@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Carne Guisada (Tex-Mex Beef and Potato Stew)",
     "slug":  "carne-guisada-beef-potato-stew",
     "cuisine":  "Tex-Mex",
@@ -145,8 +145,8 @@
                                    "canon":  "All-Purpose Flour",
                                    "grams":  21,
                                    "buy":  "2.5 tbsp",
-                                   "bid":"flour",
-                                   "gpu":453.592
+                                   "bid":  "flour",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Olive Oil",
@@ -169,8 +169,8 @@
                                    "canon":  "Jalapeno",
                                    "grams":  36,
                                    "buy":  "4 tbsp",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -201,8 +201,8 @@
                                    "canon":  "Potato",
                                    "grams":  4609,
                                    "buy":  "21.6",
-                                   "bid":"russet-potatoes",
-                                   "gpu":453.592
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -221,7 +221,7 @@
                                           "4.75 tbsp olive oil",
                                           "1 yellow onion",
                                           "3.75 tbsp jalapeno",
-                                          "4 tbsp garlic",
+                                          "4.5 tbsp garlic",
                                           "4.7 cans diced tomatoes",
                                           "5 cups dry rice"
                                       ],

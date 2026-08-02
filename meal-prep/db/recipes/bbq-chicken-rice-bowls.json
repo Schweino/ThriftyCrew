@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Lean BBQ Chicken and Rice Bowls",
     "slug":  "bbq-chicken-rice-bowls",
     "cuisine":  "American",
@@ -29,7 +29,7 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste / rub (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "That is about \u003cstrong\u003e$2.61 a bowl\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$11 or more\u003c/strong\u003e for a fast-casual chicken bowl. Catch chicken on sale at $1.99/lb and that number drops even lower.",
+    "cost_closing_html":  "That is about \u003cstrong\u003e$2.61 a bowl\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$11 or more\u003c/strong\u003e for a fast-casual chicken bowl. Catch chicken on sale at $2.61/lb and that number drops even lower.",
     "shop_smart":  [
                        "\u003cstrong\u003eChicken on sale is the whole game.\u003c/strong\u003e When breast drops to a sale price, buy a big pack and freeze it in two-pound bags. That one trip is a month of these bowls.",
                        "\u003cstrong\u003eSugar-free sauce, same flavor.\u003c/strong\u003e The no-sugar BBQ tastes nearly identical to the regular and saves you the sugar and a few carbs per serving.",
@@ -66,15 +66,15 @@
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.5 cups dry jasmine",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  840,
                                    "buy":  "4 cans, drained",
-                                   "bid":"canned-corn",
-                                   "gpu":28.3495
+                                   "bid":  "canned-corn",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "BBQ Sauce (Sugar Free)",

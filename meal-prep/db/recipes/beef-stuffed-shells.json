@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Beef Stuffed Shells",
     "slug":  "beef-stuffed-shells",
     "cuisine":  "American",
@@ -18,7 +18,23 @@
                  "cost_ps":  "3.70"
              },
     "intro_html":  "Jumbo shells stuffed with a three-cheese filling and baked under beefy marinara: it looks like a special-occasion dinner and preps like a Tuesday. Each serving packs \u003cstrong\u003e38 grams of protein\u003c/strong\u003e at 560 calories for about \u003cstrong\u003e$3.70\u003c/strong\u003e (at everyday cost). Nobody at the table needs to know how cheap that was.",
-    "ingredients_display": ["\u003cstrong\u003ePasta Shells (Great Value):\u003c/strong\u003e 19.5 oz dry (556 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1.25 tbsp (16 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 1.25 lb (529 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (128 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)","\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 6.25 cups (1588 g)","\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 4.75 tbsp (75 g)","\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.75 tbsp (3 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (7 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 23.25 oz (659 g)","\u003cstrong\u003eRicotta Cheese (Great Value):\u003c/strong\u003e 35 oz (992 g)","\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 3.75 oz (105 g)","\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 2 large eggs (117 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePasta Shells (Great Value):\u003c/strong\u003e 19.5 oz dry (556 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1.25 tbsp (16 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 1.25 lb (529 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (128 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
+                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 6.25 cups (1588 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 4.75 tbsp (75 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.75 tbsp (3 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (7 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 23.25 oz (659 g)",
+                                "\u003cstrong\u003eRicotta Cheese (Great Value):\u003c/strong\u003e 35 oz (992 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 3.75 oz (105 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 2 large eggs (117 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pasta Shells, 19.5 oz dry: ~$1.19. \u003cstrong\u003eBuy 2 12oz boxs: $1.46.\u003c/strong\u003e",
@@ -78,8 +94,8 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  529,
                                    "buy":  "1.25 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -99,8 +115,8 @@
                                    "item":  "Marinara Sauce",
                                    "grams":  1588,
                                    "buy":  "6.25 cups",
-                                   "bid":"marinara-sauce",
-                                   "gpu":28.3495
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Tomato Paste",
@@ -141,22 +157,22 @@
                                    "item":  "Reduced Fat Mozzarella",
                                    "grams":  659,
                                    "buy":  "23.25 oz",
-                                   "bid":"reduced-fat-mozzarella",
-                                   "gpu":28.3495
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Ricotta Cheese",
                                    "grams":  992,
                                    "buy":  "35 oz",
-                                   "bid":"ricotta",
-                                   "gpu":28.3495
+                                   "bid":  "ricotta",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Parmesan Cheese",
                                    "grams":  105,
                                    "buy":  "3.75 oz",
-                                   "bid":"parmesan",
-                                   "gpu":28.3495
+                                   "bid":  "parmesan",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Eggs",
@@ -176,7 +192,7 @@
                  "totalTime":  "PT1H20M",
                  "costPerServing":  3.70,
                  "recipeIngredient":  [
-                                          "24.75 oz dry pasta shells",
+                                          "19.5 oz dry pasta shells",
                                           "1.25 lb 93/7 ground beef",
                                           "35 oz ricotta cheese",
                                           "23.25 oz reduced fat mozzarella",

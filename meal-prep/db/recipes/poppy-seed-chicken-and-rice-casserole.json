@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Poppy Seed Chicken and Rice Casserole",
     "slug":  "poppy-seed-chicken-and-rice-casserole",
     "cuisine":  "American Southern",
@@ -18,7 +18,21 @@
                  "cost_ps":  "2.70"
              },
     "intro_html":  "Poppy seed chicken is Southern potluck royalty: tender chicken folded into a rich, buttery cream sauce flecked with poppy seeds, baked over rice under a crunchy buttered cracker topping until bubbling. Pure comfort, zero pretension. Each serving brings \u003cstrong\u003e25 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.70\u003c/strong\u003e a serving (at everyday cost).",
-    "ingredients_display": ["\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1.25 cups (265 g)","\u003cstrong\u003eButter Crackers (Great Value):\u003c/strong\u003e 2.25 cups (140 g)","\u003cstrong\u003ePoppy Seeds (Great Value):\u003c/strong\u003e 4.75 tbsp (39 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 (268 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 tbsp (20 g)","\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 9 tbsp (73 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.75 lb (840 g)","\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 2.25 cups (555 g)","\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 14 oz (397 g)","\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1029 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1.25 cups (265 g)",
+                                "\u003cstrong\u003eButter Crackers (Great Value):\u003c/strong\u003e 2.25 cups (140 g)",
+                                "\u003cstrong\u003ePoppy Seeds (Great Value):\u003c/strong\u003e 4.75 tbsp (39 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 (268 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 tbsp (20 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 9 tbsp (73 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.75 lb (840 g)",
+                                "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 2.25 cups (555 g)",
+                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 14 oz (397 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1029 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Butter, 1.25 cups: ~$1.70. \u003cstrong\u003eBuy 1 lb box: $2.92.\u003c/strong\u003e",
@@ -38,7 +52,12 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $8.84 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.35. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.70 a bowl\u003c/strong\u003e (at everyday cost) for creamy Southern comfort that a meat-and-three cafe would plate for $12.",
-    "shop_smart":  ["The whole batch rings up cheap, and chicken is only a small slice of it. When a casserole this rich costs so little in total, you double the recipe and thank the freezer later.","This version builds its cream sauce from scratch with butter, flour, and broth instead of canned soup. It costs less than the cans and you can pronounce everything in it.","The signature cracker topping costs almost nothing from a store-brand box of butter crackers, and the rest of the sleeve tops your next casserole. Cheapest crunch upgrade in the store.","Third-fat cream cheese runs the same price as full-fat but trims cost-per-calorie where it counts. Two 8 ounce bricks cover this batch."],
+    "shop_smart":  [
+                       "The whole batch rings up cheap, and chicken is only a small slice of it. When a casserole this rich costs so little in total, you double the recipe and thank the freezer later.",
+                       "This version builds its cream sauce from scratch with butter, flour, and broth instead of canned soup. It costs less than the cans and you can pronounce everything in it.",
+                       "The signature cracker topping costs almost nothing from a store-brand box of butter crackers, and the rest of the sleeve tops your next casserole. Cheapest crunch upgrade in the store.",
+                       "Third-fat cream cheese runs the same price as full-fat but trims cost-per-calorie where it counts. Two 8 ounce bricks cover this batch."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Cook the rice: 3.75 cups dry with water per your usual method.",
@@ -100,8 +119,8 @@
                                    "item":  "All-Purpose Flour",
                                    "grams":  73,
                                    "buy":  "9 tbsp",
-                                   "bid":"flour",
-                                   "gpu":453.592
+                                   "bid":  "flour",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -121,8 +140,8 @@
                                    "item":  "1/3 Fat Cream Cheese",
                                    "grams":  397,
                                    "buy":  "14 oz",
-                                   "bid":"1-3-fat-cream-cheese",
-                                   "gpu":28.3495
+                                   "bid":  "1-3-fat-cream-cheese",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -149,8 +168,8 @@
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -163,9 +182,9 @@
                  "totalTime":  "PT65M",
                  "costPerServing":  2.70,
                  "recipeIngredient":  [
-                                          "2.5 lb boneless skinless chicken breast",
+                                          "2.25 lb boneless skinless chicken breast",
                                           "3.75 cups dry rice",
-                                          "1.75 cups butter",
+                                          "1.25 cups butter",
                                           "2.25 cups butter crackers",
                                           "2.25 cups heavy cream",
                                           "14 oz reduced fat cream cheese",

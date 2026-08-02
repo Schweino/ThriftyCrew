@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Turkey a la King over Egg Noodles",
     "slug":  "turkey-a-la-king-over-egg-noodles",
     "cuisine":  "American",
@@ -104,8 +104,8 @@
                                    "canon":  "White Mushrooms",
                                    "grams":  794,
                                    "buy":  "1.75 lb",
-                                   "bid":"mushrooms",
-                                   "gpu":28.3495
+                                   "bid":  "mushrooms",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -144,8 +144,8 @@
                                    "canon":  "All-Purpose Flour",
                                    "grams":  219,
                                    "buy":  "1.75 cups",
-                                   "bid":"flour",
-                                   "gpu":453.592
+                                   "bid":  "flour",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -168,16 +168,16 @@
                                    "canon":  "Frozen Green Peas",
                                    "grams":  469,
                                    "buy":  "1 lb",
-                                   "bid":"frozen-peas",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-peas",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Olives",
                                    "canon":  "Olives",
                                    "grams":  236,
                                    "buy":  "1.75 cups",
-                                   "bid":"green-olives",
-                                   "gpu":28.3495
+                                   "bid":  "green-olives",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Turkey Breast",
@@ -208,11 +208,11 @@
                  "recipeIngredient":  [
                                           "10.5 cups diced cooked turkey breast",
                                           "11.25 cups white mushrooms",
-                                          "3.5 cups heavy cream",
+                                          "1.75 cups heavy cream",
                                           "3.75 lb chicken broth",
                                           "3.5 cups frozen green peas",
                                           "1.75 cups sliced olives",
-                                          "1.75 cups butter",
+                                          "1.25 cups butter",
                                           "1.75 cups all-purpose flour",
                                           "2 yellow onions"
                                       ],

@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Greek Beef and Chickpea Bowls",
     "slug":  "greek-beef-and-chickpea-bowls",
     "cuisine":  "Mediterranean/Greek",
@@ -18,7 +18,23 @@
                  "cost_ps":  "5.48"
              },
     "intro_html":  "Oregano and dill seasoned beef over rice with a thick swipe of hummus, cool yogurt, crisp cucumber, cherry tomatoes, and salty feta. Every bowl delivers \u003cstrong\u003e44 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$5.48\u003c/strong\u003e (at everyday cost). It eats like the fast casual Mediterranean chains, without the line or the upcharges.",
-    "ingredients_display": ["\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1.25 tbsp (11 g)","\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eDried Dill (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eChickpeas (generic):\u003c/strong\u003e 5.8 cans (1488 g)","\u003cstrong\u003eHummus (Great Value classic):\u003c/strong\u003e 1.75 cups (400 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)","\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1.75 cups (400 g)","\u003cstrong\u003eRed Onion:\u003c/strong\u003e 1.4 (150 g)","\u003cstrong\u003eCucumber:\u003c/strong\u003e 1 (364 g)","\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 3.5 cups (522 g)","\u003cstrong\u003eFeta Cheese (Great Value crumbled):\u003c/strong\u003e 7 oz (200 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1.25 tbsp (11 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)",
+                                "\u003cstrong\u003eDried Dill (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)",
+                                "\u003cstrong\u003eChickpeas (generic):\u003c/strong\u003e 5.8 cans (1488 g)",
+                                "\u003cstrong\u003eHummus (Great Value classic):\u003c/strong\u003e 1.75 cups (400 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1.75 cups (400 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 1.4 (150 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 1 (364 g)",
+                                "\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 3.5 cups (522 g)",
+                                "\u003cstrong\u003eFeta Cheese (Great Value crumbled):\u003c/strong\u003e 7 oz (200 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Olive Oil, 3.5 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -37,7 +53,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $14.34 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $65.16. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$5.48 a bowl\u003c/strong\u003e (at everyday cost) for what the Mediterranean bowl chains charge $13 to build, and they still ask if you want to add protein for $4 more.",
-    "shop_smart":  ["The 93/7 beef is more than half the bill. When the 4 lb pack goes on sale, that is the week to make this one.","Cherry tomatoes ran high here. If the clamshells are not on sale, diced roma tomatoes do the same job for about half the money.","Feta is the sneaky line. The crumbled tubs charge you for convenience; a block of feta crumbles in ten seconds and usually costs less per ounce."],
+    "shop_smart":  [
+                       "The 93/7 beef is more than half the bill. When the 4 lb pack goes on sale, that is the week to make this one.",
+                       "Cherry tomatoes ran high here. If the clamshells are not on sale, diced roma tomatoes do the same job for about half the money.",
+                       "Feta is the sneaky line. The crumbled tubs charge you for convenience; a block of feta crumbles in ten seconds and usually costs less per ounce."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Cook the rice: rinse it, then simmer covered with water until tender and set it aside.",
@@ -70,8 +90,8 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1588,
                                    "buy":  "3.5 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garlic Powder",
@@ -112,43 +132,43 @@
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Greek Yogurt",
                                    "grams":  400,
                                    "buy":  "1.75 cups",
-                                   "bid":"greek-yogurt",
-                                   "gpu":28.3495
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Red Onion",
                                    "grams":  150,
                                    "buy":  "1.4",
-                                   "bid":"red-onion",
-                                   "gpu":453.592
+                                   "bid":  "red-onion",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Cucumber",
                                    "grams":  364,
                                    "buy":  "1",
-                                   "bid":"cucumbers",
-                                   "gpu":300
+                                   "bid":  "cucumbers",
+                                   "gpu":  300
                                },
                                {
                                    "item":  "Cherry Tomatoes",
                                    "grams":  522,
                                    "buy":  "3.5 cups",
-                                   "bid":"cherry-tomatoes",
-                                   "gpu":28.3495
+                                   "bid":  "cherry-tomatoes",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Feta Cheese",
                                    "grams":  200,
                                    "buy":  "7 oz",
-                                   "bid":"feta",
-                                   "gpu":28.3495
+                                   "bid":  "feta",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Salt",
@@ -176,7 +196,7 @@
                  "costPerServing":  5.48,
                  "recipeIngredient":  [
                                           "3.5 lb 93/7 ground beef",
-                                          "5.5 cups dry rice",
+                                          "3.75 cups dry rice",
                                           "1.75 cups hummus",
                                           "1.75 cups Greek yogurt",
                                           "3.5 tbsp olive oil",

@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Thai Peanut Pork Tenderloin Rice Bowl",
     "slug":  "thai-peanut-pork-tenderloin-rice-bowl",
     "cuisine":  "Thai-inspired",
@@ -19,7 +19,21 @@
                  "cost_ps":  "3.27"
              },
     "intro_html":  "Seared pork tenderloin over lime-cilantro rice with a sweet, creamy peanut sauce spooned over the top. Peanut butter whisked into coconut milk with lime and brown sugar is the whole trick. Each bowl brings \u003cstrong\u003e29 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.27\u003c/strong\u003e (at everyday cost), which is less than the fancy coffee you had this morning.",
-    "ingredients_display": ["\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 2.5 lb (1164 g)","\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1.4 cans (580 g)","\u003cstrong\u003ePeanut Butter (generic):\u003c/strong\u003e 1.25 cups (331 g)","\u003cstrong\u003eLime Juice:\u003c/strong\u003e 0.75 cups (173 g)","\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 7.75 tbsp (104 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 tbsp (26 g)","\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 1.75 tbsp (9 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (852 g)","\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 6 tbsp (6 g)","\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 0.25 cups (26 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.75 tbsp (23 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (22 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 2.5 lb (1164 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1.4 cans (580 g)",
+                                "\u003cstrong\u003ePeanut Butter (generic):\u003c/strong\u003e 1.25 cups (331 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 0.75 cups (173 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 7.75 tbsp (104 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 tbsp (26 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 1.75 tbsp (9 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (852 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 6 tbsp (6 g)",
+                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 0.25 cups (26 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.75 tbsp (23 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (22 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Tenderloin, 2.5 lb: ~$10.19. \u003cstrong\u003eBuy 3 lbs: $11.91.\u003c/strong\u003e",
@@ -38,7 +52,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $22.12 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.25. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.27 a bowl\u003c/strong\u003e (at everyday cost) for pork tenderloin in peanut sauce over lime rice. The same bowl at a Thai-inspired fast casual place runs $14. That is a big markup for someone else doing the searing.",
-    "shop_smart":  ["Pork tenderloin does the protein work across 3 pounds. It is one of the leanest cuts in the case and goes on sale constantly, buy at the dip and freeze.","The coconut milk sauce only needs 1.4 cans. Buy two, use what the recipe calls for, and the leftover can starts your next curry.","Peanut butter is the sauce backbone for pocket change. The store-brand jar melts into coconut milk exactly like the name brand does, and one jar covers several batches."],
+    "shop_smart":  [
+                       "Pork tenderloin does the protein work across 3 pounds. It is one of the leanest cuts in the case and goes on sale constantly, buy at the dip and freeze.",
+                       "The coconut milk sauce only needs 1.4 cans. Buy two, use what the recipe calls for, and the leftover can starts your next curry.",
+                       "Peanut butter is the sauce backbone for pocket change. The store-brand jar melts into coconut milk exactly like the name brand does, and one jar covers several batches."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Cook the rice per the package. While it is hot, stir in half the lime juice and the fresh cilantro. Cover and set aside.",
@@ -71,8 +89,8 @@
                                    "item":  "Coconut Milk",
                                    "grams":  580,
                                    "buy":  "1.4 cans",
-                                   "bid":"coconut-milk-canned",
-                                   "gpu":29.57
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Peanut Butter",
@@ -113,22 +131,22 @@
                                    "item":  "Rice",
                                    "grams":  852,
                                    "buy":  "4.5 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Fresh Cilantro",
                                    "grams":  6,
                                    "buy":  "6 tbsp",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                },
                                {
                                    "item":  "Frozen Chopped Spinach",
                                    "grams":  26,
                                    "buy":  "0.25 cups",
-                                   "bid":"frozen-chopped-spinach",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-chopped-spinach",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Olive Oil",
@@ -162,7 +180,7 @@
                  "totalTime":  "PT50M",
                  "costPerServing":  3.27,
                  "recipeIngredient":  [
-                                          "3 lb pork tenderloin",
+                                          "2.5 lb pork tenderloin",
                                           "4.5 cups dry rice",
                                           "1.4 cans coconut milk",
                                           "1.25 cups peanut butter",

@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Chicken Jalfrezi",
     "slug":  "chicken-jalfrezi",
     "cuisine":  "Indian",
@@ -142,8 +142,8 @@
                                    "canon":  "Boneless Skinless Chicken Thigh",
                                    "grams":  2100,
                                    "buy":  "4.75 lb",
-                                   "bid":"boneless-skinless-chicken-thigh",
-                                   "gpu":453.592
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Ground Cumin",
@@ -158,8 +158,8 @@
                                    "canon":  "Fresh Cilantro",
                                    "grams":  33,
                                    "buy":  "33 tbsp",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                },
                                {
                                    "item":  "Ground Turmeric",
@@ -198,8 +198,8 @@
                                    "canon":  "Green Bell Peppers",
                                    "grams":  420,
                                    "buy":  "3.5",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "White Vinegar",
@@ -238,8 +238,8 @@
                                    "canon":  "Rice",
                                    "grams":  1086,
                                    "buy":  "5.75 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -262,7 +262,7 @@
                                           "0.75 oz dried guajillo chiles",
                                           "3.5 tbsp vegetable oil",
                                           "33 tbsp fresh cilantro",
-                                          "5 cups dry rice",
+                                          "5.75 cups dry rice",
                                           "Pantry: cumin, turmeric, paprika, garam masala, chili powder, salt, black pepper"
                                       ],
                  "steps":  [

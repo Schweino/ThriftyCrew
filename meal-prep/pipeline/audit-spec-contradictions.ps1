@@ -38,7 +38,7 @@
 
   Usage: .\audit-spec-contradictions.ps1 [-Baseline] [-Quiet] [-SelfTest]
 #>
-param([switch]$Baseline, [switch]$Quiet, [switch]$SelfTest, [string]$Root = "")
+param([switch]$Baseline, [switch]$Quiet, [switch]$SelfTest, [switch]$IncludeArchive, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
@@ -48,13 +48,30 @@ $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
 # not actually describe.
 . (Join-Path $here 'spec-contradiction-lib.ps1')
 
-function Get-SpecSet([string]$mpRoot) {
+function Get-SpecSet([string]$mpRoot, [bool]$includeArchive) {
+  <#
+    THE LIVE SPEC LAYER IS db\recipes, and that distinction cost a wasted pass. engine\build-cards.ps1
+    renders from db\recipes\*.json; archive\<run>\specs\ are the pre-consolidation snapshots of each run and
+    nothing builds from them. Reading the archive and calling the result "the catalogue" audits 513 files
+    that no shopper can see - measured on 2026-08-02, 372 of the 513 archive copies differ from their live
+    twin, in exactly the fields the cost-redesign writer waves rewrote.
+    -IncludeArchive is available on purpose (a contradiction in a snapshot is still a fact about that run),
+    but the default is the layer that ships.
+  #>
   $out = New-Object System.Collections.Generic.List[object]
-  foreach ($d in @(Get-ChildItem (Join-Path $mpRoot 'archive') -Directory -ErrorAction SilentlyContinue)) {
-    $sd = Join-Path $d.FullName 'specs'
-    if (-not (Test-Path $sd)) { continue }
-    foreach ($f in @(Get-ChildItem (Join-Path $sd '*.json') | Where-Object { $_.Name -notmatch '^(run-|recipes-)' -and $_.Name -ne '_index.json' })) {
-      $out.Add([pscustomobject]@{ run = $d.Name; slug = $f.BaseName; path = $f.FullName })
+  $liveDir = Join-Path $mpRoot 'db\recipes'
+  if (Test-Path $liveDir) {
+    foreach ($f in @(Get-ChildItem (Join-Path $liveDir '*.json') | Where-Object { $_.Name -notmatch '^(run-|recipes-)' -and $_.Name -ne '_index.json' })) {
+      $out.Add([pscustomobject]@{ run = 'live'; slug = $f.BaseName; path = $f.FullName })
+    }
+  }
+  if ($includeArchive) {
+    foreach ($d in @(Get-ChildItem (Join-Path $mpRoot 'archive') -Directory -ErrorAction SilentlyContinue)) {
+      $sd = Join-Path $d.FullName 'specs'
+      if (-not (Test-Path $sd)) { continue }
+      foreach ($f in @(Get-ChildItem (Join-Path $sd '*.json') | Where-Object { $_.Name -notmatch '^(run-|recipes-)' -and $_.Name -ne '_index.json' })) {
+        $out.Add([pscustomobject]@{ run = $d.Name; slug = $f.BaseName; path = $f.FullName })
+      }
     }
   }
   return $out
@@ -107,7 +124,7 @@ if ($SelfTest) {
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
 
-$specs = Get-SpecSet $mp
+$specs = Get-SpecSet $mp ([bool]$IncludeArchive)
 $byClass = @{}
 $rows = New-Object System.Collections.Generic.List[object]
 foreach ($s in $specs) {
@@ -157,4 +174,5 @@ if ($worse.Count -gt 0) {
   exit 1
 }
 exit 0
+
 

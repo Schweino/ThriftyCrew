@@ -29,7 +29,7 @@
   Every repair is reported with the before and after. Read-only unless -Apply.
   Usage: .\repair-spec-contradictions.ps1 [-Apply]   |   .\repair-spec-contradictions.ps1 -SelfTest
 #>
-param([switch]$Apply, [switch]$SelfTest, [string]$Root = "")
+param([switch]$Apply, [switch]$SelfTest, [switch]$IncludeArchive, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
@@ -156,9 +156,21 @@ if ($SelfTest) {
 
 $touched = 0; $total = 0
 $slugs = New-Object System.Collections.Generic.List[string]
-foreach ($d in @(Get-ChildItem (Join-Path $mp 'archive') -Directory -ErrorAction SilentlyContinue)) {
-  $sd = Join-Path $d.FullName 'specs'
-  if (-not (Test-Path $sd)) { continue }
+# THE LIVE SPEC LAYER IS db\recipes. engine\build-cards.ps1 renders from there; archive\<run>\specs\ are
+# pre-consolidation snapshots that nothing builds from, and 372 of the 513 differ from their live twin.
+# Repairing the archive fixes files no shopper can see - which is exactly what the first version of this
+# script did. -IncludeArchive is there for anyone who wants the snapshots tidied too.
+$dirs = New-Object System.Collections.Generic.List[string]
+$liveDir = Join-Path $mp 'db\recipes'
+if (Test-Path $liveDir) { $dirs.Add($liveDir) }
+if ($IncludeArchive) {
+  foreach ($d in @(Get-ChildItem (Join-Path $mp 'archive') -Directory -ErrorAction SilentlyContinue)) {
+    $sd = Join-Path $d.FullName 'specs'
+    if (Test-Path $sd) { $dirs.Add($sd) }
+  }
+}
+foreach ($sd in $dirs) {
+  $d = [pscustomobject]@{ Name = $(if ($sd -eq $liveDir) { 'live' } else { Split-Path (Split-Path $sd -Parent) -Leaf }) }
   foreach ($f in @(Get-ChildItem (Join-Path $sd '*.json') | Where-Object { $_.Name -notmatch '^(run-|recipes-)' -and $_.Name -ne '_index.json' })) {
     $spec = $null
     try { $spec = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { continue }
@@ -175,3 +187,4 @@ foreach ($d in @(Get-ChildItem (Join-Path $mp 'archive') -Directory -ErrorAction
 Write-Output ("repair-spec-contradictions: {0} fix(es) across {1} spec(s){2}" -f $total, $touched, $(if ($Apply) { '' } else { '  [read-only - pass -Apply]' }))
 if ($Apply -and $slugs.Count) { ($slugs.ToArray()) -join "`n" | Set-Content (Join-Path $mp 'out\contradiction-repaired-slugs.txt') -Encoding UTF8; Write-Output ('slug list -> out\contradiction-repaired-slugs.txt (rebuild + republish these cards)') }
 exit 0
+

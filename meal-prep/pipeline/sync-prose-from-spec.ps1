@@ -14,7 +14,16 @@
   MEASURED 2026-08-02: ALL 400 slugs that have both a spec and a prose file would be overwritten by one
   full spec-guards run - 400 upsell_html, 400 cost_closing_html, 362 head.description, 325 intro_html.
   Three of them would have their deleted dollar figures put back into shop_smart. There is no partial
-  version of this failure: the run that "validates" the catalogue is the run that reverts it.
+  version of this failure: the run that "validates" a run dir is the run that reverts it.
+
+  SCOPE, CORRECTED THE SAME DAY AND WORTH BEING PRECISE ABOUT. These specs and prose files live in
+  archive\<run>\specs\ - the PRE-CONSOLIDATION snapshot of each run. The LIVE spec layer is db\recipes,
+  which engine\build-cards.ps1 renders from and which has NO prose directory at all, so full-mode
+  spec-guards cannot run against it and cannot revert a live card. What this protects is the run
+  snapshots: still worth having in step (they are the record of what each run shipped, and spec-guards is
+  pointed at them by hand), but it is NOT the live-card risk the first version of this header claimed.
+  The live-layer contradictions are a separate job - see audit-spec-contradictions.ps1, which defaults to
+  db\recipes for exactly this reason.
 
   DIRECTION IS THE WHOLE POINT. This only ever writes spec -> prose. The spec is what built every live
   card, so it is the truth; copying prose -> spec is the revert this exists to prevent. A field is written

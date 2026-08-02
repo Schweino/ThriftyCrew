@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Thai Red Curry Chicken Rice Bowls",
     "slug":  "thai-red-curry-chicken-rice-bowls",
     "cuisine":  "Thai",
@@ -18,7 +18,22 @@
                  "cost_ps":  "3.87"
              },
     "intro_html":  "Lean chicken breast simmered in a coconut red curry with a sweet-salty backbone of fish sauce and brown sugar, all over rice. Each bowl brings \u003cstrong\u003e45 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.87\u003c/strong\u003e (at everyday cost). Lean has never tasted less like a punishment.",
-    "ingredients_display": ["\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.5 tbsp (49 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 8.75 tbsp (52 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)","\u003cstrong\u003eJalapeno:\u003c/strong\u003e 5.5 tbsp (49 g)","\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 3.5 cans (1389 g)","\u003cstrong\u003eRed Curry Paste (Thai Kitchen):\u003c/strong\u003e 7 tbsp (105 g)","\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 0.5 cups (126 g)","\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 8.75 tbsp (118 g)","\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 5.25 lb (2381 g)","\u003cstrong\u003eLime Juice:\u003c/strong\u003e 3.5 tbsp (52 g)","\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 14 tbsp (14 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.5 tbsp (49 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 8.75 tbsp (52 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 5.5 tbsp (49 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 3.5 cans (1389 g)",
+                                "\u003cstrong\u003eRed Curry Paste (Thai Kitchen):\u003c/strong\u003e 7 tbsp (105 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 0.5 cups (126 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 8.75 tbsp (118 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 5.25 lb (2381 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 3.5 tbsp (52 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 14 tbsp (14 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Vegetable Oil, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -39,7 +54,11 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $17.54 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.68. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.87 a bowl\u003c/strong\u003e (at everyday cost) for coconut red curry chicken over rice. The restaurant version is $15 a plate, which means this batch pays for itself before you finish the second container.",
-    "shop_smart":  ["Boneless skinless chicken breast is the whole protein bill at 5.25 pounds for the batch. Club-pack pricing is the target, well under what small trays charge per pound, and this recipe is why you keep some in the freezer.","Red curry paste and fish sauce are the two flavor bottles, and both keep for months. Their true cost per batch is small against jars that season many dinners.","Coconut milk is the only other line that matters at 3.5 cans. Brown sugar, oil, and rice are pantry riders, so the register total is mostly chicken and coconut, which is exactly how a curry should look."],
+    "shop_smart":  [
+                       "Boneless skinless chicken breast is the whole protein bill at 5.25 pounds for the batch. Club-pack pricing is the target, well under what small trays charge per pound, and this recipe is why you keep some in the freezer.",
+                       "Red curry paste and fish sauce are the two flavor bottles, and both keep for months. Their true cost per batch is small against jars that season many dinners.",
+                       "Coconut milk is the only other line that matters at 3.5 cans. Brown sugar, oil, and rice are pantry riders, so the register total is mostly chicken and coconut, which is exactly how a curry should look."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Cook the rice per the package and set it aside.",
@@ -87,15 +106,15 @@
                                    "item":  "Jalapeno",
                                    "grams":  49,
                                    "buy":  "5.5 tbsp",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Coconut Milk",
                                    "grams":  1389,
                                    "buy":  "3.5 cans",
-                                   "bid":"coconut-milk-canned",
-                                   "gpu":29.57
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Red Curry Paste",
@@ -136,8 +155,8 @@
                                    "item":  "Fresh Cilantro",
                                    "grams":  14,
                                    "buy":  "14 tbsp",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                },
                                {
                                    "item":  "Salt",
@@ -157,8 +176,8 @@
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -172,7 +191,7 @@
                  "costPerServing":  3.87,
                  "recipeIngredient":  [
                                           "5.25 lb boneless skinless chicken breast",
-                                          "5.75 cups dry rice",
+                                          "3.75 cups dry rice",
                                           "3.5 cans coconut milk",
                                           "7 tbsp red curry paste",
                                           "0.5 cup fish sauce",

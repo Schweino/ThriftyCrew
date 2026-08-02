@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Fajita Chicken Rice Bowl",
     "slug":  "fajita-chicken-rice-bowl",
     "cuisine":  "Tex-Mex",
@@ -29,7 +29,12 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "That\u0027s about \u003cstrong\u003e$3.43 a bowl\u003c/strong\u003e (at everyday cost), versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a single fast-casual fajita bowl.",
-    "shop_smart":  ["\u003cstrong\u003eBuy chicken when it\u0027s on sale, then freeze it.\u003c/strong\u003e Stores drop chicken to a sale price at random. We recently grabbed 50 lbs on a deep markdown instead of our usual shelf price and loaded the deep freezer. At about 5.5 lbs per batch, that one buy makes about 9 batches, or roughly 63 nights of dinner for two.","\u003cstrong\u003eThe seasoning is your priciest line per ounce.\u003c/strong\u003e Six Taco Bell packets are what drives that. A store-brand fajita or taco seasoning is a fraction of the cost, and mixing your own from chili powder, cumin, paprika, garlic, and onion powder costs pennies. Just know the macros shift a little if you swap.","\u003cstrong\u003eBuy rice in the big bag.\u003c/strong\u003e A 25-lb bag of jasmine is far cheaper per pound than a small box. Compare the price per ounce. That\u0027s the number that tells you the real deal.","\u003cstrong\u003eBeans by the case, peppers in season.\u003c/strong\u003e Canned beans are cheapest bought a case at a time, and bell peppers drop hard when they\u0027re in season or in a 3-count bag. Frozen pepper strips work too."],
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy chicken when it\u0027s on sale, then freeze it.\u003c/strong\u003e Stores drop chicken to a sale price at random. We recently grabbed 50 lbs on a deep markdown instead of our usual shelf price and loaded the deep freezer. At about 5.5 lbs per batch, that one buy makes about 9 batches, or roughly 63 nights of dinner for two.",
+                       "\u003cstrong\u003eThe seasoning is your priciest line per ounce.\u003c/strong\u003e Six Taco Bell packets are what drives that. A store-brand fajita or taco seasoning is a fraction of the cost, and mixing your own from chili powder, cumin, paprika, garlic, and onion powder costs pennies. Just know the macros shift a little if you swap.",
+                       "\u003cstrong\u003eBuy rice in the big bag.\u003c/strong\u003e A 25-lb bag of jasmine is far cheaper per pound than a small box. Compare the price per ounce. That\u0027s the number that tells you the real deal.",
+                       "\u003cstrong\u003eBeans by the case, peppers in season.\u003c/strong\u003e Canned beans are cheapest bought a case at a time, and bell peppers drop hard when they\u0027re in season or in a 3-count bag. Frozen pepper strips work too."
+                   ],
     "make_it":  [
                     "\u003cstrong\u003eWeigh your empty pot first.\u003c/strong\u003e Put the largest pot you\u0027ll use to mix everything onto your large scale and write down its weight. You\u0027ll need that number at the end to portion accurately.",
                     "Cook the rice (4 cups dry jasmine plus water per the package) and set aside.",
@@ -39,7 +44,7 @@
                     "Warm the black beans through.",
                     "Combine the rice, seasoned chicken and peppers, and beans back in the big pot and stir."
                 ],
-    "portion_html":  "Set the full pot on your large scale and subtract the empty-pot weight you noted in Step 1. That\u0027s your total food weight. Divide it by 14, then scoop that amount into each glass container. Every bowl lands right at about 499 cal and 49g protein.",
+    "portion_html":  "Set the full pot on your large scale and subtract the empty-pot weight you noted in Step 1. That\u0027s your total food weight. Divide it by 14, then scoop that amount into each glass container. Every bowl lands right at about 541 cal and 49g protein.",
     "credit_html":  "",
     "upsell_html":  "Two weeks of high-protein dinners for about $3.43 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money, work, and life lessons, all for $1 a month.",
     "cost_batch":  37.71,
@@ -62,15 +67,15 @@
                                    "item":  "Seasoned Black Beans",
                                    "grams":  910,
                                    "buy":  "2 cans",
-                                   "bid":"seasoned-black-beans",
-                                   "gpu":28.3495
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  800,
                                    "buy":  "4 cups dry jasmine",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Fajita Seasoning",
@@ -83,8 +88,8 @@
                                    "item":  "Green Bell Peppers",
                                    "grams":  715,
                                    "buy":  "6 medium",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Yellow Onion",
