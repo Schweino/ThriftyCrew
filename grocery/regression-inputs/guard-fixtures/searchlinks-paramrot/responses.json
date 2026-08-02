@@ -1,0 +1,10 @@
+{
+  "_readme": "FROZEN. Identical to searchlinks-clean/responses.json except Walmart, which now answers HTTP 200 with a generic homepage title instead of echoing the query. This is the template rot that 404-checking cannot see: rename the query parameter (?q= -> ?query=) and the store serves a perfectly healthy 200 that quietly ignores what the shopper searched for. The guard must report a DOWNGRADE for Walmart and must NOT call it BROKEN - it is still a reachable page, and only a human comparing against the store's own search box can settle it.",
+  "https://www.walmart.com/search?q=milk": { "status": 200, "title": "Walmart.com | Save Money. Live Better." },
+  "https://www.bakersplus.com/search?query=milk&searchType=default_search": { "status": 0, "title": "" },
+  "https://www.hy-vee.com/aisles-online/search?search=milk": { "status": 200, "title": "Hy-Vee Aisles Online Grocery Shopping" },
+  "https://www.aldi.us/store/aldi/s?k=milk": { "status": 200, "title": "ALDI Milk Delivery or Pickup Near Me | ALDI" },
+  "https://shop.fareway.com/store/fareway-meat-grocery/s?k=milk": { "status": 200, "title": "Fareway Meat &amp; Grocery Milk Pickup Near Me | Fareway Meat &amp; Grocery" },
+  "https://www.samsclub.com/s/milk": { "status": 200, "title": "milk - Samsclub.com" },
+  "https://www.shopfamilyfare.com/shop": { "status": 200, "title": "Shop Family Fare!" }
+}

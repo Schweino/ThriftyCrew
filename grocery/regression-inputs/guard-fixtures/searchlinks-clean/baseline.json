@@ -1,0 +1,13 @@
+{
+  "readme": "FROZEN baseline for the echo-tier downgrade test. Walmart is recorded here as echo=true (its title really did read 'milk - Walmart.com' on 2026-08-02). Paired with searchlinks-paramrot/responses.json, where Walmart answers 200 with a generic title instead, it proves the DOWNGRADE branch can still fire: that is the 200-but-ignores-our-query rot, which no status code and no not-found check would ever catch.",
+  "query": "milk",
+  "stores": {
+    "Walmart":     { "echo": true,  "verdict": "OK", "accepted": "2026-08-02" },
+    "Baker's":     { "echo": false, "verdict": "UNPROVABLE", "accepted": "2026-08-02" },
+    "Hy-Vee":      { "echo": false, "verdict": "OK", "accepted": "2026-08-02" },
+    "Aldi":        { "echo": true,  "verdict": "OK", "accepted": "2026-08-02" },
+    "Fareway":     { "echo": true,  "verdict": "OK", "accepted": "2026-08-02" },
+    "Sam's Club":  { "echo": true,  "verdict": "OK", "accepted": "2026-08-02" },
+    "Family Fare": { "echo": false, "verdict": "OK", "accepted": "2026-08-02" }
+  }
+}

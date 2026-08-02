@@ -1218,6 +1218,34 @@ try {
   }
 } catch { Log ('test-guards weekly threw: ' + $_.Exception.Message) }
 
+# ---- WEEKLY: do the store SEARCH templates still resolve? ----
+# The all-3 rule guarantees every priced chip carries a link; nothing guaranteed the link WORKED. Family
+# Fare's search template 404'd on 20 live chips in public/board.json (2026-08-02) and no guard could see it,
+# because every link check in this estate looks at PRODUCT urls. This fetches each store's search template.
+# WEEKLY, not daily: it is seven outbound requests to stores we otherwise only read data from, and a
+# template rots on the scale of a site redesign, not a day. Stamp-gated on >=7 days like test-guards, so a
+# missed week self-heals on the next daily run rather than waiting for a weekday to come round again.
+# ADVISORY: it alerts and adds a REVIEW line, it never holds the board. A dead fallback link is a real
+# defect, but every PRICE on that board is still correct, and holding a correct board over a link is the
+# wrong trade. Exit 3 (every store bot-walled) gets its own line - a blocked probe proved nothing, and
+# silence from it must never be read as seven healthy templates.
+try {
+  $slStampF = Join-Path $root 'search-links-weekly-stamp.txt'
+  $slLast = [datetime]'2000-01-01'
+  if (Test-Path $slStampF) { try { $slLast = [datetime](Get-Content $slStampF -TotalCount 1) } catch {} }
+  if (((Get-Date) - $slLast).TotalDays -ge 7) {
+    # No 2>&1 on the child: under EAP=Stop a native child's first stderr line becomes a terminating throw
+    # that would jump past the exit-code read and the stamp (the same trap measured in test-guards above).
+    $slArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-search-links.ps1'),'-OutDir',$OutDir)
+    if (-not $NoAlert) { $slArgs += '-Alert' }
+    & powershell @slArgs | ForEach-Object { Log ('search-links: ' + $_) }
+    $slRc = $LASTEXITCODE
+    (Get-Date -Format 'yyyy-MM-dd') | Set-Content $slStampF -Encoding ascii   # stamp even on failure: one alert per week
+    if ($slRc -eq 2) { $summary += 'REVIEW    a store SEARCH link is DEAD - every chip falling back to it sends a shopper to a 404; see out\search-links-report.json' }
+    elseif ($slRc -eq 3) { Log 'search-links BLIND: every store was bot-walled or unreachable - NO template was checked, so this week proved nothing about the fallback links'; $summary += 'REVIEW    audit-search-links could not evaluate (every store blocked) - the fallback search links are UNCHECKED this week' }
+  }
+} catch { Log ('search-links weekly threw: ' + $_.Exception.Message) }
+
 # ---- THE BOARD vs ITS OWN LINKS (everyday cells only) ----
 # WAS AN ORPHAN. audit-everyday-mismatch.ps1 is the only check that asks "does the number we published agree
 # with the product page we linked to?", it works, and until now NOTHING invoked it - not guards.ps1, not this

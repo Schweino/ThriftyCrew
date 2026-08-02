@@ -2143,6 +2143,63 @@ else { Bad ('stores.json marks ' + $rwWalled.Count + ' walled store(s), not 4 - 
 if ($gSrc -match "audit-cell-drops\.ps1'\)\s*2>") { Bad 'guards.ps1 redirects the cell-drops child stderr again - under EAP=Stop the first stderr line throws, and a real cell leak is reported as plumbing failure' }
 else { Ok 'guards.ps1 delegates cell-drops without a stderr redirect (a real finding reaches the warn line, not the catch)' }
 
+# ---------------------------------------------------------------- 23b. store SEARCH templates resolve
+# FOUNDING BUG (2026-08-02): the Family Fare "Find at store" template was
+# https://www.shopfamilyfare.com/search?search_term={q}, which returns "Page not found - Family Fare". It
+# was live on 20 chips in public/board.json and no guard in the estate could see it: the all-3 rule counts
+# that a chip HAS an href, and audit-links/audit-everyday-mismatch only ever look at PRODUCT urls. A link
+# that exists but does not resolve was an unguarded class.
+# The fixtures are frozen CANNED RESPONSES (url -> {status,title}) captured from the real stores that day,
+# so this replays over the network without touching it. -ReportDir keeps a fixture run from overwriting the
+# live report (the audit-basis-reconcile lesson).
+$slFx  = Join-Path $fix 'searchlinks-mustfire'
+$slCl  = Join-Path $fix 'searchlinks-clean'
+$slBl  = Join-Path $fix 'searchlinks-blind'
+$slRep = NewFxDir 'searchlinks-rep'
+function SlRun($tplDir, $respFile, $baseFile) {
+  $a = @('-ResponsesFile', $respFile, '-ReportDir', $slRep)
+  if ($tplDir)   { $a = @('-TemplatesFile', (Join-Path $tplDir 'templates.json')) + $a }
+  if ($baseFile) { $a += @('-BaselineFile', $baseFile) }
+  return (RunPS 'audit-search-links.ps1' $a)
+}
+$sl = SlRun $slFx (Join-Path $slFx 'responses.json')
+if ($sl.rc -eq 2 -and $sl.text -match 'Family Fare search template does not resolve' -and $sl.text -match '404') { Ok 'search-links FIRES on the dead Family Fare search template (its founding bug)' }
+else { Bad ('search-links MISSED its founding bug - a 404ing store search link ships unnoticed again: rc=' + $sl.rc + ' ' + $sl.text) }
+# CLEAN TWIN: the same map with Family Fare corrected. Silence here proves the guard is discriminating and
+# not just always-red. It also proves the FRAGMENT is stripped: the corrected url is a hash-bang route, and
+# a probe that fetched it whole would judge a url the server never sees.
+$sl = SlRun $slCl (Join-Path $slCl 'responses.json')
+if ($sl.rc -eq 0 -and $sl.text -match 'search-links: OK' -and $sl.text -notmatch 'does not resolve') { Ok 'search-links SILENT once the template is corrected (and strips the hash-bang before judging it)' }
+else { Bad ('search-links false-positived on the corrected templates: rc=' + $sl.rc + ' ' + $sl.text) }
+# BLIND: every store behind a bot wall must NOT read as a clean sweep. This is the gates-that-can-never-arm
+# shape - the danger with a network probe is that a blocked run looks exactly like a healthy one.
+$sl = SlRun $slCl (Join-Path $slBl 'responses.json')
+if ($sl.rc -eq 3 -and $sl.text -match 'COULD NOT EVALUATE') { Ok 'search-links exits 3 when every store is bot-walled, instead of reporting all templates healthy' }
+else { Bad ('search-links reported a result with every store blocked: rc=' + $sl.rc + ' - a blocked probe is being read as proof') }
+# THE EXTRACTION PATH ITSELF. Every case above passes templates in by file, so none of them exercises the
+# live $SEARCHURLS extraction from build-deals-page.ps1 - and that path shipped broken on the first cut
+# (Invoke-Expression on an assignment returns nothing, so a healthy file read as "could not extract" and the
+# whole guard fell into its own fail-closed branch). A fix needs a self-test that can REACH the new code.
+$sl = SlRun $null (Join-Path $slCl 'responses.json')
+if ($sl.text -notmatch 'could not be extracted') { Ok 'search-links can still extract $SEARCHURLS from the live build-deals-page.ps1 (the guard is not stuck in its own fail-closed branch)' }
+else { Bad 'search-links can no longer parse $SEARCHURLS out of build-deals-page.ps1 - it exits 3 every run and probes nothing, which reads as "could not evaluate" forever' }
+# THE ECHO DOWNGRADE, the rot a 404 check cannot see: a store renames its query parameter and serves a
+# healthy 200 that ignores what the shopper searched for. Walmart echoed the query in its title at baseline
+# and does not in this fixture. It must be reported as a DOWNGRADE and must NOT be called BROKEN.
+$sl = SlRun $slCl (Join-Path $fix 'searchlinks-paramrot\responses.json') (Join-Path $slCl 'baseline.json')
+if ($sl.text -match 'DOWNGRADE' -and $sl.text -match 'Walmart stopped echoing') { Ok 'search-links reports a store that quietly stopped reading our query (200-but-ignored, invisible to any status check)' }
+else { Bad ('search-links no longer notices a store ignoring the query parameter - a silently-rotted template reads as healthy: ' + $sl.text) }
+if ($sl.rc -eq 0) { Ok 'the echo downgrade stays ADVISORY (exit 0) - a title change is not proof of a dead link' }
+else { Bad ('search-links now hard-fails on a title change (rc=' + $sl.rc + ') - that pages Brad over marketing copy, which is how a guard gets ignored') }
+try { Remove-Item -LiteralPath $slRep -Recurse -Force -ErrorAction SilentlyContinue } catch {}
+# THE DEAD URL ITSELF, pinned at the source. Cheapest possible regression test for the exact string.
+$bdpSrc = Get-Content (Join-Path $root 'build-deals-page.ps1') -Raw
+if ($bdpSrc -notmatch 'shopfamilyfare\.com/search\?search_term=') { Ok 'build-deals-page no longer carries the dead Family Fare /search?search_term= template' }
+else { Bad 'the dead Family Fare search template is back in build-deals-page.ps1 $SEARCHURLS - every unlinked FF chip 404s again' }
+# ORPHAN CHECK: a probe nothing calls is a probe nobody reads (the audit-everyday-mismatch lesson).
+if ($cacSrc -match 'audit-search-links\.ps1') { Ok 'check-ad-cycles still invokes audit-search-links (an uncalled probe never checks a template)' }
+else { Bad 'audit-search-links is an ORPHAN - nothing invokes it, so a store can re-route its storefront and the fallback links die silently again' }
+
 # ---------------------------------------------------------------- 24. known-wrong blocklist (Component 2)
 # MUST FIRE: an adjudicated-wrong product is priced on the board again. FOUNDING BUG - audit findings lived
 # as PROSE in .md files, so honeydew was written up on 2026-07-29 with the store's own arithmetic and was
@@ -2907,7 +2964,10 @@ else {
   else { Bad ('sync-prose-from-spec -SelfTest failed: ' + ($r -replace "`n", ' ')) }
 
   $chk = & powershell -NoProfile -ExecutionPolicy Bypass -File $sps -AllRuns -Check 2>&1 | Out-String
-  if ($LASTEXITCODE -eq 0 -and $chk -match 'CHECK OK') { Ok 'specs\prose matches the specs on all 513 recipes - a full spec-guards run cannot revert the cost redesign' }
+  # SCOPE, stated in the label because the first version of it over-claimed: these prose files belong to
+  # the ARCHIVE run snapshots. db\recipes (the layer engine\build-cards renders from) has no prose dir, so
+  # full-mode spec-guards cannot run against it and cannot revert a live card.
+  if ($LASTEXITCODE -eq 0 -and $chk -match 'CHECK OK') { Ok 'specs\prose matches its spec in every archived run - a full spec-guards run on a run dir cannot revert that run''s record' }
   else { Bad ('specs\prose has DRIFTED from the specs. spec-guards FULL mode merges prose INTO the spec, so the next full run overwrites the specs with older text, on every drifted slug at once. Run meal-prep\pipeline\sync-prose-from-spec.ps1 -AllRuns. ' + (($chk -split "`r?`n" | Where-Object { $_ -match 'CHECK FAIL' }) -join ' ')) }
 
   # THE TWO FIELD LISTS MUST STAY EQUAL. sync-prose-from-spec copies exactly the fields spec-guards merges;

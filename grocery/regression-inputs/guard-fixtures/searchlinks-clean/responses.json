@@ -1,0 +1,10 @@
+{
+  "_readme": "FROZEN. Same captures as the must-fire fixture except Family Fare, which is now the SPA shell at /shop - HTTP 200, title 'Shop Family Fare!'. Captured 2026-08-02.",
+  "https://www.walmart.com/search?q=milk": { "status": 200, "title": "milk - Walmart.com" },
+  "https://www.bakersplus.com/search?query=milk&searchType=default_search": { "status": 0, "title": "" },
+  "https://www.hy-vee.com/aisles-online/search?search=milk": { "status": 200, "title": "Hy-Vee Aisles Online Grocery Shopping" },
+  "https://www.aldi.us/store/aldi/s?k=milk": { "status": 200, "title": "ALDI Milk Delivery or Pickup Near Me | ALDI" },
+  "https://shop.fareway.com/store/fareway-meat-grocery/s?k=milk": { "status": 200, "title": "Fareway Meat &amp; Grocery Milk Pickup Near Me | Fareway Meat &amp; Grocery" },
+  "https://www.samsclub.com/s/milk": { "status": 200, "title": "milk - Samsclub.com" },
+  "https://www.shopfamilyfare.com/shop": { "status": 200, "title": "Shop Family Fare!" }
+}

@@ -1,0 +1,10 @@
+{
+  "_readme": "FROZEN. Every store answered by a bot wall or nothing at all - the state a probe run from a blocked network produces. The guard MUST exit 3 and say COULD NOT EVALUATE here, never exit 0 'OK'. This pins the gates-that-can-never-arm failure mode: a probe whose silence is indistinguishable from a clean result is worse than no probe, because it is read as proof.",
+  "https://www.walmart.com/search?q=milk": { "status": 403, "title": "Access Denied" },
+  "https://www.bakersplus.com/search?query=milk&searchType=default_search": { "status": 0, "title": "" },
+  "https://www.hy-vee.com/aisles-online/search?search=milk": { "status": 429, "title": "" },
+  "https://www.aldi.us/store/aldi/s?k=milk": { "status": 503, "title": "" },
+  "https://shop.fareway.com/store/fareway-meat-grocery/s?k=milk": { "status": 0, "title": "" },
+  "https://www.samsclub.com/s/milk": { "status": 403, "title": "" },
+  "https://www.shopfamilyfare.com/shop": { "status": 0, "title": "" }
+}

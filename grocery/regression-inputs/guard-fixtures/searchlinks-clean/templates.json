@@ -1,0 +1,10 @@
+{
+  "_readme": "FROZEN clean twin: the same map with Family Fare corrected to the hash-bang route its own nav search box emits. The probe must stay SILENT on this. Note the fragment - the probe has to strip it and judge https://www.shopfamilyfare.com/shop, which is the whole reason a status code alone could not have caught the founding bug on an SPA.",
+  "Walmart": "https://www.walmart.com/search?q={q}",
+  "Baker's": "https://www.bakersplus.com/search?query={q}&searchType=default_search",
+  "Hy-Vee": "https://www.hy-vee.com/aisles-online/search?search={q}",
+  "Aldi": "https://www.aldi.us/store/aldi/s?k={q}",
+  "Fareway": "https://shop.fareway.com/store/fareway-meat-grocery/s?k={q}",
+  "Sam's Club": "https://www.samsclub.com/s/{q}",
+  "Family Fare": "https://www.shopfamilyfare.com/shop#!/?q={q}&search_option_id=product"
+}

@@ -1,0 +1,41 @@
+﻿{
+    "readme":  "Accepted per-store echo tier for audit-search-links.ps1. echo=true means that store repeats the query in its page \u003ctitle\u003e, which proves the search READ our query parameter. A drop from true to false is reported as an advisory downgrade, never a hard finding - re-accept here after checking the store by hand.",
+    "query":  "milk",
+    "stores":  {
+                   "Aldi":  {
+                                "echo":  true,
+                                "verdict":  "OK",
+                                "accepted":  "2026-08-02"
+                            },
+                   "Baker\u0027s":  {
+                                        "echo":  false,
+                                        "verdict":  "UNPROVABLE",
+                                        "accepted":  "2026-08-02"
+                                    },
+                   "Family Fare":  {
+                                       "echo":  false,
+                                       "verdict":  "OK",
+                                       "accepted":  "2026-08-02"
+                                   },
+                   "Fareway":  {
+                                   "echo":  true,
+                                   "verdict":  "OK",
+                                   "accepted":  "2026-08-02"
+                               },
+                   "Hy-Vee":  {
+                                  "echo":  false,
+                                  "verdict":  "OK",
+                                  "accepted":  "2026-08-02"
+                              },
+                   "Sam\u0027s Club":  {
+                                           "echo":  true,
+                                           "verdict":  "OK",
+                                           "accepted":  "2026-08-02"
+                                       },
+                   "Walmart":  {
+                                   "echo":  true,
+                                   "verdict":  "OK",
+                                   "accepted":  "2026-08-02"
+                               }
+               }
+}

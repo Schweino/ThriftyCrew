@@ -238,7 +238,15 @@ $SEARCHURLS = @{
   'Aldi'        = 'https://www.aldi.us/store/aldi/s?k={q}'
   'Fareway'     = 'https://shop.fareway.com/store/fareway-meat-grocery/s?k={q}'
   "Sam's Club"  = 'https://www.samsclub.com/s/{q}'
-  'Family Fare' = 'https://www.shopfamilyfare.com/search?search_term={q}'
+  # Family Fare's storefront is a Freshop SPA bolted onto a WordPress marketing site. The two halves have
+  # SEPARATE routers, and only the WordPress half owns clean paths: /search?search_term= and /shop/search? are
+  # both "Page not found" (verified 2026-08-02 - the old /search?search_term= template 404'd for 20 live chips
+  # in public/board.json). The SPA routes off the HASH-BANG fragment, and this is the exact URL the site's own
+  # nav search box emits when you type into it. Two properties make it the right last resort: the fragment is
+  # never sent to the server, so it cannot 404, and if the SPA ever stops parsing q the shopper still lands on
+  # a working /shop instead of an error page. Re-verify by typing in the site's search box, not by HTTP status:
+  # every /shop/* path returns 200 from the SPA shell, so a status code proves nothing here.
+  'Family Fare' = 'https://www.shopfamilyfare.com/shop#!/?q={q}&search_option_id=product'
 }
 function SearchLink([string]$store, [string]$query) {
   $tpl = $SEARCHURLS[$store]
