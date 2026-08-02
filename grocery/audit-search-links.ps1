@@ -252,19 +252,26 @@ if ($Accept) {
 
 # ---------------------------------------------------------------- report
 $reportF = Join-Path $ReportDir 'search-links-report.json'
-try {
-  ([ordered]@{
-    generated  = (Get-Date -Format 'yyyy-MM-dd HH:mm')
-    query      = $Query
-    offline    = [bool]$canned
-    checked    = $rows.Count
-    provable   = $provable.Count
-    unprovable = @($unprov | ForEach-Object { $_.store })
-    issues     = @($issues)
-    downgrades = @($downgrades)
-    rows       = @($rows)
-  } | ConvertTo-Json -Depth 6) | Set-Content $reportF -Encoding UTF8
-} catch {}
+# PS 5.1 TRAP, and it cost this guard its report on the first cut: inside an [ordered] literal,
+# 'k = @($list)' where $list is a List[T] throws "Argument types do not match" - the SAME member assigned
+# $list.ToArray() is fine. It threw into a silent catch, so every run printed a healthy summary and wrote
+# NO report, while the alert email pointed at a file that did not exist. Two lessons, both already paid
+# for elsewhere in this estate: arrays are materialised with .ToArray() before they go near the literal,
+# and the write no longer swallows its own failure - a report nobody can read is a finding, not a detail.
+$unprovNames = @($unprov | ForEach-Object { [string]$_.store })
+$reportObj = [ordered]@{
+  generated  = (Get-Date -Format 'yyyy-MM-dd HH:mm')
+  query      = $Query
+  offline    = [bool]$canned
+  checked    = $rows.Count
+  provable   = $provable.Count
+  unprovable = $unprovNames
+  issues     = $issues.ToArray()
+  downgrades = [string[]]$downgrades
+  rows       = $rows.ToArray()
+}
+try { ($reportObj | ConvertTo-Json -Depth 6) | Set-Content $reportF -Encoding UTF8 }
+catch { Write-Output ("  WARN  could not write the report to " + $reportF + " - " + $_.Exception.Message + " (the alert body points at this file, so it must exist)") }
 
 foreach ($n in $notes) { Write-Output ("  note: " + $n) }
 foreach ($r in ($rows | Sort-Object store)) {

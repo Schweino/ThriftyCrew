@@ -2191,6 +2191,17 @@ if ($sl.text -match 'DOWNGRADE' -and $sl.text -match 'Walmart stopped echoing') 
 else { Bad ('search-links no longer notices a store ignoring the query parameter - a silently-rotted template reads as healthy: ' + $sl.text) }
 if ($sl.rc -eq 0) { Ok 'the echo downgrade stays ADVISORY (exit 0) - a title change is not proof of a dead link' }
 else { Bad ('search-links now hard-fails on a title change (rc=' + $sl.rc + ') - that pages Brad over marketing copy, which is how a guard gets ignored') }
+# THE REPORT MUST ACTUALLY EXIST. It shipped broken: 'k = @($list)' inside an [ordered] literal throws
+# "Argument types do not match" in PS 5.1, the write was wrapped in a bare catch, and every run printed a
+# healthy summary while writing no file - with the alert email pointing at that missing file. Asserting the
+# summary text alone would never have caught it; only reading the artifact does.
+$slRepF = Join-Path $slRep 'search-links-report.json'
+if (Test-Path $slRepF) {
+  $slJson = $null
+  try { $slJson = Get-Content $slRepF -Raw | ConvertFrom-Json } catch {}
+  if ($slJson -and @($slJson.rows).Count -ge 7 -and $slJson.query) { Ok 'search-links writes a report that parses and carries a row per store (the file its alert tells Brad to open)' }
+  else { Bad 'search-links wrote a report that does not parse or has no per-store rows - the alert points at an unreadable file' }
+} else { Bad 'search-links wrote NO report file - its alert body names a path that does not exist, and every run still prints a healthy-looking summary' }
 try { Remove-Item -LiteralPath $slRep -Recurse -Force -ErrorAction SilentlyContinue } catch {}
 # THE DEAD URL ITSELF, pinned at the source. Cheapest possible regression test for the exact string.
 $bdpSrc = Get-Content (Join-Path $root 'build-deals-page.ps1') -Raw
