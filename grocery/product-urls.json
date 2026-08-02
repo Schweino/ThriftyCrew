@@ -7793,9 +7793,9 @@
                                                              "board_pu":  0.455
                                                          },
                                      "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386686-fareway-all-butter-croissants-3-ct",
-                                                     "name":  "Fareway All Butter Croissants",
-                                                     "price":  "$5.99",
+                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386218-croissants",
+                                                     "name":  "Bakery Fresh Croissants",
+                                                     "price":  "$4.99",
                                                      "size":  "3 ct",
                                                      "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                  }
@@ -11231,12 +11231,6 @@
                                                           "size":  "59 oz",
                                                           "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                       },
-                                      "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/34483-hawaiian-punch-polar-blast-juice-drink-1-gal",
-                                                      "price":  3.48,
-                                                      "size":  "512 fl oz",
-                                                      "name":  "Hawaiian Punch Multi-serve Polar Blast Juice Drink"
-                                                  },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/41153/minute-maid-fruit-punch-juice-drink-carton",
                                                      "name":  "Minute Maid Fruit Punch Juice Drink Carton",
@@ -11258,6 +11252,13 @@
                                                       "price":  "$5.57",
                                                       "size":  "150 fl oz",
                                                       "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
+                                                  },
+                                      "Fareway":  {
+                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/250591-brisk-fruit-punch-juice-33-8-fl-oz",
+                                                      "name":  "Brisk Juice Drink, Fruit Punch",
+                                                      "price":  "$2.29",
+                                                      "size":  "1 L",
+                                                      "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                   }
                                   },
                   "fruit-snacks":  {
@@ -11276,12 +11277,6 @@
                                                            "size":  "26 ea",
                                                            "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
                                                        },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1418472-mott-s-medleys-assorted-fruit-snacks-gluten-free-32-000-oz",
-                                                       "price":  8.77,
-                                                       "size":  "each",
-                                                       "name":  "Mott’s Gluten Free Assorted Fruit Flavored Snacks"
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/3910729/hy-vee-dinosaurs-fruit-snacks-10-0-8-oz-pouches",
                                                       "name":  "Hy-Vee Dinosaurs Fruit Snacks, 10-0.8 oz Pouches",
@@ -11289,7 +11284,14 @@
                                                       "size":  "10 ct",
                                                       "verified":  "2026-07-27 DERIVED from the price row (same record the board priced)",
                                                       "board_pu":  0.279
-                                                  }
+                                                  },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2690039-mott-s-assorted-fruit-flavored-snacks-10-count-8-000-oz",
+                                                       "name":  "Mott’s Gluten Free Assorted Fruit Flavored Snacks",
+                                                       "price":  "$3.28",
+                                                       "size":  "10 ct",
+                                                       "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                   }
                                    },
                   "furniture-polish":  {
                                            "commodity":  "Furniture Polish / Dusting Spray",
@@ -13119,12 +13121,6 @@
                                                         "size":  "50 fl oz",
                                                         "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
                                                     },
-                                    "Fareway":  {
-                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17105464-softsoap-hand-soap-fresh-breeze-7-5-oz",
-                                                    "price":  1.99,
-                                                    "size":  "221 fl oz",
-                                                    "name":  "Softsoap Liquid Hand Soap Pump, Fresh Breeze"
-                                                },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/4196260/hy-vee-clear-hands-soap",
                                                    "price":  5.99,
@@ -13145,6 +13141,13 @@
                                                     "price":  "$2.97",
                                                     "size":  "50 fl oz",
                                                     "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
+                                                },
+                                    "Fareway":  {
+                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/13601-dial-complete-antibacterial-foaming-hand-wash-power-berries-7-5-fl-oz",
+                                                    "name":  "Dial Antibacterial Defense Power Berries Scent Foaming Hand Soap, 7.5 fl oz",
+                                                    "price":  "$3.49",
+                                                    "size":  "7.5 fl oz",
+                                                    "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                 }
                                 },
                   "harissa-paste":  {
@@ -13594,12 +13597,6 @@
                                                           "size":  "8 oz",
                                                           "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                       },
-                                      "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71192-woeber-s-horseradish-sauce-16-oz",
-                                                      "price":  2.99,
-                                                      "size":  "16 oz",
-                                                      "name":  "Woeber\u0027s Horseradish Sauce"
-                                                  },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/12819/silver-spring-horseradish-8-oz",
                                                      "price":  3.99,
@@ -13613,6 +13610,13 @@
                                                       "size":  "9.5 oz",
                                                       "name":  "Inglehoffer Creamy Style Prepared Horseradish, 9.5 oz - Alle",
                                                       "board_pu":  0.2989
+                                                  },
+                                      "Fareway":  {
+                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/96372-reese-s-horseradish-prepared-6-5-oz",
+                                                      "name":  "Reese\u0027s Prepared Horseradish",
+                                                      "price":  "$4.29",
+                                                      "size":  "6.5 oz",
+                                                      "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                   }
                                   },
                   "horseradish-sauce":  {
@@ -13717,12 +13721,6 @@
                                                            "size":  "8 ct",
                                                            "board_pu":  0.5362
                                                        },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18529104-rotella-s-hot-dog-buns-12-4-oz",
-                                                       "price":  2.5,
-                                                       "size":  "each",
-                                                       "name":  "Rotella\u0027s Italian Bakery Hot Dog Buns"
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/89633/hy-vee-hot-dog-buns-8-count",
                                                       "name":  "Hy-Vee Hot Dog Buns 8 Count",
@@ -13737,6 +13735,13 @@
                                                        "size":  "8 ct",
                                                        "name":  "Great Value Hot Dog Buns White",
                                                        "board_pu":  0.185
+                                                   },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2607426-pepperidge-farm-bakery-classics-top-sliced-white-hot-dog-buns-14-oz",
+                                                       "name":  "Pepperidge Farm Top Sliced White Hot Dog Buns",
+                                                       "price":  "$3.49",
+                                                       "size":  "8 ct",
+                                                       "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                    }
                                    },
                   "hot-dogs":  {
@@ -14195,12 +14200,6 @@
                                                                       "size":  "8.2 oz",
                                                                       "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
                                                                   },
-                                                  "Fareway":  {
-                                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18581926-idahoan-buttery-homestyle-mashed-potatoes-6-oz",
-                                                                  "price":  4.99,
-                                                                  "size":  "",
-                                                                  "name":  "Idahoan® Buttery Homestyle Mashed Potatoes"
-                                                              },
                                                   "Hy-Vee":  {
                                                                  "url":  "https://www.hy-vee.com/aisles-online/p/43867/idahoan-four-cheese-mashed-potatoes",
                                                                  "name":  "Idahoan Four Cheese Mashed Potatoes",
@@ -14223,6 +14222,13 @@
                                                                   "size":  "13.75 oz",
                                                                   "name":  "Idahoan Original Mashed Potatoes, 13.75 oz Box",
                                                                   "verified":  "2026-07-30 price-pull self-capture"
+                                                              },
+                                                  "Fareway":  {
+                                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/36791-idahoan-roasted-garlic-mashed-potatoes-4-oz",
+                                                                  "name":  "Idahoan® Roasted Garlic Mashed Potatoes",
+                                                                  "price":  "$1.48",
+                                                                  "size":  "4 oz",
+                                                                  "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                               }
                                               },
                   "italian-dressing":  {
@@ -15192,12 +15198,6 @@
                                                      "size":  "1 ct",
                                                      "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)"
                                                  },
-                                 "Fareway":  {
-                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1366070-whole-lemons-16-oz",
-                                                 "price":  2.48,
-                                                 "size":  "each",
-                                                 "name":  "Whole Lemons"
-                                             },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/37192/lemons",
                                                 "name":  "Lemons",
@@ -15212,6 +15212,13 @@
                                                  "size":  "each",
                                                  "name":  "Fresh Lemon",
                                                  "board_pu":  0.5
+                                             },
+                                 "Fareway":  {
+                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3259496-lemon-each",
+                                                 "name":  "Lemon",
+                                                 "price":  "$0.99",
+                                                 "size":  "1 ct",
+                                                 "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                              }
                              },
                   "lettuce":  {
@@ -16726,12 +16733,6 @@
                                                      "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)",
                                                      "board_pu":  0.998
                                                  },
-                                 "Fareway":  {
-                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19267864-crazy-fresh-diced-yellow-onions-each",
-                                                 "price":  2.99,
-                                                 "size":  "6 oz",
-                                                 "name":  "Crazy Fresh Yellow Diced Onion"
-                                             },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/46166/yellow-onions-3-pound-bag",
                                                 "name":  "Yellow Onions 3-Pound Bag",
@@ -16754,6 +16755,13 @@
                                                  "size":  "0.877 lb",
                                                  "verified":  "2026-07-23 DERIVED from the price row (same record the board priced)",
                                                  "board_pu":  1.1403
+                                             },
+                                 "Fareway":  {
+                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16502119-vidalia-onion-3-lbs",
+                                                 "name":  "Vidalia Onion",
+                                                 "price":  "$3.99",
+                                                 "size":  "3 lb",
+                                                 "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                              }
                              },
                   "onion-soup-mix":  {
@@ -17452,12 +17460,6 @@
                                                           "size":  "24 oz",
                                                           "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
                                                       },
-                                      "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20629096-fareway-pasta-sauce-meat-flavored-45-oz",
-                                                      "price":  3.48,
-                                                      "size":  "45 oz",
-                                                      "name":  "Fareway Meat Flavored Pasta Sauce"
-                                                  },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/6752/hunt-s-traditional-pasta-sauce",
                                                      "name":  "Hunt\u0027s Traditional Pasta Sauce",
@@ -17481,6 +17483,13 @@
                                                       "size":  "23 oz",
                                                       "verified":  "2026-07-23 DERIVED from the price row (same record the board priced)",
                                                       "board_pu":  0.0857
+                                                  },
+                                      "Fareway":  {
+                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39349-prego-traditional-italian-sauce-24-oz",
+                                                      "name":  "Prego Traditional Pasta Sauce",
+                                                      "price":  "$2.58",
+                                                      "size":  "24 oz",
+                                                      "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                   }
                                   },
                   "peaches":  {
@@ -21565,12 +21574,6 @@
                                                    "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)",
                                                    "board_pu":  0.0516
                                                },
-                               "Fareway":  {
-                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/42309-pepsi-cola-12-fl-oz",
-                                               "price":  9.49,
-                                               "size":  "",
-                                               "name":  "Pepsi Soda - Pack"
-                                           },
                                "Sam\u0027s Club":  {
                                                        "url":  "https://www.samsclub.com/ip/13857919249",
                                                        "name":  "Shasta Cola 12 fl. oz., 24 pk.",
@@ -21584,6 +21587,13 @@
                                                "price":  "$7.97",
                                                "size":  "144 fl oz",
                                                "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)"
+                                           },
+                               "Fareway":  {
+                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16706881-coke-classic-soda-soft-drink-20-oza",
+                                               "name":  "Coca-Cola Soda Bottle",
+                                               "price":  "$2.79",
+                                               "size":  "20 fl oz",
+                                               "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                            }
                            },
                   "sour-cream":  {
@@ -23808,12 +23818,6 @@
                                                         "size":  "12 ea",
                                                         "board_pu":  0.1825
                                                     },
-                                    "Fareway":  {
-                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/128790-mission-super-soft-fajita-flour-tortillas-23-0-oz",
-                                                    "price":  3.99,
-                                                    "size":  "each",
-                                                    "name":  "Mission Super Soft Fajita Flour Tortillas"
-                                                },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2968238/mission-super-soft-flour-fajita-tortillas-20ct",
                                                    "name":  "Mission Super Soft Flour Fajita Tortillas 20Ct",
@@ -23821,7 +23825,14 @@
                                                    "size":  "20 ct",
                                                    "verified":  "2026-07-18 Hy-Vee GraphQL (storeId 1465, current shelf price)",
                                                    "board_pu":  0.1495
-                                               }
+                                               },
+                                    "Fareway":  {
+                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/103832577-mission-flour-fajit-1-each",
+                                                    "name":  "Mission Super Soft Flour Tortillas, Fajita Size, 10 Count",
+                                                    "price":  "$1.99",
+                                                    "size":  "each",
+                                                    "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
+                                                }
                                 },
                   "traditional-pasta-sauce":  {
                                                   "commodity":  "Traditional Pasta Sauce",
@@ -23902,10 +23913,10 @@
                                                      "verified":  "2026-07-30 price-pull self-capture"
                                                  },
                                      "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39667951-bright-essentials-trash-bags-black-drawstring-unscented-large-28-each",
-                                                     "name":  "Bright Essentials Trash Bags, Black, Drawstring, Unscented, Large",
-                                                     "price":  "$7.88",
-                                                     "size":  "28 ct",
+                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3250558-hefty-scent-free-tall-drawstring-kitchen-bags-40-ea",
+                                                     "name":  "Hefty Scent Free Tall Drawstring Kitchen Bags",
+                                                     "price":  "$9.97",
+                                                     "size":  "40 ct",
                                                      "verified":  "2026-08-01 DERIVED from the price row (same record the board priced)"
                                                  }
                                  },

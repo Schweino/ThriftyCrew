@@ -17214,7 +17214,8 @@
                         "epsom",
                         "tampons?",
                         "lip\\s+balm",
-                        "lunch\\s*meat"
+                        "lunch\\s*meat",
+                        "chicken\\s+breast"
                     ],
         "relax_global":  [
                              "seasoned"
@@ -36205,7 +36206,11 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "shrimp\\s+(tray|ring|platter|bowl)",
+                        "\\bcooked\\b.*\\bshrimp\\b",
+                        "\\bshrimp\\b.*\\bdeveined\\b",
+                        "shrimp\\s+and\\s+surimi"
                     ],
         "relax_global":  [
                              "\\bsauce\\b",
