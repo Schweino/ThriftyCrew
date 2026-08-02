@@ -3062,6 +3062,22 @@ else {
   if ($LASTEXITCODE -eq 0) { Ok 'no recipe spec contradicts itself worse than the recorded baseline (stat-vs-prose, stale money, head quantities all at ZERO)' }
   else { Bad ('a spec-contradiction class got WORSE: ' + (($r -split "`r?`n" | Where-Object { $_ -match 'FAIL' }) -join ' ')) }
 }
+
+# ---------------------------------------------------------------- identity eval set (2026-08-02, L1)
+# The sidecar's identity lane stays OFF until it beats a HARD eval, and Phase 1's eval was not hard: all
+# 25 of its negatives are dramatically wrong (bath soap as coconut oil), so it never asked the model to
+# tell a wiener from a hot dog. export-identity-eval.ps1 builds the harder set, and the rule that keeps it
+# honest is the one pinned here - a pair may only be MINED as a negative when the candidate commodity's
+# own regex REJECTS the product. A rule-accepted product is contested, not clean, and labelling it either
+# way teaches the eval a lie. The regex verdict stays in PowerShell for the same reason the sweep does:
+# Python must never re-implement the corpus rules.
+$eie = Join-Path $root 'export-identity-eval.ps1'
+if (-not (Test-Path $eie)) { Bad 'export-identity-eval.ps1 is missing - the identity lane has no hard eval to be measured against, and the only remaining evidence is the AUC 0.985 that was measured on dramatic errors' }
+else {
+  $r = RunPS 'export-identity-eval.ps1' @('-SelfTest')
+  if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'identity eval: an EXCLUDE still overrides an include, and a rule-ACCEPTED product still cannot be mined as a clean negative' }
+  else { Bad ('export-identity-eval -SelfTest failed (rc=' + $r.rc + ') - the hard-negative labelling rule is broken, so any AUC measured with it is meaningless: ' + ($r.text -replace "`n", ' ')) }
+}
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2
 

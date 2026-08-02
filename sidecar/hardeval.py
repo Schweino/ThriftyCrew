@@ -1,0 +1,288 @@
+"""
+hardeval.py - re-measure the identity matcher on an eval set that contains SUBTLE errors.
+
+WHY THIS EXISTS
+---------------
+Phase 1's backtest reported AUC 0.985 and that number was misleading. Its 25 labelled negatives are all
+DRAMATICALLY wrong - a bath soap as coconut oil, dog food as meat - so it never asked the model a hard
+question. When the identity lane then ran on the real board it flagged 173 pairs and every one inspected
+was CORRECT: Wimmer's Wieners against Hot Dogs, Kroger Olive Oil Mayo against Mayonnaise, Yellow Bananas
+against Bananas. Separating soap from oil says nothing about separating a wiener from a hot dog, and the
+second question is the entire job.
+
+So the first move is not a fine-tune, it is an honest eval. Two negative sets, and they measure different
+things on purpose:
+
+  GOLD   45 pairs expanded from the 63 adjudicated rulings in known-wrong.json. A reasoner looked at the
+         product and the commodity and ruled they are not the same thing. These include the subtle shapes
+         the old set had none of - sandwich cookies matched into FROSTING on the words "Butter Cream
+         Icing", a ready-to-drink oat milk latte matched into COFFEE. This is the class the lane must
+         catch.
+  MINED  near-miss pairs: a real product, paired with a commodity that is semantically CLOSE to it but
+         whose own regex rejects it. These are the class the lane must NOT flag, because in production
+         almost every pair it scores is of this kind - similar, and fine.
+
+The number that decides whether the lane can ship is not AUC. It is: at a threshold that catches most of
+GOLD, how many accepted board pairs does it also flag? That is the false-alarm rate a human would have to
+work through every day, and 173-a-day is the answer that stopped it shipping.
+
+STAGES
+------
+  --stage mine   embed products + commodities, propose near-miss candidates, write mine-candidates.json
+                 for PowerShell to stamp with the regex verdict (Python never re-implements the rules)
+  --stage score  score positives + gold (+ mined, if labelled) and write the report
+"""
+from __future__ import annotations
+import argparse, json, os, sys, time
+
+import torch
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from lib_match import Matcher, clean_product, commodity_text, load_json, DEVICE
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+DATA = os.path.join(HERE, "data")
+OUT = os.path.join(HERE, "out")
+os.makedirs(OUT, exist_ok=True)
+
+
+def log(m: str) -> None:
+    print(f"[{time.strftime('%H:%M:%S')}] {m}", flush=True)
+
+
+def auc(pos: list[float], neg: list[float]) -> float:
+    """P(a random accepted pair scores above a random wrong pair). 0.5 = coin flip.
+
+    Same tie-corrected implementation as backtest.py, copied deliberately rather than imported: the two
+    reports are read side by side and a difference in the metric would be indistinguishable from a
+    difference in the model.
+    """
+    if not pos or not neg:
+        return float("nan")
+    allv = sorted([(v, 0) for v in neg] + [(v, 1) for v in pos])
+    ranks: dict[int, float] = {}
+    i, r = 0, 1
+    while i < len(allv):
+        j = i
+        while j + 1 < len(allv) and allv[j + 1][0] == allv[i][0]:
+            j += 1
+        avg = (r + (r + (j - i))) / 2.0
+        for k in range(i, j + 1):
+            ranks[k] = avg
+        r += (j - i + 1)
+        i = j + 1
+    sr = sum(ranks[k] for k in range(len(allv)) if allv[k][1] == 1)
+    n1, n0 = len(pos), len(neg)
+    return (sr - n1 * (n1 + 1) / 2.0) / (n1 * n0)
+
+
+def load_defs():
+    defs = load_json(os.path.join(DATA, "commodity-defs.json"))
+    return defs, {d["id"]: d for d in defs}
+
+
+def stage_mine(top_k: int) -> None:
+    prods = load_json(os.path.join(DATA, "mine-products.json"))
+    defs, defs_by_id = load_defs()
+    m = Matcher.load(with_reranker=False)
+    log(f"device={DEVICE}  products={len(prods)}  commodities={len(defs)}")
+
+    cids = [d["id"] for d in defs]
+    cvecs = m.embed([commodity_text(d) for d in defs])
+    names = [clean_product(p["product"]) for p in prods]
+    t0 = time.time()
+    pvecs = m.embed(names)
+    log(f"embedded {len(names)} products in {time.time()-t0:.1f}s")
+
+    sims = pvecs @ cvecs.T                       # (P, C) cosine, both already normalised
+    k = min(top_k + 1, len(cids))                # +1 because the owner itself will usually rank first
+    top = torch.topk(sims, k=k, dim=1)
+    out = []
+    for i, p in enumerate(prods):
+        owner = p["owner"]
+        for rank in range(k):
+            cid = cids[int(top.indices[i][rank])]
+            if cid == owner:
+                continue
+            out.append({
+                "product": p["product"], "owner": owner, "candidate": cid,
+                "cos": round(float(top.values[i][rank]), 4),
+            })
+    path = os.path.join(DATA, "mine-candidates.json")
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(out, f)
+    log(f"mine-candidates.json: {len(out)} near-miss candidate pair(s) -> label them with "
+        f"export-identity-eval.ps1 -Label")
+
+
+def score_pairs(m: Matcher, defs_by_id: dict, rows: list[dict], key_id: str = "id") -> list[float]:
+    pairs, keep = [], []
+    for r in rows:
+        cid = r[key_id]
+        d = defs_by_id.get(cid)
+        if not d:
+            continue
+        pairs.append((commodity_text(d), clean_product(r["product"])))
+        keep.append(r)
+    scores = m.rerank(pairs)
+    for r, s in zip(keep, scores):
+        r["_score"] = float(s)
+    return [r["_score"] for r in keep]
+
+
+def operating_points(pos: list[float], neg: list[float], label: str) -> list[str]:
+    """The only number that decides whether the lane ships: cost of catching the wrong ones.
+
+    Reported as 'to catch N% of the wrong pairs, you must also review M accepted pairs', because that M
+    is the human's daily workload and 173 was the answer that stopped this lane from shipping.
+    """
+    lines = []
+    if not neg:
+        return ["  (no negatives)"]
+    sneg = sorted(neg)
+    for frac in (0.50, 0.80, 0.90, 1.00):
+        idx = min(len(sneg) - 1, int(round((1 - frac) * (len(sneg) - 1))))
+        thr = sneg[idx]                      # flag everything scoring <= thr
+        caught = sum(1 for v in neg if v <= thr)
+        false_alarms = sum(1 for v in pos if v <= thr)
+        rate = 100.0 * false_alarms / max(1, len(pos))
+        lines.append(f"  catch {caught}/{len(neg)} {label} (thr {thr:.4f})"
+                     f"  ->  {false_alarms} of {len(pos)} accepted pairs also flagged ({rate:.1f}%)")
+    return lines
+
+
+def stage_score() -> None:
+    defs, defs_by_id = load_defs()
+    pos_rows = load_json(os.path.join(DATA, "eval-positives.json"))
+    gold_rows = load_json(os.path.join(DATA, "negatives-gold.json"))
+    old_rows = load_json(os.path.join(DATA, "negatives.json"))
+    mined_rows = []
+    mp = os.path.join(DATA, "mine-labelled.json")
+    if os.path.exists(mp):
+        mined_rows = [r for r in load_json(mp) if not r.get("rules_accept")]
+
+    m = Matcher.load(with_reranker=True)
+    log(f"device={DEVICE}  positives={len(pos_rows)}  gold={len(gold_rows)}  "
+        f"old-negatives={len(old_rows)}  mined={len(mined_rows)}")
+
+    t0 = time.time()
+    pos = score_pairs(m, defs_by_id, pos_rows)
+    gold = score_pairs(m, defs_by_id, gold_rows)
+    old = score_pairs(m, defs_by_id, old_rows)
+    mined = score_pairs(m, defs_by_id, mined_rows, key_id="candidate") if mined_rows else []
+    log(f"scored {len(pos)+len(gold)+len(old)+len(mined)} pairs in {time.time()-t0:.1f}s")
+
+    rep = []
+    rep.append("# Identity matcher: the harder eval (2026-08-02)\n")
+    rep.append("Phase 1 reported **AUC 0.985** on 25 negatives that are all dramatically wrong (bath soap,")
+    rep.append("dog food). This re-measures the SAME model against negatives that are subtle.\n")
+    rep.append(f"- accepted board pairs (positives): **{len(pos)}**")
+    rep.append(f"- OLD negatives (Phase 1's set): **{len(old)}**")
+    rep.append(f"- GOLD negatives (adjudicated wrong-product rulings): **{len(gold)}**")
+    rep.append(f"- MINED near-miss negatives (rule-rejected, semantically close): **{len(mined)}**\n")
+    rep.append("## AUC\n")
+    rep.append(f"| negative set | n | AUC |")
+    rep.append(f"|---|---:|---:|")
+    rep.append(f"| Phase 1 (dramatic) | {len(old)} | {auc(pos, old):.4f} |")
+    rep.append(f"| GOLD (adjudicated) | {len(gold)} | {auc(pos, gold):.4f} |")
+    if mined:
+        rep.append(f"| MINED (near miss)  | {len(mined)} | {auc(pos, mined):.4f} |")
+    rep.append("")
+    rep.append("## The number that decides shipping\n")
+    rep.append("AUC is not it. The lane is advisory, so what matters is how many CORRECT pairs a human has")
+    rep.append("to read in order to be shown the wrong ones.\n")
+    rep.append("```")
+    rep += operating_points(pos, old, "OLD")
+    rep += operating_points(pos, gold, "GOLD")
+    if mined:
+        rep += operating_points(pos, mined, "MINED")
+    rep.append("```\n")
+
+    # ---- THE FAIR TEST. A raw threshold is not the design: lib_match calibrates PER COMMODITY, because
+    # 0.005 means something different for Red Pepper Flakes than for Milk. Scoring a pair against its own
+    # commodity's accepted distribution is the strongest form of the current architecture, so if the
+    # inversion survives calibration it is not a scaling problem and no threshold will fix it.
+    by_c: dict[str, list[float]] = {}
+    for r in pos_rows:
+        if "_score" in r:
+            by_c.setdefault(r["id"], []).append(r["_score"])
+
+    def z(r, cid_key="id"):
+        """How far below its OWN commodity's accepted median this pair sits, in median-absolute-deviations.
+        Robust on purpose: several commodities have a handful of exemplars and one outlier would set a
+        mean-based floor wherever it liked."""
+        v = by_c.get(r[cid_key]) or []
+        if len(v) < 3:
+            return None
+        s = sorted(v)
+        med = s[len(s) // 2]
+        mad = sorted(abs(x - med) for x in s)[len(s) // 2] or 1e-6
+        return (r["_score"] - med) / mad
+
+    zpos = [x for x in (z(r) for r in pos_rows if "_score" in r) if x is not None]
+    zgold = [x for x in (z(r) for r in gold_rows if "_score" in r) if x is not None]
+    rep.append("## Calibrated per commodity (the fair test)\n")
+    rep.append("Each pair scored against its OWN commodity's accepted distribution, which is what")
+    rep.append("lib_match's `calibrate` exists to do. If the answer does not improve here, the problem is")
+    rep.append("not the threshold.\n")
+    rep.append(f"- scorable positives {len(zpos)} / gold {len(zgold)} (a commodity needs 3+ accepted")
+    rep.append("  products before it has a distribution to calibrate against)")
+    if zpos and zgold:
+        rep.append(f"- AUC on the calibrated score: **{auc(zpos, zgold):.4f}**\n")
+        rep.append("```")
+        rep += operating_points(zpos, zgold, "GOLD (calibrated)")
+        rep.append("```\n")
+
+    worst = sorted([r for r in gold_rows if "_score" in r], key=lambda r: -r["_score"])[:10]
+    rep.append("## The adjudicated-wrong pairs the model likes MOST\n")
+    rep.append("These are the ones it would never flag. Each is a product a reasoner ruled is not the")
+    rep.append("commodity, scored as if it belongs. **Read the list before deciding what to fine-tune**:")
+    rep.append("they are not one failure, they are two, and only one of them is learnable from a name.")
+    rep.append("")
+    rep.append("- CARRIER errors (the commodity is an INGREDIENT inside a different product): Parmesan")
+    rep.append("  Garlic Pita Chips as parmesan, a chicken sausage with sun-dried tomatoes as sun-dried")
+    rep.append("  tomatoes. A model can learn these, and more labelled examples would help.")
+    rep.append("- SPECIFICATION errors (right product family, wrong grade or cut): Roast Beef Hash against")
+    rep.append("  corned-beef-hash, 96% lean against ground-beef-93-7, Pork Half Loin against")
+    rep.append("  pork-tenderloin, a beef-and-pork blend against ground-pork. Nothing in the NAME says")
+    rep.append("  which grade a commodity wants - that fact lives in the commodity's own definition, not")
+    rep.append("  in the product string - so no amount of fine-tuning on names will separate them. These")
+    rep.append("  need a grade/cut check, which is a different mechanism.")
+    rep.append("")
+    rep.append("One caveat on the gold set itself: `ground-cloves <- Spice Supreme Spice Ground Cloves` is")
+    rep.append("in the blocklist as a PRICE defect, not an identity one. The product IS ground cloves. The")
+    rep.append("model scoring it 0.531 is correct behaviour counted as a miss, so treat 45 as the")
+    rep.append("pessimistic denominator.")
+    rep.append("")
+    for r in worst:
+        rep.append(f"- `{r['_score']:.3f}`  **{r['id']}**  <- {r['product'][:90]}")
+    rep.append("")
+    best_pos = sorted([r for r in pos_rows if "_score" in r], key=lambda r: r["_score"])[:10]
+    rep.append("## The accepted pairs the model likes LEAST\n")
+    rep.append("The false alarms a low threshold buys. If these read as obviously fine, the lane is")
+    rep.append("flagging correctness, not error.\n")
+    for r in best_pos:
+        rep.append(f"- `{r['_score']:.3f}`  **{r['id']}**  <- {r['product'][:90]}")
+    rep.append("")
+
+    path = os.path.join(OUT, "hardeval-report.md")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(rep))
+    json.dump(
+        {"positives": len(pos), "old": len(old), "gold": len(gold), "mined": len(mined),
+         "auc_old": auc(pos, old), "auc_gold": auc(pos, gold),
+         "auc_mined": (auc(pos, mined) if mined else None)},
+        open(os.path.join(OUT, "hardeval.json"), "w", encoding="utf-8"), indent=2)
+    print("\n".join(rep))
+    log(f"wrote {path}")
+
+
+if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--stage", choices=["mine", "score"], required=True)
+    ap.add_argument("--top-k", type=int, default=8)
+    a = ap.parse_args()
+    if a.stage == "mine":
+        stage_mine(a.top_k)
+    else:
+        stage_score()
