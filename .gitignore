@@ -27,6 +27,11 @@
 /sidecar/out/*
 !/sidecar/out/backtest-report.md
 !/sidecar/out/phase2-report.md
+# The hard eval is the reason the identity lane is still off. Its numbers have to outlive the machine
+# that produced them, or the only surviving evidence is Phase 1's AUC 0.985 - which was measured on
+# negatives so dramatic (bath soap as coconut oil) that it answered a question nobody was asking.
+!/sidecar/out/hardeval-report.md
+!/sidecar/out/hardeval.json
 /sidecar/**/__pycache__/
 # The member-tool SOURCES and the build scripts that publish them. Same hole as lib\ and the interstitial:
 # these run on the live site, several are the only copy in existence, and none of them were versioned
