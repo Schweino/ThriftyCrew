@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Ground Beef Philly Cheesesteak Bowls",
     "slug":  "philly-cheesesteak-skillet-bowls",
     "cuisine":  "American",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://masonfit.com/ground-beef-cheesesteak-skillet/",
+    "source_site":  "Mason Fit",
     "manual_balance":  false,
     "tuning":  [
 
@@ -46,7 +46,7 @@
                     "Spoon it over cooked white rice and stir once so every bite gets some cheese."
                 ],
     "portion_html":  "Each of the 14 bowls gives you 41 grams of protein and about 579 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/ground-beef-cheesesteak-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eMason Fit\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Make a batch Sunday and you have got lunch handled all week without touching a drive-thru. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  42.23,
     "cost_batch_true":  49.16,
@@ -61,29 +61,29 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1960,
                                    "buy":  "5 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  1188,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "White Mushrooms",
                                    "grams":  368,
                                    "buy":  "2 packages",
-                                   "bid":"mushrooms",
-                                   "gpu":28.3495
+                                   "bid":  "mushrooms",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Green Bell Peppers",
                                    "grams":  307,
                                    "buy":  "3 peppers",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Yellow Onion",

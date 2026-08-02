@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Tex-Mex Beef and Rice Skillet Bowls",
     "slug":  "tex-mex-beef-rice-skillet-bowls",
     "cuisine":  "Tex-Mex",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://masonfit.com/tex-mex-ground-beef-and-rice-skillet/",
+    "source_site":  "Mason Fit",
     "manual_balance":  false,
     "tuning":  [
 
@@ -47,7 +47,7 @@
                     "Top with shredded cheddar and let it melt before you dish it into bowls."
                 ],
     "portion_html":  "Each of the 14 bowls delivers 52 grams of protein and about 576 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/tex-mex-ground-beef-and-rice-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eMason Fit\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One skillet, a stack of containers, and your lunches practically make themselves. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  53.33,
     "cost_batch_true":  56.36,
@@ -62,29 +62,29 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2730,
                                    "buy":  "6 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  587,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Seasoned Black Beans",
                                    "grams":  780,
                                    "buy":  "2 cans",
-                                   "bid":"seasoned-black-beans",
-                                   "gpu":28.3495
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  375,
                                    "buy":  "2 cans",
-                                   "bid":"canned-corn",
-                                   "gpu":28.3495
+                                   "bid":  "canned-corn",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -97,8 +97,8 @@
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  168,
                                    "buy":  "1 bag",
-                                   "bid":"cheddar-cheese-shredded",
-                                   "gpu":28.3495
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Paprika",

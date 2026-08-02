@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "High-Protein Turkey Chili Mac",
     "slug":  "turkey-chili-mac",
     "cuisine":  "American",
     "protein":  "turkey",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://skinnyfitalicious.com/healthy-chili-mac/",
+    "source_site":  "Skinny Fitalicious",
     "manual_balance":  false,
     "tuning":  [
 
@@ -51,7 +51,7 @@
                     "Melt the fat-free cheddar over the top and stir it through before you portion it out."
                 ],
     "portion_html":  "Each of the 14 bowls brings 56 grams of protein at 568 calories, making this one of the highest-protein plates in the lineup.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyfitalicious.com/healthy-chili-mac/\" target=\"_blank\" rel=\"noopener\"\u003eSkinny Fitalicious\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One pan, a pile of protein, and the kind of dinner that makes leftovers something to look forward to. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  45.54,
     "cost_batch_true":  51.65,
@@ -66,22 +66,22 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3000,
                                    "buy":  "7 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  620,
                                    "buy":  "2 boxs",
-                                   "bid":"penne-pasta",
-                                   "gpu":28.3495
+                                   "bid":  "penne-pasta",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Seasoned Black Beans",
                                    "grams":  600,
                                    "buy":  "2 cans",
-                                   "bid":"seasoned-black-beans",
-                                   "gpu":28.3495
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes",

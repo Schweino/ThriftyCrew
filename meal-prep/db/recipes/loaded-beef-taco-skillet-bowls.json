@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Loaded Beef Taco Skillet Bowls",
     "slug":  "loaded-beef-taco-skillet-bowls",
     "cuisine":  "Mexican",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://wholesomemadeeasy.com/loaded-taco-skillet/",
+    "source_site":  "Wholesome Made Easy",
     "manual_balance":  false,
     "tuning":  [
 
@@ -54,7 +54,7 @@
                     "Spoon into bowls and serve."
                 ],
     "portion_html":  "Each of the 14 servings brings 52 grams of protein and 636 calories, a genuinely loaded bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://wholesomemadeeasy.com/loaded-taco-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eWholesome Made Easy\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Taco night flavor with the budget math working in your favor, all from one pan. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  61.09,
     "cost_batch_true":  67.9,
@@ -69,29 +69,29 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2230,
                                    "buy":  "5 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Seasoned Black Beans",
                                    "grams":  2366,
                                    "buy":  "6 cans",
-                                   "bid":"seasoned-black-beans",
-                                   "gpu":28.3495
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  420,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  500,
                                    "buy":  "2 cans",
-                                   "bid":"canned-corn",
-                                   "gpu":28.3495
+                                   "bid":  "canned-corn",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Zucchini",
@@ -111,8 +111,8 @@
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  280,
                                    "buy":  "2 bags",
-                                   "bid":"cheddar-cheese-shredded",
-                                   "gpu":28.3495
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Chili Powder",
@@ -146,8 +146,8 @@
                                    "item":  "Red Bell Pepper",
                                    "grams":  260,
                                    "buy":  "1/2 cup diced",
-                                   "bid":"red-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Garlic Powder",

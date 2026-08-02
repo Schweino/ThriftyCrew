@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Honey Garlic Pork Bowls",
     "slug":  "slow-cooker-honey-garlic-pork-bowls",
     "cuisine":  "Asian",
     "protein":  "pork",
     "visibility":  "public",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.themagicalslowcooker.com/honey-garlic-pork-loin/",
+    "source_site":  "The Magical Slow Cooker",
     "manual_balance":  false,
     "tuning":  [
 
@@ -47,7 +47,7 @@
                     "Shred the pork, pile it over rice, add the broccoli, and drizzle the pan sauce on top."
                 ],
     "portion_html":  "Every bowl brings 54 grams of protein at just 586 calories, which is a lot of eating for the money.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/honey-garlic-pork-loin/\" target=\"_blank\" rel=\"noopener\"\u003eThe Magical Slow Cooker\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One pot, a handful of pantry staples, and dinner practically makes itself. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  26.04,
     "cost_batch_true":  27.46,
@@ -69,15 +69,15 @@
                                    "item":  "Rice",
                                    "grams":  820,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1200,
                                    "buy":  "4 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Honey",

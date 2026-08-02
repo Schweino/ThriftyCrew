@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Mediterranean Ground Turkey Bowls",
     "slug":  "mediterranean-ground-turkey-bowls",
     "cuisine":  "Mediterranean",
     "protein":  "turkey",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.budgetbytes.com/mediterranean-turkey-bowls/",
+    "source_site":  "Budget Bytes",
     "manual_balance":  false,
     "tuning":  [
 
@@ -50,7 +50,7 @@
                     "Serve over cooked white rice with a big dollop of Greek yogurt on top."
                 ],
     "portion_html":  "Each of the 14 bowls delivers 51 grams of protein and about 581 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/mediterranean-turkey-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eBudget Bytes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Light on the wallet, big on flavor, and it keeps beautifully all week. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  43.77,
     "cost_batch_true":  48.46,
@@ -65,15 +65,15 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3100,
                                    "buy":  "7 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Zucchini",
@@ -93,8 +93,8 @@
                                    "item":  "Greek Yogurt",
                                    "grams":  680,
                                    "buy":  "1 tub",
-                                   "bid":"greek-yogurt",
-                                   "gpu":28.3495
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -114,8 +114,8 @@
                                    "item":  "Cucumber",
                                    "grams":  1050,
                                    "buy":  "1 cucumber",
-                                   "bid":"cucumbers",
-                                   "gpu":300
+                                   "bid":  "cucumbers",
+                                   "gpu":  300
                                },
                                {
                                    "item":  "Garlic",

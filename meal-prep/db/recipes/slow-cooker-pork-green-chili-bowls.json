@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Pork Green Chili Bowls",
     "slug":  "slow-cooker-pork-green-chili-bowls",
     "cuisine":  "New Mexican",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.cakenknife.com/pork-green-chili/",
+    "source_site":  "Cake \u0027n Knife",
     "manual_balance":  false,
     "tuning":  [
 
@@ -50,7 +50,7 @@
                     "Serve over cooked white rice and divide into containers."
                 ],
     "portion_html":  "Every serving comes in around 558 calories with 55 grams of protein.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.cakenknife.com/pork-green-chili/\" target=\"_blank\" rel=\"noopener\"\u003eCake \u0027n Knife\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Tangy, warming, and easy on the wallet. Ladle it over rice and you are set. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  34.55,
     "cost_batch_true":  41.7,
@@ -72,22 +72,22 @@
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Diced Green Chiles",
                                    "grams":  760,
                                    "buy":  "7 cans",
-                                   "bid":"canned-green-chilies",
-                                   "gpu":28.3495
+                                   "bid":  "canned-green-chilies",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Salsa Verde",
                                    "grams":  450,
                                    "buy":  "1 jar",
-                                   "bid":"salsa-verde",
-                                   "gpu":28.3495
+                                   "bid":  "salsa-verde",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -114,8 +114,8 @@
                                    "item":  "Jalapeno",
                                    "grams":  45,
                                    "buy":  "1-2",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -149,8 +149,8 @@
                                    "item":  "Smoked Paprika",
                                    "grams":  3,
                                    "buy":  "1/2 tsp",
-                                   "bid":"smoked-paprika",
-                                   "gpu":28.3495
+                                   "bid":  "smoked-paprika",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Cayenne Pepper",
@@ -177,8 +177,8 @@
                                    "item":  "All-Purpose Flour",
                                    "grams":  60,
                                    "buy":  "1/4 cup",
-                                   "bid":"flour",
-                                   "gpu":453.592
+                                   "bid":  "flour",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Lime Juice",

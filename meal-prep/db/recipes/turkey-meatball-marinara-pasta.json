@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Turkey Meatball Marinara Pasta",
     "slug":  "turkey-meatball-marinara-pasta",
     "cuisine":  "Italian",
     "protein":  "turkey",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://reciperunner.com/skillet-meatballs-marinara-sauce/",
+    "source_site":  "Recipe Runner",
     "manual_balance":  false,
     "tuning":  [
 
@@ -50,7 +50,7 @@
                     "Finish each container with a shower of parmesan while it is still hot."
                 ],
     "portion_html":  "Every one of the 14 servings packs 57 grams of protein and 654 calories, so it fuels you like a full plate should.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://reciperunner.com/skillet-meatballs-marinara-sauce/\" target=\"_blank\" rel=\"noopener\"\u003eRecipe Runner\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Comfort-food Italian, meal-prepped and budget-approved. Twirl your fork and enjoy. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  46.2,
     "cost_batch_true":  54.29,
@@ -65,29 +65,29 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3130,
                                    "buy":  "7 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  749,
                                    "buy":  "2 boxs",
-                                   "bid":"penne-pasta",
-                                   "gpu":28.3495
+                                   "bid":  "penne-pasta",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Marinara Sauce",
                                    "grams":  1500,
                                    "buy":  "3 jars",
-                                   "bid":"marinara-sauce",
-                                   "gpu":28.3495
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Parmesan Cheese",
                                    "grams":  140,
                                    "buy":  "1 container",
-                                   "bid":"parmesan",
-                                   "gpu":28.3495
+                                   "bid":  "parmesan",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -121,8 +121,8 @@
                                    "item":  "Worcestershire Sauce",
                                    "grams":  45,
                                    "buy":  "1 tbsp",
-                                   "bid":"worcestershire",
-                                   "gpu":29.57
+                                   "bid":  "worcestershire",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Garlic",

@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Chicken Chile Verde Bowls",
     "slug":  "slow-cooker-chicken-chile-verde-bowls",
     "cuisine":  "Mexican",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.ambitiouskitchen.com/healthy-slow-cooker-chicken-chile-verde/",
+    "source_site":  "Ambitious Kitchen",
     "manual_balance":  false,
     "tuning":  [
 
@@ -52,7 +52,7 @@
                     "Serve the chile verde over rice with broccoli on the side."
                 ],
     "portion_html":  "Each of the 14 servings runs about 52g protein for roughly 557 calories, at around $2.44 a bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.ambitiouskitchen.com/healthy-slow-cooker-chicken-chile-verde/\" target=\"_blank\" rel=\"noopener\"\u003eAmbitious Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One pot of this and you will look forward to lunch instead of dreading it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  38.1,
     "cost_batch_true":  48.64,
@@ -67,15 +67,15 @@
                                    "item":  "Boneless Skinless Chicken Thigh",
                                    "grams":  3200,
                                    "buy":  "8 lb",
-                                   "bid":"boneless-skinless-chicken-thigh",
-                                   "gpu":453.592
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  900,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Tomatillos",
@@ -95,15 +95,15 @@
                                    "item":  "Diced Green Chiles",
                                    "grams":  200,
                                    "buy":  "2 cans",
-                                   "bid":"canned-green-chilies",
-                                   "gpu":28.3495
+                                   "bid":  "canned-green-chilies",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  400,
                                    "buy":  "2 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Poblano Peppers",
@@ -116,8 +116,8 @@
                                    "item":  "Jalapeno",
                                    "grams":  30,
                                    "buy":  "1 jalapeno",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -130,8 +130,8 @@
                                    "item":  "Fresh Cilantro",
                                    "grams":  28,
                                    "buy":  "1 bunch",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                },
                                {
                                    "item":  "Lime Juice",

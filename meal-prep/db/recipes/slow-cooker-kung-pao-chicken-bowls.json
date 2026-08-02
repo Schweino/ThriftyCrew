@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Kung Pao Chicken Bowls",
     "slug":  "slow-cooker-kung-pao-chicken-bowls",
     "cuisine":  "Chinese",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.crockpotsandflipflops.com/kung-pao-chicken/",
+    "source_site":  "Crockpots and Flip Flops",
     "manual_balance":  false,
     "tuning":  [
 
@@ -49,7 +49,7 @@
                     "Shred the chicken into the sauce and spoon it over hot white rice."
                 ],
     "portion_html":  "You\u0027re looking at 58 grams of protein and 576 calories per serving, the kind of number that keeps you full through the afternoon.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.crockpotsandflipflops.com/kung-pao-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eCrockpots and Flip Flops\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A little chopping up front buys you nine dinners that beat the drive-thru cold. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  32.02,
     "cost_batch_true":  37.26,
@@ -71,15 +71,15 @@
                                    "item":  "Rice",
                                    "grams":  980,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Green Bell Peppers",
                                    "grams":  300,
                                    "buy":  "3 peppers",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Zucchini",
@@ -134,8 +134,8 @@
                                    "item":  "Ginger",
                                    "grams":  14,
                                    "buy":  "1 tsp minced",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Red Pepper Flakes",

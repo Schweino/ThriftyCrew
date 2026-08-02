@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Cuban Mojo Pork Bowls",
     "slug":  "slow-cooker-cuban-mojo-pork-bowls",
     "cuisine":  "Cuban",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.eatingonadime.com/crock-pot-cuban-mojo-pork-tenderloin/",
+    "source_site":  "Eating on a Dime",
     "manual_balance":  false,
     "tuning":  [
 
@@ -49,7 +49,7 @@
                     "Top the beans with the mojo pork and divide into containers."
                 ],
     "portion_html":  "Every serving delivers around 565 calories and a strong 60 grams of protein.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eatingonadime.com/crock-pot-cuban-mojo-pork-tenderloin/\" target=\"_blank\" rel=\"noopener\"\u003eEating on a Dime\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Bright, filling, and cheap. That is a combination worth keeping in your regular rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  43.96,
     "cost_batch_true":  49.76,
@@ -71,15 +71,15 @@
                                    "item":  "Seasoned Black Beans",
                                    "grams":  1200,
                                    "buy":  "3 cans",
-                                   "bid":"seasoned-black-beans",
-                                   "gpu":28.3495
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  640,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Orange Juice",
@@ -120,8 +120,8 @@
                                    "item":  "Fresh Cilantro",
                                    "grams":  35,
                                    "buy":  "1 cup chopped",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                },
                                {
                                    "item":  "Fresh Mint",

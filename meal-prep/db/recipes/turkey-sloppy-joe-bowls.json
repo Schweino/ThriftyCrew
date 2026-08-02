@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Turkey Sloppy Joe Bowls",
     "slug":  "turkey-sloppy-joe-bowls",
     "cuisine":  "American",
     "protein":  "turkey",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://therealfooddietitians.com/turkey-sloppy-joes/",
+    "source_site":  "The Real Food Dietitians",
     "manual_balance":  false,
     "tuning":  [
 
@@ -51,7 +51,7 @@
                     "Spoon the sloppy joe mix right over the baked fries and dig in."
                 ],
     "portion_html":  "Each of the 14 bowls delivers 46 grams of protein and about 681 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://therealfooddietitians.com/turkey-sloppy-joes/\" target=\"_blank\" rel=\"noopener\"\u003eThe Real Food Dietitians\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "It is nostalgic, it is filling, and it will make you the hero of the lunch line. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  50.67,
     "cost_batch_true":  56.42,
@@ -66,8 +66,8 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3160,
                                    "buy":  "7 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Fries",
@@ -94,8 +94,8 @@
                                    "item":  "Green Bell Peppers",
                                    "grams":  240,
                                    "buy":  "2 peppers",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Shredded Carrots",
@@ -164,8 +164,8 @@
                                    "item":  "Smoked Paprika",
                                    "grams":  4,
                                    "buy":  "1/2 tsp",
-                                   "bid":"smoked-paprika",
-                                   "gpu":28.3495
+                                   "bid":  "smoked-paprika",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Black Pepper",

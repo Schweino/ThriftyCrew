@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Chicken Tortilla Soup Bowls",
     "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
     "cuisine":  "Mexican",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.eatyourselfskinny.com/chicken-tortilla-soup/",
+    "source_site":  "Eat Yourself Skinny",
     "manual_balance":  false,
     "tuning":  [
 
@@ -53,7 +53,7 @@
                     "Spoon over rice and finish each bowl with a little cheddar."
                 ],
     "portion_html":  "Each of the 14 servings comes in around 57g protein for about 559 calories, at roughly $2.07 a bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eatyourselfskinny.com/chicken-tortilla-soup/\" target=\"_blank\" rel=\"noopener\"\u003eEat Yourself Skinny\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheap, cozy, and ready to go, this is meal prep that actually makes you smile. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  39.14,
     "cost_batch_true":  42.58,
@@ -75,8 +75,8 @@
                                    "item":  "Rice",
                                    "grams":  820,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Crushed Tomatoes",
@@ -89,22 +89,22 @@
                                    "item":  "Seasoned Black Beans",
                                    "grams":  500,
                                    "buy":  "2 cans",
-                                   "bid":"seasoned-black-beans",
-                                   "gpu":28.3495
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  400,
                                    "buy":  "2 cans",
-                                   "bid":"canned-corn",
-                                   "gpu":28.3495
+                                   "bid":  "canned-corn",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  112,
                                    "buy":  "1 bag",
-                                   "bid":"cheddar-cheese-shredded",
-                                   "gpu":28.3495
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -138,8 +138,8 @@
                                    "item":  "Diced Green Chiles",
                                    "grams":  255,
                                    "buy":  "4.5 oz can",
-                                   "bid":"canned-green-chilies",
-                                   "gpu":28.3495
+                                   "bid":  "canned-green-chilies",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Ground Cumin",

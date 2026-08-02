@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Beef Enchilada Skillet Bowls",
     "slug":  "beef-enchilada-skillet-bowls",
     "cuisine":  "Tex-Mex",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://reciperunner.com/beef-enchilada-skillet/",
+    "source_site":  "Recipe Runner",
     "manual_balance":  false,
     "tuning":  [
 
@@ -48,7 +48,7 @@
                     "Spoon it into bowls over the beans, then top with shredded cheddar so it melts in."
                 ],
     "portion_html":  "Each of the 14 bowls packs 52 grams of protein and about 566 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://reciperunner.com/beef-enchilada-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eRecipe Runner\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Big Tex-Mex flavor with 52 grams of protein a bowl, and it reheats like a champ. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  63.29,
     "cost_batch_true":  75.18,
@@ -63,15 +63,15 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2280,
                                    "buy":  "5 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Seasoned Black Beans",
                                    "grams":  3066,
                                    "buy":  "8 cans",
-                                   "bid":"seasoned-black-beans",
-                                   "gpu":28.3495
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Enchilada Sauce",
@@ -84,15 +84,15 @@
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  500,
                                    "buy":  "2 cans",
-                                   "bid":"canned-corn",
-                                   "gpu":28.3495
+                                   "bid":  "canned-corn",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  224,
                                    "buy":  "1 bag",
-                                   "bid":"cheddar-cheese-shredded",
-                                   "gpu":28.3495
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Chili Powder",

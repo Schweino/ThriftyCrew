@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Salisbury Steak and Potato Bowls",
     "slug":  "salisbury-steak-potato-bowls",
     "cuisine":  "American",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://cincyshopper.com/simple-salisbury-steak/",
+    "source_site":  "Cincy Shopper",
     "manual_balance":  false,
     "tuning":  [
 
@@ -50,7 +50,7 @@
                     "Serve the patties and gravy over the potatoes."
                 ],
     "portion_html":  "Each bowl delivers 42 grams of protein and just 538 calories, one of the lighter dinners in the lineup.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://cincyshopper.com/simple-salisbury-steak/\" target=\"_blank\" rel=\"noopener\"\u003eCincy Shopper\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Warm, filling, and easy on the wallet, this is comfort food that loves your budget back. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  48.78,
     "cost_batch_true":  52.22,
@@ -65,22 +65,22 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2170,
                                    "buy":  "5 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Potato",
                                    "grams":  4562,
                                    "buy":  "11 lb",
-                                   "bid":"russet-potatoes",
-                                   "gpu":453.592
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "White Mushrooms",
                                    "grams":  430,
                                    "buy":  "2 packages",
-                                   "bid":"mushrooms",
-                                   "gpu":28.3495
+                                   "bid":  "mushrooms",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -114,8 +114,8 @@
                                    "item":  "Worcestershire Sauce",
                                    "grams":  25,
                                    "buy":  "1 tsp (patties) + 1/2 tsp (gravy)",
-                                   "bid":"worcestershire",
-                                   "gpu":29.57
+                                   "bid":  "worcestershire",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Ketchup",

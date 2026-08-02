@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Italian Beef Rice Bowl",
     "slug":  "slow-cooker-italian-beef-bowl",
     "cuisine":  "Italian",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://tasteandsee.com/slow-cooker-italian-beef/",
+    "source_site":  "Taste and See",
     "manual_balance":  false,
     "tuning":  [
 
@@ -48,7 +48,7 @@
                     "Build each bowl with rice on the bottom, a scoop of the beef and peppers, beans, and a little reduced fat mozzarella on top so it melts into the warm meat."
                 ],
     "portion_html":  "Weigh the full pot of finished beef and peppers, subtract the empty pot weight you wrote down, and divide by 14. Give each container that same scoop over an even bed of rice and beans so no bowl comes up short.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://tasteandsee.com/slow-cooker-italian-beef/\" target=\"_blank\" rel=\"noopener\"\u003eTaste and See\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "That is fourteen warm, satisfying Italian beef bowls from one roast and a jar of peppers, at a fraction of the cost of takeout. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  44.51,
     "cost_batch_true":  46.31,
@@ -105,29 +105,29 @@
                                    "item":  "Rice",
                                    "grams":  650,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Seasoned Black Beans",
                                    "grams":  455,
                                    "buy":  "2 cans",
-                                   "bid":"seasoned-black-beans",
-                                   "gpu":28.3495
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Green Bell Peppers",
                                    "grams":  476,
                                    "buy":  "4 peppers",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Reduced Fat Mozzarella",
                                    "grams":  196,
                                    "buy":  "1 bag",
-                                   "bid":"reduced-fat-mozzarella",
-                                   "gpu":28.3495
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Salt",

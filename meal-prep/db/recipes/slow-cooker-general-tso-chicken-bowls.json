@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker General Tso\u0027s Chicken Bowls",
     "slug":  "slow-cooker-general-tso-chicken-bowls",
     "cuisine":  "Chinese",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.foodfaithfitness.com/slow-cooker-general-tsos-chicken/",
+    "source_site":  "Food Faith Fitness",
     "manual_balance":  false,
     "tuning":  [
 
@@ -34,16 +34,20 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$3.69 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
-    "shop_smart":  ["Chicken breast is the whole game here, so \u003cstrong\u003ebuy the big family pack\u003c/strong\u003e when it goes on sale and freeze what you don\u0027t cook this week.","Hoisin and cornstarch last months in the pantry, so \u003cstrong\u003ebuy them once and forget them\u003c/strong\u003e. You\u0027ll use a splash across a dozen recipes.","Frozen broccoli florets are cheaper than fresh and never go bad on you, so \u003cstrong\u003ekeep two bags in the freezer\u003c/strong\u003e and skip the wilted-crown guilt."],
+    "shop_smart":  [
+                       "Chicken breast is the whole game here, so \u003cstrong\u003ebuy the big family pack\u003c/strong\u003e when it goes on sale and freeze what you don\u0027t cook this week.",
+                       "Hoisin and cornstarch last months in the pantry, so \u003cstrong\u003ebuy them once and forget them\u003c/strong\u003e. You\u0027ll use a splash across a dozen recipes.",
+                       "Frozen broccoli florets are cheaper than fresh and never go bad on you, so \u003cstrong\u003ekeep two bags in the freezer\u003c/strong\u003e and skip the wilted-crown guilt."
+                   ],
     "make_it":  [
-                    "Add the chicken breast, hoisin, soy sauce, brown sugar, and minced garlic to the slow cooker and give it a stir.",
+                    "Add the chicken breast, hoisin, soy sauce, brown sugar, rice vinegar, minced garlic, ground ginger, red pepper flakes, and black pepper to the slow cooker and give it a stir.",
                     "Cover and cook on low for 6 to 7 hours, until the chicken shreds easily with a fork.",
                     "Stir the cornstarch into a few tablespoons of cold water, then mix it in and let the sauce thicken for about 20 minutes.",
                     "Toss the broccoli florets in during the last 30 minutes so they stay bright and tender-crisp.",
                     "Shred or chunk the chicken right in the sauce, then serve it over cooked white rice."
                 ],
     "portion_html":  "Each serving lands at 57 grams of protein and 567 calories, which is a lot of muscle-fueling food for the money.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.foodfaithfitness.com/slow-cooker-general-tsos-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eFood Faith Fitness\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Make it once and you\u0027ll wonder why you ever paid the delivery fee. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  30.35,
     "cost_batch_true":  31.8,
@@ -65,8 +69,8 @@
                                    "item":  "Rice",
                                    "grams":  900,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Hoisin Sauce",
@@ -107,8 +111,8 @@
                                    "item":  "Broccoli Florets",
                                    "grams":  550,
                                    "buy":  "2 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Rice Vinegar",
@@ -153,7 +157,7 @@
                                           "1 boxs Cornstarch"
                                       ],
                  "steps":  [
-                               "Add the chicken breast, hoisin, soy sauce, brown sugar, and minced garlic to the slow cooker and give it a stir.",
+                               "Add the chicken breast, hoisin, soy sauce, brown sugar, rice vinegar, minced garlic, ground ginger, red pepper flakes, and black pepper to the slow cooker and give it a stir.",
                                "Cover and cook on low for 6 to 7 hours, until the chicken shreds easily with a fork.",
                                "Stir the cornstarch into a few tablespoons of cold water, then mix it in and let the sauce thicken for about 20 minutes.",
                                "Toss the broccoli florets in during the last 30 minutes so they stay bright and tender-crisp.",

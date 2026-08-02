@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Ground Beef Stroganoff Pasta",
     "slug":  "ground-beef-stroganoff-pasta",
     "cuisine":  "American",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://thecozycook.com/ground-beef-stroganoff/",
+    "source_site":  "The Cozy Cook",
     "manual_balance":  false,
     "tuning":  [
 
@@ -48,7 +48,7 @@
                     "Fold the cooked rotini into the creamy sauce and portion it out."
                 ],
     "portion_html":  "Every one of the 14 servings delivers 52 grams of protein and 601 calories, so this creamy classic still earns its spot on a lean plan.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thecozycook.com/ground-beef-stroganoff/\" target=\"_blank\" rel=\"noopener\"\u003eThe Cozy Cook\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Rich, creamy, and ready in the fridge all week. Comfort food does not have to break the budget. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  47.75,
     "cost_batch_true":  54.39,
@@ -63,8 +63,8 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2240,
                                    "buy":  "5 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rotini Pasta",
@@ -77,8 +77,8 @@
                                    "item":  "White Mushrooms",
                                    "grams":  700,
                                    "buy":  "4 packages",
-                                   "bid":"mushrooms",
-                                   "gpu":28.3495
+                                   "bid":  "mushrooms",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -98,8 +98,8 @@
                                    "item":  "Light Sour Cream",
                                    "grams":  320,
                                    "buy":  "1 tub",
-                                   "bid":"sour-cream",
-                                   "gpu":28.3495
+                                   "bid":  "sour-cream",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Dijon Mustard",
@@ -126,15 +126,15 @@
                                    "item":  "All-Purpose Flour",
                                    "grams":  72,
                                    "buy":  "3 tbsp",
-                                   "bid":"flour",
-                                   "gpu":453.592
+                                   "bid":  "flour",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Worcestershire Sauce",
                                    "grams":  15,
                                    "buy":  "1 tsp",
-                                   "bid":"worcestershire",
-                                   "gpu":29.57
+                                   "bid":  "worcestershire",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Salt",

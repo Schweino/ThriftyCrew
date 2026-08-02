@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Chicken Gyro Bowls",
     "slug":  "slow-cooker-chicken-gyro-bowls",
     "cuisine":  "Greek",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://seasonandthyme.com/slow-cooker-greek-chicken-gyros/",
+    "source_site":  "Season \u0026 Thyme",
     "manual_balance":  false,
     "tuning":  [
 
@@ -48,7 +48,7 @@
                     "Shred the chicken over white rice with the broccoli, then finish with the yogurt sauce."
                 ],
     "portion_html":  "Each serving carries 65 grams of protein and 573 calories, lean and filling in equal measure.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://seasonandthyme.com/slow-cooker-greek-chicken-gyros/\" target=\"_blank\" rel=\"noopener\"\u003eSeason \u0026amp; Thyme\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "All the flavor of the food-truck favorite, none of the food-truck markup. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  34.23,
     "cost_batch_true":  39.48,
@@ -70,22 +70,22 @@
                                    "item":  "Rice",
                                    "grams":  880,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1000,
                                    "buy":  "3 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Greek Yogurt",
                                    "grams":  300,
                                    "buy":  "1 tub",
-                                   "bid":"greek-yogurt",
-                                   "gpu":28.3495
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Olive Oil",

@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Ground Beef Fried Rice Bowls",
     "slug":  "ground-beef-fried-rice-bowls",
     "cuisine":  "Asian",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://withthewoodruffs.com/ground-beef-fried-rice/",
+    "source_site":  "With the Woodruffs",
     "manual_balance":  false,
     "tuning":  [
 
@@ -48,7 +48,7 @@
                     "Push it around the hot skillet a couple minutes to get that fried-rice edge, then portion out."
                 ],
     "portion_html":  "Each of the 14 bowls serves 46 grams of protein at 593 calories, turning a takeout treat into a meal-prep workhorse.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://withthewoodruffs.com/ground-beef-fried-rice/\" target=\"_blank\" rel=\"noopener\"\u003eWith the Woodruffs\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "The cure for leftover rice and takeout cravings in one skillet. Cook once, eat all week. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  47.66,
     "cost_batch_true":  55.46,
@@ -63,29 +63,29 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2450,
                                    "buy":  "6 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  1020,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Frozen Green Peas",
                                    "grams":  400,
                                    "buy":  "2 bags",
-                                   "bid":"frozen-peas",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-peas",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Carrots",
                                    "grams":  300,
                                    "buy":  "1 lb",
-                                   "bid":"carrots",
-                                   "gpu":453.592
+                                   "bid":  "carrots",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -119,8 +119,8 @@
                                    "item":  "Ginger",
                                    "grams":  12,
                                    "buy":  "1 root",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Eggs",

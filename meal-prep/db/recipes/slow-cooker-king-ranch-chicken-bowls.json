@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker King Ranch Chicken Bowls",
     "slug":  "slow-cooker-king-ranch-chicken-bowls",
     "cuisine":  "Tex-Mex",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://houseofyumm.com/slow-cooker-king-ranch-chicken-soup/",
+    "source_site":  "House of Yumm",
     "manual_balance":  false,
     "tuning":  [
 
@@ -52,7 +52,7 @@
                     "Build bowls with rice, king ranch chicken, broccoli, and the last of the cheese on top."
                 ],
     "portion_html":  "Each of the 14 servings comes in around 60g protein for about 567 calories, at roughly $2.16 a bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://houseofyumm.com/slow-cooker-king-ranch-chicken-soup/\" target=\"_blank\" rel=\"noopener\"\u003eHouse of Yumm\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheesy, comforting, and cheap, this bowl proves meal prep does not have to taste like a diet. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  34.81,
     "cost_batch_true":  41.97,
@@ -74,8 +74,8 @@
                                    "item":  "Rice",
                                    "grams":  850,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -88,15 +88,15 @@
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  280,
                                    "buy":  "2 bags",
-                                   "bid":"cheddar-cheese-shredded",
-                                   "gpu":28.3495
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  400,
                                    "buy":  "2 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Corn Tortillas",
@@ -116,8 +116,8 @@
                                    "item":  "All-Purpose Flour",
                                    "grams":  140,
                                    "buy":  "1/2 cup",
-                                   "bid":"flour",
-                                   "gpu":453.592
+                                   "bid":  "flour",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -158,8 +158,8 @@
                                    "item":  "Jalapeno",
                                    "grams":  45,
                                    "buy":  "1 medium",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Salt",

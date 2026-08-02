@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Maple Dijon Pork Bowls",
     "slug":  "slow-cooker-maple-dijon-pork-bowls",
     "cuisine":  "American",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.hungry-girl.com/weekly-recipes/3-ingredient-slow-cooker-maple-dijon-pork-tenderloin-recipe",
+    "source_site":  "Hungry Girl",
     "manual_balance":  false,
     "tuning":  [
 
@@ -44,7 +44,7 @@
                     "Slice or shred the pork, serve it over potatoes, and add the green beans on the side."
                 ],
     "portion_html":  "Each of the 14 servings comes in at 59 grams of protein and just 565 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.hungry-girl.com/weekly-recipes/3-ingredient-slow-cooker-maple-dijon-pork-tenderloin-recipe\" target=\"_blank\" rel=\"noopener\"\u003eHungry Girl\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "When a meal is this easy and this cheap, there is no reason not to keep it in the rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  40.94,
     "cost_batch_true":  43.19,
@@ -66,8 +66,8 @@
                                    "item":  "Potato",
                                    "grams":  4500,
                                    "buy":  "10 lb",
-                                   "bid":"russet-potatoes",
-                                   "gpu":453.592
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Green Beans",
@@ -80,8 +80,8 @@
                                    "item":  "Sugar-Free Maple Syrup",
                                    "grams":  120,
                                    "buy":  "1 bottle",
-                                   "bid":"sugar-free-maple-syrup",
-                                   "gpu":28.3495
+                                   "bid":  "sugar-free-maple-syrup",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Dijon Mustard",

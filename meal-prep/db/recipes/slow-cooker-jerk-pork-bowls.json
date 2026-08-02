@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Jerk Pork Bowls",
     "slug":  "slow-cooker-jerk-pork-bowls",
     "cuisine":  "Jamaican",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.garlicandzest.com/slow-cooker-jerk-pork/",
+    "source_site":  "Garlic \u0026 Zest",
     "manual_balance":  false,
     "tuning":  [
 
@@ -42,7 +42,7 @@
                     "Shred the pork, spoon it over the rice, and serve the broccoli alongside."
                 ],
     "portion_html":  "Each of the 14 servings delivers 56 grams of protein and 597 calories, a genuinely filling bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.garlicandzest.com/slow-cooker-jerk-pork/\" target=\"_blank\" rel=\"noopener\"\u003eGarlic \u0026amp; Zest\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A little heat, a little spice, and proof that cheap dinners never have to be dull. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  23.34,
     "cost_batch_true":  26.54,
@@ -64,15 +64,15 @@
                                    "item":  "Rice",
                                    "grams":  950,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1200,
                                    "buy":  "4 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",

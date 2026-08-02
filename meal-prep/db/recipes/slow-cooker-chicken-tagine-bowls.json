@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Chicken Tagine Bowls",
     "slug":  "slow-cooker-chicken-tagine-bowls",
     "cuisine":  "Moroccan",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.cookingclassy.com/slow-cooker-chicken-and-chick-pea-tagine/",
+    "source_site":  "Cooking Classy",
     "manual_balance":  false,
     "tuning":  [
 
@@ -53,7 +53,7 @@
                     "Spoon the tagine over white rice with plenty of the tomatoey broth."
                 ],
     "portion_html":  "Each serving lands at 62 grams of protein and 567 calories, hearty eating for barely over two dollars.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.cookingclassy.com/slow-cooker-chicken-and-chick-pea-tagine/\" target=\"_blank\" rel=\"noopener\"\u003eCooking Classy\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheap, cozy, and packed with protein. This is what a good slow cooker night looks like. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  33.03,
     "cost_batch_true":  38.66,
@@ -75,8 +75,8 @@
                                    "item":  "Rice",
                                    "grams":  800,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Chickpeas",
@@ -103,8 +103,8 @@
                                    "item":  "Carrots",
                                    "grams":  120,
                                    "buy":  "1 lb",
-                                   "bid":"carrots",
-                                   "gpu":453.592
+                                   "bid":  "carrots",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Olive Oil",
@@ -173,8 +173,8 @@
                                    "item":  "Fresh Cilantro",
                                    "grams":  14,
                                    "buy":  "1/4 cup chopped",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                },
                                {
                                    "item":  "Salt",

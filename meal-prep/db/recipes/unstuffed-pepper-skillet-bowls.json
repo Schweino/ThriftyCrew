@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Unstuffed Pepper Skillet Bowls",
     "slug":  "unstuffed-pepper-skillet-bowls",
     "cuisine":  "American",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.twopeasandtheirpod.com/stuffed-pepper-skillet/",
+    "source_site":  "Two Peas \u0026 Their Pod",
     "manual_balance":  false,
     "tuning":  [
 
@@ -52,7 +52,7 @@
                     "Melt the reduced-fat mozzarella over the top before you portion it out."
                 ],
     "portion_html":  "Each of the 14 bowls serves 46 grams of protein at 594 calories, so this shortcut version loses none of the substance.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.twopeasandtheirpod.com/stuffed-pepper-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eTwo Peas \u0026amp; Their Pod\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Stuffed pepper taste with half the work and a fraction of the cost. Work smarter, eat better. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  51.26,
     "cost_batch_true":  54.73,
@@ -67,22 +67,22 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2240,
                                    "buy":  "5 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  1081,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Green Bell Peppers",
                                    "grams":  700,
                                    "buy":  "6 peppers",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -116,8 +116,8 @@
                                    "item":  "Reduced Fat Mozzarella",
                                    "grams":  170,
                                    "buy":  "1 bag",
-                                   "bid":"reduced-fat-mozzarella",
-                                   "gpu":28.3495
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Garlic",
@@ -144,8 +144,8 @@
                                    "item":  "Worcestershire Sauce",
                                    "grams":  30,
                                    "buy":  "2 tsp",
-                                   "bid":"worcestershire",
-                                   "gpu":29.57
+                                   "bid":  "worcestershire",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Paprika",

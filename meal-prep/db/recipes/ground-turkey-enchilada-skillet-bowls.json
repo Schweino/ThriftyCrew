@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Ground Turkey Enchilada Skillet Bowls",
     "slug":  "ground-turkey-enchilada-skillet-bowls",
     "cuisine":  "Tex-Mex",
     "protein":  "turkey",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://healthyfoodiegirl.com/ground-turkey-enchilada-skillet/",
+    "source_site":  "Healthy Foodie Girl",
     "manual_balance":  false,
     "tuning":  [
 
@@ -47,7 +47,7 @@
                     "Top with shredded cheddar, cover for a minute to melt it, then dish into bowls."
                 ],
     "portion_html":  "Each of the 14 bowls gives you 51 grams of protein and about 671 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://healthyfoodiegirl.com/ground-turkey-enchilada-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eHealthy Foodie Girl\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheesy, saucy, and cheap, this one disappears fast, so make the full batch. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  45.83,
     "cost_batch_true":  51.78,
@@ -62,15 +62,15 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3000,
                                    "buy":  "7 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  750,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Enchilada Sauce",
@@ -83,29 +83,29 @@
                                    "item":  "Seasoned Black Beans",
                                    "grams":  900,
                                    "buy":  "3 cans",
-                                   "bid":"seasoned-black-beans",
-                                   "gpu":28.3495
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  500,
                                    "buy":  "2 cans",
-                                   "bid":"canned-corn",
-                                   "gpu":28.3495
+                                   "bid":  "canned-corn",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Chipotle in Adobo",
                                    "grams":  60,
                                    "buy":  "1 can",
-                                   "bid":"chipotle-adobo",
-                                   "gpu":28.3495
+                                   "bid":  "chipotle-adobo",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  168,
                                    "buy":  "1 bag",
-                                   "bid":"cheddar-cheese-shredded",
-                                   "gpu":28.3495
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",

@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Mongolian Ground Beef Bowls",
     "slug":  "mongolian-ground-beef-bowls",
     "cuisine":  "Chinese",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.eatyourselfskinny.com/healthy-mongolian-ground-beef-bowls/",
+    "source_site":  "Eat Yourself Skinny",
     "manual_balance":  false,
     "tuning":  [
 
@@ -53,7 +53,7 @@
                     "Spoon the saucy beef and vegetables over the rice and serve."
                 ],
     "portion_html":  "Each of the 14 servings delivers 43 grams of protein at 559 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eatyourselfskinny.com/healthy-mongolian-ground-beef-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eEat Yourself Skinny\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fifteen minutes of work and you have takeout flavor at a fraction of the cost. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  47.84,
     "cost_batch_true":  57.66,
@@ -68,29 +68,29 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2280,
                                    "buy":  "5 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  1031,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  700,
                                    "buy":  "3 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Red Bell Pepper",
                                    "grams":  300,
                                    "buy":  "3 peppers",
-                                   "bid":"red-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Soy Sauce",
@@ -117,8 +117,8 @@
                                    "item":  "Ginger",
                                    "grams":  20,
                                    "buy":  "1 root",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Olive Oil",

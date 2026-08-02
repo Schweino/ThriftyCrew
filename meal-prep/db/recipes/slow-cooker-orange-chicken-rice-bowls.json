@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Orange Chicken Rice Bowls",
     "slug":  "slow-cooker-orange-chicken-rice-bowls",
     "cuisine":  "Chinese",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://theproteinchef.co/slow-cooker-orange-chicken-recipe/",
+    "source_site":  "The Protein Chef",
     "manual_balance":  false,
     "tuning":  [
 
@@ -49,7 +49,7 @@
                     "Serve the orange chicken over rice with broccoli."
                 ],
     "portion_html":  "Each of the 14 servings comes in around 57g protein for about 567 calories, at roughly $1.96 a bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://theproteinchef.co/slow-cooker-orange-chicken-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eThe Protein Chef\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Sweet, tangy, and easy on the budget, this bowl proves takeout flavor can live in your fridge for less. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  30.75,
     "cost_batch_true":  35.47,
@@ -71,8 +71,8 @@
                                    "item":  "Rice",
                                    "grams":  980,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Orange Juice",
@@ -120,8 +120,8 @@
                                    "item":  "Broccoli Florets",
                                    "grams":  500,
                                    "buy":  "2 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Rice Vinegar",

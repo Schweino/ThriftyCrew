@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Chicken Shawarma Bowls",
     "slug":  "slow-cooker-chicken-shawarma-bowls",
     "cuisine":  "Middle Eastern",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://skinnyfitalicious.com/crockpot-chicken-shawarma/",
+    "source_site":  "Skinny Fitalicious",
     "manual_balance":  false,
     "tuning":  [
 
@@ -52,7 +52,7 @@
                     "Shred the chicken, pile it over white rice with the broccoli, and spoon the yogurt-tahini sauce on top."
                 ],
     "portion_html":  "You get 65 grams of protein and 585 calories per serving, a big, satisfying bowl for the price.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyfitalicious.com/crockpot-chicken-shawarma/\" target=\"_blank\" rel=\"noopener\"\u003eSkinny Fitalicious\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "That sauce alone is worth making a double batch. Trust me on this one. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  34.71,
     "cost_batch_true":  39.29,
@@ -74,22 +74,22 @@
                                    "item":  "Rice",
                                    "grams":  880,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1000,
                                    "buy":  "3 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Greek Yogurt",
                                    "grams":  240,
                                    "buy":  "1 tub",
-                                   "bid":"greek-yogurt",
-                                   "gpu":28.3495
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Tahini",

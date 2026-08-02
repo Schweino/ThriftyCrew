@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "American Goulash Pasta",
     "slug":  "american-goulash-pasta",
     "cuisine":  "American",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://natashaskitchen.com/american-goulash-recipe/",
+    "source_site":  "NatashasKitchen",
     "manual_balance":  false,
     "tuning":  [
 
@@ -51,7 +51,7 @@
                     "Stir in the parmesan and portion it into containers."
                 ],
     "portion_html":  "Each of the 14 servings delivers 55 grams of protein at 598 calories, proving this old-fashioned budget meal still competes on protein.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://natashaskitchen.com/american-goulash-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eNatashasKitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A classic that has stretched budgets for a hundred years, now stretching yours too. Grandma knew what she was doing. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  49.8,
     "cost_batch_true":  61.56,
@@ -66,15 +66,15 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2450,
                                    "buy":  "6 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  1050,
                                    "buy":  "3 boxs",
-                                   "bid":"penne-pasta",
-                                   "gpu":28.3495
+                                   "bid":  "penne-pasta",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -87,8 +87,8 @@
                                    "item":  "Carrots",
                                    "grams":  200,
                                    "buy":  "1 lb",
-                                   "bid":"carrots",
-                                   "gpu":453.592
+                                   "bid":  "carrots",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Crushed Tomatoes",
@@ -115,8 +115,8 @@
                                    "item":  "Parmesan Cheese",
                                    "grams":  80,
                                    "buy":  "1 container",
-                                   "bid":"parmesan",
-                                   "gpu":28.3495
+                                   "bid":  "parmesan",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Garlic",
@@ -150,8 +150,8 @@
                                    "item":  "Worcestershire Sauce",
                                    "grams":  45,
                                    "buy":  "1 tbsp",
-                                   "bid":"worcestershire",
-                                   "gpu":29.57
+                                   "bid":  "worcestershire",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Salt",

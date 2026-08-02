@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Mississippi Pork Bowls",
     "slug":  "slow-cooker-mississippi-pork-bowls",
     "cuisine":  "American",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.saltandlavender.com/mississippi-slow-cooker-pork-tenderloin/",
+    "source_site":  "Salt \u0026 Lavender",
     "manual_balance":  false,
     "tuning":  [
 
@@ -30,7 +30,11 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$3.62 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
-    "shop_smart":  ["Potatoes are one of the cheapest bases going. An \u003cstrong\u003e8 lb bag\u003c/strong\u003e runs cheap and doubles as your starch, so skip buying rice for this one.","One \u003cstrong\u003epacket of ranch seasoning\u003c/strong\u003e does all the flavor work. No need for a cabinet full of separate spices.","A \u003cstrong\u003ejar of pepperoncini\u003c/strong\u003e lasts a long time in the fridge, so the third of a jar you use here costs next to nothing per bowl."],
+    "shop_smart":  [
+                       "Potatoes are one of the cheapest bases going. An \u003cstrong\u003e8 lb bag\u003c/strong\u003e runs cheap and doubles as your starch, so skip buying rice for this one.",
+                       "One \u003cstrong\u003epacket of ranch seasoning\u003c/strong\u003e does all the flavor work. No need for a cabinet full of separate spices.",
+                       "A \u003cstrong\u003ejar of pepperoncini\u003c/strong\u003e lasts a long time in the fridge, so the third of a jar you use here costs next to nothing per bowl."
+                   ],
     "make_it":  [
                     "Set the pork tenderloin in the slow cooker and surround it with the potatoes and shredded carrots.",
                     "Sprinkle the ranch seasoning mix over everything.",
@@ -40,7 +44,7 @@
                     "Divide the pork and potatoes into your containers."
                 ],
     "portion_html":  "Every serving comes in around 550 calories with 52 grams of protein.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.saltandlavender.com/mississippi-slow-cooker-pork-tenderloin/\" target=\"_blank\" rel=\"noopener\"\u003eSalt \u0026amp; Lavender\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Tangy, hearty, and dead simple. Set it in the morning and dinner takes care of itself. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  44.86,
     "cost_batch_true":  50,
@@ -62,8 +66,8 @@
                                    "item":  "Potato",
                                    "grams":  3606,
                                    "buy":  "8 lb",
-                                   "bid":"russet-potatoes",
-                                   "gpu":453.592
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Shredded Carrots",

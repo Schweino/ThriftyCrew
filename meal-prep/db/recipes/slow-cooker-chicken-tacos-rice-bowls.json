@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Chicken Taco Rice Bowls",
     "slug":  "slow-cooker-chicken-tacos-rice-bowls",
     "cuisine":  "Mexican",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://joyfoodsunshine.com/crockpot-chicken-tacos/",
+    "source_site":  "JoyFoodSunshine",
     "manual_balance":  false,
     "tuning":  [
 
@@ -50,7 +50,7 @@
                     "Build bowls with rice, taco chicken, a handful of broccoli, and a sprinkle of cheddar."
                 ],
     "portion_html":  "Each of the 14 servings lands around 58g protein for about 560 calories, at roughly $2.31 a bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://joyfoodsunshine.com/crockpot-chicken-tacos/\" target=\"_blank\" rel=\"noopener\"\u003eJoyFoodSunshine\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cook it once on Sunday and you have taco bowls waiting every day you are too tired to think. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  33.14,
     "cost_batch_true":  36.24,
@@ -72,8 +72,8 @@
                                    "item":  "Rice",
                                    "grams":  900,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Salsa",
@@ -93,15 +93,15 @@
                                    "item":  "Broccoli Florets",
                                    "grams":  400,
                                    "buy":  "2 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  112,
                                    "buy":  "1 bag",
-                                   "bid":"cheddar-cheese-shredded",
-                                   "gpu":28.3495
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Lime Juice",

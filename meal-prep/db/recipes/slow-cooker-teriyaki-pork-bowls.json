@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Teriyaki Pork Bowls",
     "slug":  "slow-cooker-teriyaki-pork-bowls",
     "cuisine":  "Japanese",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.eazypeazymealz.com/slow-cooker-teriyaki-pork-tenderloin/",
+    "source_site":  "Easy Peasy Meals",
     "manual_balance":  false,
     "tuning":  [
 
@@ -47,7 +47,7 @@
                     "Serve over cooked white rice and divide into containers."
                 ],
     "portion_html":  "Each serving lands near 565 calories with 58 grams of protein.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eazypeazymealz.com/slow-cooker-teriyaki-pork-tenderloin/\" target=\"_blank\" rel=\"noopener\"\u003eEasy Peasy Meals\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Sweet, simple, and satisfying. This is comfort food that respects your budget. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  39.81,
     "cost_batch_true":  46.3,
@@ -69,15 +69,15 @@
                                    "item":  "Rice",
                                    "grams":  850,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  900,
                                    "buy":  "3 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Teriyaki Sauce",

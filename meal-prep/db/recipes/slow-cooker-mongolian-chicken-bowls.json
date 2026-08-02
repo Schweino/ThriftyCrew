@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Mongolian Chicken Bowls",
     "slug":  "slow-cooker-mongolian-chicken-bowls",
     "cuisine":  "Chinese",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://chefsavvy.com/slow-cooker-mongolian-chicken/",
+    "source_site":  "Chef Savvy",
     "manual_balance":  false,
     "tuning":  [
 
@@ -47,7 +47,7 @@
                     "Pull the chicken apart in the pot and serve over steaming white rice."
                 ],
     "portion_html":  "Each bowl carries 63 grams of protein and just 564 calories, a genuinely lean, high-protein plate.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://chefsavvy.com/slow-cooker-mongolian-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eChef Savvy\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "This one tastes like a splurge and cooks like a nap, which is exactly the deal we want. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  34.31,
     "cost_batch_true":  37.55,
@@ -69,15 +69,15 @@
                                    "item":  "Rice",
                                    "grams":  800,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1200,
                                    "buy":  "4 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Soy Sauce",
@@ -125,15 +125,15 @@
                                    "item":  "Ginger",
                                    "grams":  7,
                                    "buy":  "1 tsp grated",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Sriracha",
                                    "grams":  25,
                                    "buy":  "1-2 tsp",
-                                   "bid":"sriracha",
-                                   "gpu":29.57
+                                   "bid":  "sriracha",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Cornstarch",

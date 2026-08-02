@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Korean Ground Turkey Bowls",
     "slug":  "korean-ground-turkey-bowls",
     "cuisine":  "Korean",
     "protein":  "turkey",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://nutritiontofit.com/korean-ground-turkey/",
+    "source_site":  "Nutrition to Fit",
     "manual_balance":  false,
     "tuning":  [
 
@@ -45,7 +45,7 @@
                     "Serve over cooked white rice with the sauce spooned on top."
                 ],
     "portion_html":  "Each of the 14 bowls gives you 52 grams of protein and about 651 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://nutritiontofit.com/korean-ground-turkey/\" target=\"_blank\" rel=\"noopener\"\u003eNutrition to Fit\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "This is the bowl that makes you look forward to opening the fridge at lunch. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  42.08,
     "cost_batch_true":  46.66,
@@ -60,22 +60,22 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3300,
                                    "buy":  "8 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  900,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  700,
                                    "buy":  "3 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Teriyaki Sauce",

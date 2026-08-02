@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Kalua Pork Bowls",
     "slug":  "slow-cooker-kalua-pork-bowls",
     "cuisine":  "Hawaiian",
     "protein":  "pork",
     "visibility":  "public",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://downshiftology.com/recipes/slow-cooker-kalua-pork/",
+    "source_site":  "Downshiftology",
     "manual_balance":  false,
     "tuning":  [
 
@@ -41,7 +41,7 @@
                     "Serve the pork and cabbage over cooked white rice and portion out."
                 ],
     "portion_html":  "Every serving comes in around 567 calories with 56 grams of protein.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://downshiftology.com/recipes/slow-cooker-kalua-pork/\" target=\"_blank\" rel=\"noopener\"\u003eDownshiftology\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Three ingredients, about $1.80 a bowl (at everyday cost), and it tastes like the islands. Hard to argue with that. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  21.11,
     "cost_batch_true":  22.94,
@@ -63,15 +63,15 @@
                                    "item":  "Rice",
                                    "grams":  800,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Green Cabbage",
                                    "grams":  1400,
                                    "buy":  "4 lb",
-                                   "bid":"cabbage",
-                                   "gpu":453.592
+                                   "bid":  "cabbage",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Salt",

@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Ground Turkey Stir Fry Bowls",
     "slug":  "ground-turkey-stir-fry-bowls",
     "cuisine":  "Asian",
     "protein":  "turkey",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://healthyfitnessmeals.com/ground-turkey-stir-fry/",
+    "source_site":  "Healthy Fitness Meals",
     "manual_balance":  false,
     "tuning":  [
 
@@ -49,7 +49,7 @@
                     "Serve it hot over cooked white rice."
                 ],
     "portion_html":  "Each of the 14 bowls gives you 51 grams of protein and about 638 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://healthyfitnessmeals.com/ground-turkey-stir-fry/\" target=\"_blank\" rel=\"noopener\"\u003eHealthy Fitness Meals\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Faster than delivery, cheaper than delivery, and it reheats better too. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  48.3,
     "cost_batch_true":  54.18,
@@ -64,15 +64,15 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3300,
                                    "buy":  "8 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  900,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Zucchini",
@@ -85,8 +85,8 @@
                                    "item":  "Green Bell Peppers",
                                    "grams":  360,
                                    "buy":  "3 peppers",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Teriyaki Sauce",

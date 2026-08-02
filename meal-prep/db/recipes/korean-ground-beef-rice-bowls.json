@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Korean Ground Beef Rice Bowls",
     "slug":  "korean-ground-beef-rice-bowls",
     "cuisine":  "Korean",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://masonfit.com/healthy-korean-ground-beef/",
+    "source_site":  "Mason Fit",
     "manual_balance":  false,
     "tuning":  [
 
@@ -46,7 +46,7 @@
                     "Pile the beef and broccoli over the rice and serve."
                 ],
     "portion_html":  "Each bowl brings 50 grams of protein and 615 calories across all 14 servings.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/healthy-korean-ground-beef/\" target=\"_blank\" rel=\"noopener\"\u003eMason Fit\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One tub of gochujang unlocks a whole world of cheap, punchy dinners, and this is a great place to start. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  52.98,
     "cost_batch_true":  54.09,
@@ -61,22 +61,22 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2680,
                                    "buy":  "6 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  861,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1000,
                                    "buy":  "3 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Gochujang",

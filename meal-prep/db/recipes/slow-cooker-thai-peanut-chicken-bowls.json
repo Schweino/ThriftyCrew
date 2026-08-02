@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Thai Peanut Chicken Bowls",
     "slug":  "slow-cooker-thai-peanut-chicken-bowls",
     "cuisine":  "Thai",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.slenderkitchen.com/recipe/slow-cooker-thai-peanut-chicken",
+    "source_site":  "Slender Kitchen",
     "manual_balance":  false,
     "tuning":  [
 
@@ -45,7 +45,7 @@
                     "Serve over white rice and spoon extra sauce on top."
                 ],
     "portion_html":  "You get 63 grams of protein and 603 calories per serving, richer than the others but still a smart, filling plate.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.slenderkitchen.com/recipe/slow-cooker-thai-peanut-chicken\" target=\"_blank\" rel=\"noopener\"\u003eSlender Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Creamy, a little sweet, and cheap enough to keep on repeat. Hard combo to beat. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  34.59,
     "cost_batch_true":  37.75,
@@ -67,15 +67,15 @@
                                    "item":  "Rice",
                                    "grams":  800,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Red Bell Pepper",
                                    "grams":  600,
                                    "buy":  "5 peppers",
-                                   "bid":"red-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Peanut Butter",
@@ -88,8 +88,8 @@
                                    "item":  "Coconut Milk",
                                    "grams":  180,
                                    "buy":  "1 can",
-                                   "bid":"coconut-milk-canned",
-                                   "gpu":29.57
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Chicken Broth",

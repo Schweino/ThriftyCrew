@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Pork Carnitas Burrito Bowl",
     "slug":  "slow-cooker-pork-carnitas-bowl",
     "cuisine":  "Mexican",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.maryswholelife.com/slow-cooker-pork-carnitas/",
+    "source_site":  "Mary\u0027s Whole Life",
     "manual_balance":  false,
     "tuning":  [
 
@@ -52,7 +52,7 @@
                     "In your weighed pot, combine the rice, beans, corn, and crisped pork, then fold in the fat free cheddar so it melts into the warm mix."
                 ],
     "portion_html":  "Weigh the full finished pot, subtract the empty pot weight you wrote down, and divide by 14. Spoon that same weight into each of your 14 containers so every burrito bowl comes out equal.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.maryswholelife.com/slow-cooker-pork-carnitas/\" target=\"_blank\" rel=\"noopener\"\u003eMary\u0027s Whole Life\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fourteen restaurant-style burrito bowls for a fraction of takeout money. Add a squeeze of lime when you reheat and it tastes like you just made it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  24.55,
     "cost_batch_true":  29,
@@ -116,22 +116,22 @@
                                    "item":  "Rice",
                                    "grams":  800,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Seasoned Black Beans",
                                    "grams":  910,
                                    "buy":  "4 cans",
-                                   "bid":"seasoned-black-beans",
-                                   "gpu":28.3495
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  420,
                                    "buy":  "2 cans",
-                                   "bid":"canned-corn",
-                                   "gpu":28.3495
+                                   "bid":  "canned-corn",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Fat Free Cheddar",

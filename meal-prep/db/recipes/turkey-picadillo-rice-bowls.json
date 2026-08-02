@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Turkey Picadillo Rice Bowls",
     "slug":  "turkey-picadillo-rice-bowls",
     "cuisine":  "Cuban",
     "protein":  "turkey",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.skinnytaste.com/turkey-picadillo/",
+    "source_site":  "Skinnytaste",
     "manual_balance":  false,
     "tuning":  [
 
@@ -46,7 +46,7 @@
                     "Serve the picadillo over cooked white rice."
                 ],
     "portion_html":  "Each of the 14 bowls delivers 47 grams of protein and about 552 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.skinnytaste.com/turkey-picadillo/\" target=\"_blank\" rel=\"noopener\"\u003eSkinnytaste\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Big flavor, tiny price, and it might just become a regular on your rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  40.68,
     "cost_batch_true":  42.64,
@@ -61,15 +61,15 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3100,
                                    "buy":  "7 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -89,8 +89,8 @@
                                    "item":  "Green Bell Peppers",
                                    "grams":  360,
                                    "buy":  "3 peppers",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Yellow Onion",

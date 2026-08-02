@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Chicken Cacciatore Pasta",
     "slug":  "slow-cooker-chicken-cacciatore-pasta",
     "cuisine":  "Italian",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.wellplated.com/slow-cooker-chicken-cacciatore/",
+    "source_site":  "Well Plated",
     "manual_balance":  false,
     "tuning":  [
 
@@ -47,7 +47,7 @@
                     "Toss the pasta with the cacciatore sauce, or spoon the sauce over each portion of pasta."
                 ],
     "portion_html":  "Each serving carries 67 grams of protein and 570 calories, a genuinely high-protein pasta plate.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.wellplated.com/slow-cooker-chicken-cacciatore/\" target=\"_blank\" rel=\"noopener\"\u003eWell Plated\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Big-batch Italian comfort that reheats like a dream. This one\u0027s a keeper. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  36,
     "cost_batch_true":  41.82,
@@ -69,8 +69,8 @@
                                    "item":  "Penne Pasta",
                                    "grams":  980,
                                    "buy":  "3 boxs",
-                                   "bid":"penne-pasta",
-                                   "gpu":28.3495
+                                   "bid":  "penne-pasta",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Traditional Pasta Sauce",
@@ -83,15 +83,15 @@
                                    "item":  "White Mushrooms",
                                    "grams":  450,
                                    "buy":  "2 packages",
-                                   "bid":"mushrooms",
-                                   "gpu":28.3495
+                                   "bid":  "mushrooms",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Green Bell Peppers",
                                    "grams":  240,
                                    "buy":  "2 peppers",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Yellow Onion",

@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Crack Chicken Bowls",
     "slug":  "slow-cooker-crack-chicken-bowls",
     "cuisine":  "American",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://hungryhobby.net/crockpot-crack-chicken-recipe/",
+    "source_site":  "Hungry Hobby",
     "manual_balance":  false,
     "tuning":  [
 
@@ -42,7 +42,7 @@
                     "Shred the chicken, stir in the shredded cheddar until melted, then top with the crumbled bacon and serve."
                 ],
     "portion_html":  "Each serving carries 65 grams of protein and 588 calories, indulgent tasting but still protein-forward.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://hungryhobby.net/crockpot-crack-chicken-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eHungry Hobby\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Sometimes the comfort-food bowl is exactly what gets you through a long week, and this one earns it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  35.74,
     "cost_batch_true":  41.86,
@@ -64,22 +64,22 @@
                                    "item":  "Potato",
                                    "grams":  3500,
                                    "buy":  "8 lb",
-                                   "bid":"russet-potatoes",
-                                   "gpu":453.592
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "1/3 Fat Cream Cheese",
                                    "grams":  140,
                                    "buy":  "1 block",
-                                   "bid":"1-3-fat-cream-cheese",
-                                   "gpu":28.3495
+                                   "bid":  "1-3-fat-cream-cheese",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  170,
                                    "buy":  "1 bag",
-                                   "bid":"cheddar-cheese-shredded",
-                                   "gpu":28.3495
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Ranch Seasoning Mix",
@@ -92,8 +92,8 @@
                                    "item":  "Hickory Smoked Bacon",
                                    "grams":  60,
                                    "buy":  "1 package",
-                                   "bid":"bacon",
-                                   "gpu":453.592
+                                   "bid":  "bacon",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Chicken Broth",

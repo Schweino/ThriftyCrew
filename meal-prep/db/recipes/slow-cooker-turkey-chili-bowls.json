@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Turkey Chili Bowls",
     "slug":  "slow-cooker-turkey-chili-bowls",
     "cuisine":  "Tex-Mex",
     "protein":  "turkey",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://ifoodreal.com/high-protein-crockpot-turkey-chili-recipe/",
+    "source_site":  "iFoodReal",
     "manual_balance":  false,
     "tuning":  [
 
@@ -46,7 +46,7 @@
                     "Break up any big pieces of turkey, then serve it over or alongside more beans."
                 ],
     "portion_html":  "Each of the 14 bowls gives you 54 grams of protein and about 568 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://ifoodreal.com/high-protein-crockpot-turkey-chili-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eiFoodReal\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Set it in the morning, come home to dinner, and stash the rest for the week ahead. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  57.79,
     "cost_batch_true":  62.57,
@@ -61,15 +61,15 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3120,
                                    "buy":  "7 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Seasoned Black Beans",
                                    "grams":  2391,
                                    "buy":  "6 cans",
-                                   "bid":"seasoned-black-beans",
-                                   "gpu":28.3495
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -96,8 +96,8 @@
                                    "item":  "Green Bell Peppers",
                                    "grams":  240,
                                    "buy":  "2 peppers",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Chili Powder",
@@ -110,8 +110,8 @@
                                    "item":  "Chipotle in Adobo",
                                    "grams":  60,
                                    "buy":  "1 can",
-                                   "bid":"chipotle-adobo",
-                                   "gpu":28.3495
+                                   "bid":  "chipotle-adobo",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Vegetable Oil",

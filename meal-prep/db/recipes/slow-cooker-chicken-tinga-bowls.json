@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Chicken Tinga Bowls",
     "slug":  "slow-cooker-chicken-tinga-bowls",
     "cuisine":  "Mexican",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.themagicalslowcooker.com/slow-cooker-chicken-tinga/",
+    "source_site":  "The Magical Slow Cooker",
     "manual_balance":  false,
     "tuning":  [
 
@@ -47,7 +47,7 @@
                     "Fill bowls with rice, tinga chicken, broccoli, and a little cheddar on top."
                 ],
     "portion_html":  "Each of the 14 servings comes in around 58g protein for about 560 calories, at roughly $2.26 a bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-chicken-tinga/\" target=\"_blank\" rel=\"noopener\"\u003eThe Magical Slow Cooker\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Make the batch and you have a smoky, satisfying lunch that beats anything from the drive-thru. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  30.26,
     "cost_batch_true":  34.08,
@@ -69,8 +69,8 @@
                                    "item":  "Rice",
                                    "grams":  940,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -90,22 +90,22 @@
                                    "item":  "Broccoli Florets",
                                    "grams":  400,
                                    "buy":  "2 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Chipotle in Adobo",
                                    "grams":  90,
                                    "buy":  "1 can",
-                                   "bid":"chipotle-adobo",
-                                   "gpu":28.3495
+                                   "bid":  "chipotle-adobo",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  112,
                                    "buy":  "1 bag",
-                                   "bid":"cheddar-cheese-shredded",
-                                   "gpu":28.3495
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Garlic",

@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Cheesy Zucchini Beef and Rice Skillet",
     "slug":  "cheesy-zucchini-beef-rice-skillet",
     "cuisine":  "Mexican",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://confessionsofafitfoodie.com/21-day-fix-easy-cheesy-zucchini-mexican-skillet/",
+    "source_site":  "Confessions of a Fit Foodie",
     "manual_balance":  false,
     "tuning":  [
 
@@ -50,7 +50,7 @@
                     "Turn off the heat and stir in the fat free cheddar until it melts into the mix. Serve over the cooked rice, or fold the rice right into the skillet."
                 ],
     "portion_html":  "Once everything is combined, weigh the full pot again and subtract the empty pot weight you noted at the start. Divide that total by 14 to find the target weight per container, then scoop and check each one on the scale. Even portions keep every dinner satisfying and your macros honest.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://confessionsofafitfoodie.com/21-day-fix-easy-cheesy-zucchini-mexican-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eConfessions of a Fit Foodie\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fourteen filling dinners out of one skillet, every one warm, cheesy, and easy on the wallet. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  42.25,
     "cost_batch_true":  44.76,
@@ -65,8 +65,8 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1814,
                                    "buy":  "4 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -79,8 +79,8 @@
                                    "item":  "Green Bell Peppers",
                                    "grams":  476,
                                    "buy":  "4 peppers",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Zucchini",
@@ -114,8 +114,8 @@
                                    "item":  "Rice",
                                    "grams":  1000,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Vegetable Oil",

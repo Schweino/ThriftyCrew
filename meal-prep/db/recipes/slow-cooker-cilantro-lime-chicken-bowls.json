@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Cilantro Lime Chicken Bowls",
     "slug":  "slow-cooker-cilantro-lime-chicken-bowls",
     "cuisine":  "Mexican",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://realfoodwholelife.com/recipes/crockpot-cilantro-lime-chicken/",
+    "source_site":  "Real Food Whole Life",
     "manual_balance":  false,
     "tuning":  [
 
@@ -46,7 +46,7 @@
                     "Build bowls with rice, cilantro lime chicken, and broccoli."
                 ],
     "portion_html":  "Each of the 14 servings runs about 57g protein for roughly 578 calories, at around $2.25 a bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://realfoodwholelife.com/recipes/crockpot-cilantro-lime-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eReal Food Whole Life\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fresh, easy, and endlessly repeatable, this one earns a permanent spot in your rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  33.76,
     "cost_batch_true":  38.86,
@@ -68,15 +68,15 @@
                                    "item":  "Rice",
                                    "grams":  780,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  400,
                                    "buy":  "2 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Olive Oil",
@@ -103,8 +103,8 @@
                                    "item":  "Fresh Cilantro",
                                    "grams":  120,
                                    "buy":  "2 cups packed",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                },
                                {
                                    "item":  "Garlic",

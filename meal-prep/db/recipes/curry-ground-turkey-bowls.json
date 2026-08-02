@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Curry Ground Turkey Bowls",
     "slug":  "curry-ground-turkey-bowls",
     "cuisine":  "Indian",
     "protein":  "turkey",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.familyfoodonthetable.com/curry-ground-turkey-with-rice-and-peas/",
+    "source_site":  "Family Food on the Table",
     "manual_balance":  false,
     "tuning":  [
 
@@ -47,7 +47,7 @@
                     "Serve the curry over cooked white rice."
                 ],
     "portion_html":  "Each of the 14 bowls delivers 51 grams of protein and about 600 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.familyfoodonthetable.com/curry-ground-turkey-with-rice-and-peas/\" target=\"_blank\" rel=\"noopener\"\u003eFamily Food on the Table\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cozy, filling, and easy on the budget, this is comfort food that loves you back. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  42.3,
     "cost_batch_true":  46.67,
@@ -62,15 +62,15 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3400,
                                    "buy":  "8 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -83,8 +83,8 @@
                                    "item":  "Coconut Milk",
                                    "grams":  200,
                                    "buy":  "1 can",
-                                   "bid":"coconut-milk-canned",
-                                   "gpu":29.57
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Yellow Onion",

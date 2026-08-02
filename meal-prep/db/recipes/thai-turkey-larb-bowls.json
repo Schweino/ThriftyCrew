@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Thai Turkey Larb Bowls",
     "slug":  "thai-turkey-larb-bowls",
     "cuisine":  "Thai",
     "protein":  "turkey",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.trifectanutrition.com/blog/paleo-thai-turkey-larb-recipe",
+    "source_site":  "Trifecta Nutrition",
     "manual_balance":  false,
     "tuning":  [
 
@@ -46,7 +46,7 @@
                     "Serve it over cooked white rice with extra lime on the side."
                 ],
     "portion_html":  "Each of the 14 bowls gives you 50 grams of protein and about 642 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.trifectanutrition.com/blog/paleo-thai-turkey-larb-recipe\" target=\"_blank\" rel=\"noopener\"\u003eTrifecta Nutrition\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fresh, punchy, and cheap, this is the bowl that keeps your taste buds interested all week. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  45.86,
     "cost_batch_true":  52.55,
@@ -61,15 +61,15 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3300,
                                    "buy":  "8 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  950,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -96,8 +96,8 @@
                                    "item":  "Green Bell Peppers",
                                    "grams":  300,
                                    "buy":  "3 peppers",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Olive Oil",
@@ -117,15 +117,15 @@
                                    "item":  "Jalapeno",
                                    "grams":  35,
                                    "buy":  "3-4 dry chiles or 1.5 Tbsp chile powder",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Fresh Cilantro",
                                    "grams":  30,
                                    "buy":  "1/2 cup rough chopped",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                },
                                {
                                    "item":  "Fresh Mint",

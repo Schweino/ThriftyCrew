@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Korean Gochujang Pork Bowls",
     "slug":  "slow-cooker-korean-gochujang-pork-bowls",
     "cuisine":  "Korean",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.theendlessmeal.com/crock-pot-korean-gochujang-pork/",
+    "source_site":  "The Endless Meal",
     "manual_balance":  false,
     "tuning":  [
 
@@ -39,7 +39,7 @@
                     "Serve the pork and broccoli over cooked white rice and portion out."
                 ],
     "portion_html":  "Each of the 14 servings comes in around 576 calories with 56 grams of protein.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theendlessmeal.com/crock-pot-korean-gochujang-pork/\" target=\"_blank\" rel=\"noopener\"\u003eThe Endless Meal\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Big flavor, small price, and it hits that sweet-and-spicy spot every single time. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  25.49,
     "cost_batch_true":  27.45,
@@ -61,15 +61,15 @@
                                    "item":  "Rice",
                                    "grams":  640,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  900,
                                    "buy":  "3 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Honey",

@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Ground Beef and Broccoli Bowls",
     "slug":  "ground-beef-and-broccoli-bowls",
     "cuisine":  "Chinese",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://therecipecritic.com/ground-beef-and-broccoli/",
+    "source_site":  "The Recipe Critic",
     "manual_balance":  false,
     "tuning":  [
 
@@ -48,7 +48,7 @@
                     "Fold in the broccoli, then serve everything over cooked rice in each container."
                 ],
     "portion_html":  "Each of the 14 bowls serves up 45 grams of protein at 596 calories, so it satisfies without weighing you down.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://therecipecritic.com/ground-beef-and-broccoli/\" target=\"_blank\" rel=\"noopener\"\u003eThe Recipe Critic\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Skip the delivery app this week. You just made it better and cheaper at home. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  45.87,
     "cost_batch_true":  48.42,
@@ -63,22 +63,22 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2240,
                                    "buy":  "5 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  981,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1500,
                                    "buy":  "5 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -133,8 +133,8 @@
                                    "item":  "Ginger",
                                    "grams":  15,
                                    "buy":  "1 root",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Salt",

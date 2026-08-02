@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Apple Cider Pork Bowls",
     "slug":  "slow-cooker-apple-cider-pork-bowls",
     "cuisine":  "American",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://amindfullmom.com/roast-pork-loin-with-apples-for-the-slow-cooker/",
+    "source_site":  "A Mind Full Mom",
     "manual_balance":  false,
     "tuning":  [
 
@@ -48,7 +48,7 @@
                     "Pull the pork, spoon it over the potatoes, and ladle a little of that cider gravy over the top."
                 ],
     "portion_html":  "Each of the 14 servings lands at 59 grams of protein and 562 calories, so this fills you up without wrecking your day.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://amindfullmom.com/roast-pork-loin-with-apples-for-the-slow-cooker/\" target=\"_blank\" rel=\"noopener\"\u003eA Mind Full Mom\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Set it in the morning, forget about it, and come home to dinner already handled. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  27.11,
     "cost_batch_true":  33.15,
@@ -70,8 +70,8 @@
                                    "item":  "Potato",
                                    "grams":  2700,
                                    "buy":  "6 lb",
-                                   "bid":"russet-potatoes",
-                                   "gpu":453.592
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Apple",

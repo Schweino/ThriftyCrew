@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Unstuffed Cabbage Roll Bowls",
     "slug":  "unstuffed-cabbage-roll-bowls",
     "cuisine":  "Eastern European",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://thewholecook.com/unstuffed-cabbage-skillet/",
+    "source_site":  "The Whole Cook",
     "manual_balance":  false,
     "tuning":  [
 
@@ -47,7 +47,7 @@
                     "Taste, adjust the salt and pepper, and serve it up in bowls."
                 ],
     "portion_html":  "Each of the 14 bowls gives you 49 grams of protein and about 560 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thewholecook.com/unstuffed-cabbage-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eThe Whole Cook\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheap, filling, and loaded with veggies, this is meal prep that earns its spot in the fridge. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  51.39,
     "cost_batch_true":  54.01,
@@ -62,22 +62,22 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2710,
                                    "buy":  "6 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  808,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Green Cabbage",
                                    "grams":  1400,
                                    "buy":  "4 lb",
-                                   "bid":"cabbage",
-                                   "gpu":453.592
+                                   "bid":  "cabbage",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Crushed Tomatoes",

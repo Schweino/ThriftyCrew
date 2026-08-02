@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Teriyaki Chicken and Rice Bowl",
     "slug":  "teriyaki-chicken-bowl",
     "cuisine":  "Asian",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://masonfit.com/teriyaki-ground-turkey-stir-fry/",
+    "source_site":  "Mason Fit",
     "manual_balance":  false,
     "tuning":  [
 
@@ -43,7 +43,7 @@
                     "Fold the cooked rice into the skillet, or layer it into your containers first. Either way works fine."
                 ],
     "portion_html":  "When the skillet is done, weigh the full pot again and subtract the empty pot weight you wrote down. Divide that number by 14 to get the target weight for each container, then scoop and check on the scale as you go. Even containers mean even meals all week.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/teriyaki-ground-turkey-stir-fry/\" target=\"_blank\" rel=\"noopener\"\u003eMason Fit\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "That is 14 dinners done in one afternoon, every reheated bowl costing you a fraction of the takeout price. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  29.74,
     "cost_batch_true":  32.23,
@@ -79,15 +79,15 @@
                                    "item":  "Rice",
                                    "grams":  900,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  595,
                                    "buy":  "2 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Shredded Carrots",

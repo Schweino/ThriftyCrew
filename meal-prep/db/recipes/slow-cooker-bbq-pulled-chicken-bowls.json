@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker BBQ Pulled Chicken Bowls",
     "slug":  "slow-cooker-bbq-pulled-chicken-bowls",
     "cuisine":  "American",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.budgetbytes.com/slow-cooker-bbq-chicken/",
+    "source_site":  "Budget Bytes",
     "manual_balance":  false,
     "tuning":  [
 
@@ -44,7 +44,7 @@
                     "Serve over cooked white rice and portion into your containers."
                 ],
     "portion_html":  "Each of the 14 servings runs about 574 calories with a serious 60 grams of protein.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/slow-cooker-bbq-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eBudget Bytes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Make it once and you will wonder why you ever paid for fast food lunches. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  32.77,
     "cost_batch_true":  35.56,
@@ -66,8 +66,8 @@
                                    "item":  "Rice",
                                    "grams":  950,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "BBQ Sauce (Sugar Free)",
@@ -80,8 +80,8 @@
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  750,
                                    "buy":  "3 cans",
-                                   "bid":"canned-corn",
-                                   "gpu":28.3495
+                                   "bid":  "canned-corn",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Paprika",

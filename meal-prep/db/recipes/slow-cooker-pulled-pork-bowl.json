@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "BBQ Pulled Pork Rice Bowl",
     "slug":  "slow-cooker-pulled-pork-bowl",
     "cuisine":  "American",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://skinnyfitalicious.com/healthy-crockpot-pulled-pork/",
+    "source_site":  "Skinny Fitalicious",
     "manual_balance":  false,
     "tuning":  [
 
@@ -47,7 +47,7 @@
                     "Combine the rice, corn, and saucy pork in your weighed pot and fold everything together."
                 ],
     "portion_html":  "Weigh the full finished pot, subtract the empty pot weight you wrote down, and divide that number by 14. Scoop that same weight into each of your 14 containers so every bowl is even.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyfitalicious.com/healthy-crockpot-pulled-pork/\" target=\"_blank\" rel=\"noopener\"\u003eSkinny Fitalicious\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "That is a whole week of hearty dinners sorted in one afternoon, cheap, filling, and something you will actually look forward to opening at lunch. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  29.46,
     "cost_batch_true":  29.55,
@@ -97,22 +97,22 @@
                                    "item":  "Rice",
                                    "grams":  1000,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  840,
                                    "buy":  "4 cans",
-                                   "bid":"canned-corn",
-                                   "gpu":28.3495
+                                   "bid":  "canned-corn",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Smoked Paprika",
                                    "grams":  12,
                                    "buy":  "2 tsp",
-                                   "bid":"smoked-paprika",
-                                   "gpu":28.3495
+                                   "bid":  "smoked-paprika",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Salt",

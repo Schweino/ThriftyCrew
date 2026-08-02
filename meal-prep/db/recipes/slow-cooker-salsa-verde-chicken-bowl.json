@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Salsa Verde Chicken Burrito Bowl",
     "slug":  "slow-cooker-salsa-verde-chicken-bowl",
     "cuisine":  "Mexican",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://realfoodwholelife.com/recipes/slow-cooker-salsa-verde-chicken/",
+    "source_site":  "Real Food Whole Life",
     "manual_balance":  false,
     "tuning":  [
 
@@ -50,7 +50,7 @@
                     "Stir in the fat free cheddar to taste and mix until everything is evenly combined."
                 ],
     "portion_html":  "Weigh the full pot, subtract the empty-pot weight you noted at the start, and divide by 14. Scoop that same weight into each of the 14 containers so every burrito bowl lands with an equal, filling share of protein.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://realfoodwholelife.com/recipes/slow-cooker-salsa-verde-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eReal Food Whole Life\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fourteen burrito bowls for two, at a per-bowl price that undercuts a single trip to the burrito line. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  38.86,
     "cost_batch_true":  41.96,
@@ -72,8 +72,8 @@
                                    "item":  "Salsa Verde",
                                    "grams":  900,
                                    "buy":  "2 jars",
-                                   "bid":"salsa-verde",
-                                   "gpu":28.3495
+                                   "bid":  "salsa-verde",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Ground Cumin",
@@ -93,22 +93,22 @@
                                    "item":  "Rice",
                                    "grams":  800,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Seasoned Black Beans",
                                    "grams":  910,
                                    "buy":  "4 cans",
-                                   "bid":"seasoned-black-beans",
-                                   "gpu":28.3495
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  420,
                                    "buy":  "2 cans",
-                                   "bid":"canned-corn",
-                                   "gpu":28.3495
+                                   "bid":  "canned-corn",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Fat Free Cheddar",

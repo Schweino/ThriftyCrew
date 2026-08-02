@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Beef Chili Mac",
     "slug":  "beef-chili-mac",
     "cuisine":  "American",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.dinneratthezoo.com/chili-mac-one-pot/",
+    "source_site":  "Dinner at the Zoo",
     "manual_balance":  false,
     "tuning":  [
 
@@ -49,7 +49,7 @@
                     "Melt the shredded cheddar over the top before portioning into containers."
                 ],
     "portion_html":  "Every one of the 14 bowls carries 53 grams of protein at 596 calories, so this comfort-food combo delivers on the numbers too.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.dinneratthezoo.com/chili-mac-one-pot/\" target=\"_blank\" rel=\"noopener\"\u003eDinner at the Zoo\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One skillet, big flavor, and a fridge stocked for the week. Chili mac never gets old. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  45.43,
     "cost_batch_true":  49.68,
@@ -64,15 +64,15 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2230,
                                    "buy":  "5 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  969,
                                    "buy":  "3 boxs",
-                                   "bid":"penne-pasta",
-                                   "gpu":28.3495
+                                   "bid":  "penne-pasta",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -113,8 +113,8 @@
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  160,
                                    "buy":  "1 bag",
-                                   "bid":"cheddar-cheese-shredded",
-                                   "gpu":28.3495
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Chili Powder",

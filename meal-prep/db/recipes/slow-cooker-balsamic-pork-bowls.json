@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Balsamic Pork Bowls",
     "slug":  "slow-cooker-balsamic-pork-bowls",
     "cuisine":  "American",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.slenderkitchen.com/recipe/slow-cooker-balsamic-brown-sugar-pork-tenderloin",
+    "source_site":  "Slender Kitchen",
     "manual_balance":  false,
     "tuning":  [
 
@@ -49,7 +49,7 @@
                     "Divide the pork, potatoes, and green beans into your containers."
                 ],
     "portion_html":  "Each serving comes in around 556 calories with 57 grams of protein.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.slenderkitchen.com/recipe/slow-cooker-balsamic-brown-sugar-pork-tenderloin\" target=\"_blank\" rel=\"noopener\"\u003eSlender Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A little tang, a little sweet, and a whole lot of easy. That is a keeper. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  41.05,
     "cost_batch_true":  43.75,
@@ -71,8 +71,8 @@
                                    "item":  "Potato",
                                    "grams":  3400,
                                    "buy":  "8 lb",
-                                   "bid":"russet-potatoes",
-                                   "gpu":453.592
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Green Beans",

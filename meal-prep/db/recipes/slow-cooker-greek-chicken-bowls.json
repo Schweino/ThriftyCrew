@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Greek Chicken Bowls",
     "slug":  "slow-cooker-greek-chicken-bowls",
     "cuisine":  "Greek",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.rachelcooks.com/slow-cooker-greek-chicken/",
+    "source_site":  "Rachel Cooks",
     "manual_balance":  false,
     "tuning":  [
 
@@ -45,7 +45,7 @@
                     "Serve the chicken and potatoes together, spooning the pan juices over the top."
                 ],
     "portion_html":  "Each bowl lands at 61 grams of protein and 555 calories, one of the leaner plates in the bunch.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.rachelcooks.com/slow-cooker-greek-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eRachel Cooks\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fresh, filling, and easy on the wallet. Weeknight dinner doesn\u0027t get much friendlier. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  34.87,
     "cost_batch_true":  36.87,
@@ -67,8 +67,8 @@
                                    "item":  "Potato",
                                    "grams":  4400,
                                    "buy":  "10 lb",
-                                   "bid":"russet-potatoes",
-                                   "gpu":453.592
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Olive Oil",

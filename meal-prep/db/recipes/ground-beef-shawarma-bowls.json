@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Ground Beef Shawarma Bowls",
     "slug":  "ground-beef-shawarma-bowls",
     "cuisine":  "Middle Eastern",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.closetcooking.com/20-minute-skillet-beef-shawarma/",
+    "source_site":  "Closet Cooking",
     "manual_balance":  false,
     "tuning":  [
 
@@ -45,7 +45,7 @@
                     "Spoon the shawarma beef over rice and finish with the yogurt drizzle."
                 ],
     "portion_html":  "Every one of the 14 bowls carries 48 grams of protein at 595 calories, so this spiced favorite fuels you as well as it tastes.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.closetcooking.com/20-minute-skillet-beef-shawarma/\" target=\"_blank\" rel=\"noopener\"\u003eCloset Cooking\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Street-cart flavor from your own kitchen, portioned and ready. Adventure eating on a budget. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  45.68,
     "cost_batch_true":  52.26,
@@ -60,15 +60,15 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2450,
                                    "buy":  "6 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  1120,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -81,8 +81,8 @@
                                    "item":  "Greek Yogurt",
                                    "grams":  500,
                                    "buy":  "1 tub",
-                                   "bid":"greek-yogurt",
-                                   "gpu":28.3495
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes",

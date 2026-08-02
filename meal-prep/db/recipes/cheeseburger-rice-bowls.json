@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Cheeseburger Rice Bowls",
     "slug":  "cheeseburger-rice-bowls",
     "cuisine":  "American",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.budgetbytes.com/cheeseburger-rice/",
+    "source_site":  "Budget Bytes",
     "manual_balance":  false,
     "tuning":  [
 
@@ -48,7 +48,7 @@
                     "Melt the shredded cheddar over the top before portioning into containers."
                 ],
     "portion_html":  "Each of the 14 bowls serves 47 grams of protein at 602 calories, so this burger-in-a-bowl actually earns its keep on your plan.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/cheeseburger-rice/\" target=\"_blank\" rel=\"noopener\"\u003eBudget Bytes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheeseburger night, meal-prepped and budget-friendly. No bun, no regrets, all the flavor. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  46.1,
     "cost_batch_true":  51.42,
@@ -63,15 +63,15 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2450,
                                    "buy":  "6 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  1000,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -112,8 +112,8 @@
                                    "item":  "Cheddar Cheese, Shredded",
                                    "grams":  180,
                                    "buy":  "1 bag",
-                                   "bid":"cheddar-cheese-shredded",
-                                   "gpu":28.3495
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Garlic",
@@ -147,8 +147,8 @@
                                    "item":  "Worcestershire Sauce",
                                    "grams":  50,
                                    "buy":  "1 Tbsp",
-                                   "bid":"worcestershire",
-                                   "gpu":29.57
+                                   "bid":  "worcestershire",
+                                   "gpu":  29.57
                                }
                            ]
                },

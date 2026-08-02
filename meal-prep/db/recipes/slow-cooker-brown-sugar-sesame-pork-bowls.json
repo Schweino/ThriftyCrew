@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Brown Sugar Sesame Pork Bowls",
     "slug":  "slow-cooker-brown-sugar-sesame-pork-bowls",
     "cuisine":  "Asian",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.themagicalslowcooker.com/slow-cooker-brown-sugar-sesame-pork-loin/",
+    "source_site":  "The Magical Slow Cooker",
     "manual_balance":  false,
     "tuning":  [
 
@@ -44,7 +44,7 @@
                     "Serve over cooked white rice, sprinkle with toasted sesame seeds, and pack it up."
                 ],
     "portion_html":  "Each serving runs about 607 calories with 55 grams of protein.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-brown-sugar-sesame-pork-loin/\" target=\"_blank\" rel=\"noopener\"\u003eThe Magical Slow Cooker\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Sweet, nutty, and cheap enough that you can make it every week without a second thought. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  25.39,
     "cost_batch_true":  29.01,
@@ -66,15 +66,15 @@
                                    "item":  "Rice",
                                    "grams":  750,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1200,
                                    "buy":  "4 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Brown Sugar",

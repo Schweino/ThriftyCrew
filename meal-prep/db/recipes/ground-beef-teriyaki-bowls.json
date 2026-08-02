@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Ground Beef Teriyaki Bowls",
     "slug":  "ground-beef-teriyaki-bowls",
     "cuisine":  "Asian",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.eatyourselfskinny.com/healthy-mongolian-ground-beef-bowls/",
+    "source_site":  "Eat Yourself Skinny",
     "manual_balance":  false,
     "tuning":  [
 
@@ -51,7 +51,7 @@
                     "Serve the teriyaki beef and veggies over rice in each container."
                 ],
     "portion_html":  "Each of the 14 bowls carries 44 grams of protein at just 593 calories, keeping this one light, sweet, and filling.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eatyourselfskinny.com/healthy-mongolian-ground-beef-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eEat Yourself Skinny\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Food-court flavor, home-cook price, and a fridge full of dinners already handled. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  48.6,
     "cost_batch_true":  50.79,
@@ -66,29 +66,29 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2240,
                                    "buy":  "5 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  1031,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  1000,
                                    "buy":  "3 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Red Bell Pepper",
                                    "grams":  400,
                                    "buy":  "4 peppers",
-                                   "bid":"red-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Soy Sauce",
@@ -143,8 +143,8 @@
                                    "item":  "Ginger",
                                    "grams":  15,
                                    "buy":  "1 root",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Olive Oil",

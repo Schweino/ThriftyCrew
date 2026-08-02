@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker French Onion Chicken Bowls",
     "slug":  "slow-cooker-french-onion-chicken-bowls",
     "cuisine":  "American",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://ohsnapmacros.com/crockpot-french-onion-chicken/",
+    "source_site":  "Oh Snap Macros",
     "manual_balance":  false,
     "tuning":  [
 
@@ -47,7 +47,7 @@
                     "Serve over white rice and top each bowl with grated parmesan."
                 ],
     "portion_html":  "You get a strong 67 grams of protein and 580 calories per serving, one of the highest-protein bowls here.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://ohsnapmacros.com/crockpot-french-onion-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eOh Snap Macros\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheap onions, patient cooking, and a big protein payoff. That\u0027s a win any way you slice it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  37.23,
     "cost_batch_true":  42.4,
@@ -69,8 +69,8 @@
                                    "item":  "Rice",
                                    "grams":  820,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -90,15 +90,15 @@
                                    "item":  "Greek Yogurt",
                                    "grams":  340,
                                    "buy":  "1 tub",
-                                   "bid":"greek-yogurt",
-                                   "gpu":28.3495
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Parmesan Cheese",
                                    "grams":  140,
                                    "buy":  "1 container",
-                                   "bid":"parmesan",
-                                   "gpu":28.3495
+                                   "bid":  "parmesan",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Garlic Powder",
@@ -125,8 +125,8 @@
                                    "item":  "Worcestershire Sauce",
                                    "grams":  40,
                                    "buy":  "1 tbsp",
-                                   "bid":"worcestershire",
-                                   "gpu":29.57
+                                   "bid":  "worcestershire",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Salt",

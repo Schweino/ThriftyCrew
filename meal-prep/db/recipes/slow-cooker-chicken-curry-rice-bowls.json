@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Chicken Curry Rice Bowls",
     "slug":  "slow-cooker-chicken-curry-rice-bowls",
     "cuisine":  "Indian",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://laurenfitfoodie.com/slow-cooker-chicken-curry-low-fat-healthy-and-easy/",
+    "source_site":  "Lauren Fit Foodie",
     "manual_balance":  false,
     "tuning":  [
 
@@ -47,7 +47,7 @@
                     "Serve the curry over rice."
                 ],
     "portion_html":  "Each of the 14 servings comes in around 59g protein for about 568 calories, at roughly $2.03 a bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://laurenfitfoodie.com/slow-cooker-chicken-curry-low-fat-healthy-and-easy/\" target=\"_blank\" rel=\"noopener\"\u003eLauren Fit Foodie\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fragrant, filling, and easy on the budget, this curry is meal prep you will actually crave. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  31.96,
     "cost_batch_true":  36.47,
@@ -69,8 +69,8 @@
                                    "item":  "Rice",
                                    "grams":  1020,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -83,8 +83,8 @@
                                    "item":  "Carrots",
                                    "grams":  350,
                                    "buy":  "1 lb",
-                                   "bid":"carrots",
-                                   "gpu":453.592
+                                   "bid":  "carrots",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Curry Powder",
@@ -97,8 +97,8 @@
                                    "item":  "Greek Yogurt",
                                    "grams":  340,
                                    "buy":  "1 tub",
-                                   "bid":"greek-yogurt",
-                                   "gpu":28.3495
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Garlic",

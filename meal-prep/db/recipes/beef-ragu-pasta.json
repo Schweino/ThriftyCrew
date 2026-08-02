@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Simple Beef Ragu Pasta",
     "slug":  "beef-ragu-pasta",
     "cuisine":  "Italian",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://inquiringchef.com/simple-beef-ragu-slow-cooker-instant-pot-stovetop/",
+    "source_site":  "Inquiring Chef",
     "manual_balance":  false,
     "tuning":  [
 
@@ -50,7 +50,7 @@
                     "Finish with a shower of parmesan over the top."
                 ],
     "portion_html":  "Each of the 14 servings gives you 55 grams of protein at 603 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://inquiringchef.com/simple-beef-ragu-slow-cooker-instant-pot-stovetop/\" target=\"_blank\" rel=\"noopener\"\u003eInquiring Chef\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Slow-simmered flavor, weeknight ease, and a price that lets you cook it as often as you like. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  48.04,
     "cost_batch_true":  58.08,
@@ -65,15 +65,15 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2450,
                                    "buy":  "6 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  1080,
                                    "buy":  "3 boxs",
-                                   "bid":"penne-pasta",
-                                   "gpu":28.3495
+                                   "bid":  "penne-pasta",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -86,8 +86,8 @@
                                    "item":  "Carrots",
                                    "grams":  200,
                                    "buy":  "1 lb",
-                                   "bid":"carrots",
-                                   "gpu":453.592
+                                   "bid":  "carrots",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Crushed Tomatoes",
@@ -114,8 +114,8 @@
                                    "item":  "Parmesan Cheese",
                                    "grams":  80,
                                    "buy":  "1 container",
-                                   "bid":"parmesan",
-                                   "gpu":28.3495
+                                   "bid":  "parmesan",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Garlic",

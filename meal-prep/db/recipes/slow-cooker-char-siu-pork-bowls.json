@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Char Siu Pork Bowls",
     "slug":  "slow-cooker-char-siu-pork-bowls",
     "cuisine":  "Chinese",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://andreasrecipes.com/slow-cooker-char-siu-pork-roast/",
+    "source_site":  "Making Life Delicious",
     "manual_balance":  false,
     "tuning":  [
 
@@ -48,7 +48,7 @@
                     "Serve over cooked white rice with the broccoli alongside and pack it up."
                 ],
     "portion_html":  "You get about 562 calories and 55 grams of protein in every serving.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://andreasrecipes.com/slow-cooker-char-siu-pork-roast/\" target=\"_blank\" rel=\"noopener\"\u003eMaking Life Delicious\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Restaurant flavor, home-cook price. Once you taste it you are hooked. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  25.83,
     "cost_batch_true":  28.9,
@@ -70,15 +70,15 @@
                                    "item":  "Rice",
                                    "grams":  640,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  900,
                                    "buy":  "3 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Honey",
@@ -126,8 +126,8 @@
                                    "item":  "Ginger",
                                    "grams":  10,
                                    "buy":  "2 tsp grated fresh",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Sesame Oil",

@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Chicken Saag Rice Bowls",
     "slug":  "slow-cooker-chicken-saag-rice-bowls",
     "cuisine":  "Indian",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.everydaymaven.com/slow-cooker-chicken-saag/",
+    "source_site":  "EveryDay Maven",
     "manual_balance":  false,
     "tuning":  [
 
@@ -48,7 +48,7 @@
                     "Serve the saag over rice."
                 ],
     "portion_html":  "Each of the 14 servings lands around 59g protein for about 565 calories, at roughly $2.33 a bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.everydaymaven.com/slow-cooker-chicken-saag/\" target=\"_blank\" rel=\"noopener\"\u003eEveryDay Maven\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Deep, savory, and simple, this saag makes healthy eating feel effortless all week long. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  33.28,
     "cost_batch_true":  38.37,
@@ -70,15 +70,15 @@
                                    "item":  "Rice",
                                    "grams":  950,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Frozen Chopped Spinach",
                                    "grams":  900,
                                    "buy":  "3 boxs",
-                                   "bid":"frozen-chopped-spinach",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-chopped-spinach",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Tomato Sauce",
@@ -91,8 +91,8 @@
                                    "item":  "Coconut Milk",
                                    "grams":  240,
                                    "buy":  "1 can",
-                                   "bid":"coconut-milk-canned",
-                                   "gpu":29.57
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Garlic",
@@ -105,8 +105,8 @@
                                    "item":  "Ginger",
                                    "grams":  75,
                                    "buy":  "3 inches",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garam Masala",

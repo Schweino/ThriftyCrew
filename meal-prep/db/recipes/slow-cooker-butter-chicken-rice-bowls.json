@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Butter Chicken Rice Bowls",
     "slug":  "slow-cooker-butter-chicken-rice-bowls",
     "cuisine":  "Indian",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.slenderkitchen.com/recipe/slow-cooker-butter-chicken",
+    "source_site":  "Slender Kitchen",
     "manual_balance":  false,
     "tuning":  [
 
@@ -55,7 +55,7 @@
                     "Spoon the butter chicken over rice and serve."
                 ],
     "portion_html":  "Each of the 14 servings lands around 57g protein for about 592 calories, at roughly $2.00 a bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.slenderkitchen.com/recipe/slow-cooker-butter-chicken\" target=\"_blank\" rel=\"noopener\"\u003eSlender Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Rich and restaurant-worthy, this one will spoil you in the best way. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  31.09,
     "cost_batch_true":  43.07,
@@ -77,8 +77,8 @@
                                    "item":  "Rice",
                                    "grams":  980,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Tomato Sauce",
@@ -112,8 +112,8 @@
                                    "item":  "Greek Yogurt",
                                    "grams":  200,
                                    "buy":  "1 tub",
-                                   "bid":"greek-yogurt",
-                                   "gpu":28.3495
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Garlic",
@@ -133,8 +133,8 @@
                                    "item":  "Ginger",
                                    "grams":  35,
                                    "buy":  "1 tbsp minced",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garam Masala",

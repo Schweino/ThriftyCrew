@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Italian Chicken Penne",
     "slug":  "slow-cooker-italian-chicken-penne",
     "cuisine":  "Italian",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://thewholecook.com/slow-cooker-italian-pulled-chicken/",
+    "source_site":  "The Whole Cook",
     "manual_balance":  false,
     "tuning":  [
 
@@ -50,7 +50,7 @@
                     "Tip the shredded chicken and sauce over the pasta, add the grated parmesan, and stir until everything is coated and glossy."
                 ],
     "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide the remaining weight by 14. That gives you the grams per container. Scoop each one to that number so every meal comes out even, and you land right around 55 grams of protein per serving.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thewholecook.com/slow-cooker-italian-pulled-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eThe Whole Cook\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fourteen creamy Italian dinners cooked while you were busy, for a fraction of what one restaurant plate would cost. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  25.79,
     "cost_batch_true":  29.8,
@@ -79,8 +79,8 @@
                                    "item":  "Coconut Milk",
                                    "grams":  240,
                                    "buy":  "1 can",
-                                   "bid":"coconut-milk-canned",
-                                   "gpu":29.57
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Sun-Dried Tomatoes",
@@ -114,15 +114,15 @@
                                    "item":  "Penne Pasta",
                                    "grams":  900,
                                    "buy":  "3 boxs",
-                                   "bid":"penne-pasta",
-                                   "gpu":28.3495
+                                   "bid":  "penne-pasta",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Parmesan Cheese",
                                    "grams":  98,
                                    "buy":  "1 container",
-                                   "bid":"parmesan",
-                                   "gpu":28.3495
+                                   "bid":  "parmesan",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Salt",

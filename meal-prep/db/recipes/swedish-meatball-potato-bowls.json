@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Swedish Meatball and Potato Bowls",
     "slug":  "swedish-meatball-potato-bowls",
     "cuisine":  "Swedish",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.melskitchencafe.com/skillet-swedish-meatballs/",
+    "source_site":  "Mel\u0027s Kitchen Cafe",
     "manual_balance":  false,
     "tuning":  [
 
@@ -52,7 +52,7 @@
                     "Serve the meatballs and gravy over cooked potatoes and spoon extra sauce on top."
                 ],
     "portion_html":  "Each of the 14 bowls delivers 49 grams of protein and about 546 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.melskitchencafe.com/skillet-swedish-meatballs/\" target=\"_blank\" rel=\"noopener\"\u003eMel\u0027s Kitchen Cafe\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "This is the kind of dinner that feels like a treat but keeps your grocery budget right where you want it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  52.84,
     "cost_batch_true":  61.77,
@@ -67,15 +67,15 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2730,
                                    "buy":  "6 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Potato",
                                    "grams":  3505,
                                    "buy":  "8 lb",
-                                   "bid":"russet-potatoes",
-                                   "gpu":453.592
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Beef Broth",
@@ -102,8 +102,8 @@
                                    "item":  "Light Sour Cream",
                                    "grams":  180,
                                    "buy":  "1 tub",
-                                   "bid":"sour-cream",
-                                   "gpu":28.3495
+                                   "bid":  "sour-cream",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Milk",
@@ -144,8 +144,8 @@
                                    "item":  "All-Purpose Flour",
                                    "grams":  70,
                                    "buy":  "1/4 cup",
-                                   "bid":"flour",
-                                   "gpu":453.592
+                                   "bid":  "flour",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Brown Sugar",

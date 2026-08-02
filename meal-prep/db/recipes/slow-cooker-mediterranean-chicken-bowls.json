@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Mediterranean Chicken Bowls",
     "slug":  "slow-cooker-mediterranean-chicken-bowls",
     "cuisine":  "Mediterranean",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.slenderkitchen.com/recipe/slow-cooker-mediterranean-chicken",
+    "source_site":  "Slender Kitchen",
     "manual_balance":  false,
     "tuning":  [
 
@@ -50,7 +50,7 @@
                     "Serve over white rice with plenty of the peppers and olives spooned on top."
                 ],
     "portion_html":  "Each bowl delivers 61 grams of protein and 562 calories, a light but substantial plate.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.slenderkitchen.com/recipe/slow-cooker-mediterranean-chicken\" target=\"_blank\" rel=\"noopener\"\u003eSlender Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A few smart pantry jars turn plain chicken into something worth looking forward to. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  32.72,
     "cost_batch_true":  36.54,
@@ -72,8 +72,8 @@
                                    "item":  "Rice",
                                    "grams":  940,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -93,8 +93,8 @@
                                    "item":  "Olives",
                                    "grams":  140,
                                    "buy":  "1 jar",
-                                   "bid":"green-olives",
-                                   "gpu":28.3495
+                                   "bid":  "green-olives",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Olive Oil",

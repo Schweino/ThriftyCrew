@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker White Chicken Chili Bowls",
     "slug":  "slow-cooker-white-chicken-chili-bowls",
     "cuisine":  "Tex-Mex",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://therealfooddietitians.com/slow-cooker-white-chicken-chili/",
+    "source_site":  "The Real Food Dietitians",
     "manual_balance":  false,
     "tuning":  [
 
@@ -51,7 +51,7 @@
                     "Ladle into bowls and dig in."
                 ],
     "portion_html":  "Each of the 14 servings lands around 65g protein for about 575 calories, at roughly $2.60 a bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://therealfooddietitians.com/slow-cooker-white-chicken-chili/\" target=\"_blank\" rel=\"noopener\"\u003eThe Real Food Dietitians\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "This is a seriously high-protein bowl, and it tastes like pure comfort while it fuels you up. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  39.84,
     "cost_batch_true":  44.76,
@@ -80,8 +80,8 @@
                                    "item":  "Coconut Milk",
                                    "grams":  750,
                                    "buy":  "2 cans",
-                                   "bid":"coconut-milk-canned",
-                                   "gpu":29.57
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -94,15 +94,15 @@
                                    "item":  "Green Bell Peppers",
                                    "grams":  300,
                                    "buy":  "3 peppers",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Jalapeno",
                                    "grams":  30,
                                    "buy":  "1 jalapeno",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garlic",
@@ -164,8 +164,8 @@
                                    "item":  "Fresh Cilantro",
                                    "grams":  28,
                                    "buy":  "1 bunch",
-                                   "bid":"cilantro",
-                                   "gpu":57
+                                   "bid":  "cilantro",
+                                   "gpu":  57
                                }
                            ]
                },

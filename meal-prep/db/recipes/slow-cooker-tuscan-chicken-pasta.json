@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Tuscan Chicken Pasta",
     "slug":  "slow-cooker-tuscan-chicken-pasta",
     "cuisine":  "Italian",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://kristineskitchenblog.com/tuscan-slow-cooker-chicken-thighs/",
+    "source_site":  "Kristine\u0027s Kitchen",
     "manual_balance":  false,
     "tuning":  [
 
@@ -49,7 +49,7 @@
                     "Toss the pasta with the creamy Tuscan sauce, or spoon the sauce over each serving of pasta."
                 ],
     "portion_html":  "You get 67 grams of protein and 577 calories per serving, restaurant flavor at a home-cook price.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://kristineskitchenblog.com/tuscan-slow-cooker-chicken-thighs/\" target=\"_blank\" rel=\"noopener\"\u003eKristine\u0027s Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Tastes like a splurge, costs like a staple. That\u0027s the sweet spot we\u0027re always chasing. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  34.31,
     "cost_batch_true":  40.14,
@@ -71,8 +71,8 @@
                                    "item":  "Penne Pasta",
                                    "grams":  840,
                                    "buy":  "2 boxs",
-                                   "bid":"penne-pasta",
-                                   "gpu":28.3495
+                                   "bid":  "penne-pasta",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Sun-Dried Tomatoes",
@@ -85,8 +85,8 @@
                                    "item":  "Coconut Milk",
                                    "grams":  320,
                                    "buy":  "1 can",
-                                   "bid":"coconut-milk-canned",
-                                   "gpu":29.57
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -99,8 +99,8 @@
                                    "item":  "Parmesan Cheese",
                                    "grams":  84,
                                    "buy":  "1 container",
-                                   "bid":"parmesan",
-                                   "gpu":28.3495
+                                   "bid":  "parmesan",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Olive Oil",

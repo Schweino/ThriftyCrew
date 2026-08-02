@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Salsa Verde Pork Bowls",
     "slug":  "slow-cooker-salsa-verde-pork-bowls",
     "cuisine":  "Mexican",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://beginwithbalance.com/slow-cooker-salsa-verde-pork/",
+    "source_site":  "Begin With Balance",
     "manual_balance":  false,
     "tuning":  [
 
@@ -32,7 +32,11 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$3.73 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
-    "shop_smart":  ["Pork tenderloin runs lean and clean, but watch the tag. If the per-pound price is steep, \u003cstrong\u003echeck for pork loin instead\u003c/strong\u003e and save real money on the same batch.","A single \u003cstrong\u003ejar of salsa verde does most of the seasoning\u003c/strong\u003e, so you skip buying a handful of separate spices.","Buy \u003cstrong\u003elime juice in a bottle\u003c/strong\u003e rather than fresh limes for batch cooking. It keeps in the fridge and you only use a splash."],
+    "shop_smart":  [
+                       "Pork tenderloin runs lean and clean, but watch the tag. If the per-pound price is steep, \u003cstrong\u003echeck for pork loin instead\u003c/strong\u003e and save real money on the same batch.",
+                       "A single \u003cstrong\u003ejar of salsa verde does most of the seasoning\u003c/strong\u003e, so you skip buying a handful of separate spices.",
+                       "Buy \u003cstrong\u003elime juice in a bottle\u003c/strong\u003e rather than fresh limes for batch cooking. It keeps in the fridge and you only use a splash."
+                   ],
     "make_it":  [
                     "Set the pork tenderloin in the slow cooker.",
                     "Pour the salsa verde, diced green chiles, and chicken broth over the top.",
@@ -42,7 +46,7 @@
                     "Spoon over cooked white rice and divide into containers."
                 ],
     "portion_html":  "You are looking at about 579 calories and 55 grams of protein in every serving.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://beginwithbalance.com/slow-cooker-salsa-verde-pork/\" target=\"_blank\" rel=\"noopener\"\u003eBegin With Balance\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One quiet afternoon of cooking buys you a week of bowls you will actually look forward to. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  39.87,
     "cost_batch_true":  43.6,
@@ -64,29 +68,29 @@
                                    "item":  "Rice",
                                    "grams":  940,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Salsa Verde",
                                    "grams":  450,
                                    "buy":  "1 jar",
-                                   "bid":"salsa-verde",
-                                   "gpu":28.3495
+                                   "bid":  "salsa-verde",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Diced Green Chiles",
                                    "grams":  120,
                                    "buy":  "2 cans",
-                                   "bid":"canned-green-chilies",
-                                   "gpu":28.3495
+                                   "bid":  "canned-green-chilies",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Sweet Whole Kernel Corn",
                                    "grams":  750,
                                    "buy":  "3 cans",
-                                   "bid":"canned-corn",
-                                   "gpu":28.3495
+                                   "bid":  "canned-corn",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Chicken Broth",

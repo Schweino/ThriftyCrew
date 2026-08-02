@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Turkey Ragu Pasta",
     "slug":  "turkey-ragu-pasta",
     "cuisine":  "Italian",
     "protein":  "turkey",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.crunchtimekitchen.com/easy-turkey-ragu/",
+    "source_site":  "Crunch Time Kitchen",
     "manual_balance":  false,
     "tuning":  [
 
@@ -47,7 +47,7 @@
                     "Toss the cooked penne into the sauce and stir until every noodle is coated."
                 ],
     "portion_html":  "Each of the 14 servings delivers 52 grams of protein and about 604 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.crunchtimekitchen.com/easy-turkey-ragu/\" target=\"_blank\" rel=\"noopener\"\u003eCrunch Time Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Comforting, filling, and easy on the wallet, this is a bowl of pasta you can feel good about. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  45.73,
     "cost_batch_true":  52.85,
@@ -62,22 +62,22 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  3100,
                                    "buy":  "7 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Penne Pasta",
                                    "grams":  700,
                                    "buy":  "2 boxs",
-                                   "bid":"penne-pasta",
-                                   "gpu":28.3495
+                                   "bid":  "penne-pasta",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Marinara Sauce",
                                    "grams":  1400,
                                    "buy":  "3 jars",
-                                   "bid":"marinara-sauce",
-                                   "gpu":28.3495
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",

@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Barbacoa Burrito Bowl",
     "slug":  "slow-cooker-barbacoa-bowl",
     "cuisine":  "Mexican",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://downshiftology.com/recipes/barbacoa/",
+    "source_site":  "Downshiftology",
     "manual_balance":  false,
     "tuning":  [
 
@@ -52,7 +52,7 @@
                     "To build the bowls, layer rice on the bottom, then a scoop of barbacoa, then beans, and finish with a sprinkle of fat free cheddar."
                 ],
     "portion_html":  "Weigh the full pot of finished beef, subtract the empty pot weight you wrote down, and divide by 14. Scoop that same amount into each container over an even bed of rice and beans so every bowl is equal.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://downshiftology.com/recipes/barbacoa/\" target=\"_blank\" rel=\"noopener\"\u003eDownshiftology\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fourteen dinners done in one afternoon, stacked in the fridge and ready to grab all week, and every bowl cost you next to nothing. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  46,
     "cost_batch_true":  47.9,
@@ -74,8 +74,8 @@
                                    "item":  "Chipotle in Adobo",
                                    "grams":  105,
                                    "buy":  "1 can",
-                                   "bid":"chipotle-adobo",
-                                   "gpu":28.3495
+                                   "bid":  "chipotle-adobo",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -116,15 +116,15 @@
                                    "item":  "Rice",
                                    "grams":  800,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Seasoned Black Beans",
                                    "grams":  910,
                                    "buy":  "4 cans",
-                                   "bid":"seasoned-black-beans",
-                                   "gpu":28.3495
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Fat Free Cheddar",

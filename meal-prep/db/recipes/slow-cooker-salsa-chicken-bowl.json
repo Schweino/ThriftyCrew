@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Salsa Chicken Burrito Bowl",
     "slug":  "slow-cooker-salsa-chicken-bowl",
     "cuisine":  "Mexican",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://theproteinchef.co/slow-cooker-salsa-chicken-recipe/",
+    "source_site":  "The Protein Chef",
     "manual_balance":  false,
     "tuning":  [
 
@@ -44,7 +44,7 @@
                     "Fold the salsa chicken into the rice and beans, then stir in the fat free cheddar until it melts through."
                 ],
     "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide the remaining weight by 14. That is your grams per container. Scoop each bowl to that exact weight so the servings stay honest, and you will hit roughly 53 grams of protein per bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://theproteinchef.co/slow-cooker-salsa-chicken-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eThe Protein Chef\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fourteen burrito bowls that beat the drive-thru on price, protein, and how good you feel eating them. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  36.25,
     "cost_batch_true":  38.91,
@@ -73,8 +73,8 @@
                                    "item":  "Diced Green Chiles",
                                    "grams":  113,
                                    "buy":  "1 can",
-                                   "bid":"canned-green-chilies",
-                                   "gpu":28.3495
+                                   "bid":  "canned-green-chilies",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Salsa",
@@ -87,15 +87,15 @@
                                    "item":  "Rice",
                                    "grams":  800,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Seasoned Black Beans",
                                    "grams":  910,
                                    "buy":  "4 cans",
-                                   "bid":"seasoned-black-beans",
-                                   "gpu":28.3495
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Fat Free Cheddar",

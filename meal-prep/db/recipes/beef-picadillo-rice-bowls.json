@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Cuban Beef Picadillo Rice Bowls",
     "slug":  "beef-picadillo-rice-bowls",
     "cuisine":  "Cuban",
     "protein":  "beef",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://therealfooddietitians.com/picadillo/",
+    "source_site":  "The Real Food Dietitians",
     "manual_balance":  false,
     "tuning":  [
 
@@ -50,7 +50,7 @@
                     "Spoon the beef over rice and serve."
                 ],
     "portion_html":  "Each of the 14 servings gives you 42 grams of protein at 565 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://therealfooddietitians.com/picadillo/\" target=\"_blank\" rel=\"noopener\"\u003eThe Real Food Dietitians\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Sweet, salty, savory, and cheap all at once, this bowl earns a permanent spot in the rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  47.5,
     "cost_batch_true":  54.89,
@@ -65,22 +65,22 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  2330,
                                    "buy":  "6 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  946,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Green Bell Peppers",
                                    "grams":  340,
                                    "buy":  "3 peppers",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -100,15 +100,15 @@
                                    "item":  "Olives",
                                    "grams":  120,
                                    "buy":  "1 jar",
-                                   "bid":"green-olives",
-                                   "gpu":28.3495
+                                   "bid":  "green-olives",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Golden Raisins",
                                    "grams":  120,
                                    "buy":  "1 bag",
-                                   "bid":"golden-raisins",
-                                   "gpu":28.3495
+                                   "bid":  "golden-raisins",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Ground Cumin",

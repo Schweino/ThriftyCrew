@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Filipino Pork Adobo Bowls",
     "slug":  "slow-cooker-filipino-pork-adobo-bowls",
     "cuisine":  "Filipino",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.skinnytaste.com/slow-cooker-filipino-adobo-pulled-pork/",
+    "source_site":  "Skinnytaste",
     "manual_balance":  false,
     "tuning":  [
 
@@ -45,7 +45,7 @@
                     "Spoon the pork over rice and serve the green beans alongside."
                 ],
     "portion_html":  "Each of the 14 servings brings 54 grams of protein and 576 calories.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.skinnytaste.com/slow-cooker-filipino-adobo-pulled-pork/\" target=\"_blank\" rel=\"noopener\"\u003eSkinnytaste\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Proof that some of the best food in the world was built to be cheap in the first place. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  21.11,
     "cost_batch_true":  24.23,
@@ -67,8 +67,8 @@
                                    "item":  "Rice",
                                    "grams":  900,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Green Beans",

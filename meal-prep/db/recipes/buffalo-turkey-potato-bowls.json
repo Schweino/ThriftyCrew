@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Buffalo Turkey and Potato Bowls",
     "slug":  "buffalo-turkey-potato-bowls",
     "cuisine":  "American",
     "protein":  "turkey",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.jillianshealthfuleats.com/buffalo-ground-turkey-skillet/",
+    "source_site":  "Jillian\u0027s Healthful Eats",
     "manual_balance":  false,
     "tuning":  [
 
@@ -31,7 +31,11 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$3.95 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
-    "shop_smart":  ["Buy the store-brand frozen fries. They cook up the same as the name brand and save you real money across four bags.","One bottle of buffalo sauce covers the whole batch, so skip the fancy small-batch stuff and grab the standard wing sauce.","Fat-free cheddar melts fine on hot food, so use it here and save the block cheese for another recipe."],
+    "shop_smart":  [
+                       "Buy the store-brand frozen fries. They cook up the same as the name brand and save you real money across four bags.",
+                       "One bottle of buffalo sauce covers the whole batch, so skip the fancy small-batch stuff and grab the standard wing sauce.",
+                       "Fat-free cheddar melts fine on hot food, so use it here and save the block cheese for another recipe."
+                   ],
     "make_it":  [
                     "Brown 6 pounds of 93/7 ground turkey with a chopped yellow onion until no pink is left.",
                     "Bake the fries on sheet pans while the turkey cooks so nothing sits waiting.",
@@ -40,7 +44,7 @@
                     "Sprinkle the fat-free cheddar on top while everything is hot so it melts in."
                 ],
     "portion_html":  "Each of the 14 bowls delivers 44 grams of protein and 661 calories, so it eats like a real meal, not a snack.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.jillianshealthfuleats.com/buffalo-ground-turkey-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eJillian\u0027s Healthful Eats\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Big flavor, small price, and two weeks of lunches ready to grab. That is a win any way you count it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  45.74,
     "cost_batch_true":  50.53,
@@ -55,8 +59,8 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  2710,
                                    "buy":  "6 lb",
-                                   "bid":"93-7-ground-turkey",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Fries",
@@ -69,8 +73,8 @@
                                    "item":  "Buffalo Wing Sauce",
                                    "grams":  210,
                                    "buy":  "1 bottle",
-                                   "bid":"buffalo-wing-sauce",
-                                   "gpu":29.57
+                                   "bid":  "buffalo-wing-sauce",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Shredded Carrots",

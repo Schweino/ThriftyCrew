@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Chicken Korma Rice Bowls",
     "slug":  "slow-cooker-chicken-korma-rice-bowls",
     "cuisine":  "Indian",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.wholesomelicious.com/slow-cooker-chicken-korma/",
+    "source_site":  "Wholesomelicious",
     "manual_balance":  false,
     "tuning":  [
 
@@ -51,7 +51,7 @@
                     "Serve the korma over rice."
                 ],
     "portion_html":  "Each of the 14 servings runs about 57g protein for roughly 584 calories, at around $2.08 a bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.wholesomelicious.com/slow-cooker-chicken-korma/\" target=\"_blank\" rel=\"noopener\"\u003eWholesomelicious\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Creamy, cozy, and crowd-pleasing, korma makes eating well all week feel like a treat. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  31.79,
     "cost_batch_true":  37.72,
@@ -73,8 +73,8 @@
                                    "item":  "Rice",
                                    "grams":  920,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Cashews",
@@ -87,8 +87,8 @@
                                    "item":  "Coconut Milk",
                                    "grams":  200,
                                    "buy":  "1 can",
-                                   "bid":"coconut-milk-canned",
-                                   "gpu":29.57
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -129,8 +129,8 @@
                                    "item":  "Ginger",
                                    "grams":  35,
                                    "buy":  "3 tsp chopped",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Garam Masala",

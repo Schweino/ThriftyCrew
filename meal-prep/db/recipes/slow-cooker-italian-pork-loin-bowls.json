@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Italian Pork and White Bean Bowls",
     "slug":  "slow-cooker-italian-pork-loin-bowls",
     "cuisine":  "Italian",
     "protein":  "pork",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://www.bettycrocker.com/recipes/slow-cooker-italian-pork-loin/31f8297f-3fac-494f-93af-9f101e2d9c92",
+    "source_site":  "Betty Crocker",
     "manual_balance":  false,
     "tuning":  [
 
@@ -45,7 +45,7 @@
                     "Spoon into bowls, top with the shredded mozzarella, and let it melt before packing up."
                 ],
     "portion_html":  "Each serving delivers around 593 calories and a hefty 66 grams of protein.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.bettycrocker.com/recipes/slow-cooker-italian-pork-loin/31f8297f-3fac-494f-93af-9f101e2d9c92\" target=\"_blank\" rel=\"noopener\"\u003eBetty Crocker\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Filling, comforting, and packed with protein. This is the bowl that keeps you full till dinner. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  28.63,
     "cost_batch_true":  32.82,
@@ -81,8 +81,8 @@
                                    "item":  "Red Bell Pepper",
                                    "grams":  150,
                                    "buy":  "2 peppers",
-                                   "bid":"red-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -95,8 +95,8 @@
                                    "item":  "Reduced Fat Mozzarella",
                                    "grams":  150,
                                    "buy":  "1 bag",
-                                   "bid":"reduced-fat-mozzarella",
-                                   "gpu":28.3495
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Olive Oil",

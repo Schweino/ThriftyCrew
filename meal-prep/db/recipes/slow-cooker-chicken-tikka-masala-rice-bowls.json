@@ -1,11 +1,11 @@
-{
+﻿{
     "name":  "Slow Cooker Chicken Tikka Masala Rice Bowls",
     "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
     "cuisine":  "Indian",
     "protein":  "chicken",
     "visibility":  "paid",
-    "source_url":  "",
-    "source_site":  "",
+    "source_url":  "https://ministryofcurry.com/slow-cooker-chicken-tikka-masala/",
+    "source_site":  "Ministry of Curry",
     "manual_balance":  false,
     "tuning":  [
 
@@ -52,7 +52,7 @@
                     "Serve over rice with broccoli on the side."
                 ],
     "portion_html":  "Each of the 14 servings runs about 56g protein for roughly 554 calories, at around $2.24 a bowl.",
-    "credit_html":  "",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://ministryofcurry.com/slow-cooker-chicken-tikka-masala/\" target=\"_blank\" rel=\"noopener\"\u003eMinistry of Curry\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Takeout flavor at meal-prep prices is exactly the kind of upgrade your week needs. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  34.17,
     "cost_batch_true":  43.43,
@@ -74,8 +74,8 @@
                                    "item":  "Rice",
                                    "grams":  820,
                                    "buy":  "1 lb",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Diced Tomatoes",
@@ -88,15 +88,15 @@
                                    "item":  "Coconut Milk",
                                    "grams":  550,
                                    "buy":  "2 cans",
-                                   "bid":"coconut-milk-canned",
-                                   "gpu":29.57
+                                   "bid":  "coconut-milk-canned",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  400,
                                    "buy":  "2 bags",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Garam Masala",
@@ -123,8 +123,8 @@
                                    "item":  "Ginger",
                                    "grams":  35,
                                    "buy":  "1 tbsp grated",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Vegetable Oil",
