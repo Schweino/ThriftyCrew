@@ -5432,7 +5432,9 @@
                         "rice\\s+cakes?",
                         "vinaigrette",
                         "marinade",
-                        "\\bdressing\\b"
+                        "\\bdressing\\b",
+                        "\\bbomb\\s*pops?\\b",
+                        "\\bpops\\b"
                     ]
     },
     {
@@ -5622,7 +5624,9 @@
                         "\\bpuffs?\\b",
                         "fruit\\s+snacks?",
                         "trail\\s+mix",
-                        "rice\\s+cakes?"
+                        "rice\\s+cakes?",
+                        "\\bbomb\\s*pops?\\b",
+                        "\\bpops\\b"
                     ]
     },
     {

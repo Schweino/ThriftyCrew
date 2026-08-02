@@ -465,3 +465,6 @@
 [2026-08-02T06:18:39]   (today's prices win, everything else carries forward).
 [2026-08-02T06:18:39]   Family Fare everyday prices: 4655 catalog items (299 fresh, 4356 carried forward, 55 expired past 14 d; 467 terms still empty) -> C:\Codex\income\grocery\out\regular\family-fare-regular-2026-08-02.json
 [2026-08-02T06:18:39] sweep done rc=0 - cursor #376 -> #458
+[2026-08-02T07:00:02] sweep start (cursor before = #458, MaxMinutes=9)
+[2026-08-02T07:06:41]   THREW: Set-Content : The process cannot access the file 
+[2026-08-02T07:06:41] sweep done rc=1 - cursor #458 -> #35

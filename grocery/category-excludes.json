@@ -160,7 +160,9 @@
                                   "ice\\s+bars?",
                                   "\\bhelados\\b",
                                   "\\boutshine\\b",
-                                  "marshmallows?"
+                                  "marshmallows?",
+                                  "\\bbomb\\s*pops?\\b",
+                                  "\\bpops\\b"
                               ],
                     "supplement":  [
                                        "\\bsupplements?\\b",
