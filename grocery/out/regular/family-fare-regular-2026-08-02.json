@@ -4,137 +4,11 @@
     "price_type":  "everyday",
     "source":  "Freshop catalog base_price (store_id 6401, Omaha), NOT Instacart",
     "deal_count":  4655,
-    "fresh_count":  299,
-    "carried_count":  4356,
-    "expired_count":  55,
+    "fresh_count":  0,
+    "carried_count":  4655,
+    "expired_count":  0,
     "max_carry_days":  14,
     "empty_terms":  [
-                        "canned hominy",
-                        "onion soup mix",
-                        "pickled jalapeno slices",
-                        "green olives stuffed",
-                        "banana pepper rings",
-                        "lime juice bottle",
-                        "fish sauce",
-                        "five spice powder",
-                        "cayenne pepper",
-                        "dried thyme",
-                        "dried basil",
-                        "dill weed",
-                        "bay leaves",
-                        "ground cloves",
-                        "ground coriander",
-                        "ground allspice",
-                        "ground nutmeg",
-                        "ground ginger",
-                        "poppy seeds",
-                        "chopped walnuts",
-                        "quick grits",
-                        "corn muffin mix",
-                        "caraway seed",
-                        "poultry seasoning",
-                        "wild rice",
-                        "chili bean sauce",
-                        "fennel seed",
-                        "snow peas",
-                        "horseradish sauce",
-                        "corned beef brisket",
-                        "pigeon peas",
-                        "aji amarillo paste",
-                        "rye bread",
-                        "ricotta cheese",
-                        "red onion",
-                        "cherry tomatoes",
-                        "ginger snaps",
-                        "corn chips",
-                        "turkey smoked sausage",
-                        "93 lean ground beef",
-                        "jumbo pasta shells",
-                        "nectarines",
-                        "fresh apricots",
-                        "pomegranate",
-                        "papaya",
-                        "fresh cranberries",
-                        "plantains",
-                        "whole coconut",
-                        "medjool dates",
-                        "dried cranberries",
-                        "prunes",
-                        "shallots",
-                        "yukon gold potatoes",
-                        "mini sweet peppers",
-                        "serrano peppers",
-                        "anaheim peppers",
-                        "habanero peppers",
-                        "fresh beets",
-                        "turnips",
-                        "parsnips",
-                        "rutabaga",
-                        "leeks",
-                        "collard greens",
-                        "mustard greens",
-                        "turnip greens",
-                        "swiss chard",
-                        "bok choy",
-                        "butternut squash",
-                        "acorn squash",
-                        "spaghetti squash",
-                        "sugar snap peas",
-                        "spring mix",
-                        "baby arugula",
-                        "garden salad bag",
-                        "caesar salad kit",
-                        "coleslaw mix",
-                        "fresh stir fry vegetables",
-                        "fresh bean sprouts",
-                        "broccolini",
-                        "fennel bulb",
-                        "chayote",
-                        "yuca root",
-                        "jicama",
-                        "fresh okra",
-                        "fresh artichokes",
-                        "fresh rhubarb",
-                        "pie pumpkin",
-                        "fresh parsley bunch",
-                        "fresh dill",
-                        "fresh rosemary",
-                        "fresh thyme",
-                        "boneless skinless chicken breast",
-                        "chicken thighs",
-                        "80/20 ground beef",
-                        "ground turkey",
-                        "bacon",
-                        "pork chops",
-                        "large eggs",
-                        "milk gallon",
-                        "butter",
-                        "cottage cheese",
-                        "sour cream",
-                        "cream cheese",
-                        "shredded cheese",
-                        "yogurt",
-                        "bananas",
-                        "strawberries",
-                        "blueberries",
-                        "avocado",
-                        "russet potatoes",
-                        "yellow onion",
-                        "apples",
-                        "grapes",
-                        "sweet corn",
-                        "watermelon",
-                        "peaches",
-                        "white bread",
-                        "peanut butter",
-                        "orange juice",
-                        "ground coffee",
-                        "93/7 lean ground beef",
-                        "sugar free bbq sauce",
-                        "beef broth",
-                        "beef chuck roast boneless",
-                        "frozen broccoli florets",
-                        "buffalo wing sauce",
                         "chicken broth",
                         "chili powder",
                         "chipotle peppers in adobo sauce",
@@ -475,7 +349,193 @@
                         "vegetable broth",
                         "chicken bouillon cubes",
                         "coconut milk canned",
-                        "canned potatoes"
+                        "canned potatoes",
+                        "canned hominy",
+                        "onion soup mix",
+                        "turkey gravy jar",
+                        "dijon mustard",
+                        "honey mustard",
+                        "miracle whip",
+                        "caesar dressing",
+                        "blue cheese dressing",
+                        "balsamic vinegar",
+                        "rice vinegar",
+                        "red wine vinegar",
+                        "teriyaki sauce",
+                        "a1 steak sauce",
+                        "cocktail sauce",
+                        "tartar sauce",
+                        "prepared horseradish",
+                        "red enchilada sauce",
+                        "taco sauce",
+                        "sloppy joe sauce manwich",
+                        "steak marinade",
+                        "basil pesto",
+                        "minced garlic jar",
+                        "pickled jalapeno slices",
+                        "green olives stuffed",
+                        "banana pepper rings",
+                        "lime juice bottle",
+                        "fish sauce",
+                        "oyster sauce",
+                        "hoisin sauce",
+                        "gochujang",
+                        "mirin",
+                        "tahini",
+                        "sesame oil",
+                        "sesame seeds",
+                        "chili crisp",
+                        "red curry paste",
+                        "harissa",
+                        "achiote paste",
+                        "pomegranate molasses",
+                        "lemongrass paste",
+                        "golden curry",
+                        "berbere seasoning",
+                        "cajun seasoning",
+                        "taco seasoning",
+                        "ranch seasoning mix",
+                        "curry powder",
+                        "garam masala",
+                        "five spice powder",
+                        "cayenne pepper",
+                        "dried thyme",
+                        "dried basil",
+                        "dill weed",
+                        "bay leaves",
+                        "ground cloves",
+                        "ground coriander",
+                        "ground allspice",
+                        "ground nutmeg",
+                        "ground ginger",
+                        "poppy seeds",
+                        "chopped walnuts",
+                        "quick grits",
+                        "corn muffin mix",
+                        "refrigerated biscuits",
+                        "cheese tortellini",
+                        "gnocchi",
+                        "rice noodles",
+                        "sun dried tomatoes",
+                        "chipotle peppers in adobo",
+                        "tomatillos",
+                        "poblano peppers",
+                        "fresh basil",
+                        "fresh mint",
+                        "turkey breast",
+                        "chile de arbol",
+                        "guajillo chiles",
+                        "ancho chiles",
+                        "diced ham",
+                        "sazon",
+                        "eggplant",
+                        "brown gravy mix",
+                        "chicken livers",
+                        "sweet soy sauce",
+                        "caraway seed",
+                        "poultry seasoning",
+                        "wild rice",
+                        "chili bean sauce",
+                        "fennel seed",
+                        "snow peas",
+                        "horseradish sauce",
+                        "corned beef brisket",
+                        "pigeon peas",
+                        "aji amarillo paste",
+                        "rye bread",
+                        "ricotta cheese",
+                        "red onion",
+                        "cherry tomatoes",
+                        "ginger snaps",
+                        "corn chips",
+                        "turkey smoked sausage",
+                        "93 lean ground beef",
+                        "jumbo pasta shells",
+                        "nectarines",
+                        "fresh apricots",
+                        "pomegranate",
+                        "papaya",
+                        "fresh cranberries",
+                        "plantains",
+                        "whole coconut",
+                        "medjool dates",
+                        "dried cranberries",
+                        "prunes",
+                        "shallots",
+                        "yukon gold potatoes",
+                        "mini sweet peppers",
+                        "serrano peppers",
+                        "anaheim peppers",
+                        "habanero peppers",
+                        "fresh beets",
+                        "turnips",
+                        "parsnips",
+                        "rutabaga",
+                        "leeks",
+                        "collard greens",
+                        "mustard greens",
+                        "turnip greens",
+                        "swiss chard",
+                        "bok choy",
+                        "butternut squash",
+                        "acorn squash",
+                        "spaghetti squash",
+                        "sugar snap peas",
+                        "spring mix",
+                        "baby arugula",
+                        "garden salad bag",
+                        "caesar salad kit",
+                        "coleslaw mix",
+                        "fresh stir fry vegetables",
+                        "fresh bean sprouts",
+                        "broccolini",
+                        "fennel bulb",
+                        "chayote",
+                        "yuca root",
+                        "jicama",
+                        "fresh okra",
+                        "fresh artichokes",
+                        "fresh rhubarb",
+                        "pie pumpkin",
+                        "fresh parsley bunch",
+                        "fresh dill",
+                        "fresh rosemary",
+                        "fresh thyme",
+                        "boneless skinless chicken breast",
+                        "chicken thighs",
+                        "80/20 ground beef",
+                        "ground turkey",
+                        "bacon",
+                        "pork chops",
+                        "large eggs",
+                        "milk gallon",
+                        "butter",
+                        "cottage cheese",
+                        "sour cream",
+                        "cream cheese",
+                        "shredded cheese",
+                        "yogurt",
+                        "bananas",
+                        "strawberries",
+                        "blueberries",
+                        "avocado",
+                        "russet potatoes",
+                        "yellow onion",
+                        "apples",
+                        "grapes",
+                        "sweet corn",
+                        "watermelon",
+                        "peaches",
+                        "white bread",
+                        "peanut butter",
+                        "orange juice",
+                        "ground coffee",
+                        "93/7 lean ground beef",
+                        "sugar free bbq sauce",
+                        "beef broth",
+                        "beef chuck roast boneless",
+                        "frozen broccoli florets",
+                        "buffalo wing sauce"
                     ],
     "deals":  [
                   {
@@ -489,7 +549,8 @@
                       "current_price":  2.19,
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/our_family_mustard_dijon_12_oz/p/7081422",
-                      "product_id":  "7081422"
+                      "product_id":  "7081422",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -502,7 +563,8 @@
                       "current_price":  3.69,
                       "base_price":  3.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/koops_mustard_dijon_12_oz/p/261086",
-                      "product_id":  "261086"
+                      "product_id":  "261086",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -515,7 +577,8 @@
                       "current_price":  4.59,
                       "base_price":  4.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/french_s_stone_ground_dijon_mustard_12_oz/p/1564405684703060429",
-                      "product_id":  "1564405684703060429"
+                      "product_id":  "1564405684703060429",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -528,7 +591,8 @@
                       "current_price":  3.79,
                       "base_price":  3.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/organicville_dijon_mustard_12_oz/p/2466695",
-                      "product_id":  "2466695"
+                      "product_id":  "2466695",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -541,7 +605,8 @@
                       "current_price":  5.49,
                       "base_price":  5.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/grey_poupon_dijon_mustard_8_oz/p/35409",
-                      "product_id":  "35409"
+                      "product_id":  "35409",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -554,7 +619,8 @@
                       "current_price":  5.59,
                       "base_price":  5.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/grey_poupon_dijon_mustard_10_oz/p/35416",
-                      "product_id":  "35416"
+                      "product_id":  "35416",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -567,7 +633,8 @@
                       "current_price":  3.39,
                       "base_price":  3.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/silver_spring_classic_dijon_mustard_9_5_oz/p/236342",
-                      "product_id":  "236342"
+                      "product_id":  "236342",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -580,7 +647,8 @@
                       "current_price":  4.79,
                       "base_price":  4.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/french_s_chardonnay_dijon_mustard_squeeze_bottle_12_oz/p/6712",
-                      "product_id":  "6712"
+                      "product_id":  "6712",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -593,7 +661,8 @@
                       "current_price":  3.99,
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/inglehoffer_traditional_dijon_mustard_with_white_wine_9_oz/p/1305813",
-                      "product_id":  "1305813"
+                      "product_id":  "1305813",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -606,7 +675,8 @@
                       "current_price":  1.69,
                       "base_price":  1.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/seafood_fish/tuna/star_kist_whole_grain_dijon_mustard_tuna_salad_3_oz/p/1564405684714535019",
-                      "product_id":  "1564405684714535019"
+                      "product_id":  "1564405684714535019",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -619,7 +689,8 @@
                       "current_price":  2.19,
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/our_family_mustard_honey_12_oz/p/7081423",
-                      "product_id":  "7081423"
+                      "product_id":  "7081423",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -632,7 +703,8 @@
                       "current_price":  4.79,
                       "base_price":  4.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/french_s_honey_mustard_12_oz/p/29581",
-                      "product_id":  "29581"
+                      "product_id":  "29581",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -645,7 +717,8 @@
                       "current_price":  4.99,
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/beano_s_honey_mustard_8_oz/p/4530607",
-                      "product_id":  "4530607"
+                      "product_id":  "4530607",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -658,7 +731,8 @@
                       "current_price":  3.99,
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/inglehoffer_the_original_sweet_honey_mustard_10_25_oz/p/39743",
-                      "product_id":  "39743"
+                      "product_id":  "39743",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -671,7 +745,8 @@
                       "current_price":  5.39,
                       "base_price":  5.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/pretzels/our_family_honey_mustard_seasoned_pretzel/p/1764405684715850036",
-                      "product_id":  "1764405684715850036"
+                      "product_id":  "1764405684715850036",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -684,7 +759,8 @@
                       "current_price":  2.69,
                       "base_price":  2.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/potato_chips/pringles_potato_crisps_chips_honey_mustard_5_5_oz/p/1564405684702314890",
-                      "product_id":  "1564405684702314890"
+                      "product_id":  "1564405684702314890",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -697,7 +773,8 @@
                       "current_price":  4.79,
                       "base_price":  4.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/pretzels/snyder_s_of_hanover_honey_mustard_onion_flavored_pretzel_pieces_11_250_oz/p/1564405684712582455",
-                      "product_id":  "1564405684712582455"
+                      "product_id":  "1564405684712582455",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -710,7 +787,8 @@
                       "current_price":  3.69,
                       "base_price":  3.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/ken_s_steak_house_honey_mustard_dressing_16_fl_oz/p/5316",
-                      "product_id":  "5316"
+                      "product_id":  "5316",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -723,7 +801,8 @@
                       "current_price":  3.99,
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/kraft_honey_mustard_dressing_16_fl_oz/p/2326693",
-                      "product_id":  "2326693"
+                      "product_id":  "2326693",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -736,7 +815,8 @@
                       "current_price":  7.89,
                       "base_price":  7.89,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/pretzels/dot_s_homestyle_pretzels_seasoned_honey_mustard_flavored_pretzel_twists_16_oz/p/1564405684711705651",
-                      "product_id":  "1564405684711705651"
+                      "product_id":  "1564405684711705651",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -749,7 +829,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/pretzels/snack_factory_honey_mustard_pretzel_snacks_9_000_oz/p/1564405684716428803",
-                      "product_id":  "1564405684716428803"
+                      "product_id":  "1564405684716428803",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -762,7 +843,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/other_sauce/chick_fil_a_honey_mustard_sauce_16_fl_oz/p/1564405684716553583",
-                      "product_id":  "1564405684716553583"
+                      "product_id":  "1564405684716553583",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -775,7 +857,8 @@
                       "current_price":  5.49,
                       "base_price":  5.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/ken_s_steak_house_honey_mustard_dressing_topping_spread_24_fl_oz/p/29339",
-                      "product_id":  "29339"
+                      "product_id":  "29339",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -788,7 +871,8 @@
                       "current_price":  5.29,
                       "base_price":  5.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressings_gourmet/newman_s_own_honey_mustard_dressing_16_fl_oz/p/17353",
-                      "product_id":  "17353"
+                      "product_id":  "17353",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -801,7 +885,8 @@
                       "current_price":  3.99,
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/inglehoffer_sweet_hot_mustard_with_honey_10_25_oz/p/2504912",
-                      "product_id":  "2504912"
+                      "product_id":  "2504912",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -814,7 +899,8 @@
                       "current_price":  6.99,
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mayonnaise_sandwich_spreads/miracle_whip_dressing_30_fl_oz/p/17594",
-                      "product_id":  "17594"
+                      "product_id":  "17594",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -827,7 +913,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mayonnaise_sandwich_spreads/miracle_whip_dressing_15_fl_oz/p/17599",
-                      "product_id":  "17599"
+                      "product_id":  "17599",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -840,7 +927,8 @@
                       "current_price":  6.89,
                       "base_price":  6.89,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mayonnaise_sandwich_spreads/miracle_whip_dressing_12_fl_oz/p/2465",
-                      "product_id":  "2465"
+                      "product_id":  "2465",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -853,7 +941,8 @@
                       "current_price":  8.99,
                       "base_price":  8.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mayonnaise_sandwich_spreads/miracle_whip_dressing_19_fl_oz/p/1564405684711279096",
-                      "product_id":  "1564405684711279096"
+                      "product_id":  "1564405684711279096",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -866,7 +955,8 @@
                       "current_price":  6.99,
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mayonnaise_sandwich_spreads/miracle_whip_light_dressing_30_fl_oz/p/2884",
-                      "product_id":  "2884"
+                      "product_id":  "2884",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -879,7 +969,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mayonnaise_sandwich_spreads/miracle_whip_light_dressing_15_fl_oz/p/17601",
-                      "product_id":  "17601"
+                      "product_id":  "17601",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -892,7 +983,8 @@
                       "current_price":  5.29,
                       "base_price":  5.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressings_gourmet/newman_s_own_dressing_caesar_16_fl_oz/p/17334",
-                      "product_id":  "17334"
+                      "product_id":  "17334",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -905,7 +997,8 @@
                       "current_price":  3.69,
                       "base_price":  3.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/ken_s_steak_house_creamy_caesar_dressing_16_fl_oz/p/8713",
-                      "product_id":  "8713"
+                      "product_id":  "8713",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -918,7 +1011,8 @@
                       "current_price":  3.99,
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/kraft_classic_caesar_dressing_16_fl_oz/p/10074",
-                      "product_id":  "10074"
+                      "product_id":  "10074",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -931,7 +1025,8 @@
                       "current_price":  2.79,
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/our_family_creamy_caesar_dressing_16_fl_oz/p/7081373",
-                      "product_id":  "7081373"
+                      "product_id":  "7081373",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -944,7 +1039,8 @@
                       "current_price":  3.69,
                       "base_price":  3.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/ken_s_steak_house_lite_creamy_caesar_dressing_16_fl_oz/p/29340",
-                      "product_id":  "29340"
+                      "product_id":  "29340",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -957,7 +1053,8 @@
                       "current_price":  5.29,
                       "base_price":  5.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressings_gourmet/briannas_home_style_asiago_caesar_dressing_12_fl_oz/p/2333470",
-                      "product_id":  "2333470"
+                      "product_id":  "2333470",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -970,7 +1067,8 @@
                       "current_price":  3.29,
                       "base_price":  3.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressings_gourmet/skinnygirl_caesar_dressing_8_fl_oz/p/1564405684715516449",
-                      "product_id":  "1564405684715516449"
+                      "product_id":  "1564405684715516449",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -983,7 +1081,8 @@
                       "current_price":  4.99,
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressings_refrigerated/litehouse_caesar_dressing_spread_13_fl_oz/p/2406479",
-                      "product_id":  "2406479"
+                      "product_id":  "2406479",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -996,7 +1095,8 @@
                       "current_price":  5.49,
                       "base_price":  5.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressings_refrigerated/marzetti_simply_dressed_creamy_caesar/p/1764405684716011385",
-                      "product_id":  "1764405684716011385"
+                      "product_id":  "1764405684716011385",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1009,7 +1109,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressings_refrigerated/marzetti_dressing_supreme_caesar_15_oz/p/36561",
-                      "product_id":  "36561"
+                      "product_id":  "36561",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1022,7 +1123,8 @@
                       "current_price":  5.29,
                       "base_price":  5.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressings_gourmet/newman_s_own_dressing_creamy_caesar_16_fl_oz/p/17343",
-                      "product_id":  "17343"
+                      "product_id":  "17343",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1035,7 +1137,8 @@
                       "current_price":  6.89,
                       "base_price":  6.89,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/olive_garden_dressing_classic_caesar_16_fl_oz/p/1564405684713637433",
-                      "product_id":  "1564405684713637433"
+                      "product_id":  "1564405684713637433",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1048,7 +1151,8 @@
                       "current_price":  4.19,
                       "base_price":  4.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/finest_reserve_dressing_asiago_caesar_12_fl_oz/p/1564405684715389575",
-                      "product_id":  "1564405684715389575"
+                      "product_id":  "1564405684715389575",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1061,7 +1165,8 @@
                       "current_price":  4.69,
                       "base_price":  4.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressings_gourmet/caesar_cardini_s_original_caesar_dressing_12_fl_oz/p/39201",
-                      "product_id":  "39201"
+                      "product_id":  "39201",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1074,7 +1179,8 @@
                       "current_price":  3.69,
                       "base_price":  3.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/ken_s_steak_house_chunky_blue_cheese_dressing_16_fl_oz/p/29328",
-                      "product_id":  "29328"
+                      "product_id":  "29328",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1087,7 +1193,8 @@
                       "current_price":  2.79,
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/our_family_blue_cheese_dressing_16_fl_oz/p/7081375",
-                      "product_id":  "7081375"
+                      "product_id":  "7081375",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1100,7 +1207,8 @@
                       "current_price":  3.99,
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/kraft_chunky_blue_cheese_dressing_16_fl_oz/p/82437",
-                      "product_id":  "82437"
+                      "product_id":  "82437",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1113,7 +1221,8 @@
                       "current_price":  6.49,
                       "base_price":  6.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressings_refrigerated/litehouse_chunky_blue_cheese_dressing_dip_20_fl_oz/p/2406492",
-                      "product_id":  "2406492"
+                      "product_id":  "2406492",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1126,7 +1235,8 @@
                       "current_price":  5.49,
                       "base_price":  5.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/ken_s_steak_house_chunky_blue_cheese_dressing_topping_spread_24_fl_oz/p/29338",
-                      "product_id":  "29338"
+                      "product_id":  "29338",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1139,7 +1249,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressings_refrigerated/marzetti_dressing_chunky_blue_cheese_15_oz/p/36556",
-                      "product_id":  "36556"
+                      "product_id":  "36556",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1152,7 +1263,8 @@
                       "current_price":  4.99,
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressings_refrigerated/litehouse_dressing_dip_bacon_blue_cheese_13_oz/p/565915",
-                      "product_id":  "565915"
+                      "product_id":  "565915",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1165,7 +1277,8 @@
                       "current_price":  4.99,
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressings_refrigerated/litehouse_dressing_dip_chunky_blue_cheese_13_fl_oz/p/2406480",
-                      "product_id":  "2406480"
+                      "product_id":  "2406480",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1178,7 +1291,8 @@
                       "current_price":  9.99,
                       "base_price":  9.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/o_california_white_balsamic_vinegar_10_1_fl_oz/p/1564405684702996104",
-                      "product_id":  "1564405684702996104"
+                      "product_id":  "1564405684702996104",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1191,7 +1305,8 @@
                       "current_price":  4.99,
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/alessi_balsamic_vinegar_12_75_oz/p/38483",
-                      "product_id":  "38483"
+                      "product_id":  "38483",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1204,7 +1319,8 @@
                       "current_price":  10.99,
                       "base_price":  10.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/de_nigris_balsamic_vinegar_aged_8_5_oz/p/4552908",
-                      "product_id":  "4552908"
+                      "product_id":  "4552908",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1217,7 +1333,8 @@
                       "current_price":  10.49,
                       "base_price":  10.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/alessi_balsamic_vinegar_vsop_8_5_oz/p/2379723",
-                      "product_id":  "2379723"
+                      "product_id":  "2379723",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1230,7 +1347,8 @@
                       "current_price":  7.29,
                       "base_price":  7.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/filippo_berio_glaze_with_balsamic_vinegar_8_4_fl_oz/p/1564405684689177116",
-                      "product_id":  "1564405684689177116"
+                      "product_id":  "1564405684689177116",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1243,7 +1361,8 @@
                       "current_price":  6.99,
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/de_nigris_balsamic_vinegar_of_modena_16_9_oz/p/5597095",
-                      "product_id":  "5597095"
+                      "product_id":  "5597095",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1256,7 +1375,8 @@
                       "current_price":  6.99,
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/monari_federzoni_classic_glaze_with_balsamic_vinegar_of_modena_9_1_oz/p/2439979",
-                      "product_id":  "2439979"
+                      "product_id":  "2439979",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1269,7 +1389,8 @@
                       "current_price":  7.29,
                       "base_price":  7.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/filippo_berio_balsamic_vinegar_of_modena_16_9_fl_oz/p/1564405684689177115",
-                      "product_id":  "1564405684689177115"
+                      "product_id":  "1564405684689177115",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1282,7 +1403,8 @@
                       "current_price":  6.99,
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/monari_federzoni_balsamic_vinegar_of_modena_16_9_fl_oz/p/15100",
-                      "product_id":  "15100"
+                      "product_id":  "15100",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1295,7 +1417,8 @@
                       "current_price":  4.49,
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/crackers/entertainment/triscuit_crackers_balsamic_vinegar_basil_8_5_oz/p/7976910",
-                      "product_id":  "7976910"
+                      "product_id":  "7976910",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1308,7 +1431,8 @@
                       "current_price":  4.59,
                       "base_price":  4.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/alessi_vinegar_organic_balsamic_8_5_oz/p/1303527",
-                      "product_id":  "1303527"
+                      "product_id":  "1303527",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1321,7 +1445,8 @@
                       "current_price":  4.19,
                       "base_price":  4.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/full_circle_market_balsamic_6_acidity_vinegar_of_modena_17_fl_oz/p/583596",
-                      "product_id":  "583596"
+                      "product_id":  "583596",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1334,7 +1459,8 @@
                       "current_price":  7.99,
                       "base_price":  7.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/alessi_balsamic_reduction_premium_traditional_8_5_fl_oz/p/1014",
-                      "product_id":  "1014"
+                      "product_id":  "1014",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1347,7 +1473,8 @@
                       "current_price":  5.39,
                       "base_price":  5.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/nakano_rice_vinegar_organic_natural_12_fl_oz/p/5573392",
-                      "product_id":  "5573392"
+                      "product_id":  "5573392",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1360,7 +1487,8 @@
                       "current_price":  2.49,
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/our_family_vinegar_red_wine/p/1564405684715376615",
-                      "product_id":  "1564405684715376615"
+                      "product_id":  "1564405684715376615",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1373,7 +1501,8 @@
                       "current_price":  3.19,
                       "base_price":  3.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/regina_red_wine_vinegar_12_oz/p/35411",
-                      "product_id":  "35411"
+                      "product_id":  "35411",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1386,7 +1515,8 @@
                       "current_price":  3.39,
                       "base_price":  3.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/holland_house_red_wine_vinegar_12_fl_oz/p/2385025",
-                      "product_id":  "2385025"
+                      "product_id":  "2385025",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1399,7 +1529,8 @@
                       "current_price":  2.99,
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/reese_red_wine_vinegar_12_7_fl_oz/p/37593",
-                      "product_id":  "37593"
+                      "product_id":  "37593",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1412,7 +1543,8 @@
                       "current_price":  7.29,
                       "base_price":  7.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/filippo_berio_red_wine_vinegar_16_9_fl_oz/p/566198",
-                      "product_id":  "566198"
+                      "product_id":  "566198",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1425,7 +1557,8 @@
                       "current_price":  2.29,
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/teriyaki_sauce_our_family/p/7081431",
-                      "product_id":  "7081431"
+                      "product_id":  "7081431",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1438,7 +1571,8 @@
                       "current_price":  4.79,
                       "base_price":  4.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/la_choy_sauce_teriyaki_14_5_oz/p/1564405684704769776",
-                      "product_id":  "1564405684704769776"
+                      "product_id":  "1564405684704769776",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1451,7 +1585,8 @@
                       "current_price":  4.99,
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/kikkoman_baste_glaze_teriyaki_sauce_285_ml/p/6497",
-                      "product_id":  "6497"
+                      "product_id":  "6497",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1464,7 +1599,8 @@
                       "current_price":  6.99,
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/panda_express_sauce_mandarin_teriyaki_20_5_oz/p/7491",
-                      "product_id":  "7491"
+                      "product_id":  "7491",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1477,7 +1613,8 @@
                       "current_price":  3.79,
                       "base_price":  3.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/kikkoman_the_original_teriyaki_marinade_sauce_296_ml/p/29435",
-                      "product_id":  "29435"
+                      "product_id":  "29435",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1490,7 +1627,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/culinary_tours_sauce_sesame_teriyaki_11_8_fl_oz/p/1564405684690234360",
-                      "product_id":  "1564405684690234360"
+                      "product_id":  "1564405684690234360",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1503,7 +1641,8 @@
                       "current_price":  4.99,
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/marinades/sweet_baby_ray_s_sauce_marinade_sweet_teriyaki_16_fl_oz/p/2015162",
-                      "product_id":  "2015162"
+                      "product_id":  "2015162",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1516,7 +1655,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/marinades/soy_vay_veri_veri_teriyaki_marinade_sauce_21_oz/p/1987",
-                      "product_id":  "1987"
+                      "product_id":  "1987",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1529,7 +1669,8 @@
                       "current_price":  3.39,
                       "base_price":  3.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/cocktail_tarter_sauce/bookbinder_s_cocktail_sauce_seafood/p/6649326",
-                      "product_id":  "6649326"
+                      "product_id":  "6649326",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1542,7 +1683,8 @@
                       "current_price":  2.79,
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/cocktail_tarter_sauce/our_family_cocktail_sauce_12_oz/p/6787065",
-                      "product_id":  "6787065"
+                      "product_id":  "6787065",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1555,7 +1697,8 @@
                       "current_price":  3.79,
                       "base_price":  3.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/cocktail_tarter_sauce/louisiana_fish_fry_products_cocktail_sauce_12_oz/p/230535",
-                      "product_id":  "230535"
+                      "product_id":  "230535",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1568,7 +1711,8 @@
                       "current_price":  4.49,
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/cocktail_tarter_sauce/heinz_original_cocktail_sauce_12_oz/p/14872",
-                      "product_id":  "14872"
+                      "product_id":  "14872",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1581,7 +1725,8 @@
                       "current_price":  3.99,
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/other_sauce/mc_cormick_seafood_cocktail_sauce_8_fl_oz/p/28150",
-                      "product_id":  "28150"
+                      "product_id":  "28150",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1594,7 +1739,8 @@
                       "current_price":  12,
                       "base_price":  12,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/seafood_fish/frozen_seafood/black_pearl_shrimp_tray_w_cocktail_sauce/p/1564405684716332039",
-                      "product_id":  "1564405684716332039"
+                      "product_id":  "1564405684716332039",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1607,7 +1753,8 @@
                       "current_price":  12,
                       "base_price":  12,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/seafood_fish/frozen_seafood/black_pearl_surimi_tray_w_cocktail_sauce/p/1564405684715527035",
-                      "product_id":  "1564405684715527035"
+                      "product_id":  "1564405684715527035",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1620,7 +1767,8 @@
                       "current_price":  22.99,
                       "base_price":  22.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/seafood_fish/frozen_seafood/our_family_shrimp_ring_with_cocktail_sauce_24_oz/p/1564405684716094969",
-                      "product_id":  "1564405684716094969"
+                      "product_id":  "1564405684716094969",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1633,7 +1781,8 @@
                       "current_price":  2.79,
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/cocktail_tarter_sauce/our_family_tartar_sauce_12_fl_oz/p/6787044",
-                      "product_id":  "6787044"
+                      "product_id":  "6787044",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1646,7 +1795,8 @@
                       "current_price":  3.99,
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/cocktail_tarter_sauce/kraft_tartar_sauce_12_fl_oz/p/17598",
-                      "product_id":  "17598"
+                      "product_id":  "17598",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1659,7 +1809,8 @@
                       "current_price":  3.39,
                       "base_price":  3.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/cocktail_tarter_sauce/bookbinder_s_traditional_tartar_sauce_9_5_oz/p/6649329",
-                      "product_id":  "6649329"
+                      "product_id":  "6649329",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1672,7 +1823,8 @@
                       "current_price":  4.39,
                       "base_price":  4.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/cocktail_tarter_sauce/louisiana_fish_fry_products_tartar_sauce_10_5_oz/p/528127",
-                      "product_id":  "528127"
+                      "product_id":  "528127",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1685,7 +1837,8 @@
                       "current_price":  3.99,
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/cocktail_tarter_sauce/louisiana_fish_fry_products_remoulade_sauce_10_5_oz/p/530198",
-                      "product_id":  "530198"
+                      "product_id":  "530198",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1698,7 +1851,8 @@
                       "current_price":  4.79,
                       "base_price":  4.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/reese_prepared_horseradish_6_5_oz/p/37600",
-                      "product_id":  "37600"
+                      "product_id":  "37600",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1711,7 +1865,8 @@
                       "current_price":  3.99,
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/chip_dips/silver_spring_horseradish_prepared_coarse_cut_8_oz/p/2004543",
-                      "product_id":  "2004543"
+                      "product_id":  "2004543",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1724,7 +1879,8 @@
                       "current_price":  2.99,
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/la_victoria_mild_red_enchilada_sauce_10_oz/p/274576",
-                      "product_id":  "274576"
+                      "product_id":  "274576",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1737,7 +1893,8 @@
                       "current_price":  1.59,
                       "base_price":  1.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/our_family_enchilada_sauce_red_mild_10_oz/p/7081295",
-                      "product_id":  "7081295"
+                      "product_id":  "7081295",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1750,7 +1907,8 @@
                       "current_price":  1.99,
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/pace_mild_red_enchilada_sauce_10_500_oz/p/1564405684714443242",
-                      "product_id":  "1564405684714443242"
+                      "product_id":  "1564405684714443242",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1763,7 +1921,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/old_el_paso_mild_red_enchilada_sauce_value_size_28_oz/p/92411",
-                      "product_id":  "92411"
+                      "product_id":  "92411",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1776,7 +1935,8 @@
                       "current_price":  3.39,
                       "base_price":  3.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/old_el_paso_red_mild_enchilada_sauce_10_oz/p/32461",
-                      "product_id":  "32461"
+                      "product_id":  "32461",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1789,7 +1949,8 @@
                       "current_price":  5.79,
                       "base_price":  5.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/old_el_paso_red_mild_enchilada_sauce_19_oz/p/92426",
-                      "product_id":  "92426"
+                      "product_id":  "92426",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1802,7 +1963,8 @@
                       "current_price":  2.69,
                       "base_price":  2.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/la_preferida_enchilada_sauce_mild_red_chili_10_oz/p/543814",
-                      "product_id":  "543814"
+                      "product_id":  "543814",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1815,7 +1977,8 @@
                       "current_price":  4.49,
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/ortega_medium_taco_sauce_16_oz/p/6072",
-                      "product_id":  "6072"
+                      "product_id":  "6072",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1828,7 +1991,8 @@
                       "current_price":  2.79,
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/ortega_mild_taco_sauce_8_oz/p/26709",
-                      "product_id":  "26709"
+                      "product_id":  "26709",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1841,7 +2005,8 @@
                       "current_price":  4.49,
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/ortega_mild_taco_sauce_16_oz/p/532080",
-                      "product_id":  "532080"
+                      "product_id":  "532080",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1854,7 +2019,8 @@
                       "current_price":  2.49,
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/ortega_xtra_hot_original_taco_sauce_8_oz/p/1764405684714954500",
-                      "product_id":  "1764405684714954500"
+                      "product_id":  "1764405684714954500",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1867,7 +2033,8 @@
                       "current_price":  2.79,
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/ortega_medium_taco_sauce_8_oz/p/26714",
-                      "product_id":  "26714"
+                      "product_id":  "26714",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1880,7 +2047,8 @@
                       "current_price":  3.59,
                       "base_price":  3.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/our_family_taco_sauce_medium_16_oz/p/1564405684702622204",
-                      "product_id":  "1564405684702622204"
+                      "product_id":  "1564405684702622204",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1893,7 +2061,8 @@
                       "current_price":  3.59,
                       "base_price":  3.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/our_family_taco_sauce_mild_16_oz/p/7081743",
-                      "product_id":  "7081743"
+                      "product_id":  "7081743",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1906,7 +2075,8 @@
                       "current_price":  3.99,
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/ortega_skillet_sauce_taco_7_oz/p/554610",
-                      "product_id":  "554610"
+                      "product_id":  "554610",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1919,7 +2089,8 @@
                       "current_price":  2.79,
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/taco_bell_sauce_fire_7_5_oz/p/567965",
-                      "product_id":  "567965"
+                      "product_id":  "567965",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1932,7 +2103,8 @@
                       "current_price":  2.79,
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/taco_bell_sauce_mild_7_5_oz/p/17651",
-                      "product_id":  "17651"
+                      "product_id":  "17651",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1945,7 +2117,8 @@
                       "current_price":  2.99,
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/taco_bell_sauce_baja_creamy_12_fl_oz/p/1564405684711108544",
-                      "product_id":  "1564405684711108544"
+                      "product_id":  "1564405684711108544",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1958,7 +2131,8 @@
                       "current_price":  1,
                       "base_price":  1,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/seasonal_special_occasion/trial_sizes_store/sauce_supreme_taco_mix_seas_pwd/p/2515305",
-                      "product_id":  "2515305"
+                      "product_id":  "2515305",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1971,7 +2145,8 @@
                       "current_price":  2.99,
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/taco_bell_creamy_spicy_ranchero_sauce_12_fl_oz/p/1564405684711108547",
-                      "product_id":  "1564405684711108547"
+                      "product_id":  "1564405684711108547",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1984,7 +2159,8 @@
                       "current_price":  2.49,
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_taco_fiesta_black_beans_in_a_mild_chipotle_sauce_15_1_oz/p/1564405684711329306",
-                      "product_id":  "1564405684711329306"
+                      "product_id":  "1564405684711329306",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1997,7 +2173,8 @@
                       "current_price":  9.49,
                       "base_price":  9.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/cholula_chiles_pepitas_chili_crisp_sauce_8_oz/p/1764405684715317582",
-                      "product_id":  "1764405684715317582"
+                      "product_id":  "1764405684715317582",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2010,7 +2187,8 @@
                       "current_price":  4.29,
                       "base_price":  4.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/cholula_carne_asada_marinade_cooking_sauce_12_oz/p/1764405684715317586",
-                      "product_id":  "1764405684715317586"
+                      "product_id":  "1764405684715317586",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2023,7 +2201,8 @@
                       "current_price":  3.49,
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/our_family_seasoning_mix_taco_6_oz/p/1564405684715662397",
-                      "product_id":  "1564405684715662397"
+                      "product_id":  "1564405684715662397",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2036,7 +2215,8 @@
                       "current_price":  3.99,
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/ortega_skillet_sauce_fajita_7_oz/p/606191",
-                      "product_id":  "606191"
+                      "product_id":  "606191",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2049,7 +2229,8 @@
                       "current_price":  4.29,
                       "base_price":  4.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/cholula_birria_cooking_simmer_sauce_12_fl_oz/p/1764405684715317556",
-                      "product_id":  "1764405684715317556"
+                      "product_id":  "1764405684715317556",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2062,7 +2243,8 @@
                       "current_price":  2.69,
                       "base_price":  2.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/taco_bell_seasoning_mix_original_taco_3_pack_3_ea/p/7994886",
-                      "product_id":  "7994886"
+                      "product_id":  "7994886",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2075,7 +2257,8 @@
                       "current_price":  1.49,
                       "base_price":  1.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/ortega_40_less_sodium_taco_seasoning_mix_1_oz/p/1564405684713194644",
-                      "product_id":  "1564405684713194644"
+                      "product_id":  "1564405684713194644",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2088,7 +2271,8 @@
                       "current_price":  2.99,
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/ortega_original_taco_seasoning_mix_3_ea/p/1564405684713236737",
-                      "product_id":  "1564405684713236737"
+                      "product_id":  "1564405684713236737",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2101,7 +2285,8 @@
                       "current_price":  1.49,
                       "base_price":  1.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/ortega_original_taco_seasoning_mix_1_oz/p/1564405684713154496",
-                      "product_id":  "1564405684713154496"
+                      "product_id":  "1564405684713154496",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2114,7 +2299,8 @@
                       "current_price":  1.99,
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/cholula_original_taco_medium_recipe_mix_1_oz/p/1564405684714128040",
-                      "product_id":  "1564405684714128040"
+                      "product_id":  "1564405684714128040",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2127,7 +2313,8 @@
                       "current_price":  1.99,
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/cholula_smoky_chipotle_taco_medium_recipe_mix_1_oz/p/1564405684714127990",
-                      "product_id":  "1564405684714127990"
+                      "product_id":  "1564405684714127990",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2140,7 +2327,8 @@
                       "current_price":  1.69,
                       "base_price":  1.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/other_sauce/manwich_sloppy_joe_sauce_original_15_oz/p/20530",
-                      "product_id":  "20530"
+                      "product_id":  "20530",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2153,7 +2341,8 @@
                       "current_price":  1.69,
                       "base_price":  1.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/other_sauce/manwich_sloppy_joe_sauce_bold_16_oz/p/178158",
-                      "product_id":  "178158"
+                      "product_id":  "178158",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2166,7 +2355,8 @@
                       "current_price":  2.79,
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/other_sauce/manwich_sloppy_joe_sauce_original_24_oz/p/20543",
-                      "product_id":  "20543"
+                      "product_id":  "20543",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2179,7 +2369,8 @@
                       "current_price":  2.79,
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/other_sauce/manwich_sloppy_joe_sauce_bold_24_oz/p/1764405684715229648",
-                      "product_id":  "1764405684715229648"
+                      "product_id":  "1764405684715229648",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2192,7 +2383,8 @@
                       "current_price":  1.69,
                       "base_price":  1.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/other_sauce/manwich_sloppy_joe_sauce_thick_chunky_15_5_oz/p/178159",
-                      "product_id":  "178159"
+                      "product_id":  "178159",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2205,7 +2397,8 @@
                       "current_price":  1.69,
                       "base_price":  1.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/other_sauce/manwich_sloppy_joe_sauce_no_sugar_added_original_15_oz/p/1564405684716416531",
-                      "product_id":  "1564405684716416531"
+                      "product_id":  "1564405684716416531",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2218,7 +2411,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/marinades/rib_rack_steak_marinade_sweet_tangy_14_oz/p/2463563",
-                      "product_id":  "2463563"
+                      "product_id":  "2463563",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2231,7 +2425,8 @@
                       "current_price":  1.99,
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/marinades/mc_cormick_montreal_steak_marinade_seasoning_mix_0_71_oz/p/2462",
-                      "product_id":  "2462"
+                      "product_id":  "2462",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2244,7 +2439,8 @@
                       "current_price":  4.69,
                       "base_price":  4.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/marinades/lawry_s_steak_chop_marinade_12_fl_oz/p/17831",
-                      "product_id":  "17831"
+                      "product_id":  "17831",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2257,7 +2453,8 @@
                       "current_price":  3.29,
                       "base_price":  3.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/marinades/mc_cormick_montreal_steak_single_use_marinade_5_oz/p/4817650",
-                      "product_id":  "4817650"
+                      "product_id":  "4817650",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2270,7 +2467,8 @@
                       "current_price":  2.79,
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/marinades/steak_chop_30_minute_marinade/p/7081439",
-                      "product_id":  "7081439"
+                      "product_id":  "7081439",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2283,7 +2481,8 @@
                       "current_price":  3.69,
                       "base_price":  3.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing_low_calorie_fat/ken_s_steak_house_salad_dressing_marinade_raspberry_walnut_vinaigrette_lite_16_fl_oz/p/29329",
-                      "product_id":  "29329"
+                      "product_id":  "29329",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2296,7 +2495,8 @@
                       "current_price":  3.69,
                       "base_price":  3.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/ken_s_steak_house_zesty_italian_dressing_marinade_16_fl_oz/p/29323",
-                      "product_id":  "29323"
+                      "product_id":  "29323",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2309,7 +2509,8 @@
                       "current_price":  3.69,
                       "base_price":  3.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/ken_s_steak_house_northern_italian_with_basil_romano_dressing_marinade_16_fl_oz/p/534672",
-                      "product_id":  "534672"
+                      "product_id":  "534672",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2322,7 +2523,8 @@
                       "current_price":  3.69,
                       "base_price":  3.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/ken_s_steak_house_tuscan_italian_with_lemon_garlic_herbs_dressing_marinade_16_fl_oz/p/3019831",
-                      "product_id":  "3019831"
+                      "product_id":  "3019831",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2335,7 +2537,8 @@
                       "current_price":  3.69,
                       "base_price":  3.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing_low_calorie_fat/ken_s_steak_house_lite_northern_italian_with_basil_romano_dressing_marinade_16_fl_oz/p/2094",
-                      "product_id":  "2094"
+                      "product_id":  "2094",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2348,7 +2551,8 @@
                       "current_price":  4.49,
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/marinades/finest_reserve_steak_sauce_vidalia_onion_13_5_oz/p/1564405684714975819",
-                      "product_id":  "1564405684714975819"
+                      "product_id":  "1564405684714975819",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2361,7 +2565,8 @@
                       "current_price":  4.49,
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/marinades/finest_reserve_steak_sauce_carolina_smokehouse_13_5_oz/p/1564405684714975821",
-                      "product_id":  "1564405684714975821"
+                      "product_id":  "1564405684714975821",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2374,7 +2579,8 @@
                       "current_price":  4.99,
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/pasta_sauce_other/classico_sauce_spread_traditional_basil_pesto_8_1_oz/p/27591",
-                      "product_id":  "27591"
+                      "product_id":  "27591",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2387,7 +2593,8 @@
                       "current_price":  3.29,
                       "base_price":  3.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/seafood_fish/tuna/star_kist_solid_tuna_with_basil_pesto_in_extra_virgin_olive_oil_128_g/p/1564405684716068027",
-                      "product_id":  "1564405684716068027"
+                      "product_id":  "1564405684716068027",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2400,7 +2607,8 @@
                       "current_price":  5.59,
                       "base_price":  5.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/healthier_choices/healthy_choice_basil_pesto_chicken_protein_bowls_9_25_oz/p/1564405684704512261",
-                      "product_id":  "1564405684704512261"
+                      "product_id":  "1564405684704512261",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2413,7 +2621,8 @@
                       "current_price":  6.09,
                       "base_price":  6.09,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/salads/rana_basil_pesto_7_oz/p/59692",
-                      "product_id":  "59692"
+                      "product_id":  "59692",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2426,7 +2635,8 @@
                       "current_price":  5.69,
                       "base_price":  5.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/pasta_sauce_other/barilla_rustic_basil_pesto_sauce_6_5_oz/p/7789018",
-                      "product_id":  "7789018"
+                      "product_id":  "7789018",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2439,7 +2649,8 @@
                       "current_price":  3.49,
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/pasta_sauce_tomato_based/finest_reserve_pesto_sauce_italian_basil_6_7_oz/p/1564405684715630083",
-                      "product_id":  "1564405684715630083"
+                      "product_id":  "1564405684715630083",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2452,7 +2663,8 @@
                       "current_price":  3.69,
                       "base_price":  3.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/dynasty_sauce_oyster_flavored_9_oz/p/13115",
-                      "product_id":  "13115"
+                      "product_id":  "13115",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2465,7 +2677,8 @@
                       "current_price":  4.79,
                       "base_price":  4.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/lee_kum_kee_oyster_flavored_sauce_9_oz/p/46499",
-                      "product_id":  "46499"
+                      "product_id":  "46499",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2478,7 +2691,8 @@
                       "current_price":  6.99,
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/lee_kum_kee_hoisin_sauce_20_oz/p/2580222",
-                      "product_id":  "2580222"
+                      "product_id":  "2580222",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2491,7 +2705,8 @@
                       "current_price":  5.39,
                       "base_price":  5.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/kikkoman_sesame_oil_5_fl_oz/p/578088",
-                      "product_id":  "578088"
+                      "product_id":  "578088",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2504,7 +2719,8 @@
                       "current_price":  4.59,
                       "base_price":  4.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/baking/oils_sprays/dynasty_sesame_seed_oil_5_oz/p/13107",
-                      "product_id":  "13107"
+                      "product_id":  "13107",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2517,7 +2733,8 @@
                       "current_price":  4.29,
                       "base_price":  4.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/bakery/buns_sandwich_rolls/sandwich_rolls_buns/pepperidge_farm_soft_white_with_sesame_seeds_hoagie_rolls_14_500_oz/p/2320168",
-                      "product_id":  "2320168"
+                      "product_id":  "2320168",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2530,7 +2747,8 @@
                       "current_price":  2.69,
                       "base_price":  2.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/mc_cormick_sesame_seed_1_oz/p/34659",
-                      "product_id":  "34659"
+                      "product_id":  "34659",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2543,7 +2761,8 @@
                       "current_price":  12.69,
                       "base_price":  12.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/whole_grains/fly_by_jing_sichuan_chili_crisp_6_oz/p/1564405684712193059",
-                      "product_id":  "1564405684712193059"
+                      "product_id":  "1564405684712193059",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2556,7 +2775,8 @@
                       "current_price":  12.69,
                       "base_price":  12.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/whole_grains/fly_by_jing_hot_sauce_xtra_spicy_chili_crisp_6_oz/p/1564405684714496638",
-                      "product_id":  "1564405684714496638"
+                      "product_id":  "1564405684714496638",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2569,7 +2789,8 @@
                       "current_price":  3.19,
                       "base_price":  3.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/rice/quaker_sweet_spicy_chili_rice_crisps_3_03_oz/p/2992558",
-                      "product_id":  "2992558"
+                      "product_id":  "2992558",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2582,7 +2803,8 @@
                       "current_price":  4.49,
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/walker_sons_cajun_seasoning_original_blend_8_oz/p/3156455",
-                      "product_id":  "3156455"
+                      "product_id":  "3156455",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2595,7 +2817,8 @@
                       "current_price":  2.99,
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/louisiana_fish_fry_products_original_cajun_seasoning_8_oz/p/3078893",
-                      "product_id":  "3078893"
+                      "product_id":  "3078893",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2608,7 +2831,8 @@
                       "current_price":  4.49,
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/walker_sons_cajun_seasoning_low_sodium_blend_6_oz/p/7069540",
-                      "product_id":  "7069540"
+                      "product_id":  "7069540",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2621,7 +2845,8 @@
                       "current_price":  6.99,
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/mc_cormick_gourmet_cajun_seasoning_2_25_oz/p/2371538",
-                      "product_id":  "2371538"
+                      "product_id":  "2371538",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2634,7 +2859,8 @@
                       "current_price":  4.49,
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/walker_sons_cajun_seasoning_hot_blend_8_oz/p/3156461",
-                      "product_id":  "3156461"
+                      "product_id":  "3156461",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2647,7 +2873,8 @@
                       "current_price":  5.29,
                       "base_price":  5.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/famous_dave_s_spice_rub_medium_cajun_seasoning_5_1_oz/p/1564405684712850634",
-                      "product_id":  "1564405684712850634"
+                      "product_id":  "1564405684712850634",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2660,7 +2887,8 @@
                       "current_price":  6.99,
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/mc_cormick_cajun_seasoning_5_oz/p/1564405684708557164",
-                      "product_id":  "1564405684708557164"
+                      "product_id":  "1564405684708557164",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2673,7 +2901,8 @@
                       "current_price":  2.19,
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/sugar_n_spice_cajun_seasoning_pp/p/1564405684701714286",
-                      "product_id":  "1564405684701714286"
+                      "product_id":  "1564405684701714286",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2686,7 +2915,8 @@
                       "current_price":  6.29,
                       "base_price":  6.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/lawry_s_seasoned_cajun_seasoning_5_29_oz/p/1764405684714689528",
-                      "product_id":  "1764405684714689528"
+                      "product_id":  "1764405684714689528",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2699,7 +2929,8 @@
                       "current_price":  1.29,
                       "base_price":  1.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/old_el_paso_25_less_sodium_taco_seasoning_mix_1_oz/p/32448",
-                      "product_id":  "32448"
+                      "product_id":  "32448",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2712,7 +2943,8 @@
                       "current_price":  1.59,
                       "base_price":  1.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_meats/mc_cormick_original_taco_seasoning_mix_1_oz/p/5173605",
-                      "product_id":  "5173605"
+                      "product_id":  "5173605",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2725,7 +2957,8 @@
                       "current_price":  1.59,
                       "base_price":  1.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_meats/mc_cormick_hot_taco_seasoning_mix_1_oz/p/5460939",
-                      "product_id":  "5460939"
+                      "product_id":  "5460939",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2738,7 +2971,8 @@
                       "current_price":  1.59,
                       "base_price":  1.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_meats/mc_cormick_mild_taco_seasoning_mix_1_oz/p/5458130",
-                      "product_id":  "5458130"
+                      "product_id":  "5458130",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2751,7 +2985,8 @@
                       "current_price":  1.29,
                       "base_price":  1.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_meats/la_preferida_taco_seasoning_1_25_oz/p/270495",
-                      "product_id":  "270495"
+                      "product_id":  "270495",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2764,7 +2999,8 @@
                       "current_price":  1.59,
                       "base_price":  1.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_meats/mc_cormick_30_less_sodium_mild_taco_seasoning_mix_1_oz/p/5621054",
-                      "product_id":  "5621054"
+                      "product_id":  "5621054",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2777,7 +3013,8 @@
                       "current_price":  1.99,
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_mixes/la_preferida_taco_seasoning_organic_zesty_mexican_flavor_1_oz/p/1564405684703785109",
-                      "product_id":  "1564405684703785109"
+                      "product_id":  "1564405684703785109",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2790,7 +3027,8 @@
                       "current_price":  1.59,
                       "base_price":  1.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_meats/mc_cormick_chicken_taco_seasoning_mix_1_oz/p/2371530",
-                      "product_id":  "2371530"
+                      "product_id":  "2371530",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2803,7 +3041,8 @@
                       "current_price":  1.59,
                       "base_price":  1.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_meats/mc_cormick_30_less_sodium_taco_seasoning_mix_1_oz/p/5458159",
-                      "product_id":  "5458159"
+                      "product_id":  "5458159",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2816,7 +3055,8 @@
                       "current_price":  1.59,
                       "base_price":  1.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_meats/mc_cormick_cheesy_taco_seasoning_mix_1_12_oz/p/2371477",
-                      "product_id":  "2371477"
+                      "product_id":  "2371477",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2829,7 +3069,8 @@
                       "current_price":  8.29,
                       "base_price":  8.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_meats/mc_cormick_mild_taco_seasoning_mix_8_5_oz/p/1564405684716081451",
-                      "product_id":  "1564405684716081451"
+                      "product_id":  "1564405684716081451",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2842,7 +3083,8 @@
                       "current_price":  4.79,
                       "base_price":  4.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/dash_salt_free_taco_seasoning_mix_2_5_oz/p/1564405684714628026",
-                      "product_id":  "1564405684714628026"
+                      "product_id":  "1564405684714628026",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2855,7 +3097,8 @@
                       "current_price":  2.49,
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_mixes/la_preferida_al_pastor_taco_seasoning_1_oz/p/1564405684716301145",
-                      "product_id":  "1564405684716301145"
+                      "product_id":  "1564405684716301145",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2868,7 +3111,8 @@
                       "current_price":  1.99,
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_meats/lawry_s_taco_seasoning_mix_1_oz/p/17837",
-                      "product_id":  "17837"
+                      "product_id":  "17837",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2881,7 +3125,8 @@
                       "current_price":  9.99,
                       "base_price":  9.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_meats/mc_cormick_original_taco_seasoning_mix_8_5_oz/p/1564405684710712403",
-                      "product_id":  "1564405684710712403"
+                      "product_id":  "1564405684710712403",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2894,7 +3139,8 @@
                       "current_price":  1.29,
                       "base_price":  1.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/old_el_paso_taco_original_seasoning_mix_1_oz/p/32446",
-                      "product_id":  "32446"
+                      "product_id":  "32446",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2907,7 +3153,8 @@
                       "current_price":  1.29,
                       "base_price":  1.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/old_el_paso_taco_mild_seasoning_mix_1_oz/p/179408",
-                      "product_id":  "179408"
+                      "product_id":  "179408",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2920,7 +3167,8 @@
                       "current_price":  4.49,
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/tacos_more/old_el_paso_taco_original_seasoning_mix_large_size_6_25_oz/p/578158",
-                      "product_id":  "578158"
+                      "product_id":  "578158",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2933,7 +3181,8 @@
                       "current_price":  0.99,
                       "base_price":  0.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_meats/taco_bell_seasoning_mix_original_taco_1_oz/p/17627",
-                      "product_id":  "17627"
+                      "product_id":  "17627",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2946,7 +3195,8 @@
                       "current_price":  0.99,
                       "base_price":  0.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_meats/our_family_seasoning_mix_taco_1_25_oz/p/6787111",
-                      "product_id":  "6787111"
+                      "product_id":  "6787111",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2959,7 +3209,8 @@
                       "current_price":  3.79,
                       "base_price":  3.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/crystal_farms_seasoned_collection_taco_cheese_blend_7_oz/p/1564405684712831267",
-                      "product_id":  "1564405684712831267"
+                      "product_id":  "1564405684712831267",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2972,7 +3223,8 @@
                       "current_price":  2.49,
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_fruits_vegetables/kinder_s_ranch_dips_and_seasoning_mix_1_25_oz/p/1564405684714083263",
-                      "product_id":  "1564405684714083263"
+                      "product_id":  "1564405684714083263",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2985,7 +3237,8 @@
                       "current_price":  2.59,
                       "base_price":  2.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_fruits_vegetables/hidden_valley_seasoning_creamy_jalapeno_ranch_1_oz/p/1764405684714989272",
-                      "product_id":  "1764405684714989272"
+                      "product_id":  "1764405684714989272",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2998,7 +3251,8 @@
                       "current_price":  1.99,
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/tone_s_curry_powder_0_7_oz/p/235163",
-                      "product_id":  "235163"
+                      "product_id":  "235163",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3011,7 +3265,8 @@
                       "current_price":  6.99,
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/mc_cormick_curry_powder_1_75_oz/p/1564405684689259489",
-                      "product_id":  "1564405684689259489"
+                      "product_id":  "1564405684689259489",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3024,7 +3279,8 @@
                       "current_price":  6.59,
                       "base_price":  6.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/finest_reserve_curry_powder_1_8_oz/p/1564405684704013968",
-                      "product_id":  "1564405684704013968"
+                      "product_id":  "1564405684704013968",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3037,7 +3293,8 @@
                       "current_price":  4.49,
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/full_circle_market_curry_powder_1_8_oz/p/588560",
-                      "product_id":  "588560"
+                      "product_id":  "588560",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3050,7 +3307,8 @@
                       "current_price":  2.79,
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/sugar_n_spice_curry_powder_pp/p/1564405684701719462",
-                      "product_id":  "1564405684701719462"
+                      "product_id":  "1564405684701719462",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3063,7 +3321,8 @@
                       "current_price":  6.59,
                       "base_price":  6.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/finest_reserve_garam_masala_1_8_oz/p/1564405684714873799",
-                      "product_id":  "1564405684714873799"
+                      "product_id":  "1564405684714873799",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3076,7 +3335,8 @@
                       "current_price":  8.39,
                       "base_price":  8.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/mc_cormick_gourmet_garam_masala_blend_1_7_oz/p/6661",
-                      "product_id":  "6661"
+                      "product_id":  "6661",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3089,7 +3349,8 @@
                       "current_price":  2.19,
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/buttermilk_flavored_jumbo_biscuits/p/6787398",
-                      "product_id":  "6787398"
+                      "product_id":  "6787398",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3102,7 +3363,8 @@
                       "current_price":  3.49,
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/pillsbury_southern_homestyle_buttermilk_biscuits_8_ea/p/10490",
-                      "product_id":  "10490"
+                      "product_id":  "10490",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3115,7 +3377,8 @@
                       "current_price":  3.49,
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/pillsbury_flaky_layers_butter_tastin_biscuits_8_ea/p/5898",
-                      "product_id":  "5898"
+                      "product_id":  "5898",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3128,7 +3391,8 @@
                       "current_price":  3.49,
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/pillsbury_southern_homestyle_original_biscuits_8_ea/p/16728",
-                      "product_id":  "16728"
+                      "product_id":  "16728",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3141,7 +3405,8 @@
                       "current_price":  3.49,
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/pillsbury_flaky_layers_honey_butter_biscuits_8_ea/p/16750",
-                      "product_id":  "16750"
+                      "product_id":  "16750",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3154,7 +3419,8 @@
                       "current_price":  3.49,
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/pillsbury_southern_homestyle_butter_tastin_biscuits_8_ea/p/16725",
-                      "product_id":  "16725"
+                      "product_id":  "16725",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3167,7 +3433,8 @@
                       "current_price":  3.49,
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/pillsbury_southern_homestyle_southern_recipe_biscuits_8_ea/p/16727",
-                      "product_id":  "16727"
+                      "product_id":  "16727",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3180,7 +3447,8 @@
                       "current_price":  3.49,
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/pillsbury_southern_homestyle_butter_tastin_biscuits_5_ea/p/562276",
-                      "product_id":  "562276"
+                      "product_id":  "562276",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3193,7 +3461,8 @@
                       "current_price":  3.49,
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/pillsbury_southern_homestyle_buttermilk_biscuits_5_ea/p/2324100",
-                      "product_id":  "2324100"
+                      "product_id":  "2324100",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3206,7 +3475,8 @@
                       "current_price":  1.39,
                       "base_price":  1.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/our_family_biscuits_buttermilk_10_ea/p/6787396",
-                      "product_id":  "6787396"
+                      "product_id":  "6787396",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3219,7 +3489,8 @@
                       "current_price":  2.19,
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/our_family_biscuits_butter_jumbo_8_ea/p/6787399",
-                      "product_id":  "6787399"
+                      "product_id":  "6787399",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3232,7 +3503,8 @@
                       "current_price":  2.19,
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/jumbo_butter_flaky_biscuit_dough_our_family_8_ct/p/1564405684703971373",
-                      "product_id":  "1564405684703971373"
+                      "product_id":  "1564405684703971373",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3245,7 +3517,8 @@
                       "current_price":  2.19,
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/biscuit_dough_jumbo_flaky_our_family_8_ct/p/6787401",
-                      "product_id":  "6787401"
+                      "product_id":  "6787401",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3258,7 +3531,8 @@
                       "current_price":  2.19,
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/biscuit_dough_jumbo_flaky_homestyle_our_family_8_ct/p/7081799",
-                      "product_id":  "7081799"
+                      "product_id":  "7081799",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3271,7 +3545,8 @@
                       "current_price":  5.69,
                       "base_price":  5.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_pasta_plus/our_family_tortellini_cheese_classic_curls_19_oz/p/7081925",
-                      "product_id":  "7081925"
+                      "product_id":  "7081925",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3284,7 +3559,8 @@
                       "current_price":  11.99,
                       "base_price":  11.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/ready_to_go_cold/rana_5_cheese_tortellini_family_size_20_oz/p/5594542",
-                      "product_id":  "5594542"
+                      "product_id":  "5594542",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3297,7 +3573,8 @@
                       "current_price":  2.79,
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/other_soups/campbell_s_homestyle_soup_cheese_tortellini_with_italian_sausage_16_300_oz/p/1764405684715322322",
-                      "product_id":  "1764405684715322322"
+                      "product_id":  "1764405684715322322",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3310,7 +3587,8 @@
                       "current_price":  4.99,
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/other_pastas/de_lallo_potato_gnocchi_16_oz/p/3686",
-                      "product_id":  "3686"
+                      "product_id":  "3686",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3323,7 +3601,8 @@
                       "current_price":  6.49,
                       "base_price":  6.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/other_soups/rao_s_chicken_and_gnocchi_soup/p/1764405684716109210",
-                      "product_id":  "1764405684716109210"
+                      "product_id":  "1764405684716109210",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3336,7 +3615,8 @@
                       "current_price":  3.99,
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/ready_to_go_cold/rana_skillet_gnocchi_12_oz/p/1564405684689324737",
-                      "product_id":  "1564405684689324737"
+                      "product_id":  "1564405684689324737",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3349,7 +3629,8 @@
                       "current_price":  8.49,
                       "base_price":  8.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/packaged_meals/thai_kitchen_med_pad_thai_rice_noodle_cart_9_77_oz/p/2449732",
-                      "product_id":  "2449732"
+                      "product_id":  "2449732",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3362,7 +3643,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/california_sun_dry_sun_dry_tomatoes_jar_halves/p/1764405684715632116",
-                      "product_id":  "1764405684715632116"
+                      "product_id":  "1764405684715632116",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3375,7 +3657,8 @@
                       "current_price":  5.29,
                       "base_price":  5.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/tomatoes/alessi_tomatoes_sun_dried_in_extra_virgin_olive_oil_7_oz/p/38493",
-                      "product_id":  "38493"
+                      "product_id":  "38493",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3388,7 +3671,8 @@
                       "current_price":  4.99,
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/snacks_desserts/fresh_finest_by_our_family_sun_dried_tomato_feta_dip_10_oz/p/1564405684716878403",
-                      "product_id":  "1564405684716878403"
+                      "product_id":  "1564405684716878403",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3401,7 +3685,8 @@
                       "current_price":  6.99,
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/sausage/smoked/gilbert_s_sausage_chicken_caprese_with_basil_mozzarella_sun_dried_tomatoes_10_oz/p/5588160",
-                      "product_id":  "5588160"
+                      "product_id":  "5588160",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3414,7 +3699,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/crackers/other_crackers/simple_mills_almond_flour_crackers_tomato_basil_sun_dried_4_25_oz/p/5979802",
-                      "product_id":  "5979802"
+                      "product_id":  "5979802",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3427,7 +3713,8 @@
                       "current_price":  2.19,
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/la_costena_chipotles_peppers_in_adobo_sauce_7_oz/p/44529",
-                      "product_id":  "44529"
+                      "product_id":  "44529",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3440,7 +3727,8 @@
                       "current_price":  2.29,
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/san_marcos_original_recipe_chipotles_peppers_in_adobo_sauce_7_5_oz/p/2392969",
-                      "product_id":  "2392969"
+                      "product_id":  "2392969",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3453,7 +3741,8 @@
                       "current_price":  2.49,
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/other_vegetables/tomatillos/p/12573",
-                      "product_id":  "12573"
+                      "product_id":  "12573",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3466,7 +3755,8 @@
                       "current_price":  2.99,
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/vegetables/del_monte_whole_kernel_southwest_style_corn_with_poblano_red_peppers_15_25_oz/p/19392",
-                      "product_id":  "19392"
+                      "product_id":  "19392",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3479,7 +3769,8 @@
                       "current_price":  2.99,
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/local_roots_organic_basil/p/1564405684716871941",
-                      "product_id":  "1564405684716871941"
+                      "product_id":  "1564405684716871941",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3492,7 +3783,8 @@
                       "current_price":  4.39,
                       "base_price":  4.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/sugar_n_spice_whole_basil/p/5920129",
-                      "product_id":  "5920129"
+                      "product_id":  "5920129",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3505,7 +3797,8 @@
                       "current_price":  2.99,
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/thats_tasty_basil_conventional/p/1564405684704625846",
-                      "product_id":  "1564405684704625846"
+                      "product_id":  "1564405684704625846",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3518,7 +3811,8 @@
                       "current_price":  2.89,
                       "base_price":  2.89,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/tooth_pastes_floss/crest_baking_soda_peroxide_whitening_toothpaste_fresh_mint_5_7_oz_5_7_oz/p/1564405684704637858",
-                      "product_id":  "1564405684704637858"
+                      "product_id":  "1564405684704637858",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3531,7 +3825,8 @@
                       "current_price":  6.59,
                       "base_price":  6.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/candy/non_chocolate_candy/mentos_gum_sugarfree_fresh_mint_50_ea/p/526003",
-                      "product_id":  "526003"
+                      "product_id":  "526003",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3544,7 +3839,8 @@
                       "current_price":  8.49,
                       "base_price":  8.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/tooth_pastes_floss/parodontax_toothpaste_active_gum_repair_fresh_mint_3_4_oz/p/1564405684710398479",
-                      "product_id":  "1564405684710398479"
+                      "product_id":  "1564405684710398479",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3557,7 +3853,8 @@
                       "current_price":  3.99,
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/denture_care/polident_tablets_3_minute_antibacterial_mint_fresh_dental_appliance_cleanser_30_ea/p/1564405684716387285",
-                      "product_id":  "1564405684716387285"
+                      "product_id":  "1564405684716387285",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3570,7 +3867,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/tooth_pastes_floss/colgate_toothpaste_anticavity_fluoride_fresh_mint_with_charcoal_4_6_oz/p/1564405684703821109",
-                      "product_id":  "1564405684703821109"
+                      "product_id":  "1564405684703821109",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3583,7 +3881,8 @@
                       "current_price":  8.49,
                       "base_price":  8.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/tooth_pastes_floss/sensodyne_fresh_mint_toothpaste_4_oz/p/51751",
-                      "product_id":  "51751"
+                      "product_id":  "51751",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3596,7 +3895,8 @@
                       "current_price":  6.99,
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/rinses_fresheners_whiteners/scope_classic_fresh_mint_mouthwash_33_8_fl_oz/p/5585969",
-                      "product_id":  "5585969"
+                      "product_id":  "5585969",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3609,7 +3909,8 @@
                       "current_price":  4.69,
                       "base_price":  4.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/tooth_pastes_floss/top_care_toothpaste_daily_anti_cavity_fluoride_fresh_mint/p/546872",
-                      "product_id":  "546872"
+                      "product_id":  "546872",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3622,7 +3923,8 @@
                       "current_price":  9.99,
                       "base_price":  9.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/rinses_fresheners_whiteners/biotene_dry_mouth_fresh_mint_oral_rinse_16_fl_oz/p/2367443",
-                      "product_id":  "2367443"
+                      "product_id":  "2367443",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3635,7 +3937,8 @@
                       "current_price":  6.89,
                       "base_price":  6.89,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/pharmacy/digestive/phillips_phillips_genuine_sugar_free_fresh_mint_milk_of_magnesia_12_fl_oz/p/10587",
-                      "product_id":  "10587"
+                      "product_id":  "10587",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3648,7 +3951,8 @@
                       "current_price":  8.99,
                       "base_price":  8.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/rinses_fresheners_whiteners/crest_crest_mouthwash_pro_health_enamel_cavity_protection_6_in_1_benefits_alcohol_free_fresh_mint_1_l_33_8_fl_oz_33_8_oz/p/2139103",
-                      "product_id":  "2139103"
+                      "product_id":  "2139103",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3661,7 +3965,8 @@
                       "current_price":  9.99,
                       "base_price":  9.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/rinses_fresheners_whiteners/thera_breath_deep_clean_fresh_mint_oral_rinse_16_fl_oz/p/1564405684715625091",
-                      "product_id":  "1564405684715625091"
+                      "product_id":  "1564405684715625091",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3674,7 +3979,8 @@
                       "current_price":  6.99,
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/rinses_fresheners_whiteners/tom_s_of_maine_mouthwash_anticavity_fresh_mint_16_fl_oz/p/1564405684702748006",
-                      "product_id":  "1564405684702748006"
+                      "product_id":  "1564405684702748006",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3687,7 +3993,8 @@
                       "current_price":  4.99,
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/pharmacy/digestive/top_care_milk_of_magnesia_fresh_mint_flavor_12_fl_oz/p/1564405684711706477",
-                      "product_id":  "1564405684711706477"
+                      "product_id":  "1564405684711706477",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3700,7 +4007,8 @@
                       "current_price":  11.99,
                       "base_price":  11.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/rinses_fresheners_whiteners/thera_breath_oral_rinse_fresh_breath_mild_mint_16_fl_oz/p/184811",
-                      "product_id":  "184811"
+                      "product_id":  "184811",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3713,7 +4021,8 @@
                       "current_price":  11.99,
                       "base_price":  11.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/rinses_fresheners_whiteners/thera_breath_fresh_breath_rainforest_mint_oral_rinse_16_fl_oz/p/1564405684710094622",
-                      "product_id":  "1564405684710094622"
+                      "product_id":  "1564405684710094622",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3726,7 +4035,8 @@
                       "current_price":  11.99,
                       "base_price":  11.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/rinses_fresheners_whiteners/thera_breath_fresh_breath_invigorating_icy_mint_oral_rinse_16_fl_oz/p/184812",
-                      "product_id":  "184812"
+                      "product_id":  "184812",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3739,7 +4049,8 @@
                       "current_price":  2.99,
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/local_roots_organic_mint/p/1764405684715974010",
-                      "product_id":  "1764405684715974010"
+                      "product_id":  "1764405684715974010",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3752,7 +4063,8 @@
                       "current_price":  7.29,
                       "base_price":  7.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/land_o_frost_premium_smoked_turkey_breast/p/1764405684716133998",
-                      "product_id":  "1764405684716133998"
+                      "product_id":  "1764405684716133998",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3765,7 +4077,8 @@
                       "current_price":  11.49,
                       "base_price":  11.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/turkey/prepared_turkey/hormel_square_table_sliced_roast_turkey_breast_and_gravy/p/26187",
-                      "product_id":  "26187"
+                      "product_id":  "26187",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3778,7 +4091,8 @@
                       "current_price":  5.49,
                       "base_price":  5.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/prime_fresh_delicatessen_oven_roasted_turkey_breast_7_oz/p/1564405684702876695",
-                      "product_id":  "1564405684702876695"
+                      "product_id":  "1564405684702876695",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3791,7 +4105,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/land_o_frost_applewood_smoked_turkey_breast_8_oz/p/1564405684702994057",
-                      "product_id":  "1564405684702994057"
+                      "product_id":  "1564405684702994057",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3804,7 +4119,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/oscar_mayer_oven_roasted_turkey_breast_9_oz/p/32312",
-                      "product_id":  "32312"
+                      "product_id":  "32312",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3817,7 +4133,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/oscar_mayer_honey_smoked_turkey_breast_9_oz/p/2364158",
-                      "product_id":  "2364158"
+                      "product_id":  "2364158",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3830,7 +4147,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/land_o_frost_rotisserie_seasoned_turkey_breast_8_oz/p/1564405684702869309",
-                      "product_id":  "1564405684702869309"
+                      "product_id":  "1564405684702869309",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3843,7 +4161,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/oscar_mayer_smoked_turkey_breast_9_oz/p/4028",
-                      "product_id":  "4028"
+                      "product_id":  "4028",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3856,7 +4175,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/oscar_mayer_mesquite_smoked_turkey_breast_8_oz/p/179362",
-                      "product_id":  "179362"
+                      "product_id":  "179362",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3869,7 +4189,8 @@
                       "current_price":  4.59,
                       "base_price":  4.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/chicken_turkey/marie_callender_s_turkey_breast_stuffing_roasted_11_85_oz/p/1564405684703141275",
-                      "product_id":  "1564405684703141275"
+                      "product_id":  "1564405684703141275",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3882,7 +4203,8 @@
                       "current_price":  6.99,
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/hillshire_farm_ultra_thin_sliced_oven_roasted_turkey_breast_sandwich_meat_9_oz/p/32192",
-                      "product_id":  "32192"
+                      "product_id":  "32192",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3895,7 +4217,8 @@
                       "current_price":  6.99,
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/hillshire_farm_ultra_thin_sliced_lower_sodium_oven_roasted_turkey_breast_sandwich_meat_8_oz/p/32190",
-                      "product_id":  "32190"
+                      "product_id":  "32190",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3908,7 +4231,8 @@
                       "current_price":  9.49,
                       "base_price":  9.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/oscar_mayer_oven_roasted_turkey_breast_family_pack_16_oz/p/32313",
-                      "product_id":  "32313"
+                      "product_id":  "32313",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3921,7 +4245,8 @@
                       "current_price":  9.49,
                       "base_price":  9.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/oscar_mayer_smoked_turkey_breast_family_pack_16_oz/p/523033",
-                      "product_id":  "523033"
+                      "product_id":  "523033",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3934,7 +4259,8 @@
                       "current_price":  4.49,
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/buddig_turkey_breast_oven_roasted_9_oz/p/1564405684712448940",
-                      "product_id":  "1564405684712448940"
+                      "product_id":  "1564405684712448940",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3947,7 +4273,8 @@
                       "current_price":  4.99,
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/bar_s_deli_style_oven_roasted_turkey_breast_and_white_turkey_14_oz/p/2208690",
-                      "product_id":  "2208690"
+                      "product_id":  "2208690",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3960,7 +4287,8 @@
                       "current_price":  9.49,
                       "base_price":  9.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/oscar_mayer_cracked_black_pepper_turkey_breast_family_size_16_oz/p/549623",
-                      "product_id":  "549623"
+                      "product_id":  "549623",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3973,7 +4301,8 @@
                       "current_price":  5.99,
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/oscar_mayer_uncured_oven_roasted_smoked_turkey_breast_ham_variety_pack_9_oz/p/530379",
-                      "product_id":  "530379"
+                      "product_id":  "530379",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3986,7 +4315,8 @@
                       "current_price":  7.99,
                       "base_price":  7.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/turkey/fresh/jennie_o_99_1_fresh_ground_turkey_breast_16_oz/p/2135004",
-                      "product_id":  "2135004"
+                      "product_id":  "2135004",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3999,7 +4329,8 @@
                       "current_price":  3.99,
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/healthier_choices/lean_cuisine_roasted_roasted_turkey_breast_with_herb_dressing_and_cinnamon_apples_9_75_oz/p/15219",
-                      "product_id":  "15219"
+                      "product_id":  "15219",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4012,7 +4343,8 @@
                       "current_price":  11.99,
                       "base_price":  11.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/fresh_sliced_meats/fresh_finest_deli_sliced_oven_roasted_turkey_breast/p/1564405684714630914",
-                      "product_id":  "1564405684714630914"
+                      "product_id":  "1564405684714630914",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4025,7 +4357,8 @@
                       "current_price":  2.99,
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/healthier_choices/smart_ones_turkey_breast_slow_roasted_9_oz/p/20288",
-                      "product_id":  "20288"
+                      "product_id":  "20288",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4038,7 +4371,8 @@
                       "current_price":  12.99,
                       "base_price":  12.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/fresh_sliced_meats/fresh_sliced_turkey_breast_smoked_kretschmar/p/1564405684713024946",
-                      "product_id":  "1564405684713024946"
+                      "product_id":  "1564405684713024946",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4051,7 +4385,8 @@
                       "current_price":  11.99,
                       "base_price":  11.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/fresh_sliced_meats/fresh_finest_deli_sliced_smoked_turkey_breast/p/1564405684714630921",
-                      "product_id":  "1564405684714630921"
+                      "product_id":  "1564405684714630921",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4064,7 +4399,8 @@
                       "current_price":  12.99,
                       "base_price":  12.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/fresh_sliced_meats/fresh_sliced_turkey_breast_hickory_smoked_honey_kretschmar/p/1564405684714631314",
-                      "product_id":  "1564405684714631314"
+                      "product_id":  "1564405684714631314",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4077,7 +4413,8 @@
                       "current_price":  2.49,
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/chile_de_arbol/p/1564405684702623794",
-                      "product_id":  "1564405684702623794"
+                      "product_id":  "1564405684702623794",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4090,7 +4427,8 @@
                       "current_price":  1.19,
                       "base_price":  1.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/chile_de_arbol_molido/p/1564405684702791256",
-                      "product_id":  "1564405684702791256"
+                      "product_id":  "1564405684702791256",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4103,7 +4441,8 @@
                       "current_price":  4.99,
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/fresh_ancho_chile/p/1564405684702759755",
-                      "product_id":  "1564405684702759755"
+                      "product_id":  "1564405684702759755",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4116,7 +4455,8 @@
                       "current_price":  4.49,
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/ham/fresh/smithfield_diced_ham_8_oz/p/2590982",
-                      "product_id":  "2590982"
+                      "product_id":  "2590982",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4129,7 +4469,8 @@
                       "current_price":  6.29,
                       "base_price":  6.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/ham/fresh/farmland_diced_ham_16_oz/p/575332",
-                      "product_id":  "575332"
+                      "product_id":  "575332",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4142,7 +4483,8 @@
                       "current_price":  1.99,
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/sazon_goya_el_original_seasoning_with_coriander_annatto_8_ea/p/2205",
-                      "product_id":  "2205"
+                      "product_id":  "2205",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4155,7 +4497,8 @@
                       "current_price":  0.59,
                       "base_price":  0.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_sauces_gravies/our_family_gravy_mix_brown_0_87_oz/p/6787112",
-                      "product_id":  "6787112"
+                      "product_id":  "6787112",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4168,7 +4511,8 @@
                       "current_price":  1,
                       "base_price":  1,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_sauces_gravies/sauce_supreme_gravy_mix_brown_0_875_oz/p/2515303",
-                      "product_id":  "2515303"
+                      "product_id":  "2515303",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4181,7 +4525,8 @@
                       "current_price":  1.39,
                       "base_price":  1.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_sauces_gravies/mc_cormick_brown_gravy_mix_0_87_oz/p/34866",
-                      "product_id":  "34866"
+                      "product_id":  "34866",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4194,7 +4539,8 @@
                       "current_price":  1.39,
                       "base_price":  1.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_sauces_gravies/pioneer_brown_gravy_mix_1_61_oz/p/235969",
-                      "product_id":  "235969"
+                      "product_id":  "235969",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4207,7 +4553,8 @@
                       "current_price":  1.39,
                       "base_price":  1.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_sauces_gravies/mc_cormick_30_less_sodium_brown_gravy_seasoning_mix_0_87_oz/p/34915",
-                      "product_id":  "34915"
+                      "product_id":  "34915",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4220,7 +4567,8 @@
                       "current_price":  9.99,
                       "base_price":  9.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_sauces_gravies/mc_cormick_brown_gravy_seasoning_mix_7_62_oz/p/1564405684710712407",
-                      "product_id":  "1564405684710712407"
+                      "product_id":  "1564405684710712407",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4233,7 +4581,8 @@
                       "current_price":  0.59,
                       "base_price":  0.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/gravy/our_family_gravy_mix_reduced_sodium_brown_0_87_oz/p/7083802",
-                      "product_id":  "7083802"
+                      "product_id":  "7083802",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4246,7 +4595,8 @@
                       "current_price":  2.19,
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/chicken_liver_cups_gold_n_plump/p/1564405684714638114",
-                      "product_id":  "1564405684714638114"
+                      "product_id":  "1564405684714638114",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4259,7 +4609,8 @@
                       "current_price":  1.69,
                       "base_price":  1.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pets_wildlife/dog/canned_fresh_dog_food/cesar_classic_loaf_in_sauce_chicken_liver_recipe_canine_cuisine_3_5_oz/p/18446",
-                      "product_id":  "18446"
+                      "product_id":  "18446",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4272,7 +4623,8 @@
                       "current_price":  0.99,
                       "base_price":  0.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pets_wildlife/cat/canned_fresh_cat_food/friskies_adult_pate_liver_chicken_dinner_cat_food_5_5_oz/p/33620",
-                      "product_id":  "33620"
+                      "product_id":  "33620",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4285,7 +4637,8 @@
                       "current_price":  1.59,
                       "base_price":  1.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pets_wildlife/cat/canned_fresh_cat_food/sheba_cat_food_roasted_chicken_liver_entree_pate_in_natural_juices_2_ea/p/4820423",
-                      "product_id":  "4820423"
+                      "product_id":  "4820423",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4298,7 +4651,8 @@
                       "current_price":  19.99,
                       "base_price":  19.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pets_wildlife/dog/canned_fresh_dog_food/cesar_breakfast_dinner_grilled_steak_eggs_flavor_chicken_liver_recipe_dog_food_12_ea/p/536552",
-                      "product_id":  "536552"
+                      "product_id":  "536552",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4311,7 +4665,8 @@
                       "current_price":  19.99,
                       "base_price":  19.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pets_wildlife/cat/treats/temptations_treats_for_cats_backyard_cookout_chicken_liver_beef_flavors_super_value_size_30_oz/p/1564405684690245013",
-                      "product_id":  "1564405684690245013"
+                      "product_id":  "1564405684690245013",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4324,7 +4679,8 @@
                       "current_price":  1.09,
                       "base_price":  1.09,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pets_wildlife/cat/canned_fresh_cat_food/fancy_feast_purina_fancy_feast_tender_chicken_and_liver_feast_classic_grain_free_wet_cat_food_pate_3_oz/p/33642",
-                      "product_id":  "33642"
+                      "product_id":  "33642",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4337,7 +4693,8 @@
                       "current_price":  1.09,
                       "base_price":  1.09,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pets_wildlife/cat/canned_fresh_cat_food/fancy_feast_gourmet_chicken_hearts_liver_feast_in_gravy_cat_food_3_oz/p/580144",
-                      "product_id":  "580144"
+                      "product_id":  "580144",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4350,7 +4707,8 @@
                       "current_price":  12.59,
                       "base_price":  12.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pets_wildlife/cat/treats/friskies_party_mix_original_crunch_cat_treats_with_chicken_flavors_of_liver_turkey_20_oz/p/4820735",
-                      "product_id":  "4820735"
+                      "product_id":  "4820735",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -4363,7 +4721,8 @@
                       "current_price":  2.99,
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_chicken_turkey/frozen_turkey_livers/p/1564405684713031875",
-                      "product_id":  "1564405684713031875"
+                      "product_id":  "1564405684713031875",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",

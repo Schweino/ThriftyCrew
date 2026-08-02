@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-01 15:24",
-    "board":  "comparison-2026-08-01.json",
-    "sidecar_generated":  "2026-08-01 15:24:52",
+    "generated":  "2026-08-02 08:58",
+    "board":  "comparison-2026-08-02.json",
+    "sidecar_generated":  "2026-08-02 08:58:22",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2822,
-                     "corpus":  22925,
-                     "rule_invisible":  3304
+                     "board_pairs":  2817,
+                     "corpus":  23381,
+                     "rule_invisible":  3454
                  },
     "identity_count":  0,
-    "coverage_count":  28,
+    "coverage_count":  30,
     "identity":  [
 
                  ],
@@ -101,6 +101,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "frozen-lasagna",
+                         "commodity":  "Frozen Lasagna",
+                         "store":  "Walmart",
+                         "product":  "Stouffers Classic Lasagna with Meat and Sauce, Large Size, Oven Ready, Frozen Dinners 19 oz",
+                         "cos":  0.7434,
+                         "score":  0.963027,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "chicken-thighs",
                          "commodity":  "Chicken Thighs / Drumsticks",
                          "store":  "Aldi",
@@ -111,12 +121,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "frozen-lasagna",
-                         "commodity":  "Frozen Lasagna",
-                         "store":  "Walmart",
-                         "product":  "Stouffers Classic Lasagna with Meat and Sauce, Large Size, Oven Ready, Frozen Dinners 19 oz",
-                         "cos":  0.7521,
-                         "score":  0.959963,
+                         "id":  "cranberry-sauce",
+                         "commodity":  "Cranberry Sauce (canned)",
+                         "store":  "Family Fare",
+                         "product":  "Ocean Spray Sauce, Cranberry, Whole Berry 14 Oz",
+                         "cos":  0.6528,
+                         "score":  0.958536,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -127,6 +137,16 @@
                          "product":  "Arm \u0026 Hammer Liquid Laundry Clean Burst",
                          "cos":  0.6943,
                          "score":  0.957421,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "pork-tenderloin",
+                         "commodity":  "Pork Tenderloin",
+                         "store":  "Walmart",
+                         "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.5â€“1.9 lb, 20 Grams of Protein per 4 oz Serving",
+                         "cos":  0.7412,
+                         "score":  0.953382,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -161,12 +181,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "walnuts",
-                         "commodity":  "Walnuts",
-                         "store":  "Walmart",
-                         "product":  "Fisher Chef\u0027s Naturals Gluten Free, No Preservatives, Non-GM",
-                         "cos":  0.5769,
-                         "score":  0.939885,
+                         "id":  "cranberry-sauce",
+                         "commodity":  "Cranberry Sauce (canned)",
+                         "store":  "Family Fare",
+                         "product":  "Ocean Spray Sauce, Cranberry, Jellied 14 Oz",
+                         "cos":  0.6978,
+                         "score":  0.937355,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -177,6 +197,16 @@
                          "product":  "Simply Nature 93 07 Lean Organic Grass Fed Ground Beef 1 LB",
                          "cos":  0.7039,
                          "score":  0.930861,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "frozen-lasagna",
+                         "commodity":  "Frozen Lasagna",
+                         "store":  "Walmart",
+                         "product":  "Stouffers Meat Lovers Lasagna, Family Size, Oven Ready Lasagna, Frozen Dinners 34 oz",
+                         "cos":  0.7185,
+                         "score":  0.929779,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -197,16 +227,6 @@
                          "product":  "Kroger 80/20 Ground Beef Patties",
                          "cos":  0.6717,
                          "score":  0.92749,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "breakfast-sandwiches",
-                         "commodity":  "Frozen Breakfast Sandwiches",
-                         "store":  "Family Fare",
-                         "product":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
-                         "cos":  0.7327,
-                         "score":  0.926773,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -251,16 +271,6 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "frozen-lasagna",
-                         "commodity":  "Frozen Lasagna",
-                         "store":  "Walmart",
-                         "product":  "Stouffers Meat Lovers Lasagna, Family Size, Oven Ready Lasagna, Frozen Dinners 34 oz",
-                         "cos":  0.7146,
-                         "score":  0.917086,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "chicken-thighs",
                          "commodity":  "Chicken Thighs / Drumsticks",
                          "store":  "Baker\u0027s",
@@ -297,6 +307,16 @@
                          "product":  "Simple Truth Dairy Free Chocolate Almond Milk Half Gallon",
                          "cos":  0.7017,
                          "score":  0.903096,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "iced-tea",
+                         "commodity":  "Iced Tea (bottled/gallon)",
+                         "store":  "Baker\u0027s",
+                         "product":  "Kroger Unsweetened Tea",
+                         "cos":  0.6348,
+                         "score":  0.902958,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]

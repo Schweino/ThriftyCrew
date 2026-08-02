@@ -1,8 +1,21 @@
 ﻿{
-    "generated":  "2026-08-01 17:53",
-    "compare_file":  "comparison-2026-08-01.json",
-    "finding_count":  1,
+    "generated":  "2026-08-02 09:03",
+    "compare_file":  "comparison-2026-08-02.json",
+    "finding_count":  2,
     "findings":  [
+                     {
+                         "id":  "furniture-polish",
+                         "commodity":  "Furniture Polish / Dusting Spray",
+                         "store":  "Sam\u0027s Club",
+                         "unit":  "oz",
+                         "published":  0.1439,
+                         "as_pack_total":  0.4317,
+                         "peer_cheapest":  0.2392,
+                         "count":  3,
+                         "size":  "3 ct 29 oz",
+                         "ad":  "$12.52",
+                         "item":  "Pledge Furniture Enhancing Polish Spray, Lemon, 3ct., 29 oz."
+                     },
                      {
                          "id":  "hummus",
                          "commodity":  "Hummus",
