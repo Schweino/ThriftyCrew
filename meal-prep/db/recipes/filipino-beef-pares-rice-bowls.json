@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Filipino Beef Pares Rice Bowls",
     "slug":  "filipino-beef-pares-rice-bowls",
     "cuisine":  "Filipino",
@@ -69,7 +69,7 @@
                    ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
-                    "Cut the chuck roast into large cubes. Sear them hard in a little oil, in batches, until they have real color on at least two sides.",
+                    "Cut the chuck roast into large cubes. Sear them hard in a little vegetable oil, in batches, until they have real color on at least two sides.",
                     "Add chopped onion, half the garlic, and the ginger to the pot and cook until the onion goes soft and translucent.",
                     "Pour in the chicken broth, soy sauce, and brown sugar. Add the bay leaves, black pepper, and salt, scraping the browned bits off the bottom.",
                     "Cover and simmer low for 2 to 2.5 hours, until the beef pulls apart with a spoon. Add water if the pot gets too dry.",
@@ -158,8 +158,8 @@
                                    "canon":  "Ginger",
                                    "grams":  52,
                                    "buy":  "8.75 tbsp",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -190,8 +190,8 @@
                                    "canon":  "Rice",
                                    "grams":  684,
                                    "buy":  "3.75 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -216,7 +216,7 @@
                                           "3.75 cups dry rice"
                                       ],
                  "steps":  [
-                               "Sear cubed chuck roast in batches until well browned.",
+                               "Sear cubed chuck roast in batches in a little vegetable oil until well browned.",
                                "Cook onion, garlic, and ginger in the same pot until soft.",
                                "Add broth, soy sauce, brown sugar, bay leaves, black pepper, and salt and simmer covered 2 to 2.5 hours.",
                                "Uncover and reduce the sauce until it coats the beef.",

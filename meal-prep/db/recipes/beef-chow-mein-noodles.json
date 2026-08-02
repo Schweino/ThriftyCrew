@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Beef Chow Mein Noodles",
     "slug":  "beef-chow-mein-noodles",
     "cuisine":  "Chinese",
@@ -18,7 +18,23 @@
                  "cost_ps":  "4.61"
              },
     "intro_html":  "Takeout-style chow mein with ground beef, cabbage, carrots, egg ribbons, and a proper soy-oyster sauce that clings to every noodle. Each bowl runs \u003cstrong\u003e706 calories\u003c/strong\u003e with \u003cstrong\u003e38 grams of protein\u003c/strong\u003e at about \u003cstrong\u003e$4.61 a serving\u003c/strong\u003e (at everyday cost). It still comes in cheaper than one restaurant plate.",
-    "ingredients_display": ["\u003cstrong\u003eLo Mein Noodles (Simply Asia):\u003c/strong\u003e 49.5 oz dry (1400 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (147 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3 lb (1400 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 6.25 cups (315 g)","\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 7 large eggs (350 g)","\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1 (980 g)","\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 7 (427 g)","\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cups (224 g)","\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 6.75 oz (189 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.25 lb (168 g)","\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 3.5 tbsp (44 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)","\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 3.5 tbsp (27 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003eLo Mein Noodles (Simply Asia):\u003c/strong\u003e 49.5 oz dry (1400 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (147 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3 lb (1400 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 6.25 cups (315 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 7 large eggs (350 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1 (980 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 7 (427 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cups (224 g)",
+                                "\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 6.75 oz (189 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.25 lb (168 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 3.5 tbsp (44 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 3.5 tbsp (27 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Lo Mein Noodles, 49.5 oz dry: ~$5.37. \u003cstrong\u003eBuy 4 14oz packs: $6.09.\u003c/strong\u003e",
@@ -47,7 +63,7 @@
                    ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
-                    "Boil the lo mein noodles 1 minute short of package directions, drain, rinse briefly with cool water, and toss with a splash of the oil so they do not clump.",
+                    "Boil the lo mein noodles 1 minute short of package directions, drain, rinse briefly with cool water, and toss with a splash of the vegetable oil so they do not clump.",
                     "Whisk the sauce: soy sauce, oyster sauce, chicken broth, sugar, and flour. Set it by the stove.",
                     "Heat a little oil in your largest skillet or wok over high heat. Scramble the beaten eggs into ribbons, then set them aside.",
                     "Add more oil and brown the ground beef with the garlic, breaking it up, until no pink remains; ground beef should hit 160F. Season with salt and pepper.",
@@ -91,8 +107,8 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1400,
                                    "buy":  "3 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Green Onions",
@@ -112,15 +128,15 @@
                                    "item":  "Green Cabbage",
                                    "grams":  980,
                                    "buy":  "1",
-                                   "bid":"cabbage",
-                                   "gpu":453.592
+                                   "bid":  "cabbage",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Carrots",
                                    "grams":  427,
                                    "buy":  "7",
-                                   "bid":"carrots",
-                                   "gpu":453.592
+                                   "bid":  "carrots",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Soy Sauce",
@@ -161,8 +177,8 @@
                                    "item":  "All-Purpose Flour",
                                    "grams":  27,
                                    "buy":  "3.5 tbsp",
-                                   "bid":"flour",
-                                   "gpu":453.592
+                                   "bid":  "flour",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Salt",
@@ -191,7 +207,7 @@
                                           "6.75 oz oyster sauce"
                                       ],
                  "steps":  [
-                               "Boil the noodles 1 minute short of package time, drain, and toss with a little oil.",
+                               "Boil the noodles 1 minute short of package time, drain, and toss with a little vegetable oil.",
                                "Whisk soy sauce, oyster sauce, broth, sugar, and flour into a sauce.",
                                "Scramble the eggs into ribbons and set aside.",
                                "Brown the ground beef with garlic to 160F, then stir-fry the cabbage and carrots until just wilted.",

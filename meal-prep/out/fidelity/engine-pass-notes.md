@@ -77,6 +77,25 @@ The measure-vs-gram mismatch class - the printed measure and the gram figure can
 - Fetch-blocked (audit could not verify, nothing known wrong): 2 x thespruceeats 403s, 1 dead source in
   chunk 03.
 
+## The REVERSE gate: measured, NOT armed (2026-08-02)
+
+spec-guards now hard-fails a recipe that BUYS an ingredient no step uses. The symmetric invariant - a step
+that USES something the recipe never bought - is not gated, and the last writer wave found exactly why it
+matters: **slow-cooker-dr-pepper-pulled-pork-bowls** references "zero-sugar soda" in `intro_html`, a
+`shop_smart` line AND a `make_it` step, while no soda appears anywhere in the costed list. The braise
+cannot be made as shopped, and a used-ingredient gate alone will never see it.
+
+I measured a reverse gate and did not ship it, because I could not get it clean in the time I had:
+bounding the scan to the 275 food names this estate knows gives **295 raw hits**, almost all containment
+artifacts (a step saying "brown sugar" trips the shorter known name "Sugar"). Substring containment cuts
+it to 31; token-subset containment moves it to 44 by breaking on plurals ("Green Bell Pepper" against a
+bought "Green Bell Peppers"). It needs stemming in the token comparison, and then the survivors want
+reading one by one - "Fries" in beef-rendang and "Corn Tortillas" in the enchilada skillet look real, and
+a handful of others are probably still noise.
+
+A gate that cries wolf gets switched off, so this stays a worklist item rather than a half-tuned check.
+The measurement above is the head start.
+
 ## Related standing items
 
 - ZERO-QTY (16) and ABSURD-UNIT (79) remain baselined in `out\spec-contradictions-baseline.json` - the

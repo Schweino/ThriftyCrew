@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Curried Sausages with Rice",
     "slug":  "curried-sausages-with-rice",
     "cuisine":  "australian",
@@ -69,7 +69,7 @@
                    ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
-                    "Heat the vegetable oil in a large deep skillet and brown the sausages whole on all sides. Take them out and set them aside once they have color.",
+                    "Heat the vegetable oil in a large deep skillet and brown the bratwurst whole on all sides. Take them out and set them aside once they have color.",
                     "Slice the onions, slice the carrots into coins and mince the garlic.",
                     "Cook the onions in the sausage drippings until soft, then add the garlic and the carrots.",
                     "Sprinkle the flour and the curry powder over the vegetables and stir for a full minute. Cooking the curry powder in the fat is what wakes it up, and skipping this leaves it tasting dusty.",
@@ -126,8 +126,8 @@
                                    "canon":  "Carrots",
                                    "grams":  214,
                                    "buy":  "3.5",
-                                   "bid":"carrots",
-                                   "gpu":453.592
+                                   "bid":  "carrots",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Curry Powder",
@@ -142,8 +142,8 @@
                                    "canon":  "All-Purpose Flour",
                                    "grams":  84,
                                    "buy":  "10.5 tbsp",
-                                   "bid":"flour",
-                                   "gpu":453.592
+                                   "bid":  "flour",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -182,16 +182,16 @@
                                    "canon":  "Frozen Green Peas",
                                    "grams":  469,
                                    "buy":  "1 lb",
-                                   "bid":"frozen-peas",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-peas",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Rice",
                                    "canon":  "Rice",
                                    "grams":  770,
                                    "buy":  "4.25 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -215,7 +215,7 @@
                                           "1.75 tbsp vegetable oil"
                                       ],
                  "steps":  [
-                               "Brown the whole sausages in vegetable oil and set them aside.",
+                               "Brown the whole bratwurst in vegetable oil and set them aside.",
                                "Cook the sliced onions in the drippings, then add the garlic and sliced carrots.",
                                "Stir the flour and curry powder into the vegetables and cook for a minute.",
                                "Stream in the chicken broth with the sugar and simmer until the gravy thickens.",

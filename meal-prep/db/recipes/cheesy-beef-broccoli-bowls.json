@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Cheesy Beef and Broccoli Rice Bowls",
     "slug":  "cheesy-beef-broccoli-bowls",
     "cuisine":  "American",
@@ -39,7 +39,7 @@
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Cook the rice. Three and a half cups dry jasmine with water per the package, then set aside.",
-                    "Brown the ground beef in a large skillet over medium-high heat, breaking it up. Drain any excess.",
+                    "Brown the ground beef in a large skillet over medium-high heat, breaking it up, and season it with the garlic powder, onion powder, salt, and black pepper. Drain any excess.",
                     "Add the broccoli and the beef broth, cover, and steam a few minutes until the broccoli is bright and tender.",
                     "Combine the rice, beef, and broccoli in your big pot and stir. Fold in the shredded cheddar."
                 ],
@@ -59,22 +59,22 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1587,
                                    "buy":  "3.5 lb raw",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.5 cups dry jasmine",
-                                   "bid":"jasmine-rice",
-                                   "gpu":28.3495
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Broccoli Florets",
                                    "grams":  595,
                                    "buy":  "7 cups (about 21 oz)",
-                                   "bid":"frozen-broccoli-florets",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Fat Free Cheddar",
@@ -134,7 +134,7 @@
                                       ],
                  "steps":  [
                                "Cook 3.5 cups dry jasmine rice per the package and set aside.",
-                               "Brown the ground beef in a large skillet and drain any excess.",
+                               "Brown the ground beef, season it with garlic powder, onion powder, salt, and black pepper, and drain any excess.",
                                "Add the broccoli and beef broth, cover, and steam until tender.",
                                "Combine rice, beef, and broccoli and fold in the cheddar.",
                                "Weigh the batch and divide into 14 containers."

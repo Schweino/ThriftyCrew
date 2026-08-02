@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Claypot Chicken and Mushroom Rice",
     "slug":  "claypot-chicken-mushroom-rice",
     "cuisine":  "Chinese",
@@ -66,7 +66,7 @@
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Cut the chicken thighs into bite sized pieces and marinate them with the oyster sauce, soy sauce, sesame oil, and a little salt and pepper for at least 30 minutes.",
-                    "Slice the mushrooms and the sausage thin. Thin matters, because everything on top needs to cook through in the same time the rice does.",
+                    "Slice the mushrooms and the bratwurst thin. Thin matters, because everything on top needs to cook through in the same time the rice does.",
                     "Rinse the rice until the water runs mostly clear, then put it in a heavy pot or rice cooker with the chicken broth.",
                     "Lay the marinated chicken, mushrooms, and sausage across the top of the rice. Do not stir. The rice steams underneath while the toppings drip down into it, and stirring destroys the whole method.",
                     "Cook covered on low for about 25 minutes, or run a standard rice cooker cycle, then let it sit covered off the heat for 10 more minutes.",
@@ -90,8 +90,8 @@
                                    "canon":  "Boneless Skinless Chicken Thigh",
                                    "grams":  1588,
                                    "buy":  "3.5 lb",
-                                   "bid":"boneless-skinless-chicken-thigh",
-                                   "gpu":453.592
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Oyster Sauce",
@@ -146,16 +146,16 @@
                                    "canon":  "Rice",
                                    "grams":  1295,
                                    "buy":  "7 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "White Mushrooms",
                                    "canon":  "White Mushrooms",
                                    "grams":  220,
                                    "buy":  "7.75 oz",
-                                   "bid":"mushrooms",
-                                   "gpu":28.3495
+                                   "bid":  "mushrooms",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Bratwurst",
@@ -196,7 +196,7 @@
                                       ],
                  "steps":  [
                                "Marinate the cut chicken thighs in oyster sauce, soy sauce, and sesame oil for 30 minutes.",
-                               "Slice the mushrooms and sausage thin.",
+                               "Slice the mushrooms and bratwurst thin.",
                                "Rinse the rice and combine it with the chicken broth in a heavy pot or rice cooker.",
                                "Lay the chicken, mushrooms, and sausage on top without stirring and cook covered about 25 minutes.",
                                "Rest 10 minutes, fold everything together, top with green onions, and portion into 14 containers."

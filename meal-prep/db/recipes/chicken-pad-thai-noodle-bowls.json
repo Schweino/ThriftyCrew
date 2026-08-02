@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Chicken Pad Thai Noodle Bowls",
     "slug":  "chicken-pad-thai-noodle-bowls",
     "cuisine":  "Thai",
@@ -18,7 +18,21 @@
                  "cost_ps":  "4.10"
              },
     "intro_html":  "Sweet, tangy, salty pad thai with chicken, scrambled egg, and a peanut crunch on top. Each bowl brings \u003cstrong\u003e36 grams of protein\u003c/strong\u003e at 791 calories for about \u003cstrong\u003e$4.10\u003c/strong\u003e (at everyday cost), and it is still a fraction of what the Thai place charges.",
-    "ingredients_display": ["\u003cstrong\u003eRice Noodles (Thai Kitchen):\u003c/strong\u003e 30.75 oz dry (875 g)","\u003cstrong\u003eLime Juice:\u003c/strong\u003e 0.75 cups (158 g)","\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1.25 cups (284 g)","\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 1 cups (252 g)","\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 6.75 oz (189 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1 cups (245 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 cups (308 g)","\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1050 g)","\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 14 large eggs (700 g)","\u003cstrong\u003ePeanuts (Great Value):\u003c/strong\u003e 1.75 cups (256 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display":  [
+                                "\u003cstrong\u003eRice Noodles (Thai Kitchen):\u003c/strong\u003e 30.75 oz dry (875 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 0.75 cups (158 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1.25 cups (284 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 1 cups (252 g)",
+                                "\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 6.75 oz (189 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1 cups (245 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 cups (308 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1050 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 14 large eggs (700 g)",
+                                "\u003cstrong\u003ePeanuts (Great Value):\u003c/strong\u003e 1.75 cups (256 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
+                            ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Rice Noodles, 30.75 oz dry: ~$10.49. \u003cstrong\u003eBuy 3 14oz boxs: $14.28.\u003c/strong\u003e",
@@ -38,12 +52,16 @@
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $16.80 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.85. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.10 a bowl\u003c/strong\u003e (at everyday cost) for chicken pad thai with all the fixings. Restaurant pad thai runs $13 to $16 a plate, so even this noodle bowl saves you around $10 every single serving.",
-    "shop_smart":  ["Rice noodles are the big line item here. If your store has an international aisle or you can hit an Asian market, the same noodles often drop to half the mainstream-brand price.","Fourteen eggs do heavy protein lifting for very little money. Eggs are still one of the cheapest proteins per gram in the store.","Fish sauce, oyster sauce, and lime juice look like a spendy haul, but they are pantry bottles. Counted at what this batch actually uses, they add only a little per bowl, then keep flavoring batches for months."],
+    "shop_smart":  [
+                       "Rice noodles are the big line item here. If your store has an international aisle or you can hit an Asian market, the same noodles often drop to half the mainstream-brand price.",
+                       "Fourteen eggs do heavy protein lifting for very little money. Eggs are still one of the cheapest proteins per gram in the store.",
+                       "Fish sauce, oyster sauce, and lime juice look like a spendy haul, but they are pantry bottles. Counted at what this batch actually uses, they add only a little per bowl, then keep flavoring batches for months."
+                   ],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Soak the rice noodles in hot tap water 20 to 30 minutes until pliable but not fully soft, then drain. They finish cooking in the pot.",
                     "Stir the sauce together: fish sauce, brown sugar, oyster sauce, and lime juice. Stir until the sugar dissolves.",
-                    "Slice the chicken thin, season with salt and pepper, and sear it in batches in a little of the oil over high heat until cooked through to 165 F. Set aside.",
+                    "Slice the chicken thin, season with salt and pepper, and sear it in batches in a little of the vegetable oil over high heat until cooked through to 165 F. Set aside.",
                     "In the same pot, cook the sliced onion and garlic in more oil until fragrant. Push everything to one side, pour in the beaten eggs, and scramble until just set.",
                     "Add the drained noodles and the sauce. Toss and fry 2 to 3 minutes, until the noodles soak up the sauce and turn glossy. Return the chicken and toss once more.",
                     "Portion into 14 containers and top each with a spoonful of chopped peanuts so they keep their crunch."
@@ -176,7 +194,7 @@
                  "steps":  [
                                "Soak rice noodles in hot water until pliable, then drain.",
                                "Mix fish sauce, brown sugar, oyster sauce, and lime juice into the pad thai sauce.",
-                               "Sear sliced chicken to 165 F, then cook onion and garlic and scramble the eggs in the same pot.",
+                               "Sear sliced chicken to 165 F in a little vegetable oil, then cook onion and garlic and scramble the eggs in the same pot.",
                                "Add noodles and sauce, toss until glossy, and return the chicken.",
                                "Portion into 14 containers and top with chopped peanuts."
                            ]

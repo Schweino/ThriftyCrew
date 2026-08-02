@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Cottage Pie",
     "slug":  "cottage-pie",
     "cuisine":  "British",
@@ -84,7 +84,7 @@
                     "Add the chopped onion, carrots, celery, and garlic and cook until softened, about 8 minutes.",
                     "Stir in the flour and tomato paste and cook 2 minutes, then pour in the beef broth and Worcestershire sauce with the thyme and bay leaves.",
                     "Simmer 20 to 25 minutes until the filling is thick enough to hold a line when you drag a spoon through it. Pull the bay leaves.",
-                    "Drain and mash the potatoes with the milk and butter, season them well, and spread them over the filling in a large baking dish or two sheet pans.",
+                    "Drain and mash the potatoes with the milk and butter, season them well with the salt and black pepper, and spread them over the filling in a large baking dish or two sheet pans.",
                     "Scatter the parmesan on top and bake at 400F for 25 to 30 minutes, until the top is browned and the edges bubble."
                 ],
     "portion_html":  "Weigh the full pan, subtract the empty-pan number you wrote down, and divide by 14. Easier still, score the baked pie into 14 equal squares with a knife and lift them out one at a time. Each serving lands at \u003cstrong\u003e584 calories with 35 grams of protein\u003c/strong\u003e.",
@@ -128,8 +128,8 @@
                                    "canon":  "Carrots",
                                    "grams":  128,
                                    "buy":  "2",
-                                   "bid":"carrots",
-                                   "gpu":453.592
+                                   "bid":  "carrots",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Celery",
@@ -144,16 +144,16 @@
                                    "canon":  "93/7 Ground Beef",
                                    "grams":  1575,
                                    "buy":  "3.5 lb",
-                                   "bid":"93-7-ground-beef",
-                                   "gpu":453.592
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "All-Purpose Flour",
                                    "canon":  "All-Purpose Flour",
                                    "grams":  84,
                                    "buy":  "10.5 tbsp",
-                                   "bid":"flour",
-                                   "gpu":453.592
+                                   "bid":  "flour",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Tomato Paste",
@@ -176,8 +176,8 @@
                                    "canon":  "Worcestershire Sauce",
                                    "grams":  71,
                                    "buy":  "4.25 tbsp",
-                                   "bid":"worcestershire",
-                                   "gpu":29.57
+                                   "bid":  "worcestershire",
+                                   "gpu":  29.57
                                },
                                {
                                    "item":  "Dried Thyme",
@@ -216,8 +216,8 @@
                                    "canon":  "Potato",
                                    "grams":  4526,
                                    "buy":  "21",
-                                   "bid":"russet-potatoes",
-                                   "gpu":453.592
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Milk",
@@ -240,8 +240,8 @@
                                    "canon":  "Parmesan Cheese",
                                    "grams":  42,
                                    "buy":  "1.5 oz",
-                                   "bid":"parmesan",
-                                   "gpu":28.3495
+                                   "bid":  "parmesan",
+                                   "gpu":  28.3495
                                }
                            ]
                },
@@ -272,7 +272,7 @@
                                "Boil the peeled potatoes until tender.",
                                "Brown the ground beef, then soften onion, carrot, celery, and garlic with it.",
                                "Stir in flour and tomato paste, add broth, Worcestershire, thyme, and bay, and simmer until thick.",
-                               "Mash the potatoes with milk and butter and spread them over the filling.",
+                               "Mash the potatoes with milk and butter, season with salt and black pepper, and spread them over the filling.",
                                "Top with parmesan, bake at 400F for 25 to 30 minutes, and cut into 14 squares."
                            ]
              },

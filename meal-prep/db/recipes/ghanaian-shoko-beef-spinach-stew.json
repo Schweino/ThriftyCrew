@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Ghanaian Shoko (Beef and Spinach Stew)",
     "slug":  "ghanaian-shoko-beef-spinach-stew",
     "cuisine":  "Ghanaian",
@@ -77,7 +77,7 @@
                     "Cut the chuck into bite sized cubes, season with salt and pepper, and brown them hard in oil in batches. Set the beef aside.",
                     "Blend the diced tomatoes, a large share of the onion, the bell peppers, jalapeno, garlic, and ginger into a rough puree.",
                     "Cook the remaining chopped onion in the same pot until soft, then pour in the puree and fry it, stirring often, until it darkens and the raw tomato smell is gone.",
-                    "Grind the peanuts to a coarse meal and stir them in along with the coriander, cumin, and other pantry spices.",
+                    "Grind the peanuts to a coarse meal and stir them in along with the coriander, cumin, garam masala, and other pantry spices.",
                     "Return the beef with the beef broth, cover, and simmer 60 to 90 minutes until the beef is fork tender and the sauce has tightened.",
                     "Stir in the chopped spinach and cook 5 more minutes, just until it is fully wilted and folded through.",
                     "Cook the rice separately, then taste the stew and correct the salt."
@@ -139,32 +139,32 @@
                                    "canon":  "Green Bell Peppers",
                                    "grams":  280,
                                    "buy":  "2.3",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Frozen Chopped Spinach",
                                    "canon":  "Frozen Chopped Spinach",
                                    "grams":  662,
                                    "buy":  "1.5 lb",
-                                   "bid":"frozen-chopped-spinach",
-                                   "gpu":28.3495
+                                   "bid":  "frozen-chopped-spinach",
+                                   "gpu":  28.3495
                                },
                                {
                                    "item":  "Jalapeno",
                                    "canon":  "Jalapeno",
                                    "grams":  98,
                                    "buy":  "11 tbsp",
-                                   "bid":"jalapenos",
-                                   "gpu":453.592
+                                   "bid":  "jalapenos",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Ginger",
                                    "canon":  "Ginger",
                                    "grams":  14,
                                    "buy":  "2.25 tbsp",
-                                   "bid":"fresh-ginger",
-                                   "gpu":453.592
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Ground Coriander",
@@ -235,8 +235,8 @@
                                    "canon":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                }
                            ]
                },
@@ -264,7 +264,7 @@
                  "steps":  [
                                "Brown cubed chuck roast in batches and set it aside.",
                                "Blend tomatoes, onion, bell pepper, jalapeno, garlic, and ginger into a puree.",
-                               "Fry the puree in the pot until it darkens, then stir in ground peanuts and spices.",
+                               "Fry the puree in the pot until it darkens, then stir in ground peanuts, coriander, cumin, and garam masala.",
                                "Return the beef with broth and simmer 60 to 90 minutes until tender.",
                                "Fold in the spinach, cook the rice, and portion into 14 containers."
                            ]

@@ -1,4 +1,4 @@
-{
+﻿{
     "name":  "Louisiana Red Beans and Rice with Sausage",
     "slug":  "louisiana-red-beans-and-rice-with-sausage",
     "cuisine":  "Cajun/Creole",
@@ -77,7 +77,7 @@
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Slice the smoked sausage into coins and brown them in the vegetable oil in a large pot, then set them aside.",
                     "Add the diced onion, celery, and green bell pepper to the same pot and cook until softened and the bottom of the pot picks up color.",
-                    "Stir in the garlic and the dried seasonings and cook for a minute so the spices bloom in the fat.",
+                    "Stir in the garlic, the dried parsley, dried thyme, dried oregano, paprika, and Cajun seasoning and cook for a minute so the spices bloom in the fat.",
                     "Add the kidney beans with their liquid and the chicken broth, then return the sausage to the pot.",
                     "Simmer uncovered for at least forty minutes, mashing some of the beans against the side of the pot to thicken the gravy.",
                     "Cook the rice separately according to the package while the beans simmer.",
@@ -116,8 +116,8 @@
                                    "canon":  "Smoked Turkey Sausage",
                                    "grams":  985,
                                    "buy":  "2.25 lb",
-                                   "bid":"smoked-turkey-sausage",
-                                   "gpu":453.592
+                                   "bid":  "smoked-turkey-sausage",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -140,8 +140,8 @@
                                    "canon":  "Green Bell Peppers",
                                    "grams":  378,
                                    "buy":  "3",
-                                   "bid":"green-bell-pepper",
-                                   "gpu":120
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  120
                                },
                                {
                                    "item":  "Garlic",
@@ -220,8 +220,8 @@
                                    "canon":  "Rice",
                                    "grams":  967,
                                    "buy":  "5.25 cups dry",
-                                   "bid":"rice",
-                                   "gpu":453.592
+                                   "bid":  "rice",
+                                   "gpu":  453.592
                                },
                                {
                                    "item":  "Salt",
@@ -255,7 +255,7 @@
                  "steps":  [
                                "Slice and brown the smoked sausage, then set it aside.",
                                "Cook the onion, celery, and bell pepper in the same pot until soft.",
-                               "Add garlic and dried seasonings and bloom them in the fat.",
+                               "Add garlic, dried parsley, dried thyme, dried oregano, paprika, and Cajun seasoning and bloom them in the fat.",
                                "Add the beans, broth, and sausage and simmer at least forty minutes, mashing some beans to thicken.",
                                "Cook the rice separately.",
                                "Season, remove the bay leaves, and portion beans over rice into 14 containers."
