@@ -20,6 +20,15 @@ RAILS:
   number looks wrong to you, flag it in your report instead of fixing it silently.
 - You do not touch: food-macros-db.json, ingredient-map.json, commodities.json, anything in grocery\, or
   post visibility. Those belong to other stages.
+- EVERY INGREDIENT THE SHOPPER BUYS MUST BE USED BY A STEP. The ingredient list and your steps are two
+  artifacts derived from one source by two different stages, and on 2026-08-02 a sweep of 500 published
+  recipes found 517 ingredients that were bought, costed and never mentioned in a single instruction - a
+  General Tso card that sold people rice vinegar, ground ginger and red pepper flakes its sauce step never
+  touched. spec-guards now HARD FAILS on this, so a recipe with an orphaned ingredient cannot publish.
+  Before you finish a card, read the costed list and the steps against each other.
+  The reverse is equally binding: NEVER write a step that uses something the list does not buy. If a
+  recipe needs an ingredient nobody purchased, say so in your report and leave the recipe alone - inventing
+  a workaround, or quietly dropping the ingredient, both ship a recipe that cannot be cooked as shopped.
 
 MONEY IN PROSE: the only dollar figure prose may carry is the spec's own cost_ps (plus the site's "$1 a
 month" membership line). No per-line costs in shop_smart - reference package sizes instead (r300 made

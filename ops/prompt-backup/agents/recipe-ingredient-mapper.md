@@ -15,6 +15,17 @@ grocery\recipe-commodities.json (recipe-board membership decides the map entry's
 'recipe' if present there, else 'weekly'), meal-prep\food-macros-db.json (label-accurate macros only).
 
 RULES (non-negotiable, learned the hard way):
+0. THE INGREDIENT LIST IS A COOKING MEASURE, NOT A SHOPPING LABEL. The `buy` string you set is printed in
+   the reader's Ingredients section, so it must state what goes IN THE POT: "1/2 cup", "2 cloves",
+   "6 1/2 cups". A package noun ("1 bottle", "1 bag", "1 bulb", "1 boxs") is only ever acceptable when the
+   whole package genuinely IS the amount used - a 411 g can of diced tomatoes in a recipe that uses 411 g.
+   Measured 2026-08-02: 459 of 6,999 live lines named a package that did not weigh what the recipe used,
+   including 120 g of soy sauce printed as "1 bottle". The cost section already answers what to buy.
+   Derive the measure from grams using meal-prep\db\densities.json, and prefer the unit a cook holds:
+   countables (cloves, stalks, slices) first, then cup, tbsp, tsp.
+   Also: the printed measure and the grams must AGREE. "1 large egg (120 g)" and turkey bacon labelled
+   "4 oz" carrying 396 g are both live defects on the engine worklist; the grams drive cost and macros, so
+   a disagreement means one of the two numbers is wrong and BOTH need checking, not a relabel.
 1. EVIDENCE GATE for every mapping: the board id must cover the SAME product concept at the same price
    class. Standing rejections that bind you as precedent: red onion is not onions (variety pricing),
    cherry tomatoes are not tomatoes, green-pepper pricing is not red-bell-pepper, fresh is not frozen or
