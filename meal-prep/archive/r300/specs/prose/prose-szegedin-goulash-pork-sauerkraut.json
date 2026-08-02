@@ -1,57 +1,57 @@
-{
-  "slug": "szegedin-goulash-pork-sauerkraut",
-  "intro_html": "Szegedin goulash, or szekely gulyas, is the Hungarian braise that pairs pork shoulder with sauerkraut and a serious amount of sweet paprika, then finishes it with sour cream. It is tangy, smoky and rich all at once, and nothing else in the library tastes like it. It carries 42 grams of protein at about $2.48 a bowl.",
-  "cost_closing_html": "About <strong>$2.48 a bowl</strong> for a slow braised Hungarian classic with the sour cream finish already in it. Nobody in Omaha is selling you this plate for that.",
-  "shop_smart": [
-    "<strong>Paprika is the recipe, so buy it right.</strong> Hungarian sweet paprika costs more up front but one container flavors many batches. Old, faded paprika tastes like red dust and will sink this dish.",
-    "<strong>A quarter pound of bacon does a lot of work.</strong> You are rendering it for fat and smoke, not eating bacon strips, so the smallest package you can find covers several batches.",
-    "<strong>Light sour cream is cheaper and behaves better.</strong> One sixteen ounce tub carries the batch, and tempering it in off the heat keeps it from breaking.",
-    "<strong>Canned sauerkraut beats the jar on price.</strong> Two cans cover this and the long braise smooths out any difference."
-  ],
-  "make_it": [
-    "Weigh your empty mixing pot and write the number down for portioning later.",
-    "Cut the pork shoulder into large cubes and pat them dry. Dice the onions and the green bell peppers, and drain the sauerkraut.",
-    "Render the chopped bacon in a heavy pot until the fat runs, then brown the pork cubes in that fat in batches and set them aside.",
-    "Cook the onions and peppers in the pot until soft, then add the garlic for a minute.",
-    "Pull the pot off the heat before you stir in the paprika. Paprika scorches fast over direct heat and turns bitter, and that single step is what separates a good goulash from a ruined one.",
-    "Return the pot to the burner, add the diced tomatoes, beef broth, caraway seeds and bay leaves, and bring it to a simmer.",
-    "Return the pork, cover, and braise low until the meat is fork tender, then stir in the sauerkraut and cook another stretch so it softens into the sauce.",
-    "Kill the heat, temper the sour cream with a ladle of the hot liquid, then stir it back into the pot. Cook the rice separately to serve underneath."
-  ],
-  "portion_html": "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and ladle the exact amount over a scoop of rice in each container. Every bowl lands near 665 calories and 42 grams of protein.",
-  "upsell_html": "Hungarian braises for about $2.48 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-  "head": {
-    "description": "Szegedin goulash, the Hungarian pork and sauerkraut paprika braise finished with sour cream, built for 14 servings. 665 calories, 42g protein, about $2.48 per serving.",
-    "keywords": "szegedin goulash, szekely gulyas, hungarian pork and sauerkraut, paprika stew, pork shoulder braise, budget meal prep",
-    "prepTime": "PT25M",
-    "cookTime": "PT2H",
-    "totalTime": "PT2H25M",
-    "recipeIngredient": [
-      "5.25 lb pork shoulder",
-      "3.5 cups sauerkraut",
-      "0.25 lb hickory smoked bacon",
-      "5 yellow onions",
-      "3.5 green bell peppers",
-      "4 tbsp garlic",
-      "1.5 cans diced tomatoes",
-      "0.25 oz caraway seeds",
-      "3.75 lb beef broth",
-      "1.25 cups light sour cream",
-      "3.75 cups dry rice"
-    ],
-    "steps": [
-      "Render the chopped bacon, then brown the cubed pork shoulder in the fat in batches.",
-      "Cook the onions and green peppers until soft, add the garlic, then take the pot off the heat and stir in the paprika so it does not scorch.",
-      "Add the diced tomatoes, beef broth, caraway and bay leaves and bring to a simmer.",
-      "Return the pork, braise covered until fork tender, then add the drained sauerkraut.",
-      "Off the heat, temper the sour cream with hot liquid and stir it in. Serve over rice."
-    ],
-    "step_names": [
-      "Render bacon and brown the pork",
-      "Bloom the paprika off the heat",
-      "Build the braising liquid",
-      "Braise and add sauerkraut",
-      "Finish with sour cream"
-    ]
-  }
+﻿{
+    "slug":  "szegedin-goulash-pork-sauerkraut",
+    "intro_html":  "Szegedin goulash, or szekely gulyas, is the Hungarian braise that pairs pork shoulder with sauerkraut and a serious amount of sweet paprika, then finishes it with sour cream. It is tangy, smoky and rich all at once, and nothing else in the library tastes like it. It carries 42 grams of protein at about $4.13 a bowl (at everyday cost).",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.13 a bowl\u003c/strong\u003e (at everyday cost) for a slow braised Hungarian classic with the sour cream finish already in it. Nobody in Omaha is selling you this plate for that.",
+    "shop_smart":  [
+                       "\u003cstrong\u003ePaprika is the recipe, so buy it right.\u003c/strong\u003e Hungarian sweet paprika costs more up front but one container flavors many batches. Old, faded paprika tastes like red dust and will sink this dish.",
+                       "\u003cstrong\u003eA quarter pound of bacon does a lot of work.\u003c/strong\u003e You are rendering it for fat and smoke, not eating bacon strips, so the smallest package you can find covers several batches.",
+                       "\u003cstrong\u003eLight sour cream is cheaper and behaves better.\u003c/strong\u003e One sixteen ounce tub carries the batch, and tempering it in off the heat keeps it from breaking.",
+                       "\u003cstrong\u003eCanned sauerkraut beats the jar on price.\u003c/strong\u003e Two cans cover this and the long braise smooths out any difference."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the pork shoulder into large cubes and pat them dry. Dice the onions and the green bell peppers, and drain the sauerkraut.",
+                    "Render the chopped bacon in a heavy pot until the fat runs, then brown the pork cubes in that fat in batches and set them aside.",
+                    "Cook the onions and peppers in the pot until soft, then add the garlic for a minute.",
+                    "Pull the pot off the heat before you stir in the paprika. Paprika scorches fast over direct heat and turns bitter, and that single step is what separates a good goulash from a ruined one.",
+                    "Return the pot to the burner, add the diced tomatoes, beef broth, caraway seeds and bay leaves, and bring it to a simmer.",
+                    "Return the pork, cover, and braise low until the meat is fork tender, then stir in the sauerkraut and cook another stretch so it softens into the sauce.",
+                    "Kill the heat, temper the sour cream with a ladle of the hot liquid, then stir it back into the pot. Cook the rice separately to serve underneath."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and ladle the exact amount over a scoop of rice in each container. Every bowl lands near 665 calories and 42 grams of protein.",
+    "upsell_html":  "Hungarian braises for about $4.13 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "head":  {
+                 "description":  "Szegedin goulash, the Hungarian pork and sauerkraut paprika braise finished with sour cream, built for 14 servings. 665 calories, 42g protein, about $4.13 per serving (at everyday cost).",
+                 "keywords":  "szegedin goulash, szekely gulyas, hungarian pork and sauerkraut, paprika stew, pork shoulder braise, budget meal prep",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT2H",
+                 "totalTime":  "PT2H25M",
+                 "recipeIngredient":  [
+                                          "5.25 lb pork shoulder",
+                                          "3.5 cups sauerkraut",
+                                          "0.25 lb hickory smoked bacon",
+                                          "5 yellow onions",
+                                          "3.5 green bell peppers",
+                                          "4 tbsp garlic",
+                                          "1.5 cans diced tomatoes",
+                                          "0.25 oz caraway seeds",
+                                          "3.75 lb beef broth",
+                                          "1.25 cups light sour cream",
+                                          "3.75 cups dry rice"
+                                      ],
+                 "steps":  [
+                               "Render the chopped bacon, then brown the cubed pork shoulder in the fat in batches.",
+                               "Cook the onions and green peppers until soft, add the garlic, then take the pot off the heat and stir in the paprika so it does not scorch.",
+                               "Add the diced tomatoes, beef broth, caraway and bay leaves and bring to a simmer.",
+                               "Return the pork, braise covered until fork tender, then add the drained sauerkraut.",
+                               "Off the heat, temper the sour cream with hot liquid and stir it in. Serve over rice."
+                           ],
+                 "step_names":  [
+                                    "Render bacon and brown the pork",
+                                    "Bloom the paprika off the heat",
+                                    "Build the braising liquid",
+                                    "Braise and add sauerkraut",
+                                    "Finish with sour cream"
+                                ]
+             }
 }

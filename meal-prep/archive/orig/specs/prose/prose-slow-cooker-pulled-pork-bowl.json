@@ -1,0 +1,44 @@
+﻿{
+    "intro_html":  "This is comfort food that basically cooks itself. You load the slow cooker in the morning, and by dinner you have tender BBQ pulled pork piled over rice with sweet corn. One batch fills 14 containers, so a week of lunches and dinners is done in a single afternoon.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.94 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "portion_html":  "Weigh the full finished pot, subtract the empty pot weight you wrote down, and divide that number by 14. Scoop that same weight into each of your 14 containers so every bowl is even.",
+    "upsell_html":  "That is a whole week of hearty dinners sorted in one afternoon, cheap, filling, and something you will actually look forward to opening at lunch. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy the pork on sale.\u003c/strong\u003e Pork tenderloin and pork loin go on rotation often. When you see a good price per pound, grab it and freeze until slow-cooker day.",
+                       "\u003cstrong\u003eCheck the BBQ sauce label.\u003c/strong\u003e Sugar-free sauces vary a lot in price. The store brand is usually a dollar or two cheaper than the name brand and tastes just as good under all that pork.",
+                       "\u003cstrong\u003eRice and canned corn are your budget anchors.\u003c/strong\u003e Buy the big bag of rice and stock up on canned corn when it drops below a dollar a can. These stretch the meat and keep the cost per bowl low."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                    "Trim the pork tenderloin of any silverskin and excess fat, then lay it in the slow cooker. Pour in the chicken broth and season with garlic powder and onion powder, plus a little salt and pepper.",
+                    "Cover and cook on low for 6 to 8 hours, or on high for 3 to 4 hours, until the pork pulls apart with almost no effort.",
+                    "Lift the pork out and shred it with two forks. Skim off most of the cooking liquid, then return the meat to the pot with a splash of that liquid to keep it juicy.",
+                    "Stir in the sugar-free BBQ sauce until every strand is coated.",
+                    "Meanwhile, cook the rice according to the package. Drain and warm the sweet corn.",
+                    "Combine the rice, corn, and saucy pork in your weighed pot and fold everything together."
+                ],
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 512 calories and 41 grams of protein for roughly $2.94 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, bbq pulled pork rice bowl, budget dinner",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M",
+                 "recipeIngredient":  [
+                                          "5 lb Pork Tenderloin",
+                                          "1 carton Chicken Broth",
+                                          "1 bottle BBQ Sauce (Sugar Free)",
+                                          "1 jar Garlic Powder",
+                                          "1 jar Onion Powder",
+                                          "1 lb Rice"
+                                      ],
+                 "steps":  [
+                               "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                               "Trim the pork tenderloin of any silverskin and excess fat, then lay it in the slow cooker. Pour in the chicken broth and season with garlic powder and onion powder, plus a little salt and pepper.",
+                               "Cover and cook on low for 6 to 8 hours, or on high for 3 to 4 hours, until the pork pulls apart with almost no effort.",
+                               "Lift the pork out and shred it with two forks. Skim off most of the cooking liquid, then return the meat to the pot with a splash of that liquid to keep it juicy.",
+                               "Stir in the sugar-free BBQ sauce until every strand is coated.",
+                               "Meanwhile, cook the rice according to the package. Drain and warm the sweet corn.",
+                               "Combine the rice, corn, and saucy pork in your weighed pot and fold everything together."
+                           ]
+             }
+}

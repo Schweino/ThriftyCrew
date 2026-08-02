@@ -2827,6 +2827,40 @@ $twinMiss = @()
 foreach ($t in $medleyTwin) { if (-not (@(Get-MatchingCommodities $t.n $cmMed) -contains $t.want)) { $twinMiss += ($t.want + ' NO LONGER matches ' + $t.n) } }
 if ($twinMiss.Count -eq 0) { Ok 'medley rules CLEAN TWIN: plain broccoli/cauliflower/carrots and "Fresh Frozen" mixed veg still match their own commodity' }
 else { Bad ('the medley excludes have eaten a real product - a missing cell is the cost of an exclude written too wide: ' + ($twinMiss -join ' | ')) }
+
+# ---------------------------------------------------------------- specs\prose re-sync (2026-08-02, L4)
+# THE ONE WATCHER WHOSE FAILURE IS A REVERT RATHER THAN A WRONG NUMBER. spec-guards.ps1 full mode does not
+# read prose to CHECK it - it MERGES specs\prose\prose-<slug>.json INTO the spec and validates the result.
+# That is right while the prose file is the writer's copy; the 2026-07-26 cost redesign inverted it, three
+# writer waves re-anchored prose directly in the SPECS, and nothing wrote it back. Measured before the fix:
+# ALL 400 slugs holding both files would have been overwritten by ONE full run - 400 upsell_html, 400
+# cost_closing_html, 362 head.description, 325 intro_html - and three of them would have had their deleted
+# shop_smart dollar figures put back. There is no partial version of that failure.
+$mpPipe = Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline'
+$sps = Join-Path $mpPipe 'sync-prose-from-spec.ps1'
+if (-not (Test-Path $sps)) { Bad 'sync-prose-from-spec.ps1 is missing - nothing keeps specs\prose in step with the specs, and a full spec-guards run silently reverts the cost redesign' }
+else {
+  $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $sps -SelfTest 2>&1 | Out-String
+  if ($r -match 'SELF-TEST PASS') { Ok 'prose-sync: still writes spec -> prose only, still refuses to blank a field the spec lost, and its -Check still fires on a re-drifted file' }
+  else { Bad ('sync-prose-from-spec -SelfTest failed: ' + ($r -replace "`n", ' ')) }
+
+  $chk = & powershell -NoProfile -ExecutionPolicy Bypass -File $sps -AllRuns -Check 2>&1 | Out-String
+  if ($LASTEXITCODE -eq 0 -and $chk -match 'CHECK OK') { Ok 'specs\prose matches the specs on all 513 recipes - a full spec-guards run cannot revert the cost redesign' }
+  else { Bad ('specs\prose has DRIFTED from the specs. spec-guards FULL mode merges prose INTO the spec, so the next full run overwrites the specs with older text, on every drifted slug at once. Run meal-prep\pipeline\sync-prose-from-spec.ps1 -AllRuns. ' + (($chk -split "`r?`n" | Where-Object { $_ -match 'CHECK FAIL' }) -join ' ')) }
+
+  # THE TWO FIELD LISTS MUST STAY EQUAL. sync-prose-from-spec copies exactly the fields spec-guards merges;
+  # if that merge grows a field and the sync does not, the new field reverts on every run and nothing above
+  # would notice, because both sides would agree about the fields they DO know.
+  $sgSrc = Get-Content (Join-Path $mpPipe 'spec-guards.ps1') -Raw
+  $spSrc = Get-Content $sps -Raw
+  $sgFields = @([regex]::Matches($sgSrc, "foreach\(\`$k in @\('intro_html'[^)]*\)") | ForEach-Object { $_.Value })
+  $missing = @()
+  foreach ($f in @('intro_html','cost_closing_html','portion_html','upsell_html','shop_smart','make_it','description','keywords','prepTime','cookTime','totalTime','recipeIngredient','steps')) {
+    if ($sgSrc -match [regex]::Escape("'$f'") -and $spSrc -notmatch [regex]::Escape("'$f'")) { $missing += $f }
+  }
+  if ($missing.Count -eq 0) { Ok 'prose-sync covers every field spec-guards merges (no field can revert unwatched)' }
+  else { Bad ('spec-guards merges field(s) that sync-prose-from-spec does not copy, so those fields revert on every full run and the drift check cannot see it: ' + ($missing -join ', ')) }
+}
 if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
 Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2
 

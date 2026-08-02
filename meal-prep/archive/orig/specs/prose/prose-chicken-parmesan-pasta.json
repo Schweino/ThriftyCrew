@@ -1,0 +1,42 @@
+﻿{
+    "intro_html":  "Chicken parm is a restaurant order that usually comes with a restaurant price. This meal-prep version skips the breading and the deep fryer but keeps everything you actually love: tender chicken, marinara, and a blanket of melty cheese over high-protein pasta. At 42 grams of protein a bowl for about $3.30 (at everyday cost), it is a filling, high-protein dinner.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.30 a bowl\u003c/strong\u003e (at everyday cost) for a chicken parm that would run $16 or more at a sit-down spot.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near 403 calories and 42 grams of protein.",
+    "upsell_html":  "Restaurant flavor for about $3.30 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eChicken on sale, frozen,\u003c/strong\u003e is the move that quietly lowers the cost of half the recipes on this site.",
+                       "\u003cstrong\u003eA little parmesan goes far.\u003c/strong\u003e One container covers several batches, so the per-serving cost stays tiny.",
+                       "\u003cstrong\u003eStore-brand sauce and cheese\u003c/strong\u003e save a couple dollars with no difference on the plate."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Boil the penne to al dente per the box, then drain.",
+                    "Cube the chicken and cook in a large skillet over medium-high heat until it reaches 165F inside.",
+                    "Pour in the pasta sauce and simmer a couple of minutes until hot.",
+                    "Add the drained penne and stir to coat, then fold in the parmesan.",
+                    "Scatter the mozzarella over the top and cover for a minute until it melts."
+                ],
+    "head":  {
+                 "description":  "A lightened-up chicken parmesan meal prep over high-protein penne. Fourteen servings at about 403 calories and 42 grams of protein for roughly $3.30 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, chicken parmesan pasta, budget dinner",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M",
+                 "recipeIngredient":  [
+                                          "3.5 lb raw Boneless Skinless Chicken Breast",
+                                          "2 boxes (14.5 oz each) Penne Pasta",
+                                          "about 3.5 cups Marinara Sauce",
+                                          "7/8 cup grated Parmesan Cheese",
+                                          "1 3/4 cups shredded Reduced Fat Mozzarella",
+                                          "2 tbsp Olive Oil"
+                                      ],
+                 "steps":  [
+                               "Boil the penne to al dente and drain.",
+                               "Cube and cook the chicken until it reaches 165F.",
+                               "Add the pasta sauce and simmer until hot.",
+                               "Stir in the penne and fold in the parmesan.",
+                               "Top with mozzarella and cover until melted.",
+                               "Weigh the batch and divide into 14 containers."
+                           ]
+             }
+}

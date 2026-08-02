@@ -1,0 +1,44 @@
+﻿{
+    "intro_html":  "This is a burrito bowl built for meal prep and built for a budget. A few cheap ingredients go in the slow cooker and turn into tender, saucy shredded chicken while you go about your day. Pile it over rice with black beans and cheddar, and you have two weeks of dinners that taste like takeout.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.80 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide the remaining weight by 14. That is your grams per container. Scoop each bowl to that exact weight so the servings stay honest, and you will hit roughly 53 grams of protein per bowl.",
+    "upsell_html":  "Fourteen burrito bowls that beat the drive-thru on price, protein, and how good you feel eating them. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy dry rice, not the microwave pouches.\u003c/strong\u003e A few cups of dry rice costs a dollar or two and stretches across all 14 bowls. The pre-cooked cups cost several times more for the same food.",
+                       "\u003cstrong\u003eStock up on canned black beans when they go on sale.\u003c/strong\u003e They keep for years in the pantry, so grab a few extra cans whenever they drop below a dollar.",
+                       "\u003cstrong\u003eMake your own taco seasoning if you can.\u003c/strong\u003e Chili powder, cumin, garlic powder, and a pinch of salt do the same job as the little packets for a lot less money."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                    "Place the chicken breast in the bottom of the slow cooker and sprinkle the taco seasoning over the top.",
+                    "Add the can of diced green chiles and pour the salsa over everything so the chicken is covered.",
+                    "Cover and cook on low for 4 to 5 hours or on high for 2 to 3 hours, until the chicken is cooked through and tender.",
+                    "Shred the chicken with two forks and stir it back into the salsa so every piece soaks up the flavor.",
+                    "Cook the rice, drain and warm the black beans, and add both to your empty weighed mixing pot.",
+                    "Fold the salsa chicken into the rice and beans, then stir in the fat free cheddar until it melts through."
+                ],
+    "head":  {
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 553 calories and 53 grams of protein for roughly $2.80 each (at everyday cost).",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker salsa chicken burrito bowl, budget dinner",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M",
+                 "recipeIngredient":  [
+                                          "6 lb Boneless Skinless Chicken Breast",
+                                          "1 packet Taco Seasoning",
+                                          "1 can Diced Green Chiles",
+                                          "2 jars Salsa",
+                                          "1 lb Rice",
+                                          "4 cans Seasoned Black Beans"
+                                      ],
+                 "steps":  [
+                               "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                               "Place the chicken breast in the bottom of the slow cooker and sprinkle the taco seasoning over the top.",
+                               "Add the can of diced green chiles and pour the salsa over everything so the chicken is covered.",
+                               "Cover and cook on low for 4 to 5 hours or on high for 2 to 3 hours, until the chicken is cooked through and tender.",
+                               "Shred the chicken with two forks and stir it back into the salsa so every piece soaks up the flavor.",
+                               "Cook the rice, drain and warm the black beans, and add both to your empty weighed mixing pot.",
+                               "Fold the salsa chicken into the rice and beans, then stir in the fat free cheddar until it melts through."
+                           ]
+             }
+}
