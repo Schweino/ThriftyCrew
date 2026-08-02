@@ -9,10 +9,11 @@ $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 
 # ---------------------------------------------------------------------------------------------------------
-# TWO PURE RULES, LIFTED OUT SO THEY CAN BE TESTED (2026-07-31).
-# Both of these were inline expressions buried in the middle of a network-driven script, which meant the only
+# THE PURE RULES, LIFTED OUT SO THEY CAN BE TESTED (2026-07-31, extended 2026-08-02).
+# All of these were inline expressions buried in the middle of a network-driven script, which meant the only
 # way to exercise them was to run the real pull against the real store. That is why nobody ever noticed the
 # alert condition below had become structurally impossible to satisfy: there was no way to ask it a question.
+# A decision that only exists inside a network-driven loop is a decision no fixture can reach.
 # ---------------------------------------------------------------------------------------------------------
 
 # WHERE THE NEXT RUN STARTS. $lastSuccessRot is the ROTATED index of the last term that returned products, so
@@ -28,7 +29,74 @@ function Get-FfNextCursor([int]$startIdx, [int]$lastSuccessRot, [int]$termCount)
   return (($startIdx + $lastSuccessRot + 1) % $termCount)
 }
 
-# IS THE CATALOG ACTUALLY DEGRADING? (re-keyed 2026-07-31, plan item 30a1a8)
+# WRITE THE CATALOG WITHOUT BEING ABLE TO LOSE IT (2026-08-02, plan item 2026-08-02-91d877).
+# Measured, not theorised, in this pipeline's own ff-sweep-log.txt: the 2026-08-02T07:00 window bought terms
+# #458..#34 (686 rows), wrote its throttled diagnostic, ADVANCED THE CURSOR #458 -> #35 at 07:06:40, and then
+# threw "Set-Content : The process cannot access the file" at 07:06:41 on the merged write. Under
+# $ErrorActionPreference='Stop' that bare Set-Content took the whole run down AFTER the cursor had already
+# moved, so 686 rows of fresh prices and as_of re-verifications across ~104 terms were discarded while the
+# cursor skipped past those exact terms - which then waited a full ~1.2-day rotation for their next chance.
+# The merged file's mtime stayed 06:18:38 while the cursor file's said 07:06:40, which is the fingerprint.
+# Every merged-write failure repeats it, and unlike name-churn expiry this one genuinely pushes rows toward
+# the 14-day edge. Two properties fix it, and -SelfTest can reach both:
+#   1. ATOMIC AND RETRIED - write a temp file, then rename over the target, up to 5 attempts with a 2s
+#      backoff. A reader can never see half a catalog, and a transient lock costs 8 seconds instead of a
+#      whole window. The temp suffix is ".tmp" ON PURPOSE: out\regular is scanned with '*.json' in several
+#      places, so a partial file named *.json could be read as a store - the same reasoning that moved the
+#      throttled diagnostic out of out\regular entirely.
+#   2. IT NEVER THROWS - it returns $true/$false and the caller decides. A failed write must not be able to
+#      kill the run at whatever line it happens to be on; it has to be a VALUE the cursor decision can read.
+function Write-FfJsonAtomic([string]$path, [string]$text, [int]$Attempts = 5, [int]$BackoffSec = 2) {
+  $tmp = $path + '.tmp'
+  for ($a = 1; $a -le $Attempts; $a++) {
+    try {
+      $text | Set-Content -LiteralPath $tmp -Encoding UTF8 -ErrorAction Stop
+      Move-Item -LiteralPath $tmp -Destination $path -Force -ErrorAction Stop
+      return $true
+    } catch {
+      if ($a -lt $Attempts) { Start-Sleep -Seconds $BackoffSec }
+    }
+  }
+  # Leave no half-written orphan behind, and leave the PRIOR file byte-identical: losing a window is
+  # recoverable (the cursor did not move, so the next window re-buys it); corrupting the catalog is not.
+  try { if (Test-Path -LiteralPath $tmp) { Remove-Item -LiteralPath $tmp -Force -ErrorAction SilentlyContinue } } catch {}
+  return $false
+}
+
+# MAY THIS WINDOW MOVE THE CURSOR? Get-FfNextCursor says WHERE the next window would start; this says whether
+# this window earned the right to say so. It did not if its purchases never landed on disk. Re-buying the same
+# slice next window is the correct no-loss behaviour and is exactly what already happens on a cold shutout.
+# Lifted out as its own pure function for one reason: so a fixture can ask it the question without a network,
+# a file lock or a real sweep (the 2026-07-29 lesson - a fix whose self-test cannot reach the new code is not
+# a fix). This is the ONLY thing allowed to authorise a cursor write.
+function Get-FfCursorCommit($nextIdx, [bool]$mergedOk) {
+  if ($null -eq $nextIdx) { return $null }   # cold shutout: nothing was bought, so there is nothing to commit
+  if (-not $mergedOk) { return $null }       # bought, but the catalog never landed - do NOT skip those terms
+  return [int]$nextIdx
+}
+
+# WHAT DOES ONE EXPIRY ACTUALLY MEAN? Three different things, and only one of them is news.
+#   starved - the row's own search term has not returned a single product inside the whole carry window. The
+#             sweep genuinely cannot replace this product. THIS is degradation, and it is directly actionable:
+#             a starved term gets a second term in commodity-search.json (the F3 multi-term path).
+#   churn   - the term is being bought fine; this particular NAME simply stopped appearing in its top-25.
+#             Renames, ranking drift, delistings and the multi-buy skip all do this while Family Fare goes on
+#             selling the product. Architectural, permanent, and not a fault.
+#   unknown - the row predates found_by_term (or the ledger lost its entry), so starvation is UNMEASURABLE
+#             for it. Never pages. Paging on the absence of a measurement is precisely the false page this
+#             change exists to kill, and the class empties itself within MaxCarryDays as every carried row
+#             either refreshes (gaining the field) or expires.
+function Get-FfExpiryClass([string]$foundByTerm, [string]$lastSuccess, [string]$today, [int]$maxCarryDays) {
+  if ([string]::IsNullOrWhiteSpace($foundByTerm)) { return 'unknown' }
+  if ([string]::IsNullOrWhiteSpace($lastSuccess)) { return 'unknown' }
+  $age = 9999
+  try { $age = [int](([datetime]$today) - ([datetime]$lastSuccess)).TotalDays } catch { return 'unknown' }
+  if ($age -gt $maxCarryDays) { return 'starved' }
+  return 'churn'
+}
+
+# IS THE CATALOG ACTUALLY DEGRADING? (re-keyed 2026-07-31, plan item 30a1a8; expiry arm re-keyed 2026-08-02,
+# plan item 2026-08-02-91d877)
 # The old alert asked "did ONE run capture the whole store", comparing this run's raw collection against the
 # best deal_count of recent MERGED files. That was the right question at one pull per day. Under the 3-hourly
 # sharded sweep it is a question that can NEVER be answered yes - a run buys ~85 of 526 terms BY DESIGN - so
@@ -36,15 +104,34 @@ function Get-FfNextCursor([int]$startIdx, [int]$lastSuccessRot, [int]$termCount)
 # sweeps, 0 expired, 358 board cells against a 256-cell pre-freeze baseline.
 # So ask about OUTCOMES instead, on the MERGED catalog, where "Family Fare stopped refreshing" is actually
 # visible. Any one of these is real news:
-#   - rows are aging out of the 14-day carry (expired > 0): the catalog is losing products it cannot replace
+#   - rows are aging out of the 14-day carry ON A STARVED TERM: the catalog is losing products it cannot replace
+#   - a MASS of rows aged out in one run (>2% of the catalog), whatever class they are
 #   - almost nothing has been re-verified against the store in the last 24-48h: the sweep is not buying
 #   - the merged catalog itself shrank materially against the best of recent files
 # The recently-verified window is TWO DAYS on purpose: as_of is a date, not a timestamp, and the day's FIRST
 # sweep would otherwise be judged on its own slice alone and page every morning - the same shape of bug being
 # fixed here. A genuinely frozen store falls to ~0 across two days regardless.
-function Test-FfCatalogDegraded([int]$mergedCount, [int]$prevMax, [int]$expired, [int]$recentVerified) {
+#
+# THE EXPIRY ARM, RE-KEYED 2026-08-02. It used to be a bare `expired > 0`, on the belief that any 14-day
+# expiry means the sweep cannot replace products. That premise is false FOR THIS ARCHITECTURE. The merged
+# catalog is a NAME-KEYED UNION of every top-25 search response since 07-19 (4,706 rows) while one full
+# rotation currently yields ~3,300-3,900 unique names, so 800-1,400 rows are always living on carry-forward.
+# Renames ("Chicken Breasts, Boneless & Skinless Fresh" $3.99/lb became "Our Family Boneless Skinless Chicken
+# Breast Family Pack" $3.99 - same shelf, same price, new name, successor already in the catalog), top-25
+# ranking drift, delistings and the multi-buy skip all retire NAMES without Family Fare losing the PRODUCT.
+# A nonzero trickle of name-expiries is therefore the HEALTHY steady state of this design, which made the old
+# arm the exact mirror of the bug it replaced: a trigger that at steady state can never stay false. It fired
+# on 2026-08-02 for the last tranche of the 07-17..07-29 frozen-era backlog draining on schedule - 55 rows
+# that backed ZERO crowns and ZERO commodities on either board (2 non-winner store entries; ground-coriander
+# stayed Fareway 0.96, turkey-bacon stayed Aldi 0.325, 492 commodities before and after).
+# So ask the question that IS news: has a search term stopped buying? That is measured per term in
+# out\ff-term-ledger.json and attached to each row as found_by_term, so starvation stops being an inference
+# from row ages and becomes a fact with a name on it. Unknown-class rows never page; see Get-FfExpiryClass.
+function Test-FfCatalogDegraded([int]$mergedCount, [int]$prevMax, [int]$starvedExpired, [int]$churnExpired, [int]$recentVerified) {
   $reasons = @()
-  if ($expired -gt 0) { $reasons += ("$expired row(s) aged out past the 14-day carry - the catalog is losing products the sweep is not replacing") }
+  $totalExpired = $starvedExpired + $churnExpired
+  if ($starvedExpired -gt 0) { $reasons += ("$starvedExpired row(s) aged out past the 14-day carry on a STARVED search term - that term has not returned a single product inside the carry window, so the sweep genuinely cannot replace those products") }
+  if ($mergedCount -gt 0 -and $totalExpired -gt ($mergedCount * 0.02)) { $reasons += ("$totalExpired row(s) aged out in ONE run against a $mergedCount-item catalog - that is a mass loss (over 2%) whatever class the rows are") }
   if ($recentVerified -lt 500) { $reasons += ("only $recentVerified row(s) re-verified against the store in the last 48h - the sweep is not buying terms") }
   if ($prevMax -gt 100 -and $mergedCount -lt ($prevMax * 0.80)) { $reasons += ("merged catalog is $mergedCount items against a best-of-recent $prevMax - it shrank by more than 20%") }
   return @{ degraded = ($reasons.Count -gt 0); reasons = $reasons }
@@ -74,23 +161,91 @@ if ($SelfTest) {
   # the wrap is real - the 2026-07-30T22:00 run started at #508 and wrapped to #70
   _T 'cursor wraps around the end of the term list (#508 + 87 of 526 -> #70)' ((Get-FfNextCursor 508 87 526) -eq 70)
 
-  # ---- ALERT CONDITION. MUST-FIRE and its clean twin are both frozen from real runs.
-  # CLEAN TWIN, and the whole point of the change: the 2026-07-31T04:00 sweep. One shard of a healthy catalog
-  # (4269 merged items, 0 expired, 1259 re-verified in the window). The OLD trigger paged on this every day
-  # because the run's own 566-row collection is under half the merged 4269 - by design. It must be silent.
-  $ok = Test-FfCatalogDegraded 4269 4269 0 1259
-  _T 'a healthy sharded sweep does NOT page (4269 items, 0 expired, 1259 re-verified) - the false daily alert' (-not $ok.degraded)
-  # MUST-FIRE 1: rows aging out of the carry. This is what a genuinely frozen store looks like first.
-  $d1 = Test-FfCatalogDegraded 4269 4269 24 1259
-  _T 'FIRES when rows age out past the 14-day carry (24 expired)' ($d1.degraded -and ($d1.reasons -join ' ') -match 'aged out')
-  # MUST-FIRE 2: the sweep has stopped buying terms at all
-  $d2 = Test-FfCatalogDegraded 4269 4269 0 12
-  _T 'FIRES when almost nothing was re-verified against the store (12 rows)' ($d2.degraded -and ($d2.reasons -join ' ') -match 're-verified')
-  # MUST-FIRE 3: the merged catalog itself collapsed - the original freeze, which bottomed at 207 board cells
-  $d3 = Test-FfCatalogDegraded 1909 3974 0 1259
-  _T 'FIRES when the merged catalog shrinks >20% against best-of-recent (1909 vs 3974)' ($d3.degraded -and ($d3.reasons -join ' ') -match 'shrank')
+  # ---- ALERT CONDITION. MUST-FIRE and its clean twin are both frozen from real runs and NEVER regenerated
+  # from live data: today's numbers are copied in as literals precisely so that tomorrow's healthy catalog
+  # cannot quietly make them pass by finding nothing.
+  # CLEAN TWIN (c5), kept verbatim through the re-key: the 2026-07-31T04:00 sweep. One shard of a healthy
+  # catalog (4269 merged items, no expiries, 1259 re-verified in the window). The trigger before it paged on
+  # this every day because the run's own 566-row collection is under half the merged 4269 - by design.
+  $ok = Test-FfCatalogDegraded 4269 4269 0 0 1259
+  _T 'CLEAN-TWIN c5: a healthy sharded sweep does NOT page (4269 items, 0 expired, 1259 re-verified)' (-not $ok.degraded)
+  # CLEAN TWIN (c1) - TODAY'S REAL FALSE PAGE, frozen. 2026-08-02T06:18: 4655 merged against a best-of-recent
+  # 4706, 55 rows aged out, 3357 re-verified. Every one of those 55 was the 2026-07-18 cohort (57 rows in the
+  # 08-01 file, 2 of which re-verified fresh) whose terms the sweep had bought 3+ times inside the window, and
+  # they backed zero crowns and zero commodities. THIS EXACT ALERT MUST NEVER PAGE AGAIN.
+  $c1 = Test-FfCatalogDegraded 4655 4706 0 55 3357
+  _T "CLEAN-TWIN c1: today's real false page stays SILENT (4655/4706, 0 starved + 55 churn, 3357 re-verified)" (-not $c1.degraded)
+  # MUST-FIRE m1: the same run, but three of those expiries sit on terms that have bought NOTHING for the whole
+  # carry window. That is a sweep that has genuinely stopped reaching products, and it pages.
+  $m1 = Test-FfCatalogDegraded 4655 4706 3 52 3357
+  _T 'MUST-FIRE m1: FIRES on starvation (3 starved + 52 churn) and names the starved count' ($m1.degraded -and ($m1.reasons -join ' ') -match 'STARVED' -and ($m1.reasons -join ' ') -match '^3 row')
+  # MUST-FIRE m2: the mass-expiry safety net. Even with every row classed as harmless churn, losing more than
+  # 2% of the catalog in ONE run is not something a classifier gets to wave through (120 > 2% of 4655 = 93.1).
+  $m2 = Test-FfCatalogDegraded 4655 4706 0 120 3357
+  _T 'MUST-FIRE m2: FIRES on mass expiry even when every row is churn-class (120 of 4655 = 2.6%)' ($m2.degraded -and ($m2.reasons -join ' ') -match 'mass loss')
+  # MUST-FIRE m3: the OLD founding case re-expressed. The 24 expiries of 2026-07-31T01:05 as they would look
+  # if they had been starvation. The re-key must not have cost us the ability to see the original bug.
+  $m3 = Test-FfCatalogDegraded 4269 4269 24 0 1259
+  _T 'MUST-FIRE m3: the founding 24-expiry case still fires when those rows are starved' ($m3.degraded -and ($m3.reasons -join ' ') -match 'STARVED')
+  # MUST-FIRE (kept verbatim): the sweep has stopped buying terms at all. A REAL freeze detector - do not soften.
+  $d2 = Test-FfCatalogDegraded 4269 4269 0 0 12
+  _T 'MUST-FIRE c5: FIRES when almost nothing was re-verified against the store (12 rows)' ($d2.degraded -and ($d2.reasons -join ' ') -match 're-verified')
+  # MUST-FIRE (kept verbatim): the merged catalog itself collapsed - the original freeze, which bottomed at 207
+  # board cells. Also a REAL freeze detector - do not soften.
+  $d3 = Test-FfCatalogDegraded 1909 3974 0 0 1259
+  _T 'MUST-FIRE c5: FIRES when the merged catalog shrinks >20% against best-of-recent (1909 vs 3974)' ($d3.degraded -and ($d3.reasons -join ' ') -match 'shrank')
   # and it must not fire on a catalog that merely grew slower than its best day
-  _T 'does NOT fire on a catalog within 20% of its best (3800 vs 3974)' (-not (Test-FfCatalogDegraded 3800 3974 0 1259).degraded)
+  _T 'CLEAN-TWIN c5: does NOT fire on a catalog within 20% of its best (3800 vs 3974)' (-not (Test-FfCatalogDegraded 3800 3974 0 0 1259).degraded)
+
+  # ---- EXPIRY CLASSIFIER. What separates the two above.
+  # MUST-FIRE m6, frozen from a real pair: ground-coriander's Family Fare row was found by the term
+  # "ground coriander", which is one of the 467 terms the 06:18 run reported still empty. If that term's last
+  # successful buy really were 2026-07-18, the row's expiry would be starvation and must be called that.
+  _T 'MUST-FIRE m6: a row whose term last succeeded 15 days ago is STARVED' ((Get-FfExpiryClass 'ground coriander' '2026-07-18' '2026-08-02' 14) -eq 'starved')
+  # CLEAN TWIN c4: the actual state of those 55 rows - their terms are being bought constantly, the NAMES just
+  # left the top-25. Churn never pages. And a row that predates found_by_term is unknown, which never pages
+  # either: during the 14-day warm-up, paging on unknown would simply recreate today's false page daily.
+  _T 'CLEAN-TWIN c4: a row whose term succeeded yesterday is CHURN' ((Get-FfExpiryClass 'ground coriander' '2026-08-01' '2026-08-02' 14) -eq 'churn')
+  _T 'CLEAN-TWIN c4: a row with no found_by_term is UNKNOWN (never pages)' ((Get-FfExpiryClass '' '2026-08-01' '2026-08-02' 14) -eq 'unknown')
+  _T 'CLEAN-TWIN c4: a term with no ledger entry is UNKNOWN, not starved (absence of a measurement is not a measurement)' ((Get-FfExpiryClass 'ground coriander' '' '2026-08-02' 14) -eq 'unknown')
+  _T 'CLEAN-TWIN c4: exactly at the carry boundary (14 days) is still CHURN, not starved' ((Get-FfExpiryClass 'ground coriander' '2026-07-19' '2026-08-02' 14) -eq 'churn')
+
+  # ---- CURSOR COMMIT. Frozen from the 2026-08-02T07:06:41 loss: 686 rows bought across terms #458..#34, the
+  # cursor written to #35, the merged write then refused by a file lock. The cursor must NOT move on that.
+  _T 'MUST-FIRE m5: a failed merged write must NOT advance the cursor (Get-FfCursorCommit 35 $false -> null)' ($null -eq (Get-FfCursorCommit 35 $false))
+  _T 'CLEAN-TWIN c3: a successful merged write commits the cursor (Get-FfCursorCommit 35 $true -> 35)' ((Get-FfCursorCommit 35 $true) -eq 35)
+  _T 'MUST-FIRE m5: a cold shutout commits nothing even when the write succeeded (null, $true -> null)' ($null -eq (Get-FfCursorCommit $null $true))
+
+  # ---- ATOMIC WRITE. The only fixture here that touches a disk, and it stays inside a fresh TEMP directory.
+  # MUST-FIRE m4 reproduces the real incident: the target is held open with FileShare.None, exactly as a
+  # concurrent reader held out\regular\family-fare-regular-2026-08-02.json at 07:06:41. The write must come
+  # back FALSE, must leave the prior file BYTE-IDENTICAL, and must not litter a .tmp orphan behind it.
+  # The backoff argument is passed as 0 so a daily fixture run does not spend 8 seconds asleep; every OTHER
+  # property (all 5 attempts, the non-throwing return, the byte-identity, the tmp cleanup) runs exactly as it
+  # does live, and test-auditors pins the PRODUCTION defaults (5 attempts / 2s) as a source check so they
+  # cannot be quietly dropped here.
+  $tdir = Join-Path ([IO.Path]::GetTempPath()) ('ff-selftest-' + [guid]::NewGuid().ToString('N').Substring(0,12))
+  $null = New-Item -ItemType Directory -Path $tdir -Force
+  try {
+    $tf = Join-Path $tdir 'family-fare-regular-2026-08-02.json'
+    [IO.File]::WriteAllText($tf, '{"store":"Family Fare","deal_count":4655}')
+    $before = [IO.File]::ReadAllBytes($tf)
+    $lock = [IO.File]::Open($tf, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::None)
+    $r4 = $true
+    try { $r4 = Write-FfJsonAtomic $tf '{"clobbered":true}' 5 0 } finally { $lock.Close(); $lock.Dispose() }
+    $after = [IO.File]::ReadAllBytes($tf)
+    $same = ($after.Length -eq $before.Length)
+    if ($same) { for ($bi = 0; $bi -lt $before.Length; $bi++) { if ($after[$bi] -ne $before[$bi]) { $same = $false; break } } }
+    _T 'MUST-FIRE m4: a locked target returns FALSE, leaves the prior catalog byte-identical, and leaves no .tmp orphan' ((-not $r4) -and $same -and (-not (Test-Path ($tf + '.tmp'))))
+    # CLEAN TWIN c2: the ordinary case still works, replaces the content, and cleans up after itself.
+    $r2 = Write-FfJsonAtomic $tf '{"clobbered":true}' 5 0
+    $txt = [IO.File]::ReadAllText($tf)
+    _T 'CLEAN-TWIN c2: an unlocked target returns TRUE, content is replaced, tmp file is gone' ($r2 -and ($txt -match 'clobbered') -and (-not (Test-Path ($tf + '.tmp'))))
+    # and it must create a file that did not exist yet (the first run of a new day)
+    $tf2 = Join-Path $tdir 'family-fare-regular-2026-08-03.json'
+    $r3 = Write-FfJsonAtomic $tf2 '{"fresh":true}' 5 0
+    _T 'CLEAN-TWIN c2: a brand-new target is created (first write of a new day)' ($r3 -and (Test-Path $tf2))
+  } finally { Remove-Item -LiteralPath $tdir -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
@@ -199,7 +354,10 @@ $supplemental = @{ 'orange juice' = @('simply orange juice','kemps orange juice'
 
 $deals = @()
 $seen = @{}
-function Ingest-Items($items) {
+# $term is the SEARCH TERM this response came back from, and it is stamped onto every row (see found_by_term
+# below). Supplemental queries pass the PRIMARY term on purpose: "simply orange juice" exists only as an extra
+# query on the "orange juice" term, and the ledger tracks terms, not queries.
+function Ingest-Items($items, $term) {
   foreach ($it in $items) {
     if (-not $it.name) { continue }
     # PUBLISH THE CURRENT PRICE, NEVER THE REGULAR ONE.
@@ -246,6 +404,12 @@ function Ingest-Items($items) {
     # fact can always disagree, and that disagreement is the entire wrong-link bug class.
     # A price and its link are the same fact. Carry the id with the price and they cannot drift apart.
     $row = [ordered]@{ store='Family Fare'; item=[string]$it.name; ad_price=('$' + $val); size=[string]$it.size; regular=$val; current_price=$cur; source_ad='everyday shelf price'; as_of=$todayS }
+    # WHICH TERM FOUND THIS ROW (2026-08-02). Additive metadata; compare-deals and every board consumer ignore
+    # it. It exists so that when this row eventually ages out of the 14-day carry, the expiry can be
+    # CLASSIFIED instead of guessed at: rows carry their own provenance, and out\ff-term-ledger.json carries
+    # each term's last successful buy, so "the sweep can no longer reach this product" becomes a measurement
+    # rather than an inference from a date. Without it, starvation and ordinary name-churn are the same event.
+    if ($term) { $row['found_by_term'] = [string]$term }
     if ($it.canonical_url) { $row['canonical_url'] = [string]$it.canonical_url }
     if ($it.id) { $row['product_id'] = [string]$it.id }
     if ($base -gt 0) { $row['base_price'] = $base }
@@ -294,6 +458,26 @@ if ($startIdx -gt 0) {
   $termList = @($termList[$startIdx..($termList.Count-1)]) + @($termList[0..($startIdx-1)])
   Write-Output ("Family Fare: term cursor at #$startIdx of $($termList.Count) - this run's budget starts there and wraps")
 }
+# THE PER-TERM LEDGER (2026-08-02): term -> the last date that term's query came back with products.
+# This is the structural half of the alert re-key. Rows record which term found them; this records when each
+# term last worked. Between them, "a product aged out because the sweep can no longer reach it" is a MEASURED
+# statement about a named term instead of an inference from a row's age.
+# MEASURED, NEVER STAMPED. Entries are written from the receipt inside the buy loop - the moment a query is
+# observed to return items - and nowhere else. The temptation is to bulk-stamp every term in the rotation at
+# the end of a run, which would be the dates-written-not-measured trap in its purest form: the builder writing
+# the number the freshness check will later read back and believe. A term that was never asked, or that
+# answered empty, gets no entry today and keeps whatever it last honestly earned.
+# It is a durable map: keys are never dropped, so a term that starves keeps its old date and stays visible.
+$ledgerFile = Join-Path $OutDir 'ff-term-ledger.json'
+$ledger = @{}
+if (Test-Path $ledgerFile) {
+  try {
+    $lj = Get-Content $ledgerFile -Raw | ConvertFrom-Json
+    if ($lj -and $lj.terms) { foreach ($p in $lj.terms.PSObject.Properties) { if ($p.Value) { $ledger[[string]$p.Name] = [string]$p.Value } } }
+  } catch { Write-Warning ('Family Fare: term ledger unreadable, starting a fresh one (expiries classify as unknown until it warms up): ' + $_.Exception.Message) }
+}
+$termSuccess = @{}
+
 $empty = New-Object System.Collections.Generic.List[string]
 # GIVE UP WHEN THE API IS CLEARLY REFUSING US, instead of spending the whole budget proving it.
 # The cooldown below (15 empties -> sleep 45s -> reset) is a THROTTLE-RIDE, not an exit: under a hard shutout
@@ -322,7 +506,7 @@ for ($i = 0; $i -lt $termList.Count; $i++) {
       break
     }
     if ($streak -ge 15) { Write-Output ("Family Fare: throttle streak ($streak empties) - cooling down 45s..."); Start-Sleep -Seconds 45; $streak = 0 }
-  } else { $streak = 0; $emptyRun = 0; $lastSuccessRot = $i; Ingest-Items $items }
+  } else { $streak = 0; $emptyRun = 0; $lastSuccessRot = $i; $termSuccess[$term] = $todayS; Ingest-Items $items $term }
 }
 # Advance the cursor past the contiguous stretch the budget actually bought. Only main-pass successes move it:
 # recovery-pass hits are re-tries of earlier empties and would drag the cursor backwards. No successes at all
@@ -331,13 +515,14 @@ for ($i = 0; $i -lt $termList.Count; $i++) {
 # The arithmetic itself lives in Get-FfNextCursor at the top of this file so -SelfTest can exercise it; this
 # is the only caller. When the run ABORTED, the term after the last success IS the first term of the wall, so
 # next_index lands on the wall's start and the walled tail gets first claim on the next window's budget.
+#
+# WHERE THIS USED TO BE WRITTEN, AND WHY IT MOVED (2026-08-02). The cursor file was written HERE, before the
+# recovery passes and before the merged catalog was written at all. On 2026-08-02T07:06:40 it duly recorded
+# #35 - and one second later the merged write was refused by a file lock and the run died with 686 rows of
+# purchases in memory and nothing on disk. The cursor had certified a window that produced nothing.
+# The arithmetic stays exactly where it was and stays pure; only the COMMIT moves, down past the merged write,
+# behind Get-FfCursorCommit. Compute here, commit there.
 $nextIdx = Get-FfNextCursor $startIdx $lastSuccessRot $termList.Count
-if ($null -ne $nextIdx) {
-  try {
-    ([ordered]@{ next_index = $nextIdx; updated = (Get-Date).ToString('s'); note = 'index into the commodity-search term order where the NEXT Family Fare run starts; see the term-budget cursor comment in pull-regular-familyfare.ps1' } | ConvertTo-Json) | Set-Content $cursorFile -Encoding UTF8
-    Write-Output ("Family Fare: term cursor advanced to #$nextIdx (this run bought terms #$startIdx..#$(($startIdx + $lastSuccessRot) % $termList.Count))")
-  } catch { Write-Warning ('Family Fare: could not write term cursor (next run restarts at #' + $startIdx + '): ' + $_.Exception.Message) }
-}
 # RECOVERY PASSES: empties are rate-limit victims; wait out the throttle and retry ONCE each, up to 2 passes,
 # still under the wall-clock cap. Single query per term (no inner backoff) so a hard throttle can't blow up.
 # If the main pass ABORTED on a shutout, skip recovery entirely. Recovery exists to re-ask terms that were
@@ -351,7 +536,7 @@ while (-not $aborted -and $empty.Count -gt 0 -and $pass -lt 2 -and -not (Over-Ca
   foreach ($term in $empty) {
     if (Over-Cap) { $still.Add($term); continue }
     $items = Get-FreshopItems $term; Start-Sleep -Milliseconds 250
-    if (@($items).Count -eq 0) { $still.Add($term) } else { Ingest-Items $items }
+    if (@($items).Count -eq 0) { $still.Add($term) } else { $termSuccess[$term] = $todayS; Ingest-Items $items $term }
   }
   $empty = $still
 }
@@ -378,7 +563,13 @@ if ($prevMax -gt 100 -and @($deals).Count -lt ($prevMax * 0.5)) {
   $qDir = Join-Path $OutDir 'throttled'
   if (-not (Test-Path $qDir)) { New-Item -ItemType Directory -Path $qDir -Force | Out-Null }
   $pfile = Join-Path $qDir ("family-fare-$todayS.throttled.json")
-  ([ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; throttled=$true; deal_count=@($deals).Count; empty_terms=@($empty); deals=$deals } | ConvertTo-Json -Depth 6) | Set-Content $pfile -Encoding UTF8
+  # ATOMIC AND NON-FATAL (2026-08-02). This was a bare Set-Content under $ErrorActionPreference='Stop', which
+  # is the same class as the merged-write failure below and sits BEFORE it: a lock on the diagnostic would
+  # take down a run that had already bought a full window of real prices. A diagnostic must never be able to
+  # kill the thing it is diagnosing, so its failure is a warning and the run carries on to the merge.
+  if (-not (Write-FfJsonAtomic $pfile (([ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; throttled=$true; deal_count=@($deals).Count; empty_terms=@($empty); deals=$deals } | ConvertTo-Json -Depth 6)))) {
+    Write-Warning ("Family Fare: could not write the throttled diagnostic to $pfile (locked?) - continuing to the merge, which is the part that matters.")
+  }
   Write-Warning ("Family Fare: throttled - got only " + @($deals).Count + " items vs " + $prevMax + " in the last good file. Diagnostic copy: " + $pfile + ". These rows are REAL and are being MERGED (today's prices win, everything else carries forward).")
   # THE ALERT USED TO LIVE HERE AND IT HAS MOVED (2026-07-31, plan item 30a1a8).
   # Writing the diagnostic is the GUARD and it stays exactly as it is. What was wrong was ALERTING off it:
@@ -419,6 +610,12 @@ if ($prevMax -gt 100 -and @($deals).Count -lt ($prevMax * 0.5)) {
 # capture goes stale. Absence from one throttled response is not evidence of absence from the store.
 $MaxCarryDays = 14
 $carried = 0; $expired = 0
+# EXPIRY CLASSIFICATION (2026-08-02). Counted here, not inferred later. See Get-FfExpiryClass for what the
+# three classes mean and why only one of them is allowed to page. The ledger has already been merged with
+# this run's measured successes by the time the carry loop runs, so a term bought minutes ago reads as fresh.
+$expStarved = 0; $expChurn = 0; $expUnknown = 0
+$starvedTerms = @{}
+foreach ($k in $termSuccess.Keys) { $ledger[$k] = $termSuccess[$k] }
 $prevF = Get-ChildItem (Join-Path $regDir 'family-fare-regular-*.json') -EA SilentlyContinue |
   Where-Object { $_.BaseName -match '^family-fare-regular-\d{4}-\d{2}-\d{2}$' } |
   Sort-Object Name -Descending | Select-Object -First 1
@@ -435,7 +632,10 @@ function Norm-Row($r, $asOf, $isCarried) {
   # from, and the link is derived from them. Drop them here and the row keeps its price but forgets which
   # product it priced - which is exactly how a tile ends up with a price and no link, or worse, a link found
   # by a separate search that landed on a different product.
-  foreach ($k in @('current_price', 'base_price', 'marked_down', 'canonical_url', 'product_id')) { if ($null -ne $r.$k) { $h[$k] = $r.$k } }
+  # found_by_term joined this list on 2026-08-02 for the same reason: a carried row that forgets which term
+  # found it can never have its expiry classified, and the classifier is the whole basis of the re-keyed alert.
+  # Dropping it here would silently return every carried row to the "unknown" class forever.
+  foreach ($k in @('current_price', 'base_price', 'marked_down', 'canonical_url', 'product_id', 'found_by_term')) { if ($null -ne $r.$k) { $h[$k] = $r.$k } }
   if ($isCarried) { $h['carried_forward'] = $true }
   return $h
 }
@@ -452,7 +652,15 @@ if ($prevF) {
     $asOf = if ($d.as_of) { [string]$d.as_of } else { [string]$pdoc.week_of }
     $age = 9999
     try { $age = [int](([datetime]$todayS) - ([datetime]$asOf)).TotalDays } catch {}
-    if ($age -gt $MaxCarryDays) { $expired++; continue }
+    if ($age -gt $MaxCarryDays) {
+      $expired++
+      $ft = [string]$d.found_by_term
+      $cls = Get-FfExpiryClass $ft ([string]$ledger[$ft]) $todayS $MaxCarryDays
+      if ($cls -eq 'starved') { $expStarved++; $starvedTerms[$ft] = $true }
+      elseif ($cls -eq 'churn') { $expChurn++ }
+      else { $expUnknown++ }
+      continue
+    }
     $have[$k] = $true
     [void]$rows.Add((Norm-Row $d $asOf $true))
     $carried++
@@ -460,15 +668,48 @@ if ($prevF) {
 }
 $deals = $rows.ToArray()
 
-$out = [ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; source='Freshop catalog base_price (store_id 6401, Omaha), NOT Instacart'; deal_count=@($deals).Count; fresh_count=(@($deals).Count - $carried); carried_count=$carried; expired_count=$expired; max_carry_days=$MaxCarryDays; empty_terms=@($empty); deals=$deals }
-($out | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8
-Write-Output ("Family Fare everyday prices: " + @($deals).Count + " catalog items (" + (@($deals).Count - $carried) + " fresh, " + $carried + " carried forward, " + $expired + " expired past $MaxCarryDays d; " + $empty.Count + " terms still empty) -> " + $file)
+$out = [ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; source='Freshop catalog base_price (store_id 6401, Omaha), NOT Instacart'; deal_count=@($deals).Count; fresh_count=(@($deals).Count - $carried); carried_count=$carried; expired_count=$expired; expired_starved=$expStarved; expired_churn=$expChurn; expired_unknown=$expUnknown; max_carry_days=$MaxCarryDays; empty_terms=@($empty); deals=$deals }
+
+# THE ONE WRITE THIS RUN EXISTS TO PRODUCE. Atomic, retried, and NON-FATAL - see Write-FfJsonAtomic. Under the
+# old bare Set-Content this line threw at 2026-08-02T07:06:41 and took 686 rows of purchases down with it,
+# AFTER the cursor had already been advanced past the terms that bought them.
+$mergedOk = Write-FfJsonAtomic $file ($out | ConvertTo-Json -Depth 6)
+Write-Output ("Family Fare everyday prices: " + @($deals).Count + " catalog items (" + (@($deals).Count - $carried) + " fresh, " + $carried + " carried forward, " + $expired + " expired past $MaxCarryDays d [" + $expStarved + " starved, " + $expChurn + " churn, " + $expUnknown + " unknown]; " + $empty.Count + " terms still empty) -> " + $file)
+if ($starvedTerms.Count) { Write-Warning ("Family Fare: STARVED term(s) behind those expiries (no successful buy inside the " + $MaxCarryDays + "-day carry): " + ((($starvedTerms.Keys | Sort-Object) | Select-Object -First 40) -join ', ')) }
+
+# CURSOR AND LEDGER COMMIT TOGETHER, AND ONLY BEHIND A LANDED CATALOG.
+# The catalog, the cursor and the ledger are one fact about one window: these terms were bought, these rows
+# are the result, the next window starts after them. Committing the cursor without the catalog is what threw
+# away 686 rows; committing the ledger without the catalog would record buys whose rows never landed, which
+# would then read as healthy churn on a later expiry. So all three move together or none of them do.
+if (-not $mergedOk) {
+  Write-Warning ("Family Fare: MERGED WRITE FAILED after 5 attempts - " + $file + " is still the previous run's file and this window's " + (@($deals).Count - $carried) + " fresh row(s) did NOT land. The term cursor is deliberately LEFT AT #" + $startIdx + " so the next window re-buys terms #" + $startIdx + "..#" + (($startIdx + [math]::Max($lastSuccessRot,0)) % [math]::Max($termList.Count,1)) + " instead of skipping them. Nothing is lost; the window is simply repeated.")
+  exit 1
+}
+$commitIdx = Get-FfCursorCommit $nextIdx $mergedOk
+if ($null -ne $commitIdx) {
+  if (Write-FfJsonAtomic $cursorFile (([ordered]@{ next_index = $commitIdx; updated = (Get-Date).ToString('s'); note = 'index into the commodity-search term order where the NEXT Family Fare run starts; only written after the merged catalog has landed - see the cursor-commit comment in pull-regular-familyfare.ps1' } | ConvertTo-Json))) {
+    Write-Output ("Family Fare: term cursor advanced to #$commitIdx (this run bought terms #$startIdx..#$(($startIdx + $lastSuccessRot) % $termList.Count), merged catalog landed)")
+  } else { Write-Warning ('Family Fare: merged catalog landed but the term cursor could not be written (next run restarts at #' + $startIdx + ' and re-buys this slice - no rows are lost).') }
+}
+# The ledger is a full rewrite of a merged map, so a failed write costs the run's new dates and nothing else:
+# every term simply keeps its last honestly-earned date and re-earns today's on the next window.
+if ($ledger.Count) {
+  $ledgerDoc = [ordered]@{ store='Family Fare'; updated=(Get-Date).ToString('s'); note='term -> the last date that search term returned products. Written ONLY from measured receipt inside the buy loop, never bulk-stamped. Used to classify a 14-day carry expiry as starved / churn / unknown; see Get-FfExpiryClass in pull-regular-familyfare.ps1.'; term_count=$ledger.Count; terms=[ordered]@{} }
+  foreach ($k in ($ledger.Keys | Sort-Object)) { $ledgerDoc.terms[[string]$k] = [string]$ledger[$k] }
+  if (-not (Write-FfJsonAtomic $ledgerFile ($ledgerDoc | ConvertTo-Json -Depth 4))) {
+    Write-Warning ('Family Fare: could not write the term ledger to ' + $ledgerFile + ' - expiry classification falls back to unknown (which never pages) until it writes.')
+  }
+}
 
 # ---- IS FAMILY FARE ACTUALLY FREEZING? (re-keyed 2026-07-31, plan item 30a1a8) ----
 # This is the alert that used to live inside the throttle-wipeout branch above, asking a question the sharded
 # sweep made permanently unanswerable ("did ONE run capture the whole store?"). It now runs on every pull,
 # reads the MERGED catalog it just wrote, and asks whether the catalog is actually degrading - see
-# Test-FfCatalogDegraded at the top of this file for the three outcome tests and why each one is real news.
+# Test-FfCatalogDegraded at the top of this file for the four outcome tests and why each one is real news.
+# It runs only on a run whose merged catalog actually LANDED (2026-08-02): a failed write exits above this
+# point, because paging about the outcomes of a catalog that never reached disk is noise about a file that
+# does not exist, and the write failure itself is already loud in the sweep log at rc=1.
 # The once-per-day stamp is KEPT verbatim: 9 sweeps a day must not become 9 emails, and it was seven identical
 # items in the triage queue on 2026-07-30 that proved it.
 try {
@@ -477,7 +718,7 @@ try {
   foreach ($d in @($deals)) {
     try { if (([datetime][string]$d.as_of) -ge $cutoff) { $recentVerified++ } } catch {}
   }
-  $ffState = Test-FfCatalogDegraded @($deals).Count $prevMax $expired $recentVerified
+  $ffState = Test-FfCatalogDegraded @($deals).Count $prevMax $expStarved $expChurn $recentVerified
   if ($ffState.degraded) {
     $alertStamp = Join-Path $OutDir 'ff-throttle-alert.stamp'
     $sentToday = $false
@@ -488,9 +729,15 @@ try {
       $qDirA = Join-Path $OutDir 'throttled'
       $recent = @(Get-ChildItem (Join-Path $qDirA 'family-fare-*.throttled.json') -ErrorAction SilentlyContinue |
                   Where-Object { $_.BaseName -match '(\d{4}-\d{2}-\d{2})' -and [datetime]$Matches[1] -ge (Get-Date).AddDays(-4) })
+      # NAME THE STARVED TERMS. A starved term is the one degradation signal that is directly actionable: it
+      # gets a second search term in commodity-search.json (the F3 multi-term path), which is a five-minute
+      # fix. An email that says "55 rows expired" sends the reader back into the data to find out which; an
+      # email that says "these 3 terms have bought nothing in 14 days" hands them the change.
+      $starvedLine = if ($starvedTerms.Count) { "STARVED TERMS (no successful buy in $MaxCarryDays days - each one is a candidate for a second search term in commodity-search.json):`n  - " + ((($starvedTerms.Keys | Sort-Object) | Select-Object -First 40) -join "`n  - ") + "`n`n" } else { '' }
       $body = "Family Fare's MERGED everyday catalog is degrading, not just throttled.`n`n" +
-              "What tripped it:`n  - " + (($ffState.reasons) -join "`n  - ") + "`n`n" +
-              "Merged catalog: $(@($deals).Count) items ($(@($deals).Count - $carried) fresh this run, $carried carried forward, $expired expired past $MaxCarryDays days, $recentVerified re-verified in the last 48h) against a best-of-recent of $prevMax. File: $file`n`n" +
+              "What tripped it:`n  - " + (($ffState.reasons) -join "`n  - ") + "`n`n" + $starvedLine +
+              "Merged catalog: $(@($deals).Count) items ($(@($deals).Count - $carried) fresh this run, $carried carried forward, $expired expired past $MaxCarryDays days [$expStarved starved, $expChurn churn, $expUnknown unknown], $recentVerified re-verified in the last 48h) against a best-of-recent of $prevMax. File: $file`n`n" +
+              "Expiry classes: STARVED means the row's own search term has returned nothing for the whole carry window and the sweep genuinely cannot replace that product. CHURN means the term is being bought fine and only the NAME left the store's top-25 (a rename, a ranking shift, a delisting, or the multi-buy skip) - the catalog is a name-keyed union, so a trickle of those is the healthy steady state and does NOT page on its own. UNKNOWN means the row predates the found_by_term field, so it cannot be classified yet; it never pages and the class empties itself within $MaxCarryDays days.`n`n" +
               "Throttled diagnostics written on $($recent.Count) of the last 4 days - that alone is NORMAL under the 3-hourly sharded sweep (a run buys ~85 of 526 terms by design) and is no longer what this alert keys on. It fires only when the merged catalog is actually losing ground.`n`n" +
               "Freshop rate-limits several hundred sequential terms from one IP. The fix is fewer requests per window (shard the term list across the day), NOT slower pacing - a 2026-07-28 probe showed 20 terms at 200ms all succeed while a second burst all came back empty, so the budget is per-window request COUNT."
       & powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'send-alert.ps1') -Subject ("Grocery: Family Fare catalog is degrading - " + $ffState.reasons.Count + " signal(s)") -Body $body | Out-Null

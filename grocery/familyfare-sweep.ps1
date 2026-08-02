@@ -48,6 +48,12 @@ try {
 $after = ''
 if (Test-Path $cursorF) { try { $after = [string]((Get-Content $cursorF -Raw | ConvertFrom-Json).next_index) } catch {} }
 # A cursor that did not move means the window bought NOTHING - the sweep is the one place that is visible.
-if ($after -ne '' -and $after -eq $before) { Log ("sweep bought no terms - cursor still at #$after (hard shutout this window; next sweep re-attempts the same slice, which is correct)") }
+# TWO DIFFERENT REASONS THE CURSOR CAN SIT STILL, AND THEY ARE NOT THE SAME NEWS (2026-08-02).
+# Since the pull commits its cursor only behind a landed merged catalog, "cursor did not move" now covers a
+# second case: a window that bought plenty and then could not write it. Reporting that as a hard shutout would
+# be the same conflation that cost this pipeline thirteen days on "throttled" - an API refusal and a store
+# that does not carry the term reading as one line. rc separates them: a real shutout exits 0.
+if ($after -ne '' -and $after -eq $before -and $rc -eq 0) { Log ("sweep bought no terms - cursor still at #$after (hard shutout this window; next sweep re-attempts the same slice, which is correct)") }
+elseif ($after -ne '' -and $after -eq $before) { Log ("sweep FAILED rc=$rc - cursor deliberately still at #$after. This is NOT a hard shutout: the run exited nonzero without committing the window (see the lines above), so the next sweep re-buys the same slice and nothing is lost.") }
 else { Log ("sweep done rc=$rc - cursor #$before -> #$after") }
 exit $rc
