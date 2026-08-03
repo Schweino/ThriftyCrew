@@ -84,6 +84,13 @@ foreach ($s in $stores) { if ($s.method -eq 'server') { $serverDue = $true } }
 # ---- pull live server ad windows if due (retry once; a healthy pull ALWAYS yields >=1 PASS store) ----
 $verif = $null
 $hardFail = $false
+# DID THE PULL ACTUALLY HAPPEN? Measured here, at the call site - never inferred from $serverDue. $serverDue
+# only means "a server store's next_pull has arrived"; whether the pull RUNS is decided a few lines down, and
+# under -NoPull it never does. The report header used to word itself from $serverDue alone, so every -NoPull
+# run (bakers-daily-scan.ps1:74, the Fareway daily check) printed "(server pull ran)" while nothing had been
+# pulled - a line that ASSERTS an action instead of reporting one, same class as a date written rather than
+# measured. Observed 2026-08-03. Set this flag, and only this flag, drive the header note.
+$pullRan = $false
 $adsToday = Join-Path $OutDir ("ads-" + $asofS + ".json")
 if ($serverDue) {
   $pullOk = $NoPull   # in NoPull test mode we don't judge health
@@ -91,6 +98,7 @@ if ($serverDue) {
     for ($attempt=1; $attempt -le 2 -and -not $pullOk; $attempt++) {
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'pull-grocery-ads.ps1') | Out-Null
+        $pullRan = $true   # the child was launched and returned; health is judged separately, just below
         # Assert a FRESH, today-dated ads file with >=1 PASS store. If the pull crashed before writing
         # today's file, this stays false (we do NOT trust yesterday's ads-*.json) -> retry -> HARD FAILURE.
         if (Test-Path $adsToday) { $vv = @((Get-Content $adsToday -Raw | ConvertFrom-Json).verification); if (@($vv | Where-Object { $_.status -eq 'PASS' }).Count -gt 0) { $pullOk = $true } }
@@ -1345,10 +1353,18 @@ try {
 } catch { Log ('coverage-cycle ratchet threw: ' + $_.Exception.Message) }
 
 # ---- report ----
-$pullNote = if ($serverDue) { '   (server pull ran)' } else { '   (nothing due)' }
+# The header reports what the run DID, read off $pullRan / $hardFail (both set at the pull site near the top),
+# not off $serverDue - which says only that a store was due. Order matters: a pull that ran and came back with
+# no current ad data is a FAILED pull, not a pull that "ran", so $hardFail is worded before $pullRan.
+$pullNote =
+  if     (-not $serverDue) { '   (nothing due)' }
+  elseif ($NoPull)         { '   (no pull - -NoPull; latest ads file reused)' }
+  elseif ($hardFail)       { '   (server pull FAILED - no current ad data)' }
+  elseif ($pullRan)        { '   (server pull ran)' }
+  else                     { '   (server pull did not run)' }
 Write-Output ("Ad-cycle check  -  " + $asofS + $pullNote)
 Write-Output ('-'*74)
 foreach ($line in $summary) { Write-Output $line }
 if (@($flips).Count -gt 0) { Write-Output ""; Write-Output ("Flipped this run: " + ($flips -join ', ') + "  -> comparison + price history refreshed") }
-Log ("run complete; flips=" + (@($flips).Count))
+Log ("run complete; flips=" + (@($flips).Count) + "; pull=" + $pullNote.Trim())
 
