@@ -2645,3 +2645,580 @@
 [2026-08-03T07:16:34] coverage-cycle: 
 [2026-08-03T07:16:34] coverage-cycle: coverage-ledger: 1 coverage finding(s) across 13 rostered check(s); 13 row(s) evaluated.
 [2026-08-03T07:16:34] run complete; flips=0
+[2026-08-03T08:31:04] pull attempt 1 ok=True
+[2026-08-03T08:32:34] FF everyday refreshed
+[2026-08-03T08:46:34] Hy-Vee: Hy-Vee: 1538 products (939 refreshable via GraphQL; 599 have no link so their price cannot be re-verified)
+[2026-08-03T08:46:34] Hy-Vee: Hy-Vee: 897 refreshed today (154 marked down), 0 newly priced, 641 not re-verified, 31 REFUSED (productId is a different size than our row), 0 never asked (wall-clock cap), 0 failed
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Clorox Disinfecting Bleach Free Crisp Lemon Cleaning Wipes  ours=[35 ct] 
+[2026-08-03T08:46:34] Hy-Vee: hy-vee=[each]  qty 35 vs 1  (productId 50222)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: That's Smart Ground Cinnamon  ours=[2.5 oz] hy-vee=[2.38 oz]  qty 2.5 vs 
+[2026-08-03T08:46:34] Hy-Vee: 2.38  (productId 2950925)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Lee Kum Kee Premium Dark Soy Sauce  ours=[16.9 fl oz] hy-vee=[16.9 ml]  qty 
+[2026-08-03T08:46:34] Hy-Vee: 16.9 vs 0.57  (productId 731717)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Dinty Moore Beef Stew  ours=[15 oz] hy-vee=[38 oz]  qty 15 vs 38  (productId
+[2026-08-03T08:46:34] Hy-Vee:  11342)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Hormel Mary Kitchen Homestyle Corned Beef Hash  ours=[14 oz] hy-vee=[25 oz] 
+[2026-08-03T08:46:34] Hy-Vee:  qty 14 vs 25  (productId 47144)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Hy-Vee Sloppy Joe Sauce  ours=[24 oz] hy-vee=[15 oz]  qty 24 vs 15  
+[2026-08-03T08:46:34] Hy-Vee: (productId 444508)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Spice World Minced Garlic  ours=[4.5 oz] hy-vee=[32 oz]  qty 4.5 vs 32  
+[2026-08-03T08:46:34] Hy-Vee: (productId 19478)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Hy-Vee Dill Weed  ours=[0.25 oz] hy-vee=[0.75 oz]  qty 0.25 vs 0.75  
+[2026-08-03T08:46:34] Hy-Vee: (productId 2918306)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Hy-Vee Ground Cloves  ours=[0.55 oz] hy-vee=[2 oz]  qty 0.55 vs 2  
+[2026-08-03T08:46:34] Hy-Vee: (productId 55979)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Hy-Vee Ground Ginger  ours=[0.55 oz] hy-vee=[2 oz]  qty 0.55 vs 2  
+[2026-08-03T08:46:34] Hy-Vee: (productId 2925188)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Hy-Vee Select Cheese Tortellini  ours=[19 oz] hy-vee=[42 oz]  qty 19 vs 42  
+[2026-08-03T08:46:34] Hy-Vee: (productId 1334638)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Tomatillos  ours=[0.15 lbs ($3.99/lb)] hy-vee=[lb]  qty 0.25 vs 1  
+[2026-08-03T08:46:34] Hy-Vee: (productId 37464)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Poblano Peppers  ours=[0.25 lbs ($4.99/lb)] hy-vee=[lb]  qty 0.2 vs 1  
+[2026-08-03T08:46:34] Hy-Vee: (productId 37443)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Johnson Family Farm Fresh Basil  ours=[0.75 oz] hy-vee=[0.8 oz]  qty 0.75 vs
+[2026-08-03T08:46:34] Hy-Vee:  0.8  (productId 332699)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Johnson Family Farm Fresh Mint  ours=[0.75 oz] hy-vee=[0.8 oz]  qty 0.75 vs 
+[2026-08-03T08:46:34] Hy-Vee: 0.8  (productId 269490)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Southeastern Mills Brown Gravy Mix  ours=[2.75 oz] hy-vee=[1.76 oz]  qty 
+[2026-08-03T08:46:34] Hy-Vee: 2.75 vs 1.76  (productId 54194)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Yellow Flesh Nectarines  ours=[0.55 lbs ($2.99/lb)] hy-vee=[lb]  qty 0.33 vs
+[2026-08-03T08:46:34] Hy-Vee:  1  (productId 8698)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Ocean Sprayr Craisinsr Original Dried Cranberries, Dried Fruit  ours=[6 oz] 
+[2026-08-03T08:46:34] Hy-Vee: hy-vee=[24 oz]  qty 6 vs 24  (productId 387023)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Ocean Sprayr Craisinsr Original Dried Cranberries, Dried Fruit  ours=[12 oz]
+[2026-08-03T08:46:34] Hy-Vee:  hy-vee=[24 oz]  qty 12 vs 24  (productId 387023)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Shallots  ours=[0.15 lbs ($3.99/lb)] hy-vee=[lb]  qty 0.25 vs 1  (productId 
+[2026-08-03T08:46:34] Hy-Vee: 37367)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: B-Size Gold Potatoes  ours=[0.15 lbs ($1.29/lb)] hy-vee=[lb]  qty 0.78 vs 1 
+[2026-08-03T08:46:34] Hy-Vee:  (productId 86415)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Green Serrano Peppers  ours=[0.05 lbs ($4.99/lb)] hy-vee=[lb]  qty 0.2 vs 1 
+[2026-08-03T08:46:34] Hy-Vee:  (productId 37444)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Anaheim Peppers  ours=[0.25 lbs ($4.99/lb)] hy-vee=[lb]  qty 0.2 vs 1  
+[2026-08-03T08:46:34] Hy-Vee: (productId 37372)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Bok Choy  ours=[1.35 lbs ($3.99/lb)] hy-vee=[lb]  qty 0.25 vs 1  (productId 
+[2026-08-03T08:46:34] Hy-Vee: 37343)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Butternut Squash  ours=[2.5 lbs ($1.49/lb)] hy-vee=[lb]  qty 0.67 vs 1  
+[2026-08-03T08:46:34] Hy-Vee: (productId 8845)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Acorn Squash  ours=[1.35 lbs ($1.49/lb)] hy-vee=[lb]  qty 0.67 vs 1  
+[2026-08-03T08:46:34] Hy-Vee: (productId 37453)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Spaghetti Squash  ours=[2.4 lbs ($1.49/lb)] hy-vee=[lb]  qty 0.67 vs 1  
+[2026-08-03T08:46:34] Hy-Vee: (productId 8849)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Jicama  ours=[1.4 lbs ($1.99/lb)] hy-vee=[lb]  qty 0.5 vs 1  (productId 
+[2026-08-03T08:46:34] Hy-Vee: 37358)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Johnson Family Farm Fresh Dill  ours=[0.75 oz] hy-vee=[0.8 oz]  qty 0.75 vs 
+[2026-08-03T08:46:34] Hy-Vee: 0.8  (productId 276428)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Johnson Family Farm Fresh Rosemary  ours=[0.75 oz] hy-vee=[0.8 oz]  qty 0.75
+[2026-08-03T08:46:34] Hy-Vee:  vs 0.8  (productId 332701)
+[2026-08-03T08:46:34] Hy-Vee: WARNING:   size conflict, refresh refused: Johnson Family Farm Fresh Thyme  ours=[0.75 oz] hy-vee=[0.8 oz]  qty 0.75 vs
+[2026-08-03T08:46:34] Hy-Vee:  0.8  (productId 332702)
+[2026-08-03T08:46:34] Hy-Vee: Hy-Vee everyday prices -> C:\Codex\income\grocery\out\regular\hyvee-regular-2026-08-03.json
+[2026-08-03T08:56:13] Baker's everyday+promo refreshed via Kroger API (Saddlecreek) + link snapshots synced
+[2026-08-03T08:56:13] Hy-Vee link snapshots refreshed
+[2026-08-03T08:57:13] ff-carry: ff-carry: BLIND  Freshop answered NONE of the 94 term(s) this run needed to probe, so nothing was checked - this is not an OK (0 of 527 empty term(s) re-probed; 433 skipped because this pull already prices that commodity)
+[2026-08-03T08:57:14] NEW AD Hy-Vee 2026-08-03..2026-08-09
+[2026-08-03T08:57:23] multipack-repair: repair-multipack-sizes: 96 file(s), 0 guard-5 reject(s) examined, 0 repairable, 0 REFUSED (need a human) - APPLIED
+[2026-08-03T08:58:17] history banked from the raw board (no verdict file for this week - nothing judged, so raw == verified)
+[2026-08-03T08:58:34] coverage-gaps: 33 store(s) carry an item but are off the board - watermelon @ Walmart; bread @ Walmart; lemons @ Walmart; limes @ Walmart; celery @ Walmart; frozen-pizza @ Walmart; paper-towels @ Walmart; toilet-paper @ Walmart; trash-bags @ Hy-Vee; mangoes @ Fareway; mangoes @ Walmart; cantaloupe @ Walmart; pineapple @ Walmart; grapefruit @ Walmart; cauliflower @ Walmart; kale @ Family Fare; kale @ Walmart; green-onions @ Walmart; cilantro @ Walmart; chicken-wings @ Fareway; rotisserie-chicken @ Walmart; string-cheese @ Hy-Vee; french-bread @ Family Fare; french-bread @ Walmart; brownie-mix @ Family Fare; microwave-popcorn @ Fareway; fruit-snacks @ Fareway; gelatin @ Walmart; sports-drinks @ Fareway; frozen-lasagna @ Family Fare; parchment-paper @ Walmart; acorn-squash @ Family Fare; chayote @ Family Fare
+[2026-08-03T08:58:35] coverage-gap alert sent
+[2026-08-03T09:00:05] semantic sweep: 12 product(s) invisible to the rules across 6 commodit(y/ies) - breakfast-sandwiches, chicken-thighs, frozen-lasagna, ground-beef-8020, storage-bags, whipped-cream
+[2026-08-03T09:00:07] semantic sweep alert sent
+[2026-08-03T09:00:08] aisle test: 21 live cell(s) sit in a department their commodity does not occupy - bagels, bay-leaves, cheese-tortellini, cherries, chicken-nuggets, coffee-creamer, condensed-milk, corned-beef-hash, curry-powder, dried-arbol-chiles, evaporated-milk, fish-sticks, gingersnaps, ground-fennel, ground-turmeric, lemon-juice, lime-juice, minced-garlic, poultry-seasoning, prunes, rice
+[2026-08-03T09:00:10] aisle-test alert sent
+[2026-08-03T09:01:20] match-soundness: match-soundness: MOVED=0  DROPPED=0  new-contested=20  drift-vs-engine=0
+[2026-08-03T09:01:20] match-soundness:   new-contested (order-dependence to review): Back to Nature crackers or cookies, 15% off regular price, | Blue Diamond Almonds and More Honey Roasted Mixed Nuts | BOUNTY paper towels 4 triple rolls or Charmin bath tissue 6 mega XL rolls, $12.99 | Di Lusso croissant sandwich, FUEL SAVER EARN 3¢ OFF PER GALLON, | Fareway Mandarin Oranges in 100% Juice | Fareway Sliced Pears | HyChi dinner for 4, 4 pint entrées, 2 pints rice, 4 egg rolls, 4 crab Rangoon & 4 fortune cookies, $34.99 | Hy-Vee heavy whipping cream 16 fl. oz. or half & half 32 fl. oz., $2.99 | Jolly Rancher Fruit Punch + Mango Ropes 10 Oz | Kroger Oats Raisins Almonds & Honey Granola | Kroger Salsa Style Fire Roasted Diced Tomatoes | Market Grille country sampler breakfast, 2 eggs any style, 1 biscuit & gravy, 2 slices of bacon, sausage links or patties & hashbrowns or fruit cup., $7.99 | Natural Delights Organic Coconut Rolled Mini Medjools | Oh Snap! pickles, veggies or cranberries, 1.7 to 3.5 oz., 2/ $4.00 | Party Size Frito-Lay snacks, salsa or queso, 8.25 to 24 oz., $3.99 ea. with purchase of 3 | Perdue Panko Chicken Nuggets | Rana flat pasta or gnocchi, 9 or 12 oz., 2/ $4.00 | SC Johnson fantastik Disinfectant Multi-Purpose Cleaner Spray Bottle, Fresh Scent | Sunset Flavor, Lolli or Honey Bomb tomatoes, 12 oz. pkg., $4.99 | Sweet Cherry Brats (4 Ct.)
+[2026-08-03T09:01:21] category-coverage: category-coverage: OK  all 503 commodities are in exactly one of 16 categories
+[2026-08-03T09:01:22] store-registry: store-registry: OK  7 stores; board, files, schedule and live scripts all agree
+[2026-08-03T09:02:52] discover-hyvee: DOCKET: 139 open candidate(s) that beat what we hold -> C:\Codex\income\grocery\out\hyvee-discovery.json
+[2026-08-03T09:02:52] discover-hyvee:   (76 found by this slice, 63 carried forward from earlier runs, 0 removed because they are now ruled)
+[2026-08-03T09:02:55] arrivals:   cells today 2830 | baseline union 4572 | ARRIVALS 50 (crown 1) | scored 48 | blind 2
+[2026-08-03T09:02:55] arrivals:   FLAGGED at div >= 0.75: 6  (this is a REVIEW QUEUE - measured precision is low; nothing here blocks a publish)
+[2026-08-03T09:02:55] arrivals: CROWN ARRIVALS (1) - a wrong product is 4x more likely to hold a crown
+[2026-08-03T09:02:55] arrivals: OTHER ARRIVALS (47)
+[2026-08-03T09:02:55] arrivals:   FLAG#1  div=1.00         baby-food @ Family Fare   $0.2738/oz
+[2026-08-03T09:02:55] arrivals:   FLAG#2  div=1.00         enchilada-sauce @ Hy-Vee   $0.0938/oz
+[2026-08-03T09:02:55] arrivals:   FLAG#3  div=1.00         muffins @ Hy-Vee   $0.6650/each
+[2026-08-03T09:02:55] arrivals:   FLAG#4  div=0.80         garlic-bread @ Hy-Vee   $5.0000/each
+[2026-08-03T09:02:55] arrivals:   FLAG#5  div=0.80         raisins @ Baker's   $0.2136/oz
+[2026-08-03T09:02:55] arrivals:   FLAG#6  div=0.75         frozen-burritos @ Hy-Vee   $0.7488/each
+[2026-08-03T09:02:55] arrivals:   FLAG#1  div=1.00  TAKES CROWN  cucumbers @ Hy-Vee   $0.2163/each
+[2026-08-03T09:02:55] arrivals:   FLAG#2  div=0.50  TAKES CROWN  peaches @ Hy-Vee   $1.2246/lb
+[2026-08-03T09:02:55] arrivals:   FLAG#10  div=1.00  no crown  blueberries @ Hy-Vee   $0.4350/oz
+[2026-08-03T09:02:55] arrivals:   FLAG#11  div=1.00  no crown  honey @ Hy-Vee   $0.2496/oz
+[2026-08-03T09:02:55] arrivals:   FLAG#12  div=1.00  no crown  honey @ Hy-Vee   $0.2028/oz
+[2026-08-03T09:02:55] arrivals:   FLAG#13  div=1.00  no crown  honey @ Hy-Vee   $0.2496/oz
+[2026-08-03T09:02:55] arrivals:   FLAG#14  div=1.00  no crown  lettuce @ Hy-Vee   $3.9900/each
+[2026-08-03T09:02:55] arrivals:   FLAG#15  div=1.00  no crown  pasta-sauce @ Hy-Vee   $0.0741/oz
+[2026-08-03T09:02:55] arrivals:   FLAG#16  div=0.80  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-03T09:02:55] arrivals:   FLAG#17  div=0.80  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-03T09:02:55] arrivals:   FLAG#18  div=0.80  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-03T09:02:55] arrivals:   FLAG#19  div=0.80  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-03T09:02:55] arrivals:   FLAG#20  div=0.80  no crown  yogurt @ Hy-Vee   $0.1150/oz
+[2026-08-03T09:02:55] arrivals:   FLAG#21  div=0.00  no crown  beef-broth @ Hy-Vee   $0.0469/floz
+[2026-08-03T09:02:55] arrivals:   FLAG#22  div=0.00  no crown  chicken-broth @ Hy-Vee   $0.0469/floz
+[2026-08-03T09:02:55] arrivals:   FLAG#23  div=0.00  no crown  chicken-broth @ Hy-Vee   $0.0600/floz
+[2026-08-03T09:02:55] arrivals:   FLAG#24  div=0.00  no crown  mayonnaise @ Hy-Vee   $0.0990/oz
+[2026-08-03T09:02:59] taxonomy: taxonomy source: Family Fare: canonical_url from 19 file(s) within 30d -> 4736 product(s) with a department (newest family-fare-regular-2026-08-03.json)
+[2026-08-03T09:02:59] taxonomy: taxonomy source: Hy-Vee: row field store_department in hyvee-regular-2026-08-03.json -> 888 product(s) with a department
+[2026-08-03T09:02:59] taxonomy: taxonomy source: Baker's: row field store_category in bakers-regular-2026-08-03.json -> 6387 product(s) with a department
+[2026-08-03T09:02:59] taxonomy: taxonomy: judged 4157 row(s) across board cells + candidates; 0 LIVE CELL disagreement(s), 14 candidate disagreement(s)
+[2026-08-03T09:02:59] taxonomy: taxonomy: 5963 row(s) from Baker's carried a department but that store has no entry in taxonomy-map.json - NOT judged
+[2026-08-03T09:02:59] taxonomy: taxonomy: 1187 row(s) from Hy-Vee carried a department but that store has no entry in taxonomy-map.json - NOT judged
+[2026-08-03T09:02:59] taxonomy:   candidate  apples @ Family Fare -> health_beauty/baby_child  Once Upon A Farm No Added Sugar Apple, Sweet Potato & Spinach Toddler Tractor Wheels 5 Ea
+[2026-08-03T09:02:59] taxonomy:   candidate  apples @ Family Fare -> health_beauty/baby_child  Pumpkin Tree Fruit & Vegetable Puree, Apple, Sweet Potato & Corn, Organic 4.4 Oz
+[2026-08-03T09:02:59] taxonomy:   candidate  brown-rice @ Family Fare -> pets_wildlife/dog  Blue Buffalo Natural Puppy Chicken And Brown Rice Recipe Food For Puppies 5 Lb
+[2026-08-03T09:02:59] taxonomy:   candidate  coconut-oil @ Family Fare -> household/facial_tissue  Kleenex 3 In 1 3 Ply Coconut Oil + Aloe Tissues 4 Ea
+[2026-08-03T09:02:59] taxonomy:   candidate  grapefruit @ Family Fare -> health_beauty/skin_care  Top Care Foaming Pink Grapefruit Acne Scrub 4.2 Fl Oz
+[2026-08-03T09:02:59] taxonomy:   candidate  ice-cream @ Family Fare -> health_beauty/adult_nutrition  Optimum Nutrition Vanilla Ice Cream 100% Whey Protein 24.05 Oz
+[2026-08-03T09:02:59] taxonomy:   candidate  lemons @ Family Fare -> health_beauty/pharmacy  Halls Sugar Free Drops Honey Lemon Flavor Cough & Throat Relief 25 Ea
+[2026-08-03T09:02:59] taxonomy:   candidate  milk @ Family Fare -> health_beauty/pharmacy  Top Care Milk Of Magnesia, Fresh Mint Flavor 12 Fl Oz
+[2026-08-03T09:02:59] taxonomy:   candidate  milk @ Family Fare -> health_beauty/pharmacy  Phillips' Phillips' Genuine Sugar Free Fresh Mint Milk Of Magnesia 12 Fl Oz
+[2026-08-03T09:02:59] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/grooming_hygiene  Nair Shower Cream Moroccan Argan Oil & Orange Blossom Hair Remover 12 Oz
+[2026-08-03T09:02:59] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Metamucil 4 In 1 Psyllium Fiber Powder, Sugar Free, Orange, 114 Tsp 23.3 Oz
+[2026-08-03T09:02:59] taxonomy:   candidate  oranges @ Family Fare -> health_beauty/pharmacy  Top Care Fiber Powder, Sugar Free, Orange Flavor 23.3 Oz
+[2026-08-03T09:02:59] taxonomy:   candidate  salt @ Family Fare -> health_beauty/adult_nutrition  Rxbar Chocolate Sea Salt Protein Bar 1.8 Oz
+[2026-08-03T09:02:59] taxonomy:   candidate  watermelon @ Family Fare -> health_beauty/adult_nutrition  5 Hour Energy Watermelon Energy Shot 1.93 Fl Oz
+[2026-08-03T09:02:59] taxonomy: taxonomy: report -> C:\Codex\income\grocery\out\taxonomy-disagreements-2026-08-03.json
+[2026-08-03T09:03:02] sale-windows refreshed
+[2026-08-03T09:03:10] recipe-overlay applied
+[2026-08-03T09:03:13] engine cost-recipes refreshed db\costed
+[2026-08-03T09:03:14] db-agreement guard: clean
+[2026-08-03T09:03:15] v2 per-serving manifest recomputed
+[2026-08-03T09:03:16] ingredient-map regenerated (derived from specs + feed)
+[2026-08-03T09:03:21] top5-weekly refreshed
+[2026-08-03T09:03:21] free-rotation: rotation: board-week=2026-08-03  target free set = 20 recipe(s)
+[2026-08-03T09:03:21] free-rotation:   chicken #1  $1.63/srv  chicken-bulgogi-rice-bowls
+[2026-08-03T09:03:21] free-rotation:   chicken #2  $1.71/srv  chicken-fried-rice-skillet
+[2026-08-03T09:03:21] free-rotation:   chicken #3  $1.82/srv  claypot-chicken-mushroom-rice
+[2026-08-03T09:03:21] free-rotation:   chicken #4  $1.88/srv  poppy-seed-chicken-and-rice-casserole
+[2026-08-03T09:03:21] free-rotation:   chicken #5  $1.92/srv  chicken-pot-pie-biscuit-casserole
+[2026-08-03T09:03:21] free-rotation:   turkey  #1  $1.84/srv  turkey-huevos-rancheros-rice-bowls
+[2026-08-03T09:03:21] free-rotation:   turkey  #2  $1.92/srv  haluski-and-kielbasa-cabbage-noodles
+[2026-08-03T09:03:21] free-rotation:   turkey  #3  $1.93/srv  turkey-biscuit-pot-pie-casserole
+[2026-08-03T09:03:21] free-rotation:   turkey  #4  $1.97/srv  scalloped-potato-turkey-casserole
+[2026-08-03T09:03:21] free-rotation:   turkey  #5  $2.00/srv  red-beans-turkey-sausage-and-rice
+[2026-08-03T09:03:21] free-rotation:   beef    #1  $2.37/srv  beef-potato-au-gratin-casserole
+[2026-08-03T09:03:21] free-rotation:   beef    #2  $2.40/srv  lebanese-hashweh
+[2026-08-03T09:03:21] free-rotation:   beef    #3  $2.45/srv  bistek-tagalog-filipino-beef-onion-rice
+[2026-08-03T09:03:21] free-rotation:   beef    #4  $2.49/srv  mediterranean-beef-hummus-bowls
+[2026-08-03T09:03:21] free-rotation:   beef    #5  $2.54/srv  million-dollar-baked-spaghetti
+[2026-08-03T09:03:21] free-rotation:   pork    #1  $1.31/srv  bratwurst-sauerkraut-potatoes-bake
+[2026-08-03T09:03:21] free-rotation:   pork    #2  $1.49/srv  vietnamese-thit-kho-braised-pork-and-eggs
+[2026-08-03T09:03:21] free-rotation:   pork    #3  $1.51/srv  slow-cooker-country-style-pork-ribs-rice
+[2026-08-03T09:03:21] free-rotation:   pork    #4  $1.59/srv  orecchiette-italian-sausage-broccoli
+[2026-08-03T09:03:21] free-rotation:   pork    #5  $1.63/srv  slow-cooker-kalua-pork-bowls
+[2026-08-03T09:03:22] free-rotation:   FREE   chicken-bulgogi-rice-bowls -> already-public
+[2026-08-03T09:03:22] free-rotation:   FREE   chicken-fried-rice-skillet -> already-public
+[2026-08-03T09:03:23] free-rotation:   FREE   claypot-chicken-mushroom-rice -> already-public
+[2026-08-03T09:03:24] free-rotation:   FREE   poppy-seed-chicken-and-rice-casserole -> already-public
+[2026-08-03T09:03:24] free-rotation:   FREE   chicken-pot-pie-biscuit-casserole -> already-public
+[2026-08-03T09:03:25] free-rotation:   FREE   turkey-huevos-rancheros-rice-bowls -> already-public
+[2026-08-03T09:03:25] free-rotation:   FREE   haluski-and-kielbasa-cabbage-noodles -> already-public
+[2026-08-03T09:03:26] free-rotation:   FREE   turkey-biscuit-pot-pie-casserole -> already-public
+[2026-08-03T09:03:26] free-rotation:   FREE   scalloped-potato-turkey-casserole -> already-public
+[2026-08-03T09:03:27] free-rotation:   FREE   red-beans-turkey-sausage-and-rice -> already-public
+[2026-08-03T09:03:28] free-rotation:   FREE   beef-potato-au-gratin-casserole -> already-public
+[2026-08-03T09:03:28] free-rotation:   FREE   lebanese-hashweh -> already-public
+[2026-08-03T09:03:29] free-rotation:   FREE   bistek-tagalog-filipino-beef-onion-rice -> already-public
+[2026-08-03T09:03:29] free-rotation:   FREE   mediterranean-beef-hummus-bowls -> already-public
+[2026-08-03T09:03:30] free-rotation:   FREE   million-dollar-baked-spaghetti -> already-public
+[2026-08-03T09:03:31] free-rotation:   FREE   bratwurst-sauerkraut-potatoes-bake -> already-public
+[2026-08-03T09:03:31] free-rotation:   FREE   vietnamese-thit-kho-braised-pork-and-eggs -> already-public
+[2026-08-03T09:03:32] free-rotation:   FREE   slow-cooker-country-style-pork-ribs-rice -> already-public
+[2026-08-03T09:03:32] free-rotation:   FREE   orecchiette-italian-sausage-broccoli -> already-public
+[2026-08-03T09:03:33] free-rotation:   FREE   slow-cooker-kalua-pork-bowls -> already-public
+[2026-08-03T09:03:33] free-rotation:   recipes-db: patched 0 visibility field(s) key-scoped (no whole-file round-trip)
+[2026-08-03T09:03:33] free-rotation: rotation: 20 flip(s), 0 error(s); state + recipes-db + public/free-dinners.json written
+[2026-08-03T09:03:33] free-rotation: set changed - republishing the hub so its baked badges match the new rotation
+[2026-08-03T09:03:45] free-rotation:   hub: spliced OK: cards=521 (grid 513 + rail 8)  len 478705 -> 478815  written hub-new.html
+[2026-08-03T09:03:45] free-rotation:   hub: PUBLISHED. live cards=521  copy-updated=True  sort-live=True  script-live=True
+[2026-08-03T09:03:46] smp-feed exported
+[2026-08-03T09:05:04] price-alerts: price-alerts done: 0 email(s) sent
+[2026-08-03T09:05:08] derive-links-from-prices: .
+[2026-08-03T09:05:21] family-fare link fill: APPLIED: 0 Family Fare link(s) written from the plan (0 network calls)
+[2026-08-03T09:05:23] prune-bad-links: links DROPPED (wrong product/price)    : 7   (of which 4 were SALE cells the old rule skipped entirely) | links DROPPED (per-unit unverifiable)  : 0   (cannot prove the link shows our price - unknown is not a pass) | links DROPPED (link carries no price)  : 0   (nothing from the store to check against)
+[2026-08-03T09:05:24] downstream refreshed after flips: Hy-Vee
+[2026-08-03T09:05:42] basis-reconcile: checked 68 cell(s) against the store's own unit price (23439 indexed, 0 allowlisted)
+[2026-08-03T09:05:42] REVIEW FLAGS: 77 -> SANITY|Allspice (ground)|outlier|Walmart $1.06 is 47% below runner-up Baker's $1.99 - verify the price/size parse ; SANITY|Bar Soap|outlier|Sam's Club $0.50 is 37% below runner-up Baker's $0.79 - verify the price/size parse ; SANITY|Basil (dried)|outlier|Hy-Vee $0.41 is 61% below runner-up Sam's Club $1.06 - verify the price/size parse ; SANITY|Basil (dried)|wow|cheapest moved down 61% vs last week ($1.06 -> $0.41)
+[2026-08-03T09:05:43] review-flag alert sent (14 new of 77)
+[2026-08-03T09:05:47] pins:   board-confirmed-fresh gate: 20402 first-party rows loaded from out\regular
+[2026-08-03T09:05:47] pins:   basis-gap SKIPPED (not pinned): apple / Hy-Vee  board=0.79 link=1.98  (2.5x)
+[2026-08-03T09:05:47] pins:   basis-gap SKIPPED (not pinned): zero-sugar-soda / Aldi  board=2.15 link=0.3158  (0.1x)
+[2026-08-03T09:05:47] pins:   basis-gap SKIPPED (not pinned): worcestershire-sauce / Sam's Club  board=0.2345 link=0.0686  (0.3x)
+[2026-08-03T09:05:47] pins:   basis-gap SKIPPED (not pinned): smoked-paprika / Family Fare  board=0.9986 link=2.49  (2.5x)
+[2026-08-03T09:05:47] pins: board-overrides: wrote 22 corrections  (skipped: sale=64 collision=0 name-drift=28 no-link=106 bad-price=83 already-agree=2927 basis-gap=4 board-confirmed-fresh=0)
+[2026-08-03T09:05:47] guards:   ok    pu-lib per-unit engine self-check
+[2026-08-03T09:05:48] guards:   ok    partial-pull union (compare-deals) self-test
+[2026-08-03T09:05:48] guards:   ok    multipack reject + pricing (walmart-deals) self-test
+[2026-08-03T09:05:49] guards:   ok    name-size vs Walmart unit price (walmart-batch) self-test
+[2026-08-03T09:05:51] guards:   ok    fullpull [Walmart]: ok - newest comprehensive capture walmart-regular-2026-07-31.json (217 terms) is 3 day(s) old (warn at 10, cliff at 14) fullpull [Sam's Club]: ok - newest comprehensive capture sams-deals-2026-07-29.json (316 terms) is 5 day(s) old (warn at 10, cliff at 14) fullpull [Walmart] cells: ok - 6 of 408 attributed board cell(s) expire within 5 day(s) (warn at 5%); 6 cell(s) could not be traced to a capture in the window fullpull [Sam's Club] cells: ok - 1 of 325 attributed board cell(s) expire within 5 day(s) (warn at 5%); 17 cell(s) could not be traced to a capture in the window
+[2026-08-03T09:05:51] guards:   ok    matching rules carry no mojibake (accented classes use the \u00XX escape form)
+[2026-08-03T09:05:52] guards:   ok    price-mode (in-store pricing)
+[2026-08-03T09:05:54] guards:   ok    household-in-food
+[2026-08-03T09:05:55] guards:   ok    no food commodity matched a wrong-class product (beverage/baby/pet/household/carrier/candy)
+[2026-08-03T09:05:55] guards:   ok    no store lost coverage vs the previous board
+[2026-08-03T09:05:58] guards:   ok    no product a reasoner already ruled wrong is priced on the board (known-wrong blocklist)
+[2026-08-03T09:05:59] guards:   ok    no cell is cheapest because a pack TOTAL was multiplied by its own count (peer-size fingerprint)
+[2026-08-03T09:05:59] guards:   ok    no published price claims a date newer than the capture it came from (as_of evidence)
+[2026-08-03T09:06:00] guards:   ok    ZERO shipped links disagree with their tile (hard), and no store regressed on coverage (ratchet)
+[2026-08-03T09:06:01] guards:   ok    every override pin is derivable from its own link (22 checked for derivability; product identity checked on 18 of them)
+[2026-08-03T09:06:01] guards:   ok    no board cell differs from its linked product by a factor (2666 cells compared)
+[2026-08-03T09:06:04] guards:   ok    no multipack row prices a pack as a single unit (798 pack-total size(s) verified by arithmetic out of 801 pack-shaped row(s))
+[2026-08-03T09:06:07] guards:   ok    no store's newest data file collapsed vs its recent history (7 store(s) compared against their own history)
+[2026-08-03T09:06:07] guards:   ok    out\regular holds only canonical <store>-regular-<date>.json data files
+[2026-08-03T09:06:07] guards:   ok    no undated stale discount is being published as a live sale
+[2026-08-03T09:06:09] guards:   ok    no store's price data is older than 14 days (7 store(s) aged)
+[2026-08-03T09:06:11] guards:   ok    every price we publish is the price the store charges (34082 rows verified against their own current_price)
+[2026-08-03T09:06:11] guards:   ok    Baker's prices arrive verbatim from the sanctioned Kroger API (6937 rows, 6937 carrying current_price); independent proof is audit-basis-reconcile's netWeight check
+[2026-08-03T09:06:11] guards:   ok    the board is built from the newest ads file (ads-2026-08-03 -> comparison-2026-08-03)
+[2026-08-03T09:06:12] guards: 
+[2026-08-03T09:06:12] guards:   warn  cell-drops: WARNING - 37 everyday cell(s) priced on comparison-2026-07-29 are missing from today's board. Baker's/Walmart run comprehensive pulls with NO carry-forward by design, so a dead search term is an instant hole - check that store's pull for failed terms first; for the browser stores check as_of expiry + carry-forward: |   bread @ Walmart (was $1.48) |   cantaloupe @ Walmart (was $2.69) |   cauliflower @ Walmart (was $3.97) |   celery @ Walmart (was $2.37) |   chicken-wings @ Fareway (was $2.99) |   cilantro @ Walmart (was $1.78) |   clam-chowder @ Fareway (was $0.13) |   ground-coriander @ Family Fare (was $1.05) |   cucumbers @ Fareway (was $1.17) |   eggplant @ Fareway (was $1.99) |   french-bread @ Walmart (was $1.25) |   frozen-pizza @ Walmart (was $4.82) |   fruit-snacks @ Fareway (was $0.33) |   gelatin @ Walmart (was $1.62) |   grapefruit @ Walmart (was $1.36) |   grapefruit @ Fareway (was $1.69) |   green-onions @ Walmart (was $1.07) |   honeydew @ Fareway (was $1.49) |   honeydew @ Walmart (was $4.46) |   kale @ Walmart (was $1.48) |   lemons @ Walmart (was $0.50) |   limes @ Walmart (was $0.25) |   mangoes @ Walmart (was $0.75) |   mangoes @ Fareway (was $0.99) |   microwave-popcorn @ Fareway (was $1.00) |   mirin @ Fareway (was $0.53) |   paper-towels @ Walmart (was $1.14) |   parchment-paper @ Walmart (was $2.96) |   pineapple @ Walmart (was $1.98) |   plastic-wrap @ Walmart (was $2.14) |   ribeye-steak @ Fareway (was $24.99) |   rotisserie-chicken @ Walmart (was $5.97) |   sports-drinks @ Fareway (was $0.05) |   sun-dried-tomatoes @ Family Fare (was $0.70) |   toilet-paper @ Walmart (was $0.71) |   watermelon @ Walmart (was $4.65) |   watermelon @ Fareway (was $5.99)
+[2026-08-03T09:06:12] guards:   warn  allowlist hygiene: 0 entr(y/ies) reviewed >120 days ago + 18 with no 'reviewed' date - re-verify against the store and stamp 'reviewed: yyyy-MM-dd' (multipack-allowlist / coverage-gap-allowlist / basis-reconcile-allowlist)
+[2026-08-03T09:06:12] guards:   warn  guard 3 could not product-identity-check 4 of 22 pins - their board cell carries no product name, so nothing can check that the pinned link is the product the board priced: boneless-skinless-chicken-thigh/Family Fare, light-sour-cream/Sam's Club, red-bell-pepper/Sam's Club, red-bell-pepper/Family Fare. Fix at the source: give these recipe-board cells an .item.
+[2026-08-03T09:06:12] guards:   warn  16 cell(s) drift from their link by <50% (ordinary price movement; the daily consistency repair handles it)
+[2026-08-03T09:06:12] guards:   warn  Aldi          1675 rows |   0% re-verified against the store TODAY (0 of 1675 dated) | file 2d old
+[2026-08-03T09:06:12] guards:   warn  Baker's       6937 rows | 100% re-verified against the store TODAY (6937 of 6937 dated) | file 0d old
+[2026-08-03T09:06:12] guards:   warn  Family Fare   4700 rows |  14% re-verified against the store TODAY (642 of 4700 dated) | file 0d old
+[2026-08-03T09:06:12] guards:   warn  Fareway        611 rows |  72% re-verified against the store TODAY (442 of 611 dated) | file 0d old
+[2026-08-03T09:06:12] guards:   warn  Hy-Vee        1538 rows |  58% re-verified against the store TODAY (897 of 1538 dated) | file 0d old | 641 row(s) flagged unverified
+[2026-08-03T09:06:12] guards:   warn  Sam's Club      60 rows |   0% re-verified against the store TODAY (0 of 48 dated) | file 2d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-08-03T09:06:12] guards:   warn  Walmart       4881 rows |   0% re-verified against the store TODAY (0 of 2028 dated) | file 2d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-08-03T09:06:12] guards:   warn  coverage ratchet: BLIND           audit-ff-carry - examined 0 of 527 eligible row(s). This is the shape guard 11 held for five days: a confident ok over an empty examination. empty FF search terms re-probed against Freshop from family-fare-regular-2026-08-03.json | coverage-ledger: 1 coverage finding(s) across 13 rostered check(s); 13 row(s) evaluated.
+[2026-08-03T09:06:12] guards: GUARDS OK: every hard invariant holds. Safe to publish.
+[2026-08-03T09:06:12] share: share-image: 5 drops -> C:\Codex\income\public\share\omaha-drops.png
+[2026-08-03T09:13:41] AUTO-PUBLISH: live page updated (price change/new ad)
+[2026-08-03T09:13:43] walmart-fullpull: fullpull [Walmart]: ok - newest comprehensive capture walmart-regular-2026-07-31.json (217 terms) is 3 day(s) old (warn at 10, cliff at 14) fullpull [Sam's Club]: ok - newest comprehensive capture sams-deals-2026-07-29.json (316 terms) is 5 day(s) old (warn at 10, cliff at 14) fullpull [Walmart] cells: ok - 6 of 408 attributed board cell(s) expire within 5 day(s) (warn at 5%); 6 cell(s) could not be traced to a capture in the window fullpull [Sam's Club] cells: ok - 1 of 325 attributed board cell(s) expire within 5 day(s) (warn at 5%); 17 cell(s) could not be traced to a capture in the window
+[2026-08-03T09:13:44] digest: digest: not Friday - nothing to do
+[2026-08-03T09:13:45] consistency OK - every shown link matches its price
+[2026-08-03T09:13:45] store-coverage OK - every staple commodity shows all 7 stores
+[2026-08-03T09:13:46] notify-item-added: notify-item-added: no new commodities, empty queue - nothing to do
+[2026-08-03T09:17:50] WATCHERS FAILED: test-auditors could not prove a guard still sees its own bug
+[2026-08-03T09:17:50] WATCHERS: full test-auditors output saved to C:\Codex\income\grocery\out\test-auditors-fail-2026-08-03.txt
+[2026-08-03T09:17:50] test-auditors threw: Program 'powershell.exe' failed to run: The filename or extension is too longAt C:\Codex\income\grocery\check-ad-cycles.ps1:1191 char:7
++       & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'se ...
++       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+[2026-08-03T09:17:51] everyday-mismatch: everyday cells with a link, checked : 2978
+[2026-08-03T09:17:51] everyday-mismatch:   by board                          : main=2666  recipe=312
+[2026-08-03T09:17:51] everyday-mismatch: sale cells skipped (expected diff)  : 46
+[2026-08-03T09:17:51] everyday-mismatch: uncomputable size                   : 33
+[2026-08-03T09:17:51] everyday-mismatch: board published no per-unit         : 0
+[2026-08-03T09:17:51] everyday-mismatch: 
+[2026-08-03T09:17:51] everyday-mismatch: EVERYDAY MISMATCHES (board disagrees with its own linked product): 116
+[2026-08-03T09:17:51] everyday-mismatch:   apple                    Hy-Vee       board=0.79      link=1.98      x2.51   $1.98 [lb]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: 
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Gala Apples
+[2026-08-03T09:17:51] everyday-mismatch:   smoked-paprika           Family Fare  board=0.9986    link=2.49      x2.49   $2.49 [1 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Sugar 'N Spice Smoked Paprika 7 Oz
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Sugar N Spice Paprika Smoked Pp
+[2026-08-03T09:17:51] everyday-mismatch:   marinara-sauce           Family Fare  board=0.0829    link=0.1871    x2.26   $4.49 [24 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Our Family Pasta Sauce, Tomato, Basil & Garlic 24 Oz
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Ragu Kettle Cooked Marinara Sauce 24 Oz
+[2026-08-03T09:17:51] everyday-mismatch:   rotini-pasta             Aldi         board=0.0591    link=0.1244    x2.1    $1.99 [16 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Reggano Spaghetti
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Priano Rotini
+[2026-08-03T09:17:51] everyday-mismatch:   red-bell-pepper          Family Fare  board=2.5       link=5         x2      $5 [1 ea]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: 
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Fresh Sweet Bell Pepper, Red Organic
+[2026-08-03T09:17:51] everyday-mismatch:   zero-sugar-soda          Aldi         board=2.15      link=0.3158    x0.15   $3.79 [12 x 12 fl oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: 
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Summit Zero Sugar Cola 12pk
+[2026-08-03T09:17:51] everyday-mismatch:   white-wine-vinegar       Hy-Vee       board=0.1473    link=0.27      x1.83   $4.59 [17 fl oz]
+[2026-08-03T09:17:51] everyday-mismatch:   hickory-smoked-bacon     Baker's      board=4.4444    link=7.9867    x1.8    $5.99 [12 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Kroger Naturally Hardwood Smoked Thick Cut Bacon
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Jimmy Dean Premium Bacon Hickory Smoked
+[2026-08-03T09:17:51] everyday-mismatch:   frozen-green-peas        Hy-Vee       board=0.0817    link=0.1454    x1.78   $3.49 [24 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: That's Smart! Sweet Peas (Frozen)
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Hy-Vee Frozen Sweet Peas
+[2026-08-03T09:17:51] everyday-mismatch:   worcestershire-sauce     Sam's Club   board=0.2345    link=0.0686    x0.29   $8.78 [1 gal]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Lea & Perrins The Original Worcestershire Sauce
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: French's Classic Worcestershire Sauce (1 gal)
+[2026-08-03T09:17:51] everyday-mismatch:   parmesan-cheese          Hy-Vee       board=0.4612    link=0.7633    x1.66   $2.29 [3 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Hy Vee Grated Parmesan Cheese
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Hy-Vee Grated Parmesan Cheese
+[2026-08-03T09:17:51] everyday-mismatch:   honey-dijon-mustard      Hy-Vee       board=0.1658    link=0.2742    x1.65   $3.29 [12 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Hy-Vee Honey Mustard
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Hy-Vee Stone Ground Honey Dijon Mustard
+[2026-08-03T09:17:51] everyday-mismatch:   swiss-cheese             Hy-Vee       board=0.3125    link=0.5       x1.6    $2.5 [5 oz]
+[2026-08-03T09:17:51] everyday-mismatch:   cannellini-beans         Family Fare  board=0.1413    link=0.0639    x0.45   $0.99 [15.5 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Delallo Cannellini Beans, White Kidney 15.5 Oz
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Our Family Great Northern Beans 15.5 Oz
+[2026-08-03T09:17:51] everyday-mismatch:   feta-cheese              Family Fare  board=0.8113    link=1.2475    x1.54   $4.99 [4 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Culinary Tours Feta Chunk Cheese 8 Oz
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Athenos Feta Traditional Cheese Crumbles 4 Oz
+[2026-08-03T09:17:51] everyday-mismatch:   honey-dijon-mustard      Family Fare  board=0.3893    link=0.1825    x0.47   $2.19 [12 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Inglehoffer The Original Sweet Honey Mustard 10.25 Oz
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Our Family Mustard, Honey 12 Oz
+[2026-08-03T09:17:51] everyday-mismatch:   penne-pasta              Family Fare  board=0.0778    link=0.1181    x1.52   $1.89 [1 lb]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Dried Spaghetti Pasta, Thin Our Family
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Creamette Penne Rigate 1 Lb
+[2026-08-03T09:17:51] everyday-mismatch:   coconut-milk             Baker's      board=0.1474    link=0.2215    x1.5    $2.99 [13.5 fl oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Simple Truth Organic Lite Unsweetened Coconut Milk
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Kroger Premium Coconut Milk
+[2026-08-03T09:17:51] everyday-mismatch:   pepperoncini             Baker's      board=0.1949    link=0.2931    x1.5    $4.69 [16 fl oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Mezzetta Hot Banana Pepper Rings
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Mezzetta Golden Greek Pepperoncini
+[2026-08-03T09:17:51] everyday-mismatch:   1-3-fat-cream-cheese     Hy-Vee       board=0.2075    link=0.3113    x1.5    $2.49 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:   apple                    Walmart      board=0.75      link=0.39      x0.52   $0.39 [each]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Fresh Red Delicious Apple, Each
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Fresh Gala Apple, Each
+[2026-08-03T09:17:51] everyday-mismatch:   penne-pasta              Hy-Vee       board=0.0612    link=0.09      x1.47   $1.44 [16 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Hy-Vee Rotini Pasta
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Hy-Vee Penne Rigate
+[2026-08-03T09:17:51] everyday-mismatch:   rotini-pasta             Hy-Vee       board=0.0612    link=0.09      x1.47   $1.44 [16 oz]
+[2026-08-03T09:17:51] everyday-mismatch:   hickory-smoked-bacon     Family Fare  board=5.495     link=7.9867    x1.45   $5.99 [12 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Chuck Wagon Bacon, Smoked, Ends & Pieces 32 Oz
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Farmland Bacon, Hickory Smoked, Classic Cut 12 Oz
+[2026-08-03T09:17:51] everyday-mismatch:   cashews                  Baker's      board=0.898     link=0.56      x0.62   $8.99 [$0.56/oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: PLANTERS Garlic Chili Crisp cashews 5oz
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Simple Truth Sea Salt Roasted Cashews
+[2026-08-03T09:17:51] everyday-mismatch:   zero-sugar-soda          Family Fare  board=0.8817    link=1.215     x1.38   $7.29 [6 pk]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Welch's Zero Sugar Concord Grape Drink 6 Ea
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Coca Cola Zero Sugar Soda Bottles 6 Pk
+[2026-08-03T09:17:51] everyday-mismatch:   red-bell-pepper          Sam's Club   board=0.83      link=1.1283    x1.36   $6.77 [6 ct]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: 
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Multi Bell Sweet Peppers
+[2026-08-03T09:17:51] everyday-mismatch:   light-sour-cream         Sam's Club   board=0.18      link=0.1156    x0.64   $5.54 [$1.85/lb]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: 
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Daisy Sour Cream, 48 oz
+[2026-08-03T09:17:51] everyday-mismatch:   golden-raisins           Walmart      board=0.4142    link=0.2653    x0.64   $3.98 [15 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Sun-Maidr California Golden Raisins, 12 oz Bag in a Box
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Great Value Seedless Golden Raisins, 15 oz
+[2026-08-03T09:17:51] everyday-mismatch:   frozen-green-peas        Walmart      board=0.0612    link=0.0817    x1.33   $0.98 [12 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Great Value Frozen Sweet Peas, Steamable Bag, 16 oz
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Great Value Sweet Peas, 12 oz (Frozen)
+[2026-08-03T09:17:51] everyday-mismatch:   frozen-chopped-spinach   Walmart      board=0.115     link=0.0788    x0.68   $1.26 [16 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Pictsweet Family Size Chopped Spinach
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Great Value Chopped Spinach, 16 oz (Frozen)
+[2026-08-03T09:17:51] everyday-mismatch:   boneless-skinless-chicken-thigh Family Fare  board=7.19      link=4.99      x0.69   $4.99 [lb]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: 
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Chicken Thighs, Boneless Gold N Plump
+[2026-08-03T09:17:51] everyday-mismatch:   cucumber                 Family Fare  board=1.29      link=0.89      x0.69   $0.89 [1 ea]
+[2026-08-03T09:17:51] everyday-mismatch:   all-purpose-flour        Hy-Vee       board=0.0285    link=0.0374    x1.31   $2.99 [5 lbs]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: That's Smart! Bleached Enriched All-Purpose Flour
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Hy-Vee Bleached All Purpose Flour
+[2026-08-03T09:17:51] everyday-mismatch:   cheddar-cheese           Family Fare  board=0.2466    link=0.3238    x1.31   $2.59 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Our Family Mild Cheddar Shredded Cheese 8 Oz
+[2026-08-03T09:17:51] everyday-mismatch:   mozzarella-cheese        Family Fare  board=0.2466    link=0.3238    x1.31   $2.59 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Our Family Natural Finely Cut Mozzarella Shredded Cheese 8 Oz
+[2026-08-03T09:17:51] everyday-mismatch:   green-beans              Hy-Vee       board=0.0524    link=0.0683    x1.3    $0.99 [14.5 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: That's Smart! Cut Green Beans
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Hy-Vee Cut Green Beans
+[2026-08-03T09:17:51] everyday-mismatch:   olives                   Sam's Club   board=0.2944    link=0.21      x0.71   $8.98 [$0.21/oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Lindsay Sliced Black Ripe Olives, 6.5 oz., 6 pk.
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Member's Mark Manzanilla Olives, 2 pk
+[2026-08-03T09:17:51] everyday-mismatch:   olives                   Baker's      board=0.3317    link=0.2355    x0.71   $2.19 [9.3 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Kroger Large Pitted Ripe Black Olives
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Kroger Stuffed Manzanilla Olives with Pimiento
+[2026-08-03T09:17:51] everyday-mismatch:   rotini-pasta             Walmart      board=0.0606    link=0.0775    x1.28   $1.24 [16 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Great Value Spaghetti, 32 oz
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Great Value Rotini, 16 oz
+[2026-08-03T09:17:51] everyday-mismatch:   pepperoncini             Family Fare  board=0.2145    link=0.2742    x1.28   $3.29 [12 fl oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Our Family Hot Banana Pepper Rings 16 Fl Oz
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Mt Olive Pepperoncini, Italian Seasoned 12 Fl Oz
+[2026-08-03T09:17:51] everyday-mismatch:   greek-yogurt             Sam's Club   board=0.1217    link=0.156     x1.28   $6.24 [40 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Member's Mark Honey Vanilla Whole Milk Greek Yogurt, 48 oz.
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Chobani Vanilla Zero Sugar Greek Yogurt, 40 oz.
+[2026-08-03T09:17:51] everyday-mismatch:   green-beans              Baker's      board=0.0538    link=0.069     x1.28   $1 [14.5 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Smart Way Cut Green Beans
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Kroger Cut Canned Green Beans
+[2026-08-03T09:17:51] everyday-mismatch:   chipotle-in-adobo        Baker's      board=0.2129    link=0.27      x1.27   $1.89 [7 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Kroger Gluten Free Whole Chipotle Peppers in Adobo Sauce
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: La Costena Chipotle Peppers in Adobo Sauce
+[2026-08-03T09:17:51] everyday-mismatch:   greek-yogurt             Family Fare  board=0.2817    link=0.3566    x1.27   $1.89 [5.3 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Chobani Strawberry Banana On The Bottom Reduced Fat Greek Yogurt 5.3 Oz
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Chobani Plain Nonfat Greek Yogurt 5.3 Oz
+[2026-08-03T09:17:51] everyday-mismatch:   potato                   Family Fare  board=0.549     link=0.698     x1.27   $3.49 [5 lb]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Our Family Potatoes Russet Idaho
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Fresh Idaho Russet Potatoes Our Family
+[2026-08-03T09:17:51] everyday-mismatch:   diced-green-chiles       Hy-Vee       board=0.3557    link=0.4475    x1.26   $1.79 [4 oz]
+[2026-08-03T09:17:51] everyday-mismatch:   ginger                   Baker's      board=3.9867    link=4.99      x1.25   $4.99 [lb]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Legacy Farms Ginger Root Tray
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Ginger Root
+[2026-08-03T09:17:51] everyday-mismatch:   cheddar-cheese-shredded  Hy-Vee       board=0.2494    link=0.31      x1.24   $2.48 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Cheese
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Hy-Vee Finely Shredded Mild Cheddar Natural Cheese
+[2026-08-03T09:17:51] everyday-mismatch:   provolone-cheese         Hy-Vee       board=0.4112    link=0.3125    x0.76   $2.5 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:   1-3-fat-cream-cheese     Sam's Club   board=0.2275    link=0.28      x1.23   $8.97 [$0.28/oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: 
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Philadelphia Cream Cheese, 2 pk
+[2026-08-03T09:17:51] everyday-mismatch:   buffalo-wing-sauce       Baker's      board=0.27      link=0.2083    x0.77   $2.5 [12 fl oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Krogerr Mild Buffalo Wing Sauce
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Kroger Mild Buffalo Wing Sauce
+[2026-08-03T09:17:51] everyday-mismatch:   jalapeno                 Family Fare  board=2.99      link=2.29      x0.77   $2.29 [lb]
+[2026-08-03T09:17:51] everyday-mismatch:   parmesan-cheese          Baker's      board=0.3333    link=0.4112    x1.23   $3.29 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Kroger Parmesan Shredded Cheese
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Kroger Parmesan Grated Cheese
+[2026-08-03T09:17:51] everyday-mismatch:   beef-chuck-roast         Hy-Vee       board=8.99      link=10.99     x1.22   $10.99 [lb]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Hy-Vee Choice Reserve Boneless Chuck Roast
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Beef Boneless Chuck Roast
+[2026-08-03T09:17:51] everyday-mismatch:   feta-cheese              Hy-Vee       board=0.615     link=0.7488    x1.22   $5.99 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Soiree Traditional Feta Cheese Crumble
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Soiree Feta Traditional Chunk Cheese
+[2026-08-03T09:17:51] everyday-mismatch:   frozen-waffles           Sam's Club   board=0.1371    link=0.1649    x1.2    $11.87 [72 ct]
+[2026-08-03T09:17:51] everyday-mismatch:   buffalo-wing-sauce       Hy-Vee       board=0.2488    link=0.2025    x0.81   $3.24 [16 fl oz]
+[2026-08-03T09:17:51] everyday-mismatch:   93-7-ground-turkey       Family Fare  board=7.99      link=6.49      x0.81   $6.49 [16 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Jennie O 99%/1% Fresh Ground Turkey Breast 16 Oz
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Jennie O Fresh 93%/7% Ground Turkey 16 Oz
+[2026-08-03T09:17:51] everyday-mismatch:   olives                   Hy-Vee       board=0.3283    link=0.2696    x0.82   $1.55 [5.75 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: That's Smart! Large Pitted Ripe Olives
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: That's Smart! Pimiento Stuffed Spanish Manzanilla Olives
+[2026-08-03T09:17:51] everyday-mismatch:   cheddar-cheese-shredded  Sam's Club   board=0.1521    link=0.18      x1.18   $5.87 [$0.18/oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Member's Mark Part-Skim Mozzarella Cheese 5 lbs.
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Member's Mark Mild Cheddar Shredded Cheese, 16 oz 2 pk
+[2026-08-03T09:17:51] everyday-mismatch:   feta-cheese              Baker's      board=0.7075    link=0.8317    x1.18   $4.99 [6 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: President Feta Crumbles
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Private Selection Traditional Feta Crumbles
+[2026-08-03T09:17:51] everyday-mismatch:   frozen-green-peas        Baker's      board=0.0915    link=0.1075    x1.17   $1.29 [12 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Kroger Traditional Favorites Frozen Green Peas BIG DEAL!
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Kroger Frozen Sweet Green Peas
+[2026-08-03T09:17:51] everyday-mismatch:   93-7-ground-turkey       Walmart      board=4.55      link=5.3067    x1.17   $15.92 [3 lb]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Honeysuckle White 93% Lean / 7% Fat Ground Turkey Tray, Fresh, 1.2 lbs.
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: JENNIE-O Fresh Lean Ground Turkey 93/7, 3 lb
+[2026-08-03T09:17:51] everyday-mismatch:   frozen-green-peas        Family Fare  board=0.0996    link=0.1158    x1.16   $1.39 [12 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Our Family Green Peas, Sweet, Fresh Frozen 24 Oz
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Our Family Green Peas, Sweet, Fresh Frozen
+[2026-08-03T09:17:51] everyday-mismatch:   1-3-fat-cream-cheese     Walmart      board=0.23      link=0.195     x0.85   $1.56 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Great Value Light Cream Cheese Spread, 8 oz Tub
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Great Value Neufchatel Cheese Brick, 8 oz
+[2026-08-03T09:17:51] everyday-mismatch:   cheddar-cheese-shredded  Aldi         board=0.2056    link=0.2355    x1.15   $2.59 [11 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Happy Farms Shredded Mild Cheddar Cheese 16 OZ
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Happy Farms Thick Shredded Triple Cheddar
+[2026-08-03T09:17:51] everyday-mismatch:   white-mushrooms          Walmart      board=0.218     link=0.25      x1.15   $2 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Fresh Whole White Mushrooms, Bulk
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Freshness Guaranteed Sliced White Mushrooms, 8 oz
+[2026-08-03T09:17:51] everyday-mismatch:   olives                   Aldi         board=0.265     link=0.229     x0.86   $2.29 [10 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Tuscan Garden Large Pitted Black Ripe Olives 6 OZ
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Tuscan Garden Manzanilla Olives
+[2026-08-03T09:17:51] everyday-mismatch:   cheddar-cheese-shredded  Walmart      board=0.2155    link=0.2462    x1.14   $1.97 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Great Value Fiesta Blend Finely Shredded Cheese, 5 Pound Bag
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Great Value Sharp Cheddar Finely Shredded Cheese, 8 oz
+[2026-08-03T09:17:51] everyday-mismatch:   chipotle-in-adobo        Family Fare  board=0.3053    link=0.2653    x0.87   $1.99 [7.5 oz]
+[2026-08-03T09:17:51] everyday-mismatch:   ground-cinnamon          Hy-Vee       board=0.5       link=0.436     x0.87   $1.09 [2.5 oz]
+[2026-08-03T09:17:51] everyday-mismatch:   fries                    Baker's      board=0.0911    link=0.1028    x1.13   $3.29 [32 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Kroger Crinkle-Cut Frozen French Fries BIG Deal!
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Kroger Crinkle-Cut Frozen French Fries
+[2026-08-03T09:17:51] everyday-mismatch:   coconut-milk             Hy-Vee       board=0.2215    link=0.2511    x1.13   $3.39 [13.5 fl oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Nuoc Cot Dua Coconut Milk
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Hy-Vee Coconut Milk
+[2026-08-03T09:17:51] everyday-mismatch:   potato                   Baker's      board=0.5       link=0.558     x1.12   $2.79 [5 lb]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Kroger Russet Potatoes Bag BIG DEAL!
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Russet Potatoes Bag
+[2026-08-03T09:17:51] everyday-mismatch:   red-bell-pepper          Hy-Vee       board=1.69      link=1.48      x0.88   $1.48 [1 ct]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: 
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Red Pepper
+[2026-08-03T09:17:51] everyday-mismatch:   jasmine-rice             Baker's      board=0.09      link=0.0999    x1.11   $15.99 [10 lb]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Krogerr Jasmine Rice
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Kroger Jasmine Rice
+[2026-08-03T09:17:51] everyday-mismatch:   toasted-sesame-seeds     Sam's Club   board=0.4082    link=0.3627    x0.89   $7.98 [22 oz]
+[2026-08-03T09:17:51] everyday-mismatch:   cheddar-cheese-shredded  Baker's      board=0.2278    link=0.25      x1.1    $2 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Kroger Mexican Style Blend Shredded Cheese Family Size
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Kroger Sharp Cheddar Shredded Cheese
+[2026-08-03T09:17:51] everyday-mismatch:   golden-raisins           Baker's      board=0.4158    link=0.4575    x1.1    $5.49 [12 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Sun-Maidr California Golden Raisins Dried Fruit Snack
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Sun-Maid California Golden Raisins Dried Fruit Snack
+[2026-08-03T09:17:51] everyday-mismatch:   ginger                   Walmart      board=3.6255    link=3.97      x1.1    $3.97 [lb]
+[2026-08-03T09:17:51] everyday-mismatch:   swiss-cheese             Aldi         board=0.2438    link=0.2188    x0.9    $1.75 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:   jasmine-rice             Hy-Vee       board=0.0934    link=0.0841    x0.9    $2.69 [32 oz]
+[2026-08-03T09:17:51] everyday-mismatch:   turkey-pepperoni         Hy-Vee       board=0.994     link=0.896     x0.9    $4.48 [5 oz]
+[2026-08-03T09:17:51] everyday-mismatch:   breadcrumbs              Aldi         board=0.2563    link=0.2312    x0.9    $1.85 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:   red-bell-pepper          Aldi         board=1         link=0.8967    x0.9    $2.69 [3 ct]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: 
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Multi-Colored Peppers, Package
+[2026-08-03T09:17:51] everyday-mismatch:   honey-dijon-mustard      Aldi         board=0.1375    link=0.1242    x0.9    $1.49 [12 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: 
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Burman's Dijon Mustard
+[2026-08-03T09:17:51] everyday-mismatch:   boneless-skinless-chicken-thigh Baker's      board=3.6633    link=3.99      x1.09   $3.99 [lb]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Kroger Frozen Raw Boneless Skinless Chicken Thighs
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Heritage Farm Boneless Skinless Chicken Thighs
+[2026-08-03T09:17:51] everyday-mismatch:   frozen-chopped-spinach   Aldi         board=0.1344    link=0.1219    x0.91   $1.95 [16 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: 
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Simply Nature Organic Spinach
+[2026-08-03T09:17:51] everyday-mismatch:   greek-yogurt             Baker's      board=0.1466    link=0.1341    x0.91   $4.29 [32 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Simple Truth Organic Plain Nonfat Greek Yogurt Tub
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Kroger Plain Nonfat Greek Yogurt Tub
+[2026-08-03T09:17:51] everyday-mismatch:   smoked-paprika           Aldi         board=1.3688    link=1.2438    x0.91   $1.99 [1.6 oz]
+[2026-08-03T09:17:51] everyday-mismatch:   white-wine-vinegar       Aldi         board=0.1947    link=0.1769    x0.91   $2.99 [16.9 fl oz]
+[2026-08-03T09:17:51] everyday-mismatch:   pineapple-juice          Aldi         board=0.1056    link=0.096     x0.91   $4.99 [52 fl oz]
+[2026-08-03T09:17:51] everyday-mismatch:   golden-raisins           Aldi         board=0.22      link=0.1995    x0.91   $3.99 [20 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: 
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Southern Grove Seedless Raisins
+[2026-08-03T09:17:51] everyday-mismatch:   marinara-sauce           Baker's      board=0.0765    link=0.0829    x1.08   $1.99 [24 oz]
+[2026-08-03T09:17:51] everyday-mismatch:   whole-chicken            Sam's Club   board=2.38      link=2.57      x1.08   $2.57 [lb]
+[2026-08-03T09:17:51] everyday-mismatch:   traditional-pasta-sauce  Baker's      board=0.0765    link=0.0829    x1.08   $1.99 [24 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Kroger Marinara Pasta Sauce
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Kroger Classic Tomato Traditional Pasta Sauce
+[2026-08-03T09:17:51] everyday-mismatch:   pepperoncini             Hy-Vee       board=0.2599    link=0.2809    x1.08   $8.99 [32 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Vlasic Hot Banana Pepper Rings, 12 fl. oz.
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Mezzetta Medium Heat Golden Greek Peperoncini
+[2026-08-03T09:17:51] everyday-mismatch:   salsa-verde              Baker's      board=0.17      link=0.1562    x0.92   $2.5 [16 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Herdezr Salsa Verde Mild
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Herdez Salsa Verde Mild
+[2026-08-03T09:17:51] everyday-mismatch:   white-mushrooms          Aldi         board=0.1862    link=0.1988    x1.07   $1.59 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: White Mushrooms, Package
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Monterey Sliced White Mushrooms
+[2026-08-03T09:17:51] everyday-mismatch:   roasted-red-peppers      Hy-Vee       board=0.4271    link=0.4557    x1.07   $3.19 [7 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: 
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Dunbars Roasted Peppers
+[2026-08-03T09:17:51] everyday-mismatch:   marinara-sauce           Hy-Vee       board=0.0767    link=0.0822    x1.07   $1.89 [23 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Hunt's Traditional Pasta Sauce
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Hy-Vee Marinara Pasta Sauce
+[2026-08-03T09:17:51] everyday-mismatch:   cashews                  Walmart      board=0.687     link=0.6414    x0.93   $8.98 [14 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Emeraldr Nuts Avocado Oil Roasted Hot Honey Cashews, 120-Calorie packs, 10ct
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Great Value Organic Raw Whole Cashews, 14 oz
+[2026-08-03T09:17:51] everyday-mismatch:   sugar-free-bbq-sauce     Baker's      board=0.2       link=0.1886    x0.94   $3.49 [18.5 oz]
+[2026-08-03T09:17:51] everyday-mismatch:   cheddar-cheese           Aldi         board=0.2056    link=0.2188    x1.06   $1.75 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Happy Farms Shredded Mild Cheddar Cheese 16 OZ
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Happy Farms Mild Cheddar Cheese Block
+[2026-08-03T09:17:51] everyday-mismatch:   chipotle-in-adobo        Hy-Vee       board=0.47      link=0.4992    x1.06   $5.99 [12 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: La Costena Chipotles in Adobo Sauce
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: La Costena Chipotle Peppers in Adobo Sauce
+[2026-08-03T09:17:51] everyday-mismatch:   mozzarella-cheese        Aldi         board=0.2056    link=0.2188    x1.06   $1.75 [8 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Happy Farms Shredded Mild Cheddar Cheese 16 OZ
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Happy Farms Mozzarella Cheese Block
+[2026-08-03T09:17:51] everyday-mismatch:   provolone-cheese         Sam's Club   board=0.2181    link=0.23      x1.05   $7.36 [2 lb]
+[2026-08-03T09:17:51] everyday-mismatch:   cheddar-cheese           Sam's Club   board=0.1521    link=0.1596    x1.05   $12.77 [5 lb]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Member's Mark Part-Skim Mozzarella Cheese 5 lbs.
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Member's Mark Shredded Mild Cheddar
+[2026-08-03T09:17:51] everyday-mismatch:   light-sour-cream         Family Fare  board=0.2494    link=0.2369    x0.95   $3.79 [16 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: 
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Daisy Sour Cream, Light 16 Oz
+[2026-08-03T09:17:51] everyday-mismatch:   hickory-smoked-bacon     Sam's Club   board=3.784     link=3.9433    x1.04   $11.83 [3 lb]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Member's Mark Restaurant Style Bacon, Hickory Smoked, 10lbs.
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Member's Mark Naturally Hickory Smoked Bacon 3 lbs.
+[2026-08-03T09:17:51] everyday-mismatch:   hickory-smoked-bacon     Aldi         board=3.99      link=4.1667    x1.04   $6.25 [24 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Appleton Farms Premium Sliced Bacon 16 OZ
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Appleton Farms Hickory Smoked Bacon
+[2026-08-03T09:17:51] everyday-mismatch:   ribeye-steak             Hy-Vee       board=14.99     link=15.49     x1.03   $15.49 [lb]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Beef Ribeye Steak Thin
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Beef Ribeye Steak - Thin
+[2026-08-03T09:17:51] everyday-mismatch:   ground-beef-8020         Aldi         board=6.19      link=5.99      x0.97   $5.99 [lb]
+[2026-08-03T09:17:51] everyday-mismatch:   hot-italian-sausage      Baker's      board=4.88      link=5         x1.02   $5 [16 oz]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Krogerr Hot Italian Sausage
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Johnsonville Hot Italian Ground Sausage
+[2026-08-03T09:17:51] everyday-mismatch:   boneless-skinless-chicken-thigh Walmart      board=3.2199    link=3.29      x1.02   $9.87 [3 lb]
+[2026-08-03T09:17:51] everyday-mismatch:       board item: Freshness Guaranteed Boneless Skinless Chicken Thighs Family Pack, 2.75 - 5.7 lb Tray
+[2026-08-03T09:17:51] everyday-mismatch:       link  item: Great Value All Natural Boneless Skinless Chicken Thighs, 3 lb
+[2026-08-03T09:17:51] everyday-mismatch: 
+[2026-08-03T09:17:51] everyday-mismatch: saved -> C:\Codex\income\grocery\out\everyday-mismatches.json
+[2026-08-03T09:17:53] rescue-worklist: rescue [Aldi]: DROPPED 6  UNTRACEABLE 0  EXPIRING 0  STALE 0 -> out\rescue-terms-aldi.txt
+[2026-08-03T09:17:53] rescue-worklist: rescue [Fareway]: DROPPED 15  UNTRACEABLE 0  EXPIRING 0  STALE 0 -> out\rescue-terms-fareway.txt
+[2026-08-03T09:17:53] rescue-worklist: rescue [Sam's Club]: DROPPED 4  UNTRACEABLE 0  EXPIRING 1  STALE 11 -> out\rescue-terms-sams.txt
+[2026-08-03T09:17:53] rescue-worklist: rescue [Walmart]: DROPPED 22  UNTRACEABLE 6  EXPIRING 6  STALE 0 -> out\rescue-terms-walmart.txt
+[2026-08-03T09:17:54] coverage-cycle:   ok    audit-everyday-mismatch        examined 2978 of 3011 eligible (baseline 2968, tol 10%)
+[2026-08-03T09:17:54] coverage-cycle:   ok    audit-food-category            examined 2817 of 3234 eligible (baseline 2813, tol 10%)
+[2026-08-03T09:17:54] coverage-cycle:   ok    build-rescue-worklist          examined 1505 of 1511 eligible (baseline 1517, tol 10%)
+[2026-08-03T09:17:54] coverage-cycle:   ok    guards/10-store-charges        examined 34082 of 34082 eligible (baseline 29542, tol 35%)
+[2026-08-03T09:17:54] coverage-cycle:   ok    guards/11-bakers-provenance    examined 6937 of 6937 eligible (baseline 6947, tol 25%)
+[2026-08-03T09:17:54] coverage-cycle:   ok    guards/3-pin-derivable         examined 22 of 22 eligible (baseline 19, tol 50%)
+[2026-08-03T09:17:54] coverage-cycle:   ok    guards/3-pin-identity          examined 18 of 22 eligible (baseline 13, tol 50%)
+[2026-08-03T09:17:54] coverage-cycle:   ok    guards/4-factor                examined 2666 of 2666 eligible (baseline 2652, tol 10%)
+[2026-08-03T09:17:54] coverage-cycle:   ok    guards/5-multipack             examined 801 of 801 eligible (baseline 594, tol 50%)
+[2026-08-03T09:17:54] coverage-cycle:   ok    guards/6-collapse              examined 7 of 7 eligible (baseline 6, tol 15%)
+[2026-08-03T09:17:54] coverage-cycle:   ok    guards/9-freshness             examined 7 of 7 eligible (baseline 7, tol 15%)
+[2026-08-03T09:17:54] coverage-cycle:   ok    pull-regular-hyvee             examined 897 of 939 eligible (baseline 1010, tol 15%)
+[2026-08-03T09:17:54] coverage-cycle: 
+[2026-08-03T09:17:54] coverage-cycle:   BLIND           audit-ff-carry - examined 0 of 527 eligible row(s). This is the shape guard 11 held for five days: a confident ok over an empty examination. empty FF search terms re-probed against Freshop from family-fare-regular-2026-08-03.json
+[2026-08-03T09:17:54] coverage-cycle: 
+[2026-08-03T09:17:54] coverage-cycle: coverage-ledger: 1 coverage finding(s) across 13 rostered check(s); 13 row(s) evaluated.
+[2026-08-03T09:17:54] run complete; flips=1; pull=(server pull ran)

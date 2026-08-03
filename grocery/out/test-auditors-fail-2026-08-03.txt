@@ -1,0 +1,433 @@
+﻿test-auditors: can each watcher still see the bug it was written for?
+  PASS  basis-reconcile FIRES on the per-lb-rate conflict
+  PASS  basis-reconcile SILENT on the corrected board
+  PASS  basis-reconcile ignores whole-cent rounding noise
+  PASS  basis-reconcile FIRES when Baker's size disagrees with Kroger's own netWeight
+  PASS  basis-reconcile SILENT when the pack size matches netWeight
+  PASS  basis-reconcile ignores a per-pound (soldBy=WEIGHT) row, whose netWeight is a tray weight
+  PASS  basis-reconcile picks the right row when two products share one name
+  PASS  pack-basis FIRES on the Pledge pack-total bug
+  PASS  pack-basis SILENT on legitimate bulk multipacks
+  PASS  pack-basis BLOCKS (exit 2) on the peer-size fingerprint of a pack total
+  PASS  pack-basis fingerprint stays SILENT on a real per-item pack (hummus clean twin, still advisory)
+  PASS  coverage-gaps classifies the founding pork-chops bug as RULE-INVISIBLE
+  PASS  coverage-gaps classifies a first-match hijack as CLAIMED-BY and names the thief
+  PASS  coverage-gaps classifies a bagged-per-lb row on an each commodity as BASIS-NULL
+  PASS  coverage-gaps classifies a band-rejected real price as BAND-DROPPED
+  PASS  coverage-gaps pages on RULE-INVISIBLE + CLAIMED-BY and counts the rest as explained
+  PASS  coverage-gaps stays QUIET (exit 0) when every gap is basis/band, while still reporting them
+  PASS  triage-due says DUE on an empty (mid-write) queue file
+  PASS  triage-due says DUE on truncated JSON
+  PASS  triage-due says DUE and names a genuinely open item
+  PASS  triage-due says IDLE only when the queue is really clear
+  PASS  no live script wraps a ConvertFrom-Json pipeline in @() (the PS 5.1 no-unroll trap)
+  PASS  the no-unroll trap still behaves as documented (wrapped=1, assigned-then-wrapped=3)
+  PASS  send-alert still writes the queue via mutex + atomic swap
+  PASS  send-alert still refuses to overwrite a queue that reads back empty
+  PASS  coverage-gaps reads the engine GLOBAL_EXCLUDE
+  PASS  the GLOBAL_EXCLUDE parse yields the real list (78 tokens)
+  PASS  a locked log file does not kill the run (retry-then-continue Log pattern)
+  PASS  every pipeline logger retries instead of dying on a locked file
+  PASS  golden regression guard is GREEN on the hermetic frozen inputs
+  PASS  the weight-package divisor's founding-bug fixture is still in -SelfTest
+  PASS  regression harness still pins the RULES as well as the data (hermetic)
+
+  PASS  guards.ps1 still defines OkUnlessBlind (the zero-rows rule)
+  PASS  OkUnlessBlind still gates on the examined count and warns when it is zero
+  PASS  zero-rows rule is wired into 6 guard(s)
+  PASS  guard 10 (the only what-we-publish-vs-what-the-store-charges check) cannot print ok on zero rows
+  PASS  zero-rows fixture: a non-zero count stays silent, a zero count raises exactly the blind warning
+  PASS  guards.ps1 still resolves its file set through the shared engine definition
+  PASS  EngineFileSet does not re-derive the file set or its as-of locally
+  PASS  import-walmart-batch.ps1 reads its capture as UTF-8 and repairs mojibake
+  PASS  import-instacart-batch.ps1 reads its capture as UTF-8 and repairs mojibake
+  PASS  utf8 fixture: the default read DOES corrupt an umlaut and the -Encoding UTF8 read the importers now use does not
+  PASS  allowlist-rot check still covers multipack-allowlist.json
+  PASS  allowlist-rot check still covers coverage-gap-allowlist.json
+  PASS  allowlist-rot check still covers basis-reconcile-allowlist.json
+  PASS  multipack-allowlist.json still exposes a recognised entry list
+  PASS  coverage-gap-allowlist.json still exposes a recognised entry list
+  PASS  basis-reconcile-allowlist.json still exposes a recognised entry list
+  PASS  guards.ps1 defines Get-CollapseVerdict (guard 6's decision is testable)
+  PASS  Get-CollapseVerdict is wired into guard 6 for BOTH the skip and the collapse decision
+  PASS  guard 6 reports its examined count and names the stores it could not evaluate
+  PASS  guard-6 fixture: a single capture reports no-history (was a silent skip), a halved file collapses, a healthy file and a below-floor file stay silent
+  PASS  guards.ps1 defines Test-MaskedStaleCapture (the masked-age rule)
+  PASS  the masked-age rule is CALLED from guard 9's redirect branch
+  PASS  guard-9 masked-age fixture: a still-priced-from capture masked by a newer alt feed is aged, while a true orphan, an unredirected store and a within-cliff capture all stay silent
+  PASS  -Accept still carries the DROP-verdict gate
+  PASS  the override is the explicit -ForceAccept switch, not silence
+  PASS  verdict-lib quote capture survives an apostrophe in the product name
+  PASS  the -Accept gate sources verdict-lib (one definition of item identity)
+  PASS  import-walmart-batch verifies every batch row through the builder invariants (founding-bug fixture fires)
+  PASS  import-walmart-batch still lifts Build-Row from build-walmart-deals (one home, no fork)
+  PASS  price-mode goes BLIND (exit 3) when zero mode-sensitive files reach it
+  PASS  price-mode clean twin: live out\regular still passes with the counted OK line
+  PASS  price-mode anchored glob: a .PARTIAL twin cannot shadow the real capture (rc 0 AND the Aldi OK line present)
+  PASS  walmart-fullpull goes BLIND (exit 3) per store on an empty capture window
+  PASS  walmart-fullpull clean twin: fresh comprehensive captures AND a board whose cells all come from them read ok for both stores
+  PASS  walmart-fullpull FIRES on a board cell whose only source is about to leave the union window, while watch 1 still reads ok
+  PASS  walmart-fullpull cell watch stays SILENT at 1 aging cell in 40 (2.5%, under the 5% floor) - the trailing-cell noise floor
+  PASS  household-in-food goes BLIND (exit 3) at zero rows scanned
+  PASS  household-in-food clean twin: one seeded row scans and passes
+  PASS  food-category goes BLIND (exit 3) at zero priced cells
+  PASS  food-category clean twin: the live board still scans and passes
+  PASS  food-category MUST-FIRE: a snack on lemons and a soda on limes both hard-fail (exit 2)
+  PASS  food-category clean twin: fresh lemon/lime rows stay silent under the new classes
+  PASS  tile-integrity goes ACCURACY BLIND (exit 3) when zero links were graded
+  PASS  tile-integrity clean twin: one matching link grades and the OK line carries the count
+  PASS  tile-integrity -Baseline REFUSES a blind run (rc 3, poisoned baseline never written)
+  PASS  tile-integrity -Strict reports BLIND (rc 3) on an empty board instead of a vacuous every-tile-linked pass
+  PASS  cell-drops goes BLIND (exit 3) with a single dated board
+  PASS  cell-drops goes BLIND (exit 3) on an empty-comparison baseline (the false positive-ok shape)
+  PASS  cell-drops clean twin: kept cell reads ok with the examined count
+  PASS  cell-drops still detects a real drop (exit 1) - the founding Fareway-chicken shape
+  PASS  name-drift goes BLIND (exit 3) at zero cells and its JSON carries examined=0
+  PASS  name-drift clean twin: one matching link is examined and reported
+  PASS  name-drift MUST-FIRE: a wrong-product link on a RECIPE-board-only id is flagged and recorded in examined_cells (guard 3 can arm)
+  PASS  name-drift scans a two-board id ONCE (staple row wins; the recipe row's different unit basis is not re-judged against the same link)
+  PASS  name-drift CLEAN TWIN: the recipe cell is in scope and a matching link stays unflagged (the union adds coverage, not noise)
+  PASS  audit-links goes BLIND (exit 3) when no link matches the board
+  PASS  audit-links clean twin: one computable link audits with the honest of-total summary
+  PASS  coverage-gaps goes BLIND (exit 3) at total blindness and names all 7 unscanned stores in its JSON
+  PASS  coverage-gaps clean twin: all 7 stores seeded reads the plain none line
+  PASS  wrapper chain: exit 5 lands in warn (not ok), exit 0 lands in ok
+  PASS  guards.ps1 keeps both advisory-wrapper exit-3 branches and the missing-allowlist warn
+  PASS  check-ad-cycles keeps all five audit blind branches
+  PASS  check-ad-cycles blind email does not reuse the nothing-is-broken-yet body
+  PASS  check-ad-cycles weekly test-guards capture leaves stderr unredirected (crash still reaches the alert path)
+  PASS  store-registry scan reads PowerShell '' escaping - a line naming all 7 stores is not reported as drift
+  PASS  store-registry scan still FIRES on a genuine 5-store hardcoded list (not blinded by the escaping fix)
+  PASS  board-consistency records chips_examined in its report
+  PASS  board-consistency exits 3 (could-not-evaluate) when it examined zero chips
+  PASS  check-ad-cycles has the matching exit-3 branch (a blind run is not logged as OK)
+  PASS  PS still throws casting a "$1.88" price string to [double] - the founding hazard is real
+  PASS  audit-everyday-mismatch records the already-parsed price (it can survive its own findings)
+  PASS  audit-everyday-mismatch reuses $sp, the price it already parsed safely
+  PASS  audit-everyday-mismatch still reads the RECIPE board (a recipe-only mismatch is found)
+  PASS  audit-everyday-mismatch still reports its per-board checked counts
+  PASS  PS 5.1 still throws on @(List[object]) - the founding hazard is real, not a historical quirk
+  PASS  audit-ff-carry builds its report without @(List[object]) (it can reach its own report line)
+  PASS  audit-ff-carry serialises its victims with .ToArray() (array shape holds at 0, 1 and many)
+  PASS  check-ad-cycles captures ff-carry, logs its output, and reads its exit code
+  PASS  ff-carry-caller fixture fires on the pipe-and-hope form that hid the crash for 17 days
+  PASS  ff-carry-caller fixture stays silent on capture-then-check (clean twin)
+  PASS  consistency auto-repair refreshes name-drift after the heal, before pins and guards
+  PASS  repair-refresh fixture fires when the name-drift refresh is removed (the 2026-07-30 bug)
+  PASS  repair-refresh fixture stays silent on correct ordering (clean twin)
+  PASS  prune-bad-links defaults to the 0.32 factor rule and tile-integrity advises it explicitly
+  PASS  prune-tolerance fixture fires on the 2026-07-30 founding bug (0.02 default + untolerance advice)
+  PASS  prune-tolerance fixture stays silent on a correct source (clean twin)
+  PASS  weekly-post-capture separates BLIND from FAILED (prune advice stays on the real failure only)
+  PASS  weekly-post-capture runs coverage-gaps + sale-fallback in BOTH -Phase compare and -Phase publish, pinned to an explicit -CompareFile
+  PASS  phase-wiring check FIRES on a source with the publish-phase audits stripped, and blames only the publish phase
+  PASS  publish-deals-page surfaces exit 3 from all three of its direct audit calls
+  PASS  purge-verdict-lows -SelfTest passes with its founding-bug fixtures armed
+  PASS  the 1.02x bacon shape (invisible to any ratio purge) is still the must-fire fixture
+  PASS  the price-exact name lookup still has its clean twin (a week-only match deletes real prices)
+  PASS  purge-verdict-lows sources verdict-lib (one definition of item identity)
+  PASS  merge-product-urls -SelfTest passes (fresh merged, stale refused, consumed archived, size verbatim)
+  PASS  the consume-once must-fire fixture (a merged input must be archived) is still armed
+  PASS  merge-product-urls still archives consumed inputs
+  PASS  the size-field clean twin is armed (a URL-only diff cannot see a basis overwrite)
+  PASS  discover-hyvee -SelfTest passes (cat litter and toothpaste refused, real cheaper kept, marginal suppressed)
+  PASS  the cat-litter-as-baking-soda must-fire fixture is still armed
+  PASS  discover-hyvee still records that the Hy-Vee CATEGORY facet cannot filter (measured, not assumed)
+  PASS  discover-hyvee still writes a docket rather than the feed
+  PASS  aisle-test -SelfTest passes (4 founding flips blocked, hard positive allowed, blind refuses, multi-row unrolls)
+  PASS  the hard-positive fixture (a real hot dog scoring BELOW three of the four failures) is still armed
+  PASS  the multi-row unroll fixture is armed (a collapsed candidates file returns a tidy BLIND and reads as clean)
+  PASS  aisle-test still documents that BLIND refuses the flip (the one place the estate inverts blind-not-block)
+  PASS  the purge still honours a later KEEP verdict (verify-apply's human-overturn rule)
+  PASS  weekly publish still purges verdict-rejected history entries after banking
+  PASS  the daily history bank is swept for verdict-rejected entries
+  PASS  review flags: an open flag present every day RE-ARMS (the never-re-arms bug)
+  PASS  review flags: a flag paged yesterday stays SILENT for its whole re-arm window
+  PASS  review flags: a re-armed flag pages ONCE, not daily
+  PASS  review flags: an acked flag stays SILENT through its expiry date
+  PASS  review flags: an acked flag RE-ARMS the day after its ack expires
+  PASS  review flags: an expired ack re-arms ONCE, not every day after expiry
+  PASS  review flags: a -NoAlert run stamps NO last_alerted (the cloud backup cannot consume a re-arm)
+  PASS  review flags: a flag suppressed by -NoAlert is still DUE on the next alerting run
+  PASS  review flags: a real alerting run DOES stamp last_alerted
+  PASS  review flags: a FAILED send stamps nothing (existing guard still intact)
+  PASS  publish-deals-page change gate still skips an unchanged board and still publishes a one-byte change
+  PASS  publish-retry-until-live counts a short-circuited (CURRENT) board as success, so the retry task can still delete itself
+  PASS  publish-deals-page tells a store-guide upsert apart from a store-guide skip
+  PASS  signs-its-own-name FIRES on the forked builder and stays silent on the honest twin (self-label + labelling a child it runs)
+  PASS  no grocery script signs another script's name (the build-walmart-deals/build-sams-deals fork class)
+  PASS  match-soundness cold run agrees with its frozen baseline
+  PASS  byte-identical inputs HIT the sweep cache
+  PASS  a one-byte change to the script itself MISSES the sweep cache
+  PASS  a one-byte change to commodities.json MISSES the sweep cache
+  PASS  a one-byte change to compare-deals.ps1 MISSES the sweep cache
+  PASS  a one-byte change to verdict-lib.ps1 MISSES the sweep cache
+  PASS  a one-byte change to a store feed file MISSES the sweep cache
+  PASS  -Accept ignores the sweep cache and baselines a freshly swept truth
+  PASS  -Accept does not write the sweep cache either (write path skipped entirely)
+  PASS  an unusable sweep stamp (len 0) falls through to the real sweep
+  PASS  an unusable sweep stamp (len 3) falls through to the real sweep
+  PASS  an unusable sweep stamp (len 26) falls through to the real sweep
+  PASS  an unusable sweep stamp (len 83) falls through to the real sweep
+  PASS  match-soundness reports BLIND (exit 3) when ZERO products were ingested
+  PASS  a sweep that read ZERO products is never stamped (cannot be replayed as all-clear)
+  PASS  -Accept REFUSES an empty sweep (the reviewed baseline survives intact)
+  PASS  weekly lock: the REPLAYED 2026-07-29 run still holds the tree at the 08:30 daily tick
+  PASS  weekly lock: the real 187.5-min agent judgment pause still reads HELD
+  PASS  weekly lock: a finished/abandoned lock EXPIRES before the next daily, says so loudly, and does NOT stand it down
+  PASS  weekly lock carries its own acquired/refreshed/expires/pid stamp
+  PASS  weekly lock clean twin: no lock = the daily runs, and says nothing alarming
+  PASS  weekly lock: an empty lock is exit 3 (could-not-evaluate) and fails OPEN
+  PASS  weekly lock: a corrupt lock is exit 3 and fails OPEN
+  PASS  weekly lock: -Release removes it (so the daily can sweep its own stale debris)
+  PASS  run-daily-local still checks the weekly lock, stands down on HELD, and sweeps a stale one
+  PASS  weekly-post-capture still takes the lock on every phase
+  PASS  weekly-post-capture never hands the tree back mid-run (the lock expires on its own TTL)
+  FAIL  script-census fires on the live tree, or reported an EMPTY census (rc=2) - either a new orphan landed, or the self-exclusion that stops its own KNOWN table from marking everything "called" was removed: script-census: 446 script(s) + 37 under out\, read against 587 executable file(s); 35 uncalled, 35 recorded as deliberate
+  note    35 recorded entries are no longer uncalled here - drop their KNOWN lines
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\build-budget-tracker.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\build-new-foot.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\deploy-starthere.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\get-foot.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\get-starthere.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\verify-starthere.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\audit-full.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\build-aldi-0715.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\audit\apply-patch.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\audit\diff-assignments.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\audit\ff-pulldrop-scan.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\audit\gen-artifacts.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\audit\gen-audit-data.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\audit\inject-ff-victims.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\audit\parse-findings.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\audit\parse-journal.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\audit\split-pantry.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\r100\add-berbere.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\r100\add-relax.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\r100\compare-debug.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\r100\dedup-green-chiles.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\r100\fence-rice.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\r100\fix-guards.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\r100\fix-pin2.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\r100\fix-pins.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\r100\import-aldi-r100.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\r100\import-bakers-r100.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\r100\merge-fareway.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\r100\who-claims.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\staples100\fix-fareway.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\staples100\process-agents.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\staples100\process-walmart.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\staples300\fix-rules-r1.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\staples300\fix-rules-r2.ps1 - no executable file in the repo names it
+  FAIL    ORPHAN .claude\worktrees\bold-hofstadter-4c786e\grocery\out\staples300\process-agents300.ps1 - no executable file in the repo names it
+script-census FAIL: 35 finding(s). Wire it in, move it to archive\one-off\, or record it in KNOWN with the reason it stays uncalled.
+  PASS  script-census FIRES on a script no executable file names
+  PASS  script-census SILENT once that script is wired in (a .cmd launcher counts as a caller)
+  PASS  script-census ratchet FIRES when a one-off is written into out\
+  PASS  script-census ratchet SILENT at the recorded baseline (a ratchet, not a hard zero)
+  PASS  script-census goes BLIND (exit 3) with nothing to examine instead of reporting a clean zero
+  PASS  arrivals-docket RANKS the bath-soap-as-coconut-oil crown arrival FIRST
+  PASS  arrivals-docket reports a 1-cell cohort BLIND instead of passing it
+  PASS  arrivals-docket SILENT on the same crown arrival with the right product
+  PASS  arrivals-docket still reports the thin cohort BLIND on the clean board
+  PASS  arrivals-docket exits 3 when it has NO baseline to diff against
+  PASS  prospects: the bath-soap-as-coconut-oil candidate ranks FIRST, div 1.00, named as a crown-taker
+  PASS  prospects: a size in fluid ounces against a per-weight commodity is flagged as a BASIS defect
+  PASS  prospects: the real coconut oil is listed as context, unflagged, and correctly reads no crown
+  PASS  prospects: the already-ruled cat-food candidate leaves the queue and is counted as settled, not dropped
+  PASS  prospects: a missing docket reports BLIND rather than a clean zero
+  PASS  prospects: an off-board prospect is reported as unscorable WITHOUT overwriting the docket-level DEGRADED reason
+  PASS  prospects fixtures are still the frozen founding cases
+  PASS  discovery docket MERGES the open queue forward instead of overwriting it with the current slice
+  PASS  the cycle runs discover-hyvee BEFORE the arrivals desk that reads its docket
+  PASS  adjudicate-discovery self-test: adjudicate-discovery SELFTEST: all 14 passed
+  PASS  recipe floors: a cell is stamped with the product its price came from, even when the price is unchanged
+  PASS  recipe floors: a candidate with no size writes NO size rather than an empty one the resolver would read as an answer
+  PASS  recipe floors: a row with no candidate keeps its price AND gets no invented identity
+  PASS  recipe-floors fixture is still the frozen identity gap
+  PASS  recipe floors: a row with no staples twin is priced (and named) from the recipe pool instead of sitting frozen
+  PASS  recipe floors: every cell priced from the recipe pool is reported separately for review, not blended in
+  PASS  recipe floors: a pool entry in a different unit is REFUSED, price and identity both untouched
+  PASS  multipack size repair self-test: repair-multipack-sizes SELFTEST: all 8 passed
+  PASS  multipack repair and guard 5 agree: the rejected row repairs, and the repaired row passes
+  PASS  rule-batch gate rebuilds the board BEFORE freezing its theft baseline (a stale baseline reverts correct work)
+  PASS  rule-batch gate refuses an empty batch instead of reporting a clean run over nothing
+  PASS  rule-batch gate rejects an uncompilable pattern BEFORE it spends a compare-deals on it
+  PASS  rule-batch gate rejects a batch on a commodity id that does not exist
+  PASS  rule-batch link repair calls resolve-hyvee-links SCOPED to the batch, not in bulk
+  PASS  verification sample records WHICH population it estimates (store scope)
+  PASS  verdict recorder pools only same-population runs and NAMES the ones it drops
+  PASS  every banked verification run declares the population it estimates
+  PASS  public feed price-history.json is written BOM-less (PS 5.1 cannot parse its own BOM)
+  PASS  public feed board.json is written BOM-less (PS 5.1 cannot parse its own BOM)
+  PASS  public feed smp-feed.json is written BOM-less (PS 5.1 cannot parse its own BOM)
+  PASS  public feed free-dinners.json is written BOM-less (PS 5.1 cannot parse its own BOM)
+  PASS  search terms: an array expands to real separate searches and a plain string still yields exactly one
+  PASS  search terms: an empty term produces NO search rather than a blank one that would match the whole catalogue
+  PASS  search terms: single-string consumers get the FIRST term, never the joined one, and a missing id yields empty
+  PASS  search terms: no consumer of commodity-search.json casts a term value to a string (an array would JOIN, not fail)
+  PASS  search terms: the live commodity-search.json has no empty terms and no degenerate arrays
+  PASS  coverage ratchet reports a tolerance that makes its own REGRESSED verdict structurally unfirable
+  PASS  coverage ratchet reports a tolerance override that records no reason
+  PASS  -Accept RAISES the coverage ratchet but refuses to lower it, and names the rows it kept high
+  PASS  -AcceptLower lowers the ratchet deliberately and says which rows it moved down
+  PASS  resolve-hyvee-links stores the price the BOARD priced, not the search endpoint's (the poultry-seasoning root cause)
+  PASS  store-taxonomy -SelfTest passes with its founding-bug fixtures armed
+  PASS  the Blue Buffalo dog-food-as-brown-rice row is still the must-fire fixture
+  PASS  the taxonomy-less-URL trap (3 live rows) is still pinned - a slug must never be read as a department
+  PASS  audit-ff-carry declares [switch]$SelfTest (its fixture block is reachable at all)
+  PASS  audit-ff-carry skips its pull-state exits under -SelfTest (fixtures run in every data state)
+  PASS  ff-carry -SelfTest passes with NO FF file present (fixtures are data-state independent)
+  PASS  the chili-beans own-feed-coverage fixture is still armed (the 15-of-24 false-positive class)
+  PASS  the multi-buy cheapest-pick fixture is still armed ("4 for $5.00" must not read as 45)
+  PASS  ff-carry refuses to print OK when Freshop answered none of the terms it needed to probe (exit 3, blind)
+  PASS  ff-carry measures blindness against terms it actually had to probe, not the raw empty-term count
+  PASS  check-ad-cycles reports an ff-carry could-not-evaluate separately from a crash
+  PASS  pull-regular-familyfare declares [switch]$SelfTest (its fixture block is reachable, and -SelfTest cannot fall through to a live pull)
+  PASS  pull-regular-familyfare runs its fixtures ABOVE every network call (a -SelfTest run cannot touch Freshop)
+  PASS  ff-pull -SelfTest passes with its must-fire and clean-twin fixtures armed
+  PASS  the 2026-08-02 false page (4655/4706, 55 churn expiries, 0 crowns moved) is frozen as the clean twin
+  PASS  the starvation must-fire is armed (a term that has bought nothing inside the carry window still pages)
+  PASS  the mass-expiry safety net is armed (>2% of the catalog in one run pages whatever the class)
+  PASS  the cursor-commit must-fire is armed (the 686-row / terms #458..#34 loss cannot silently return)
+  PASS  the atomic-write must-fire is armed (a locked target returns false and cannot corrupt or clobber the last good catalog)
+  PASS  the recentVerified < 500 freeze detector survives verbatim
+  PASS  the 20%-shrink freeze detector survives verbatim
+  PASS  the 14-day carry policy is unchanged (expiry was re-classified, not made quieter by extending the window)
+  PASS  Ingest-Items takes the search term that produced the response, and all 2 call site(s) pass it (row provenance is captured at ingest)
+  PASS  fresh rows are stamped with found_by_term
+  PASS  Norm-Row preserves found_by_term on carried rows (the normalizer-drops-the-contract-field class)
+  PASS  the atomic write keeps its production retry budget (5 attempts / 2s backoff)
+  PASS  the cursor write is gated on the merged catalog having landed
+  PASS  everyday-mismatch FIRES on a board cell that disagrees with its own linked product (exit 1, advisory)
+  PASS  everyday-mismatch stays silent when the board agrees with its links (clean twin)
+  PASS  everyday-mismatch survives a link price stored as a STRING ("$3.99") - the cast that killed it on its own first finding
+  PASS  everyday-mismatch exits 3 when it had cells to check and could check none (no all-clear over an empty examination)
+  PASS  check-ad-cycles still invokes audit-everyday-mismatch (it spent its whole life as an orphan)
+  PASS  check-ad-cycles treats an everyday-mismatch finding as a REVIEW line, not a failure
+  PASS  check-ad-cycles runs the coverage ratchet for the CYCLE phase
+  PASS  pull-regular-hyvee counts cap-skipped products separately from $stale
+  PASS  the Hy-Vee wall-clock warning fires ONCE, not once per remaining product
+  PASS  the Hy-Vee capture file records cap_skipped, not just the console
+  PASS  the Hy-Vee throttle-wipeout path exits 2 (a bare return at script scope exits ZERO)
+  PASS  check-ad-cycles no longer pipes the Hy-Vee pull to Out-Null
+  PASS  check-ad-cycles captures the Hy-Vee pull exit code and branches on it (a native child crash is not a PowerShell exception, so the catch never sees it)
+  PASS  the Hy-Vee pull child is captured without 2>&1 (which under EAP=Stop makes its first stderr line terminating)
+  PASS  the protein-bars clean twin is still present (the one measured legitimate non-food crossing)
+  PASS  store-taxonomy goes BLIND (exit 3) with no store feed to read, instead of a clean zero
+  PASS  the daily job still runs the store-taxonomy second opinion
+  PASS  rescue-worklist FIRES on a cell that was priced a week ago and is gone today (the Aldi 7-staple drop class)
+  PASS  rescue-worklist flags a cell no capture on disk still carries (unknown provenance = capture it)
+  PASS  rescue-worklist counts an expiring cell down to the exact day its only source leaves the union window
+  PASS  the emitted worklist carries the DEEP CAPTURE warning (a narrow re-capture WINS the commodity with thinner data)
+  PASS  rescue-worklist stays silent on a healthy walled store (clean twin: exit 0, every section empty, list still emitted)
+  PASS  rescue-worklist exits 3 with no board to read, instead of reporting every walled store healthy
+  PASS  check-ad-cycles still invokes build-rescue-worklist (an uncalled worklist builder is a worklist nobody gets)
+  PASS  check-ad-cycles captures the rescue-worklist exit code and branches on it (a native child exit is not a PowerShell exception)
+  PASS  the rescue-worklist child is captured without a stderr redirect (under EAP=Stop one stderr line would become a terminating throw)
+  PASS  stores.json still marks exactly 4 walled stores - the set build-rescue-worklist builds lists for
+  PASS  guards.ps1 delegates cell-drops without a stderr redirect (a real finding reaches the warn line, not the catch)
+  PASS  search-links FIRES on the dead Family Fare search template (its founding bug)
+  PASS  search-links SILENT once the template is corrected (and strips the hash-bang before judging it)
+  PASS  search-links exits 3 when every store is bot-walled, instead of reporting all templates healthy
+  PASS  search-links can still extract $SEARCHURLS from the live build-deals-page.ps1 (the guard is not stuck in its own fail-closed branch)
+  PASS  search-links reports a store that quietly stopped reading our query (200-but-ignored, invisible to any status check)
+  PASS  the echo downgrade stays ADVISORY (exit 0) - a title change is not proof of a dead link
+  PASS  search-links writes a report that parses and carries a row per store (the file its alert tells Brad to open)
+  PASS  build-deals-page no longer carries the dead Family Fare /search?search_term= template
+  PASS  check-ad-cycles still invokes audit-search-links (an uncalled probe never checks a template)
+  PASS  known-wrong FIRES (exit 2) when an adjudicated-wrong product is priced on the board again
+  PASS  known-wrong id key works: a listed product renamed in the feed is still blocked (name re-derived from item_id)
+  PASS  known-wrong normalizer works: the apostrophe-stripped Aldi spelling is BLOCKED by the adjudicated name
+  PASS  known-wrong stops enforcing a REVERSED ruling (the retire trigger can actually fire)
+  PASS  known-wrong retire trigger commodity-retired FIRES for an entry whose commodity is gone
+  PASS  known-wrong clean twin: the same blocklist is SILENT on a board carrying the right products
+  PASS  known-wrong REVIEW tier fires on a size-variant of a blocked product
+  PASS  known-wrong REVIEW tier does NOT set the exit code (a 100%-precision gate plus a separate review queue, never one blended detector)
+  PASS  known-wrong reports how many entries it could evaluate and how many cells it examined
+  PASS  known-wrong goes BLIND (exit 3) with no board to examine instead of reporting a clean blocklist
+  PASS  known-wrong goes BLIND (exit 3) when the blocklist file is missing rather than passing an unguarded board
+  PASS  known-wrong REFUSES an entry whose retire trigger nobody can evaluate (the 2026-07-30 allowlist bug, rejected at the schema)
+  PASS  known-wrong names an entry it could not evaluate (typo commodity id) and goes blind rather than counting it clean
+  PASS  known-wrong live clean twin: the real blocklist is green on the real board
+  PASS  guards.ps1 still records coverage for guards/11-bakers-provenance
+  PASS  guards.ps1 still records coverage for guards/3-pin-identity
+  PASS  guards.ps1 still records coverage for guards/4-factor
+  PASS  guards.ps1 still records coverage for guards/10-store-charges
+  PASS  audit-food-category still records what it scanned
+  PASS  audit-food-category still counts the DENOMINATOR before its scoping tests (2,663 scanned of 3,196 priced cells)
+  PASS  audit-ff-carry records its probe count BEFORE the report line that threw for 17 days
+  PASS  coverage-ledger FIRES on the guard-11 founding bug (0 of 6,960 rows examined)
+  PASS  coverage-ledger -Gate goes RED on the pre-change state (exit 2)
+  PASS  coverage-ledger -Accept REFUSES on a blind ledger (accepting would disarm the ratchet permanently)
+  PASS  coverage-ledger FIRES on the guard-3 founding bug (0 of 16 pins identity-checked)
+  PASS  coverage-ledger FIRES on a rostered check that produced NO row at all (the 17-day ff-carry silence)
+  PASS  coverage-ledger stays SILENT about a cycle-phase check during a publish-phase run
+  PASS  coverage-ledger FIRES when a check quietly halves its coverage (2,435 -> 900)
+  PASS  coverage-ledger calls a check with ZERO eligible rows INERT, not ok
+  PASS  coverage-ledger exits 3 on an empty/mid-write ledger instead of reporting a clean board
+  PASS  coverage-ledger exits 3 on truncated JSON
+  PASS  coverage-ledger SILENT on a healthy ledger
+  PASS  coverage-ledger SILENT on a -0.7% move (the worst real day-over-day drop since 2026-07-18)
+  PASS  coverage-ledger does NOT punish ff-carry for having fewer empty terms to re-probe
+  PASS  coverage-ledger reports an unbaselined new check as a note, never a finding
+  PASS  coverage-ledger FIRES on a check that stopped recording 9 days ago
+  PASS  coverage-lib records eligible/examined/skipped and marks a zero-examined row BLIND
+  PASS  coverage-lib emits nothing to the output stream (it cannot pollute a caller's stdout)
+  PASS  sample draw is deterministic per (seed, cell), changes with the seed, and stays in [0,1)
+  PASS  stratum allocation: 60/40 on the live shape, -CrownShare 0 gives a plain whole-board draw, a thin stratum SPILLS instead of shrinking the sample, and an over-large -N clamps to the population
+  PASS  the verification worklist is BLIND - it carries no product name, no price and no crown flag
+  PASS  the sealed key still holds the board answer + stratum populations (so the blind worklist is blind by omission, not by emptiness)
+  PASS  the worklist INTERLEAVES the strata (52 runs over 100 rows) - row position does not publish the crown flag the columns withhold
+  PASS  the worklist holds exactly the 100 rows that were asked for
+  PASS  the draw is REPRODUCIBLE - re-running the sampler on the same board rebuilds a byte-identical worklist
+  PASS  the sampler refuses to overwrite an existing worklist without -Force (no redrawing until the answer is convenient)
+  PASS  the sampler goes BLIND (exit 3) with no board to draw from, instead of reporting an empty sample
+  PASS  ZERO defects still yields a real upper bound (0/30 -> up to 11.4%, 0/100 -> up to 3.7%) - a clean sample is never certainty
+  PASS  Wilson half-widths match the hand-computed values (6/30 +/-13.9 pts, 20/100 +/-7.8, 2/100 +/-3.2) - the n=30 sample cannot tell a 10% board from a 30% board
+  PASS  the crown-weighted draw is REWEIGHTED to the board (7/100 raw = 7.0% becomes 3.8% whole-board) - quoting the raw sample fraction would overstate the board 1.8x
+  PASS  a stratum with zero verified cells blows the whole-board ceiling to 86% instead of being silently dropped
+  PASS  the finite-population correction is live (60+40 of 2792 -> +/-4.2 pts design-based) and collapses to exactly zero on a census
+  PASS  required-n is honest about its own limits: +/-3 pts at a 2% rate needs 82 cells, +/-1 pt needs 594, +/-1 pt at a 20% rate needs 1,921 of 2,792 (69% of the board - a census in all but name), and an impossible target returns -1
+  PASS  the rate refusal is armed: 29 verified rows quote nothing, 30 do, and zero rows never do
+  PASS  the recorder REFUSES to quote a defect rate from 12 verified cells (exit 3, could-not-evaluate)
+  PASS  the recorder quotes a whole-board rate only WITH its 95% interval and states what n would resolve it
+  PASS  a 100-cell sample with ZERO defects still publishes a non-zero upper bound - "we found nothing" never becomes "there is nothing"
+  PASS  an all-unverifiable sample (bot walls) reports that it proved NOTHING - it never counts as 100 passes
+  PASS  bake-currency: the live commodities.json is CURRENT with category-excludes.json (nothing left to bake)
+  PASS  bake-currency MUST-FIRE: a commodity whose exclude list predates a library class is reported as drift, and the apples exempt still exempts
+  PASS  bake-currency clean twin: an already-baked tree reports no drift
+  PASS  bake-currency fixture is still frozen (the drifted tree was not written to)
+  PASS  food-category MUST-FIRE: tampons on honey, marshmallows on strawberries and tea bags on lemons all hard-fail (exit 2) and each names its class
+  PASS  food-category clean twin: the real honey / strawberries / lemons cells stay silent under the round-2 classes
+  PASS  send-alert: queue routing (cross-day absorb, resolved-mints-new) + body-thin detection
+  PASS  validate-triage-plan: the reviewer-to-developer handoff gate still rejects a token-match blast radius and an unclaimed include
+  PASS  prompt-backup: every agent prompt and scheduled-task SKILL is backed up in ops\prompt-backup and identical across scopes
+  PASS  fmt-lib: per-unit display still rolls over at a dollar and still shows a real sub-cent price
+  PASS  basis-outlier: still catches a pack price on a single-unit size, and still stays silent on an ordinary premium spread
+  PASS  board-consistency: a flyer-only ad pill is not a breach, and a priced chip with no link still is
+  PASS  semantic-identity: the actionable filter still admits fresh findings and still suppresses settled rulings
+  PASS  fareway slug sizes: counts still recovered, the four slug defects still refused, and the milk/eggs basis relabel still cannot eat a real size
+  PASS  size-heal: still heals across a store RENAME on the catalog product id, and still refuses when the price moved
+  PASS  as_of evidence: a row dated fresher than any capture that holds it still fires, and a carried OLDER date still does not
+  PASS  as_of repair: still re-dates a laundered row DOWN to its evidence, still never forward, still leaves unbacked rows alone
+  PASS  fareway builder still dates each row from the EXTRACT it came from, not the build date
+  PASS  fareway builder still runs the as_of repair after carry-forward
+  PASS  Sam's verified refresh: still re-prices sft/no-unitPrice rows, and still refuses an ambiguous price, a changed pack, a per-unit size and a size that is a price
+  PASS  medley rules: no broccoli/cauliflower/carrot BLEND matches a single-vegetable commodity (all 7 live Walmart blends)
+  PASS  medley rules CLEAN TWIN: plain broccoli/cauliflower/carrots and "Fresh Frozen" mixed veg still match their own commodity
+  PASS  prose-sync: still writes spec -> prose only, still refuses to blank a field the spec lost, and its -Check still fires on a re-drifted file
+  PASS  specs\prose matches its spec in every archived run - a full spec-guards run on a run dir cannot revert that run's record
+  PASS  prose-sync covers every field spec-guards merges (no field can revert unwatched)
+  PASS  spec-contradictions: all five classes still fire on the frozen live cases, and a self-consistent spec still produces nothing
+  PASS  contradiction repair: still refuses a two-quantity head line, "rice vinegar", and "wild rice" - and still matches "93/7 ground turkey" to its own line
+  PASS  no recipe spec contradicts itself worse than the recorded baseline (stat-vs-prose, stale money, head quantities all at ZERO)
+  PASS  cook measures: a package noun that cannot prove it equals the grams is still replaced, a whole can is still left alone, and a WEIGHT label is still out of scope
+  PASS  no ingredient line names a package the recipe does not actually use (0 false labels across 513 specs)
+  PASS  serving scaler still scales only the leading quantity and understands fractions (the JS matches its PowerShell twin)
+  PASS  unused-ingredient gate: still catches a bought-but-never-cooked ingredient, and still credits "shred the chicken" for the chicken breast
+  PASS  unused-ingredient gate CLEAN TWIN: loose but genuine step wording is never accused
+  PASS  empty-required gate: an EMPTY source_url no longer passes for a present one (the 113-uncredited-recipes hole)
+  PASS  spec-guards ENFORCES both gates, so a new recipe cannot publish with ingredients no step uses or an empty credit
+  PASS  identity eval: an EXCLUDE still overrides an include, and a rule-ACCEPTED product still cannot be mined as a clean negative
+test-auditors FAIL  (1 failed, 392 passed) - a watcher has gone blind. Fix it before trusting a quiet board.

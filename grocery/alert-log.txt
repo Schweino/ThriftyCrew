@@ -15,3 +15,9 @@
 [2026-08-03T07:08:19] SENT 'Grocery matching soundness - review needed' -> schweino68@gmail.com (id 19fc78654007c2a2)
 [2026-08-03T07:09:50] SENT 'Recipe db drift (index vs specs)' -> schweino68@gmail.com (id 19fc787b7167726f)
 [2026-08-03T07:12:55] SENT 'Grocery: 1 NEW price flag(s) - 2026-08-03' -> schweino68@gmail.com (id 19fc78a8d9983dbf)
+[2026-08-03T08:58:35] SUPPRESSED (already sent this type today) 'Grocery: 33 store(s) dropped from a commodity they carry - 2026-08-03' [type: grocery store s dropped from a commodity they carry]
+[2026-08-03T09:00:07] SUPPRESSED (already sent this type today) 'Grocery: semantic sweep found 12 product(s) no rule can see - 2026-08-03' [type: grocery semantic sweep found product s no rule can see]
+[2026-08-03T09:00:10] SUPPRESSED (already sent this type today) 'Grocery: 21 board cell(s) sit in the wrong store department - 2026-08-03' [type: grocery board cell s sit in the wrong store department]
+[2026-08-03T09:01:20] SUPPRESSED (already sent this type today) 'Grocery matching soundness - review needed' [type: grocery matching soundness review needed]
+[2026-08-03T09:05:43] QUEUE BODY UPGRADED on 2026-08-03-6c488c (307 -> 1493 chars, same day)
+[2026-08-03T09:05:43] SUPPRESSED (already sent this type today) 'Grocery: 14 NEW price flag(s) - 2026-08-03' [type: grocery new price flag s]

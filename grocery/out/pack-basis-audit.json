@@ -1,9 +1,25 @@
 ﻿{
-    "generated":  "2026-08-03 07:13",
-    "compare_file":  "comparison-2026-08-02.json",
-    "finding_count":  1,
+    "generated":  "2026-08-03 09:05",
+    "compare_file":  "comparison-2026-08-03.json",
+    "finding_count":  2,
     "confirmed_count":  0,
     "findings":  [
+                     {
+                         "id":  "frozen-pizza",
+                         "commodity":  "Frozen Pizza",
+                         "store":  "Baker\u0027s",
+                         "unit":  "each",
+                         "published":  1.745,
+                         "as_pack_total":  3.49,
+                         "peer_cheapest":  2.97,
+                         "count":  2,
+                         "size":  "2 pk 5 oz",
+                         "ad":  "$3.49",
+                         "item":  "Kroger Pepperoni French Bread Frozen Pizza",
+                         "fingerprint":  "undecidable",
+                         "each_derived":  null,
+                         "peer_single_unit":  null
+                     },
                      {
                          "id":  "hummus",
                          "commodity":  "Hummus",
