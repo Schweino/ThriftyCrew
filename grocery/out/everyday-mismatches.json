@@ -13,6 +13,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "frozen-waffles",
+        "store":  "Sam\u0027s Club",
+        "unit":  "each",
+        "board":  0.1371,
+        "link":  0.1649,
+        "ratio":  1.2,
+        "price":  11.87,
+        "size":  "72 ct",
+        "boardItem":  "Eggo Homestyle Waffles, Frozen Breakfast, 72 ct.",
+        "linkItem":  "Eggo Homestyle Waffles, Frozen Breakfast, 72 ct.",
+        "board_src":  "main"
+    },
+    {
         "id":  "ground-cinnamon",
         "store":  "Hy-Vee",
         "unit":  "oz",
@@ -36,19 +49,6 @@
         "size":  "22 oz",
         "boardItem":  "Member\u0027s Mark Black Sesame Seed, 22 oz.",
         "linkItem":  "Member\u0027s Mark Black Sesame Seed, 22 oz.",
-        "board_src":  "main"
-    },
-    {
-        "id":  "string-cheese",
-        "store":  "Fareway",
-        "unit":  "oz",
-        "board":  0.349,
-        "link":  0.2908,
-        "ratio":  0.83,
-        "price":  3.49,
-        "size":  "12 oz",
-        "boardItem":  "Fareway Low-Moisture Part-Skim Sticks Mozzarella String Cheese",
-        "linkItem":  "Fareway Low-Moisture Part-Skim Sticks Mozzarella String Cheese",
         "board_src":  "main"
     },
     {

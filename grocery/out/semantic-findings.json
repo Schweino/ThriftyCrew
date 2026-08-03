@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-02 08:58",
+    "generated":  "2026-08-03 07:07",
     "board":  "comparison-2026-08-02.json",
-    "sidecar_generated":  "2026-08-02 08:58:22",
+    "sidecar_generated":  "2026-08-03 07:06:59",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,106 +9,16 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2817,
-                     "corpus":  23381,
-                     "rule_invisible":  3454
+                     "board_pairs":  2830,
+                     "corpus":  23455,
+                     "rule_invisible":  3461
                  },
     "identity_count":  0,
-    "coverage_count":  30,
+    "coverage_count":  3,
     "identity":  [
 
                  ],
     "coverage":  [
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-detergent",
-                         "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
-                         "store":  "Family Fare",
-                         "product":  "Arm \u0026 Hammer Stain Fighters Fresh Scent Detergent 32.5 Fl Oz",
-                         "cos":  0.761,
-                         "score":  0.98545,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-detergent",
-                         "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
-                         "store":  "Family Fare",
-                         "product":  "Arm \u0026 Hammer Stain Fighters Fresh Scent Detergent 100.5 Fl Oz",
-                         "cos":  0.761,
-                         "score":  0.98545,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-detergent",
-                         "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
-                         "store":  "Baker\u0027s",
-                         "product":  "ARM \u0026 HAMMER Clean Burst Scent Liquid Laundry Detergent",
-                         "cos":  0.7704,
-                         "score":  0.981365,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-detergent",
-                         "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
-                         "store":  "Baker\u0027s",
-                         "product":  "ARM \u0026 HAMMER Sensitive Skin Plus Fresh Scent Liquid Laundry Detergent",
-                         "cos":  0.77,
-                         "score":  0.978265,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-detergent",
-                         "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
-                         "store":  "Baker\u0027s",
-                         "product":  "ARM \u0026 HAMMER Clean Burst Liquid Laundry Detergent",
-                         "cos":  0.7221,
-                         "score":  0.975918,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Walmart",
-                         "product":  "Marketside Organic Grass-Fed Ground Beef, 93% Lean/7% Fat, 1 lb",
-                         "cos":  0.7206,
-                         "score":  0.974728,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-detergent",
-                         "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
-                         "store":  "Baker\u0027s",
-                         "product":  "ARM \u0026 HAMMER Plus OxiClean Fresh Scent Powder Laundry Detergent",
-                         "cos":  0.8354,
-                         "score":  0.973599,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "cranberry-juice",
-                         "commodity":  "Cranberry Juice",
-                         "store":  "Family Fare",
-                         "product":  "Ocean Spray Juice Drink, Cranberry, Zero Sugar 64 Fl Oz",
-                         "cos":  0.6774,
-                         "score":  0.963291,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "frozen-lasagna",
-                         "commodity":  "Frozen Lasagna",
-                         "store":  "Walmart",
-                         "product":  "Stouffers Classic Lasagna with Meat and Sauce, Large Size, Oven Ready, Frozen Dinners 19 oz",
-                         "cos":  0.7434,
-                         "score":  0.963027,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
                      {
                          "kind":  "coverage",
                          "id":  "chicken-thighs",
@@ -117,156 +27,6 @@
                          "product":  "Fresh Fresh Chicken Drumsticks Family Pack Per LB",
                          "cos":  0.6542,
                          "score":  0.961238,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "cranberry-sauce",
-                         "commodity":  "Cranberry Sauce (canned)",
-                         "store":  "Family Fare",
-                         "product":  "Ocean Spray Sauce, Cranberry, Whole Berry 14 Oz",
-                         "cos":  0.6528,
-                         "score":  0.958536,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-detergent",
-                         "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
-                         "store":  "Family Fare",
-                         "product":  "Arm \u0026 Hammer Liquid Laundry Clean Burst",
-                         "cos":  0.6943,
-                         "score":  0.957421,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "pork-tenderloin",
-                         "commodity":  "Pork Tenderloin",
-                         "store":  "Walmart",
-                         "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.5â€“1.9 lb, 20 Grams of Protein per 4 oz Serving",
-                         "cos":  0.7412,
-                         "score":  0.953382,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "pork-tenderloin",
-                         "commodity":  "Pork Tenderloin",
-                         "store":  "Walmart",
-                         "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.5–1.9 lb, 20 Grams of Protein per 4 oz Serving",
-                         "cos":  0.7417,
-                         "score":  0.952633,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-detergent",
-                         "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
-                         "store":  "Family Fare",
-                         "product":  "Arm \u0026 Hammer Lndry Dtrgnt Fresh Scent Pls O",
-                         "cos":  0.7318,
-                         "score":  0.945348,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-detergent",
-                         "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
-                         "store":  "Walmart",
-                         "product":  "ARM \u0026 HAMMER Plus OxiClean 5-in-1 Laundry Detergent Paks, Fresh Scent, 42 Count",
-                         "cos":  0.8206,
-                         "score":  0.941812,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "cranberry-sauce",
-                         "commodity":  "Cranberry Sauce (canned)",
-                         "store":  "Family Fare",
-                         "product":  "Ocean Spray Sauce, Cranberry, Jellied 14 Oz",
-                         "cos":  0.6978,
-                         "score":  0.937355,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-93-7",
-                         "commodity":  "93/7 Lean Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "Simply Nature 93 07 Lean Organic Grass Fed Ground Beef 1 LB",
-                         "cos":  0.7039,
-                         "score":  0.930861,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "frozen-lasagna",
-                         "commodity":  "Frozen Lasagna",
-                         "store":  "Walmart",
-                         "product":  "Stouffers Meat Lovers Lasagna, Family Size, Oven Ready Lasagna, Frozen Dinners 34 oz",
-                         "cos":  0.7185,
-                         "score":  0.929779,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "cranberry-juice",
-                         "commodity":  "Cranberry Juice",
-                         "store":  "Family Fare",
-                         "product":  "Ocean Spray Juice Drink, Cranberry Mixed Berry, Zero Sugar 64 Fl Oz",
-                         "cos":  0.7018,
-                         "score":  0.927548,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-8020",
-                         "commodity":  "80/20 Ground Beef",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger 80/20 Ground Beef Patties",
-                         "cos":  0.6717,
-                         "score":  0.92749,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-detergent",
-                         "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
-                         "store":  "Baker\u0027s",
-                         "product":  "ARM \u0026 HAMMER Baking Soda Fresh Sparkling Fresh Scent Liquid Laundry Detergent",
-                         "cos":  0.7648,
-                         "score":  0.925798,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-detergent",
-                         "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
-                         "store":  "Baker\u0027s",
-                         "product":  "ARM \u0026 HAMMER Baking Soda Fresh Liquid Laundry Detergent Sparkling Fresh Scent",
-                         "cos":  0.7706,
-                         "score":  0.92061,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "frozen-fries",
-                         "commodity":  "Frozen French Fries",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger Seasoned Crispy Frozen French Fries",
-                         "cos":  0.7041,
-                         "score":  0.917474,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "canned-pumpkin",
-                         "commodity":  "Canned Pumpkin (100% puree)",
-                         "store":  "Walmart",
-                         "product":  "Libby\u0027s 100% Pure Pumpkin Puree, All Natural Gluten Free Canned Pumpkin for Baking Pumpkin Pie Dessert, 15 oz Can",
-                         "cos":  0.7768,
-                         "score":  0.91711,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -281,42 +41,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "canned-pumpkin",
-                         "commodity":  "Canned Pumpkin (100% puree)",
-                         "store":  "Walmart",
-                         "product":  "Libby\u0027s 100% Pure Pumpkin Puree, All Natural Gluten Free Canned Pumpkin for Baking Pumpkin Pie Dessert, 29 oz Can",
-                         "cos":  0.7727,
-                         "score":  0.912385,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "chicken-thighs",
                          "commodity":  "Chicken Thighs / Drumsticks",
                          "store":  "Aldi",
                          "product":  "Kirkwood Fresh Chicken Drumsticks Per LB",
                          "cos":  0.6699,
                          "score":  0.90917,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "almond-milk",
-                         "commodity":  "Almond Milk",
-                         "store":  "Baker\u0027s",
-                         "product":  "Simple Truth Dairy Free Chocolate Almond Milk Half Gallon",
-                         "cos":  0.7017,
-                         "score":  0.903096,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "iced-tea",
-                         "commodity":  "Iced Tea (bottled/gallon)",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger Unsweetened Tea",
-                         "cos":  0.6348,
-                         "score":  0.902958,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]

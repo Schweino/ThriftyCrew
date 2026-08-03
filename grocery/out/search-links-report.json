@@ -1,0 +1,81 @@
+﻿{
+    "generated":  "2026-08-03 07:16",
+    "query":  "milk",
+    "offline":  false,
+    "checked":  7,
+    "provable":  6,
+    "unprovable":  [
+                       "Baker\u0027s"
+                   ],
+    "issues":  [
+
+               ],
+    "downgrades":  [
+
+                   ],
+    "rows":  [
+                 {
+                     "store":  "Aldi",
+                     "url":  "https://www.aldi.us/store/aldi/s?k=milk",
+                     "routing":  "path",
+                     "status":  200,
+                     "title":  "ALDI Milk Delivery or Pickup Near Me | ALDI",
+                     "verdict":  "OK",
+                     "echo":  true
+                 },
+                 {
+                     "store":  "Baker\u0027s",
+                     "url":  "https://www.bakersplus.com/search?query=milk\u0026searchType=default_search",
+                     "routing":  "path",
+                     "status":  0,
+                     "title":  "",
+                     "verdict":  "UNPROVABLE",
+                     "echo":  false
+                 },
+                 {
+                     "store":  "Family Fare",
+                     "url":  "https://www.shopfamilyfare.com/shop",
+                     "routing":  "shell",
+                     "status":  200,
+                     "title":  "Shop Family Fare!",
+                     "verdict":  "OK",
+                     "echo":  false
+                 },
+                 {
+                     "store":  "Fareway",
+                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/s?k=milk",
+                     "routing":  "path",
+                     "status":  200,
+                     "title":  "Fareway Meat \u0026amp; Grocery Milk Pickup Near Me | Fareway Meat \u0026amp; Grocery",
+                     "verdict":  "OK",
+                     "echo":  true
+                 },
+                 {
+                     "store":  "Hy-Vee",
+                     "url":  "https://www.hy-vee.com/aisles-online/search?search=milk",
+                     "routing":  "path",
+                     "status":  200,
+                     "title":  "Hy-Vee Aisles Online Grocery Shopping",
+                     "verdict":  "OK",
+                     "echo":  false
+                 },
+                 {
+                     "store":  "Sam\u0027s Club",
+                     "url":  "https://www.samsclub.com/s/milk",
+                     "routing":  "path",
+                     "status":  200,
+                     "title":  "milk - Samsclub.com",
+                     "verdict":  "OK",
+                     "echo":  true
+                 },
+                 {
+                     "store":  "Walmart",
+                     "url":  "https://www.walmart.com/search?q=milk",
+                     "routing":  "path",
+                     "status":  200,
+                     "title":  "milk - Walmart.com",
+                     "verdict":  "OK",
+                     "echo":  true
+                 }
+             ]
+}

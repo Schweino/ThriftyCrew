@@ -1,5 +1,5 @@
 ﻿{
-    "next_index":  35,
-    "updated":  "2026-08-02T07:06:40",
-    "note":  "index into the commodity-search term order where the NEXT Family Fare run starts; see the term-budget cursor comment in pull-regular-familyfare.ps1"
+    "next_index":  71,
+    "updated":  "2026-08-03T07:06:44",
+    "note":  "index into the commodity-search term order where the NEXT Family Fare run starts; only written after the merged catalog has landed - see the cursor-commit comment in pull-regular-familyfare.ps1"
 }

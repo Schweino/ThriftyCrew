@@ -1,6 +1,6 @@
 {
     "week_of":  "2026-08-02",
-    "updated":  "2026-08-02T09:01:11",
+    "updated":  "2026-08-03T07:10:14",
     "note":  "This week free because they are the cheapest dinners per protein on the live Omaha board. They revert to members-only when prices re-rank.",
     "free":  [
                  {
@@ -15,14 +15,14 @@
                      "protein":  "chicken",
                      "rank":  2,
                      "name":  "Chicken Fried Rice",
-                     "per_serving":  1.72
+                     "per_serving":  1.71
                  },
                  {
                      "slug":  "claypot-chicken-mushroom-rice",
                      "protein":  "chicken",
                      "rank":  3,
                      "name":  "Claypot Chicken and Mushroom Rice",
-                     "per_serving":  1.83
+                     "per_serving":  1.82
                  },
                  {
                      "slug":  "poppy-seed-chicken-and-rice-casserole",
@@ -137,10 +137,10 @@
                      "per_serving":  1.59
                  },
                  {
-                     "slug":  "cochinita-pibil-pork-rice-bowls",
+                     "slug":  "slow-cooker-kalua-pork-bowls",
                      "protein":  "pork",
                      "rank":  5,
-                     "name":  "Cochinita Pibil Pork Rice Bowls",
+                     "name":  "Slow Cooker Kalua Pork Bowls",
                      "per_serving":  1.63
                  }
              ]

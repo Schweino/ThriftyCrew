@@ -569,7 +569,7 @@
     {
         "id":  "canned-corn",
         "store":  "Family Fare",
-        "product":  "Our Family No Salt Added Super Sweet Whole Kernel Corn 15.25 Oz",
+        "product":  "Our Family Super Sweet Whole Kernel Corn 15.25 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -588,6 +588,15 @@
         "id":  "diced-tomatoes",
         "store":  "Family Fare",
         "product":  "Our Family Tomatoes, Diced 14.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
+        "id":  "canned-green-beans",
+        "store":  "Family Fare",
+        "product":  "Our Family Cut Green Beans 14.5 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -772,6 +781,15 @@
         "aisle":  "freezer/frozen_pasta_plus",
         "verdict":  "BLOCK",
         "reason":  "candidate sits in \u0027freezer\u0027; category \u0027grains\u0027 allows only: pantry"
+    },
+    {
+        "id":  "cherries",
+        "store":  "Family Fare",
+        "product":  "Sweet Cherry Brats (4 Ct.)",
+        "dept":  "meat",
+        "aisle":  "meat/sausage",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027meat\u0027; category \u0027fruit\u0027 allows only: fresh_fruits_vegetables"
     },
     {
         "id":  "cherry-tomatoes",
@@ -1082,7 +1100,7 @@
     {
         "id":  "cranberry-sauce",
         "store":  "Family Fare",
-        "product":  "Cranberry Sauce, Jellied Our Family",
+        "product":  "Cranberry Sauce, Whole Our Family",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -1370,7 +1388,7 @@
     {
         "id":  "fabric-softener",
         "store":  "Family Fare",
-        "product":  "Free \u0026 Clear Fabric Softener Our Family",
+        "product":  "Our Family Fabric Softener, Ultra Spring 51 Fl Oz",
         "dept":  "household",
         "aisle":  "household/laundry",
         "verdict":  "ALLOW",
@@ -1402,6 +1420,15 @@
         "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
         "verdict":  "BLOCK",
         "reason":  "candidate sits in \u0027fresh_fruits_vegetables\u0027; category \u0027baking\u0027 allows only: pantry"
+    },
+    {
+        "id":  "feta",
+        "store":  "Family Fare",
+        "product":  "Athenos Feta Traditional Cheese Crumbles 4 Oz",
+        "dept":  "deli",
+        "aisle":  "deli/cheese",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027deli\u0027 is an allowed department for category \u0027dairy\u0027"
     },
     {
         "id":  "fish-sauce",
@@ -2927,7 +2954,7 @@
     {
         "id":  "shampoo",
         "store":  "Family Fare",
-        "product":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
+        "product":  "Alberto Vo5 Extra Body With Collagen Volumizing Shampoo For Body \u0026 Bounce Bonus Size 15 Fl Oz",
         "dept":  "health_beauty",
         "aisle":  "health_beauty/grooming_hygiene",
         "verdict":  "ALLOW",
@@ -2981,7 +3008,7 @@
     {
         "id":  "sliced-cheese",
         "store":  "Family Fare",
-        "product":  "Kraft American Cheese Slices 24 Ea",
+        "product":  "Crystal Farms Crystal Farms American Cheese Slices 24 Ea",
         "dept":  "deli",
         "aisle":  "deli/cheese",
         "verdict":  "ALLOW",
@@ -3026,7 +3053,7 @@
     {
         "id":  "sparkling-water",
         "store":  "Family Fare",
-        "product":  "Sparkling Ice Sparkling Water, Zero Sugar, Peach Nectarine 17 Fl Oz",
+        "product":  "Sparkling Ice Zero Sugar Lemon Lime Sparkling Water 17 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/soda_other_carbonated_beverages",
         "verdict":  "ALLOW",
@@ -3330,6 +3357,24 @@
         "reason":  "\u0027deli\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "turkey-bacon",
+        "store":  "Family Fare",
+        "product":  "Jennie O Turkey Bacon 12 Oz",
+        "dept":  "meat",
+        "aisle":  "meat/bacon",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
+        "id":  "turnips",
+        "store":  "Family Fare",
+        "product":  "Turnips",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/other_vegetables",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
         "id":  "vanilla-extract",
         "store":  "Family Fare",
         "product":  "Finest Reserve Vanilla Extract 2 Fl Oz",
@@ -3449,7 +3494,7 @@
     {
         "id":  "yogurt",
         "store":  "Family Fare",
-        "product":  "Yoplait Low Fat Strawberry Yogurt 6 Oz",
+        "product":  "Yoplait Low Fat Strawberry Banana Yogurt 6 Oz",
         "dept":  "dairy",
         "aisle":  "dairy/yogurt",
         "verdict":  "ALLOW",
@@ -3485,7 +3530,7 @@
     {
         "id":  "cheddar-cheese-shredded",
         "store":  "Family Fare",
-        "product":  "Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz",
+        "product":  "Our Family Sharp Cheddar Shredded Cheese 8 Oz",
         "dept":  "deli",
         "aisle":  "deli/cheese",
         "verdict":  "BLIND",
@@ -3584,7 +3629,7 @@
     {
         "id":  "white-mushrooms",
         "store":  "Family Fare",
-        "product":  "Our Family Mushrooms, White 12 Oz",
+        "product":  "Our Family Mushrooms, White, Whole 8 Oz",
         "dept":  "fresh_fruits_vegetables",
         "aisle":  "fresh_fruits_vegetables/mushrooms",
         "verdict":  "BLIND",

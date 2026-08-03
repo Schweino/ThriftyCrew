@@ -1,0 +1,21 @@
+﻿{
+    "generated":  "2026-08-03",
+    "store":  "Fareway",
+    "ad_group":  "OmahaGroup (043)",
+    "weekly":  {
+                   "from":  "2026-08-02",
+                   "to":  "2026-08-08",
+                   "pages":  24,
+                   "dir":  "C:\\Codex\\income\\grocery\\out\\fareway\\weekly",
+                   "blocked":  false,
+                   "reason":  "OK (24 pages)"
+               },
+    "monthly":  {
+                    "from":  "2026-08-02",
+                    "to":  "2026-08-29",
+                    "pages":  40,
+                    "dir":  "C:\\Codex\\income\\grocery\\out\\fareway\\monthly",
+                    "blocked":  false,
+                    "reason":  "OK (40 pages)"
+                }
+}
