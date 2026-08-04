@@ -39,11 +39,19 @@ pipeline\repair-cook-measures.ps1 -Apply   a label naming a PACKAGE the recipe d
 pipeline\repair-unitless-buy.ps1  -Apply   a COUNT with no noun ("18.4" -> "18.4 potatoes")
 pipeline\repair-range-buy.ps1     -Apply   a RANGE where the quantity belongs ("2-3 cloves" -> "8 cloves")
   then, for the slugs any of them touched:
+pipeline\repair-head-ingredients.ps1 -Apply  re-derive the JSON-LD list from the repaired display lines
 pipeline\sync-recipesdb-buy.ps1   -Apply   carry the label into recipes-db.json (planner-data reads THAT)
 meal-prep\gen-planner-data.ps1             recipes-db -> planner-data.js (Meal Plan Builder grocery list)
 engine\build-cards.ps1 -Slugs ...          the scaler payload embeds buy, so the cards must be rebuilt
 engine\publish.ps1 -Slugs ...
 ```
+
+`repair-head-ingredients` is not optional in that tail. `head.recipeIngredient` is DERIVED from
+`ingredients_display` (2026-08-04, SPEC-SCHEMA invariant 9), so a label repair that stops before it
+leaves the structured data quoting amounts the page no longer shows - the same drift the derivation was
+built to end, just one revision later. It happened immediately: the 2026-08-04 label repair landed while
+the derivation was in flight, and 423 of 513 specs needed re-deriving on top of it.
+`audit-db-agreement.ps1` fails on HEAD-INGREDIENT drift, so a skipped step is caught, not shipped.
 
 `build-cards`/`publish` take `[string[]] -Slugs`. Call them **in-process** (`& .\engine\build-cards.ps1
 -Slugs $slugs`), never through `powershell -File`: that path marshals arguments as command-line strings,

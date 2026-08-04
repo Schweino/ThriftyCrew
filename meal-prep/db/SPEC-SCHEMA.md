@@ -54,8 +54,17 @@ cost"); the widget live-updates the rectangle to the cheapest number from the fe
 
 ## head (Recipe JSON-LD source)
 `{cookTime, prepTime, totalTime, costPerServing, description, image, keywords, recipeIngredient[], steps[]}`.
-`recipeIngredient[]` is the schema.org ingredient list (14-serving amounts). `description` is also the
-post's meta description + custom excerpt.
+`description` is also the post's meta description + custom excerpt.
+
+`recipeIngredient[]` is the schema.org ingredient list (14-serving amounts) and is **DERIVED, never
+hand-written** — one line per `ingredients_display` line, same order, same amounts, shaped
+`"<name>, <amount> (<grams> g)"` with the brand parenthetical dropped. `pipeline/head-ingredients-lib.ps1`
+is the only thing that may produce it: `build-v2-spec` derives it at intake (an intake file that supplies
+one is ignored with a warning) and `pipeline/repair-head-ingredients.ps1` re-derives it in place on
+existing specs. It was writer-typed prose until 2026-08-04, and prose about a list of quantities drifts:
+507 of 513 specs named fewer ingredients than their own card, in package units the page never used
+("3 boxs Penne Pasta" against the card's "10 cups (1050 g)"). Google asks that structured data represent
+the visible page, so it is now generated from the visible page's own list. See invariant 9.
 
 ## Other
 `make_it[]` — ordered method steps (strings). `tuning[]` — provenance notes (e.g. "base +5% (Pasta
@@ -78,6 +87,11 @@ Shells)"). `manual_balance` — bool, marks a spec whose macros were hand-balanc
    without the other makes the list change under the reader the moment they touch the servings control.
 8. `buy` LEADS with its quantity, because the widget's `scaleBuy` only multiplies the leading number.
    A range ("1-2") scales to nonsense ("2-2"); ~10 legacy freeform labels still carry this shape.
+9. `head.recipeIngredient` EQUALS the derivation from `ingredients_display` - same length, same order,
+   same amounts (HEAD-INGREDIENT guard in `audit-db-agreement.ps1`). The JSON-LD ingredient list and the
+   rendered ingredient list are two views of one list; keeping them as two separately-maintained lists is
+   what let the structured data drift to 6 ingredients on a 16-ingredient recipe. Repair:
+   `pipeline/repair-head-ingredients.ps1 -Apply`.
 
 ## Fields that keep their own COPY of a spec value (a repair must carry across, or they go stale)
 `recipes-db.json` stores each ingredient's `buy` again (`pipeline/sync-recipesdb-buy.ps1` carries a label
