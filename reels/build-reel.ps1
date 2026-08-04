@@ -137,6 +137,15 @@ foreach ($f in @($psFile, $frFile)) { if (-not (Test-Path $f)) { throw "Missing 
 $perServing = Get-Content $psFile -Raw | ConvertFrom-Json
 $rotation   = Get-Content $frFile -Raw | ConvertFrom-Json
 
+# The daily chain (grocery\run-daily-local.ps1 -> check-ad-cycles) rewrites v2-perserving.json each
+# morning, finishing 09:08-09:18 across the last four days. This runs at 10:00, but do not TRUST the
+# clock: if the pipeline failed or ran long, the headline price is yesterday's. Say so rather than
+# refusing, because a stale board price is still a real price and the reel stamps its own board week.
+$psAge = (Get-Date).Date - (Get-Item $psFile).LastWriteTime.Date
+if ($psAge.Days -ge 1) {
+  Write-Warning ("v2-perserving.json is {0} day(s) old (last written {1:yyyy-MM-dd HH:mm}). The daily price refresh may not have run. Prices below are from that date, not today." -f $psAge.Days, (Get-Item $psFile).LastWriteTime)
+}
+
 $psBySlug = @{}
 foreach ($row in $perServing) { $psBySlug[[string]$row.slug] = $row }
 
