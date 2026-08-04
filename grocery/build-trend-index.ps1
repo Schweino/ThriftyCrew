@@ -17,6 +17,8 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 if ([string]::IsNullOrWhiteSpace($HistoryFile)) { $HistoryFile = Join-Path $here 'price-history.json' }
 if ([string]::IsNullOrWhiteSpace($OutFile))     { $OutFile     = Join-Path $here 'out\trend\index.html' }
 
+. (Join-Path $here '..\lib\trend-keep.ps1')   # 2026-08-04: single source for which commodities get a page
+
 $utf8 = New-Object System.Text.UTF8Encoding($false)
 
 function Esc { param([string]$t)
@@ -100,6 +102,9 @@ foreach ($cat in $catOrder) { $buckets[$cat] = @() }
 $included = 0
 
 foreach ($c in $data.commodities) {
+  # 2026-08-04: this hub must list exactly the pages that exist, or it becomes 472 dead links.
+  # Same single gate the publisher and the board use. See lib\trend-keep.ps1.
+  if (-not (Test-TrendKeep $c.id)) { continue }
   $hist = @($c.history | Sort-Object week_of)
   if ($hist.Count -lt $MinWeeks) { continue }
   $cur = $hist[$hist.Count - 1]

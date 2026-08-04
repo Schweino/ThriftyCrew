@@ -1,0 +1,18 @@
+301:
+  ^/tag/financial-lessons/(.*): /financial-lessons/$1
+  ^/tag/meal-prep/(.*): /meal-prep/$1
+  ^/tag/books/(.*): /books/$1
+  ^/read-me-first-how-to-use-map-to-success/?$: /start-here/
+  ^/how-to-save-1000-dollars-in-30-days/?$: /how-to-build-an-emergency-fund/
+  ^/how-to-build-a-financial-cushion/?$: /how-to-build-an-emergency-fund/
+  ^/how-to-start-investing-with-100-dollars/?$: /how-to-invest-your-first-1000-dollars/
+  ^/cheapest-healthy-foods/?$: /cheap-healthy-grocery-staples/
+  ^/how-to-eat-well-on-a-tight-grocery-budget/?$: /grocery-bill-hacks/
+  ^/best-proteins-for-meal-prep/?$: /best-cheap-high-protein-foods/
+  ^/healthy-meal-prep-snack-ideas/?$: /cheap-high-protein-snacks/
+  ^/how-to-meal-prep-for-a-month/?$: /freezer-meal-prep-guide/
+  ^/two-week-freezer-meal-prep/?$: /freezer-meal-prep-guide/
+  ^/budgeting-apps-vs-spreadsheets/?$: /best-free-budgeting-apps/
+  ^/cash-back-guide/?$: /best-cash-back-apps/
+  ^/is-renting-throwing-money-away/?$: /renting-vs-buying-a-home/
+  ^/30-day-money-saving-challenge/?$: /how-to-do-a-30-day-money-reset/

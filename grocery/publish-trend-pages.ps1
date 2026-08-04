@@ -40,6 +40,7 @@ $StoreNames = @('Hy-Vee','Aldi','Family Fare','Fareway',"Baker's","Sam's Club",'
 $numWords   = @('zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve')
 $StoreWord  = if ($StoreNames.Count -lt $numWords.Count) { $numWords[$StoreNames.Count] } else { [string]$StoreNames.Count }
 . (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
+. (Join-Path $PSScriptRoot '..\lib\trend-keep.ps1')  # 2026-08-04: single source for which commodities get a page
 function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 
 function Format-Price { param([double]$p)
@@ -103,6 +104,10 @@ foreach ($c in $data.commodities) {
   # sat at 2026-07-17 for eleven days as the evidence, and nobody saw it because the caller pipes this
   # script to Out-Null and ignores its exit code. Two filters over one list must never drift apart.
   if ($c.src -eq 'recipe') { continue }
+  # 2026-08-04: the >=$MinWeeks rule qualified 492 commodities and produced 492 near-duplicate pages
+  # that Google refused to crawl. The keep-list in lib\trend-keep.ps1 is now the ONLY gate; MinWeeks
+  # stays below it as a floor so a keep-listed item with no history still cannot publish an empty page.
+  if (-not (Test-TrendKeep $c.id)) { continue }
   $hist = @($c.history | Sort-Object week_of)
   if ($hist.Count -lt $MinWeeks) { continue }
 

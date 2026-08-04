@@ -25,6 +25,7 @@ if (-not $Out) { $Out = Join-Path $OutDir 'deals-page.html' }
 # format prices too - and they were a SECOND copy of the same math, which is how "$0.00/oz at Sam's Club"
 # survived inside a title attribute after the visible chip had been fixed.
 . (Join-Path $root 'fmt-lib.ps1')
+. (Join-Path $root '..\lib\trend-keep.ps1')   # 2026-08-04: single source for which commodities get a standalone trend page
 $doc  = Get-Content $CompareFile -Raw | ConvertFrom-Json
 $cats = (Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json).categories | Sort-Object order
 $week = [string]$doc.week_of
@@ -1797,7 +1798,10 @@ if ($histDoc) {
       $sParts += ((JStr2 $sn) + ':[' + ($vals -join ',') + ']')
     }
     $t = 'null'
-    if (@($h.history).Count -ge 3 -and $h.src -ne 'recipe') { $t = JStr2 ($id + '-price-omaha') }
+    # Only keep-listed commodities get a "Full history ->" link out to a standalone page. Everything
+    # else keeps its history INLINE in this same modal (the per-store chart above is strictly richer
+    # than the trend page ever was). See lib\trend-keep.ps1 for why the old >=3-weeks rule was wrong.
+    if ((Test-TrendKeep $id) -and $h.src -ne 'recipe') { $t = JStr2 ($id + '-price-omaha') }
     $entries += ((JStr2 $id) + ':{"l":' + (JStr2 ([string]$h.label)) + ',"u":' + (JStr2 ([string]$h.unit)) + ',"t":' + $t + ',"w":[' + ((@($weeks | ForEach-Object { JStr2 $_ })) -join ',') + '],"s":{' + ($sParts -join ',') + '}}')
   }
   if ($entries.Count -gt 0) {

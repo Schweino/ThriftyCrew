@@ -22,9 +22,12 @@ $comms = Get-Content "$root\commodities.json" -Raw | ConvertFrom-Json
 $recOf = @{}
 try { foreach ($h in ((Get-Content "$root\price-history.json" -Raw | ConvertFrom-Json).commodities)) { if ($h.record_low) { $recOf[[string]$h.id] = [double]$h.record_low.price } } } catch {}
 
-# trend slugs = ids with >=3 weeks history (mirror build-trend-pages rule)
+# trend slugs = the keep-list, not a re-derived history rule. 2026-08-04: the old ">=3 weeks" copy here
+# emitted links to all 492 trend pages; 472 of those are being unpublished. Deliberately NOT wrapped in a
+# silent try/catch any more - a missing keep-list must fail the build, not quietly drop every trend link.
+. (Join-Path $root '..\lib\trend-keep.ps1')
 $trendIds = @{}
-try { foreach ($h in ((Get-Content "$root\price-history.json" -Raw | ConvertFrom-Json).commodities)) { if (@($h.history).Count -ge 3 -and $h.src -ne 'recipe') { $trendIds[[string]$h.id] = $true } } } catch {}
+foreach ($k in (Get-TrendKeep)) { $trendIds[[string]$k] = $true }
 
 $items = @(); $seen = @{}
 foreach ($c in $comms) {

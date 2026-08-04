@@ -1,0 +1,27 @@
+{
+  "_comment": "Canonical keep-list for standalone /<id>-price-omaha/ trend pages. Read by build-deals-page.ps1, publish-trend-pages.ps1, build-trend-index.ps1 and build-staples-data.ps1 via lib\\trend-keep.ps1. Before 2026-08-04 these four scripts each carried their own copy of a '>= 3 weeks of history' rule, which produced 492 near-duplicate pages; Search Console left 475 URLs as 'Discovered - currently not indexed' (never fetched) and the whole Omaha vertical drew 0 impressions in 28 days. The board's own history modal already shows a richer multi-store chart than any trend page, so these pages exist only for search intent. Only add an id here if people plausibly search '<thing> price'.",
+  "_rule": "An id in this list gets a standalone page. Everything else gets its history inline on the board only. Ids must exist in price-history.json.",
+  "_updated": "2026-08-04",
+  "keep": [
+    "eggs",
+    "milk",
+    "ground-beef-8020",
+    "chicken-breast",
+    "chicken-thighs",
+    "whole-chicken",
+    "ground-turkey",
+    "pork-chops",
+    "bacon",
+    "butter",
+    "shredded-cheese",
+    "bread",
+    "bananas",
+    "apples",
+    "russet-potatoes",
+    "onions",
+    "rice",
+    "sugar",
+    "flour",
+    "coffee"
+  ]
+}
