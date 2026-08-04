@@ -60,7 +60,23 @@ try {
   $adflip = ($guard -match 'ADFLIP')
 
   # ---- 0.5 sync ----
-  try { git -C (Split-Path $root -Parent) pull --rebase --autostash origin main 2>&1 | Select-Object -Last 1 | ForEach-Object { Log ('git: ' + $_) } } catch { Log ('git pull warn: ' + $_.Exception.Message) }
+  # --autostash pops on success and SILENTLY LEAVES the stash when the pop conflicts. Here the warning
+  # could not survive even if anyone read the log: Select-Object -Last 1 keeps ONE line of git's output,
+  # and the leftover-stash warning is never the last one. Six had accumulated by 2026-08-04. Count the
+  # entries across the pull instead of trusting the log. Same fix as run-daily-local.ps1.
+  $repoRoot = Split-Path $root -Parent
+  $stashBefore = @(git -C $repoRoot stash list).Count
+  try { git -C $repoRoot pull --rebase --autostash origin main 2>&1 | Select-Object -Last 1 | ForEach-Object { Log ('git: ' + $_) } } catch { Log ('git pull warn: ' + $_.Exception.Message) }
+  $stashAfter = @(git -C $repoRoot stash list).Count
+  if ($stashAfter -gt $stashBefore) {
+    $smsg = "git pull --rebase --autostash could not restore local changes: " +
+            "$($stashAfter - $stashBefore) stash entry left behind, $stashAfter total. " +
+            "Local edits are parked, not lost. Inspect with: git -C $repoRoot stash list, " +
+            "then git stash show -p on the newest entry."
+    Log ('ALERT: ' + $smsg)
+    & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') `
+        -Subject 'Bakers daily scan: autostash not restored' -Body $smsg 2>&1 | ForEach-Object { Log ('alert: ' + $_) }
+  }
 
   # ---- A: headless API scan ----
   # keep=4, not 2: the puller's "terms ok=N failed=M" line is the only place a term-shaped hole is visible,

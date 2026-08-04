@@ -195,3 +195,6 @@ site-backups/*
 # MP4s and voice samples, reproducible from the specs and the board.
 !/reels/
 /reels/out/
+
+# Claude worktree metadata; the repo root's own .claude is already covered by the /* allow-list rule.
+/grocery/.claude/
