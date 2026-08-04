@@ -460,11 +460,27 @@ if (-not $Embed) { [void]$sb.Append("<h1>Omaha's Cheapest Groceries This Week</h
 [void]$sb.Append("<p class='pg-note'>Lowest verified price at each store, sale or everyday, checked against the store's own ad or site. Sam's Club prices need a membership.</p>")
 [void]$sb.Append("<p class='pg-trust'>I'm Brad. I live here in Omaha, and I check these prices every morning before most people are awake. No store pays to be on this board, there are no affiliate links, and no one can buy the word 'cheapest.' If a store wins, it's because their shelf price won.</p>")
 [void]$sb.Append("</details>")
+# Both per-row features (the price-history chart and the price alert) are hidden until a row is opened,
+# so nothing on a first read reveals they exist. One sentence, above the first price.
+[void]$sb.Append("<p class='pg-teach'>Tap any item for its full price history, or to get an email the week it hits a record low.</p>")
 [void]$sb.Append("<p class='pg-suggest'><a href='/suggest-an-item/'>Suggest an item for us to start tracking! &rarr;</a></p></header>")
 # THE ASK moves out of the header to between the first and second category sections. 1,182 visitors in 30
 # days reached this page and converted once; ask-after-value beats ask-before-value, and the header was
 # asking before the shopper had seen a single price. Emitted as a token and placed during the section loop.
-$captureHtml = "<div class='pg-capture'><div class='pg-capture-txt'><strong>Get this board every Friday, free.</strong> The updated prices and biggest drops, in your inbox before you shop the weekend.</div><a class='pg-capture-btn' href='#/portal/signup/free' data-portal='signup/free'>Email me the board &rarr;</a></div>"
+    # 2026-08-04: was an <a> to #/portal/signup/free. The offer and the placement were right and are
+# unchanged; only the mechanism moved inline, so the reader types an address instead of being handed
+# a modal. data-members-form / data-members-email / data-members-error mirror the theme's own footer
+# form exactly, which is what Ghost's Portal script binds to.
+$captureHtml = "<div class='pg-capture'>" +
+  "<span class='pg-capture-eb'>Free weekly email</span>" +
+  "<p class='pg-capture-txt'><strong>Get this board every Friday, free.</strong> The updated prices and biggest drops, in your inbox before you shop the weekend.</p>" +
+  "<form data-members-form><label class='pg-sr' for='pg-cap-email'>Your email address</label>" +
+  "<input id='pg-cap-email' name='email' type='email' placeholder='you@email.com' required data-members-email>" +
+  "<button type='submit'>Email me the board</button>" +
+  "<p data-members-error></p></form>" +
+  "<p class='pg-capture-fine'>One email a week. Unsubscribe in one click.</p>" +
+  "<p class='pg-capture-done'>Check your inbox. Click the link in the email and you are on the list.</p>" +
+  "</div>"
 
 # store-status strip is built here but rendered at the BOTTOM of the page (it is transparency fine print;
 # it was costing ~200px of prime space above the first price). See the footer section.
@@ -881,16 +897,51 @@ $css = @'
 .pg-cycle{font-size:.88em;color:var(--ink);margin:.45em 0 0}
 .pg-trust{font-size:.88em;line-height:1.5;color:var(--ink);margin:.8em 0 0;padding:8px 14px;border-left:3px solid var(--gold,#c9a227);background:rgba(201,162,39,.05);max-width:66ch}
 .pg-cycle strong{color:#b23b2e}
-.pg-capture{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:.8em 0 .2em;padding:12px 16px;border:1.5px solid var(--gold,#c9a227);border-radius:12px;background:rgba(201,162,39,.06)}
-.pg-capture-txt{flex:1 1 260px;font-size:.92em;line-height:1.35;color:var(--ink)}
-.pg-capture-btn{flex:0 0 auto;display:inline-block;padding:9px 16px;border-radius:9px;background:var(--ink);color:#fff !important;font-weight:700;font-size:.9em;text-decoration:none;white-space:nowrap}
-.pg-capture-btn:hover{opacity:.88}
-.pg-bar{position:fixed;left:0;right:0;bottom:-120px;z-index:9999;display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--ink);color:#fff;box-shadow:0 -4px 18px rgba(0,0,0,.18);transition:bottom .35s ease}
-.pg-bar.pg-bar-on{bottom:0}
+/* THE ASK. Was a button that opened the Portal modal; it is now an inline email field, because the
+   modal is a context switch between "I want this" and "here is my address" and the board's whole
+   audience is one-handed on a phone. Ghost binds any [data-members-form] on the page, so this is the
+   theme's own footer pattern reused inline (unique ids: duplicate ids would break label/focus). */
+.pg-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.pg-capture{margin:.9em 0 .3em;padding:14px 16px;border:1.5px solid var(--gold,#c9a227);border-bottom-width:3px;border-radius:12px;background:rgba(201,162,39,.06)}
+.pg-capture-eb{display:block;font-size:.68em;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8a6d1f;margin:0 0 .35em}
+.pg-capture-txt{font-size:.95em;line-height:1.4;color:var(--ink);margin:0 0 10px}
+.pg-capture-txt strong{font-weight:800}
+.pg-capture-free{color:#8a6d1f;font-weight:800}
+.pg-capture form{display:flex;gap:8px;flex-wrap:wrap;margin:0}
+.pg-capture input[type=email]{flex:1 1 190px;min-width:0;font:inherit;font-size:.92em;padding:11px 13px;border:1.5px solid #ddd6c2;border-radius:10px;background:#fff;color:var(--ink);min-height:44px}
+.pg-capture button{flex:0 0 auto;font:inherit;font-size:.9em;font-weight:800;padding:11px 17px;min-height:44px;border:none;border-radius:10px;background:var(--ink);color:#fff;cursor:pointer}
+.pg-capture button:hover{opacity:.9}
+.pg-capture-fine{font-size:.78em;color:var(--mut);margin:8px 0 0}
+.pg-capture [data-members-error]{margin:8px 0 0;font-size:.82em;color:#b23b2e;min-height:0}
+.pg-capture-done{display:none;font-size:.95em;line-height:1.45;color:#0c5c3b;font-weight:700;margin:0}
+.pg-capture.success form,.pg-capture.success .pg-capture-txt,.pg-capture.success .pg-capture-fine{display:none}
+.pg-capture.success .pg-capture-done{display:block}
+/* THE BAR. Two real defects, both of which meant it has never once been seen by a visitor:
+   (1) it is appended to document.body, but --ink/--gold are declared on .pg-wrap, so background and
+       button colour resolved to nothing outside that scope - an invisible bar on an invisible bar;
+   (2) it animated `bottom`, which never settled here. transform is composited and always lands.
+   Colours below are therefore LITERAL, not tokens: this element lives outside .pg-wrap by design. */
+.pg-bar{position:fixed;left:0;right:0;bottom:0;z-index:2147481000;display:flex;align-items:center;gap:10px;
+  padding:11px 14px calc(11px + env(safe-area-inset-bottom));background:#16263F;color:#F6F1E7;
+  box-shadow:0 -4px 18px rgba(0,0,0,.18);border-top:2px solid #E2A43C;
+  transform:translateY(110%);transition:transform .32s cubic-bezier(0.2,0,0,1)}
+.pg-bar.pg-bar-on{transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){.pg-bar{transition:none}}
 .pg-bar-txt{flex:1 1 auto;font-size:.86em;line-height:1.3}
-.pg-bar-btn{flex:0 0 auto;padding:8px 14px;border-radius:8px;background:var(--gold,#c9a227);color:var(--ink) !important;font-weight:700;font-size:.86em;text-decoration:none;white-space:nowrap}
-.pg-bar-x{flex:0 0 auto;background:none;border:none;color:#fff;opacity:.7;font-size:1.25em;line-height:1;padding:4px 8px;cursor:pointer}
+.pg-bar-txt strong{color:#E2A43C}
+.pg-bar-btn{flex:0 0 auto;padding:10px 15px;min-height:44px;display:inline-flex;align-items:center;border-radius:8px;background:#E2A43C;color:#2a2109 !important;font-weight:800;font-size:.86em;text-decoration:none;white-space:nowrap}
+.pg-bar-x{flex:0 0 auto;background:none;border:none;color:#F6F1E7;opacity:.7;font-size:1.25em;line-height:1;padding:8px 10px;min-height:44px;cursor:pointer}
 .pg-bar-x:hover{opacity:1}
+/* Never ask a member for the email they already gave. The bar's own JS gates on the
+   ghost-members-ssr cookie, which does NOT match on this theme - so a signed-in member got the bar
+   shell with its CTA stripped out by the site-wide `html.tc-paid a[href*="portal/signup"]{display:none}`
+   rule: a navy bar with text, a dismiss X, and no button. Gate on the same class that rule uses, in
+   CSS, so it cannot race the member block that stamps the class. */
+html.tc-member .pg-bar,html.tc-member .pg-capture{display:none !important}
+/* THE TEACHING LINE. Every row carries a history chart and a price alert, but both live behind
+   .pg-row:not(.pg-open) .pg-rh-bot{display:none} - so a first-time reader has no way to learn they
+   exist. One sentence is cheaper than putting an affordance on 572 rows. */
+.pg-teach{font-size:.9em;line-height:1.45;color:var(--ink);margin:.7em 0 0;padding:9px 13px;border-left:3px solid var(--gold,#c9a227);background:rgba(201,162,39,.05)}
 .pg-plan-send{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px dotted var(--bd)}
 .pg-plan-mailto,.pg-plan-copy{display:inline-block;padding:7px 13px;border-radius:8px;font-weight:700;font-size:.86em;text-decoration:none;border:1.5px solid var(--ink);color:var(--ink);background:#fff;cursor:pointer}
 .pg-plan-mailto:hover,.pg-plan-copy:hover{background:var(--ink);color:#fff}
@@ -1220,6 +1271,7 @@ $js = @'
         if (y > 2200) { shown = true; bar.classList.add('pg-bar-on'); window.removeEventListener('scroll', maybeShow); }
       }
       window.addEventListener('scroll', maybeShow, {passive:true});
+      maybeShow();   // a restored scroll position (back button, deep link) fires no scroll event
       bar.querySelector('.pg-bar-x').addEventListener('click', function(){
         bar.classList.remove('pg-bar-on');
         try { localStorage.setItem('tcBarSnooze', String(Date.now())); } catch(e){}
@@ -1227,6 +1279,17 @@ $js = @'
       bar.querySelector('.pg-bar-btn').addEventListener('click', function(){
         bar.classList.remove('pg-bar-on');
       });
+      // Asking twice for something already given is the fastest way to look broken: once the inline
+      // capture succeeds, the bar retires for good and does not come back on the next visit either.
+      var cap = document.querySelector('.pg-capture');
+      if (cap) {
+        new MutationObserver(function(){
+          if (cap.classList.contains('success')) {
+            bar.classList.remove('pg-bar-on');
+            try { localStorage.setItem('tcBarSnooze', String(Date.now())); } catch(e){}
+          }
+        }).observe(cap, {attributes:true, attributeFilter:['class']});
+      }
     }
   } catch(e){}
 
