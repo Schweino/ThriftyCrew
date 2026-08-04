@@ -1,0 +1,2362 @@
+[
+    {
+        "from":  "^/achiote-paste-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/acorn-squash-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/air-freshener-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/alfredo-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/all-purpose-cleaner-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/almond-milk-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/almonds-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/aluminum-foil-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/anaheim-peppers-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/apple-cider-vinegar-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/apple-juice-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/applesauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/apricots-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/artichoke-hearts-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/artichokes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/arugula-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/asparagus-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/avocados-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/baby-back-ribs-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/baby-food-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/baby-formula-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/baby-wipes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/bagels-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/baked-beans-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/baking-powder-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/baking-soda-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/balsamic-vinegar-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/banana-peppers-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/bar-soap-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/batteries-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/bay-leaves-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/bbq-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/beef-broth-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/beef-jerky-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/beef-stew-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/beets-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/bell-peppers-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/berbere-seasoning-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/blackberries-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/black-olives-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/black-pepper-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/bleach-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/blueberries-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/blue-cheese-dressing-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/body-wash-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/bok-choy-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/bottled-marinade-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/bottled-water-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/bouillon-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/bratwurst-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/bread-crumbs-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/breakfast-sandwiches-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/breakfast-sausage-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/broccoli-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/broccolini-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/brown-gravy-mix-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/brownie-mix-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/brown-rice-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/brown-sugar-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/brussels-sprouts-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/buttermilk-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/butternut-squash-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cabbage-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/caesar-dressing-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/caesar-salad-kit-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cajun-seasoning-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cake-mix-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-beets-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-black-beans-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-chicken-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-chili-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-corn-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-green-beans-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-green-chilies-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-mixed-vegetables-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-mushrooms-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-pasta-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-peaches-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-pears-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-peas-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-pineapple-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-pinto-beans-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-potatoes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-pumpkin-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-salmon-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-tuna-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-white-beans-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/canned-yams-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cantaloupe-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/caraway-seeds-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/carrots-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cat-food-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cat-litter-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cauliflower-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cayenne-pepper-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/celery-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cereal-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/charcoal-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cheese-crackers-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cheese-tortellini-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cherries-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cherry-tomatoes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/chicken-broth-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/chicken-livers-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/chicken-noodle-soup-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/chicken-nuggets-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/chicken-wings-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/chickpeas-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/chili-beans-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/chili-crisp-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/chili-powder-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/chipotle-adobo-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/chocolate-chips-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/chocolate-milk-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/chuck-roast-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cilantro-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/clam-chowder-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/clementines-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cocktail-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cocoa-powder-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/coconut-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/coconut-milk-canned-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/coconut-oil-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cod-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/coffee-creamer-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/coffee-pods-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/coleslaw-mix-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/collard-greens-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/condensed-milk-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/conditioner-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cookies-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cooking-spray-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/corn-chips-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/corn-dogs-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/corned-beef-brisket-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/corned-beef-hash-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/corn-muffin-mix-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cornstarch-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cottage-cheese-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cotton-swabs-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/crackers-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cranberry-juice-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cranberry-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cream-cheese-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cream-of-chicken-soup-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cream-of-mushroom-soup-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/croissants-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/crushed-tomatoes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/cucumbers-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/curry-powder-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/deli-ham-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/deodorant-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/diapers-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/diced-ham-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/diced-tomatoes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dijon-mustard-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dinner-rolls-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dish-soap-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dishwasher-detergent-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/disinfectant-spray-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/disinfecting-wipes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dog-food-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dog-treats-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/donuts-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/drain-cleaner-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dried-ancho-chiles-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dried-arbol-chiles-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dried-basil-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dried-cranberries-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dried-dill-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dried-guajillo-chiles-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dried-oregano-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dried-parsley-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dried-thyme-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/dryer-sheets-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/egg-noodles-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/eggplant-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/egg-whites-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/enchilada-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/energy-drinks-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/english-muffins-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/evaporated-milk-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fabric-softener-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/facial-tissues-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/feminine-pads-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/feta-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fish-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fish-sticks-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/five-spice-powder-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/floor-cleaner-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/french-bread-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fresh-basil-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fresh-dill-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fresh-ginger-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fresh-green-beans-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fresh-mint-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fresh-parsley-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fresh-rosemary-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fresh-stir-fry-blend-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fresh-thyme-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/frosting-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/frozen-broccoli-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/frozen-burritos-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/frozen-corn-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/frozen-fries-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/frozen-fruit-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/frozen-lasagna-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/frozen-meatballs-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/frozen-peas-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/frozen-pizza-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/frozen-vegetables-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/frozen-waffles-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fruit-cocktail-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fruit-cups-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fruit-punch-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/fruit-snacks-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/furniture-polish-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/garam-masala-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/garden-salad-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/garlic-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/garlic-bread-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/garlic-powder-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/gelatin-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/gingersnaps-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/glass-cleaner-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/gochujang-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/graham-crackers-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/granola-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/granola-bars-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/grapefruit-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/grape-juice-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/grapes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/green-olives-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/green-onions-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/grits-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ground-allspice-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ground-beef-93-7-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ground-cinnamon-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ground-cloves-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ground-coriander-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ground-cumin-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ground-fennel-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ground-ginger-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ground-nutmeg-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ground-pork-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ground-turmeric-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/half-and-half-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/hamburger-buns-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/hand-sanitizer-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/hand-soap-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/harissa-paste-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/hash-browns-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/heavy-cream-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/hoisin-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/hominy-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/honey-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/honeydew-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/honey-mustard-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/horseradish-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/horseradish-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/hot-cocoa-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/hot-dog-buns-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/hot-dogs-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/hot-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/hummus-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ice-cream-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/iced-tea-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/insect-spray-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/instant-coffee-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/instant-mashed-potatoes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/italian-dressing-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/italian-sausage-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/italian-seasoning-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/jalapenos-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/japanese-curry-roux-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/jarred-gravy-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/jelly-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/jicama-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/jumbo-pasta-shells-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/kale-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ketchup-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/kidney-beans-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/kielbasa-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/kiwi-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/lasagna-noodles-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/laundry-detergent-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/laundry-pods-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/leeks-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/lemonade-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/lemongrass-paste-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/lemon-juice-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/lemons-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/lettuce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/lime-juice-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/limes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/lotion-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/mac-and-cheese-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/mandarin-oranges-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/mangoes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/maple-syrup-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/marshmallows-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/mayonnaise-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/medjool-dates-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/microwave-popcorn-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/minced-garlic-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/mini-sweet-peppers-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/miracle-whip-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/mirin-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/mixed-nuts-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/mouthwash-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/muffins-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/mushrooms-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/mustard-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/mustard-greens-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/nectarines-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/oatmeal-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/oat-milk-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/okra-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/olive-oil-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/onion-powder-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/onion-soup-mix-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/orange-juice-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/oranges-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/oven-cleaner-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/oyster-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pancake-mix-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/paper-napkins-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/paper-plates-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/paper-towels-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/paprika-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/parchment-paper-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/parmesan-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/parsnips-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pasta-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pasta-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/peaches-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/peanut-butter-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/peanuts-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pears-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pepperoni-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pesto-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pickled-jalapenos-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pickles-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pigeon-peas-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pineapple-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pita-bread-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pizza-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/plantains-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/plastic-wrap-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/plums-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/poblano-peppers-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pomegranate-molasses-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pomegranates-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/poppy-seeds-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/popsicles-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pork-shoulder-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pork-tenderloin-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/potato-chips-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/potato-gnocchi-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/poultry-seasoning-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/powdered-sugar-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pretzels-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/protein-bars-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/prunes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/pudding-cups-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/queso-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/radishes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/raisins-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ramen-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ranch-dressing-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ranch-seasoning-mix-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/raspberries-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/razors-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/red-curry-paste-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/red-onion-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/red-pepper-flakes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/red-potatoes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/red-wine-vinegar-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/refried-beans-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/refrigerated-biscuits-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/relish-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/rhubarb-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ribeye-steak-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/rice-cakes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/rice-noodles-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/rice-vinegar-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/ricotta-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/rotisserie-chicken-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/rutabagas-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/rye-bread-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/salmon-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/salsa-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/salt-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sandwich-bags-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sandwich-cookies-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sauerkraut-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sazon-seasoning-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/serrano-peppers-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sesame-oil-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/shallots-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/shampoo-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/shaving-cream-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/shower-cleaner-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/shrimp-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sirloin-steak-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sliced-cheese-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sloppy-joe-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/smoked-turkey-sausage-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/snow-peas-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/soda-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sour-cream-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/soy-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/spaghetti-squash-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sparkling-water-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/spinach-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sponges-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sports-drinks-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/spring-mix-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/stain-remover-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/steak-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/storage-bags-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/strawberries-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/string-cheese-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/stuffing-mix-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sugar-snap-peas-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sun-dried-tomatoes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sweet-corn-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sweet-potatoes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/sweet-soy-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/taco-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/taco-seasoning-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/tahini-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/tampons-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/tartar-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/tater-tots-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/tea-bags-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/teriyaki-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/tilapia-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/toasted-sesame-seeds-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/toaster-pastries-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/toilet-bowl-cleaner-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/toilet-paper-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/tomatillos-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/tomatoes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/tomatoes-green-chilies-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/tomato-paste-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/tomato-sauce-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/tomato-soup-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/toothbrushes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/toothpaste-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/tortilla-chips-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/tortillas-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/trash-bags-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/turkey-bacon-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/turkey-breast-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/turkey-lunchmeat-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/turnip-greens-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/turnips-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/vanilla-extract-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/vegetable-broth-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/vegetable-oil-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/vegetable-soup-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/walnuts-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/watermelon-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/whipped-cream-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/white-vinegar-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/wild-rice-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/worcestershire-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/yeast-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/yogurt-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/yukon-gold-potatoes-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    },
+    {
+        "from":  "^/zucchini-price-omaha/?$",
+        "to":  "/omaha-grocery-prices/",
+        "permanent":  true
+    }
+]

@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-03 09:00",
-    "board":  "comparison-2026-08-03.json",
-    "sidecar_generated":  "2026-08-03 09:00:03",
+    "generated":  "2026-08-04 08:57",
+    "board":  "comparison-2026-08-04.json",
+    "sidecar_generated":  "2026-08-04 08:57:39",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,26 +9,16 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2830,
-                     "corpus":  23515,
-                     "rule_invisible":  3469
+                     "board_pairs":  2833,
+                     "corpus":  23616,
+                     "rule_invisible":  3485
                  },
     "identity_count":  0,
-    "coverage_count":  12,
+    "coverage_count":  6,
     "identity":  [
 
                  ],
     "coverage":  [
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-8020",
-                         "commodity":  "80/20 Ground Beef",
-                         "store":  "Walmart",
-                         "product":  "Marketside Grass-Fed Ground Beef, 80% Lean/20% Fat, 1 lb",
-                         "cos":  0.6966,
-                         "score":  0.971002,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
                      {
                          "kind":  "coverage",
                          "id":  "chicken-thighs",
@@ -37,26 +27,6 @@
                          "product":  "Fresh Fresh Chicken Drumsticks Family Pack Per LB",
                          "cos":  0.6402,
                          "score":  0.956105,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "breakfast-sandwiches",
-                         "commodity":  "Frozen Breakfast Sandwiches",
-                         "store":  "Baker\u0027s",
-                         "product":  "Kroger Sausage, Egg \u0026 Cheese Croissant 8 Sandwiches",
-                         "cos":  0.7269,
-                         "score":  0.955113,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-8020",
-                         "commodity":  "80/20 Ground Beef",
-                         "store":  "Aldi",
-                         "product":  "80 Lean Ground Beef Patties Per LB",
-                         "cos":  0.659,
-                         "score":  0.944979,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -91,42 +61,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "breakfast-sandwiches",
-                         "commodity":  "Frozen Breakfast Sandwiches",
-                         "store":  "Family Fare",
-                         "product":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
-                         "cos":  0.7192,
-                         "score":  0.916499,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-8020",
-                         "commodity":  "80/20 Ground Beef",
-                         "store":  "Walmart",
-                         "product":  "Fresh, All Natural Ground Beef Chuck Patties, 80% Lean, 4 Count, 1.33 lb Tray",
-                         "cos":  0.704,
-                         "score":  0.912911,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "chicken-thighs",
                          "commodity":  "Chicken Thighs / Drumsticks",
                          "store":  "Baker\u0027s",
                          "product":  "Tyson All Natural Fresh Chicken Drumsticks",
                          "cos":  0.633,
                          "score":  0.905498,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ground-beef-8020",
-                         "commodity":  "80/20 Ground Beef",
-                         "store":  "Walmart",
-                         "product":  "80% Lean / 20% Fat Ground Beef Patties, 12 Count, 2.25 lb Tray, Fresh, All Natural*",
-                         "cos":  0.7319,
-                         "score":  0.900649,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

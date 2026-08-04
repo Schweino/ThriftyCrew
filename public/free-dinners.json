@@ -1,6 +1,6 @@
 {
-    "week_of":  "2026-08-03",
-    "updated":  "2026-08-03T09:03:33",
+    "week_of":  "2026-08-04",
+    "updated":  "2026-08-04T09:00:53",
     "note":  "This week free because they are the cheapest dinners per protein on the live Omaha board. They revert to members-only when prices re-rank.",
     "free":  [
                  {
@@ -116,32 +116,32 @@
                      "per_serving":  1.31
                  },
                  {
-                     "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
-                     "protein":  "pork",
-                     "rank":  2,
-                     "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
-                     "per_serving":  1.49
-                 },
-                 {
-                     "slug":  "slow-cooker-country-style-pork-ribs-rice",
-                     "protein":  "pork",
-                     "rank":  3,
-                     "name":  "Slow Cooker BBQ Country Style Pork Ribs over Rice",
-                     "per_serving":  1.51
-                 },
-                 {
                      "slug":  "orecchiette-italian-sausage-broccoli",
                      "protein":  "pork",
-                     "rank":  4,
+                     "rank":  2,
                      "name":  "Orecchiette with Italian Sausage and Broccoli",
-                     "per_serving":  1.59
+                     "per_serving":  1.57
                  },
                  {
                      "slug":  "slow-cooker-kalua-pork-bowls",
                      "protein":  "pork",
-                     "rank":  5,
+                     "rank":  3,
                      "name":  "Slow Cooker Kalua Pork Bowls",
                      "per_serving":  1.63
+                 },
+                 {
+                     "slug":  "asado-de-puerco-red-chile-pork-bowls",
+                     "protein":  "pork",
+                     "rank":  4,
+                     "name":  "Asado de Puerco (Mexican Red Chile Pork Stew) Bowls",
+                     "per_serving":  1.72
+                 },
+                 {
+                     "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
+                     "protein":  "pork",
+                     "rank":  5,
+                     "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
+                     "per_serving":  1.72
                  }
              ]
 }

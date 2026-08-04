@@ -1,6 +1,16 @@
 ﻿{
     "resolved":  [
-
+                     {
+                         "id":  "broccoli",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Broccoli Crowns",
+                         "board_pu":  2.99,
+                         "name":  "Broccoli Crowns",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/broccoli/broccoli_crowns/p/77935",
+                         "price":  "$2.99",
+                         "size":  "lb",
+                         "score":  1
+                     }
                  ],
     "refused":  [
                     {
@@ -40,7 +50,7 @@
                         "why":  "match found but per-unit disagrees: board $0.1993 vs link $0.3993 (50.1%)"
                     }
                 ],
-    "worked":  9,
-    "generated":  "2026-08-03 09:05",
-    "board":  "comparison-2026-08-03.json"
+    "worked":  10,
+    "generated":  "2026-08-04 09:02",
+    "board":  "comparison-2026-08-04.json"
 }
