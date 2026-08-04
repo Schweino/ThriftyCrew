@@ -21,7 +21,7 @@
     "ingredients_display": ["\u003cstrong\u003ePasta Shells (Great Value):\u003c/strong\u003e 37.25 oz dry (1058 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1058 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (7 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 onion (128 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (23 g)","\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 2.5 tbsp (10 g)","\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 3 cans (1323 g)","\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 18.5 oz (527 g)","\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 9.25 oz (264 g)","\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 0.5 lb (280 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Pasta Shells, 37.25 oz dry: ~$2.27. \u003cstrong\u003eBuy 4 12oz boxs: $2.92.\u003c/strong\u003e",
+                       "Pasta Shells, 37.25 oz dry: ~$2.27. \u003cstrong\u003eBuy 4 12oz boxes: $2.92.\u003c/strong\u003e",
                        "93/7 Ground Beef, 2.25 lb: ~$14.65. \u003cstrong\u003eBuy 3 lbs: $18.84.\u003c/strong\u003e",
                        "Yellow Onion, 1 onion: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 2.75 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
@@ -145,11 +145,17 @@
                  "totalTime":  "PT50M",
                  "costPerServing":  3.27,
                  "recipeIngredient":  [
-                                          "37.25 oz dry pasta shells",
-                                          "2.25 lb 93/7 ground beef",
-                                          "3 cans tomato sauce",
-                                          "18.5 oz shredded cheddar cheese",
-                                          "9.25 oz reduced fat mozzarella"
+                                          "Pasta Shells, 37.25 oz dry (1058 g)",
+                                          "93/7 Ground Beef, 2.25 lb (1058 g)",
+                                          "Salt, 0.5 tbsp (7 g)",
+                                          "Black Pepper, 0.25 tbsp (1 g)",
+                                          "Yellow Onion, 1 onion (128 g)",
+                                          "Garlic, 2.75 tbsp (23 g)",
+                                          "Italian Seasoning, 2.5 tbsp (10 g)",
+                                          "Tomato Sauce, 3 cans (1323 g)",
+                                          "Cheddar Cheese, Shredded, 18.5 oz (527 g)",
+                                          "Reduced Fat Mozzarella, 9.25 oz (264 g)",
+                                          "Beef Broth, 0.5 lb (280 g)"
                                       ],
                  "steps":  [
                                "Boil the shells just shy of al dente and drain.",

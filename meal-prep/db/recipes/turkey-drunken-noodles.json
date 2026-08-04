@@ -35,7 +35,7 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Rice Noodles, 45.5 oz dry: ~$15.51. \u003cstrong\u003eBuy 4 14oz boxs: $19.05.\u003c/strong\u003e",
+                       "Rice Noodles, 45.5 oz dry: ~$15.51. \u003cstrong\u003eBuy 4 14oz boxes: $19.05.\u003c/strong\u003e",
                        "Soy Sauce, 0.75 cups: ~$0.84. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Oyster Sauce, 6.75 oz: ~$1.65. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fish Sauce, 2.25 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -175,16 +175,19 @@
                  "totalTime":  "PT40M",
                  "costPerServing":  4.99,
                  "recipeIngredient":  [
-                                          "3.5 lb 93/7 ground turkey",
-                                          "45.5 oz dry rice noodles",
-                                          "0.75 cup soy sauce",
-                                          "6.75 oz oyster sauce",
-                                          "2.25 tbsp fish sauce",
-                                          "3.5 tbsp brown sugar",
-                                          "1.25 tbsp sriracha",
-                                          "11 tbsp jalapeno",
-                                          "8.25 tbsp garlic",
-                                          "6.25 cups green onions"
+                                          "Rice Noodles, 45.5 oz dry (1293 g)",
+                                          "Soy Sauce, 0.75 cups (223 g)",
+                                          "Oyster Sauce, 6.75 oz (189 g)",
+                                          "Fish Sauce, 2.25 tbsp (42 g)",
+                                          "Brown Sugar, 3.5 tbsp (47 g)",
+                                          "Sriracha, 1.25 tbsp (18 g)",
+                                          "93/7 Ground Turkey, 3.5 lb (1588 g)",
+                                          "Jalapeno, 11 tbsp (98 g)",
+                                          "Garlic, 8.25 tbsp (70 g)",
+                                          "Green Onions, 6.25 cups (315 g)",
+                                          "Fresh Basil, 28 tbsp (42 g)",
+                                          "Salt, 1 tbsp (20 g)",
+                                          "Black Pepper, 0.5 tbsp (4 g)"
                                       ],
                  "steps":  [
                                "Soak or boil rice noodles until just shy of tender, then drain.",

@@ -20,8 +20,8 @@
 #              "credit_html": "...",                               // optional; built from source if absent
 #              "cost_note_html": "..." },                          // optional; house default if absent
 #   "head": { "description": "...", "keywords": "...", "image": "", "prepTime": "PT20M",
-#             "cookTime": "PT40M", "totalTime": "PT1H", "recipeIngredient": [...],  // optional; derived
-#             "steps": [...], "step_names": [...] }                // step_names optional
+#             "cookTime": "PT40M", "totalTime": "PT1H",            // recipeIngredient is NOT an intake
+#             "steps": [...], "step_names": [...] }                // field; it is derived. step_names optional
 # }
 #
 # WHAT THE TOOL DERIVES (never hand-typed):
@@ -33,6 +33,8 @@
 #     food-macros-db, same filter as r300 build-specs; a display-renamed item never gets a second paren).
 #   * ingredients_grams + scaler.ing PARALLEL to ingredients_display (equal length, same order -
 #     build-card2 hard-fails otherwise).
+#   * head.recipeIngredient (the JSON-LD ingredient list) derived FROM ingredients_display, one line per
+#     displayed ingredient, same amounts, brand paren dropped (head-ingredients-lib.ps1). Never typed.
 #   * cost_* numbers + cost_lines RENDERED from the recipe's db\costed.json row. The cost MATH lives in
 #     engine\cost-recipes.ps1 ONLY (the two-copies-of-the-same-math blind spot is a documented board
 #     trap); this tool renders and cross-checks, it never re-computes prices.
@@ -78,6 +80,7 @@ param(
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path     # ...\meal-prep\pipeline
 $mp   = Split-Path -Parent $here                            # ...\meal-prep
+. (Join-Path $here 'head-ingredients-lib.ps1')              # head.recipeIngredient derived from ingredients_display
 if(-not $OutDir){        $OutDir        = Join-Path $mp 'db\recipes' }
 if(-not $CostedFile){    $CostedFile    = Join-Path $mp 'db\costed.json' }
 if(-not $IngredientsDb){ $IngredientsDb = Join-Path $mp 'db\ingredients.json' }
@@ -302,24 +305,19 @@ foreach($pk in @('intro_html','portion_html','cost_closing_html','upsell_html'))
 # ---------------- head ----------------
 $hIn = if(IProp $intake 'head'){ $intake.head } else { [pscustomobject]@{} }
 function HeadStr([string]$k){ if((IProp $hIn $k) -and $hIn.$k){ [string]$hIn.$k } else { '' } }
-$recipeIngredient = @()
-if((IProp $hIn 'recipeIngredient') -and $hIn.recipeIngredient){ $recipeIngredient = @($hIn.recipeIngredient | ForEach-Object { [string]$_ }) }
-else {
-  # derived fallback: "{buy} {display name lowercased}", the live-card convention. Writers usually
-  # hand this in; the derivation exists so a machine-only import still emits valid JSON-LD.
-  # A COUNT LABEL ALREADY NAMES THE FOOD ("18.4 potatoes"), so appending the item on top of it would
-  # emit "18.4 potatoes potato". Skip the suffix when buy already ends in this item's each-noun.
-  $recipeIngredient = @($scalerIng | ForEach-Object {
-    $buyS = [string]$_.buy
-    $cn   = if($_.PSObject.Properties.Name -contains 'canon' -and $_.canon){ [string]$_.canon } else { [string]$_.item }
-    $named = $false
-    if($enm.ContainsKey($cn)){
-      foreach($nn in @([string]$enm[$cn].one, [string]$enm[$cn].many)){
-        if($nn -and $buyS -match ([regex]::Escape($nn) + '$')){ $named = $true; break }
-      }
-    }
-    if($named){ $buyS } else { ($buyS + ' ' + ([string]$_.item).ToLower()) }
-  })
+# head.recipeIngredient is DERIVED, never hand-typed (2026-08-04). It used to be taken from the intake
+# file whenever a writer supplied one, with the derivation as a mere fallback - and a hand-typed list of
+# quantities is prose, so it drifted: 507 of 513 live specs named fewer ingredients than the card, in
+# package units the page never uses ("3 boxs Penne Pasta" against the card's "10 cups (1050 g)"). Google
+# wants the markup to represent the visible page, so it is now generated FROM the visible page's own list.
+# See head-ingredients-lib.ps1 for the measurement and the line shape.
+#
+# This SUPERSEDES the each-noun-aware fallback that used to live here (the "18.4 potatoes potato" fix):
+# the derivation reads the display line, which already carries the count noun EachNoun put there, so the
+# doubled-noun case it guarded against cannot arise. db\each-nouns.json still drives FriendlyAmt above.
+$recipeIngredient = @(Get-HeadRecipeIngredient $display $scalerIng $dbm)
+if((IProp $hIn 'recipeIngredient') -and $hIn.recipeIngredient){
+  Write-Warning ('intake supplies head.recipeIngredient (' + @($hIn.recipeIngredient).Count + ' lines) - IGNORED; the JSON-LD list is derived from ingredients_display (' + $recipeIngredient.Count + ' lines) so the two cannot disagree')
 }
 $headSteps = @(); if((IProp $hIn 'steps') -and $hIn.steps){ $headSteps = @($hIn.steps | ForEach-Object { [string]$_ }) }
 $head = [ordered]@{

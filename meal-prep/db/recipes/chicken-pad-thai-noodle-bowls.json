@@ -35,7 +35,7 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Rice Noodles, 30.75 oz dry: ~$10.49. \u003cstrong\u003eBuy 3 14oz boxs: $14.28.\u003c/strong\u003e",
+                       "Rice Noodles, 30.75 oz dry: ~$10.49. \u003cstrong\u003eBuy 3 14oz boxes: $14.28.\u003c/strong\u003e",
                        "Lime Juice, 0.75 cups: ~$1.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Brown Sugar, 1.25 cups: ~$0.62. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fish Sauce, 1 cups: ~$2.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -180,16 +180,19 @@
                  "totalTime":  "PT60M",
                  "costPerServing":  4.10,
                  "recipeIngredient":  [
-                                          "30.75 oz dry rice noodles",
-                                          "2.25 lb boneless skinless chicken breast",
-                                          "14 large eggs",
-                                          "1 cup fish sauce",
-                                          "1.25 cups brown sugar",
-                                          "6.75 oz oyster sauce",
-                                          "0.75 cup lime juice",
-                                          "3.5 yellow onions",
-                                          "2.25 cups garlic",
-                                          "1.75 cups peanuts"
+                                          "Rice Noodles, 30.75 oz dry (875 g)",
+                                          "Lime Juice, 0.75 cups (158 g)",
+                                          "Brown Sugar, 1.25 cups (284 g)",
+                                          "Fish Sauce, 1 cups (252 g)",
+                                          "Oyster Sauce, 6.75 oz (189 g)",
+                                          "Vegetable Oil, 1 cups (245 g)",
+                                          "Yellow Onion, 3.5 onions (385 g)",
+                                          "Garlic, 2.25 cups (308 g)",
+                                          "Boneless Skinless Chicken Breast, 2.25 lb (1050 g)",
+                                          "Eggs, 14 large eggs (700 g)",
+                                          "Peanuts, 1.75 cups (256 g)",
+                                          "Salt, 1 tbsp (20 g)",
+                                          "Black Pepper, 0.5 tbsp (4 g)"
                                       ],
                  "steps":  [
                                "Soak rice noodles in hot water until pliable, then drain.",

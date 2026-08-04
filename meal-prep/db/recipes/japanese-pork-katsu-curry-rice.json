@@ -24,7 +24,7 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Rice, 3.25 cups dry: ~$0.89. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Japanese Curry Roux, 7 boxes: ~$20.73. \u003cstrong\u003eBuy 7 3.2oz boxs: $20.73.\u003c/strong\u003e",
+                       "Japanese Curry Roux, 7 boxes: ~$20.73. \u003cstrong\u003eBuy 7 3.2oz boxes: $20.73.\u003c/strong\u003e",
                        "All-Purpose Flour, 14 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Eggs, 7 large eggs: ~$0.86. \u003cstrong\u003eBuy 1 dozen: $1.47.\u003c/strong\u003e",
                        "Bread Crumbs, 6.5 cups: ~$2.01. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -132,13 +132,15 @@
                  "totalTime":  "PT70M",
                  "costPerServing":  4.03,
                  "recipeIngredient":  [
-                                          "5.25 lb pork chops",
-                                          "3.25 cups dry rice",
-                                          "7 boxes Japanese curry roux",
-                                          "14 tbsp all-purpose flour",
-                                          "7 large eggs",
-                                          "6.5 cups bread crumbs",
-                                          "6 tbsp vegetable oil"
+                                          "Rice, 3.25 cups dry (600 g)",
+                                          "Japanese Curry Roux, 7 boxes (644 g)",
+                                          "All-Purpose Flour, 14 tbsp (112 g)",
+                                          "Eggs, 7 large eggs (350 g)",
+                                          "Bread Crumbs, 6.5 cups (700 g)",
+                                          "Pork Chops, 5.25 lb (2380 g)",
+                                          "Black Pepper, 4 tbsp (28 g)",
+                                          "Vegetable Oil, 6 tbsp (84 g)",
+                                          "Salt, 1 tbsp (20 g)"
                                       ],
                  "steps":  [
                                "Cook the rice and set aside.",
