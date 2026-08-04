@@ -1,0 +1,2338 @@
+﻿[
+    {
+        "slug":  "american-goulash-pasta",
+        "item":  "Olive Oil",
+        "old":  "1 tbsp",
+        "new":  "3 tbsp",
+        "grams":  42,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "american-goulash-pasta",
+        "item":  "Worcestershire Sauce",
+        "old":  "1 tbsp",
+        "new":  "2.75 tbsp",
+        "grams":  45,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "american-goulash-pasta",
+        "item":  "Salt",
+        "old":  "2 tsp",
+        "new":  "2 tbsp",
+        "grams":  36,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "american-goulash-pasta",
+        "item":  "Black Pepper",
+        "old":  "1/2 tsp",
+        "new":  "1.75 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "american-goulash-pasta",
+        "item":  "Sugar",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "beef-chili-mac",
+        "item":  "Olive Oil",
+        "old":  "2 tsp",
+        "new":  "2 tbsp",
+        "grams":  27,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "beef-enchilada-skillet-bowls",
+        "item":  "Olive Oil",
+        "old":  "1 tbsp",
+        "new":  "3.25 tbsp",
+        "grams":  45,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "beef-enchilada-skillet-bowls",
+        "item":  "Garlic Powder",
+        "old":  "1/2 tsp",
+        "new":  "1.5 tsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "beef-picadillo-rice-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5 cups dry",
+        "grams":  946,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "beef-ragu-pasta",
+        "item":  "Vegetable Oil",
+        "old":  "1 tbsp",
+        "new":  "2.25 tbsp",
+        "grams":  30,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "beef-ragu-pasta",
+        "item":  "Salt",
+        "old":  "1/2 tsp",
+        "new":  "1 tsp",
+        "grams":  6,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "beef-ragu-pasta",
+        "item":  "Black Pepper",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "beef-ragu-pasta",
+        "item":  "Sugar",
+        "old":  "1 tsp",
+        "new":  "2.25 tsp",
+        "grams":  9,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "buffalo-turkey-potato-bowls",
+        "item":  "Garlic Powder",
+        "old":  "1 Tbsp",
+        "new":  "3.5 tbsp",
+        "grams":  32,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "buffalo-turkey-potato-bowls",
+        "item":  "Black Pepper",
+        "old":  "1 tsp ground",
+        "new":  "1.25 tbsp ground",
+        "grams":  8,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "cheeseburger-rice-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.5 cups dry",
+        "grams":  1000,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "cheesy-zucchini-beef-rice-skillet",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.5 cups dry",
+        "grams":  1000,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "curry-ground-turkey-bowls",
+        "item":  "Salt",
+        "old":  "3/4 tsp kosher",
+        "new":  "1 tbsp kosher",
+        "grams":  16,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "curry-ground-turkey-bowls",
+        "item":  "Olive Oil",
+        "old":  "1 tsp EVOO",
+        "new":  "1.25 tbsp EVOO",
+        "grams":  16,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-beef-and-broccoli-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.25 cups dry",
+        "grams":  981,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "ground-beef-fried-rice-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.5 cups dry",
+        "grams":  1020,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "ground-beef-fried-rice-bowls",
+        "item":  "Vegetable Oil",
+        "old":  "2 Tbsp",
+        "new":  "7.25 tbsp",
+        "grams":  100,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "6.5 cups dry",
+        "grams":  1201,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "item":  "Dried Oregano",
+        "old":  "1 tsp",
+        "new":  "2.25 tbsp",
+        "grams":  7,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "item":  "Dried Thyme",
+        "old":  "1 tsp",
+        "new":  "1.25 tbsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "item":  "Ground Nutmeg",
+        "old":  "1/4 tsp",
+        "new":  "1 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "item":  "Cucumber",
+        "old":  "3/4 cup grated (tzatziki)",
+        "new":  "1 cucumber grated (tzatziki)",
+        "grams":  300,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "item":  "Dried Dill",
+        "old":  "2 tbsp (tzatziki)",
+        "new":  "6 tbsp (tzatziki)",
+        "grams":  18,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "item":  "Lemon Juice",
+        "old":  "1/2 tbsp (tzatziki)",
+        "new":  "1.5 tbsp (tzatziki)",
+        "grams":  21,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "item":  "Feta Cheese",
+        "old":  "1/4 cup crumbled (tzatziki)",
+        "new":  "4 oz crumbled (tzatziki)",
+        "grams":  113,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-beef-gyro-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/2 tsp",
+        "new":  "1.75 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-beef-shawarma-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "6 cups dry",
+        "grams":  1120,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "ground-beef-stroganoff-pasta",
+        "item":  "All-Purpose Flour",
+        "old":  "3 tbsp",
+        "new":  "9 tbsp",
+        "grams":  72,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-beef-stroganoff-pasta",
+        "item":  "Worcestershire Sauce",
+        "old":  "1 tsp",
+        "new":  "1 tbsp",
+        "grams":  15,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-beef-teriyaki-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.5 cups dry",
+        "grams":  1031,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "ground-beef-teriyaki-bowls",
+        "item":  "Olive Oil",
+        "old":  "1 tbsp",
+        "new":  "3 tbsp",
+        "grams":  42,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-beef-teriyaki-bowls",
+        "item":  "Rice Vinegar",
+        "old":  "1 tsp",
+        "new":  "1 tbsp",
+        "grams":  15,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-beef-teriyaki-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-beef-teriyaki-bowls",
+        "item":  "Red Pepper Flakes",
+        "old":  "1/4 tsp",
+        "new":  "1 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-turkey-enchilada-skillet-bowls",
+        "item":  "Ground Cumin",
+        "old":  "1/4 tsp",
+        "new":  "1 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-turkey-enchilada-skillet-bowls",
+        "item":  "Salt",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-turkey-enchilada-skillet-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/8 tsp",
+        "new":  "0.5 tsp",
+        "grams":  1,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-turkey-stir-fry-bowls",
+        "item":  "Sesame Oil",
+        "old":  "2 tsp toasted",
+        "new":  "2.5 tbsp toasted",
+        "grams":  35,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "ground-turkey-stir-fry-bowls",
+        "item":  "Rice Vinegar",
+        "old":  "1 tbsp vinegar",
+        "new":  "3.5 tbsp vinegar",
+        "grams":  52,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "korean-ground-beef-rice-bowls",
+        "item":  "Red Pepper Flakes",
+        "old":  "1 tsp",
+        "new":  "1.5 tbsp",
+        "grams":  8,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "korean-ground-turkey-bowls",
+        "item":  "Ground Ginger",
+        "old":  "1/4 tsp",
+        "new":  "1 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "korean-ground-turkey-bowls",
+        "item":  "Red Pepper Flakes",
+        "old":  "1/4 tsp crushed",
+        "new":  "1 tsp crushed",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "loaded-beef-taco-skillet-bowls",
+        "item":  "Vegetable Oil",
+        "old":  "2 tsp",
+        "new":  "2.25 tbsp",
+        "grams":  30,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "loaded-beef-taco-skillet-bowls",
+        "item":  "Red Bell Pepper",
+        "old":  "1/2 cup diced",
+        "new":  "2 peppers diced",
+        "grams":  260,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "loaded-beef-taco-skillet-bowls",
+        "item":  "Garlic Powder",
+        "old":  "1 tsp",
+        "new":  "1 tbsp",
+        "grams":  9,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "loaded-beef-taco-skillet-bowls",
+        "item":  "Dried Oregano",
+        "old":  "1 tsp",
+        "new":  "1.75 tbsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "loaded-beef-taco-skillet-bowls",
+        "item":  "Paprika",
+        "old":  "1/2 tsp",
+        "new":  "2.25 tsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "loaded-beef-taco-skillet-bowls",
+        "item":  "Salt",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "loaded-beef-taco-skillet-bowls",
+        "item":  "Red Pepper Flakes",
+        "old":  "1/4 tsp",
+        "new":  "1 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "mediterranean-ground-turkey-bowls",
+        "item":  "Lemon Juice",
+        "old":  "1 Tbsp",
+        "new":  "1 lemon worth",
+        "grams":  50,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "mediterranean-ground-turkey-bowls",
+        "item":  "Dried Oregano",
+        "old":  "1/2 tsp",
+        "new":  "1.25 tbsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "mediterranean-ground-turkey-bowls",
+        "item":  "Garlic Powder",
+        "old":  "1/4 tsp",
+        "new":  "1 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "mediterranean-ground-turkey-bowls",
+        "item":  "Dried Dill",
+        "old":  "1/4 tsp",
+        "new":  "2 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "mediterranean-ground-turkey-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/4 tsp cracked",
+        "new":  "0.75 tsp cracked",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "mongolian-ground-beef-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.5 cups dry",
+        "grams":  1031,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "mongolian-ground-beef-bowls",
+        "item":  "Olive Oil",
+        "old":  "1 Tbsp",
+        "new":  "3.75 tbsp",
+        "grams":  50,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "mongolian-ground-beef-bowls",
+        "item":  "Hoisin Sauce",
+        "old":  "1 Tbsp",
+        "new":  "3.25 tbsp",
+        "grams":  52,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "mongolian-ground-beef-bowls",
+        "item":  "Sesame Oil",
+        "old":  "1 tsp",
+        "new":  "1.25 tbsp",
+        "grams":  16,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "mongolian-ground-beef-bowls",
+        "item":  "Rice Vinegar",
+        "old":  "1 tsp",
+        "new":  "1.25 tbsp",
+        "grams":  17,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "mongolian-ground-beef-bowls",
+        "item":  "Cornstarch",
+        "old":  "1 Tbsp",
+        "new":  "3.5 tbsp",
+        "grams":  28,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "mongolian-ground-beef-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "mongolian-ground-beef-bowls",
+        "item":  "Red Pepper Flakes",
+        "old":  "1/4 tsp",
+        "new":  "1 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "mongolian-ground-beef-bowls",
+        "item":  "Beef Broth",
+        "old":  "1/4 cup (or water)",
+        "new":  "1 cup (or water)",
+        "grams":  210,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "mongolian-ground-beef-bowls",
+        "item":  "Green Onions",
+        "old":  "1/4 cup, thinly sliced",
+        "new":  "6.75 tbsp, thinly sliced",
+        "grams":  40,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "philly-cheesesteak-skillet-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "6.5 cups dry",
+        "grams":  1188,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "philly-cheesesteak-skillet-bowls",
+        "item":  "Olive Oil",
+        "old":  "1 1/2 tbsp",
+        "new":  "3.25 tbsp",
+        "grams":  45,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "philly-cheesesteak-skillet-bowls",
+        "item":  "Salt",
+        "old":  "2 tsp",
+        "new":  "1.5 tbsp",
+        "grams":  25,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "philly-cheesesteak-skillet-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/2 tsp",
+        "new":  "2.5 tsp",
+        "grams":  6,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "salisbury-steak-potato-bowls",
+        "item":  "Dijon Mustard",
+        "old":  "1 tsp",
+        "new":  "1.25 tbsp",
+        "grams":  18,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "salisbury-steak-potato-bowls",
+        "item":  "Garlic Powder",
+        "old":  "1/2 tsp",
+        "new":  "1.5 tsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "salisbury-steak-potato-bowls",
+        "item":  "Onion Powder",
+        "old":  "1/2 tsp",
+        "new":  "2 tsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "sloppy-joe-rice-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.75 cups dry",
+        "grams":  1050,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "sloppy-joe-rice-bowls",
+        "item":  "Olive Oil",
+        "old":  "2 tsp (beef) + oil for base",
+        "new":  "1.5 tbsp (beef) + oil for base",
+        "grams":  20,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "sloppy-joe-rice-bowls",
+        "item":  "Salt",
+        "old":  "1 tsp",
+        "new":  "2.5 tsp",
+        "grams":  15,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "sloppy-joe-rice-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/4 tsp",
+        "new":  "1.25 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "sloppy-joe-rice-bowls",
+        "item":  "Paprika",
+        "old":  "1/2 tsp",
+        "new":  "1.25 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "sloppy-joe-rice-bowls",
+        "item":  "Apple Cider Vinegar",
+        "old":  "1 tbsp",
+        "new":  "2 tbsp",
+        "grams":  30,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-apple-cider-pork-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/2 tsp",
+        "new":  "1.25 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-apple-cider-pork-bowls",
+        "item":  "Ground Coriander",
+        "old":  "1/2 tsp",
+        "new":  "1.75 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-apple-cider-pork-bowls",
+        "item":  "Dried Thyme",
+        "old":  "1/2 tsp",
+        "new":  "2 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-balsamic-pork-bowls",
+        "item":  "Ground Cumin",
+        "old":  "1/2 tsp",
+        "new":  "2 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-balsamic-pork-bowls",
+        "item":  "Garlic Powder",
+        "old":  "1/2 tsp",
+        "new":  "1.25 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-balsamic-pork-bowls",
+        "item":  "Chili Powder",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-barbacoa-bowl",
+        "item":  "Apple Cider Vinegar",
+        "old":  "2 tbsp",
+        "new":  "4 tbsp",
+        "grams":  60,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-barbacoa-bowl",
+        "item":  "Dried Oregano",
+        "old":  "1 tbsp",
+        "new":  "3.25 tbsp",
+        "grams":  10,
+        "verdict":  "label-near-source"
+    },
+    {
+        "slug":  "slow-cooker-barbacoa-bowl",
+        "item":  "Black Pepper",
+        "old":  "1 tsp",
+        "new":  "2.25 tsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-bbq-pulled-chicken-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.25 cups dry",
+        "grams":  950,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-bbq-pulled-chicken-bowls",
+        "item":  "Salt",
+        "old":  "1/2 tsp",
+        "new":  "1.75 tsp",
+        "grams":  10,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-bbq-pulled-chicken-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/2 tsp",
+        "new":  "1.75 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-brown-sugar-sesame-pork-bowls",
+        "item":  "Ground Ginger",
+        "old":  "3/4 tsp",
+        "new":  "2.25 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-buffalo-chicken-bowl",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.5 cups dry",
+        "grams":  1000,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.25 cups dry",
+        "grams":  980,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "item":  "Ginger",
+        "old":  "1 tbsp minced",
+        "new":  "5.75 tbsp minced",
+        "grams":  35,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "item":  "Garam Masala",
+        "old":  "2 tsp",
+        "new":  "2 tbsp",
+        "grams":  12,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "item":  "Chili Powder",
+        "old":  "1 tsp",
+        "new":  "2.25 tsp",
+        "grams":  6,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "item":  "Ground Cumin",
+        "old":  "1 tsp",
+        "new":  "1 tbsp",
+        "grams":  6,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "item":  "Cayenne Pepper",
+        "old":  "1/2 tsp",
+        "new":  "2.25 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-butter-chicken-rice-bowls",
+        "item":  "Lemon Juice",
+        "old":  "2 tsp",
+        "new":  "1.5 tbsp",
+        "grams":  23,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-char-siu-pork-bowls",
+        "item":  "Ketchup",
+        "old":  "3 tbsp",
+        "new":  "6.75 tbsp",
+        "grams":  115,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-char-siu-pork-bowls",
+        "item":  "Garlic",
+        "old":  "2 tsp minced",
+        "new":  "2 tbsp minced",
+        "grams":  18,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-char-siu-pork-bowls",
+        "item":  "Ginger",
+        "old":  "2 tsp grated fresh",
+        "new":  "1.75 tbsp grated fresh",
+        "grams":  10,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-char-siu-pork-bowls",
+        "item":  "Sesame Oil",
+        "old":  "1 tsp dark sesame oil",
+        "new":  "2.25 tsp dark sesame oil",
+        "grams":  10,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-char-siu-pork-bowls",
+        "item":  "Five-Spice Powder",
+        "old":  "1/2 tsp",
+        "new":  "1.25 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-adobo-rice-bowls",
+        "item":  "Black Pepper",
+        "old":  "1 tsp peppercorns",
+        "new":  "2.25 tsp peppercorns",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-cacciatore-pasta",
+        "item":  "Salt",
+        "old":  "1 tsp kosher salt",
+        "new":  "2 tsp kosher salt",
+        "grams":  12,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-cacciatore-pasta",
+        "item":  "Black Pepper",
+        "old":  "1/2 tsp",
+        "new":  "1.25 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-cacciatore-pasta",
+        "item":  "Italian Seasoning",
+        "old":  "2 tsp",
+        "new":  "2.75 tbsp",
+        "grams":  12,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-curry-rice-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.5 cups dry",
+        "grams":  1020,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-chicken-curry-rice-bowls",
+        "item":  "Salt",
+        "old":  "2 tsp",
+        "new":  "2 tbsp",
+        "grams":  36,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-curry-rice-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/2 tsp",
+        "new":  "2.25 tsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-gyro-bowls",
+        "item":  "Dried Oregano",
+        "old":  "1 1/2 tsp",
+        "new":  "2.25 tbsp",
+        "grams":  7,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-gyro-bowls",
+        "item":  "Dried Dill",
+        "old":  "1 1/2 tsp",
+        "new":  "1.25 tbsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-gyro-bowls",
+        "item":  "Dried Basil",
+        "old":  "1 1/2 tsp",
+        "new":  "1.75 tbsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-gyro-bowls",
+        "item":  "Salt",
+        "old":  "1 tsp",
+        "new":  "2.25 tsp",
+        "grams":  14,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-gyro-bowls",
+        "item":  "Black Pepper",
+        "old":  "1 tsp",
+        "new":  "2.5 tsp",
+        "grams":  6,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-korma-rice-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5 cups dry",
+        "grams":  920,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-chicken-korma-rice-bowls",
+        "item":  "Ginger",
+        "old":  "3 tsp chopped",
+        "new":  "5.75 tbsp chopped",
+        "grams":  35,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-korma-rice-bowls",
+        "item":  "Garam Masala",
+        "old":  "2 tsp",
+        "new":  "2 tbsp",
+        "grams":  12,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-korma-rice-bowls",
+        "item":  "Ground Cumin",
+        "old":  "1 tsp",
+        "new":  "1 tbsp",
+        "grams":  6,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-korma-rice-bowls",
+        "item":  "Ground Turmeric",
+        "old":  "1 tsp",
+        "new":  "2 tsp",
+        "grams":  6,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-korma-rice-bowls",
+        "item":  "Ground Cinnamon",
+        "old":  "1 tsp",
+        "new":  "2.25 tsp",
+        "grams":  6,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-korma-rice-bowls",
+        "item":  "Salt",
+        "old":  "1 tsp",
+        "new":  "2.25 tsp",
+        "grams":  14,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-pozole-bowls",
+        "item":  "Chili Powder",
+        "old":  "1 tbsp",
+        "new":  "2 tbsp",
+        "grams":  16,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-pozole-bowls",
+        "item":  "Ground Cumin",
+        "old":  "2 tsp",
+        "new":  "1.5 tbsp",
+        "grams":  10,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-pozole-bowls",
+        "item":  "Salt",
+        "old":  "1 tsp",
+        "new":  "2 tsp",
+        "grams":  12,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-pozole-bowls",
+        "item":  "Dried Oregano",
+        "old":  "1 tbsp Mexican oregano",
+        "new":  "2 tbsp Mexican oregano",
+        "grams":  6,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-saag-rice-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.25 cups dry",
+        "grams":  950,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-chicken-saag-rice-bowls",
+        "item":  "Garam Masala",
+        "old":  "1 tbsp",
+        "new":  "3 tbsp",
+        "grams":  18,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-saag-rice-bowls",
+        "item":  "Ground Coriander",
+        "old":  "1 tbsp",
+        "new":  "2.75 tbsp",
+        "grams":  15,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-saag-rice-bowls",
+        "item":  "Ground Cumin",
+        "old":  "1 tbsp",
+        "new":  "2.75 tbsp",
+        "grams":  18,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-saag-rice-bowls",
+        "item":  "Cayenne Pepper",
+        "old":  "1/8 tsp",
+        "new":  "0.5 tsp",
+        "grams":  1,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-saag-rice-bowls",
+        "item":  "Salt",
+        "old":  "1.5 tsp",
+        "new":  "1.25 tbsp",
+        "grams":  23,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-shawarma-bowls",
+        "item":  "Ground Cumin",
+        "old":  "1 1/2 tsp",
+        "new":  "2 tbsp",
+        "grams":  12,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-shawarma-bowls",
+        "item":  "Paprika",
+        "old":  "1 tsp",
+        "new":  "1.25 tbsp",
+        "grams":  8,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-shawarma-bowls",
+        "item":  "Dried Parsley",
+        "old":  "1 tsp",
+        "new":  "2.75 tbsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-shawarma-bowls",
+        "item":  "Curry Powder",
+        "old":  "1/2 tsp",
+        "new":  "2 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-shawarma-bowls",
+        "item":  "Ground Cinnamon",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-shawarma-bowls",
+        "item":  "Ground Coriander",
+        "old":  "1/4 tsp",
+        "new":  "1 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+        "item":  "Garlic",
+        "old":  "1 tbsp minced",
+        "new":  "2.25 tbsp minced",
+        "grams":  20,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+        "item":  "Ground Cumin",
+        "old":  "1 tsp",
+        "new":  "2.5 tsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+        "item":  "Paprika",
+        "old":  "1 tsp",
+        "new":  "2.25 tsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+        "item":  "Chili Powder",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+        "item":  "Ground Coriander",
+        "old":  "1/2 tsp",
+        "new":  "1 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tagine-bowls",
+        "item":  "Carrots",
+        "old":  "1 lb",
+        "new":  "2 carrots",
+        "grams":  120,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tagine-bowls",
+        "item":  "Ground Coriander",
+        "old":  "1 1/2 tsp",
+        "new":  "1.75 tbsp",
+        "grams":  10,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tagine-bowls",
+        "item":  "Ground Cumin",
+        "old":  "1 tsp",
+        "new":  "1.5 tbsp",
+        "grams":  9,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tagine-bowls",
+        "item":  "Ground Turmeric",
+        "old":  "1/2 tsp",
+        "new":  "1.75 tsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tagine-bowls",
+        "item":  "Ground Cinnamon",
+        "old":  "1/2 tsp",
+        "new":  "2 tsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tagine-bowls",
+        "item":  "Ground Ginger",
+        "old":  "1/2 tsp",
+        "new":  "1.75 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tagine-bowls",
+        "item":  "Fresh Cilantro",
+        "old":  "1/4 cup chopped",
+        "new":  "14 tbsp chopped",
+        "grams":  14,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "item":  "Garlic",
+        "old":  "1 tbsp minced",
+        "new":  "4 tbsp minced",
+        "grams":  35,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "item":  "Ginger",
+        "old":  "1 tbsp grated",
+        "new":  "5.75 tbsp grated",
+        "grams":  35,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "item":  "Vegetable Oil",
+        "old":  "2 tbsp",
+        "new":  "4.75 tbsp",
+        "grams":  65,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "item":  "Chili Powder",
+        "old":  "1 tbsp",
+        "new":  "2 tbsp",
+        "grams":  16,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "item":  "Ground Turmeric",
+        "old":  "1/2 tsp",
+        "new":  "1.25 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "item":  "Salt",
+        "old":  "2.5 tsp",
+        "new":  "2 tbsp",
+        "grams":  34,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tinga-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5 cups dry",
+        "grams":  940,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tinga-bowls",
+        "item":  "Dried Oregano",
+        "old":  "1 tsp",
+        "new":  "2 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tinga-bowls",
+        "item":  "Salt",
+        "old":  "1 tsp",
+        "new":  "2 tsp",
+        "grams":  12,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tinga-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+        "item":  "Ground Cumin",
+        "old":  "1 tbsp",
+        "new":  "2.5 tbsp",
+        "grams":  16,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+        "item":  "Chili Powder",
+        "old":  "1 tbsp",
+        "new":  "2 tbsp",
+        "grams":  16,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+        "item":  "Salt",
+        "old":  "1 tsp",
+        "new":  "2 tsp",
+        "grams":  12,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-cilantro-lime-chicken-bowls",
+        "item":  "Fresh Cilantro",
+        "old":  "2 cups packed",
+        "new":  "7.5 cups packed",
+        "grams":  120,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-cilantro-lime-chicken-bowls",
+        "item":  "Ground Cumin",
+        "old":  "1 tsp",
+        "new":  "2.5 tsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-creamy-chicken-mushroom-bowls",
+        "item":  "Salt",
+        "old":  "1 tsp kosher salt",
+        "new":  "2.25 tsp kosher salt",
+        "grams":  13,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-creamy-chicken-mushroom-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/2 tsp",
+        "new":  "1.25 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-creamy-chicken-mushroom-bowls",
+        "item":  "Dried Thyme",
+        "old":  "1/2 tsp",
+        "new":  "2 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-creamy-chicken-mushroom-bowls",
+        "item":  "Worcestershire Sauce",
+        "old":  "2 tsp",
+        "new":  "1.5 tbsp",
+        "grams":  25,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-cuban-mojo-pork-bowls",
+        "item":  "Fresh Cilantro",
+        "old":  "1 cup chopped",
+        "new":  "35 tbsp chopped",
+        "grams":  35,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-cuban-mojo-pork-bowls",
+        "item":  "Salt",
+        "old":  "1 tsp",
+        "new":  "2 tsp",
+        "grams":  12,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-cuban-mojo-pork-bowls",
+        "item":  "Black Pepper",
+        "old":  "1 tsp",
+        "new":  "2.5 tsp",
+        "grams":  6,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-cuban-mojo-pork-bowls",
+        "item":  "Cornstarch",
+        "old":  "1 tbsp",
+        "new":  "2.25 tbsp",
+        "grams":  18,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-french-onion-chicken-bowls",
+        "item":  "Swiss Cheese",
+        "old":  "2.5 oz + topping",
+        "new":  "6.25 oz + topping",
+        "grams":  180,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-french-onion-chicken-bowls",
+        "item":  "Worcestershire Sauce",
+        "old":  "1 tbsp",
+        "new":  "2.25 tbsp",
+        "grams":  40,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-general-tso-chicken-bowls",
+        "item":  "Rice Vinegar",
+        "old":  "2 tbsp",
+        "new":  "4.75 tbsp",
+        "grams":  70,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-general-tso-chicken-bowls",
+        "item":  "Ground Ginger",
+        "old":  "1/2 tsp",
+        "new":  "2.25 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-general-tso-chicken-bowls",
+        "item":  "Red Pepper Flakes",
+        "old":  "1/4 tsp",
+        "new":  "1 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-general-tso-chicken-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/2 tsp",
+        "new":  "1.75 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-greek-chicken-bowls",
+        "item":  "Salt",
+        "old":  "1 tsp kosher salt",
+        "new":  "2.25 tsp kosher salt",
+        "grams":  14,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-greek-chicken-bowls",
+        "item":  "Onion Powder",
+        "old":  "1/2 tsp",
+        "new":  "1.75 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-greek-chicken-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-honey-garlic-pork-bowls",
+        "item":  "Onion Powder",
+        "old":  "1/2 tsp",
+        "new":  "1.25 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-honey-garlic-pork-bowls",
+        "item":  "Red Pepper Flakes",
+        "old":  "1/2 tsp",
+        "new":  "1 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-honey-garlic-pork-bowls",
+        "item":  "Ground Ginger",
+        "old":  "1/4 tsp",
+        "new":  "1 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-honey-sesame-chicken-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.5 cups dry",
+        "grams":  1000,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-honey-sesame-chicken-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-italian-beef-bowl",
+        "item":  "Salt",
+        "old":  "1/2 tsp",
+        "new":  "1.25 tsp",
+        "grams":  8,
+        "verdict":  "label-near-source"
+    },
+    {
+        "slug":  "slow-cooker-italian-chicken-penne",
+        "item":  "Salt",
+        "old":  "1 tsp",
+        "new":  "2.5 tsp",
+        "grams":  15,
+        "verdict":  "label-near-source"
+    },
+    {
+        "slug":  "slow-cooker-italian-chicken-penne",
+        "item":  "Black Pepper",
+        "old":  "1/2 tsp",
+        "new":  "1.75 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-italian-chicken-penne",
+        "item":  "Red Pepper Flakes",
+        "old":  "1/4 tsp",
+        "new":  "1 tsp",
+        "grams":  2,
+        "verdict":  "label-near-source"
+    },
+    {
+        "slug":  "slow-cooker-jerk-pork-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.25 cups dry",
+        "grams":  950,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "item":  "Butter",
+        "old":  "8 tbsp",
+        "new":  "1 cup",
+        "grams":  250,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "item":  "All-Purpose Flour",
+        "old":  "1/2 cup",
+        "new":  "1 cup",
+        "grams":  140,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "item":  "Chili Powder",
+        "old":  "4 tsp",
+        "new":  "3 tbsp",
+        "grams":  24,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "item":  "Ground Cumin",
+        "old":  "1 tbsp",
+        "new":  "2.5 tbsp",
+        "grams":  16,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "item":  "Garlic Powder",
+        "old":  "1 tbsp",
+        "new":  "2.25 tbsp",
+        "grams":  20,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-king-ranch-chicken-bowls",
+        "item":  "Salt",
+        "old":  "1 tsp",
+        "new":  "2.25 tsp",
+        "grams":  14,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-korean-shredded-pork-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.25 cups dry",
+        "grams":  950,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-kung-pao-chicken-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.25 cups dry",
+        "grams":  980,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-kung-pao-chicken-bowls",
+        "item":  "Ginger",
+        "old":  "1 tsp minced",
+        "new":  "2.25 tbsp minced",
+        "grams":  14,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-kung-pao-chicken-bowls",
+        "item":  "Salt",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-kung-pao-chicken-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-maple-dijon-pork-bowls",
+        "item":  "Salt",
+        "old":  "1/2 tsp",
+        "new":  "2 tsp",
+        "grams":  12,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-maple-dijon-pork-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/8 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-mediterranean-chicken-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5 cups dry",
+        "grams":  940,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-mediterranean-chicken-bowls",
+        "item":  "Dried Oregano",
+        "old":  "1 tsp",
+        "new":  "2.25 tbsp",
+        "grams":  7,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-mediterranean-chicken-bowls",
+        "item":  "Dried Thyme",
+        "old":  "1 tsp",
+        "new":  "2.25 tbsp",
+        "grams":  7,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-mississippi-pork-bowls",
+        "item":  "Cornstarch",
+        "old":  "2 tbsp",
+        "new":  "4.5 tbsp",
+        "grams":  35,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-mongolian-chicken-bowls",
+        "item":  "Rice Vinegar",
+        "old":  "2 tbsp",
+        "new":  "6.75 tbsp",
+        "grams":  100,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-mongolian-chicken-bowls",
+        "item":  "Ginger",
+        "old":  "1 tsp grated",
+        "new":  "1.25 tbsp grated",
+        "grams":  7,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-mongolian-chicken-bowls",
+        "item":  "Cornstarch",
+        "old":  "1 tbsp",
+        "new":  "3.5 tbsp",
+        "grams":  28,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-orange-chicken-rice-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.25 cups dry",
+        "grams":  980,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-orange-chicken-rice-bowls",
+        "item":  "Ground Ginger",
+        "old":  "1 tsp",
+        "new":  "2.75 tsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-orange-chicken-rice-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/2 tsp",
+        "new":  "1.25 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-pork-carnitas-bowl",
+        "item":  "Salt",
+        "old":  "1/2 tsp+",
+        "new":  "2.5 tsp +",
+        "grams":  15,
+        "verdict":  "label-near-source"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "item":  "Ground Cumin",
+        "old":  "1 Tbsp",
+        "new":  "2.5 tbsp",
+        "grams":  15,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/2 tsp",
+        "new":  "1.25 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "item":  "Smoked Paprika",
+        "old":  "1/2 tsp",
+        "new":  "1.25 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "item":  "Cayenne Pepper",
+        "old":  "1/2 tsp",
+        "new":  "1 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "item":  "Dried Oregano",
+        "old":  "1/4 tsp",
+        "new":  "2 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-pulled-pork-bowl",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.5 cups dry",
+        "grams":  1000,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-salsa-verde-chicken-bowl",
+        "item":  "Salt",
+        "old":  "1/4 tsp",
+        "new":  "1.25 tsp",
+        "grams":  8,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-salsa-verde-pork-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5 cups dry",
+        "grams":  940,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-salsa-verde-pork-bowls",
+        "item":  "Brown Sugar",
+        "old":  "1/3 cup",
+        "new":  "0.75 cups",
+        "grams":  150,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-salsa-verde-pork-bowls",
+        "item":  "Salt",
+        "old":  "1/4 tsp kosher salt",
+        "new":  "0.75 tsp kosher salt",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-sweet-and-sour-pork-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.25 cups dry",
+        "grams":  950,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "slow-cooker-sweet-and-sour-pork-bowls",
+        "item":  "Brown Sugar",
+        "old":  "1 tbsp",
+        "new":  "3.25 tbsp",
+        "grams":  45,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-sweet-and-sour-pork-bowls",
+        "item":  "Ground Ginger",
+        "old":  "1 tsp",
+        "new":  "4.5 tsp",
+        "grams":  8,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-sweet-and-sour-pork-bowls",
+        "item":  "Red Pepper Flakes",
+        "old":  "1 tsp",
+        "new":  "1.5 tbsp",
+        "grams":  8,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-teriyaki-pork-bowls",
+        "item":  "Pineapple Juice",
+        "old":  "6 oz",
+        "new":  "14 oz",
+        "grams":  400,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-teriyaki-pork-bowls",
+        "item":  "Red Pepper Flakes",
+        "old":  "1/2 tsp red chili pepper flakes",
+        "new":  "1 tsp red chili pepper flakes",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-teriyaki-pork-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-thai-peanut-chicken-bowls",
+        "item":  "Rice Vinegar",
+        "old":  "2 tbsp",
+        "new":  "4.75 tbsp",
+        "grams":  70,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-tuscan-chicken-pasta",
+        "item":  "Italian Seasoning",
+        "old":  "1 tsp",
+        "new":  "1.5 tbsp",
+        "grams":  6,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-tuscan-chicken-pasta",
+        "item":  "Salt",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-tuscan-chicken-pasta",
+        "item":  "Black Pepper",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "slow-cooker-tuscan-chicken-pasta",
+        "item":  "Cornstarch",
+        "old":  "1 tbsp",
+        "new":  "2.25 tbsp",
+        "grams":  18,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "item":  "Butter",
+        "old":  "1 tbsp",
+        "new":  "2.25 tbsp",
+        "grams":  30,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "item":  "Olive Oil",
+        "old":  "1 tbsp (sauce)",
+        "new":  "2.25 tbsp (sauce)",
+        "grams":  30,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "item":  "All-Purpose Flour",
+        "old":  "1/4 cup",
+        "new":  "8.75 tbsp",
+        "grams":  70,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "item":  "Salt",
+        "old":  "1 tsp",
+        "new":  "2 tsp",
+        "grams":  12,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "item":  "Ground Nutmeg",
+        "old":  "1/4 tsp",
+        "new":  "1 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "item":  "Ground Allspice",
+        "old":  "1/4 tsp",
+        "new":  "1 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "swedish-meatball-potato-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/4 tsp",
+        "new":  "1.25 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "tex-mex-beef-rice-skillet-bowls",
+        "item":  "Chili Powder",
+        "old":  "2 tsp ground chipotle (or chili powder)",
+        "new":  "2 tbsp ground chipotle (or chili powder)",
+        "grams":  16,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "tex-mex-beef-rice-skillet-bowls",
+        "item":  "Garlic Powder",
+        "old":  "1 tsp",
+        "new":  "1 tbsp",
+        "grams":  9,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "tex-mex-beef-rice-skillet-bowls",
+        "item":  "Salt",
+        "old":  "1/2 tsp",
+        "new":  "1.5 tsp",
+        "grams":  9,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "tex-mex-beef-rice-skillet-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/2 tsp",
+        "new":  "1.75 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "thai-turkey-larb-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.25 cups dry",
+        "grams":  950,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "thai-turkey-larb-bowls",
+        "item":  "Fish Sauce",
+        "old":  "3 Tbsp",
+        "new":  "0.5 cups",
+        "grams":  160,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "thai-turkey-larb-bowls",
+        "item":  "Fresh Cilantro",
+        "old":  "1/2 cup rough chopped",
+        "new":  "30 tbsp rough chopped",
+        "grams":  30,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "thai-turkey-larb-bowls",
+        "item":  "Fresh Mint",
+        "old":  "1/3 cup fresh",
+        "new":  "15.5 tbsp fresh",
+        "grams":  25,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-chili-mac",
+        "item":  "Olive Oil",
+        "old":  "1 tbsp",
+        "new":  "3 tbsp",
+        "grams":  42,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-chili-mac",
+        "item":  "Ground Cumin",
+        "old":  "2 tsp",
+        "new":  "2.5 tbsp",
+        "grams":  15,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-chili-mac",
+        "item":  "Paprika",
+        "old":  "2 tsp",
+        "new":  "2.25 tbsp",
+        "grams":  15,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-chili-mac",
+        "item":  "Chili Powder",
+        "old":  "2 tsp",
+        "new":  "2 tbsp",
+        "grams":  15,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-chili-mac",
+        "item":  "Garlic Powder",
+        "old":  "1 tsp",
+        "new":  "2.5 tsp",
+        "grams":  8,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-fajita-rice-bowls",
+        "item":  "Balsamic Vinegar",
+        "old":  "2 Tbsp",
+        "new":  "5.25 tbsp",
+        "grams":  84,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-meatball-marinara-pasta",
+        "item":  "Worcestershire Sauce",
+        "old":  "1 tbsp",
+        "new":  "2.75 tbsp",
+        "grams":  45,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-meatball-marinara-pasta",
+        "item":  "Dried Basil",
+        "old":  "1 tsp",
+        "new":  "2.75 tbsp",
+        "grams":  8,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-meatball-marinara-pasta",
+        "item":  "Dried Oregano",
+        "old":  "1 tsp",
+        "new":  "2.75 tbsp",
+        "grams":  8,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-picadillo-rice-bowls",
+        "item":  "Salt",
+        "old":  "1 tsp kosher salt",
+        "new":  "1.25 tbsp kosher salt",
+        "grams":  22,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-ragu-pasta",
+        "item":  "Turkey Bacon",
+        "old":  "4 oz, chopped",
+        "new":  "0.75 lb, chopped",
+        "grams":  396,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-ragu-pasta",
+        "item":  "Dried Thyme",
+        "old":  "1 tsp",
+        "new":  "1.25 tbsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-ragu-pasta",
+        "item":  "Salt",
+        "old":  "1/2 tsp kosher",
+        "new":  "1.75 tsp kosher",
+        "grams":  10,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-ragu-pasta",
+        "item":  "Black Pepper",
+        "old":  "1/2 tsp",
+        "new":  "1.75 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-sloppy-joe-bowls",
+        "item":  "Olive Oil",
+        "old":  "2 tsp",
+        "new":  "2 tbsp",
+        "grams":  28,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-sloppy-joe-bowls",
+        "item":  "Chicken Broth",
+        "old":  "3/4 cup",
+        "new":  "2.25 cups",
+        "grams":  540,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-sloppy-joe-bowls",
+        "item":  "Apple Cider Vinegar",
+        "old":  "1 tbsp",
+        "new":  "3 tbsp",
+        "grams":  45,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-sloppy-joe-bowls",
+        "item":  "Smoked Paprika",
+        "old":  "1/2 tsp",
+        "new":  "1.75 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "turkey-sloppy-joe-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/4 tsp",
+        "new":  "0.75 tsp",
+        "grams":  2,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "unstuffed-cabbage-roll-bowls",
+        "item":  "Olive Oil",
+        "old":  "2 tbsp",
+        "new":  "6 tbsp",
+        "grams":  80,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "unstuffed-cabbage-roll-bowls",
+        "item":  "Salt",
+        "old":  "1 1/2 tsp",
+        "new":  "1.5 tbsp",
+        "grams":  25,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "unstuffed-cabbage-roll-bowls",
+        "item":  "Black Pepper",
+        "old":  "1 tsp",
+        "new":  "1 tbsp",
+        "grams":  7,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "unstuffed-cabbage-roll-bowls",
+        "item":  "Dried Oregano",
+        "old":  "1 tsp",
+        "new":  "1.75 tbsp",
+        "grams":  5,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "unstuffed-cabbage-roll-bowls",
+        "item":  "Paprika",
+        "old":  "3/4 tsp",
+        "new":  "2.5 tsp",
+        "grams":  6,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "unstuffed-cabbage-roll-bowls",
+        "item":  "Red Pepper Flakes",
+        "old":  "1/2 tsp",
+        "new":  "1.75 tsp",
+        "grams":  3,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "unstuffed-pepper-skillet-bowls",
+        "item":  "Rice",
+        "old":  "1 lb",
+        "new":  "5.75 cups dry",
+        "grams":  1081,
+        "verdict":  "filler-label"
+    },
+    {
+        "slug":  "unstuffed-pepper-skillet-bowls",
+        "item":  "Olive Oil",
+        "old":  "1 tbsp",
+        "new":  "3 tbsp",
+        "grams":  42,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "unstuffed-pepper-skillet-bowls",
+        "item":  "Worcestershire Sauce",
+        "old":  "2 tsp",
+        "new":  "1.75 tbsp",
+        "grams":  30,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "unstuffed-pepper-skillet-bowls",
+        "item":  "Paprika",
+        "old":  "1 tsp",
+        "new":  "1.25 tbsp",
+        "grams":  8,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "unstuffed-pepper-skillet-bowls",
+        "item":  "Tomato Paste",
+        "old":  "2 tbsp",
+        "new":  "5.5 tbsp",
+        "grams":  90,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "unstuffed-pepper-skillet-bowls",
+        "item":  "Salt",
+        "old":  "1/2 tsp",
+        "new":  "2 tsp",
+        "grams":  12,
+        "verdict":  "label-is-source-unscaled"
+    },
+    {
+        "slug":  "unstuffed-pepper-skillet-bowls",
+        "item":  "Black Pepper",
+        "old":  "1/2 tsp",
+        "new":  "1.75 tsp",
+        "grams":  4,
+        "verdict":  "label-is-source-unscaled"
+    }
+]

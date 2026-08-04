@@ -31,8 +31,8 @@
     "intro_html":  "Nachos are usually a plate you build to order and eat standing up. Baked as a sheet pan instead, they portion by weight and reheat without turning into a soggy mess, which is the whole trick. Tortilla chips under seasoned turkey, black beans, tomatoes and jalapenos, buried in cheese and finished with cilantro, sour cream and salsa. Each serving runs 561 calories with \u003cstrong\u003e37 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.15\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.75 tbsp (38 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.5 (161 g)",
-                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 1 (129 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.5 onions (161 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 1 pepper (129 g)",
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 2.75 lb (1270 g)",
                                 "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 tbsp (9 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (17 g)",
@@ -49,8 +49,8 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Olive Oil, 2.75 tbsp: ~$0.53. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 1.5: ~$0.40. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Green Bell Peppers, 1: ~$0.92. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "Yellow Onion, 1.5 onions: ~$0.40. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 1 pepper: ~$0.92. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
                        "93/7 Ground Turkey, 2.75 lb: ~$10.70. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
                        "Tortilla, 31 oz: ~$2.08. \u003cstrong\u003eBuy 3 10ct packs: $2.12.\u003c/strong\u003e",
                        "Seasoned Black Beans, 2.8 cans: ~$2.41. \u003cstrong\u003eBuy 3 cans: $2.58.\u003c/strong\u003e",
@@ -106,7 +106,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  161,
-                                   "buy":  "1.5",
+                                   "buy":  "1.5 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -114,7 +114,7 @@
                                    "item":  "Green Bell Peppers",
                                    "canon":  "Green Bell Peppers",
                                    "grams":  129,
-                                   "buy":  "1",
+                                   "buy":  "1 pepper",
                                    "bid":"green-bell-pepper",
                                    "gpu":120
                                },

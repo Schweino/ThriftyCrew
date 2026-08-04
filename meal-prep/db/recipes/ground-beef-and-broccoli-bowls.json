@@ -20,7 +20,7 @@
     "intro_html":  "Takeout beef and broccoli, made at home for a fraction of the delivery bill. This skillet stacks 45 grams of protein over rice for about $4.57 a bowl (at everyday cost) and makes 14 servings. Same savory, garlicky, gingery flavor you order out, minus the tip and the wait.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2240 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (981 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (981 g)",
                                 "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 18 cups (1500 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 2/3 cup (180 g)",
@@ -69,7 +69,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  981,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.25 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -158,7 +158,7 @@
                  "costPerServing":  4.57,
                  "recipeIngredient":  [
                                           "5 lb 93/7 Ground Beef",
-                                          "1 lb Rice",
+                                          "5.25 cups dry Rice",
                                           "5 bags Broccoli Florets",
                                           "3 onions Yellow Onion",
                                           "1 bottle Soy Sauce",

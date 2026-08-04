@@ -30,9 +30,9 @@
              },
     "intro_html":  "Calabacitas means little squashes, and in New Mexico and northern Mexico it means zucchini cooked down with corn, tomato, and chile until everything melts together. It is late-summer garden food, built for the weeks when zucchini is practically free. Add ground turkey and black beans and serve it over rice and you have a full dinner. Each serving runs 570 calories with \u003cstrong\u003e32 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.27\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
-                                "\u003cstrong\u003eZucchini:\u003c/strong\u003e 7 (1389 g)",
+                                "\u003cstrong\u003eZucchini:\u003c/strong\u003e 7 zucchinis (1389 g)",
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1588 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (101 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 onion (101 g)",
                                 "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3.5 tbsp (56 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 1.8 cans (452 g)",
                                 "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 1 can (433 g)",
@@ -47,9 +47,9 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Zucchini, 7: ~$4.65. \u003cstrong\u003eBuy 4 lbs: $6.08.\u003c/strong\u003e",
+                       "Zucchini, 7 zucchinis: ~$4.65. \u003cstrong\u003eBuy 4 lbs: $6.08.\u003c/strong\u003e",
                        "93/7 Ground Turkey, 3.5 lb: ~$13.38. \u003cstrong\u003eBuy 4 lbs: $15.29.\u003c/strong\u003e",
-                       "Yellow Onion, 1: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1 onion: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Tomato Paste, 3.5 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
                        "Seasoned Black Beans, 1.8 cans: ~$1.52. \u003cstrong\u003eBuy 2 cans: $1.72.\u003c/strong\u003e",
                        "Sweet Whole Kernel Corn, 1 can: ~$0.79. \u003cstrong\u003eBuy 1 can: $0.79.\u003c/strong\u003e",
@@ -96,7 +96,7 @@
                                    "item":  "Zucchini",
                                    "canon":  "Zucchini",
                                    "grams":  1389,
-                                   "buy":  "7",
+                                   "buy":  "7 zucchinis",
                                    "bid":  "zucchini",
                                    "gpu":  "453.592"
                                },
@@ -112,7 +112,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  101,
-                                   "buy":  "1",
+                                   "buy":  "1 onion",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

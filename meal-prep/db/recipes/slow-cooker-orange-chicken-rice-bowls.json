@@ -20,7 +20,7 @@
     "intro_html":  "Orange chicken you can meal prep, and it is an easy one on the budget. Bright, sweet, and savory, it packs in the protein while keeping the fat low and the price easy on the wallet. One batch makes 14 servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (980 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (980 g)",
                                 "\u003cstrong\u003eOrange Juice:\u003c/strong\u003e 1 cup (240 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 3 3/4 tbsp (60 g)",
                                 "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 4 tbsp (84 g)",
@@ -29,8 +29,8 @@
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (8 g)",
                                 "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 6 cups (500 g)",
                                 "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 1 oz (50 g)",
-                                "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 1 tsp (5 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)",
+                                "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 2.75 tsp (5 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tsp (3 g)",
                                 "\u003cstrong\u003eOrange Zest:\u003c/strong\u003e from orange (8 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
@@ -70,7 +70,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  980,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.25 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -133,14 +133,14 @@
                                {
                                    "item":  "Ground Ginger",
                                    "grams":  5,
-                                   "buy":  "1 tsp",
+                                   "buy":  "2.75 tsp",
                                    "bid":  "ground-ginger",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  3,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.25 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                },
@@ -159,7 +159,7 @@
                  "costPerServing":  3.99,
                  "recipeIngredient":  [
                                           "7 lb Boneless Skinless Chicken Breast",
-                                          "1 lb Rice",
+                                          "5.25 cups dry Rice",
                                           "1 carton Orange Juice",
                                           "1 bottle Soy Sauce",
                                           "1 bottle Honey",

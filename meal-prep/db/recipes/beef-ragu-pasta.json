@@ -29,10 +29,10 @@
                                 "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 cup (80 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (20 g)",
                                 "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1 1/2 tbsp (6 g)",
-                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1 tbsp (30 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/2 tsp (6 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
-                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1 tsp (9 g)"
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 2.25 tbsp (30 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (6 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tsp (2 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 2.25 tsp (9 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$4.92 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -134,28 +134,28 @@
                                {
                                    "item":  "Vegetable Oil",
                                    "grams":  30,
-                                   "buy":  "1 tbsp",
+                                   "buy":  "2.25 tbsp",
                                    "bid":  "vegetable-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  6,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1 tsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  2,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "0.75 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Sugar",
                                    "grams":  9,
-                                   "buy":  "1 tsp",
+                                   "buy":  "2.25 tsp",
                                    "bid":  "sugar",
                                    "gpu":  "453.592"
                                }

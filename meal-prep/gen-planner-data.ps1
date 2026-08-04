@@ -1,6 +1,7 @@
 # gen-planner-data.ps1 - Exports slim per-recipe data for the Meal Plan Builder tool.
 # Output: meal-prep\planner-data.js  ->  var MPP=[{s,n,c,p,cal,pro,carb,fat,cps,ing:[{i,g,b,bid,gpu}]}]
-#   s=slug n=name c=cuisine p=protein-cat cal/pro/carb/fat=per-serving cps=cost per serving (everyday)
+#   s=slug n=name c=cuisine p=protein-cat cal/pro/carb/fat=per-serving
+#   cps=cost per serving, WHOLE-PACKAGE at the board's cheapest store, from pipeline\v2-perserving.json
 #   ing: i=item g=grams at 14 servings b=buy amount at 14 servings
 #        bid/gpu only when the LIVE FEED can price the item; gpu is reconciled to the FEED row's unit
 #        (the brown-sugar 16x lesson: a map gpu is calibrated to its era's board unit, never trust blindly)
@@ -8,6 +9,25 @@
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $db=(Get-Content (Join-Path $here 'recipes-db.json') -Raw | ConvertFrom-Json).recipes
+
+# THE PER-SERVING PRICE COMES FROM THE MANIFEST, NOT THE INDEX (2026-08-04).
+# This script used to read $r.cost_per_serving straight off recipes-db, which was wrong twice over:
+#   BASIS. recipes-db.cost_per_serving is cost_batch/14 - the UTILIZATION basis, counting only the grams
+#   the recipe consumes out of each package. The tool's own note under the grocery list promises the
+#   opposite ("every item is priced as full packages (a 2 lb bag of rice costs what the bag costs)...
+#   prices come from our verified Omaha grocery board"), and the grocery list below it really does price
+#   whole packages at the cheapest store. So the cost tiles and the list they sit above were computed on
+#   two different bases, and the tiles were the low one.
+#   FRESHNESS. It is a COPY, written once at import time. On 2026-07-25 the R300 merge stamped one
+#   recipe's cost block across 299 rows; the specs were recost the next morning and the index sat stale
+#   for ten days, so a $6.78 bowl was presented at $1.83. sync-recipesdb-cost.ps1 now keeps that copy
+#   honest, but honest-to-the-spec still means the wrong BASIS for this surface.
+# cheapest_ps is what every other surface already reads (build-hub-grid, build-card2,
+# build-stretcher-data, top5, the rotation), so the planner tile and the recipe card a reader clicks
+# through to now quote the same number on the same basis.
+$cheapPs=@{}
+foreach($m in (Get-Content (Join-Path $here 'pipeline\v2-perserving.json') -Raw | ConvertFrom-Json)){ $cheapPs[[string]$m.slug]=[double]$m.cheapest_ps }
+Write-Output ("v2-perserving manifest: {0} priced recipes" -f $cheapPs.Count)
 
 # feed units per bid (what the tool queries live)
 $feed=(Get-Content (Join-Path $here '..\grocery\out\smp-feed.json') -Raw | ConvertFrom-Json).ingredients
@@ -72,7 +92,15 @@ $DISPLAY_OVERRIDES=@{ 'korean-turkey-japchae|Cornstarch'='Korean glass noodles (
 
 $rows=New-Object System.Collections.Generic.List[string]
 $withBid=0; $totalIng=0
+$unpriced=@()
 foreach($r in $db){
+  # COLLECT-AND-REPORT, the same contract compute-v2-perserving.ps1 runs on: a recipe the manifest cannot
+  # price is DROPPED and named, never shipped at a fallback price. There is no honest fallback here - the
+  # index copy is a different basis and quoting it would put a too-low number on a conversion surface,
+  # which is the exact defect this block exists to close. The file is still written for every other
+  # recipe (a hard throw would leave the tool serving yesterday's data with nothing said), and the run
+  # exits 1 so the daily chain alerts.
+  if(-not $cheapPs.ContainsKey([string]$r.slug)){ $unpriced += [string]$r.slug; continue }
   $ings=New-Object System.Collections.Generic.List[string]
   foreach($ing in $r.ingredients){
     $g=[int][Math]::Round([double]$ing.grams,0)
@@ -87,7 +115,7 @@ foreach($r in $db){
     if($DISPLAY_OVERRIDES.ContainsKey($ovKey)){ $dispName=$DISPLAY_OVERRIDES[$ovKey] }
     [void]$ings.Add('{"i":'+(J $dispName)+',"g":'+$g+',"b":'+(J ([string]$ing.buy))+$extra+'}')
   }
-  $cps=[double]$r.cost_per_serving
+  $cps=$cheapPs[[string]$r.slug]
   [void]$rows.Add('{"s":'+(J $r.slug)+',"n":'+(J $r.name)+',"c":'+(J ([string]$r.cuisine))+',"p":'+(J (Get-ProteinCat $r))+
     ',"cal":'+[int]$r.per_serving.calories+',"pro":'+[int]$r.per_serving.protein_g+',"carb":'+[int]$r.per_serving.carbs_g+',"fat":'+[int]$r.per_serving.fat_g+
     ',"cps":'+$cps.ToString('0.00')+',"ing":['+($ings -join ',')+']}')
@@ -108,5 +136,11 @@ Write-Output ("public\planner-data.json: " + [Math]::Round((Get-Item $pubPlanner
 $kb=[Math]::Round((Get-Item (Join-Path $here 'planner-data.js')).Length/1024,0)
 $noPkg=@{}
 foreach($r in $db){ foreach($ing in $r.ingredients){ if($ing.grams -gt 0 -and -not $pkg.ContainsKey($ing.item)){ $noPkg[$ing.item]=1 } } }
-Write-Output ("planner-data.js: {0} recipes, {1}/{2} ingredient lines feed-priced, {3} KB, pkg table {4} items" -f $rows.Count,$withBid,$totalIng,$kb,$pkg.Count)
+Write-Output ("planner-data.js: {0} of {1} recipes, {2}/{3} ingredient lines feed-priced, {4} KB, pkg table {5} items" -f $rows.Count,@($db).Count,$withBid,$totalIng,$kb,$pkg.Count)
 if($noPkg.Count -gt 0){ Write-Output ("ITEMS WITHOUT PACKAGE DEF ({0}): {1}" -f $noPkg.Count, (($noPkg.Keys | Sort-Object) -join ', ')) }
+if($unpriced.Count -gt 0){
+  # No silent caps: a recipe missing from the planner has to say so by name, or a shrinking catalog
+  # reads as a clean run. Re-run pipeline\compute-v2-perserving.ps1 and check what it skipped.
+  Write-Output ("DROPPED {0} recipe(s) with no v2-perserving row (not shown in the Meal Plan Builder): {1}" -f $unpriced.Count, ($unpriced -join ', '))
+  exit 1
+}

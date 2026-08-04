@@ -20,17 +20,17 @@
     "intro_html":  "Saag is that deep green, garlicky spinach curry that tastes far more involved than it is. Frozen spinach makes it dead simple, and the bowl stays high protein and cheap per serving. One batch makes 14 servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3200 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (950 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (950 g)",
                                 "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 11 cups (900 g)",
                                 "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 1 can (425 g)",
                                 "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1 cups (240 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (18 g)",
                                 "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3 inches (75 g)",
-                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 1 tbsp (18 g)",
-                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 1 tbsp (15 g)",
-                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (18 g)",
-                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 1/8 tsp (1 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.5 tsp (23 g)"
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 3 tbsp (18 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 2.75 tbsp (15 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2.75 tbsp (18 g)",
+                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 0.5 tsp (1 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (23 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$3.30 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -69,7 +69,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  950,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.25 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -111,35 +111,35 @@
                                {
                                    "item":  "Garam Masala",
                                    "grams":  18,
-                                   "buy":  "1 tbsp",
+                                   "buy":  "3 tbsp",
                                    "bid":  "garam-masala",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Ground Coriander",
                                    "grams":  15,
-                                   "buy":  "1 tbsp",
+                                   "buy":  "2.75 tbsp",
                                    "bid":  "ground-coriander",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Ground Cumin",
                                    "grams":  18,
-                                   "buy":  "1 tbsp",
+                                   "buy":  "2.75 tbsp",
                                    "bid":  "ground-cumin",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Cayenne Pepper",
                                    "grams":  1,
-                                   "buy":  "1/8 tsp",
+                                   "buy":  "0.5 tsp",
                                    "bid":  "cayenne-pepper",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  23,
-                                   "buy":  "1.5 tsp",
+                                   "buy":  "1.25 tbsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                }
@@ -151,7 +151,7 @@
                  "costPerServing":  3.30,
                  "recipeIngredient":  [
                                           "8 lb Boneless Skinless Chicken Breast",
-                                          "1 lb Rice",
+                                          "5.25 cups dry Rice",
                                           "3 boxs Frozen Chopped Spinach",
                                           "1 can Tomato Sauce",
                                           "1 can Coconut Milk",

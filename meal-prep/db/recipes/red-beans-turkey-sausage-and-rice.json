@@ -31,9 +31,9 @@
     "intro_html":  "In New Orleans, red beans and rice is Monday food. Monday was wash day, the pot could sit on the stove unattended all morning, and the ham bone from Sunday went in with the beans. This version seasons ground turkey like Cajun sausage and simmers it with kidney beans, tomatoes, and the holy trinity over rice. Each serving carries \u003cstrong\u003e31 grams of protein\u003c/strong\u003e and 568 calories for about \u003cstrong\u003e$2.85\u003c/strong\u003e (at everyday cost). Beans and rice have been the best protein-per-dollar math in America for two centuries and nothing has come along to beat it.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3 lb (1324 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (335 g)",
-                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 (350 g)",
-                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 2.7 (147 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (335 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (350 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 2.7 stalks (147 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp (16 g)",
                                 "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)",
                                 "\u003cstrong\u003eHot Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 1 tbsp (15 g)",
@@ -47,9 +47,9 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 3 lb: ~$11.15. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
-                       "Yellow Onion, 3: ~$0.84. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Green Bell Peppers, 3: ~$2.51. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
-                       "Celery, 2.7: ~$0.77. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.84. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 3 peppers: ~$2.51. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Celery, 2.7 stalks: ~$0.77. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
                        "Garlic, 2 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Hot Sauce, 1 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Diced Tomatoes, 3 cans: ~$2.80. \u003cstrong\u003eBuy 3 cans: $2.88.\u003c/strong\u003e",
@@ -102,7 +102,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  335,
-                                   "buy":  "3",
+                                   "buy":  "3 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -110,7 +110,7 @@
                                    "item":  "Green Bell Peppers",
                                    "canon":  "Green Bell Peppers",
                                    "grams":  350,
-                                   "buy":  "3",
+                                   "buy":  "3 peppers",
                                    "bid":"green-bell-pepper",
                                    "gpu":120
                                },
@@ -118,7 +118,7 @@
                                    "item":  "Celery",
                                    "canon":  "Celery",
                                    "grams":  147,
-                                   "buy":  "2.7",
+                                   "buy":  "2.7 stalks",
                                    "bid":  "celery",
                                    "gpu":  "450.000"
                                },

@@ -32,10 +32,10 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 0.25 lb (140 g)",
                                 "\u003cstrong\u003eHot Italian Sausage (Johnsonville):\u003c/strong\u003e 2.75 lb (1287 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 onions (257 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.75 tbsp (58 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.2 cartons (1120 g)",
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 11.3 (2416 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 11.3 potatoes (2416 g)",
                                 "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.25 tbsp (1 g)",
                                 "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 2.25 cups (555 g)",
                                 "\u003cstrong\u003eKale:\u003c/strong\u003e 1 lb (467 g)",
@@ -46,10 +46,10 @@
     "cost_lines":  [
                        "Hickory Smoked Bacon, 0.25 lb: ~$1.22. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
                        "Hot Italian Sausage, 2.75 lb: ~$7.10. \u003cstrong\u003eBuy 3 lbs: $7.50.\u003c/strong\u003e",
-                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 2.3 onions: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 6.75 tbsp: ~$0.84. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Chicken Broth, 1.2 cartons: ~$1.50. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
-                       "Potato, 11.3: ~$3.03. \u003cstrong\u003eBuy 6 lbs: $3.41.\u003c/strong\u003e",
+                       "Potato, 11.3 potatoes: ~$3.03. \u003cstrong\u003eBuy 6 lbs: $3.41.\u003c/strong\u003e",
                        "Heavy Cream, 2.25 cups: ~$3.45. \u003cstrong\u003eBuy 2 pints: $5.87.\u003c/strong\u003e",
                        "Kale, 1 lb: ~$2.76. \u003cstrong\u003eBuy 2 bunches: $2.96.\u003c/strong\u003e",
                        "Pantry seasonings (italian seasoning, black pepper, salt): ~$0.47. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
@@ -106,7 +106,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  257,
-                                   "buy":  "2.3",
+                                   "buy":  "2.3 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -130,7 +130,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  2416,
-                                   "buy":  "11.3",
+                                   "buy":  "11.3 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                },

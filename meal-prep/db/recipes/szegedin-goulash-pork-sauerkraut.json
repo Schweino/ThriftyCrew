@@ -30,8 +30,8 @@
     "intro_html":  "Szegedin goulash, or szekely gulyas, is the Hungarian braise that pairs pork shoulder with sauerkraut and a serious amount of sweet paprika, then finishes it with sour cream. It is tangy, smoky and rich all at once, and nothing else in the library tastes like it. It carries 42 grams of protein at about $4.13 a bowl (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 0.25 lb (168 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5 (525 g)",
-                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3.5 (420 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5 onions (525 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3.5 peppers (420 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1.5 cans (637 g)",
                                 "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 5.25 lb (2381 g)",
@@ -48,8 +48,8 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Hickory Smoked Bacon, 0.25 lb: ~$1.47. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
-                       "Yellow Onion, 5: ~$1.32. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
-                       "Green Bell Peppers, 3.5: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "Yellow Onion, 5 onions: ~$1.32. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Green Bell Peppers, 3.5 peppers: ~$3.01. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
                        "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Diced Tomatoes, 1.5 cans: ~$1.49. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
                        "Pork Shoulder, 5.25 lb: ~$18.74. \u003cstrong\u003eBuy 6 lbs: $21.42.\u003c/strong\u003e",
@@ -104,7 +104,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  525,
-                                   "buy":  "5",
+                                   "buy":  "5 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -112,7 +112,7 @@
                                    "item":  "Green Bell Peppers",
                                    "canon":  "Green Bell Peppers",
                                    "grams":  420,
-                                   "buy":  "3.5",
+                                   "buy":  "3.5 peppers",
                                    "bid":  "green-bell-pepper",
                                    "gpu":  120
                                },

@@ -22,8 +22,8 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.75 lb (1250 g)",
                                 "\u003cstrong\u003eGround Pork:\u003c/strong\u003e 1 lb (417 g)",
-                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 (221 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (129 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 peppers (221 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 onion (129 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3.5 cans (1459 g)",
                                 "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 3.7 cans (1562 g)",
                                 "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1.75 tbsp (25 g)",
@@ -40,8 +40,8 @@
     "cost_lines":  [
                        "93/7 Ground Beef, 2.75 lb: ~$17.31. \u003cstrong\u003eBuy 3 lbs: $18.84.\u003c/strong\u003e",
                        "Ground Pork, 1 lb: ~$3.13. \u003cstrong\u003eBuy 1 lb: $3.41.\u003c/strong\u003e",
-                       "Green Bell Peppers, 2: ~$1.58. \u003cstrong\u003eBuy 2 eachs: $1.72.\u003c/strong\u003e",
-                       "Yellow Onion, 1: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 2 peppers: ~$1.58. \u003cstrong\u003eBuy 2 eachs: $1.72.\u003c/strong\u003e",
+                       "Yellow Onion, 1 onion: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Diced Tomatoes, 3.5 cans: ~$3.41. \u003cstrong\u003eBuy 4 cans: $3.84.\u003c/strong\u003e",
                        "Tomato Sauce, 3.7 cans: ~$3.53. \u003cstrong\u003eBuy 4 15oz cans: $3.84.\u003c/strong\u003e",
                        "Brown Sugar, 1.75 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -98,14 +98,14 @@
                                {
                                    "item":  "Green Bell Peppers",
                                    "grams":  221,
-                                   "buy":  "2",
+                                   "buy":  "2 peppers",
                                    "bid":  "green-bell-pepper",
                                    "gpu":  120
                                },
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  129,
-                                   "buy":  "1",
+                                   "buy":  "1 onion",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

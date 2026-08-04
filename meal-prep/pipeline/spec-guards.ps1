@@ -333,6 +333,14 @@ foreach($sf in $specs){
       if([int]$sing[$i].grams -ne [int]$grams[$i].grams){ Fail $slug ('scaler/grams gram mismatch on ' + $sing[$i].item); break }
       if(-not $sing[$i].buy){ Fail $slug ('scaler buy empty on ' + $sing[$i].item) }
       if($sing[$i].buy -match '(^|\s)0(\s|$)'){ Fail $slug ('scaler buy amount rounds to zero on ' + $sing[$i].item) }
+      # A BUY AMOUNT MUST NAME ITS UNIT. FriendlyAmt's each branch used to return the bare count, and
+      # 661 lines shipped reading "Potato (generic): 18.4 (3909 g)" - which a reader can only tell from a
+      # typo by working back from the gram restatement. The test is deliberately "contains a letter"
+      # rather than a shape match: the catalog has ~90 legitimate freeform labels ("to taste",
+      # "about 1 3/4 cups", "juice of 1 lime", "1 (1 oz) packet") and none of them are this defect,
+      # while every instance of the defect is a number and nothing else. It is also the exact test
+      # income\reels\build-reel.ps1 applies when it parses these lines, so guard and consumer agree.
+      if(([string]$sing[$i].buy) -notmatch '[A-Za-z]'){ Fail $slug ('scaler buy has no unit on ' + $sing[$i].item + ": '" + [string]$sing[$i].buy + "' (a bare count - add the noun to db\each-nouns.json)") }
       if($sing[$i].PSObject.Properties.Name -contains 'bid'){
         if(-not $sing[$i].bid){ Fail $slug ('empty bid on ' + $sing[$i].item) }
         if([string]$sing[$i].gpu -notmatch '^\d+\.\d{3}$'){ Fail $slug ('gpu not formatted on ' + $sing[$i].item) }

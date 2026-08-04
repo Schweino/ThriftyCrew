@@ -30,9 +30,9 @@
              },
     "intro_html":  "Pot pie has one real problem as a meal prep dish, which is that a bottom crust turns to wet cardboard in the fridge. This version fixes it by skipping the bottom entirely and topping a creamy chicken and vegetable filling with biscuits, which hold up far better and taste better anyway. It bakes in a 9x13 and cuts by the square. Each serving lands at 582 calories and \u003cstrong\u003e25 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.48 a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 2.3 (497 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 2.3 potatoes (497 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1 cups (242 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (128 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 onion (128 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (23 g)",
                                 "\u003cstrong\u003ePoultry Seasoning (generic (USDA)):\u003c/strong\u003e 0.25 oz (9 g)",
                                 "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 12 tbsp (97 g)",
@@ -42,20 +42,20 @@
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 1.75 lb (794 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (7 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
-                                "\u003cstrong\u003eRefrigerated Biscuits (Pillsbury):\u003c/strong\u003e 20.5 (1189 g)"
+                                "\u003cstrong\u003eRefrigerated Biscuits (Pillsbury):\u003c/strong\u003e 20.5 biscuits (1189 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Potato, 2.3: ~$0.62. \u003cstrong\u003eBuy 2 lbs: $1.14.\u003c/strong\u003e",
+                       "Potato, 2.3 potatoes: ~$0.62. \u003cstrong\u003eBuy 2 lbs: $1.14.\u003c/strong\u003e",
                        "Butter, 1 cups: ~$1.59. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Yellow Onion, 1: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1 onion: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 2.75 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "All-Purpose Flour, 12 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Milk, 3.5 cups: ~$0.68. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
                        "Chicken Broth, 3 cups: ~$0.94. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Frozen Green Peas, 1.75 lb: ~$1.69. \u003cstrong\u003eBuy 3 12oz bags: $2.20.\u003c/strong\u003e",
                        "Boneless Skinless Chicken Breast, 1.75 lb: ~$5.72. \u003cstrong\u003eBuy 2 lbs: $6.54.\u003c/strong\u003e",
-                       "Refrigerated Biscuits, 20.5: ~$5.17. \u003cstrong\u003eBuy 3 8ct cans: $6.03.\u003c/strong\u003e",
+                       "Refrigerated Biscuits, 20.5 biscuits: ~$5.17. \u003cstrong\u003eBuy 3 8ct cans: $6.03.\u003c/strong\u003e",
                        "Pantry seasonings (poultry seasoning, salt, black pepper): ~$0.57. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $17.72 across 14 servings, so roughly $1.27 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $25.23 across 14 servings, roughly $1.80 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -94,7 +94,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  497,
-                                   "buy":  "2.3",
+                                   "buy":  "2.3 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                },
@@ -110,7 +110,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  128,
-                                   "buy":  "1",
+                                   "buy":  "1 onion",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -190,7 +190,7 @@
                                    "item":  "Refrigerated Biscuits",
                                    "canon":  "Refrigerated Biscuits",
                                    "grams":  1189,
-                                   "buy":  "20.5",
+                                   "buy":  "20.5 biscuits",
                                    "bid":  "refrigerated-biscuits",
                                    "gpu":  "28.350"
                                }

@@ -20,7 +20,7 @@
     "intro_html":  "Fried rice built on ground beef, which is cheaper than takeout and loaded with more protein. Each bowl carries 46 grams for about $4.57 (at everyday cost), and the pan makes 14 servings. This is the perfect home for leftover rice, and it beats the delivery version every time.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1020 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.5 cups dry (1020 g)",
                                 "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 3 cups (400 g)",
                                 "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 1 lb (300 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (250 g)",
@@ -29,7 +29,7 @@
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (20 g)",
                                 "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 root (12 g)",
                                 "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 3 large eggs (500 g)",
-                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 2 Tbsp (100 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 7.25 tbsp (100 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (12 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (6 g)"
                             ],
@@ -70,7 +70,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  1020,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.5 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -133,7 +133,7 @@
                                {
                                    "item":  "Vegetable Oil",
                                    "grams":  100,
-                                   "buy":  "2 Tbsp",
+                                   "buy":  "7.25 tbsp",
                                    "bid":  "vegetable-oil",
                                    "gpu":  "28.000"
                                },
@@ -159,7 +159,7 @@
                  "costPerServing":  4.57,
                  "recipeIngredient":  [
                                           "6 lb 93/7 Ground Beef",
-                                          "1 lb Rice",
+                                          "5.5 cups dry Rice",
                                           "2 bags Frozen Green Peas",
                                           "1 lb Carrots",
                                           "3 onions Yellow Onion",

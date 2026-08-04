@@ -20,7 +20,7 @@
     "intro_html":  "Butter chicken is rich, golden, and downright luxurious, yet this batch clocks in at about $4.87 a bowl (at everyday cost). It is creamy, high in protein, and a rich one to keep in the rotation. One batch makes 14 servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3000 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (980 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (980 g)",
                                 "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (700 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1/3 cup (70 g)",
@@ -28,13 +28,13 @@
                                 "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (200 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5 cloves (24 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 1/2 tbsp (20 g)",
-                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 tbsp minced (35 g)",
-                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 2 tsp (12 g)",
-                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 tsp (6 g)",
-                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tsp (6 g)",
-                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)",
-                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 1 (1 g)",
-                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 2 tsp (23 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 5.75 tbsp minced (35 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 2 tbsp (12 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 2.25 tsp (6 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (6 g)",
+                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 2.25 tsp (4 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 1 leaf (1 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1.5 tbsp (23 g)",
                                 "\u003cstrong\u003eHalf and Half:\u003c/strong\u003e 1/4 cup (140 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (14 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
@@ -76,7 +76,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  980,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.25 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -132,49 +132,49 @@
                                {
                                    "item":  "Ginger",
                                    "grams":  35,
-                                   "buy":  "1 tbsp minced",
+                                   "buy":  "5.75 tbsp minced",
                                    "bid":  "fresh-ginger",
                                    "gpu":  453.592
                                },
                                {
                                    "item":  "Garam Masala",
                                    "grams":  12,
-                                   "buy":  "2 tsp",
+                                   "buy":  "2 tbsp",
                                    "bid":  "garam-masala",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Chili Powder",
                                    "grams":  6,
-                                   "buy":  "1 tsp",
+                                   "buy":  "2.25 tsp",
                                    "bid":  "chili-powder",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Ground Cumin",
                                    "grams":  6,
-                                   "buy":  "1 tsp",
+                                   "buy":  "1 tbsp",
                                    "bid":  "ground-cumin",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Cayenne Pepper",
                                    "grams":  4,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "2.25 tsp",
                                    "bid":  "cayenne-pepper",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Bay Leaves",
                                    "grams":  1,
-                                   "buy":  "1",
+                                   "buy":  "1 leaf",
                                    "bid":  "bay-leaves",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Lemon Juice",
                                    "grams":  23,
-                                   "buy":  "2 tsp",
+                                   "buy":  "1.5 tbsp",
                                    "bid":  "lemon-juice",
                                    "gpu":  "29.570"
                                },
@@ -207,7 +207,7 @@
                  "costPerServing":  4.87,
                  "recipeIngredient":  [
                                           "7 lb Boneless Skinless Chicken Breast",
-                                          "1 lb Rice",
+                                          "5.25 cups dry Rice",
                                           "2 cans Tomato Sauce",
                                           "3 onions Yellow Onion",
                                           "1 boxs Butter",

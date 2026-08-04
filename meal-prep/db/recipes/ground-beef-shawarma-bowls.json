@@ -20,7 +20,7 @@
     "intro_html":  "Warm, spiced shawarma flavor over rice with a cool yogurt drizzle, all made at home for cheap. Each serving delivers 48 grams of protein for about $3.96 (at everyday cost) and the batch makes 14 bowls. That is a spice-shop of flavor for less than the price of a single street-cart wrap.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1120 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6 cups dry (1120 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (500 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1 can (400 g)",
@@ -66,7 +66,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  1120,
-                                   "buy":  "1 lb",
+                                   "buy":  "6 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -134,7 +134,7 @@
                  "costPerServing":  3.96,
                  "recipeIngredient":  [
                                           "6 lb 93/7 Ground Beef",
-                                          "1 lb Rice",
+                                          "6 cups dry Rice",
                                           "3 onions Yellow Onion",
                                           "1 tub Greek Yogurt",
                                           "1 can Diced Tomatoes",

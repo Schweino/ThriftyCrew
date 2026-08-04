@@ -25,15 +25,15 @@
                                 "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 2 1/2 cups (280 g)",
                                 "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 4 2/3 cups (400 g)",
                                 "\u003cstrong\u003eCorn Tortillas:\u003c/strong\u003e 15 corn tortillas, torn (450 g)",
-                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 8 tbsp (250 g)",
-                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1/2 cup (140 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1 cup (250 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1 cup (140 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 4 cups (1440 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (25 g)",
-                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 4 tsp (24 g)",
-                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (16 g)",
-                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 tbsp (20 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 3 tbsp (24 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2.5 tbsp (16 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 2.25 tbsp (20 g)",
                                 "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 1 medium (45 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (14 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tsp (14 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
@@ -108,14 +108,14 @@
                                {
                                    "item":  "Butter",
                                    "grams":  250,
-                                   "buy":  "8 tbsp",
+                                   "buy":  "1 cup",
                                    "bid":  "butter",
                                    "gpu":  "453.592"
                                },
                                {
                                    "item":  "All-Purpose Flour",
                                    "grams":  140,
-                                   "buy":  "1/2 cup",
+                                   "buy":  "1 cup",
                                    "bid":  "flour",
                                    "gpu":  453.592
                                },
@@ -136,21 +136,21 @@
                                {
                                    "item":  "Chili Powder",
                                    "grams":  24,
-                                   "buy":  "4 tsp",
+                                   "buy":  "3 tbsp",
                                    "bid":  "chili-powder",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Ground Cumin",
                                    "grams":  16,
-                                   "buy":  "1 tbsp",
+                                   "buy":  "2.5 tbsp",
                                    "bid":  "ground-cumin",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Garlic Powder",
                                    "grams":  20,
-                                   "buy":  "1 tbsp",
+                                   "buy":  "2.25 tbsp",
                                    "bid":  "garlic-powder",
                                    "gpu":  "28.350"
                                },
@@ -164,7 +164,7 @@
                                {
                                    "item":  "Salt",
                                    "grams":  14,
-                                   "buy":  "1 tsp",
+                                   "buy":  "2.25 tsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },

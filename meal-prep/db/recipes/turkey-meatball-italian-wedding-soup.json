@@ -29,9 +29,9 @@
     "intro_html":  "The name has nothing to do with weddings. It comes from the Italian \u003cem\u003eminestra maritata\u003c/em\u003e, the married soup, and the marriage in question is greens and meat. Little turkey meatballs, tender pasta shells, kale and spinach, all floating in a clean chicken broth with parmesan stirred in at the end. It is a soup that looks fancy in the container and costs less than a drive-through combo. That is the whole point of this operation.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePasta Shells (Great Value):\u003c/strong\u003e 18.75 oz dry (532 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
-                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.5 (214 g)",
-                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 3.5 (192 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 onions (385 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.5 carrots (214 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 3.5 stalks (192 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (6 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.75 tbsp (51 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 4.4 cartons (4200 g)",
@@ -48,9 +48,9 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pasta Shells, 18.75 oz dry: ~$1.14. \u003cstrong\u003eBuy 2 12oz boxes: $1.45.\u003c/strong\u003e",
-                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Carrots, 3.5: ~$0.45. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
-                       "Celery, 3.5: ~$1.01. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 3.5 carrots: ~$0.45. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Celery, 3.5 stalks: ~$1.01. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
                        "Chicken Broth, 4.4 cartons: ~$5.64. \u003cstrong\u003ePantry staple; this batch alone uses about 5 32oz cartons.\u003c/strong\u003e",
                        "Kale, 12.25 oz: ~$2.07. \u003cstrong\u003eBuy 2 bunches: $2.96.\u003c/strong\u003e",
                        "Frozen Chopped Spinach, 15.5 oz: ~$3.09. \u003cstrong\u003eBuy 2 10oz boxes: $4.01.\u003c/strong\u003e",
@@ -106,7 +106,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  385,
-                                   "buy":  "3.5",
+                                   "buy":  "3.5 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -114,7 +114,7 @@
                                    "item":  "Carrots",
                                    "canon":  "Carrots",
                                    "grams":  214,
-                                   "buy":  "3.5",
+                                   "buy":  "3.5 carrots",
                                    "bid":"carrots",
                                    "gpu":453.592
                                },
@@ -122,7 +122,7 @@
                                    "item":  "Celery",
                                    "canon":  "Celery",
                                    "grams":  192,
-                                   "buy":  "3.5",
+                                   "buy":  "3.5 stalks",
                                    "bid":  "celery",
                                    "gpu":  "450.000"
                                },

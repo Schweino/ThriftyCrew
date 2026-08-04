@@ -18,11 +18,11 @@
                  "cost_ps":  "4.28"
              },
     "intro_html":  "Stroganoff without the fancy beef: ground turkey and a mountain of mushrooms in a creamy, tangy sauce with egg noodles that cook right in the pot. One pot, one sink cleanup, and every bowl brings \u003cstrong\u003e38 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.28\u003c/strong\u003e (at everyday cost). The spinach is in there for your conscience.",
-    "ingredients_display": ["\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7 tbsp (98 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 (192 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 5.25 tbsp (44 g)","\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 0.75 tbsp (2 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 6.5 lb (2940 g)","\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 22.75 cups (1588 g)","\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 2.25 tbsp (40 g)","\u003cstrong\u003eEgg Noodles (Great Value wide):\u003c/strong\u003e 32.5 oz dry (919 g)","\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1.75 tbsp (26 g)","\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1.25 cups (268 g)","\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 3.5 oz (99 g)","\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 5.25 cups (446 g)"],
+    "ingredients_display": ["\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7 tbsp (98 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 onions (192 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 5.25 tbsp (44 g)","\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 0.75 tbsp (2 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 6.5 lb (2940 g)","\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 22.75 cups (1588 g)","\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 2.25 tbsp (40 g)","\u003cstrong\u003eEgg Noodles (Great Value wide):\u003c/strong\u003e 32.5 oz dry (919 g)","\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1.75 tbsp (26 g)","\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1.25 cups (268 g)","\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 3.5 oz (99 g)","\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 5.25 cups (446 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Butter, 7 tbsp: ~$0.63. \u003cstrong\u003eBuy 1 lb box: $2.92.\u003c/strong\u003e",
-                       "Yellow Onion, 1.7: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1.7 onions: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 5.25 tbsp: ~$0.63. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "93/7 Ground Turkey, 3.5 lb: ~$19.12. \u003cstrong\u003eBuy 4 lbs: $21.84.\u003c/strong\u003e",
                        "Chicken Broth, 6.5 lb: ~$3.95. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -71,7 +71,7 @@
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  192,
-                                   "buy":  "1.7",
+                                   "buy":  "1.7 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

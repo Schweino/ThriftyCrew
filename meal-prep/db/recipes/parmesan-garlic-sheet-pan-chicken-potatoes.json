@@ -28,7 +28,7 @@
              },
     "intro_html":  "This is the whole plate on one pan. Potatoes on the bottom soaking up drippings, green beans tucked around the edges, and chicken thighs under a garlic parmesan coat that browns into something close to a crust. No side dish to plan, no second pot to wash. Each container comes in at \u003cstrong\u003e563 calories and 28 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.56\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 11 (2346 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 11 potatoes (2346 g)",
                                 "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 2.25 lb (1058 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7 tbsp (94 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
@@ -38,13 +38,13 @@
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
                                 "\u003cstrong\u003eMayonnaise (Great Value):\u003c/strong\u003e 1.25 cups (243 g)",
                                 "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 3.75 oz (105 g)",
-                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 0.7 (35 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 0.7 lemons worth (35 g)",
                                 "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.75 tbsp (3 g)",
                                 "\u003cstrong\u003ePaprika:\u003c/strong\u003e 0.5 tbsp (3 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Potato, 11: ~$2.94. \u003cstrong\u003eBuy 6 lbs: $3.41.\u003c/strong\u003e",
+                       "Potato, 11 potatoes: ~$2.94. \u003cstrong\u003eBuy 6 lbs: $3.41.\u003c/strong\u003e",
                        "Green Beans, 2.25 lb: ~$2.28. \u003cstrong\u003eBuy 4 12oz bags: $2.93.\u003c/strong\u003e",
                        "Olive Oil, 7 tbsp: ~$1.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Boneless Skinless Chicken Thigh, 3 lb: ~$5.46. \u003cstrong\u003eBuy 4 lbs: $7.08.\u003c/strong\u003e",
@@ -52,7 +52,7 @@
                        "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Mayonnaise, 1.25 cups: ~$0.85. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Parmesan Cheese, 3.75 oz: ~$1.28. \u003cstrong\u003eBuy 1 8oz tub: $2.78.\u003c/strong\u003e",
-                       "Lemon Juice, 0.7: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lemon Juice, 0.7 lemons worth: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, italian seasoning, paprika): ~$0.42. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $16.55 across 14 servings, so roughly $1.18 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $23.05 across 14 servings, roughly $1.65 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -91,7 +91,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  2346,
-                                   "buy":  "11",
+                                   "buy":  "11 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                },
@@ -171,7 +171,7 @@
                                    "item":  "Lemon Juice",
                                    "canon":  "Lemon Juice",
                                    "grams":  35,
-                                   "buy":  "0.7",
+                                   "buy":  "0.7 lemons worth",
                                    "bid":  "lemon-juice",
                                    "gpu":  "29.570"
                                },

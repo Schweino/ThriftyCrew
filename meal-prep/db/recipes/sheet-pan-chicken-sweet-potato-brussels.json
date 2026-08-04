@@ -39,9 +39,9 @@
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.5 tbsp (25 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)",
                                 "\u003cstrong\u003eBrussels Sprouts:\u003c/strong\u003e 3.25 lb (1478 g)",
-                                "\u003cstrong\u003eSweet Potatoes:\u003c/strong\u003e 7.5 (980 g)",
-                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 4 (462 g)",
-                                "\u003cstrong\u003eApple (generic):\u003c/strong\u003e 4 (756 g)"
+                                "\u003cstrong\u003eSweet Potatoes:\u003c/strong\u003e 7.5 sweet potatoes (980 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 4 onions (462 g)",
+                                "\u003cstrong\u003eApple (generic):\u003c/strong\u003e 4 apples (756 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -49,9 +49,9 @@
                        "Olive Oil, 0.75 cups: ~$2.39. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 10 tbsp: ~$1.21. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
                        "Brussels Sprouts, 3.25 lb: ~$9.84. \u003cstrong\u003eBuy 4 lbs: $12.08.\u003c/strong\u003e",
-                       "Sweet Potatoes, 7.5: ~$3.20. \u003cstrong\u003eBuy 3 lbs: $4.44.\u003c/strong\u003e",
-                       "Red Onion, 4: ~$1.36. \u003cstrong\u003eBuy 1 lb: $1.36.\u003c/strong\u003e",
-                       "Apple, 4: ~$1.68. \u003cstrong\u003eBuy 5 each: $1.95.\u003c/strong\u003e",
+                       "Sweet Potatoes, 7.5 sweet potatoes: ~$3.20. \u003cstrong\u003eBuy 3 lbs: $4.44.\u003c/strong\u003e",
+                       "Red Onion, 4 onions: ~$1.36. \u003cstrong\u003eBuy 1 lb: $1.36.\u003c/strong\u003e",
+                       "Apple, 4 apples: ~$1.68. \u003cstrong\u003eBuy 5 each: $1.95.\u003c/strong\u003e",
                        "Pantry seasonings (italian seasoning, ground cinnamon, salt, black pepper): ~$1.70. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $34.49 across 14 servings, so roughly $2.46 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $39.81 across 14 servings, roughly $2.84 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -154,7 +154,7 @@
                                    "item":  "Sweet Potatoes",
                                    "canon":  "Sweet Potatoes",
                                    "grams":  980,
-                                   "buy":  "7.5",
+                                   "buy":  "7.5 sweet potatoes",
                                    "bid":  "sweet-potatoes",
                                    "gpu":  "453.592"
                                },
@@ -162,7 +162,7 @@
                                    "item":  "Red Onion",
                                    "canon":  "Red Onion",
                                    "grams":  462,
-                                   "buy":  "4",
+                                   "buy":  "4 onions",
                                    "bid":"red-onion",
                                    "gpu":453.592
                                },
@@ -170,7 +170,7 @@
                                    "item":  "Apple",
                                    "canon":  "Apple",
                                    "grams":  756,
-                                   "buy":  "4",
+                                   "buy":  "4 apples",
                                    "bid":  "apple",
                                    "gpu":  "175.000"
                                }

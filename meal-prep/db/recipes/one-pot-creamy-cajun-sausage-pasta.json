@@ -29,8 +29,8 @@
     "intro_html":  "The pasta cooks in the sauce, which means every bit of starch that would normally go down the drain stays in the pot and thickens things instead. Smoked sausage, peppers, tomatoes and Cajun seasoning with cream and parmesan stirred in at the end. It lands at 25 grams of protein for about $3.90 a bowl (at everyday cost) and dirties exactly one pot.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (32 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
-                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2.3 (280 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 onions (257 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2.3 peppers (280 g)",
                                 "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 2 lb (919 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 tbsp (20 g)",
                                 "\u003cstrong\u003eCajun Seasoning (Tony Chachere\u0027s):\u003c/strong\u003e 2.25 tbsp (21 g)",
@@ -46,8 +46,8 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Olive Oil, 2.25 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Red Bell Pepper, 2.3: ~$2.01. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Yellow Onion, 2.3 onions: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2.3 peppers: ~$2.01. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
                        "Smoked Turkey Sausage, 2 lb: ~$8.20. \u003cstrong\u003eBuy 3 13oz ropes: $9.86.\u003c/strong\u003e",
                        "Garlic, 2.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Ziti Pasta, 37.25 oz dry: ~$2.26. \u003cstrong\u003eBuy 3 16oz boxes: $2.91.\u003c/strong\u003e",
@@ -102,7 +102,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  257,
-                                   "buy":  "2.3",
+                                   "buy":  "2.3 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -110,7 +110,7 @@
                                    "item":  "Red Bell Pepper",
                                    "canon":  "Red Bell Pepper",
                                    "grams":  280,
-                                   "buy":  "2.3",
+                                   "buy":  "2.3 peppers",
                                    "bid":  "red-bell-pepper",
                                    "gpu":  120
                                },

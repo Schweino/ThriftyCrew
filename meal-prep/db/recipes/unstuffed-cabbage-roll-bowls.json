@@ -25,12 +25,12 @@
                                 "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 5 cups (1200 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (240 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (12 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tbsp (80 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 1/2 tsp (25 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tsp (7 g)",
-                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tsp (5 g)",
-                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 3/4 tsp (6 g)",
-                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)"
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 6 tbsp (80 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.5 tbsp (25 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.75 tbsp (5 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 2.5 tsp (6 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1.75 tsp (3 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$4.95 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -103,42 +103,42 @@
                                {
                                    "item":  "Olive Oil",
                                    "grams":  80,
-                                   "buy":  "2 tbsp",
+                                   "buy":  "6 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  25,
-                                   "buy":  "1 1/2 tsp",
+                                   "buy":  "1.5 tbsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  7,
-                                   "buy":  "1 tsp",
+                                   "buy":  "1 tbsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Dried Oregano",
                                    "grams":  5,
-                                   "buy":  "1 tsp",
+                                   "buy":  "1.75 tbsp",
                                    "bid":  "dried-oregano",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Paprika",
                                    "grams":  6,
-                                   "buy":  "3/4 tsp",
+                                   "buy":  "2.5 tsp",
                                    "bid":  "paprika",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Red Pepper Flakes",
                                    "grams":  3,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.75 tsp",
                                    "bid":  "red-pepper-flakes",
                                    "gpu":  "28.350"
                                }

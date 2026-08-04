@@ -20,7 +20,7 @@
     "intro_html":  "The messy sandwich you loved as a kid, grown up into a high-protein rice bowl. Each serving brings 45 grams of protein for about $5.26 (at everyday cost) and the batch makes 14. Same tangy, savory sloppy joe flavor, now built to fuel you instead of just fill you.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1050 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.75 cups dry (1050 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 4 peppers (400 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (680 g)",
@@ -28,11 +28,11 @@
                                 "\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 1/2 cup (150 g)",
                                 "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 2 tbsp (30 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (20 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tsp (beef) + oil for base (20 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (15 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (3 g)",
-                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1/2 tsp (3 g)",
-                                "\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 1 tbsp (30 g)"
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.5 tbsp (beef) + oil for base (20 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.5 tsp (15 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tsp (3 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1.25 tsp (3 g)",
+                                "\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 2 tbsp (30 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$5.26 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -70,7 +70,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  1050,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.75 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -126,35 +126,35 @@
                                {
                                    "item":  "Olive Oil",
                                    "grams":  20,
-                                   "buy":  "2 tsp (beef) + oil for base",
+                                   "buy":  "1.5 tbsp (beef) + oil for base",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  15,
-                                   "buy":  "1 tsp",
+                                   "buy":  "2.5 tsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  3,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "1.25 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Paprika",
                                    "grams":  3,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.25 tsp",
                                    "bid":  "paprika",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Apple Cider Vinegar",
                                    "grams":  30,
-                                   "buy":  "1 tbsp",
+                                   "buy":  "2 tbsp",
                                    "bid":  "apple-cider-vinegar",
                                    "gpu":  "29.570"
                                }
@@ -166,7 +166,7 @@
                  "costPerServing":  5.26,
                  "recipeIngredient":  [
                                           "6 lb 93/7 Ground Beef",
-                                          "1 lb Rice",
+                                          "5.75 cups dry Rice",
                                           "4 peppers Green Bell Peppers",
                                           "3 onions Yellow Onion",
                                           "2 cans Tomato Sauce",

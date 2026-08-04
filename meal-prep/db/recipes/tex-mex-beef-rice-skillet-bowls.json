@@ -27,10 +27,10 @@
                                 "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 1/2 cups (168 g)",
                                 "\u003cstrong\u003ePaprika:\u003c/strong\u003e 2 tbsp (14 g)",
                                 "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 1/4 tbsp (8 g)",
-                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 2 tsp ground chipotle (or chili powder) (16 g)",
-                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 tsp (9 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/2 tsp (9 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)"
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 2 tbsp ground chipotle (or chili powder) (16 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 tbsp (9 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.5 tsp (9 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.75 tsp (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$4.59 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -117,28 +117,28 @@
                                {
                                    "item":  "Chili Powder",
                                    "grams":  16,
-                                   "buy":  "2 tsp ground chipotle (or chili powder)",
+                                   "buy":  "2 tbsp ground chipotle (or chili powder)",
                                    "bid":  "chili-powder",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Garlic Powder",
                                    "grams":  9,
-                                   "buy":  "1 tsp",
+                                   "buy":  "1 tbsp",
                                    "bid":  "garlic-powder",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  9,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.5 tsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  4,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.75 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                }

@@ -28,9 +28,9 @@
              },
     "intro_html":  "Sausages and root vegetables roasted in one pan, and then the gravy gets made in that same pan using everything stuck to the bottom. No second pot, no gravy packet, no wasted flavor. It is a big, generous plate at 35 grams of protein and about $3.45 a bowl (at everyday cost).",
     "ingredients_display":  [
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 11.5 (2450 g)",
-                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 10.5 (640 g)",
-                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 7 (770 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 11.5 potatoes (2450 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 10.5 carrots (640 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 7 onions (770 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7 tbsp (94 g)",
                                 "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 2.25 tbsp (7 g)",
@@ -44,9 +44,9 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Potato, 11.5: ~$3.07. \u003cstrong\u003eBuy 6 lbs: $3.41.\u003c/strong\u003e",
-                       "Carrots, 10.5: ~$1.35. \u003cstrong\u003eBuy 2 lbs: $1.91.\u003c/strong\u003e",
-                       "Red Onion, 7: ~$2.27. \u003cstrong\u003eBuy 2 lbs: $2.68.\u003c/strong\u003e",
+                       "Potato, 11.5 potatoes: ~$3.07. \u003cstrong\u003eBuy 6 lbs: $3.41.\u003c/strong\u003e",
+                       "Carrots, 10.5 carrots: ~$1.35. \u003cstrong\u003eBuy 2 lbs: $1.91.\u003c/strong\u003e",
+                       "Red Onion, 7 onions: ~$2.27. \u003cstrong\u003eBuy 2 lbs: $2.68.\u003c/strong\u003e",
                        "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Olive Oil, 7 tbsp: ~$1.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Bratwurst, 5.25 lb: ~$13.12. \u003cstrong\u003eBuy 5 19oz 5-packs: $14.86.\u003c/strong\u003e",
@@ -91,7 +91,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  2450,
-                                   "buy":  "11.5",
+                                   "buy":  "11.5 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                },
@@ -99,7 +99,7 @@
                                    "item":  "Carrots",
                                    "canon":  "Carrots",
                                    "grams":  640,
-                                   "buy":  "10.5",
+                                   "buy":  "10.5 carrots",
                                    "bid":"carrots",
                                    "gpu":453.592
                                },
@@ -107,7 +107,7 @@
                                    "item":  "Red Onion",
                                    "canon":  "Red Onion",
                                    "grams":  770,
-                                   "buy":  "7",
+                                   "buy":  "7 onions",
                                    "bid":"red-onion",
                                    "gpu":453.592
                                },

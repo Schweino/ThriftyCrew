@@ -32,7 +32,7 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 3.75 lb (1651 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 7.25 tbsp (98 g)",
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 21 (4448 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 21 potatoes (4448 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (22 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 5.5 lb (2477 g)",
@@ -45,7 +45,7 @@
     "cost_lines":  [
                        "Green Beans, 3.75 lb: ~$3.55. \u003cstrong\u003eBuy 5 12oz bags: $3.66.\u003c/strong\u003e",
                        "Olive Oil, 7.25 tbsp: ~$1.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Potato, 21: ~$5.57. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
+                       "Potato, 21 potatoes: ~$5.57. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
                        "Pork Tenderloin, 5.5 lb: ~$21.68. \u003cstrong\u003eBuy 6 lbs: $23.82.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, chili powder, ground cumin, garlic powder, paprika): ~$0.70. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $32.88 across 14 servings, so roughly $2.35 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
@@ -100,7 +100,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  4448,
-                                   "buy":  "21",
+                                   "buy":  "21 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                },

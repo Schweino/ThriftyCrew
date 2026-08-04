@@ -32,7 +32,7 @@
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 5.25 lb (2381 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (96 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 onion (96 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
                                 "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 7 cups (1680 g)",
                                 "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 0.5 tbsp (10 g)",
@@ -45,7 +45,7 @@
     "cost_lines":  [
                        "Olive Oil, 3.5 tbsp: ~$0.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Beef Chuck Roast, 5.25 lb: ~$41.84. \u003cstrong\u003eBuy 6 lbs: $47.82.\u003c/strong\u003e",
-                       "Yellow Onion, 1: ~$0.24. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1 onion: ~$0.24. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Beef Broth, 7 cups: ~$2.26. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Cornstarch, 7 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -120,7 +120,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  96,
-                                   "buy":  "1",
+                                   "buy":  "1 onion",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

@@ -3089,6 +3089,53 @@ else {
     if (($tpl -match 'function parseQty') -and ($tpl -match 'function fmtCook') -and ($tpl -notmatch 'buy\.replace\(/\\d\+')) {
       Ok 'serving scaler still scales only the leading quantity and understands fractions (the JS matches its PowerShell twin)'
     } else { Bad 'tpl2-scaler-prefix.html no longer carries the fraction-aware scaleBuy - changing the servings will render "2/4 tsp" again' }
+
+    # ------------------------------------------------ RANGE labels (2026-08-04)
+    # The one label shape the scaler above cannot render honestly no matter how carefully it is written.
+    # "<quantity> <unit> <note>" is the premise scaleBuy depends on; a range puts a second number where
+    # the unit belongs, so "2-3 cloves" doubled renders "4-3 cloves". Ten shipped that way, and nine of
+    # the ten were ALREADY wrong standing still - the range was the source recipe's amount at the
+    # SOURCE's serving count sitting beside Brad's scaled gram figure, so the garlic line said 2-3 cloves
+    # over 42 g of garlic, which is 8. Nothing detected them: repair-cook-measures scopes itself to
+    # package nouns on purpose, and Get-CmUnit's pattern is anchored and reads no unit past a dash, so a
+    # range reports no unit at all and passes Test-CmLabelTrue as "not provably false".
+    $rrb = Join-Path $mpPipe 'repair-range-buy.ps1'
+    if (-not (Test-Path $rrb)) { Bad 'repair-range-buy.ps1 is missing - a range label can ship again and the servings control will render "4-3 cloves"' }
+    else {
+      $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $rrb -SelfTest 2>&1 | Out-String
+      if ($r -match 'SELF-TEST PASS') { Ok 'range labels: the founding garlic case still resolves to the grams, a range with an unweighable unit is still REFUSED rather than guessed, and "12-oz bag" is still not a range' }
+      else { Bad ('repair-range-buy -SelfTest failed: ' + ($r -replace "`n", ' ')) }
+
+      $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $rrb 2>&1 | Out-String
+      $n = -1
+      $m = [regex]::Match($r, 'range-buy repair: (\d+) label')
+      if ($m.Success) { $n = [int]$m.Groups[1].Value }
+      if ($n -eq 0) { Ok 'no ingredient line states a range where the quantity belongs (the serving scaler can render every label in the catalog)' }
+      elseif ($n -lt 0) { Bad ('repair-range-buy did not report a count - the guard cannot tell a clean catalog from a broken run: ' + ($r -replace "`n", ' ')) }
+      else { Bad ("$n ingredient line(s) state a RANGE where the quantity belongs. Changing the servings will render nonsense like ""4-3 cloves"", and the label is probably the source recipe's amount at the source's serving count rather than this batch's. Run meal-prep\pipeline\repair-range-buy.ps1 -Apply, then sync-recipesdb-buy.ps1 -Apply, gen-planner-data.ps1, and rebuild + republish those cards.") }
+    }
+
+    # ---------------------------------- the SECOND copy of every one of those labels (2026-08-04)
+    # THE CHECK ABOVE READ GREEN FOR TWO DAYS WHILE THE SITE WAS WRONG, and it was not lying: the specs
+    # really were clean. recipes-db.json keeps its own copy of every ingredient's buy string,
+    # gen-planner-data.ps1 is built from THAT copy, and the 2026-08-02 repair never reached it - so the
+    # Meal Plan Builder's merged grocery list went on telling members to buy "2 cans" of beans the specs
+    # had already restated as 5 1/4 cups. Nothing compared the two: engine\audit-db-agreement.ps1 checks
+    # slug and protein, not labels. "The source of truth is clean" is not the same claim as "every copy
+    # agrees with it", and only the second one is what a member reads.
+    $srb = Join-Path $mpPipe 'sync-recipesdb-buy.ps1'
+    if (-not (Test-Path $srb)) { Bad 'sync-recipesdb-buy.ps1 is missing - a spec label repair now has no path into recipes-db, and the Meal Plan Builder reads recipes-db' }
+    else {
+      $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $srb -SelfTest 2>&1 | Out-String
+      if ($r -match 'SELF-TEST PASS') { Ok 'recipes-db buy sync: both carry classes still fire on their frozen cases, and a true package noun, a hand-edited spec, a measure-vs-grams defect and disagreeing grams are all still refused' }
+      else { Bad ('sync-recipesdb-buy -SelfTest failed - the only path a label repair has into recipes-db: ' + ($r -replace "`n", ' ')) }
+
+      $r = & powershell -NoProfile -ExecutionPolicy Bypass -File $srb 2>&1 | Out-String
+      $m = [regex]::Match($r, 'recipes-db buy sync: (\d+) label')
+      if (-not $m.Success) { Bad ('could not read a label count out of sync-recipesdb-buy - the check cannot tell clean from broken: ' + ($r -replace "`n", ' ')) }
+      elseif ([int]$m.Groups[1].Value -eq 0) { Ok "recipes-db states the same ingredient label as its spec everywhere the difference is a known repair class (the Meal Plan Builder's grocery list matches the recipe cards)" }
+      else { Bad ("$([int]$m.Groups[1].Value) ingredient label(s) in recipes-db.json still disagree with their spec in a class we know how to carry - the Meal Plan Builder's merged grocery list is printing pre-repair text. Run meal-prep\pipeline\sync-recipesdb-buy.ps1 -Apply, then meal-prep\gen-planner-data.ps1.") }
+    }
   }
 
   # ------------------------------------------- the gates that stop this recurring (2026-08-02)

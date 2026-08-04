@@ -20,13 +20,13 @@
     "intro_html":  "This is the kind of meal that makes the whole week easier. You get tender BBQ pulled chicken over rice with a hit of sweet corn, 60 grams of protein a serving, and it lands right around $2.92 a bowl (at everyday cost). Fourteen servings out of one pot means lunch is handled before Monday even starts.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3300 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (950 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (950 g)",
                                 "\u003cstrong\u003eBBQ Sauce (Sugar Free) (Sweet Baby Ray\u0027s):\u003c/strong\u003e 1 bottle (500 g)",
                                 "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 4 1/2 cups (750 g)",
                                 "\u003cstrong\u003ePaprika:\u003c/strong\u003e 2 tbsp (14 g)",
                                 "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 tbsp (9 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/2 tsp (10 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)"
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.75 tsp (10 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.75 tsp (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$2.92 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -65,7 +65,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  950,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.25 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -100,14 +100,14 @@
                                {
                                    "item":  "Salt",
                                    "grams":  10,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.75 tsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  4,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.75 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                }
@@ -119,7 +119,7 @@
                  "costPerServing":  2.92,
                  "recipeIngredient":  [
                                           "8 lb Boneless Skinless Chicken Breast",
-                                          "1 lb Rice",
+                                          "5.25 cups dry Rice",
                                           "1 bottle BBQ Sauce (Sugar Free)",
                                           "3 cans Sweet Whole Kernel Corn",
                                           "1 jar Paprika",

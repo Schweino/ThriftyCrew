@@ -20,7 +20,7 @@
     "intro_html":  "All the flavor of stuffed peppers without the fuss of stuffing a single one. This skillet delivers 46 grams of protein per bowl for about $5.11 (at everyday cost) and makes 14 servings. You get the same savory beef, pepper, and rice combo, just faster and built for meal prep.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2240 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1081 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.75 cups dry (1081 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 6 peppers (700 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (800 g)",
@@ -29,13 +29,13 @@
                                 "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 6 slices (170 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (20 g)",
                                 "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1 1/2 tbsp (6 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tbsp (42 g)",
-                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 2 tsp (30 g)",
-                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1 tsp (8 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 tbsp (42 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.75 tbsp (30 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1.25 tbsp (8 g)",
                                 "\u003cstrong\u003eCheddar Cheese:\u003c/strong\u003e 1/2 cup shredded (170 g)",
-                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 2 tbsp (90 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/2 tsp (12 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)"
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 5.5 tbsp (90 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (12 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.75 tsp (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$5.11 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -73,7 +73,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  1081,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.75 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -136,21 +136,21 @@
                                {
                                    "item":  "Olive Oil",
                                    "grams":  42,
-                                   "buy":  "1 tbsp",
+                                   "buy":  "3 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "Worcestershire Sauce",
                                    "grams":  30,
-                                   "buy":  "2 tsp",
+                                   "buy":  "1.75 tbsp",
                                    "bid":  "worcestershire",
                                    "gpu":  29.57
                                },
                                {
                                    "item":  "Paprika",
                                    "grams":  8,
-                                   "buy":  "1 tsp",
+                                   "buy":  "1.25 tbsp",
                                    "bid":  "paprika",
                                    "gpu":  "28.350"
                                },
@@ -164,21 +164,21 @@
                                {
                                    "item":  "Tomato Paste",
                                    "grams":  90,
-                                   "buy":  "2 tbsp",
+                                   "buy":  "5.5 tbsp",
                                    "bid":  "tomato-paste",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  12,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "2 tsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  4,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.75 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                }
@@ -190,7 +190,7 @@
                  "costPerServing":  5.11,
                  "recipeIngredient":  [
                                           "5 lb 93/7 Ground Beef",
-                                          "1 lb Rice",
+                                          "5.75 cups dry Rice",
                                           "6 peppers Green Bell Peppers",
                                           "3 onions Yellow Onion",
                                           "2 cans Diced Tomatoes",

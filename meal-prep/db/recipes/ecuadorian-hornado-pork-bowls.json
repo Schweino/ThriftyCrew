@@ -38,7 +38,7 @@
                                 "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 4.25 cups (1008 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1 cups (238 g)",
                                 "\u003cstrong\u003eAchiote Paste (El Yucateco):\u003c/strong\u003e 2.75 tbsp (48 g)",
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 6.6 (1400 g)"
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 6.6 potatoes (1400 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -48,7 +48,7 @@
                        "Beef Broth, 4.25 cups: ~$1.35. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Butter, 1 cups: ~$1.56. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "Achiote Paste, 2.75 tbsp: ~$1.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Potato, 6.6: ~$1.75. \u003cstrong\u003eBuy 4 lbs: $2.27.\u003c/strong\u003e",
+                       "Potato, 6.6 potatoes: ~$1.75. \u003cstrong\u003eBuy 4 lbs: $2.27.\u003c/strong\u003e",
                        "Pantry seasonings (ground cumin, salt, black pepper): ~$0.67. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $36.44 across 14 servings, so roughly $2.60 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $40.86 across 14 servings, roughly $2.92 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -158,7 +158,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  1400,
-                                   "buy":  "6.6",
+                                   "buy":  "6.6 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                }

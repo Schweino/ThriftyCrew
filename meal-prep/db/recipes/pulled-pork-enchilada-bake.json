@@ -30,8 +30,8 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eEnchilada Sauce (Old El Paso):\u003c/strong\u003e 3.5 cans (990 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 (192 g)",
-                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 (210 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 onions (192 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 peppers (210 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp (18 g)",
                                 "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 4.25 lb (1960 g)",
                                 "\u003cstrong\u003eBBQ Sauce (generic):\u003c/strong\u003e 2.5 cups (748 g)",
@@ -48,8 +48,8 @@
     "cost_lines":  [
                        "Enchilada Sauce, 3.5 cans: ~$3.49. \u003cstrong\u003eBuy 4 10oz cans: $3.99.\u003c/strong\u003e",
                        "Olive Oil, 3.5 tbsp: ~$0.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 1.7: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Green Bell Peppers, 2: ~$1.50. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "Yellow Onion, 1.7 onions: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 2 peppers: ~$1.50. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
                        "Garlic, 2 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Pork Shoulder, 4.25 lb: ~$15.43. \u003cstrong\u003eBuy 5 lbs: $17.85.\u003c/strong\u003e",
                        "BBQ Sauce, 2.5 cups: ~$3.27. \u003cstrong\u003ePantry staple; this batch alone uses about 2 18oz bottles.\u003c/strong\u003e",
@@ -110,7 +110,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  192,
-                                   "buy":  "1.7",
+                                   "buy":  "1.7 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -118,7 +118,7 @@
                                    "item":  "Green Bell Peppers",
                                    "canon":  "Green Bell Peppers",
                                    "grams":  210,
-                                   "buy":  "2",
+                                   "buy":  "2 peppers",
                                    "bid":"green-bell-pepper",
                                    "gpu":120
                                },

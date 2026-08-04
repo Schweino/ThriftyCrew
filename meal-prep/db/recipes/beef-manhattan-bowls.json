@@ -34,7 +34,7 @@
                                 "\u003cstrong\u003eBrown Gravy Mix (generic dry (USDA)):\u003c/strong\u003e 2.25 oz (66 g)",
                                 "\u003cstrong\u003eOnion Soup Mix (Great Value):\u003c/strong\u003e 2.25 oz (66 g)",
                                 "\u003cstrong\u003eRed Wine Vinegar (generic):\u003c/strong\u003e 0.5 cups (140 g)",
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 6.6 (1400 g)"
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 6.6 potatoes (1400 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -43,7 +43,7 @@
                        "Brown Gravy Mix, 2.25 oz: ~$1.24. \u003cstrong\u003ePantry staple; this batch alone uses about 3 0.87oz packets.\u003c/strong\u003e",
                        "Onion Soup Mix, 2.25 oz: ~$2.11. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2.2oz 2ct boxes.\u003c/strong\u003e",
                        "Red Wine Vinegar, 0.5 cups: ~$0.84. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Potato, 6.6: ~$1.75. \u003cstrong\u003eBuy 4 lbs: $2.27.\u003c/strong\u003e",
+                       "Potato, 6.6 potatoes: ~$1.75. \u003cstrong\u003eBuy 4 lbs: $2.27.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.17. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $62.79 across 14 servings, so roughly $4.49 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $63.31 across 14 servings, roughly $4.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -138,7 +138,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  1400,
-                                   "buy":  "6.6",
+                                   "buy":  "6.6 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                }

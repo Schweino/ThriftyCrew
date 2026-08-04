@@ -20,22 +20,22 @@
     "intro_html":  "This Mongolian beef bowl gives you that sweet and savory restaurant flavor without the restaurant bill. Lean ground beef browns fast, then simmers in a honey soy garlic sauce with broccoli and peppers over rice. It runs about $6.29 a serving (at everyday cost) with 43 grams of protein, and it makes 14 bowls.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2280 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1031 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.5 cups dry (1031 g)",
                                 "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 8 1/4 cups (700 g)",
                                 "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3 peppers (300 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1/2 cup (120 g)",
                                 "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 3 3/4 tbsp (80 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5 cloves (24 g)",
                                 "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 root (20 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 Tbsp (50 g)",
-                                "\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 1 Tbsp (52 g)",
-                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 tsp (16 g)",
-                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 1 tsp (17 g)",
-                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 Tbsp (28 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
-                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
-                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1/4 cup (or water) (210 g)",
-                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 1/4 cup, thinly sliced (40 g)"
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.75 tbsp (50 g)",
+                                "\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 3.25 tbsp (52 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1.25 tbsp (16 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 1.25 tbsp (17 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 3.5 tbsp (28 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tsp (2 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1 tsp (2 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 cup (or water) (210 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 6.75 tbsp, thinly sliced (40 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$6.29 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -74,7 +74,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  1031,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.5 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -123,63 +123,63 @@
                                {
                                    "item":  "Olive Oil",
                                    "grams":  50,
-                                   "buy":  "1 Tbsp",
+                                   "buy":  "3.75 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "Hoisin Sauce",
                                    "grams":  52,
-                                   "buy":  "1 Tbsp",
+                                   "buy":  "3.25 tbsp",
                                    "bid":  "hoisin-sauce",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Sesame Oil",
                                    "grams":  16,
-                                   "buy":  "1 tsp",
+                                   "buy":  "1.25 tbsp",
                                    "bid":  "sesame-oil",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Rice Vinegar",
                                    "grams":  17,
-                                   "buy":  "1 tsp",
+                                   "buy":  "1.25 tbsp",
                                    "bid":  "rice-vinegar",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Cornstarch",
                                    "grams":  28,
-                                   "buy":  "1 Tbsp",
+                                   "buy":  "3.5 tbsp",
                                    "bid":  "cornstarch",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  2,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "0.75 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Red Pepper Flakes",
                                    "grams":  2,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "1 tsp",
                                    "bid":  "red-pepper-flakes",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Beef Broth",
                                    "grams":  210,
-                                   "buy":  "1/4 cup (or water)",
+                                   "buy":  "1 cup (or water)",
                                    "bid":  "beef-broth",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Green Onions",
                                    "grams":  40,
-                                   "buy":  "1/4 cup, thinly sliced",
+                                   "buy":  "6.75 tbsp, thinly sliced",
                                    "bid":  "green-onions",
                                    "gpu":  "100.000"
                                }
@@ -191,7 +191,7 @@
                  "costPerServing":  6.29,
                  "recipeIngredient":  [
                                           "5 lb 93/7 Ground Beef",
-                                          "1 lb Rice",
+                                          "5.5 cups dry Rice",
                                           "3 bags Broccoli Florets",
                                           "3 peppers Red Bell Pepper",
                                           "1 bottle Soy Sauce",

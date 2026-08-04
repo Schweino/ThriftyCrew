@@ -40,12 +40,12 @@
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (6 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7.5 tbsp (105 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4.5 (490 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4.5 onions (490 g)",
                                 "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 10.5 tbsp (84 g)",
                                 "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 7 cups (1680 g)",
                                 "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.25 tbsp (20 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.5 tbsp (7 g)",
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 6.6 (1400 g)"
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 6.6 potatoes (1400 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -56,11 +56,11 @@
                        "Green Onions, 17.5 tbsp: ~$1.25. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
                        "Garlic, 6 tbsp: ~$0.75. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Butter, 7.5 tbsp: ~$0.69. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Yellow Onion, 4.5: ~$1.23. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Yellow Onion, 4.5 onions: ~$1.23. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
                        "All-Purpose Flour, 10.5 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Beef Broth, 7 cups: ~$2.26. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Worcestershire Sauce, 1.25 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Potato, 6.6: ~$1.75. \u003cstrong\u003eBuy 4 lbs: $2.27.\u003c/strong\u003e",
+                       "Potato, 6.6 potatoes: ~$1.75. \u003cstrong\u003eBuy 4 lbs: $2.27.\u003c/strong\u003e",
                        "Pantry seasonings (italian seasoning, onion powder, paprika, dried thyme, salt, black pepper, soy sauce): ~$0.73. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $24.47 across 14 servings, so roughly $1.75 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $31.11 across 14 servings, roughly $2.22 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -203,7 +203,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  490,
-                                   "buy":  "4.5",
+                                   "buy":  "4.5 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -243,7 +243,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  1400,
-                                   "buy":  "6.6",
+                                   "buy":  "6.6 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                }

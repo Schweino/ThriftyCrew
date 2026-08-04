@@ -30,23 +30,23 @@
              },
     "intro_html":  "Six ingredients, one skillet, and nothing in it costs much. Diced potatoes crisped in olive oil, cabbage cooked down until it sweetens, garlic and onion, and browned coins of smoked sausage tying it all together. It lands at 26 grams of protein for about $3.40 (at everyday cost), and it reheats better than most skillet meals because the potatoes hold their shape.",
     "ingredients_display":  [
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 17 (3650 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 17 potatoes (3650 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 4.5 tbsp (60 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (314 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (314 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8 tbsp (67 g)",
                                 "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 4.5 lb (2032 g)",
-                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 2 (2016 g)"
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 2 heads (2016 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Potato, 17: ~$4.57. \u003cstrong\u003eBuy 9 lbs: $5.11.\u003c/strong\u003e",
+                       "Potato, 17 potatoes: ~$4.57. \u003cstrong\u003eBuy 9 lbs: $5.11.\u003c/strong\u003e",
                        "Olive Oil, 4.5 tbsp: ~$0.84. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 3: ~$0.79. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.79. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 8 tbsp: ~$0.96. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Smoked Turkey Sausage, 4.5 lb: ~$18.14. \u003cstrong\u003eBuy 6 13oz ropes: $19.71.\u003c/strong\u003e",
-                       "Green Cabbage, 2: ~$3.78. \u003cstrong\u003eBuy 3 heads: $5.06.\u003c/strong\u003e",
+                       "Green Cabbage, 2 heads: ~$3.78. \u003cstrong\u003eBuy 3 heads: $5.06.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $29.35 across 14 servings, so roughly $2.10 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $33.28 across 14 servings, roughly $2.38 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -85,7 +85,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  3650,
-                                   "buy":  "17",
+                                   "buy":  "17 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                },
@@ -117,7 +117,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  314,
-                                   "buy":  "3",
+                                   "buy":  "3 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -141,7 +141,7 @@
                                    "item":  "Green Cabbage",
                                    "canon":  "Green Cabbage",
                                    "grams":  2016,
-                                   "buy":  "2",
+                                   "buy":  "2 heads",
                                    "bid":"cabbage",
                                    "gpu":453.592
                                }

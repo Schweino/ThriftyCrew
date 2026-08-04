@@ -20,11 +20,11 @@
     "intro_html":  "If your weeknight dinners have gotten a little boring, this Jamaican jerk pork wakes things right up. Lean pork loin slow cooks with onion and warm spice until tender, then goes over rice with broccoli. You get 56 grams of protein a serving for about $2.24 (at everyday cost), and it makes 14 bowls.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3200 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (950 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (950 g)",
                                 "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 14 cups (1200 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (200 g)",
                                 "\u003cstrong\u003eJerk Seasoning (McCormick):\u003c/strong\u003e 4 1/2 tbsp (40 g)",
-                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1/2-1 cup low-sodium vegetable or chicken broth (240 g)"
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 cup (240 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$2.24 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -63,7 +63,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  950,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.25 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -91,7 +91,7 @@
                                {
                                    "item":  "Chicken Broth",
                                    "grams":  240,
-                                   "buy":  "1/2-1 cup low-sodium vegetable or chicken broth",
+                                   "buy":  "1 cup",
                                    "bid":  "chicken-broth",
                                    "gpu":  "29.570"
                                }
@@ -103,11 +103,11 @@
                  "costPerServing":  2.24,
                  "recipeIngredient":  [
                                           "8 lb Pork Loin",
-                                          "1 lb Rice",
+                                          "5.25 cups dry Rice",
                                           "4 bags Broccoli Florets",
                                           "2 onions Yellow Onion",
                                           "1 jar Jerk Seasoning",
-                                          "1/2-1 cup low-sodium vegetable or chicken broth Chicken Broth"
+                                          "1 cup Chicken Broth"
                                       ],
                  "steps":  [
                                "Cut the pork loin into large pieces and add them to the slow cooker.",

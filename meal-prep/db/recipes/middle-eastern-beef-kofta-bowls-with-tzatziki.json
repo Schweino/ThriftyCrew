@@ -20,15 +20,15 @@
              },
     "intro_html":  "Kofta is spiced beef shaped into little logs and roasted until browned, then served over rice with cool garlic tzatziki, tomatoes, and herbs. It is a serious flavor-per-effort bargain. Each bowl carries a hefty \u003cstrong\u003e47 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$6.23\u003c/strong\u003e (at everyday cost), still less than a third of the restaurant plate.",
     "ingredients_display":  [
-                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 9.4 (2828 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 9.4 cucumbers (2828 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)",
                                 "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 3.5 cups (858 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (32 g)",
                                 "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 0.75 tbsp (2 g)",
-                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1.7 (82 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1.7 lemons worth (82 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)",
-                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 2.7 (302 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 2.7 onions (302 g)",
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 4.75 lb (2112 g)",
                                 "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 3.5 tbsp (22 g)",
                                 "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
@@ -41,12 +41,12 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Cucumber, 9.4: ~$7.16. \u003cstrong\u003eBuy 10 eachs: $7.60.\u003c/strong\u003e",
+                       "Cucumber, 9.4 cucumbers: ~$7.16. \u003cstrong\u003eBuy 10 eachs: $7.60.\u003c/strong\u003e",
                        "Garlic, 6 tbsp: ~$0.75. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Greek Yogurt, 3.5 cups: ~$2.50. \u003cstrong\u003eBuy 1 32oz tub: $2.64.\u003c/strong\u003e",
                        "Olive Oil, 2.25 tbsp: ~$0.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Lemon Juice, 1.7: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Red Onion, 2.7: ~$0.76. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Lemon Juice, 1.7 lemons worth: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Red Onion, 2.7 onions: ~$0.76. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "93/7 Ground Beef, 4.75 lb: ~$29.24. \u003cstrong\u003eBuy 5 lbs: $31.40.\u003c/strong\u003e",
                        "Fresh Mint, 3 tbsp: ~$0.63. \u003cstrong\u003eBuy 1 0.5oz pack: $1.76.\u003c/strong\u003e",
                        "Fresh Cilantro, 5 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
@@ -88,7 +88,7 @@
                                {
                                    "item":  "Cucumber",
                                    "grams":  2828,
-                                   "buy":  "9.4",
+                                   "buy":  "9.4 cucumbers",
                                    "bid":  "cucumbers",
                                    "gpu":  300
                                },
@@ -130,7 +130,7 @@
                                {
                                    "item":  "Lemon Juice",
                                    "grams":  82,
-                                   "buy":  "1.7",
+                                   "buy":  "1.7 lemons worth",
                                    "bid":  "lemon-juice",
                                    "gpu":  "29.570"
                                },
@@ -144,7 +144,7 @@
                                {
                                    "item":  "Red Onion",
                                    "grams":  302,
-                                   "buy":  "2.7",
+                                   "buy":  "2.7 onions",
                                    "bid":  "red-onion",
                                    "gpu":  453.592
                                },

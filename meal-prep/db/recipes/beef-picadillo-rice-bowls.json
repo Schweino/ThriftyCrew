@@ -20,7 +20,7 @@
     "intro_html":  "Cuban picadillo is a beautiful mix of savory and sweet, with olives and golden raisins playing off cumin-spiced beef. It browns and simmers in one skillet, then goes over rice for an easy meal-prep bowl. This one runs around $4.84 a serving (at everyday cost) with 42 grams of protein and makes 14 bowls.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2330 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (946 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5 cups dry (946 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (340 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (320 g)",
                                 "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (800 g)",
@@ -30,7 +30,7 @@
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (12 g)",
                                 "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 2 tbsp (6 g)",
                                 "\u003cstrong\u003eCapers (generic (USDA)):\u003c/strong\u003e 2 tablespoons, drained (36 g)",
-                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 1 (1 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 1 leaf (1 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/8 to 1/2 tsp fine salt (6 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 teaspoon (2 g)"
                             ],
@@ -71,7 +71,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  946,
-                                   "buy":  "1 lb",
+                                   "buy":  "5 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -141,7 +141,7 @@
                                {
                                    "item":  "Bay Leaves",
                                    "grams":  1,
-                                   "buy":  "1",
+                                   "buy":  "1 leaf",
                                    "bid":  "bay-leaves",
                                    "gpu":  "28.350"
                                },
@@ -167,7 +167,7 @@
                  "costPerServing":  4.84,
                  "recipeIngredient":  [
                                           "6 lb 93/7 Ground Beef",
-                                          "1 lb Rice",
+                                          "5 cups dry Rice",
                                           "3 peppers Green Bell Peppers",
                                           "3 onions Yellow Onion",
                                           "2 cans Tomato Sauce",

@@ -20,16 +20,16 @@
     "intro_html":  "This one takes the sandwich you love and drops the roll, so you keep all the flavor and skip the carb crash. It packs 41 grams of protein per bowl and lands around $4.54 a serving (at everyday cost), which is a steal for something that tastes like a diner splurge. One skillet, 14 servings, no hoagie required.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (1960 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1188 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.5 cups dry (1188 g)",
                                 "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 5 1/4 cups (368 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (307 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4 onions (350 g)",
                                 "\u003cstrong\u003eProvolone Cheese (generic):\u003c/strong\u003e 1 pack (162 g)",
                                 "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 cups (250 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 cloves (15 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 1/2 tbsp (45 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (25 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (6 g)"
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.25 tbsp (45 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.5 tbsp (25 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2.5 tsp (6 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$4.54 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -67,7 +67,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  1188,
-                                   "buy":  "1 lb",
+                                   "buy":  "6.5 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -116,21 +116,21 @@
                                {
                                    "item":  "Olive Oil",
                                    "grams":  45,
-                                   "buy":  "1 1/2 tbsp",
+                                   "buy":  "3.25 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  25,
-                                   "buy":  "2 tsp",
+                                   "buy":  "1.5 tbsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  6,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "2.5 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                }
@@ -142,7 +142,7 @@
                  "costPerServing":  4.54,
                  "recipeIngredient":  [
                                           "5 lb 93/7 Ground Beef",
-                                          "1 lb Rice",
+                                          "6.5 cups dry Rice",
                                           "2 packages White Mushrooms",
                                           "3 peppers Green Bell Peppers",
                                           "4 onions Yellow Onion",

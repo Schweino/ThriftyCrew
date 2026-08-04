@@ -20,15 +20,15 @@
     "intro_html":  "Salsa verde does the heavy lifting here, so you get bright, tangy pork with almost no effort. It stacks up 55 grams of protein per bowl over rice and corn, all for right around $3.73 a serving (at everyday cost). Fourteen servings from one batch is a whole lot of lunch for the money.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3300 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (940 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5 cups dry (940 g)",
                                 "\u003cstrong\u003eSalsa Verde (Herdez):\u003c/strong\u003e 1 jar (450 g)",
                                 "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 8 tbsp (120 g)",
                                 "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 4 1/2 cups (750 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 cups (480 g)",
                                 "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 3 tbsp (45 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (12 g)",
-                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1/3 cup (150 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/4 tsp kosher salt (4 g)"
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 0.75 cups (150 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tsp kosher salt (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$3.73 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -67,7 +67,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  940,
-                                   "buy":  "1 lb",
+                                   "buy":  "5 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -116,14 +116,14 @@
                                {
                                    "item":  "Brown Sugar",
                                    "grams":  150,
-                                   "buy":  "1/3 cup",
+                                   "buy":  "0.75 cups",
                                    "bid":  "brown-sugar",
                                    "gpu":  "453.592"
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  4,
-                                   "buy":  "1/4 tsp kosher salt",
+                                   "buy":  "0.75 tsp kosher salt",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                }
@@ -135,7 +135,7 @@
                  "costPerServing":  3.73,
                  "recipeIngredient":  [
                                           "8 lb Pork Tenderloin",
-                                          "1 lb Rice",
+                                          "5 cups dry Rice",
                                           "1 jar Salsa Verde",
                                           "2 cans Diced Green Chiles",
                                           "3 cans Sweet Whole Kernel Corn",

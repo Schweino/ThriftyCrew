@@ -18,11 +18,11 @@
                  "cost_ps":  "4.25"
              },
     "intro_html":  "This is the walking taco in casserole form: seasoned beef and kidney bean chili baked under melted cheese, with salty corn chips for crunch. Each serving packs \u003cstrong\u003e37 grams of protein\u003c/strong\u003e at about \u003cstrong\u003e$4.25 a bowl\u003c/strong\u003e (at everyday cost). It tastes like the fair, minus the fair prices.",
-    "ingredients_display": ["\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (32 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1058 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)","\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 7 tbsp (56 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (14 g)","\u003cstrong\u003eKidney Beans (generic):\u003c/strong\u003e 7.8 cans (1985 g)","\u003cstrong\u003eDiced Tomatoes \u0026 Green Chilies (Great Value (Ro-Tel style)):\u003c/strong\u003e 2.3 cans (662 g)","\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (858 g)","\u003cstrong\u003eCorn Chips (Fritos):\u003c/strong\u003e 21.75 cups (612 g)","\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 9.25 oz (264 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display": ["\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (32 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 onions (257 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1058 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)","\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 7 tbsp (56 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (14 g)","\u003cstrong\u003eKidney Beans (generic):\u003c/strong\u003e 7.8 cans (1985 g)","\u003cstrong\u003eDiced Tomatoes \u0026 Green Chilies (Great Value (Ro-Tel style)):\u003c/strong\u003e 2.3 cans (662 g)","\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (858 g)","\u003cstrong\u003eCorn Chips (Fritos):\u003c/strong\u003e 21.75 cups (612 g)","\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 9.25 oz (264 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Olive Oil, 2.25 tbsp: ~$0.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 2.3 onions: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "93/7 Ground Beef, 2.25 lb: ~$14.65. \u003cstrong\u003eBuy 3 lbs: $18.84.\u003c/strong\u003e",
                        "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Kidney Beans, 7.8 cans: ~$3.84. \u003cstrong\u003eBuy 5 cans: $4.11.\u003c/strong\u003e",
@@ -67,7 +67,7 @@
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  257,
-                                   "buy":  "2.3",
+                                   "buy":  "2.3 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

@@ -1,0 +1,154 @@
+{
+  "_what": "Source-verification evidence for the measure-vs-grams screen (out/measure-vs-grams-screen.csv).",
+  "_method": "For each recipe, fetch source_url and read the SOURCE's stated amount for every flagged ingredient, plus the source's serving count and main-protein amount. If the flagged label equals the source amount verbatim while the spec's grams are the 14-serving scaled figure, the LABEL is the wrong side and the grams are sound. Any row that does not fit that shape is hand-adjudicated separately rather than swept in.",
+  "_verdicts": {
+    "label-is-source-unscaled": "Label matched the source's amount verbatim; grams are this recipe's own scaled figure. Label is wrong, grams stand.",
+    "filler-label": "Label is a default that was never derived from anything - the source states a different unit or has no such ingredient at all.",
+    "grams-suspect": "Label is LARGER than the grams, which is not the copy-forward shape. Needs its own check; the grams may be the error.",
+    "unverifiable": "No source_url on the spec, or the source page does not state the ingredient. Reported as unverifiable, NOT treated as verified."
+  },
+  "recipes": [
+    {
+      "slug": "ground-beef-gyro-bowls",
+      "source_url": "https://www.modernfarmhouseeats.com/easy-ground-beef-gyros-with-tzatziki/",
+      "source_servings": "4 gyros",
+      "source_protein": "1 pound ground beef",
+      "spec_protein_g": 2240,
+      "scale_x": 4.94,
+      "rows": [
+        {"item": "Black Pepper",  "label": "1/2 tsp",                       "grams": 4,   "source_says": "1/2 teaspoon black pepper", "verdict": "label-is-source-unscaled"},
+        {"item": "Dried Oregano", "label": "1 tsp",                         "grams": 7,   "source_says": "1 teaspoon each dried oregano, ground thyme, ground cumin, garlic powder, onion powder, and salt", "verdict": "label-is-source-unscaled"},
+        {"item": "Dried Thyme",   "label": "1 tsp",                         "grams": 4,   "source_says": "1 teaspoon each (see above)", "verdict": "label-is-source-unscaled"},
+        {"item": "Ground Nutmeg", "label": "1/4 tsp",                       "grams": 2,   "source_says": "1/4 teaspoon ground nutmeg", "verdict": "label-is-source-unscaled"},
+        {"item": "Cucumber",      "label": "3/4 cup grated (tzatziki)",     "grams": 300, "source_says": "3/4 cup grated cucumber", "verdict": "label-is-source-unscaled"},
+        {"item": "Feta Cheese",   "label": "1/4 cup crumbled (tzatziki)",   "grams": 113, "source_says": "1/4 cup feta cheese, crumbled", "verdict": "label-is-source-unscaled"},
+        {"item": "Lemon Juice",   "label": "1/2 tbsp (tzatziki)",           "grams": 21,  "source_says": "1/2 tablespoon lemon juice", "verdict": "label-is-source-unscaled"},
+        {"item": "Dried Dill",    "label": "2 tbsp (tzatziki)",             "grams": 18,  "source_says": "2 tablespoons FRESH dill, finely chopped", "verdict": "label-is-source-unscaled", "note": "SEPARATE FIDELITY ISSUE: the source calls for FRESH dill; this spec buys DRIED. 2 tbsp fresh is not 2 tbsp dried. Raise on the fidelity worklist, do not fold into a label fix."},
+        {"item": "Salt",          "label": "1 tsp meat + 1/2 tsp tzatziki", "grams": 20,  "source_says": "1 teaspoon each (meat) - tzatziki salt not separately quantified", "verdict": "label-is-source-unscaled"},
+        {"item": "Rice",          "label": "1 lb",                          "grams": 1201,"source_says": "source contains NO rice - this recipe's own addition", "verdict": "filler-label"}
+      ]
+    },
+    {
+      "slug": "mongolian-ground-beef-bowls",
+      "source_url": "https://www.eatyourselfskinny.com/healthy-mongolian-ground-beef-bowls/",
+      "source_servings": "4",
+      "source_protein": "1 lb lean ground beef (90%)",
+      "spec_protein_g": 2280,
+      "scale_x": 5.03,
+      "rows": [
+        {"item": "Beef Broth",        "label": "1/4 cup (or water)",       "grams": 210, "source_says": "1/4 cup beef broth (or water)", "verdict": "label-is-source-unscaled", "note": "the parenthetical is copied verbatim too"},
+        {"item": "Black Pepper",      "label": "1/4 tsp",                  "grams": 2,   "source_says": "1/4 tsp black pepper", "verdict": "label-is-source-unscaled"},
+        {"item": "Cornstarch",        "label": "1 Tbsp",                   "grams": 28,  "source_says": "1 Tbsp cornstarch", "verdict": "label-is-source-unscaled"},
+        {"item": "Green Onions",      "label": "1/4 cup, thinly sliced",   "grams": 40,  "source_says": "1/4 cup green onions, thinly sliced", "verdict": "label-is-source-unscaled"},
+        {"item": "Hoisin Sauce",      "label": "1 Tbsp",                   "grams": 52,  "source_says": "1 Tbsp hoisin sauce", "verdict": "label-is-source-unscaled"},
+        {"item": "Olive Oil",         "label": "1 Tbsp",                   "grams": 50,  "source_says": "1 Tbsp olive oil", "verdict": "label-is-source-unscaled"},
+        {"item": "Red Pepper Flakes", "label": "1/4 tsp",                  "grams": 2,   "source_says": "1/4 tsp red pepper flakes", "verdict": "label-is-source-unscaled"},
+        {"item": "Rice Vinegar",      "label": "1 tsp",                    "grams": 17,  "source_says": "1 tsp rice vinegar", "verdict": "label-is-source-unscaled"},
+        {"item": "Sesame Oil",        "label": "1 tsp",                    "grams": 16,  "source_says": "1 tsp sesame oil", "verdict": "label-is-source-unscaled"},
+        {"item": "Rice",              "label": "1 lb",                     "grams": 1031,"source_says": "source lists no rice amount", "verdict": "filler-label"}
+      ]
+    },
+    {
+      "slug": "loaded-beef-taco-skillet-bowls",
+      "source_url": "https://wholesomemadeeasy.com/loaded-taco-skillet/",
+      "source_servings": "6",
+      "source_protein": "1 pound 93% lean ground beef or turkey",
+      "spec_protein_g": 2230,
+      "scale_x": 4.92,
+      "rows": [
+        {"item": "Dried Oregano",     "label": "1 tsp",            "grams": 5,   "source_says": "1 teaspoon oregano", "verdict": "label-is-source-unscaled"},
+        {"item": "Garlic Powder",     "label": "1 tsp",            "grams": 9,   "source_says": "1 teaspoon garlic powder", "verdict": "label-is-source-unscaled"},
+        {"item": "Paprika",           "label": "1/2 tsp",          "grams": 5,   "source_says": "1/2 teaspoon paprika", "verdict": "label-is-source-unscaled"},
+        {"item": "Red Bell Pepper",   "label": "1/2 cup diced",    "grams": 260, "source_says": "1/2 cup diced red bell pepper", "verdict": "label-is-source-unscaled"},
+        {"item": "Red Pepper Flakes", "label": "1/4 tsp",          "grams": 2,   "source_says": "1/4 teaspoon crushed red pepper flakes", "verdict": "label-is-source-unscaled"},
+        {"item": "Salt",              "label": "1/4 tsp",          "grams": 5,   "source_says": "1/4 teaspoon kosher or sea salt, or to taste", "verdict": "label-is-source-unscaled"},
+        {"item": "Vegetable Oil",     "label": "2 tsp",            "grams": 30,  "source_says": "2 teaspoons oil, like avocado oil or vegetable oil", "verdict": "label-is-source-unscaled"},
+        {"item": "Yellow Onion",      "label": "1/2 cup diced",    "grams": 280, "source_says": "1/2 cup diced yellow onion", "verdict": "label-is-source-unscaled"}
+      ]
+    },
+    {
+      "slug": "swedish-meatball-potato-bowls",
+      "source_url": "https://www.melskitchencafe.com/skillet-swedish-meatballs/",
+      "source_servings": "6",
+      "spec_protein_g": 2730,
+      "rows": [
+        {"item": "All-Purpose Flour", "label": "1/4 cup",                            "grams": 70, "source_says": "1/4 cup", "verdict": "label-is-source-unscaled"},
+        {"item": "Black Pepper",      "label": "1/4 tsp",                            "grams": 3,  "source_says": "1/4 teaspoon", "verdict": "label-is-source-unscaled"},
+        {"item": "Brown Sugar",       "label": "1 tsp (meatballs) + 1 tsp (sauce)",  "grams": 20, "source_says": "1 teaspoon (meatballs) + 1 teaspoon (sauce)", "verdict": "label-is-source-unscaled", "note": "the split note is the source's own structure, copied verbatim"},
+        {"item": "Butter",            "label": "1 tbsp",                             "grams": 30, "source_says": "1 tablespoon", "verdict": "label-is-source-unscaled"},
+        {"item": "Ground Allspice",   "label": "1/4 tsp",                            "grams": 2,  "source_says": "1/4 teaspoon", "verdict": "label-is-source-unscaled"},
+        {"item": "Ground Nutmeg",     "label": "1/4 tsp",                            "grams": 2,  "source_says": "1/4 teaspoon", "verdict": "label-is-source-unscaled"},
+        {"item": "Olive Oil",         "label": "1 tbsp (sauce)",                     "grams": 30, "source_says": "1 tablespoon (sauce), plus 1-2 tablespoons for cooking meatballs", "verdict": "label-is-source-unscaled"},
+        {"item": "Salt",              "label": "1 tsp",                              "grams": 12, "source_says": "1 teaspoon", "verdict": "label-is-source-unscaled"}
+      ]
+    },
+    {
+      "slug": "turkey-chili-mac",
+      "source_url": "https://skinnyfitalicious.com/healthy-chili-mac/",
+      "source_servings": "6",
+      "source_protein": "1 lb ground turkey",
+      "spec_protein_g": 3000,
+      "scale_x": 6.61,
+      "rows": [
+        {"item": "Chicken Broth", "label": "2 1/2 cups low sodium",        "grams": 1800, "source_says": "2 1/2 cups", "verdict": "label-is-source-unscaled"},
+        {"item": "Chili Powder",  "label": "2 tsp",                        "grams": 15,   "source_says": "2 teaspoons", "verdict": "label-is-source-unscaled"},
+        {"item": "Garlic",        "label": "1 tbsp minced (~3 cloves)",    "grams": 45,   "source_says": "1 tablespoon", "verdict": "label-is-source-unscaled"},
+        {"item": "Garlic Powder", "label": "1 tsp",                        "grams": 8,    "source_says": "1 teaspoon", "verdict": "label-is-source-unscaled"},
+        {"item": "Ground Cumin",  "label": "2 tsp",                        "grams": 15,   "source_says": "2 teaspoons", "verdict": "label-is-source-unscaled"},
+        {"item": "Olive Oil",     "label": "1 tbsp",                       "grams": 42,   "source_says": "1 tablespoon", "verdict": "label-is-source-unscaled"},
+        {"item": "Paprika",       "label": "2 tsp",                        "grams": 15,   "source_says": "2 teaspoons", "verdict": "label-is-source-unscaled"}
+      ]
+    },
+    {
+      "slug": "unstuffed-pepper-skillet-bowls",
+      "source_url": "https://www.twopeasandtheirpod.com/stuffed-pepper-skillet/",
+      "source_servings": "6",
+      "source_protein": "1 pound ground beef",
+      "spec_protein_g": 2240,
+      "scale_x": 4.94,
+      "rows": [
+        {"item": "Black Pepper",         "label": "1/2 tsp", "grams": 4,    "source_says": "1/2 teaspoon black pepper", "verdict": "label-is-source-unscaled"},
+        {"item": "Olive Oil",            "label": "1 tbsp",  "grams": 42,   "source_says": "1 tablespoon olive oil", "verdict": "label-is-source-unscaled"},
+        {"item": "Paprika",              "label": "1 tsp",   "grams": 8,    "source_says": "1 teaspoon paprika", "verdict": "label-is-source-unscaled"},
+        {"item": "Salt",                 "label": "1/2 tsp", "grams": 12,   "source_says": "1/2 teaspoon kosher salt", "verdict": "label-is-source-unscaled"},
+        {"item": "Tomato Paste",         "label": "2 tbsp",  "grams": 90,   "source_says": "2 tablespoons tomato paste", "verdict": "label-is-source-unscaled"},
+        {"item": "Worcestershire Sauce", "label": "2 tsp",   "grams": 30,   "source_says": "2 teaspoons Worcestershire sauce", "verdict": "label-is-source-unscaled"},
+        {"item": "Rice",                 "label": "1 lb",    "grams": 1081, "source_says": "1 cup long grain white rice, rinsed", "verdict": "filler-label", "note": "KEY DISCRIMINATOR: the source states rice in CUPS. '1 lb' was not copied from anywhere - it is the filler default, a different defect from the copy-forward rows above."}
+      ]
+    },
+    {
+      "slug": "slow-cooker-butter-chicken-rice-bowls",
+      "source_url": "https://www.slenderkitchen.com/recipe/slow-cooker-butter-chicken",
+      "source_servings": "not stated (serving size 3/4 cup / 312 g)",
+      "source_protein": "2 lbs boneless skinless chicken breast",
+      "spec_protein_g": 3000,
+      "scale_x": 3.31,
+      "rows": [
+        {"item": "Cayenne Pepper", "label": "1/2 tsp",       "grams": 4,   "source_says": "1/2 tsp cayenne pepper (or to taste)", "verdict": "label-is-source-unscaled"},
+        {"item": "Chili Powder",   "label": "1 tsp",         "grams": 6,   "source_says": "1 tsp chili powder", "verdict": "label-is-source-unscaled"},
+        {"item": "Garam Masala",   "label": "2 tsp",         "grams": 12,  "source_says": "2 tsp garam masala", "verdict": "label-is-source-unscaled"},
+        {"item": "Ginger",         "label": "1 tbsp minced", "grams": 35,  "source_says": "1 tbsp fresh ginger, minced (or to taste)", "verdict": "label-is-source-unscaled"},
+        {"item": "Ground Cumin",   "label": "1 tsp",         "grams": 6,   "source_says": "1 tsp ground cumin", "verdict": "label-is-source-unscaled"},
+        {"item": "Lemon Juice",    "label": "2 tsp",         "grams": 23,  "source_says": "2 tsp lemon juice", "verdict": "label-is-source-unscaled"},
+        {"item": "Rice",           "label": "1 lb",          "grams": 980, "source_says": "no rice amount given (serving suggestion only)", "verdict": "filler-label"}
+      ]
+    },
+    {
+      "slug": "slow-cooker-chicken-tikka-masala-rice-bowls",
+      "source_url": "https://ministryofcurry.com/slow-cooker-chicken-tikka-masala/",
+      "source_servings": "6",
+      "source_protein": "2 pounds chicken breasts skinless boneless",
+      "spec_protein_g": 3100,
+      "scale_x": 3.42,
+      "rows": [
+        {"item": "Chili Powder",    "label": "1 tbsp",        "grams": 16, "source_says": "1 tablespoon Kashmiri red chili powder", "verdict": "label-is-source-unscaled"},
+        {"item": "Garlic",          "label": "1 tbsp minced", "grams": 35, "source_says": "1 tablespoon garlic, minced", "verdict": "label-is-source-unscaled"},
+        {"item": "Ginger",          "label": "1 tbsp grated", "grams": 35, "source_says": "1 tablespoon ginger, grated", "verdict": "label-is-source-unscaled"},
+        {"item": "Ground Turmeric", "label": "1/2 tsp",       "grams": 4,  "source_says": "1/2 teaspoon ground turmeric", "verdict": "label-is-source-unscaled"},
+        {"item": "Lemon Juice",     "label": "1 tbsp",        "grams": 35, "source_says": "1 tablespoon lemon juice", "verdict": "label-is-source-unscaled"},
+        {"item": "Salt",            "label": "2.5 tsp",       "grams": 34, "source_says": "2 1/2 teaspoons kosher salt (plus 1/2 tsp for the onions)", "verdict": "label-is-source-unscaled"},
+        {"item": "Vegetable Oil",   "label": "2 tbsp",        "grams": 65, "source_says": "2 tablespoons oil", "verdict": "label-is-source-unscaled"}
+      ]
+    }
+  ]
+}

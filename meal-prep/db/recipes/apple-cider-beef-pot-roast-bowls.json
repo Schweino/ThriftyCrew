@@ -39,8 +39,8 @@
                                 "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 2.25 tbsp (35 g)",
                                 "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1.75 tbsp (7 g)",
                                 "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1.75 tbsp (5 g)",
-                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 17.3 (1058 g)",
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 5 (1058 g)"
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 17.3 carrots (1058 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 5 potatoes (1058 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -52,8 +52,8 @@
                        "Garlic, 5.5 tbsp: ~$0.68. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Tomato Paste, 2.25 tbsp: ~$0.19. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
                        "Dijon Mustard, 2.25 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Carrots, 17.3: ~$2.23. \u003cstrong\u003eBuy 3 lbs: $2.86.\u003c/strong\u003e",
-                       "Potato, 5: ~$1.32. \u003cstrong\u003eBuy 3 lbs: $1.70.\u003c/strong\u003e",
+                       "Carrots, 17.3 carrots: ~$2.23. \u003cstrong\u003eBuy 3 lbs: $2.86.\u003c/strong\u003e",
+                       "Potato, 5 potatoes: ~$1.32. \u003cstrong\u003eBuy 3 lbs: $1.70.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, italian seasoning, dried thyme): ~$0.67. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $62.93 across 14 servings, so roughly $4.50 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $66.63 across 14 servings, roughly $4.76 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -188,7 +188,7 @@
                                    "item":  "Carrots",
                                    "canon":  "Carrots",
                                    "grams":  1058,
-                                   "buy":  "17.3",
+                                   "buy":  "17.3 carrots",
                                    "bid":"carrots",
                                    "gpu":453.592
                                },
@@ -196,7 +196,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  1058,
-                                   "buy":  "5",
+                                   "buy":  "5 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                }

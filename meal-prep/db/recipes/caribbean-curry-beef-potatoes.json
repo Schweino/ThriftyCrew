@@ -40,10 +40,10 @@
                                 "\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 1 tbsp (19 g)",
                                 "\u003cstrong\u003eCurry Powder (generic):\u003c/strong\u003e 3.75 tbsp (23 g)",
                                 "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 0.25 tbsp (2 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.7 (404 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.7 onions (404 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.5 tbsp (55 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (154 g)",
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 20 (4217 g)"
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 20 potatoes (4217 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -53,10 +53,10 @@
                        "Jalapeno, 3 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
                        "Diced Tomatoes, 1 can: ~$1.06. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
                        "Ketchup, 1 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 3.7: ~$1.02. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3.7 onions: ~$1.02. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 6.5 tbsp: ~$0.79. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Vegetable Oil, 0.75 cups: ~$0.37. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Potato, 20: ~$5.28. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
+                       "Potato, 20 potatoes: ~$5.28. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, curry powder, ground cumin): ~$0.98. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $40.48 across 14 servings, so roughly $2.89 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $47.76 across 14 servings, roughly $3.41 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -175,7 +175,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  404,
-                                   "buy":  "3.7",
+                                   "buy":  "3.7 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -199,7 +199,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  4217,
-                                   "buy":  "20",
+                                   "buy":  "20 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                }

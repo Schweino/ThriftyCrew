@@ -25,8 +25,8 @@
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3 lb (1400 g)",
                                 "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 6.25 cups (315 g)",
                                 "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 7 large eggs (350 g)",
-                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1 (980 g)",
-                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 7 (427 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1 head (980 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 7 carrots (427 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cups (224 g)",
                                 "\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 6.75 oz (189 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.25 lb (168 g)",
@@ -43,8 +43,8 @@
                        "93/7 Ground Beef, 3 lb: ~$19.38. \u003cstrong\u003eBuy 4 lbs: $25.12.\u003c/strong\u003e",
                        "Green Onions, 6.25 cups: ~$3.74. \u003cstrong\u003eBuy 4 bunchs: $4.28.\u003c/strong\u003e",
                        "Eggs, 7 large eggs: ~$0.86. \u003cstrong\u003eBuy 1 dozen: $1.47.\u003c/strong\u003e",
-                       "Green Cabbage, 1: ~$1.84. \u003cstrong\u003eBuy 2 heads: $3.37.\u003c/strong\u003e",
-                       "Carrots, 7: ~$1.06. \u003cstrong\u003eBuy 1 lb: $1.13.\u003c/strong\u003e",
+                       "Green Cabbage, 1 head: ~$1.84. \u003cstrong\u003eBuy 2 heads: $3.37.\u003c/strong\u003e",
+                       "Carrots, 7 carrots: ~$1.06. \u003cstrong\u003eBuy 1 lb: $1.13.\u003c/strong\u003e",
                        "Soy Sauce, 1 cups: ~$0.85. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Oyster Sauce, 6.75 oz: ~$1.65. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 0.25 lb: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -127,14 +127,14 @@
                                {
                                    "item":  "Green Cabbage",
                                    "grams":  980,
-                                   "buy":  "1",
+                                   "buy":  "1 head",
                                    "bid":  "cabbage",
                                    "gpu":  453.592
                                },
                                {
                                    "item":  "Carrots",
                                    "grams":  427,
-                                   "buy":  "7",
+                                   "buy":  "7 carrots",
                                    "bid":  "carrots",
                                    "gpu":  453.592
                                },

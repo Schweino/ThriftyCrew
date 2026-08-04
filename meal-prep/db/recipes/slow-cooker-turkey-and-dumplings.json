@@ -30,9 +30,9 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 5.5 lb (2540 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 4.3 cartons (4032 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4 (420 g)",
-                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 8.4 (512 g)",
-                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 8.4 (462 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4 onions (420 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 8.4 carrots (512 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 8.4 stalks (462 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.5 tbsp (56 g)",
                                 "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 2.75 tbsp (8 g)",
                                 "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 2.75 tbsp (12 g)",
@@ -48,9 +48,9 @@
     "cost_lines":  [
                        "Turkey Breast, 5.5 lb: ~$26.95. \u003cstrong\u003eBuy 2 3lb frozen roasts: $28.88.\u003c/strong\u003e",
                        "Chicken Broth, 4.3 cartons: ~$5.41. \u003cstrong\u003ePantry staple; this batch alone uses about 5 32oz cartons.\u003c/strong\u003e",
-                       "Yellow Onion, 4: ~$1.06. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Carrots, 8.4: ~$1.08. \u003cstrong\u003eBuy 2 lbs: $1.91.\u003c/strong\u003e",
-                       "Celery, 8.4: ~$2.43. \u003cstrong\u003eBuy 2 bunches: $4.74.\u003c/strong\u003e",
+                       "Yellow Onion, 4 onions: ~$1.06. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 8.4 carrots: ~$1.08. \u003cstrong\u003eBuy 2 lbs: $1.91.\u003c/strong\u003e",
+                       "Celery, 8.4 stalks: ~$2.43. \u003cstrong\u003eBuy 2 bunches: $4.74.\u003c/strong\u003e",
                        "Garlic, 6.5 tbsp: ~$0.81. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "All-Purpose Flour, 5.5 cups: ~$0.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Milk, 2.75 cups: ~$0.55. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
@@ -109,7 +109,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  420,
-                                   "buy":  "4",
+                                   "buy":  "4 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -117,7 +117,7 @@
                                    "item":  "Carrots",
                                    "canon":  "Carrots",
                                    "grams":  512,
-                                   "buy":  "8.4",
+                                   "buy":  "8.4 carrots",
                                    "bid":"carrots",
                                    "gpu":453.592
                                },
@@ -125,7 +125,7 @@
                                    "item":  "Celery",
                                    "canon":  "Celery",
                                    "grams":  462,
-                                   "buy":  "8.4",
+                                   "buy":  "8.4 stalks",
                                    "bid":  "celery",
                                    "gpu":  "450.000"
                                },

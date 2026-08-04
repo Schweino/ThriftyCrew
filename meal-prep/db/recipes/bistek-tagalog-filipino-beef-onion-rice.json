@@ -31,11 +31,11 @@
     "intro_html":  "Bistek Tagalog answers the question every budget cook eventually asks: how do you make a little steak feed a lot of people? You slice it thin, soak it in lemon juice, soy sauce, and a serious amount of garlic, then bury it under soft fried onions. Each bowl carries \u003cstrong\u003e33 grams of protein\u003c/strong\u003e and 564 calories for about \u003cstrong\u003e$3.85\u003c/strong\u003e (at everyday cost). Five real ingredients, one pan, fourteen dinners.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 3.5 lb (1588 g)",
-                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 3 (141 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 3 lemons worth (141 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (161 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (350 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (350 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 8.25 tbsp (114 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.25 cups dry (1140 g)"
@@ -43,10 +43,10 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Beef Flank/Sirloin Steak, 3.5 lb: ~$30.88. \u003cstrong\u003eBuy 4 lbs: $35.28.\u003c/strong\u003e",
-                       "Lemon Juice, 3: ~$0.53. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lemon Juice, 3 lemons worth: ~$0.53. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Soy Sauce, 0.75 cups: ~$0.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
-                       "Yellow Onion, 3: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Vegetable Oil, 8.25 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Rice, 6.25 cups dry: ~$1.41. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
                        "Pantry seasonings (black pepper, salt): ~$0.19. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
@@ -95,7 +95,7 @@
                                    "item":  "Lemon Juice",
                                    "canon":  "Lemon Juice",
                                    "grams":  141,
-                                   "buy":  "3",
+                                   "buy":  "3 lemons worth",
                                    "bid":  "lemon-juice",
                                    "gpu":  "29.570"
                                },
@@ -127,7 +127,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  350,
-                                   "buy":  "3",
+                                   "buy":  "3 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

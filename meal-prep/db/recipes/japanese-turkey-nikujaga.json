@@ -34,9 +34,9 @@
     "intro_html":  "Nikujaga is Japanese comfort food at its plainest and best: meat and potatoes simmered in soy, mirin, and a little sugar until the potatoes go soft enough to break with chopsticks. Every Japanese household makes it a slightly different way and every one of them is convinced theirs is correct. Ours leans turkey-forward so it works as a full container, at \u003cstrong\u003e561 calories and 40 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.09\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 4 lb (1811 g)",
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 24 (5060 g)",
-                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2 (123 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.6 (282 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 24 potatoes (5060 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2 carrots (123 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.6 onions (282 g)",
                                 "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 7.75 oz (221 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.3 cartons (1199 g)",
                                 "\u003cstrong\u003eMirin (Mizkan):\u003c/strong\u003e 1 cups (217 g)",
@@ -49,9 +49,9 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Turkey Breast, 4 lb: ~$19.22. \u003cstrong\u003eBuy 2 3lb frozen roasts: $28.88.\u003c/strong\u003e",
-                       "Potato, 24: ~$6.34. \u003cstrong\u003eBuy 12 lbs: $6.82.\u003c/strong\u003e",
-                       "Carrots, 2: ~$0.26. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
-                       "Yellow Onion, 2.6: ~$0.71. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Potato, 24 potatoes: ~$6.34. \u003cstrong\u003eBuy 12 lbs: $6.82.\u003c/strong\u003e",
+                       "Carrots, 2 carrots: ~$0.26. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Yellow Onion, 2.6 onions: ~$0.71. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Green Beans, 7.75 oz: ~$0.48. \u003cstrong\u003eBuy 1 12oz bag: $0.73.\u003c/strong\u003e",
                        "Chicken Broth, 1.3 cartons: ~$1.61. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Mirin, 1 cups: ~$1.91. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -104,7 +104,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  5060,
-                                   "buy":  "24",
+                                   "buy":  "24 potatoes",
                                    "bid":  "russet-potatoes",
                                    "gpu":  453.592
                                },
@@ -112,7 +112,7 @@
                                    "item":  "Carrots",
                                    "canon":  "Carrots",
                                    "grams":  123,
-                                   "buy":  "2",
+                                   "buy":  "2 carrots",
                                    "bid":  "carrots",
                                    "gpu":  453.592
                                },
@@ -120,7 +120,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  282,
-                                   "buy":  "2.6",
+                                   "buy":  "2.6 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

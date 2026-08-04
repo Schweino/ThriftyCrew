@@ -20,7 +20,7 @@
     "intro_html":  "This Mediterranean bowl leans on roasted peppers and briny olives to make chicken taste like a vacation. It brings 61 grams of protein for about $4.03 a serving (at everyday cost), no fancy technique required. One batch makes 14 servings, so a few jars from the pantry aisle stretch a long way.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3450 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (940 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5 cups dry (940 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (200 g)",
                                 "\u003cstrong\u003eRoasted Red Peppers (generic):\u003c/strong\u003e 1 3/4 cups (240 g)",
                                 "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1 cups (140 g)",
@@ -28,8 +28,8 @@
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1/2 cup (120 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (9 g)",
                                 "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 2 tbsp (30 g)",
-                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tsp (7 g)",
-                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1 tsp (7 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 2.25 tbsp (7 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 2.25 tbsp (7 g)",
                                 "\u003cstrong\u003eDried Rosemary:\u003c/strong\u003e 1 tsp (7 g)",
                                 "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 1 leaf (1 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (15 g)",
@@ -71,7 +71,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  940,
-                                   "buy":  "1 lb",
+                                   "buy":  "5 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -127,14 +127,14 @@
                                {
                                    "item":  "Dried Oregano",
                                    "grams":  7,
-                                   "buy":  "1 tsp",
+                                   "buy":  "2.25 tbsp",
                                    "bid":  "dried-oregano",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Dried Thyme",
                                    "grams":  7,
-                                   "buy":  "1 tsp",
+                                   "buy":  "2.25 tbsp",
                                    "bid":  "dried-thyme",
                                    "gpu":  "28.350"
                                },
@@ -174,7 +174,7 @@
                  "costPerServing":  4.03,
                  "recipeIngredient":  [
                                           "8 lb Boneless Skinless Chicken Breast",
-                                          "1 lb Rice",
+                                          "5 cups dry Rice",
                                           "2 onions Yellow Onion",
                                           "1 jar Roasted Red Peppers",
                                           "1 jar Olives",

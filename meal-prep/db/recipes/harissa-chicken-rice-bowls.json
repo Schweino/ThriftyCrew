@@ -31,8 +31,8 @@
                                 "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 cups (225 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4 cups dry (752 g)",
                                 "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 7.25 cups (985 g)",
-                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 3.7 (1102 g)",
-                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 4 (423 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 3.7 cucumbers (1102 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 4 onions (423 g)",
                                 "\u003cstrong\u003eFeta Cheese (Great Value crumbled):\u003c/strong\u003e 7.5 oz (210 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
                             ],
@@ -45,8 +45,8 @@
                        "Greek Yogurt, 1 cups: ~$0.65. \u003cstrong\u003eBuy 1 32oz tub: $2.64.\u003c/strong\u003e",
                        "Rice, 4 cups dry: ~$1.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Frozen Green Peas, 7.25 cups: ~$2.13. \u003cstrong\u003eBuy 3 12oz bags: $2.20.\u003c/strong\u003e",
-                       "Cucumber, 3.7: ~$2.79. \u003cstrong\u003eBuy 4 eachs: $3.04.\u003c/strong\u003e",
-                       "Red Onion, 4: ~$1.06. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Cucumber, 3.7 cucumbers: ~$2.79. \u003cstrong\u003eBuy 4 eachs: $3.04.\u003c/strong\u003e",
+                       "Red Onion, 4 onions: ~$1.06. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Feta Cheese, 7.5 oz: ~$4.86. \u003cstrong\u003eBuy 2 6oz tubs: $7.87.\u003c/strong\u003e",
                        "Pantry seasonings (salt, garlic powder, ground cumin, onion powder, black pepper): ~$0.45. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $29.67 across 14 servings, so roughly $2.12 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
@@ -160,14 +160,14 @@
                                {
                                    "item":  "Cucumber",
                                    "grams":  1102,
-                                   "buy":  "3.7",
+                                   "buy":  "3.7 cucumbers",
                                    "bid":  "cucumbers",
                                    "gpu":  300
                                },
                                {
                                    "item":  "Red Onion",
                                    "grams":  423,
-                                   "buy":  "4",
+                                   "buy":  "4 onions",
                                    "bid":  "red-onion",
                                    "gpu":  453.592
                                },

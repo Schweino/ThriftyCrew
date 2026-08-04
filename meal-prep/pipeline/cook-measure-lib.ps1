@@ -204,3 +204,100 @@ function Get-CookMeasure($densItems, [string]$item, [double]$grams, [string]$old
   if ($tail) { $out = "$out $tail" }
   return $out.Trim()
 }
+
+# ---------------------------------------------------------------------------------------------------
+# RANGE LABELS. A label stating "2-3 cloves" names two quantities where the card can only mean one, and
+# Invoke-CmScaleBuy above moves only the first of them - so doubling the servings renders "4-3 cloves".
+# The full account of the defect, and of why the range is resolved rather than the widget taught to
+# scale both ends, is in the header of pipeline\repair-range-buy.ps1.
+#
+# THESE LIVE HERE, not in that script, because sync-recipesdb-buy.ps1 needs the same predicate to decide
+# whether a recipes-db label is in the class, and a script that runs a catalog pass at the bottom cannot
+# be dot-sourced for its functions. One matcher, both dot-source it - the same arrangement as
+# spec-contradiction-lib.
+# ---------------------------------------------------------------------------------------------------
+
+# A number: mixed fraction, bare fraction, or decimal. The FRACTION alternatives must come first - with
+# the plain-number branch leading, "1/4-1/2" parses its high end as "1" (the regex matches "1", is
+# satisfied, and never sees "/2"), which silently turns a 1/4-1/2 range into a 1/4-1 one.
+$script:CM_NUM = '(?:\d+\s+\d+/\d+|\d+/\d+|\d+(?:\.\d+)?)'
+# Range, unit, note. The dash class carries the en and em dashes because a writer pasting from a source
+# page brings whatever that page used.
+$script:CM_RANGE_RX = '^\s*(' + $script:CM_NUM + ')\s*[-–—]\s*(' + $script:CM_NUM + ')\s*([A-Za-z]+)?\.?\s*(.*)$'
+# Units that never take a plural s. The abbreviations are invariant in recipe writing ("2 tbsp", never
+# "2 tbsps"); spelled-out forms do pluralise and are handled by the general rule.
+$script:CM_INVARIANT = @('tsp', 'tbsp', 'oz', 'fl', 'lb', 'g', 'kg', 'ml', 'l', 'qt', 'pt')
+
+function Test-RangeBuy {
+  <# Is this label in scope? A range at the HEAD of the label, where the quantity belongs. A hyphen
+     elsewhere is not a range: "12-oz bag" and "1 lb (16-oz package)" are ordinary labels, and the
+     anchor plus the requirement of a NUMBER after the dash is what keeps them out. #>
+  param([Parameter(Mandatory)][AllowEmptyString()][string]$Buy)
+  return [regex]::IsMatch($Buy, $script:CM_RANGE_RX)
+}
+
+function Resolve-RangeBuy {
+  <#
+    Turn one range label into the single quantity the grams state, or return $null with the reason.
+    Pure, so every refusal below is a case the self-test can pin.
+
+    The refusals matter more than the rewrites. A range whose unit we cannot weigh ("3-4 dry chiles")
+    is a label we do not understand, and the honest move is to leave it and say so - the same rule
+    Get-CookMeasure follows. Inventing a number for it would be exactly the defect this exists to
+    remove, committed by the tool instead of the writer.
+  #>
+  param(
+    [Parameter(Mandatory)][AllowEmptyString()][string]$Buy,
+    [Parameter(Mandatory)][AllowEmptyString()][string]$Item,
+    [Parameter(Mandatory)][double]$Grams,
+    $Dens = $null
+  )
+  $m = [regex]::Match($Buy, $script:CM_RANGE_RX)
+  if (-not $m.Success) { return [pscustomobject]@{ New = $null; Reason = 'not a range label' } }
+  if ($Grams -le 0) { return [pscustomobject]@{ New = $null; Reason = 'the spec states no grams to resolve against' } }
+  $unit = [string]$m.Groups[3].Value
+  $tail = [string]$m.Groups[4].Value
+  if (-not $unit) { return [pscustomobject]@{ New = $null; Reason = 'the range names no unit (a bare count - repair-unitless-buy owns that shape)' } }
+  if (-not $Dens) { return [pscustomobject]@{ New = $null; Reason = 'no densities loaded' } }
+
+  # Weigh the unit the WRITER named, not one of our choosing. The unit was never the bug, and swapping a
+  # correct "1 tsp" for a technically-equal "1/3 tbsp" would be a readability regression dressed up as a
+  # fix. Spelled-out forms resolve to the abbreviation densities.json actually stores.
+  $stem = ($unit -replace 's$', '').ToLower()
+  $keys = @($unit.ToLower(), $stem)
+  if ($stem -eq 'teaspoon')   { $keys += 'tsp' }
+  if ($stem -eq 'tablespoon') { $keys += 'tbsp' }
+  $dm = Get-CmDensity $Dens $Item
+  $per = $null
+  if ($dm) { foreach ($k in $keys) { if ($k -and $dm.PSObject.Properties.Name -contains $k) { $per = [double]$dm.$k; break } } }
+  if (-not $per -or $per -le 0) {
+    return [pscustomobject]@{ New = $null; Reason = ("no weight for a '{0}' of {1} - refusing to guess" -f $unit, $Item) }
+  }
+
+  $n = $Grams / $per
+  # A COUNTABLE IS A WHOLE THING - the same rule Get-CookMeasure follows, for the same reason: nobody
+  # minces 8 1/3 cloves of garlic. The gram figure printed beside it carries the precision.
+  $countable = ($stem -in @('clove', 'each', 'slice', 'stalk', 'leaf', 'sprig'))
+  if ($countable) { $n = [math]::Max(1, [math]::Round($n)) }
+  if ($n -le 0) { return [pscustomobject]@{ New = $null; Reason = 'the grams resolve to nothing of that unit' } }
+
+  # Plural follows the NEW quantity, not the old label: "2-3 cloves" resolving to one clove must not
+  # print "1 cloves", and "1/2-1 cup" resolving to three must not print "3 cup".
+  #
+  # AND IT FOLLOWS THE NUMBER THE READER SEES, not the raw division. Format-CmQty rounds to kitchen
+  # fractions, so 2 g of cayenne over 1.8 g per tsp is 1.11 - greater than one - but prints as "1".
+  # Pluralising on the raw value gave "1 teaspoons"; the rendered string is the only quantity on the
+  # card, so it is the one the noun has to agree with.
+  $shown = Format-CmQty $n
+  $shownVal = Get-CmQty $shown
+  $outUnit = $unit
+  if ($stem -notin $script:CM_INVARIANT) {
+    if ($shownVal -gt 1) { $outUnit = $stem + 's' } else { $outUnit = $stem }
+    # keep the writer's capitalisation of the first letter
+    if ($unit.Substring(0, 1) -cmatch '[A-Z]') { $outUnit = $outUnit.Substring(0, 1).ToUpper() + $outUnit.Substring(1) }
+  }
+
+  $out = ($shown + ' ' + $outUnit)
+  if ($tail) { $out = Join-CmTail $out $tail }
+  return [pscustomobject]@{ New = $out.Trim(); Reason = '' }
+}

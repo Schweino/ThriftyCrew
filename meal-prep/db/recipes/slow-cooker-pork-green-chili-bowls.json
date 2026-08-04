@@ -26,14 +26,14 @@
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (120 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 cups (840 g)",
                                 "\u003cstrong\u003eGreen Chile Sauce:\u003c/strong\u003e 16 oz jar (680 g)",
-                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 1-2 (45 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 3 jalapenos (45 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (40 g)",
-                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 Tbsp (15 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2.5 tbsp (15 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (8 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)",
-                                "\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)",
-                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (2 g)",
-                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tsp (3 g)",
+                                "\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 1.25 tsp (3 g)",
+                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 1 tsp (2 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 2 tsp (2 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 2 Tbsp (50 g)",
                                 "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1/4 cup (60 g)",
                                 "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 lime (45 g)"
@@ -113,7 +113,7 @@
                                {
                                    "item":  "Jalapeno",
                                    "grams":  45,
-                                   "buy":  "1-2",
+                                   "buy":  "3 jalapenos",
                                    "bid":  "jalapenos",
                                    "gpu":  453.592
                                },
@@ -127,7 +127,7 @@
                                {
                                    "item":  "Ground Cumin",
                                    "grams":  15,
-                                   "buy":  "1 Tbsp",
+                                   "buy":  "2.5 tbsp",
                                    "bid":  "ground-cumin",
                                    "gpu":  "28.350"
                                },
@@ -141,28 +141,28 @@
                                {
                                    "item":  "Black Pepper",
                                    "grams":  3,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.25 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Smoked Paprika",
                                    "grams":  3,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.25 tsp",
                                    "bid":  "smoked-paprika",
                                    "gpu":  28.3495
                                },
                                {
                                    "item":  "Cayenne Pepper",
                                    "grams":  2,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1 tsp",
                                    "bid":  "cayenne-pepper",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Dried Oregano",
                                    "grams":  2,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "2 tsp",
                                    "bid":  "dried-oregano",
                                    "gpu":  "28.350"
                                },

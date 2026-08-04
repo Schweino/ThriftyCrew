@@ -37,24 +37,24 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 5.5 lb (2450 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 2.25 cups dry (404 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5 (539 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5 onions (539 g)",
                                 "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 15 large eggs (735 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.75 cups (137 g)",
-                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2.4 (149 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2.4 carrots (149 g)",
                                 "\u003cstrong\u003eDried Dill (Great Value):\u003c/strong\u003e 9.75 tbsp (29 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.5 tbsp (29 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 3 tbsp (20 g)",
-                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 10 (461 g)"
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 10 lemons worth (461 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 5.5 lb: ~$20.64. \u003cstrong\u003eBuy 6 lbs: $22.93.\u003c/strong\u003e",
                        "Rice, 2.25 cups dry: ~$0.50. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 5: ~$1.36. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Yellow Onion, 5 onions: ~$1.36. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
                        "Eggs, 15 large eggs: ~$1.75. \u003cstrong\u003eBuy 2 dozens: $2.85.\u003c/strong\u003e",
                        "Olive Oil, 0.75 cups: ~$1.93. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Carrots, 2.4: ~$0.31. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
-                       "Lemon Juice, 10: ~$1.74. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Carrots, 2.4 carrots: ~$0.31. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Lemon Juice, 10 lemons worth: ~$1.74. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (dried dill, salt, black pepper): ~$2.47. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $30.70 across 14 servings, so roughly $2.19 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $35.65 across 14 servings, roughly $2.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -109,7 +109,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  539,
-                                   "buy":  "5",
+                                   "buy":  "5 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -133,7 +133,7 @@
                                    "item":  "Carrots",
                                    "canon":  "Carrots",
                                    "grams":  149,
-                                   "buy":  "2.4",
+                                   "buy":  "2.4 carrots",
                                    "bid":"carrots",
                                    "gpu":453.592
                                },
@@ -165,7 +165,7 @@
                                    "item":  "Lemon Juice",
                                    "canon":  "Lemon Juice",
                                    "grams":  461,
-                                   "buy":  "10",
+                                   "buy":  "10 lemons worth",
                                    "bid":  "lemon-juice",
                                    "gpu":  "29.570"
                                }

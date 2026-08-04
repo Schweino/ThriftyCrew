@@ -28,8 +28,8 @@
                                 "\u003cstrong\u003eHummus (Great Value classic):\u003c/strong\u003e 1.75 cups (400 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)",
                                 "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1.75 cups (400 g)",
-                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 1.4 (150 g)",
-                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 1 (364 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 1.4 onions (150 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 1 cucumber (364 g)",
                                 "\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 3.5 cups (522 g)",
                                 "\u003cstrong\u003eFeta Cheese (Great Value crumbled):\u003c/strong\u003e 7 oz (200 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
@@ -43,8 +43,8 @@
                        "Hummus, 1.75 cups: ~$4.05. \u003cstrong\u003eBuy 2 10oz tubs: $5.73.\u003c/strong\u003e",
                        "Rice, 3.75 cups dry: ~$1.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Greek Yogurt, 1.75 cups: ~$1.16. \u003cstrong\u003eBuy 1 32oz tub: $2.64.\u003c/strong\u003e",
-                       "Red Onion, 1.4: ~$0.38. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Cucumber, 1: ~$0.92. \u003cstrong\u003eBuy 2 eachs: $1.52.\u003c/strong\u003e",
+                       "Red Onion, 1.4 onions: ~$0.38. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Cucumber, 1 cucumber: ~$0.92. \u003cstrong\u003eBuy 2 eachs: $1.52.\u003c/strong\u003e",
                        "Cherry Tomatoes, 3.5 cups: ~$1.12. \u003cstrong\u003eBuy 2 10oz clamshells: $1.21.\u003c/strong\u003e",
                        "Feta Cheese, 7 oz: ~$4.63. \u003cstrong\u003eBuy 2 6oz tubs: $7.87.\u003c/strong\u003e",
                        "Pantry seasonings (garlic powder, dried oregano, dried dill, salt, black pepper): ~$0.71. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
@@ -145,14 +145,14 @@
                                {
                                    "item":  "Red Onion",
                                    "grams":  150,
-                                   "buy":  "1.4",
+                                   "buy":  "1.4 onions",
                                    "bid":  "red-onion",
                                    "gpu":  453.592
                                },
                                {
                                    "item":  "Cucumber",
                                    "grams":  364,
-                                   "buy":  "1",
+                                   "buy":  "1 cucumber",
                                    "bid":  "cucumbers",
                                    "gpu":  300
                                },

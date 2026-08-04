@@ -20,7 +20,7 @@
     "intro_html":  "Kung Pao is one of those dishes people assume you have to order out, and that assumption costs them real money every week. This version leans on the slow cooker to do the work, delivering 58 grams of protein per bowl at about $4.58 a serving (at everyday cost). Fourteen servings out of one pot means the math finally works in your favor.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3200 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (980 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (980 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (300 g)",
                                 "\u003cstrong\u003eZucchini:\u003c/strong\u003e 2 zucchinis (300 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1/2 cup (120 g)",
@@ -29,10 +29,10 @@
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 1/4 tbsp (30 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (9 g)",
                                 "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 2 tbsp (16 g)",
-                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 tsp minced (14 g)",
-                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/4-1/2 tsp (3 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/4 tsp (4 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)"
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 2.25 tbsp minced (14 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1 2/3 tsp (3 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tsp (4 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tsp (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$4.58 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -70,7 +70,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  980,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.25 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -133,28 +133,28 @@
                                {
                                    "item":  "Ginger",
                                    "grams":  14,
-                                   "buy":  "1 tsp minced",
+                                   "buy":  "2.25 tbsp minced",
                                    "bid":  "fresh-ginger",
                                    "gpu":  453.592
                                },
                                {
                                    "item":  "Red Pepper Flakes",
                                    "grams":  3,
-                                   "buy":  "1/4-1/2 tsp",
+                                   "buy":  "1 2/3 tsp",
                                    "bid":  "red-pepper-flakes",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  4,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "0.75 tsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  2,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "0.75 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                }
@@ -166,7 +166,7 @@
                  "costPerServing":  4.58,
                  "recipeIngredient":  [
                                           "8 lb Boneless Skinless Chicken Breast",
-                                          "1 lb Rice",
+                                          "5.25 cups dry Rice",
                                           "3 peppers Green Bell Peppers",
                                           "2 zucchinis Zucchini",
                                           "1 bottle Soy Sauce",

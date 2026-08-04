@@ -97,6 +97,136 @@ function Remove-RecipeRow {
     return @($parsed.recipes).Count
 }
 
+# ---------------------------------------------------------------------------------------------------
+# STRING-AWARE STRUCTURAL SCANNERS. SPEC-SCHEMA.md forbids re-serializing a recipe spec, so a structured
+# edit has to find its target by walking the raw text. Brace counting alone is not enough here: recipe
+# prose is full of braces and brackets inside string literals, and every '<' is stored as the escape
+# <, so a naive scan desynchronises on the first intro paragraph. These skip string literals (and
+# the backslash escapes inside them) properly, which is the whole reason they exist.
+# ---------------------------------------------------------------------------------------------------
+
+# Find-JsonValueStart: index of the first character of the VALUE for "key": , searching from $From.
+# Returns -1 when the key is not found. $Nth picks a later occurrence (1-based) for repeated keys.
+function Find-JsonValueStart {
+    param(
+        [Parameter(Mandatory)][string]$Raw,
+        [Parameter(Mandatory)][string]$Key,
+        [int]$From = 0,
+        [int]$Nth = 1
+    )
+    $rx = New-Object System.Text.RegularExpressions.Regex ('"' + [regex]::Escape($Key) + '"\s*:\s*')
+    $at = $From; $n = 0
+    while ($true) {
+        $m = $rx.Match($Raw, $at)
+        if (-not $m.Success) { return -1 }
+        $n++
+        if ($n -ge $Nth) { return ($m.Index + $m.Length) }
+        $at = $m.Index + $m.Length
+    }
+}
+
+# Get-JsonArraySpans: the [Start,End] character span of every TOP-LEVEL element of the array whose '['
+# sits at $OpenIndex. Spans are trimmed of surrounding whitespace, so Raw.Substring(Start, End-Start+1)
+# is exactly the element text (including its quotes for a string element).
+#
+# ALWAYS CALL THIS AS  $spans = @(Get-JsonArraySpans ...)  - the @() is load-bearing. PS 5.1 unrolls a
+# one-element return to a bare object, and a bare PSCustomObject has no .Count, so `$spans.Count` reads
+# $null and `for ($k=0; $k -lt $spans.Count; ...)` never executes its body. That is a repair that finds
+# nothing, reports nothing and exits 0 - the same silent-wrong-answer shape as the rest of
+# ps51-json-array-traps. Measured 2026-08-04 on a recipes-db row holding a single ingredient.
+function Get-JsonArraySpans {
+    param(
+        [Parameter(Mandatory)][string]$Raw,
+        [Parameter(Mandatory)][int]$OpenIndex
+    )
+    if ($OpenIndex -lt 0 -or $OpenIndex -ge $Raw.Length -or $Raw[$OpenIndex] -ne '[') {
+        throw "Get-JsonArraySpans: index $OpenIndex is not the '[' of an array"
+    }
+    $spans = New-Object System.Collections.Generic.List[object]
+    $i = $OpenIndex + 1
+    $depth = 0; $inStr = $false; $elStart = -1
+    while ($i -lt $Raw.Length) {
+        $c = $Raw[$i]
+        if ($inStr) {
+            if ($c -eq '\') { $i += 2; continue }      # an escape consumes the next char, including \" and \\
+            if ($c -eq '"') { $inStr = $false }
+            $i++; continue
+        }
+        if ($c -eq '"') {
+            if ($depth -eq 0 -and $elStart -lt 0) { $elStart = $i }
+            $inStr = $true; $i++; continue
+        }
+        if ($c -eq '[' -or $c -eq '{') {
+            if ($depth -eq 0 -and $elStart -lt 0) { $elStart = $i }
+            $depth++; $i++; continue
+        }
+        if ($c -eq ']' -or $c -eq '}') {
+            if ($depth -eq 0) {
+                if ($elStart -ge 0) {
+                    $e = $i - 1
+                    while ($e -gt $elStart -and [char]::IsWhiteSpace($Raw[$e])) { $e-- }
+                    if ($e -ge $elStart) { $spans.Add([pscustomobject]@{ Start = $elStart; End = $e }) }
+                }
+                return @($spans.ToArray())
+            }
+            $depth--; $i++; continue
+        }
+        if ($c -eq ',' -and $depth -eq 0) {
+            if ($elStart -ge 0) {
+                $e = $i - 1
+                while ($e -gt $elStart -and [char]::IsWhiteSpace($Raw[$e])) { $e-- }
+                if ($e -ge $elStart) { $spans.Add([pscustomobject]@{ Start = $elStart; End = $e }) }
+                $elStart = -1
+            }
+            $i++; continue
+        }
+        if ($depth -eq 0 -and $elStart -lt 0 -and -not [char]::IsWhiteSpace($c)) { $elStart = $i }
+        $i++
+    }
+    throw "Get-JsonArraySpans: unterminated array from $OpenIndex"
+}
+
+# Get-JsonStringSpan: the span of the JSON string literal whose opening quote sits at $OpenIndex,
+# returned as the span of its CONTENT (between the quotes) so a caller can splice a new value in.
+function Get-JsonStringSpan {
+    param(
+        [Parameter(Mandatory)][string]$Raw,
+        [Parameter(Mandatory)][int]$OpenIndex
+    )
+    if ($Raw[$OpenIndex] -ne '"') { throw ("Get-JsonStringSpan: index " + $OpenIndex + " is not a quote") }
+    $i = $OpenIndex + 1
+    while ($i -lt $Raw.Length) {
+        $c = $Raw[$i]
+        if ($c -eq '\') { $i += 2; continue }
+        if ($c -eq '"') { return [pscustomobject]@{ Start = ($OpenIndex + 1); End = ($i - 1) } }
+        $i++
+    }
+    throw "Get-JsonStringSpan: unterminated string from $OpenIndex"
+}
+
+# Read-SpecText / Write-SpecText: byte-faithful spec IO. The 513 spec files are NOT uniform - some carry
+# a UTF-8 BOM and some do not - so a repair that normalises the BOM rewrites the first bytes of files it
+# did not otherwise change and buries the real edit in the diff. Round-trip whatever the file already had.
+function Read-SpecText {
+    param([Parameter(Mandatory)][string]$Path)
+    $bytes = [System.IO.File]::ReadAllBytes($Path)
+    $bom = ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF)
+    $off = if ($bom) { 3 } else { 0 }
+    return [pscustomobject]@{
+        Text = [System.Text.Encoding]::UTF8.GetString($bytes, $off, $bytes.Length - $off)
+        Bom  = $bom
+    }
+}
+function Write-SpecText {
+    param(
+        [Parameter(Mandatory)][string]$Path,
+        [Parameter(Mandatory)][string]$Text,
+        [Parameter(Mandatory)][bool]$Bom
+    )
+    $null = $Text | ConvertFrom-Json    # never write a spec that will not parse
+    [System.IO.File]::WriteAllText($Path, $Text, (New-Object System.Text.UTF8Encoding($Bom)))
+}
+
 # Set-RecipeVisibility: patch the "visibility" field of one-or-many recipe rows IN PLACE, key-scoped by
 # slug, without re-serializing the file. rotate-free-dinners.ps1 used to round-trip the ENTIRE
 # recipes-db.json (3.9 MB now, ~11.5 MB at 1500 recipes) through ConvertTo-Json -Depth 8 just to flip

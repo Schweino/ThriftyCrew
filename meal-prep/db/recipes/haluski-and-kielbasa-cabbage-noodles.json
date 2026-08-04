@@ -35,9 +35,9 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eEgg Noodles (Great Value wide):\u003c/strong\u003e 36.25 oz dry (1026 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.75 cups (191 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 (185 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 onions (185 g)",
                                 "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 3.25 lb (1482 g)",
-                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1.7 (1512 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1.7 heads (1512 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tbsp (7 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (24 g)"
                             ],
@@ -45,9 +45,9 @@
     "cost_lines":  [
                        "Egg Noodles, 36.25 oz dry: ~$3.94. \u003cstrong\u003eBuy 3 12oz bags: $3.94.\u003c/strong\u003e",
                        "Butter, 0.75 cups: ~$1.25. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Yellow Onion, 1.7: ~$0.47. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1.7 onions: ~$0.47. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Smoked Turkey Sausage, 3.25 lb: ~$13.23. \u003cstrong\u003eBuy 5 13oz ropes: $16.43.\u003c/strong\u003e",
-                       "Green Cabbage, 1.7: ~$2.83. \u003cstrong\u003eBuy 2 heads: $3.37.\u003c/strong\u003e",
+                       "Green Cabbage, 1.7 heads: ~$2.83. \u003cstrong\u003eBuy 2 heads: $3.37.\u003c/strong\u003e",
                        "Pantry seasonings (black pepper, salt): ~$0.36. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $22.08 across 14 servings, so roughly $1.58 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $28.22 across 14 servings, roughly $2.02 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -102,7 +102,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  185,
-                                   "buy":  "1.7",
+                                   "buy":  "1.7 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -118,7 +118,7 @@
                                    "item":  "Green Cabbage",
                                    "canon":  "Green Cabbage",
                                    "grams":  1512,
-                                   "buy":  "1.7",
+                                   "buy":  "1.7 heads",
                                    "bid":"cabbage",
                                    "gpu":453.592
                                },

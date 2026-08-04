@@ -29,8 +29,8 @@
     "intro_html":  "Meatloaf gets mocked, and meatloaf does not care. It is one of the few dinners that actually improves after a night in the fridge, and it slices to weight better than almost anything else you can cook. This one is turkey, bound with egg and bread crumbs, glazed with ketchup and barbecue sauce, served over rice. Each serving comes to 599 calories with \u003cstrong\u003e32 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.13\u003c/strong\u003e (at everyday cost), and a genuinely cheap plate.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1.75 tbsp (24 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (101 g)",
-                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 0.7 (80 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 onion (101 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 0.7 peppers (80 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 tbsp (26 g)",
                                 "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 4 large eggs (175 g)",
                                 "\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 1.25 cups (278 g)",
@@ -48,8 +48,8 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Butter, 1.75 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Yellow Onion, 1: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Green Bell Peppers, 0.7: ~$0.57. \u003cstrong\u003eBuy 1 each: $0.86.\u003c/strong\u003e",
+                       "Yellow Onion, 1 onion: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 0.7 peppers: ~$0.57. \u003cstrong\u003eBuy 1 each: $0.86.\u003c/strong\u003e",
                        "Garlic, 3 tbsp: ~$0.37. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Eggs, 4 large eggs: ~$0.42. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
                        "Heavy Cream, 1.25 cups: ~$1.73. \u003cstrong\u003eBuy 1 pint: $2.94.\u003c/strong\u003e",
@@ -107,7 +107,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  101,
-                                   "buy":  "1",
+                                   "buy":  "1 onion",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -115,7 +115,7 @@
                                    "item":  "Green Bell Peppers",
                                    "canon":  "Green Bell Peppers",
                                    "grams":  80,
-                                   "buy":  "0.7",
+                                   "buy":  "0.7 peppers",
                                    "bid":"green-bell-pepper",
                                    "gpu":120
                                },

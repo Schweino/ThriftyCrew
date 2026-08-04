@@ -32,7 +32,7 @@
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 5.25 lb (2381 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 5.25 tbsp (74 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 onions (385 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)",
                                 "\u003cstrong\u003eGround Cloves (Great Value):\u003c/strong\u003e 0.04 oz (1 g)",
                                 "\u003cstrong\u003eWalnuts (Great Value):\u003c/strong\u003e 1.75 cups (205 g)",
@@ -51,7 +51,7 @@
     "cost_lines":  [
                        "Beef Chuck Roast, 5.25 lb: ~$41.84. \u003cstrong\u003eBuy 6 lbs: $47.82.\u003c/strong\u003e",
                        "Vegetable Oil, 5.25 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 6 tbsp: ~$0.75. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Walnuts, 1.75 cups: ~$4.33. \u003cstrong\u003eBuy 1 8oz bag: $4.80.\u003c/strong\u003e",
                        "Diced Tomatoes, 1.7 cans: ~$1.68. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
@@ -120,7 +120,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  385,
-                                   "buy":  "3.5",
+                                   "buy":  "3.5 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

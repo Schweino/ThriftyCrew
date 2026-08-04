@@ -29,10 +29,10 @@
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tbsp (27 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 medium sweet onion, diced (385 g)",
                                 "\u003cstrong\u003eCelery:\u003c/strong\u003e 5 stalks, finely diced (280 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2-3 cloves, minced (42 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8 cloves, minced (42 g)",
                                 "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 3, green parts sliced (90 g)",
-                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 2 tsp toasted (35 g)",
-                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 1 tbsp vinegar (52 g)"
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 2.5 tbsp toasted (35 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 3.5 tbsp vinegar (52 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$5.57 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -134,7 +134,7 @@
                                {
                                    "item":  "Garlic",
                                    "grams":  42,
-                                   "buy":  "2-3 cloves, minced",
+                                   "buy":  "8 cloves, minced",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },
@@ -148,14 +148,14 @@
                                {
                                    "item":  "Sesame Oil",
                                    "grams":  35,
-                                   "buy":  "2 tsp toasted",
+                                   "buy":  "2.5 tbsp toasted",
                                    "bid":  "sesame-oil",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Rice Vinegar",
                                    "grams":  52,
-                                   "buy":  "1 tbsp vinegar",
+                                   "buy":  "3.5 tbsp vinegar",
                                    "bid":  "rice-vinegar",
                                    "gpu":  "29.570"
                                }

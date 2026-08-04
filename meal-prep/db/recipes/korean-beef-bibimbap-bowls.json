@@ -29,8 +29,8 @@
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (970 g)",
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)",
                                 "\u003cstrong\u003eSugar-Free Maple Syrup (generic):\u003c/strong\u003e 7 tbsp (119 g)",
-                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 5 (320 g)",
-                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 3.5 (1050 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 5 carrots (320 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 3.5 cucumbers (1050 g)",
                                 "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 13.25 tbsp (79 g)",
                                 "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 14 large eggs (700 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
@@ -47,8 +47,8 @@
                        "Rice, 5.25 cups dry: ~$1.44. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "93/7 Ground Beef, 3.5 lb: ~$21.99. \u003cstrong\u003eBuy 4 lbs: $25.12.\u003c/strong\u003e",
                        "Sugar-Free Maple Syrup, 7 tbsp: ~$0.39. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Carrots, 5: ~$0.80. \u003cstrong\u003eBuy 1 lb: $1.13.\u003c/strong\u003e",
-                       "Cucumber, 3.5: ~$2.66. \u003cstrong\u003eBuy 4 eachs: $3.04.\u003c/strong\u003e",
+                       "Carrots, 5 carrots: ~$0.80. \u003cstrong\u003eBuy 1 lb: $1.13.\u003c/strong\u003e",
+                       "Cucumber, 3.5 cucumbers: ~$2.66. \u003cstrong\u003eBuy 4 eachs: $3.04.\u003c/strong\u003e",
                        "Green Onions, 13.25 tbsp: ~$0.94. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
                        "Eggs, 14 large eggs: ~$1.72. \u003cstrong\u003eBuy 2 dozens: $2.94.\u003c/strong\u003e",
                        "Pantry seasonings (garlic powder, salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
@@ -156,14 +156,14 @@
                                {
                                    "item":  "Carrots",
                                    "grams":  320,
-                                   "buy":  "5",
+                                   "buy":  "5 carrots",
                                    "bid":  "carrots",
                                    "gpu":  453.592
                                },
                                {
                                    "item":  "Cucumber",
                                    "grams":  1050,
-                                   "buy":  "3.5",
+                                   "buy":  "3.5 cucumbers",
                                    "bid":  "cucumbers",
                                    "gpu":  300
                                },

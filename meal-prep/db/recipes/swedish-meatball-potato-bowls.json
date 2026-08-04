@@ -27,15 +27,15 @@
                                 "\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1 tub (180 g)",
                                 "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 1 quart (120 g)",
                                 "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 1 large (120 g)",
-                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1 tbsp (30 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tbsp (sauce) (30 g)",
-                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1-2 tbsp (meatballs) (40 g)",
-                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1/4 cup (70 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 2.25 tbsp (30 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (sauce) (30 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 2 3/4 tbsp (meatballs) (40 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 8.75 tbsp (70 g)",
                                 "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1 tsp (meatballs) + 1 tsp (sauce) (20 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (12 g)",
-                                "\u003cstrong\u003eGround Nutmeg (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
-                                "\u003cstrong\u003eGround Allspice (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (3 g)"
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (12 g)",
+                                "\u003cstrong\u003eGround Nutmeg (Great Value):\u003c/strong\u003e 1 tsp (2 g)",
+                                "\u003cstrong\u003eGround Allspice (Great Value):\u003c/strong\u003e 1 tsp (2 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tsp (3 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$6.42 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -122,28 +122,28 @@
                                {
                                    "item":  "Butter",
                                    "grams":  30,
-                                   "buy":  "1 tbsp",
+                                   "buy":  "2.25 tbsp",
                                    "bid":  "butter",
                                    "gpu":  "453.592"
                                },
                                {
                                    "item":  "Olive Oil",
                                    "grams":  30,
-                                   "buy":  "1 tbsp (sauce)",
+                                   "buy":  "2.25 tbsp (sauce)",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "Vegetable Oil",
                                    "grams":  40,
-                                   "buy":  "1-2 tbsp (meatballs)",
+                                   "buy":  "2 3/4 tbsp (meatballs)",
                                    "bid":  "vegetable-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "All-Purpose Flour",
                                    "grams":  70,
-                                   "buy":  "1/4 cup",
+                                   "buy":  "8.75 tbsp",
                                    "bid":  "flour",
                                    "gpu":  453.592
                                },
@@ -157,28 +157,28 @@
                                {
                                    "item":  "Salt",
                                    "grams":  12,
-                                   "buy":  "1 tsp",
+                                   "buy":  "2 tsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Ground Nutmeg",
                                    "grams":  2,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "1 tsp",
                                    "bid":  "ground-nutmeg",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Ground Allspice",
                                    "grams":  2,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "1 tsp",
                                    "bid":  "ground-allspice",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  3,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "1.25 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                }

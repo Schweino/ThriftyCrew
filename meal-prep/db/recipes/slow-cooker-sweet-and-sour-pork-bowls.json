@@ -20,7 +20,7 @@
     "intro_html":  "This sweet and sour pork is the meal-prep answer to your favorite Chinese takeout. Lean pork tenderloin cooks low and slow with peppers, onion, and pineapple in a honey soy glaze, then goes over rice. It runs a touch higher at around $4.79 a serving (at everyday cost), but you still get 55 grams of protein across 14 bowls.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3200 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (950 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (950 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (357 g)",
                                 "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3 peppers (300 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (250 g)",
@@ -28,11 +28,11 @@
                                 "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1/3 cup (120 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1/2 cup (120 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves, crushed (21 g)",
-                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1 tbsp (45 g)",
-                                "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 1 tsp (8 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 3.25 tbsp (45 g)",
+                                "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 4.5 tsp (8 g)",
                                 "\u003cstrong\u003eSweet Chili Sauce:\u003c/strong\u003e 2 tbsp (105 g)",
                                 "\u003cstrong\u003eWhite Wine Vinegar:\u003c/strong\u003e 1 tbsp (52 g)",
-                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1 tsp (8 g)"
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1.5 tbsp (8 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$4.79 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -71,7 +71,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  950,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.25 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -127,14 +127,14 @@
                                {
                                    "item":  "Brown Sugar",
                                    "grams":  45,
-                                   "buy":  "1 tbsp",
+                                   "buy":  "3.25 tbsp",
                                    "bid":  "brown-sugar",
                                    "gpu":  "453.592"
                                },
                                {
                                    "item":  "Ground Ginger",
                                    "grams":  8,
-                                   "buy":  "1 tsp",
+                                   "buy":  "4.5 tsp",
                                    "bid":  "ground-ginger",
                                    "gpu":  "28.350"
                                },
@@ -155,7 +155,7 @@
                                {
                                    "item":  "Red Pepper Flakes",
                                    "grams":  8,
-                                   "buy":  "1 tsp",
+                                   "buy":  "1.5 tbsp",
                                    "bid":  "red-pepper-flakes",
                                    "gpu":  "28.350"
                                }
@@ -167,7 +167,7 @@
                  "costPerServing":  4.79,
                  "recipeIngredient":  [
                                           "8 lb Pork Tenderloin",
-                                          "1 lb Rice",
+                                          "5.25 cups dry Rice",
                                           "3 peppers Green Bell Peppers",
                                           "3 peppers Red Bell Pepper",
                                           "3 onions Yellow Onion",

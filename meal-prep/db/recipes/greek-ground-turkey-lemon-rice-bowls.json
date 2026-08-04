@@ -18,14 +18,14 @@
                  "cost_ps":  "3.95"
              },
     "intro_html":  "Bright lemon rice cooked in chicken broth, topped with garlicky browned turkey, briny olives, and crumbled feta. Each bowl brings \u003cstrong\u003e30 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.95\u003c/strong\u003e (at everyday cost). It tastes like a Greek taverna plate that somehow costs less than a gas station sandwich.",
-    "ingredients_display": ["\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.75 cups dry (872 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 lb (420 g)","\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 7 (329 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.7 (402 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 4.5 tbsp (39 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.75 cups (142 g)","\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1 cups (120 g)","\u003cstrong\u003eSun-Dried Tomatoes:\u003c/strong\u003e 17.25 tbsp (60 g)","\u003cstrong\u003eFeta Cheese (Great Value crumbled):\u003c/strong\u003e 7 oz (200 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display": ["\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.75 cups dry (872 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 lb (420 g)","\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 7 lemons worth (329 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.7 onions (402 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 4.5 tbsp (39 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.75 cups (142 g)","\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1 cups (120 g)","\u003cstrong\u003eSun-Dried Tomatoes:\u003c/strong\u003e 17.25 tbsp (60 g)","\u003cstrong\u003eFeta Cheese (Great Value crumbled):\u003c/strong\u003e 7 oz (200 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 3.5 lb: ~$19.12. \u003cstrong\u003eBuy 4 lbs: $21.84.\u003c/strong\u003e",
                        "Rice, 4.75 cups dry: ~$1.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 1 lb: ~$0.56. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Lemon Juice, 7: ~$1.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 3.7: ~$1.01. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Lemon Juice, 7 lemons worth: ~$1.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 3.7 onions: ~$1.01. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 4.5 tbsp: ~$0.56. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Olive Oil, 0.75 cups: ~$1.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Olives, 1 cups: ~$1.32. \u003cstrong\u003eBuy 1 6oz can: $1.87.\u003c/strong\u003e",
@@ -82,14 +82,14 @@
                                {
                                    "item":  "Lemon Juice",
                                    "grams":  329,
-                                   "buy":  "7",
+                                   "buy":  "7 lemons worth",
                                    "bid":  "lemon-juice",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  402,
-                                   "buy":  "3.7",
+                                   "buy":  "3.7 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

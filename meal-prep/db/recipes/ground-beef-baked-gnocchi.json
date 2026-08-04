@@ -18,11 +18,11 @@
                  "cost_ps":  "4.24"
              },
     "intro_html":  "Pillowy potato gnocchi baked right in a beefy marinara with pockets of ricotta and a melted mozzarella top. Each serving delivers \u003cstrong\u003e37 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.24\u003c/strong\u003e (at everyday cost). It is lasagna comfort with a fraction of the assembly work.",
-    "ingredients_display": ["\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 (192 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)","\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1.25 tbsp (5 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)","\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 9.5 cups (2381 g)","\u003cstrong\u003ePotato Gnocchi (Great Value):\u003c/strong\u003e 68 oz dry (1930 g)","\u003cstrong\u003eRicotta Cheese (Great Value):\u003c/strong\u003e 7.5 oz (215 g)","\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 7 oz (198 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display": ["\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 onions (192 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)","\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1.25 tbsp (5 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)","\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 9.5 cups (2381 g)","\u003cstrong\u003ePotato Gnocchi (Great Value):\u003c/strong\u003e 68 oz dry (1930 g)","\u003cstrong\u003eRicotta Cheese (Great Value):\u003c/strong\u003e 7.5 oz (215 g)","\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 7 oz (198 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Beef, 3.5 lb: ~$21.99. \u003cstrong\u003eBuy 4 lbs: $25.12.\u003c/strong\u003e",
-                       "Yellow Onion, 1.7: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1.7 onions: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Marinara Sauce, 9.5 cups: ~$6.12. \u003cstrong\u003eBuy 4 24oz jars: $6.99.\u003c/strong\u003e",
                        "Potato Gnocchi, 68 oz dry: ~$11.18. \u003cstrong\u003eBuy 4 17.6oz packs: $11.56.\u003c/strong\u003e",
@@ -66,7 +66,7 @@
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  192,
-                                   "buy":  "1.7",
+                                   "buy":  "1.7 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

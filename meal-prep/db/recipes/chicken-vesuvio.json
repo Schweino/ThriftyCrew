@@ -28,7 +28,7 @@
              },
     "intro_html":  "Chicken Vesuvio is Chicago Italian, born in the old neighborhood restaurants and never quite famous outside of them. Chicken and potato wedges roast in the same pan with garlic, olive oil, oregano, and lemon until the potatoes go crisp at the corners, and a handful of peas goes in at the end for color. It is a whole dinner in one pan with no side dish required. Each serving lands at 607 calories and \u003cstrong\u003e52 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.08 a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 10 (2117 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 10 potatoes (2117 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 cups (189 g)",
                                 "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 0.75 tbsp (2 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tbsp (42 g)",
@@ -39,18 +39,18 @@
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 13.75 tbsp (117 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.2 cartons (1120 g)",
                                 "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 11 oz (313 g)",
-                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 2.3 (110 g)"
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 2.3 lemons worth (110 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Potato, 10: ~$2.65. \u003cstrong\u003eBuy 5 lbs: $2.84.\u003c/strong\u003e",
+                       "Potato, 10 potatoes: ~$2.65. \u003cstrong\u003eBuy 5 lbs: $2.84.\u003c/strong\u003e",
                        "Olive Oil, 1 cups: ~$2.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Boneless Skinless Chicken Thigh, 7.5 lb: ~$13.11. \u003cstrong\u003eBuy 8 lbs: $14.16.\u003c/strong\u003e",
                        "Butter, 4.75 tbsp: ~$0.43. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "Garlic, 13.75 tbsp: ~$1.68. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
                        "Chicken Broth, 1.2 cartons: ~$1.50. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "Frozen Green Peas, 11 oz: ~$0.68. \u003cstrong\u003eBuy 1 12oz bag: $0.73.\u003c/strong\u003e",
-                       "Lemon Juice, 2.3: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lemon Juice, 2.3 lemons worth: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (dried oregano, salt, black pepper, italian seasoning): ~$0.79. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $23.92 across 14 servings, so roughly $1.71 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $27.81 across 14 servings, roughly $1.99 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -89,7 +89,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  2117,
-                                   "buy":  "10",
+                                   "buy":  "10 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                },
@@ -177,7 +177,7 @@
                                    "item":  "Lemon Juice",
                                    "canon":  "Lemon Juice",
                                    "grams":  110,
-                                   "buy":  "2.3",
+                                   "buy":  "2.3 lemons worth",
                                    "bid":  "lemon-juice",
                                    "gpu":  "29.570"
                                }

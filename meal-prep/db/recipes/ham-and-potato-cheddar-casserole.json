@@ -33,13 +33,13 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 5.5 tbsp (77 g)",
                                 "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 6.5 tbsp (51 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (129 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 onion (129 g)",
                                 "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 1.5 cups (338 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.75 cups (441 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (11 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)",
                                 "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 18.25 oz (519 g)",
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 21 (4490 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 21 potatoes (4490 g)",
                                 "\u003cstrong\u003eDiced Ham (John Morrell (Smithfield)):\u003c/strong\u003e 2.25 lb (1029 g)",
                                 "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 1 lb (492 g)"
                             ],
@@ -47,11 +47,11 @@
     "cost_lines":  [
                        "Butter, 5.5 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "All-Purpose Flour, 6.5 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 1: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1 onion: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Milk, 1.5 cups: ~$0.27. \u003cstrong\u003eBuy 1 gallon: $3.02.\u003c/strong\u003e",
                        "Chicken Broth, 1.75 cups: ~$0.59. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 18.25 oz: ~$3.95. \u003cstrong\u003eBuy 3 8oz bags: $5.18.\u003c/strong\u003e",
-                       "Potato, 21: ~$5.62. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
+                       "Potato, 21 potatoes: ~$5.62. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
                        "Diced Ham, 2.25 lb: ~$11.25. \u003cstrong\u003eBuy 3 16oz packs: $14.89.\u003c/strong\u003e",
                        "Frozen Green Peas, 1 lb: ~$1.06. \u003cstrong\u003eBuy 2 12oz bags: $1.47.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.11. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
@@ -108,7 +108,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  129,
-                                   "buy":  "1",
+                                   "buy":  "1 onion",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -156,7 +156,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  4490,
-                                   "buy":  "21",
+                                   "buy":  "21 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                },

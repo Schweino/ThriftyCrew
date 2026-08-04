@@ -66,6 +66,7 @@ param(
   [string]$IngredientsDb,   # default <meal-prep>\db\ingredients.json
   [string]$FoodDb,          # default <meal-prep>\food-macros-db.json
   [string]$DensitiesFile,   # default <meal-prep>\db\densities.json
+  [string]$EachNounsFile,   # default <meal-prep>\db\each-nouns.json
   [string]$FeedFile,        # default <estate>\grocery\out\smp-feed.json
   [string]$NoBoardOkFile,   # default <meal-prep>\db\no-board-price-ok.json
   [string]$ManifestFile,    # default <meal-prep>\pipeline\v2-perserving.json (everyday_ps basis for stat.cost_ps)
@@ -82,6 +83,7 @@ if(-not $CostedFile){    $CostedFile    = Join-Path $mp 'db\costed.json' }
 if(-not $IngredientsDb){ $IngredientsDb = Join-Path $mp 'db\ingredients.json' }
 if(-not $FoodDb){        $FoodDb        = Join-Path $mp 'food-macros-db.json' }
 if(-not $DensitiesFile){ $DensitiesFile = Join-Path $mp 'db\densities.json' }
+if(-not $EachNounsFile){ $EachNounsFile = Join-Path $mp 'db\each-nouns.json' }
 if(-not $FeedFile){      $FeedFile      = Join-Path (Split-Path $mp -Parent) 'grocery\out\smp-feed.json' }
 if(-not $NoBoardOkFile){ $NoBoardOkFile = Join-Path $mp 'db\no-board-price-ok.json' }
 if(-not $ManifestFile){  $ManifestFile  = Join-Path $mp 'pipeline\v2-perserving.json' }
@@ -111,6 +113,8 @@ $dbm=@{}
 foreach($i in ((Get-Content $FoodDb -Raw -Encoding utf8 | ConvertFrom-Json).items)){ $dbm[[string]$i.item]=$i }
 $dnRoot = Get-Content $DensitiesFile -Raw -Encoding utf8 | ConvertFrom-Json
 $dnm=@{}; foreach($p in $dnRoot.items.PSObject.Properties){ $dnm[$p.Name]=$p.Value }
+$enm=@{}
+foreach($p in ((Get-Content $EachNounsFile -Raw -Encoding utf8 | ConvertFrom-Json).items.PSObject.Properties)){ $enm[$p.Name]=$p.Value }
 $noBoardOk=@{}
 if(Test-Path $NoBoardOkFile){ foreach($b in ((Get-Content $NoBoardOkFile -Raw -Encoding utf8 | ConvertFrom-Json).bids)){ $noBoardOk[[string]$b]=1 } }
 
@@ -146,6 +150,18 @@ function Resolve-ScalerGpu([string]$item,[string]$bid,[double]$gpu,[string]$mapU
 
 # ---------------- friendly amounts (ported from r300 build-specs, deltas 5/6 kept) ----------------
 function Den([string]$item,[string]$u){ if($dnm.ContainsKey($item) -and ($dnm[$item].PSObject.Properties.Name -contains $u)){ [double]$dnm[$item].$u } else { $null } }
+# The noun that goes with a COUNT. Every other FriendlyAmt branch appends its unit; the each branch used
+# to return the bare number, and 661 lines shipped reading "Potato (generic): 18.4 (3909 g)" - a typo as
+# far as a reader can tell, recoverable only from the gram restatement. The noun cannot be derived from
+# densities because 'each' is overloaded there (Chicken Broth each = 240 g IS a cup), so it is stated per
+# item in db\each-nouns.json. A missing entry THROWS: a bare number is how this bug shipped the first time.
+function EachNoun([string]$item,[double]$n){
+  if(-not $enm.ContainsKey($item)){
+    throw ("no each-noun for '$item' - it reaches the FriendlyAmt each branch, so it needs a {one, many} entry in db\each-nouns.json (otherwise the card prints a count with no unit)")
+  }
+  if([Math]::Abs($n - 1.0) -lt 1e-9){ return [string]$enm[$item].one }
+  return [string]$enm[$item].many
+}
 function Frac([double]$v){
   # friendly quantity: quarters for anything a quarter-unit or larger, 2 decimals below that so a
   # small amount never prints as a bare "0" (r100 shipped "Bay Leaves ... 0 oz").
@@ -174,7 +190,7 @@ function FriendlyAmt([string]$item,[double]$g){
   $can = Den $item 'can'
   if($can -and $g -ge ($can*0.85)){ $n=[Math]::Round($g/$can,1); if([Math]::Abs($n-[Math]::Round($n)) -lt 0.15){ $n=[Math]::Round($n) }; return ("$n can" + $(if($n -ne 1){'s'})) }
   $each = Den $item 'each'
-  if($each -and $each -ge 40 -and $g -ge ($each*0.6)){ $n=[Math]::Round($g/$each,1); if([Math]::Abs($n-[Math]::Round($n)) -lt 0.25){ $n=[Math]::Round($n) }; return ("$n") }
+  if($each -and $each -ge 40 -and $g -ge ($each*0.6)){ $n=[Math]::Round($g/$each,1); if([Math]::Abs($n-[Math]::Round($n)) -lt 0.25){ $n=[Math]::Round($n) }; return ("$n " + (EachNoun $item $n)) }
   if($item -match $WEIGHT_FIRST -or $item -match $WEIGHT_MEAT){
     if($g -ge $LB){ return ((Frac ($g/$LB)) + ' lb') }
     return ((Frac ($g/$OZ)) + ' oz')
@@ -291,7 +307,19 @@ if((IProp $hIn 'recipeIngredient') -and $hIn.recipeIngredient){ $recipeIngredien
 else {
   # derived fallback: "{buy} {display name lowercased}", the live-card convention. Writers usually
   # hand this in; the derivation exists so a machine-only import still emits valid JSON-LD.
-  $recipeIngredient = @($scalerIng | ForEach-Object { ([string]$_.buy + ' ' + ([string]$_.item).ToLower()) })
+  # A COUNT LABEL ALREADY NAMES THE FOOD ("18.4 potatoes"), so appending the item on top of it would
+  # emit "18.4 potatoes potato". Skip the suffix when buy already ends in this item's each-noun.
+  $recipeIngredient = @($scalerIng | ForEach-Object {
+    $buyS = [string]$_.buy
+    $cn   = if($_.PSObject.Properties.Name -contains 'canon' -and $_.canon){ [string]$_.canon } else { [string]$_.item }
+    $named = $false
+    if($enm.ContainsKey($cn)){
+      foreach($nn in @([string]$enm[$cn].one, [string]$enm[$cn].many)){
+        if($nn -and $buyS -match ([regex]::Escape($nn) + '$')){ $named = $true; break }
+      }
+    }
+    if($named){ $buyS } else { ($buyS + ' ' + ([string]$_.item).ToLower()) }
+  })
 }
 $headSteps = @(); if((IProp $hIn 'steps') -and $hIn.steps){ $headSteps = @($hIn.steps | ForEach-Object { [string]$_ }) }
 $head = [ordered]@{

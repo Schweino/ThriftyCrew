@@ -20,16 +20,16 @@
     "intro_html":  "Bright, zesty, and a little addictive, this Thai-style larb is proof that healthy prep never has to be boring. Each bowl brings 50 grams of protein for about $4.96 a serving (at everyday cost). One skillet makes 14 servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 8 lb (3300 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (950 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (950 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1/3 cup (90 g)",
                                 "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 2 tbsp (42 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (300 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tbsp (27 g)",
-                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 3 Tbsp (160 g)",
-                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 3-4 dry chiles or 1.5 Tbsp chile powder (35 g)",
-                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1/2 cup rough chopped (30 g)",
-                                "\u003cstrong\u003eFresh Mint:\u003c/strong\u003e 1/3 cup fresh (25 g)"
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 0.5 cups (160 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 2 1/2 jalapenos (35 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 30 tbsp rough chopped (30 g)",
+                                "\u003cstrong\u003eFresh Mint:\u003c/strong\u003e 15.5 tbsp fresh (25 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$4.96 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -68,7 +68,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  950,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.25 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -110,28 +110,28 @@
                                {
                                    "item":  "Fish Sauce",
                                    "grams":  160,
-                                   "buy":  "3 Tbsp",
+                                   "buy":  "0.5 cups",
                                    "bid":  "fish-sauce",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Jalapeno",
                                    "grams":  35,
-                                   "buy":  "3-4 dry chiles or 1.5 Tbsp chile powder",
+                                   "buy":  "2 1/2 jalapenos",
                                    "bid":  "jalapenos",
                                    "gpu":  453.592
                                },
                                {
                                    "item":  "Fresh Cilantro",
                                    "grams":  30,
-                                   "buy":  "1/2 cup rough chopped",
+                                   "buy":  "30 tbsp rough chopped",
                                    "bid":  "cilantro",
                                    "gpu":  57
                                },
                                {
                                    "item":  "Fresh Mint",
                                    "grams":  25,
-                                   "buy":  "1/3 cup fresh",
+                                   "buy":  "15.5 tbsp fresh",
                                    "bid":  "fresh-mint",
                                    "gpu":  "28.350"
                                }
@@ -143,7 +143,7 @@
                  "costPerServing":  4.96,
                  "recipeIngredient":  [
                                           "8 lb 93/7 Ground Turkey",
-                                          "1 lb Rice",
+                                          "5.25 cups dry Rice",
                                           "3 onions Yellow Onion",
                                           "1 bottle Lime Juice",
                                           "1 bottle Honey",

@@ -27,8 +27,8 @@
                                 "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 1.75 cups (189 g)",
                                 "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 2 large eggs (117 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 4.75 tbsp (65 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
-                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2.3 (280 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 onions (257 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2.3 peppers (280 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (23 g)",
                                 "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 4.75 tbsp (28 g)",
                                 "\u003cstrong\u003eRed Curry Paste (Thai Kitchen):\u003c/strong\u003e 7 tbsp (105 g)",
@@ -45,7 +45,7 @@
                        "Bread Crumbs, 1.75 cups: ~$0.54. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Eggs, 2 large eggs: ~$0.29. \u003cstrong\u003eBuy 1 dozen: $1.47.\u003c/strong\u003e",
                        "Vegetable Oil, 4.75 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 2.3 onions: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 2.75 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Ginger, 4.75 tbsp: ~$0.25. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
                        "Red Curry Paste, 7 tbsp: ~$1.67. \u003cstrong\u003eBuy 1 4oz jar: $1.80.\u003c/strong\u003e",
@@ -140,14 +140,14 @@
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  257,
-                                   "buy":  "2.3",
+                                   "buy":  "2.3 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
                                {
                                    "item":  "Red Bell Pepper",
                                    "grams":  280,
-                                   "buy":  "2.3",
+                                   "buy":  "2.3 peppers",
                                    "bid":  "red-bell-pepper",
                                    "gpu":  120
                                },

@@ -74,6 +74,24 @@ try {
 & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $mp 'engine\audit-db-agreement.ps1') | Out-Null
 Ok 'clean again after restore (exit 0)' ($LASTEXITCODE -eq 0)
 
+# ---- 3b. COST-DRIFT: the founding-bug fixture is hermetic, so it runs as the guard's own -SelfTest
+# rather than by mutating a 3.9 MB live file. Both scripts in the repair pair are checked: the guard that
+# has to SEE stale cost copies, and the sync that has to FIX them without touching anything else.
+Write-Output 'audit-db-agreement (COST-DRIFT guard) + sync-recipesdb-cost:'
+$dbSelf = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $mp 'engine\audit-db-agreement.ps1') -SelfTest 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
+Ok 'COST-DRIFT fixture: the guard still sees the 2026-07-25 stamped block (exit 0)' ($LASTEXITCODE -eq 0)
+# The clean twin is the load-bearing half. panang is the ONE row the stamped block legitimately belonged
+# to, so a spot check of the batch cleared it; without that case in the fixture a green run cannot be
+# told from a blind one.
+Ok 'the panang clean-twin is still in the fixture' ($dbSelf -match 'the one recipe the stamped block belongs to is silent')
+$scSelf = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $mp 'pipeline\sync-recipesdb-cost.ps1') -SelfTest 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
+Ok 'sync-recipesdb-cost fixture passes (exit 0)' ($LASTEXITCODE -eq 0)
+# Without this twin the sync can launder a broken spec into the index, and the guard above would then
+# read the result as agreement - two green checks over one wrong number.
+Ok 'the sync still refuses to copy an incoherent spec block' ($scSelf -match 'an incoherent SPEC block is refused')
+$scLive = (& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $mp 'pipeline\sync-recipesdb-cost.ps1') 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
+Ok 'sync-recipesdb-cost finds nothing to carry on live data (index mirrors the specs)' ($scLive -match 'cost sync: 0 field\(s\)')
+
 # ---- 4. audit-store-registry: regression + drift negative ----
 Write-Output 'audit-store-registry:'
 $sr = Join-Path $root 'grocery\audit-store-registry.ps1'

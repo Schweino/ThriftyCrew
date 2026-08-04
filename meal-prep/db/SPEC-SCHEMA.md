@@ -37,7 +37,7 @@ The card build hard-fails if `ingredients_display.Count != scaler.ing.Count`.
   |---|---|---|
   | `item` | string | matches the costed line's `item` (or `canon` if present) — the pricing join key. |
   | `grams` | number | grams at 14 servings (base). The scaler multiplies this. |
-  | `buy` | string | shopper-facing buy amount ("5.5 lb raw"). |
+  | `buy` | string | the amount THIS RECIPE uses, in the unit a cook holds ("5.5 lb raw", "3 onions", "1/2 cup"). It must always name a unit: the widget re-renders the Ingredients list from this string, and a bare number ("18.4") reads as a typo on the card. Counts get their noun from `db/each-nouns.json` (see invariant 6). What to BUY is the cost section's job, not this field's. |
   | `bid` | string | board/feed commodity id for the LIVE cheapest lookup. **MUST resolve on the public feed** (`smp-feed.json` ingredients) OR be listed in `db/no-board-price-ok.json`, else the card's "current cheapest" silently falls back to the everyday price — the CHEAPEST-FALLBACK guard in `audit-db-agreement.ps1` enforces this. |
   | `gpu` | number | grams per feed unit for `bid`, reconciled to the FEED row's unit (the "brown-sugar 16x" lesson: a map gpu is calibrated to its era's board unit — never copy blindly). Drives `pkg_g/gpu * feed.cheapest`. |
 - `scaler.cost` — legacy per-serving figure (not authoritative; the manifest recomputes).
@@ -67,3 +67,21 @@ Shells)"). `manual_balance` — bool, marks a spec whose macros were hand-balanc
 3. For each line, `ceil(grams/pkg_g - 0.02) == costed.buy_n` (build-card2 self-test; pkg_g/buy_n must agree).
 4. Every `scaler.ing.bid` resolves on the feed or is in `no-board-price-ok.json` (CHEAPEST-FALLBACK guard).
 5. `slug` + `protein` agree with the `recipes-db.json` index row (audit-db-agreement guard).
+6. Every `scaler.ing.buy` NAMES ITS UNIT - it contains at least one letter (spec-guards). A count with no
+   noun ("Potato (generic): 18.4 (3909 g)") is only recoverable from the gram restatement beside it, and
+   661 lines across 339 specs shipped that way until 2026-08-04. The cause was `FriendlyAmt`'s `each`
+   branch returning a bare number while all nine sibling branches append a unit; the noun now comes from
+   `db/each-nouns.json`, and an item that reaches that branch without an entry is a BUILD ERROR rather
+   than a silent bare count. Repair: `pipeline/repair-unitless-buy.ps1`.
+7. `ingredients_display[i]` CONTAINS `scaler.ing[i].buy` verbatim. Two surfaces render the same list - the
+   static `<ul>` the page ships and the widget's re-render when a reader changes servings - so fixing one
+   without the other makes the list change under the reader the moment they touch the servings control.
+8. `buy` LEADS with its quantity, because the widget's `scaleBuy` only multiplies the leading number.
+   A range ("1-2") scales to nonsense ("2-2"); ~10 legacy freeform labels still carry this shape.
+
+## Fields that keep their own COPY of a spec value (a repair must carry across, or they go stale)
+`recipes-db.json` stores each ingredient's `buy` again (`pipeline/sync-recipesdb-buy.ps1` carries a label
+repair across; `update-recipes-db.ps1 -Replace` is the heavier full-row path), and `planner-data.js` is
+generated from THAT copy, so the Meal Plan Builder's merged grocery list reads the index and not the
+specs. `db/built/<slug>.body.html` embeds `buy` in the scaler payload, so any label change needs a card
+rebuild + republish. audit-db-agreement compares slug and protein only - it will NOT catch label drift.

@@ -39,7 +39,7 @@
                                 "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)",
                                 "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 4.5 tbsp (37 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.5 cups (133 g)",
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 10 (2100 g)"
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 10 potatoes (2100 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -50,7 +50,7 @@
                        "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Cornstarch, 4.5 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Butter, 0.5 cups: ~$0.87. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Potato, 10: ~$2.63. \u003cstrong\u003eBuy 5 lbs: $2.84.\u003c/strong\u003e",
+                       "Potato, 10 potatoes: ~$2.63. \u003cstrong\u003eBuy 5 lbs: $2.84.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, red pepper flakes): ~$0.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $73.66 across 14 servings, so roughly $5.26 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $76.12 across 14 servings, roughly $5.44 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -169,7 +169,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  2100,
-                                   "buy":  "10",
+                                   "buy":  "10 potatoes",
                                    "bid":  "russet-potatoes",
                                    "gpu":  453.592
                                }

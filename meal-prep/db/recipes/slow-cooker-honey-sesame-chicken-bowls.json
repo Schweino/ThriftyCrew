@@ -20,7 +20,7 @@
     "intro_html":  "Honey sesame chicken is sweet, sticky, and just plain fun to eat, and it comes in as an easy, budget-friendly bowl. It is high protein, low fat, and tastes like the good takeout without the sticker shock. One batch makes 14 servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1000 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.5 cups dry (1000 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1/3 cup (80 g)",
                                 "\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 1/3 cup (80 g)",
                                 "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 4 tbsp (84 g)",
@@ -28,7 +28,7 @@
                                 "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 tbsp (8 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (9 g)",
                                 "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 6 cups (500 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)"
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tsp (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$3.25 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -67,7 +67,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  1000,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.5 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -123,7 +123,7 @@
                                {
                                    "item":  "Black Pepper",
                                    "grams":  2,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "0.75 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                }
@@ -135,7 +135,7 @@
                  "costPerServing":  3.25,
                  "recipeIngredient":  [
                                           "7 lb Boneless Skinless Chicken Breast",
-                                          "1 lb Rice",
+                                          "5.5 cups dry Rice",
                                           "1 bottle Soy Sauce",
                                           "1 bottle Ketchup",
                                           "1 bottle Honey",

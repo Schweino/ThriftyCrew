@@ -40,12 +40,12 @@
                                 "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 5.25 cups (1232 g)",
                                 "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 2.5 tbsp (21 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 5 tbsp (69 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.3 (141 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.3 onions (141 g)",
                                 "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 4 tbsp (36 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4.5 tbsp (38 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (770 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.5 tbsp (7 g)",
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 21.6 (4609 g)"
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 21.6 potatoes (4609 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -53,11 +53,11 @@
                        "Beef Broth, 5.25 cups: ~$1.65. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
                        "All-Purpose Flour, 2.5 tbsp: ~$0.02. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Olive Oil, 5 tbsp: ~$0.97. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 1.3: ~$0.35. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1.3 onions: ~$0.35. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Jalapeno, 4 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
                        "Garlic, 4.5 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Diced Tomatoes, 2 cans: ~$1.80. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
-                       "Potato, 21.6: ~$5.77. \u003cstrong\u003eBuy 11 lbs: $6.25.\u003c/strong\u003e",
+                       "Potato, 21.6 potatoes: ~$5.77. \u003cstrong\u003eBuy 11 lbs: $6.25.\u003c/strong\u003e",
                        "Pantry seasonings (salt, ground cumin, dried oregano, black pepper, soy sauce): ~$0.37. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $56.89 across 14 servings, so roughly $4.06 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $67.58 across 14 servings, roughly $4.83 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -160,7 +160,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  141,
-                                   "buy":  "1.3",
+                                   "buy":  "1.3 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -200,7 +200,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  4609,
-                                   "buy":  "21.6",
+                                   "buy":  "21.6 potatoes",
                                    "bid":  "russet-potatoes",
                                    "gpu":  453.592
                                }

@@ -19,14 +19,14 @@
                  "cost_ps":  "2.95"
              },
     "intro_html":  "Hashweh is the Lebanese answer to comfort food: cinnamon and allspice scented beef folded into buttery rice with toasted noodles. Simple ingredients, big warm flavor. Each bowl brings \u003cstrong\u003e25 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.95\u003c/strong\u003e (at everyday cost), and the whole thing cooks in one pot with about six real ingredients.",
-    "ingredients_display": ["\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.75 cups (198 g)","\u003cstrong\u003eSpaghetti (Great Value):\u003c/strong\u003e 4.25 oz dry (117 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.25 cups dry (1163 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (14 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)","\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3.75 lb (1680 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.5 lb (1111 g)","\u003cstrong\u003eGround Allspice (Great Value):\u003c/strong\u003e 2.75 oz (75 g)"],
+    "ingredients_display": ["\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.75 cups (198 g)","\u003cstrong\u003eSpaghetti (Great Value):\u003c/strong\u003e 4.25 oz dry (117 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.25 cups dry (1163 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (14 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (5 g)","\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3.75 lb (1680 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 onions (257 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.5 lb (1111 g)","\u003cstrong\u003eGround Allspice (Great Value):\u003c/strong\u003e 2.75 oz (75 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Butter, 0.75 cups: ~$1.27. \u003cstrong\u003eBuy 1 lb box: $2.92.\u003c/strong\u003e",
                        "Spaghetti, 4.25 oz dry: ~$0.25. \u003cstrong\u003eBuy 1 16oz box: $0.98.\u003c/strong\u003e",
                        "Rice, 6.25 cups dry: ~$1.72. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 3.75 lb: ~$2.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 2.3 onions: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "93/7 Ground Beef, 2.5 lb: ~$15.38. \u003cstrong\u003eBuy 3 lbs: $18.84.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, ground cinnamon, ground allspice): ~$3.05. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $24.58 across 14 servings, so roughly $1.76 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
@@ -112,7 +112,7 @@
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  257,
-                                   "buy":  "2.3",
+                                   "buy":  "2.3 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

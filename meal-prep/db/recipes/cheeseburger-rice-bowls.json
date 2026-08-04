@@ -20,7 +20,7 @@
     "intro_html":  "Everything you love about a cheeseburger, deconstructed into a high-protein rice bowl. Each serving brings 47 grams of protein for about $4.92 (at everyday cost) and the batch makes 14. Same juicy, cheesy, tangy flavor, no bun required and no drive-thru markup.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1000 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.5 cups dry (1000 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 3 cups (700 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1 can (400 g)",
@@ -69,7 +69,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  1000,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.5 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -158,7 +158,7 @@
                  "costPerServing":  4.92,
                  "recipeIngredient":  [
                                           "6 lb 93/7 Ground Beef",
-                                          "1 lb Rice",
+                                          "5.5 cups dry Rice",
                                           "3 onions Yellow Onion",
                                           "1 carton Beef Broth",
                                           "1 can Diced Tomatoes",

@@ -26,15 +26,15 @@
                                 "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 4 2/3 cups (400 g)",
                                 "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 2 1/3 tbsp (14 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 medium (500 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 tbsp minced (35 g)",
-                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 tbsp grated (35 g)",
-                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 2 tbsp (65 g)",
-                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 tbsp (16 g)",
-                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp minced (35 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 5.75 tbsp grated (35 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 4.75 tbsp (65 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 2 tbsp (16 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 1.25 tsp (4 g)",
                                 "\u003cstrong\u003ePlain Yogurt:\u003c/strong\u003e 3 tbsp (100 g)",
-                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1-2 tbsp (55 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3 1/2 tbsp (55 g)",
                                 "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1 tbsp (35 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.5 tsp (34 g)"
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tbsp (34 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$3.96 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -115,35 +115,35 @@
                                {
                                    "item":  "Garlic",
                                    "grams":  35,
-                                   "buy":  "1 tbsp minced",
+                                   "buy":  "4 tbsp minced",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },
                                {
                                    "item":  "Ginger",
                                    "grams":  35,
-                                   "buy":  "1 tbsp grated",
+                                   "buy":  "5.75 tbsp grated",
                                    "bid":  "fresh-ginger",
                                    "gpu":  453.592
                                },
                                {
                                    "item":  "Vegetable Oil",
                                    "grams":  65,
-                                   "buy":  "2 tbsp",
+                                   "buy":  "4.75 tbsp",
                                    "bid":  "vegetable-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "Chili Powder",
                                    "grams":  16,
-                                   "buy":  "1 tbsp",
+                                   "buy":  "2 tbsp",
                                    "bid":  "chili-powder",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Ground Turmeric",
                                    "grams":  4,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.25 tsp",
                                    "bid":  "ground-turmeric",
                                    "gpu":  "28.350"
                                },
@@ -157,7 +157,7 @@
                                {
                                    "item":  "Tomato Paste",
                                    "grams":  55,
-                                   "buy":  "1-2 tbsp",
+                                   "buy":  "3 1/2 tbsp",
                                    "bid":  "tomato-paste",
                                    "gpu":  "28.350"
                                },
@@ -171,7 +171,7 @@
                                {
                                    "item":  "Salt",
                                    "grams":  34,
-                                   "buy":  "2.5 tsp",
+                                   "buy":  "2 tbsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                }

@@ -31,7 +31,7 @@
     "intro_html":  "This is what the cheapest petite sirloins in the meat case were made for. They go in the slow cooker with a pile of onions and a packet of brown gravy, and six hours later they are tender enough to cut with a spoon, sitting in a gravy the onions built. Six ingredients, and one of them is rice. Each bowl carries \u003cstrong\u003e40 grams of protein\u003c/strong\u003e and 561 calories for about \u003cstrong\u003e$4.32\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 4.75 lb (2117 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4.7 (513 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4.7 onions (513 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (7 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.25 tbsp (20 g)",
@@ -43,7 +43,7 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Beef Flank/Sirloin Steak, 4.75 lb: ~$41.16. \u003cstrong\u003eBuy 5 lbs: $44.10.\u003c/strong\u003e",
-                       "Yellow Onion, 4.7: ~$1.29. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Yellow Onion, 4.7 onions: ~$1.29. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
                        "Garlic, 2.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Brown Gravy Mix, 2 oz: ~$1.09. \u003cstrong\u003ePantry staple; this batch alone uses about 3 0.87oz packets.\u003c/strong\u003e",
                        "Cornstarch, 7 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -94,7 +94,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  513,
-                                   "buy":  "4.7",
+                                   "buy":  "4.7 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

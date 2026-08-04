@@ -28,9 +28,9 @@
                                 "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 1/2 cups (168 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1/2 cup diced (275 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 clove, crushed (18 g)",
-                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1/4 tsp (2 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/4 tsp (5 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/8 tsp (1 g)"
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tsp (2 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tsp (5 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tsp (1 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$4.10 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -124,21 +124,21 @@
                                {
                                    "item":  "Ground Cumin",
                                    "grams":  2,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "1 tsp",
                                    "bid":  "ground-cumin",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  5,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "0.75 tsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  1,
-                                   "buy":  "1/8 tsp",
+                                   "buy":  "0.5 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                }

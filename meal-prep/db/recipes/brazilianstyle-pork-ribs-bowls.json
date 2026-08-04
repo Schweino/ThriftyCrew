@@ -19,12 +19,12 @@
                  "cost_ps":  "2.77"
              },
     "intro_html":  "Brazilian churrasco flavor on a Nebraska budget: pork marinated in garlic, mustard, Worcestershire, vinegar, and honey, roasted until the edges caramelize, then served over rice. Each bowl brings \u003cstrong\u003e44 grams of protein\u003c/strong\u003e and 565 calories for about \u003cstrong\u003e$2.77\u003c/strong\u003e a bowl (at everyday cost) with every package bought fresh, and it only gets cheaper once your pantry is stocked.",
-    "ingredients_display": ["\u003cstrong\u003ePork Loin:\u003c/strong\u003e 5.5 lb (2540 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.5 tbsp (56 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (98 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tbsp (34 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)","\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1.5 tbsp (21 g)","\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.5 tbsp (24 g)","\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)","\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 7.5 tbsp (112 g)","\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 2 tbsp (40 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.25 cups dry (1140 g)"],
+    "ingredients_display": ["\u003cstrong\u003ePork Loin:\u003c/strong\u003e 5.5 lb (2540 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.5 tbsp (56 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 onion (98 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tbsp (34 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)","\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1.5 tbsp (21 g)","\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.5 tbsp (24 g)","\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)","\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 7.5 tbsp (112 g)","\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 2 tbsp (40 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.25 cups dry (1140 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Loin, 5.5 lb: ~$11.98. \u003cstrong\u003eBuy 6 lbs: $12.84.\u003c/strong\u003e",
                        "Garlic, 6.5 tbsp: ~$0.81. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
-                       "Yellow Onion, 1: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 1 onion: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Dijon Mustard, 1.5 tbsp: ~$0.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Worcestershire Sauce, 1.5 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Apple Cider Vinegar, 7.5 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -76,7 +76,7 @@
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  98,
-                                   "buy":  "1",
+                                   "buy":  "1 onion",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

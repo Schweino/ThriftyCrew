@@ -21,15 +21,15 @@
     "intro_html":  "Giniling is the Filipino cousin of picadillo: savory ground pork simmered in a soy and tomato sauce with potatoes, carrots, sweet golden raisins, and a boiled egg on top. Every bowl lands \u003cstrong\u003e32 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.16\u003c/strong\u003e (at everyday cost). Sweet, salty, and filling in a way that makes the price tag feel like a typo.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eGround Pork:\u003c/strong\u003e 3.75 lb (1667 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.3 (368 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.3 onions (368 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.75 tbsp (74 g)",
                                 "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 1.5 cans (1186 g)",
                                 "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7.5 tbsp (118 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.5 cups (137 g)",
                                 "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 1.5 tbsp (29 g)",
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 4.4 (937 g)",
-                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2.4 (149 g)",
-                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.7 (441 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 4.4 potatoes (937 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2.4 carrots (149 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.7 peppers (441 g)",
                                 "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 1.25 cups (164 g)",
                                 "\u003cstrong\u003eGolden Raisins (generic):\u003c/strong\u003e 13 tbsp (118 g)",
                                 "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 12 large eggs (612 g)",
@@ -40,14 +40,14 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Ground Pork, 3.75 lb: ~$12.53. \u003cstrong\u003eBuy 4 lbs: $13.64.\u003c/strong\u003e",
-                       "Yellow Onion, 3.3: ~$0.92. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3.3 onions: ~$0.92. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 8.75 tbsp: ~$1.07. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Crushed Tomatoes, 1.5 cans: ~$2.25. \u003cstrong\u003eBuy 2 28oz cans: $3.02.\u003c/strong\u003e",
                        "Tomato Paste, 7.5 tbsp: ~$0.60. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
                        "Soy Sauce, 0.5 cups: ~$0.52. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fish Sauce, 1.5 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Potato, 4.4: ~$1.14. \u003cstrong\u003eBuy 3 lbs: $1.65.\u003c/strong\u003e",
-                       "Carrots, 2.4: ~$0.37. \u003cstrong\u003eBuy 1 lb: $1.13.\u003c/strong\u003e",
+                       "Potato, 4.4 potatoes: ~$1.14. \u003cstrong\u003eBuy 3 lbs: $1.65.\u003c/strong\u003e",
+                       "Carrots, 2.4 carrots: ~$0.37. \u003cstrong\u003eBuy 1 lb: $1.13.\u003c/strong\u003e",
                        "Frozen Green Peas, 1.25 cups: ~$0.35. \u003cstrong\u003eBuy 1 12oz bag: $0.73.\u003c/strong\u003e",
                        "Golden Raisins, 13 tbsp: ~$0.99. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Eggs, 12 large eggs: ~$1.50. \u003cstrong\u003eBuy 1 dozen: $1.50.\u003c/strong\u003e",
@@ -94,7 +94,7 @@
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  368,
-                                   "buy":  "3.3",
+                                   "buy":  "3.3 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -136,21 +136,21 @@
                                {
                                    "item":  "Potato",
                                    "grams":  937,
-                                   "buy":  "4.4",
+                                   "buy":  "4.4 potatoes",
                                    "bid":  "russet-potatoes",
                                    "gpu":  453.592
                                },
                                {
                                    "item":  "Carrots",
                                    "grams":  149,
-                                   "buy":  "2.4",
+                                   "buy":  "2.4 carrots",
                                    "bid":  "carrots",
                                    "gpu":  453.592
                                },
                                {
                                    "item":  "Red Bell Pepper",
                                    "grams":  441,
-                                   "buy":  "3.7",
+                                   "buy":  "3.7 peppers",
                                    "bid":  "red-bell-pepper",
                                    "gpu":  120
                                },

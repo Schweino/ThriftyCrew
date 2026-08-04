@@ -20,7 +20,7 @@
     "intro_html":  "Korma is the mild, creamy, slightly sweet curry that wins over just about everyone. Cashews and coconut milk make it feel indulgent while the numbers stay high protein and cheap per serving. One batch makes 14 servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (920 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5 cups dry (920 g)",
                                 "\u003cstrong\u003eCashews (generic):\u003c/strong\u003e 1 cup (130 g)",
                                 "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1 cup (200 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 1/2 cups (360 g)",
@@ -28,12 +28,12 @@
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (150 g)",
                                 "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 2/3 tbsp (14 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (12 g)",
-                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3 tsp chopped (35 g)",
-                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 2 tsp (12 g)",
-                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tsp (6 g)",
-                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 1 tsp (6 g)",
-                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 1 tsp (6 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (14 g)"
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 5.75 tbsp chopped (35 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 2 tbsp (12 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (6 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 2 tsp (6 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 2.25 tsp (6 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tsp (14 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$3.71 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -72,7 +72,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  920,
-                                   "buy":  "1 lb",
+                                   "buy":  "5 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -128,42 +128,42 @@
                                {
                                    "item":  "Ginger",
                                    "grams":  35,
-                                   "buy":  "3 tsp chopped",
+                                   "buy":  "5.75 tbsp chopped",
                                    "bid":  "fresh-ginger",
                                    "gpu":  453.592
                                },
                                {
                                    "item":  "Garam Masala",
                                    "grams":  12,
-                                   "buy":  "2 tsp",
+                                   "buy":  "2 tbsp",
                                    "bid":  "garam-masala",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Ground Cumin",
                                    "grams":  6,
-                                   "buy":  "1 tsp",
+                                   "buy":  "1 tbsp",
                                    "bid":  "ground-cumin",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Ground Turmeric",
                                    "grams":  6,
-                                   "buy":  "1 tsp",
+                                   "buy":  "2 tsp",
                                    "bid":  "ground-turmeric",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Ground Cinnamon",
                                    "grams":  6,
-                                   "buy":  "1 tsp",
+                                   "buy":  "2.25 tsp",
                                    "bid":  "ground-cinnamon",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  14,
-                                   "buy":  "1 tsp",
+                                   "buy":  "2.25 tsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                }
@@ -175,7 +175,7 @@
                  "costPerServing":  3.71,
                  "recipeIngredient":  [
                                           "7 lb Boneless Skinless Chicken Breast",
-                                          "1 lb Rice",
+                                          "5 cups dry Rice",
                                           "1 bag Cashews",
                                           "1 can Coconut Milk",
                                           "1 carton Chicken Broth",

@@ -37,22 +37,22 @@
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
                                 "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.07 oz (2 g)",
                                 "\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 2.25 tbsp (16 g)",
-                                "\u003cstrong\u003eSweet Potatoes:\u003c/strong\u003e 14 (1820 g)",
+                                "\u003cstrong\u003eSweet Potatoes:\u003c/strong\u003e 14 sweet potatoes (1820 g)",
                                 "\u003cstrong\u003eBBQ Sauce (generic):\u003c/strong\u003e 3.5 cups (980 g)",
                                 "\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1.25 cups (300 g)",
                                 "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 25 tbsp (25 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (350 g)"
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (350 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Shoulder, 7.5 lb: ~$26.44. \u003cstrong\u003eBuy 8 lbs: $28.56.\u003c/strong\u003e",
                        "Vegetable Oil, 7 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Sweet Potatoes, 14: ~$5.94. \u003cstrong\u003eBuy 4 lbs: $5.94.\u003c/strong\u003e",
+                       "Sweet Potatoes, 14 sweet potatoes: ~$5.94. \u003cstrong\u003eBuy 4 lbs: $5.94.\u003c/strong\u003e",
                        "BBQ Sauce, 3.5 cups: ~$4.28. \u003cstrong\u003ePantry staple; this batch alone uses about 2 18oz bottles.\u003c/strong\u003e",
                        "Light Sour Cream, 1.25 cups: ~$1.08. \u003cstrong\u003eBuy 1 16oz tub: $1.64.\u003c/strong\u003e",
                        "Fresh Cilantro, 25 tbsp: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
-                       "Yellow Onion, 3: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, bay leaves, smoked paprika): ~$0.63. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $40.77 across 14 servings, so roughly $2.91 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $44.79 across 14 servings, roughly $3.20 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -146,7 +146,7 @@
                                    "item":  "Sweet Potatoes",
                                    "canon":  "Sweet Potatoes",
                                    "grams":  1820,
-                                   "buy":  "14",
+                                   "buy":  "14 sweet potatoes",
                                    "bid":  "sweet-potatoes",
                                    "gpu":  "453.592"
                                },
@@ -178,7 +178,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  350,
-                                   "buy":  "3",
+                                   "buy":  "3 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                }

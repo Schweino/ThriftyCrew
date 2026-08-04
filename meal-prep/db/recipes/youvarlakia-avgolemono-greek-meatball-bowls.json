@@ -34,21 +34,21 @@
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tbsp (42 g)",
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.75 lb (1270 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5 cups dry (930 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4 (420 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4 onions (420 g)",
                                 "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 8 large eggs (420 g)",
                                 "\u003cstrong\u003eFresh Mint:\u003c/strong\u003e 22 tbsp (35 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2.5 tbsp (18 g)",
-                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 5.6 (263 g)"
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 5.6 lemons worth (263 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Olive Oil, 1 cups: ~$3.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "93/7 Ground Beef, 2.75 lb: ~$18.57. \u003cstrong\u003eBuy 3 lbs: $19.90.\u003c/strong\u003e",
                        "Rice, 5 cups dry: ~$1.15. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
-                       "Yellow Onion, 4: ~$1.06. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 4 onions: ~$1.06. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Eggs, 8 large eggs: ~$1.00. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
                        "Fresh Mint, 22 tbsp: ~$4.40. \u003cstrong\u003eBuy 3 0.5oz packs: $5.27.\u003c/strong\u003e",
-                       "Lemon Juice, 5.6: ~$0.99. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lemon Juice, 5.6 lemons worth: ~$0.99. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.88. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $31.25 across 14 servings, so roughly $2.23 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $33.96 across 14 servings, roughly $2.43 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -119,7 +119,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  420,
-                                   "buy":  "4",
+                                   "buy":  "4 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -151,7 +151,7 @@
                                    "item":  "Lemon Juice",
                                    "canon":  "Lemon Juice",
                                    "grams":  263,
-                                   "buy":  "5.6",
+                                   "buy":  "5.6 lemons worth",
                                    "bid":  "lemon-juice",
                                    "gpu":  "29.570"
                                }

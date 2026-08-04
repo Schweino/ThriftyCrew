@@ -18,15 +18,15 @@
                  "cost_ps":  "4.76"
              },
     "intro_html":  "Filipino comfort in a bowl: chicken thighs braised in a tomato sauce with potatoes, carrots, bell peppers, and peas, seasoned the traditional way with fish sauce. Each serving lands \u003cstrong\u003e57 grams of protein\u003c/strong\u003e at 675 calories for about \u003cstrong\u003e$4.76\u003c/strong\u003e (at everyday cost). The potatoes cook in the stew, so the starch is built right in.",
-    "ingredients_display": ["\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1 cups (191 g)","\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 7 (1491 g)","\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.5 (214 g)","\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2 (210 g)","\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 (210 g)","\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7.5 lb (3360 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)","\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 21 cans (8631 g)","\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 3.5 tbsp (63 g)","\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 1.75 cups (234 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 tbsp (14 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"],
+    "ingredients_display": ["\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1 cups (191 g)","\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 7 potatoes (1491 g)","\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.5 carrots (214 g)","\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2 peppers (210 g)","\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 peppers (210 g)","\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7.5 lb (3360 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 onions (385 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)","\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 21 cans (8631 g)","\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 3.5 tbsp (63 g)","\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 1.75 cups (234 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 tbsp (14 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Vegetable Oil, 1 cups: ~$0.46. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Potato, 7: ~$1.81. \u003cstrong\u003eBuy 4 lbs: $2.20.\u003c/strong\u003e",
-                       "Carrots, 3.5: ~$0.53. \u003cstrong\u003eBuy 1 lb: $1.13.\u003c/strong\u003e",
-                       "Green Bell Peppers, 2: ~$1.50. \u003cstrong\u003eBuy 2 eachs: $1.72.\u003c/strong\u003e",
+                       "Potato, 7 potatoes: ~$1.81. \u003cstrong\u003eBuy 4 lbs: $2.20.\u003c/strong\u003e",
+                       "Carrots, 3.5 carrots: ~$0.53. \u003cstrong\u003eBuy 1 lb: $1.13.\u003c/strong\u003e",
+                       "Green Bell Peppers, 2 peppers: ~$1.50. \u003cstrong\u003eBuy 2 eachs: $1.72.\u003c/strong\u003e",
                        "Boneless Skinless Chicken Thigh, 7.5 lb: ~$13.11. \u003cstrong\u003eBuy 8 lbs: $14.16.\u003c/strong\u003e",
-                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 6 tbsp: ~$0.75. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Diced Tomatoes, 21 cans: ~$20.15. \u003cstrong\u003eBuy 21 cans: $20.15.\u003c/strong\u003e",
                        "Fish Sauce, 3.5 tbsp: ~$0.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -70,28 +70,28 @@
                                {
                                    "item":  "Potato",
                                    "grams":  1491,
-                                   "buy":  "7",
+                                   "buy":  "7 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                },
                                {
                                    "item":  "Carrots",
                                    "grams":  214,
-                                   "buy":  "3.5",
+                                   "buy":  "3.5 carrots",
                                    "bid":"carrots",
                                    "gpu":453.592
                                },
                                {
                                    "item":  "Red Bell Pepper",
                                    "grams":  210,
-                                   "buy":  "2",
+                                   "buy":  "2 peppers",
                                    "bid":"red-bell-pepper",
                                    "gpu":120
                                },
                                {
                                    "item":  "Green Bell Peppers",
                                    "grams":  210,
-                                   "buy":  "2",
+                                   "buy":  "2 peppers",
                                    "bid":"green-bell-pepper",
                                    "gpu":120
                                },
@@ -105,7 +105,7 @@
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  385,
-                                   "buy":  "3.5",
+                                   "buy":  "3.5 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

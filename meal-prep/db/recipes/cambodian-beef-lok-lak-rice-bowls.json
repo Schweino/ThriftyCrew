@@ -30,7 +30,7 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 3.75 lb (1750 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.5 tbsp (49 g)",
-                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 3.5 onions (385 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3.5 cans (1438 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.5 cups dry (1035 g)",
                                 "\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 0.75 cups (189 g)",
@@ -48,7 +48,7 @@
     "cost_lines":  [
                        "Beef Flank/Sirloin Steak, 3.75 lb: ~$34.03. \u003cstrong\u003eBuy 4 lbs: $35.28.\u003c/strong\u003e",
                        "Vegetable Oil, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Red Onion, 3.5: ~$1.14. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
+                       "Red Onion, 3.5 onions: ~$1.14. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
                        "Diced Tomatoes, 3.5 cans: ~$3.36. \u003cstrong\u003eBuy 4 cans: $3.84.\u003c/strong\u003e",
                        "Rice, 5.5 cups dry: ~$1.28. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
                        "Oyster Sauce, 0.75 cups: ~$1.65. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -111,7 +111,7 @@
                                    "item":  "Red Onion",
                                    "canon":  "Red Onion",
                                    "grams":  385,
-                                   "buy":  "3.5",
+                                   "buy":  "3.5 onions",
                                    "bid":"red-onion",
                                    "gpu":453.592
                                },

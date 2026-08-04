@@ -33,8 +33,8 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eWild Rice (generic (USDA)):\u003c/strong\u003e 5.25 cups (855 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 5.5 tbsp (78 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (196 g)",
-                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 5.6 (308 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (196 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 5.6 stalks (308 g)",
                                 "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 1.5 lb (635 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5 tbsp (42 g)",
                                 "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 3.75 lb (1680 g)",
@@ -54,8 +54,8 @@
     "cost_lines":  [
                        "Wild Rice, 5.25 cups: ~$20.72. \u003cstrong\u003eBuy 2 16oz bags: $22.00.\u003c/strong\u003e",
                        "Butter, 5.5 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
-                       "Yellow Onion, 2: ~$0.49. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Celery, 5.6: ~$1.62. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.49. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Celery, 5.6 stalks: ~$1.62. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
                        "White Mushrooms, 1.5 lb: ~$5.29. \u003cstrong\u003eBuy 3 8oz packs: $5.67.\u003c/strong\u003e",
                        "Garlic, 5 tbsp: ~$0.60. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Turkey Breast, 3.75 lb: ~$17.83. \u003cstrong\u003eBuy 2 3lb frozen roasts: $28.88.\u003c/strong\u003e",
@@ -118,7 +118,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  196,
-                                   "buy":  "2",
+                                   "buy":  "2 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -126,7 +126,7 @@
                                    "item":  "Celery",
                                    "canon":  "Celery",
                                    "grams":  308,
-                                   "buy":  "5.6",
+                                   "buy":  "5.6 stalks",
                                    "bid":  "celery",
                                    "gpu":  "450.000"
                                },

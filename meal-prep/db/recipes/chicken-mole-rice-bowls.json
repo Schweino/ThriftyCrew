@@ -19,15 +19,15 @@
                  "cost_ps":  "3.46"
              },
     "intro_html":  "A weeknight-friendly mole: charred poblanos, onion, and peanuts blended into a deep, smoky sauce over tender chicken thighs and rice. Each bowl delivers \u003cstrong\u003e52 grams of protein\u003c/strong\u003e at 560 calories for about \u003cstrong\u003e$3.46\u003c/strong\u003e (at everyday cost). Poblanos and peanuts are doing work here that usually takes a restaurant kitchen all afternoon.",
-    "ingredients_display": ["\u003cstrong\u003ePeanuts (Great Value):\u003c/strong\u003e 3.5 tbsp (32 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)","\u003cstrong\u003eJalapeno:\u003c/strong\u003e 5.5 tbsp (49 g)","\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3175 g)","\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 tbsp (9 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1.25 tbsp (11 g)","\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 tbsp (14 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.75 lb (1260 g)","\u003cstrong\u003ePoblano Peppers (generic):\u003c/strong\u003e 7.6 (644 g)","\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 25 tbsp (25 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.75 cups dry (894 g)"],
+    "ingredients_display": ["\u003cstrong\u003ePeanuts (Great Value):\u003c/strong\u003e 3.5 tbsp (32 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 onions (385 g)","\u003cstrong\u003eJalapeno:\u003c/strong\u003e 5.5 tbsp (49 g)","\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3175 g)","\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 tbsp (9 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1.25 tbsp (11 g)","\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 tbsp (14 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.75 lb (1260 g)","\u003cstrong\u003ePoblano Peppers (generic):\u003c/strong\u003e 7.6 peppers (644 g)","\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 25 tbsp (25 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.75 cups dry (894 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Peanuts, 3.5 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 16oz jar: $2.58.\u003c/strong\u003e",
-                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Jalapeno, 5.5 tbsp: ~$0.19. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
                        "Boneless Skinless Chicken Thigh, 7 lb: ~$12.39. \u003cstrong\u003eBuy 7 lbs: $12.39.\u003c/strong\u003e",
                        "Chicken Broth, 2.75 lb: ~$1.69. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Poblano Peppers, 7.6: ~$4.63. \u003cstrong\u003eBuy 2 lbs: $6.52.\u003c/strong\u003e",
+                       "Poblano Peppers, 7.6 peppers: ~$4.63. \u003cstrong\u003eBuy 2 lbs: $6.52.\u003c/strong\u003e",
                        "Fresh Cilantro, 25 tbsp: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Rice, 4.75 cups dry: ~$1.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (chili powder, garlic powder, dried oregano, black pepper, salt): ~$1.03. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
@@ -68,7 +68,7 @@
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  385,
-                                   "buy":  "3.5",
+                                   "buy":  "3.5 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -124,7 +124,7 @@
                                {
                                    "item":  "Poblano Peppers",
                                    "grams":  644,
-                                   "buy":  "7.6",
+                                   "buy":  "7.6 peppers",
                                    "bid":  "poblano-peppers",
                                    "gpu":  "453.592"
                                },

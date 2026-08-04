@@ -27,10 +27,10 @@
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (160 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 1/2 tbsp (20 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (9 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp kosher salt (12 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp kosher salt (12 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tsp (3 g)",
                                 "\u003cstrong\u003eBalsamic Vinegar (generic):\u003c/strong\u003e 1 tbsp + 1/2 tsp (40 g)",
-                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 2 tsp (12 g)"
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 2.75 tbsp (12 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$4.35 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -117,14 +117,14 @@
                                {
                                    "item":  "Salt",
                                    "grams":  12,
-                                   "buy":  "1 tsp kosher salt",
+                                   "buy":  "2 tsp kosher salt",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  3,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.25 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                },
@@ -138,7 +138,7 @@
                                {
                                    "item":  "Italian Seasoning",
                                    "grams":  12,
-                                   "buy":  "2 tsp",
+                                   "buy":  "2.75 tbsp",
                                    "bid":  "italian-seasoning",
                                    "gpu":  "28.350"
                                }

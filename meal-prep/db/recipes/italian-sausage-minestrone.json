@@ -32,8 +32,8 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eHot Italian Sausage (Johnsonville):\u003c/strong\u003e 3 lb (1376 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 4 tbsp (55 g)",
-                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 6 (334 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (334 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 6 stalks (334 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (334 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 9 tbsp (76 g)",
                                 "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 1.5 lb (688 g)",
                                 "\u003cstrong\u003eArtichoke Hearts (Hannaford):\u003c/strong\u003e 36.5 oz (1032 g)",
@@ -51,8 +51,8 @@
     "cost_lines":  [
                        "Hot Italian Sausage, 3 lb: ~$7.59. \u003cstrong\u003eBuy 4 lbs: $10.00.\u003c/strong\u003e",
                        "Olive Oil, 4 tbsp: ~$0.77. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Celery, 6: ~$1.76. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
-                       "Yellow Onion, 3: ~$0.84. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Celery, 6 stalks: ~$1.76. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.84. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 9 tbsp: ~$1.09. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Green Beans, 1.5 lb: ~$1.48. \u003cstrong\u003eBuy 3 12oz bags: $2.19.\u003c/strong\u003e",
                        "Artichoke Hearts, 36.5 oz: ~$5.86. \u003cstrong\u003eBuy 3 13.8oz cans: $6.66.\u003c/strong\u003e",
@@ -116,7 +116,7 @@
                                    "item":  "Celery",
                                    "canon":  "Celery",
                                    "grams":  334,
-                                   "buy":  "6",
+                                   "buy":  "6 stalks",
                                    "bid":  "celery",
                                    "gpu":  "450.000"
                                },
@@ -124,7 +124,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  334,
-                                   "buy":  "3",
+                                   "buy":  "3 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

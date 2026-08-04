@@ -19,10 +19,10 @@
                  "cost_ps":  "4.60"
              },
     "intro_html":  "Everything you like about a cheeseburger and fries, deconstructed into a bowl: seasoned turkey, roasted potatoes, crunchy cabbage, cheddar, pickles, and a tangy burger sauce. Each one packs \u003cstrong\u003e38 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.60\u003c/strong\u003e (at everyday cost). Drive-thru flavor without the drive-thru math.",
-    "ingredients_display": ["\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 13 (2812 g)","\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.75 lb (1667 g)","\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.25 tbsp (21 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1.25 tbsp (11 g)","\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1.25 tbsp (9 g)","\u003cstrong\u003ePaprika:\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1.75 cups (450 g)","\u003cstrong\u003eMayonnaise (Great Value):\u003c/strong\u003e 7.5 tbsp (96 g)","\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 3.75 tbsp (62 g)","\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 5.5 tbsp (83 g)","\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1.25 tbsp (26 g)","\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 1.25 tbsp (18 g)","\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 7.25 cups (514 g)","\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 3.75 cups (548 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (211 g)","\u003cstrong\u003eDill Pickles (Great Value):\u003c/strong\u003e 4 (263 g)","\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 14.75 oz (415 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display": ["\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 13 potatoes (2812 g)","\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.75 lb (1667 g)","\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.25 tbsp (21 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1.25 tbsp (11 g)","\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1.25 tbsp (9 g)","\u003cstrong\u003ePaprika:\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1.75 cups (450 g)","\u003cstrong\u003eMayonnaise (Great Value):\u003c/strong\u003e 7.5 tbsp (96 g)","\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 3.75 tbsp (62 g)","\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 5.5 tbsp (83 g)","\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1.25 tbsp (26 g)","\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 1.25 tbsp (18 g)","\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 7.25 cups (514 g)","\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 3.75 cups (548 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (211 g)","\u003cstrong\u003eDill Pickles (Great Value):\u003c/strong\u003e 4 pickles (263 g)","\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 14.75 oz (415 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Potato, 13: ~$3.41. \u003cstrong\u003eBuy 7 lbs: $3.85.\u003c/strong\u003e",
+                       "Potato, 13 potatoes: ~$3.41. \u003cstrong\u003eBuy 7 lbs: $3.85.\u003c/strong\u003e",
                        "93/7 Ground Turkey, 3.75 lb: ~$20.07. \u003cstrong\u003eBuy 4 lbs: $21.84.\u003c/strong\u003e",
                        "Worcestershire Sauce, 1.25 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Greek Yogurt, 1.75 cups: ~$1.31. \u003cstrong\u003eBuy 1 32oz tub: $2.64.\u003c/strong\u003e",
@@ -33,7 +33,7 @@
                        "Apple Cider Vinegar, 1.25 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Green Cabbage, 7.25 cups: ~$0.96. \u003cstrong\u003eBuy 1 head: $1.69.\u003c/strong\u003e",
                        "Cherry Tomatoes, 3.75 cups: ~$1.17. \u003cstrong\u003eBuy 2 10oz clamshells: $1.21.\u003c/strong\u003e",
-                       "Yellow Onion, 2: ~$0.53. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.53. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 14.75 oz: ~$3.60. \u003cstrong\u003eBuy 2 8oz bags: $3.94.\u003c/strong\u003e",
                        "Pantry seasonings (garlic powder, onion powder, paprika, dill pickles, salt, black pepper): ~$1.51. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $33.78 across 14 servings, so roughly $2.41 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
@@ -66,7 +66,7 @@
                                {
                                    "item":  "Potato",
                                    "grams":  2812,
-                                   "buy":  "13",
+                                   "buy":  "13 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                },
@@ -164,14 +164,14 @@
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  211,
-                                   "buy":  "2",
+                                   "buy":  "2 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
                                {
                                    "item":  "Dill Pickles",
                                    "grams":  263,
-                                   "buy":  "4",
+                                   "buy":  "4 pickles",
                                    "bid":  "pickles",
                                    "gpu":  "28.350"
                                },

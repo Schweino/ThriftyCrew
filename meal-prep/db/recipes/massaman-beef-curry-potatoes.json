@@ -32,7 +32,7 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eLemongrass Paste (Gourmet Garden (McCormick)):\u003c/strong\u003e 3.5 tbsp (52 g)",
                                 "\u003cstrong\u003eDried Arbol Chiles (generic (USDA)):\u003c/strong\u003e 0.5 cups (15 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 14 (1540 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 14 onions (1540 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 10.25 tbsp (88 g)",
                                 "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 5.5 oz (158 g)",
                                 "\u003cstrong\u003eGround Cloves (Great Value):\u003c/strong\u003e 0.25 oz (4 g)",
@@ -49,7 +49,7 @@
                                 "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1.25 tbsp (18 g)",
                                 "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 3.5 tbsp (63 g)",
                                 "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 3.5 tbsp (44 g)",
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 3 (623 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 3 potatoes (623 g)",
                                 "\u003cstrong\u003ePeanuts (Great Value):\u003c/strong\u003e 10.5 tbsp (94 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
@@ -59,7 +59,7 @@
     "cost_lines":  [
                        "Lemongrass Paste, 3.5 tbsp: ~$2.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Dried Arbol Chiles, 0.5 cups: ~$0.44. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 14: ~$3.87. \u003cstrong\u003eBuy 4 lbs: $4.56.\u003c/strong\u003e",
+                       "Yellow Onion, 14 onions: ~$3.87. \u003cstrong\u003eBuy 4 lbs: $4.56.\u003c/strong\u003e",
                        "Garlic, 10.25 tbsp: ~$1.27. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
                        "Ginger, 5.5 oz: ~$1.38. \u003cstrong\u003eBuy 2 pieces: $1.75.\u003c/strong\u003e",
                        "Fresh Cilantro, 14 tbsp: ~$0.44. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
@@ -70,7 +70,7 @@
                        "Lime Juice, 1.25 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fish Sauce, 3.5 tbsp: ~$0.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Sugar, 3.5 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Potato, 3: ~$0.78. \u003cstrong\u003eBuy 2 lbs: $1.14.\u003c/strong\u003e",
+                       "Potato, 3 potatoes: ~$0.78. \u003cstrong\u003eBuy 2 lbs: $1.14.\u003c/strong\u003e",
                        "Peanuts, 10.5 tbsp: ~$0.53. \u003cstrong\u003eBuy 1 16oz jar: $2.58.\u003c/strong\u003e",
                        "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (ground cloves, ground cumin, ground nutmeg, garam masala, ground cinnamon, bay leaves, salt, black pepper): ~$1.60. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
@@ -127,7 +127,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  1540,
-                                   "buy":  "14",
+                                   "buy":  "14 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -263,7 +263,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  623,
-                                   "buy":  "3",
+                                   "buy":  "3 potatoes",
                                    "bid":  "russet-potatoes",
                                    "gpu":  453.592
                                },

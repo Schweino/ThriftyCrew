@@ -32,9 +32,9 @@
              },
     "intro_html":  "Nikujaga translates, more or less, to meat and potatoes. In Japan it is the dish people name when you ask what home tastes like. Thin sliced meat, potatoes, onions, and carrots simmer in a sweet soy broth of mirin, sugar, and soy sauce until the potatoes go soft at the edges and take on the color of the broth. Eastern Japan traditionally makes it with pork, and that is the version here. It is gentle food, and it is one of the least expensive stews you can put together.",
     "ingredients_display":  [
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.7 (404 g)",
-                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.7 (224 g)",
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 20 (4217 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.7 onions (404 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.7 carrots (224 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 20 potatoes (4217 g)",
                                 "\u003cstrong\u003eSnow Peas:\u003c/strong\u003e 3 oz (88 g)",
                                 "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 4.5 lb (2058 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.75 tbsp (51 g)",
@@ -47,9 +47,9 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Yellow Onion, 3.7: ~$1.02. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Carrots, 3.7: ~$0.47. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
-                       "Potato, 20: ~$5.28. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
+                       "Yellow Onion, 3.7 onions: ~$1.02. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 3.7 carrots: ~$0.47. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Potato, 20 potatoes: ~$5.28. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
                        "Snow Peas, 3 oz: ~$0.98. \u003cstrong\u003eBuy 1 8oz bag: $2.53.\u003c/strong\u003e",
                        "Pork Loin, 4.5 lb: ~$9.71. \u003cstrong\u003eBuy 5 lbs: $10.70.\u003c/strong\u003e",
                        "Vegetable Oil, 3.75 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -95,7 +95,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  404,
-                                   "buy":  "3.7",
+                                   "buy":  "3.7 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -103,7 +103,7 @@
                                    "item":  "Carrots",
                                    "canon":  "Carrots",
                                    "grams":  224,
-                                   "buy":  "3.7",
+                                   "buy":  "3.7 carrots",
                                    "bid":"carrots",
                                    "gpu":453.592
                                },
@@ -111,7 +111,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  4217,
-                                   "buy":  "20",
+                                   "buy":  "20 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                },

@@ -29,8 +29,8 @@
     "intro_html":  "Five ingredients. That is the entire list. Ground beef, sliced potatoes, onion, cheddar, and a splash of broth, layered into a slow cooker and left alone until the potatoes go tender and the cheese melts down through all of it. This is a genuinely cheap dinner. Each serving carries \u003cstrong\u003e34 grams of protein\u003c/strong\u003e and 569 calories for about \u003cstrong\u003e$3.08\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1058 g)",
-                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 19 (4052 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 (268 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 19 potatoes (4052 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 onions (268 g)",
                                 "\u003cstrong\u003ePaprika:\u003c/strong\u003e 0.75 tbsp (5 g)",
                                 "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.5 tbsp (4 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (14 g)",
@@ -41,8 +41,8 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Beef, 2.25 lb: ~$15.47. \u003cstrong\u003eBuy 3 lbs: $19.90.\u003c/strong\u003e",
-                       "Potato, 19: ~$5.07. \u003cstrong\u003eBuy 9 lbs: $5.11.\u003c/strong\u003e",
-                       "Yellow Onion, 2.4: ~$0.67. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Potato, 19 potatoes: ~$5.07. \u003cstrong\u003eBuy 9 lbs: $5.11.\u003c/strong\u003e",
+                       "Yellow Onion, 2.4 onions: ~$0.67. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 28 oz: ~$6.01. \u003cstrong\u003eBuy 4 8oz bags: $6.90.\u003c/strong\u003e",
                        "Chicken Broth, 1.25 cups: ~$0.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (paprika, garlic powder, salt, black pepper): ~$0.20. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
@@ -91,7 +91,7 @@
                                    "item":  "Potato",
                                    "canon":  "Potato",
                                    "grams":  4052,
-                                   "buy":  "19",
+                                   "buy":  "19 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                },
@@ -99,7 +99,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  268,
-                                   "buy":  "2.4",
+                                   "buy":  "2.4 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

@@ -20,7 +20,7 @@
     "intro_html":  "This Korean-style shredded pork brings a sweet and savory punch for about $3.71 a bowl (at everyday cost). Lean tenderloin slow cooks in soy, brown sugar, garlic, and ginger until it shreds like a dream, then goes over rice with carrots. It makes 14 servings and hands you 54 grams of protein each.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3200 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (950 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (950 g)",
                                 "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 4 2/3 cups (510 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (120 g)",
                                 "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1/3 cup (80 g)",
@@ -67,7 +67,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  950,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.25 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -135,7 +135,7 @@
                  "costPerServing":  3.71,
                  "recipeIngredient":  [
                                           "8 lb Pork Tenderloin",
-                                          "1 lb Rice",
+                                          "5.25 cups dry Rice",
                                           "2 bags Shredded Carrots",
                                           "2 onions Yellow Onion",
                                           "1 bag Brown Sugar",

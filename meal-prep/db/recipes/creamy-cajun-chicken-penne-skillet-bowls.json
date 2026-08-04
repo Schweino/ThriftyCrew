@@ -18,13 +18,13 @@
                  "cost_ps":  "3.82"
              },
     "intro_html":  "One pot, no draining: penne cooks right in the smoky Cajun tomato broth, then cream cheese melts in to make it silky. Each bowl brings \u003cstrong\u003e44 grams of protein\u003c/strong\u003e at 570 calories for about \u003cstrong\u003e$3.82\u003c/strong\u003e (at everyday cost), and it is still a genuinely cheap full dinner.",
-    "ingredients_display": ["\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 2.25 tbsp (16 g)","\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.75 tbsp (6 g)","\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.25 tbsp (5 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3.5 tbsp (49 g)","\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)","\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 43.5 oz dry (1232 g)","\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3.6 cans (1488 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3.75 lb (1680 g)","\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 7 oz (198 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 3.25 cups (158 g)"],
+    "ingredients_display": ["\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 2.25 tbsp (16 g)","\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.75 tbsp (6 g)","\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.25 tbsp (5 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3.5 tbsp (49 g)","\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 onions (385 g)","\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 43.5 oz dry (1232 g)","\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3.6 cans (1488 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3.75 lb (1680 g)","\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 7 oz (198 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 3.25 cups (158 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Olive Oil, 3.5 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Butter, 3.5 tbsp: ~$0.31. \u003cstrong\u003eBuy 1 lb box: $2.92.\u003c/strong\u003e",
                        "Boneless Skinless Chicken Breast, 3.5 lb: ~$7.81. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
-                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Penne Pasta, 43.5 oz dry: ~$2.65. \u003cstrong\u003eBuy 3 16oz boxs: $2.93.\u003c/strong\u003e",
                        "Diced Tomatoes, 3.6 cans: ~$3.47. \u003cstrong\u003eBuy 4 cans: $3.84.\u003c/strong\u003e",
                        "Chicken Broth, 3.75 lb: ~$2.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -139,7 +139,7 @@
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  385,
-                                   "buy":  "3.5",
+                                   "buy":  "3.5 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

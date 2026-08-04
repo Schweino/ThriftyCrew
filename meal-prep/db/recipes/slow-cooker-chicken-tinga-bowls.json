@@ -20,16 +20,16 @@
     "intro_html":  "Tinga is smoky, a little spicy, and tastes like you fussed over it, even though you did not. This chipotle-and-tomato chicken is high in protein and comes in cheap per serving, which is exactly what you want from a meal prep. One batch makes 14 servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (940 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5 cups dry (940 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cups (500 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 4 2/3 cups (400 g)",
                                 "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 5 1/3 tbsp (90 g)",
                                 "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 cup (112 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (20 g)",
-                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tsp (2 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (12 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)"
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 2 tsp (2 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (12 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tsp (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$2.94 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -68,7 +68,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  940,
-                                   "buy":  "1 lb",
+                                   "buy":  "5 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -117,21 +117,21 @@
                                {
                                    "item":  "Dried Oregano",
                                    "grams":  2,
-                                   "buy":  "1 tsp",
+                                   "buy":  "2 tsp",
                                    "bid":  "dried-oregano",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  12,
-                                   "buy":  "1 tsp",
+                                   "buy":  "2 tsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  2,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "0.75 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                }
@@ -143,7 +143,7 @@
                  "costPerServing":  2.94,
                  "recipeIngredient":  [
                                           "7 lb Boneless Skinless Chicken Breast",
-                                          "1 lb Rice",
+                                          "5 cups dry Rice",
                                           "2 cans Diced Tomatoes",
                                           "3 onions Yellow Onion",
                                           "2 bags Broccoli Florets",

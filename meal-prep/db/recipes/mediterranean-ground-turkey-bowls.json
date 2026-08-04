@@ -28,12 +28,12 @@
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tbsp (27 g)",
                                 "\u003cstrong\u003eCucumber:\u003c/strong\u003e 1 cucumber (1050 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves, minced (35 g)",
-                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1 Tbsp (50 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1 lemon worth (50 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/2 tsp + 1/4 tsp (turkey + sauce) (16 g)",
-                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)",
-                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1/4 tsp (3 g)",
-                                "\u003cstrong\u003eDried Dill (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp cracked (2 g)"
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 tsp (3 g)",
+                                "\u003cstrong\u003eDried Dill (Great Value):\u003c/strong\u003e 2 tsp (2 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tsp cracked (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$4.88 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -128,7 +128,7 @@
                                {
                                    "item":  "Lemon Juice",
                                    "grams":  50,
-                                   "buy":  "1 Tbsp",
+                                   "buy":  "1 lemon worth",
                                    "bid":  "lemon-juice",
                                    "gpu":  "29.570"
                                },
@@ -142,28 +142,28 @@
                                {
                                    "item":  "Dried Oregano",
                                    "grams":  4,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.25 tbsp",
                                    "bid":  "dried-oregano",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Garlic Powder",
                                    "grams":  3,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "1 tsp",
                                    "bid":  "garlic-powder",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Dried Dill",
                                    "grams":  2,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "2 tsp",
                                    "bid":  "dried-dill",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  2,
-                                   "buy":  "1/4 tsp cracked",
+                                   "buy":  "0.75 tsp cracked",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                }

@@ -80,6 +80,12 @@ $dn       = (Get-Content $DensitiesFile -Raw | ConvertFrom-Json).items
 
 $dbm=@{}; foreach($i in $db){ $dbm[$i.item]=$i }
 $dnm=@{}; foreach($p in $dn.PSObject.Properties){ $dnm[$p.Name]=$p.Value }
+# each-noun map: see db\each-nouns.json. Kept in step with build-v2-spec.ps1 - both builders share the
+# FriendlyAmt each branch, so a fix in only one of them lets the bare-count bug back in through the other.
+$enm=@{}
+$EachNounsFile = Join-Path (Split-Path (Split-Path $DensitiesFile -Parent) -Parent) 'db\each-nouns.json'
+if(-not (Test-Path $EachNounsFile)){ $EachNounsFile = Join-Path (Split-Path $DensitiesFile -Parent) 'each-nouns.json' }
+foreach($p in ((Get-Content $EachNounsFile -Raw -Encoding utf8 | ConvertFrom-Json).items.PSObject.Properties)){ $enm[$p.Name]=$p.Value }
 
 # ---- MERGED ITEM -> BOARD MAP (cost-engine Load-Map pattern; later files win) --------------------
 function Add-MapFile([hashtable]$acc,[string]$path,[string]$label,[switch]$Required){
@@ -152,6 +158,15 @@ Write-Output ("live catalog slugs: " + $liveSlugs.Count)
 
 $LB=453.592; $OZ=28.3495
 function Den([string]$item,[string]$u){ if($dnm.ContainsKey($item) -and ($dnm[$item].PSObject.Properties.Name -contains $u)){ [double]$dnm[$item].$u } else { $null } }
+# The noun that goes with a COUNT - see build-v2-spec.ps1 and db\each-nouns.json for the why. A missing
+# entry throws rather than printing a bare number, which is exactly how 661 lines shipped unitless.
+function EachNoun([string]$item,[double]$n){
+  if(-not $enm.ContainsKey($item)){
+    throw ("no each-noun for '$item' - it reaches the FriendlyAmt each branch, so it needs a {one, many} entry in db\each-nouns.json (otherwise the card prints a count with no unit)")
+  }
+  if([Math]::Abs($n - 1.0) -lt 1e-9){ return [string]$enm[$item].one }
+  return [string]$enm[$item].many
+}
 function Frac([double]$v){
   # friendly quantity: quarters for anything a quarter-unit or larger, 2 decimals below that so a
   # small amount never prints as a bare "0" (r100 shipped "Bay Leaves ... 0 oz").
@@ -182,7 +197,7 @@ function FriendlyAmt([string]$item,[double]$g){
   $can = Den $item 'can'
   if($can -and $g -ge ($can*0.85)){ $n=[Math]::Round($g/$can,1); if([Math]::Abs($n-[Math]::Round($n)) -lt 0.15){ $n=[Math]::Round($n) }; return ("$n can" + $(if($n -ne 1){'s'})) }
   $each = Den $item 'each'
-  if($each -and $each -ge 40 -and $g -ge ($each*0.6)){ $n=[Math]::Round($g/$each,1); if([Math]::Abs($n-[Math]::Round($n)) -lt 0.25){ $n=[Math]::Round($n) }; return ("$n") }
+  if($each -and $each -ge 40 -and $g -ge ($each*0.6)){ $n=[Math]::Round($g/$each,1); if([Math]::Abs($n-[Math]::Round($n)) -lt 0.25){ $n=[Math]::Round($n) }; return ("$n " + (EachNoun $item $n)) }
   # bulk/leafy produce and whole-muscle cuts that reached here: weigh them, do not cup them
   if($item -match $WEIGHT_FIRST -or $item -match $WEIGHT_MEAT){
     if($g -ge $LB){ return ((Frac ($g/$LB)) + ' lb') }

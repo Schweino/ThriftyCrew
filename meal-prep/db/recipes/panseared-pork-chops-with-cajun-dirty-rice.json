@@ -18,7 +18,7 @@
                  "cost_ps":  "4.02"
              },
     "intro_html":  "Juicy cajun-crusted pork chops over dirty rice loaded with chorizo, peppers, and green onion. The chorizo stands in for the traditional chicken livers and nobody files a complaint. Every bowl brings \u003cstrong\u003e44 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.02\u003c/strong\u003e (at everyday cost) of honest Louisiana-style cooking.",
-    "ingredients_display": ["\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 5.5 lb (2520 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.5 cups dry (648 g)","\u003cstrong\u003ePork Chops:\u003c/strong\u003e 5.25 lb (2380 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 tbsp (14 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003ePork Chorizo (Cacique):\u003c/strong\u003e 1 lb (397 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.7 (402 g)","\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.5 (420 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 12.25 tbsp (105 g)","\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 3.25 tbsp (10 g)","\u003cstrong\u003eCajun Seasoning (Tony Chachere\u0027s):\u003c/strong\u003e 3.5 tbsp (32 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 3.25 cups (158 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"],
+    "ingredients_display": ["\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 5.5 lb (2520 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.5 cups dry (648 g)","\u003cstrong\u003ePork Chops:\u003c/strong\u003e 5.25 lb (2380 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 tbsp (14 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003ePork Chorizo (Cacique):\u003c/strong\u003e 1 lb (397 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.7 onions (402 g)","\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.5 peppers (420 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 12.25 tbsp (105 g)","\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 3.25 tbsp (10 g)","\u003cstrong\u003eCajun Seasoning (Tony Chachere\u0027s):\u003c/strong\u003e 3.5 tbsp (32 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 3.25 cups (158 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Chicken Broth, 5.5 lb: ~$3.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -26,7 +26,7 @@
                        "Pork Chops, 5.25 lb: ~$21.88. \u003cstrong\u003eBuy 6 lbs: $25.02.\u003c/strong\u003e",
                        "Olive Oil, 3.5 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pork Chorizo, 1 lb: ~$2.98. \u003cstrong\u003eBuy 2 9oz tubes: $3.83.\u003c/strong\u003e",
-                       "Yellow Onion, 3.7: ~$1.01. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3.7 onions: ~$1.01. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 12.25 tbsp: ~$1.51. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
                        "Green Onions, 3.25 cups: ~$1.88. \u003cstrong\u003eBuy 2 bunchs: $2.14.\u003c/strong\u003e",
                        "Pantry seasonings (black pepper, red bell pepper, dried thyme, cajun seasoning, salt): ~$4.72. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
@@ -102,14 +102,14 @@
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  402,
-                                   "buy":  "3.7",
+                                   "buy":  "3.7 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
                                {
                                    "item":  "Red Bell Pepper",
                                    "grams":  420,
-                                   "buy":  "3.5",
+                                   "buy":  "3.5 peppers",
                                    "bid":"red-bell-pepper",
                                    "gpu":120
                                },

@@ -18,7 +18,7 @@
                  "cost_ps":  "4.75"
              },
     "intro_html":  "Gnocchi simmered in a creamy tomato sauce with browned turkey, then blanketed in melted mozzarella. This is the rich one: 795 calories with \u003cstrong\u003e42 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.75 a bowl\u003c/strong\u003e (at everyday cost). The gnocchi cooks right in the sauce, so all that starch thickens dinner instead of going down the drain.",
-    "ingredients_display": ["\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.75 lb (1750 g)","\u003cstrong\u003ePotato Gnocchi (Great Value):\u003c/strong\u003e 61.75 oz dry (1750 g)","\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (875 g)","\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 3.75 cups (875 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 lb (420 g)","\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 3.75 oz (105 g)","\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7 tbsp (112 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 18.5 oz (525 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display": ["\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.75 lb (1750 g)","\u003cstrong\u003ePotato Gnocchi (Great Value):\u003c/strong\u003e 61.75 oz dry (1750 g)","\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (875 g)","\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 3.75 cups (875 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 lb (420 g)","\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 3.75 oz (105 g)","\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7 tbsp (112 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 onions (385 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 18.5 oz (525 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 3.75 lb: ~$21.07. \u003cstrong\u003eBuy 4 lbs: $21.84.\u003c/strong\u003e",
@@ -28,7 +28,7 @@
                        "Chicken Broth, 1 lb: ~$0.56. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Parmesan Cheese, 3.75 oz: ~$1.38. \u003cstrong\u003eBuy 1 8oz tub: $2.98.\u003c/strong\u003e",
                        "Tomato Paste, 7 tbsp: ~$0.57. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
-                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5 onions: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Olive Oil, 3.5 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Reduced Fat Mozzarella, 18.5 oz: ~$4.56. \u003cstrong\u003eBuy 3 8oz bags: $5.91.\u003c/strong\u003e",
@@ -113,7 +113,7 @@
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  385,
-                                   "buy":  "3.5",
+                                   "buy":  "3.5 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

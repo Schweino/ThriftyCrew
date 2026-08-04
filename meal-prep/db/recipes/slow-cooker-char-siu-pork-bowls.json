@@ -26,11 +26,11 @@
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 cup (240 g)",
                                 "\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 1/2 cup (120 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1/2 cup (120 g)",
-                                "\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 3 tbsp (115 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tsp minced (18 g)",
-                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 2 tsp grated fresh (10 g)",
-                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 tsp dark sesame oil (10 g)",
-                                "\u003cstrong\u003eFive-Spice Powder (McCormick Gourmet):\u003c/strong\u003e 1/2 tsp (3 g)"
+                                "\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 6.75 tbsp (115 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp minced (18 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1.75 tbsp grated fresh (10 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 2.25 tsp dark sesame oil (10 g)",
+                                "\u003cstrong\u003eFive-Spice Powder (McCormick Gourmet):\u003c/strong\u003e 1.25 tsp (3 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$3.52 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -111,35 +111,35 @@
                                {
                                    "item":  "Ketchup",
                                    "grams":  115,
-                                   "buy":  "3 tbsp",
+                                   "buy":  "6.75 tbsp",
                                    "bid":  "ketchup",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  18,
-                                   "buy":  "2 tsp minced",
+                                   "buy":  "2 tbsp minced",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },
                                {
                                    "item":  "Ginger",
                                    "grams":  10,
-                                   "buy":  "2 tsp grated fresh",
+                                   "buy":  "1.75 tbsp grated fresh",
                                    "bid":  "fresh-ginger",
                                    "gpu":  453.592
                                },
                                {
                                    "item":  "Sesame Oil",
                                    "grams":  10,
-                                   "buy":  "1 tsp dark sesame oil",
+                                   "buy":  "2.25 tsp dark sesame oil",
                                    "bid":  "sesame-oil",
                                    "gpu":  "29.570"
                                },
                                {
                                    "item":  "Five-Spice Powder",
                                    "grams":  3,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.25 tsp",
                                    "bid":  "five-spice-powder",
                                    "gpu":  "28.350"
                                }

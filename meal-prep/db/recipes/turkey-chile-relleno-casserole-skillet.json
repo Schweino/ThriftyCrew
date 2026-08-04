@@ -30,8 +30,8 @@
     "intro_html":  "A proper chile relleno means roasting and peeling each pepper, stuffing it by hand, dipping it in whipped egg batter, and frying it one at a time. That is a beautiful way to spend a Sunday and a terrible way to make fourteen servings. This takes the same parts, charred peppers, spiced meat, and an absurd amount of melted cheese, and builds them into a skillet. Each serving carries \u003cstrong\u003e53 grams of protein\u003c/strong\u003e and 764 calories for about \u003cstrong\u003e$4.01\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 5.25 lb (2380 g)",
-                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 7 (840 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 (192 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 7 peppers (840 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 onions (192 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp (18 g)",
                                 "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 3.5 tbsp (28 g)",
                                 "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 tbsp (9 g)",
@@ -45,8 +45,8 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "93/7 Ground Turkey, 5.25 lb: ~$20.05. \u003cstrong\u003eBuy 6 lbs: $22.93.\u003c/strong\u003e",
-                       "Green Bell Peppers, 7: ~$6.02. \u003cstrong\u003eBuy 7 each: $6.02.\u003c/strong\u003e",
-                       "Yellow Onion, 1.7: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 7 peppers: ~$6.02. \u003cstrong\u003eBuy 7 each: $6.02.\u003c/strong\u003e",
+                       "Yellow Onion, 1.7 onions: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 2 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "All-Purpose Flour, 3.5 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 1 carton: ~$1.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -100,7 +100,7 @@
                                    "item":  "Green Bell Peppers",
                                    "canon":  "Green Bell Peppers",
                                    "grams":  840,
-                                   "buy":  "7",
+                                   "buy":  "7 peppers",
                                    "bid":  "green-bell-pepper",
                                    "gpu":  120
                                },
@@ -108,7 +108,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  192,
-                                   "buy":  "1.7",
+                                   "buy":  "1.7 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

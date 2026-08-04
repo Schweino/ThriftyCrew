@@ -30,6 +30,35 @@ engine\build-cards.ps1 [-Slugs ...]        specs + costed -> db\built (uses pipe
 engine\publish.ps1 -Slugs ...              db\built -> Ghost (visibility-PRESERVING upsert + live verify)
 ```
 
+INGREDIENT-LABEL REPAIRS are a separate lane (they change what a line SAYS, never what it costs), and
+they all have the same tail because `buy` is copied into three more places inside the spec
+(`ingredients_display`, `cost_lines`, and `head.recipeIngredient`) and a fourth in `recipes-db.json`:
+
+```
+pipeline\repair-cook-measures.ps1 -Apply   a label naming a PACKAGE the recipe does not use ("1 bottle")
+pipeline\repair-unitless-buy.ps1  -Apply   a COUNT with no noun ("18.4" -> "18.4 potatoes")
+pipeline\repair-range-buy.ps1     -Apply   a RANGE where the quantity belongs ("2-3 cloves" -> "8 cloves")
+  then, for the slugs any of them touched:
+pipeline\sync-recipesdb-buy.ps1   -Apply   carry the label into recipes-db.json (planner-data reads THAT)
+meal-prep\gen-planner-data.ps1             recipes-db -> planner-data.js (Meal Plan Builder grocery list)
+engine\build-cards.ps1 -Slugs ...          the scaler payload embeds buy, so the cards must be rebuilt
+engine\publish.ps1 -Slugs ...
+```
+
+`build-cards`/`publish` take `[string[]] -Slugs`. Call them **in-process** (`& .\engine\build-cards.ps1
+-Slugs $slugs`), never through `powershell -File`: that path marshals arguments as command-line strings,
+so a 10-slug array binds as one slug and the run reports a cheerful "built 1/1".
+
+The splice all three repairs share is `pipeline\buy-label-lib.ps1` - one implementation, because two
+copies of a four-surface text edit means the day someone fixes a splice bug in one, the other keeps
+shipping it. Label semantics (`Test-RangeBuy`, `Resolve-RangeBuy`, `Get-CookMeasure`) live in
+`pipeline\cook-measure-lib.ps1` so `sync-recipesdb-buy` can read the same predicates without
+dot-sourcing a script that runs a catalog pass at the bottom.
+
+Skipping the sync step leaves the Meal Plan Builder showing the old text with nothing to say so:
+audit-db-agreement compares slug and protein, not labels. Run `sync-recipesdb-buy.ps1` (read-only) any
+time to see the standing drift.
+
 Daily automation (grocery\check-ad-cycles.ps1) runs: recipe-overlay -> cost-recipes ->
 compute-v2-perserving -> top5-weekly -> rotate-free-dinners -> export-feed. top5-weekly reads
 cheapest_ps from the manifest (legacy fallback only if a slug is missing).

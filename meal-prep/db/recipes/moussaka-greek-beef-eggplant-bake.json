@@ -28,10 +28,10 @@
              },
     "intro_html":  "Moussaka is the Greek answer to lasagna, except the layers are roasted eggplant instead of pasta and the top is a thick bechamel that puffs and browns in the oven. It bakes in one pan and cuts into clean squares, which is exactly what you want when you are portioning out a week. Each square lands at 706 calories and \u003cstrong\u003e42 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$6.13 a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
-                                "\u003cstrong\u003eEggplant:\u003c/strong\u003e 5 (2333 g)",
+                                "\u003cstrong\u003eEggplant:\u003c/strong\u003e 5 eggplants (2333 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (24 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 8.25 tbsp (110 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 (257 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.3 onions (257 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.25 lb (1482 g)",
                                 "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 5.75 cups (1400 g)",
@@ -54,9 +54,9 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Eggplant, 5: ~$7.75. \u003cstrong\u003eBuy 5 each: $9.10.\u003c/strong\u003e",
+                       "Eggplant, 5 eggplants: ~$7.75. \u003cstrong\u003eBuy 5 each: $9.10.\u003c/strong\u003e",
                        "Olive Oil, 8.25 tbsp: ~$1.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 2.3 onions: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 4 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "93/7 Ground Beef, 3.25 lb: ~$21.67. \u003cstrong\u003eBuy 4 lbs: $26.53.\u003c/strong\u003e",
                        "Beef Broth, 5.75 cups: ~$1.88. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
@@ -109,7 +109,7 @@
                                    "item":  "Eggplant",
                                    "canon":  "Eggplant",
                                    "grams":  2333,
-                                   "buy":  "5",
+                                   "buy":  "5 eggplants",
                                    "bid":  "eggplant",
                                    "gpu":  "548.000"
                                },
@@ -133,7 +133,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  257,
-                                   "buy":  "2.3",
+                                   "buy":  "2.3 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

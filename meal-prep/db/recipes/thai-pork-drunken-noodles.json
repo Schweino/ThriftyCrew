@@ -25,9 +25,9 @@
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 12.25 tbsp (105 g)",
                                 "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 7 oz (196 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (147 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 (262 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 onions (262 g)",
                                 "\u003cstrong\u003eGround Pork:\u003c/strong\u003e 3.5 lb (1588 g)",
-                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.5 (420 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.5 peppers (420 g)",
                                 "\u003cstrong\u003eRice Noodles (Thai Kitchen):\u003c/strong\u003e 42 oz dry (1191 g)",
                                 "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 23.25 tbsp (35 g)",
                                 "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 7 tbsp (105 g)",
@@ -42,7 +42,7 @@
                        "Garlic, 12.25 tbsp: ~$1.51. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
                        "Jalapeno, 7 oz: ~$0.76. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
                        "Vegetable Oil, 0.75 cups: ~$0.36. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Yellow Onion, 2.4: ~$0.66. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 2.4 onions: ~$0.66. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Ground Pork, 3.5 lb: ~$11.94. \u003cstrong\u003eBuy 4 lbs: $13.64.\u003c/strong\u003e",
                        "Rice Noodles, 42 oz dry: ~$14.28. \u003cstrong\u003eBuy 3 14oz boxs: $14.28.\u003c/strong\u003e",
                        "Lime Juice, 7 tbsp: ~$0.88. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -119,7 +119,7 @@
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  262,
-                                   "buy":  "2.4",
+                                   "buy":  "2.4 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -133,7 +133,7 @@
                                {
                                    "item":  "Red Bell Pepper",
                                    "grams":  420,
-                                   "buy":  "3.5",
+                                   "buy":  "3.5 peppers",
                                    "bid":  "red-bell-pepper",
                                    "gpu":  120
                                },

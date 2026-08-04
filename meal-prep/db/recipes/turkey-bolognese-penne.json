@@ -23,11 +23,11 @@
                                 "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 7 1/4 cups (14.5 oz each) (719 g)",
                                 "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 4 1/3 cups (24 oz each) (1076 g)",
                                 "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e about 7/8 cup grated (98 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1/2 onion (scaled ~1.75) (200 g)",
-                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 clove (scaled ~4) (25 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1/2 tbsp (scaled ~2-3 tbsp) (40 g)",
-                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 1 (scaled ~3) (200 g)",
-                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 1 rib (scaled ~3) (140 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (200 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 tbsp (25 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 tbsp (40 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.3 carrots (200 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 2.5 stalks (140 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (15 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
                             ],
@@ -89,35 +89,35 @@
                                {
                                    "item":  "Yellow Onion",
                                    "grams":  200,
-                                   "buy":  "1/2 onion (scaled ~1.75)",
+                                   "buy":  "2 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
                                {
                                    "item":  "Garlic",
                                    "grams":  25,
-                                   "buy":  "1 clove (scaled ~4)",
+                                   "buy":  "3 tbsp",
                                    "bid":  "garlic",
                                    "gpu":  "50.000"
                                },
                                {
                                    "item":  "Olive Oil",
                                    "grams":  40,
-                                   "buy":  "1/2 tbsp (scaled ~2-3 tbsp)",
+                                   "buy":  "3 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
                                {
                                    "item":  "Carrots",
                                    "grams":  200,
-                                   "buy":  "1 (scaled ~3)",
+                                   "buy":  "3.3 carrots",
                                    "bid":  "carrots",
                                    "gpu":  453.592
                                },
                                {
                                    "item":  "Celery",
                                    "grams":  140,
-                                   "buy":  "1 rib (scaled ~3)",
+                                   "buy":  "2.5 stalks",
                                    "bid":  "celery",
                                    "gpu":  "450.000"
                                },
@@ -146,8 +146,8 @@
                                           "2 boxes (14.5 oz each) Penne Pasta",
                                           "2 jars (24 oz each) Marinara Sauce",
                                           "about 7/8 cup grated Parmesan Cheese",
-                                          "1/2 onion (scaled ~1.75) Yellow Onion",
-                                          "1 clove (scaled ~4) Garlic"
+                                          "2 onions Yellow Onion",
+                                          "3 tbsp Garlic"
                                       ],
                  "steps":  [
                                "Boil the penne to al dente and drain.",

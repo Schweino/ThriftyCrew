@@ -18,7 +18,7 @@
                  "cost_ps":  "3.73"
              },
     "intro_html":  "Crispy country-fried pork chops draped in a bacon gravy, served over mashed potatoes. This is Southern diner food at \u003cstrong\u003e49 grams of protein\u003c/strong\u003e and 685 calories per plate, for about \u003cstrong\u003e$3.73\u003c/strong\u003e (at everyday cost). The gravy is made from the same pan you fried in, which is free flavor you already paid for.",
-    "ingredients_display": ["\u003cstrong\u003ePork Chops:\u003c/strong\u003e 5.25 lb (2380 g)","\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 5 large eggs (233 g)","\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 0.5 cups (143 g)","\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 2.75 cups (348 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.75 tbsp (7 g)","\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 0.75 tbsp (6 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (7 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.75 cups (168 g)","\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 0.5 lb (280 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.5 lb (1120 g)","\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 6.6 (1400 g)"],
+    "ingredients_display": ["\u003cstrong\u003ePork Chops:\u003c/strong\u003e 5.25 lb (2380 g)","\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 5 large eggs (233 g)","\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 0.5 cups (143 g)","\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 2.75 cups (348 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.75 tbsp (7 g)","\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 0.75 tbsp (6 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (7 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.75 cups (168 g)","\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 0.5 lb (280 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.5 lb (1120 g)","\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 6.6 potatoes (1400 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Chops, 5.25 lb: ~$21.88. \u003cstrong\u003eBuy 6 lbs: $25.02.\u003c/strong\u003e",
@@ -28,7 +28,7 @@
                        "Olive Oil, 0.75 cups: ~$1.97. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Hickory Smoked Bacon, 0.5 lb: ~$2.58. \u003cstrong\u003eBuy 1 lb: $4.18.\u003c/strong\u003e",
                        "Chicken Broth, 2.5 lb: ~$1.50. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Potato, 6.6: ~$1.70. \u003cstrong\u003eBuy 4 lbs: $2.20.\u003c/strong\u003e",
+                       "Potato, 6.6 potatoes: ~$1.70. \u003cstrong\u003eBuy 4 lbs: $2.20.\u003c/strong\u003e",
                        "Pantry seasonings (garlic powder, onion powder, salt, black pepper): ~$0.29. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $30.99 across 14 servings, so roughly $2.21 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $40.02 across 14 servings, roughly $2.86 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -138,7 +138,7 @@
                                {
                                    "item":  "Potato",
                                    "grams":  1400,
-                                   "buy":  "6.6",
+                                   "buy":  "6.6 potatoes",
                                    "bid":"russet-potatoes",
                                    "gpu":453.592
                                }

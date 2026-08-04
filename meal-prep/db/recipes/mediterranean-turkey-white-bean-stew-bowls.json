@@ -30,7 +30,7 @@
              },
     "intro_html":  "This is the stew that leans on beans to stretch the protein for very little. Ground turkey, cannellini beans, kale, olives, and tomatoes simmer into something thick and savory, then it goes over rice with fresh basil on top. Beans are the reason it works: they carry protein and fiber for pennies. Each bowl comes to \u003cstrong\u003e561 calories and 29 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.98\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (350 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (350 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.75 tbsp (58 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (32 g)",
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 2.25 lb (1058 g)",
@@ -43,13 +43,13 @@
                                 "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.11 oz (3 g)",
                                 "\u003cstrong\u003eKale:\u003c/strong\u003e 7 oz (196 g)",
                                 "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1.75 cups (236 g)",
-                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1 (55 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1 lemon worth (55 g)",
                                 "\u003cstrong\u003eFresh Basil:\u003c/strong\u003e 18.75 tbsp (28 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.5 cups dry (1034 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Yellow Onion, 3: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 6.75 tbsp: ~$0.84. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Olive Oil, 2.25 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "93/7 Ground Turkey, 2.25 lb: ~$8.91. \u003cstrong\u003eBuy 3 lbs: $11.46.\u003c/strong\u003e",
@@ -58,7 +58,7 @@
                        "Chicken Broth, 2.25 cups: ~$0.75. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Kale, 7 oz: ~$1.16. \u003cstrong\u003eBuy 1 bunch: $1.48.\u003c/strong\u003e",
                        "Olives, 1.75 cups: ~$2.60. \u003cstrong\u003eBuy 2 6oz cans: $3.74.\u003c/strong\u003e",
-                       "Lemon Juice, 1: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lemon Juice, 1 lemon worth: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fresh Basil, 18.75 tbsp: ~$3.52. \u003cstrong\u003eBuy 2 0.5oz packs: $3.52.\u003c/strong\u003e",
                        "Rice, 5.5 cups dry: ~$1.28. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
                        "Pantry seasonings (italian seasoning, salt, black pepper, bay leaves): ~$0.67. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
@@ -99,7 +99,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  350,
-                                   "buy":  "3",
+                                   "buy":  "3 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -203,7 +203,7 @@
                                    "item":  "Lemon Juice",
                                    "canon":  "Lemon Juice",
                                    "grams":  55,
-                                   "buy":  "1",
+                                   "buy":  "1 lemon worth",
                                    "bid":  "lemon-juice",
                                    "gpu":  "29.570"
                                },

@@ -33,9 +33,9 @@
     "intro_html":  "Chicken and dumplings is the dish that got families through lean decades, and it earned its place honestly. Chicken, broth, a few vegetables, and dough made from flour, butter, and milk, dropped on top and steamed until it puffs. There are few cheaper ways to turn a small amount of meat into a filling dinner. Each bowl runs 564 calories and \u003cstrong\u003e38 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.15 a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 4.5 lb (2012 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 (192 g)",
-                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 6 (378 g)",
-                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 5.3 (289 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 onions (192 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 6 carrots (378 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 5.3 stalks (289 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
                                 "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.04 oz (1 g)",
@@ -49,9 +49,9 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Thigh, 4.5 lb: ~$7.85. \u003cstrong\u003eBuy 5 lbs: $8.85.\u003c/strong\u003e",
-                       "Yellow Onion, 1.7: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "Carrots, 6: ~$0.80. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
-                       "Celery, 5.3: ~$1.52. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
+                       "Yellow Onion, 1.7 onions: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 6 carrots: ~$0.80. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Celery, 5.3 stalks: ~$1.52. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
                        "Chicken Broth, 3.6 cartons: ~$4.51. \u003cstrong\u003ePantry staple; this batch alone uses about 4 32oz cartons.\u003c/strong\u003e",
                        "Cornstarch, 7 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "All-Purpose Flour, 6.25 cups: ~$0.73. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -103,7 +103,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  192,
-                                   "buy":  "1.7",
+                                   "buy":  "1.7 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },
@@ -111,7 +111,7 @@
                                    "item":  "Carrots",
                                    "canon":  "Carrots",
                                    "grams":  378,
-                                   "buy":  "6",
+                                   "buy":  "6 carrots",
                                    "bid":  "carrots",
                                    "gpu":  453.592
                                },
@@ -119,7 +119,7 @@
                                    "item":  "Celery",
                                    "canon":  "Celery",
                                    "grams":  289,
-                                   "buy":  "5.3",
+                                   "buy":  "5.3 stalks",
                                    "bid":  "celery",
                                    "gpu":  "450.000"
                                },

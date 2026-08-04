@@ -29,12 +29,12 @@
                                 "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 cup (80 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (20 g)",
                                 "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1 1/2 tbsp (6 g)",
-                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tbsp (42 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 tbsp (42 g)",
                                 "\u003cstrong\u003eCelery:\u003c/strong\u003e 2 stalks, finely chopped (120 g)",
-                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1 tbsp (45 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (36 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)",
-                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1/4 tsp (3 g)"
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 2.75 tbsp (45 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tbsp (36 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.75 tsp (4 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 0.75 tsp (3 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$5.63 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -135,7 +135,7 @@
                                {
                                    "item":  "Olive Oil",
                                    "grams":  42,
-                                   "buy":  "1 tbsp",
+                                   "buy":  "3 tbsp",
                                    "bid":  "olive-oil",
                                    "gpu":  "28.000"
                                },
@@ -149,28 +149,28 @@
                                {
                                    "item":  "Worcestershire Sauce",
                                    "grams":  45,
-                                   "buy":  "1 tbsp",
+                                   "buy":  "2.75 tbsp",
                                    "bid":  "worcestershire",
                                    "gpu":  29.57
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  36,
-                                   "buy":  "2 tsp",
+                                   "buy":  "2 tbsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  4,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.75 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Sugar",
                                    "grams":  3,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "0.75 tsp",
                                    "bid":  "sugar",
                                    "gpu":  "453.592"
                                }

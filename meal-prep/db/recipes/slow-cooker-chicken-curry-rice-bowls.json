@@ -20,7 +20,7 @@
     "intro_html":  "A good chicken curry is warm, fragrant, and endlessly forgiving, which makes it perfect for meal prep. This one packs in the protein, keeps the fat low, and stays cheap per serving thanks to a few pantry staples. One batch makes 14 servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1020 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.5 cups dry (1020 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 1 lb (350 g)",
                                 "\u003cstrong\u003eCurry Powder (generic):\u003c/strong\u003e 1/2 cup (40 g)",
@@ -28,8 +28,8 @@
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (12 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1/2 cup (120 g)",
                                 "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 2 tbsp (16 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (36 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (5 g)"
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tbsp (36 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2.25 tsp (5 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$3.05 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -68,7 +68,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  1020,
-                                   "buy":  "1 lb",
+                                   "buy":  "5.5 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -124,14 +124,14 @@
                                {
                                    "item":  "Salt",
                                    "grams":  36,
-                                   "buy":  "2 tsp",
+                                   "buy":  "2 tbsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  5,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "2.25 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                }
@@ -143,7 +143,7 @@
                  "costPerServing":  3.05,
                  "recipeIngredient":  [
                                           "7 lb Boneless Skinless Chicken Breast",
-                                          "1 lb Rice",
+                                          "5.5 cups dry Rice",
                                           "3 onions Yellow Onion",
                                           "1 lb Carrots",
                                           "1 jar Curry Powder",

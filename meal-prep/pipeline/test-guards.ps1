@@ -39,5 +39,27 @@ Check "PASSES scoped 'highest protein soup in this batch'"     (-not (Superlativ
 Check "PASSES the true #1 saying 'the highest by a wide margin'" (-not (SuperlativeFlags 'the highest protein dish in this batch by a wide margin' $true))
 Check "PASSES a plain 'a genuinely high protein number'"       (-not (SuperlativeFlags 'a genuinely high protein number for a stew' $false))
 
+# ---- buy-has-a-unit guard predicate ----
+# FROZEN FIXTURE of the founding bug (2026-08-04): FriendlyAmt's each branch returned the bare count, so
+# 661 lines across 339 specs shipped as "Potato (generic): 18.4 (3909 g)" - a number with no noun, which
+# reads as a typo and is recoverable only from the gram restatement. The clean twins are the catalog's
+# real freeform labels, which look irregular but are NOT this defect and must never be swept up with it.
+# Kept in step with the predicate in spec-guards.ps1; if that one changes, this file is where it is proven.
+function BuyHasUnitFlags($buy) { return (([string]$buy) -notmatch '[A-Za-z]') }
+Write-Output "buy-has-a-unit guard:"
+Check "MUST FIRE  a bare count '18.4' (the founding bug, Potato)"  (BuyHasUnitFlags '18.4')
+Check "MUST FIRE  a bare count '1.5' (Yellow Onion)"               (BuyHasUnitFlags '1.5')
+Check "MUST FIRE  a bare single '1' (Green Cabbage)"               (BuyHasUnitFlags '1')
+Check "MUST FIRE  a bare RANGE '1-2' (also breaks the widget's scaleBuy)" (BuyHasUnitFlags '1-2')
+Check "PASSES the repaired label '18.4 potatoes'"                  (-not (BuyHasUnitFlags '18.4 potatoes'))
+Check "PASSES the singular repair '1 onion'"                       (-not (BuyHasUnitFlags '1 onion'))
+Check "PASSES a two-word noun '3 lemons worth'"                    (-not (BuyHasUnitFlags '3 lemons worth'))
+Check "CLEAN TWIN an ordinary weight '5.75 lb'"                    (-not (BuyHasUnitFlags '5.75 lb'))
+Check "CLEAN TWIN a fraction '1/2 cup'"                            (-not (BuyHasUnitFlags '1/2 cup'))
+Check "CLEAN TWIN freeform 'to taste'"                             (-not (BuyHasUnitFlags 'to taste'))
+Check "CLEAN TWIN freeform 'about 1 3/4 cups shredded'"            (-not (BuyHasUnitFlags 'about 1 3/4 cups shredded'))
+Check "CLEAN TWIN freeform 'juice of 1 lime'"                      (-not (BuyHasUnitFlags 'juice of 1 lime'))
+Check "CLEAN TWIN freeform '1 (1 oz) packet'"                      (-not (BuyHasUnitFlags '1 (1 oz) packet'))
+
 Write-Output ""
 if ($fail -eq 0) { Write-Output "ALL GUARD PREDICATE TESTS PASS" } else { Write-Output ("$fail TEST(S) FAILED"); exit 1 }

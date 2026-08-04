@@ -28,14 +28,14 @@
                                 "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 2 1/2 cups (280 g)",
                                 "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 2 1/4 tbsp (18 g)",
                                 "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 1/4 tbsp (8 g)",
-                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 2 tsp (30 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 2.25 tbsp (30 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1/2 cup diced (280 g)",
-                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 1/2 cup diced (260 g)",
-                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 tsp (9 g)",
-                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tsp (5 g)",
-                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1/2 tsp (5 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/4 tsp (5 g)",
-                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2 peppers diced (260 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 tbsp (9 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.75 tbsp (5 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 2.25 tsp (5 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tsp (5 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1 tsp (2 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (3 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
@@ -131,7 +131,7 @@
                                {
                                    "item":  "Vegetable Oil",
                                    "grams":  30,
-                                   "buy":  "2 tsp",
+                                   "buy":  "2.25 tbsp",
                                    "bid":  "vegetable-oil",
                                    "gpu":  "28.000"
                                },
@@ -145,42 +145,42 @@
                                {
                                    "item":  "Red Bell Pepper",
                                    "grams":  260,
-                                   "buy":  "1/2 cup diced",
+                                   "buy":  "2 peppers diced",
                                    "bid":  "red-bell-pepper",
                                    "gpu":  120
                                },
                                {
                                    "item":  "Garlic Powder",
                                    "grams":  9,
-                                   "buy":  "1 tsp",
+                                   "buy":  "1 tbsp",
                                    "bid":  "garlic-powder",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Dried Oregano",
                                    "grams":  5,
-                                   "buy":  "1 tsp",
+                                   "buy":  "1.75 tbsp",
                                    "bid":  "dried-oregano",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Paprika",
                                    "grams":  5,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "2.25 tsp",
                                    "bid":  "paprika",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  5,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "0.75 tsp",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Red Pepper Flakes",
                                    "grams":  2,
-                                   "buy":  "1/4 tsp",
+                                   "buy":  "1 tsp",
                                    "bid":  "red-pepper-flakes",
                                    "gpu":  "28.350"
                                },

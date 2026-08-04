@@ -29,8 +29,8 @@
     "intro_html":  "Beef bourguignon has a reputation for being fussy French cooking, and it is really just a beef stew with bacon, mushrooms, and a mountain of onions cooked down into the gravy. The cut it calls for is chuck, the same cheap roast in every other braise on this site. The name is expensive, the groceries are not. Each bowl carries \u003cstrong\u003e47 grams of protein\u003c/strong\u003e and 726 calories for about \u003cstrong\u003e$5.48\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 5 lb (2240 g)",
-                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 6.6 (403 g)",
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5.7 (627 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 6.6 carrots (403 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5.7 onions (627 g)",
                                 "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.07 oz (2 g)",
                                 "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 2.75 tbsp (8 g)",
                                 "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 17.25 cups (4116 g)",
@@ -47,8 +47,8 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Beef Chuck Roast, 5 lb: ~$39.36. \u003cstrong\u003eBuy 5 lbs: $39.85.\u003c/strong\u003e",
-                       "Carrots, 6.6: ~$0.85. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
-                       "Yellow Onion, 5.7: ~$1.58. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Carrots, 6.6 carrots: ~$0.85. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Yellow Onion, 5.7 onions: ~$1.58. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
                        "Beef Broth, 17.25 cups: ~$5.53. \u003cstrong\u003ePantry staple; this batch alone uses about 5 32oz cartons.\u003c/strong\u003e",
                        "Vegetable Oil, 8.5 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "White Mushrooms, 1.25 lb: ~$4.67. \u003cstrong\u003eBuy 3 8oz packs: $5.67.\u003c/strong\u003e",
@@ -103,7 +103,7 @@
                                    "item":  "Carrots",
                                    "canon":  "Carrots",
                                    "grams":  403,
-                                   "buy":  "6.6",
+                                   "buy":  "6.6 carrots",
                                    "bid":"carrots",
                                    "gpu":453.592
                                },
@@ -111,7 +111,7 @@
                                    "item":  "Yellow Onion",
                                    "canon":  "Yellow Onion",
                                    "grams":  627,
-                                   "buy":  "5.7",
+                                   "buy":  "5.7 onions",
                                    "bid":  "onions",
                                    "gpu":  "453.592"
                                },

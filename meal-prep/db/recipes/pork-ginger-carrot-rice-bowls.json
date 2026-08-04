@@ -28,7 +28,7 @@
              },
     "intro_html":  "This is the kind of dish that gets made on a weeknight in a Chinese home and never makes it onto a restaurant menu, because there is nothing to it. Ground pork, a serious amount of grated ginger, and a pile of carrots go in one pan, get a splash of soy and sesame oil, and land on rice. Carrots and ground pork are two of the cheapest items on our grocery board, which is the entire reason this bowl comes in where it does. Do not go light on the ginger. It is the dish.",
     "ingredients_display":  [
-                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 26 (1588 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 26 carrots (1588 g)",
                                 "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 17.5 tbsp (105 g)",
                                 "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3.5 tbsp (21 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp (18 g)",
@@ -43,7 +43,7 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Carrots, 26: ~$3.34. \u003cstrong\u003eBuy 4 lbs: $3.82.\u003c/strong\u003e",
+                       "Carrots, 26 carrots: ~$3.34. \u003cstrong\u003eBuy 4 lbs: $3.82.\u003c/strong\u003e",
                        "Green Onions, 17.5 tbsp: ~$1.25. \u003cstrong\u003eBuy 2 bunches: $2.14.\u003c/strong\u003e",
                        "Ginger, 3.5 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
                        "Garlic, 2 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
@@ -91,7 +91,7 @@
                                    "item":  "Carrots",
                                    "canon":  "Carrots",
                                    "grams":  1588,
-                                   "buy":  "26",
+                                   "buy":  "26 carrots",
                                    "bid":"carrots",
                                    "gpu":453.592
                                },

@@ -25,12 +25,12 @@
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 2 1/4 cups (250 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3 tbsp (42 g)",
-                                "\u003cstrong\u003eTurkey Bacon:\u003c/strong\u003e 4 oz, chopped (396 g)",
+                                "\u003cstrong\u003eTurkey Bacon:\u003c/strong\u003e 0.75 lb, chopped (396 g)",
                                 "\u003cstrong\u003eCelery:\u003c/strong\u003e 2 stalks, diced (280 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves, chopped (35 g)",
-                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1 tsp (4 g)",
-                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/2 tsp kosher (10 g)",
-                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)"
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.75 tsp kosher (10 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.75 tsp (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_closing_html":  "About \u003cstrong\u003e$4.87 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
@@ -104,7 +104,7 @@
                                {
                                    "item":  "Turkey Bacon",
                                    "grams":  396,
-                                   "buy":  "4 oz, chopped",
+                                   "buy":  "0.75 lb, chopped",
                                    "bid":  "bacon",
                                    "gpu":  "453.592"
                                },
@@ -125,21 +125,21 @@
                                {
                                    "item":  "Dried Thyme",
                                    "grams":  4,
-                                   "buy":  "1 tsp",
+                                   "buy":  "1.25 tbsp",
                                    "bid":  "dried-thyme",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Salt",
                                    "grams":  10,
-                                   "buy":  "1/2 tsp kosher",
+                                   "buy":  "1.75 tsp kosher",
                                    "bid":  "salt",
                                    "gpu":  "28.350"
                                },
                                {
                                    "item":  "Black Pepper",
                                    "grams":  4,
-                                   "buy":  "1/2 tsp",
+                                   "buy":  "1.75 tsp",
                                    "bid":  "black-pepper",
                                    "gpu":  "28.350"
                                }
