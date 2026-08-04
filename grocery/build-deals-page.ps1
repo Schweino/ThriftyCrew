@@ -26,6 +26,7 @@ if (-not $Out) { $Out = Join-Path $OutDir 'deals-page.html' }
 # survived inside a title attribute after the visible chip had been fixed.
 . (Join-Path $root 'fmt-lib.ps1')
 . (Join-Path $root '..\lib\trend-keep.ps1')   # 2026-08-04: single source for which commodities get a standalone trend page
+. (Join-Path $root '..\lib\board-drops.ps1')  # 2026-08-04: single source for the week's price-drop ranking (chip + Friday email)
 $doc  = Get-Content $CompareFile -Raw | ConvertFrom-Json
 $cats = (Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json).categories | Sort-Object order
 $week = [string]$doc.week_of
@@ -832,28 +833,12 @@ if (@($spreads).Count -ge 20) {
 # low takes the slot instead; a genuinely flat week says so rather than inventing motion.
 $dropChip = ''
 if ($histById -and $histById.Count) {
-  $bestDrop = $null
-  foreach ($r in $doc.comparison) {
-    $h = $histById[[string]$r.id]; if (-not $h) { continue }
-    $P = [double]$r.cheapest_price; if ($P -le 0) { continue }
-    # BROADLY PRICED ONLY. A headline drop on a one-store niche item ("Achiote Paste down 91%") is almost
-    # always a coverage change wearing a price change's clothes, and it is the least useful sentence we
-    # could put at the top of the board. Four priced stores is the same floor the wrong-store stat uses.
-    $rk = @($r.stores | Where-Object { [double]$_.per_unit -gt 0 } | Sort-Object per_unit)
-    if (@($rk).Count -lt 4) { continue }
-    $ru = [double]$rk[1].per_unit; if ($ru -gt 0 -and (($ru - $P) / $ru) -gt 0.30) { continue }
-    $prior = @($h.history | Where-Object { try { [datetime]$_.week_of -lt [datetime]$week } catch { $false } })
-    if (@($prior).Count -lt 2) { continue }
-    $last = @($prior | Sort-Object week_of -Descending)[0]
-    $lp = [double]$last.cheapest_price; if ($lp -le 0) { continue }
-    $pct = ($lp - $P) / $lp
-    # a real grocery sale is 5-40%. Above 60% week over week is a data event, not a price event, and the
-    # same reasoning as the 30% outlier guard applies: never headline one until a later week confirms it.
-    if ($pct -le 0 -or $pct -gt 0.60) { continue }
-    if (($null -eq $bestDrop) -or ($pct -gt $bestDrop.pct)) { $bestDrop = @{ pct = $pct; row = $r } }
-  }
+  # 2026-08-04: the ranking moved to lib\board-drops.ps1 so the Friday email can publish the SAME ten
+  # drops this chip picks its one from. Guards (4+ priced stores, 30% outlier, 2+ prior weeks, 60%
+  # ceiling) all live there now; this caller only decides what is newsworthy enough to headline.
+  $bestDrop = @(Get-BoardDrops -Comparison $doc.comparison -HistById $histById -Week $week -Top 1)[0]
   if ($bestDrop -and $bestDrop.pct -ge 0.10) {
-    $dropChip = "<button type='button' class='pg-mast-chip' data-goto='" + (HtmlEnc ([string]$bestDrop.row.id)) + "'>" + (HtmlEnc $bestDrop.row.commodity) + " down " + [int]([math]::Floor($bestDrop.pct * 100)) + "%</button>"
+    $dropChip = "<button type='button' class='pg-mast-chip' data-goto='" + (HtmlEnc ([string]$bestDrop.id)) + "'>" + (HtmlEnc $bestDrop.commodity) + " down " + [int]([math]::Floor($bestDrop.pct * 100)) + "%</button>"
   } elseif ($recBadge.Count -gt 0) {
     # same broadly-priced floor as the drop itself: the masthead chip is the one thing on this page a
     # first-time visitor is guaranteed to read, so it names something they buy, not the cheapest oddity
