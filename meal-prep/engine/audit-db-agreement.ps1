@@ -163,7 +163,16 @@ foreach($s in ($specSlugs.Keys | Sort-Object)){
   $got = @($spec.head.recipeIngredient | ForEach-Object { [string]$_ })
   if(($got -join "`n") -ne ($want -join "`n")){
     $headDrift++
-    if($headDrift -le 6){ $issues.Add("HEAD-INGREDIENT drift: $s JSON-LD has $($got.Count) line(s), the card shows $($want.Count) - rerun pipeline\repair-head-ingredients.ps1 -Apply -Slugs $s") }
+    # SAY WHICH KIND OF DRIFT. Reporting counts when the counts happen to AGREE ("has 16, the card shows
+    # 16") reads as a false positive and invites the next reader to wave it off; a content drift has to
+    # name the line that differs.
+    $why = if($got.Count -ne $want.Count){
+      "JSON-LD has $($got.Count) line(s), the card shows $($want.Count)"
+    } else {
+      $i = 0; while($i -lt $got.Count -and $got[$i] -eq $want[$i]){ $i++ }
+      "line $($i+1) says '$($got[$i])', the card says '$($want[$i])'"
+    }
+    if($headDrift -le 6){ $issues.Add("HEAD-INGREDIENT drift: $s $why - rerun pipeline\repair-head-ingredients.ps1 -Apply -Slugs $s") }
   }
 }
 if($headDrift -gt 6){ $issues.Add("... plus $($headDrift-6) more HEAD-INGREDIENT drift lines") }
