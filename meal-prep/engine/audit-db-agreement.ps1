@@ -78,6 +78,31 @@ foreach($s in $specSlugs.Keys){
     }
   }
 }
+# ---- JSON-LD vs THE PAGE (2026-08-04). head.recipeIngredient is what Google reads; ingredients_display
+# is what the reader sees. They were never reconciled and drifted apart on 507 of 513 recipes - the
+# structured data named 6 of 16 ingredients on american-goulash-pasta, in package units the card never
+# used. head.recipeIngredient is now DERIVED from ingredients_display (pipeline\head-ingredients-lib.ps1),
+# so any spec where the two disagree has been hand-edited or written by a stale path, and the live pages
+# would ship structured data that misrepresents them. Same shape as every other guard here: two derived
+# artifacts that are never compared is a defect generator.
+$headDrift = 0; $headErr = 0
+$foodDbPath = Join-Path $mp 'food-macros-db.json'
+. (Join-Path $mp 'pipeline\head-ingredients-lib.ps1')
+$hiDb = Get-HiFoodDbMap $foodDbPath
+foreach($s in ($specSlugs.Keys | Sort-Object)){
+  $spec = Get-Content $specs[$s] -Raw | ConvertFrom-Json
+  $want = $null
+  try { $want = @(Get-HeadRecipeIngredient $spec.ingredients_display $spec.scaler.ing $hiDb) }
+  catch { $headErr++; if($headErr -le 4){ $issues.Add("HEAD-INGREDIENT: $s cannot derive the JSON-LD list :: $($_.Exception.Message)") }; continue }
+  $got = @($spec.head.recipeIngredient | ForEach-Object { [string]$_ })
+  if(($got -join "`n") -ne ($want -join "`n")){
+    $headDrift++
+    if($headDrift -le 6){ $issues.Add("HEAD-INGREDIENT drift: $s JSON-LD has $($got.Count) line(s), the card shows $($want.Count) - rerun pipeline\repair-head-ingredients.ps1 -Apply -Slugs $s") }
+  }
+}
+if($headDrift -gt 6){ $issues.Add("... plus $($headDrift-6) more HEAD-INGREDIENT drift lines") }
+if($headErr -gt 4){ $issues.Add("... plus $($headErr-4) more HEAD-INGREDIENT derive failures") }
+
 if($bidMiss -gt 8){ $issues.Add("... plus $($bidMiss-8) more missing-item lines") }
 if($bidDrift -gt 8){ $issues.Add("... plus $($bidDrift-8) more bid-drift lines") }
 if($fallback.Count){
