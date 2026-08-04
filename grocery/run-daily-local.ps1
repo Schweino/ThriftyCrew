@@ -176,7 +176,22 @@ if ($wlRc -eq 0 -and (@($wl) -match 'STALE')) {
 
 # ---- SYNC: build on the latest (the browser agents push their data before 8:30) ------------------
 Log "start: syncing repo"
+# --autostash pops on success and SILENTLY LEAVES the stash when the pop conflicts: git prints one
+# warning line into a log nobody reads, and the run continues green. Six had piled up by 2026-08-04
+# (back to 07-24), each parking local edits to v2-perserving / free-rotation / costed / recipes-db
+# where no guard looks. Count the entries instead of trusting the log line.
+$stashBefore = @(git -C $repo stash list).Count
 git -C $repo pull --rebase --autostash origin main 2>&1 | ForEach-Object { Log ("pull: " + $_) }
+$stashAfter = @(git -C $repo stash list).Count
+if ($stashAfter -gt $stashBefore) {
+  $msg = "git pull --rebase --autostash could not restore local changes: " +
+         "$($stashAfter - $stashBefore) stash entry left behind, $stashAfter total. " +
+         "Local edits are parked, not lost. Inspect with: git -C $repo stash list, " +
+         "then git stash show -p on the newest entry."
+  Log ("ALERT: " + $msg)
+  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') `
+      -Subject 'Daily run: autostash not restored' -Body $msg 2>&1 | ForEach-Object { Log ("alert: " + $_) }
+}
 
 # ---- RUN the pipeline (WITH alerts - send-alert's per-type daily gate caps the volume) ------------
 Log "running check-ad-cycles"

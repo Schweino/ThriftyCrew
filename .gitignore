@@ -182,3 +182,16 @@ site-backups/*
 
 # built recipe cards: regenerated on demand by build-cards; only build/publish read them, never the cloud pipeline
 /meal-prep/db/built/
+
+# A DUMP, NOT A FINDING. engine\golden-test.ps1 -Force writes this by comparing a daily-regenerated
+# costed.json against a baseline frozen at the 2026-07-26 port, so nearly every line in it is grocery
+# prices moving. An untracked 891 KB file sitting in db\ reads like an alarm and cost an afternoon once.
+/meal-prep/db/golden-diffs.txt
+
+# The daily Facebook reel generator (2026-08-04). Same "only copy in existence" hole as lib\ and the
+# interstitial: build-reel.ps1 is the entire video pipeline (HTML scenes -> headless Chrome -> edge-tts
+# -> ffmpeg) plus the brand layout, it is scheduled to run every day, and it lived on one machine's disk.
+# reel-state.json is durable state - lose it and the rotation starts repeating recipes. out\ is rendered
+# MP4s and voice samples, reproducible from the specs and the board.
+!/reels/
+/reels/out/
