@@ -265,12 +265,14 @@ function Get-IngredientLines {
 $ingredients = @(Get-IngredientLines -Spec $spec)
 if ($ingredients.Count -lt 2) { throw "Parsed only $($ingredients.Count) ingredients from '$pick' - the display format changed; fix the parser before shipping a reel." }
 
-$maxShown = 12
+# Show the first six in the spec's own order and send the rest to the page. Specs are authored
+# headline-ingredient first and seasonings last, so splitting a long list across two frames reliably
+# produced a second frame reading "Black Pepper, Red Pepper Flakes, Parmesan, Salt" under a caption
+# saying "nothing fancy" - a whole scene of a daily reel spent on spices. The cap is not hiding
+# anything: the overflow count is printed and the full list is on the page the reel drives to.
+$maxShown = 6
 $shown    = @($ingredients | Select-Object -First $maxShown)
 $overflow = $ingredients.Count - $shown.Count
-$half     = [math]::Ceiling($shown.Count / 2)
-$listA    = @($shown | Select-Object -First $half)
-$listB    = @($shown | Select-Object -Skip $half)
 
 # ---------------------------------------------------------------- scene HTML
 
@@ -390,24 +392,16 @@ function Format-List {
   return $h
 }
 
-# 4 (and 5). the list. Splitting a 6-item recipe across two frames reads as padding, so only
-# split when the list is genuinely too tall for one frame.
-if ($shown.Count -le 7) {
-  Add-Scene -Id 'list' `
-    -Vo "The whole shopping list, priced at this week's cheapest Omaha shelf. Nothing fancy." `
-    -Caption 'The shopping list' `
-    -Body (Format-List -Rows $shown -More $overflow)
+# 4. the list, one frame.
+$listVo = if ($overflow -gt 0) {
+  "The big stuff, priced at this week's cheapest Omaha shelf. $(ConvertTo-Words $overflow) more on the page."
 } else {
-  Add-Scene -Id 'list-a' `
-    -Vo "The whole shopping list, priced at this week's cheapest Omaha shelf." `
-    -Caption 'The shopping list' `
-    -Body (Format-List -Rows $listA -More 0)
-
-  Add-Scene -Id 'list-b' `
-    -Vo 'Nothing fancy. Nothing you have to hunt for.' `
-    -Caption 'Nothing fancy' `
-    -Body (Format-List -Rows $listB -More $overflow)
+  "The whole shopping list, priced at this week's cheapest Omaha shelf. Nothing fancy."
 }
+Add-Scene -Id 'list' `
+  -Vo $listVo `
+  -Caption 'The shopping list' `
+  -Body (Format-List -Rows $shown -More $overflow)
 
 # 6. batch math (shown as arithmetic because cheapest_ps IS a whole-package total over 14)
 Add-Scene -Id 'batch' `
