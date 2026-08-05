@@ -18,14 +18,14 @@
                  "cost_ps":  "3.66"
              },
     "intro_html":  "Bun thit nuong is the noodle bowl that eats like a salad and satisfies like a barbecue plate: charred pork over cool rice noodles with herbs, cucumber, and a sweet-tangy dressing. Each bowl delivers \u003cstrong\u003e45 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.66\u003c/strong\u003e (at everyday cost).",
-    "ingredients_display": ["\u003cstrong\u003ePork Loin:\u003c/strong\u003e 5.25 lb (2380 g)","\u003cstrong\u003eRice Noodles (Thai Kitchen):\u003c/strong\u003e 24.75 oz dry (700 g)","\u003cstrong\u003eCucumber:\u003c/strong\u003e 7 cucumbers (2100 g)","\u003cstrong\u003eFresh Mint:\u003c/strong\u003e 17.5 tbsp (28 g)","\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 35 tbsp (35 g)","\u003cstrong\u003ePeanuts (Great Value):\u003c/strong\u003e 1 cups (128 g)","\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 7 carrots (427 g)","\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 1 cups (284 g)","\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1 cups (197 g)","\u003cstrong\u003eLime Juice:\u003c/strong\u003e 0.75 cups (158 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display": ["\u003cstrong\u003ePork Loin:\u003c/strong\u003e 5.25 lb (2380 g)","\u003cstrong\u003eRice Noodles (Thai Kitchen):\u003c/strong\u003e 24.75 oz dry (700 g)","\u003cstrong\u003eCucumber:\u003c/strong\u003e 7 cucumbers (2100 g)","\u003cstrong\u003eFresh Mint:\u003c/strong\u003e 17.5 tbsp (28 g)","\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 2 1/4 cups (35 g)","\u003cstrong\u003ePeanuts (Great Value):\u003c/strong\u003e 1 cups (128 g)","\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 7 carrots (427 g)","\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 1 cups (284 g)","\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1 cups (197 g)","\u003cstrong\u003eLime Juice:\u003c/strong\u003e 0.75 cups (158 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Loin, 5.25 lb: ~$11.23. \u003cstrong\u003eBuy 6 lbs: $12.84.\u003c/strong\u003e",
                        "Rice Noodles, 24.75 oz dry: ~$8.40. \u003cstrong\u003eBuy 2 14oz boxes: $9.52.\u003c/strong\u003e",
                        "Cucumber, 7 cucumbers: ~$5.32. \u003cstrong\u003eBuy 7 each: $5.32.\u003c/strong\u003e",
                        "Fresh Mint, 17.5 tbsp: ~$3.52. \u003cstrong\u003eBuy 2 0.5oz packs: $3.52.\u003c/strong\u003e",
-                       "Fresh Cilantro, 35 tbsp: ~$1.09. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Fresh Cilantro, 2 1/4 cups: ~$1.09. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Peanuts, 1 cups: ~$0.73. \u003cstrong\u003eBuy 1 16oz jar: $2.58.\u003c/strong\u003e",
                        "Carrots, 7 carrots: ~$1.06. \u003cstrong\u003eBuy 1 lb: $1.13.\u003c/strong\u003e",
                        "Fish Sauce, 1 cups: ~$2.73. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -90,7 +90,7 @@
                                {
                                    "item":  "Fresh Cilantro",
                                    "grams":  35,
-                                   "buy":  "35 tbsp",
+                                   "buy":  "2 1/4 cups",
                                    "bid":"cilantro",
                                    "gpu":57
                                },
@@ -158,7 +158,7 @@
                                           "Rice Noodles, 24.75 oz dry (700 g)",
                                           "Cucumber, 7 cucumbers (2100 g)",
                                           "Fresh Mint, 17.5 tbsp (28 g)",
-                                          "Fresh Cilantro, 35 tbsp (35 g)",
+                                          "Fresh Cilantro, 2 1/4 cups (35 g)",
                                           "Peanuts, 1 cups (128 g)",
                                           "Carrots, 7 carrots (427 g)",
                                           "Fish Sauce, 1 cups (284 g)",

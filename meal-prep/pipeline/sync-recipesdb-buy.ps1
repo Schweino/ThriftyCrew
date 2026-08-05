@@ -671,6 +671,22 @@ if (Test-Path $measureCarryPath) {
     }
     Write-Output ("  measure-vs-grams carry manifest: {0} row(s) from out\measure-vs-grams-carry.json" -f $measureCarry.Count)
 }
+# The absurd-unit promotion (repair-absurd-units.ps1) rides the SAME channel, and for the same reason:
+# "26 tbsp" is not provably false, it is merely unusable, so Get-BuyCarryClass can never derive the edit
+# and the manifest is the entire trigger. It is a separate FILE rather than a separate parameter because
+# the carry rule it needs is identical - match old byte for byte, then take new - and a fourth near-copy
+# of that rule is the two-copies-of-the-same-math failure this lib exists to avoid.
+$absurdCarryPath = Join-Path $mp 'out\absurd-unit-carry.json'
+if (Test-Path $absurdCarryPath) {
+    if (-not $measureCarry) { $measureCarry = @{} }
+    $n = 0
+    foreach ($c in @((Get-Content $absurdCarryPath -Raw | ConvertFrom-Json))) {
+        if (-not $c -or -not $c.slug) { continue }
+        $measureCarry[([string]$c.slug + '|' + [string]$c.item)] = [pscustomobject]@{ Old = [string]$c.old; New = [string]$c.new }
+        $n++
+    }
+    Write-Output ("  absurd-unit carry manifest: {0} row(s) from out\absurd-unit-carry.json" -f $n)
+}
 # densities are what the cook-measure class weighs its evidence with. Missing them does not silently
 # downgrade the run to the unitless class alone - say so, because a clean "0 labels" line off a run that
 # could not evaluate the class reads exactly like a clean "0 labels" off a run that found nothing.

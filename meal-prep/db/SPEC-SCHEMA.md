@@ -92,10 +92,27 @@ Shells)"). `manual_balance` — bool, marks a spec whose macros were hand-balanc
    rendered ingredient list are two views of one list; keeping them as two separately-maintained lists is
    what let the structured data drift to 6 ingredients on a 16-ingredient recipe. Repair:
    `pipeline/repair-head-ingredients.ps1 -Apply`.
+10. The `recipes-db.json` row lists the SAME ingredients as the spec - same count, same canonical names
+   (`scaler.canon` when present, else `scaler.item`; INGREDIENT-SET guard in `audit-db-agreement.ps1`,
+   armed at zero). Two defects on 2026-08-04 proved both directions:
+   `slow-cooker-dr-pepper-pulled-pork-bowls` held 8 ingredients in the index and 7 in the spec, so the
+   soda the recipe is NAMED for was in no ingredient line, no cost line and no scaler row - a braise with
+   no braising liquid on the list a shopper buys from; and `korean-turkey-japchae` still said
+   "Cornstarch" where the spec said "Rice Noodles", a swap from the 2026-07 glass-noodle correction that
+   never reached the index, so the Meal Plan Builder shopped 794 g of cornstarch for a noodle dish. The
+   card reads the SPEC and the Meal Plan Builder reads the INDEX, so a disagreement here ships two
+   different shopping lists for one recipe.
+11. Every ingredient a `make_it` step NAMES is in the ingredient list - the mirror of the spec-guards
+   "use what you buy" gate. Reported as PHANTOM by `pipeline/audit-spec-contradictions.ps1`, ratcheted
+   against a baseline rather than armed at zero; the standing list and the six rules that got it from
+   555 raw hits to 9 are in `out/fidelity/engine-pass-notes.md`.
 
 ## Fields that keep their own COPY of a spec value (a repair must carry across, or they go stale)
 `recipes-db.json` stores each ingredient's `buy` again (`pipeline/sync-recipesdb-buy.ps1` carries a label
 repair across; `update-recipes-db.ps1 -Replace` is the heavier full-row path), and `planner-data.js` is
 generated from THAT copy, so the Meal Plan Builder's merged grocery list reads the index and not the
 specs. `db/built/<slug>.body.html` embeds `buy` in the scaler payload, so any label change needs a card
-rebuild + republish. audit-db-agreement compares slug and protein only - it will NOT catch label drift.
+rebuild + republish. audit-db-agreement compares slug, protein, the cost block and the ingredient SET
+(count + canonical names) - it will NOT catch `buy` LABEL or gram drift inside a line whose name matches;
+that is `sync-recipesdb-buy.ps1`, which carries the named repair classes and REPORTS everything else
+rather than overwriting reader-facing text on its own judgement.

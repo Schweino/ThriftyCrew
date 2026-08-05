@@ -45,7 +45,7 @@
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 4.2 cans (1726 g)",
                                 "\u003cstrong\u003eFries (Great Value):\u003c/strong\u003e 59.25 oz (1680 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)",
-                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 25 tbsp (25 g)"
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 1/2 cups (25 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -62,7 +62,7 @@
                        "Diced Tomatoes, 4.2 cans: ~$4.03. \u003cstrong\u003eBuy 5 cans: $4.80.\u003c/strong\u003e",
                        "Fries, 59.25 oz: ~$5.45. \u003cstrong\u003eBuy 2 32oz bags: $5.89.\u003c/strong\u003e",
                        "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Fresh Cilantro, 25 tbsp: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 1/2 cups: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Pantry seasonings (ground cumin, dried oregano, black pepper, salt): ~$0.19. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $33.27 across 14 servings, so roughly $2.38 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $40.62 across 14 servings, roughly $2.90 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -237,7 +237,7 @@
                                    "item":  "Fresh Cilantro",
                                    "canon":  "Fresh Cilantro",
                                    "grams":  25,
-                                   "buy":  "25 tbsp",
+                                   "buy":  "1 1/2 cups",
                                    "bid":"cilantro",
                                    "gpu":57
                                }
@@ -269,7 +269,7 @@
                                           "Diced Tomatoes, 4.2 cans (1726 g)",
                                           "Fries, 59.25 oz (1680 g)",
                                           "Rice, 3.75 cups dry (700 g)",
-                                          "Fresh Cilantro, 25 tbsp (25 g)"
+                                          "Fresh Cilantro, 1 1/2 cups (25 g)"
                                       ],
                  "steps":  [
                                "Marinate sliced chicken breast in soy sauce, cumin, oregano, aji amarillo paste and vinegar for 30 minutes.",

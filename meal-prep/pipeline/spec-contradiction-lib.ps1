@@ -89,7 +89,163 @@ function Get-HeadQtyMismatch([string]$headLine, $disp) {
   return @{ key = $best; unit = $u; head = $have; costed = $want; prefixLen = $q.Groups[1].Length + $q.Index }
 }
 
-function Get-SpecContradictions($spec) {
+# ---- PHANTOM: a step names an ingredient the recipe never buys -----------------------------------
+# The mirror of UNUSED. UNUSED asks "is everything bought also used"; PHANTOM asks "is everything used
+# also bought", and only the second one can see slow-cooker-dr-pepper-pulled-pork-bowls, whose step 2
+# pours a zero-sugar soda that appears in NO ingredient list, cost line or scaler row. The braise cannot
+# be made as shopped and the recipe is named after the missing bottle.
+#
+# This was measured and deliberately NOT shipped on 2026-08-02 (out\fidelity\engine-pass-notes.md): the
+# naive reading gave 295 hits, almost all containment artifacts, and "a gate that cries wolf gets
+# switched off". Six rules below are what took it from 555 raw hits to a readable handful. Each one is a
+# false positive this matcher actually produced against the live catalogue.
+
+# A noun that turns the food name in front of it into a DIFFERENT food: "apple cider VINEGAR", "rice
+# WINE", "milk CHOCOLATE". When the compound is not itself a name we know, we cannot judge it, so we say
+# nothing rather than report the head word.
+$script:PHANTOM_TAIL = '(?:vinegar|oil|sauce|powder|juice|milk|wine|paste|seed|seeds|extract|butter|salt|sugar|flour|stock|broth|cream|water|syrup|zest|flakes|leaves|chocolate|cake|cakes|bread|crumbs)'
+# "sugar-free BBQ sauce" names sugar in order to say the sauce has none of it. X-free is the absence of
+# X, never its use - the one case where a match must be read as the opposite of a mention.
+$script:PHANTOM_FREE = '^\s*[-\s]?free(?![a-z])'
+# A step that MAKES something is not shopping for it: four recipes blend tomatillos, chiles and cilantro
+# "into a rough salsa", and salsa is a name this estate knows, so all four reported a phantom salsa they
+# cook in the step. Anchored on "into a/the" and "make a/the" rather than on the verb, because the verb
+# can be a whole clause away ("blend them with the jalapenos, most of the cilantro, and the garlic into
+# a rough green salsa"). Bare "to the" is deliberately NOT accepted - "add the broth to the rice" would
+# swallow a real one.
+$script:PHANTOM_MADE = '(?:^|\s)into\s+(?:a|the)\s+(?:\w+\s+){0,3}$|(?:^|\s)makes?\s+(?:a|the)\s+(?:\w+\s+){0,3}$'
+# A comparison is not an instruction. "honey burns faster THAN sugar does" is a warning about the honey.
+$script:PHANTOM_CMP = '(?:^|\s)than\s+$'
+# A word right after a subject pronoun is a VERB, whatever else it spells. "day-old rice, so it FRIES up
+# instead of turning mushy" is the ingredient Fries, spelled identically, in the one grammatical slot an
+# ingredient can never occupy. English does not put a bare noun there.
+$script:PHANTOM_SUBJ = '(?:^|\s)(?:it|they|we|you|i|he|she|that|this|which|who)\s+$'
+
+function Get-FoodStem([string]$w) {
+  <# Plural -> singular, enough for ingredient nouns. The 'oes' arm is not decoration: without it
+     "potatoes" stems to "potatoe" while "potato" stems to itself, so a recipe that BUYS Sweet Potatoes
+     reported a phantom Potato in every one of its own steps - five recipes at once. #>
+  if ($w.Length -le 3) { return $w }
+  if ($w -match 'ies$') { return ($w -replace 'ies$', 'y') }
+  if ($w -match '(o|ch|sh|ss|x|z)es$') { return ($w -replace 'es$', '') }
+  if ($w -match '[^s]s$') { return ($w -replace 's$', '') }
+  return $w
+}
+function Get-FoodTokens([string]$s) {
+  # The parenthetical is a brand or a variant note ("(Great Value)", "(generic)"), never the identity.
+  $t = (($s.ToLower() -replace '\([^)]*\)', ' ') -replace '[^a-z ]', ' ') -replace '\s+', ' '
+  return @(($t.Trim() -split ' ') | Where-Object { $_ })
+}
+function Get-FoodStemTokens([string]$s) { return @(@(Get-FoodTokens $s) | ForEach-Object { Get-FoodStem $_ }) }
+
+function New-FoodVocabulary([string[]]$names) {
+  <#
+    The food names this estate knows, compiled widest-first so LONGEST MATCH WINS. That ordering is the
+    single biggest noise cut: read narrowest-first, a step saying "brown sugar" trips the shorter known
+    name Sugar, "olive oil" trips Olives (183 times), "garlic powder" trips Garlic. Widest-first plus
+    span masking reads each phrase once, as the longest name that fits it.
+    Matching is on the SURFACE words with an optional plural on the last one - never on the stem - because
+    stemming both sides put the ingredient "Fries" on the cooking verb "fry" in 50 recipes.
+  #>
+  $seen = @{}
+  $out = New-Object System.Collections.Generic.List[object]
+  foreach ($n0 in $names) {
+    if (-not $n0) { continue }
+    # "Cheddar Cheese, Shredded" is Cheddar Cheese with a prep note; register both readings or a step
+    # that says "cheddar cheese" looks like a phantom in the recipe that buys exactly that.
+    foreach ($n in @($n0, (($n0 -split ',')[0]))) {
+      $t = @(Get-FoodTokens $n)
+      if ($t.Count -eq 0) { continue }
+      $key = ($t -join ' ')
+      if ($seen.ContainsKey($key)) { continue }
+      $seen[$key] = 1
+      $last = $t[-1] + '(?:e?s)?'
+      $body = if ($t.Count -eq 1) { $last } else { (@($t[0..($t.Count - 2)]) + @($last)) -join '\s+' }
+      $out.Add([pscustomobject]@{
+        name = $n0
+        stem = @(Get-FoodStemTokens $n)
+        rx   = [regex]::new('(?<![a-z])' + $body + '(?![a-z])')
+        w    = $t.Count
+      })
+    }
+  }
+  return @($out.ToArray() | Sort-Object -Property @{ Expression = { $_.w }; Descending = $true }, @{ Expression = { $_.name.Length }; Descending = $true })
+}
+
+function Test-FoodCovered($ownTok, $namTok) {
+  <#
+    Does an ingredient this recipe DOES buy account for the name a step used? Either direction of token
+    containment counts, and neither needs the head noun to agree:
+      the recipe buys the more specific thing - a step saying "diced tomatoes" in a recipe that buys
+        "Diced Tomatoes & Green Chilies" is naming its own can (4 recipes);
+      the recipe buys the more general thing - a step saying "frozen peas" over a bought "Peas".
+    Containment BOTH ways is deliberately generous. It costs real findings (a step saying "rice" is
+    forgiven in a recipe that only buys Rice Vinegar) and that is the right trade for a gate: a missed
+    phantom stays on the worklist, a false one gets the whole check switched off.
+  #>
+  $ownTok = @($ownTok); $namTok = @($namTok)
+  if ($ownTok.Count -eq 0 -or $namTok.Count -eq 0) { return $false }
+  $a = @($namTok | Where-Object { $ownTok -notcontains $_ }).Count
+  $b = @($ownTok | Where-Object { $namTok -notcontains $_ }).Count
+  return ($a -eq 0 -or $b -eq 0)
+}
+
+function Get-PhantomIngredients($spec, $vocab) {
+  <# Known food names the make_it steps use that no line of this recipe's ingredient list accounts for. #>
+  $hits = New-Object System.Collections.Generic.List[object]
+  if (-not $vocab) { return $hits }
+  $steps = (@($spec.make_it) -join ' ')
+  if (-not $steps) { return $hits }
+  $hay = ((($steps.ToLower() -replace '[^a-z ]', ' ') -replace '\s+', ' ')).Trim()
+  if (-not $hay) { return $hits }
+
+  # What this recipe actually buys, read from all three parallel arrays: the scaler item, its canonical
+  # name when the card renames an ingredient for the reader (the japchae glass noodles), and the display
+  # key. Any one of them accounting for the word is enough.
+  $own = New-Object System.Collections.Generic.List[object]
+  foreach ($sc in @($spec.scaler.ing)) {
+    foreach ($v in @([string]$sc.item, [string]$sc.canon)) { if ($v) { $own.Add(@(Get-FoodStemTokens $v)) } }
+  }
+  foreach ($li in @($spec.ingredients_display)) {
+    $s = ([string]$li) -replace '<[^>]+>', ''
+    $m = [regex]::Match($s, '^\s*([^:]+?)\s*:')
+    if ($m.Success) { $own.Add(@(Get-FoodStemTokens $m.Groups[1].Value)) }
+  }
+  if ($own.Count -eq 0) { return $hits }
+
+  $mask = $hay.ToCharArray()
+  foreach ($v in $vocab) {
+    # MADE is decided per NAME, the other exemptions per occurrence. A recipe that blends tomatillos
+    # "into a rough salsa" also says "for a smoother salsa, pulse it in a blender" two clauses later;
+    # exempting only the sentence that makes it reported the second sentence instead, which is the same
+    # false positive wearing a different mention. If the recipe makes the thing anywhere, it makes it.
+    $made = $false
+    $said = $null
+    foreach ($m in $v.rx.Matches($hay)) {
+      $freeSpan = $true
+      for ($i = $m.Index; $i -lt ($m.Index + $m.Length); $i++) { if ($mask[$i] -eq '#') { $freeSpan = $false; break } }
+      if (-not $freeSpan) { continue }
+      for ($i = $m.Index; $i -lt ($m.Index + $m.Length); $i++) { $mask[$i] = '#' }
+      $before = $hay.Substring(0, $m.Index)
+      if ($before -match $script:PHANTOM_MADE) { $made = $true; continue }
+      if ($said) { continue }
+      $rest = $hay.Substring($m.Index + $m.Length)
+      if ($rest -match ('^\s+' + $script:PHANTOM_TAIL + '(?![a-z])')) { continue }
+      if ($rest -match $script:PHANTOM_FREE) { continue }
+      if ($before -match $script:PHANTOM_SUBJ) { continue }
+      if ($before -match $script:PHANTOM_CMP) { continue }
+      $said = $m.Value
+    }
+    if ($made -or -not $said) { continue }
+    $cov = $false
+    foreach ($o in $own) { if (Test-FoodCovered $o $v.stem) { $cov = $true; break } }
+    if ($cov) { continue }
+    $hits.Add(@{ name = $v.name; said = $said })
+  }
+  return $hits
+}
+
+function Get-SpecContradictions($spec, $vocab) {
   <# Every finding for one spec: @{ cls, why }. Shared by the audit and the repair. #>
   $f = New-Object System.Collections.Generic.List[object]
   $cal = 0; $pro = 0
@@ -147,6 +303,12 @@ function Get-SpecContradictions($spec) {
       if ($head.Length -lt 4) { $head = $key }
       if ($steps -notmatch ('\b' + [regex]::Escape($head))) { $f.Add(@{ cls = 'UNUSED'; why = ("'" + $key + "' is bought and costed but never named in a step") }) }
     }
+  }
+
+  # PHANTOM needs the catalogue's food lexicon, so it only runs when a caller supplies one. Callers that
+  # read one spec in isolation (repair-spec-contradictions) pass nothing and skip the class.
+  foreach ($p in (Get-PhantomIngredients $spec $vocab)) {
+    $f.Add(@{ cls = 'PHANTOM'; why = ("a step says '" + $p.said + "' but " + $p.name + " is in no ingredient line - it cannot be made as shopped") })
   }
   return $f
 }

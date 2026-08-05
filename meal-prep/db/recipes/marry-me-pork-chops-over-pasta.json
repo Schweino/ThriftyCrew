@@ -18,7 +18,7 @@
                  "cost_ps":  "4.11"
              },
     "intro_html":  "Seared cajun-dusted pork chops in a creamy sun-dried tomato and parmesan sauce, the same sauce that made marry me chicken famous. Each serving packs \u003cstrong\u003e45 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.11\u003c/strong\u003e (at everyday cost). The name says pasta, but our grocery board priced the base and rice won, so rice it is. The sauce does not care.",
-    "ingredients_display": ["\u003cstrong\u003ePork Chops:\u003c/strong\u003e 5.25 lb (2380 g)","\u003cstrong\u003eCajun Seasoning (Tony Chachere\u0027s):\u003c/strong\u003e 3.5 tbsp (32 g)","\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1 tbsp (8 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1.25 tbsp (11 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3.5 tbsp (49 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.75 lb (840 g)","\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 1.75 cups (416 g)","\u003cstrong\u003eSun-Dried Tomatoes:\u003c/strong\u003e 26.75 tbsp (94 g)","\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eDried Basil (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 5.5 oz (158 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display": ["\u003cstrong\u003ePork Chops:\u003c/strong\u003e 5.25 lb (2380 g)","\u003cstrong\u003eCajun Seasoning (Tony Chachere\u0027s):\u003c/strong\u003e 3.5 tbsp (32 g)","\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1 tbsp (8 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1.25 tbsp (11 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3.5 tbsp (49 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.75 lb (840 g)","\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 1.75 cups (416 g)","\u003cstrong\u003eSun-Dried Tomatoes:\u003c/strong\u003e 1 2/3 cups (94 g)","\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eDried Basil (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 5.5 oz (158 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Chops, 5.25 lb: ~$21.88. \u003cstrong\u003eBuy 6 lbs: $25.02.\u003c/strong\u003e",
@@ -27,7 +27,7 @@
                        "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Chicken Broth, 1.75 lb: ~$1.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Heavy Cream, 1.75 cups: ~$2.58. \u003cstrong\u003eBuy 1 pint: $2.94.\u003c/strong\u003e",
-                       "Sun-Dried Tomatoes, 26.75 tbsp: ~$2.02. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sun-Dried Tomatoes, 1 2/3 cups: ~$2.02. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Parmesan Cheese, 5.5 oz: ~$2.08. \u003cstrong\u003eBuy 1 8oz tub: $2.98.\u003c/strong\u003e",
                        "Rice, 3.75 cups dry: ~$1.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (cajun seasoning, onion powder, garlic powder, dried oregano, dried basil, salt, black pepper): ~$1.12. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
@@ -125,7 +125,7 @@
                                {
                                    "item":  "Sun-Dried Tomatoes",
                                    "grams":  94,
-                                   "buy":  "26.75 tbsp",
+                                   "buy":  "1 2/3 cups",
                                    "bid":  "sun-dried-tomatoes",
                                    "gpu":  "28.350"
                                },
@@ -191,7 +191,7 @@
                                           "Garlic, 8.25 tbsp (70 g)",
                                           "Chicken Broth, 1.75 lb (840 g)",
                                           "Heavy Cream, 1.75 cups (416 g)",
-                                          "Sun-Dried Tomatoes, 26.75 tbsp (94 g)",
+                                          "Sun-Dried Tomatoes, 1 2/3 cups (94 g)",
                                           "Dried Oregano, 1.25 tbsp (4 g)",
                                           "Dried Basil, 1.25 tbsp (4 g)",
                                           "Parmesan Cheese, 5.5 oz (158 g)",

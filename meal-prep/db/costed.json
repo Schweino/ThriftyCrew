@@ -76335,13 +76335,13 @@
     {
         "proposed_name":  "Slow Cooker Dr Pepper Pulled Pork Bowls",
         "slug":  "slow-cooker-dr-pepper-pulled-pork-bowls",
-        "cost_batch":  23.5,
-        "cost_per_serving":  1.68,
-        "cost_batch_true":  25.7,
-        "cost_per_serving_true":  1.84,
+        "cost_batch":  23.86,
+        "cost_per_serving":  1.7,
+        "cost_batch_true":  26.71,
+        "cost_per_serving_true":  1.91,
         "cost_pantry_add":  5.15,
-        "cost_first_run":  30.85,
-        "lines_priced":  7,
+        "cost_first_run":  31.86,
+        "lines_priced":  8,
         "lines_unpriced":  0,
         "lines":  [
                       {
@@ -76403,6 +76403,21 @@
                           "starter_cost":  3.13,
                           "starter_pkg":  "18oz bottle",
                           "starter_pkg_g":  510
+                      },
+                      {
+                          "item":  "Zero-Sugar Soda",
+                          "grams":  710,
+                          "util_cost":  0.36,
+                          "basis":  "board:zero-sugar-soda-2l:recipeboard-walmart",
+                          "bulk":  false,
+                          "buy_n":  1,
+                          "buy_cost":  1.01,
+                          "pkg":  "2L bottle",
+                          "pkg_g":  2000,
+                          "starter_n":  null,
+                          "starter_cost":  null,
+                          "starter_pkg":  null,
+                          "starter_pkg_g":  null
                       },
                       {
                           "item":  "Salt",

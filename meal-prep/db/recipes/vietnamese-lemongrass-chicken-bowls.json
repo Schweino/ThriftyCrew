@@ -42,7 +42,7 @@
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)",
                                 "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 5.7 carrots (350 g)",
                                 "\u003cstrong\u003eCucumber:\u003c/strong\u003e 1 cucumber (300 g)",
-                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 25 tbsp (25 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 1/2 cups (25 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
@@ -59,7 +59,7 @@
                        "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Carrots, 5.7 carrots: ~$0.74. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
                        "Cucumber, 1 cucumber: ~$0.76. \u003cstrong\u003eBuy 1 each: $0.76.\u003c/strong\u003e",
-                       "Fresh Cilantro, 25 tbsp: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 1/2 cups: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Pantry seasonings (black pepper, cayenne pepper, salt): ~$0.43. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $38.49 across 14 servings, so roughly $2.75 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $42.06 across 14 servings, roughly $3.00 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
@@ -210,7 +210,7 @@
                                    "item":  "Fresh Cilantro",
                                    "canon":  "Fresh Cilantro",
                                    "grams":  25,
-                                   "buy":  "25 tbsp",
+                                   "buy":  "1 1/2 cups",
                                    "bid":"cilantro",
                                    "gpu":57
                                },
@@ -247,7 +247,7 @@
                                           "Rice, 3.75 cups dry (700 g)",
                                           "Carrots, 5.7 carrots (350 g)",
                                           "Cucumber, 1 cucumber (300 g)",
-                                          "Fresh Cilantro, 25 tbsp (25 g)",
+                                          "Fresh Cilantro, 1 1/2 cups (25 g)",
                                           "Salt, 1 tbsp (20 g)"
                                       ],
                  "steps":  [

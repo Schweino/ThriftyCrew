@@ -29,6 +29,14 @@
                  arithmetically true at ~1 g/tbsp and useless to a person holding a measuring spoon.
     HEAD-QTY     the head ingredient list and the costed display line state different amounts of the same
                  ingredient in the same unit.
+    PHANTOM      a make_it step names a food this estate knows and the recipe's ingredient list does not
+                 carry it. The mirror of UNUSED, and the only reading that can see
+                 slow-cooker-dr-pepper-pulled-pork-bowls: step 2 pours a zero-sugar soda that appears in
+                 no display line, no scaler row and no cost line, so the braise the recipe is NAMED for
+                 cannot be made as shopped. Measured and left unshipped on 2026-08-02 because the naive
+                 version gave 295 hits; the four rules in the lib (longest-match masking, surface-not-stem
+                 matching, compound tails, made-in-the-step) are what made it readable. See
+                 out\fidelity\engine-pass-notes.md for that measurement.
   ADVISORY (reported, never a failure): UNUSED - an ingredient the list buys and the steps never mention.
   It is the noisiest reading here because steps legitimately say "season" instead of naming salt, and a
   guard that cries wolf is one nobody reads.
@@ -98,7 +106,15 @@ if ($SelfTest) {
     cost_lines = @('Chicken Broth, 0 lb: ~$0.06.')
     make_it = @('Weigh the pot.', 'Cook the rice.', 'Simmer with broth and cilantro.')
   }
-  $r = @(Get-SpecContradictions $bad)
+  # FROZEN VOCABULARY - never read from db\ingredients.json, per the guard-fixture rule. These are the
+  # names the PHANTOM cases below need in order to mean anything, including the ones that exist only to
+  # be the LONGER match that must win ("Brown Sugar" over "Sugar", "Olive Oil" over "Olives").
+  $vocabFx = New-FoodVocabulary @(
+    'Zero-Sugar Soda', 'Soda', 'Sugar', 'Brown Sugar', 'Olives', 'Olive Oil', 'Rice', 'Rice Vinegar',
+    'Potato', 'Sweet Potatoes', 'Peas', 'Frozen Green Peas', 'Cheddar Cheese, Shredded', 'Fries',
+    'Salsa', 'Tomatillos', 'BBQ Sauce (Sugar Free)', 'Pork Loin', 'Salt', 'Black Pepper'
+  )
+  $r = @(Get-SpecContradictions $bad $vocabFx)
   $cls = @($r | ForEach-Object { $_.cls })
   Chk 'MUST FIRE  STAT-PROSE  499 cal in a paragraph that also says 541' (($cls -contains 'STAT-PROSE') -and (@($r | Where-Object { $_.why -match '499' }).Count -eq 1)) (($r | ForEach-Object { $_.why }) -join ' | ')
   Chk 'MUST FIRE  ZERO-QTY    a broth line that reads "0 lb"' (@($r | Where-Object { $_.cls -eq 'ZERO-QTY' }).Count -ge 1) (($r | Where-Object { $_.cls -eq 'ZERO-QTY' } | ForEach-Object { $_.why }) -join ' | ')
@@ -117,23 +133,122 @@ if ($SelfTest) {
     cost_lines = @('Rice, 3.75 cups: ~$1.20.')
     make_it = @('Weigh the pot.', 'Cook the rice.', 'Fold in the cilantro.')
   }
-  $r2 = @(Get-SpecContradictions $good)
+  $r2 = @(Get-SpecContradictions $good $vocabFx)
   $hard2 = @($r2 | Where-Object { $_.cls -ne 'UNUSED' })
   Chk 'CLEAN TWIN a self-consistent spec produces no findings' ($hard2.Count -eq 0) (($hard2 | ForEach-Object { $_.cls + ': ' + $_.why }) -join ' | ')
   Chk 'CLEAN TWIN a comparison price ($14 a restaurant charges) is not stale money' (@($r2 | Where-Object { $_.why -match '14' }).Count -eq 0) (($r2 | ForEach-Object { $_.why }) -join ' | ')
+
+  # ---- PHANTOM: the founding case and its real twin -----------------------------------------------
+  # FROZEN FIXTURE - the ingredient list and steps of slow-cooker-dr-pepper-pulled-pork-bowls as they
+  # shipped: seven lines, not one of them a soda, and a step that pours one. Its CLEAN TWIN is a real
+  # recipe too - slow-cooker-root-beer-pulled-pork-bowls, the same braise built the same way, which does
+  # buy the bottle. The pair is the whole point of the class: identical prose, opposite verdicts, and
+  # nothing but the ingredient list to tell them apart.
+  $phantomBad = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 557; protein = 56; cost_ps = '2.38' }
+    ingredients_display = @(
+      '<strong>Pork Loin:</strong> 8 lb (3400 g)', '<strong>Potato (generic):</strong> 9 lb (3700 g)',
+      '<strong>BBQ Sauce (Sugar Free) (Sweet Baby Ray''s):</strong> 1 bottle (360 g)',
+      '<strong>Salt (Morton):</strong> for rub (8 g)', '<strong>Black Pepper (Great Value):</strong> for rub (3 g)')
+    scaler = [pscustomobject]@{ ing = @(
+      [pscustomobject]@{ item = 'Pork Loin'; grams = 3400 }, [pscustomobject]@{ item = 'Potato'; grams = 3700 },
+      [pscustomobject]@{ item = 'BBQ Sauce (Sugar Free)'; grams = 360 },
+      [pscustomobject]@{ item = 'Salt'; grams = 8 }, [pscustomobject]@{ item = 'Black Pepper'; grams = 3 }) }
+    make_it = @(
+      'Rub the pork loin all over with the salt and black pepper, then set it in the slow cooker.',
+      'Pour the zero-sugar soda over the pork until it is about halfway up the sides.',
+      'Stir in the BBQ sauce and let it warm through for a few minutes.',
+      'Serve over cooked potatoes and divide into containers.')
+  }
+  $r3 = @(Get-SpecContradictions $phantomBad $vocabFx)
+  $ph3 = @($r3 | Where-Object { $_.cls -eq 'PHANTOM' })
+  Chk 'MUST FIRE  PHANTOM     step 2 pours a soda the recipe never buys' ((@($ph3 | Where-Object { $_.why -match 'Zero-Sugar Soda' }).Count -eq 1)) (($ph3 | ForEach-Object { $_.why }) -join ' | ')
+  Chk 'MUST FIRE  PHANTOM     and it is the ONLY phantom in that spec' ($ph3.Count -eq 1) (($ph3 | ForEach-Object { $_.why }) -join ' | ')
+
+  # THE TWIN. Same braise, same sentences, one extra line in the list - and the class must go silent.
+  $phantomGood = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 560; protein = 59; cost_ps = '3.93' }
+    ingredients_display = @(
+      '<strong>Pork Loin:</strong> 8 lb (3400 g)', '<strong>Potato (generic):</strong> 10 lb (4300 g)',
+      '<strong>BBQ Sauce (Sugar Free) (Sweet Baby Ray''s):</strong> 1 bottle (300 g)',
+      '<strong>Zero-Sugar Soda (generic):</strong> 1 1/2 cups (355 g)',
+      '<strong>Salt (Morton):</strong> 1 teaspoon (8 g)', '<strong>Black Pepper (Great Value):</strong> 1 teaspoon (4 g)')
+    scaler = [pscustomobject]@{ ing = @(
+      [pscustomobject]@{ item = 'Pork Loin'; grams = 3400 }, [pscustomobject]@{ item = 'Potato'; grams = 4300 },
+      [pscustomobject]@{ item = 'BBQ Sauce (Sugar Free)'; grams = 300 },
+      [pscustomobject]@{ item = 'Zero-Sugar Soda'; grams = 355 },
+      [pscustomobject]@{ item = 'Salt'; grams = 8 }, [pscustomobject]@{ item = 'Black Pepper'; grams = 4 }) }
+    make_it = @(
+      'Rub the pork loin all over with the salt and black pepper, then set it in the slow cooker.',
+      'Pour the zero-sugar soda over the pork until it is about halfway up the sides.',
+      'Stir in the BBQ sauce and let it warm through for a few minutes.',
+      'Serve over cooked potatoes and divide into containers.')
+  }
+  $ph4 = @(Get-SpecContradictions $phantomGood $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
+  Chk 'CLEAN TWIN the same steps over a list that DOES buy the soda are silent' ($ph4.Count -eq 0) (($ph4 | ForEach-Object { $_.why }) -join ' | ')
+
+  # THE FOUR NOISE RULES. Each line is a false positive this matcher produced against the live catalogue
+  # before the rule above it existed; without them the class gives 555 hits and gets switched off.
+  $noise = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 500; protein = 40; cost_ps = '2.00' }
+    ingredients_display = @(
+      '<strong>Brown Sugar:</strong> 7 tbsp (94 g)', '<strong>Olive Oil:</strong> 2 tbsp (27 g)',
+      '<strong>Sweet Potatoes:</strong> 3 lb (1360 g)', '<strong>Frozen Green Peas:</strong> 1 lb (454 g)',
+      '<strong>Cheddar Cheese, Shredded:</strong> 8 oz (227 g)', '<strong>Rice:</strong> 3.75 cups (700 g)',
+      '<strong>BBQ Sauce (Sugar Free):</strong> 1 bottle (300 g)', '<strong>Tomatillos:</strong> 1 lb (454 g)')
+    scaler = [pscustomobject]@{ ing = @(
+      [pscustomobject]@{ item = 'Brown Sugar'; grams = 94 }, [pscustomobject]@{ item = 'Olive Oil'; grams = 27 },
+      [pscustomobject]@{ item = 'Sweet Potatoes'; grams = 1360 }, [pscustomobject]@{ item = 'Frozen Green Peas'; grams = 454 },
+      [pscustomobject]@{ item = 'Cheddar Cheese, Shredded'; grams = 227 }, [pscustomobject]@{ item = 'Rice'; grams = 700 },
+      [pscustomobject]@{ item = 'BBQ Sauce (Sugar Free)'; grams = 300 }, [pscustomobject]@{ item = 'Tomatillos'; grams = 454 }) }
+    make_it = @(
+      'Stir the brown sugar into the olive oil.',                       # longest match wins: not Sugar, not Olives
+      'Peel and cube the sweet potatoes, then scatter the frozen peas.', # plural stemming: not Potato, not a missing Peas
+      'Scatter on most of the cheddar cheese.',                          # the comma reading: Cheddar Cheese, Shredded
+      'Add the cooked rice so it fries up instead of turning mushy.',    # surface not stem: "fries" the verb is not Fries
+      'Stir in the sugar-free BBQ sauce until every strand is coated.',  # X-free is the absence of X
+      'Blend the tomatillos with the garlic and most of the cilantro into a rough green salsa.', # made, verb a clause away
+      'Watch it, because honey burns faster than sugar does.',           # a comparison is not an instruction
+      'Splash in the rice vinegar at the end.')                          # an unknown compound is not its head word
+  }
+  $ph5 = @(Get-SpecContradictions $noise $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
+  Chk 'CLEAN TWIN the eight live false-positive shapes all stay silent' ($ph5.Count -eq 0) (($ph5 | ForEach-Object { $_.why }) -join ' | ')
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
 
 $specs = Get-SpecSet $mp ([bool]$IncludeArchive)
-$byClass = @{}
-$rows = New-Object System.Collections.Generic.List[object]
+
+# Parse once, then read twice. PHANTOM needs the food lexicon of the WHOLE catalogue before it can judge
+# any single spec: db\ingredients.json is the canonical store but a spec may name an ingredient it has not
+# adopted yet, and every such gap becomes a phantom in the recipe that legitimately buys it.
+$parsed = New-Object System.Collections.Generic.List[object]
 foreach ($s in $specs) {
   $spec = $null
   try { $spec = Get-Content $s.path -Raw | ConvertFrom-Json } catch { continue }
   if (-not $spec.stat) { continue }
-  foreach ($f in (Get-SpecContradictions $spec)) {
+  $parsed.Add([pscustomobject]@{ run = $s.run; slug = $s.slug; spec = $spec })
+}
+$names = New-Object System.Collections.Generic.List[string]
+$ingDb = Join-Path $mp 'db\ingredients.json'
+if (Test-Path $ingDb) {
+  foreach ($r in (Get-Content $ingDb -Raw | ConvertFrom-Json)) {
+    $n = [string]$r.item
+    if ($n -and $n -notmatch '^_') { $names.Add($n) }
+  }
+}
+foreach ($p in $parsed) {
+  foreach ($sc in @($p.spec.scaler.ing)) {
+    foreach ($v in @([string]$sc.item, [string]$sc.canon)) { if ($v) { $names.Add($v) } }
+  }
+}
+$vocab = New-FoodVocabulary $names.ToArray()
+
+$byClass = @{}
+$rows = New-Object System.Collections.Generic.List[object]
+foreach ($p in $parsed) {
+  foreach ($f in (Get-SpecContradictions $p.spec $vocab)) {
     $byClass[$f.cls] = 1 + [int]$byClass[$f.cls]
-    $rows.Add([pscustomobject]@{ run = $s.run; slug = $s.slug; cls = $f.cls; why = $f.why })
+    $rows.Add([pscustomobject]@{ run = $p.run; slug = $p.slug; cls = $f.cls; why = $f.why })
   }
 }
 $outPath = Join-Path $mp 'out\spec-contradictions.json'
@@ -143,7 +258,7 @@ New-Item -ItemType Directory -Force -Path (Split-Path $outPath) | Out-Null
 if (-not $Quiet) {
   Write-Output ("spec contradictions: {0} finding(s) across {1} spec(s)" -f $rows.Count, $specs.Count)
   foreach ($k in ($byClass.Keys | Sort-Object)) { Write-Output ("  {0,-12} {1}" -f $k, $byClass[$k]) }
-  foreach ($k in @('STAT-PROSE','ZERO-QTY','STALE-MONEY','ABSURD-UNIT','HEAD-QTY')) {
+  foreach ($k in @('STAT-PROSE','ZERO-QTY','STALE-MONEY','ABSURD-UNIT','HEAD-QTY','PHANTOM')) {
     $r = @($rows | Where-Object { $_.cls -eq $k })
     if ($r.Count -eq 0) { continue }
     Write-Output ("  --- $k")
@@ -163,7 +278,7 @@ if ($Baseline) {
 $base = @{}
 if (Test-Path $basePath) { try { $bd = Get-Content $basePath -Raw | ConvertFrom-Json; foreach ($p in $bd.PSObject.Properties) { $base[$p.Name] = [int]$p.Value } } catch {} }
 $worse = @()
-foreach ($k in @('STAT-PROSE','ZERO-QTY','STALE-MONEY','ABSURD-UNIT','HEAD-QTY')) {
+foreach ($k in @('STAT-PROSE','ZERO-QTY','STALE-MONEY','ABSURD-UNIT','HEAD-QTY','PHANTOM')) {
   $now = [int]$byClass[$k]
   $was = if ($base.ContainsKey($k)) { [int]$base[$k] } else { 0 }
   if ($now -gt $was) { $worse += ("{0}: {1} now, baseline {2}" -f $k, $now, $was) }

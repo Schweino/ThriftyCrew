@@ -6,8 +6,19 @@ audit's MISSING-KEY rows (`engine-pass-worklist.json` holds the raw audit rows).
 
 ## Blocked recipes - the steps cannot be honest until the LIST changes
 
-1. **slow-cooker-dr-pepper-pulled-pork-bowls** - the namesake soda is the braising liquid and is not
-   costed. The salt/pepper/garlic-powder "for rub" annotations also only resolve once the soda exists.
+1. ~~**slow-cooker-dr-pepper-pulled-pork-bowls**~~ - DONE 2026-08-04. Zero-Sugar Soda restored to the
+   spec: 710 g / "3 cups", bid `zero-sugar-soda-2l`, gpu 29.570 - the same row its root beer twin already
+   carried, and the canonical values in `db/ingredients.json`. It prices at 1 x 2L bottle ($1.01, $0.36
+   used), so the step that pours it can now be followed from the list a shopper buys.
+   FIVE PLACES, because an ingredient is not one field: `ingredients_display` and `scaler.ing` spliced
+   key-scoped (parallel arrays, same index the index row already used); `head.recipeIngredient` NOT typed
+   by hand but re-derived with `repair-head-ingredients.ps1 -Apply -Slugs` since it became a derived
+   field, which yields "Zero-Sugar Soda, 3 cups (710 g)"; `db/costed.json` via a targeted
+   `cost-recipes.ps1 -Slugs`; and the `recipes-db.json` row, whose own copy of the line said 0 g /
+   "1 bottle" - a braising liquid weighing nothing, labelled with a package. `sync-recipesdb-buy.ps1`
+   correctly REFUSED to carry that one ("grams disagree too - not a label repair") and reported it
+   instead, so it was authored deliberately. The salt/pepper/garlic-powder "for rub" annotations are
+   still purchase labels rather than cook measures - the separate repair-cook-measures class, not this one.
 2. **coq-au-vin** - the sauce thickener is a flour beurre manie; flour is not costed. Source confirms no
    reduction path. Needs flour added (butter is already there).
 3. **filipino-pork-menudo-rice-bowls** - a "Rice Bowls" card with no rice in the cost list; every sibling
@@ -95,6 +106,36 @@ a handful of others are probably still noise.
 
 A gate that cries wolf gets switched off, so this stays a worklist item rather than a half-tuned check.
 The measurement above is the head start.
+
+### ARMED 2026-08-04 as PHANTOM (`spec-contradiction-lib.ps1`), 555 raw -> 9
+
+The head start was right about what it would take. Six rules, each one a false positive the matcher
+actually produced against the live catalogue:
+
+1. **Longest match wins**, with span masking. The single biggest cut. Read narrowest-first, "olive oil"
+   trips Olives 183 times, "brown sugar" trips Sugar 50, "garlic powder" trips Garlic 58.
+2. **Match the surface, never the stem.** Stemming both sides put the ingredient "Fries" on the cooking
+   verb "fry" in 50 recipes. Plurals are tolerated on the last word of the name instead.
+3. **Stem `oes` properly** in the coverage comparison. Without it "potatoes" stems to "potatoe" while
+   "potato" stems to itself, and five recipes that BUY Sweet Potatoes reported a phantom Potato.
+4. **Containment either way covers**, head noun not required - a step saying "diced tomatoes" in a recipe
+   that buys "Diced Tomatoes & Green Chilies" is naming its own can. Also register the pre-comma reading
+   of a name, or "Cheddar Cheese, Shredded" cannot account for a step that says "cheddar cheese".
+5. **Compound tails, X-free, subject pronouns, comparisons.** "apple cider VINEGAR" is not apple cider;
+   "sugar-free BBQ sauce" names sugar to say there is none; "so IT fries up" is a verb; "honey burns
+   faster THAN sugar" is a comparison, not an instruction.
+6. **A step that MAKES something is not shopping for it**, decided per NAME rather than per sentence -
+   four recipes blend tomatillos "into a rough salsa" and then mention the salsa again a clause later.
+
+Frozen fixture is the Dr Pepper spec's own list and steps, with the root beer twin - the same braise,
+the same sentences, one extra line in the list - as the clean twin. Baselined at **9** and ratcheted, so
+a new one fails the gate. Of the 9: coq-au-vin (no bay leaves), filipino-pork-menudo and
+slow-cooker-country-style-pork-ribs-rice (no rice in a rice dish), hungarian-chicken-paprikash ("a ladle
+of hot sauce" that means hot braising liquid), beef-tips-and-gravy-mashed-potatoes (titled for potatoes,
+buys rice) and al-pastor (a squeeze of pineapple juice from bought chunks) are real and belong on the
+list above. Three are known noise worth reading before anyone "fixes" them: two hash-brown casseroles
+whose steps say "potatoes" (they buy Frozen Hash Browns) and turkish-iskender, whose tomato sauce is
+built in the pan from bought paste and tomatoes.
 
 ## Related standing items
 

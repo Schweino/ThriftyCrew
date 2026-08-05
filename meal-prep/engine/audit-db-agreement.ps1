@@ -2,7 +2,8 @@
 # the catalog INDEX, db\recipes\<slug>.json are the SPECS). Nothing enforced their agreement until
 # 2026-07-26 (estate audit finding): a recipe added to one but not the other, or a protein/visibility
 # edit applied to only one, silently splits the surfaces (rotation/top5 read the index; cards read specs).
-# Checks: slug sets match both ways; protein agrees; the COST BLOCK agrees; spec scaler bids exist in
+# Checks: slug sets match both ways; protein agrees; the COST BLOCK agrees; the two masters list the SAME
+# INGREDIENTS (count and canonical names); spec scaler bids exist in
 # db\ingredients.json (a gpu/bid recalibration must reach both, or cheapest_ps diverges from cost basis).
 # Exit 0 clean, 1 drift found (caller alerts; non-fatal in the daily chain).
 #
@@ -122,6 +123,27 @@ foreach($s in $specSlugs.Keys){
     $costDriftRows++; $costDriftFields += $cd.Count
     if($costDriftRows -le 8){ $issues.Add(($cd | Where-Object { $_ -match 'cost_per_serving ' } | Select-Object -First 1)) }
     if($costDriftRows -le 8 -and -not ($cd | Where-Object { $_ -match 'cost_per_serving ' })){ $issues.Add($cd[0]) }
+  }
+  # INGREDIENT-SET (2026-08-04): the two masters must agree on WHICH ingredients a recipe has. COST-DRIFT
+  # above compares what a recipe costs; this compares what is IN it, and nothing did until two defects the
+  # same day proved both directions. slow-cooker-dr-pepper-pulled-pork-bowls carried 8 ingredients in the
+  # index and 7 in the spec - the namesake soda existed only in the index, so the card sold a Dr Pepper
+  # braise with no braising liquid in the list a shopper buys from. korean-turkey-japchae carried
+  # "Cornstarch" in the index against the spec's "Rice Noodles", a one-for-one swap from the 2026-07
+  # glass-noodle correction that never reached the index, so the Meal Plan Builder (which reads the INDEX,
+  # while the card reads the SPEC) shopped 794 g of cornstarch for a noodle dish. Both read CLEAN here.
+  # Compared on the CANONICAL name - scaler.canon when a card renames an ingredient for the reader, else
+  # scaler.item - which is the key update-recipes-db.ps1 writes into the index. Armed at ZERO.
+  $specIng = @($spec.scaler.ing | ForEach-Object { if($_.PSObject.Properties.Name -contains 'canon' -and $_.canon){ [string]$_.canon } else { [string]$_.item } })
+  $idxIng  = @($row.ingredients | ForEach-Object { [string]$_.item })
+  if($specIng.Count -ne $idxIng.Count){
+    $issues.Add("INGREDIENT-COUNT drift: $s spec has $($specIng.Count) ingredient(s), index has $($idxIng.Count) - one master is missing a line the other buys")
+  } else {
+    $specOnly = @($specIng | Where-Object { $idxIng -notcontains $_ })
+    $idxOnly  = @($idxIng  | Where-Object { $specIng -notcontains $_ })
+    if($specOnly.Count -or $idxOnly.Count){
+      $issues.Add("INGREDIENT-NAME drift: $s spec-only [$($specOnly -join ', ')] index-only [$($idxOnly -join ', ')] - the card and the Meal Plan Builder name different products")
+    }
   }
   # visibility is deliberately NOT compared: recipes-db + Ghost own it (the free-dinner rotation flips
   # both weekly); the spec field is only the default for a FIRST publish. engine\publish preserves the

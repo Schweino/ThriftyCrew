@@ -654,6 +654,22 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Recipe db drift (index vs specs)" -Body "meal-prep\engine\audit-db-agreement.ps1 found drift between recipes-db.json and db\recipes specs (or missing db\ingredients items). Run it for the list; fix the lagging side." | Out-Null } catch {}
         } else { Log 'db-agreement guard: clean' }
       } catch { Log ('db-agreement guard threw: ' + $_.Exception.Message) }
+      # self-contradiction guard: a spec that disagrees with ITSELF (2026-08-04). Ratchets per class
+      # against out\spec-contradictions-baseline.json, so this only fires when a class gets WORSE.
+      # test-auditors already proves the matcher still sees its founding bugs; this runs the real audit
+      # over the live catalogue every day, next to the drift guard, so a NEW contradiction is named the
+      # day it lands instead of at the next manual pass. Non-fatal; alerts. The class that motivated it
+      # is PHANTOM - a step naming an ingredient the list never buys, which is how
+      # slow-cooker-dr-pepper-pulled-pork-bowls shipped a Dr Pepper braise with no soda in the cost list.
+      try {
+        $sc = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-spec-contradictions.ps1') -Quiet 2>&1
+        if ($LASTEXITCODE -ne 0) {
+          $scWorse = (($sc | Where-Object { $_ -match 'FAIL' }) -join ' ')
+          Log ('spec-contradiction guard got WORSE: ' + $scWorse)
+          $summary += 'REVIEW    a spec-contradiction class got worse than its baseline - see meal-prep\out\spec-contradictions.json'
+          try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Recipe spec contradictions got worse" -Body ("meal-prep\pipeline\audit-spec-contradictions.ps1 found MORE of a contradiction class than the recorded baseline. One of the two disagreeing statements is on a live card. Full list in meal-prep\out\spec-contradictions.json. " + $scWorse) | Out-Null } catch {}
+        } else { Log 'spec-contradiction guard: no class worse than baseline' }
+      } catch { Log ('spec-contradiction guard threw: ' + $_.Exception.Message) }
       # compute-v2 now SKIPS bad recipes and exits 1 with the list (was: throw -> whole manifest stale,
       # and a child exit-1 does NOT raise in this parent, so the old code logged success falsely). Check
       # the exit code explicitly and alert on any skipped recipe.

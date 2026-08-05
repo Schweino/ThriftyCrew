@@ -32,7 +32,7 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 3.75 lb (1667 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (22 g)",
-                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 29 tbsp (29 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 3/4 cups (29 g)",
                                 "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 9.25 tbsp (55 g)",
                                 "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 3 tbsp (26 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
@@ -48,7 +48,7 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Beef Chuck Roast, 3.75 lb: ~$29.29. \u003cstrong\u003eBuy 4 lbs: $31.88.\u003c/strong\u003e",
-                       "Fresh Cilantro, 29 tbsp: ~$0.91. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 3/4 cups: ~$0.91. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Green Onions, 9.25 tbsp: ~$0.65. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
                        "Jalapeno, 3 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
                        "Diced Tomatoes, 1 can: ~$1.06. \u003cstrong\u003eBuy 2 cans: $1.92.\u003c/strong\u003e",
@@ -111,7 +111,7 @@
                                    "item":  "Fresh Cilantro",
                                    "canon":  "Fresh Cilantro",
                                    "grams":  29,
-                                   "buy":  "29 tbsp",
+                                   "buy":  "1 3/4 cups",
                                    "bid":"cilantro",
                                    "gpu":57
                                },
@@ -216,7 +216,7 @@
                  "recipeIngredient":  [
                                           "Beef Chuck Roast, 3.75 lb (1667 g)",
                                           "Salt, 1.25 tbsp (22 g)",
-                                          "Fresh Cilantro, 29 tbsp (29 g)",
+                                          "Fresh Cilantro, 1 3/4 cups (29 g)",
                                           "Green Onions, 9.25 tbsp (55 g)",
                                           "Jalapeno, 3 tbsp (26 g)",
                                           "Black Pepper, 0.25 tbsp (1 g)",
