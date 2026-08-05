@@ -12,6 +12,17 @@
 # invisible in one of the two fields it lived in.
 $script:RX_CAL     = '(?i)\b(\d{3,4})\s*cal(?:orie)?s?\b'
 $script:RX_PROTEIN = '(?i)\b(\d{1,3})\s*(?:g\b|grams?\b)\s*(?:of\s+)?protein'
+# UNMEASURABLE-QTY: a quantity below a QUARTER of its stated unit is one no kitchen can act on. There is
+# no quarter-tablespoon in the drawer and no home scale that resolves 0.07 oz, so the reader is being
+# handed a number they can only ignore.
+#
+# ZERO WAS ONLY THE EXTREME CASE. Until 2026-08-05 this class read `0\s*(lb|oz|...)` and could see nothing
+# else, so "Bay Leaves: 0 oz" failed the gate while "Bay Leaves: 0.07 oz" - the same three grams, one
+# rounding step away - passed it 44 times. Fixing the 15 zero labels moved four of them to 0.11 oz and the
+# gate went quiet, which is the failure mode of measuring a defect by the spelling of its worst example.
+# The threshold is the same 0.25 the repair uses to decide a label is usable; repair-unmeasurable-qty's
+# self-test asserts against this line so the two cannot drift.
+$script:UNMEASURABLE_UNDER = 0.25
 # Adjectives that sit between the quantity and the ingredient name on a head line ("5.5 cups DRY rice").
 # They are skipped when testing whether the display key is the head line's trailing ingredient phrase.
 $script:HEAD_ADJ = '(?:dry|fresh|frozen|minced|grated|ground|chopped|diced|sliced|shredded|boneless|skinless|large|small|whole|low\s*sodium|reduced\s*fat|extra\s*virgin|uncooked|cooked|raw|lean)'
@@ -87,6 +98,62 @@ function Get-HeadQtyMismatch([string]$headLine, $disp) {
   $want = [double]$disp[$best].n
   if ([math]::Abs($have - $want) -le ([math]::Max(0.05, $want * 0.1))) { return $null }
   return @{ key = $best; unit = $u; head = $have; costed = $want; prefixLen = $q.Groups[1].Length + $q.Index }
+}
+
+# ---- UNUSED: is everything bought also used? ------------------------------------------------------
+# Words that describe a FORM rather than an identity. They cannot carry a mention on their own: a step
+# saying "ground" or "fresh" tells you nothing about which ingredient it means.
+$script:UNUSED_STOP = @('fresh','dried','ground','shredded','grated','minced','chopped','diced','sliced',
+    'frozen','canned','whole','large','small','light','reduced','free','low','sodium','value','great',
+    'generic','boneless','skinless','lean','raw','cooked','sweet','hot','mild','plain','style')
+
+function Test-IngredientNamedInSteps {
+    <#
+      Does any step name this ingredient? Returns $true when it does.
+
+      MATCHING THE HEAD NOUN ALONE WAS THE BUG, and it made this class useless. Until 2026-08-05 the rule
+      took the LAST word of the display key and required it verbatim in the steps, so "Parmesan Cheese"
+      was searched for as "cheese" while the step said "stir in the PARMESAN", and "Boneless Skinless
+      Chicken Breast" was searched for as "breast" while the step said "cube the CHICKEN". English names
+      an ingredient by its distinctive word, not its category noun. That single rule produced 150 of the
+      150 findings this class carried, essentially all of them false, and a gate that cries wolf 149 times
+      out of 150 is one nobody reads - the same reasoning that kept PHANTOM off the board until its noise
+      was cut.
+
+      SO A DISTINCTIVE TOKEN COUNTS. But token matching alone over-forgives in the other direction, and
+      the PHANTOM matcher already names the trap: a step saying "rice" would forgive a bought Rice
+      Vinegar.
+
+      WHAT MAKES A SHARED WORD AMBIGUOUS IS NOT THAT IT IS SHARED. It is that another ingredient has
+      ALREADY CLAIMED it by being exactly that word. A recipe buying Rice and Rice Vinegar spends its
+      "rice" on the Rice - so "cook the rice" says nothing about the vinegar. A recipe buying Chicken
+      Breast and Chicken Broth has no ingredient simply called "chicken", so "cube the chicken" is
+      unclaimed and can only mean the breast. Requiring a wholly UNSHARED token instead was this
+      function's own second bug: it left 25 findings that were the first bug one level down, reporting
+      Chicken Breast in a recipe whose step cubes the chicken, Black Pepper where the step says salt and
+      pepper, Ground Beef where the step browns the beef.
+
+      An ingredient with nothing left to look for falls back to demanding its full name rather than
+      guessing.
+    #>
+    param([string]$Key, [string[]]$AllKeys, [string]$Steps)
+    $mine = @(($Key -split ' ') | Where-Object { $_.Length -ge 4 -and $script:UNUSED_STOP -notcontains $_ })
+    if ($mine.Count -eq 0) { $mine = @(($Key -split ' ') | Where-Object { $_ }) }
+    # a word ANOTHER ingredient is wholly named by belongs to that ingredient, not this one
+    $claimed = @{}
+    foreach ($other in $AllKeys) {
+        if ($other -eq $Key) { continue }
+        if ($other -notmatch ' ') { $claimed[$other] = 1 }
+    }
+    $usable = @($mine | Where-Object { -not $claimed.ContainsKey($_) })
+    if ($usable.Count -eq 0) {
+        # every word this ingredient has is spoken for - demand the whole name rather than guess
+        return ($Steps -match ('\b' + [regex]::Escape($Key)))
+    }
+    foreach ($t in $usable) {
+        if ($Steps -match ('\b' + [regex]::Escape($t))) { return $true }
+    }
+    return $false
 }
 
 # ---- PHANTOM: a step names an ingredient the recipe never buys -----------------------------------
@@ -281,8 +348,10 @@ function Get-SpecContradictions($spec, $vocab) {
   foreach ($li in (@(@($spec.ingredients_display) + @($spec.cost_lines)) | Where-Object { $_ })) {
     $s = [string]$li
     $clean = (($s -replace '<[^>]+>', '') -replace '\s+', ' ').Trim()
-    foreach ($m in [regex]::Matches($s, '(?<![\d.])0\s*(lb|lbs|oz|cups?|tbsp|tsp)\b')) {
-      $f.Add(@{ cls = 'ZERO-QTY'; why = ("a line reads '" + $m.Value.Trim() + "': " + $clean) })
+    foreach ($m in [regex]::Matches($s, '(?<![\d.])(\d+(?:\.\d+)?)\s*(lb|lbs|oz|cups?|tbsp|tsp)\b')) {
+      if ([double]$m.Groups[1].Value -lt $script:UNMEASURABLE_UNDER) {
+        $f.Add(@{ cls = 'UNMEASURABLE-QTY'; why = ("a line asks for '" + $m.Value.Trim() + "', which no kitchen measure shows: " + $clean) })
+      }
     }
     foreach ($m in [regex]::Matches($s, '(?<![\d.])(\d{2,4}(?:\.\d+)?)\s*tbsp\b')) {
       if ([double]$m.Groups[1].Value -gt 24) { $f.Add(@{ cls = 'ABSURD-UNIT'; why = ($m.Groups[1].Value + " tbsp is over a cup and a half measured a spoon at a time: " + $clean) }) }
@@ -295,13 +364,18 @@ function Get-SpecContradictions($spec, $vocab) {
     if ($mm) { $f.Add(@{ cls = 'HEAD-QTY'; why = ("head asks for " + $mm.head + " " + $mm.unit + " of " + $mm.key + ", the costed line uses " + $mm.costed + " " + $mm.unit) }) }
   }
 
-  $steps = (@($spec.make_it) -join ' ').ToLower()
+  # The display KEY is reduced to letters and spaces (Get-DisplayQuantities), which closes "Five-Spice"
+  # up into "fivespice". The steps must be reduced the SAME way or the two can never meet: a step saying
+  # "five-spice" was reported as an unused five-spice powder in two live recipes purely because one side
+  # of the comparison had dropped a hyphen the other kept.
+  $steps = ((@($spec.make_it) -join ' ').ToLower() -replace '[^a-z ]', '')
   if ($steps) {
-    foreach ($key in $disp.Keys) {
+    $keys = @($disp.Keys)
+    foreach ($key in $keys) {
       if ($key.Length -lt 4) { continue }
-      $head = ($key -split ' ')[-1]
-      if ($head.Length -lt 4) { $head = $key }
-      if ($steps -notmatch ('\b' + [regex]::Escape($head))) { $f.Add(@{ cls = 'UNUSED'; why = ("'" + $key + "' is bought and costed but never named in a step") }) }
+      if (-not (Test-IngredientNamedInSteps $key $keys $steps)) {
+        $f.Add(@{ cls = 'UNUSED'; why = ("'" + $key + "' is bought and costed but never named in a step") })
+      }
     }
   }
 

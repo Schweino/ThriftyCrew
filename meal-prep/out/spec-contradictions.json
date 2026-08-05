@@ -3,914 +3,133 @@
     "findings":  [
                      {
                          "run":  "live",
-                         "slug":  "american-goulash-pasta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "baked-ziti-with-ground-beef",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "baked-ziti-with-ground-beef",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027ricotta cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "baked-ziti-with-ground-turkey-and-ricotta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027ziti pasta\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "baked-ziti-with-ground-turkey-and-ricotta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "baked-ziti-with-ground-turkey-and-ricotta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027ricotta cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "beef-bourguignon-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef chuck roast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "beef-bulgogi-rice-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef flanksirloin steak\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "beef-honey-black-pepper-sauce-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef flanksirloin steak\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "beef-mushroom-stir-fry-rice-plate",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef flanksirloin steak\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "beef-potato-au-gratin-casserole",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "beef-ragu-pasta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027penne pasta\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "beef-ragu-pasta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "beef-rendang-rice-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef chuck roast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "bistek-tagalog-filipino-beef-onion-rice",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef flanksirloin steak\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "buffalo-chicken-pasta-bake",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027ziti pasta\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "buffalo-chicken-pasta-bake",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027ranch seasoning mix\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "cambodian-beef-lok-lak-rice-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef flanksirloin steak\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "carbonada-chilean-beef-corn-soup",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef flanksirloin steak\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "carne-guisada-beef-potato-stew",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef flanksirloin steak\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "cheesy-beef-and-shells-casserole",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "cheesy-beef-broccoli-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027broccoli florets\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "cheesy-pork-chop-and-hash-brown-casserole",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
                          "slug":  "chicken-biryani-rice-bowls",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 tbsp\u0027: Milk (Fairlife): 0 tbsp (1 g)"
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270 tbsp\u0027, which no kitchen measure shows: Milk (Fairlife): 0 tbsp (1 g)"
                      },
                      {
                          "run":  "live",
-                         "slug":  "chicken-divan-broccoli-bake",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027broccoli florets\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "chicken-enchilada-rice-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "chicken-madras-curry",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "chicken-pad-thai-noodle-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "chicken-parmesan-pasta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "chicken-scampi",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "chicken-scampi",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
+                         "slug":  "chile-colorado-bowls",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.08 cups\u0027, which no kitchen measure shows: Dried Arbol Chiles (generic (USDA)): 0.08 cups (2 g)"
                      },
                      {
                          "run":  "live",
                          "slug":  "chile-relleno-casserole-ground-beef",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.07 tbsp\u0027, which no kitchen measure shows: Hot Sauce (Frank\u0027s RedHot): 0.07 tbsp (1 g)"
                      },
                      {
                          "run":  "live",
-                         "slug":  "chuletas-guisadas-stewed-pork-chops-and-rice",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027sazon seasoning\u0027 is bought and costed but never named in a step"
+                         "slug":  "cornbread-topped-turkey-casserole",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.11 oz\u0027, which no kitchen measure shows: Poultry Seasoning (generic (USDA)): 0.11 oz (3 g)"
                      },
                      {
                          "run":  "live",
-                         "slug":  "cottage-pie",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "creamy-chicken-and-gnocchi-skillet",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "creamy-ground-turkey-shell-pasta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "creamy-ground-turkey-tortellini-skillet",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "creamy-mushroom-pork-chops-over-mashed-potatoes",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027worcestershire sauce\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "ethiopian-doro-wat-chicken-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027berbere seasoning\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "filipino-beef-caldereta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef chuck roast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "georgian-chicken-chakhokhbili",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken thigh\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "ghanaian-shoko-beef-spinach-stew",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef chuck roast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "ghanaian-shoko-beef-spinach-stew",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027fivespice powder\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "ghanaian-shoko-beef-spinach-stew",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027brown sugar\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "greek-beef-and-chickpea-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027feta cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "greek-ground-turkey-lemon-rice-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027feta cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "greek-stifado-beef-onion-stew",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef chuck roast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "greek-turkey-giouvetsi-baked-orzo",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "greek-turkey-giouvetsi-baked-orzo",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027orzo pasta\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "greek-turkey-meatballs-with-lemon-orzo",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027orzo pasta\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "greek-turkey-meatballs-with-lemon-orzo",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027feta cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "greek-turkey-moussaka",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "greek-turkey-spanakorizo-skillet",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027feta cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "green-chile-ground-turkey-skillet",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027mexican cheese blend\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "ground-beef-gyro-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027feta cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "ground-beef-stroganoff-pasta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027rotini pasta\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "ground-beef-stroganoff-pasta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027dijon mustard\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "ground-turkey-broccoli-cheddar-rice-skillet",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "ground-turkey-broccoli-cheddar-rice-skillet",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "ground-turkey-burrito-bowl",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027mexican cheese blend\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "ground-turkey-shepherds-pie",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "ground-turkey-sweet-potato-bowl",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027mexican cheese blend\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "hainanese-chicken-rice",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027green onions\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "harissa-chicken-rice-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027feta cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "highprotein-turkey-burger-bowl",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "highprotein-turkey-burger-bowl",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027dijon mustard\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "honey-garlic-steak-bites-potatoes",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef flanksirloin steak\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "hong-kongstyle-baked-pork-chop-rice",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027mexican cheese blend\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "hot-honey-chicken-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "hot-honey-chicken-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027broccoli florets\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "hungarian-beef-goulash",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef chuck roast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "irish-beef-and-guinness-stew",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef chuck roast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "italian-sausage-minestrone",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "italian-sausage-penne",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "john-wayne-casserole",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027green bell peppers\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "john-wayne-casserole",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "johnny-marzetti-casserole",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "johnny-marzetti-casserole",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027dijon mustard\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "kenyan-beef-pilau-rice",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef flanksirloin steak\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "kharcho-georgian-beef-walnut-soup",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef chuck roast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "korean-beef-bibimbap-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027green onions\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "korean-beef-japchae-noodle-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef flanksirloin steak\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "loaded-chicken-and-potato-casserole",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "loaded-ground-turkey-nacho-bake",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027mexican cheese blend\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "marry-me-pork-chops-over-pasta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "massaman-beef-curry-potatoes",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef chuck roast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "massaman-chicken-curry",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "mediterranean-beef-hummus-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027feta cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "moo-shu-pork-rice-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027green onions\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "moroccan-beef-tagine-chickpeas",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef chuck roast\u0027 is bought and costed but never named in a step"
+                         "slug":  "morisqueta-pork-rice-and-beans",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.12 cups\u0027, which no kitchen measure shows: Dried Arbol Chiles (generic (USDA)): 0.12 cups (3 g)"
                      },
                      {
                          "run":  "live",
                          "slug":  "moussaka-greek-beef-eggplant-bake",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.06 cups\u0027, which no kitchen measure shows: Chicken Broth (Swanson): 0.06 cups (15 g)"
                      },
                      {
                          "run":  "live",
-                         "slug":  "one-pot-creamy-cajun-sausage-pasta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
+                         "slug":  "moussaka-greek-beef-eggplant-bake",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.06 cups\u0027, which no kitchen measure shows: Chicken Broth, 0.06 cups: ~$0.02. Buy 1 (lasts several batches)."
                      },
                      {
                          "run":  "live",
-                         "slug":  "onepot-ground-turkey-stroganoff",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027dijon mustard\u0027 is bought and costed but never named in a step"
+                         "slug":  "nigerian-beef-stew-rice-bowls",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.12 cups\u0027, which no kitchen measure shows: Chicken Broth (Swanson): 0.12 cups (28 g)"
                      },
                      {
                          "run":  "live",
-                         "slug":  "parmesan-garlic-sheet-pan-chicken-potatoes",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
+                         "slug":  "nigerian-beef-stew-rice-bowls",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.12 cups\u0027, which no kitchen measure shows: Chicken Broth, 0.12 cups: ~$0.04. Buy 1 (lasts several batches)."
                      },
                      {
                          "run":  "live",
-                         "slug":  "pasta-alla-norcina-creamy-sausage-pasta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
+                         "slug":  "peruvian-pollo-saltado",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.06 tbsp\u0027, which no kitchen measure shows: Salt (Morton): 0.06 tbsp (1 g)"
                      },
                      {
                          "run":  "live",
-                         "slug":  "pastitsio",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
+                         "slug":  "pozole-rojo-pork-hominy-bowls",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.08 cups\u0027, which no kitchen measure shows: Dried Arbol Chiles (generic (USDA)): 0.08 cups (2 g)"
                      },
                      {
                          "run":  "live",
-                         "slug":  "pastitsio",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027feta cheese\u0027 is bought and costed but never named in a step"
+                         "slug":  "sopa-de-fideo-con-carne-molida",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.05 cups\u0027, which no kitchen measure shows: Chicken Broth (Swanson): 0.05 cups (12 g)"
                      },
                      {
                          "run":  "live",
-                         "slug":  "peruvian-tallarines-verdes-con-carne",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef flanksirloin steak\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "scalloped-potato-turkey-casserole",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "sheet-pan-chicken-sweet-potato-brussels",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken thigh\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "sloppy-joe-rice-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027dijon mustard\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-chicken-adobo-rice-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-chicken-cacciatore-pasta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-chicken-gyro-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-chicken-saag-rice-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cayenne pepper\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-chicken-shawarma-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-chicken-tacos-rice-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-chicken-tagine-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-chicken-tinga-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-crack-chicken-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-creamy-chicken-mushroom-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-french-onion-chicken-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-greek-chicken-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-honey-sesame-chicken-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027broccoli florets\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-italian-chicken-penne",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-kung-pao-chicken-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-mediterranean-chicken-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-mongolian-chicken-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-orange-chicken-rice-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027broccoli florets\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-sauerbraten-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027gingersnap cookies\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-thai-peanut-chicken-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-turkey-pasta-e-fagioli",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-tuscan-chicken-pasta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027boneless skinless chicken breast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-tuscan-chicken-pasta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "soto-betawi-indonesian-beef-coconut-soup",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef chuck roast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "spicy-italian-sausage-orzo",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027orzo pasta\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "spicy-italian-sausage-orzo",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "spicy-vodka-rigatoni-italian-sausage",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
+                         "slug":  "sopa-de-fideo-con-carne-molida",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.05 cups\u0027, which no kitchen measure shows: Chicken Broth, 0.05 cups: ~$0.02. Buy 1 (lasts several batches)."
                      },
                      {
                          "run":  "live",
                          "slug":  "steak-fajita-rice-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef flanksirloin steak\u0027 is bought and costed but never named in a step"
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.06 tbsp\u0027, which no kitchen measure shows: Salt (Morton): 0.06 tbsp (1 g)"
                      },
                      {
                          "run":  "live",
-                         "slug":  "taiwanese-braised-beef-noodle-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef chuck roast\u0027 is bought and costed but never named in a step"
+                         "slug":  "turkey-cordon-bleu-casserole",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.07 tbsp\u0027, which no kitchen measure shows: Dijon Mustard (generic): 0.07 tbsp (1 g)"
                      },
                      {
                          "run":  "live",
-                         "slug":  "taiwanese-lu-rou-fan-pork-rice-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027broccoli florets\u0027 is bought and costed but never named in a step"
+                         "slug":  "turkey-reuben-casserole",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.11 oz\u0027, which no kitchen measure shows: Caraway Seeds (generic (USDA)): 0.11 oz (3 g)"
                      },
                      {
                          "run":  "live",
-                         "slug":  "teriyaki-chicken-bowl",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027broccoli florets\u0027 is bought and costed but never named in a step"
+                         "slug":  "turkey-reuben-casserole",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.11 oz\u0027, which no kitchen measure shows: Caraway Seeds, 0.11 oz: ~$0.46. Buy 1 (lasts several batches)."
                      },
                      {
                          "run":  "live",
-                         "slug":  "turkey-divan-broccoli-rice-bake",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
+                         "slug":  "vietnamese-ginger-chicken-ga-kho-gung",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.05 cups\u0027, which no kitchen measure shows: Chicken Broth (Swanson): 0.05 cups (12 g)"
                      },
                      {
                          "run":  "live",
-                         "slug":  "turkey-florentine-rice-bake",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027mexican cheese blend\u0027 is bought and costed but never named in a step"
+                         "slug":  "vietnamese-ginger-chicken-ga-kho-gung",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.05 cups\u0027, which no kitchen measure shows: Chicken Broth, 0.05 cups: ~$0.02. Buy 1 (lasts several batches)."
                      },
                      {
                          "run":  "live",
-                         "slug":  "turkey-lasagna-soup",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
+                         "slug":  "vietnamese-turkey-xiu-mai-meatballs",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.12 cups\u0027, which no kitchen measure shows: Chicken Broth (Swanson): 0.12 cups (28 g)"
                      },
                      {
                          "run":  "live",
-                         "slug":  "turkey-lasagna-soup",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027ricotta cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-manicotti-ricotta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027ricotta cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-meatball-italian-wedding-soup",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-meatball-sub-bake",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-minestrone",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-pesto-pasta-kale",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027feta cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-pozole-rojo",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027lime juice\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-ragu-pasta",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027penne pasta\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-sausage-and-cheesy-grits-bowl",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-stuffed-pepper-soup",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-taco-casserole",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027mexican cheese blend\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-wild-rice-casserole",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkish-pasta-garlic-yogurt-beef",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027penne pasta\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "vietnamese-bo-kho-lemongrass-beef-stew",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef chuck roast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "xinjiang-cumin-beef-rice-bowls",
-                         "cls":  "UNUSED",
-                         "why":  "\u0027beef flanksirloin steak\u0027 is bought and costed but never named in a step"
+                         "slug":  "vietnamese-turkey-xiu-mai-meatballs",
+                         "cls":  "UNMEASURABLE-QTY",
+                         "why":  "a line asks for \u00270.12 cups\u0027, which no kitchen measure shows: Chicken Broth, 0.12 cups: ~$0.04. Buy 1 (lasts several batches)."
                      }
                  ],
     "generated":  "see git",
     "by_class":  {
-                     "ZERO-QTY":  1,
-                     "UNUSED":  150
+                     "UNMEASURABLE-QTY":  21
                  }
 }

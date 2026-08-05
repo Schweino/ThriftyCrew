@@ -1,4 +1,4 @@
-﻿<#
+<#
   audit-spec-contradictions.ps1 - find recipe specs that contradict THEMSELVES.
 
   WHY. On 2026-07-26 five writer agents rewriting shop_smart prose kept tripping over content bugs that had
@@ -20,7 +20,8 @@
                  spec-guards already requires portion_html to CONTAIN stat.cal, which fajita passes while
                  also containing 499 - "contains the right number" and "contains no wrong ones" are
                  different questions and only the second one catches this.
-    ZERO-QTY     a display or cost line that reads "0 lb" / "0 cups". A real ingredient rounded to nothing
+    UNMEASURABLE-QTY a display or cost line asking for less than a quarter of its own unit - "0 lb",
+                     "0.07 oz". A real ingredient rounded past the point any kitchen can measure it
                  by its display unit: the shopper is told to buy zero of something the recipe needs.
     STALE-MONEY  a dollar or cents figure in a NON-shop_smart prose field that is not the current
                  per-serving cost. The 2026-07-26 money strip only covered shop_smart, so cost_closing and
@@ -117,7 +118,7 @@ if ($SelfTest) {
   $r = @(Get-SpecContradictions $bad $vocabFx)
   $cls = @($r | ForEach-Object { $_.cls })
   Chk 'MUST FIRE  STAT-PROSE  499 cal in a paragraph that also says 541' (($cls -contains 'STAT-PROSE') -and (@($r | Where-Object { $_.why -match '499' }).Count -eq 1)) (($r | ForEach-Object { $_.why }) -join ' | ')
-  Chk 'MUST FIRE  ZERO-QTY    a broth line that reads "0 lb"' (@($r | Where-Object { $_.cls -eq 'ZERO-QTY' }).Count -ge 1) (($r | Where-Object { $_.cls -eq 'ZERO-QTY' } | ForEach-Object { $_.why }) -join ' | ')
+  Chk 'MUST FIRE  UNMEASURABLE-QTY a broth line that reads "0 lb"' (@($r | Where-Object { $_.cls -eq 'UNMEASURABLE-QTY' }).Count -ge 1) (($r | Where-Object { $_.cls -eq 'UNMEASURABLE-QTY' } | ForEach-Object { $_.why }) -join ' | ')
   Chk 'MUST FIRE  STALE-MONEY a "28 cents" claim in cost_closing' (@($r | Where-Object { $_.cls -eq 'STALE-MONEY' -and $_.why -match '28 cents' }).Count -eq 1) (($r | Where-Object { $_.cls -eq 'STALE-MONEY' } | ForEach-Object { $_.why }) -join ' | ')
   Chk 'MUST FIRE  ABSURD-UNIT 105 tbsp of cilantro' (@($r | Where-Object { $_.cls -eq 'ABSURD-UNIT' }).Count -eq 1) (($r | Where-Object { $_.cls -eq 'ABSURD-UNIT' } | ForEach-Object { $_.why }) -join ' | ')
   Chk 'MUST FIRE  HEAD-QTY    head 5.5 cups rice vs a costed 3.75 cups' (@($r | Where-Object { $_.cls -eq 'HEAD-QTY' }).Count -eq 1) (($r | Where-Object { $_.cls -eq 'HEAD-QTY' } | ForEach-Object { $_.why }) -join ' | ')
@@ -137,6 +138,31 @@ if ($SelfTest) {
   $hard2 = @($r2 | Where-Object { $_.cls -ne 'UNUSED' })
   Chk 'CLEAN TWIN a self-consistent spec produces no findings' ($hard2.Count -eq 0) (($hard2 | ForEach-Object { $_.cls + ': ' + $_.why }) -join ' | ')
   Chk 'CLEAN TWIN a comparison price ($14 a restaurant charges) is not stale money' (@($r2 | Where-Object { $_.why -match '14' }).Count -eq 0) (($r2 | ForEach-Object { $_.why }) -join ' | ')
+
+  # ---- UNUSED: the head-noun bug, and the over-forgiving trap that replaces it if you are careless ----
+  # Both halves are real catalog shapes. The first two are what made this class 150 findings of noise;
+  # the third is the failure a naive token rule would introduce, and is the reason a token only counts
+  # when no OTHER ingredient in the recipe shares it.
+  $unusedFx = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 600; protein = 40; cost_ps = '3.00' }
+    ingredients_display = @(
+      '<strong>Parmesan Cheese (Great Value):</strong> 1 oz (31 g)',
+      '<strong>Boneless Skinless Chicken Breast (Member''s Mark):</strong> 5.5 lb (2495 g)',
+      '<strong>Rice (Member''s Mark):</strong> 3.75 cups dry (700 g)',
+      '<strong>Rice Vinegar (Nakano):</strong> 2 tbsp (30 g)',
+      '<strong>Sesame Oil (Kadoya):</strong> 1 tbsp (14 g)')
+    make_it = @(
+      'Cube the chicken and brown it.',
+      'Cook the rice.',
+      'Stir in the parmesan and portion it out.')
+  }
+  $r2b = @(Get-SpecContradictions $unusedFx $null)
+  $un = @($r2b | Where-Object { $_.cls -eq 'UNUSED' } | ForEach-Object { $_.why })
+  Chk 'CLEAN TWIN "stir in the parmesan" uses Parmesan Cheese (head noun said cheese)' (@($un | Where-Object { $_ -match 'parmesan' }).Count -eq 0) ($un -join ' | ')
+  Chk 'CLEAN TWIN "cube the chicken" uses Chicken Breast (head noun said breast)'      (@($un | Where-Object { $_ -match 'chicken breast' }).Count -eq 0) ($un -join ' | ')
+  Chk 'MUST FIRE  UNUSED     rice vinegar is bought and only "rice" is cooked'         (@($un | Where-Object { $_ -match 'rice vinegar' }).Count -eq 1) ($un -join ' | ')
+  Chk 'MUST FIRE  UNUSED     sesame oil is bought and never named at all'              (@($un | Where-Object { $_ -match 'sesame oil' }).Count -eq 1) ($un -join ' | ')
+  Chk 'CLEAN TWIN plain Rice itself is not reported - the step cooks it'               (@($un | Where-Object { $_ -match "^'rice'" }).Count -eq 0) ($un -join ' | ')
 
   # ---- PHANTOM: the founding case and its real twin -----------------------------------------------
   # FROZEN FIXTURE - the ingredient list and steps of slow-cooker-dr-pepper-pulled-pork-bowls as they
@@ -258,7 +284,7 @@ New-Item -ItemType Directory -Force -Path (Split-Path $outPath) | Out-Null
 if (-not $Quiet) {
   Write-Output ("spec contradictions: {0} finding(s) across {1} spec(s)" -f $rows.Count, $specs.Count)
   foreach ($k in ($byClass.Keys | Sort-Object)) { Write-Output ("  {0,-12} {1}" -f $k, $byClass[$k]) }
-  foreach ($k in @('STAT-PROSE','ZERO-QTY','STALE-MONEY','ABSURD-UNIT','HEAD-QTY','PHANTOM')) {
+  foreach ($k in @('STAT-PROSE','UNMEASURABLE-QTY','STALE-MONEY','ABSURD-UNIT','HEAD-QTY','PHANTOM')) {
     $r = @($rows | Where-Object { $_.cls -eq $k })
     if ($r.Count -eq 0) { continue }
     Write-Output ("  --- $k")
@@ -278,7 +304,7 @@ if ($Baseline) {
 $base = @{}
 if (Test-Path $basePath) { try { $bd = Get-Content $basePath -Raw | ConvertFrom-Json; foreach ($p in $bd.PSObject.Properties) { $base[$p.Name] = [int]$p.Value } } catch {} }
 $worse = @()
-foreach ($k in @('STAT-PROSE','ZERO-QTY','STALE-MONEY','ABSURD-UNIT','HEAD-QTY','PHANTOM')) {
+foreach ($k in @('STAT-PROSE','UNMEASURABLE-QTY','STALE-MONEY','ABSURD-UNIT','HEAD-QTY','PHANTOM')) {
   $now = [int]$byClass[$k]
   $was = if ($base.ContainsKey($k)) { [int]$base[$k] } else { 0 }
   if ($now -gt $was) { $worse += ("{0}: {1} now, baseline {2}" -f $k, $now, $was) }

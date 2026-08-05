@@ -1,23 +1,32 @@
 <#
-  repair-zero-qty.ps1 - a label that asks the reader for NOTHING gets the unit it should have carried.
+  repair-unmeasurable-qty.ps1 - a label asking for an amount no kitchen measure shows gets the unit it
+  should have carried.
 
-  THE DEFECT. 15 labels across the 513 specs state a quantity of zero in a unit the ingredient is too
-  small to register in:
+  THE DEFECT. 87 labels across the 513 specs state a quantity below a QUARTER of its own unit, which is
+  the point where a home kitchen runs out of ways to measure it:
 
-      arroz-con-pollo-bowls                 Bay Leaves       "0 oz"    (3 g)
-      pastitsio                             Ground Cloves    "0 oz"    (1 g)
-      hong-kongstyle-baked-pork-chop-rice   Chicken Broth    "0 lb"    (42 g)
-      turkey-sausage-and-cheesy-grits-bowl  Salt             "0 tbsp"  (2 g)
-      ... and 11 more, all spices and one broth
+      arroz-con-pollo-bowls                 Bay Leaves       "0 oz"     (3 g)
+      pastitsio                             Ground Cloves    "0 oz"     (1 g)
+      hong-kongstyle-baked-pork-chop-rice   Chicken Broth    "0 lb"     (42 g)
+      turkey-sausage-and-cheesy-grits-bowl  Salt             "0 tbsp"   (2 g)
+      ... plus 44 bay-leaf rows reading "0.07 oz" and 28 more spice rows under a quarter unit
 
-  A shopper reading "Bay Leaves: 0 oz" is being told to buy none of an ingredient the method then asks
-  them to cook with. It is the ABSURD-UNIT defect from the other end: that one names a real quantity in a
-  unit too SMALL to count in (105 tbsp of cilantro), this one names a real quantity in a unit too LARGE
-  to show it (3 g of bay leaves in ounces). Both print a number no kitchen can act on.
+  A shopper reading "Bay Leaves: 0 oz" is told to buy none of an ingredient the method then asks them to
+  cook with. A shopper reading "0.07 oz" is told to weigh something no home scale resolves. It is the
+  ABSURD-UNIT defect from the other end: that one names a real quantity in a unit too SMALL to count in
+  (105 tbsp of cilantro), this one names a real quantity in a unit too LARGE to show it. Both print a
+  number nobody can act on.
+
+  ZERO WAS ONLY THE EXTREME CASE, and scoping to it was this repair's own first mistake. The 2026-08-05
+  pass fixed the 15 labels that literally read zero, moved four bay-leaf rows to "0.11 oz", and the gate
+  went quiet - while 44 rows of the identical defect sat untouched because their number happened to round
+  to something other than 0. A class measured by the spelling of its worst example is a class that
+  ratchets down to its own blind spot. The threshold is now the same 0.25 both the sweep and the
+  usability test already used.
 
   WHY IT IS A LEGACY CLASS AND NOT A LIVE BUG. friendly-amt-lib already refuses to emit these. Get-FaFrac
   drops to two decimals below a quarter unit precisely "so a small amount never prints '0'", and its
-  comment names the founding case - r100 shipped "Bay Leaves ... 0 oz". These 15 are labels written
+  comment names the founding case - r100 shipped "Bay Leaves ... 0 oz". These are labels written
   before that guard existed and never re-derived since. So the repair is not a new rule: it is running
   the estate's own current label generator over rows the old one wrote.
 
@@ -33,7 +42,7 @@
   that row alone and REPORTS it. 1 g of milk across 14 servings is a question about the grams, and grams
   are not this lane's to move.
 
-  Usage: repair-zero-qty.ps1 [-Apply] [-SelfTest]
+  Usage: repair-unmeasurable-qty.ps1 [-Apply] [-SelfTest]
          Read-only by default: prints what it would change and writes nothing.
 #>
 param([switch]$Apply, [switch]$SelfTest, [string]$Root = "")
@@ -45,22 +54,24 @@ $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
 . (Join-Path $here 'cook-measure-lib.ps1')
 . (Join-Path $here 'friendly-amt-lib.ps1')
 
-# The units audit-spec-contradictions' ZERO-QTY regex looks at. Kept in step with the sweep by the
-# self-test below, the same way repair-absurd-units pins its threshold.
-$script:ZeroUnits = @('lb','lbs','oz','cup','cups','tbsp','tsp')
-# A re-derived label must reach a quarter of its unit to count as usable. Below that the reader is being
-# handed another decimal they cannot measure - see the milk row in the header.
+# The units audit-spec-contradictions' UNMEASURABLE-QTY regex looks at. Kept in step with the sweep by
+# the self-test below, the same way repair-absurd-units pins its threshold.
+$script:MeasureUnits = @('lb','lbs','oz','cup','cups','tbsp','tsp')
+# ONE NUMBER, TWO JOBS, DELIBERATELY THE SAME. It is the floor the sweep flags below and the floor a
+# re-derived label must clear to count as usable. If they were two constants they would drift, and the
+# drift would be silent in the worst direction: a repair that "fixes" a row into something the sweep
+# still flags, or clears the sweep with something the reader still cannot measure.
 $script:UsableFloor = 0.25
 
-function Test-ZeroQty {
-    <# True when a buy label LEADS with a zero quantity in a measurable unit. #>
+function Test-UnmeasurableQty {
+    <# True when a buy label LEADS with a quantity below a quarter of its measurable unit (zero included). #>
     param([string]$Buy)
     if (-not $Buy) { return $false }
     $u = Get-CmUnit $Buy
-    if (-not $u -or ($script:ZeroUnits -notcontains $u)) { return $false }
+    if (-not $u -or ($script:MeasureUnits -notcontains $u)) { return $false }
     $q = Get-CmQty $Buy
     if ($null -eq $q) { return $false }
-    return ($q -eq 0)
+    return ($q -lt $script:UsableFloor)
 }
 
 function Test-UsableLabel {
@@ -75,7 +86,7 @@ function Test-UsableLabel {
     return ($q -ge $script:UsableFloor)
 }
 
-function Resolve-ZeroQty {
+function Resolve-UnmeasurableQty {
     <# Re-derive the label from the grams through the estate's own generator. $null when the result
        would still be unusable, so the caller reports the row instead of pretending it is fixed. #>
     param([string]$Item, [double]$Grams, [string]$Buy)
@@ -89,7 +100,7 @@ function Resolve-ZeroQty {
     return $new
 }
 
-function Repair-SpecZeroQty {
+function Repair-SpecUnmeasurableQty {
     <# Returns @{ changed; text; notes; edits } for ONE spec. Pure text in, text out. #>
     param(
         [Parameter(Mandatory)][string]$Raw,
@@ -103,10 +114,10 @@ function Repair-SpecZeroQty {
     $notes = New-Object System.Collections.Generic.List[string]
     for ($i = 0; $i -lt $ing.Count; $i++) {
         $buy = [string]$ing[$i].buy
-        if (-not (Test-ZeroQty -Buy $buy)) { continue }
+        if (-not (Test-UnmeasurableQty -Buy $buy)) { continue }
         $item = [string]$ing[$i].item
         $g = if ($ing[$i].PSObject.Properties.Name -contains 'grams' -and $ing[$i].grams) { [double]$ing[$i].grams } else { 0 }
-        $new = Resolve-ZeroQty -Item $item -Grams $g -Buy $buy
+        $new = Resolve-UnmeasurableQty -Item $item -Grams $g -Buy $buy
         if (-not $new) {
             $notes.Add("'$item' buy '$buy' ($([int]$g) g): no usable unit exists for this amount - LEFT ALONE, the grams are the question")
             continue
@@ -130,17 +141,22 @@ if ($SelfTest) {
         if ("$got" -ne "$want") { Write-Output "  FAIL $name : got '$got' want '$want'"; $script:fail++ }
         else { Write-Output "  ok   $name" }
     }
-    Write-Output 'repair-zero-qty self-test'
+    Write-Output 'repair-unmeasurable-qty self-test'
     Initialize-FriendlyAmt -Root $mp
 
     # the predicate
-    Check 'flags 0 oz'            (Test-ZeroQty -Buy '0 oz')        $true
-    Check 'flags 0 tbsp'          (Test-ZeroQty -Buy '0 tbsp')      $true
-    Check 'flags 0 lb'            (Test-ZeroQty -Buy '0 lb')        $true
-    Check 'leaves 0.25 tsp alone' (Test-ZeroQty -Buy '0.25 tsp')    $false
-    Check 'leaves 1 oz alone'     (Test-ZeroQty -Buy '1 oz')        $false
-    Check 'leaves a count alone'  (Test-ZeroQty -Buy '0 onions')    $false
-    Check 'leaves empty alone'    (Test-ZeroQty -Buy '')            $false
+    Check 'flags 0 oz'            (Test-UnmeasurableQty -Buy '0 oz')        $true
+    Check 'flags 0 tbsp'          (Test-UnmeasurableQty -Buy '0 tbsp')      $true
+    Check 'flags 0 lb'            (Test-UnmeasurableQty -Buy '0 lb')        $true
+    # THE BLIND SPOT THE ZERO-ONLY SCOPE HAD. Each of these is a real catalog label that the previous
+    # version of this predicate walked straight past because its number did not happen to be 0.
+    Check 'flags 0.07 oz'         (Test-UnmeasurableQty -Buy '0.07 oz')     $true
+    Check 'flags 0.11 oz'         (Test-UnmeasurableQty -Buy '0.11 oz')     $true
+    Check 'flags 0.1 tsp'         (Test-UnmeasurableQty -Buy '0.1 tsp')     $true
+    Check 'leaves 0.25 tsp alone' (Test-UnmeasurableQty -Buy '0.25 tsp')    $false
+    Check 'leaves 1 oz alone'     (Test-UnmeasurableQty -Buy '1 oz')        $false
+    Check 'leaves a count alone'  (Test-UnmeasurableQty -Buy '0 onions')    $false
+    Check 'leaves empty alone'    (Test-UnmeasurableQty -Buy '')            $false
 
     # usability, the rule that stops this becoming a guard-clearing exercise
     Check 'usable 1 tsp'          (Test-UsableLabel '1 tsp')        $true
@@ -151,16 +167,16 @@ if ($SelfTest) {
     Check 'NOT usable 0 oz'       (Test-UsableLabel '0 oz')         $false
 
     # the conversion, through the real densities
-    Check 'cloves 2 g -> tsp'     (Resolve-ZeroQty -Item 'Ground Cloves' -Grams 2 -Buy '0 oz')   '1 tsp'
-    Check 'bay leaves 3 g -> count' (Resolve-ZeroQty -Item 'Bay Leaves' -Grams 3 -Buy '0 oz')    '5 leaves'
-    Check 'broth 42 g -> cups'    (Resolve-ZeroQty -Item 'Chicken Broth' -Grams 42 -Buy '0 lb')  '0.25 cups'
+    Check 'cloves 2 g -> tsp'     (Resolve-UnmeasurableQty -Item 'Ground Cloves' -Grams 2 -Buy '0 oz')   '1 tsp'
+    Check 'bay leaves 3 g -> count' (Resolve-UnmeasurableQty -Item 'Bay Leaves' -Grams 3 -Buy '0 oz')    '5 leaves'
+    Check 'broth 42 g -> cups'    (Resolve-UnmeasurableQty -Item 'Chicken Broth' -Grams 42 -Buy '0 lb')  '0.25 cups'
     # MUST REFUSE: 1 g of milk has no usable unit; the row is a grams question, not a label question
-    Check 'REFUSES milk 1 g'      ($null -eq (Resolve-ZeroQty -Item 'Milk' -Grams 1 -Buy '0 tbsp')) $true
+    Check 'REFUSES milk 1 g'      ($null -eq (Resolve-UnmeasurableQty -Item 'Milk' -Grams 1 -Buy '0 tbsp')) $true
 
     # THE MUST-FIRE FIXTURE: a zero label, a refusable one, and a clean twin that must not move.
     $fixture = @'
 {
-  "slug": "fixture-zeroqty",
+  "slug": "fixture-unmeasurable",
   "ingredients_display": [
     "<strong>Bay Leaves (Great Value):</strong> 0 oz (3 g)",
     "<strong>Milk (Fairlife):</strong> 0 tbsp (1 g)",
@@ -174,7 +190,7 @@ if ($SelfTest) {
 }
 '@
     $fspec = $fixture | ConvertFrom-Json
-    $r = Repair-SpecZeroQty -Raw $fixture -Spec $fspec
+    $r = Repair-SpecUnmeasurableQty -Raw $fixture -Spec $fspec
     Check 'fixture: exactly one edit'      $r.changed 1
     Check 'fixture: the zero one moved'    ($r.edits[0].New) '5 leaves'
     Check 'fixture: display rewritten'     ($r.text -match '5 leaves \(3 g\)') $true
@@ -182,11 +198,19 @@ if ($SelfTest) {
     Check 'fixture: milk was REPORTED'     (@($r.notes | Where-Object { $_ -match "'Milk'" }).Count) 1
     Check 'fixture: clean twin untouched'  ($r.text -match '\<strong\>Olive Oil:\</strong\> 3 tbsp') $true
 
-    # the unit list must match what the sweep flags, or the two drift apart in silence
+    # THE THRESHOLD AND THE UNIT LIST MUST MATCH THE SWEEP, or the repair and the gate disagree about
+    # what the class even is - and the way that fails is silent: rows the sweep flags that the repair
+    # skips, or rows the repair "fixes" into something the sweep still reports.
     $sweep = Join-Path $here 'spec-contradiction-lib.ps1'
     if (Test-Path $sweep) {
-        $hasSame = (Select-String -Path $sweep -Pattern "0\\s\*\(lb\|lbs\|oz\|cups\?\|tbsp\|tsp\)" -Quiet)
-        Check 'unit list agrees with the sweep' $hasSame $true
+        $hasUnits = (Select-String -Path $sweep -Pattern '\(lb\|lbs\|oz\|cups\?\|tbsp\|tsp\)' -Quiet)
+        Check 'unit list agrees with the sweep' $hasUnits $true
+        $sweepThresh = $null
+        $m = Select-String -Path $sweep -Pattern '\$script:UNMEASURABLE_UNDER\s*=\s*([0-9.]+)' | Select-Object -First 1
+        if ($m) { $sweepThresh = [double]$m.Matches[0].Groups[1].Value }
+        Check 'threshold agrees with the sweep' ($sweepThresh -eq $script:UsableFloor) $true
+        $usesClass = (Select-String -Path $sweep -Pattern "cls = 'UNMEASURABLE-QTY'" -Quiet)
+        Check 'sweep emits the class this repairs' $usesClass $true
     }
 
     if ($script:fail -gt 0) { Write-Output "SELF-TEST FAILED ($script:fail)"; exit 1 }
@@ -205,7 +229,7 @@ $changedSpecs = 0
 foreach ($sf in (Get-ChildItem (Join-Path $specDir '*.json') | Sort-Object Name)) {
     $io = Read-SpecText -Path $sf.FullName
     $spec = $io.Text | ConvertFrom-Json
-    $r = Repair-SpecZeroQty -Raw $io.Text -Spec $spec
+    $r = Repair-SpecUnmeasurableQty -Raw $io.Text -Spec $spec
     foreach ($n in $r.notes) { Write-Output ("  note {0}: {1}" -f $sf.BaseName, $n) }
     if ($r.changed -eq 0) { continue }
     $changedSpecs++
@@ -220,13 +244,13 @@ foreach ($sf in (Get-ChildItem (Join-Path $specDir '*.json') | Sort-Object Name)
 }
 
 foreach ($t in $touched) { Write-Output ("  {0,-46} {1,-22} '{2}' -> '{3}'" -f $t.slug, $t.item, $t.old, $t.new) }
-Write-Output ("zero-qty repair: {0} label(s) across {1} spec(s){2}" -f $touched.Count, $changedSpecs, $(if ($Apply) { '' } else { '  [read-only - pass -Apply]' }))
+Write-Output ("unmeasurable-qty repair: {0} label(s) across {1} spec(s){2}" -f $touched.Count, $changedSpecs, $(if ($Apply) { '' } else { '  [read-only - pass -Apply]' }))
 
 if ($Apply -and $touched.Count) {
     $outDir = Join-Path $mp 'out'
     if (-not (Test-Path $outDir)) { New-Item -ItemType Directory -Force -Path $outDir | Out-Null }
-    [IO.File]::WriteAllText((Join-Path $outDir 'zero-qty-carry.json'), (@($carry.ToArray()) | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
-    [IO.File]::WriteAllText((Join-Path $outDir 'zero-qty-slugs.txt'), (($touched.slug | Sort-Object -Unique) -join "`n"), (New-Object Text.UTF8Encoding($false)))
-    Write-Output ("  carry manifest -> out\zero-qty-carry.json ({0} row(s))" -f $carry.Count)
-    Write-Output ("  slugs          -> out\zero-qty-slugs.txt")
+    [IO.File]::WriteAllText((Join-Path $outDir 'unmeasurable-qty-carry.json'), (@($carry.ToArray()) | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
+    [IO.File]::WriteAllText((Join-Path $outDir 'unmeasurable-qty-slugs.txt'), (($touched.slug | Sort-Object -Unique) -join "`n"), (New-Object Text.UTF8Encoding($false)))
+    Write-Output ("  carry manifest -> out\unmeasurable-qty-carry.json ({0} row(s))" -f $carry.Count)
+    Write-Output ("  slugs          -> out\unmeasurable-qty-slugs.txt")
 }
