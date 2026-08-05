@@ -98,6 +98,22 @@ function Get-FriendlyAmt {
                     $n = $g / $tsp
                     if ($n -ge 0.25 -and $n -lt 24) { return ((Get-FaFrac $n) + ' tsp') }
                 }
+                # A LEAF RUNG below the spoon, for the one shape a spoon cannot describe. Bay Leaves is
+                # authored in densities as {each 0.6, leaf 0.6} and NOTHING else: there is no tsp, tbsp or
+                # cup for it, because you do not spoon bay leaves - you count them. Without this the
+                # small-amount branch falls through to the weight fallback and the card asks for
+                # "0.04 oz", which is the same unmeasurable label as the "0 oz" this rung exists to end.
+                # GATED ON THE ABSENCE OF A VOLUME MEASURE, not on the leaf density alone. Fresh Basil and
+                # Fresh Mint also carry leaf=0.5, and they have cup + tbsp too - a blanket leaf rung would
+                # turn a cup of basil into "150 leaves", trading one unusable label for another. If the
+                # estate ever authors a spoon for an item, that spoon wins and this rung stops firing.
+                if (-not (Get-FaDen $item 'tsp') -and -not (Get-FaDen $item 'tbsp') -and -not (Get-FaDen $item 'cup')) {
+                    $leaf = Get-FaDen $item 'leaf'
+                    if ($leaf -and $leaf -gt 0) {
+                        $n = [Math]::Max(1, [Math]::Round($g / $leaf))
+                        return ("$n " + (Get-FaEachNoun $item $n))
+                    }
+                }
             }
             # "1 cups" - Get-FaFrac returns the bare number and the branch appends a hardcoded plural, so
             # exactly one cup prints with an s. Small, but it is on the card.

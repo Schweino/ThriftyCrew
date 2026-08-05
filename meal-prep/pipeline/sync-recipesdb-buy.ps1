@@ -687,6 +687,21 @@ if (Test-Path $absurdCarryPath) {
     }
     Write-Output ("  absurd-unit carry manifest: {0} row(s) from out\absurd-unit-carry.json" -f $n)
 }
+# The zero-quantity repair (repair-zero-qty.ps1) is the absurd-unit class from the other end - a real
+# amount named in a unit too LARGE to show it, "Bay Leaves: 0 oz" - and it rides the same channel for the
+# same reason: 3 g really does round to 0 oz, so the db label is not provably FALSE and Get-BuyCarryClass
+# will never derive the edit on its own. Fifth file on one rule, still not a fifth copy of the rule.
+$zeroCarryPath = Join-Path $mp 'out\zero-qty-carry.json'
+if (Test-Path $zeroCarryPath) {
+    if (-not $measureCarry) { $measureCarry = @{} }
+    $n = 0
+    foreach ($c in @((Get-Content $zeroCarryPath -Raw | ConvertFrom-Json))) {
+        if (-not $c -or -not $c.slug) { continue }
+        $measureCarry[([string]$c.slug + '|' + [string]$c.item)] = [pscustomobject]@{ Old = [string]$c.old; New = [string]$c.new }
+        $n++
+    }
+    Write-Output ("  zero-qty carry manifest: {0} row(s) from out\zero-qty-carry.json" -f $n)
+}
 # densities are what the cook-measure class weighs its evidence with. Missing them does not silently
 # downgrade the run to the unitless class alone - say so, because a clean "0 labels" line off a run that
 # could not evaluate the class reads exactly like a clean "0 labels" off a run that found nothing.

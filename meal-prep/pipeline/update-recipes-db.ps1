@@ -50,6 +50,26 @@ if(-not $DbPath){            $DbPath            = Join-Path $mp 'recipes-db.json
 if(-not $IngredientMapFile){ $IngredientMapFile = Join-Path $mp 'ingredient-map.json' }
 if(-not $RunLabel){          $RunLabel          = Split-Path -Leaf (Resolve-Path $RunDir).Path }
 $dbPath = $DbPath
+# ROW HISTORY THE SPEC DOES NOT OWN. -Replace rebuilds a row from its spec, and two of the row's fields
+# are NOT the spec's to state:
+#   visibility - owned by rotate-free-dinners. The spec's copy is a FIRST-PUBLISH DEFAULT (SPEC-SCHEMA)
+#                and the builder below hardcodes "paid" regardless, so replacing a row that the weekly
+#                rotation had set PUBLIC silently paywalled a free dinner. Measured 2026-08-05: 20 rows
+#                were public at the time, one of them a slug this very lane was about to repair.
+#   published  - the date the recipe went live, a historical fact. Stamping today over it on a content
+#                repair makes a two-week-old recipe look new to every surface that sorts by it.
+# Captured BEFORE Remove-RecipeRow deletes the row, because after that the old values are gone.
+$carryRows = @{}
+if($Replace){
+  $preDoc = Get-Content $dbPath -Raw -Encoding utf8 | ConvertFrom-Json
+  foreach($row in @($preDoc.recipes)){
+    if($Replace -notcontains [string]$row.slug){ continue }
+    $carryRows[[string]$row.slug] = @{
+      visibility = $(if($row.PSObject.Properties.Name -contains 'visibility' -and $row.visibility){ [string]$row.visibility } else { $null })
+      published  = $(if($row.PSObject.Properties.Name -contains 'published'  -and $row.published ){ [string]$row.published  } else { $null })
+    }
+  }
+}
 if($Replace -and -not $DryRun){
   Copy-Item $dbPath ($dbPath + '.bak-replace') -Force
   foreach($rs in $Replace){
@@ -124,18 +144,20 @@ foreach($slug in $ready){
     $idJson = if($id){ (J $id) } else { 'null' }
     $ingParts += ('{"item":' + (J $canon) + ',"grams":' + [int]$sc['grams'] + ',"buy":' + (J $sc['buy']) + ',"item_id":' + $idJson + '}')
   }
-  $glParts=@()
-  foreach($g in $s['head']['recipeIngredient']){ $glParts += (J ([string]$g)) }
+  # a replaced row keeps the visibility the rotation gave it and the date it actually went live;
+  # a genuinely NEW row is paid and published today, which is what a first publish means
+  $carry = $carryRows[$slug]
+  $visOut = if($carry -and $carry.visibility){ [string]$carry.visibility } else { 'paid' }
+  $pubOut = if($carry -and $carry.published ){ [string]$carry.published  } else { $today }
   $rec = '{' +
-    '"name":' + (J $s['name']) + ',"slug":' + (J $slug) + ',"visibility":"paid","cuisine":' + (J $s['cuisine']) + ',"servings":14,' +
+    '"name":' + (J $s['name']) + ',"slug":' + (J $slug) + ',"visibility":' + (J $visOut) + ',"cuisine":' + (J $s['cuisine']) + ',"servings":14,' +
     '"ingredients":[' + ($ingParts -join ',') + '],' +
-    '"grocery_list":[' + ($glParts -join ',') + '],' +
     '"per_serving":{"calories":' + [int]$stat['cal'] + ',"protein_g":' + [int]$stat['protein'] + ',"carbs_g":' + [int]$stat['carbs'] + ',"fat_g":' + [int]$stat['fat'] + '},' +
     '"batch":{"calories":' + ([int]$stat['cal']*14) + ',"protein_g":' + ([int]$stat['protein']*14) + ',"carbs_g":' + ([int]$stat['carbs']*14) + ',"fat_g":' + ([int]$stat['fat']*14) + '},' +
     '"cost_per_serving":' + (N $s['cost_per_serving']) + ',"cost_batch":' + (N $s['cost_batch']) + ',' +
     '"cost_batch_true":' + (N $s['cost_batch_true']) + ',"cost_per_serving_true":' + (N $s['cost_per_serving_true']) + ',' +
     '"cost_pantry_add":' + (N $s['cost_pantry_add']) + ',"cost_first_run":' + (N $s['cost_first_run']) + ',' +
-    '"published":' + (J $today) + ',"source_url":' + (J $s['source_url']) + ',"source_site":' + (J $s['source_site']) + ',' +
+    '"published":' + (J $pubOut) + ',"source_url":' + (J $s['source_url']) + ',"source_site":' + (J $s['source_site']) + ',' +
     '"notes":' + (J ($RunLabel + ' build ' + $today + '; adapted from ' + $s['source_site'] + '; macros computed from food-macros-db')) + ',' +
     '"protein":' + (J ([string]$s['protein'])) +
   '}'

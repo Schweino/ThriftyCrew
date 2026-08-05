@@ -18,7 +18,7 @@
                  "cost_ps":  "4.46"
              },
     "intro_html":  "Rendang is what happens when curry stops being soup and becomes a rich, clingy, caramelized coat of coconut and spice on tender chicken. It takes patience, not skill. Each bowl delivers \u003cstrong\u003e41 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.46\u003c/strong\u003e (at everyday cost), which is a steal for one of the great dishes of Southeast Asia.",
-    "ingredients_display": ["\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 5.25 lb (2381 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1.25 cups (254 g)","\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 1.25 tbsp (9 g)","\u003cstrong\u003eGround Cloves (Great Value):\u003c/strong\u003e 0 oz (1 g)","\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 0.75 tbsp (4 g)","\u003cstrong\u003eLemongrass Paste (Gourmet Garden (McCormick)):\u003c/strong\u003e 6 oz (168 g)","\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 2 cans (791 g)","\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 3.5 tbsp (44 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 21 onions (2310 g)","\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 17.5 tbsp (105 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)","\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 3.25 tbsp (18 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display": ["\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 5.25 lb (2381 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1.25 cups (254 g)","\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 1.25 tbsp (9 g)","\u003cstrong\u003eGround Cloves (Great Value):\u003c/strong\u003e 0.5 tsp (1 g)","\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 0.75 tbsp (4 g)","\u003cstrong\u003eLemongrass Paste (Gourmet Garden (McCormick)):\u003c/strong\u003e 6 oz (168 g)","\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 2 cans (791 g)","\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 3.5 tbsp (44 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 21 onions (2310 g)","\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 17.5 tbsp (105 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)","\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 3.25 tbsp (18 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Boneless Skinless Chicken Breast, 5.25 lb: ~$11.71. \u003cstrong\u003eBuy 6 lbs: $13.38.\u003c/strong\u003e",
@@ -81,7 +81,7 @@
                                {
                                    "item":  "Ground Cloves",
                                    "grams":  1,
-                                   "buy":  "0 oz",
+                                   "buy":  "0.5 tsp",
                                    "bid":  "ground-cloves",
                                    "gpu":  "28.350"
                                },
@@ -169,7 +169,7 @@
                                           "Boneless Skinless Chicken Breast, 5.25 lb (2381 g)",
                                           "Vegetable Oil, 1.25 cups (254 g)",
                                           "Ground Cinnamon, 1.25 tbsp (9 g)",
-                                          "Ground Cloves, 0 oz (1 g)",
+                                          "Ground Cloves, 0.5 tsp (1 g)",
                                           "Garam Masala, 0.75 tbsp (4 g)",
                                           "Lemongrass Paste, 6 oz (168 g)",
                                           "Coconut Milk, 2 cans (791 g)",

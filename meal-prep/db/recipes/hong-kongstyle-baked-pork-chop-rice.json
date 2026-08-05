@@ -18,13 +18,13 @@
                  "cost_ps":  "3.70"
              },
     "intro_html":  "A Hong Kong cafe classic: crispy pan-fried pork chops over egg fried rice, smothered in a sweet-tangy tomato sauce and baked under melted cheese. Each serving brings \u003cstrong\u003e42 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.70\u003c/strong\u003e (at everyday cost). It sounds fancy. It costs less than a value meal.",
-    "ingredients_display": ["\u003cstrong\u003ePork Chops:\u003c/strong\u003e 4 lb (1786 g)","\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1.25 tbsp (15 g)","\u003cstrong\u003eFive-Spice Powder (McCormick Gourmet):\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 3.5 tbsp (63 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0 lb (42 g)","\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1.75 tbsp (28 g)","\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 9 large eggs (438 g)","\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1.75 cups (219 g)","\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3.5 tbsp (49 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 onion (122 g)","\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 0.5 cups (120 g)","\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 1 can (719 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.25 cups dry (798 g)","\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3 carrots (192 g)","\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 10.5 oz (298 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
+    "ingredients_display": ["\u003cstrong\u003ePork Chops:\u003c/strong\u003e 4 lb (1786 g)","\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1.25 tbsp (15 g)","\u003cstrong\u003eFive-Spice Powder (McCormick Gourmet):\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 3.5 tbsp (63 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.25 cups (42 g)","\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1.75 tbsp (28 g)","\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 9 large eggs (438 g)","\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1.75 cups (219 g)","\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3.5 tbsp (49 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 onion (122 g)","\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 0.5 cups (120 g)","\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 1 can (719 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.25 cups dry (798 g)","\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3 carrots (192 g)","\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 10.5 oz (298 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Pork Chops, 4 lb: ~$16.42. \u003cstrong\u003eBuy 4 lbs: $16.68.\u003c/strong\u003e",
                        "Sugar, 1.25 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Oyster Sauce, 3.5 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Chicken Broth, 0 lb: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 0.25 cups: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Soy Sauce, 1.75 tbsp: ~$0.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Eggs, 9 large eggs: ~$1.07. \u003cstrong\u003eBuy 1 dozen: $1.47.\u003c/strong\u003e",
                        "All-Purpose Flour, 1.75 cups: ~$0.25. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -94,7 +94,7 @@
                                {
                                    "item":  "Chicken Broth",
                                    "grams":  42,
-                                   "buy":  "0 lb",
+                                   "buy":  "0.25 cups",
                                    "bid":  "chicken-broth",
                                    "gpu":  "29.570"
                                },
@@ -197,7 +197,7 @@
                                           "Sugar, 1.25 tbsp (15 g)",
                                           "Five-Spice Powder, 0.25 tbsp (1 g)",
                                           "Oyster Sauce, 3.5 tbsp (63 g)",
-                                          "Chicken Broth, 0 lb (42 g)",
+                                          "Chicken Broth, 0.25 cups (42 g)",
                                           "Soy Sauce, 1.75 tbsp (28 g)",
                                           "Eggs, 9 large eggs (438 g)",
                                           "All-Purpose Flour, 1.75 cups (219 g)",

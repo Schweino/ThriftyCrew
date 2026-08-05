@@ -102,6 +102,13 @@ Shells)"). `manual_balance` — bool, marks a spec whose macros were hand-balanc
    never reached the index, so the Meal Plan Builder shopped 794 g of cornstarch for a noodle dish. The
    card reads the SPEC and the Meal Plan Builder reads the INDEX, so a disagreement here ships two
    different shopping lists for one recipe.
+   REPAIR: `pipeline\update-recipes-db.ps1 -Replace <slug>` rebuilds the row from the spec. It carries
+   the old row's `visibility` and `published` across (2026-08-05) - the spec owns neither. `visibility`
+   belongs to `rotate-free-dinners.ps1` and the builder emits `paid` for a new row, so before that fix a
+   -Replace on a recipe the weekly rotation had set PUBLIC silently paywalled a free dinner; `published`
+   is the date it went live, not the date it was last repaired. If a repair only needs to ADD or RENAME
+   an ingredient, a key-scoped edit to the row is smaller than a rebuild and moves nothing else - the
+   rebuild also re-orders the row to the end of the array.
 11. Every ingredient a `make_it` step NAMES is in the ingredient list - the mirror of the spec-guards
    "use what you buy" gate. Reported as PHANTOM by `pipeline/audit-spec-contradictions.ps1`, ratcheted
    against a baseline rather than armed at zero; the standing list and the six rules that got it from

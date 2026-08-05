@@ -9,12 +9,6 @@
                      },
                      {
                          "run":  "live",
-                         "slug":  "arroz-con-pollo-bowls",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 oz\u0027: Bay Leaves (Great Value): 0 oz (3 g)"
-                     },
-                     {
-                         "run":  "live",
                          "slug":  "baked-ziti-with-ground-beef",
                          "cls":  "UNUSED",
                          "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
@@ -111,12 +105,6 @@
                      },
                      {
                          "run":  "live",
-                         "slug":  "cajun-chicken-etouffee-rice-bowls",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 oz\u0027: Bay Leaves (Great Value): 0 oz (2 g)"
-                     },
-                     {
-                         "run":  "live",
                          "slug":  "cambodian-beef-lok-lak-rice-bowls",
                          "cls":  "UNUSED",
                          "why":  "\u0027beef flanksirloin steak\u0027 is bought and costed but never named in a step"
@@ -150,18 +138,6 @@
                          "slug":  "cheesy-pork-chop-and-hash-brown-casserole",
                          "cls":  "UNUSED",
                          "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "chicken-biryani-rice-bowls",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 oz\u0027: Bay Leaves (Great Value): 0 oz (2 g)"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "chicken-biryani-rice-bowls",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 oz\u0027: Ground Cloves (Great Value): 0 oz (2 g)"
                      },
                      {
                          "run":  "live",
@@ -430,18 +406,6 @@
                      {
                          "run":  "live",
                          "slug":  "hong-kongstyle-baked-pork-chop-rice",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 lb\u0027: Chicken Broth (Swanson): 0 lb (42 g)"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "hong-kongstyle-baked-pork-chop-rice",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 lb\u0027: Chicken Broth, 0 lb: ~$0.06. Buy 1 (lasts several batches)."
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "hong-kongstyle-baked-pork-chop-rice",
                          "cls":  "UNUSED",
                          "why":  "\u0027mexican cheese blend\u0027 is bought and costed but never named in a step"
                      },
@@ -543,12 +507,6 @@
                      },
                      {
                          "run":  "live",
-                         "slug":  "malaysian-chicken-rendang-bowls",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 oz\u0027: Ground Cloves (Great Value): 0 oz (1 g)"
-                     },
-                     {
-                         "run":  "live",
                          "slug":  "marry-me-pork-chops-over-pasta",
                          "cls":  "UNUSED",
                          "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
@@ -570,12 +528,6 @@
                          "slug":  "mediterranean-beef-hummus-bowls",
                          "cls":  "UNUSED",
                          "why":  "\u0027feta cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "middle-eastern-beef-kofta-bowls-with-tzatziki",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 oz\u0027: Ground Allspice (Great Value): 0 oz (2 g)"
                      },
                      {
                          "run":  "live",
@@ -618,24 +570,6 @@
                          "slug":  "pasta-alla-norcina-creamy-sausage-pasta",
                          "cls":  "UNUSED",
                          "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "pastitsio",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 oz\u0027: Bay Leaves (Great Value): 0 oz (1 g)"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "pastitsio",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 oz\u0027: Ground Cloves (Great Value): 0 oz (1 g)"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "pastitsio",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 oz\u0027: Ground Nutmeg (Great Value): 0 oz (1 g)"
                      },
                      {
                          "run":  "live",
@@ -867,12 +801,6 @@
                      },
                      {
                          "run":  "live",
-                         "slug":  "thai-coconut-curry-turkey-meatballs",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 oz\u0027: Ground Ginger (Great Value): 0 oz (1 g)"
-                     },
-                     {
-                         "run":  "live",
                          "slug":  "turkey-divan-broccoli-rice-bake",
                          "cls":  "UNUSED",
                          "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
@@ -882,18 +810,6 @@
                          "slug":  "turkey-florentine-rice-bake",
                          "cls":  "UNUSED",
                          "why":  "\u0027mexican cheese blend\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-kofta-rice-bowl-with-tahini-sauce",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 oz\u0027: Ground Allspice (Great Value): 0 oz (2 g)"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-kofta-rice-bowl-with-tahini-sauce",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 oz\u0027: Ground Cloves (Great Value): 0 oz (2 g)"
                      },
                      {
                          "run":  "live",
@@ -952,12 +868,6 @@
                      {
                          "run":  "live",
                          "slug":  "turkey-sausage-and-cheesy-grits-bowl",
-                         "cls":  "ZERO-QTY",
-                         "why":  "a line reads \u00270 tbsp\u0027: Salt (Morton): 0 tbsp (2 g)"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "turkey-sausage-and-cheesy-grits-bowl",
                          "cls":  "UNUSED",
                          "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
                      },
@@ -1000,7 +910,7 @@
                  ],
     "generated":  "see git",
     "by_class":  {
-                     "ZERO-QTY":  16,
+                     "ZERO-QTY":  1,
                      "UNUSED":  150
                  }
 }
