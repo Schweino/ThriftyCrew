@@ -38,6 +38,10 @@ USAGE
 param(
   [string] $Slug,
   [string] $Voice        = 'en-US-AndrewNeural',
+  # Set to run the reel as a two-hander: scenes alternate between $Voice and $Voice2. $Voice keeps the
+  # hook and the CTA (the brand moments book-end the reel in one voice) and the second voice takes the
+  # scenes in between, so a viewer hears a conversation rather than a handover.
+  [string] $Voice2       = '',
   # A jolly read is tempo and pitch as much as it is casting: the same voice at -5% reads sober and
   # at +6% with a few Hz of lift reads upbeat. Both are exposed so the delivery can be tuned without
   # changing voice, and -VoiceSamples renders at whatever is set here so a sample is what would ship.
@@ -520,6 +524,7 @@ if ($VoiceSamples) {
 
 $LeadIn = 0.20
 $TailPad = 0.45
+$vi = 0   # scene index for the two-hander alternation; StrictMode needs it initialised up here
 
 foreach ($s in $scenes) {
   if ($NoVoice) {
@@ -528,14 +533,32 @@ foreach ($s in $scenes) {
     continue
   }
   $mp3 = Join-Path $WorkDir "$($s.Id).mp3"
+  # Two-hander: $Voice book-ends (hook + cta) and the alternation runs through the middle. The hook is
+  # index 0 and the cta is last, so parity alone would hand the cta to whichever voice happened to land
+  # there as the scene count changes with the ingredient list. Pin both ends, alternate the rest.
+  $useVoice = $Voice
+  if ($Voice2) {
+    $isEnd = ($vi -eq 0) -or ($vi -eq ($scenes.Count - 1))
+    if (-not $isEnd -and ($vi % 2 -eq 1)) { $useVoice = $Voice2 }
+  }
   Invoke-Tool -Exe $Python -Tag "tts-$($s.Id)" -ArgList (@(
-    '-m', 'edge_tts', '--voice', $Voice, $script:RateStr) + $script:PitchArg + @('--text', $s.Vo, '--write-media', $mp3))
+    '-m', 'edge_tts', '--voice', $useVoice, $script:RateStr) + $script:PitchArg + @('--text', $s.Vo, '--write-media', $mp3))
+  Add-Member -InputObject $s -NotePropertyName VoiceUsed -NotePropertyValue $useVoice
+  $vi++
   if (-not (Test-Path $mp3)) { throw "edge-tts produced no audio for scene '$($s.Id)'." }
   $d = Get-MediaDuration $mp3
   Add-Member -InputObject $s -NotePropertyName Mp3 -NotePropertyValue $mp3
   Add-Member -InputObject $s -NotePropertyName Dur -NotePropertyValue ([math]::Round($LeadIn + $d + $TailPad, 2))
 }
-if (-not $NoVoice) { Write-Output "Voiceover: $Voice at $RatePct%" }
+if (-not $NoVoice) {
+  $rateLabel = "$(if ($RatePct -ge 0) { '+' })$RatePct%$(if ($PitchHz -ne 0) { ", $(if ($PitchHz -gt 0) { '+' })${PitchHz}Hz" })"
+  if ($Voice2) {
+    Write-Output "Voiceover: $Voice + $Voice2 (two-hander) at $rateLabel"
+    foreach ($s in $scenes) { Write-Output ("  {0,-10} {1}" -f $s.Id, $s.VoiceUsed) }
+  } else {
+    Write-Output "Voiceover: $Voice at $rateLabel"
+  }
+}
 
 # ---------------------------------------------------------------- video
 # One self-contained clip per scene, then a stream-copy concat. Encoding each scene to its exact
