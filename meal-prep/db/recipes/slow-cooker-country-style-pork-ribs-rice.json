@@ -20,13 +20,13 @@
 
                               ],
     "stat":  {
-                 "cal":  605,
-                 "protein":  43,
-                 "carbs":  37,
+                 "cal":  785,
+                 "protein":  47,
+                 "carbs":  76,
                  "fat":  30,
                  "cost_ps":  "3.42"
              },
-    "intro_html":  "Five minutes of work in the morning, barbecue for a week. Country style ribs are cut from the shoulder, which means they are cheap, forgiving, and they turn to shreds after a long slow cook. Pile them over rice and you have 43 grams of protein sitting at about $3.42 a bowl (at everyday cost).",
+    "intro_html":  "Five minutes of work in the morning, barbecue for a week. Country style ribs are cut from the shoulder, which means they are cheap, forgiving, and they turn to shreds after a long slow cook. Pile them over rice and you have 47 grams of protein sitting at about $3.42 a bowl (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 7.5 lb (3360 g)",
                                 "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 7 tbsp (94 g)",
@@ -36,18 +36,20 @@
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (201 g)",
-                                "\u003cstrong\u003eBBQ Sauce (generic):\u003c/strong\u003e 3.5 cups (998 g)"
+                                "\u003cstrong\u003eBBQ Sauce (generic):\u003c/strong\u003e 3.5 cups (998 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Pork Shoulder, 7.5 lb: ~$26.44. \u003cstrong\u003eBuy 8 lbs: $28.56.\u003c/strong\u003e",
-                       "Brown Sugar, 7 tbsp: ~$0.53. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pork Shoulder, 7.5 lb: ~$22.00. \u003cstrong\u003eBuy 8 lbs: $23.76.\u003c/strong\u003e",
+                       "Brown Sugar, 7 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Yellow Onion, 2 onions: ~$0.51. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "BBQ Sauce, 3.5 cups: ~$4.36. \u003cstrong\u003ePantry staple; this batch alone uses about 2 18oz bottles.\u003c/strong\u003e",
-                       "Pantry seasonings (garlic powder, onion powder, chili powder, salt, black pepper): ~$0.37. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $32.21 across 14 servings, so roughly $2.30 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $34.96 across 14 servings, roughly $2.50 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.86. Those containers then feed this batch and many more after it."
+                       "BBQ Sauce, 3.5 cups: ~$3.07. \u003cstrong\u003ePantry staple; this batch alone uses about 2 18oz bottles.\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, onion powder, chili powder, salt, black pepper): ~$0.32. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.97 across 14 servings, so roughly $1.93 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $29.36 across 14 servings, roughly $2.10 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.96 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.32. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.42 a bowl\u003c/strong\u003e (at everyday cost) for slow cooked barbecue pork over rice. A barbecue joint plate would cost you several times that and would not be waiting in your fridge on Wednesday.",
     "shop_smart":  [
@@ -66,17 +68,17 @@
                     "Cook the rice near the end so it is fresh and hot when the pork is done.",
                     "Shred the pork right in the cooker, stir in the rest of the barbecue sauce and the juices, then combine with the rice in your big pot."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container so nobody gets shorted on meat. Every bowl lands near 605 calories and 43 grams of protein.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container so nobody gets shorted on meat. Every bowl lands near 785 calories and 47 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-country-style-ribs/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Slow cooker barbecue for about $3.42 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  32.21,
-    "cost_batch_true":  34.96,
-    "cost_per_serving":  2.3,
-    "cost_per_serving_true":  2.5,
-    "cost_pantry_add":  12.9,
-    "cost_first_run":  47.86,
+    "cost_batch":  26.97,
+    "cost_batch_true":  29.36,
+    "cost_per_serving":  1.93,
+    "cost_per_serving_true":  2.1,
+    "cost_pantry_add":  7.96,
+    "cost_first_run":  37.32,
     "scaler":  {
-                   "cost":  "34.96",
+                   "cost":  "29.36",
                    "ing":  [
                                {
                                    "item":  "Pork Shoulder",
@@ -149,11 +151,19 @@
                                    "buy":  "3.5 cups",
                                    "bid":  "bbq-sauce",
                                    "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "3.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
                                }
                            ]
                },
     "head":  {
-                 "description":  "Slow cooker barbecue country style pork ribs shredded over rice, built for 14 servings. 605 calories, 43g protein, about $3.42 per serving (at everyday cost).",
+                 "description":  "Slow cooker barbecue country style pork ribs shredded over rice, built for 14 servings. 785 calories, 47g protein, about $3.42 per serving (at everyday cost).",
                  "keywords":  "slow cooker country style ribs, bbq pork rice bowls, crockpot pork ribs, budget bbq meal prep, cheap pork dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",
@@ -169,7 +179,8 @@
                                           "Salt, 1.25 tbsp (21 g)",
                                           "Black Pepper, 0.25 tbsp (2 g)",
                                           "Yellow Onion, 2 onions (201 g)",
-                                          "BBQ Sauce, 3.5 cups (998 g)"
+                                          "BBQ Sauce, 3.5 cups (998 g)",
+                                          "Rice, 3.75 cups dry (700 g)"
                                       ],
                  "steps":  [
                                "Cut the pork shoulder into rib style strips and coat with a rub of garlic powder, onion powder, chili powder, salt and pepper.",
@@ -215,6 +226,10 @@
                               {
                                   "item":  "BBQ Sauce",
                                   "grams":  998
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  700
                               }
                           ]
 }

@@ -28139,7 +28139,7 @@
                         "protein":  "beef"
                     },
                     {
-                        "name":  "Slow Cooker Beef Tips and Gravy over Mashed Potatoes",
+                        "name":  "Slow Cooker Beef Tips and Gravy over Rice",
                         "slug":  "beef-tips-and-gravy-mashed-potatoes",
                         "visibility":  "paid",
                         "cuisine":  "American",
@@ -36644,6 +36644,12 @@
                                                 "grams":  20,
                                                 "buy":  "1 tbsp",
                                                 "item_id":  "salt"
+                                            },
+                                            {
+                                                "item":  "Rice",
+                                                "grams":  700,
+                                                "buy":  "3.75 cups dry",
+                                                "item_id":  "rice"
                                             }
                                         ],
                         "grocery_list":  [
@@ -36662,23 +36668,23 @@
                                              "0.75 tbsp achiote paste"
                                          ],
                         "per_serving":  {
-                                            "calories":  592,
-                                            "protein_g":  41,
-                                            "carbs_g":  47,
+                                            "calories":  772,
+                                            "protein_g":  45,
+                                            "carbs_g":  86,
                                             "fat_g":  27
                                         },
                         "batch":  {
-                                      "calories":  8288,
-                                      "protein_g":  574,
-                                      "carbs_g":  658,
+                                      "calories":  10808,
+                                      "protein_g":  630,
+                                      "carbs_g":  1204,
                                       "fat_g":  378
                                   },
-                        "cost_per_serving":  2.42,
-                        "cost_batch":  33.83,
-                        "cost_batch_true":  39.27,
-                        "cost_per_serving_true":  2.8,
-                        "cost_pantry_add":  13.95,
-                        "cost_first_run":  53.22,
+                        "cost_per_serving":  2.26,
+                        "cost_batch":  31.57,
+                        "cost_batch_true":  36.76,
+                        "cost_per_serving_true":  2.63,
+                        "cost_pantry_add":  13.25,
+                        "cost_first_run":  50.01,
                         "published":  "2026-07-25",
                         "source_url":  "https://www.kawalingpinoy.com/pork-menudo/",
                         "source_site":  "kawalingpinoy.com",
@@ -51814,6 +51820,12 @@
                                                 "grams":  998,
                                                 "buy":  "3.5 cups",
                                                 "item_id":  "bbq-sauce"
+                                            },
+                                            {
+                                                "item":  "Rice",
+                                                "grams":  700,
+                                                "buy":  "3.75 cups dry",
+                                                "item_id":  "rice"
                                             }
                                         ],
                         "grocery_list":  [
@@ -51827,23 +51839,23 @@
                                              "salt and black pepper"
                                          ],
                         "per_serving":  {
-                                            "calories":  605,
-                                            "protein_g":  43,
-                                            "carbs_g":  37,
+                                            "calories":  785,
+                                            "protein_g":  47,
+                                            "carbs_g":  76,
                                             "fat_g":  30
                                         },
                         "batch":  {
-                                      "calories":  8470,
-                                      "protein_g":  602,
-                                      "carbs_g":  518,
+                                      "calories":  10990,
+                                      "protein_g":  658,
+                                      "carbs_g":  1064,
                                       "fat_g":  420
                                   },
-                        "cost_per_serving":  2.3,
-                        "cost_batch":  32.21,
-                        "cost_batch_true":  34.96,
-                        "cost_per_serving_true":  2.5,
-                        "cost_pantry_add":  12.9,
-                        "cost_first_run":  47.86,
+                        "cost_per_serving":  1.93,
+                        "cost_batch":  26.97,
+                        "cost_batch_true":  29.36,
+                        "cost_per_serving_true":  2.1,
+                        "cost_pantry_add":  7.96,
+                        "cost_first_run":  37.32,
                         "published":  "2026-07-25",
                         "source_url":  "https://www.themagicalslowcooker.com/slow-cooker-country-style-ribs/",
                         "source_site":  "themagicalslowcooker.com",

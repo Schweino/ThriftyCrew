@@ -3,12 +3,6 @@
     "findings":  [
                      {
                          "run":  "live",
-                         "slug":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027pineapple juice\u0027 but Pineapple Juice is in no ingredient line - it cannot be made as shopped"
-                     },
-                     {
-                         "run":  "live",
                          "slug":  "american-goulash-pasta",
                          "cls":  "UNUSED",
                          "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
@@ -99,12 +93,6 @@
                      },
                      {
                          "run":  "live",
-                         "slug":  "beef-tips-and-gravy-mashed-potatoes",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027potatoes\u0027 but Potato is in no ingredient line - it cannot be made as shopped"
-                     },
-                     {
-                         "run":  "live",
                          "slug":  "bistek-tagalog-filipino-beef-onion-rice",
                          "cls":  "UNUSED",
                          "why":  "\u0027beef flanksirloin steak\u0027 is bought and costed but never named in a step"
@@ -162,12 +150,6 @@
                          "slug":  "cheesy-pork-chop-and-hash-brown-casserole",
                          "cls":  "UNUSED",
                          "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "cheesy-pork-chop-and-hash-brown-casserole",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027potatoes\u0027 but Potato is in no ingredient line - it cannot be made as shopped"
                      },
                      {
                          "run":  "live",
@@ -243,12 +225,6 @@
                      },
                      {
                          "run":  "live",
-                         "slug":  "coq-au-vin",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027bay leaves\u0027 but Bay Leaves is in no ingredient line - it cannot be made as shopped"
-                     },
-                     {
-                         "run":  "live",
                          "slug":  "cottage-pie",
                          "cls":  "UNUSED",
                          "why":  "\u0027parmesan cheese\u0027 is bought and costed but never named in a step"
@@ -288,12 +264,6 @@
                          "slug":  "filipino-beef-caldereta",
                          "cls":  "UNUSED",
                          "why":  "\u0027beef chuck roast\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "filipino-pork-menudo-rice-bowls",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027rice\u0027 but Rice is in no ingredient line - it cannot be made as shopped"
                      },
                      {
                          "run":  "live",
@@ -495,12 +465,6 @@
                      },
                      {
                          "run":  "live",
-                         "slug":  "hungarian-chicken-paprikash",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027hot sauce\u0027 but Hot Sauce is in no ingredient line - it cannot be made as shopped"
-                     },
-                     {
-                         "run":  "live",
                          "slug":  "irish-beef-and-guinness-stew",
                          "cls":  "UNUSED",
                          "why":  "\u0027beef chuck roast\u0027 is bought and costed but never named in a step"
@@ -693,12 +657,6 @@
                      },
                      {
                          "run":  "live",
-                         "slug":  "sausage-hash-brown-egg-casserole",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027potatoes\u0027 but Potato is in no ingredient line - it cannot be made as shopped"
-                     },
-                     {
-                         "run":  "live",
                          "slug":  "scalloped-potato-turkey-casserole",
                          "cls":  "UNUSED",
                          "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
@@ -768,12 +726,6 @@
                          "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
                          "cls":  "UNUSED",
                          "why":  "\u0027cheddar cheese shredded\u0027 is bought and costed but never named in a step"
-                     },
-                     {
-                         "run":  "live",
-                         "slug":  "slow-cooker-country-style-pork-ribs-rice",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027rice\u0027 but Rice is in no ingredient line - it cannot be made as shopped"
                      },
                      {
                          "run":  "live",
@@ -1029,12 +981,6 @@
                      },
                      {
                          "run":  "live",
-                         "slug":  "turkish-iskender-turkey-bowls",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027tomato sauce\u0027 but Tomato Sauce is in no ingredient line - it cannot be made as shopped"
-                     },
-                     {
-                         "run":  "live",
                          "slug":  "turkish-pasta-garlic-yogurt-beef",
                          "cls":  "UNUSED",
                          "why":  "\u0027penne pasta\u0027 is bought and costed but never named in a step"
@@ -1055,7 +1001,6 @@
     "generated":  "see git",
     "by_class":  {
                      "ZERO-QTY":  16,
-                     "UNUSED":  150,
-                     "PHANTOM":  9
+                     "UNUSED":  150
                  }
 }

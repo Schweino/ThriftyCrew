@@ -7763,7 +7763,7 @@
                   ]
     },
     {
-        "proposed_name":  "Slow Cooker Beef Tips and Gravy over Mashed Potatoes",
+        "proposed_name":  "Slow Cooker Beef Tips and Gravy over Rice",
         "slug":  "beef-tips-and-gravy-mashed-potatoes",
         "cost_batch":  46.96,
         "cost_per_serving":  3.35,
@@ -30970,13 +30970,13 @@
     {
         "proposed_name":  "Filipino Pork Menudo Rice Bowls",
         "slug":  "filipino-pork-menudo-rice-bowls",
-        "cost_batch":  30.71,
-        "cost_per_serving":  2.19,
-        "cost_batch_true":  35.9,
-        "cost_per_serving_true":  2.56,
-        "cost_pantry_add":  12.99,
-        "cost_first_run":  48.89,
-        "lines_priced":  16,
+        "cost_batch":  31.57,
+        "cost_per_serving":  2.26,
+        "cost_batch_true":  36.76,
+        "cost_per_serving_true":  2.63,
+        "cost_pantry_add":  13.25,
+        "cost_first_run":  50.01,
+        "lines_priced":  17,
         "lines_unpriced":  0,
         "lines":  [
                       {
@@ -31218,6 +31218,21 @@
                           "starter_cost":  0.94,
                           "starter_pkg":  "26oz canister",
                           "starter_pkg_g":  737
+                      },
+                      {
+                          "item":  "Rice",
+                          "grams":  700,
+                          "util_cost":  0.86,
+                          "basis":  "board:rice:walmart",
+                          "bulk":  true,
+                          "buy_n":  null,
+                          "buy_cost":  null,
+                          "pkg":  null,
+                          "pkg_g":  null,
+                          "starter_n":  1,
+                          "starter_cost":  1.12,
+                          "starter_pkg":  "2lb bag",
+                          "starter_pkg_g":  907
                       }
                   ]
     },
@@ -75679,13 +75694,13 @@
     {
         "proposed_name":  "Slow Cooker BBQ Country Style Pork Ribs over Rice",
         "slug":  "slow-cooker-country-style-pork-ribs-rice",
-        "cost_batch":  26.11,
-        "cost_per_serving":  1.86,
-        "cost_batch_true":  28.5,
-        "cost_per_serving_true":  2.04,
-        "cost_pantry_add":  7.7,
-        "cost_first_run":  36.2,
-        "lines_priced":  9,
+        "cost_batch":  26.97,
+        "cost_per_serving":  1.93,
+        "cost_batch_true":  29.36,
+        "cost_per_serving_true":  2.1,
+        "cost_pantry_add":  7.96,
+        "cost_first_run":  37.32,
+        "lines_priced":  10,
         "lines_unpriced":  0,
         "lines":  [
                       {
@@ -75822,6 +75837,21 @@
                           "starter_cost":  3.14,
                           "starter_pkg":  "18oz bottle",
                           "starter_pkg_g":  510
+                      },
+                      {
+                          "item":  "Rice",
+                          "grams":  700,
+                          "util_cost":  0.86,
+                          "basis":  "board:rice:walmart",
+                          "bulk":  true,
+                          "buy_n":  null,
+                          "buy_cost":  null,
+                          "pkg":  null,
+                          "pkg_g":  null,
+                          "starter_n":  1,
+                          "starter_cost":  1.12,
+                          "starter_pkg":  "2lb bag",
+                          "starter_pkg_g":  907
                       }
                   ]
     },
