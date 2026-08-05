@@ -988,6 +988,19 @@
         "board_src":  "recipe"
     },
     {
+        "id":  "beef-chuck-roast",
+        "store":  "Baker\u0027s",
+        "unit":  "lb",
+        "board":  10.99,
+        "link":  9.99,
+        "ratio":  0.91,
+        "price":  9.99,
+        "size":  "lb",
+        "boardItem":  "Choice Beef Chuck Roast",
+        "linkItem":  "Choice Beef Chuck Roast",
+        "board_src":  "recipe"
+    },
+    {
         "id":  "buffalo-wing-sauce",
         "store":  "Hy-Vee",
         "unit":  "floz",
@@ -1096,9 +1109,9 @@
         "store":  "Baker\u0027s",
         "unit":  "lb",
         "board":  4.88,
-        "link":  5,
-        "ratio":  1.02,
-        "price":  5,
+        "link":  5.49,
+        "ratio":  1.12,
+        "price":  5.49,
         "size":  "16 oz",
         "boardItem":  "Kroger® Hot Italian Sausage",
         "linkItem":  "Johnsonville Hot Italian Ground Sausage",

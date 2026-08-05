@@ -1,7 +1,7 @@
 ﻿{
     "readme":  "State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.",
-    "week_of":  "2026-08-02",
-    "rotated_at":  "2026-08-03T07:10:13",
+    "week_of":  "2026-08-04",
+    "rotated_at":  "2026-08-05T06:15:17",
     "free":  [
                  {
                      "slug":  "chicken-bulgogi-rice-bowls",
@@ -116,32 +116,32 @@
                      "per_serving":  1.31
                  },
                  {
-                     "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
-                     "protein":  "pork",
-                     "rank":  2,
-                     "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
-                     "per_serving":  1.49
-                 },
-                 {
-                     "slug":  "slow-cooker-country-style-pork-ribs-rice",
-                     "protein":  "pork",
-                     "rank":  3,
-                     "name":  "Slow Cooker BBQ Country Style Pork Ribs over Rice",
-                     "per_serving":  1.51
-                 },
-                 {
                      "slug":  "orecchiette-italian-sausage-broccoli",
                      "protein":  "pork",
-                     "rank":  4,
+                     "rank":  2,
                      "name":  "Orecchiette with Italian Sausage and Broccoli",
-                     "per_serving":  1.59
+                     "per_serving":  1.57
                  },
                  {
                      "slug":  "slow-cooker-kalua-pork-bowls",
                      "protein":  "pork",
-                     "rank":  5,
+                     "rank":  3,
                      "name":  "Slow Cooker Kalua Pork Bowls",
                      "per_serving":  1.63
+                 },
+                 {
+                     "slug":  "asado-de-puerco-red-chile-pork-bowls",
+                     "protein":  "pork",
+                     "rank":  4,
+                     "name":  "Asado de Puerco (Mexican Red Chile Pork Stew) Bowls",
+                     "per_serving":  1.72
+                 },
+                 {
+                     "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
+                     "protein":  "pork",
+                     "rank":  5,
+                     "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
+                     "per_serving":  1.72
                  }
              ]
 }
