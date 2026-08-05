@@ -38,7 +38,11 @@ USAGE
 param(
   [string] $Slug,
   [string] $Voice        = 'en-US-AndrewNeural',
+  # A jolly read is tempo and pitch as much as it is casting: the same voice at -5% reads sober and
+  # at +6% with a few Hz of lift reads upbeat. Both are exposed so the delivery can be tuned without
+  # changing voice, and -VoiceSamples renders at whatever is set here so a sample is what would ship.
   [int]    $RatePct      = -5,
+  [int]    $PitchHz      = 0,
   [double] $TakeoutPlate = 12.0,
   [string] $OutDir,
   [switch] $NoVoice,
@@ -82,6 +86,13 @@ $Chrome  = Resolve-Tool 'chrome'  @('C:\Program Files\Google\Chrome\Application\
 $FFmpeg  = Resolve-Tool 'ffmpeg'  @()
 $FFprobe = Resolve-Tool 'ffprobe' @()
 $Python  = Resolve-Tool 'python'  @('C:\Codex\Python312\python.exe')
+
+# edge-tts validates rate against ^[+-]\d+%$ and pitch against the same shape in Hz: BOTH need an
+# explicit sign and a bare "6%" is rejected outright. The default -5% hid this for weeks because a
+# negative number brings its own sign; the first positive value passed is the one that fails.
+# Defined up here because -VoiceSamples runs well before the main voiceover loop.
+$script:RateStr  = "--rate=$(if ($RatePct -ge 0) { '+' })$RatePct%"
+$script:PitchArg = if ($PitchHz -ne 0) { @("--pitch=$(if ($PitchHz -gt 0) { '+' })${PitchHz}Hz") } else { @() }
 
 # ---------------------------------------------------------------- number to speech
 # Neural TTS reads "$1.63" inconsistently (sometimes "one point six three dollars"). Spell it.
@@ -486,9 +497,20 @@ if ($VoiceSamples) {
   $sampleDir = Join-Path $OutDir 'voice-samples'
   New-Item -ItemType Directory -Force -Path $sampleDir | Out-Null
   $line = "$speakPs a serving. $name. $(ConvertTo-Words $proteinG) grams of protein a bowl. Free this week at thrifty crew dot com."
-  foreach ($v in @('en-US-AndrewNeural', 'en-US-BrianNeural', 'en-US-ChristopherNeural', 'en-US-GuyNeural', 'en-US-SteffanNeural')) {
+  # Microsoft publishes a personality tag per voice; these are the ones tagged for warmth and energy
+  # rather than authority. Lively / Cheerful / Passion / Friendly, both genders, so the pick is not
+  # narrowed by an assumption about who should read it.
+  $candidates = @(
+    'en-US-RogerNeural',        # Lively
+    'en-US-GuyNeural',          # Passion
+    'en-US-BrianNeural',        # Approachable, Casual, Sincere
+    'en-US-EmmaNeural',         # Cheerful, Clear, Conversational
+    'en-US-AvaNeural',          # Expressive, Caring, Pleasant, Friendly
+    'en-US-AriaNeural'          # Positive, Confident
+  )
+  foreach ($v in $candidates) {
     $mp3 = Join-Path $sampleDir "$v.mp3"
-    Invoke-Tool -Exe $Python -Tag "tts-$v" -ArgList @('-m', 'edge_tts', '--voice', $v, "--rate=$RatePct%", '--text', $line, '--write-media', $mp3)
+    Invoke-Tool -Exe $Python -Tag "tts-$v" -ArgList (@('-m', 'edge_tts', '--voice', $v, $script:RateStr) + $script:PitchArg + @('--text', $line, '--write-media', $mp3))
     Write-Output "  $v"
   }
   Write-Output ''
@@ -506,8 +528,8 @@ foreach ($s in $scenes) {
     continue
   }
   $mp3 = Join-Path $WorkDir "$($s.Id).mp3"
-  Invoke-Tool -Exe $Python -Tag "tts-$($s.Id)" -ArgList @(
-    '-m', 'edge_tts', '--voice', $Voice, "--rate=$RatePct%", '--text', $s.Vo, '--write-media', $mp3)
+  Invoke-Tool -Exe $Python -Tag "tts-$($s.Id)" -ArgList (@(
+    '-m', 'edge_tts', '--voice', $Voice, $script:RateStr) + $script:PitchArg + @('--text', $s.Vo, '--write-media', $mp3))
   if (-not (Test-Path $mp3)) { throw "edge-tts produced no audio for scene '$($s.Id)'." }
   $d = Get-MediaDuration $mp3
   Add-Member -InputObject $s -NotePropertyName Mp3 -NotePropertyValue $mp3
