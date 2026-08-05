@@ -280,14 +280,12 @@ function Get-IngredientLines {
 $ingredients = @(Get-IngredientLines -Spec $spec)
 if ($ingredients.Count -lt 2) { throw "Parsed only $($ingredients.Count) ingredients from '$pick' - the display format changed; fix the parser before shipping a reel." }
 
-# Show the first six in the spec's own order and send the rest to the page. Specs are authored
-# headline-ingredient first and seasonings last, so splitting a long list across two frames reliably
-# produced a second frame reading "Black Pepper, Red Pepper Flakes, Parmesan, Salt" under a caption
-# saying "nothing fancy" - a whole scene of a daily reel spent on spices. The cap is not hiding
-# anything: the overflow count is printed and the full list is on the page the reel drives to.
-$maxShown = 6
-$shown    = @($ingredients | Select-Object -First $maxShown)
-$overflow = $ingredients.Count - $shown.Count
+# EVERY ingredient, always, on ONE frame. Brad's rule, 2026-08-05, and it is about how the reel is
+# actually used: people PAUSE AND SCREENSHOT the list to shop from it. A capped list ("+3 more on the
+# page") makes that screenshot useless, and splitting across two frames is worse - a screenshot
+# catches half a list and the reader does not know it. Both were tried and both are wrong.
+# So the list never truncates; the TYPE scales to fit instead.
+$shown = $ingredients
 
 # ---------------------------------------------------------------- scene HTML
 
@@ -324,11 +322,10 @@ body{font-family:Georgia,'Times New Roman',serif;-webkit-font-smoothing:antialia
 .tile i{display:block;font:400 30px/1.2 Georgia,serif;font-style:normal;color:$TcMut;
   margin-top:18px;letter-spacing:.06em;text-transform:uppercase}
 .list{width:100%;text-align:left}
-.row{display:flex;align-items:baseline;gap:22px;padding:26px 0;border-bottom:2px solid $TcRule}
+.row{display:flex;align-items:baseline;gap:22px;padding:var(--rp,26px) 0;border-bottom:2px solid $TcRule}
 .row:last-child{border-bottom:0}
-.row .n{flex:1 1 auto;font:400 46px/1.2 Georgia,serif}
-.row .a{flex:0 0 auto;font:400 38px/1.2 ui-monospace,Consolas,monospace;color:$TcMut}
-.more{font:400 34px/1.2 Georgia,serif;color:$TcMut;padding-top:28px;text-align:center}
+.row .n{flex:1 1 auto;font:400 var(--rf,46px)/1.2 Georgia,serif}
+.row .a{flex:0 0 auto;font:400 var(--ra,38px)/1.2 ui-monospace,Consolas,monospace;color:$TcMut}
 .math{font:400 62px/1.5 Georgia,serif;color:$TcMut}
 .math b{font-weight:700;color:$TcGold}
 .vs{display:flex;flex-direction:column;gap:30px;width:100%}
@@ -369,8 +366,6 @@ $moneyPs    = Format-Money $cheapestPs
 $moneyBatch = Format-Money $batchCost
 $speakPs    = Get-MoneySpeech $cheapestPs
 $speakBatch = Get-MoneySpeech $batchCost
-$takeout    = [math]::Round($TakeoutPlate * $servings, 2)
-$saved      = [math]::Round($takeout - $batchCost, 2)
 $titleClass = if ($name.Length -gt 30) { 'title long' } else { 'title' }
 
 # 1. hook
@@ -397,26 +392,27 @@ Add-Scene -Id 'macros' `
          '</div>')
 
 function Format-List {
-  param($Rows, [int]$More)
-  $h = '<div class="list">'
+  <# Fits N rows into the frame's usable band by scaling type, so the list NEVER truncates. #>
+  param($Rows)
+  $n = [math]::Max(1, @($Rows).Count)
+  # .body's usable band: 1920 tall, less the 200px masthead, the 300px caption and the 360px pad the
+  # Facebook chrome sits over, less its own 120px bottom padding. About 940px of real estate.
+  $perRow  = 940 / $n
+  $rowFont = [int][math]::Max(24, [math]::Min(46, [math]::Floor($perRow * 0.60)))
+  $amtFont = [int][math]::Max(20, [math]::Floor($rowFont * 0.82))
+  $rowPad  = [int][math]::Max(5,  [math]::Min(26, [math]::Floor(($perRow - $rowFont * 1.2) / 2)))
+  $h = ('<div class="list" style="--rf:{0}px;--ra:{1}px;--rp:{2}px">' -f $rowFont, $amtFont, $rowPad)
   foreach ($r in $Rows) {
     $h += '<div class="row"><span class="n">' + (HtmlEnc $r.Name) + '</span><span class="a">' + (HtmlEnc $r.Amount) + '</span></div>'
   }
-  $h += '</div>'
-  if ($More -gt 0) { $h += '<div class="more">+ ' + $More + ' more on the page</div>' }
-  return $h
+  return $h + '</div>'
 }
 
-# 4. the list, one frame.
-$listVo = if ($overflow -gt 0) {
-  "The big stuff, priced at this week's cheapest Omaha shelf. $(ConvertTo-Words $overflow) more on the page."
-} else {
-  "The whole shopping list, priced at this week's cheapest Omaha shelf. Nothing fancy."
-}
+# 4. the list: all of it, one frame, screenshot-ready.
 Add-Scene -Id 'list' `
-  -Vo $listVo `
-  -Caption 'The shopping list' `
-  -Body (Format-List -Rows $shown -More $overflow)
+  -Vo "The whole shopping list, priced at this week's cheapest Omaha shelf. Screenshot it." `
+  -Caption 'The whole list. Screenshot it.' `
+  -Body (Format-List -Rows $shown)
 
 # 6. batch math (shown as arithmetic because cheapest_ps IS a whole-package total over 14)
 Add-Scene -Id 'batch' `
@@ -424,15 +420,34 @@ Add-Scene -Id 'batch' `
   -Caption "$servings &times; $moneyPs = $moneyBatch" `
   -Body ('<div class="math">' + $servings + ' servings &times; ' + $moneyPs + '<br><b>' + $moneyBatch + ' for the batch</b></div>')
 
-# 7. comparison (assumption printed on the frame)
+# 7. comparison. NOT "14 takeout plates you never would have bought" (Brad, 2026-08-05): nobody eats
+# out 14 times, so a $146 "you keep" is a number the reader knows is fake, and a fake number standing
+# next to $1.57 makes the reader doubt the $1.57 too. Compare the batch to ONE plate instead, which is
+# a purchase they actually make, and let the ratio carry the message.
+$plates = [math]::Ceiling($batchCost / $TakeoutPlate)
+$ratioLine = if ($batchCost -le $TakeoutPlate) {
+  "$servings dinners for less than one plate"
+} else {
+  "$servings dinners for the price of $(ConvertTo-Words $plates)"
+}
+$ratioVo = if ($batchCost -le $TakeoutPlate) {
+  "$(ConvertTo-Words $servings) dinners for less than the price of one plate."
+} else {
+  "$(ConvertTo-Words $servings) dinners for the price of $(ConvertTo-Words $plates) of them."
+}
+# The board's own value, and unlike the takeout figure this one is measured, not assumed: it is the
+# gap between everyday_ps and cheapest_ps on this exact recipe this exact week.
+$boardSaved = [math]::Round(($everydayPs - $cheapestPs) * $servings, 2)
+
 Add-Scene -Id 'compare' `
-  -Vo "Buy the same $(ConvertTo-Words $servings) dinners out at $(Get-MoneySpeech $TakeoutPlate) a plate and you have spent $(Get-MoneySpeech $takeout). One recipe, one week, $(Get-MoneySpeech $saved) back in your pocket." `
-  -Caption "One recipe. $(Format-Money $saved) back." `
+  -Vo "One takeout plate runs about $(Get-MoneySpeech $TakeoutPlate). This whole batch is $speakBatch. $ratioVo" `
+  -Caption "One plate out, or $servings dinners in the fridge." `
   -Body ('<div class="vs">' +
-         '<div><span>Takeout, ' + $servings + ' plates</span><em>' + (Format-Money $takeout) + '</em></div>' +
-         '<div><span>This batch</span><em class="gold">' + $moneyBatch + '</em></div>' +
-         '</div><div class="save">You keep ' + (Format-Money $saved) + '</div>' +
-         '<div class="fine">Takeout figure assumes ' + (Format-Money $TakeoutPlate) + ' a plate. Batch cost is the cheapest whole-package price across our Omaha board, week of ' + $weekOf + '.</div>')
+         '<div><span>One takeout plate</span><em>' + (Format-Money $TakeoutPlate) + '</em></div>' +
+         '<div><span>This whole batch, ' + $servings + ' dinners</span><em class="gold">' + $moneyBatch + '</em></div>' +
+         '</div><div class="save">' + $ratioLine + '</div>' +
+         '<div class="fine">Plate figure assumes ' + (Format-Money $TakeoutPlate) + ', a typical Omaha lunch. Batch cost is the cheapest whole-package price across our seven-store board, week of ' + $weekOf +
+         $(if ($boardSaved -gt 0) { '. Shopping the board beat everyday shelf prices by ' + (Format-Money $boardSaved) + ' on this batch' }) + '.</div>')
 
 # 8. cta
 $ctaBadge = if ($isFree) { '<div class="free">Free this week</div>' } else { '' }
