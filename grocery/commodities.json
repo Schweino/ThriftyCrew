@@ -29811,10 +29811,10 @@
         "band_min":  0.01,
         "band_max":  0.12,
         "include":  [
-                        "sandwich\\s+bags?",
-                        "snack\\s+bags?"
+                        "sandwich\\s+bags?"
                     ],
         "exclude":  [
+                        "\\bsnack\\s+bags?\\b",
                         "\\bpaper\\b",
                         "reusable"
                     ],

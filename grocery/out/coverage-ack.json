@@ -1,10 +1,15 @@
-{
-  "_comment": "Acknowledged, INTENTIONAL coverage drops for audit-coverage-regression.ps1. An entry silences the guard for one store until 'expires', then the guard re-arms itself - an intentional drop must never decay into a permanent blind spot. Delete an entry once the store is whole again. Fareway's entry was removed on 2026-07-16: it was restored to 321 rows once its prices were proven in-store (see stamp-fareway-instore.ps1), so the ack no longer describes reality and would have hidden a real future drop.",
-  "acks": [
-    {
-      "store": "Family Fare",
-      "reason": "2026-07-30 triage: this drop is the 14-day carry policy working, not a capture bug. Freshop throttled Family Fare four days running, so rows still on the board captured 07-16/07-18 are now aging out (256 -> 207 cells). Everything we publish is inside the carry window, and holding the whole board would freeze every OTHER store's fresh prices to hide a Family Fare gap the tiles already render as 'no price yet'. Root-cause work shipped the same day: the term cursor (out\\ff-term-cursor.json) sweeps the 526-term list instead of re-buying the same first ~60, and the new 'SMP Family Fare Term Sweep' task runs familyfare-sweep.ps1 every 3 hours so the catalogue turns over about daily. If Family Fare is still short when this expires, the sweep is NOT working and that is the thing to fix - do not renew this ack blind.",
-      "expires": "2026-08-06"
-    }
-  ]
+﻿{
+    "_comment":  "Acknowledged, INTENTIONAL coverage drops for audit-coverage-regression.ps1. An entry silences the guard for one store until \u0027expires\u0027, then the guard re-arms itself - an intentional drop must never decay into a permanent blind spot. Delete an entry once the store is whole again. Fareway\u0027s entry was removed on 2026-07-16: it was restored to 321 rows once its prices were proven in-store (see stamp-fareway-instore.ps1), so the ack no longer describes reality and would have hidden a real future drop.",
+    "acks":  [
+                 {
+                     "store":  "Family Fare",
+                     "reason":  "2026-07-30 triage: this drop is the 14-day carry policy working, not a capture bug. Freshop throttled Family Fare four days running, so rows still on the board captured 07-16/07-18 are now aging out (256 -\u003e 207 cells). Everything we publish is inside the carry window, and holding the whole board would freeze every OTHER store\u0027s fresh prices to hide a Family Fare gap the tiles already render as \u0027no price yet\u0027. Root-cause work shipped the same day: the term cursor (out\\ff-term-cursor.json) sweeps the 526-term list instead of re-buying the same first ~60, and the new \u0027SMP Family Fare Term Sweep\u0027 task runs familyfare-sweep.ps1 every 3 hours so the catalogue turns over about daily. If Family Fare is still short when this expires, the sweep is NOT working and that is the thing to fix - do not renew this ack blind.",
+                     "expires":  "2026-08-06"
+                 },
+                 {
+                     "store":  "Sam\u0027s Club",
+                     "reason":  "2026-08-05 weekly browser run: Sam\u0027s Club hit an Akamai bot wall after 187 of 526 search terms (Walmart, same infra, walled at 74 the same morning). The 187 terms that DID land captured at a healthy 21.8 rows/term and built 1808 priced rows - this is a truncated capture, not a broken one, and every price on the board is freshly captured and correct. The 49 lost cells are the terms the wall stopped us reaching. A desktop prompt + email went to Brad while the run was live so the challenge could be cleared; it was not cleared before the run finished. Expires 2026-08-13: next Wednesday\u0027s run must restore Sam\u0027s to ~342 cells. If it has NOT, the wall is now persistent rather than incidental and THAT is the thing to fix - do not renew this ack blind.",
+                     "expires":  "2026-08-13"
+                 }
+             ]
 }

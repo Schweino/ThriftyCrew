@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-08-05T06:10:22",
+    "generated":  "2026-08-05T07:26:53",
     "note":  "winning history cells at a verdict-rejected (commodity,store) whose product could not be identified from any surviving board; neither purged nor cleared",
     "cells":  [
                   {
@@ -7,6 +7,62 @@
                       "store":  "Sam\u0027s Club",
                       "week":  "2026-07-17",
                       "price":  0.3827,
+                      "is_record_low":  true
+                  },
+                  {
+                      "id":  "cherries",
+                      "store":  "Aldi",
+                      "week":  "2026-07-19",
+                      "price":  2.49,
+                      "is_record_low":  false
+                  },
+                  {
+                      "id":  "cherries",
+                      "store":  "Aldi",
+                      "week":  "2026-07-20",
+                      "price":  2.49,
+                      "is_record_low":  false
+                  },
+                  {
+                      "id":  "cherries",
+                      "store":  "Aldi",
+                      "week":  "2026-07-21",
+                      "price":  2.49,
+                      "is_record_low":  false
+                  },
+                  {
+                      "id":  "dijon-mustard",
+                      "store":  "Aldi",
+                      "week":  "2026-07-12",
+                      "price":  0.1375,
+                      "is_record_low":  false
+                  },
+                  {
+                      "id":  "dijon-mustard",
+                      "store":  "Aldi",
+                      "week":  "2026-07-14",
+                      "price":  0.1375,
+                      "is_record_low":  false
+                  },
+                  {
+                      "id":  "dijon-mustard",
+                      "store":  "Aldi",
+                      "week":  "2026-07-19",
+                      "price":  0.1242,
+                      "is_record_low":  true
+                  },
+                  {
+                      "id":  "dijon-mustard",
+                      "store":  "Aldi",
+                      "week":  "2026-07-20",
+                      "price":  0.1242,
+                      "is_record_low":  true
+                  },
+                  {
+                      "id":  "dijon-mustard",
+                      "store":  "Aldi",
+                      "week":  "2026-07-21",
+                      "price":  0.1242,
                       "is_record_low":  true
                   },
                   {

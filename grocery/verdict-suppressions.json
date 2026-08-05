@@ -1,6 +1,6 @@
 ﻿{
     "readme":  "Every confirmed DROP verdict ever made, keyed (id, store, normalised item), applied by verify-apply on EVERY run regardless of which week produced it. Exists because only the current week\u0027s verdict file used to be read, so the same wrong products returned as soon as their week rolled over - 18 previously-dropped cells were live again on 2026-07-29, three as crowns. Entries are added automatically when a drop\u0027s item identity is CONFIRMED (verdict item field or reason quote matches the cell), and removed automatically when a later keep verdict overturns one. Do not hand-edit item_norm; it is Get-VerdictNorm\u0027s output (verdict-lib.ps1).",
-    "updated":  "2026-07-30T03:36:22",
+    "updated":  "2026-08-05T07:15:59",
     "suppressions":  [
                          {
                              "id":  "apple-juice",
@@ -111,6 +111,15 @@
                              "source":  "quote-backfill"
                          },
                          {
+                             "id":  "cherries",
+                             "store":  "Aldi",
+                             "item_norm":  "lunch buddies mixed fruit in black cherry gel bowls 4 3 oz",
+                             "item":  "Lunch Buddies Mixed Fruit IN Black Cherry Gel Bowls 4 3 OZ",
+                             "week":  "2026-08-05",
+                             "reason":  "Not fresh cherries: \"Black Cherry Gel Bowls\" is a shelf-stable gelatin fruit cup, a different product priced per lb against fresh fruit.",
+                             "source":  "apply-confirmed"
+                         },
+                         {
                              "id":  "chocolate-milk",
                              "store":  "Walmart",
                              "item_norm":  "trumoo whole chocolate milk half gallon",
@@ -165,6 +174,15 @@
                              "source":  "quote-backfill"
                          },
                          {
+                             "id":  "dijon-mustard",
+                             "store":  "Aldi",
+                             "item_norm":  "burman s spicy brown mustard 12 oz",
+                             "item":  "Burman S Spicy Brown Mustard 12 OZ",
+                             "week":  "2026-08-05",
+                             "reason":  "Not dijon: \"Spicy Brown Mustard\" is a different mustard style.",
+                             "source":  "apply-confirmed"
+                         },
+                         {
                              "id":  "disinfecting-wipes",
                              "store":  "Hy-Vee",
                              "item_norm":  "lysol wipes or disinfectant spray 80 ct or 12 5 oz 5 99",
@@ -181,6 +199,15 @@
                              "week":  "2026-07-29",
                              "reason":  "Cannot tell fresh from dried. The captured name is just \u0027Parsley 2 OZ\u0027 with no brand - Aldi sells both a Stonemill dried jar and a fresh clamshell in that weight, and at 76% under the runner-up the two readings give very different answers. Dropped rather than publish a guess; dried-parsley still has six other stores.",
                              "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "fresh-basil",
+                             "store":  "Aldi",
+                             "item_norm":  "simply nature organic basil stir in paste 2 8 oz",
+                             "item":  "Simply Nature Organic Basil Stir IN Paste 2.8 OZ",
+                             "week":  "2026-08-05",
+                             "reason":  "Not fresh basil: a Basil Stir-In PASTE in a tube, not the fresh herb the commodity means.",
+                             "source":  "apply-confirmed"
                          },
                          {
                              "id":  "fresh-green-beans",
@@ -237,6 +264,15 @@
                              "source":  "quote-backfill"
                          },
                          {
+                             "id":  "green-olives",
+                             "store":  "Aldi",
+                             "item_norm":  "tuscan garden manzanilla olives stuffed with pimiento 10 oz",
+                             "item":  "Tuscan Garden Manzanilla Olives Stuffed With Pimiento 10 OZ",
+                             "week":  "2026-08-05",
+                             "reason":  "Size basis unresolvable: the card says 15.8 oz (net, with brine) but ALDI\u0027s own product name says 10 oz (drained). The board priced the 15.8 oz basis ($0.1449/oz); against the 10 oz the store names it is $0.229/oz, which is what its own product page shows. Dropping rather than publishing the cheaper of two bases.",
+                             "source":  "apply-confirmed"
+                         },
+                         {
                              "id":  "honey",
                              "store":  "Baker\u0027s",
                              "item_norm":  "kroger rich n honey hot dog buns",
@@ -253,6 +289,33 @@
                              "week":  "2026-07-29",
                              "reason":  "Canned, not fresh. \u0027La Costena Whole Jalapeno Peppers\u0027 is the canned pepper; fresh jalapenos are the commodity here and pickled/canned ones already have their own row (pickled-jalapenos).",
                              "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "muffins",
+                             "store":  "Hy-Vee",
+                             "item_norm":  "thomas bagels protein bagels or muffin tops 6 ct 3 99",
+                             "item":  "Thomas\u0027 bagels, protein bagels or muffin tops, 6 ct., $3.99",
+                             "week":  "2026-08-05",
+                             "reason":  "Combined multi-product ad line (\"bagels, protein bagels or muffin tops\") and muffin tops are not muffins.",
+                             "source":  "apply-confirmed"
+                         },
+                         {
+                             "id":  "oven-cleaner",
+                             "store":  "Hy-Vee",
+                             "item_norm":  "easy off lime a way or old english cleaner 14 5 to 32 oz 3 99",
+                             "item":  "Easy-Off, Lime-A-Way or Old English cleaner, 14.5 to 32 oz., $3.99",
+                             "week":  "2026-08-05",
+                             "reason":  "Combined multi-product ad line (three different cleaners) with a 14.5-32 oz size RANGE - no single size to price.",
+                             "source":  "apply-confirmed"
+                         },
+                         {
+                             "id":  "parmesan",
+                             "store":  "Aldi",
+                             "item_norm":  "earthly grains parmesan couscous 5 9 oz",
+                             "item":  "Earthly Grains Parmesan Couscous 5.9 OZ",
+                             "week":  "2026-08-05",
+                             "reason":  "Not parmesan cheese: \"Parmesan Couscous\" is a boxed couscous side dish.",
+                             "source":  "apply-confirmed"
                          },
                          {
                              "id":  "pesto",
@@ -316,6 +379,24 @@
                              "week":  "2026-07-29",
                              "reason":  "Not fruit. \u0027Bomb Pop Extremes Super Sour Blue Raspberry Ice Pops\u0027 is a freezer novelty that matched on \u0027raspberry\u0027.",
                              "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "ribeye-steak",
+                             "store":  "Family Fare",
+                             "item_norm":  "ibp ribeye beef steak burgers 1 33 lb",
+                             "item":  "Ibp Ribeye Beef Steak Burgers 1.33 Lb",
+                             "week":  "2026-08-05",
+                             "reason":  "Not a ribeye steak: \"Ribeye Beef STEAK BURGERS\" are ground-beef patties.",
+                             "source":  "apply-confirmed"
+                         },
+                         {
+                             "id":  "shrimp",
+                             "store":  "Aldi",
+                             "item_norm":  "fremont fish market jumbo butterfly shrimp 9 oz",
+                             "item":  "Fremont Fish Market Jumbo Butterfly Shrimp 9 OZ",
+                             "week":  "2026-08-05",
+                             "reason":  "Not raw shrimp: \"Jumbo Butterfly Shrimp\" is a breaded frozen prepared item; commodity is frozen RAW shrimp.",
+                             "source":  "apply-confirmed"
                          },
                          {
                              "id":  "spinach",

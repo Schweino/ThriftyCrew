@@ -1,0 +1,245 @@
+﻿{
+    "week_of":  "2026-08-05",
+    "verdicts":  [
+                     {
+                         "id":  "cherries",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "item":  "Lunch Buddies Mixed Fruit IN Black Cherry Gel Bowls 4 3 OZ",
+                                             "keep":  false,
+                                             "annotation":  null,
+                                             "reason":  "Not fresh cherries: \"Black Cherry Gel Bowls\" is a shelf-stable gelatin fruit cup, a different product priced per lb against fresh fruit."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "fresh-basil",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "item":  "Simply Nature Organic Basil Stir IN Paste 2.8 OZ",
+                                             "keep":  false,
+                                             "annotation":  null,
+                                             "reason":  "Not fresh basil: a Basil Stir-In PASTE in a tube, not the fresh herb the commodity means."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "parmesan",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "item":  "Earthly Grains Parmesan Couscous 5.9 OZ",
+                                             "keep":  false,
+                                             "annotation":  null,
+                                             "reason":  "Not parmesan cheese: \"Parmesan Couscous\" is a boxed couscous side dish."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "ribeye-steak",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "item":  "Ibp Ribeye Beef Steak Burgers 1.33 Lb",
+                                             "keep":  false,
+                                             "annotation":  null,
+                                             "reason":  "Not a ribeye steak: \"Ribeye Beef STEAK BURGERS\" are ground-beef patties."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "muffins",
+                         "entries":  [
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "item":  "Thomas\u0027 bagels, protein bagels or muffin tops, 6 ct., $3.99",
+                                             "keep":  false,
+                                             "annotation":  null,
+                                             "reason":  "Combined multi-product ad line (\"bagels, protein bagels or muffin tops\") and muffin tops are not muffins."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "oven-cleaner",
+                         "entries":  [
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "item":  "Easy-Off, Lime-A-Way or Old English cleaner, 14.5 to 32 oz., $3.99",
+                                             "keep":  false,
+                                             "annotation":  null,
+                                             "reason":  "Combined multi-product ad line (three different cleaners) with a 14.5-32 oz size RANGE - no single size to price."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "shrimp",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "item":  "Fremont Fish Market Jumbo Butterfly Shrimp 9 OZ",
+                                             "keep":  false,
+                                             "annotation":  null,
+                                             "reason":  "Not raw shrimp: \"Jumbo Butterfly Shrimp\" is a breaded frozen prepared item; commodity is frozen RAW shrimp."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "dijon-mustard",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "item":  "Burman S Spicy Brown Mustard 12 OZ",
+                                             "keep":  false,
+                                             "annotation":  null,
+                                             "reason":  "Not dijon: \"Spicy Brown Mustard\" is a different mustard style."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "avocados",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "item":  "Mini Avocados Bag 6 CT",
+                                             "keep":  true,
+                                             "annotation":  "mini avocados (6-ct bag), smaller than a standard Hass",
+                                             "reason":  "Correct commodity but not like-for-like on size."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "sweet-corn",
+                         "entries":  [
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "item":  "Kroger Sweet Corn Mini Cobs",
+                                             "keep":  true,
+                                             "annotation":  "mini cobs, not full-size ears",
+                                             "reason":  "Correct commodity, smaller unit."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "beets",
+                         "entries":  [
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "item":  "Organic Red Beets",
+                                             "keep":  true,
+                                             "annotation":  "organic",
+                                             "reason":  "Correct commodity, organic premium."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "arugula",
+                         "entries":  [
+                                         {
+                                             "store":  "Fareway",
+                                             "item":  "Organic Girl Organic Baby Arugula",
+                                             "keep":  true,
+                                             "annotation":  "organic",
+                                             "reason":  "Correct commodity, organic premium."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "turkey-breast",
+                         "entries":  [
+                                         {
+                                             "store":  "Fareway",
+                                             "item":  "Fareway Bone-In Turkey Breast",
+                                             "keep":  true,
+                                             "annotation":  "bone-in",
+                                             "reason":  "Correct commodity; bone-in vs boneless is not like-for-like."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "cherry-tomatoes",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "item":  "Grape Tomatoes, 2 lbs.",
+                                             "keep":  true,
+                                             "annotation":  "grape tomatoes",
+                                             "reason":  "Closely related but a different variety than cherry tomatoes."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "ground-fennel",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "item":  "Sugar \u0027N Spice Fennel Seed Whole",
+                                             "keep":  true,
+                                             "annotation":  "WHOLE fennel seed, not ground",
+                                             "reason":  "Correct spice, different grind."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "relish",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "item":  "Dill Relish",
+                                             "keep":  true,
+                                             "annotation":  "dill relish, not sweet relish",
+                                             "reason":  "Correct commodity family, different flavour than the tracked sweet relish."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "tomatoes",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "item":  "Tomatoes Roma Per LB",
+                                             "keep":  true,
+                                             "annotation":  "Roma variety",
+                                             "reason":  "Correct commodity; tracked item is tomatoes on the vine."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "salmon",
+                         "entries":  [
+                                         {
+                                             "store":  "Fareway",
+                                             "item":  "Demings Salmon, Pink, Wild Caught Alaskan",
+                                             "keep":  true,
+                                             "annotation":  "pink (not Atlantic) salmon",
+                                             "reason":  "Correct commodity, cheaper species."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "green-olives",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "item":  "Tuscan Garden Manzanilla Olives Stuffed With Pimiento 10 OZ",
+                                             "keep":  false,
+                                             "annotation":  null,
+                                             "reason":  "Size basis unresolvable: the card says 15.8 oz (net, with brine) but ALDI\u0027s own product name says 10 oz (drained). The board priced the 15.8 oz basis ($0.1449/oz); against the 10 oz the store names it is $0.229/oz, which is what its own product page shows. Dropping rather than publishing the cheaper of two bases."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "sandwich-bags",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "item":  "Ziploc Snack Bags",
+                                             "keep":  false,
+                                             "annotation":  null,
+                                             "reason":  "Wrong product: \"Ziploc SNACK Bags\" are not sandwich bags. Sam\u0027s real sandwich bags (Ziploc 580 ct) price at $0.0168/each, so this cell was both the wrong item and not the store\u0027s cheapest."
+                                         }
+                                     ]
+                     }
+                 ]
+}
