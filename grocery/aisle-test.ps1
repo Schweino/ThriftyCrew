@@ -154,6 +154,20 @@ $CAT_DEPT = @{
 # NOTE for later: `coffee` sits in the estate category 'oils', which is almost certainly a
 # miscategorisation rather than an aisle problem. Left alone here - recategorising a commodity moves it on
 # the public board's category filter, which is a bigger change than this gate should make on its own.
+# 2026-08-06 (triage plan-2026-08-06, item 2026-08-03-3ec6da): the standing BLOCK set had grown to a fixed
+# 21 rows that re-paged on every product-string churn, and ALL 21 were read row by row against the board -
+# every one a REAL instance of its commodity that Family Fare simply shelves somewhere else (Sugar 'N Spice
+# spice packets and bagged Chile De Arbol in produce, canned milks and refrigerated bagels in dairy,
+# ReaLemon-class juices in beverages, breaded nuggets and fish sticks filed under meat, Pampa rice and Lil
+# Dutch Maid cookies in the trial-sizes aisle, dried prunes in pantry, California Sun Dry tomatoes in
+# produce). A standing set of known-real blocks is worse than useless: a genuinely NEW cross-department
+# hijack arrives buried in a 21-row list a human has to diff from memory. Draining it to zero re-arms the
+# signature dedup in check-ad-cycles so the alert only speaks on a new block.
+# EVERY entry below is the commodity's CURRENT category allowlist PLUS the observed FF department - never a
+# raw replacement, because this table REPLACES the category map (see Judge), so a bare list would silently
+# BLOCK a department that is allowed today. Verified: none of the 21 loses a department it already allows.
+# The category-level CAT_DEPT map above stays tight on purpose - loosening it is the thing this gate exists
+# to refuse.
 $COMMODITY_DEPT = @{
   'coffee'            = @('beverages', 'pantry')
   'orange-juice'      = @('beverages', 'pantry')
@@ -162,6 +176,28 @@ $COMMODITY_DEPT = @{
   'protein-bars'      = @('health_beauty', 'pantry')
   'whipped-cream'     = @('freezer', 'dairy')
   'dried-cranberries' = @('pantry', 'fresh_fruits_vegetables')
+  # --- reviewed 2026-08-06, all 21 read against their board row ---
+  'bagels'             = @('bakery', 'pantry', 'dairy')                                # FF shelves Lender's/Bubba's bagels in dairy
+  'bay-leaves'         = @('pantry', 'fresh_fruits_vegetables')                         # Sugar 'N Spice packets hang in produce
+  'curry-powder'       = @('pantry', 'fresh_fruits_vegetables')
+  'dried-arbol-chiles' = @('pantry', 'fresh_fruits_vegetables')                         # bagged dried chiles are a produce item
+  'ground-fennel'      = @('pantry', 'fresh_fruits_vegetables')
+  'ground-turmeric'    = @('pantry', 'fresh_fruits_vegetables')
+  'poultry-seasoning'  = @('pantry', 'fresh_fruits_vegetables')
+  'condensed-milk'     = @('pantry', 'dairy')                                           # canned milks sit in the dairy aisle
+  'evaporated-milk'    = @('pantry', 'dairy')
+  'cheese-tortellini'  = @('pantry', 'freezer')
+  'rice'               = @('pantry', 'seasonal_special_occasion')                        # Pampa rice in the trial-sizes aisle
+  'chicken-nuggets'    = @('freezer', 'meat')                                            # breaded frozen nuggets filed under meat
+  'fish-sticks'        = @('freezer', 'meat')
+  'coffee-creamer'     = @('dairy', 'deli', 'beverages')                                 # 26 FF creamers hang in beverages
+  'corned-beef-hash'   = @('pantry', 'meat')
+  'gingersnaps'        = @('pantry', 'beverages', 'seasonal_special_occasion')
+  'lemon-juice'        = @('pantry', 'deli', 'beverages')                                # ReaLemon-class juice bottles
+  'lime-juice'         = @('pantry', 'deli', 'beverages')
+  'minced-garlic'      = @('pantry', 'deli', 'fresh_fruits_vegetables')
+  'prunes'             = @('fresh_fruits_vegetables', 'pantry')                          # dried fruit is pantry, not produce
+  'sun-dried-tomatoes' = @('pantry', 'fresh_fruits_vegetables')                          # FF shelves the California Sun Dry jar in produce
 }
 
 function Get-CategoryMap {
@@ -237,6 +273,7 @@ if ($SelfTest) {
     'coffee'     = 'oils'
     'butter'     = 'dairy'
     'hot-dogs'   = 'meat'
+    'bagels'     = 'bakery'
     'thin'       = 'no-such-category'
   }
   $bad = 0
@@ -244,7 +281,11 @@ if ($SelfTest) {
     @('watermelon', 'https://www.shopfamilyfare.com/shop/household/trash_bags/hefty_fabuloso_watermelon/p/1', 'trash bags are not produce'),
     @('milk',       'https://www.shopfamilyfare.com/shop/pantry/candy/chocolate/mms_peanut_milk_chocolate/p/2', 'candy is not dairy'),
     @('coffee',     'https://www.shopfamilyfare.com/shop/dairy/creamers/international_delight_iced_mocha/p/3', 'a dairy creamer is not the coffee aisle'),
-    @('butter',     'https://www.shopfamilyfare.com/shop/pantry/canned_goods/our_family_butter_beans/p/4', 'canned beans are not dairy')
+    @('butter',     'https://www.shopfamilyfare.com/shop/pantry/canned_goods/our_family_butter_beans/p/4', 'canned beans are not dairy'),
+    # 2026-08-06: a reviewed COMMODITY_DEPT exception is DEPARTMENT-SCOPED, not a free pass. bagels allows
+    # bakery/pantry/dairy; anything else must still BLOCK, or the 21 exceptions added that day would have
+    # quietly turned 21 commodities into wildcards.
+    @('bagels',     'https://www.shopfamilyfare.com/shop/household/trash_bags/hefty_bagel_scent/p/10', 'an excepted commodity in a NON-listed department must still block')
   )
   foreach ($m in $must) {
     $v = Judge -CatMap $P -CommodityId $m[0] -Url $m[1]
@@ -255,7 +296,11 @@ if ($SelfTest) {
   $clean = @(
     @('watermelon', 'https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/melons/fresh_watermelons_seedless/p/5'),
     @('hot-dogs',   'https://www.shopfamilyfare.com/shop/meat_seafood/hot_dogs_sausage/wimmers_wieners_skinless/p/6'),
-    @('milk',       'https://www.shopfamilyfare.com/shop/dairy/milk/our_family_2_percent/p/7')
+    @('milk',       'https://www.shopfamilyfare.com/shop/dairy/milk/our_family_2_percent/p/7'),
+    # the twin of the case above, and the one that actually PINS the exception table: category 'bakery'
+    # does not allow 'dairy', so this row can only pass through the reviewed COMMODITY_DEPT entry. Delete
+    # the bagels exception and this goes red.
+    @('bagels',     'https://www.shopfamilyfare.com/shop/dairy/breads_rolls_bagels/lenders_pre_sliced_plain_bagels_6_ea/p/11')
   )
   foreach ($m in $clean) {
     $v = Judge -CatMap $P -CommodityId $m[0] -Url $m[1]
@@ -285,7 +330,7 @@ if ($SelfTest) {
     if ($v1.verdict -ne 'BLOCK' -or $v2.verdict -ne 'ALLOW') { Write-Output ("  X ARRAY-UNROLL: rows judged $($v1.verdict)/$($v2.verdict), expected BLOCK/ALLOW"); $bad++ }
   }
   if ($bad) { Write-Output "aisle-test SELFTEST: FAILED ($bad)"; exit 2 }
-  Write-Output 'aisle-test SELFTEST: 12/12 pass (4 founding failures blocked, 3 clean twins allowed incl. the hard positive, 3 blind paths refuse, multi-row file unrolls)'
+  Write-Output 'aisle-test SELFTEST: 14/14 pass (5 must-fire blocked incl. an excepted commodity in a non-listed dept, 4 clean twins allowed incl. the hard positive and the exception path, 3 blind paths refuse, multi-row file unrolls)'
   exit 0
 }
 

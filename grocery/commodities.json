@@ -765,6 +765,7 @@
         "exclude":  [
                         "eggo",
                         "eggplant",
+                        "\\bpizza\\b",
                         "egg\\s+roll",
                         "noodle",
                         "egg\\s+bite",
@@ -11586,7 +11587,10 @@
                         "sandwich\\s+bags?\\s+fold",
                         "\\bsnack\\b",
                         "\\bsandwich\\b",
-                        "snack\\s+bags?"
+                        "snack\\s+bags?",
+                        "\\bquart\\b",
+                        "\\bpint\\b",
+                        "half\\s+gallon"
                     ]
     },
     {
@@ -18413,7 +18417,7 @@
                              "\\bfrozen\\b"
                          ],
         "include":  [
-                        "whipped\\s+(?:cream|topping)",
+                        "whipped\\s+(?:dairy\\s+)?(?:cream|topping)",
                         "reddi\\s*-?\\s*wip",
                         "cool\\s+whip"
                     ],
@@ -18602,8 +18606,8 @@
         "band_min":  0.03,
         "band_max":  0.25,
         "include":  [
-                        "oat\\s*milk",
-                        "oat\\s+beverage"
+                        "\\boat\\s*milk",
+                        "\\boat\\s+beverage"
                     ],
         "exclude":  [
                         "creamer",
@@ -22769,6 +22773,7 @@
                         "\\bfrozen\\b",
                         "casserole",
                         "seasoned\\b.{0,15}pork",
+                        "steam\\s+bags?",
                         "\\bfresh\\b",
                         "\\bmixed\\b",
                         "beech\\s*nut",
@@ -28932,7 +28937,7 @@
                         "\\bnoodles?\\b",
                         "^(?!.*\\bfrozen\\b).*oven[\\s-]?ready",
                         "no[\\s-]?boil",
-                        "\\bpasta\\b",
+                        "^(?!.*\\bfrozen\\b).*\\bpasta\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -50449,7 +50454,8 @@
         "label":  "Acorn Squash",
         "unit":  "lb",
         "include":  [
-                        "acorn\\s+squash"
+                        "acorn\\s+squash",
+                        "acorn/table\\s+queen\\s+squash"
                     ],
         "exclude":  [
                         "\\bcut\\b",

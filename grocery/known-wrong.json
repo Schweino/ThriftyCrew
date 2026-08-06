@@ -965,6 +965,96 @@
                         "ruled_on":  "2026-08-02",
                         "ruled_by":  "triage-developer plan-2026-08-02-2",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "fruit-snacks|SamsClub|members-mark-cheese-fruit-and-nut-snacks-12-pk",
+                        "commodity":  "fruit-snacks",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Member\u0027s Mark Cheese, Fruit and Nut Snacks, 12 pk."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different product: a Balanced-Breaks-style cheese + fruit + nut snack tray, not fruit snacks. Sam\u0027s Club $9.12 / 12 pk. Surfaced by audit-coverage-gaps as RULE-INVISIBLE (only the loosened probe matched); it needs a ruling, not a widened include - admitting it would put a cheese tray on the fruit-snacks commodity. Ruled from plan-2026-08-06 item 2026-08-03-f4fb91.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pork-tenderloin|Walmart|prairie-fresh-natural-fresh-pork-ribeye-roast-bo",
+                        "commodity":  "pork-tenderloin",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Prairie Fresh Natural Fresh Pork Ribeye Roast, Boneless, 1.3- 2.5 lb, 25g of protein per 4oz serving"
+                                  ],
+                        "product_id":  "273035820",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different cut: a boneless pork RIBEYE ROAST, not a tenderloin. Walmart $7.54 / 1.899 lb. The Walmart board row is already the real \u0027Prairie Fresh Pork Tenderloin 2 Pieces\u0027 $8.93 / 2.249 lb = $3.9707 per lb, so this is a ruling that keeps a roast from ever taking the cell, not a fix to a wrong cell. Semantic sweep 2026-08-05; plan-2026-08-06 item 2026-08-03-0d3bb1.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "vegetable-soup|Walmart|progresso-tomato-basil-soup-vegetable-classics-c",
+                        "commodity":  "vegetable-soup",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Progresso Tomato Basil Soup, Vegetable Classics Canned Soup, Gluten Free, 19 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different product: a TOMATO BASIL soup wearing the \u0027Vegetable Classics\u0027 line branding, not a vegetable soup. Walmart $2.48 / 19 oz. The Walmart board row is already the real \u0027Progresso Vegetable Soup, Vegetable Classics 19 oz\u0027 at the same $2.48, so this ruling only stops the line-branding name from taking the cell. Semantic sweep 2026-08-05; plan-2026-08-06 item 2026-08-03-0d3bb1.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "breakfast-sandwiches|FamilyFare|jimmy-dean-biscuit-roll-ups-sausage-frozen-break",
+                        "commodity":  "breakfast-sandwiches",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct,Jimmy Dean Maple Biscuit Roll Ups, Sausage, Frozen Breakfast 2 Ct"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different product: Jimmy Dean BISCUIT ROLL UPS, a rolled sausage-in-biscuit, not a breakfast sandwich. Family Fare $7.99 each. This ruling is what stands between the finding and a wrong CROWN: at 8 Ct the roll-up prices to $0.999/each and would take the breakfast-sandwiches crown from Sam\u0027s Club at $1.165/each. Semantic sweep 2026-08-05; plan-2026-08-06 item 2026-08-03-0d3bb1.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "storage-bags|Aldi|boulder-quart-storage-twin-lock-bags-50-ct",
+                        "commodity":  "storage-bags",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Boulder Quart Storage Twin Lock Bags 50 CT"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Wrong size class: QUART bags on a commodity labelled \u0027Food Storage Bags (gallon)\u0027. Aldi $2.19 / 50 CT. Belt to the suspenders of the quart/pint exclude added to the commodity the same day, so the semantic lane goes quiet too. The Aldi crown row \u0027Boulder Twin Lock Storage Bags 40 CT\u0027 carries no size word and is NOT ruled. plan-2026-08-06 item 2026-08-03-0d3bb1.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "mangoes|Walmart|aidells-refrigerated-spicy-mango-with-jalape-o-s",
+                        "commodity":  "mangoes",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Aidells Refrigerated Spicy Mango with Jalapeño Smoked Chicken Sausage Links, 12 oz, 4 Count"
+                                  ],
+                        "product_id":  "10811030",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different product, LIVE CELL: a mango-flavoured smoked CHICKEN SAUSAGE holding the Walmart mangoes cell at $5.54 / 4 links = $1.385 each on comparison-2026-08-06. It arrived with the resumed Walmart pull (walmart-regular-2026-08-06) after plan-2026-08-06 was measured, and it is why the mangoes@Walmart coverage gap the plan expected had vanished: a wrong product had filled the cell. mangoes\u0027 include is \u0027mango(?:es|s)?\u0027 and no exclude covers sausage. Deviation recorded on item 2026-08-03-f4fb91.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

@@ -1286,6 +1286,41 @@
                       "why":  "FALSE FUZZY-MATCH on a BRAND NAME, the known SpongeBob class (already allowlisted for Baker\u0027s). The only row matching /sponge/ in family-fare-regular-2026-07-31.json is \"Popsicle Confection Bars, Fruit Punch \u0026 Cotton Candy, Sponge Bob Square Pants 6 Ea\" $7.49 - a box of ice pops, verified as the sole match. Family Fare carries no cleaning sponge in our feed at all, so this is a PULL-TERM gap wearing a false candidate, not a matching bug. DELETE-TRIGGER: delete the moment family-fare-regular-*.json contains a row matching \"scrub(ber)?\\s+sponge\" or \"cleaning\\s+sponge\".",
                       "reviewed":  "2026-07-31",
                       "reviewed_source":  "REVIEWED 2026-07-31 against out\\coverage-gaps.json (06:10) + the store captures named in each entry (plan-2026-07-31.json item f3fd16)"
+                  },
+                  {
+                      "commodity":  "canned-pineapple",
+                      "store":  "Family Fare",
+                      "why":  "LOOSENED-PROBE ARTIFACT, not a gap: the single candidate is \"Daisy 4% Milkfat With Crushed Pineapples Cottage Cheese 6 Oz\", engine saw price_text=[$2.29] size_text=[6 oz], and the engine already routes it CORRECTLY to cottage-cheese at a lower array index. Only the audit's loosened include (\\s+ -> .{0,25}) reaches it. Nothing to fix: widening canned-pineapple would pull a tub of cottage cheese into a canned-fruit cell. DELETE-TRIGGER: delete when a family-fare-regular-*.json row matches \"pineapple\" in a can/tidbits/chunks form.",
+                      "reviewed":  "2026-08-06",
+                      "reviewed_source":  "REVIEWED 2026-08-06 against out\\coverage-gaps.json (06:50, classified_against candidates-2026-08-06) + family-fare-regular-2026-08-05/06.json (plan-2026-08-06.json item 2026-08-03-f4fb91)"
+                  },
+                  {
+                      "commodity":  "tea-bags",
+                      "store":  "Sam's Club",
+                      "why":  "LOOSENED-PROBE ARTIFACT on the letters t-e-a inside sTEAm: the store's only probe hit is \"Member's Mark Extra Fine Whole Green Beans 16 oz. steam bags, 5 ct.\", engine saw price_text=[$9.67] size_text=[80 oz]. Sam's carries no tea bag in this feed at all, so this is a PULL-TERM gap wearing a false candidate. That same row is now excluded from canned-green-beans (it is FRESH steam-in-bag produce, not canned), so it routes nowhere. DELETE-TRIGGER: delete the moment a sams-deals-*.json row matches \"tea\\s+bags?\".",
+                      "reviewed":  "2026-08-06",
+                      "reviewed_source":  "REVIEWED 2026-08-06 against out\\coverage-gaps.json (06:50) + sams-deals-2026-08-05.json (plan-2026-08-06.json item 2026-08-03-f4fb91)"
+                  },
+                  {
+                      "commodity":  "mangoes",
+                      "store":  "Walmart",
+                      "why":  "NO WHOLE MANGO IN THE CAPTURE (bot-walled partial pull). Every /mango/ row in walmart-regular-2026-08-06.json was read: a Stage-2 baby-food pouch [$1.74 / 4 oz], a cider soda [$1.97 / 12 fl oz], a Buffalo Wild Wings mango habanero sauce [$3.68 / 12 fl oz], a Lysol All Purpose Cleaner [$4.27 / 32 fl oz], a Tree Top applesauce variety pack [$6.98 / 38.4 oz], and \"Florida's Natural Peach Mango 59 oz\" [$2.17 / 59 fl oz] which routes to peaches and can never price (fl oz against a per-each commodity). The cell that used to sit here was \"Aidells Refrigerated Spicy Mango with Jalapeno Smoked Chicken Sausage Links\" [$5.54] - ruled known-wrong 2026-08-06, which is what re-opened this gap. Not a rule bug. DELETE-TRIGGER: delete when a full (unwalled) Walmart pull lands a whole mango row.",
+                      "reviewed":  "2026-08-06",
+                      "reviewed_source":  "REVIEWED 2026-08-06 against out\\coverage-gaps.json (06:50) + walmart-regular-2026-08-05/06.json (plan-2026-08-06.json item 2026-08-03-f4fb91)"
+                  },
+                  {
+                      "commodity":  "watermelon",
+                      "store":  "Walmart",
+                      "why":  "NO WHOLE WATERMELON IN THE CAPTURE (bot-walled partial pull), and the commodity is priced per EACH. Every /watermelon/ row in walmart-regular-2026-08-06.json was read: cut trays and bowls only - \"Marketside Watermelon Bowl, 24 oz\" [$6.47 / 24 oz], \"Marketside Fresh Whole Watermelon Center, 32 oz\" [$10.97 / 32 oz], four Fresh Cut trays [10 / 16 / 32 / 42 oz] - plus drinks (WTRMLN water, a Minute Maid carton, an AriZona gallon, a Kool-Aid mix) and \"Taste Salud Strawberry Watermelon\" [$9.98 / 1.27 oz], a powdered drink mix the engine gives to strawberries at a lower index. An oz size on a per-each commodity can never price without inventing a melon count. DELETE-TRIGGER: delete when a full Walmart pull lands a whole or seedless watermelon row. ADDED BY THE DEVELOPER 2026-08-06: this gap appeared after the plan was measured; same class as mangoes|Walmart above.",
+                      "reviewed":  "2026-08-06",
+                      "reviewed_source":  "REVIEWED 2026-08-06 against out\\coverage-gaps.json (06:50) + walmart-regular-2026-08-05/06.json (plan-2026-08-06.json item 2026-08-03-f4fb91, developer deviation)"
+                  },
+                  {
+                      "commodity":  "plastic-wrap",
+                      "store":  "Walmart",
+                      "why":  "LOOSENED-PROBE ARTIFACT on packaging words inside a MEAT name: the single candidate is \"Hormel, Natural Choice Original Uncured Bacon, Gluten Free, Refrigerated 12 oz Plastic Wrapper\", engine saw price_text=[$5.97] size_text=[0.75 lb], and the engine already routes it CORRECTLY to bacon. Only the audit's loosened include reaches it. Walmart's own cling-wrap rows are not in this bot-walled partial capture. Nothing to fix; widening plastic-wrap would put a pack of bacon in a household cell. DELETE-TRIGGER: delete when a walmart-regular-*.json row matches \"cling\\s+wrap\" or \"plastic\\s+wrap\" as its own product. ADDED BY THE DEVELOPER 2026-08-06: this gap appeared after the plan was measured; same class as canned-pineapple|Family Fare above.",
+                      "reviewed":  "2026-08-06",
+                      "reviewed_source":  "REVIEWED 2026-08-06 against out\\coverage-gaps.json (06:50) + walmart-regular-2026-08-06.json (plan-2026-08-06.json item 2026-08-03-f4fb91, developer deviation)"
                   }
               ]
 }

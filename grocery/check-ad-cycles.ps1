@@ -379,18 +379,39 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-coverage-gaps.ps1') | Out-Null
         $cg = try { Get-Content (Join-Path $OutDir 'coverage-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
-        if ($cg -and [int]$cg.gap_count -gt 0) {
-          $cgSig = (@($cg.gaps | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object) -join ';')
+        # ---- ALERT ON THE ACTIONABLE SUBSET ONLY (2026-08-06, triage plan-2026-08-06 item 2026-08-03-f4fb91).
+        # The audit already separates a gap it can act on (CLAIMED-BY / RULE-INVISIBLE / PRICED) from one the
+        # ENGINE ITSELF explains and refuses on purpose (BASIS-NULL: an each-priced commodity whose only rows at
+        # that store are cut trays or weights; BAND-DROPPED: the sanity band saving us from a moisturiser called
+        # "Orchid & Plum"). Those are permanent, correct refusals - 44 of the 51 rows on 2026-08-05, 35 of 43 the
+        # next morning. Counting and signaturing the FULL set meant any churn in a quiet row re-paged the whole
+        # list, and the 7 real rows arrived buried in it. Count, list and signature the ACTIONABLE subset; the
+        # quiet rows stay in coverage-gaps.json for the record and are still reported in the Log line.
+        # <<COVERAGE-GAP-ALERT-BEGIN>> test-auditors.ps1 extracts this region and runs it against a frozen file.
+        $cgAll = @($cg.gaps | Where-Object { $_ })     # @($null).Count is 1 in PS 5.1 - filter, never assume
+        $cgHasFlag = @($cgAll | Where-Object { $_.PSObject.Properties['actionable'] }).Count -gt 0
+        # FAIL OPEN on an old coverage-gaps.json with no actionable field: alert on everything rather than
+        # silently on nothing. A detector that goes quiet because a field was renamed is the worst outcome here.
+        $cgAct = if ($cgHasFlag) { @($cgAll | Where-Object { $_.actionable }) } else { $cgAll }
+        if ($cg -and $cgAct.Count -gt 0) {
+          $cgSig = (@($cgAct | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object) -join ';')
           $cgF = Join-Path $OutDir 'coverage-gap-alert.sig'
           $cgPrev = if (Test-Path $cgF) { ((Get-Content $cgF -Raw) + '').Trim() } else { '' }
-          $cgList = (@($cg.gaps | ForEach-Object { $_.commodity + ' @ ' + $_.store }) -join '; ')
-          Log ("coverage-gaps: $($cg.gap_count) store(s) carry an item but are off the board - $cgList")
-          $summary += "REVIEW    coverage gaps: $($cg.gap_count) store(s) dropped despite carrying the item - see coverage-gaps.json"
+          $cgList = (@($cgAct | ForEach-Object { $_.commodity + ' @ ' + $_.store }) -join '; ')
+          Log ("coverage-gaps: $($cgAll.Count) gap(s), $($cgAct.Count) actionable - $cgList")
+          $summary += "REVIEW    coverage gaps: $($cgAct.Count) actionable of $($cgAll.Count) store(s) dropped despite carrying the item - see coverage-gaps.json"
           if ($cgSig -ne $cgPrev -and (-not $NoAlert)) {
-            try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: $($cg.gap_count) store(s) dropped from a commodity they carry - $asofS" -Body "audit-coverage-gaps found stores that HAVE a matching product but are missing from the board (usually a too-strict include regex): $cgList. Fix that commodity's include in commodities.json (or add a reviewed exception to coverage-gap-allowlist.json). Details: grocery/out/coverage-gaps.json." | Out-Null
+            try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: $($cgAct.Count) store(s) dropped from a commodity they carry - $asofS" -Body "audit-coverage-gaps found stores that HAVE a matching product but are missing from the board (usually a too-strict include regex): $cgList. Fix that commodity's include in commodities.json (or add a reviewed exception to coverage-gap-allowlist.json). $($cgAll.Count - $cgAct.Count) further gap(s) are engine-explained (BASIS-NULL / BAND-DROPPED) and are listed in the report without paging. Details: grocery/out/coverage-gaps.json." | Out-Null
                   if ($LASTEXITCODE -eq 0) { Set-Content -Path $cgF -Value $cgSig -Encoding UTF8; Log 'coverage-gap alert sent' } } catch { Log ('coverage-gap alert threw: ' + $_.Exception.Message) }
           } else { Log 'coverage-gaps unchanged since last alert - not re-alerting' }
-        } elseif ($cg -and @($cg.stores_not_scanned | Where-Object { $_ }).Count) {
+        }
+        # <<COVERAGE-GAP-ALERT-END>>
+        elseif ($cg -and $cgAll.Count -gt 0) {
+          Log ("coverage-gaps: $($cgAll.Count) gap(s), 0 actionable - every one is engine-explained (BASIS-NULL / BAND-DROPPED); reported, not paged")
+          $summary += "REVIEW    coverage gaps: 0 actionable of $($cgAll.Count) - all engine-explained, see coverage-gaps.json"
+          if (Test-Path (Join-Path $OutDir 'coverage-gap-alert.sig')) { Remove-Item (Join-Path $OutDir 'coverage-gap-alert.sig') -ErrorAction SilentlyContinue }
+        }
+        elseif ($cg -and @($cg.stores_not_scanned | Where-Object { $_ }).Count) {
           $ns = (@($cg.stores_not_scanned | Where-Object { $_ }) -join ', ')
           Log ("coverage-gaps BLIND for: " + $ns + " - zero raw products parsed; those stores were never checked")
           $summary += "REVIEW    coverage-gaps scanned 0 products for $ns - the 'no gaps' result does not cover those stores"

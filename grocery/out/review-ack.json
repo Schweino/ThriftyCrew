@@ -421,6 +421,11 @@
                      "key":  "SANITY|Wild Rice|outlier",
                      "reason":  "Real economics: store brand at double the size against a premium organic half-pound. Winner Hy-Vee \"Hy-Vee Select Wild Rice\" 10.99 / 16 oz = 0.6869/oz (Aisles Online shelf price, storeId 1465, as_of 2026-07-30); runner-up Fareway \"Lundberg Family Farms Organic Wild Rice\" 9.29 / 8 oz = 1.1612/oz. Both reproduce exactly from their captured rows. The 2026-07-28 \"Canoe cooked wild rice\" wrong-form bug is not involved - neither row is a cooked product. Verified 2026-08-01 by triage 2026-08-01-b6c064.",
                      "expires":  "2026-08-14"
+                 },
+                 {
+                     "key":  "SANITY|Rice Vinegar|outlier",
+                     "reason":  "Real economics, verified 2026-08-06 against comparison-2026-08-06: Walmart \"Kikkoman Kosher Rice Vinegar, 10 fl oz Bottle\" $1.87 / 10 fl oz = $0.187/floz vs runner-up Bakers \"Nakano Natural Rice Vinegar\" $3.49 / 12 fl oz = $0.2908/floz (kroger-api); Hy-Vee Marukan $4.69/12 = $0.3908, Family Fare Nakano Organic $5.39/12 = $0.4492. Arithmetic reproduces from each row own size (1.87/10 = 0.187), size parsed from the name itself, and the identical Walmart row appears in the 07-30, 07-31 and 08-01 captures - a stable everyday shelf price for the mainstream brand against pricier brands elsewhere, not a parse bug. Acked by triage plan-2026-08-06 item 2026-08-03-6c488c. DO NOT RENEW BLIND at expiry: re-read the row.",
+                     "expires":  "2026-08-20"
                  }
              ]
 }

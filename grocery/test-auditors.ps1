@@ -1119,8 +1119,12 @@ else { Bad 'discover-hyvee may now write into the store feed - unreviewed discov
 # --- aisle-test (added 2026-08-01) -------------------------------------------------------------------
 # The gate that has to exist before a catalogue browse is allowed to flip crowns: the FF browse test
 # flipped 26 verdicts, ~2/3 to the wrong product (watermelon -> Hefty Fabuloso Watermelon TRASH BAGS).
+# The count is pinned on purpose: it is the ratchet that catches a fixture being DELETED rather than fixed.
+# Raised 12 -> 14 on 2026-08-06 when the reviewed COMMODITY_DEPT exception table grew from 7 entries to 21
+# and took a must-fire / clean-twin pair with it (an excepted commodity in a NON-listed department must still
+# BLOCK; the same commodity in its listed department must ALLOW through the exception). Never lower it.
 $r = RunPS 'aisle-test.ps1' @('-SelfTest')
-if ($r.rc -eq 0 -and $r.text -match 'SELFTEST: 12/12 pass') { Ok 'aisle-test -SelfTest passes (4 founding flips blocked, hard positive allowed, blind refuses, multi-row unrolls)' }
+if ($r.rc -eq 0 -and $r.text -match 'SELFTEST: 14/14 pass') { Ok 'aisle-test -SelfTest passes (5 founding/exception flips blocked, hard positive allowed, exception path allowed, blind refuses, multi-row unrolls)' }
 else { Bad ('aisle-test -SelfTest failed or lost its founding-bug fixtures: ' + ((($r.text -split "`n") | Select-Object -Last 3) -join ' | ')) }
 $atSrc = Get-Content (Join-Path $root 'aisle-test.ps1') -Raw
 if ($atSrc -match 'Wimmer') { Ok 'the hard-positive fixture (a real hot dog scoring BELOW three of the four failures) is still armed' }
@@ -1243,6 +1247,77 @@ if (-not $rfD.Success -or -not $rfS.Success -or -not $rfA.Success) {
   $null = RfRunDay $rfT0.AddDays(0) $rfSt $false $true
   if (@($rfSt.Keys | Where-Object { $rfSt[$_].last_alerted -eq $rfT0.ToString('s') }).Count -eq 0) { Ok 'review flags: a FAILED send stamps nothing (existing guard still intact)' }
   else { Bad 'review flags: a failed send stamped last_alerted - the alert is lost' }
+}
+
+# ---------------------------------------------------------------- (l2) coverage-gap alert: ACTIONABLE only
+# 2026-08-06 (triage plan-2026-08-06 item 2026-08-03-f4fb91). The coverage-gap alert counted and signatured
+# the FULL gap set while the audit itself already separates a gap we can act on from one the ENGINE explains
+# and refuses on purpose. Measured on the live files: 51 gaps / 7 actionable on 2026-08-05, 43 / 8 the next
+# morning - so 84-86% of the set was permanent, correct refusals (BASIS-NULL: an each-priced commodity whose
+# only rows at that store are cut trays; BAND-DROPPED: the sanity band eating "Orchid & Plum" moisturiser).
+# Any churn in a quiet row changed the signature and re-paged the whole list, burying the real rows.
+# Runs THE REAL REGION out of check-ad-cycles.ps1 against a FROZEN 5-gap file (2 actionable + 3 quiet),
+# never a transcription and never regenerated from out\coverage-gaps.json - the bug is in which rows the
+# region selects, and a fixture rebuilt from today's live file would encode whatever it does now.
+$cgSrc = [IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))
+$cgR = [regex]::Match($cgSrc, '(?s)<<COVERAGE-GAP-ALERT-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<COVERAGE-GAP-ALERT-END>>')
+if (-not $cgR.Success) {
+  Bad 'the coverage-gap alert region is GONE from check-ad-cycles.ps1 - this check EXAMINED NOTHING, the actionable-only selection is untested'
+} else {
+  $CG_REGION = $cgR.Groups[1].Value
+  # FROZEN fixture. The 2 actionable rows are the real 2026-08-05 shapes (a first-match-wins claim and a
+  # rule-invisible store naming); the 3 quiet rows are the real permanent-refusal shapes.
+  $cgFxGaps = @(
+    [pscustomobject]@{ commodity = 'baby-formula'; store = "Sam's Club"; reason = 'CLAIMED-BY';     actionable = $true  }
+    [pscustomobject]@{ commodity = 'acorn-squash'; store = 'Family Fare'; reason = 'RULE-INVISIBLE'; actionable = $true  }
+    [pscustomobject]@{ commodity = 'lemons';       store = 'Walmart';     reason = 'BASIS-NULL';     actionable = $false }
+    [pscustomobject]@{ commodity = 'plums';        store = 'Hy-Vee';      reason = 'BAND-DROPPED';   actionable = $false }
+    [pscustomobject]@{ commodity = 'mangoes';      store = 'Aldi';        reason = 'BASIS-NULL';     actionable = $false }
+  )
+  function CgRunRegion($gaps) {
+    # the region's own inputs, isolated: no mail can leave ($NoAlert), no sig file is read or written
+    # (a temp $OutDir), and Log/summary are captured so the count in the operator line is assertable.
+    $cg = [pscustomobject]@{ gap_count = @($gaps).Count; gaps = @($gaps) }
+    $OutDir = NewFxDir 'cg-alert'
+    $NoAlert = $true
+    $asofS = '2026-08-06'
+    $summary = @()
+    $script:CG_LOG = @()
+    function Log([string]$m) { $script:CG_LOG += $m }
+    Invoke-Expression $CG_REGION
+    return [pscustomobject]@{ sig = $cgSig; list = $cgList; act = @($cgAct).Count; all = @($cgAll).Count; summary = ($summary -join ' | '); log = ($script:CG_LOG -join ' | ') }
+  }
+  $cgFx = CgRunRegion $cgFxGaps
+  # MUST FIRE: the paging set is EXACTLY the 2 actionable pairs.
+  $cgQuiet = @('lemons @ Walmart', 'plums @ Hy-Vee', 'mangoes @ Aldi')
+  $cgLeak = @($cgQuiet | Where-Object { $cgFx.list -like ('*' + $_ + '*') })
+  if ($cgFx.act -eq 2 -and $cgFx.all -eq 5) { Ok 'coverage-gap alert: 5 frozen gaps select 2 actionable (3 engine-explained rows do not page)' }
+  else { Bad ('coverage-gap alert: frozen 5-gap file selected ' + $cgFx.act + ' actionable of ' + $cgFx.all + ' - expected 2 of 5, so the alert is back on the full set') }
+  if ($cgLeak.Count -eq 0) { Ok 'coverage-gap alert: no BASIS-NULL / BAND-DROPPED row reaches the alert body' }
+  else { Bad ('coverage-gap alert: quiet row(s) leaked into the alert body: ' + ($cgLeak -join ' ; ')) }
+  if ($cgFx.list -like '*baby-formula*' -and $cgFx.list -like '*acorn-squash*') { Ok 'coverage-gap alert: both actionable rows ARE named in the body' }
+  else { Bad ('coverage-gap alert: an actionable row is missing from the body: [' + $cgFx.list + ']') }
+  if ($cgFx.sig -eq "acorn-squash|Family Fare;baby-formula|Sam's Club") { Ok 'coverage-gap alert: the dedup signature is built from the actionable subset only' }
+  else { Bad ('coverage-gap alert: signature is [' + $cgFx.sig + '] - it must be the sorted actionable pairs only, or quiet-row churn re-pages the list') }
+  if ($cgFx.summary -match '2 actionable of 5') { Ok 'coverage-gap alert: the operator summary reports BOTH counts' }
+  else { Bad ('coverage-gap alert: summary lost the both-counts line: [' + $cgFx.summary + ']') }
+  # CLEAN TWIN 1: quiet-row CHURN must not change the signature (this is the whole point).
+  $cgChurn = @($cgFxGaps | ForEach-Object { $_ })
+  $cgChurn[2] = [pscustomobject]@{ commodity = 'watermelon'; store = 'Walmart'; reason = 'BASIS-NULL'; actionable = $false }
+  $cgFx2 = CgRunRegion $cgChurn
+  if ($cgFx2.sig -eq $cgFx.sig) { Ok 'coverage-gap alert: a quiet row changing does NOT change the signature (no re-page)' }
+  else { Bad 'coverage-gap alert: swapping one engine-explained row changed the signature - the daily churn re-page is back' }
+  # CLEAN TWIN 2: a real actionable row arriving DOES change it.
+  $cgNew = @($cgFxGaps) + @([pscustomobject]@{ commodity = 'frozen-pizza'; store = 'Aldi'; reason = 'CLAIMED-BY'; actionable = $true })
+  $cgFx3 = CgRunRegion $cgNew
+  if ($cgFx3.sig -ne $cgFx.sig -and $cgFx3.act -eq 3) { Ok 'coverage-gap alert: a NEW actionable gap still changes the signature and pages' }
+  else { Bad 'coverage-gap alert: a new actionable gap did not change the signature - the detector is deaf' }
+  # CLEAN TWIN 3: FAIL OPEN. An old coverage-gaps.json with no actionable field must alert on everything
+  # rather than silently on nothing - a detector that goes quiet because a field was renamed is the worst case.
+  $cgOld = @($cgFxGaps | ForEach-Object { [pscustomobject]@{ commodity = $_.commodity; store = $_.store; reason = $_.reason } })
+  $cgFx4 = CgRunRegion $cgOld
+  if ($cgFx4.act -eq 5) { Ok 'coverage-gap alert: a gaps file with no actionable field FAILS OPEN (alerts on all 5)' }
+  else { Bad ('coverage-gap alert: an actionable-less gaps file selected ' + $cgFx4.act + ' of 5 - the alert would go silent on a format change') }
 }
 
 # ---------------------------------------------------------------- publish-deals-page CHANGE GATE

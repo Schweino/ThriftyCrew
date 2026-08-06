@@ -715,6 +715,68 @@ if ($SelfTest) {
   # three cells landing at ~2x their own link. Pinned here so nobody widens the rule without redoing that work.
   _Eq 'Walmart rows still take the FILE date (its union owns their ordering)' (Get-RowSrcDate 'Walmart' ([pscustomobject]@{ as_of = '2026-07-18' }) '2026-08-01') '2026-08-01'
 
+  # --- 28-40: ROUTING fixtures for the 2026-08-06 rule edits (triage plan-2026-08-06) ---------------------
+  # A rule change's whole effect is WHERE A PRODUCT ENDS UP after first-match-wins, so these run the REAL
+  # Match-Category over the REAL commodities.json rather than asserting a regex in isolation. Match-Category
+  # and $GLOBAL_EXCLUDE are defined AFTER this block exits, so they are extracted from this script's own
+  # source and evaluated here - the same trick the 'snax' case above uses, and for the same reason: a
+  # transcribed copy would pass whether or not the engine still does this.
+  # MUST-FIRE / CLEAN-TWIN pairs, every name a REAL captured row:
+  #   R1 oat-milk needed a word boundary  - 'oat milk' matches inside 'GOAT milk'
+  #   R2 eggs ate an Aldi breakfast PIZZA it could never price per dozen
+  #   R3 canned-green-beans claimed FRESH steam-in-bag beans
+  #   R4 whipped-cream's adjacency could not cross the word Dairy
+  #   R5 frozen-lasagna's blanket 'pasta' exclude (aimed at dry noodle boxes) ate a real frozen lasagna
+  #   R6 acorn-squash could not read the store's 'Acorn/Table Queen Squash' naming
+  #   R7 storage-bags is labelled (gallon) and had no size guard at all - a PINT cell was live at Fareway
+  $cdSelfSrc = Get-Content $PSCommandPath -Raw
+  $mcSrc = [regex]::Match($cdSelfSrc, '(?s)\r?\nfunction Get-MatchTexts.*?\r?\n\}\r?\nfunction Match-Category.*?\r?\n  return \$null\r?\n\}')
+  $gexSrc = [regex]::Match($cdSelfSrc, '(?s)\$GLOBAL_EXCLUDE = @\([\s\S]*?\r?\n\)')
+  if (-not $mcSrc.Success -or -not $gexSrc.Success) {
+    Write-Output 'FAIL  could not extract Match-Category / GLOBAL_EXCLUDE from this script - the routing fixtures EXAMINED NOTHING'; $script:fail++
+  } else {
+    Invoke-Expression $gexSrc.Value
+    Invoke-Expression $mcSrc.Value
+    function _Route($label, $name, $want) {
+      $c = Match-Category $name
+      $got = if ($c) { [string]$c.id } else { '<unmatched>' }
+      if ($got -eq $want) { Write-Output ("ok    route: $label -> $got") }
+      else { Write-Output ("FAIL  route: $label -> got '$got' want '$want'  [" + $name + ']'); $script:fail++ }
+    }
+    # MUST-FIRE (each of these routes WRONG on the pre-2026-08-06 rules)
+    _Route 'R1 goat-milk formula reaches baby-formula' "Bubs Goat Milk Infant Formula Powder With Iron, 20 oz., 2 pk." 'baby-formula'
+    _Route 'R1 evaporated goat milk leaves oat-milk'   'Meyenberg Evaporated Vitamin D Goat Milk Unsweetened, 12 fl oz' '<unmatched>'
+    _Route 'R2 breakfast pizza leaves eggs'            'Breakfast Best Sausage Egg Cheese Breakfast Pizza 2pk 112 OZ' 'frozen-pizza'
+    _Route 'R3 fresh steam-bag beans leave canned'     "Member's Mark Extra Fine Whole Green Beans 16 oz. steam bags, 5 ct." '<unmatched>'
+    _Route 'R4 whipped DAIRY topping is admitted'      'Friendly Farms Whipped Dairy Topping 13 FL OZ' 'whipped-cream'
+    _Route 'R5 Stouffers Party Size Pasta (Frozen)'    "Stouffer's Classic Lasagna with Meat and Sauce, Party Size Pasta, Frozen Meals, 90 oz (Frozen)" 'frozen-lasagna'
+    _Route 'R6 store slash-naming acorn squash'        'Acorn/Table Queen Squash' 'acorn-squash'
+    _Route 'R7 QUART bags leave the (gallon) commodity' 'Boulder Quart Slider Storage Bags 40 CT' '<unmatched>'
+    _Route 'R7 PINT bags leave the (gallon) commodity'  'Bright Essentials Freezer Bags, Zipper, Pint Size' '<unmatched>'
+    # HALF GALLON, added by the developer the same day: with only quart+pint excluded, the Sam's cell moved
+    # from a QUART box to a HALF GALLON box ($0.0764/each) while Sam's own true gallon box sat at $0.0792 -
+    # the same misleading comparison one size down. Measured over the 14-day corpus: exactly 2 names carry
+    # 'half gallon' into this commodity (this one and a Baker's Kroger slider that loses to its own store's
+    # gallon box anyway), so the whole cost is Sam's cell moving 3.7% up to a like-for-like gallon price.
+    _Route 'R7 HALF-GALLON bags leave it too'           "Ziploc Brand Half Gallon Freezer Storage Bags, Expandable Bottom, Grip 'n Seal Technology, 160 ct." '<unmatched>'
+    _Route 'a plain GALLON Ziploc box still routes'     'Ziploc Brand Gallon Storage Bags, Stay Open Design, Easy to Fill, 208 ct.' 'storage-bags'
+    # CLEAN TWINS (a token too broad shows up here, not on the board)
+    _Route 'real oat milk still routes'                'Planet Oat Original Oatmilk, 52 oz' 'oat-milk'
+    _Route 'Aldi oat milk still routes'                'Friendly Farms Original Oatmilk 64 FL OZ' 'oat-milk'
+    _Route 'a real dozen of eggs still routes'         'Goldhen Grade A Large Eggs 12 CT' 'eggs'
+    _Route 'canned cut green beans still route'        'Del Monte Fancy Cut Green Beans, 101 oz.' 'canned-green-beans'
+    _Route 'plain whipped topping still routes'        'Kroger Original Whipped Topping' 'whipped-cream'
+    # R5's twin, in two halves. First a REAL captured row: a dry box is claimed by lasagna-noodles (index 201)
+    # long before frozen-lasagna (252), so it can never become a frozen dinner. Then a SYNTHETIC name that
+    # actually isolates the guard - it reaches frozen-lasagna's include, carries 'pasta', and carries NO frozen
+    # marker, so the exclude must still bite. Measured 2026-08-06: every real dry lasagna-pasta row in the
+    # corpus is claimed by pasta / brown-rice / lasagna-noodles first, so only a synthetic row can reach here.
+    _Route 'a DRY lasagna box lands on lasagna-noodles' 'Great Value Lasagna Pasta, 16 oz' 'lasagna-noodles'
+    _Route 'pasta still excludes when NOT frozen'       'Store Brand Lasagna with Meat Sauce, Pasta, 38 oz' '<unmatched>'
+    _Route 'a GALLON bag box still routes'             'Great Value Freezer Guard Double Zipper Gallon Freezer Bag, 80 Count' 'storage-bags'
+    _Route 'the Aldi crown bag row is untouched'       'Boulder Twin Lock Storage Bags 40 CT' 'storage-bags'
+  }
+
   Write-Output ('-'*54)
   if ($script:fail -eq 0) { Write-Output 'SELF-TEST PASS  (all multibuy / BOGO cases correct)'; exit 0 }
   else { Write-Output ("SELF-TEST FAIL: $script:fail case(s)"); exit 1 }
