@@ -1616,7 +1616,35 @@ $fxScB = NewFxDir 'sc-blind'
 $r = RunPS 'audit-script-census.ps1' @('-Root', $fxScB, '-ScanRoot', $fxScB)
 if ($r.rc -eq 3 -and $r.text -match 'BLIND') { Ok 'script-census goes BLIND (exit 3) with nothing to examine instead of reporting a clean zero' }
 else { Bad ('script-census reported a result from an empty tree (rc=' + $r.rc + ') - "0 orphans" from zero examination is back') }
-Remove-Item $fxSc, $fxScB -Recurse -Force -ErrorAction SilentlyContinue
+
+# A SIBLING CHECKOUT IS NOT A SECOND SET OF SCRIPTS (2026-08-03 -> 08-06). Another session left a git
+# worktree inside the scanned tree and this census was red for four days: 35 ORPHANs, every one of them a
+# copy living inside that worktree. The noise was the harmless half. The worktree also holds a COPY of the
+# census, and a copy is not the running file, so it was read as a SOURCE - and its recorded table quotes
+# every deliberate entry point, so the census could see 0 of its own recorded set while still exiting 2 for
+# transient files. Both halves are pinned below. The fixture is built to a real worktree's SHAPE - a
+# directory whose .git is a FILE holding a gitdir: line - because that marker, not the path it sits at, is
+# what the prune keys on. Nothing here may key on \.claude\worktrees\: the live worktrees already sit under
+# two different parents and the next one need not sit under either.
+$fxWt = NewFxDir 'sc-worktree'
+Set-Content (Join-Path $fxWt 'zzz-main.ps1')   '& (Join-Path $PSScriptRoot "zzz-helper.ps1")' -Encoding UTF8
+Set-Content (Join-Path $fxWt 'zzz-helper.ps1') 'Write-Output "helper"' -Encoding UTF8
+Set-Content (Join-Path $fxWt 'zzz-wire.js')    '// nightly: zzz-main.ps1' -Encoding UTF8
+$fxWtTwin = Join-Path $fxWt '.claude\worktrees\zzz-sibling'
+New-Item -ItemType Directory -Force $fxWtTwin | Out-Null
+Set-Content (Join-Path $fxWtTwin '.git') 'gitdir: C:/nowhere/.git/worktrees/zzz-sibling' -Encoding UTF8
+Set-Content (Join-Path $fxWtTwin 'zzz-copied-oneoff.ps1') 'Write-Output "a transient copy"' -Encoding UTF8
+# the masking half: the ONLY file that names the orphan added below lives inside the pruned checkout
+Set-Content (Join-Path $fxWtTwin 'zzz-vouch.js') '// zzz-orphan-for-real.ps1' -Encoding UTF8
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxWt, '-ScanRoot', $fxWt)
+if ($r.rc -eq 0 -and $r.text -match 'skipped nested checkout' -and $r.text -notmatch 'zzz-copied-oneoff') { Ok 'script-census CLEAN TWIN: a sibling git worktree in the tree is pruned whole, not counted as 1 more orphan' }
+else { Bad ('script-census counts a sibling worktree''s copies as scripts (rc=' + $r.rc + ') - the 2026-08-03 four-day red is back: ' + $r.text) }
+Set-Content (Join-Path $fxWt 'zzz-orphan-for-real.ps1') 'Write-Output "new"' -Encoding UTF8
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxWt, '-ScanRoot', $fxWt)
+if ($r.rc -eq 2 -and $r.text -match 'ORPHAN zzz-orphan-for-real\.ps1' -and $r.text -notmatch 'zzz-copied-oneoff') { Ok 'script-census MUST-FIRE with that sibling still present: a real new orphan is still caught, and a file inside the pruned checkout cannot vouch for it' }
+else { Bad ('script-census went blind to a real orphan while a sibling worktree was present (rc=' + $r.rc + ') - the prune is swallowing the tree it is meant to census, or a copy of the repo is being read as a caller: ' + $r.text) }
+
+Remove-Item $fxSc, $fxScB, $fxWt -Recurse -Force -ErrorAction SilentlyContinue
 
 # ---------------------------------------------------------------- N. arrivals desk (build-arrivals-docket)
 # MUST FIRE: 2026-07-28. "Dr Teal's Foaming Bath with Pure Epsom Salt, Nourish & Protect with Coconut Oil"

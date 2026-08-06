@@ -23,7 +23,8 @@
   Reference universe is EXECUTABLE files only (.ps1/.psm1/.js/.yml/.yaml/.vbs/.bat/.cmd). Prose is not a
   caller: a script named only in a README or an audit write-up is still unreachable, and counting that as a
   reference would make the whole census evaporate the day the write-up is archived. archive\ is excluded on
-  BOTH sides - a reference from archive is a dead reference.
+  BOTH sides - a reference from archive is a dead reference. So is a NESTED CHECKOUT: see the boundary walk
+  below for why a git worktree is a copy of this repo and not a second set of scripts.
 
   Exit 0 = clean, 2 = a new orphan or a new out\ one-off, 3 = could not evaluate (never read that as "ok").
   Usage: audit-script-census.ps1 [-Root <dir>] [-ScanRoot <repo>] [-OutBaseline <n>]
@@ -41,8 +42,9 @@ $ScanRoot = $ScanRoot.TrimEnd('\')
 # FROZEN 2026-07-30: measured count of .ps1 under grocery\out\. May only go DOWN (archive them).
 if ($OutBaseline -lt 0) { $OutBaseline = 37 }
 
-# FROZEN 2026-07-30 - the 25 scripts nothing in the repo calls, each with the reason it stays. An entry that
-# stops being uncalled (wired in, or archived) prints a note telling you to delete the line; it never fails.
+# FROZEN 2026-07-30, appended to since - the scripts nothing in the repo calls, each with the reason it
+# stays. An entry that stops being uncalled (wired in, or archived) prints a note telling you to delete the
+# line; it never fails. No count is written here: it drifted from 25 to 39 before anyone noticed.
 $KNOWN = [ordered]@{
   # -- launched by hand from a scheduled-agent SKILL under ~\.claude\scheduled-tasks\ (not in this repo)
   'build-aldi-regular.ps1'           = 'SKILL grocery-browser-stores-refresh step F2 - weekly Aldi capture builder'
@@ -54,6 +56,7 @@ $KNOWN = [ordered]@{
   'pull-fareway-ads.ps1'             = 'SKILL grocery-fareway-daily-check + browser-stores-refresh; stamped into ad-schedule.json'
   # -- launched by Windows Task Scheduler through the GENERIC run-hidden.vbs, so no file names it
   'familyfare-sweep.ps1'             = 'scheduled task "SMP Family Fare Term Sweep", every 3h via run-hidden.vbs'
+  'send-friday-email.ps1'            = 'scheduled task "SMP Friday Email (draft)", weekly via run-hidden.vbs; drafts unless -Send, and a week_of stamp stops a double-mail'
   # -- human entry points, run when a specific failure or a specific job shows up
   'promote-verdicts.ps1'             = 'weekly by hand after audit-match-soundness; writes exclude-provenance.json'
   'audit-ff-missing-products.ps1'    = 'report half of the FF partial-pull pair; the -Apply half is heal-ff-missing-products.ps1'
@@ -86,28 +89,90 @@ $KNOWN = [ordered]@{
   'brands\pull-ff-brands-batch.ps1'  = 'brand-pricing pilot'
   'brands\assemble-board-brands.ps1' = 'brand-pricing pilot'
   'brands\regression-brands.ps1'     = 'brand-pricing pilot'
+  # -- 2026-08-04 trend-page cut (492 pages -> 20). Run by hand, in this order, whenever the keep-list moves;
+  # each derives its own target set from that keep-list rather than a typed list, so none is a spent one-shot.
+  # They landed on 08-04 and went unnoticed for two days because THIS census was already red for an unrelated
+  # reason - the four-day worktree failure above. That is the cost of a watcher nobody reads, measured.
+  'build-trend-redirects.ps1'        = 'emits the Ghost redirects file for every retired trend page; re-run whenever the keep-list moves, because the upload replaces the WHOLE redirect set'
+  'unpublish-trend-pages.ps1'        = 'drafts (never deletes) the retired trend posts; refuses to run until the redirects answer over HTTP, and is resumable'
+  'publish-trend-index.ps1'          = 'publishes the trend index page; live successor to the archived one-off, with the tracked-count derived from the keep-list'
   # -- finished one-shots still in the tree on 2026-07-30. Both were verified to change ZERO records today
   # and both unconditionally rewrite live data plus a hardcoded 2026-07-14 backup name, so re-running one
   # DESTROYS that backup. Delete these two lines once they are in archive\one-off\.
 }
 
+# NESTED CHECKOUTS (2026-08-06). A git worktree is a second checkout of THIS repo: the same scripts, at a
+# path that exists only while some other session is running. One appeared under grocery\ on 2026-08-03 and
+# this census has been red every day since. The 35 ORPHANs it printed were the HARMLESS half. The real
+# damage is that a checkout also holds a COPY of this file - and a copy is not $self, so it was read as a
+# source, where its $KNOWN table quotes every recorded name and marked the entire recorded set "called".
+# Measured 2026-08-06: population 144 -> 451, and of the 35 deliberate entry points this census exists to
+# keep watching, it could still see ZERO. That is precisely the self-defeat the $self note below describes,
+# arriving through a copy instead of through the file itself. A gate that can never arm.
+#
+# The boundary is the one git itself uses: a directory holding its OWN .git entry - a FILE in a worktree, a
+# DIRECTORY in a clone or submodule - is a separate checkout, and it is pruned whole. Deliberately NOT a
+# \.claude\worktrees\ path pattern: the four live worktrees already sit under two different parents, and the
+# next one need not sit under either. Excluded on BOTH sides for the same reason archive\ is - a reference
+# from a copy of the repo is not a reference, and would mask the orphan it copied.
+#
+# $Root and its ancestors are never pruned. The checkout we were ASKED to census is not someone else's copy;
+# that exemption is what lets this run from inside a worktree at all (it is running in one right now).
+function Get-CheckoutBoundaries {
+  param([string]$from)
+  $found = New-Object System.Collections.ArrayList
+  $stack = New-Object System.Collections.Stack
+  $stack.Push($from)
+  while ($stack.Count -gt 0) {
+    $dir = $stack.Pop()
+    foreach ($d in @(Get-ChildItem -LiteralPath $dir -Directory -Force -ErrorAction SilentlyContinue)) {
+      if (@('.git','node_modules','archive') -contains $d.Name) { continue }
+      # prune AT the boundary: a nested checkout's own subtree is never walked, so this stays cheap
+      if (Test-Path -LiteralPath (Join-Path $d.FullName '.git')) { [void]$found.Add($d.FullName.TrimEnd('\')); continue }
+      $stack.Push($d.FullName)
+    }
+  }
+  ,$found
+}
+$walkFrom = @($ScanRoot)
+if (-not ($Root + '\').StartsWith($ScanRoot + '\', [StringComparison]::OrdinalIgnoreCase)) { $walkFrom += $Root }
+# Collected with foreach, never through a pipeline: ,$found exists to stop unrolling, so an EMPTY result
+# would survive a pipeline as one object and print as a nested checkout at the empty path.
+$acc = New-Object System.Collections.ArrayList
+foreach ($w in $walkFrom) {
+  foreach ($b in (Get-CheckoutBoundaries $w)) {
+    if (($Root + '\').StartsWith($b + '\', [StringComparison]::OrdinalIgnoreCase)) { continue }   # $Root or above it
+    if (-not $acc.Contains($b)) { [void]$acc.Add($b) }
+  }
+}
+$nested = @($acc | Sort-Object)
+function Test-InOtherCheckout {
+  param([string]$path)
+  foreach ($b in $script:nested) { if ($path.StartsWith($b + '\', [StringComparison]::OrdinalIgnoreCase)) { return $true } }
+  return $false
+}
+
 # -Filter *.ps1 is the legacy 8.3 matcher and also matches .ps1xml, so the extension is re-checked exactly.
 $all = @(Get-ChildItem -Path $Root -Filter *.ps1 -Recurse -File -ErrorAction SilentlyContinue |
-         Where-Object { $_.Extension -eq '.ps1' -and $_.FullName -notmatch '\\archive\\' })
+         Where-Object { $_.Extension -eq '.ps1' -and $_.FullName -notmatch '\\archive\\' -and
+                        -not (Test-InOtherCheckout $_.FullName) })
 $pop  = @($all | Where-Object { $_.FullName.Substring($Root.Length + 1) -notmatch '^out\\' })
 $inOut= @($all | Where-Object { $_.FullName.Substring($Root.Length + 1) -match  '^out\\' })
 
 $exts = '.ps1','.psm1','.js','.yml','.yaml','.vbs','.bat','.cmd'
-# THIS FILE MUST NOT BE A SOURCE. $KNOWN quotes 33 script names; counting it would make every one of them
-# "referenced" and the census would report a clean zero forever - a gate that can never arm. (Same reason
+# THIS FILE MUST NOT BE A SOURCE. $KNOWN quotes every recorded script name; counting it would make every one
+# of them "referenced" and the census would report a clean zero forever - a gate that can never arm. (Same reason
 # test-auditors.ps1 skips itself when it greps for the logger pattern.)
+# NOR MAY A COPY OF THIS FILE BE ONE: $self is a single path, so on 2026-08-03 four worktree copies of this
+# census sailed straight past it. The nested-checkout prune above is what holds that line now.
 $self = $MyInvocation.MyCommand.Path
 $src = @(Get-ChildItem -Path $ScanRoot -Recurse -File -ErrorAction SilentlyContinue |
          Where-Object { $exts -contains $_.Extension.ToLower() -and
                         $_.FullName -ne $self -and
                         $_.FullName -notmatch '\\archive\\' -and
                         $_.FullName -notmatch '\\node_modules\\' -and
-                        $_.FullName -notmatch '\\\.git\\' })
+                        $_.FullName -notmatch '\\\.git\\' -and
+                        -not (Test-InOtherCheckout $_.FullName) })
 
 # A check that examined NOTHING must say so. Every population script is itself a source file, so src can only
 # be smaller than pop if the roots are wrong or the tree is not checked out - and "0 orphans" from that is a
@@ -140,6 +205,8 @@ $fail = New-Object System.Collections.ArrayList
 
 Write-Output ("script-census: " + $pop.Count + " script(s) + " + $inOut.Count + " under out\, read against " +
               $src.Count + " executable file(s); " + $uncalled.Count + " uncalled, " + $KNOWN.Count + " recorded as deliberate")
+# An exclusion nobody can see is its own blind spot: say what was pruned and where, every run.
+foreach ($b in $nested) { Write-Output ("  skipped nested checkout " + $b + " - a copy of this repo, not a second set of scripts") }
 if ($gone.Count -gt 5) { Write-Output ("  note    " + $gone.Count + " recorded entries are no longer uncalled here - drop their KNOWN lines") }
 else { foreach ($g in $gone) { Write-Output ("  note    " + $g + " is called again (or archived) - drop its KNOWN line") } }
 foreach ($n in $new)  { [void]$fail.Add("ORPHAN " + $n + " - no executable file in the repo names it") }
