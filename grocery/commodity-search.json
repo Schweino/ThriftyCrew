@@ -1,4 +1,4 @@
-{
+﻿{
     "note":  "Per-commodity search terms used by the everyday/regular-price pulls (Family Fare Freshop, Baker\u0027s/Kroger, Hy-Vee, Sam\u0027s). Keyed by commodity id in commodities.json.",
     "terms":  {
                   "chicken-breast":  "boneless skinless chicken breast",
@@ -130,6 +130,7 @@
                   "trash-bags":  "13 gallon trash bags",
                   "aluminum-foil":  "aluminum foil",
                   "storage-bags":  "gallon freezer bags",
+                 "quart-storage-bags":  "quart freezer bags",
                   "all-purpose-cleaner":  "all purpose cleaner",
                   "bleach":  "bleach",
                   "hand-soap":  "liquid hand soap",

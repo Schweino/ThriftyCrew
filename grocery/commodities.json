@@ -11579,7 +11579,6 @@
         "band_max":  0.6,
         "include":  [
                         "(?:storage|freezer)\\s+bags?",
-                        "zipper\\s+bags?",
                         "slider\\s+bags?",
                         "freezer\\b.{0,20}bags?\\b"
                     ],
@@ -11593,6 +11592,27 @@
                         "\\bquart\\b",
                         "\\bpint\\b",
                         "half\\s+gallon"
+                    ]
+    },
+    {
+        "id":  "quart-storage-bags",
+        "label":  "Food Storage Bags (quart)",
+        "unit":  "each",
+        "band_min":  0.02,
+        "band_max":  0.3,
+        "include":  [
+                        "\\bquart\\b.{0,40}bags?\\b"
+                    ],
+        "exclude":  [
+                        "\\bgallon\\b",
+                        "\\bpint\\b",
+                        "\\bvariety\\b",
+                        "\\bsandwich\\b",
+                        "\\bsnack\\b",
+                        "vacuum",
+                        "trash",
+                        "mylar",
+                        "dehydrated"
                     ]
     },
     {

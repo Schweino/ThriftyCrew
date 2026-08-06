@@ -818,7 +818,11 @@ if ($SelfTest) {
     _Route 'R4 whipped DAIRY topping is admitted'      'Friendly Farms Whipped Dairy Topping 13 FL OZ' 'whipped-cream'
     _Route 'R5 Stouffers Party Size Pasta (Frozen)'    "Stouffer's Classic Lasagna with Meat and Sauce, Party Size Pasta, Frozen Meals, 90 oz (Frozen)" 'frozen-lasagna'
     _Route 'R6 store slash-naming acorn squash'        'Acorn/Table Queen Squash' 'acorn-squash'
-    _Route 'R7 QUART bags leave the (gallon) commodity' 'Boulder Quart Slider Storage Bags 40 CT' '<unmatched>'
+    # R7's quart case expected '<unmatched>' when it shipped, because quart bags had NO home - being
+    # excluded from the gallon commodity meant falling off the board entirely. R14 below gives them one,
+    # so the expectation moves from "nowhere" to "the quart commodity". The ASSERTION is unchanged and is
+    # the one that matters: a quart bag must never be priced as a gallon bag.
+    _Route 'R7 QUART bags leave the (gallon) commodity' 'Boulder Quart Slider Storage Bags 40 CT' 'quart-storage-bags'
     _Route 'R7 PINT bags leave the (gallon) commodity'  'Bright Essentials Freezer Bags, Zipper, Pint Size' '<unmatched>'
     # HALF GALLON, added by the developer the same day: with only quart+pint excluded, the Sam's cell moved
     # from a QUART box to a HALF GALLON box ($0.0764/each) while Sam's own true gallon box sat at $0.0792 -
@@ -867,6 +871,32 @@ if ($SelfTest) {
     _Route 'R11 twin: real worcestershire still routes' 'Great Value Worcestershire Sauce, 10 fl oz' 'worcestershire'
     _Route 'R12 twin: real teriyaki sauce still routes' 'Great Value Teriyaki Sauce, 15 fl oz, 1 Count' 'teriyaki-sauce'
     _Route 'R13 twin: fresh tomatoes still route'      'Fresh Beefsteak Tomatoes, Each' 'tomatoes'
+
+    # --- R14, 2026-08-06: BAGS SPLIT BY SIZE (Brad's call) ----------------------------------------------
+    # storage-bags was one commodity labelled "(gallon)" that excluded every other size, so quart bags had
+    # no home at all - 8 real products across Aldi, Sam's and Walmart priced nothing. Now gallon / quart /
+    # sandwich are three commodities. Measured over the 14-day corpus first: 95 distinct bag names, 44
+    # gallon, 35 sandwich, 7 quart, 4 half-gallon, 1 pint.
+    # THE TRAP IS THE COMBO PACK. Sam's sells "Gallon & Quart" and "Variety Pack" boxes whose count mixes
+    # sizes, so they can price NEITHER per-gallon-bag nor per-quart-bag honestly - the count is a blend and
+    # any per-bag figure invents a split that is not on the label. Both sides exclude them on purpose, which
+    # is why half-gallon and pint also stay unmatched rather than being folded into the nearest size.
+    _Route 'R14 Aldi quart bags get a home'            'Boulder Quart Slider Storage Bags 40 CT' 'quart-storage-bags'
+    _Route 'R14 Sams quart bags too'                   'Ziploc Brand Quart Storage Bags, Stay Open Design, Easy to Fill, 216 ct.' 'quart-storage-bags'
+    _Route 'R14 quart wording can be mid-name'         "Ziploc Freezer Quart Food Storage Bags, School Supplies, Stay Open Design, Grip 'n Seal Technology, Zipper, 100 Count" 'quart-storage-bags'
+    # MUST-FIRE: the mixed-size boxes belong to NEITHER size.
+    _Route 'R14 a GALLON+QUART combo box is neither'   'Ziploc Brand Gallon & Quart  Storage Bags, Stay Open Design, Easy to Fill, 204 ct.' '<unmatched>'
+    _Route 'R14 a VARIETY pack is neither'             'Ziploc Gallon Quart Freezer and Storage Slider Bags Variety Pack, Power Shield Technology, 149 ct.' '<unmatched>'
+    _Route 'R14 half gallon still has no home'         'Kroger Slider Half Gallon Freezer Storage Bags' '<unmatched>'
+    # CLEAN TWINS: the other two sizes are untouched by the new commodity.
+    _Route 'R14 twin: gallon still routes'             'Bright Essentials Storage Bags, Double Zipper, 20 Gallon' 'storage-bags'
+    _Route 'R14 twin: the Aldi gallon crown is safe'   'Boulder Twin Lock Storage Bags 40 CT' 'storage-bags'
+    _Route 'R14 twin: sandwich bags still route'       'Great Value Sandwich Bags, 180 Count' 'sandwich-bags'
+    # R15: the loose 'zipper bags?' include is GONE. Measured over 27,659 corpus names it admitted exactly
+    # ONE product and that product was dried fruit - every real bag row is caught by the storage/freezer/
+    # slider tokens. A food package described by its packaging is not a storage bag.
+    _Route 'R15 dried fruit in a zipper bag is not a bag' 'Sun-Maid Dried Mangos 15oz Resealable Stand-Up Zipper Bag' '<unmatched>'
+    _Route 'R15 a mylar food pouch is not a quart bag'  'Dehydrated Zucchini, 1 Full Quart Mylar Bag' 'zucchini'
   }
 
   Write-Output ('-'*54)
