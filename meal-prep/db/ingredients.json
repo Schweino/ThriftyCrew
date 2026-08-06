@@ -2338,12 +2338,13 @@
   },
   {
       "item":  "Turkey Bacon",
-      "bid":  "bacon",
-      "gpu":  453.592,
-      "unit":  "lb",
-      "board":  "recipe",
+      "bid":  "turkey-bacon",
+      "gpu":  28.3495,
+      "unit":  "oz",
+      "board":  "weekly",
       "buy_pkg_g":  340,
-      "buy_pkg_label":  "12oz pack"
+      "buy_pkg_label":  "12oz pack",
+      "note":  "bid corrected 2026-08-06: was 'bacon' (PORK by the lb) - turkey bacon is its own board commodity at its own price class"
   },
   {
       "item":  "Turkey Breast",
