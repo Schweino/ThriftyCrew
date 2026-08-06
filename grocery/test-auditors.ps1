@@ -3232,6 +3232,64 @@ foreach ($t in $medleyTwin) { if (-not (@(Get-MatchingCommodities $t.n $cmMed) -
 if ($twinMiss.Count -eq 0) { Ok 'medley rules CLEAN TWIN: plain broccoli/cauliflower/carrots and "Fresh Frozen" mixed veg still match their own commodity' }
 else { Bad ('the medley excludes have eaten a real product - a missing cell is the cost of an exclude written too wide: ' + ($twinMiss -join ' | ')) }
 
+# ------------------------------------------------- product-FORM and one-word-include ownership (2026-08-06, plan-3)
+# FOUR mechanisms, one fixture, all four measured on the 2026-08-06 board and frozen here verbatim from the
+# captures named beside each row. NEVER regenerate these strings from the live board: the bug they encode would
+# vanish and the case would pass by finding nothing.
+#   (1) FORM: a commodity named for a FRESH herb had only herb-NAME includes, so a shelf-stable stir-in
+#       concentrate paste won Basil (fresh) at Aldi. Dish-name includes did the same for a 0.741 oz seasoning
+#       packet on a fresh vegetable commodity.
+#   (2) ENCODING: the store's own mojibake defeated a correct [n-ntilde] character class. The rule never changed;
+#       the world under it did. Built from char codes on purpose so an editor re-saving this file in another
+#       encoding cannot silently repair the fixture out of existence.
+#   (3) OWNERSHIP: one-word includes ('\bpizza\b' at 85, '\bbleach\b' at 99) sit EARLY in first-match-wins, so
+#       anything that merely MENTIONS the word is captured before its true owner (cheese-crackers 218,
+#       shower-cleaner 305) can ever see it.
+#   (4) A brand-scoped exclude that was silently doing first-match-wins protection for a LATER commodity, so it
+#       could only be narrowed, never deleted. The canned twin below is what proves the narrowing held.
+$mojiN = [string][char]0xC3 + [string][char]0xB1        # the store's UTF-8-read-as-latin1 n-tilde
+$formMust = @(
+  # name                                                                                     # first-match-wins owner (null = must not be claimed by 'reject')
+  @{ n = 'Simply Nature Organic Basil Stir IN Paste 2.8 OZ';                                  reject = 'fresh-basil';          src = 'aldi-regular-2026-08-05' },
+  @{ n = 'Sun-Bird Stir Fry Mix';                                                             reject = 'fresh-stir-fry-blend'; src = 'walmart-regular-2026-08-06' },
+  @{ n = 'Goldfish Flavor Blasted Xtra Cheesy Pizza Cheese Crackers';                         want   = 'cheese-crackers';      src = 'bakers-regular-2026-08-06' },
+  @{ n = 'OxiClean Plus Bleach No Drip Foam Mold & Mildew Bathroom Cleaner';                  want   = 'shower-cleaner';       src = 'bakers-regular-2026-08-06' },
+  @{ n = 'Great Value Bathroom Cleaner with Bleach, 32 fl oz';                                want   = 'shower-cleaner';       src = 'walmart-regular-2026-08-06' },
+  @{ n = ('Clemente Jacques Sliced Jalape' + $mojiN + 'o Peppers, Pickled Jalape' + $mojiN + 'os, 28 oz Can'); want = 'pickled-jalapenos'; src = 'walmart-regular-2026-08-01' }
+)
+$formLeak = @()
+foreach ($t in $formMust) {
+  $hits = @(Get-MatchingCommodities $t.n $cmMed)
+  $own  = if ($hits.Count) { $hits[0] } else { '<unmatched>' }
+  if ($t.reject) { if ($hits -contains $t.reject) { $formLeak += ($t.reject + ' STILL CLAIMS ' + $t.n) } }
+  else           { if ($own -ne $t.want)          { $formLeak += ($t.n + ' -> ' + $own + ', wanted ' + $t.want) } }
+}
+if ($formLeak.Count -eq 0) { Ok 'product-form + ownership rules: a stir-in paste and a seasoning packet stay OUT of the fresh commodities, and the mojibake jalapeno / pizza-flavoured crackers / bathroom cleaners reach their TRUE owners past the early one-word includes' }
+else { Bad ('a wrong-form or wrong-owner product is back in a commodity it does not belong to: ' + ($formLeak -join ' | ')) }
+# CLEAN TWINS - the real products these excludes sit next to must keep their commodities, or a token is too wide.
+# The canned 15 oz row is the load-bearing one: its name carries NO can token, so the ONLY thing keeping it out of
+# frozen-vegetables (index 87, ahead of canned-mixed-vegetables at 336) is the narrowed brand exclude. Deleting
+# that exclude outright re-hijacked this SKU in the first simulation; the (?!(frozen)) lookahead is why it holds.
+$formTwin = @(
+  @{ n = 'Great Value Mixed Vegetables, 15 oz';                                            want = 'canned-mixed-vegetables' },
+  @{ n = 'Great Value Mixed Vegetables, 32 oz Bag (Frozen)';                               want = 'frozen-vegetables' },
+  @{ n = 'Fresh Basil, 1.5 oz Clamshell';                                                  want = 'fresh-basil' },
+  @{ n = 'Bud by Dole 12oz Vegetable Stir Fry';                                            want = 'fresh-stir-fry-blend' },
+  @{ n = 'Kroger Pepperoni French Bread Frozen Pizza';                                     want = 'frozen-pizza' },
+  @{ n = 'CLORALEN Household Cleaning Liquid Scented Bleach - Lemon Scent (121 fl oz)';     want = 'bleach' },
+  @{ n = 'San Marcos Nacho Sliced Jalapenos, 26 oz';                                        want = 'pickled-jalapenos' },
+  @{ n = 'Kroger Premium Chicken Breast Chunk in Water';                                    want = 'canned-chicken' },
+  @{ n = 'Kroger Sausage, Egg & Cheese Croissant 8 Sandwiches';                             want = 'breakfast-sandwiches' }
+)
+$formTwinMiss = @()
+foreach ($t in $formTwin) {
+  $hits = @(Get-MatchingCommodities $t.n $cmMed)
+  $own  = if ($hits.Count) { $hits[0] } else { '<unmatched>' }
+  if ($own -ne $t.want) { $formTwinMiss += ($t.n + ' -> ' + $own + ', wanted ' + $t.want) }
+}
+if ($formTwinMiss.Count -eq 0) { Ok 'product-form CLEAN TWIN: the canned 15 oz mixed-veg SKU stays home behind the NARROWED brand exclude, and real basil / stir-fry / pizza / bleach / jalapenos / canned chicken / croissant sandwiches all keep their commodities' }
+else { Bad ('a form or ownership exclude has eaten a real product, or a widened include did not land: ' + ($formTwinMiss -join ' | ')) }
+
 # ---------------------------------------------------------------- specs\prose re-sync (2026-08-02, L4)
 # THE ONE WATCHER WHOSE FAILURE IS A REVERT RATHER THAN A WRONG NUMBER. spec-guards.ps1 full mode does not
 # read prose to CHECK it - it MERGES specs\prose\prose-<slug>.json INTO the spec and validates the result.

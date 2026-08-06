@@ -1,0 +1,210 @@
+﻿{
+    "positive_control":  {
+                             "expected":  "cheese-crackers",
+                             "before":  "frozen-pizza",
+                             "observed":  "cheese-crackers",
+                             "name":  "Goldfish Flavor Blasted Xtra Cheesy Pizza Cheese Crackers"
+                         },
+    "corpus_unique_names":  28972,
+    "rule_changes":  [
+                         "fresh-basil.exclude += stir[\\s-]*in , \\bpaste\\b",
+                         "fresh-stir-fry-blend.exclude += sun[\\s-]?bird , \\bseasoning\\b",
+                         "frozen-pizza.exclude += \\bcrackers?\\b",
+                         "bleach.exclude += bathroom\\s+cleaner",
+                         "frozen-vegetables.exclude: great\\s+value\\s+mixed\\s+vegetables,  NARROWED TO  great\\s+value\\s+mixed\\s+vegetables,(?![^(]*\\(frozen\\))",
+                         "canned-chicken.include += chicken\\s+breast\\s+chunk\\b , chunk\\s+chicken\\s+in\\s+water",
+                         "breakfast-sandwiches.include += croissant\\s+\\d+\\s+sandwiches",
+                         "pickled-jalapenos.include += jalape\\S{1,3}o\\s+peppers,?\\s+pickled"
+                     ],
+    "skipped_files":  [
+
+                      ],
+    "corpus_files":  [
+                         "aldi-regular-2026-08-05.json",
+                         "bakers-regular-2026-08-06.json",
+                         "family-fare-regular-2026-08-06.json",
+                         "fareway-regular-2026-08-05.json",
+                         "hyvee-regular-2026-08-05.json",
+                         "walmart-regular-2026-08-06.json",
+                         "walmart-regular-2026-08-05.json",
+                         "walmart-regular-2026-08-01.json",
+                         "sams-regular-2026-08-01.json",
+                         "sams-deals-2026-08-05.json",
+                         "bakers-deals-2026-08-05.json",
+                         "fareway-shop-2026-08-05.json",
+                         "supplemental-soundness-names (3 names, quoted from the 11:26 soundness alert)"
+                     ],
+    "routing_changes":  [
+                            {
+                                "after":  "\u003cunmatched\u003e",
+                                "before":  "fresh-basil",
+                                "name":  "Simply Nature Organic Basil Stir IN Paste 2.8 OZ",
+                                "src":  "aldi-regular-2026-08-05.json"
+                            },
+                            {
+                                "after":  "canned-chicken",
+                                "before":  "\u003cunmatched\u003e",
+                                "name":  "Kroger Premium Chicken Breast Chunk in Water",
+                                "src":  "bakers-regular-2026-08-06.json"
+                            },
+                            {
+                                "after":  "canned-chicken",
+                                "before":  "\u003cunmatched\u003e",
+                                "name":  "Kroger Premium Chicken Breast Chunk in Water BIG DEAL!",
+                                "src":  "bakers-regular-2026-08-06.json"
+                            },
+                            {
+                                "after":  "canned-chicken",
+                                "before":  "\u003cunmatched\u003e",
+                                "name":  "Kroger Premium Natural Chicken Breast Chunk in Water",
+                                "src":  "bakers-regular-2026-08-06.json"
+                            },
+                            {
+                                "after":  "breakfast-sandwiches",
+                                "before":  "\u003cunmatched\u003e",
+                                "name":  "Kroger Sausage, Egg \u0026 Cheese Croissant 8 Sandwiches",
+                                "src":  "bakers-regular-2026-08-06.json"
+                            },
+                            {
+                                "after":  "cheese-crackers",
+                                "before":  "frozen-pizza",
+                                "name":  "Goldfish Flavor Blasted Xtra Cheesy Pizza Cheese Crackers",
+                                "src":  "bakers-regular-2026-08-06.json"
+                            },
+                            {
+                                "after":  "shower-cleaner",
+                                "before":  "bleach",
+                                "name":  "Kroger Foaming Bathroom Cleaner with Bleach",
+                                "src":  "bakers-regular-2026-08-06.json"
+                            },
+                            {
+                                "after":  "shower-cleaner",
+                                "before":  "bleach",
+                                "name":  "OxiClean Plus Bleach No Drip Foam Mold \u0026 Mildew Bathroom Cleaner",
+                                "src":  "bakers-regular-2026-08-06.json"
+                            },
+                            {
+                                "after":  "frozen-vegetables",
+                                "before":  "\u003cunmatched\u003e",
+                                "name":  "Great Value Mixed Vegetables, 12 oz Steamable Bag (Frozen)",
+                                "src":  "walmart-regular-2026-08-06.json"
+                            },
+                            {
+                                "after":  "frozen-vegetables",
+                                "before":  "\u003cunmatched\u003e",
+                                "name":  "Great Value Mixed Vegetables, 32 oz Bag (Frozen)",
+                                "src":  "walmart-regular-2026-08-06.json"
+                            },
+                            {
+                                "after":  "shower-cleaner",
+                                "before":  "bleach",
+                                "name":  "Great Value Bathroom Cleaner with Bleach, 32 fl oz",
+                                "src":  "walmart-regular-2026-08-06.json"
+                            },
+                            {
+                                "after":  "\u003cunmatched\u003e",
+                                "before":  "fresh-stir-fry-blend",
+                                "name":  "Sun-Bird Stir Fry Mix",
+                                "src":  "walmart-regular-2026-08-06.json"
+                            },
+                            {
+                                "after":  "canned-chicken",
+                                "before":  "\u003cunmatched\u003e",
+                                "name":  "Great Value Chunk Chicken in Water, 12.5 oz",
+                                "src":  "walmart-regular-2026-08-01.json"
+                            },
+                            {
+                                "after":  "pickled-jalapenos",
+                                "before":  "\u003cunmatched\u003e",
+                                "name":  "Clemente Jacques Sliced JalapeÃ±o Peppers, Pickled JalapeÃ±os, 28 oz Can",
+                                "src":  "walmart-regular-2026-08-01.json"
+                            }
+                        ],
+    "generated":  "2026-08-06T12:42:19",
+    "board":  "comparison-2026-08-06.json built_at 2026-08-06T12:08:57 (BOARD line of triage-due at 12:15: JUST LANDED)",
+    "cell_effects":  [
+                         {
+                             "effect":  "cell DROPS: the only Aldi row was the Simply Nature stir-in paste (verified: no other basil row in any aldi-regular capture). Crown moves Aldi 0.7107/oz -\u003e Walmart 2.42/oz (Fresh Basil 1.5 oz Clamshell $3.63)",
+                             "commodity":  "fresh-basil",
+                             "before":  0.7107,
+                             "store":  "Aldi",
+                             "after":  0
+                         },
+                         {
+                             "effect":  "cell DROPS: Sun-Bird seasoning packet was the only Walmart row surviving the frozen/noodle/sauce excludes (La Choy killed by canned). Crown unchanged (Hy-Vee 0.2058); commodity down to 1 store",
+                             "commodity":  "fresh-stir-fry-blend",
+                             "before":  1.8489,
+                             "store":  "Walmart",
+                             "after":  0
+                         },
+                         {
+                             "effect":  "Kroger Premium Chicken Breast Chunk in Water BIG DEAL! 6 pk 10 oz $13.99 = 0.2332/oz beats the current 10 oz row 0.249. Crown unchanged (Sams 0.1675). Same capture (bakers-regular-2026-08-06) already covers the store: no eviction risk",
+                             "commodity":  "canned-chicken",
+                             "before":  0.249,
+                             "store":  "Baker\u0027s",
+                             "after":  0.2332
+                         },
+                         {
+                             "effect":  "GV Mixed Vegetables 32 oz Bag (Frozen) $2.58 = 0.0806/oz replaces GV Peas \u0026 Carrots 12 oz 0.0817. Crown unchanged (Aldi 0.064). Canned GV 15 oz SKU stays in canned-mixed-vegetables (narrowed exclude verified: it did NOT move in the final sim)",
+                             "commodity":  "frozen-vegetables",
+                             "before":  0.0817,
+                             "store":  "Walmart",
+                             "after":  0.0806
+                         },
+                         {
+                             "effect":  "NO cell move today: Clemente Jacques 28 oz ($2.33 = 0.0832/oz) lives only in walmart-regular-2026-08-01; capture selection keeps the freshest capture (08-06) which holds San Marcos 26 oz 0.0877. If a future comprehensive pull carries Clemente, the cell legitimately moves to 0.0832",
+                             "commodity":  "pickled-jalapenos",
+                             "before":  0.0877,
+                             "store":  "Walmart",
+                             "after":  0.0877
+                         },
+                         {
+                             "effect":  "tie: admitted Kroger Sausage Egg \u0026 Cheese Croissant 8 pk $10.99 = 1.3738 each, exactly equal to the incumbent Kroger Bacon 8 pk 10.99. No visible change",
+                             "commodity":  "breakfast-sandwiches",
+                             "before":  1.3738,
+                             "store":  "Baker\u0027s",
+                             "after":  1.3738
+                         },
+                         {
+                             "effect":  "GV Bathroom Cleaner with Bleach 32 fl oz $1.74 = 0.0544/floz, released from the bleach commodity by the bathroom-cleaner exclude. CROWN MOVES: Aldi 0.0841 -\u003e Walmart 0.0544. Real product, right commodity",
+                             "commodity":  "shower-cleaner",
+                             "before":  0.0928,
+                             "store":  "Walmart",
+                             "after":  0.0544
+                         },
+                         {
+                             "effect":  "no move: released rows are dearer (Kroger Foaming w/ Bleach 3.99/32 = 0.1247; OxiClean Plus Bleach 5.79/30 = 0.193) than the incumbent Clean Shower 0.1184",
+                             "commodity":  "shower-cleaner",
+                             "before":  0.1184,
+                             "store":  "Baker\u0027s",
+                             "after":  0.1184
+                         },
+                         {
+                             "effect":  "no move: CLORALEN liquid bleach 0.04/floz keeps the cell; the released rows were never the winners",
+                             "commodity":  "bleach",
+                             "before":  0.04,
+                             "store":  "Walmart",
+                             "after":  0.04
+                         },
+                         {
+                             "effect":  "no move: Goldfish Flavor Blasted Pizza 6.6 oz $2.99 = 0.453/oz loses to Kroger Cheesy Bitz 0.2331",
+                             "commodity":  "cheese-crackers",
+                             "before":  0.2331,
+                             "store":  "Baker\u0027s",
+                             "after":  0.2331
+                         },
+                         {
+                             "effect":  "no move: Goldfish leaves frozen-pizza; Kroger French Bread 2 pk $3.49 = 1.745 each keeps the cell",
+                             "commodity":  "frozen-pizza",
+                             "before":  1.745,
+                             "store":  "Baker\u0027s",
+                             "after":  1.745
+                         }
+                     ],
+    "caveats":  [
+                    "fareway-shop-2026-08-05.json parsed but yielded 0 names (different shape, no .deals[].item); Fareway is still covered by fareway-regular-2026-08-05.json (625 rows). This is the ONLY corpus gap.",
+                    "Walmart board rows union walmart-regular-2026-08-06 (11:57 rescue, 420 terms) + 08-05 + 08-01 partials; all three are in the corpus.",
+                    "The 3 supplemental names from the 11:26 soundness alert also appear in bakers-regular-2026-08-06 (Goldfish, OxiClean) and walmart-regular-2026-08-01 (Dole Tidbits 20 oz Can variant); the exact 12x4oz Fruit Bowls name was only found in the soundness sweep corpus.",
+                    "Board built_at 12:08:57 and HEAD moved to 0af15e73 at 12:16 (Walmart comprehensive re-pull commit) DURING this review; if another build lands before shipping, re-run this sim (script preserved in the session scratchpad)."
+                ]
+}

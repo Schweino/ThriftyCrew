@@ -1055,6 +1055,126 @@
                         "ruled_on":  "2026-08-06",
                         "ruled_by":  "triage-developer (plan-2026-08-06)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Walmart|73-lean-27-fat-ground-beef-3-lb-roll-fresh-all-n",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "73% Lean / 27% Fat Ground Beef, 3 lb Roll, Fresh, All Natural*"
+                                  ],
+                        "product_id":  "15136793",
+                        "verdict":  "wrong-product",
+                        "evidence":  "73/27 is a genuinely different product from 93/7; the semantic sidecar scores it similar on name shape alone. Six sibling 73/27 SKUs sit in the Walmart capture (cheapest 10 lb roll at 4.444/lb) against the real 93/7 cell at 6.99/lb, so admitting the class would wreck the cell. Correct refusal, blocklisted so the coverage sweep stops re-paging it.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "soy-sauce|Aldi|fusia-asian-inspirations-traditional-81-oz",
+                        "commodity":  "soy-sauce",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Fusia Asian Inspirations Traditional 81 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "The name carries neither soy nor sauce, so the product cannot be identified from its own name. The capture resolves it to 8.1 oz at 3.49 = 0.4309/floz, nowhere near a win, and Aldi\u0027s soy cell is already the real \u0027Fusia Asian Inspirations All Purpose Soy Sauce 15 FL OZ\u0027 at 0.11/floz. Unverifiable name, zero upside. Correct refusal.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "quart-storage-bags|Aldi|boulder-storage-twin-lock-bags-40-ct",
+                        "commodity":  "quart-storage-bags",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Boulder Storage Twin Lock Bags 40 CT"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "The name carries no size word, so admitting it to the QUART commodity would fabricate a size claim (hard rule: never fabricate a size); 40 CT is consistent with the gallon sibling. The quart cell is already covered by the explicit \u0027Boulder Quart Storage Twin Lock Bags 50 CT\u0027 at 0.0438/each. Correct refusal.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "fruit-cups|Bakers|dole-diced-mango-in-juice",
+                        "commodity":  "fruit-cups",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Dole Diced Mango In Juice"
+                                  ],
+                        "product_id":  "0003890002968",
+                        "verdict":  "wrong-product",
+                        "evidence":  "fruit-cups is an EACH-priced commodity and this name expresses no pack count (the garlic-bread lesson), so no per-each price can be derived without inventing one. Baker\u0027s is already covered by the 24 pk mandarin cups at 0.6662/each. Correct refusal.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-8020|Walmart|80-lean-20-fat-ground-beef-chuck-patties-12-coun",
+                        "commodity":  "ground-beef-8020",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "80% Lean / 20% Fat Ground Beef Chuck Patties, 12 Count, 1/3 lb patties, 4 lb Tray, Fresh, All Natural*"
+                                  ],
+                        "product_id":  "887705275",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pre-formed PATTIES, a different product from bulk 80/20 ground beef and priced as such; the standing \u0027patties\u0027 exclude is correct and plan-2026-08-06-3 lists it under do_not_touch. Correct refusal, blocklisted so the coverage sweep stops re-paging it.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "chicken-thighs|Aldi|fresh-fresh-chicken-drumsticks-family-pack-per-l",
+                        "commodity":  "chicken-thighs",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Fresh Fresh Chicken Drumsticks Family Pack Per LB"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Drumstick, correctly held out of chicken-thighs by the standing \\bdrumsticks?\\b exclude from commit 75cf58d7 (2026-07-17 drumsticks-as-thighs soundness ruling over 1,296 new Sam\u0027s rows). The commodity DISPLAYS as \u0027Chicken Thighs / Drumsticks\u0027, which is a genuine contradiction: admitting drumsticks would move the crown from Sam\u0027s 1.28 to Aldi 1.09/lb and two cells by 25-30%. That is a commodity-MEANING call, escalated to Brad in plan-2026-08-06-3 open_questions_for_brad. Status quo shipped; retire_when ruling-reversed.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "chicken-thighs|Bakers|tyson-all-natural-fresh-chicken-drumsticks",
+                        "commodity":  "chicken-thighs",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Tyson All Natural Fresh Chicken Drumsticks"
+                                  ],
+                        "product_id":  "0026080800000",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Drumstick, correctly held out of chicken-thighs by the standing \\bdrumsticks?\\b exclude from commit 75cf58d7 (2026-07-17 drumsticks-as-thighs soundness ruling over 1,296 new Sam\u0027s rows). The commodity DISPLAYS as \u0027Chicken Thighs / Drumsticks\u0027, which is a genuine contradiction: admitting drumsticks would move the crown from Sam\u0027s 1.28 to Aldi 1.09/lb and two cells by 25-30%. That is a commodity-MEANING call, escalated to Brad in plan-2026-08-06-3 open_questions_for_brad. Status quo shipped; retire_when ruling-reversed.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "chicken-thighs|Bakers|heritage-farm-bone-in-skin-on-chicken-drumsticks",
+                        "commodity":  "chicken-thighs",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Heritage Farm Bone In Skin On Chicken Drumsticks"
+                                  ],
+                        "product_id":  "0028334800000",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Drumstick, correctly held out of chicken-thighs by the standing \\bdrumsticks?\\b exclude from commit 75cf58d7 (2026-07-17 drumsticks-as-thighs soundness ruling over 1,296 new Sam\u0027s rows). The commodity DISPLAYS as \u0027Chicken Thighs / Drumsticks\u0027, which is a genuine contradiction: admitting drumsticks would move the crown from Sam\u0027s 1.28 to Aldi 1.09/lb and two cells by 25-30%. That is a commodity-MEANING call, escalated to Brad in plan-2026-08-06-3 open_questions_for_brad. Status quo shipped; retire_when ruling-reversed.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

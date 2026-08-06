@@ -11049,7 +11049,8 @@
                         "\\bheart\\s+health\\b",
                         "epsom",
                         "tampons?",
-                        "lip\\s+balm"
+                        "lip\\s+balm",
+                        "\\bcrackers?\\b"
                     ]
     },
     {
@@ -11234,7 +11235,7 @@
                         "\\d+(?:\\.\\d+)?\\s*oz\\s+can\\b",
                         "\\bcan\\b",
                         "veg[\\s-]?all",
-                        "great\\s+value\\s+mixed\\s+vegetables,",
+                        "great\\s+value\\s+mixed\\s+vegetables,(?![^(]*\\(frozen\\))",
                         "\\bshampoo\\b",
                         "body\\s*wash",
                         "\\bconditioner\\b",
@@ -11653,7 +11654,8 @@
                         "\\bhair\\b",
                         "\\bpen\\b",
                         "crystals",
-                        "\\bgel\\b"
+                        "\\bgel\\b",
+                        "bathroom\\s+cleaner"
                     ]
     },
     {
@@ -17649,7 +17651,9 @@
                         "canned\\s+chicken",
                         "chunk\\s+chicken\\s+breast",
                         "premium\\s+chicken\\s+breast\\b.{0,20}\\bcan",
-                        "chicken\\s+breast\\b.{0,40}premium\\s+chunk"
+                        "chicken\\s+breast\\b.{0,40}premium\\s+chunk",
+                        "chicken\\s+breast\\s+chunk\\b",
+                        "chunk\\s+chicken\\s+in\\s+water"
                     ],
         "exclude":  [
                         "\\bdog\\b",
@@ -28663,7 +28667,8 @@
                         "croissant\\s+sandwich",
                         "biscuit\\s+sandwich",
                         "sandwiches\\b.{0,35}(?:sausage|egg)",
-                        "breakfast\\b.{0,70}\\bsandwich"
+                        "breakfast\\b.{0,70}\\bsandwich",
+                        "croissant\\s+\\d+\\s+sandwiches"
                     ],
         "exclude":  [
                         "\\bmaker\\b",
@@ -37180,7 +37185,8 @@
                         "pickled\\s+jalape[n\\u00f1]os?",
                         "jalape[n\\u00f1]o\\s+(?:slices|rings|nacho)",
                         "(?:nacho|tamed|sliced|diced)\\s+(?:hot\\s+)?jalape[n\\u00f1]os?",
-                        "jalape[nñ]o\\s+peppers,?\\s+pickled"
+                        "jalape[nñ]o\\s+peppers,?\\s+pickled",
+                        "jalape[n\u00f1\u00c3\u00b1]{1,2}o\\s+peppers,?\\s+pickled"
                     ],
         "exclude":  [
                         "green\\s+chil",
@@ -42106,7 +42112,9 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "stir[\\s-]*in",
+                        "\\bpaste\\b"
                     ]
     },
     {
@@ -52041,7 +52049,9 @@
                         "trail\\s+mix",
                         "rice\\s+cakes?",
                         "\\bbomb\\s*pops?\\b",
-                        "\\bpops\\b"
+                        "\\bpops\\b",
+                        "sun[\\s-]?bird",
+                        "\\bseasoning\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
