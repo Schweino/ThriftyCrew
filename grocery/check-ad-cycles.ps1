@@ -1075,6 +1075,37 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         } else { Log ('walmart-fullpull: ' + [string]$wfpOut) }
       } catch { Log ('walmart-fullpull audit threw: ' + $_.Exception.Message) }
 
+      # ---- Capture-eviction outcome watch (rostered 2026-08-06, triage plan-2026-08-06-2 / queue acb66b).
+      # audit-capture-eviction.ps1 is the ONLY check that can see a thin capture evicting a rich one under
+      # Select-FreshestCaptureRows - the class that shipped Sam's baby formula at +87% with every existing
+      # guard green. Until today nothing RAN it: test-auditors only exercises its -SelfTest, so the live
+      # pass was hand-cranked. On 2026-08-06 it was run by hand at 10:22:08 against the 10:21:49 board and
+      # would never have re-checked the 11:23:15 rebuild on its own, in an estate where the Walmart bot wall
+      # has made partial captures routine. That is a guard that exists but never arms (gates-that-can-never-
+      # arm), so it gets rostered here, next to the fullpull watch, on every generation.
+      # ADVISORY ONLY and deliberately placed AFTER the publish branch: the engine's own eligibility rule
+      # already decides which row wins and guards.ps1 already fails closed, so this is the OUTCOME watch,
+      # not a gate. It must never hold a board.
+      # Exit 0 = clean or advisory findings (the count is in the summary line), 3 = BLIND (no src_date in
+      # candidates, or no board to read) which is NOT a clean result and says so. Output is captured first
+      # and 2>$null keeps a child stderr line from killing the cycle under EAP=Stop (the audit-ff-carry /
+      # logger-kills-pipeline lesson); the whole block is wrapped so a crash here cannot cost the cycle.
+      try {
+        $ceOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-capture-eviction.ps1') 2>$null
+        $ceRc = $LASTEXITCODE
+        $ceLine = [string](@($ceOut) -match '^audit-capture-eviction: ' | Select-Object -First 1)
+        if (-not $ceLine) { $ceLine = (@($ceOut) | ForEach-Object { [string]$_ }) -join ' ' }
+        if ($ceRc -eq 3) {
+          Log ('capture-eviction: BLIND - ' + $ceLine)
+          $summary += 'REVIEW    audit-capture-eviction could not evaluate (no src_date in candidates, or no board) - a thin-capture eviction is INVISIBLE this cycle'
+        } else {
+          Log ('capture-eviction: ' + $ceLine)
+          $ceN = 0
+          if ($ceLine -match '(\d+) cell\(s\) dearer') { $ceN = [int]$Matches[1] }
+          if ($ceN -gt 0) { $summary += ('REVIEW    audit-capture-eviction: ' + $ceN + " cell(s) dearer than the engine's own eligibility rule allows - a thinner capture may have evicted a richer one; see out\capture-evictions.json") }
+        }
+      } catch { Log ('capture-eviction audit threw: ' + $_.Exception.Message) }
+
       # ---- Friday digest: the weekly board email the capture CTAs promise. Only when guards passed (never
       # email prices the gates would not publish), Fridays only, idempotent inside the script. Non-fatal.
       if (-not $guardsBlocked) {

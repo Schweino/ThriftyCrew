@@ -3042,6 +3042,43 @@ else { Bad 'audit-capture-eviction no longer mirrors the engine eligibility rule
 if ($cdSrc2 -match 'price_type,src_date\)') { Ok 'compare-deals still emits src_date into candidates (the field the per-store ranking turns on)' }
 else { Bad 'compare-deals no longer emits src_date into candidates-*.json - audit-capture-eviction goes BLIND and an eviction becomes invisible again' }
 
+# ROSTER CURRENCY (2026-08-06, triage plan-2026-08-06-2). A guard nothing RUNS is not a guard. This one
+# shipped with a self-test and no roster: for its first day the only thing exercising it was the -SelfTest
+# above, which proves the code works and says nothing about whether it ever looks at the live board. It was
+# hand-run at 10:22:08 against the 10:21:49 board and would never have re-checked the 11:23:15 rebuild.
+# Checked in two halves, because either half alone can be fooled:
+#   (1) SOURCE - check-ad-cycles must still make a LIVE call (a -SelfTest-only reference does not count).
+#   (2) CURRENCY - the artifact it writes must name the newest comparison and be stamped LATER than that
+#       comparison's built_at. A stamp older than the job that writes it is the tell of a roster entry that
+#       never armed (gates-that-can-never-arm), and it is also what a call that throws every run looks like
+#       from the outside, where the source check alone would stay green forever.
+$cacLive = @(Get-Content (Join-Path $root 'check-ad-cycles.ps1') | Where-Object { $_ -match 'audit-capture-eviction\.ps1' -and $_ -notmatch '-SelfTest' -and $_ -notmatch '^\s*#' })
+if ($cacLive.Count -gt 0) { Ok 'audit-capture-eviction is ROSTERED in check-ad-cycles - the eviction check runs on every board generation, not only when a human remembers it' }
+else { Bad 'audit-capture-eviction is not called by check-ad-cycles.ps1 - the ONLY check that can see a thin capture evicting a rich one is hand-cranked, and a passing -SelfTest proves the code works, not that anything runs it' }
+
+$ceStamp = Join-Path $root 'out\capture-evictions.json'
+$ceCmps = @(Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending)
+if ($ceCmps.Count -eq 0) {
+  Bad 'roster currency UNCHECKABLE: no out\comparison-*.json to compare the capture-eviction stamp against - this check examined nothing, which is not the same as a clean board'
+} elseif (-not (Test-Path $ceStamp)) {
+  Bad 'a board exists but out\capture-evictions.json does not - the rostered capture-eviction pass has never written its artifact, so the eviction class is going unwatched on the live board'
+} else {
+  $ceDoc = Get-Content $ceStamp -Raw | ConvertFrom-Json
+  $ceCmpDoc = Get-Content $ceCmps[0].FullName -Raw | ConvertFrom-Json
+  $ceGen = $null; $ceBuilt = $null
+  try { $ceGen = [datetime]::Parse([string]$ceDoc.generated, [Globalization.CultureInfo]::InvariantCulture) } catch {}
+  try { $ceBuilt = [datetime]::Parse([string]$ceCmpDoc.built_at, [Globalization.CultureInfo]::InvariantCulture) } catch {}
+  if ((-not $ceGen) -or (-not $ceBuilt)) {
+    Bad ('capture-evictions.json or the newest comparison carries an unparseable timestamp (generated=' + [string]$ceDoc.generated + ', built_at=' + [string]$ceCmpDoc.built_at + ') - roster currency cannot be established')
+  } elseif ([string]$ceDoc.compare_file -ne $ceCmps[0].Name) {
+    Bad ('capture-evictions.json audited ' + [string]$ceDoc.compare_file + ' but the newest board is ' + $ceCmps[0].Name + ' - the eviction check is reporting on a board that is no longer live')
+  } elseif ($ceGen -lt $ceBuilt) {
+    Bad ('capture-evictions.json is stamped ' + $ceGen.ToString('s') + ', OLDER than the ' + $ceCmps[0].Name + ' generation it names (built_at ' + $ceBuilt.ToString('s') + ') - the rostered pass did not run on this board, so its zero findings describe a board that no longer exists')
+  } else {
+    Ok ('capture-eviction roster is ARMED: capture-evictions.json (' + $ceGen.ToString('s') + ') post-dates the newest board ' + $ceCmps[0].Name + ' (built_at ' + $ceBuilt.ToString('s') + ')')
+  }
+}
+
 # ---- (g) THE PROMPTS THEMSELVES ARE CODE (2026-07-31) --------------------------------------------------
 # The agents and scheduled-task SKILLs that drive all of this were the only unversioned thing left, and on
 # the day this check was written SIX of eight agent prompts had already drifted between project scope and
