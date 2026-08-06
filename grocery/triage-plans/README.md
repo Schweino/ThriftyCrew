@@ -33,6 +33,18 @@ with the change and a future reader can see why a rule exists.
   // DIFFS against this instead of re-deriving the corpus (on 2026-07-31 the reviewer routed 26,003 names
   // and the developer then rebuilt 25,939 of them to check the same contract). "Outside the contract"
   // becomes a set difference anyone can re-run instead of a claim to be reconstructed.
+  // The sidecar MUST carry a positive_control and MUST cover ONE corpus. Both rules were bought on 2026-08-06:
+  //   positive_control - two full 26,013-name simulations returned a confident ZERO because PowerShell
+  //     variable names are case-insensitive, so `$b = Route $B $rules` destroyed the ruleset it was routing
+  //     against. A zero-change result is indistinguishable from a simulation that never ran, and zero is the
+  //     answer that ENDS an investigation ("this rule is a no-op, drop it"). So name a row you KNOW must
+  //     reclassify and record that it did:
+  //       "positive_control": { "name": "<a row that must move>", "expected": "<id>", "observed": "<id>" }
+  //     validate-triage-plan.ps1 reads the artifact and rejects the plan if expected != observed.
+  //   ONE corpus - the 08-06 artifact routed 79 files but built its aisle EXPOSURE list from a narrower set
+  //     (the live FF sweep was appending, so it fell back to the previous day's file). The developer then
+  //     paid to rediscover two Fareway rows the exposure list never covered. Every section reads the SAME
+  //     file list, or the artifact names the skipped files explicitly so the gap is a lookup, not a hunt.
   "routing_artifact": "plan-2026-07-31.routing.json",
   "items": [
     {
@@ -91,7 +103,19 @@ with the change and a future reader can see why a rule exists.
         "measured_by": "before/after routing of 25,939 names across comparison-2026-07-30 + out\\regular + out\\sams + out\\bakers + out\\fareway",
         "affected_now": 2,
         "names": ["Starry Mini Cans Lemon Lime, 7.5 fl. oz., 30 pk.", "Lulu Platanitios Lemon Plantain Chips, 2.5 oz., 30 pk."],
-        "risk": "both are the wrong-product rows themselves; no legitimate produce name matches. Fresh Lemon / Fresh Lime verified NOT matched."
+        "risk": "both are the wrong-product rows themselves; no legitimate produce name matches. Fresh Lemon / Fresh Lime verified NOT matched.",
+
+        // REQUIRED ON EVERY MATCHING-RULE CHANGE. Routing is itself a proxy, and this estate has now been
+        // bitten at every layer of it. 2026-07-31 measured the CROWN and should have measured the ROUTE.
+        // 2026-08-06 measured the route perfectly and a cell still moved 87% the wrong way: admitting ONE
+        // goat-milk formula to baby-formula made a 1-row Sam's capture "cover" the commodity, which
+        // discarded the 20-row capture behind it, and Sam's went $0.7704/oz -> $1.4445/oz. Both rows real,
+        // both prices real, the crown unmoved, every guard green. Routing says where a NAME lands; it says
+        // nothing about which ROW survives capture selection afterwards. THE OUTCOME IS THE CELL.
+        // An empty array is a legitimate, checkable claim: "no cell moved". Omitting the field is not.
+        "cell_effects": [
+          { "commodity": "lemons", "store": "Sam's Club", "before": 0.5413, "after": 0.4200 }
+        ]
       },
 
       // REQUIRED WHENEVER AN INCLUDE IS WIDENED. For each name the new token should admit, who claims it

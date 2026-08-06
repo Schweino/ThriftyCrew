@@ -134,6 +134,32 @@ function Test-Plan {
     if ($widens -and ($null -eq $i.claimed_by_earlier)) {
       $problems.Add("$id widens an include but has no claimed_by_earlier - first-match-wins can block the admit entirely (2026-07-31 taco-sauce/hot-sauce)")
     }
+
+    # --- CELL EFFECTS: routing is itself a proxy, and this estate has now been bitten at every layer -------
+    # 2026-07-31 round 1 measured each commodity's CROWN when it should have measured each product's ROUTING.
+    # The fix was to mandate measured_as: 'routing'. On 2026-08-06 that mandate was satisfied in full and a
+    # cell still moved 87% the wrong way, because routing answers "which commodity does this name land in"
+    # and says NOTHING about which row survives capture selection afterwards. Admitting ONE goat-milk formula
+    # to baby-formula made a 1-row Sam's capture "cover" the commodity, which discarded the 20-row capture
+    # behind it, and the live cell went $0.7704/oz -> $1.4445/oz. Every existing guard read clean: both rows
+    # real, both prices real, the crown unmoved. THE OUTCOME IS THE CELL, NOT THE ROUTE. So a rule change now
+    # has to state what happened to the PRICES, per store, or it is unmeasured no matter how good the routing
+    # section looks. An empty array is a legitimate and checkable claim: "no cell moved".
+    if (Test-TouchesMatchingRule $i) {
+      $ce = $null; if ($br) { $ce = $br.cell_effects }
+      if ($null -eq $ce) {
+        $problems.Add("$id changes a MATCHING RULE but blast_radius has no cell_effects - routing alone cannot see a capture-selection eviction (2026-08-06 Sam's baby-formula, +87% with every guard green). List each commodity+store whose per-unit price moves, before and after; an empty array means 'no cell moved' and is a fine answer if it is true")
+      } else {
+        $n = 0
+        foreach ($c in @($ce)) {
+          $n++
+          if (-not [string]$c.commodity) { $problems.Add("$id cell_effects[$n] has no commodity") }
+          if (-not [string]$c.store) { $problems.Add("$id cell_effects[$n] has no store") }
+          if ($null -eq $c.before) { $problems.Add("$id cell_effects[$n] has no before price") }
+          if ($null -eq $c.after) { $problems.Add("$id cell_effects[$n] has no after price") }
+        }
+      }
+    }
   }
 
   # the routing artifact, when the plan names one, has to be on disk
@@ -141,6 +167,27 @@ function Test-Plan {
   if ($art) {
     $p = if ([IO.Path]::IsPathRooted($art)) { $art } else { Join-Path $PlanDir $art }
     if (-not (Test-Path $p)) { $problems.Add("routing_artifact '$art' is named but not on disk at $p") }
+    else {
+      # POSITIVE CONTROL. A before/after simulation that returns ZERO changes is indistinguishable from a
+      # simulation that never ran, and zero is the answer that ENDS an investigation ("this rule is a no-op,
+      # drop it"). On 2026-08-06 the reviewer lost two full 26,013-name simulations to exactly that: PowerShell
+      # variable names are case-insensitive, so `$b = Route $B $rules` destroyed the ruleset it was routing
+      # against, and both runs reported a confident zero. Nothing in the artifact could have revealed it.
+      # So the artifact must name a control - a row it KNOWS must move - and record that it actually moved.
+      $doc2 = $null
+      try { $raw2 = Get-Content $p -Raw -ErrorAction Stop; if ($raw2 -and $raw2.Trim()) { $doc2 = $raw2 | ConvertFrom-Json } } catch { $doc2 = $null }
+      if (-not $doc2) { $problems.Add("routing_artifact '$art' is on disk but reads back empty or unparseable") }
+      elseif ($null -eq $doc2.positive_control) {
+        $problems.Add("routing_artifact '$art' has no positive_control - name one row the simulation MUST reclassify and record that it did, so a zero-change result cannot be a broken harness reporting success (2026-08-06 case-insensitive `$b/`$B)")
+      } else {
+        $pc = $doc2.positive_control
+        if (-not [string]$pc.name) { $problems.Add("routing_artifact positive_control has no name (which row was used as the control)") }
+        if (-not [string]$pc.expected) { $problems.Add("routing_artifact positive_control has no expected (what it must reclassify to)") }
+        if ($pc.observed -ne $pc.expected) {
+          $problems.Add("routing_artifact positive_control did NOT reproduce: expected '$([string]$pc.expected)' but observed '$([string]$pc.observed)' - the simulation behind this plan is not trustworthy")
+        }
+      }
+    }
   }
 
   if ($problems.Count) { return @{ rc = 2; problems = $problems } }
@@ -160,7 +207,8 @@ if ($SelfTest) {
     queue_ids_seen = @('q1'); ship_sequence = @('step 1')
     items = @([pscustomobject]@{
       queue_id='q1'; classification='wrong-product'; evidence=@('lemons | Sam''s | soda row'); root_cause='library cannot express the class'
-      blast_radius=[pscustomobject]@{ measured_as='routing'; measured_by='25,939 names'; affected_now=2 }
+      blast_radius=[pscustomobject]@{ measured_as='routing'; measured_by='25,939 names'; affected_now=2
+        cell_effects=@([pscustomobject]@{ commodity='lemons'; store="Sam's Club"; before=0.5413; after=0.4200 }) }
       proof=[pscustomobject]@{ guard_or_fixture='test-auditors case d2' }; rollback='revert the hunk'
       freshness='measured against comparison-2026-07-30'; resolution_note='fixed'
       surface_fix=[pscustomobject]@{ what='exclude the soda'; exact_change='lemons.exclude += ...' }
@@ -195,6 +243,49 @@ if ($SelfTest) {
   $ok2 = [pscustomobject]@{ queue_ids_seen=@('q1'); ship_sequence=@('x'); items=@([pscustomobject]@{
       queue_id='q1'; classification='no-code-change'; evidence=@('Hy-Vee 17 chips'); root_cause='browser store drift'; resolution_note='waits for the Wednesday agent' }) }
   _Case 'no-code item needs no blast radius/proof/rollback' $ok2 0 $null
+
+  # MUST-FIRE 5 (2026-08-06): a MATCHING RULE change with a perfect routing section and NO cell_effects.
+  # This is the founding case for the check: the 08-06 plan passed this gate with measured_as='routing' on
+  # every rule item, and a Sam's cell still moved +87% because routing cannot see capture selection.
+  $noCells = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $noCells.items[0].blast_radius.PSObject.Properties.Remove('cell_effects')
+  _Case 'a matching-rule change with no cell_effects is rejected' $noCells 2 'no cell_effects'
+  # CLEAN TWIN: an EMPTY cell_effects array is a positive claim ("no cell moved") and must pass.
+  $emptyCells = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $emptyCells.items[0].blast_radius.cell_effects = @()
+  _Case 'an empty cell_effects array is an answer, not an omission' $emptyCells 0 $null
+  # CLEAN TWIN: the infra item does NOT touch a matching rule, so it is never asked for cell effects.
+  _Case 'an infra item is not asked for cell_effects' $infra 0 $null
+  # MUST-FIRE 6: a cell_effects entry missing its prices is not a measurement.
+  $halfCells = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $halfCells.items[0].blast_radius.cell_effects[0].PSObject.Properties.Remove('after')
+  _Case 'a cell_effects entry with no after price is rejected' $halfCells 2 'no after price'
+
+  # --- routing artifact positive control (2026-08-06 case-insensitive $b/$B) ----------------------------
+  # These need a real file on disk, because the check reads the artifact rather than trusting the plan.
+  $artDir = Join-Path $env:TEMP ('vtp-selftest-' + $PID); New-Item -ItemType Directory -Force -Path $artDir | Out-Null
+  function _Artifact($obj) { $f = Join-Path $artDir 'art.json'; ($obj | ConvertTo-Json -Depth 8) | Set-Content $f -Encoding UTF8; return 'art.json' }
+  function _CaseArt($label, $doc, $expectRc, $expectMatch) {
+    $r = Test-Plan $doc @('q1') $artDir
+    $txt = ($r.problems -join ' | ')
+    if ($r.rc -eq $expectRc -and ((-not $expectMatch) -or ($txt -match $expectMatch))) { Write-Output "ok    $label" }
+    else { Write-Output ("FAIL  $label  rc=" + $r.rc + " want $expectRc; problems: " + $txt); $script:fail++ }
+  }
+  # CLEAN TWIN: a control that reproduces passes.
+  [void](_Artifact ([pscustomobject]@{ corpus='26,013 names'; positive_control=[pscustomobject]@{
+      name='Bubs Goat Milk Infant Formula Powder With Iron, 20 oz., 2 pk.'; expected='baby-formula'; observed='baby-formula' } }))
+  $withArt = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
+  $withArt | Add-Member -NotePropertyName routing_artifact -NotePropertyValue 'art.json' -Force
+  _CaseArt 'a routing artifact whose positive control reproduces passes' $withArt 0 $null
+  # MUST-FIRE 7: no control at all. A zero-change simulation and a broken simulation look identical.
+  [void](_Artifact ([pscustomobject]@{ corpus='26,013 names' }))
+  _CaseArt 'a routing artifact with no positive_control is rejected' $withArt 2 'no positive_control'
+  # MUST-FIRE 8: THE REAL BUG. The control was declared and did NOT reproduce - which is exactly what a
+  # destroyed ruleset looks like from the outside, and what two lost 26k-name simulations looked like.
+  [void](_Artifact ([pscustomobject]@{ corpus='26,013 names'; positive_control=[pscustomobject]@{
+      name='Bubs Goat Milk Infant Formula Powder With Iron, 20 oz., 2 pk.'; expected='baby-formula'; observed='<unmatched>' } }))
+  _CaseArt 'a positive control that did not reproduce is rejected' $withArt 2 'did NOT reproduce'
+  Remove-Item $artDir -Recurse -Force -ErrorAction SilentlyContinue
   # BLIND: zero items proves nothing
   _Case 'zero items reports BLIND (rc 3)' ([pscustomobject]@{ queue_ids_seen=@(); ship_sequence=@('x'); items=@() }) 3 'ZERO items'
   # MUST-FIRE: a comma-joined -OpenIds (what `powershell -File` does to a [string[]]) must be split, not
@@ -204,7 +295,7 @@ if ($SelfTest) {
   else { Write-Output "FAIL  comma-joined -OpenIds not split (got $($split.Count) id(s))"; $script:fail++ }
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
-  Write-Output 'SELF-TEST PASS (all 7 plan-gate cases)'
+  Write-Output 'SELF-TEST PASS (all 17 plan-gate cases)'
   exit 0
 }
 

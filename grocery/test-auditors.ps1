@@ -2959,6 +2959,23 @@ $r = RunPS 'validate-triage-plan.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'validate-triage-plan: the reviewer-to-developer handoff gate still rejects a token-match blast radius and an unclaimed include' }
 else { Bad ('validate-triage-plan -SelfTest failed (rc=' + $r.rc + ') - the plan gate is not enforcing what it claims: ' + ($r.text -replace "`n", ' ')) }
 
+# audit-capture-eviction (2026-08-06): the guard for the class NO other guard can see - a cell that got
+# DEARER because a thin capture evicted a rich one under Select-FreshestCaptureRows. Its must-fire is the
+# frozen Sam's baby-formula case ($0.7704 -> $1.4445/oz, every existing guard green), and its clean twins
+# include the founding ONIONS bug that the freshness ranker exists to fix, so a lazy "flag every eviction"
+# rewrite argues against the fix that created it and goes red here.
+$r = RunPS 'audit-capture-eviction.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'audit-capture-eviction: thin-capture eviction still fires on the frozen Sams formula case and stays silent on the onions ranker fix' }
+else { Bad ('audit-capture-eviction -SelfTest failed (rc=' + $r.rc + ') - the capture-eviction class is unguarded: ' + ($r.text -replace "`n", ' ')) }
+$aceSrc = Get-Content (Join-Path $root 'audit-capture-eviction.ps1') -Raw
+if ($aceSrc -match 'newestRows -ge \$evictedRows') { Ok 'the coverage-depth discriminator is still what separates an eviction from the ranker working' }
+else { Bad 'audit-capture-eviction lost its coverage-depth check - on a price ratio alone it also condemns the onions stale-LOW fix, which is the bug the freshness ranker was written for' }
+# The candidates artifact must keep carrying src_date, or this guard is permanently BLIND. It shipped
+# without that field for months, which is exactly why the eviction class went unseen.
+$cdSrc2 = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
+if ($cdSrc2 -match 'price_type,src_date\)') { Ok 'compare-deals still emits src_date into candidates (the field the per-store ranking turns on)' }
+else { Bad 'compare-deals no longer emits src_date into candidates-*.json - audit-capture-eviction goes BLIND and an eviction becomes invisible again' }
+
 # ---- (g) THE PROMPTS THEMSELVES ARE CODE (2026-07-31) --------------------------------------------------
 # The agents and scheduled-task SKILLs that drive all of this were the only unversioned thing left, and on
 # the day this check was written SIX of eight agent prompts had already drifted between project scope and

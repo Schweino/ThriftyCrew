@@ -98,12 +98,44 @@ Whenever you widen an INCLUDE, fill in `claimed_by_earlier` for every name the t
 it today, at what index, and the release exclude needed to free it. An include that cannot be reached is a
 change that does nothing, shipped with confidence.
 
+### ROUTING IS ALSO A PROXY. THE OUTCOME IS THE CELL.
+
+`measured_as: "routing"` was the fix for measuring crowns. On 2026-08-06 a plan satisfied it in full on every
+rule item and a live cell still moved 87% the wrong way. Admitting ONE goat-milk formula to `baby-formula`
+made a 1-row Sam's capture "cover" the commodity, which discarded the 20-row capture behind it, and the cell
+went `$0.7704/oz -> $1.4445/oz`. Both rows real, both prices real, the crown unmoved, every guard green.
+Routing answers *where a name lands*. It says nothing about *which row survives capture selection after it
+lands* - and `Select-FreshestCaptureRows` hands a commodity to the freshest capture holding even one matching
+row. So every matching-rule item also carries `blast_radius.cell_effects`: each commodity+store whose
+per-unit price moves, before and after. An empty array is a fine answer when it is true; omitting it fails
+the gate. `audit-capture-eviction.ps1` computes exactly this class and is the cheapest way to fill it in.
+
 ### WRITE THE MEASUREMENT DOWN, NOT JUST ITS SUMMARY
 
 Save the frozen before/after routing to `plan-<date>.routing.json` beside the plan and name it in
 `routing_artifact`. The developer diffs against that file instead of re-deriving your corpus; on
 2026-07-31 it rebuilt 25,939 names to re-check a contract you had already computed over 26,003. Your
 numbers in prose are a claim. The artifact is the contract.
+
+**Give the simulation a POSITIVE CONTROL, and put it in the artifact.** On 2026-08-06 two consecutive
+26,013-name simulations returned zero routing changes, because PowerShell variable names are
+case-insensitive and `$b = Route $B $rules` destroyed the ruleset it was routing against. Nothing errored.
+A zero-change result is indistinguishable from a simulation that never ran, and zero is the answer that
+ENDS an investigation - "this rule is a no-op, drop it" - which makes it the most expensive wrong answer
+available. Pick a row you KNOW must reclassify, assert it before you trust any other number, and record it:
+`"positive_control": { "name": "...", "expected": "<id>", "observed": "<id>" }`. The gate reads the artifact
+and rejects the plan when they disagree.
+
+**One corpus, or name the gap.** The 08-06 artifact routed 79 capture files but built its aisle exposure
+list from a narrower set, because the live Family Fare sweep was appending mid-measurement and it fell back
+to the previous day's file. That was recorded honestly in a caveat and still cost the developer real work
+rediscovering two Fareway rows the exposure list never covered. Every section reads the SAME file list, or
+the artifact names the skipped files explicitly so the hole is a lookup instead of a hunt.
+
+**Pin the board generation.** `triage-due.ps1` prints a `BOARD <comparison-file>` line. Record it in
+`board_week` and measure everything against it. If it says MID-BUILD or JUST LANDED, say so in every
+`freshness` line, because on 2026-08-06 a build landed six minutes after the corpus was frozen and three of
+six items came back deviated - every one of them for that reason and not for a bad diagnosis.
 
 ## EVERY ITEM SHIPS WITH ITS PROOF
 

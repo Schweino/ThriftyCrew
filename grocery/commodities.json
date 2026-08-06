@@ -5110,6 +5110,7 @@
                         "\\boranges?\\b"
                     ],
         "exclude":  [
+                        "\\bcarrots?\\b",
                         "\\bjuice\\b",
                         "mandarin",
                         "clementine",
@@ -5677,6 +5678,7 @@
                         "\\btomato(?:es)?\\b"
                     ],
         "exclude":  [
+                        "bruschetta",
                         "\\bchopped\\s+tomatoes\\b",
                         "\\bpomi\\b",
                         "\\bbouillon\\b",
@@ -18800,6 +18802,7 @@
                         "parmigiano"
                     ],
         "exclude":  [
+                        "\\bseasoning\\b",
                         "\\bpasta\\b",
                         "\\bfrozen\\b",
                         "crisps",
@@ -21793,6 +21796,7 @@
                         "worcestershire"
                     ],
         "exclude":  [
+                        "\\bseasoning\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",
                         "\\bstage\\s*[1-3]\\b",
@@ -25733,6 +25737,8 @@
                         "\\bcookies?\\b"
                     ],
         "exclude":  [
+                        "\\bseasoning\\b",
+                        "\\brub\\b",
                         "\\bdough\\b",
                         "sandwich\\s+cookies",
                         "\\boreo\\b",
@@ -36075,6 +36081,8 @@
                         "teriyaki"
                     ],
         "exclude":  [
+                        "jack\\s*link",
+                        "tender\\s+bites",
                         "\\bjerky\\b",
                         "\\bbowl\\b",
                         "\\bfrozen\\b",

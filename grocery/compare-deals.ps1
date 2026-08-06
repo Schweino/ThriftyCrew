@@ -775,6 +775,31 @@ if ($SelfTest) {
     _Route 'pasta still excludes when NOT frozen'       'Store Brand Lasagna with Meat Sauce, Pasta, 38 oz' '<unmatched>'
     _Route 'a GALLON bag box still routes'             'Great Value Freezer Guard Double Zipper Gallon Freezer Bag, 80 Count' 'storage-bags'
     _Route 'the Aldi crown bag row is untouched'       'Boulder Twin Lock Storage Bags 40 CT' 'storage-bags'
+
+    # --- R8-R13, 2026-08-06 second pass: SIX WRONG PRODUCTS THAT WERE LIVE ON THE BOARD --------------------
+    # Found by audit-capture-eviction.ps1 on the day it was written, not by any existing guard. All six had
+    # been matching their commodity for a long time and losing on price, so nothing ever surfaced them. Then
+    # the resumed partial Walmart pull of 2026-08-06 landed a capture holding ONE row for each of these
+    # commodities, that capture won the commodity outright under Select-FreshestCaptureRows, and the wrong
+    # product became the cell. A latent routing bug and a thin capture are individually survivable; together
+    # they put shredded CARROTS on the oranges row at $3.09/lb.
+    # Each exclude was measured against every candidate row in the live corpus first: 9 rows leave in total,
+    # all nine wrong products, and no store loses coverage (every one falls through to a correct cheaper row).
+    _Route 'R8 shredded orange CARROTS leave oranges'  'Fresh Shredded Orange Carrots, 10 Oz Bag' 'carrots'
+    _Route 'R9 garlic parmesan SEASONING leaves cheese' 'Weber Garlic Parmesan Seasoning, Gluten Free, 4.3 oz' '<unmatched>'
+    _Route 'R9 Sams parmesan pepper seasoning too'     "Member's Mark Parmesan Pepper Seasoning, 7.5 oz." '<unmatched>'
+    _Route 'R10 the SEASONING brand named Cookies'     'Cookies Flavor Enhancer All Purpose Seasoning & Rub, 8 oz' '<unmatched>'
+    _Route 'R11 worcestershire SEASONING is not sauce' 'Grill Mates Kosher Cracked Peppercorn & Worcestershire Seasoning, 2.75 oz Bottle' '<unmatched>'
+    _Route 'R12 teriyaki BEEF BITES are not sauce'     "Jack Link's 100% Beef Teriyaki Tender Bites 10Ounce Resealable Bag" '<unmatched>'
+    _Route 'R12 the Bakers teriyaki beef sticks too'   "Jack Link's x MrBeast Teriyaki Beef Sticks, 9.20 ounce, 10 count of .92 oz meat sticks" '<unmatched>'
+    _Route 'R13 jarred BRUSCHETTA is not fresh tomato' 'Cara Mia Tomato Bruschetta, 14.8 oz. Jar' '<unmatched>'
+    # CLEAN TWINS: the real product of each of the six must be untouched, or a token is too broad.
+    _Route 'R8 twin: real navel oranges still route'   'Fresh Navel Oranges, 4 lb Bag' 'oranges'
+    _Route 'R9 twin: real grated parmesan still routes' 'Great Value Grated Parmesan Cheese, 16 oz Bottle' 'parmesan'
+    _Route 'R10 twin: real cookies still route'        'Great Value Classic Chocolate Chip Cookies, 18.2 oz' 'cookies'
+    _Route 'R11 twin: real worcestershire still routes' 'Great Value Worcestershire Sauce, 10 fl oz' 'worcestershire'
+    _Route 'R12 twin: real teriyaki sauce still routes' 'Great Value Teriyaki Sauce, 15 fl oz, 1 Count' 'teriyaki-sauce'
+    _Route 'R13 twin: fresh tomatoes still route'      'Fresh Beefsteak Tomatoes, Each' 'tomatoes'
   }
 
   Write-Output ('-'*54)
@@ -1074,7 +1099,13 @@ foreach ($g in ($matched | Group-Object id)) {
   # price_type added 2026-07-23 so derive-recipe-floors.ps1 can tell an EVERYDAY candidate from a sale -
   # the everyday floor per store is the cheapest everyday-typed candidate, which the comparison row hides
   # whenever a sale is winning that store.
-  $candList.Add([pscustomobject]@{ id=$g.Name; label=$f.label; unit=$f.unit; candidates=@($g.Group | Select-Object store,name,price_text,size_text,regular,unit_price,basis,price_type) })
+  # src_date added 2026-08-06. The candidates artifact used to drop the ONE field the per-store ranking
+  # actually turns on (Select-FreshestCaptureRows filters on src_date), so every auditor reading this file
+  # was structurally blind to a freshness EVICTION: a row visible here, cheaper than the board cell, with
+  # no way to tell whether it lost on price or was filtered out before price was ever compared. That is how
+  # Sam's baby-formula shipped at $1.4445/oz on 2026-08-06 with a real $0.7704/oz row sitting in this file.
+  # audit-capture-eviction.ps1 reads it. An artifact that omits the deciding field cannot be audited.
+  $candList.Add([pscustomobject]@{ id=$g.Name; label=$f.label; unit=$f.unit; candidates=@($g.Group | Select-Object store,name,price_text,size_text,regular,unit_price,basis,price_type,src_date) })
 }
 $candPfx = if ($OutName -eq 'comparison') { 'candidates' } else { "$OutName-candidates" }
 (@{ week_of=$today; commodities=$candList } | ConvertTo-Json -Depth 8) | Set-Content (Join-Path $OutDir ("$candPfx-"+$today+".json")) -Encoding UTF8
