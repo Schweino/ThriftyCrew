@@ -95,3 +95,7 @@
 [2026-08-05T08:30:03] cloud-runs: check-cloud-runs: heartbeat.yml ok (completed/success)
 [2026-08-05T08:30:03] weekly-lock: weekly-run lock: HELD - a weekly refresh is in flight (pid 3180, phase links, acquired 2026-08-05T06:46:56, last refreshed 2026-08-05T07:29:50, expires 2026-08-05T11:29:50).
 [2026-08-05T08:30:03] STAND DOWN: the weekly browser refresh holds grocery\out. Not starting a second full pipeline on the same files; the 16:00 UTC cloud backup covers today.
+[2026-08-06T08:30:03] cloud-runs: check-cloud-runs: daily.yml ok (completed/success)
+[2026-08-06T08:30:03] cloud-runs: check-cloud-runs: heartbeat.yml ok (completed/success)
+[2026-08-06T08:30:03] weekly-lock: weekly-run lock: HELD - a weekly refresh is in flight (pid 34464, phase links, acquired 2026-08-05T06:46:56, last refreshed 2026-08-06T06:56:15, expires 2026-08-06T10:56:15).
+[2026-08-06T08:30:03] STAND DOWN: the weekly browser refresh holds grocery\out. Not starting a second full pipeline on the same files; the 16:00 UTC cloud backup covers today.

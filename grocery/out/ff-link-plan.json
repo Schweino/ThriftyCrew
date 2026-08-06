@@ -1,16 +1,6 @@
 ﻿{
     "resolved":  [
-                     {
-                         "id":  "pork-shoulder",
-                         "fault":  "PRICE-DRIFT",
-                         "board":  "Fresh Shoulder/Butt Pork Roast, Boneless",
-                         "board_pu":  4.49,
-                         "name":  "Fresh Shoulder/Butt Pork Roast, Boneless",
-                         "url":  "https://www.shopfamilyfare.com/shop/meat/pork/fresh/fresh_shoulder_butt_pork_roast_boneless/p/1564405684713031240",
-                         "price":  "$4.49",
-                         "size":  "lb",
-                         "score":  1
-                     }
+
                  ],
     "refused":  [
                     {
@@ -50,7 +40,7 @@
                         "why":  "match found but per-unit disagrees: board $0.1993 vs link $0.3993 (50.1%)"
                     }
                 ],
-    "worked":  10,
-    "generated":  "2026-08-05 06:17",
-    "board":  "comparison-2026-08-04.json"
+    "worked":  9,
+    "generated":  "2026-08-06 11:31",
+    "board":  "comparison-2026-08-06.json"
 }

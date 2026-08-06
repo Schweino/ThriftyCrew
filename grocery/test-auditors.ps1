@@ -182,17 +182,34 @@ Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue
 # @(Get-Content x | ConvertFrom-Json) does NOT unroll a JSON array in 5.1: it yields ONE element holding the
 # whole array. That is how 54 sanity outliers became a single flag line. This is a CLASS check, not a
 # site check - it fails if the pattern reappears anywhere in the live grocery scripts.
+#
+# WIDENED 2026-08-06, because this check watched one doorway and the bug walked through another two:
+#   - the same no-unroll applies to @(Invoke-RestMethod ...) and @(Invoke-WebRequest ...); the cmdlet emits a
+#     deserialized JSON array as ONE pipeline object exactly like ConvertFrom-Json does, and
+#   - daily.yml is PowerShell too, but it lives in .github\workflows and this scan only read grocery\*.ps1.
+# Cost of the gap: the cloud backup's stand-down gate read @(Invoke-RestMethod ...).Count -gt 0, which is
+# always true, so runs #22 (07-24) through #34 (08-05) all stood down - 13 days with no backup, all green.
+# A class check that only knows the one shape the class first appeared in is a site check wearing a costume.
+$skipSelf = @('test-auditors.ps1', 'test-gate-count.ps1')   # these quote the pattern to describe and probe it
+$scan = @(Get-ChildItem (Join-Path $root '*.ps1')) +
+        @(Get-ChildItem (Join-Path (Split-Path $root -Parent) '.github\workflows\*.yml') -ErrorAction SilentlyContinue)
+$patterns = @(
+  '(?m)^.*@\(\s*Get-Content[^)\r\n]*\|\s*ConvertFrom-Json\s*\).*$',
+  '(?m)^.*@\(\s*Invoke-(RestMethod|WebRequest)\b.*$'
+)
 $offenders = @()
-foreach ($f in (Get-ChildItem (Join-Path $root '*.ps1'))) {
-  if ($f.Name -eq 'test-auditors.ps1') { continue }   # this file quotes the pattern to describe and probe it
+foreach ($f in $scan) {
+  if ($skipSelf -contains $f.Name) { continue }
   $txt = Get-Content $f.FullName -Raw
-  foreach ($ln in ([regex]::Matches($txt, '(?m)^.*@\(\s*Get-Content[^)\r\n]*\|\s*ConvertFrom-Json\s*\).*$'))) {
-    if ($ln.Value -match '^\s*#') { continue }   # the explanatory comments are not code
-    $offenders += ($f.Name + ': ' + $ln.Value.Trim())
+  foreach ($p in $patterns) {
+    foreach ($ln in ([regex]::Matches($txt, $p))) {
+      if ($ln.Value -match '^\s*#') { continue }   # the explanatory comments are not code
+      $offenders += ($f.Name + ': ' + $ln.Value.Trim())
+    }
   }
 }
-if ($offenders.Count -eq 0) { Ok 'no live script wraps a ConvertFrom-Json pipeline in @() (the PS 5.1 no-unroll trap)' }
-else { Bad ("the @(Get-Content|ConvertFrom-Json) trap is back in " + $offenders.Count + " place(s):`n      " + ($offenders -join "`n      ")) }
+if ($offenders.Count -eq 0) { Ok 'no live script or workflow wraps a JSON-array-returning call in @() (the PS 5.1 no-unroll trap)' }
+else { Bad ("the PS 5.1 no-unroll trap is back in " + $offenders.Count + " place(s):`n      " + ($offenders -join "`n      ")) }
 
 # and prove the trap is real, so nobody "fixes" the check by deleting it
 $probe = Join-Path $env:TEMP ('arr-' + [guid]::NewGuid().ToString('N').Substring(0,6) + '.json')

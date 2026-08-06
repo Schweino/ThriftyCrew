@@ -51,9 +51,24 @@ jobs:
           }
           $since = (Get-Date).ToUniversalTime().AddHours(-16).ToString("yyyy-MM-ddTHH:mm:ssZ")
           $uri = "https://api.github.com/repos/$env:GITHUB_REPOSITORY/commits?author=actions@users.noreply.github.com&since=$since&per_page=1"
-          $recent = @()
-          try { $recent = @(Invoke-RestMethod -Uri $uri -Headers @{ Authorization = "Bearer $env:GH_TOKEN"; "User-Agent" = "smp-pipeline" }) } catch { Write-Host "gate API check failed ($($_.Exception.Message)) - failing OPEN (running) so an API blip can never stop the pipeline" }
-          if ($recent.Count -gt 0) {
+          $resp = $null
+          try { $resp = Invoke-RestMethod -Uri $uri -Headers @{ Authorization = "Bearer $env:GH_TOKEN"; "User-Agent" = "smp-pipeline" } } catch { Write-Host "gate API check failed ($($_.Exception.Message)) - failing OPEN (running) so an API blip can never stop the pipeline" }
+          # >>> GATE-COUNT  (test-gate-count.ps1 extracts and executes THIS text verbatim - keep the sentinels)
+          # COUNT THE COMMITS, NOT THE WRAPPER. This was `@(Invoke-RestMethod ...).Count -gt 0`, and in
+          # Windows PowerShell 5.1 that is ALWAYS TRUE. Invoke-RestMethod emits a deserialized JSON array as
+          # ONE pipeline object rather than enumerating it, so @( ) around the CALL builds a 1-element array
+          # holding the array - Count 1 whether the API returned zero commits or fifty. (@( ) around a
+          # VARIABLE that already holds the array unrolls it correctly, which is why this reads as fine.)
+          # Measured 2026-08-06: every scheduled run from #22 on 2026-07-24 through #34 on 2026-08-05 stood
+          # down in 0.1-0.4 min - 13 consecutive days, all green, the backup never once ran. It went unseen
+          # because a stand-down is a SUCCESS, so the workflow reported healthy the entire time. On 08-05 and
+          # 08-06 the local 8:30 run also stood down (the weekly lock held grocery\out across two days) and
+          # there was no safety net underneath it at all. See ps51-json-array-traps.
+          # Assign first, then pipe: piping a stored array enumerates it, $null pipes to nothing, and .sha
+          # keeps a non-commit payload (an API error object) from counting as a commit.
+          $commitCount = @($resp | Where-Object { $_.sha }).Count
+          # <<< GATE-COUNT
+          if ($commitCount -gt 0) {
             Write-Host "::notice::The pipeline already committed within 16h (the local 8:30am run). Backup standing down - a second pass would only re-throttle the stores and burn runner minutes."
             "skip=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
           } else {

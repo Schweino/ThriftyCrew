@@ -32,6 +32,36 @@ $okLines = New-Object System.Collections.Generic.List[string]
 $TASK_NOT_YET_RUN = 267011   # 0x00041303 SCHED_S_TASK_HAS_NOT_RUN
 $TASK_RUNNING     = 267009   # 0x00041301 SCHED_S_TASK_RUNNING (transient: reported as LastTaskResult while a run is in flight)
 
+# >>> PROOF-FRESHNESS  (test-proof-freshness.ps1 extracts and executes THIS text verbatim - keep the sentinels)
+function Test-ProofLanded {
+  param([string]$ProvesGlob, [string]$RepoRoot, [double]$MaxAgeHours, $LastRunTime, [datetime]$Now)
+  # Decides whether a NONZERO task result is excused because the work landed anyway. Two conditions, and
+  # the second one is the whole point (added 2026-08-06):
+  #   1. the proof output is younger than max_age_hours, AND
+  #   2. the proof output is NOT OLDER THAN the run it is supposed to prove.
+  #
+  # Condition 2 exists because max_age_hours (30h, sized to tolerate a late run plus a weekend gap) is WIDER
+  # than a daily task's own 24h period, so YESTERDAY's output always satisfies condition 1 on its own. On
+  # 2026-08-06 the Baker's task never started at all (PC went back to sleep at 05:52, the 06:00 trigger fired
+  # into a sleeping machine, result 0x800710E0) and produced nothing - but bakers-regular-2026-08-05.json was
+  # 23.5h old, inside the 30h window, so this check reported "work landed, not dead" and the entire missed day
+  # went unpaged. A proof written BEFORE the run cannot be evidence about that run.
+  #
+  # The founding case for 'proves' still passes: 2026-07-28, Baker's was terminated by a battery condition
+  # AFTER its data had refreshed. That proof was written DURING the run, so it is >= LastRunTime.
+  if (-not $ProvesGlob) { return @{ fresh = $false; ageH = $null; why = '' } }
+  $newest = @(Get-ChildItem (Join-Path $RepoRoot $ProvesGlob) -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1)
+  if ($newest.Count -eq 0) { return @{ fresh = $false; ageH = $null; why = ' (nothing matches its proves glob)' } }
+  $stamp = $newest[0].LastWriteTime
+  $ageH  = [math]::Round(($Now - $stamp).TotalHours, 1)
+  if ($ageH -gt $MaxAgeHours) { return @{ fresh = $false; ageH = $ageH; why = (' (its newest output is ' + $ageH + 'h old)') } }
+  if ($LastRunTime -and $stamp -lt $LastRunTime) {
+    return @{ fresh = $false; ageH = $ageH; why = (' (its newest output ' + $newest[0].Name + ' PREDATES the run that was supposed to write it, so that run produced nothing)') }
+  }
+  return @{ fresh = $true; ageH = $ageH; why = '' }
+}
+# <<< PROOF-FRESHNESS
+
 # ---- Windows scheduled tasks (silent death = deleted / disabled / long-since-run) ----
 foreach ($t in @($cfg.windows_tasks)) {
   $name = [string]$t.name
@@ -53,21 +83,26 @@ foreach ($t in @($cfg.windows_tasks)) {
   elseif ($ageH -gt [double]$t.max_age_hours) { $issues.Add(("TASK STALE: '{0}' last ran {1}h ago (> {2}h) - did its trigger stop? {3}" -f $name, $ageH, $t.max_age_hours, $t.why)) }
   elseif ($res -ne 0) {
     # A nonzero exit is only a SILENT DEATH if the work also failed to land. When the registry names a
-    # 'proves' output and that output is fresh, the task's job got done (a killed-at-the-end run, a battery
-    # stop, a retry that succeeded downstream) - report it, do not page it. Without 'proves' nothing changes.
-    $proofFresh = $false; $proofAge = $null
-    if ($t.PSObject.Properties['proves'] -and $t.proves) {
-      $pp = Join-Path $repo ([string]$t.proves)
-      $newest = @(Get-ChildItem $pp -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1)
-      if ($newest.Count -gt 0) {
-        $proofAge = [math]::Round(($now - $newest[0].LastWriteTime).TotalHours, 1)
-        if ($proofAge -le [double]$t.max_age_hours) { $proofFresh = $true }
-      }
-    }
-    if ($proofFresh) { $okLines.Add(("{0,-38} result {1} BUT its output is {2}h fresh - work landed, not dead" -f $name, $res, $proofAge)) }
-    else { $issues.Add(("TASK FAILED: '{0}' last result {1} (nonzero) - {2}" -f $name, $res, $t.why)) }
+    # 'proves' output and that output is fresh AND was written by this run, the task's job got done (a
+    # killed-at-the-end run, a battery stop, a retry that succeeded downstream) - report it, do not page it.
+    # Without 'proves' nothing changes: a nonzero result pages. See Test-ProofLanded for why both halves.
+    $glob = if ($t.PSObject.Properties['proves'] -and $t.proves) { [string]$t.proves } else { '' }
+    $v = Test-ProofLanded -ProvesGlob $glob -RepoRoot $repo -MaxAgeHours ([double]$t.max_age_hours) -LastRunTime $last -Now $now
+    if ($v.fresh) { $okLines.Add(("{0,-38} result {1} BUT its output is {2}h fresh - work landed, not dead" -f $name, $res, $v.ageH)) }
+    else { $issues.Add(("TASK FAILED: '{0}' last result {1} (nonzero) - {2}{3}" -f $name, $res, $t.why, $v.why)) }
   }
   else { $okLines.Add(("{0,-38} ran {1}h ago, result 0" -f $name, $ageH)) }
+}
+
+# ---- REGISTRY DRIFT (2026-08-06): a task that exists on the machine but is in nobody's registry is invisible
+# to every check above - it can die silently forever and nothing here notices, because this loop only walks
+# what the JSON already lists. That is exactly how "SMP Daily Facebook Reel", "SMP Family Fare Term Sweep" and
+# "SMP Friday Email (draft)" ran unwatched until they were found by hand. This catches the NEXT one.
+$known = @(@($cfg.windows_tasks) | ForEach-Object { [string]$_.name })
+foreach ($wt in @(Get-ScheduledTask -TaskName 'SMP *' -ErrorAction SilentlyContinue)) {
+  if ($known -notcontains [string]$wt.TaskName) {
+    $issues.Add(("TASK UNWATCHED: '{0}' is registered in Windows Task Scheduler but missing from expected-automations.json - nothing checks whether it still runs. Add it to windows_tasks." -f $wt.TaskName))
+  }
 }
 
 # ---- critical output files (silent death = missing / stale) ----
