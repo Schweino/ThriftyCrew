@@ -1098,6 +1098,16 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         if ($ceRc -eq 3) {
           Log ('capture-eviction: BLIND - ' + $ceLine)
           $summary += 'REVIEW    audit-capture-eviction could not evaluate (no src_date in candidates, or no board) - a thin-capture eviction is INVISIBLE this cycle'
+        } elseif ($ceRc -ne 0 -or $ceLine -notmatch '^audit-capture-eviction: ') {
+          # A CRASH MUST NOT READ AS A CLEAN BOARD. Measured while shipping this hunk: with the child
+          # throwing, 2>$null swallows the message and $ceLine comes back empty; with the script missing,
+          # powershell -File prints its own banner instead. Both used to land in the else branch below,
+          # parse to zero findings and log a blank line, which is indistinguishable from a clean pass -
+          # the exact shape of the dead-guard class this whole roster exists to close. Same precedent and
+          # same wording as audit-ff-carry's did-not-complete line above. test-auditors catches it on the
+          # NEXT cycle too (the stamp stops advancing past the board), but it gets said out loud today.
+          Log ('capture-eviction DID NOT COMPLETE (rc=' + $ceRc + '): ' + $ceLine)
+          $summary += 'REVIEW    audit-capture-eviction did not complete - the thin-capture eviction check produced no verdict this cycle, so a cell dearer than the engine rule allows would go unseen'
         } else {
           Log ('capture-eviction: ' + $ceLine)
           $ceN = 0
