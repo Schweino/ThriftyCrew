@@ -6,7 +6,6 @@ blueberries	blueberries
 butter	butter
 chicken-breast	boneless skinless chicken breast
 chicken-thighs	chicken thighs
-cottage-cheese	cottage cheese
 cream-cheese	cream cheese
 eggs	large eggs
 grapes	grapes
@@ -24,6 +23,7 @@ strawberries	strawberries
 sweet-corn	sweet corn
 whole-chicken	whole chicken
 yogurt	yogurt
+cottage-cheese	cottage cheese
 watermelon	watermelon
 bread	white bread
 beef-broth	beef broth
@@ -43,7 +43,6 @@ garlic-powder	garlic powder
 ground-cinnamon	ground cinnamon
 ground-cumin	ground cumin
 ground-turmeric	ground turmeric
-half-and-half	half and half
 honey	honey
 hot-sauce	hot sauce
 italian-seasoning	italian seasoning
@@ -63,10 +62,11 @@ tomato-sauce	tomato sauce
 vegetable-oil	vegetable oil
 white-vinegar	distilled white vinegar
 apple-cider-vinegar	apple cider vinegar
-frozen-peas	frozen sweet peas
 garlic	fresh garlic
+half-and-half	half and half
 pork-tenderloin	pork tenderloin whole boneless
 zucchini	zucchini squash
+frozen-peas	frozen sweet peas
 celery	celery
 green-onions	green onions
 limes	fresh limes
@@ -87,7 +87,6 @@ batteries	aa batteries
 bbq-sauce	barbecue sauce
 beef-jerky	beef jerky
 blackberries	fresh blackberries
-bleach	bleach
 body-wash	body wash
 breakfast-sausage	breakfast sausage
 broccoli	broccoli crowns
@@ -131,14 +130,12 @@ deodorant	deodorant
 diapers	diapers size 4
 dinner-rolls	dinner rolls
 dish-soap	dish soap
-dishwasher-detergent	dishwasher detergent pacs
 disinfecting-wipes	disinfecting wipes
 dog-food	dry dog food
 dog-treats	dog treats
 dryer-sheets	dryer sheets
 egg-noodles	egg noodles
 energy-drinks	energy drink
-evaporated-milk	evaporated milk
 fabric-softener	liquid fabric softener
 facial-tissues	facial tissues
 feta	feta cheese crumbled
@@ -149,12 +146,10 @@ frozen-broccoli	frozen broccoli florets
 frozen-fruit	frozen mixed berries
 frozen-meatballs	frozen meatballs
 frozen-waffles	frozen waffles
-fruit-cups	fruit cups
 fruit-punch	fruit punch
 graham-crackers	graham crackers
 granola	granola
 granola-bars	chewy granola bars
-ground-pork	ground pork
 hand-soap	liquid hand soap
 heavy-cream	heavy whipping cream
 hot-dogs	hot dogs
@@ -182,45 +177,29 @@ parmesan	grated parmesan cheese
 pasta	spaghetti
 pasta-sauce	pasta sauce marinara
 peanuts	dry roasted peanuts
-pears	bartlett pears
 pepperoni	sliced pepperoni
 pickles	dill pickle spears
-pizza-sauce	pizza sauce
 popsicles	popsicles
 pork-shoulder	pork shoulder butt roast
 potato-chips	potato chips
-powdered-sugar	powdered sugar
-pretzels	pretzel twists
 protein-bars	protein bars
 queso	salsa con queso
-raisins	raisins
 ramen	ramen noodles
 ranch-dressing	ranch dressing
 raspberries	fresh raspberries
-razors	disposable razors
 red-potatoes	red potatoes
 refried-beans	refried beans
 rice	long grain white rice
-rice-cakes	rice cakes
 salmon	salmon fillet
-sandwich-bags	sandwich bags
 sandwich-cookies	sandwich cookies
 shampoo	shampoo
 shower-cleaner	bathroom cleaner
 shrimp	frozen raw shrimp
 sirloin-steak	sirloin steak
 sliced-cheese	american cheese slices
-soda	cola 12 pack
-sparkling-water	sparkling water
-spinach	fresh spinach
 stain-remover	laundry stain remover
-storage-bags	gallon freezer bags
-stuffing-mix	stuffing mix
-sugar	granulated sugar
 sweet-potatoes	sweet potatoes
-tea-bags	black tea bags
 teriyaki-sauce	teriyaki sauce
-tilapia	tilapia fillets
 toaster-pastries	toaster pastries
 toilet-bowl-cleaner	toilet bowl cleaner
 tomatoes	tomatoes on the vine
@@ -228,21 +207,16 @@ tomato-soup	tomato soup
 toothbrushes	toothbrush
 toothpaste	toothpaste
 tortilla-chips	tortilla chips
-tortillas	flour tortillas
-turkey-lunchmeat	sliced deli turkey breast
 vanilla-extract	vanilla extract
 whipped-cream	whipped topping
 yeast	active dry yeast
 aluminum-foil	aluminum foil
-baby-formula	infant formula
 bagels	plain bagels
 balsamic-vinegar	balsamic vinegar
-bar-soap	bar soap
-bottled-water	purified water 24 pack
+bleach	bleach
 bratwurst	bratwurst
-brown-rice	brown rice
-brown-sugar	brown sugar
 cabbage	green cabbage
+canned-pineapple	canned pineapple chunks
 charcoal	charcoal briquets
 chicken-wings	chicken wings
 clementines	mandarins clementines
@@ -250,28 +224,24 @@ corn-dogs	corn dogs
 cotton-swabs	cotton swabs
 cucumbers	cucumber
 dijon-mustard	dijon mustard
+dishwasher-detergent	dishwasher detergent pacs
 disinfectant-spray	disinfectant spray
-drain-cleaner	drain cleaner
 egg-whites	liquid egg whites
-english-muffins	english muffins
-feminine-pads	maxi pads
+evaporated-milk	evaporated milk
 floor-cleaner	floor cleaner
 fresh-ginger	ginger root
 fresh-green-beans	fresh green beans
 frozen-corn	frozen sweet corn
 frozen-fries	frozen french fries
-frozen-lasagna	frozen lasagna
 frozen-vegetables	frozen mixed vegetables
-fruit-snacks	fruit snacks
+fruit-cups	fruit cups
 furniture-polish	furniture polish
-glass-cleaner	glass cleaner
 grape-juice	grape juice
+ground-pork	ground pork
 hamburger-buns	hamburger buns
-hand-sanitizer	hand sanitizer
 hash-browns	frozen hash browns
 hot-dog-buns	hot dog buns
 iced-tea	iced tea gallon
-instant-coffee	instant coffee
 italian-sausage	italian sausage
 jalapenos	jalapeno peppers
 lettuce	iceberg lettuce
@@ -280,55 +250,85 @@ maple-syrup	pancake syrup
 muffins	blueberry muffins
 oat-milk	oat milk
 oven-cleaner	oven cleaner
-pita-bread	pita bread
-plums	plums
-pudding-cups	pudding cups
+pears	bartlett pears
+pizza-sauce	pizza sauce
+powdered-sugar	powdered sugar
+pretzels	pretzel twists
 radishes	radishes
+raisins	raisins
+razors	disposable razors
 red-wine-vinegar	red wine vinegar
 relish	sweet relish
 ribeye-steak	ribeye steak
+rice-cakes	rice cakes
+sandwich-bags	sandwich bags
 shaving-cream	shaving cream
+soda	cola 12 pack
+sparkling-water	sparkling water
+spinach	fresh spinach
 sports-drinks	gatorade
-string-cheese	mozzarella string cheese
+storage-bags	gallon freezer bags
+stuffing-mix	stuffing mix
+sugar	granulated sugar
 tampons	tampons
 tater-tots	tater tots
+tea-bags	black tea bags
+tilapia	tilapia fillets
+tortillas	flour tortillas
 turkey-bacon	turkey bacon
+turkey-lunchmeat	sliced deli turkey breast
 worcestershire	worcestershire sauce
 air-freshener	air freshener spray
-paper-towels	paper towels
-toilet-paper	toilet paper
+baby-formula	infant formula
+bar-soap	bar soap
 bell-peppers	green bell pepper
+bottled-water	purified water 24 pack
 breakfast-sandwiches	frozen breakfast sandwiches
+brown-sugar	brown sugar
 buttermilk	buttermilk
-canned-pineapple	canned pineapple chunks
 cocoa-powder	baking cocoa powder
-donuts	glazed donuts
+drain-cleaner	drain cleaner
 enchilada-sauce	red enchilada sauce
+english-muffins	english muffins
+feminine-pads	maxi pads
 frozen-burritos	frozen burritos
+frozen-lasagna	frozen lasagna
+fruit-snacks	fruit snacks
 garlic-bread	frozen garlic bread
+glass-cleaner	glass cleaner
+hand-sanitizer	hand sanitizer
+instant-coffee	instant coffee
 laundry-detergent	arm and hammer detergent
-microwave-popcorn	microwave popcorn
-sponges	dish sponges
-trash-bags	13 gallon trash bags
+pita-bread	pita bread
+plums	plums
+pudding-cups	pudding cups
+string-cheese	mozzarella string cheese
 cauliflower	cauliflower head
 cilantro	cilantro
-frozen-pizza	frozen pizza
+paper-towels	paper towels
 plastic-wrap	plastic wrap
-rotisserie-chicken	rotisserie chicken
+toilet-paper	toilet paper
+brown-rice	brown rice
+donuts	glazed donuts
 hominy	canned hominy
 insect-spray	ant roach killer spray
-lasagna-noodles	lasagna noodles
+microwave-popcorn	microwave popcorn
 rice-vinegar	rice vinegar
+sponges	dish sponges
+trash-bags	13 gallon trash bags
+cantaloupe	cantaloupe
+frozen-pizza	frozen pizza
 hot-cocoa	hot cocoa mix
 lemons	lemons
+mangoes	mango
 parchment-paper	parchment paper
 pineapple	whole pineapple
+rotisserie-chicken	rotisserie chicken
+lasagna-noodles	lasagna noodles
 brownie-mix	brownie mix
-cantaloupe	cantaloupe
 french-bread	french bread
 honeydew	honeydew melon
 kale	kale bunch
-mangoes	mango
 gelatin	gelatin cups
 grapefruit	grapefruit
 kiwi	kiwi fruit
@@ -338,78 +338,78 @@ taco-seasoning	taco seasoning
 bay-leaves	bay leaves
 cayenne-pepper	cayenne pepper
 curry-powder	curry powder
-ground-ginger	ground ginger
 sun-dried-tomatoes	sun dried tomatoes
-toasted-sesame-seeds	sesame seeds
 tomatillos	tomatillos
-dried-basil	dried basil
 dried-dill	dill weed
-dried-thyme	dried thyme
 fish-sauce	fish sauce
 fresh-mint	fresh mint
+garam-masala	garam masala
 ground-allspice	ground allspice
+ground-ginger	ground ginger
 ground-nutmeg	ground nutmeg
 hoisin-sauce	hoisin sauce
 sesame-oil	sesame oil
-garam-masala	garam masala
+toasted-sesame-seeds	sesame seeds
+dried-basil	dried basil
+dried-thyme	dried thyme
 ground-coriander	ground coriander
 poblano-peppers	poblano peppers
 tahini	tahini
 gochujang	gochujang
 five-spice-powder	five spice powder
 artichoke-hearts	artichoke hearts
+chili-beans	chili beans
 corned-beef-hash	corned beef hash
-honey-mustard	honey mustard
 minced-garlic	minced garlic jar
 pickled-jalapenos	pickled jalapeno slices
+steak-sauce	a1 steak sauce
 tomatoes-green-chilies	rotel diced tomatoes green chilies
 banana-peppers	banana pepper rings
 bouillon	chicken bouillon cubes
 caesar-dressing	caesar dressing
 canned-green-chilies	diced green chiles
 canned-pears	canned pears
-canned-pumpkin	canned pumpkin
 canned-white-beans	great northern beans canned
-canned-yams	canned yams
-chili-beans	chili beans
+fruit-cocktail	fruit cocktail canned
 green-olives	green olives stuffed
+honey-mustard	honey mustard
 jarred-gravy	turkey gravy jar
 lime-juice	lime juice bottle
 sauerkraut	sauerkraut
 sloppy-joe-sauce	sloppy joe sauce manwich
-steak-sauce	a1 steak sauce
 taco-sauce	taco sauce
 vegetable-broth	vegetable broth
 beef-stew	canned beef stew
 black-olives	black olives canned
 blue-cheese-dressing	blue cheese dressing
 bottled-marinade	steak marinade
+canned-pumpkin	canned pumpkin
+canned-yams	canned yams
 cocktail-sauce	cocktail sauce
 coconut-milk-canned	coconut milk canned
 cranberry-sauce	cranberry sauce
-fruit-cocktail	fruit cocktail canned
 horseradish	prepared horseradish
 mandarin-oranges	canned mandarin oranges
 tartar-sauce	tartar sauce
+pesto	basil pesto
 canned-beets	canned beets
 canned-mixed-vegetables	canned mixed vegetables
-canned-pasta	canned ravioli
 vegetable-soup	canned vegetable soup
 miracle-whip	miracle whip
-pesto	basil pesto
+canned-pasta	canned ravioli
 canned-potatoes	canned potatoes
 clam-chowder	clam chowder canned
 onion-soup-mix	onion soup mix
 cajun-seasoning	cajun seasoning
 cheese-tortellini	cheese tortellini
-corn-muffin-mix	corn muffin mix
 walnuts	chopped walnuts
+corn-muffin-mix	corn muffin mix
+fresh-basil	fresh basil
 grits	quick grits
 potato-gnocchi	gnocchi
 refrigerated-biscuits	refrigerated biscuits
 chili-crisp	chili crisp
 chipotle-adobo	chipotle peppers in adobo
-fresh-basil	fresh basil
 ground-cloves	ground cloves
 poppy-seeds	poppy seeds
 rice-noodles	rice noodles
@@ -445,15 +445,15 @@ shredded-carrots	shredded carrots
 sugar-free-bbq-sauce	sugar free bbq sauce
 turkey-pepperoni	turkey pepperoni
 zero-sugar-soda-2l	zero sugar soda 2 liter
-spring-mix	spring mix
 brown-gravy-mix	brown gravy mix
 butternut-squash	butternut squash
 ground-beef-93-7	93 lean ground beef
 medjool-dates	medjool dates
+prunes	prunes
 red-onion	red onion
 ricotta	ricotta cheese
+spring-mix	spring mix
 turkey-breast	turkey breast
-caesar-salad-kit	caesar salad kit
 cherry-tomatoes	cherry tomatoes
 corn-chips	corn chips
 anaheim-peppers	anaheim peppers
@@ -461,40 +461,39 @@ chicken-livers	chicken livers
 corned-beef-brisket	corned beef brisket
 diced-ham	diced ham
 horseradish-sauce	horseradish sauce
-prunes	prunes
 rye-bread	rye bread
 sugar-snap-peas	sugar snap peas
 yukon-gold-potatoes	yukon gold potatoes
-dried-cranberries	dried cranberries
+caesar-salad-kit	caesar salad kit
 mini-sweet-peppers	mini sweet peppers
 nectarines	nectarines
 smoked-turkey-sausage	turkey smoked sausage
 acorn-squash	acorn squash
-garden-salad	garden salad bag
 poultry-seasoning	poultry seasoning
+dried-cranberries	dried cranberries
 fresh-rosemary	fresh rosemary
 gingersnaps	ginger snaps
 ground-fennel	fennel seed
 serrano-peppers	serrano peppers
 shallots	shallots
 eggplant	eggplant
+garden-salad	garden salad bag
 sweet-soy-sauce	sweet soy sauce
 apricots	fresh apricots
 arugula	baby arugula
 caraway-seeds	caraway seed
 jumbo-pasta-shells	jumbo pasta shells
+parsnips	parsnips
 spaghetti-squash	spaghetti squash
 artichokes	fresh artichokes
 beets	fresh beets
 bok-choy	bok choy
-coleslaw-mix	coleslaw mix
 collard-greens	collard greens
 dried-arbol-chiles	chile de arbol
 fresh-parsley	fresh parsley bunch
 fresh-stir-fry-blend	fresh stir fry vegetables
 fresh-thyme	fresh thyme
 leeks	leeks
-parsnips	parsnips
 rhubarb	fresh rhubarb
 rutabagas	rutabaga
 sazon-seasoning	sazon
@@ -503,6 +502,7 @@ turnips	turnips
 wild-rice	wild rice
 broccolini	broccolini
 coconut	whole coconut
+coleslaw-mix	coleslaw mix
 dried-ancho-chiles	ancho chiles
 fresh-dill	fresh dill
 jicama	jicama

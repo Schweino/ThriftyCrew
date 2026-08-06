@@ -1,0 +1,150 @@
+{
+  "week_of": "2026-08-06",
+  "verdicts": [
+    {
+      "id": "parmesan",
+      "entries": [
+        { "store": "Aldi", "item": "Earthly Grains Parmesan Couscous 5.9 OZ", "keep": false, "annotation": null, "reason": "Couscous, not grated/shredded parmesan cheese - the word 'Parmesan' is a flavour descriptor on a boxed grain side dish." },
+        { "store": "Baker's", "item": "Cheez-It DUOZ Sharp Cheddar and Parmesan Cheese Crackers", "keep": false, "annotation": null, "reason": "Cheese CRACKERS, not parmesan cheese." }
+      ]
+    },
+    {
+      "id": "ribeye-steak",
+      "entries": [
+        { "store": "Family Fare", "item": "Ibp Ribeye Beef Steak Burgers 1.33 Lb", "keep": false, "annotation": null, "reason": "'Steak Burgers' are formed ground-beef patties, not a ribeye steak." }
+      ]
+    },
+    {
+      "id": "shrimp",
+      "entries": [
+        { "store": "Aldi", "item": "Fremont Fish Market Jumbo Butterfly Shrimp 9 OZ", "keep": false, "annotation": null, "reason": "Breaded butterfly shrimp (a prepared/battered product); the commodity is frozen RAW shrimp, so this is not comparable." }
+      ]
+    },
+    {
+      "id": "fresh-basil",
+      "entries": [
+        { "store": "Aldi", "item": "Simply Nature Organic Basil Stir IN Paste 2.8 OZ", "keep": false, "annotation": null, "reason": "Basil stir-in PASTE in a tube, not fresh basil leaves." }
+      ]
+    },
+    {
+      "id": "cherries",
+      "entries": [
+        { "store": "Aldi", "item": "Lunch Buddies Mixed Fruit IN Black Cherry Gel Bowls 4 3 OZ", "keep": false, "annotation": null, "reason": "Mixed-fruit gel snack cups, not fresh cherries." }
+      ]
+    },
+    {
+      "id": "dijon-mustard",
+      "entries": [
+        { "store": "Aldi", "item": "Burman S Spicy Brown Mustard 12 OZ", "keep": false, "annotation": null, "reason": "Spicy brown mustard is a different mustard style from Dijon; Aldi's own Dijon is a separate SKU." }
+      ]
+    },
+    {
+      "id": "relish",
+      "entries": [
+        { "store": "Aldi", "item": "Dill Relish", "keep": false, "annotation": null, "reason": "DILL relish; the commodity is Sweet Relish, which is a different product at a different price point." }
+      ]
+    },
+    {
+      "id": "cajun-seasoning",
+      "entries": [
+        { "store": "Hy-Vee", "item": "Chophouse Cajun Seasoning with Jalapeno", "keep": false, "annotation": null, "reason": "A jalapeno-flavoured variant, and the number is not credible: 12 oz at $0.0833/oz = $1.00 for a 12 oz shaker against $4.58 for the 16 oz runner-up. Almost certainly a bad price/size parse - drop rather than publish a 71%-below-runner-up crown." }
+      ]
+    },
+    {
+      "id": "muffins",
+      "entries": [
+        { "store": "Hy-Vee", "item": "Thomas' bagels, protein bagels or muffin tops, 6 ct., $3.99", "keep": false, "annotation": null, "reason": "Combined multi-product ad line (bagels OR protein bagels OR muffin tops) - no single product to price." }
+      ]
+    },
+    {
+      "id": "oven-cleaner",
+      "entries": [
+        { "store": "Hy-Vee", "item": "Easy-Off, Lime-A-Way or Old English cleaner, 14.5 to 32 oz., $3.99", "keep": false, "annotation": null, "reason": "Combined multi-product ad line across three brands AND a 14.5-32 oz size range - the per-ounce price is undefined." }
+      ]
+    },
+    {
+      "id": "tortillas",
+      "entries": [
+        { "store": "Hy-Vee", "item": "Guerrero fajita 20 ct. or burrito tortillas 8 ct., $2.49", "keep": false, "annotation": null, "reason": "Combined ad line offering two different counts (20 ct OR 8 ct) at one price - the per-tortilla price depends on which you buy." }
+      ]
+    },
+    {
+      "id": "beets",
+      "entries": [
+        { "store": "Baker's", "item": "Organic Red Beets", "keep": true, "annotation": "organic", "reason": "Is the commodity, but organic - not like-for-like against conventional beets." }
+      ]
+    },
+    {
+      "id": "coffee",
+      "entries": [
+        { "store": "Walmart", "item": "Maxwell House Decaffeinated Original Medium Roast Ground Coffee, 29.3 oz Canister", "keep": true, "annotation": "decaf", "reason": "Is ground coffee, but decaffeinated rather than the plain regular grind." }
+      ]
+    },
+    {
+      "id": "croissants",
+      "entries": [
+        { "store": "Sam's Club", "item": "Member's Mark Chocolate Croissants, 12 ct.", "keep": true, "annotation": "chocolate-filled", "reason": "Is a croissant, but chocolate-filled rather than plain." }
+      ]
+    },
+    {
+      "id": "avocados",
+      "entries": [
+        { "store": "Aldi", "item": "Mini Avocados Bag 6 CT", "keep": true, "annotation": "mini size", "reason": "Is avocados, but the mini size - a per-each price is not like-for-like against standard Hass." }
+      ]
+    },
+    {
+      "id": "arugula",
+      "entries": [
+        { "store": "Fareway", "item": "Organic Girl Organic Baby Arugula", "keep": true, "annotation": "organic", "reason": "Is the commodity, but organic." }
+      ]
+    },
+    {
+      "id": "chili-crisp",
+      "entries": [
+        { "store": "Hy-Vee", "item": "Lee Kum Kee Chili Crisp Hot Honey Sauce", "keep": true, "annotation": "hot honey variant", "reason": "Is chili crisp, but the hot-honey flavour variant rather than the plain chiu chow style." }
+      ]
+    },
+    {
+      "id": "cottage-cheese",
+      "entries": [
+        { "store": "Baker's", "item": "Kroger Fat Free Small Curd Cottage Cheese", "keep": true, "annotation": "fat free", "reason": "Is cottage cheese, but the fat-free version rather than the standard 4% milkfat." }
+      ]
+    },
+    {
+      "id": "furniture-polish",
+      "entries": [
+        { "store": "Baker's", "item": "Murphy Oil Soap Wood Cleaner Original", "keep": true, "annotation": "wood cleaner, not a polish", "reason": "Adjacent product - a wood cleaning soap rather than a furniture polish; kept because it is the same shelf category, but it is not like-for-like." }
+      ]
+    },
+    {
+      "id": "pita-bread",
+      "entries": [
+        { "store": "Baker's", "item": "Joseph's Flax Oat Bran & Whole Wheat Pita Bread", "keep": true, "annotation": "flax / whole-wheat specialty", "reason": "Is pita, but a flax/oat-bran whole-wheat specialty loaf rather than plain white pita." }
+      ]
+    },
+    {
+      "id": "rice-cakes",
+      "entries": [
+        { "store": "Baker's", "item": "Kroger Caramel Rice Cakes", "keep": true, "annotation": "flavoured (caramel)", "reason": "Is rice cakes, but caramel-flavoured rather than plain/lightly salted." }
+      ]
+    },
+    {
+      "id": "sirloin-steak",
+      "entries": [
+        { "store": "Family Fare", "item": "Fresh Usda Choice Whole Sirloin Tip", "keep": true, "annotation": "whole sirloin tip (roast cut), not a cut steak", "reason": "Same primal and genuinely comparable per pound, but sold as a whole sirloin tip rather than cut steaks." }
+      ]
+    },
+    {
+      "id": "brussels-sprouts",
+      "entries": [
+        { "store": "Walmart", "item": "Green Giant Season Brussel Sprout Intro", "keep": true, "annotation": "seasoned prepared pack, and the 13.551 oz size is derived rather than stated", "reason": "Is brussels sprouts, but a seasoned Green Giant pack rather than plain sprouts, and its size was backed out of the unit price. Kept because the number is credible - only 2% under the Fareway runner-up, so the crown barely moves." }
+      ]
+    },
+    {
+      "id": "potato-gnocchi",
+      "entries": [
+        { "store": "Aldi", "item": "Priano Gnocchi 176 OZ", "keep": true, "annotation": "name misstates the size - the pack is 17.6 oz, and the price is computed off the correct 17.6 oz", "reason": "Price and unit price are right (17.6 oz at $1.89). Only the displayed NAME carries the Aldi URL-slug decimal artifact (17.6 -> 176), so this is a cosmetic name defect, not a pricing error." }
+      ]
+    }
+  ]
+}

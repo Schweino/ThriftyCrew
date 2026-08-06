@@ -91,3 +91,7 @@
 [2026-08-04T09:08:38] pushed on attempt 1
 [2026-08-04T09:08:38] feed fresh: week 2026-08-04, 513 recipes, 572 ingredients
 [2026-08-04T09:08:38] done
+[2026-08-05T08:30:02] cloud-runs: check-cloud-runs: daily.yml ok (completed/success)
+[2026-08-05T08:30:03] cloud-runs: check-cloud-runs: heartbeat.yml ok (completed/success)
+[2026-08-05T08:30:03] weekly-lock: weekly-run lock: HELD - a weekly refresh is in flight (pid 3180, phase links, acquired 2026-08-05T06:46:56, last refreshed 2026-08-05T07:29:50, expires 2026-08-05T11:29:50).
+[2026-08-05T08:30:03] STAND DOWN: the weekly browser refresh holds grocery\out. Not starting a second full pipeline on the same files; the 16:00 UTC cloud backup covers today.

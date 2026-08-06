@@ -94,6 +94,20 @@ if ($SelfTest) {
   if ($s.Message -match '203 of 526' -and $s.Message -match 'WHAT HELPS') { Write-Output 'ok    body quotes the detail and says what unblocks it' } else { Write-Output 'FAIL  body missing detail or remedy'; $ok = $false }
   $o = New-Prompt '' '' 'Custom' 'Body only' 'Wed 09:10'
   if ($o.Title -eq 'Custom' -and $o.Message -eq 'Body only') { Write-Output 'ok    explicit -Title/-Message override the composed text' } else { Write-Output 'FAIL  override path'; $ok = $false }
+  # FROZEN FOUNDING BUG (2026-08-06): the -AlsoEmail leg used `powershell -File send-alert.ps1 -Body $Message`,
+  # and a real bot-wall body carrying quotes was re-split on the command line - send-alert answered
+  # "-BodyFile not found: a" and mailed NOTHING while the desktop dialog went up, so the run looked alerted.
+  # The email leg cannot be exercised here without actually sending mail, so this asserts the CALL SHAPE
+  # instead: the source must invoke send-alert.ps1 directly, never through a child powershell -File. That is
+  # the whole defect - a string round trip - so the shape IS the thing worth pinning.
+  $src = Get-Content $PSCommandPath -Raw
+  if ($src -match '(?m)^\s*&\s*powershell[^\r\n]*send-alert\.ps1') {
+    Write-Output 'FAIL  -AlsoEmail calls send-alert through `powershell -File`; a quoted body will be re-split and the email will silently not send'; $ok = $false
+  } elseif ($src -match '(?m)^\s*&\s*\(Join-Path \$root ''send-alert\.ps1''\)\s+-Subject') {
+    Write-Output 'ok    -AlsoEmail calls send-alert in-process (no command-line round trip for the body)'
+  } else {
+    Write-Output 'FAIL  could not find the -AlsoEmail call to send-alert.ps1 at all - the email leg may have been dropped'; $ok = $false
+  }
   if ($ok) { Write-Output 'all self-tests pass'; exit 0 } else { exit 1 }
 }
 
@@ -128,9 +142,18 @@ try {
 }
 
 if ($AlsoEmail) {
+  # CALL send-alert IN-PROCESS, NOT VIA `powershell -File` (2026-08-06). The child-process form marshals every
+  # argument through a command line, and a -Detail carrying quotes/punctuation is re-split on the way across:
+  # a real bot-wall alert reading  PerimeterX 'Robot or human?' wall after 75 of 526 terms  arrived at
+  # send-alert as -Subject <title> plus a stray positional 'a', which it rejected with
+  # "send-alert: -BodyFile not found: a". The desktop dialog had gone up, so the run looked alerted while the
+  # EMAIL leg - the only record an unattended run leaves - silently sent nothing. `& <script>` passes the real
+  # strings with no command-line round trip. `exit` inside a script invoked with & ends THAT script only, and
+  # its $ErrorActionPreference='Stop' is scoped to it, so this cannot terminate the notifier. See
+  # [[ps51-json-array-traps]] (powershell -File marshals arguments as strings).
   try {
-    & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject $Title -Body $Message | Out-Null
+    & (Join-Path $root 'send-alert.ps1') -Subject $Title -Body $Message | Out-Null
     Write-Output 'and emailed via send-alert.ps1'
-  } catch { Write-Output 'email leg failed - see send-alert.ps1' }
+  } catch { Write-Output ('email leg failed (' + $_.Exception.Message + ') - see send-alert.ps1') }
 }
 exit 0

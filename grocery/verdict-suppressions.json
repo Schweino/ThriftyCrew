@@ -1,6 +1,6 @@
 ﻿{
     "readme":  "Every confirmed DROP verdict ever made, keyed (id, store, normalised item), applied by verify-apply on EVERY run regardless of which week produced it. Exists because only the current week\u0027s verdict file used to be read, so the same wrong products returned as soon as their week rolled over - 18 previously-dropped cells were live again on 2026-07-29, three as crowns. Entries are added automatically when a drop\u0027s item identity is CONFIRMED (verdict item field or reason quote matches the cell), and removed automatically when a later keep verdict overturns one. Do not hand-edit item_norm; it is Get-VerdictNorm\u0027s output (verdict-lib.ps1).",
-    "updated":  "2026-08-05T07:15:59",
+    "updated":  "2026-08-06T06:44:50",
     "suppressions":  [
                          {
                              "id":  "apple-juice",
@@ -64,6 +64,15 @@
                              "week":  "2026-07-17",
                              "reason":  "\u0027Broccoli Normandy\u0027 is a mixed vegetable blend (broccoli, cauliflower, carrots), not fresh broccoli.",
                              "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "cajun-seasoning",
+                             "store":  "Hy-Vee",
+                             "item_norm":  "chophouse cajun seasoning with jalapeno",
+                             "item":  "Chophouse Cajun Seasoning with Jalapeno",
+                             "week":  "2026-08-06",
+                             "reason":  "A jalapeno-flavoured variant, and the number is not credible: 12 oz at $0.0833/oz = $1.00 for a 12 oz shaker against $4.58 for the 16 oz runner-up. Almost certainly a bad price/size parse - drop rather than publish a 71%-below-runner-up crown.",
+                             "source":  "apply-confirmed"
                          },
                          {
                              "id":  "canned-pineapple",
@@ -318,6 +327,15 @@
                              "source":  "apply-confirmed"
                          },
                          {
+                             "id":  "parmesan",
+                             "store":  "Baker\u0027s",
+                             "item_norm":  "cheez it duoz sharp cheddar and parmesan cheese crackers",
+                             "item":  "Cheez-It DUOZ Sharp Cheddar and Parmesan Cheese Crackers",
+                             "week":  "2026-08-06",
+                             "reason":  "Cheese CRACKERS, not parmesan cheese.",
+                             "source":  "apply-confirmed"
+                         },
+                         {
                              "id":  "pesto",
                              "store":  "Aldi",
                              "item_norm":  "mama cozzis pesto burrata",
@@ -381,6 +399,15 @@
                              "source":  "quote-backfill"
                          },
                          {
+                             "id":  "relish",
+                             "store":  "Aldi",
+                             "item_norm":  "dill relish",
+                             "item":  "Dill Relish",
+                             "week":  "2026-08-06",
+                             "reason":  "DILL relish; the commodity is Sweet Relish, which is a different product at a different price point.",
+                             "source":  "apply-confirmed"
+                         },
+                         {
                              "id":  "ribeye-steak",
                              "store":  "Family Fare",
                              "item_norm":  "ibp ribeye beef steak burgers 1 33 lb",
@@ -442,6 +469,15 @@
                              "week":  "2026-07-17",
                              "reason":  "\u0027Hy-Vee tomatoes, 28 or 29 oz.\u0027 is the standard CANNED tomato size - canned product under a fresh-tomato (per lb) commodity",
                              "source":  "quote-backfill"
+                         },
+                         {
+                             "id":  "tortillas",
+                             "store":  "Hy-Vee",
+                             "item_norm":  "guerrero fajita 20 ct or burrito tortillas 8 ct 2 49",
+                             "item":  "Guerrero fajita 20 ct. or burrito tortillas 8 ct., $2.49",
+                             "week":  "2026-08-06",
+                             "reason":  "Combined ad line offering two different counts (20 ct OR 8 ct) at one price - the per-tortilla price depends on which you buy.",
+                             "source":  "apply-confirmed"
                          },
                          {
                              "id":  "tortillas",
