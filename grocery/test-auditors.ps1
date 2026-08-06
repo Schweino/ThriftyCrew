@@ -3010,11 +3010,18 @@ $r = RunPS 'audit-capture-eviction.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'audit-capture-eviction: thin-capture eviction still fires on the frozen Sams formula case and stays silent on the onions ranker fix' }
 else { Bad ('audit-capture-eviction -SelfTest failed (rc=' + $r.rc + ') - the capture-eviction class is unguarded: ' + ($r.text -replace "`n", ' ')) }
 $aceSrc = Get-Content (Join-Path $root 'audit-capture-eviction.ps1') -Raw
-if ($aceSrc -match 'newestRows -ge \$evictedRows') { Ok 'the coverage-depth discriminator is still what separates an eviction from the ranker working' }
-else { Bad 'audit-capture-eviction lost its coverage-depth check - on a price ratio alone it also condemns the onions stale-LOW fix, which is the bug the freshness ranker was written for' }
+$cdSrc2 = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
+# LOCKSTEP: the audit restates Select-FreshestCaptureRows' eligibility rule so it can ask whether the BOARD
+# agrees with it. If the engine's rule changes and the audit's copy does not, the audit silently starts
+# measuring a rule nothing runs - which is the whole class of bug this file exists to catch. Both must carry
+# the depth comparison verbatim.
+$cdRule = ($cdSrc2 -match '\$g\.Count -gt \$newestCount')
+$aceRule = ($aceSrc -match '\$g\.Count -gt \$newestCount')
+if ($cdRule -and $aceRule) { Ok 'compare-deals and audit-capture-eviction still state the SAME coverage-depth eligibility rule' }
+elseif (-not $cdRule) { Bad 'compare-deals lost the coverage-depth rule in Select-FreshestCaptureRows - a 1-row capture can again evict a 20-row one, which is how Sams baby-formula shipped at +87% and how six wrong products reached the board' }
+else { Bad 'audit-capture-eviction no longer mirrors the engine eligibility rule - it is now auditing a rule the engine does not run' }
 # The candidates artifact must keep carrying src_date, or this guard is permanently BLIND. It shipped
 # without that field for months, which is exactly why the eviction class went unseen.
-$cdSrc2 = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
 if ($cdSrc2 -match 'price_type,src_date\)') { Ok 'compare-deals still emits src_date into candidates (the field the per-store ranking turns on)' }
 else { Bad 'compare-deals no longer emits src_date into candidates-*.json - audit-capture-eviction goes BLIND and an eviction becomes invisible again' }
 

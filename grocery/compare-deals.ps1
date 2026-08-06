@@ -454,13 +454,40 @@ function Get-RowSrcDate([string]$store, $row, [string]$fileDate) {
 }
 
 function Select-FreshestCaptureRows($rows) {
-  # THE FRESHEST CAPTURE THAT COVERS A COMMODITY WINS IT OUTRIGHT, and only then does its cheapest row win.
+  # THE FRESHEST CAPTURE THAT COVERS A COMMODITY WINS IT - UNLESS IT KNOWS LESS THAN THE ONE IT DISPLACES.
   # Rows with NO src_date are a store's only source and are never filtered. Extracted verbatim from the
   # ranker so the self-test runs the REAL decision instead of a transcribed copy of it.
+  #
+  # ORIGINAL RULE (2026-07-30): newest capture wins outright. It was written for a real bug - a 16-day-old
+  # 60-row hand-promotion was pricing Sam's onions at a stale-LOW $0.737/lb against a live $0.8267 - and
+  # that case is still frozen in cases 21-24 below.
+  #
+  # WHAT IT MISSED (2026-08-06): "covers the commodity" meant ONE MATCHING ROW. Sam's and Walmart captures
+  # are partial term-based pulls, so a capture that swept one premium product wins the commodity from a
+  # capture that swept twenty, and the surviving cell is real, correctly priced and much dearer. Measured
+  # across the live board: 58 cells, worst 18.17x (Walmart tea-bags showed a $0.3961/each specialty matcha
+  # from a 1-row capture while a 58-row capture five days older held Great Value black tea at $0.0218). It
+  # is also how a wrong product reaches the board: a bad rule is harmless while it is outranked, and becomes
+  # the cell the moment it is ALONE in its capture. Six live wrong products got there exactly that way.
+  #
+  # THE FIX IS NOT "PREFER THE CHEAPEST", which would bring the onions bug straight back. A capture only
+  # survives if it knows AT LEAST AS MUCH about this commodity as the newest one does. So:
+  #   onions  - newer capture holds MORE onion rows than the file it displaces -> displaces it. Unchanged.
+  #   formula - newer capture holds FEWER -> the richer, older capture's rows stay eligible beside it.
+  # Ties go to the newer capture. Staleness is already bounded by -SamsMaxAgeDays / -WalmartMaxAgeDays; this
+  # function is a second filter on top of that window, and it has no business discarding better information.
+  # Spot-checked before shipping: of 11 evicted Walmart rows re-read live, 9 were unchanged after five days
+  # and the 2 that moved were still 2.08x closer to the truth than the cell that had displaced them.
   $dated = @($rows | Where-Object { $_.src_date })
   if (-not $dated.Count) { return @($rows) }
   $newest = @($dated | ForEach-Object { [string]$_.src_date } | Sort-Object -Descending)[0]
-  return @($rows | Where-Object { -not $_.src_date -or [string]$_.src_date -eq $newest })
+  $newestCount = @($dated | Where-Object { [string]$_.src_date -eq $newest }).Count
+  $keepDates = @($newest)
+  foreach ($g in ($dated | Group-Object src_date)) {
+    if ([string]$g.Name -eq $newest) { continue }
+    if ($g.Count -gt $newestCount) { $keepDates += [string]$g.Name }
+  }
+  return @($rows | Where-Object { -not $_.src_date -or $keepDates -contains [string]$_.src_date })
 }
 
 # ---------------------------------------------------------------- SELF-TEST (provable multibuy math; -SelfTest exits here)
@@ -706,6 +733,46 @@ if ($SelfTest) {
     (_Row 'Ziploc Brand Sandwich Bags, 580 ct' 0.0168 '2026-07-29')
   ) | Sort-Object unit_price | Select-Object -First 1)
   _Eq 'the real feed still wins over a merely-carried row' $mixed.name 'Ziploc Brand Sandwich Bags, 580 ct'
+
+  # --- 25-28: COVERAGE DEPTH. A capture only displaces an older one if it knows at least as much. -------
+  # FROZEN FOUNDING BUG (2026-08-06). Sam's baby-formula: sams-deals-2026-08-05 held ONE formula row (Bubs
+  # Goat Milk, $1.4445/oz) and sams-deals-2026-07-29 held twenty-plus including Member's Mark Advantage
+  # Premium at $0.7704/oz. Under "newest wins outright" the 1-row capture took the commodity and the live
+  # cell jumped +87%, with every price, basis and crown guard reading green because both rows are real.
+  # 58 cells estate-wide. Synthetic and FROZEN, never re-read from the board.
+  # 25. MUST FIRE: the richer OLDER capture stays eligible, so the cheap real row still prices the cell.
+  $formula = @(Select-FreshestCaptureRows @(
+    (_Row 'Bubs Goat Milk Infant Formula Powder With Iron, 20 oz., 2 pk.' 1.4445 '2026-08-05'),
+    (_Row "Member's Mark, Advantage Premium, Infant Formula, 48 oz." 0.7704 '2026-07-29'),
+    (_Row "Member's Mark, Infant Premium, Infant Formula, 48 oz."     0.8017 '2026-07-29'),
+    (_Row "Member's Mark Sensitivity Premium Baby Formula, 48 oz."    0.8329 '2026-07-29')
+  ) | Sort-Object unit_price | Select-Object -First 1)
+  _Eq 'a 1-row capture does not evict a 3-row one' $formula.name "Member's Mark, Advantage Premium, Infant Formula, 48 oz."
+  # 26. CLEAN TWIN, AND IT IS THE ONIONS BUG ITSELF: when the newer capture is RICHER it still displaces the
+  #     older one outright. If this ever flips, the depth rule has been written as "cheapest in the window"
+  #     and case 22 above is being argued with. The stale-LOW $0.737 must stay dead.
+  $onionDepth = @(Select-FreshestCaptureRows @(
+    (_Row 'Yellow Onions, 10 lbs.'   0.737  '2026-07-14'),
+    (_Row 'Sweet Onions, 6 lbs.'     0.8267 '2026-07-29'),
+    (_Row 'Red Onions, 5 lbs.'       0.9100 '2026-07-29'),
+    (_Row 'Vidalia Onions, 10 lbs.'  0.9500 '2026-07-29')
+  ) | Sort-Object unit_price | Select-Object -First 1)
+  _Eq 'a RICHER newer capture still evicts the stale-low' $onionDepth.name 'Sweet Onions, 6 lbs.'
+  # 27. TIES GO TO THE FRESHER CAPTURE. Equal coverage means the newer one is strictly better information,
+  #     and this is the shape of case 22's real data (1 row vs 1 row), so it must not regress.
+  $tie = @(Select-FreshestCaptureRows @(
+    (_Row 'Old Yellow Onions, 10 lbs.' 0.737  '2026-07-14'),
+    (_Row 'New Sweet Onions, 6 lbs.'   0.8267 '2026-07-29')
+  ) | Sort-Object unit_price | Select-Object -First 1)
+  _Eq 'equal coverage still goes to the newer capture' $tie.name 'New Sweet Onions, 6 lbs.'
+  # 28. CLEAN TWIN: a thinner newer capture that is also CHEAPER still wins on price. Keeping the richer
+  #     capture eligible must never mean preferring it - it competes, it does not outrank.
+  $cheapThin = @(Select-FreshestCaptureRows @(
+    (_Row "Member's Mark Butter, 4 lb."   2.98 '2026-08-05'),
+    (_Row 'Land O Lakes Butter, 2 lb.'    4.15 '2026-07-29'),
+    (_Row 'Kerrygold Butter, 1 lb.'       6.20 '2026-07-29')
+  ) | Sort-Object unit_price | Select-Object -First 1)
+  _Eq 'a thin but genuinely cheaper capture still wins' $cheapThin.name "Member's Mark Butter, 4 lb."
   # CLEAN TWIN: the direction that must NOT work. A row claiming to be FRESHER than the file it lives in is
   # the as_of laundering fixed in the Fareway builder the same day; taking its word would let a stale price
   # out-rank a live one, which is the exact failure this whole family of fixes exists to prevent.
