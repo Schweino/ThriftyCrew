@@ -22,6 +22,11 @@
 param([switch]$Alert)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+# Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
+# Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
+# arrive truncated - it did not arrive at all, and the launch error read like the CHECK had crashed. Three
+# consecutive guard-blind days went unpaged that way on 2026-08-03/04/05. See alert-lib.ps1.
+. (Join-Path $root 'alert-lib.ps1')
 $OutDir = Join-Path $root 'out'
 $issues = New-Object System.Collections.Generic.List[string]
 
@@ -100,7 +105,7 @@ if ($Alert) {
   $sigH = [BitConverter]::ToString([Security.Cryptography.MD5]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes($sig))) -replace '-',''
   if ($sigH -ne $prev) {
     try {
-      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject ("Grocery: store-registry drift - " + $issues.Count + " issue(s)") -Body ("audit-store-registry.ps1 found hardcoded store lists or data out of lockstep with stores.json: " + (($issues | Select-Object -First 12) -join ' | ') + ". Fix the listed script/data or document a legitimate subset in stores.json allowed_subsets.") | Out-Null
+      Send-Alert -Subject ("Grocery: store-registry drift - " + $issues.Count + " issue(s)") -Body ("audit-store-registry.ps1 found hardcoded store lists or data out of lockstep with stores.json: " + (($issues | Select-Object -First 12) -join ' | ') + ". Fix the listed script/data or document a legitimate subset in stores.json allowed_subsets.") | Out-Null
       if ($LASTEXITCODE -eq 0) { Set-Content $sigF -Value $sigH -Encoding ASCII }
     } catch {}
   }

@@ -1,4 +1,4 @@
-﻿<#
+<#
   audit-ff-carry.ps1 - COMPLETENESS guard for the Family Fare Freshop pull. Catches the class where the pull
   silently drops a term (rate-limit -> HTTP 200 with 0 items) so a product FF actually carries shows "No price
   yet" on the board (the 2026-07-13 ground-pork bug). coverage-gaps CANNOT see this - it only scans the raw pull,
@@ -15,6 +15,11 @@
 param([switch]$Alert, [switch]$SelfTest, [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+# Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
+# Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
+# arrive truncated - it did not arrive at all, and the launch error read like the CHECK had crashed. Three
+# consecutive guard-blind days went unpaged that way on 2026-08-03/04/05. See alert-lib.ps1.
+. (Join-Path $root 'alert-lib.ps1')
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 # COVERAGE LEDGER. THE FOUNDING INCIDENT OF THIS WHOLE COMPONENT IS IN THIS FILE: the .ToArray() note ~30
 # lines down records that this script threw on its own report line on EVERY run since 2026-07-13 - after all
@@ -208,7 +213,7 @@ if ($Alert) {
   $last = if (Test-Path $sigF) { (Get-Content $sigF -Raw).Trim() } else { '' }
   if ($sigHash -ne $last) {
     $body = "The Family Fare pull dropped item(s) FF actually carries (Freshop rate-limit survived the recovery passes). Board shows 'No price yet' for:`n" + (($victims | ForEach-Object { $_.commodity + ' <- ' + $_.product }) -join "`n") + "`nRe-run pull-regular-familyfare.ps1 (recovery should catch them) or investigate persistent throttling."
-    try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: Family Fare pull dropped a carried item - review" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
+    try { Send-Alert -Subject "Grocery: Family Fare pull dropped a carried item - review" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
   }
 }
 exit 0

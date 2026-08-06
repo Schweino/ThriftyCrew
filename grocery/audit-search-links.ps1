@@ -78,6 +78,11 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+# Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
+# Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
+# arrive truncated - it did not arrive at all, and the launch error read like the CHECK had crashed. Three
+# consecutive guard-blind days went unpaged that way on 2026-08-03/04/05. See alert-lib.ps1.
+. (Join-Path $root 'alert-lib.ps1')
 if (-not $OutDir)    { $OutDir    = Join-Path $root 'out' }
 if (-not $ReportDir) { $ReportDir = $OutDir }
 $issues = New-Object System.Collections.Generic.List[string]
@@ -305,7 +310,7 @@ if ($Alert) {
   $sigH = [BitConverter]::ToString([Security.Cryptography.MD5]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes($sig))) -replace '-',''
   if ($sigH -ne $prev) {
     try {
-      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject ("Grocery: a store SEARCH link is dead - " + $issues.Count + " template(s)") -Body ("audit-search-links.ps1 fetched each store's 'Find at store' search template. Broken: " + (($issues | Select-Object -First 8) -join ' | ') + ".`n`nEvery chip that falls back to that template is sending a shopper to a dead page (the 2026-08-02 Family Fare class, which shipped on 20 live chips). Fix the template in build-deals-page.ps1 `$SEARCHURLS, then rebuild - the chips live in public/board.json, not in the post html.`n`nGet the real url from the store's OWN nav search box; do not guess paths, because on an SPA storefront every guessed path returns 200. Report: " + $reportF) | Out-Null
+      Send-Alert -Subject ("Grocery: a store SEARCH link is dead - " + $issues.Count + " template(s)") -Body ("audit-search-links.ps1 fetched each store's 'Find at store' search template. Broken: " + (($issues | Select-Object -First 8) -join ' | ') + ".`n`nEvery chip that falls back to that template is sending a shopper to a dead page (the 2026-08-02 Family Fare class, which shipped on 20 live chips). Fix the template in build-deals-page.ps1 `$SEARCHURLS, then rebuild - the chips live in public/board.json, not in the post html.`n`nGet the real url from the store's OWN nav search box; do not guess paths, because on an SPA storefront every guessed path returns 200. Report: " + $reportF) | Out-Null
       if ($LASTEXITCODE -eq 0) { Set-Content $sigF -Value $sigH -Encoding ASCII }
     } catch {}
   }

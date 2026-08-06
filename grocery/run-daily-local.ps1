@@ -22,6 +22,11 @@
 #>
 $ErrorActionPreference = 'Continue'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+# Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
+# Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
+# arrive truncated - it did not arrive at all, and the launch error read like the CHECK had crashed. Three
+# consecutive guard-blind days went unpaged that way on 2026-08-03/04/05. See alert-lib.ps1.
+. (Join-Path $root 'alert-lib.ps1')
 $repo = Split-Path -Parent $root
 $log  = Join-Path $root 'local-daily-log.txt'
 # a locked log file must never kill the run it is logging - see the note in check-ad-cycles.ps1 (2026-07-28).
@@ -41,7 +46,7 @@ function Log($m) {
     $script:logFallback = Join-Path $root ('local-daily-log.LOCKED-' + (Get-Date -Format 'yyyy-MM-dd') + '.txt')
     try {
       Add-Content -Path $script:logFallback -Value ("[" + (Get-Date).ToString('s') + "] local-daily-log.txt is LOCKED by another process - this run's log lives here. Find the holder (handle.exe / Get-Process) and release it, or the primary log stays frozen.") -ErrorAction Stop
-      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject 'Grocery: local-daily-log.txt is locked - the daily pipeline cannot log' -Body ("run-daily-local.ps1 could not append to grocery\local-daily-log.txt (exclusive lock held by another process). The run itself continues and the board is unaffected, but the wrapper's audit trail is going to " + $script:logFallback + " instead. This exact lock sat unnoticed from 2026-07-25 to 2026-07-30 because the old fallback was Write-Host, which a scheduled task discards. Find and kill the holding process. Do NOT simply delete the sidecar: it holds the only trail of this run. The next run that can write the primary log folds it back in and clears it by itself (SIDECAR RECOVERY block, 2026-08-02); merge by hand only if you need it sooner.") | Out-Null
+      Send-Alert -Subject 'Grocery: local-daily-log.txt is locked - the daily pipeline cannot log' -Body ("run-daily-local.ps1 could not append to grocery\local-daily-log.txt (exclusive lock held by another process). The run itself continues and the board is unaffected, but the wrapper's audit trail is going to " + $script:logFallback + " instead. This exact lock sat unnoticed from 2026-07-25 to 2026-07-30 because the old fallback was Write-Host, which a scheduled task discards. Find and kill the holding process. Do NOT simply delete the sidecar: it holds the only trail of this run. The next run that can write the primary log folds it back in and clears it by itself (SIDECAR RECOVERY block, 2026-08-02); merge by hand only if you need it sooner.") | Out-Null
     } catch { }
   }
   try { Add-Content -Path $script:logFallback -Value $line -ErrorAction Stop } catch { try { Write-Host ('[log locked, not written] ' + $line) } catch {} }
@@ -189,7 +194,7 @@ if ($stashAfter -gt $stashBefore) {
          "Local edits are parked, not lost. Inspect with: git -C $repo stash list, " +
          "then git stash show -p on the newest entry."
   Log ("ALERT: " + $msg)
-  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') `
+  Send-Alert `
       -Subject 'Daily run: autostash not restored' -Body $msg 2>&1 | ForEach-Object { Log ("alert: " + $_) }
 }
 
@@ -227,7 +232,7 @@ foreach ($attempt in 1..4) {
 }
 if (-not $pushed) {
   Log "PUSH FAILED after 4 attempts - the run's data is committed locally but NOT on main"
-  try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery local pipeline could not push - $today" -Body "run-daily-local.ps1 committed today's refresh locally but could not push to main after 4 rebase attempts. The cloud backup will regenerate at 16:00 UTC, but check for a rebase conflict in C:\Codex\income (see grocery/local-daily-log.txt)." | Out-Null } catch {}
+  try { Send-Alert -Subject "Grocery local pipeline could not push - $today" -Body "run-daily-local.ps1 committed today's refresh locally but could not push to main after 4 rebase attempts. The cloud backup will regenerate at 16:00 UTC, but check for a rebase conflict in C:\Codex\income (see grocery/local-daily-log.txt)." | Out-Null } catch {}
 }
 
 # ---- ASSERT the feed refreshed today (the cloud's red-X assert, as a deduped email) ---------------
@@ -236,7 +241,7 @@ try {
   $gen = ([datetime]$feed.generated).ToString('yyyy-MM-dd')
   if ($gen -ne $today) {
     Log "FEED STALE: generated $gen, expected $today"
-    try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery local pipeline did NOT refresh the feed - $today" -Body "run-daily-local.ps1 finished but public/smp-feed.json is still dated $gen. A store pull likely failed; nothing bad was published (guards fail closed). See grocery/ad-cycle-log.txt + local-daily-log.txt. The cloud backup will retry at 16:00 UTC." | Out-Null } catch {}
+    try { Send-Alert -Subject "Grocery local pipeline did NOT refresh the feed - $today" -Body "run-daily-local.ps1 finished but public/smp-feed.json is still dated $gen. A store pull likely failed; nothing bad was published (guards fail closed). See grocery/ad-cycle-log.txt + local-daily-log.txt. The cloud backup will retry at 16:00 UTC." | Out-Null } catch {}
   } else { Log "feed fresh: week $($feed.week_of), $($feed.recipe_count) recipes, $($feed.ingredient_count) ingredients" }
 } catch { Log ("feed assert threw: " + $_.Exception.Message) }
 

@@ -15,6 +15,11 @@
 $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+# Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
+# Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
+# arrive truncated - it did not arrive at all, and the launch error read like the CHECK had crashed. Three
+# consecutive guard-blind days went unpaged that way on 2026-08-03/04/05. See alert-lib.ps1.
+. (Join-Path $root 'alert-lib.ps1')
 
 # stored git credential, the way git itself asks for it (never printed, never persisted here)
 $tok = $null
@@ -34,7 +39,7 @@ foreach ($wf in @('daily.yml', 'heartbeat.yml')) {
     # only completed runs have a verdict; an in-progress run is tomorrow's problem if it hangs
     if ($run.status -eq 'completed' -and $run.conclusion -notin @('success', 'skipped', 'neutral')) {
       Write-Output ("check-cloud-runs: $wf latest run FAILED (" + $run.conclusion + ") - queueing for triage")
-      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') `
+      Send-Alert `
         -Subject ("Cloud workflow $wf failed (" + $run.conclusion + ")") `
         -Body ("The latest GitHub Actions run of $wf concluded '" + $run.conclusion + "' at " + $run.created_at + ".`nRun: " + $run.html_url + "`nThe local pipeline is unaffected (it already ran); this alert exists so the triage agent investigates the cloud side - logs are at the run URL. Common causes: secrets rotation, runner image changes, the pre-checkout gate erroring instead of skipping.") | Out-Null
     } else {

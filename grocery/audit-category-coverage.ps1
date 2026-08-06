@@ -15,6 +15,11 @@
 param([switch]$Alert, [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+# Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
+# Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
+# arrive truncated - it did not arrive at all, and the launch error read like the CHECK had crashed. Three
+# consecutive guard-blind days went unpaged that way on 2026-08-03/04/05. See alert-lib.ps1.
+. (Join-Path $root 'alert-lib.ps1')
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
 $tmp = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $root 'commodities.json'))); $commods = @($tmp)
@@ -58,7 +63,7 @@ if ($Alert) {
       $(if ($multi.Count) { "MULTI-CATEGORY: " + ($multi -join ', ') + "`n" } else { '' }) +
       $(if ($orphanRefs.Count) { "ORPHAN REFS: " + ($orphanRefs -join ', ') + "`n" } else { '' }) +
       "Fix: add each commodity id to exactly one category's commodities[] in categories.json. Publish is HELD until then."
-    try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: a commodity is in no category (no filter) - review" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
+    try { Send-Alert -Subject "Grocery: a commodity is in no category (no filter) - review" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
   }
 }
 exit 2

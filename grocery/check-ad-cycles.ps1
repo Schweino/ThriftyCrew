@@ -45,6 +45,18 @@ function Log([string]$m) {
   }
   try { Write-Host ('[log locked, not written] ' + $line) } catch {}
 }
+
+# ---- SEND AN ALERT WITHOUT LOSING IT (2026-08-06) -------------------------------------------------------
+# Send-Alert is the only way this file may page anybody. Every alert below used to be
+# `& powershell -File send-alert.ps1 -Body $long`, and Windows refuses to START a process whose command
+# line exceeds 32767 characters - so the watchers alert, whose body is the whole test-auditors output
+# (43,030 / 43,283 / 43,718 chars on 2026-08-03/04/05), never launched the mailer on any of the three
+# consecutive days a guard was blind. No email, no triage-queue entry, and a swallowed launch error logged
+# as "test-auditors threw: ...", which reads like the test crashed rather than like the page never went
+# out. The helper sends the body BY FILE and makes a failed send its own loud log line. Full account, and
+# the reason every caller goes through it even when today's body looks short, in alert-lib.ps1.
+. (Join-Path $root 'alert-lib.ps1')
+
 # Price signature of the current board: sorted id|store|per_unit|type over the latest comparison, hashed.
 # Used to re-publish only when a price actually changed (a new ad, a flash sale ending, a mid-cycle fix),
 # so the daily pull can run every day without needlessly re-pushing an unchanged page.
@@ -111,7 +123,7 @@ if ($serverDue) {
       Log "HARD FAILURE: server pull returned no current TODAY data after 2 attempts -> alerting, downstream skipped"
       if (-not $NoAlert) {
         $bdy = "The daily server-side grocery pull (Hy-Vee / Aldi / Family Fare) returned NO current ad data after 2 attempts on $asofS. Likely an API or network issue. The board was left at its last good state - nothing was republished. Check pull-grocery-ads.ps1 and ad-cycle-log.txt on the machine."
-        try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery pull FAILED (server stores) - $asofS" -Body $bdy | Out-Null } catch { Log ("alert send threw: " + $_.Exception.Message) }
+        try { Send-Alert -Subject "Grocery pull FAILED (server stores) - $asofS" -Body $bdy | Out-Null } catch { Log ("alert send threw: " + $_.Exception.Message) }
       }
     }
     # Family Fare EVERYDAY column (headless Freshop catalog) - refresh alongside the ad pull; nothing else pulls it.
@@ -271,7 +283,7 @@ if (-not $NoAlert) {
       foreach ($k in $feeds.Keys) { $m = $feeds[$k]; if (($null -eq $m) -or ($m.Date -lt $lastWed)) { $tag = if ($m) { ' (' + $m.ToString('MM-dd') + ')' } else { ' (missing)' }; $stale += ($k + $tag) } }
       if ($stale.Count -gt 0) {
         $bd = "The weekly Wednesday grocery browser refresh did not run for the week of " + $lastWed.ToString('yyyy-MM-dd') + ". Stale/missing browser feeds: " + ($stale -join ', ') + ". The live page is holding last week's prices for those stores. Open the Claude app and run the grocery-browser-stores-refresh agent. While in the warm store tabs, ALSO close any browser-store no-link gaps: run build-chips-from-tileintegrity.ps1 for the chip list (reads out\tile-integrity.json, all stores), then paste hyvee/browser-link-resolve.js and BLR.run('<store>', chips) per store (board-match, skips sponsored/wrong-size), save to out\url-inputs\store-<store>-urls.json, and merge -> stamp -> prune-bad-links -Tol 0.32 -> guards -> publish -> archive the url-inputs file. Family Fare's MISSING links now self-heal in the daily job (fix-links-ff, 30 Freshop calls/day) and Hy-Vee's link PRICES self-heal (refresh-hyvee-links) - but nothing headless can ADD a Hy-Vee/Aldi/Baker's/Walmart/Sam's link, so those no-link chips need this browser pass. Check out\tile-integrity.json for the current per-store count. IMPORTANT: the Walmart capture must run the FULL commodity worklist (every commodity-search.json term (count the file, 526 as of 2026-07-29)) - a core-staples subset is absorbed by the union but leaves the comprehensive-capture clock running (audit-walmart-fullpull warns from day 10 of 14)."
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject ("Grocery: Wednesday browser refresh MISSED - week of " + $lastWed.ToString('yyyy-MM-dd')) -Body $bd | Out-Null
+        Send-Alert -Subject ("Grocery: Wednesday browser refresh MISSED - week of " + $lastWed.ToString('yyyy-MM-dd')) -Body $bd | Out-Null
         # only burn the once-per-week de-dupe marker if the email actually SENT (send-alert exits 1 on
         # failure) - otherwise a transient mail error silently ate the whole week's stale warning.
         if ($LASTEXITCODE -eq 0) { New-Item -ItemType File -Path $marker -Force | Out-Null; Log ("browser-stale alert sent: " + ($stale -join ', ')) } else { Log 'browser-stale alert FAILED to send (will retry next run)' }
@@ -325,7 +337,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # A crashed re-compare must NOT be treated as "board current" - leave the last-good board up and alert.
       Log ("COMPARE FAILED rc=$cmprc - board left at last good, NOT republished")
       $summary += "ERROR     compare-deals failed (rc=$cmprc) - live page left at last good, not updated"
-      if (-not $NoAlert) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery compare FAILED - $asofS" -Body "compare-deals.ps1 exited $cmprc on $asofS. The board was NOT recomputed or republished (left at last good). Check ad-cycle-log.txt." | Out-Null } catch {} }
+      if (-not $NoAlert) { try { Send-Alert -Subject "Grocery compare FAILED - $asofS" -Body "compare-deals.ps1 exited $cmprc on $asofS. The board was NOT recomputed or republished (left at last good). Check ad-cycle-log.txt." | Out-Null } catch {} }
     } else {
       # BANK THE VERIFIED BOARD, NOT THE RAW ONE (2026-07-30). This ran update-history against the raw
       # comparison that compare-deals had just written - the exact bug fixed in the WEEKLY path on 2026-07-29
@@ -401,7 +413,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           Log ("coverage-gaps: $($cgAll.Count) gap(s), $($cgAct.Count) actionable - $cgList")
           $summary += "REVIEW    coverage gaps: $($cgAct.Count) actionable of $($cgAll.Count) store(s) dropped despite carrying the item - see coverage-gaps.json"
           if ($cgSig -ne $cgPrev -and (-not $NoAlert)) {
-            try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: $($cgAct.Count) store(s) dropped from a commodity they carry - $asofS" -Body "audit-coverage-gaps found stores that HAVE a matching product but are missing from the board (usually a too-strict include regex): $cgList. Fix that commodity's include in commodities.json (or add a reviewed exception to coverage-gap-allowlist.json). $($cgAll.Count - $cgAct.Count) further gap(s) are engine-explained (BASIS-NULL / BAND-DROPPED) and are listed in the report without paging. Details: grocery/out/coverage-gaps.json." | Out-Null
+            try { Send-Alert -Subject "Grocery: $($cgAct.Count) store(s) dropped from a commodity they carry - $asofS" -Body "audit-coverage-gaps found stores that HAVE a matching product but are missing from the board (usually a too-strict include regex): $cgList. Fix that commodity's include in commodities.json (or add a reviewed exception to coverage-gap-allowlist.json). $($cgAll.Count - $cgAct.Count) further gap(s) are engine-explained (BASIS-NULL / BAND-DROPPED) and are listed in the report without paging. Details: grocery/out/coverage-gaps.json." | Out-Null
                   if ($LASTEXITCODE -eq 0) { Set-Content -Path $cgF -Value $cgSig -Encoding UTF8; Log 'coverage-gap alert sent' } } catch { Log ('coverage-gap alert threw: ' + $_.Exception.Message) }
           } else { Log 'coverage-gaps unchanged since last alert - not re-alerting' }
         }
@@ -442,7 +454,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
             Log ("semantic sweep: $($semRows.Count) product(s) invisible to the rules across $(@($semRows | Group-Object id).Count) commodit(y/ies) - $semIds")
             $summary += "REVIEW    semantic sweep: $($semRows.Count) real product(s) no rule can see - see semantic-findings.json"
             if ($semSig -ne $semPrev -and (-not $NoAlert)) {
-              try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: semantic sweep found $($semRows.Count) product(s) no rule can see - $asofS" -Body "The embedding sweep found real store products that look like a tracked commodity but match NO include pattern, so they can never win a cell - not this week and not any future week. Commodities: $semIds. Work them with explain-coverage-gap.ps1 (diagnose WHY: NO-INCLUDE / EXCLUDED / CLAIMED / MATCHES) then apply-coverage-batch.ps1 (applies and gates one batch). Anything that is genuinely a different product gets a ruling via add-known-wrong.ps1 instead of a rule. Details: grocery/out/semantic-findings.json." | Out-Null
+              try { Send-Alert -Subject "Grocery: semantic sweep found $($semRows.Count) product(s) no rule can see - $asofS" -Body "The embedding sweep found real store products that look like a tracked commodity but match NO include pattern, so they can never win a cell - not this week and not any future week. Commodities: $semIds. Work them with explain-coverage-gap.ps1 (diagnose WHY: NO-INCLUDE / EXCLUDED / CLAIMED / MATCHES) then apply-coverage-batch.ps1 (applies and gates one batch). Anything that is genuinely a different product gets a ruling via add-known-wrong.ps1 instead of a rule. Details: grocery/out/semantic-findings.json." | Out-Null
                     if ($LASTEXITCODE -eq 0) { Set-Content -Path $semF -Value $semSig -Encoding UTF8; Log 'semantic sweep alert sent' } } catch { Log ('semantic alert threw: ' + $_.Exception.Message) }
             } else { Log 'semantic findings unchanged since last alert - not re-alerting' }
           } else {
@@ -476,7 +488,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
             Log ("aisle test: $($atBlocked.Count) live cell(s) sit in a department their commodity does not occupy - $atIds")
             $summary += "REVIEW    aisle test: $($atBlocked.Count) live cell(s) in the wrong store department - see out\aisle-test.json"
             if ($atSig -ne $atPrev -and (-not $NoAlert)) {
-              try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: $($atBlocked.Count) board cell(s) sit in the wrong store department - $asofS" -Body "aisle-test judged the LIVE board against Family Fare's own shelf paths and found cells whose product the STORE files in a department the commodity never occupies. This is the class that finds cat litter priced as baking soda and teriyaki brats priced as pineapple - real prices on the wrong product, so no price guard can see them. Commodities: $atIds. Check the CROWN rows first (a wrong crown is the cheapest-price verdict shoppers see). Fix by tightening that commodity's exclude, then record the product via add-known-wrong.ps1. NOTE: a standing ~22 are known department-map false positives (spices shelved in produce, canned milks in dairy) - compare against the previous set. Details: grocery/out/aisle-test.json." | Out-Null
+              try { Send-Alert -Subject "Grocery: $($atBlocked.Count) board cell(s) sit in the wrong store department - $asofS" -Body "aisle-test judged the LIVE board against Family Fare's own shelf paths and found cells whose product the STORE files in a department the commodity never occupies. This is the class that finds cat litter priced as baking soda and teriyaki brats priced as pineapple - real prices on the wrong product, so no price guard can see them. Commodities: $atIds. Check the CROWN rows first (a wrong crown is the cheapest-price verdict shoppers see). Fix by tightening that commodity's exclude, then record the product via add-known-wrong.ps1. NOTE: a standing ~22 are known department-map false positives (spices shelved in produce, canned milks in dairy) - compare against the previous set. Details: grocery/out/aisle-test.json." | Out-Null
                     if ($LASTEXITCODE -eq 0) { Set-Content -Path $atF -Value $atSig -Encoding UTF8; Log 'aisle-test alert sent' } } catch { Log ('aisle alert threw: ' + $_.Exception.Message) }
             } else { Log 'aisle-test block-set unchanged since last alert - not re-alerting' }
           } else {
@@ -623,7 +635,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           Log ("sale-fallback: $($sf.gap_count) on-sale cell(s) with no everyday fallback - $sfList")
           $summary += "REVIEW    sale-fallback: $($sf.gap_count) on-sale cell(s) would vanish when the sale ends - see sale-fallback-gaps.json"
           if ($sfSig -ne $sfPrev -and (-not $NoAlert)) {
-            try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: $($sf.gap_count) on-sale item(s) have no everyday fallback - $asofS" -Body "These commodity+store cells are on SALE with no everyday item to revert to, so the store DROPS OFF that commodity when the sale ends: $sfList. Browser stores are queued in grocery/out/research-worklist.json for the weekly agent to research the next-cheapest everyday item; Family Fare self-heals daily." | Out-Null
+            try { Send-Alert -Subject "Grocery: $($sf.gap_count) on-sale item(s) have no everyday fallback - $asofS" -Body "These commodity+store cells are on SALE with no everyday item to revert to, so the store DROPS OFF that commodity when the sale ends: $sfList. Browser stores are queued in grocery/out/research-worklist.json for the weekly agent to research the next-cheapest everyday item; Family Fare self-heals daily." | Out-Null
                   if ($LASTEXITCODE -eq 0) { Set-Content -Path $sfF -Value $sfSig -Encoding UTF8; Log 'sale-fallback alert sent' } } catch { Log ('sale-fallback alert threw: ' + $_.Exception.Message) }
           } else { Log 'sale-fallback gaps unchanged - not re-alerting' }
         } else { if (Test-Path (Join-Path $OutDir 'sale-fallback-alert.sig')) { Remove-Item (Join-Path $OutDir 'sale-fallback-alert.sig') -ErrorAction SilentlyContinue } }
@@ -663,7 +675,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           $cfSigF = Join-Path $OutDir 'cost-flags-alert.sig'
           $cfPrev = if (Test-Path $cfSigF) { ((Get-Content $cfSigF -Raw) + '').Trim() } else { '' }
           if ($cfSig -ne $cfPrev -and (-not $NoAlert)) {
-            try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Recipe pricing: $($cfLines.Count) unpriced ingredient line(s)" -Body ("engine\cost-recipes.ps1 could not price some recipe ingredient lines this run - each dropped line makes that recipe's cost read LOWER than reality (usually a bid pointing at a renamed/removed board commodity). Fix the bid in db\ingredients.json or register the commodity. Lines: " + (($cfLines | Select-Object -First 15) -join ' | ')) | Out-Null; if ($LASTEXITCODE -eq 0) { Set-Content $cfSigF -Value $cfSig -Encoding ASCII } } catch {}
+            try { Send-Alert -Subject "Recipe pricing: $($cfLines.Count) unpriced ingredient line(s)" -Body ("engine\cost-recipes.ps1 could not price some recipe ingredient lines this run - each dropped line makes that recipe's cost read LOWER than reality (usually a bid pointing at a renamed/removed board commodity). Fix the bid in db\ingredients.json or register the commodity. Lines: " + (($cfLines | Select-Object -First 15) -join ' | ')) | Out-Null; if ($LASTEXITCODE -eq 0) { Set-Content $cfSigF -Value $cfSig -Encoding ASCII } } catch {}
           }
         } elseif (Test-Path (Join-Path $OutDir 'cost-flags-alert.sig')) { Remove-Item (Join-Path $OutDir 'cost-flags-alert.sig') -ErrorAction SilentlyContinue }
       } catch { Log ('cost-flag alert threw: ' + $_.Exception.Message) }
@@ -672,7 +684,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\audit-db-agreement.ps1') | Out-Null
         if ($LASTEXITCODE -ne 0) {
           Log 'db-agreement guard found DRIFT (see its output)'
-          try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Recipe db drift (index vs specs)" -Body "meal-prep\engine\audit-db-agreement.ps1 found drift between recipes-db.json and db\recipes specs (or missing db\ingredients items). Run it for the list; fix the lagging side." | Out-Null } catch {}
+          try { Send-Alert -Subject "Recipe db drift (index vs specs)" -Body "meal-prep\engine\audit-db-agreement.ps1 found drift between recipes-db.json and db\recipes specs (or missing db\ingredients items). Run it for the list; fix the lagging side." | Out-Null } catch {}
         } else { Log 'db-agreement guard: clean' }
       } catch { Log ('db-agreement guard threw: ' + $_.Exception.Message) }
       # self-contradiction guard: a spec that disagrees with ITSELF (2026-08-04). Ratchets per class
@@ -688,7 +700,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           $scWorse = (($sc | Where-Object { $_ -match 'FAIL' }) -join ' ')
           Log ('spec-contradiction guard got WORSE: ' + $scWorse)
           $summary += 'REVIEW    a spec-contradiction class got worse than its baseline - see meal-prep\out\spec-contradictions.json'
-          try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Recipe spec contradictions got worse" -Body ("meal-prep\pipeline\audit-spec-contradictions.ps1 found MORE of a contradiction class than the recorded baseline. One of the two disagreeing statements is on a live card. Full list in meal-prep\out\spec-contradictions.json. " + $scWorse) | Out-Null } catch {}
+          try { Send-Alert -Subject "Recipe spec contradictions got worse" -Body ("meal-prep\pipeline\audit-spec-contradictions.ps1 found MORE of a contradiction class than the recorded baseline. One of the two disagreeing statements is on a live card. Full list in meal-prep\out\spec-contradictions.json. " + $scWorse) | Out-Null } catch {}
         } else { Log 'spec-contradiction guard: no class worse than baseline' }
       } catch { Log ('spec-contradiction guard threw: ' + $_.Exception.Message) }
       # compute-v2 now SKIPS bad recipes and exits 1 with the list (was: throw -> whole manifest stale,
@@ -700,7 +712,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           $cv2Bad = @($cv2 | Where-Object { $_ -match '^\s+\S' -or $_ -match 'SKIPPED' })
           Log ('compute-v2 SKIPPED recipe(s) with bad cost data: ' + (($cv2Bad | Select-Object -First 6) -join ' | '))
           $summary += 'REVIEW    v2 per-serving manifest skipped recipe(s) with bad cost data - top5/rotation may be stale for them (see compute-v2 output)'
-          if (-not $NoAlert) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Recipe per-serving manifest: skipped recipe(s)" -Body ("compute-v2-perserving.ps1 could not compute per-serving cost for some recipes and skipped them (the rest still updated). Their top5/rotation/site numbers are stale until fixed. Detail: " + (($cv2Bad | Select-Object -First 15) -join ' | ')) | Out-Null } catch {} }
+          if (-not $NoAlert) { try { Send-Alert -Subject "Recipe per-serving manifest: skipped recipe(s)" -Body ("compute-v2-perserving.ps1 could not compute per-serving cost for some recipes and skipped them (the rest still updated). Their top5/rotation/site numbers are stale until fixed. Detail: " + (($cv2Bad | Select-Object -First 15) -join ' | ')) | Out-Null } catch {} }
         } else { Log 'v2 per-serving manifest recomputed' }
       } catch { Log ('compute-v2-perserving threw: ' + $_.Exception.Message) }
       # DERIVED ingredient-map refresh (2026-07-26): regenerate meal-prep\ingredient-map.json from the spec
@@ -929,7 +941,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           $newLines = @($newIdx | ForEach-Object { $flagParts[$_] })
           $body = "$($newIdx.Count) NEW price flag(s) on $asofS (these still published; verify they are real):`n`n" + ($newLines -join "`n") +
                   "`n`n$stillOpen other flag(s) were already reported and are still open - the full set is in guards-*.json / flagged-*.json in $OutDir ."
-          & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: $($newIdx.Count) NEW price flag(s) - $asofS" -Body $body | Out-Null
+          Send-Alert -Subject "Grocery: $($newIdx.Count) NEW price flag(s) - $asofS" -Body $body | Out-Null
           if ($LASTEXITCODE -eq 0) { Log ("review-flag alert sent (" + $newIdx.Count + " new of " + $flagParts.Count + ")") }
           else { Log 'review-flag alert FAILED to send (will retry next run)'; $newIdx = @() }   # do not mark as seen if it never sent
         }
@@ -1019,7 +1031,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         Log 'GUARDS FAILED - board NOT republished (left at last good state)'
         $summary += 'BLOCKED   guards failed a hard invariant - live page left at last good, NOT updated'
         if (-not $NoAlert) {
-          try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: GUARDS FAILED - board not published - $asofS" -Body "guards.ps1 found a hard invariant violation on $asofS (wrong-mode store, cleaner priced as food, a pin overriding the engine, a cell off its linked product by a FACTOR, or a multipack priced as one unit). The live page was left at its last good state. See grocery/ad-cycle-log.txt." | Out-Null } catch {}
+          try { Send-Alert -Subject "Grocery: GUARDS FAILED - board not published - $asofS" -Body "guards.ps1 found a hard invariant violation on $asofS (wrong-mode store, cleaner priced as food, a pin overriding the engine, a cell off its linked product by a FACTOR, or a multipack priced as one unit). The live page was left at its last good state. See grocery/ad-cycle-log.txt." | Out-Null } catch {}
         }
       }
 
@@ -1039,9 +1051,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         elseif ($pubrc -eq 2) {
           Log 'AUTO-PUBLISH HELD: coverage gate failed - live page NOT updated'
           $summary += 'HELD      coverage gate failed - live page NOT updated (a store pull is thin/missing)'
-          if (-not $NoAlert) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery page HELD (coverage) - $asofS" -Body "A refreshed board failed the coverage gate on $asofS (a store's pull produced too few commodities), so the live page was NOT updated - nothing bad was published. Check the store pulls." | Out-Null } catch { Log ('held-alert threw: ' + $_.Exception.Message) } }
+          if (-not $NoAlert) { try { Send-Alert -Subject "Grocery page HELD (coverage) - $asofS" -Body "A refreshed board failed the coverage gate on $asofS (a store's pull produced too few commodities), so the live page was NOT updated - nothing bad was published. Check the store pulls." | Out-Null } catch { Log ('held-alert threw: ' + $_.Exception.Message) } }
         }
-        else { Log "AUTO-PUBLISH ERROR (rc=$pubrc) - Ghost upsert or build failed; live page NOT updated"; $summary += 'ERROR     auto-publish failed (page NOT updated) - see ad-cycle-log.txt'; if (-not $NoAlert) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery publish FAILED (rc=$pubrc) - $asofS" -Body "publish-deals-page.ps1 returned $pubrc on $asofS (Ghost upsert or page build failed). The live page was NOT updated with today's price change. Check ad-cycle-log.txt." | Out-Null } catch {} } }
+        else { Log "AUTO-PUBLISH ERROR (rc=$pubrc) - Ghost upsert or build failed; live page NOT updated"; $summary += 'ERROR     auto-publish failed (page NOT updated) - see ad-cycle-log.txt'; if (-not $NoAlert) { try { Send-Alert -Subject "Grocery publish FAILED (rc=$pubrc) - $asofS" -Body "publish-deals-page.ps1 returned $pubrc on $asofS (Ghost upsert or page build failed). The live page was NOT updated with today's price change. Check ad-cycle-log.txt." | Out-Null } catch {} } }
       }
 
       # ---- Walmart full-capture aging watch (2026-07-23 incident follow-up). The union in compare-deals
@@ -1056,10 +1068,10 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $wfpOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-walmart-fullpull.ps1') 2>$null
         if ($LASTEXITCODE -eq 1) {
           Log ('walmart-fullpull ADVISORY: ' + [string]$wfpOut)
-          try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: Walmart full capture aging - $asofS" -Body ("Early warning, nothing is broken yet: " + [string]$wfpOut + " When the last comprehensive capture leaves the 14-day union window, the coverage guard will HOLD the board (safe, but that day's Walmart refresh is lost). Run the full-worklist Walmart browser pull to reset the clock.") | Out-Null } catch {}
+          try { Send-Alert -Subject "Grocery: Walmart full capture aging - $asofS" -Body ("Early warning, nothing is broken yet: " + [string]$wfpOut + " When the last comprehensive capture leaves the 14-day union window, the coverage guard will HOLD the board (safe, but that day's Walmart refresh is lost). Run the full-worklist Walmart browser pull to reset the clock.") | Out-Null } catch {}
         } elseif ($LASTEXITCODE -eq 3) {
           Log ('walmart-fullpull BLIND: ' + [string]$wfpOut)
-          try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: a union store has NO captures in its window - $asofS" -Body ("Not an early warning - the fullpull watch examined ZERO capture files for at least one union store (Walmart/Sam's): " + [string]$wfpOut + " The coverage guard will HOLD that store at the cliff; run the full-worklist browser pull now.") | Out-Null } catch {}
+          try { Send-Alert -Subject "Grocery: a union store has NO captures in its window - $asofS" -Body ("Not an early warning - the fullpull watch examined ZERO capture files for at least one union store (Walmart/Sam's): " + [string]$wfpOut + " The coverage guard will HOLD that store at the cliff; run the full-worklist browser pull now.") | Out-Null } catch {}
         } else { Log ('walmart-fullpull: ' + [string]$wfpOut) }
       } catch { Log ('walmart-fullpull audit threw: ' + $_.Exception.Message) }
 
@@ -1144,7 +1156,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
               Log ("consistency STILL breached after repair - no-link=$nl (browser-store price drift, needs re-pull)")
               $summary += "REVIEW    board-link drift: $nl chips show a name not a link - see consistency-report.json"
               if ($driftSig -ne $prevSig -and (-not $NoAlert)) {
-                try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: board-link price drift ($nl chips) - $asofS" -Body "$nl priced chips fall back to a product name (no 'See item' link) after auto-repair on $asofS, because a store's shelf price drifted from the board. NO misleading link is shown. Re-pull the flagged store(s). Details: grocery/out/consistency-report.json." | Out-Null
+                try { Send-Alert -Subject "Grocery: board-link price drift ($nl chips) - $asofS" -Body "$nl priced chips fall back to a product name (no 'See item' link) after auto-repair on $asofS, because a store's shelf price drifted from the board. NO misleading link is shown. Re-pull the flagged store(s). Details: grocery/out/consistency-report.json." | Out-Null
                       if ($LASTEXITCODE -eq 0) { Set-Content -Path $csigF -Value $driftSig -Encoding UTF8; Log 'consistency drift alert sent' } } catch { Log ('consistency alert threw: ' + $_.Exception.Message) }
               } else { Log 'consistency drift unchanged since last alert - not re-alerting' }
             } else { Log 'consistency repaired - all shown links match their price'; if (Test-Path (Join-Path $OutDir 'consistency-alert.sig')) { Remove-Item (Join-Path $OutDir 'consistency-alert.sig') -ErrorAction SilentlyContinue } }
@@ -1175,7 +1187,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
             Log ("store-coverage FAIL: $($sc.violations.Count) commodity(ies) missing a store tile - $scList")
             $summary += "REVIEW    store-coverage: $($sc.violations.Count) commodity(ies) not showing all 7 stores - see store-coverage-report.json"
             if ($scSig -ne $scPrev -and (-not $NoAlert)) {
-              try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: a store dropped off a commodity tile - $asofS" -Body "audit-store-coverage found staple commodities NOT showing all 7 stores (a store tile is missing entirely - not even a 'Doesn't carry' card): $scList. The board is built to render all 7 by construction, so this is a render regression - check MissingCells / storeOrder in build-deals-page.ps1. Details: grocery/out/store-coverage-report.json." | Out-Null
+              try { Send-Alert -Subject "Grocery: a store dropped off a commodity tile - $asofS" -Body "audit-store-coverage found staple commodities NOT showing all 7 stores (a store tile is missing entirely - not even a 'Doesn't carry' card): $scList. The board is built to render all 7 by construction, so this is a render regression - check MissingCells / storeOrder in build-deals-page.ps1. Details: grocery/out/store-coverage-report.json." | Out-Null
                     if ($LASTEXITCODE -eq 0) { Set-Content -Path $scF -Value $scSig -Encoding UTF8; Log 'store-coverage alert sent' } } catch { Log ('store-coverage alert threw: ' + $_.Exception.Message) }
             } else { Log 'store-coverage violation unchanged since last alert - not re-alerting' }
           } else { Log 'store-coverage OK - every staple commodity shows all 7 stores'; if (Test-Path (Join-Path $OutDir 'store-coverage-alert.sig')) { Remove-Item (Join-Path $OutDir 'store-coverage-alert.sig') -ErrorAction SilentlyContinue } }
@@ -1214,18 +1226,32 @@ try {
     $ta = (& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'test-auditors.ps1') 2>&1 | ForEach-Object { [string]$_ }) -join "`n"
     Log 'WATCHERS FAILED: test-auditors could not prove a guard still sees its own bug'
     $summary += 'WATCHERS  a guard can no longer see its own founding bug - see test-auditors output'
-    # PERSIST THE WHOLE THING BEFORE ALERTING (2026-07-31). send-alert truncates its body, and on
+    # PERSIST THE WHOLE THING BEFORE ALERTING (2026-07-31). send-alert used to truncate its body, and on
     # 2026-07-31T06:20 that truncation ate the only copy of WHICH case failed: the email carried the first
     # ~28 PASS lines and stopped, the log line says only "a guard has gone blind", and by the time anyone
     # read it the mid-edit working tree that produced the failure had been committed over. The failing case
     # was unrecoverable - a page about a blind guard that cannot say which guard. The file is written first
     # so it survives even if the send throws, and it is dated so consecutive failures do not overwrite each
     # other's evidence.
+    #
+    # THE FILE IS ALSO THE EMAIL BODY NOW (2026-08-06). This output is the one alert body in the estate with
+    # no bound on it - 43 KB on each of 2026-08-03/04/05 - and passing it as a command-line -Body meant the
+    # send never launched on any of those days (see Send-Alert above). It already has to be written here, so
+    # hand send-alert THAT PATH: nothing on this path can be too long, and the mail carries the whole run
+    # instead of the first 28 PASS lines. The explanatory header goes into the file rather than only into
+    # the email, which also makes the artefact self-describing for whoever finds it days later.
     $taF = Join-Path $OutDir ('test-auditors-fail-' + (Get-Date -Format 'yyyy-MM-dd') + '.txt')
-    try { Set-Content -Path $taF -Value $ta -Encoding UTF8; Log ('WATCHERS: full test-auditors output saved to ' + $taF) }
+    $taBody = "test-auditors.ps1 replays each watcher's founding bug against a frozen fixture. At least one watcher no longer fires on it, which means any quiet report from that guard is unproven - including a clean board.`n`n" +
+              "Saved copy of this run: " + $taF + "`n" +
+              "FULL test-auditors OUTPUT FOLLOWS - look for the BAD lines.`n" + ('-' * 78) + "`n" + $ta
+    $taSaved = $false
+    try { Set-Content -Path $taF -Value $taBody -Encoding UTF8; $taSaved = $true; Log ('WATCHERS: full test-auditors output saved to ' + $taF) }
     catch { Log ('WATCHERS: could not save test-auditors output: ' + $_.Exception.Message) }
     if (-not $NoAlert) {
-      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject 'Grocery: a GUARD has gone blind (test-auditors failed)' -Body ("test-auditors.ps1 replays each watcher's founding bug against a frozen fixture. At least one watcher no longer fires on it, which means any quiet report from that guard is unproven - including a clean board.`n`nFULL OUTPUT (this email is truncated): " + $taF + "`n`n" + $ta) | Out-Null
+      # normal path: the evidence file IS the body. If it could not be written, Send-Alert spools the same
+      # text to %TEMP% instead - a failed evidence write must not also cost us the page.
+      if ($taSaved) { Send-Alert -Subject 'Grocery: a GUARD has gone blind (test-auditors failed)' -BodyFile $taF -What 'WATCHERS' | Out-Null }
+      else          { Send-Alert -Subject 'Grocery: a GUARD has gone blind (test-auditors failed)' -Body $taBody -What 'WATCHERS' | Out-Null }
     }
   } else { Log 'watchers ok: every guard still fires on its own founding bug' }
 } catch { Log ('test-auditors threw: ' + $_.Exception.Message) }
@@ -1257,7 +1283,7 @@ try {
       $summary += 'INVARIANTS a blocking guard may no longer be able to fire - see test-guards weekly alert'
       if (-not $NoAlert) {
         $tgSubject = if ($tgRc -eq 3) { 'Grocery: test-guards could not evaluate (guards already red on the unmutated board)' } elseif ($tgRc -eq 4) { 'Grocery: test-guards weekly did not run (hermetic copy failed)' } else { 'Grocery: a BLOCKING invariant can no longer fail (test-guards weekly)' }
-        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject $tgSubject -Body ("run-test-guards-weekly.ps1 breaks each hard invariant inside a scratch COPY of the grocery tree and asserts guards.ps1 exits 2 with that guard's own failure text. Exit " + $tgRc + ": 1 = a broken invariant did NOT fail guards (that guard is decorative until fixed - do not trust a quiet board on it); 3 = baseline already red, nothing proven (the daily run is already alerting on the real failure); 4 = the hermetic copy failed. Production files are never touched by this job.`n`n" + $tg) | Out-Null
+        Send-Alert -Subject $tgSubject -Body ("run-test-guards-weekly.ps1 breaks each hard invariant inside a scratch COPY of the grocery tree and asserts guards.ps1 exits 2 with that guard's own failure text. Exit " + $tgRc + ": 1 = a broken invariant did NOT fail guards (that guard is decorative until fixed - do not trust a quiet board on it); 3 = baseline already red, nothing proven (the daily run is already alerting on the real failure); 4 = the hermetic copy failed. Production files are never touched by this job.`n`n" + $tg) | Out-Null
       }
     }
   }

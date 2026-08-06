@@ -26,6 +26,11 @@ param([switch]$Accept, [switch]$Alert, [string]$OutDir = "",
   [switch]$ForceAccept)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+# Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
+# Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
+# arrive truncated - it did not arrive at all, and the launch error read like the CHECK had crashed. Three
+# consecutive guard-blind days went unpaged that way on 2026-08-03/04/05. See alert-lib.ps1.
+. (Join-Path $root 'alert-lib.ps1')
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $audDir = Join-Path $OutDir 'audit'
 if (-not (Test-Path $audDir)) { New-Item -ItemType Directory -Path $audDir | Out-Null }
@@ -266,7 +271,7 @@ if ($Alert -and ($regr -gt 0 -or $newContest.Count -gt 0 -or $drift -gt 0)) {
   $last = if (Test-Path $sigF) { (Get-Content $sigF -Raw).Trim() } else { '' }
   if ($sigHash -ne $last) {
     $body = "Matching soundness found changes:`nMOVED=$($moved.Count) DROPPED=$($dropped.Count) new-contested=$($newContest.Count) drift=$drift`n`n" + (($dropped | ForEach-Object { "DROPPED $($_.from): $($_.name)" }) -join "`n") + "`n" + (($moved | ForEach-Object { "MOVED $($_.from)->$($_.to): $($_.name)" }) -join "`n") + "`nReview, then accept with: audit-match-soundness.ps1 -Accept"
-    try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery matching soundness - review needed" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
+    try { Send-Alert -Subject "Grocery matching soundness - review needed" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
   }
 }
 # regressions (moved/dropped of an existing product) HOLD the publish until reviewed+accepted

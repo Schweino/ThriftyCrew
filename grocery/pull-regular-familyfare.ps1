@@ -7,6 +7,11 @@
 param([string]$OutDir = "", [int]$MaxMinutes = 9, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+# Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
+# Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
+# arrive truncated - it did not arrive at all, and the launch error read like the CHECK had crashed. Three
+# consecutive guard-blind days went unpaged that way on 2026-08-03/04/05. See alert-lib.ps1.
+. (Join-Path $root 'alert-lib.ps1')
 
 # ---------------------------------------------------------------------------------------------------------
 # THE PURE RULES, LIFTED OUT SO THEY CAN BE TESTED (2026-07-31, extended 2026-08-02).
@@ -740,7 +745,7 @@ try {
               "Expiry classes: STARVED means the row's own search term has returned nothing for the whole carry window and the sweep genuinely cannot replace that product. CHURN means the term is being bought fine and only the NAME left the store's top-25 (a rename, a ranking shift, a delisting, or the multi-buy skip) - the catalog is a name-keyed union, so a trickle of those is the healthy steady state and does NOT page on its own. UNKNOWN means the row predates the found_by_term field, so it cannot be classified yet; it never pages and the class empties itself within $MaxCarryDays days.`n`n" +
               "Throttled diagnostics written on $($recent.Count) of the last 4 days - that alone is NORMAL under the 3-hourly sharded sweep (a run buys ~85 of 526 terms by design) and is no longer what this alert keys on. It fires only when the merged catalog is actually losing ground.`n`n" +
               "Freshop rate-limits several hundred sequential terms from one IP. The fix is fewer requests per window (shard the term list across the day), NOT slower pacing - a 2026-07-28 probe showed 20 terms at 200ms all succeed while a second burst all came back empty, so the budget is per-window request COUNT."
-      & powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'send-alert.ps1') -Subject ("Grocery: Family Fare catalog is degrading - " + $ffState.reasons.Count + " signal(s)") -Body $body | Out-Null
+      Send-Alert -Subject ("Grocery: Family Fare catalog is degrading - " + $ffState.reasons.Count + " signal(s)") -Body $body | Out-Null
       # stamp only on a SENT alert: a failed send must be free to try again on the next run, or a transient
       # mail error would buy the whole day's silence.
       if ($LASTEXITCODE -eq 0) { Set-Content -Path $alertStamp -Value $todayS -Encoding ASCII }

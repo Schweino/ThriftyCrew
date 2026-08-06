@@ -19,6 +19,11 @@
 param([switch]$Alert)
 $ErrorActionPreference = 'Continue'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+# Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
+# Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
+# arrive truncated - it did not arrive at all, and the launch error read like the CHECK had crashed. Three
+# consecutive guard-blind days went unpaged that way on 2026-08-03/04/05. See alert-lib.ps1.
+. (Join-Path $root 'alert-lib.ps1')
 $repo = Split-Path $root -Parent
 $now  = Get-Date
 $cfg  = Get-Content (Join-Path $root 'expected-automations.json') -Raw | ConvertFrom-Json
@@ -91,7 +96,7 @@ if ($Alert) {
   $prev = if (Test-Path $sigF) { (Get-Content $sigF -Raw).Trim() } else { '' }
   if ($sig -ne $prev) {
     try {
-      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject ("Automation silent-death: " + $issues.Count + " issue(s)") -Body ("health-heartbeat.ps1 found automations/outputs that stopped WITHOUT a loud failure (a task got deleted/disabled or an output went stale). This is the class the GitHub-failure email + local-watchdog do not cover. Issues: " + (($issues | Select-Object -First 12) -join ' | ') + ". Fix the task/trigger or the job that writes the output.") | Out-Null
+      Send-Alert -Subject ("Automation silent-death: " + $issues.Count + " issue(s)") -Body ("health-heartbeat.ps1 found automations/outputs that stopped WITHOUT a loud failure (a task got deleted/disabled or an output went stale). This is the class the GitHub-failure email + local-watchdog do not cover. Issues: " + (($issues | Select-Object -First 12) -join ' | ') + ". Fix the task/trigger or the job that writes the output.") | Out-Null
       if ($LASTEXITCODE -eq 0) { Set-Content $sigF -Value $sig -Encoding ASCII }
     } catch {}
   }

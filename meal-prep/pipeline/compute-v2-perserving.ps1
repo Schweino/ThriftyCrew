@@ -118,10 +118,14 @@ if($inverted.Count){
   Write-Output ("BLOCK-BEFORE-SHIP: clamped {0} recipe(s) where cheapest_ps exceeded everyday_ps (root price bug - triage):" -f $inverted.Count)
   $inverted | ForEach-Object { Write-Output ("  {0}: everyday `${1} but feed-cheapest `${2} ({3:P0} over)" -f $_.slug,$_.everyday_ps,$_.raw_cheapest_ps,$_.over_frac) }
   Set-Content (Join-Path $here 'v2-inversions.json') -Value (($inverted | ConvertTo-Json -Depth 4)) -Encoding utf8
-  $alert = Join-Path $mp '..\grocery\send-alert.ps1'
-  if(Test-Path $alert){
+  # Alerts go out through Send-Alert (grocery\alert-lib.ps1), never as `powershell -File send-alert.ps1
+  # -Body $long`: Windows refuses to start a process whose command line passes 32767 chars, so an oversized
+  # body did not arrive truncated - it did not arrive at all. See alert-lib.ps1.
+  $alertLib = Join-Path $mp '..\grocery\alert-lib.ps1'
+  if(Test-Path $alertLib){
+    . $alertLib
     $body = "compute-v2 found recipes whose 'cheapest everywhere' price computed HIGHER than the everyday price - impossible on an aligned product, so a feed price or gpu is wrong. The shipped number was clamped to everyday (safe), but the underlying price must be fixed. Rows: " + (($inverted | Select-Object -First 12 | ForEach-Object { "$($_.slug) ev=$($_.everyday_ps) ch=$($_.raw_cheapest_ps)" }) -join ' | ')
-    try { & powershell -ExecutionPolicy Bypass -File $alert -Subject ("Recipe price inversion: {0} clamped" -f $inverted.Count) -Body $body | Out-Null } catch {}
+    Send-Alert -Subject ("Recipe price inversion: {0} clamped" -f $inverted.Count) -Body $body -What 'v2 price inversion' | Out-Null
   }
 }
 if($bad.Count){

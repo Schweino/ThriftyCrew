@@ -213,6 +213,47 @@ else { Bad 'send-alert lost its mutex or atomic swap - a concurrent read can see
 if ($sa -match 'refusing to overwrite') { Ok 'send-alert still refuses to overwrite a queue that reads back empty' }
 else { Bad 'send-alert lost the refuse-to-overwrite-empty guard - a bad read can wipe the backlog' }
 
+# ---------------------------------------------------------------- 5b. an alert body must never ride the command line
+# FOUNDING BUG (2026-08-06). Every alerting script mailed like this:
+#     & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "..." -Body $body
+# Windows caps a whole command line at 32767 characters, and CreateProcess does not truncate at the cap - it
+# REFUSES to start the process. So the one alert whose body is unbounded by construction (the watchers' full
+# test-auditors output - this file's own output, 43,030 / 43,283 / 43,718 chars on 2026-08-03/04/05) never
+# launched the mailer on any of the three consecutive days a guard was blind. There was no email and no
+# triage-queue entry either, because the queue is written INSIDE send-alert.ps1, and the caller's catch
+# swallowed the launch error and logged it as "test-auditors threw: ... The filename or extension is too
+# long" - which reads like THIS script crashed rather than like the page never went out. A watcher was red
+# for four days and nobody was told. The bug was in the delivery, wearing the costume of the thing it was
+# meant to deliver.
+# THE RULE NOW: alert-lib.ps1's Send-Alert is the only thing that may spawn send-alert.ps1, and it hands the
+# body over as -BodyFile. The defect IS the call shape, so the call shape is what gets pinned.
+$abBad = @()
+$abDirs = @((Join-Path $root '*.ps1'), (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\*.ps1'))
+foreach ($abG in $abDirs) {
+  foreach ($abF in @(Get-ChildItem $abG -File -ErrorAction SilentlyContinue)) {
+    # alert-lib is the one permitted spawner; send-alert is the target; this file carries the frozen bad
+    # shape below as a MUST-FIRE fixture and would otherwise convict itself of the bug it is detecting.
+    if (@('alert-lib.ps1', 'send-alert.ps1', 'test-auditors.ps1') -contains $abF.Name) { continue }
+    # strip block comments then whole-line comments: the prose ABOUT the bad shape (here, in alert-lib and
+    # in notify-desktop's founding-bug note) must not read as the bad shape itself.
+    $abSrc = [regex]::Replace([IO.File]::ReadAllText($abF.FullName), '(?s)<#.*?#>', '')
+    $abSrc = (($abSrc -split "`r?`n") | Where-Object { $_ -notmatch '^\s*#' }) -join "`n"
+    if ($abSrc -match '(?s)powershell[^\r\n]{0,240}-File[^\r\n]{0,160}send-alert\.ps1') { $abBad += $abF.Name }
+  }
+}
+if ($abBad.Count -eq 0) { Ok 'no script spawns send-alert.ps1 itself - every alert goes through Send-Alert, whose body travels by file' }
+else { Bad ('these script(s) invoke send-alert.ps1 through a child powershell again, so any alert body over 32767 chars will silently never send: ' + ($abBad -join ', ')) }
+# MUST-FIRE: the detector has to still recognise the exact 2026-08-06 shape, or it is examining nothing.
+$abFx = "  & powershell -ExecutionPolicy Bypass -File (Join-Path `$root 'send-alert.ps1') -Subject 'x' -Body `$body | Out-Null"
+if ($abFx -match '(?s)powershell[^\r\n]{0,240}-File[^\r\n]{0,160}send-alert\.ps1') { Ok 'alert-shape detector still fires on the frozen founding call shape' }
+else { Bad 'the alert-shape detector no longer matches its own founding bug - the check above proves nothing' }
+# and the helper must keep the two properties the outage turned on: body by file, and a LOUD failed send.
+$abLib = [IO.File]::ReadAllText((Join-Path $root 'alert-lib.ps1'))
+if ($abLib -match '-BodyFile \$bf') { Ok 'alert-lib still passes the body as -BodyFile, not on the command line' }
+else { Bad 'alert-lib no longer sends the body by file - an oversized alert can silently fail to send again' }
+if ($abLib -match 'ALERT FAILED TO SEND') { Ok 'alert-lib still logs a failed send loudly (a dead page cannot read as a crashed check)' }
+else { Bad 'alert-lib lost its ALERT FAILED TO SEND line - a page that never went out is indistinguishable from the check itself dying again' }
+
 # ---------------------------------------------------------------- 6. coverage-gaps must share the engine's exclusions
 # It kept its own opinion of what is not-food and reported engine-refused products as gaps forever.
 $cg = Get-Content (Join-Path $root 'audit-coverage-gaps.ps1') -Raw
@@ -1429,6 +1470,7 @@ New-Item -ItemType Directory -Force (Join-Path $fxMs 'out\audit') | Out-Null
 New-Item -ItemType Directory -Force (Join-Path $fxMs 'out\regular') | Out-Null
 Copy-Item (Join-Path $root 'audit-match-soundness.ps1') (Join-Path $fxMs 'audit-match-soundness.ps1')
 Copy-Item (Join-Path $root 'verdict-lib.ps1') (Join-Path $fxMs 'verdict-lib.ps1')
+Copy-Item (Join-Path $root 'alert-lib.ps1') (Join-Path $fxMs 'alert-lib.ps1')      # dot-sourced for Send-Alert, same as verdict-lib
 Set-Content (Join-Path $fxMs 'commodities.json') '[{"id":"lemons","include":["lemon"],"exclude":[]},{"id":"limes","include":["lime"],"exclude":[]}]' -Encoding UTF8
 Set-Content (Join-Path $fxMs 'compare-deals.ps1') "`$GLOBAL_EXCLUDE = @(`n  'scented candle'`n)`n" -Encoding UTF8
 Set-Content (Join-Path $fxMs 'out\regular\hyvee-regular-2026-01-01.json') '{"deals":[{"item":"Fresh Lemon 1 ct"},{"item":"Fresh Lime 1 ct"}]}' -Encoding UTF8

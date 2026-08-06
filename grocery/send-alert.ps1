@@ -6,7 +6,12 @@
   Requires the shared Google token to include the gmail.send scope. If it doesn't yet, this logs the failure
   and exits 1 (so the caller can fall back) - run google-oauth-authorize.ps1 once to add the scope.
 
-  Usage: powershell -File send-alert.ps1 -Subject "Grocery pull failed: Baker's" -Body "details..."
+  Usage: DON'T CALL THIS DIRECTLY. Dot-source alert-lib.ps1 and use Send-Alert:
+      . (Join-Path $root 'alert-lib.ps1')
+      Send-Alert -Subject "Grocery pull failed: Baker's" -Body $details | Out-Null
+  It routes the body through -BodyFile (a `powershell -File ... -Body $long` command line over 32767 chars
+  does not start AT ALL, so the alert simply never happens) and makes a failed send a loud log line rather
+  than a swallowed exception. The whole account of the four-day silent outage is in alert-lib.ps1.
 #>
 param(
   [string]$Subject = "Grocery pipeline alert",
