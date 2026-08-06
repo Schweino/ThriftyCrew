@@ -1307,13 +1307,6 @@
                                                       "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)",
                                                       "board_pu":  1.6776
                                                   },
-                                       "Sam\u0027s Club":  {
-                                                               "url":  "https://www.samsclub.com/ip/15382963513",
-                                                               "name":  "Member\u0027s Mark, Advantage Premium, Infant Formula, 48 oz.",
-                                                               "price":  "$36.98",
-                                                               "size":  "48 oz",
-                                                               "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                           },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/1541354514",
                                                        "price":  "24.28",
@@ -11523,13 +11516,6 @@
                                   },
                   "frozen-pizza":  {
                                        "commodity":  "frozen-pizza",
-                                       "Aldi":  {
-                                                    "url":  "https://www.aldi.us/store/aldi/products/25821485-mama-cozzimama-cozzi-s-pizza-kitchen-s-pizza-kitchen-original-thin-crust-cheese-pizza-13-8-oz",
-                                                    "price":  2.99,
-                                                    "size":  "each",
-                                                    "name":  "Mama Cozzi\u0027s Pizza Kitchen Original Thin Crust Cheese Pizza",
-                                                    "board_pu":  2.99
-                                                },
                                        "Baker\u0027s":  {
                                                             "url":  "https://www.bakersplus.com/p/totino-s-party-pizza-multipack-pepperoni-17g-protein-thin-crust-frozen-pizza/0004280043589",
                                                             "name":  "Totino\u0027s Party Pizza Multipack Pepperoni 17g Protein Thin Crust Frozen Pizza",
@@ -12025,6 +12011,13 @@
                                                     "size":  "11.25 oz",
                                                     "name":  "Mama Cozzi\u0027s Pizza Kitchen Garlic Texas Toast"
                                                 },
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/kroger-garlic-texas-toast/0001111015904",
+                                                            "price":  "17.52",
+                                                            "size":  "8 ct",
+                                                            "name":  "Kroger Garlic Texas Toast",
+                                                            "verified":  "2026-08-06 price-pull self-capture"
+                                                        },
                                        "Family Fare":  {
                                                            "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_breads/garlic_bread/our_family_slices_original_garlic_texas_toast_8_ea/p/7081079",
                                                            "price":  2.89,
@@ -12050,14 +12043,7 @@
                                                                "price":  8.98,
                                                                "size":  "32 ct",
                                                                "name":  "Cole\u0027s Garlic Texas Toast, Frozen"
-                                                           },
-                                       "Baker\u0027s":  {
-                                                            "url":  "https://www.bakersplus.com/p/kroger-garlic-texas-toast/0001111015904",
-                                                            "price":  "17.52",
-                                                            "size":  "8 ct",
-                                                            "name":  "Kroger Garlic Texas Toast",
-                                                            "verified":  "2026-08-06 price-pull self-capture"
-                                                        }
+                                                           }
                                    },
                   "garlic-powder":  {
                                         "commodity":  "Garlic Powder",
@@ -23030,12 +23016,10 @@
                                                            "board_pu":  0.113
                                                        },
                                        "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/48699356-bright-essentials-freezer-bags-zipper-pint-size-20-each",
-                                                       "name":  "Bright Essentials Freezer Bags, Zipper, Pint Size",
-                                                       "price":  "$2.28",
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39736208-bright-essentials-storage-bags-double-zipper-20-gallon-20-each",
+                                                       "price":  2.48,
                                                        "size":  "20 ct",
-                                                       "verified":  "2026-08-03 DERIVED from the price row (same record the board priced)",
-                                                       "board_pu":  0.114
+                                                       "name":  "Bright Essentials Storage Bags, Double Zipper, 20 Gallon"
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2913524/that-s-smart-reclosable-freezer-storage-bags-1-gallon",
@@ -23045,13 +23029,6 @@
                                                       "verified":  "2026-08-03 DERIVED from the price row (same record the board priced)",
                                                       "board_pu":  0.0992
                                                   },
-                                       "Sam\u0027s Club":  {
-                                                               "url":  "https://www.samsclub.com/ip/2570014879",
-                                                               "name":  "Ziploc Brand Quart Freezer Storage Bags, Stay Open Design, Easy to Fill, 216 ct.",
-                                                               "price":  "$11.23",
-                                                               "size":  "216 ct",
-                                                               "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)"
-                                                           },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/624605773",
                                                        "name":  "Great Value Freezer Guard Double Zipper Gallon Freezer Bag, 80 Count",
