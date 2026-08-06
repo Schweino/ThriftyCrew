@@ -897,6 +897,22 @@ if ($SelfTest) {
     # slider tokens. A food package described by its packaging is not a storage bag.
     _Route 'R15 dried fruit in a zipper bag is not a bag' 'Sun-Maid Dried Mangos 15oz Resealable Stand-Up Zipper Bag' '<unmatched>'
     _Route 'R15 a mylar food pouch is not a quart bag'  'Dehydrated Zucchini, 1 Full Quart Mylar Bag' 'zucchini'
+
+    # --- R16, 2026-08-06: WOOD POLISH IS NOT CITRUS -----------------------------------------------------
+    # audit-household-in-food HARD-FAILED the publish on the full Walmart re-pull: Pledge "Orange Enhancing"
+    # wood polish was landing in the EDIBLE commodity 'oranges'. The gap was a disarmed sibling, not a new
+    # class - 'lemons' has excluded 'polish' for a while and 'oranges'/'limes' never got the same guard, so
+    # the defence existed and simply was not applied across the family. Measured over the 14-day corpus:
+    # 7 rows leave oranges, all seven wood-care products, zero real fruit; limes loses nothing today and is
+    # guarded anyway so the family stops depending on which citrus a brand happens to scent this season.
+    # 'pledge' is carried alongside 'polish' because one row is "Pledge Wood Oil ... Orange Scent" with no
+    # word "polish" in it at all - the brand token is what makes the class complete.
+    # Both land in furniture-polish, which is their real home - releasing them from a fruit commodity does
+    # not orphan them, it lets the household commodity that was always right for them finally claim them.
+    _Route 'R16 orange-scented wood polish is not fruit' 'Pledge Expert Care, Wood Polish Shines and Protects, Orange Enhancing, Aerosol, 9.7 oz., Pack of 3' 'furniture-polish'
+    _Route 'R16 Pledge wood OIL has no word polish'      'Pledge Wood Oil, Expert Care, Trigger Spray - Moisturizes & Revives with Orange Scent, 16 oz' 'furniture-polish'
+    _Route 'R16 twin: real navel oranges are untouched'  'Fresh Navel Oranges, 4 lb Bag' 'oranges'
+    _Route 'R16 twin: real limes are untouched'          'Fresh Limes, Each' 'limes'
   }
 
   Write-Output ('-'*54)

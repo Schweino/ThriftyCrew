@@ -5111,6 +5111,8 @@
                     ],
         "exclude":  [
                         "\\bcarrots?\\b",
+                        "\\bpolish\\b",
+                        "\\bpledge\\b",
                         "\\bjuice\\b",
                         "mandarin",
                         "clementine",
@@ -5484,6 +5486,8 @@
                         "\\blimes?\\b"
                     ],
         "exclude":  [
+                        "\\bpolish\\b",
+                        "\\bpledge\\b",
                         "lemon[\\s-]*lime",
                         "\\bmini\\s+cans?\\b",
                         "\\bchips?\\b",
