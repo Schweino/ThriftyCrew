@@ -141,6 +141,15 @@ proves each swap round-trips before writing. A missed run is caught within a day
 this exact command. Bounds ("under 400 calories") are deliberately left as literals - the bounded-claim
 gate owns their truth.
 
+## After ANY spec edit: one command propagates it (2026-08-08)
+
+    powershell -File pipeline\propagate-recipes.ps1
+
+Content-hash dirty detection carries exactly the changed specs through recipes-db sync, the db-agreement
+hard gate, planner data, cards and the hash-gated publish, and only advances its stamps after every stage
+succeeds. `-DryRun` lists what would move. This replaces remembering the four NEXT steps each repair
+script prints.
+
 ## Shared pipeline (promoted 2026-07-26) - reference, do not re-port
 
 The stable, run-agnostic toolchain now lives OUTSIDE the run folder so it compounds instead of being

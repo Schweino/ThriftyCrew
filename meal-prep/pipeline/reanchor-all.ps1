@@ -119,6 +119,36 @@ Write-Output ''
 # on disk, and the daily chain reads this file to decide what to republish - so a clean day would have
 # rebuilt and published whatever the last dirty day happened to contain. That is the stale-proof-file class
 # (a proof that outlives the work it certifies), and it was caught the first time this was dry-run.
+# ---- related-recipe widgets: the OTHER number baked into every card ----------------------------------
+# Each card carries a "smp-rel-card" strip quoting up to three sibling recipes' per-serving prices from the
+# manifest at BUILD time. Any price move anywhere therefore stales every card that quotes that recipe -
+# a fan-out nothing owned: measured 2026-08-07, 1,612 of 1,626 embedded prices disagreed with the manifest
+# (mean $0.10 off, max $0.98) and only a catalog-wide force republish cleared it. This folds the check into
+# the same daily stale list, thresholded at $0.15 so ordinary penny drift does not churn republishes; the
+# 150-slug sanity cap and its alert in check-ad-cycles still governs the volume.
+$THRESH = 0.15
+$manifestPath = Join-Path $here 'v2-perserving.json'
+if(Test-Path $manifestPath){
+  . (Join-Path $mp 'lib\json-db-io.ps1')   # @() does not unroll ConvertFrom-Json output in PS 5.1
+  $man = @{}
+  foreach($r in (Read-JsonArrayFile -Path $manifestPath)){ $man[[string]$r.slug] = [double]$r.cheapest_ps }
+  $relRx = [regex]'smp-rel-card. href=.https://www\.thriftycrew\.com/([a-z0-9-]+)/[^>]*>.*?smp-rel-p.>\$(\d+\.\d{2})'
+  $relStale = 0
+  foreach($f in (Get-ChildItem (Join-Path $builtDir '*.body.html'))){
+    $slugName = $f.BaseName -replace '\.body$',''
+    if($stale.Contains($slugName) -or $held.Contains($slugName)){ continue }
+    $html = [IO.File]::ReadAllText($f.FullName)
+    foreach($m in $relRx.Matches($html)){
+      $rs = $m.Groups[1].Value
+      if(-not $man.ContainsKey($rs)){ continue }
+      if([Math]::Abs([double]$m.Groups[2].Value - $man[$rs]) -gt $THRESH){ $stale.Add($slugName); $relStale++; break }
+    }
+  }
+  if($relStale){ Write-Output ("{0} card(s) added to the stale list for RELATED-RECIPE price drift over `${1}" -f $relStale, $THRESH) }
+} else {
+  Write-Output '  (no v2-perserving.json beside this script - related-price drift not checked this run)'
+}
+
 $stale | Out-File $listPath -Encoding utf8
 if($held.Count){
   Write-Output ("{0} stale card(s) HELD BACK - their spec fails the money invariant, so republishing would" -f $held.Count)
