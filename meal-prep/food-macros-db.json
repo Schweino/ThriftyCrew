@@ -1,4 +1,4 @@
-﻿{
+{
     "readme":  "Food macro database for Thrifty Crew meal prep. Each item\u0027s calories/protein_g/carbs_g/fat_g are PER SERVING. serving_grams = grams in one serving (used to scale by weight, e.g. pounds). For count or volume items (eggs, tbsp), serving_qty + serving_unit describe the serving. Conversions: 1 lb = 453.592 g, 1 oz = 28.3495 g. Note raw vs cooked for meats. brand empty string = not specified yet. null macro = pending label.",
     "items":  [
                   {
@@ -137,6 +137,19 @@
                   },
                   {
                       "item":  "Tortilla",
+                      "brand":  "Great Value",
+                      "serving_grams":  36,
+                      "serving_qty":  1,
+                      "serving_unit":  "tortilla",
+                      "calories":  110,
+                      "protein_g":  3,
+                      "carbs_g":  18,
+                      "fat_g":  2,
+                      "fiber_g":  2,
+                      "notes":  "Great Value Small Fajita Flour Tortillas, 26 oz / 20 ct - the product the tortillas board cell actually prices ($0.106 each, Walmart, 2026-08-06). Label serving 1 tortilla (36 g); package basis is 737 g / 20 = 36.85 g, which is what densities.json and the map gpu carry. Was La Banderita Carb Counter 65 g / 90 cal until 2026-08-06 - a specific high-fiber product on the shared GENERIC row, which priced and counted macros for a tortilla the board has never priced. That product now lives on its own 'High Fiber Tortilla' row (burrito format), so this row is free to describe an ordinary flour tortilla."
+                  },
+                  {
+                      "item":  "High Fiber Tortilla",
                       "brand":  "La Banderita",
                       "serving_grams":  65,
                       "serving_qty":  1,
@@ -146,7 +159,7 @@
                       "carbs_g":  23,
                       "fat_g":  2,
                       "fiber_g":  18,
-                      "notes":  "Large tortilla; 1 tortilla (65g) per serving; from label - high fiber (18g), ~5g net carb; verified"
+                      "notes":  "La Banderita Carb Counter Large (13.7oz/6ct); 1 tortilla (65g) per serving; same verified label as the 'Tortilla' row above (2026-08-06 burrito repoint) - values identical BY DESIGN so repointing moves no recipe macros"
                   },
                   {
                       "item":  "Greek Yogurt",
@@ -296,14 +309,14 @@
                   {
                       "item":  "Rice",
                       "brand":  "Member\u0027s Mark",
-                      "serving_grams":  50,
+                      "serving_grams":  45,
                       "serving_qty":  0.25,
                       "serving_unit":  "cup",
-                      "calories":  180,
-                      "protein_g":  4,
-                      "carbs_g":  39,
+                      "calories":  160,
+                      "protein_g":  3,
+                      "carbs_g":  36,
                       "fat_g":  0,
-                      "notes":  "Thai Jasmine; 1/4 cup (50g) dry per serving; from label"
+                      "notes":  "Long Grain White Rice; 1/4 cup (45g) dry per serving; from label. RE-POINTED 2026-08-07: this row was a Member\u0027s Mark THAI JASMINE label (1/4 cup = 50 g, 180 cal), which put it at 200 g per cup while db\\densities.json said 185 and the board priced long grain. The board\u0027s White Rice commodity is long grain at all seven stores, so the cost math was already long-grain and this row was the odd one out. Mahatma Extra Long Grain states the same 45 g / 160 cal serving, so the figure is not one bag\u0027s quirk. Per gram this moved calories 3.60 -> 3.56 and protein 0.080 -> 0.067: at most 5.3 cal and 1.6 g protein per serving across the 305 recipes that use rice."
                   },
                   {
                       "item":  "Fat Free Mozzarella",
@@ -3163,6 +3176,171 @@
                       "source":  "Walmart product image https://i5.walmartimages.com/asr/f673a4e2-71c7-4e71-ae97-893a64f4d807.a059b4caa1b8beb92b55476a5e73a911.jpeg (listing /ip/503548268)",
                       "needs_verify":  false,
                       "verify_source":  "full panel readable; Atwater 4 vs 5 ok (rounding)"
+                  },
+                  {
+                      "serving_grams":  100,
+                      "carbs_g":  0,
+                      "serving_unit":  "g",
+                      "protein_g":  31,
+                      "item":  "Roasted Chicken Breast (meat only)",
+                      "needs_verify":  false,
+                      "verify_source":  "USDA standard record; consistent with 4oz raw breast row (130 cal raw -\u003e ~140 cooked)",
+                      "notes":  "COOKED pulled white meat, skin removed (USDA roasted broiler-fryer breast, meat only). 3 oz cooked (85g) = 4 oz raw equivalent. Skin-on rotisserie meat runs materially higher fat; spec skinless pulled meat. RENAMED from Rotisserie Chicken 2026-08-07 (repair pass 2, B1): the three burrito recipes citing this row direct the cook to shred ALL the meat off the bird, so their basis is the whole-bird row now named Rotisserie Chicken; breast-only data preserved here unchanged. No recipe references this name as of the rename.",
+                      "source":  "USDA FDC roasted chicken breast meat-only",
+                      "brand":  "generic (USDA)",
+                      "fat_g":  3.6,
+                      "serving_qty":  100,
+                      "calories":  165
+                  },
+                  {
+                      "serving_grams":  100,
+                      "carbs_g":  0,
+                      "serving_unit":  "g",
+                      "protein_g":  28.93,
+                      "item":  "Rotisserie Chicken",
+                      "needs_verify":  false,
+                      "verify_source":  "per-100g fingerprint checked 2026-08-07 against USDA SR mirror (cal 190, fat 7.4, cholesterol 89 mg, sodium 86 mg all match SR 05013)",
+                      "notes":  "COOKED whole-bird pulled meat, light and dark, SKIN REMOVED (USDA SR 05013 broiler-fryer, meat only, roasted). Added 2026-08-07 (repair pass 2, B1): the burrito cards say shred all the meat, and 1190 g pulled from 2 birds cannot be white meat alone, so the breast-only basis understated calories and overstated protein. Skin-on rotisserie meat runs materially higher fat; spec skinless pulled meat.",
+                      "source":  "USDA SR Legacy 05013 Chicken, broilers or fryers, meat only, roasted",
+                      "brand":  "generic (USDA)",
+                      "fat_g":  7.41,
+                      "serving_qty":  100,
+                      "calories":  190
+                  },
+                  {
+                      "serving_grams":  130,
+                      "carbs_g":  18,
+                      "serving_unit":  "cup",
+                      "protein_g":  6,
+                      "item":  "Refried Beans",
+                      "needs_verify":  false,
+                      "verify_source":  "multiple label mirrors agree 100 cal / 6P / 18C / 0F",
+                      "notes":  "Fat Free Refried Beans, 16 oz can; 1/2 cup (130g); fiber 7g, sodium 510mg; from label",
+                      "source":  "GV Fat Free Refried Beans label (eatthismuch/myfooddata/nutritionix concur)",
+                      "brand":  "Great Value",
+                      "fat_g":  0,
+                      "serving_qty":  0.5,
+                      "calories":  100
+                  },
+                  {
+                      "serving_grams":  130,
+                      "carbs_g":  22,
+                      "serving_unit":  "cup",
+                      "protein_g":  8,
+                      "item":  "Canned Black Beans",
+                      "needs_verify":  false,
+                      "verify_source":  "label mirrors agree 120 cal / 8P / 22C / 0F",
+                      "notes":  "plain canned black beans, 15 oz can; 1/2 cup (130g) label serving; fiber 9g; distinct from the existing Seasoned Black Beans row (130 cal) - do not merge",
+                      "source":  "GV Black Beans label (Walmart listing/eatthismuch/mynetdiary concur)",
+                      "brand":  "Great Value",
+                      "fat_g":  0,
+                      "serving_qty":  0.5,
+                      "calories":  120
+                  },
+                  {
+                      "serving_grams":  130,
+                      "carbs_g":  20,
+                      "serving_unit":  "cup",
+                      "protein_g":  7,
+                      "item":  "Canned Pinto Beans",
+                      "needs_verify":  false,
+                      "verify_source":  "label mirrors agree 110 cal / 7P / 20C / 0F",
+                      "notes":  "plain canned pinto beans, 15.5 oz can; 1/2 cup (130g); fiber 5g, sodium 410mg; from label",
+                      "source":  "GV Pinto Beans label (eatthismuch/myfooddiary/calorieking concur)",
+                      "brand":  "Great Value",
+                      "fat_g":  0,
+                      "serving_qty":  0.5,
+                      "calories":  110
+                  },
+                  {
+                      "serving_grams":  14,
+                      "carbs_g":  0,
+                      "serving_unit":  "slice",
+                      "protein_g":  2,
+                      "item":  "Turkey Bacon",
+                      "needs_verify":  false,
+                      "verify_source":  "two independent full-panel mirrors concur on 1 slice: 35 cal, 2.5 fat (1 sat), 10mg chol, 180mg Na, 0 carb, 2 protein (myfooddiary GV Turkey Bacon + recipal); NOT a physical-pack read - re-verify if a capture shows a different GV variety",
+                      "notes":  "1 slice (14g) raw; GV Turkey Bacon label per mirrors: 35 cal / 2.5 F / 2 P / 0 C; the earlier 30-45 band came from mixing GV varieties (uncured runs 30) - this row is the standard 12oz GV Turkey Bacon",
+                      "source":  "GV Turkey Bacon label mirrors (recipal/mynetdiary/carbmanager)",
+                      "brand":  "Great Value",
+                      "fat_g":  2.5,
+                      "serving_qty":  1,
+                      "calories":  35
+                  },
+                  {
+                      "serving_grams":  100,
+                      "carbs_g":  8.5,
+                      "serving_unit":  "g",
+                      "protein_g":  2,
+                      "item":  "Avocado",
+                      "needs_verify":  false,
+                      "verify_source":  "USDA standard record",
+                      "notes":  "raw; USDA per 100g; flesh per medium avocado = 150 g (FDA NLEA: 1/3 medium = 50 g) - the earlier ~200g note was a large fruit; per-100g macros unchanged",
+                      "source":  "USDA FDC raw avocado",
+                      "brand":  "fresh",
+                      "fat_g":  14.7,
+                      "serving_qty":  100,
+                      "calories":  160
+                  },
+                  {
+                      "serving_grams":  100,
+                      "carbs_g":  15,
+                      "serving_unit":  "g",
+                      "protein_g":  0.8,
+                      "item":  "Mango",
+                      "needs_verify":  false,
+                      "verify_source":  "USDA standard record",
+                      "notes":  "raw; USDA; 1 medium mango ~ 200g flesh; high conf",
+                      "source":  "USDA FDC raw mango",
+                      "brand":  "fresh",
+                      "fat_g":  0.4,
+                      "serving_qty":  100,
+                      "calories":  60
+                  },
+                  {
+                      "serving_grams":  100,
+                      "carbs_g":  3.6,
+                      "serving_unit":  "g",
+                      "protein_g":  2.9,
+                      "item":  "Spinach",
+                      "needs_verify":  false,
+                      "verify_source":  "USDA standard record; identical to the existing Frozen Chopped Spinach row, so specs computed on either agree",
+                      "notes":  "raw; USDA FDC raw spinach per 100g. NOTE: the price row for item Spinach bids frozen-chopped-spinach (pre-existing shared mapping, also used by slow-cooker-tuscan-chicken-pasta); fresh and frozen carry the same macros here so the stat is form-independent",
+                      "source":  "USDA FDC raw spinach",
+                      "brand":  "fresh",
+                      "fat_g":  0.4,
+                      "serving_qty":  100,
+                      "calories":  23
+                  },
+                  {
+                      "serving_grams":  15,
+                      "carbs_g":  0,
+                      "serving_unit":  "tbsp",
+                      "protein_g":  0,
+                      "item":  "White Wine Vinegar",
+                      "needs_verify":  false,
+                      "verify_source":  "mirrors the Rice Vinegar row; US wine vinegar labels print 0 cal per 1 tbsp (USDA ~3 cal/tbsp trace rounds to 0 on label)",
+                      "notes":  "plain white wine vinegar; 1 tbsp (15g) 0 cal, all macros 0; same label shape as the existing Rice/Red Wine Vinegar rows",
+                      "source":  "standard US wine vinegar FDA label (0 cal serving)",
+                      "brand":  "generic",
+                      "fat_g":  0,
+                      "serving_qty":  1,
+                      "calories":  0
+                  },
+                  {
+                      "serving_grams":  28,
+                      "carbs_g":  1,
+                      "serving_unit":  "tbsp",
+                      "protein_g":  0,
+                      "item":  "Ranch Dressing",
+                      "needs_verify":  false,
+                      "verify_source":  "eatthismuch GV Classic Ranch full panel (2 tbsp 28g: 130 cal, 14 fat, 2 sat, 260 Na, 1 carb, 1 sugar, 0 protein); fatsecret concurs 130/14/1/0. Atwater 14x9+1x4=130 exact",
+                      "notes":  "REGULAR ranch (GV Classic), 2 tbsp (28g) per serving; 4.64 cal/g. Deliberately NOT the light-ranch ~2.9 cal/g the writer wave assumed: the board ranch-dressing commodity and the recipe prose are plain ranch. T13 ranch-chicken-burrito stat restated off this row",
+                      "source":  "GV Classic Ranch Dressing label (eatthismuch/fatsecret mirrors concur)",
+                      "brand":  "Great Value",
+                      "fat_g":  14,
+                      "serving_qty":  2,
+                      "calories":  130
                   }
               ]
 }

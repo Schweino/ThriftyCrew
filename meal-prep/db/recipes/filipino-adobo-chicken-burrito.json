@@ -1,0 +1,300 @@
+{
+    "name":  "Filipino Chicken Adobo Burrito",
+    "slug":  "filipino-adobo-chicken-burrito",
+    "cuisine":  "Filipino",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://spicedblog.com/grilled-adobo-chicken-burritos/",
+    "source_site":  "spicedblog.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "CAP: source runs about 1 cup uncooked rice across 4 burritos. Cut to 50 g cooked per burrito (17.9 g dry x 14 = 250 g dry) to clear 400 cal.",
+                         "VINEGAR ADDED: stage-1 build carried no vinegar, but adobo is defined by soy AND vinegar. Added White Vinegar (near-zero cal, 210 g). Flagged in report as a build addition for authenticity.",
+                         "Soy specced at the NET simmered amount (22 g/burrito x 14 = 308 g), not a discard-half marinade, so what you buy is what the pan uses.",
+                         "Fresh tomato mapped to Cherry Tomatoes (closest fresh-tomato food-DB home, 0.176 cal/g vs stage-1 0.18). No plain fresh Tomato row exists. Flagged.",
+                         "Bowl cousin: Slow Cooker Chicken Adobo Rice Bowls. This differs as a pan-seared adobo burrito with a fresh tomato-onion salsa, not a slow braise."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "pork"
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  390,
+                 "protein":  37,
+                 "carbs":  56,
+                 "fat":  5,
+                 "cost_ps":  "3.67"
+             },
+    "intro_html":  "\u003cp\u003eFilipino adobo is soy, vinegar, garlic, and bay simmered into something far bigger than its four main parts. We built it into a burrito that holds the line at 390 calories with 37 grams of protein, on a tortilla carrying 18 grams of fiber for about 5 grams of net carb. If you already love our Slow Cooker Chicken Adobo Rice Bowls, think of this as the handheld cousin: pan-seared instead of braised, wrapped around rice and black beans with a bright tomato and red onion salsa to cut the salt.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1.25 cups (308 g)",
+                                "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 1 cup (210 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 6.25 tbsp (84 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5 tbsp (42 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 13 leaves (8 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 tbsp (14 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1.25 cups dry (250 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 2.4 cans (602 g)",
+                                "\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 4.25 cups (630 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 2 onions (210 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 bunch (28 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 4.75 tbsp (70 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 3.5 lb: ~$7.78. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "Soy Sauce, 1.25 cups: ~$1.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "White Vinegar, 1 cup: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 6.25 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 5 tbsp: ~$0.49. \u003cstrong\u003eBuy 2 heads: $0.93.\u003c/strong\u003e",
+                       "Rice, 1.25 cups dry: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Seasoned Black Beans, 2.4 cans: ~$3.93. \u003cstrong\u003eBuy 3 cans: $4.99.\u003c/strong\u003e",
+                       "Cherry Tomatoes, 4.25 cups: ~$3.95. \u003cstrong\u003eBuy 3 10oz clamshells: $5.33.\u003c/strong\u003e",
+                       "Red Onion, 2 onions: ~$0.62. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 bunch: ~$0.44. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Lime Juice, 4.75 tbsp: ~$1.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (bay leaves, black pepper): ~$0.80. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.10 across 14 servings, so roughly $2.36 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $41.52 across 14 servings, roughly $2.97 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.92 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.44. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e$3.67 a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a build-your-own burrito counter. Almost all of that dollar-eighty-five is the chicken, which is exactly where you want your money going.\u003c/p\u003e",
+    "shop_smart":  [
+                       "\u003cstrong\u003eSoy and vinegar are the backbone, so buy them once and keep them.\u003c/strong\u003e A single bottle of each seasons this batch and a dozen after it. This is a recipe that spends almost nothing on the flavor and most of its money on the chicken.",
+                       "\u003cstrong\u003eBay leaves live in the pantry for a year.\u003c/strong\u003e One small jar covers this and every braise you make until next summer, so do not skip them for the cost.",
+                       "\u003cstrong\u003eBuy the black beans by the can and drain them well.\u003c/strong\u003e A couple of 15 ounce cans covers all 14 burritos, and draining keeps the wrap from going soggy in the fridge."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Make the adobo braise: combine the soy sauce, white vinegar, brown sugar, smashed garlic, bay leaves, and black pepper in a pot.",
+                    "Add the chicken breast, bring to a simmer, and cook until the chicken reaches 165F and the liquid has reduced to a glaze. Pull out the bay leaves, then shred or chop the chicken back into the glaze.",
+                    "Cook 1.25 cups of dry rice per the package and set aside.",
+                    "Warm the drained black beans through.",
+                    "Make the fresh salsa: toss the quartered cherry tomatoes, diced red onion, chopped cilantro, and lime juice together.",
+                    "Warm the tortillas so they roll cleanly. Lay down rice, then the adobo chicken, then black beans, and top with the tomato and onion salsa before you wrap."
+                ],
+    "portion_html":  "\u003cp\u003eSet the full pot of adobo chicken on your scale and subtract the empty-pot weight from Step 1, and portion the rice and beans the same way. Divide each by 14 so every burrito lands near 390 calories with 37 grams of protein.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://spicedblog.com/grilled-adobo-chicken-burritos/\" target=\"_blank\" rel=\"noopener\"\u003espicedblog.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about $3.67 a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
+    "cost_batch":  33.1,
+    "cost_batch_true":  41.52,
+    "cost_per_serving":  2.36,
+    "cost_per_serving_true":  2.97,
+    "cost_pantry_add":  9.92,
+    "cost_first_run":  51.44,
+    "scaler":  {
+                   "cost":  "41.52",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1582,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  308,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "White Vinegar",
+                                   "canon":  "White Vinegar",
+                                   "grams":  210,
+                                   "buy":  "1 cup",
+                                   "bid":  "white-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  84,
+                                   "buy":  "6.25 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  42,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  8,
+                                   "buy":  "13 leaves",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  14,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  250,
+                                   "buy":  "1.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "canon":  "Seasoned Black Beans",
+                                   "grams":  602,
+                                   "buy":  "2.4 cans",
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cherry Tomatoes",
+                                   "canon":  "Cherry Tomatoes",
+                                   "grams":  630,
+                                   "buy":  "4.25 cups",
+                                   "bid":  "cherry-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  210,
+                                   "buy":  "2 onions",
+                                   "bid":  "red-onion",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  28,
+                                   "buy":  "1 bunch",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  70,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A pan-seared Filipino chicken adobo burrito under 400 calories. Fourteen servings at about 390 calories and 37 grams of protein for roughly $3.67 each (at everyday cost).",
+                 "keywords":  "filipino chicken adobo burrito, high protein meal prep, low calorie burrito, cheap meal prep, adobo recipe",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT55M",
+                 "costPerServing":  3.67,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Boneless Skinless Chicken Breast, 3.5 lb (1582 g)",
+                                          "Soy Sauce, 1.25 cups (308 g)",
+                                          "White Vinegar, 1 cup (210 g)",
+                                          "Brown Sugar, 6.25 tbsp (84 g)",
+                                          "Garlic, 5 tbsp (42 g)",
+                                          "Bay Leaves, 13 leaves (8 g)",
+                                          "Black Pepper, 2 tbsp (14 g)",
+                                          "Rice, 1.25 cups dry (250 g)",
+                                          "Seasoned Black Beans, 2.4 cans (602 g)",
+                                          "Cherry Tomatoes, 4.25 cups (630 g)",
+                                          "Red Onion, 2 onions (210 g)",
+                                          "Fresh Cilantro, 1 bunch (28 g)",
+                                          "Lime Juice, 4.75 tbsp (70 g)"
+                                      ],
+                 "steps":  [
+                               "Simmer the chicken breast in soy sauce, white vinegar, brown sugar, garlic, bay leaves, and black pepper until it reaches 165F and the liquid glazes.",
+                               "Shred the chicken back into the glaze and discard the bay leaves.",
+                               "Cook 1.25 cups dry rice per the package and warm the drained black beans.",
+                               "Toss cherry tomatoes, red onion, cilantro, and lime juice into a fresh salsa.",
+                               "Fill warmed tortillas with rice, adobo chicken, beans, and salsa.",
+                               "Weigh the batch and divide into 14 equal burritos."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1582
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  308
+                              },
+                              {
+                                  "item":  "White Vinegar",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  250
+                              },
+                              {
+                                  "item":  "Seasoned Black Beans",
+                                  "grams":  602
+                              },
+                              {
+                                  "item":  "Cherry Tomatoes",
+                                  "grams":  630
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  70
+                              }
+                          ]
+}

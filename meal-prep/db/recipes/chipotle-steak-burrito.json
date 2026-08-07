@@ -1,0 +1,299 @@
+{
+    "name":  "Chipotle-Style Steak Burrito",
+    "slug":  "chipotle-steak-burrito",
+    "cuisine":  "Mission-style",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://bellyfull.net/chipotle-steak-burrito/",
+    "source_site":  "bellyfull.net",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Stage-1 build B16: skirt substituted to sirloin, sour cream to Greek yogurt, rice trimmed to 35g and beans to 45g per burrito, oil cut to about a quarter teaspoon each. Lands 388 cal, 37g protein.",
+                         "Rice stored as DRY grams (177g). Chipotle in Adobo is the mapped new commodity (board id present).",
+                         "BLOCKER, flag for repair: Canned Black Beans is in food-macros-db but NOT in ingredients.json; add its board-mapping row before the spec builder runs or bid/gpu and costing fail.",
+                         "SUBSTITUTION: pico built from Cherry Tomatoes (displayed Tomato), Red Onion, Fresh Cilantro, Jalapeno, Lime Juice to reproduce stage-1\u0027s 20g pico line. Greek yogurt carries the chipotle crema (stage-1 sauce S5 base).",
+                         "Bowl cousin: Steak Fajita Rice Bowls. Differentiated as a mission-style wrapped burrito with a chipotle-adobo steak marinade and a chipotle Greek-yogurt crema rather than plated fajita steak and peppers."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  388,
+                 "protein":  37,
+                 "carbs":  43,
+                 "fat":  11,
+                 "cost_ps":  "5.39"
+             },
+    "intro_html":  "This is the fast-casual burrito you build at home for a fraction of the counter price, rice and beans and chipotle steak wrapped tight with a cool crema. The sour cream is swapped for Greek yogurt, which is where a lot of the protein comes from, and the steak gets its smoke from chipotle in adobo. Each one lands at about \u003cstrong\u003e388 calories\u003c/strong\u003e and \u003cstrong\u003e37 grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. If you like our Steak Fajita Rice Bowls, this takes the same steak in a smokier, mission-style direction and folds it into a wrap.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eSirloin Steak:\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 0.9 cups dry (177 g)",
+                                "\u003cstrong\u003eBlack Beans:\u003c/strong\u003e 2.5 cans (630 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1.75 cups (406 g)",
+                                "\u003cstrong\u003eTomato:\u003c/strong\u003e 1.25 cups (168 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 0.25 cups (42 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 bunch (28 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 3 tbsp (28 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 tbsp (14 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1.25 tbsp (17 g)",
+                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 2.5 tbsp (42 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2 tsp (4 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tsp (14 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Sirloin Steak, 3.5 lb: ~$30.87. \u003cstrong\u003eBuy 4 lbs: $35.27.\u003c/strong\u003e",
+                       "Rice, 0.9 cups dry: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Black Beans, 2.5 cans: ~$2.27. \u003cstrong\u003eBuy 3 15oz cans: $2.76.\u003c/strong\u003e",
+                       "Greek Yogurt, 1.75 cups: ~$1.47. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Tomato, 1.25 cups: ~$1.05. \u003cstrong\u003eBuy 1 10oz clamshell: $1.78.\u003c/strong\u003e",
+                       "Red Onion, 0.25 cups: ~$0.12. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 bunch: ~$0.44. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Jalapeno, 3 tbsp: ~$0.11. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Lime Juice, 1 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, 1.25 tbsp: ~$0.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chipotle in Adobo, 2.5 tbsp: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, salt): ~$0.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $48.92 across 14 servings, so roughly $3.49 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $62.90 across 14 servings, roughly $4.49 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.56 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $75.46. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "Sirloin, a tub of yogurt, and pantry rice and beans build a fast-casual burrito for a fraction of the drive-through price, so the cost tab number stays friendly.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eOne can of chipotle in adobo goes a long way.\u003c/strong\u003e You use a few spoons per batch and freeze the rest in a little bag. That single cheap can flavors this burrito and several others in the lineup.",
+                       "\u003cstrong\u003eGreek yogurt replaces two things at once.\u003c/strong\u003e It stands in for sour cream and pushes the protein up, and the big tub is cheaper per ounce than the little cups. Buy plain and large.",
+                       "\u003cstrong\u003eSirloin is the budget steak that behaves.\u003c/strong\u003e Slice it thin against the grain and it eats like a pricier cut. Buy it on sale and freeze what you do not need."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice per the package and set it aside.",
+                    "Stir most of the chipotle in adobo with the cumin, the vegetable oil, half the lime juice, and the salt, and toss the sliced sirloin in it. Sear it hard in a hot pan and slice thin.",
+                    "Drain and rinse the black beans and warm them through.",
+                    "Make the pico: dice the tomato, red onion, and jalapeno, chop the cilantro, and toss with the rest of the lime juice.",
+                    "Stir the reserved spoon of chipotle into the Greek yogurt to make the crema.",
+                    "Warm the tortillas, then portion and wrap as below, layering rice, beans, steak, crema, and pico."
+                ],
+    "portion_html":  "Weigh the steak, beans, and rice together against the empty pot number from Step 1, and divide by 14. Onto each warm tortilla goes that hot share plus an even spoon of the chipotle crema and the pico. Every burrito lands at about \u003cstrong\u003e388 calories and 37 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://bellyfull.net/chipotle-steak-burrito/\" target=\"_blank\" rel=\"noopener\"\u003ebellyfull.net\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  48.92,
+    "cost_batch_true":  62.9,
+    "cost_per_serving":  3.49,
+    "cost_per_serving_true":  4.49,
+    "cost_pantry_add":  12.56,
+    "cost_first_run":  75.46,
+    "scaler":  {
+                   "cost":  "62.90",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  177,
+                                   "buy":  "0.9 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Beans",
+                                   "canon":  "Canned Black Beans",
+                                   "grams":  630,
+                                   "buy":  "2.5 cans",
+                                   "bid":  "canned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "canon":  "Greek Yogurt",
+                                   "grams":  406,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato",
+                                   "canon":  "Cherry Tomatoes",
+                                   "grams":  168,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "cherry-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  42,
+                                   "buy":  "0.25 cups",
+                                   "bid":  "red-onion",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  28,
+                                   "buy":  "1 bunch",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  28,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  14,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  17,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Chipotle in Adobo",
+                                   "canon":  "Chipotle in Adobo",
+                                   "grams":  42,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "chipotle-adobo",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  4,
+                                   "buy":  "2 tsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A mission-style chipotle steak burrito for meal prep: sirloin in chipotle adobo with rice, beans, and a Greek-yogurt crema. About 388 calories and 37 grams of protein per serving.",
+                 "keywords":  "chipotle steak burrito, mission burrito, sirloin burrito, greek yogurt crema, budget high protein meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  5.39,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Sirloin Steak, 3.5 lb (1588 g)",
+                                          "Rice, 0.9 cups dry (177 g)",
+                                          "Black Beans, 2.5 cans (630 g)",
+                                          "Greek Yogurt, 1.75 cups (406 g)",
+                                          "Tomato, 1.25 cups (168 g)",
+                                          "Red Onion, 0.25 cups (42 g)",
+                                          "Fresh Cilantro, 1 bunch (28 g)",
+                                          "Jalapeno, 3 tbsp (28 g)",
+                                          "Lime Juice, 1 tbsp (14 g)",
+                                          "Vegetable Oil, 1.25 tbsp (17 g)",
+                                          "Chipotle in Adobo, 2.5 tbsp (42 g)",
+                                          "Ground Cumin, 2 tsp (4 g)",
+                                          "Salt, 2.25 tsp (14 g)"
+                                      ],
+                 "steps":  [
+                               "Cook the rice per the package and set aside.",
+                               "Marinate the sliced sirloin in chipotle adobo, cumin, oil, lime, and salt, then sear and slice thin.",
+                               "Warm the drained black beans; make pico from tomato, red onion, jalapeno, cilantro, and lime.",
+                               "Stir a little chipotle into the Greek yogurt for the crema.",
+                               "Portion steak, beans, and rice by weight, top each tortilla with crema and pico, and roll."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  177
+                              },
+                              {
+                                  "item":  "Canned Black Beans",
+                                  "grams":  630
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  406
+                              },
+                              {
+                                  "item":  "Cherry Tomatoes",
+                                  "grams":  168
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  17
+                              },
+                              {
+                                  "item":  "Chipotle in Adobo",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              }
+                          ]
+}

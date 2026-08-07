@@ -1,0 +1,311 @@
+{
+    "name":  "Chicken Tikka Masala Burrito",
+    "slug":  "chicken-tikka-masala-burrito",
+    "cuisine":  "Indian",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://stealthhealthcookbook.com/blogs/recipes/tikka-masala-burritos-big-flavor-little-prep",
+    "source_site":  "stealthhealthcookbook.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "STAGE2: built from burrito-stage1-builds C13. Rice trimmed and entered as a DRY weight (250 g batch); the DB Rice row is dry basis. Do not re-enter cooked grams.",
+                         "The Greek yogurt is split: part marinates the chicken with the spices in the tikka style, the rest enriches the masala sauce in place of cream.",
+                         "Garam masala is on the board. The sauce is native to the dish, so no library sauce is used.",
+                         "Differs from the live Slow Cooker Chicken Tikka Masala Rice Bowls by being a marinated, seared tikka breast folded into a wrap with the masala and rice, rather than a slow-cooked rice bowl. It is the only Indian profile in the batch."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  364,
+                 "protein":  36,
+                 "carbs":  45,
+                 "fat":  8,
+                 "cost_ps":  "3.01"
+             },
+    "intro_html":  "Tikka masala is the most ordered curry in the world for a reason, and it wraps up better than you would think. We marinate chicken breast in spiced yogurt the traditional way, sear it, and simmer it into a tomato masala loosened with a little more yogurt instead of cream, then fold it around rice in a wrap. Each burrito lands \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e36 grams of protein\u003c/strong\u003e, on a high fiber tortilla that keeps you near 5 grams of net carb. We have Slow Cooker Chicken Tikka Masala Rice Bowls on the site; this is the seared, hand-held version, and it is the only Indian plate in this batch.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1.75 cups (406 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 4 tbsp (56 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.4 onions (378 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 5.25 tbsp (84 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1.3 cans (518 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1.5 cups dry (250 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 2.25 tbsp (14 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 2.25 tbsp (14 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5 tbsp (42 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 2 tsp (6 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (6 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 2.5 tsp (6 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tsp (14 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 3.5 lb: ~$7.78. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "Greek Yogurt, 1.75 cups: ~$1.47. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Butter, 4 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 lb box: $2.56.\u003c/strong\u003e",
+                       "Yellow Onion, 3.4 onions: ~$0.95. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Tomato Paste, 5.25 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1.3 cans: ~$1.06. \u003cstrong\u003eBuy 2 cans: $1.68.\u003c/strong\u003e",
+                       "Rice, 1.5 cups dry: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Ginger, 2.25 tbsp: ~$0.04. \u003cstrong\u003eBuy 1 piece: $0.31.\u003c/strong\u003e",
+                       "Garlic, 5 tbsp: ~$0.49. \u003cstrong\u003eBuy 2 heads: $0.93.\u003c/strong\u003e",
+                       "Pantry seasonings (garam masala, ground turmeric, ground cumin, paprika, salt): ~$0.87. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.19 across 14 servings, so roughly $1.80 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.44 across 14 servings, roughly $2.53 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.71 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.15. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.01 a burrito\u003c/strong\u003e (at everyday cost) for the world\u0027s favorite curry you can eat with one hand. A jar of garam masala and a couple of cans of tomato do most of the work.",
+    "shop_smart":  [
+                       "Garam masala is the one spice that makes this taste like the restaurant, and a jar lasts for many batches, so buy it once and use it freely.",
+                       "Tomato paste and canned diced tomatoes are the cheap backbone of the sauce, and this batch uses close to a full can of each, so nothing dries out in the fridge.",
+                       "Greek yogurt stands in for cream here and shows up all over this batch, so buy the big tub for the best price per ounce.",
+                       "Buy rice in the biggest bag you have room for. It is the cheapest calorie in this recipe and it keeps forever."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Whisk about a third of the Greek yogurt with half the garam masala, half the ginger, half the garlic and the turmeric. Coat the diced chicken breast and let it marinate at least 30 minutes.",
+                    "Cook the rice until tender and set it aside.",
+                    "Melt the butter in a large pan and cook the diced onion until soft and golden, then add the remaining garlic and ginger, the ground cumin, paprika and the rest of the garam masala and stir for a minute.",
+                    "Stir in the tomato paste and diced tomatoes, season with the salt, and simmer 10 minutes until it thickens into a masala.",
+                    "Sear the marinated chicken in a separate hot pan until charred and cooked through, then fold it into the masala with the remaining Greek yogurt to finish the sauce.",
+                    "Weigh the rice and the masala chicken together, subtract the empty bowl, and divide by 14. Lay that much down each tortilla, fold in the sides and roll.",
+                    "Wrap each burrito and portion into 14 containers."
+                ],
+    "portion_html":  "Weigh the rice and masala chicken together, subtract the empty bowl, and divide by 14 so each burrito carries the same curry. Each burrito holds \u003cstrong\u003e364 calories and 36 grams of protein\u003c/strong\u003e. Reheat wrapped, and the sauce keeps the rice soft.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://stealthhealthcookbook.com/blogs/recipes/tikka-masala-burritos-big-flavor-little-prep\" target=\"_blank\" rel=\"noopener\"\u003estealthhealthcookbook.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Chicken tikka masala burritos, 14 wrapped and ready, for about $3.01 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  25.19,
+    "cost_batch_true":  35.44,
+    "cost_per_serving":  1.8,
+    "cost_per_serving_true":  2.53,
+    "cost_pantry_add":  6.71,
+    "cost_first_run":  42.15,
+    "scaler":  {
+                   "cost":  "35.44",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1582,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "canon":  "Greek Yogurt",
+                                   "grams":  406,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "canon":  "Butter",
+                                   "grams":  56,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  378,
+                                   "buy":  "3.4 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  84,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  518,
+                                   "buy":  "1.3 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  250,
+                                   "buy":  "1.5 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "canon":  "Garam Masala",
+                                   "grams":  14,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  14,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  42,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  6,
+                                   "buy":  "2 tsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  6,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "canon":  "Paprika",
+                                   "grams":  6,
+                                   "buy":  "2.5 tsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken tikka masala burritos with yogurt-marinated seared breast, a tomato masala and rice folded into a wrap. 14 wrapped at 364 calories, 36g protein, about $3.01 (at everyday cost).",
+                 "keywords":  "chicken tikka masala burrito, tikka masala meal prep, high protein indian meal prep, low calorie curry burrito, budget chicken burrito, garam masala chicken",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  3.01,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Boneless Skinless Chicken Breast, 3.5 lb (1582 g)",
+                                          "Greek Yogurt, 1.75 cups (406 g)",
+                                          "Butter, 4 tbsp (56 g)",
+                                          "Yellow Onion, 3.4 onions (378 g)",
+                                          "Tomato Paste, 5.25 tbsp (84 g)",
+                                          "Diced Tomatoes, 1.3 cans (518 g)",
+                                          "Rice, 1.5 cups dry (250 g)",
+                                          "Garam Masala, 2.25 tbsp (14 g)",
+                                          "Ginger, 2.25 tbsp (14 g)",
+                                          "Garlic, 5 tbsp (42 g)",
+                                          "Ground Turmeric, 2 tsp (6 g)",
+                                          "Ground Cumin, 1 tbsp (6 g)",
+                                          "Paprika, 2.5 tsp (6 g)",
+                                          "Salt, 2.25 tsp (14 g)"
+                                      ],
+                 "steps":  [
+                               "Marinate diced chicken breast in spiced yogurt.",
+                               "Cook the rice; build a masala from butter, onion, garlic, ginger, spices, tomato paste and diced tomatoes.",
+                               "Sear the marinated chicken and fold it into the masala with the remaining yogurt.",
+                               "Build each tortilla with rice and masala chicken, weighing to divide by 14, roll and portion."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1582
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  406
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  378
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  518
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  250
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              }
+                          ]
+}

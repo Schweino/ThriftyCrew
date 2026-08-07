@@ -1,0 +1,311 @@
+{
+    "name":  "Cuban Ropa Vieja Burrito",
+    "slug":  "ropa-vieja-beef-burrito",
+    "cuisine":  "Cuban",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.skinnytaste.com/ropa-vieja/",
+    "source_site":  "skinnytaste.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Stage-1 build B6: flank substituted to sirloin (Beef Flank/Sirloin Steak, the board sirloin); 40g cooked rice added for the wrap. Lands 384 cal, 33g protein.",
+                         "White wine has no board home, so per stage-1 the wine was respec\u0027d to Chicken Broth plus White Wine Vinegar.",
+                         "BLOCKER, flag for repair: White Wine Vinegar is in ingredients.json (board id present) but has NO food-macros-db row, so build-v2-spec\u0027s macro recompute cannot find it. Add a 0 cal / 0 protein White Wine Vinegar row to food-macros-db (mirror Rice Vinegar) before the spec builder runs, or the B6 build fails. I treated it as 0 cal in my macro figures.",
+                         "Rice stored as DRY grams (202g). Green olives mapped to Olives (board id green-olives).",
+                         "Bowl cousin: Ropa Vieja Rice Bowls. Deliberately differentiated: this burrito builds the sofrito on tomato paste, chicken broth, and white wine vinegar and adds carrot, where the bowl uses diced tomatoes, beef broth, and apple cider vinegar with no carrot. Different braising base, same shredded destination, and it is wrapped."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  384,
+                 "protein":  33,
+                 "carbs":  44,
+                 "fat":  13,
+                 "cost_ps":  "5.39"
+             },
+    "intro_html":  "Ropa vieja means old clothes, which is what shredded beef in a pepper and tomato sauce apparently looked like to whoever named it. It is Cuba\u0027s national dish, and the olives at the end are not a garnish, they are the salt and the sharpness that make the whole thing sing. This wrap lands at about \u003cstrong\u003e384 calories\u003c/strong\u003e and \u003cstrong\u003e33 grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. We already run Ropa Vieja Rice Bowls, so this one takes a different road on purpose: a tomato paste and chicken broth base brightened with white wine vinegar, a little carrot for sweetness, all folded into a tortilla.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eSirloin Steak:\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1.8 cans (308 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.75 cups (420 g)",
+                                "\u003cstrong\u003eWhite Wine Vinegar (generic):\u003c/strong\u003e 0.5 cups (140 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (350 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2.3 peppers (280 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3 carrots (168 g)",
+                                "\u003cstrong\u003eGreen Olives:\u003c/strong\u003e 1.25 cups (154 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.5 tsp (11 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 cup dry (202 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tbsp (3 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tsp (14 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tsp (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Sirloin Steak, 3.5 lb: ~$30.87. \u003cstrong\u003eBuy 4 lbs: $35.27.\u003c/strong\u003e",
+                       "Tomato Paste, 1.8 cans: ~$1.10. \u003cstrong\u003eBuy 2 6oz cans: $1.22.\u003c/strong\u003e",
+                       "Chicken Broth, 1.75 cups: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "White Wine Vinegar, 0.5 cups: ~$0.84. \u003cstrong\u003eBuy 1 16.9floz bottle: $3.01.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 2.3 peppers: ~$2.01. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Carrots, 3 carrots: ~$0.35. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Green Olives, 1.25 cups: ~$1.52. \u003cstrong\u003eBuy 1 6oz can: $1.68.\u003c/strong\u003e",
+                       "Rice, 1 cup dry: ~$0.25. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (olive oil, ground cumin, dried oregano, salt, black pepper): ~$0.43. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $50.49 across 14 servings, so roughly $3.61 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $62.00 across 14 servings, roughly $4.43 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.43 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $75.43. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "Swapping flank for sirloin is where the savings live, and the rest is pantry and a couple of peppers. Catch the steak on sale and the cost tab number drops with it.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eSirloin does the flank\u0027s job for less.\u003c/strong\u003e Traditional ropa vieja uses flank, which the store prices like a treat. The board\u0027s sirloin gets to the same shredded place for a lot less, so buy that.",
+                       "\u003cstrong\u003eGreen bell peppers are the traditional pick and the cheap one.\u003c/strong\u003e That alignment is rare, so take it and skip the pricier colored peppers here.",
+                       "\u003cstrong\u003eTomato paste and broth build the sauce from the pantry.\u003c/strong\u003e A small can of paste and a box of broth cost almost nothing per serving and both keep for a long time."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice per the package and set it aside.",
+                    "Season the sirloin with the cumin, oregano, salt, and black pepper and sear it in the olive oil, then add the sliced onion, green bell peppers, and carrot.",
+                    "Stir the tomato paste into the chicken broth until smooth, pour it over the beef, cover, and braise until the meat shreds with a fork.",
+                    "Shred the beef right in the pot and stir it back through the peppers and sauce.",
+                    "Stir in the sliced green olives and the white wine vinegar and let it sit a few minutes off direct heat so the flavors settle.",
+                    "Fold the cooked rice into the filling, then warm the tortillas and portion and wrap as below."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total filling weight. Divide it by 14, spoon that amount onto each warm tortilla, and roll. Every burrito lands at about \u003cstrong\u003e384 calories and 33 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.skinnytaste.com/ropa-vieja/\" target=\"_blank\" rel=\"noopener\"\u003eskinnytaste.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  50.49,
+    "cost_batch_true":  62,
+    "cost_per_serving":  3.61,
+    "cost_per_serving_true":  4.43,
+    "cost_pantry_add":  13.43,
+    "cost_first_run":  75.43,
+    "scaler":  {
+                   "cost":  "62.00",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "canon":  "Tomato Paste",
+                                   "grams":  308,
+                                   "buy":  "1.8 cans",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  420,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "White Wine Vinegar",
+                                   "canon":  "White Wine Vinegar",
+                                   "grams":  140,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "white-wine-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  350,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  280,
+                                   "buy":  "2.3 peppers",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  168,
+                                   "buy":  "3 carrots",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Olives",
+                                   "canon":  "Olives",
+                                   "grams":  154,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "green-olives",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  11,
+                                   "buy":  "2.5 tsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  202,
+                                   "buy":  "1 cup dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  3,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "0.75 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A Cuban ropa vieja burrito for meal prep: shredded sirloin braised with peppers, tomato, and olives, folded with rice. About 384 calories and 33 grams of protein per serving.",
+                 "keywords":  "ropa vieja, cuban shredded beef, ropa vieja burrito, cuban meal prep, budget high protein burrito",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT2H",
+                 "totalTime":  "PT2H20M",
+                 "costPerServing":  5.39,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Sirloin Steak, 3.5 lb (1588 g)",
+                                          "Tomato Paste, 1.8 cans (308 g)",
+                                          "Chicken Broth, 1.75 cups (420 g)",
+                                          "White Wine Vinegar, 0.5 cups (140 g)",
+                                          "Yellow Onion, 3 onions (350 g)",
+                                          "Green Bell Peppers, 2.3 peppers (280 g)",
+                                          "Carrots, 3 carrots (168 g)",
+                                          "Green Olives, 1.25 cups (154 g)",
+                                          "Olive Oil, 2.5 tsp (11 g)",
+                                          "Rice, 1 cup dry (202 g)",
+                                          "Ground Cumin, 1 tbsp (7 g)",
+                                          "Dried Oregano, 1 tbsp (3 g)",
+                                          "Salt, 2.25 tsp (14 g)",
+                                          "Black Pepper, 0.75 tsp (2 g)"
+                                      ],
+                 "steps":  [
+                               "Cook the rice per the package and set aside.",
+                               "Season and sear the sirloin in olive oil, then add onion, green bell peppers, and carrot.",
+                               "Stir tomato paste into the chicken broth, pour over, and braise until the beef shreds.",
+                               "Shred the beef, then stir in the green olives and white wine vinegar.",
+                               "Fold in the rice, weigh the filling, divide by 14, spoon onto warm tortillas, and roll."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  308
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "White Wine Vinegar",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  168
+                              },
+                              {
+                                  "item":  "Olives",
+                                  "grams":  154
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  202
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              }
+                          ]
+}

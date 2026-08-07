@@ -15,9 +15,15 @@
 # update-recipes-db.ps1 and pipeline\sync-recipesdb-cost.ps1 may write them - so any disagreement is
 # drift by definition, with no legitimate reading. Run sync-recipesdb-cost.ps1 to repair it.
 #
-# Usage: audit-db-agreement.ps1 [-SelfTest]
-param([switch]$SelfTest)
+# Usage: audit-db-agreement.ps1 [-SelfTest] [-ShowAll]
+param([switch]$SelfTest,[switch]$ShowAll)
 $ErrorActionPreference='Stop'
+# CATEGORY CAPS (2026-08-07): each check stops ADDING issues after N and appends a "plus X more" line, so
+# raising only the print cap produced output that showed everything AND still claimed lines were withheld.
+# -ShowAll now lifts the collection caps too, which is what the flag promised.
+$CAP8 = if($ShowAll){ [int]::MaxValue } else { 8 }
+$CAP6 = if($ShowAll){ [int]::MaxValue } else { 6 }
+$CAP4 = if($ShowAll){ [int]::MaxValue } else { 4 }
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
 $issues = New-Object System.Collections.Generic.List[string]
@@ -87,8 +93,30 @@ foreach($row in (Get-Content (Join-Path $mp 'db\ingredients.json') -Raw | Conver
 # cheapest number (spec bid + feed) price DIFFERENT products - the exact root of a cheapest>everyday
 # inversion. The only legitimate divergence is a per-recipe product variant (a recipe whose prose calls for,
 # and prices, jasmine rice instead of generic rice); those are enumerated in db\spec-bid-overrides.json.
-# Any bid mismatch NOT on that list is drift and fails the guard. gpu is intentionally NOT value-compared:
-# it is unit-reconciled at spec-build time, so spec.gpu legitimately differs from db.gpu.
+# Any bid mismatch NOT on that list is drift and fails the guard.
+#
+# GPU-DRIFT (2026-08-06). gpu used to be exempt from value comparison here, on the reasoning that
+# build-v2-spec unit-reconciles it so spec.gpu legitimately differs from db.gpu. That is true only when
+# a conversion actually applies: Resolve-ScalerGpu rescales gpu by $UNIT_G[feed]/$UNIT_G[map] when the
+# map's unit and the feed's unit DIFFER, and returns it untouched when they are the same. So for an
+# item whose map unit already equals the feed unit there is no legitimate divergence at all, and the
+# blanket exemption was hiding a whole class.
+#
+# It hid this one: the shared "Tortilla" row was recalibrated in db\ingredients.json (gpu 45 -> 36.85,
+# the real weight of the Great Value Small Fajita the board actually prices) while 11 published specs
+# kept gpu 45 in their own scaler copy. Both units are "each", so nothing reconciled and nothing
+# compared - the map read fixed, the live cards kept pricing on the old basis, and the guard stayed
+# green. That is the estate's "repair stops at the source of truth" failure mode, armed.
+#
+# So: compare gpu whenever no conversion applies (map unit == feed unit, or the feed has no row and
+# the units cannot differ). Where a conversion DOES apply, stay silent - recomputing the expected
+# value here would duplicate Resolve-ScalerGpu and drift from it.
+$feedUnitById=@{}
+$fuPath = Join-Path (Split-Path $mp -Parent) 'grocery\out\smp-feed.json'
+if(Test-Path $fuPath){
+  try { $fu=(Get-Content $fuPath -Raw -Encoding utf8 | ConvertFrom-Json).ingredients
+        foreach($p in $fu.PSObject.Properties){ $feedUnitById[$p.Name]=[string]$p.Value.unit } } catch {}
+}
 $bidOverrides=@{}
 $boF = Join-Path $mp 'db\spec-bid-overrides.json'
 if(Test-Path $boF){ try { $bo=(Get-Content $boF -Raw|ConvertFrom-Json).overrides; foreach($p in $bo.PSObject.Properties){ $bidOverrides[[string]$p.Name]=@($p.Value | ForEach-Object { [string]$_ }) } } catch {} }
@@ -107,7 +135,7 @@ $noPriceOk=@{}
 $npF = Join-Path $mp 'db\no-board-price-ok.json'
 if(Test-Path $npF){ try { $npObj=(Get-Content $npF -Raw|ConvertFrom-Json); $npList=if($npObj.PSObject.Properties.Name -contains 'bids'){ $npObj.bids } else { $npObj }; foreach($x in $npList){ $noPriceOk[[string]$x]=1 } } catch {} }
 
-$bidMiss=0; $fallback=@(); $bidDrift=0
+$bidMiss=0; $fallback=@(); $bidDrift=0; $gpuDrift=0
 $costDriftRows=0; $costDriftFields=0
 foreach($s in $specSlugs.Keys){
   if(-not $idxBySlug.ContainsKey($s)){ continue }
@@ -121,7 +149,7 @@ foreach($s in $specSlugs.Keys){
   $cd = @(Get-CostDrift -Row $row -Spec $spec -Slug $s)
   if($cd.Count){
     $costDriftRows++; $costDriftFields += $cd.Count
-    if($costDriftRows -le 8){ $issues.Add(($cd | Where-Object { $_ -match 'cost_per_serving ' } | Select-Object -First 1)) }
+    if($costDriftRows -le $CAP8){ $issues.Add(($cd | Where-Object { $_ -match 'cost_per_serving ' } | Select-Object -First 1)) }
     if($costDriftRows -le 8 -and -not ($cd | Where-Object { $_ -match 'cost_per_serving ' })){ $issues.Add($cd[0]) }
   }
   # INGREDIENT-SET (2026-08-04): the two masters must agree on WHICH ingredients a recipe has. COST-DRIFT
@@ -150,12 +178,24 @@ foreach($s in $specSlugs.Keys){
   # live post's visibility and bases its leak-check on the LIVE visibility, not the spec.
   foreach($ing in $spec.scaler.ing){
     $key = if($ing.PSObject.Properties.Name -contains 'canon' -and $ing.canon){ [string]$ing.canon } else { [string]$ing.item }
-    if(-not $items.ContainsKey($key)){ $bidMiss++; if($bidMiss -le 8){ $issues.Add("NO-DB-ITEM: $s ingredient '$key' missing from db\ingredients.json") } }
+    if(-not $items.ContainsKey($key)){ $bidMiss++; if($bidMiss -le $CAP8){ $issues.Add("NO-DB-ITEM: $s ingredient '$key' missing from db\ingredients.json") } }
     else {
       $sb  = if($ing.PSObject.Properties.Name -contains 'bid'){ [string]$ing.bid } else { '' }
       $dbb = if($items[$key].PSObject.Properties.Name -contains 'bid'){ [string]$items[$key].bid } else { '' }
       if($sb -and $dbb -and $sb -ne $dbb -and -not ($bidOverrides.ContainsKey($key) -and ($bidOverrides[$key] -contains $sb))){
-        $bidDrift++; if($bidDrift -le 8){ $issues.Add("BID-DRIFT: $s '$key' spec bid '$sb' != db bid '$dbb' (not an allowed override; everyday & cheapest would price different products - fix the spec or list it in db\spec-bid-overrides.json)") }
+        $bidDrift++; if($bidDrift -le $CAP8){ $issues.Add("BID-DRIFT: $s '$key' spec bid '$sb' != db bid '$dbb' (not an allowed override; everyday & cheapest would price different products - fix the spec or list it in db\spec-bid-overrides.json)") }
+      }
+      # GPU-DRIFT: only where no unit conversion can apply (see the header note above).
+      if($sb -and $sb -eq $dbb -and ($ing.PSObject.Properties.Name -contains 'gpu')){
+        $mapUnit  = if($items[$key].PSObject.Properties.Name -contains 'unit'){ [string]$items[$key].unit } else { '' }
+        $feedUnit = if($feedUnitById.ContainsKey($sb)){ $feedUnitById[$sb] } else { $mapUnit }
+        if($mapUnit -and $feedUnit -eq $mapUnit){
+          $sg = [double]$ing.gpu; $dg = [double]$items[$key].gpu
+          if($dg -gt 0 -and $sg -gt 0 -and [Math]::Abs($sg/$dg - 1) -gt 0.005){
+            $gpuDrift++
+            if($gpuDrift -le $CAP8){ $issues.Add("GPU-DRIFT: $s '$key' spec gpu $sg != db gpu $dg (unit '$mapUnit' both sides, so nothing reconciled it; the card prices grams/gpu * cheapest, so the spec is costing on a stale basis - rebuild the spec or revert the map)") }
+          }
+        }
       }
     }
     if($feedLoaded){
@@ -181,7 +221,7 @@ foreach($s in ($specSlugs.Keys | Sort-Object)){
   $spec = Get-Content $specs[$s] -Raw | ConvertFrom-Json
   $want = $null
   try { $want = @(Get-HeadRecipeIngredient $spec.ingredients_display $spec.scaler.ing $hiDb) }
-  catch { $headErr++; if($headErr -le 4){ $issues.Add("HEAD-INGREDIENT: $s cannot derive the JSON-LD list :: $($_.Exception.Message)") }; continue }
+  catch { $headErr++; if($headErr -le $CAP4){ $issues.Add("HEAD-INGREDIENT: $s cannot derive the JSON-LD list :: $($_.Exception.Message)") }; continue }
   $got = @($spec.head.recipeIngredient | ForEach-Object { [string]$_ })
   if(($got -join "`n") -ne ($want -join "`n")){
     $headDrift++
@@ -194,21 +234,37 @@ foreach($s in ($specSlugs.Keys | Sort-Object)){
       $i = 0; while($i -lt $got.Count -and $got[$i] -eq $want[$i]){ $i++ }
       "line $($i+1) says '$($got[$i])', the card says '$($want[$i])'"
     }
-    if($headDrift -le 6){ $issues.Add("HEAD-INGREDIENT drift: $s $why - rerun pipeline\repair-head-ingredients.ps1 -Apply -Slugs $s") }
+    if($headDrift -le $CAP6){ $issues.Add("HEAD-INGREDIENT drift: $s $why - rerun pipeline\repair-head-ingredients.ps1 -Apply -Slugs $s") }
   }
 }
-if($headDrift -gt 6){ $issues.Add("... plus $($headDrift-6) more HEAD-INGREDIENT drift lines") }
-if($headErr -gt 4){ $issues.Add("... plus $($headErr-4) more HEAD-INGREDIENT derive failures") }
+if($headDrift -gt $CAP6){ $issues.Add("... plus $($headDrift-6) more HEAD-INGREDIENT drift lines") }
+if($headErr -gt $CAP4){ $issues.Add("... plus $($headErr-4) more HEAD-INGREDIENT derive failures") }
 
-if($bidMiss -gt 8){ $issues.Add("... plus $($bidMiss-8) more missing-item lines") }
-if($bidDrift -gt 8){ $issues.Add("... plus $($bidDrift-8) more bid-drift lines") }
-if($costDriftRows -gt 8){ $issues.Add("... plus $($costDriftRows-8) more COST-DRIFT rows ($costDriftFields stale cost fields in total - run pipeline\sync-recipesdb-cost.ps1)") }
+if($bidMiss -gt $CAP8){ $issues.Add("... plus $($bidMiss-8) more missing-item lines") }
+if($bidDrift -gt $CAP8){ $issues.Add("... plus $($bidDrift-8) more bid-drift lines") }
+if($gpuDrift -gt $CAP8){ $issues.Add("... plus $($gpuDrift-8) more gpu-drift lines") }
+if($costDriftRows -gt $CAP8){ $issues.Add("... plus $($costDriftRows-8) more COST-DRIFT rows ($costDriftFields stale cost fields in total - run pipeline\sync-recipesdb-cost.ps1)") }
 if($fallback.Count){
-  foreach($f in ($fallback | Select-Object -First 8)){ $issues.Add("CHEAPEST-FALLBACK: $f") }
-  if($fallback.Count -gt 8){ $issues.Add("... plus $($fallback.Count-8) more cheapest-fallback lines (unmapped bid -> add to no-board-price-ok.json if intentional, else fix the bid)") }
+  foreach($f in ($fallback | Select-Object -First $CAP8)){ $issues.Add("CHEAPEST-FALLBACK: $f") }
+  if($fallback.Count -gt $CAP8){ $issues.Add("... plus $($fallback.Count-8) more cheapest-fallback lines (unmapped bid -> add to no-board-price-ok.json if intentional, else fix the bid)") }
 }
 
 if($issues.Count -eq 0){ Write-Output ("db-agreement: CLEAN ({0} recipes, index==specs)" -f $specSlugs.Count); exit 0 }
-Write-Output ("db-agreement: {0} drift issue(s)" -f $issues.Count)
-$issues | Select-Object -First 25 | ForEach-Object { Write-Output ("  ! " + $_) }
+# The headline used to count only what SURVIVED the category caps, so a default run reported 44 when the
+# real total was 48. The caps are a display convenience; the count must not inherit them.
+$suppressed = 0; $summaryLines = 0
+foreach($pair in @(@($gpuDrift,$CAP8),@($bidMiss,$CAP8),@($bidDrift,$CAP8),@($headDrift,$CAP6),@($headErr,$CAP4),@($costDriftRows,$CAP8),@($fallback.Count,$CAP8))){
+  if($pair[0] -gt $pair[1]){ $suppressed += ($pair[0] - $pair[1]); $summaryLines++ }
+}
+# $summaryLines is subtracted because each suppressed category ALREADY pushed a "... plus N more" row into
+# $issues. Counting that row AND its N double-counts, which is how the default headline read 49 against
+# -ShowAll's 48. The two modes must report the same total or the count is not a count.
+Write-Output ("db-agreement: {0} drift issue(s){1}" -f ($issues.Count + $suppressed - $summaryLines), $(if($suppressed -gt 0){ " ($suppressed held back by category caps - rerun with -ShowAll)" } else { '' }))
+# -ShowAll because the flat 25-line cap hid real findings behind a homogeneous block: on 2026-08-07 a run
+# reported 45 issues and printed 25, every one of them the same expected SPEC-ONLY line, so the 20 that
+# actually needed attention were invisible. The cap stays the default (the output is a daily-ops summary),
+# but the tail is now COUNTED rather than silently dropped, and -ShowAll prints everything.
+$cap = if($ShowAll){ $issues.Count } else { 25 }
+$issues | Select-Object -First $cap | ForEach-Object { Write-Output ("  ! " + $_) }
+if($issues.Count -gt $cap){ Write-Output ("  ... {0} more not shown - rerun with -ShowAll" -f ($issues.Count - $cap)) }
 exit 1

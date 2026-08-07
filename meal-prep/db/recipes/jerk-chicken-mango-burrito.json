@@ -1,0 +1,347 @@
+{
+    "name":  "Jerk Chicken Burrito with Mango Salsa",
+    "slug":  "jerk-chicken-mango-burrito",
+    "cuisine":  "Jamaican Jerk",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://saucedupfoods.com/the-greatest-jerk-chicken-burritos-with-mango-salsa/",
+    "source_site":  "saucedupfoods.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "STAGE2: built from burrito-stage1-builds C6. This is the tightest recipe in the batch. It clears the 400 cap ONLY on the recorded trims: skinless thigh (respec from skin-on), rice trimmed to a dry weight that cooks up to about a third of a cup per burrito, cheese held to a light dusting of reduced fat mozzarella, sour cream swapped to Greek yogurt, and the FRIED PLANTAINS DROPPED. Do not restore plantains and do not add oil.",
+                         "Skin-on jerk thigh runs materially higher in fat; the macro basis here is skinless thigh, so the prose says skinless. If skin goes back on, the published number is wrong.",
+                         "Jerk Seasoning is 0 cal per the DB label, so the whole jerk marinade lands its heat without moving the calorie count, which is what buys the margin under the cap.",
+                         "Rice is entered as a DRY weight (175 g batch). The DB Rice row is dry basis at 3.6 cal/g; stage 1 modeled the cooked weight at 1.30 cal/g. Do not re-enter the cooked grams here or the recipe blows the cap.",
+                         "Differs from the live One Pot Caribbean Jerk Chicken and Rice by being a marinated-thigh wrap with a fresh mango salsa rather than a one-pot rice bake. It is the only Caribbean profile in the batch.",
+                         "Fresh tomato is mapped to Cherry Tomatoes (fresh) since the DB carries no plain fresh tomato row."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "plantain",
+                                  "plantains"
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  391,
+                 "protein":  36,
+                 "carbs":  52,
+                 "fat":  8,
+                 "cost_ps":  "4.43"
+             },
+    "intro_html":  "Jerk chicken and cold mango salsa is one of the great flavor pairings, sweet and fiery in the same bite. We marinate skinless thigh in a jerk-spiced mix of citrus, soy and a little brown sugar and honey, tuck it into a wrap with a modest scoop of rice and kidney beans, and top it with a fresh mango, tomato and red onion salsa. It is the only Caribbean plate in this batch, and every burrito still lands \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e36 grams of protein\u003c/strong\u003e, on a high fiber tortilla that keeps you near 5 grams of net carb. We have a One Pot Caribbean Jerk Chicken and Rice on the site; this is the marinated, hand-held version finished with a bright salsa instead of a baked rice pot.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
+                                "\u003cstrong\u003eOrange Juice:\u003c/strong\u003e 3.3 oranges worth (294 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 6 tbsp (98 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 2 tbsp (28 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 2.25 tbsp (49 g)",
+                                "\u003cstrong\u003eJerk Seasoning (McCormick):\u003c/strong\u003e 0.5 oz (14 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tsp (14 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 0.9 cups dry (175 g)",
+                                "\u003cstrong\u003eKidney Beans (generic):\u003c/strong\u003e 1.2 cans (294 g)",
+                                "\u003cstrong\u003eMango:\u003c/strong\u003e 1 mango (350 g)",
+                                "\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 1.5 cups (210 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 2 onions (210 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 0.75 cups (196 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 5 oz (140 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1.75 tbsp (28 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 bunch (14 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Thigh, 3.5 lb: ~$11.23. \u003cstrong\u003eBuy 4 lbs: $12.88.\u003c/strong\u003e",
+                       "Orange Juice, 3.3 oranges worth: ~$0.63. \u003cstrong\u003eBuy 1 52floz carton: $3.36.\u003c/strong\u003e",
+                       "Soy Sauce, 6 tbsp: ~$0.37. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 2 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 2.25 tbsp: ~$0.39. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 0.9 cups dry: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Kidney Beans, 1.2 cans: ~$0.93. \u003cstrong\u003eBuy 2 cans: $1.62.\u003c/strong\u003e",
+                       "Mango, 1 mango: ~$0.77. \u003cstrong\u003eBuy 2 each: $1.48.\u003c/strong\u003e",
+                       "Cherry Tomatoes, 1.5 cups: ~$1.32. \u003cstrong\u003eBuy 1 10oz clamshell: $1.78.\u003c/strong\u003e",
+                       "Red Onion, 2 onions: ~$0.62. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
+                       "Greek Yogurt, 0.75 cups: ~$0.71. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Reduced Fat Mozzarella, 5 oz: ~$1.08. \u003cstrong\u003eBuy 1 8oz bag: $1.75.\u003c/strong\u003e",
+                       "Lime Juice, 1.75 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 bunch: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Pantry seasonings (jerk seasoning, salt): ~$0.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $31.06 across 14 servings, so roughly $2.22 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.16 across 14 servings, roughly $3.23 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.03. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.43 a burrito\u003c/strong\u003e (at everyday cost) for a Caribbean plate most people only order out. Thigh keeps the cost down, the mango salsa does the celebrating.",
+    "shop_smart":  [
+                       "Skinless thigh is cheaper than breast, stays juicy through reheating, and is the right cut for jerk. Buy the family pack and freeze the extra.",
+                       "One ripe mango does the salsa. Buy it a few days ahead and let it soften on the counter so it dices sweet instead of sour.",
+                       "Jerk seasoning in a jar keeps for a long time and seasons several batches, so buy it once and let it work.",
+                       "Kidney beans and rice are the cheap ballast that make this filling, and both store in the pantry indefinitely, so buy the bigger sizes."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Whisk the orange juice, soy sauce, brown sugar, honey, jerk seasoning and salt into a marinade. Add the skinless chicken thighs and let them sit at least 30 minutes.",
+                    "Cook the rice until tender and set it aside, and warm the drained kidney beans.",
+                    "Grill or sear the marinated thighs until charred at the edges and cooked through, then chop them.",
+                    "Make the salsa by tossing the diced mango, halved cherry tomatoes and diced red onion with the lime juice and chopped cilantro.",
+                    "Lay a small bed of rice and beans down each tortilla, add a share of the jerk chicken, a spoon of Greek yogurt and a light dusting of reduced fat mozzarella, then top with the mango salsa.",
+                    "Weigh the rice, beans and chicken together, subtract the empty bowl, and divide by 14 so each burrito gets the same base before you add the salsa.",
+                    "Fold in the sides, roll tight, wrap each one, and portion into 14 containers."
+                ],
+    "portion_html":  "Weigh the rice, beans and chicken, subtract the empty bowl, and divide by 14 so the calorie count actually holds across all 14. Add the salsa and the spoon of yogurt on top, then roll. Each burrito carries \u003cstrong\u003e391 calories and 36 grams of protein\u003c/strong\u003e. Keep the salsa in a separate cup if you are freezing these, and add it fresh after reheating.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://saucedupfoods.com/the-greatest-jerk-chicken-burritos-with-mango-salsa/\" target=\"_blank\" rel=\"noopener\"\u003esaucedupfoods.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Jerk chicken burritos with mango salsa, 14 wrapped and ready, for about $4.43 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  31.06,
+    "cost_batch_true":  45.16,
+    "cost_per_serving":  2.22,
+    "cost_per_serving_true":  3.23,
+    "cost_pantry_add":  16.87,
+    "cost_first_run":  62.03,
+    "scaler":  {
+                   "cost":  "45.16",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  1582,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Orange Juice",
+                                   "canon":  "Orange Juice",
+                                   "grams":  294,
+                                   "buy":  "3.3 oranges worth",
+                                   "bid":  "orange-juice",
+                                   "gpu":  "31.000"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  98,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  28,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "canon":  "Honey",
+                                   "grams":  49,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Jerk Seasoning",
+                                   "canon":  "Jerk Seasoning",
+                                   "grams":  14,
+                                   "buy":  "0.5 oz",
+                                   "bid":  "jerk-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  175,
+                                   "buy":  "0.9 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Kidney Beans",
+                                   "canon":  "Kidney Beans",
+                                   "grams":  294,
+                                   "buy":  "1.2 cans",
+                                   "bid":  "kidney-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mango",
+                                   "canon":  "Mango",
+                                   "grams":  350,
+                                   "buy":  "1 mango",
+                                   "bid":  "mangoes",
+                                   "gpu":  "336.000"
+                               },
+                               {
+                                   "item":  "Cherry Tomatoes",
+                                   "canon":  "Cherry Tomatoes",
+                                   "grams":  210,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "cherry-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  210,
+                                   "buy":  "2 onions",
+                                   "bid":  "red-onion",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "canon":  "Greek Yogurt",
+                                   "grams":  196,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Reduced Fat Mozzarella",
+                                   "canon":  "Reduced Fat Mozzarella",
+                                   "grams":  140,
+                                   "buy":  "5 oz",
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  28,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  14,
+                                   "buy":  "1 bunch",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Jerk chicken burritos on skinless thigh with rice, kidney beans and a fresh mango salsa. 14 wrapped at 391 calories, 36g protein, about $4.43 (at everyday cost).",
+                 "keywords":  "jerk chicken burrito, mango salsa burrito, caribbean chicken meal prep, high protein jerk chicken, low calorie burrito, budget meal prep burrito",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  4.43,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Boneless Skinless Chicken Thigh, 3.5 lb (1582 g)",
+                                          "Orange Juice, 3.3 oranges worth (294 g)",
+                                          "Soy Sauce, 6 tbsp (98 g)",
+                                          "Brown Sugar, 2 tbsp (28 g)",
+                                          "Honey, 2.25 tbsp (49 g)",
+                                          "Jerk Seasoning, 0.5 oz (14 g)",
+                                          "Salt, 2.25 tsp (14 g)",
+                                          "Rice, 0.9 cups dry (175 g)",
+                                          "Kidney Beans, 1.2 cans (294 g)",
+                                          "Mango, 1 mango (350 g)",
+                                          "Cherry Tomatoes, 1.5 cups (210 g)",
+                                          "Red Onion, 2 onions (210 g)",
+                                          "Greek Yogurt, 0.75 cups (196 g)",
+                                          "Reduced Fat Mozzarella, 5 oz (140 g)",
+                                          "Lime Juice, 1.75 tbsp (28 g)",
+                                          "Fresh Cilantro, 1 bunch (14 g)"
+                                      ],
+                 "steps":  [
+                               "Marinate skinless chicken thighs in the jerk citrus marinade.",
+                               "Cook the rice and warm the kidney beans.",
+                               "Sear the thighs until charred and chop; make the mango, tomato and red onion salsa.",
+                               "Build each tortilla with rice, beans, chicken, yogurt and mozzarella, weighing the base to divide by 14, top with salsa, roll and portion."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  1582
+                              },
+                              {
+                                  "item":  "Orange Juice",
+                                  "grams":  294
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Jerk Seasoning",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  175
+                              },
+                              {
+                                  "item":  "Kidney Beans",
+                                  "grams":  294
+                              },
+                              {
+                                  "item":  "Mango",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Cherry Tomatoes",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Reduced Fat Mozzarella",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  14
+                              }
+                          ]
+}

@@ -1,0 +1,310 @@
+{
+    "name":  "Chicken Shawarma Burrito",
+    "slug":  "chicken-shawarma-burrito",
+    "cuisine":  "Middle Eastern",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://gimmedelicious.com/chicken-shawarma/",
+    "source_site":  "gimmedelicious.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "STAGE2: built from burrito-stage1-builds C8. NO TAHINI. The mayo-tahini shawarma sauce is replaced with a garlic Greek-yogurt sauce per the batch decision. Tahini appears nowhere and is set as a forbidden prose term.",
+                         "The Greek yogurt does double duty: part of it marinates the chicken with the spices, the rest is whisked with garlic and lemon into the sauce.",
+                         "The source\u0027s pickled turnips or pickles resolves to pickles, the source\u0027s own listed alternative. Mapped to Dill Pickles, displayed as Pickles.",
+                         "Differs from the live Slow Cooker Chicken Shawarma Bowls by being a spice-marinated seared breast with a garlic-yogurt sauce and pickles in a wrap, rather than a slow-cooked bowl.",
+                         "Lowest calorie recipe in my slice at 273; the biggest headroom under the cap of any chicken burrito here.",
+                         "Fresh tomato is mapped to Cherry Tomatoes (fresh) since the DB carries no plain fresh tomato row."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "tahini"
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  273,
+                 "protein":  34,
+                 "carbs":  29,
+                 "fat":  7,
+                 "cost_ps":  "3.59"
+             },
+    "intro_html":  "Shawarma is a spice cabinet and a hot surface, and it travels beautifully into a wrap. We marinate chicken breast in Greek yogurt loaded with cumin, coriander, smoked paprika and turmeric, sear it hard, and finish with a cool garlic yogurt sauce, sliced onion, tomato and a handful of pickles for the sharp bite that cuts the spice. Every burrito lands \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e34 grams of protein\u003c/strong\u003e, on a high fiber tortilla that keeps you near 5 grams of net carb. We have Slow Cooker Chicken Shawarma Bowls on the site; this is the fast, seared, hand-held version with the garlic yogurt sauce instead of a bowl base.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1.75 cups (420 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.5 tbsp (21 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5 tbsp (42 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1.75 tbsp (28 g)",
+                                "\u003cstrong\u003ePickles:\u003c/strong\u003e 2 pickles (140 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (210 g)",
+                                "\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 2 cups (280 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (6 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 1 tbsp (6 g)",
+                                "\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 1.75 tsp (4 g)",
+                                "\u003cstrong\u003eGround Turmeric (Great Value):\u003c/strong\u003e 1.25 tsp (4 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tsp (14 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tsp (3 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 3.5 lb: ~$7.78. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "Greek Yogurt, 1.75 cups: ~$1.52. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Olive Oil, 1.5 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 5 tbsp: ~$0.49. \u003cstrong\u003eBuy 2 heads: $0.93.\u003c/strong\u003e",
+                       "Lemon Juice, 1.75 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.53. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Cherry Tomatoes, 2 cups: ~$1.76. \u003cstrong\u003eBuy 1 10oz clamshell: $1.78.\u003c/strong\u003e",
+                       "Pantry seasonings (pickles, ground cumin, ground coriander, smoked paprika, ground turmeric, salt, black pepper): ~$0.88. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.84 across 14 servings, so roughly $1.77 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.04 across 14 servings, roughly $2.29 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.25 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.29. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.59 a burrito\u003c/strong\u003e (at everyday cost) for street-cart shawarma out of your own spice rack. The yogurt does the marinade and the sauce, and the pickles cost almost nothing.",
+    "shop_smart":  [
+                       "Shawarma flavor lives in the spice rack, and it is cheapest to buy cumin, coriander, paprika and turmeric in bags from an international grocer rather than branded jars.",
+                       "Greek yogurt is both the marinade and the sauce here, so buy the big tub. It tenderizes the chicken and then cools it down.",
+                       "A jar of pickles is the cheap secret that makes this taste like a real shawarma. Buy the spears and slice them thin.",
+                       "Chicken breast in the family pack is the best value. Marinate what you need and freeze the rest."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Whisk about half the Greek yogurt with the ground cumin, coriander, smoked paprika, turmeric, salt, black pepper and half the minced garlic. Coat the chicken breast and let it marinate at least 30 minutes.",
+                    "Whisk the rest of the Greek yogurt with the remaining garlic, the lemon juice and the olive oil to make the garlic sauce.",
+                    "Sear the marinated chicken in a hot pan until charred at the edges and cooked through, then slice it thin.",
+                    "Lay sliced chicken down each tortilla with a share of sliced onion, halved cherry tomatoes and thin-sliced pickles, then spoon on the garlic yogurt sauce.",
+                    "Weigh the chicken, onion and tomato together, subtract the empty bowl, and divide by 14 so each burrito gets the same fill.",
+                    "Fold in the sides, roll tight, wrap each one, and portion into 14 containers."
+                ],
+    "portion_html":  "Weigh the sliced chicken and vegetables, subtract the empty bowl, and divide by 14, then sauce and roll each tortilla to match. Each burrito carries \u003cstrong\u003e273 calories and 34 grams of protein\u003c/strong\u003e. Keep the garlic sauce in a side cup if you are freezing these and add it fresh after reheating.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://gimmedelicious.com/chicken-shawarma/\" target=\"_blank\" rel=\"noopener\"\u003egimmedelicious.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Chicken shawarma burritos, 14 wrapped and ready, for about $3.59 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  24.84,
+    "cost_batch_true":  32.04,
+    "cost_per_serving":  1.77,
+    "cost_per_serving_true":  2.29,
+    "cost_pantry_add":  18.25,
+    "cost_first_run":  50.29,
+    "scaler":  {
+                   "cost":  "32.04",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1582,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "canon":  "Greek Yogurt",
+                                   "grams":  420,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  21,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  42,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "canon":  "Lemon Juice",
+                                   "grams":  28,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Pickles",
+                                   "canon":  "Dill Pickles",
+                                   "grams":  140,
+                                   "buy":  "2 pickles",
+                                   "bid":  "pickles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  210,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cherry Tomatoes",
+                                   "canon":  "Cherry Tomatoes",
+                                   "grams":  280,
+                                   "buy":  "2 cups",
+                                   "bid":  "cherry-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  6,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "canon":  "Ground Coriander",
+                                   "grams":  6,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Smoked Paprika",
+                                   "canon":  "Smoked Paprika",
+                                   "grams":  4,
+                                   "buy":  "1.75 tsp",
+                                   "bid":  "smoked-paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "canon":  "Ground Turmeric",
+                                   "grams":  4,
+                                   "buy":  "1.25 tsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "1.25 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken shawarma burritos with yogurt-spice marinated breast, a garlic yogurt sauce, onion, tomato and pickles. 14 wrapped at 273 calories, 34g protein, about $3.59 (at everyday cost).",
+                 "keywords":  "chicken shawarma burrito, garlic yogurt sauce, high protein shawarma meal prep, low calorie shawarma, budget chicken burrito, middle eastern meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT15M",
+                 "totalTime":  "PT40M",
+                 "costPerServing":  3.59,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Boneless Skinless Chicken Breast, 3.5 lb (1582 g)",
+                                          "Greek Yogurt, 1.75 cups (420 g)",
+                                          "Olive Oil, 1.5 tbsp (21 g)",
+                                          "Garlic, 5 tbsp (42 g)",
+                                          "Lemon Juice, 1.75 tbsp (28 g)",
+                                          "Pickles, 2 pickles (140 g)",
+                                          "Yellow Onion, 2 onions (210 g)",
+                                          "Cherry Tomatoes, 2 cups (280 g)",
+                                          "Ground Cumin, 1 tbsp (6 g)",
+                                          "Ground Coriander, 1 tbsp (6 g)",
+                                          "Smoked Paprika, 1.75 tsp (4 g)",
+                                          "Ground Turmeric, 1.25 tsp (4 g)",
+                                          "Salt, 2.25 tsp (14 g)",
+                                          "Black Pepper, 1.25 tsp (3 g)"
+                                      ],
+                 "steps":  [
+                               "Marinate the chicken breast in yogurt with cumin, coriander, smoked paprika, turmeric and garlic.",
+                               "Whisk the rest of the yogurt with garlic, lemon and olive oil for the sauce.",
+                               "Sear and slice the chicken.",
+                               "Build each tortilla with chicken, onion, tomato, pickles and garlic sauce, weighing to divide by 14, roll and portion."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1582
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Dill Pickles",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Cherry Tomatoes",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Ground Coriander",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Smoked Paprika",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              }
+                          ]
+}

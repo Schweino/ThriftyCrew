@@ -1,0 +1,285 @@
+{
+    "name":  "Cuban Picadillo Burrito",
+    "slug":  "cuban-picadillo-burrito",
+    "cuisine":  "Cuban",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.skinnytaste.com/picadillo-6-ww-pts/",
+    "source_site":  "skinnytaste.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Stage-1 build B4: filling is already lean, 40g cooked rice added for the wrap. Lands 358 cal, 31g protein, still the lowest-calorie beef build in this slice.",
+                         "Rice stored as DRY grams (202g) so the dry food-DB Rice row reproduces stage-1 cooked-rice calories.",
+                         "Green olives mapped to canonical item Olives (board id green-olives); displayed as Green Olives.",
+                         "SUBSTITUTION, flag for audit: stage-1\u0027s fresh \u0027tomato\u0027 has no canonical fresh-tomato item; mapped to Cherry Tomatoes (density 0.177 vs stage-1 0.18) and displayed as Tomato. Add a Roma/fresh Tomato commodity if you want the exact reader-facing name.",
+                         "Stage-1 \u0027spices\u0027 (2 cal) carried as Ground Cumin, Dried Oregano, and Salt.",
+                         "REPAIR PASS 3 B4: raisins (Golden Raisins 84g) and capers (34g) ADDED, both used in make_it steps, per Brad. This gives the burrito the classic sweet-and-briny picadillo character the bowl-vs-burrito pair needed to differ in more than the wrapper. Recompute lands 358 cal (was 340), 31g protein, clear of the 400 cap and 25g floor.",
+                         "Bowl cousin: Cuban Beef Picadillo Rice Bowls. Differentiated by the classic raisins-and-capers picadillo filling folded, with the rice, into a hand-wrapped tortilla."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  358,
+                 "protein":  31,
+                 "carbs":  44,
+                 "fat":  11,
+                 "cost_ps":  "4.39"
+             },
+    "intro_html":  "Picadillo is the Cuban answer to weeknight ground beef, a sweet and briny simmer of beef, tomato, pepper, green olives, raisins, and capers that tastes like it took all day and does not. This wrap comes in at about \u003cstrong\u003e358 calories\u003c/strong\u003e and \u003cstrong\u003e31 grams of protein\u003c/strong\u003e, the leanest beef burrito in the batch, in a tortilla that carries 18 grams of fiber for 5 grams of net carb. If our Cuban Beef Picadillo Rice Bowls are on your rotation, this wrap goes fuller Havana, sweet raisins and briny capers folded right into the beef and rice for the classic sweet and salty picadillo you can eat with one hand.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 1 cup (266 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 onions (182 g)",
+                                "\u003cstrong\u003eTomato:\u003c/strong\u003e 2 cups (280 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 1 pepper (140 g)",
+                                "\u003cstrong\u003eGreen Olives:\u003c/strong\u003e 8.25 tbsp (70 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 cup dry (202 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tbsp (3 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tsp (14 g)",
+                                "\u003cstrong\u003eRaisins:\u003c/strong\u003e 9.25 tbsp (84 g)",
+                                "\u003cstrong\u003eCapers (generic (USDA)):\u003c/strong\u003e 0.25 cups (34 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 3.5 lb: ~$23.18. \u003cstrong\u003eBuy 4 lbs: $26.48.\u003c/strong\u003e",
+                       "Tomato Sauce, 1 cup: ~$0.52. \u003cstrong\u003eBuy 1 15oz can: $0.84.\u003c/strong\u003e",
+                       "Yellow Onion, 1.7 onions: ~$0.46. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Tomato, 2 cups: ~$1.76. \u003cstrong\u003eBuy 1 10oz clamshell: $1.78.\u003c/strong\u003e",
+                       "Red Bell Pepper, 1 pepper: ~$1.14. \u003cstrong\u003eBuy 2 each: $1.96.\u003c/strong\u003e",
+                       "Green Olives, 8.25 tbsp: ~$0.69. \u003cstrong\u003eBuy 1 6oz can: $1.68.\u003c/strong\u003e",
+                       "Rice, 1 cup dry: ~$0.25. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Raisins, 9.25 tbsp: ~$1.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Capers, 0.25 cups: ~$1.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, dried oregano, salt): ~$0.26. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $42.27 across 14 servings, so roughly $3.02 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $51.63 across 14 servings, roughly $3.69 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.79 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.42. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "Lean beef and a can of tomato sauce do most of the work, which keeps this one easy on the cost tab. The olives and capers are the pantry splurge, and a small can or jar of each covers the batch.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eGreen olives and capers are the briny backbone, so buy the jars.\u003c/strong\u003e A can of olives and a small jar of capers cost a fraction of the olive bar and last through several batches in the fridge.",
+                       "\u003cstrong\u003eTomato sauce is the cheap base.\u003c/strong\u003e A small can builds the whole simmer for almost nothing, and it keeps in the pantry until you need it.",
+                       "\u003cstrong\u003eOne bell pepper and one onion is all it takes.\u003c/strong\u003e Add a handful of raisins from the baking aisle for the sweet note. This is a light-produce recipe, so you are not buying a cart of vegetables to make it work."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice per the package and set it aside.",
+                    "Brown the ground beef in a large skillet, breaking it up as it cooks, then add the diced onion and red bell pepper and cook until they soften.",
+                    "Stir in the tomato sauce, the chopped fresh tomato, the raisins, the cumin, oregano, and salt, and simmer 10 minutes until it thickens and the raisins plump.",
+                    "Slice the green olives and stir them in with the capers for the last couple of minutes so they keep their bite.",
+                    "Fold the cooked rice into the filling and warm everything through.",
+                    "Warm the tortillas, then portion and wrap as below."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total filling weight. Divide it by 14, spoon that amount onto each warm tortilla, and roll. Every burrito lands at about \u003cstrong\u003e358 calories and 31 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.skinnytaste.com/picadillo-6-ww-pts/\" target=\"_blank\" rel=\"noopener\"\u003eskinnytaste.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  42.27,
+    "cost_batch_true":  51.63,
+    "cost_per_serving":  3.02,
+    "cost_per_serving_true":  3.69,
+    "cost_pantry_add":  9.79,
+    "cost_first_run":  61.42,
+    "scaler":  {
+                   "cost":  "51.63",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "canon":  "Tomato Sauce",
+                                   "grams":  266,
+                                   "buy":  "1 cup",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  182,
+                                   "buy":  "1.7 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Tomato",
+                                   "canon":  "Cherry Tomatoes",
+                                   "grams":  280,
+                                   "buy":  "2 cups",
+                                   "bid":  "cherry-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  140,
+                                   "buy":  "1 pepper",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Green Olives",
+                                   "canon":  "Olives",
+                                   "grams":  70,
+                                   "buy":  "8.25 tbsp",
+                                   "bid":  "green-olives",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  202,
+                                   "buy":  "1 cup dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  3,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Raisins",
+                                   "canon":  "Golden Raisins",
+                                   "grams":  84,
+                                   "buy":  "9.25 tbsp",
+                                   "bid":  "golden-raisins",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Capers",
+                                   "canon":  "Capers",
+                                   "grams":  34,
+                                   "buy":  "0.25 cups",
+                                   "bid":  "capers",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A Cuban picadillo burrito for meal prep: lean beef simmered with tomato, pepper, green olives, raisins, and capers, folded with rice. About 358 calories and 31 grams of protein per serving.",
+                 "keywords":  "cuban picadillo, picadillo burrito, beef with olives, cuban meal prep, budget high protein burrito",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  4.39,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "93/7 Ground Beef, 3.5 lb (1588 g)",
+                                          "Tomato Sauce, 1 cup (266 g)",
+                                          "Yellow Onion, 1.7 onions (182 g)",
+                                          "Tomato, 2 cups (280 g)",
+                                          "Red Bell Pepper, 1 pepper (140 g)",
+                                          "Green Olives, 8.25 tbsp (70 g)",
+                                          "Rice, 1 cup dry (202 g)",
+                                          "Ground Cumin, 1 tbsp (7 g)",
+                                          "Dried Oregano, 1 tbsp (3 g)",
+                                          "Salt, 2.25 tsp (14 g)",
+                                          "Raisins, 9.25 tbsp (84 g)",
+                                          "Capers, 0.25 cups (34 g)"
+                                      ],
+                 "steps":  [
+                               "Cook the rice per the package and set aside.",
+                               "Brown the beef, then soften the onion and red bell pepper in it.",
+                               "Add tomato sauce, chopped tomato, raisins, cumin, oregano, and salt and simmer to thicken.",
+                               "Stir in the sliced green olives and capers near the end.",
+                               "Fold in the rice, then weigh the filling, divide by 14, spoon onto warm tortillas, and roll."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Tomato Sauce",
+                                  "grams":  266
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  182
+                              },
+                              {
+                                  "item":  "Cherry Tomatoes",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Olives",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  202
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Golden Raisins",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Capers",
+                                  "grams":  34
+                              }
+                          ]
+}

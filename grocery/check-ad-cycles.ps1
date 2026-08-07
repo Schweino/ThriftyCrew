@@ -679,6 +679,20 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           }
         } elseif (Test-Path (Join-Path $OutDir 'cost-flags-alert.sig')) { Remove-Item (Join-Path $OutDir 'cost-flags-alert.sig') -ErrorAction SilentlyContinue }
       } catch { Log ('cost-flag alert threw: ' + $_.Exception.Message) }
+      # GOLDEN TEST (2026-08-06): the cost engine's regression suite, run against the file cost-recipes
+      # just wrote. It had been unrunnable for eleven days because its baseline was a frozen OUTPUT that
+      # every price move invalidated; it now asserts (a) the catalogue against its own specs, which reads
+      # no price board and so cannot age, and (b) the engine over frozen INPUTS, byte for byte. Running it
+      # here is the point: the eleven-day gap happened because nothing ever invoked it. Non-fatal; alerts.
+      try {
+        $gt = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\golden-test.ps1') 2>&1 | ForEach-Object { [string]$_ }
+        if ($LASTEXITCODE -ne 0) {
+          $gtFail = @($gt | Where-Object { $_ -match '^\s+(FAIL|C\d+)' })
+          Log ('golden-test FAILED: ' + (($gtFail | Select-Object -First 3) -join ' | '))
+          $summary += "REVIEW    golden-test: the cost engine's regression suite failed - run meal-prep\engine\golden-test.ps1"
+          try { Send-Alert -Subject "Cost engine: golden test failed" -Body ("meal-prep\engine\golden-test.ps1 failed after today's recost. A STRUCTURAL failure means db\costed.json disagrees with the specs or the ingredient db (usually a package/grams edit that never got a recost). A FROZEN failure means the engine's output over pinned inputs moved - if that change was intended, accept it with golden-test.ps1 -Rebaseline. Lines: " + (($gtFail | Select-Object -First 15) -join ' | ')) | Out-Null } catch {}
+        } else { Log 'golden-test: clean' }
+      } catch { Log ('golden-test threw: ' + $_.Exception.Message) }
       # drift guard: recipes-db index vs db\recipes specs vs db\ingredients (2026-07-26). Non-fatal; alerts.
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\audit-db-agreement.ps1') | Out-Null

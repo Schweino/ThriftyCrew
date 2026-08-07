@@ -19,7 +19,9 @@ WHAT QUALIFIES (all of these):
 - BATCH-SCALABLE: sane at 14 servings with the weigh-and-divide portioning method (skillets, bakes, bowls,
   slow-cooker; not individually-assembled or fried-to-order dishes).
 - PROTEIN CLASS: chicken, turkey, beef, or pork (or genuinely vegetarian if the run asks). NO SEAFOOD -
-  standing rule (expensive per serving, no reader demand).
+  standing rule (expensive per serving, no reader demand). NO GROUND CHICKEN - standing rule (Brad's call
+  on texture; it also has no board home). Ground turkey and whole-muscle chicken are both fine, so a
+  recipe built on ground chicken is rebuilt on diced/shredded chicken breast or ground turkey, not dropped.
 - NOT A DUPLICATE: check meal-prep\recipes-db.json slugs/names first; near-duplicates (same dish, trivial
   variation) count as duplicates unless the run explicitly wants variations.
 

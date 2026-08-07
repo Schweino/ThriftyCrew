@@ -1,0 +1,271 @@
+{
+    "name":  "Thai Peanut Chicken Burrito",
+    "slug":  "thai-peanut-chicken-burrito",
+    "cuisine":  "Thai",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.closetcooking.com/thai-peanut-chicken-avocado-burritos/",
+    "source_site":  "closetcooking.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "STAGE2: built from burrito-stage1-builds C11. Stage 1 modeled the peanut sauce as a placeholder at 2.5 cal/g, a DISCLOSED ASSUMPTION. Per the batch rule, the sauce is now specced EXPLICITLY from real board items so stage 3 can recompute it: Peanut Butter 98 g, Soy Sauce 42 g, Lime Juice 42 g, Honey 28 g, Sriracha 14 g, Ginger 14 g (thinned with warm water, uncosted). These grams REPLACE the placeholder line.",
+                         "Because the sauce is now real peanut butter rather than a 2.5 cal/g stand-in, the recomputed calories are about 13 higher than the stage-1 placeholder total (376 vs 363), still under the 400 cap. This divergence is expected and sanctioned by the batch note.",
+                         "Cheese was cut hard from the source (about 57 g down to 14 g of blend) and avocado halved to 25 g per burrito, both mandated trims, to fit the cap.",
+                         "Differs from the live Slow Cooker Thai Peanut Chicken Bowls by being a peanut-sauced seared breast with avocado in a wrap, not a slow-cooked rice bowl.",
+                         "FLAG for mapper: Avocado has a food-macros-db row but NO db/ingredients.json board row. Needed for build-v2-spec to cost this spec."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  376,
+                 "protein":  37,
+                 "carbs":  30,
+                 "fat":  16,
+                 "cost_ps":  "3.30"
+             },
+    "intro_html":  "Peanut sauce makes everything it touches taste like takeout, and it costs about a dollar\u0027s worth of pantry to make. We coat seared chicken breast in a real Thai peanut sauce built from peanut butter, soy, lime, honey, ginger and a hit of sriracha, then wrap it with cool avocado, a little cheese and a swipe of Greek yogurt. Each burrito lands \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e37 grams of protein\u003c/strong\u003e, on a high fiber tortilla that holds near 5 grams of net carb. We have Slow Cooker Thai Peanut Chicken Bowls on the site; this is the seared, hand-held version, sauced with the same peanut flavor but folded around avocado instead of spooned over rice.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003ePeanut Butter (generic):\u003c/strong\u003e 6 tbsp (98 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 2.5 tbsp (42 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 2.75 tbsp (42 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1.25 tbsp (28 g)",
+                                "\u003cstrong\u003eSriracha (Huy Fong Foods):\u003c/strong\u003e 1 tbsp (14 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 2.25 tbsp (14 g)",
+                                "\u003cstrong\u003eAvocado:\u003c/strong\u003e 2.3 avocados (350 g)",
+                                "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 7 oz (196 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 0.75 cups (196 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 bunch (14 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 3.5 lb: ~$7.78. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Peanut Butter, 6 tbsp: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 2.5 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 2.75 tbsp: ~$0.97. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 1.25 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Ginger, 2.25 tbsp: ~$0.04. \u003cstrong\u003eBuy 1 piece: $0.31.\u003c/strong\u003e",
+                       "Avocado, 2.3 avocados: ~$1.35. \u003cstrong\u003eBuy 3 each: $1.74.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 7 oz: ~$1.22. \u003cstrong\u003eBuy 1 8oz bag: $1.42.\u003c/strong\u003e",
+                       "Greek Yogurt, 0.75 cups: ~$0.71. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 bunch: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Pantry seasonings (sriracha): ~$0.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.68 across 14 servings, so roughly $1.76 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.15 across 14 servings, roughly $2.37 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.00 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.15. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.30 a burrito\u003c/strong\u003e (at everyday cost) for a peanut sauce that tastes like a Thai restaurant and comes out of a jar you already own. The avocado is the only splurge, and half of one does a burrito.",
+    "shop_smart":  [
+                       "A jar of peanut butter is the whole sauce and it costs almost nothing per batch. Buy the natural kind with no added sugar so the honey does the sweetening on your terms.",
+                       "One ripe avocado goes a long way sliced thin across the batch. Buy them a couple days ahead and let them ripen on the counter.",
+                       "Soy sauce, honey and sriracha are long-life pantry bottles, so buy them once and let them ride through many recipes.",
+                       "A knob of fresh ginger keeps in the freezer and grates straight from frozen, so you are never buying a whole root for a spoonful again."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Whisk the peanut butter, soy sauce, lime juice, honey, sriracha and grated ginger together, loosening with a little warm water until it pours in a thick ribbon. That is your peanut sauce.",
+                    "Slice the chicken breast into strips and sear it in a hot pan until browned and cooked through.",
+                    "Toss the seared chicken in about two thirds of the peanut sauce so every piece is coated, and keep the rest for drizzling.",
+                    "Slice the avocado and chop the cilantro.",
+                    "Lay peanut chicken down each tortilla, add sliced avocado, a scatter of the cheese blend, a spoon of Greek yogurt and a drizzle of the reserved sauce.",
+                    "Weigh the peanut chicken, subtract the empty bowl, and divide by 14 so each burrito gets the same amount, then fold in the sides and roll.",
+                    "Wrap each burrito and portion into 14 containers."
+                ],
+    "portion_html":  "Weigh the peanut chicken, subtract the empty bowl, and divide by 14, then build each tortilla to match before you add the avocado and drizzle. Each burrito carries \u003cstrong\u003e376 calories and 37 grams of protein\u003c/strong\u003e. Add the avocado fresh if you are making these ahead, since it browns once cut.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.closetcooking.com/thai-peanut-chicken-avocado-burritos/\" target=\"_blank\" rel=\"noopener\"\u003eclosetcooking.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Thai peanut chicken burritos, 14 wrapped and ready, for about $3.30 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  24.68,
+    "cost_batch_true":  33.15,
+    "cost_per_serving":  1.76,
+    "cost_per_serving_true":  2.37,
+    "cost_pantry_add":  13,
+    "cost_first_run":  46.15,
+    "scaler":  {
+                   "cost":  "33.15",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1582,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Peanut Butter",
+                                   "canon":  "Peanut Butter",
+                                   "grams":  98,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "peanut-butter",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  42,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  42,
+                                   "buy":  "2.75 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "canon":  "Honey",
+                                   "grams":  28,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sriracha",
+                                   "canon":  "Sriracha",
+                                   "grams":  14,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "sriracha",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "canon":  "Ginger",
+                                   "grams":  14,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "fresh-ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Avocado",
+                                   "canon":  "Avocado",
+                                   "grams":  350,
+                                   "buy":  "2.3 avocados",
+                                   "bid":  "avocados",
+                                   "gpu":  "150.000"
+                               },
+                               {
+                                   "item":  "Mexican Cheese Blend",
+                                   "canon":  "Mexican Cheese Blend",
+                                   "grams":  196,
+                                   "buy":  "7 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "canon":  "Greek Yogurt",
+                                   "grams":  196,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  14,
+                                   "buy":  "1 bunch",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Thai peanut chicken burritos with seared breast in a real peanut sauce, avocado and Greek yogurt. 14 wrapped at 376 calories, 37g protein, about $3.30 (at everyday cost).",
+                 "keywords":  "thai peanut chicken burrito, peanut sauce chicken, high protein thai meal prep, avocado chicken burrito, low calorie burrito, budget meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT15M",
+                 "totalTime":  "PT35M",
+                 "costPerServing":  3.30,
+                 "recipeIngredient":  [
+                                          "Boneless Skinless Chicken Breast, 3.5 lb (1582 g)",
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Peanut Butter, 6 tbsp (98 g)",
+                                          "Soy Sauce, 2.5 tbsp (42 g)",
+                                          "Lime Juice, 2.75 tbsp (42 g)",
+                                          "Honey, 1.25 tbsp (28 g)",
+                                          "Sriracha, 1 tbsp (14 g)",
+                                          "Ginger, 2.25 tbsp (14 g)",
+                                          "Avocado, 2.3 avocados (350 g)",
+                                          "Mexican Cheese Blend, 7 oz (196 g)",
+                                          "Greek Yogurt, 0.75 cups (196 g)",
+                                          "Fresh Cilantro, 1 bunch (14 g)"
+                                      ],
+                 "steps":  [
+                               "Whisk peanut butter, soy, lime, honey, sriracha and ginger into a peanut sauce, loosening with warm water.",
+                               "Sear the sliced chicken breast, then toss it in most of the sauce.",
+                               "Slice the avocado and chop cilantro.",
+                               "Build each tortilla with peanut chicken, avocado, cheese, yogurt and reserved sauce, weighing to divide by 14, roll and portion."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1582
+                              },
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Peanut Butter",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  42
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Sriracha",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Ginger",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Avocado",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Mexican Cheese Blend",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  14
+                              }
+                          ]
+}

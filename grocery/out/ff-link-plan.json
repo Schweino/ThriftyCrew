@@ -5,7 +5,7 @@
     "refused":  [
                     {
                         "id":  "caesar-salad-kit",
-                        "why":  "no confident match (best 0)"
+                        "why":  "match found but its size \"1 bag\" gives no per-unit in oz"
                     },
                     {
                         "id":  "cherry-tomatoes",
@@ -41,6 +41,6 @@
                     }
                 ],
     "worked":  9,
-    "generated":  "2026-08-06 11:31",
+    "generated":  "2026-08-07 06:18",
     "board":  "comparison-2026-08-06.json"
 }

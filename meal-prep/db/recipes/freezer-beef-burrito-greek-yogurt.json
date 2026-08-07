@@ -1,0 +1,224 @@
+{
+    "name":  "Greek-Yogurt Freezer Beef Burrito",
+    "slug":  "freezer-beef-burrito-greek-yogurt",
+    "cuisine":  "Tex-Mex",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://ourbestbites.com/high-protein-freezer-burritos/",
+    "source_site":  "ourbestbites.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Stage-1 build B8: source 96/4 respec\u0027d to 93/7 (no 96/4 board SKU). Salsa specified, NOT enchilada sauce, to keep it off the wet-burrito line so it freezes and reheats clean. Lands 365 cal, 38g protein.",
+                         "BLOCKER, flag for repair: Refried Beans is in food-macros-db (100 cal / 6P per 130g) but has NO ingredients.json board-mapping row, so build-v2-spec cannot derive its bid/gpu and cost-recipes cannot cost it. Add a Refried Beans row to ingredients.json before the spec builder runs.",
+                         "Stage-1 \u0027worcestershire+lime\u0027 (2 cal) carried as Worcestershire Sauce plus Lime Juice; \u0027spices\u0027 (5 cal) carried as Taco Seasoning.",
+                         "Greek yogurt is bound into the cooled filling (the high-protein, freezer-stable move), not a cold sauce on top.",
+                         "Bowl cousin: High-Protein Beef Burrito Bowls. Differentiated as a make-ahead freezer wrap with a creamy Greek-yogurt-and-refried-bean base rather than a fresh-scooped rice bowl."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "enchilada sauce"
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  365,
+                 "protein":  38,
+                 "carbs":  35,
+                 "fat":  12,
+                 "cost_ps":  "4.09"
+             },
+    "intro_html":  "This is the one you build a big batch of and stack in the freezer, so a real dinner is always ninety seconds away. Greek yogurt stirred into the filling makes it creamy and pushes the protein up without adding a wet sauce that would turn the tortilla to mush. Each burrito lands at about \u003cstrong\u003e365 calories\u003c/strong\u003e and \u003cstrong\u003e38 grams of protein\u003c/strong\u003e, the highest protein in this slice, in a tortilla with 18 grams of fiber for 5 grams of net carb. It is a cousin of our High-Protein Beef Burrito Bowls, rebuilt to survive a freezer and a microwave.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eSalsa (Pace):\u003c/strong\u003e 1.75 cups (420 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 2 cups (476 g)",
+                                "\u003cstrong\u003eRefried Beans (Great Value):\u003c/strong\u003e 1.3 cans (588 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 7 oz (196 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.75 tbsp (28 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1.75 tbsp (28 g)",
+                                "\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 2.5 tbsp (21 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 3.5 lb: ~$23.18. \u003cstrong\u003eBuy 4 lbs: $26.48.\u003c/strong\u003e",
+                       "Salsa, 1.75 cups: ~$1.82. \u003cstrong\u003eBuy 1 16oz jar: $1.97.\u003c/strong\u003e",
+                       "Greek Yogurt, 2 cups: ~$1.72. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Refried Beans, 1.3 cans: ~$1.40. \u003cstrong\u003eBuy 2 16oz cans: $2.16.\u003c/strong\u003e",
+                       "Reduced Fat Mozzarella, 7 oz: ~$1.51. \u003cstrong\u003eBuy 1 8oz bag: $1.75.\u003c/strong\u003e",
+                       "Worcestershire Sauce, 1.75 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 1.75 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (taco seasoning): ~$0.22. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $42.18 across 14 servings, so roughly $3.01 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $51.42 across 14 servings, roughly $3.67 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.80 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.22. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "A tub of yogurt, some cans of beans, and lean beef make a month of dinners here, so the per serving number on the cost tab is one of the friendliest in the batch.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eGreek yogurt is your protein and your creaminess.\u003c/strong\u003e A big tub costs less per ounce than the little cups and replaces sour cream at a fraction of the fat. Buy plain and buy the large size.",
+                       "\u003cstrong\u003eRefried beans by the can are cents per serving.\u003c/strong\u003e Stock a few cans; they are the backbone of the creamy filling and they keep forever.",
+                       "\u003cstrong\u003eFreeze smart.\u003c/strong\u003e Wrap each burrito tight, freeze on a tray so they hold their shape, then bag them. That one afternoon of work is a month of grab-and-go lunches."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Brown the ground beef in a large skillet, breaking it up as it cooks, then stir in the taco seasoning, the Worcestershire sauce, and the lime juice.",
+                    "Add the refried beans and the salsa and stir until the filling is thick and holds together on a spoon.",
+                    "Pull the pan off the heat and let it cool for 10 minutes so the yogurt will not break.",
+                    "Fold in the Greek yogurt and the shredded mozzarella until the filling is creamy and even.",
+                    "Warm the tortillas so they roll without cracking, then portion and wrap as below, and freeze what you are not eating this week."
+                ],
+    "portion_html":  "Set the cooled pot on your scale and subtract the empty pot weight from Step 1. That is your total filling weight. Divide it by 14, spoon that amount onto each tortilla, and roll tight. Every burrito lands at about \u003cstrong\u003e365 calories and 38 grams of protein\u003c/strong\u003e. To reheat from frozen, microwave wrapped in a paper towel for about 90 seconds.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://ourbestbites.com/high-protein-freezer-burritos/\" target=\"_blank\" rel=\"noopener\"\u003eourbestbites.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  42.18,
+    "cost_batch_true":  51.42,
+    "cost_per_serving":  3.01,
+    "cost_per_serving_true":  3.67,
+    "cost_pantry_add":  5.8,
+    "cost_first_run":  57.22,
+    "scaler":  {
+                   "cost":  "51.42",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salsa",
+                                   "canon":  "Salsa",
+                                   "grams":  420,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "salsa",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "canon":  "Greek Yogurt",
+                                   "grams":  476,
+                                   "buy":  "2 cups",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Refried Beans",
+                                   "canon":  "Refried Beans",
+                                   "grams":  588,
+                                   "buy":  "1.3 cans",
+                                   "bid":  "refried-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Reduced Fat Mozzarella",
+                                   "canon":  "Reduced Fat Mozzarella",
+                                   "grams":  196,
+                                   "buy":  "7 oz",
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "canon":  "Worcestershire Sauce",
+                                   "grams":  28,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  28,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Taco Seasoning",
+                                   "canon":  "Taco Seasoning",
+                                   "grams":  21,
+                                   "buy":  "2.5 tbsp",
+                                   "bid":  "taco-seasoning",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A freezer-friendly Greek-yogurt beef burrito for meal prep: creamy beef and refried bean filling, salsa not sauce, about 365 calories and 38 grams of protein per serving.",
+                 "keywords":  "freezer burrito, high protein freezer burrito, greek yogurt burrito, make ahead meal prep, budget beef burrito",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT40M",
+                 "costPerServing":  4.09,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "93/7 Ground Beef, 3.5 lb (1588 g)",
+                                          "Salsa, 1.75 cups (420 g)",
+                                          "Greek Yogurt, 2 cups (476 g)",
+                                          "Refried Beans, 1.3 cans (588 g)",
+                                          "Reduced Fat Mozzarella, 7 oz (196 g)",
+                                          "Worcestershire Sauce, 1.75 tbsp (28 g)",
+                                          "Lime Juice, 1.75 tbsp (28 g)",
+                                          "Taco Seasoning, 2.5 tbsp (21 g)"
+                                      ],
+                 "steps":  [
+                               "Brown the beef, then stir in taco seasoning, Worcestershire, and lime juice.",
+                               "Add refried beans and salsa and cook until thick.",
+                               "Cool 10 minutes, then fold in the Greek yogurt and shredded mozzarella.",
+                               "Weigh the filling, divide by 14, spoon onto tortillas, and roll tight.",
+                               "Freeze extras; reheat from frozen about 90 seconds in the microwave."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Salsa",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  476
+                              },
+                              {
+                                  "item":  "Refried Beans",
+                                  "grams":  588
+                              },
+                              {
+                                  "item":  "Reduced Fat Mozzarella",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Taco Seasoning",
+                                  "grams":  21
+                              }
+                          ]
+}

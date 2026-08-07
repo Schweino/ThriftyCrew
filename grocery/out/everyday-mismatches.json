@@ -13,6 +13,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "aluminum-foil",
+        "store":  "Walmart",
+        "unit":  "each",
+        "board":  12.2,
+        "link":  10.99,
+        "ratio":  0.9,
+        "price":  10.99,
+        "size":  "each",
+        "boardItem":  "GARITIN Aluminum Foil Paper 223 Sq Ft, Heavy Duty Aluminum Foil, Non Stick Foil Roll with Cutter for Grilling, Cooking, Catering, Grill Foil Wraps for Food, 12 Inches Wide, Silver",
+        "linkItem":  "GARITIN Aluminum Foil Paper 223 Sq Ft, Heavy Duty Aluminum Foil, Non Stick Foil Roll with Cutter for Grilling, Cooking, Catering, Grill Foil Wraps for Food, 12 Inches Wide, Silver",
+        "board_src":  "main"
+    },
+    {
         "id":  "asparagus",
         "store":  "Aldi",
         "unit":  "lb",
@@ -23,6 +36,19 @@
         "size":  "1 lb",
         "boardItem":  "Asparagus 1 LB",
         "linkItem":  "Asparagus, Package",
+        "board_src":  "main"
+    },
+    {
+        "id":  "baby-food",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.435,
+        "link":  0.5114,
+        "ratio":  1.18,
+        "price":  1.79,
+        "size":  "3.5 oz",
+        "boardItem":  "Happy Tot Stage 4 Organic Pears, Raspberries, Carrots \u0026 Butternut Squash Pouch, 4 oz.",
+        "linkItem":  "Gerber Stage 4 Toddler Food, Cherry Banana Vanilla Puree Pouch",
         "board_src":  "main"
     },
     {
@@ -78,6 +104,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "canned-black-beans",
+        "store":  "Walmart",
+        "unit":  "oz",
+        "board":  0.0613,
+        "link":  0.0734,
+        "ratio":  1.2,
+        "price":  13.22,
+        "size":  "180 oz",
+        "boardItem":  "(12 pack) Great Value Organic Black Beans, Canned, 15 oz",
+        "linkItem":  "(12 pack) Great Value Organic Black Beans, Canned, 15 oz",
+        "board_src":  "main"
+    },
+    {
         "id":  "canned-chicken",
         "store":  "Aldi",
         "unit":  "oz",
@@ -88,19 +127,6 @@
         "size":  "12.5 oz",
         "boardItem":  "Brookdale Chicken Breast Extra Lean White Premium Chunk With Rib Meat IN Water 12.5 OZ",
         "linkItem":  "Brookdale Chunk Chicken Breast",
-        "board_src":  "main"
-    },
-    {
-        "id":  "chili-crisp",
-        "store":  "Walmart",
-        "unit":  "oz",
-        "board":  0.7875,
-        "link":  0.671,
-        "ratio":  0.85,
-        "price":  4.97,
-        "size":  "7.407 oz",
-        "boardItem":  "Lee Kum Kee Chiu Chow Style Chili Crisp Oil, 7.2 oz",
-        "linkItem":  "Laoganma Spicy Chili Crisp Sauce, 7.41 Fl Oz",
         "board_src":  "main"
     },
     {
@@ -182,6 +208,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "frosting",
+        "store":  "Walmart",
+        "unit":  "oz",
+        "board":  0.11,
+        "link":  0.1212,
+        "ratio":  1.1,
+        "price":  15.52,
+        "size":  "128 oz",
+        "boardItem":  "(8 pack) Pillsbury Creamy Supreme Vanilla Frosting, 16 oz Tub",
+        "linkItem":  "(8 pack) Pillsbury Creamy Supreme Vanilla Frosting, 16 oz Tub",
+        "board_src":  "main"
+    },
+    {
         "id":  "chicken-nuggets",
         "store":  "Aldi",
         "unit":  "oz",
@@ -218,19 +257,6 @@
         "size":  "1.5 lb",
         "boardItem":  "Tyson All Natural 85% Lean/15% Fat Ground Pork, 1.5 lb Tray",
         "linkItem":  "Tyson All Natural 85% Lean/15% Fat Ground Pork, 1.5 lb Tray",
-        "board_src":  "main"
-    },
-    {
-        "id":  "ground-turmeric",
-        "store":  "Walmart",
-        "unit":  "oz",
-        "board":  0.7119,
-        "link":  0.7344,
-        "ratio":  1.03,
-        "price":  11.75,
-        "size":  "16 oz",
-        "boardItem":  "Badia Ground Turmeric, 16 oz",
-        "linkItem":  "Badia Ground Turmeric, 16 oz",
         "board_src":  "main"
     },
     {
@@ -283,19 +309,6 @@
         "size":  "33.8 oz",
         "boardItem":  "Carlini Pure Olive Oil 33.8 FL OZ",
         "linkItem":  "Carlini Pure Olive Oil 33.8 FL OZ",
-        "board_src":  "main"
-    },
-    {
-        "id":  "pickled-jalapenos",
-        "store":  "Walmart",
-        "unit":  "oz",
-        "board":  0.0832,
-        "link":  0.0957,
-        "ratio":  1.15,
-        "price":  2.68,
-        "size":  "28 oz",
-        "boardItem":  "Clemente Jacques Sliced Jalapeño Peppers, Pickled Jalapeños, 28 oz Can",
-        "linkItem":  "La CosteÃ±a Pickled Sliced Jalapenos, 28 oz",
         "board_src":  "main"
     },
     {
@@ -400,6 +413,19 @@
         "size":  "1 lb",
         "boardItem":  "Strawberries Package 1 LB",
         "linkItem":  "Strawberries",
+        "board_src":  "main"
+    },
+    {
+        "id":  "tartar-sauce",
+        "store":  "Walmart",
+        "unit":  "floz",
+        "board":  0.1367,
+        "link":  0.1267,
+        "ratio":  0.93,
+        "price":  1.52,
+        "size":  "12 fl oz",
+        "boardItem":  "Great Value Tartar Sauce, 12 fl oz",
+        "linkItem":  "Great Value Tartar Sauce, 12 fl oz",
         "board_src":  "main"
     },
     {
@@ -1258,6 +1284,19 @@
         "size":  "8 oz",
         "boardItem":  "Fresh Whole White Mushrooms, Bulk",
         "linkItem":  "Freshness Guaranteed Sliced White Mushrooms, 8 oz",
+        "board_src":  "recipe"
+    },
+    {
+        "id":  "white-mushrooms",
+        "store":  "Family Fare",
+        "unit":  "oz",
+        "board":  0.3325,
+        "link":  0.3113,
+        "ratio":  0.94,
+        "price":  2.49,
+        "size":  "8 oz",
+        "boardItem":  "Our Family Mushrooms, White 12 Oz",
+        "linkItem":  "Our Family Mushrooms, White, Whole 8 Oz",
         "board_src":  "recipe"
     },
     {

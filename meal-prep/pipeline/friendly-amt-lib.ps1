@@ -117,21 +117,39 @@ function Get-FriendlyAmt {
             }
             # "1 cups" - Get-FaFrac returns the bare number and the branch appends a hardcoded plural, so
             # exactly one cup prints with an s. Small, but it is on the card.
-            if ($u -eq 'cups' -and [math]::Abs($q - 1.0) -lt 1e-9) { return '1 cup' }
+            # SPLICE THE UNIT, DO NOT REBUILD THE STRING. This returned the literal '1 cup' until 2026-08-07,
+            # which silently ATE the tail on the one branch that has one: Rice renders "1 cups dry", and
+            # "1 cup" of rice is a different claim from "1 cup DRY" of rice. It never showed up because no
+            # builder called this path - both carried their own plural-hardcoding copy. The moment they
+            # started calling it, every 185 g rice row would have lost its "dry".
+            if ($u -eq 'cups' -and [math]::Abs($q - 1.0) -lt 1e-9) {
+                return ('1 cup' + $pre.Substring($m.Index + $m.Length))
+            }
         }
         return $pre
     }
-    return (Get-FriendlyAmtCore $item $g)
+    return (Get-FriendlyAmtCore $item $g -PinnedRiceCup)
 }
 
-function Get-FriendlyAmtCore([string]$item, [double]$g) {
+function Get-FriendlyAmtCore([string]$item, [double]$g, [switch]$PinnedRiceCup) {
     if ($item -match 'Broth|Stock') {
         $cartons = Get-FaDen $item 'carton'
         if ($cartons -and $g -ge ($cartons * 0.85)) { $n = [Math]::Round($g / $cartons, 1); if ([Math]::Abs($n - [Math]::Round($n)) -lt 0.15) { $n = [Math]::Round($n) }; return ("$n carton" + $(if ($n -ne 1) { 's' })) }
         return ((Get-FaFrac ($g / 240.0)) + ' cups')
     }
     if ($item -match $script:FA_WEIGHT_MEAT -and $item -notmatch $script:FA_NOT_MEAT) { return ((Get-FaFrac ($g / $script:FA_LB)) + ' lb') }
-    if ($item -eq 'Rice')  { return ((Get-FaFrac ($g / 185.0)) + ' cups dry') }
+    # RICE READS ITS CUP FROM densities.json LIKE EVERY OTHER ITEM. It used to be the literal 185.0, in
+    # four places at once (here, build-v2-spec, build-run-specs, repair-cook-measures) - so db\densities.json
+    # said 185 and food-macros-db.json said 200 g per cup and nothing in the estate had to notice, because
+    # the number the labels actually used was typed into the code. A basis that lives in a data file can be
+    # audited against the product label; one typed into four scripts cannot.
+    # -Faithful stays PINNED to 185: its contract is "reproduce the builder that wrote the live catalog",
+    # and Test-FriendlyAmtAgainstCatalog grades against stored labels the 185 builder wrote. If the Rice
+    # basis in densities ever moves, that pin is what keeps the port test measuring the port and not the move.
+    if ($item -eq 'Rice')  {
+        $rc = if ($PinnedRiceCup) { 185.0 } else { $d = Get-FaDen 'Rice' 'cup'; if ($d -and $d -gt 0) { [double]$d } else { 185.0 } }
+        return ((Get-FaFrac ($g / $rc)) + ' cups dry')
+    }
     if ($item -eq 'Eggs')  { return ([string][int][Math]::Round($g / 50.0) + ' large eggs') }
     if ($item -match 'Pasta|Spaghetti|Ziti|Fettuccine|Orzo|Noodles|Gnocchi|Tortellini|Shells') { return ((Get-FaFrac ($g / $script:FA_OZ)) + ' oz dry') }
     if ($item -match 'Cheese|Mozzarella|Cheddar|Feta|Parmesan|Ricotta') { return ((Get-FaFrac ($g / $script:FA_OZ)) + ' oz') }

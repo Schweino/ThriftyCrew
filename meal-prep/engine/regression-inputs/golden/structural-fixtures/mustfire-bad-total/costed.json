@@ -1,0 +1,75 @@
+﻿[
+  {
+    "proposed_name": "MF One",
+    "slug": "mf-one",
+    "cost_batch": 5.2,
+    "cost_per_serving": 0.37,
+    "cost_batch_true": 5.4,
+    "cost_per_serving_true": 0.39,
+    "cost_pantry_add": 1.63,
+    "cost_first_run": 5.4,
+    "lines_priced": 2,
+    "lines_unpriced": 0,
+    "lines": [
+      {
+        "item": "MF Flour",
+        "grams": 1000,
+        "util_cost": 2.0,
+        "basis": "board:mf-flour:walmart",
+        "bulk": true,
+        "buy_n": null,
+        "buy_cost": null,
+        "pkg": null,
+        "pkg_g": null,
+        "starter_n": 2,
+        "starter_cost": 3.63,
+        "starter_pkg": "2lb bag",
+        "starter_pkg_g": 907
+      },
+      {
+        "item": "MF Beans",
+        "grams": 800,
+        "util_cost": 3.2,
+        "basis": "board:mf-beans:walmart",
+        "bulk": false,
+        "buy_n": 2,
+        "buy_cost": 3.4,
+        "pkg": "15oz can",
+        "pkg_g": 425,
+        "starter_n": null,
+        "starter_cost": null,
+        "starter_pkg": null,
+        "starter_pkg_g": null
+      }
+    ]
+  },
+  {
+    "proposed_name": "MF Two",
+    "slug": "mf-two",
+    "cost_batch": 1.7,
+    "cost_per_serving": 0.12,
+    "cost_batch_true": 1.7,
+    "cost_per_serving_true": 0.12,
+    "cost_pantry_add": 0.0,
+    "cost_first_run": 1.7,
+    "lines_priced": 1,
+    "lines_unpriced": 0,
+    "lines": [
+      {
+        "item": "MF Beans",
+        "grams": 425,
+        "util_cost": 1.7,
+        "basis": "board:mf-beans:walmart",
+        "bulk": false,
+        "buy_n": 1,
+        "buy_cost": 1.7,
+        "pkg": "15oz can",
+        "pkg_g": 425,
+        "starter_n": null,
+        "starter_cost": null,
+        "starter_pkg": null,
+        "starter_pkg_g": null
+      }
+    ]
+  }
+]

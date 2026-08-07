@@ -26,7 +26,7 @@
                  "protein":  33,
                  "carbs":  81,
                  "fat":  11,
-                 "cost_ps":  "4.30"
+                 "cost_ps":  "4.13"
              },
     "intro_html":  "Do not skip past this one because of the word pumpkin. Canned pumpkin does not make chili taste like pie. It makes it thick, a little sweet in the background, and velvety in a way that usually takes an hour of reducing. Add a spoon of cocoa powder and a pinch of cinnamon, the same move behind a good mole, and you get a chili with more depth than the standard chili powder and beans version. Nobody guesses the pumpkin. Everybody asks what is in it.",
     "ingredients_display":  [
@@ -49,7 +49,7 @@
                                 "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 1.75 lb (793 g)",
                                 "\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1.25 cups (300 g)",
                                 "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 1/2 cups (25 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.75 cups dry (893 g)"
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5 cups dry (893 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -65,13 +65,13 @@
                        "Frozen Chopped Spinach, 1.75 lb: ~$5.59. \u003cstrong\u003eBuy 3 10oz boxes: $6.01.\u003c/strong\u003e",
                        "Light Sour Cream, 1.25 cups: ~$1.08. \u003cstrong\u003eBuy 1 16oz tub: $1.64.\u003c/strong\u003e",
                        "Fresh Cilantro, 1 1/2 cups: ~$0.78. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
-                       "Rice, 4.75 cups dry: ~$1.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 5 cups dry: ~$1.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (chili powder, cocoa powder, ground cinnamon, ground cumin, salt, black pepper, cayenne pepper): ~$1.85. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $35.79 across 14 servings, so roughly $2.56 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $46.46 across 14 servings, roughly $3.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $14.51 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.97. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.30 a bowl\u003c/strong\u003e (at everyday cost) for a chili that tastes like it took a lot more effort than it did. Canned pumpkin is one of the cheapest thickeners on the shelf and it brings fiber along with it.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.13 a bowl\u003c/strong\u003e (at everyday cost) for a chili that tastes like it took a lot more effort than it did. Canned pumpkin is one of the cheapest thickeners on the shelf and it brings fiber along with it.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy plain canned pumpkin, not pie filling.\u003c/strong\u003e The pie filling is already sugared and spiced and it costs more. You want the one with a single ingredient on the label.",
                        "\u003cstrong\u003eCocoa powder is a savory ingredient too.\u003c/strong\u003e A container lasts years and a spoonful of it is what separates a good chili from a flat one. Same idea as a mole.",
@@ -89,7 +89,7 @@
                 ],
     "portion_html":  "Spread the cooked rice into your 14 containers, then set the chili pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight over the rice. Every serving lands near 563 calories with 33 grams of protein once the sour cream and cilantro go on top.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.skinnytaste.com/turkey-pumpkin-chili/\" target=\"_blank\" rel=\"noopener\"\u003eskinnytaste.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cem\u003eA chili with real depth for about $4.30 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "upsell_html":  "\u003cem\u003eA chili with real depth for about $4.13 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  35.79,
     "cost_batch_true":  46.46,
     "cost_per_serving":  2.56,
@@ -255,7 +255,7 @@
                                    "item":  "Rice",
                                    "canon":  "Rice",
                                    "grams":  893,
-                                   "buy":  "4.75 cups dry",
+                                   "buy":  "5 cups dry",
                                    "bid":"rice",
                                    "gpu":453.592
                                }
@@ -268,7 +268,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M",
-                 "costPerServing":  4.30,
+                 "costPerServing":  4.13,
                  "recipeIngredient":  [
                                           "Yellow Onion, 3 onions (350 g)",
                                           "Green Bell Peppers, 2.3 peppers (280 g)",
@@ -289,7 +289,7 @@
                                           "Frozen Chopped Spinach, 1.75 lb (793 g)",
                                           "Light Sour Cream, 1.25 cups (300 g)",
                                           "Fresh Cilantro, 1 1/2 cups (25 g)",
-                                          "Rice, 4.75 cups dry (893 g)"
+                                          "Rice, 5 cups dry (893 g)"
                                       ],
                  "steps":  [
                                "Cook the rice separately and set it aside.",

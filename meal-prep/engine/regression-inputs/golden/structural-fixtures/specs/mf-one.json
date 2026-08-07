@@ -1,0 +1,11 @@
+{
+  "name": "MF One",
+  "slug": "mf-one",
+  "_doc": "FROZEN structural fixture. Not a recipe. See ..\\README.md.",
+  "scaler": {
+    "ing": [
+      { "item": "MF Flour", "grams": 1000 },
+      { "item": "MF Beans", "grams": 800 }
+    ]
+  }
+}

@@ -55,6 +55,7 @@ param(
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path     # ...\meal-prep\pipeline
 $mp = Split-Path -Parent $here
+. (Join-Path $here 'friendly-amt-lib.ps1')                  # THE buy-label deriver (see the note where FriendlyAmt used to be)
 if(-not (Test-Path $RunDir)){ throw ("RunDir not found: $RunDir") }
 if(-not $ComputedFile){  $ComputedFile  = Join-Path $RunDir 'recipes-computed.json' }
 if(-not $CostedFile){    $CostedFile    = Join-Path $RunDir 'recipes-costed.json' }
@@ -76,16 +77,15 @@ $selected = (Get-Content $SelectedFile -Raw | ConvertFrom-Json).selected
 $canon    = Get-Content $CanonFile -Raw | ConvertFrom-Json
 $mo       = Get-Content $OverridesFile -Raw | ConvertFrom-Json
 $db       = (Get-Content $FoodDbFile -Raw | ConvertFrom-Json).items
-$dn       = (Get-Content $DensitiesFile -Raw | ConvertFrom-Json).items
 
 $dbm=@{}; foreach($i in $db){ $dbm[$i.item]=$i }
-$dnm=@{}; foreach($p in $dn.PSObject.Properties){ $dnm[$p.Name]=$p.Value }
-# each-noun map: see db\each-nouns.json. Kept in step with build-v2-spec.ps1 - both builders share the
-# FriendlyAmt each branch, so a fix in only one of them lets the bare-count bug back in through the other.
-$enm=@{}
+# densities + each-nouns load INSIDE pipeline\friendly-amt-lib.ps1, which is also where the label logic
+# lives. This block used to load them here for a private FriendlyAmt copy, under a comment promising the
+# copy would be "kept in step with build-v2-spec.ps1". It was not: the "1 cup" singular fix landed in the
+# library and neither builder called it, so 96 rows shipped "1 cups". There is one copy now.
 $EachNounsFile = Join-Path (Split-Path (Split-Path $DensitiesFile -Parent) -Parent) 'db\each-nouns.json'
 if(-not (Test-Path $EachNounsFile)){ $EachNounsFile = Join-Path (Split-Path $DensitiesFile -Parent) 'each-nouns.json' }
-foreach($p in ((Get-Content $EachNounsFile -Raw -Encoding utf8 | ConvertFrom-Json).items.PSObject.Properties)){ $enm[$p.Name]=$p.Value }
+Initialize-FriendlyAmt -DensitiesFile $DensitiesFile -EachNounsFile $EachNounsFile -Root $mp
 
 # ---- MERGED ITEM -> BOARD MAP (cost-engine Load-Map pattern; later files win) --------------------
 function Add-MapFile([hashtable]$acc,[string]$path,[string]$label,[switch]$Required){
@@ -156,59 +156,10 @@ $liveSlugs=@{}
 foreach($m in [regex]::Matches([IO.File]::ReadAllText($RecipesDbFile), '"slug"\s*:\s*"([^"]+)"')){ $liveSlugs[$m.Groups[1].Value]=1 }
 Write-Output ("live catalog slugs: " + $liveSlugs.Count)
 
-$LB=453.592; $OZ=28.3495
-function Den([string]$item,[string]$u){ if($dnm.ContainsKey($item) -and ($dnm[$item].PSObject.Properties.Name -contains $u)){ [double]$dnm[$item].$u } else { $null } }
-# The noun that goes with a COUNT - see build-v2-spec.ps1 and db\each-nouns.json for the why. A missing
-# entry throws rather than printing a bare number, which is exactly how 661 lines shipped unitless.
-function EachNoun([string]$item,[double]$n){
-  if(-not $enm.ContainsKey($item)){
-    throw ("no each-noun for '$item' - it reaches the FriendlyAmt each branch, so it needs a {one, many} entry in db\each-nouns.json (otherwise the card prints a count with no unit)")
-  }
-  if([Math]::Abs($n - 1.0) -lt 1e-9){ return [string]$enm[$item].one }
-  return [string]$enm[$item].many
-}
-function Frac([double]$v){
-  # friendly quantity: quarters for anything a quarter-unit or larger, 2 decimals below that so a
-  # small amount never prints as a bare "0" (r100 shipped "Bay Leaves ... 0 oz").
-  $r=[Math]::Round($v*4)/4
-  if($r -lt 0.25){ if($v -le 0){ return '0' }; return ([Math]::Max([Math]::Round($v,2),0.01)).ToString('0.##') }
-  if($r -eq [Math]::Floor($r)){ return ([string][int]$r) }
-  return $r.ToString('0.##')
-}
-# Items a shopper buys BY WEIGHT. Nobody scoops cups of turkey breast, kale or mushrooms into a cart,
-# and r100's cup fallback produced "Turkey Breast: 14.25 cups" / "Kale: 75.5 cups" (writer-wave finding).
-# Meats keep the r100 pounds-always rule; everything else here goes lb at a pound or more, oz below.
-$WEIGHT_MEAT   = 'Chicken|Beef|Turkey|Pork|Sausage|Chorizo|Bacon|\bHam\b|Brisket|Liver|Bratwurst|Lamb|Veal'
-$WEIGHT_FIRST  = 'Kale|Spinach|Cabbage|Mushrooms|Broccoli|Brussels|Sprouts|Green Beans|Snow Peas|Zucchini|Eggplant|Cauliflower|Collard|Bok Choy|Asparagus|Okra|Squash|Peas$|Corn$'
-# names that CONTAIN a meat word but are not sold as meat (r100 printed "Chicken Broth: 4.25 lb")
-$NOT_MEAT = 'Broth|Stock|Soup|Bouillon|Seasoning|Powder|Sauce|Gravy|Rub|Bacon Bits'
-function FriendlyAmt([string]$item,[double]$g){
-  # returns display amount string (without grams)
-  if($item -match 'Broth|Stock'){
-    $cartons = Den $item 'carton'
-    if($cartons -and $g -ge ($cartons*0.85)){ $n=[Math]::Round($g/$cartons,1); if([Math]::Abs($n-[Math]::Round($n)) -lt 0.15){ $n=[Math]::Round($n) }; return ("$n carton" + $(if($n -ne 1){'s'})) }
-    return ((Frac ($g/240.0)) + ' cups')
-  }
-  if($item -match $WEIGHT_MEAT -and $item -notmatch $NOT_MEAT){ return ((Frac ($g/$LB)) + ' lb') }
-  if($item -eq 'Rice'){ return ((Frac ($g/185.0)) + ' cups dry') }
-  if($item -eq 'Eggs'){ return ([string][int][Math]::Round($g/50.0) + ' large eggs') }
-  if($item -match 'Pasta|Spaghetti|Ziti|Fettuccine|Orzo|Noodles|Gnocchi|Tortellini|Shells'){ return ((Frac ($g/$OZ)) + ' oz dry') }
-  if($item -match 'Cheese|Mozzarella|Cheddar|Feta|Parmesan|Ricotta'){ return ((Frac ($g/$OZ)) + ' oz') }
-  $can = Den $item 'can'
-  if($can -and $g -ge ($can*0.85)){ $n=[Math]::Round($g/$can,1); if([Math]::Abs($n-[Math]::Round($n)) -lt 0.15){ $n=[Math]::Round($n) }; return ("$n can" + $(if($n -ne 1){'s'})) }
-  $each = Den $item 'each'
-  if($each -and $each -ge 40 -and $g -ge ($each*0.6)){ $n=[Math]::Round($g/$each,1); if([Math]::Abs($n-[Math]::Round($n)) -lt 0.25){ $n=[Math]::Round($n) }; return ("$n " + (EachNoun $item $n)) }
-  # bulk/leafy produce and whole-muscle cuts that reached here: weigh them, do not cup them
-  if($item -match $WEIGHT_FIRST -or $item -match $WEIGHT_MEAT){
-    if($g -ge $LB){ return ((Frac ($g/$LB)) + ' lb') }
-    return ((Frac ($g/$OZ)) + ' oz')
-  }
-  $tb = Den $item 'tbsp'
-  if($tb -and $g -lt 120){ return ((Frac ($g/$tb)) + ' tbsp') }
-  $cup = Den $item 'cup'
-  if($cup){ return ((Frac ($g/$cup)) + ' cups') }
-  return ((Frac ($g/$OZ)) + ' oz')
-}
+# ---------------- friendly amounts ----------------
+# THE LABEL LOGIC IS NOT HERE - it is in pipeline\friendly-amt-lib.ps1, dot-sourced at the top, and the
+# three call sites below use Get-FriendlyAmt. See the matching note in build-v2-spec.ps1 for why the
+# private copy that used to sit here had to go.
 function GpuStr([double]$v){ $v.ToString('0.000') }
 function Plural([string]$label,[int]$n){
   if($n -le 1){ return $label }
@@ -315,13 +266,13 @@ foreach($r in $computed){
     if(($isSpice -or ($ing.grams -lt 15 -and $util -lt 0.15)) -and $utilOnly){
       $pantryItems += $dispItem.ToLower(); $pantryUtil += $util; $foldSet[$ing.item]=1
     }
-    $display += ('<strong>' + $dispItem + $brand + ':</strong> ' + (FriendlyAmt $ing.item $ing.grams) + ' (' + [int]$ing.grams + ' g)')
+    $display += ('<strong>' + $dispItem + $brand + ':</strong> ' + (Get-FriendlyAmt $ing.item $ing.grams) + ' (' + [int]$ing.grams + ' g)')
     # Scaler entry (ALL items). The widget renders scaler.item to the READER, so it carries the display
     # name or the same page contradicts itself ("Korean glass noodles" in the ingredient list,
     # "Cornstarch" in the size widget). 'canon' keeps the canonical DB name for machines: build-card
     # emits only item/grams/buy/bid/gpu, so the payload is unchanged in shape, and update-recipes-db +
     # spec-guards read 'canon' for the macro/pricing identity. bid/gpu/pricing untouched.
-    $se = [ordered]@{ item=$dispItem; canon=$ing.item; grams=[int]$ing.grams; buy=(FriendlyAmt $ing.item $ing.grams) }
+    $se = [ordered]@{ item=$dispItem; canon=$ing.item; grams=[int]$ing.grams; buy=(Get-FriendlyAmt $ing.item $ing.grams) }
     if($bidMap.ContainsKey($ing.item) -and $bidMap[$ing.item].bid){
       $b=$bidMap[$ing.item]
       $se.bid=$b.bid; $se.gpu=(GpuStr (Resolve-ScalerGpu $ing.item $b.bid $b.gpu $b.unit))
@@ -338,7 +289,7 @@ foreach($r in $computed){
     if($foldSet.ContainsKey($ing.item)){ continue }
     $util=[double]$cl.util_cost
     $sumUtil += $util
-    $amt = FriendlyAmt $ing.item $ing.grams
+    $amt = Get-FriendlyAmt $ing.item $ing.grams
     $nm  = DispName $slug $ing.item
     if($cl.bulk){
       $sumTrue += $util
@@ -377,8 +328,13 @@ foreach($r in $computed){
   if([Math]::Abs($batch-[double]$cost.cost_batch) -gt 0.005){ throw ($slug + ': spec batch ' + $batch + ' != engine ' + $cost.cost_batch) }
   if([Math]::Abs($trueC-[double]$cost.cost_batch_true) -gt 0.005){ throw ($slug + ': spec true ' + $trueC + ' != engine ' + $cost.cost_batch_true) }
   if([Math]::Abs(($trueC+$pantryAdd)-$firstRun) -gt 0.005){ throw ($slug + ': first_run ' + $firstRun + ' != true+add ' + ($trueC+$pantryAdd)) }
-  $costHtml += ('<strong>Batch total: about $' + $batch.ToString('0.00') + ' across 14 servings, so roughly $' + $cps.ToString('0.00') + ' per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.')
-  $costHtml += ('<strong>True shopping cost: about $' + $trueC.ToString('0.00') + ' across 14 servings, roughly $' + $cpsTrue.ToString('0.00') + ' per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.')
+  # SERVING NOUN: kept identical to pipeline\cost-render-lib.ps1 (2026-08-07). These are two copies of the
+  # same rendered sentence, so a fix to one that skips the other reintroduces the bug the day a run goes
+  # through the other builder. Default stays "bowl"; the 'bowl' test is second because beef-burrito-bowls
+  # and the other burrito BOWLS contain "burrito".
+  $servingNoun = if($slug -match 'burrito' -and $slug -notmatch 'bowl'){ 'burrito' } else { 'bowl' }
+  $costHtml += ('<strong>Batch total: about $' + $batch.ToString('0.00') + ' across 14 servings, so roughly $' + $cps.ToString('0.00') + ' per ' + $servingNoun + '.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.')
+  $costHtml += ('<strong>True shopping cost: about $' + $trueC.ToString('0.00') + ' across 14 servings, roughly $' + $cpsTrue.ToString('0.00') + ' per ' + $servingNoun + '.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.')
   if($pantryAdd -gt 0){
     $costHtml += ('<strong>Starting with an empty pantry? Add about $' + $pantryAdd.ToString('0.00') + ' one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $' + $firstRun.ToString('0.00') + '. Those containers then feed this batch and many more after it.')
   }

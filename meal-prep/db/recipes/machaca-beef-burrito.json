@@ -1,0 +1,240 @@
+{
+    "name":  "Machaca Beef Burrito",
+    "slug":  "machaca-beef-burrito",
+    "cuisine":  "Sonoran",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.slenderkitchen.com/recipe/machaca-burritos",
+    "source_site":  "slenderkitchen.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Stage-1 build B3 ships with NO cheese; chuck at 4 oz raw leaves no calorie room and I did not add any.",
+                         "Chuck (Beef Chuck Roast) reproduces stage-1 density 1.90 cal/g on the drained-shredded basis.",
+                         "Rice stored as DRY grams (152g) so the dry food-DB Rice row reproduces stage-1 cooked-rice calories.",
+                         "WRITER ADDITION, flag for audit: stage-1 B3 listed only chuck, pinto, rice, lettuce, cilantro, which is not a machaca. I added Yellow Onion and Diced Green Chiles as the shredded-beef sofrito (both board-priced, both fit inside the cap headroom) so the dish is an actual Sonoran machaca. Revert if the auditor wants a strict stage-1 mirror.",
+                         "SUBSTITUTION, flag for audit: stage-1\u0027s \u0027lettuce\u0027 has no canonical board or food-DB item. Mapped to Green Cabbage (shredded), which is more appropriate for a week of meal-prep because it does not wilt. If a Lettuce commodity is added later, swap it back.",
+                         "Cousin: none in the catalog."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  396,
+                 "protein":  31,
+                 "carbs":  41,
+                 "fat":  15,
+                 "cost_ps":  "4.19"
+             },
+    "intro_html":  "Machaca is Sonoran comfort food, beef braised until it shreds into strands and cooked down with onion and green chile until every thread is seasoned. This build keeps it lean and honest at about \u003cstrong\u003e396 calories\u003c/strong\u003e and \u003cstrong\u003e31 grams of protein\u003c/strong\u003e a burrito, in a tortilla that brings 18 grams of fiber for 5 grams of net carb. There is no cheese in this one, and it does not need it. The chile and the shredded chuck do the heavy lifting, and a handful of cold cabbage at the end keeps it fresh straight out of the fridge.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003ePinto Beans:\u003c/strong\u003e 2.3 cans (588 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 0.75 cups dry (152 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.5 onions (168 g)",
+                                "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 1.2 cans (140 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 10 oz (280 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 bunch (14 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tsp (14 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Beef Chuck Roast, 3.5 lb: ~$27.90. \u003cstrong\u003eBuy 4 lbs: $31.88.\u003c/strong\u003e",
+                       "Pinto Beans, 2.3 cans: ~$2.01. \u003cstrong\u003eBuy 3 15.5oz cans: $2.62.\u003c/strong\u003e",
+                       "Rice, 0.75 cups dry: ~$0.19. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1.5 onions: ~$0.42. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Diced Green Chiles, 1.2 cans: ~$1.35. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz cans.\u003c/strong\u003e",
+                       "Green Cabbage, 10 oz: ~$0.52. \u003cstrong\u003eBuy 1 head: $1.69.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 bunch: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, salt): ~$0.16. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $44.37 across 14 servings, so roughly $3.17 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $54.75 across 14 servings, roughly $3.91 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $3.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.65. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "Chuck roast and canned beans keep this cheap for a shredded-beef dinner. Buy the roast on sale and the cost tab number drops with it.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eChuck roast is the budget shredder.\u003c/strong\u003e It is cheaper than steak and built for a long braise. Buy it when the roast price drops and freeze what you do not use this week.",
+                       "\u003cstrong\u003eCanned green chiles carry the flavor.\u003c/strong\u003e A small can of diced green chiles is a couple of quarters and lasts, so the machaca taste costs almost nothing per serving.",
+                       "\u003cstrong\u003eA head of cabbage goes a long way.\u003c/strong\u003e One head shreds into far more than this batch needs and keeps for weeks, which is why it beats a bag of lettuce that dies in three days."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice per the package and set it aside.",
+                    "Season the chuck roast with the cumin and salt, then braise it with the diced onion and green chiles and a cup of water, covered, until it pulls apart with a fork.",
+                    "Shred the beef right in the pot and let it simmer uncovered a few minutes so it soaks up the chile and onion.",
+                    "Drain and rinse the pinto beans, then fold them and the cooked rice into the shredded beef and warm through.",
+                    "Shred the cabbage and chop the cilantro and keep them cold and separate; they go on at wrap time so they stay crisp.",
+                    "Warm the tortillas, then portion and wrap as below."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total hot filling weight. Divide it by 14, spoon that amount onto each warm tortilla, top with an even share of the cold cabbage and cilantro, and roll. Every burrito lands at about \u003cstrong\u003e396 calories and 31 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.slenderkitchen.com/recipe/machaca-burritos\" target=\"_blank\" rel=\"noopener\"\u003eslenderkitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  44.37,
+    "cost_batch_true":  54.75,
+    "cost_per_serving":  3.17,
+    "cost_per_serving_true":  3.91,
+    "cost_pantry_add":  3.9,
+    "cost_first_run":  58.65,
+    "scaler":  {
+                   "cost":  "54.75",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Pinto Beans",
+                                   "canon":  "Canned Pinto Beans",
+                                   "grams":  588,
+                                   "buy":  "2.3 cans",
+                                   "bid":  "canned-pinto-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  152,
+                                   "buy":  "0.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  168,
+                                   "buy":  "1.5 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Green Chiles",
+                                   "canon":  "Diced Green Chiles",
+                                   "grams":  140,
+                                   "buy":  "1.2 cans",
+                                   "bid":  "canned-green-chilies",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Cabbage",
+                                   "canon":  "Green Cabbage",
+                                   "grams":  280,
+                                   "buy":  "10 oz",
+                                   "bid":  "cabbage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  14,
+                                   "buy":  "1 bunch",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A Sonoran machaca beef burrito for meal prep: chuck braised and shredded with onion and green chile, no cheese, about 396 calories and 31 grams of protein per serving.",
+                 "keywords":  "machaca burrito, sonoran shredded beef, chuck roast burrito, budget meal prep, mexican meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT2H30M",
+                 "totalTime":  "PT2H50M",
+                 "costPerServing":  4.19,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Beef Chuck Roast, 3.5 lb (1588 g)",
+                                          "Pinto Beans, 2.3 cans (588 g)",
+                                          "Rice, 0.75 cups dry (152 g)",
+                                          "Yellow Onion, 1.5 onions (168 g)",
+                                          "Diced Green Chiles, 1.2 cans (140 g)",
+                                          "Green Cabbage, 10 oz (280 g)",
+                                          "Fresh Cilantro, 1 bunch (14 g)",
+                                          "Ground Cumin, 1 tbsp (7 g)",
+                                          "Salt, 2.25 tsp (14 g)"
+                                      ],
+                 "steps":  [
+                               "Cook the rice per the package and set aside.",
+                               "Season the chuck with cumin and salt and braise with the onion and green chiles until fork tender.",
+                               "Shred the beef in the pot and simmer uncovered to reduce.",
+                               "Fold in the drained pinto beans and the rice and warm through.",
+                               "Weigh the filling, divide by 14, spoon onto warm tortillas, top with cold cabbage and cilantro, and roll."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Canned Pinto Beans",
+                                  "grams":  588
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  152
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  168
+                              },
+                              {
+                                  "item":  "Diced Green Chiles",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Green Cabbage",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              }
+                          ]
+}

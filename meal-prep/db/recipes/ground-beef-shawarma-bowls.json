@@ -1,4 +1,4 @@
-﻿{
+{
     "name":  "Ground Beef Shawarma Bowls",
     "slug":  "ground-beef-shawarma-bowls",
     "cuisine":  "Middle Eastern",
@@ -15,12 +15,12 @@
                  "protein":  48,
                  "carbs":  68,
                  "fat":  13,
-                 "cost_ps":  "3.96"
+                 "cost_ps":  "3.75"
              },
-    "intro_html":  "Warm, spiced shawarma flavor over rice with a cool yogurt drizzle, all made at home for cheap. Each serving delivers 48 grams of protein for about $3.96 (at everyday cost) and the batch makes 14 bowls. That is a spice-shop of flavor for less than the price of a single street-cart wrap.",
+    "intro_html":  "Warm, spiced shawarma flavor over rice with a cool yogurt drizzle, all made at home for cheap. Each serving delivers 48 grams of protein for about $3.75 (at everyday cost) and the batch makes 14 bowls. That is a spice-shop of flavor for less than the price of a single street-cart wrap.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6 cups dry (1120 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.25 cups dry (1120 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
                                 "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (500 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 1 can (400 g)",
@@ -31,7 +31,7 @@
                                 "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 2/3 tbsp (6 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
-    "cost_closing_html":  "About \u003cstrong\u003e$3.96 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.75 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Build the shawarma spice from \u003cstrong\u003ecumin, paprika, and garlic powder\u003c/strong\u003e in your rack instead of paying up for a pre-mixed shawarma blend.",
                        "A \u003cstrong\u003etub of plain greek yogurt\u003c/strong\u003e gives you the classic cool sauce and adds protein for pennies per serving.",
@@ -66,7 +66,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  1120,
-                                   "buy":  "6 cups dry",
+                                   "buy":  "6.25 cups dry",
                                    "bid":  "jasmine-rice",
                                    "gpu":  28.3495
                                },
@@ -129,12 +129,12 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Middle Eastern meal prep. Fourteen servings at about 595 calories and 48 grams of protein for roughly $3.96 each (at everyday cost).",
+                 "description":  "A high-protein Middle Eastern meal prep. Fourteen servings at about 595 calories and 48 grams of protein for roughly $3.75 each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, ground beef shawarma bowls, budget dinner",
-                 "costPerServing":  3.96,
+                 "costPerServing":  3.75,
                  "recipeIngredient":  [
                                           "93/7 Ground Beef, 6 lb (2450 g)",
-                                          "Rice, 6 cups dry (1120 g)",
+                                          "Rice, 6.25 cups dry (1120 g)",
                                           "Yellow Onion, 3 onions (300 g)",
                                           "Greek Yogurt, 1 tub (500 g)",
                                           "Diced Tomatoes, 1 can (400 g)",

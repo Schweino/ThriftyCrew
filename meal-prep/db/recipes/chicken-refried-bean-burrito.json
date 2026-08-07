@@ -1,0 +1,209 @@
+{
+    "name":  "Chicken and Refried Bean Burrito",
+    "slug":  "chicken-refried-bean-burrito",
+    "cuisine":  "Tex-Mex",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.onelovelylife.com/ground-chicken-burritos/",
+    "source_site":  "onelovelylife.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "STAGE2: built from burrito-stage1-builds C3. REBUILT from the source\u0027s ground chicken onto diced chicken breast. Ground chicken is banned this batch and appears nowhere.",
+                         "Sour cream in the source is swapped to Greek yogurt per the batch rule, which also lifts the protein.",
+                         "This is the creamy refried-bean plate. It is kept distinct from the live-adjacent whole-bean and salsa build (C15 chicken and bean); refried plus Greek-yogurt reads as a different plate. If the pair is collapsed downstream, this is the one to cut per the selector note.",
+                         "FLAG for mapper: Refried Beans has a food-macros-db row but NO db/ingredients.json board row. Needed for build-v2-spec to cost this spec."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "ground chicken"
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  347,
+                 "protein":  38,
+                 "carbs":  35,
+                 "fat":  10,
+                 "cost_ps":  "2.73"
+             },
+    "intro_html":  "This is the burrito you make when the week is already tired and you need something that eats like a hug. Diced chicken breast gets a hard hit of taco seasoning, then it rides a layer of warm refried beans and a swipe of Greek yogurt that stands in for sour cream and pays you back in protein. Every burrito lands \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e38 grams of protein\u003c/strong\u003e, on a high fiber tortilla that brings only about 5 grams of net carb of its own. It is the creamy, refried-bean cousin to our whole black bean and salsa chicken burrito. That one pulls a rotisserie bird and leans on salsa and a Mexican cheese blend; this one hits diced breast with taco seasoning, folds in a Greek yogurt crema and cheddar, and swaps the whole beans for refried.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
+                                "\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 8.75 tbsp (70 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1.5 cups (392 g)",
+                                "\u003cstrong\u003eRefried Beans (Great Value):\u003c/strong\u003e 1.5 cans (700 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 7 oz (196 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1.75 tbsp (28 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 bunch (14 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 3.5 lb: ~$7.78. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "Greek Yogurt, 1.5 cups: ~$1.42. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Refried Beans, 1.5 cans: ~$1.67. \u003cstrong\u003eBuy 2 16oz cans: $2.16.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 7 oz: ~$1.49. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "Lime Juice, 1.75 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 bunch: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Pantry seasonings (taco seasoning): ~$0.74. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.56 across 14 servings, so roughly $1.83 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.19 across 14 servings, roughly $2.37 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.96 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.15. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.73 a burrito\u003c/strong\u003e (at everyday cost) for the kind of cheap, creamy, filling dinner that made bean burritos famous in the first place. The beans carry the cost down and the yogurt carries the protein up.",
+    "shop_smart":  [
+                       "Refried beans in the can are one of the cheapest, most filling things in the store. Buy the plain or the fat free version and season them yourself so you control the salt.",
+                       "Taco seasoning costs almost nothing if you buy the bulk container instead of the single packets, and this batch uses a good spoonful per burrito.",
+                       "Greek yogurt does double duty across a lot of these recipes, so buy the big tub. It is cheaper per ounce and it is the sour cream stand-in that keeps this whole batch lean.",
+                       "Chicken breast in the family pack is the move. Dice what this recipe needs and freeze the rest for next week."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Dice the chicken breast into small cubes, toss with the taco seasoning, and cook in a dry or lightly oiled skillet over medium high heat until browned and cooked through.",
+                    "Warm the refried beans in a small pot with a splash of water until they are spreadable.",
+                    "Stir the lime juice and chopped cilantro into the Greek yogurt to make a quick crema.",
+                    "Spread a stripe of refried beans down each tortilla, add a share of the seasoned chicken, a spoon of the yogurt crema and a scatter of shredded cheddar.",
+                    "To keep them even, weigh the beans, chicken and cheese together, subtract the empty bowl, and divide by 14 before you build, so each burrito gets the same load.",
+                    "Fold in the sides, roll tight, wrap each one, and portion into 14 containers."
+                ],
+    "portion_html":  "Weigh the components, divide by 14, and build each burrito to the same number so nobody gets the sad one. Each burrito carries \u003cstrong\u003e347 calories and 38 grams of protein\u003c/strong\u003e. Reheat wrapped for a minute or two, and the beans keep everything moist.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.onelovelylife.com/ground-chicken-burritos/\" target=\"_blank\" rel=\"noopener\"\u003eonelovelylife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Chicken and refried bean burritos, 14 wrapped and ready, for about $2.73 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  25.56,
+    "cost_batch_true":  33.19,
+    "cost_per_serving":  1.83,
+    "cost_per_serving_true":  2.37,
+    "cost_pantry_add":  4.96,
+    "cost_first_run":  38.15,
+    "scaler":  {
+                   "cost":  "33.19",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1582,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Taco Seasoning",
+                                   "canon":  "Taco Seasoning",
+                                   "grams":  70,
+                                   "buy":  "8.75 tbsp",
+                                   "bid":  "taco-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "canon":  "Greek Yogurt",
+                                   "grams":  392,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Refried Beans",
+                                   "canon":  "Refried Beans",
+                                   "grams":  700,
+                                   "buy":  "1.5 cans",
+                                   "bid":  "refried-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  196,
+                                   "buy":  "7 oz",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  28,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  14,
+                                   "buy":  "1 bunch",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken and refried bean burritos with taco-seasoned diced breast, warm refried beans and a Greek yogurt crema. 14 wrapped at 347 calories, 38g protein, about $2.73 (at everyday cost).",
+                 "keywords":  "chicken refried bean burrito, high protein bean burrito, taco chicken meal prep, greek yogurt crema burrito, budget burrito meal prep, low calorie chicken burrito",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT15M",
+                 "totalTime":  "PT30M",
+                 "costPerServing":  2.73,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Boneless Skinless Chicken Breast, 3.5 lb (1582 g)",
+                                          "Taco Seasoning, 8.75 tbsp (70 g)",
+                                          "Greek Yogurt, 1.5 cups (392 g)",
+                                          "Refried Beans, 1.5 cans (700 g)",
+                                          "Cheddar Cheese, Shredded, 7 oz (196 g)",
+                                          "Lime Juice, 1.75 tbsp (28 g)",
+                                          "Fresh Cilantro, 1 bunch (14 g)"
+                                      ],
+                 "steps":  [
+                               "Dice and season the chicken breast with taco seasoning, then cook until browned.",
+                               "Warm the refried beans until spreadable.",
+                               "Stir lime and cilantro into Greek yogurt for a crema.",
+                               "Build each tortilla with beans, chicken, crema and cheddar, weighing to divide evenly by 14, then roll and portion."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1582
+                              },
+                              {
+                                  "item":  "Taco Seasoning",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  392
+                              },
+                              {
+                                  "item":  "Refried Beans",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  14
+                              }
+                          ]
+}

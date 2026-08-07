@@ -82,6 +82,7 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path     # ...\meal-prep\pipe
 $mp   = Split-Path -Parent $here                            # ...\meal-prep
 . (Join-Path $here 'head-ingredients-lib.ps1')              # head.recipeIngredient derived from ingredients_display
 . (Join-Path $here 'cost-render-lib.ps1')                   # THE cost-block renderer, shared with recost-spec-cost-block
+. (Join-Path $here 'friendly-amt-lib.ps1')                  # THE buy-label deriver - see the block comment below
 if(-not $OutDir){        $OutDir        = Join-Path $mp 'db\recipes' }
 if(-not $CostedFile){    $CostedFile    = Join-Path $mp 'db\costed.json' }
 if(-not $IngredientsDb){ $IngredientsDb = Join-Path $mp 'db\ingredients.json' }
@@ -92,7 +93,6 @@ if(-not $FeedFile){      $FeedFile      = Join-Path (Split-Path $mp -Parent) 'gr
 if(-not $NoBoardOkFile){ $NoBoardOkFile = Join-Path $mp 'db\no-board-price-ok.json' }
 if(-not $ManifestFile){  $ManifestFile  = Join-Path $mp 'pipeline\v2-perserving.json' }
 
-$LB=453.592; $OZ=28.3495
 
 # ---------------- intake ----------------
 $intake = Get-Content $InFile -Raw -Encoding utf8 | ConvertFrom-Json
@@ -115,10 +115,7 @@ $ITEMS=@{}
 foreach($row in (Get-Content $IngredientsDb -Raw -Encoding utf8 | ConvertFrom-Json)){ $ITEMS[[string]$row.item]=$row }
 $dbm=@{}
 foreach($i in ((Get-Content $FoodDb -Raw -Encoding utf8 | ConvertFrom-Json).items)){ $dbm[[string]$i.item]=$i }
-$dnRoot = Get-Content $DensitiesFile -Raw -Encoding utf8 | ConvertFrom-Json
-$dnm=@{}; foreach($p in $dnRoot.items.PSObject.Properties){ $dnm[$p.Name]=$p.Value }
-$enm=@{}
-foreach($p in ((Get-Content $EachNounsFile -Raw -Encoding utf8 | ConvertFrom-Json).items.PSObject.Properties)){ $enm[$p.Name]=$p.Value }
+Initialize-FriendlyAmt -DensitiesFile $DensitiesFile -EachNounsFile $EachNounsFile -Root $mp   # densities + each-nouns now load INSIDE the label library
 $noBoardOk=@{}
 if(Test-Path $NoBoardOkFile){ foreach($b in ((Get-Content $NoBoardOkFile -Raw -Encoding utf8 | ConvertFrom-Json).bids)){ $noBoardOk[[string]$b]=1 } }
 
@@ -152,59 +149,17 @@ function Resolve-ScalerGpu([string]$item,[string]$bid,[double]$gpu,[string]$mapU
   return $gpu
 }
 
-# ---------------- friendly amounts (ported from r300 build-specs, deltas 5/6 kept) ----------------
-function Den([string]$item,[string]$u){ if($dnm.ContainsKey($item) -and ($dnm[$item].PSObject.Properties.Name -contains $u)){ [double]$dnm[$item].$u } else { $null } }
-# The noun that goes with a COUNT. Every other FriendlyAmt branch appends its unit; the each branch used
-# to return the bare number, and 661 lines shipped reading "Potato (generic): 18.4 (3909 g)" - a typo as
-# far as a reader can tell, recoverable only from the gram restatement. The noun cannot be derived from
-# densities because 'each' is overloaded there (Chicken Broth each = 240 g IS a cup), so it is stated per
-# item in db\each-nouns.json. A missing entry THROWS: a bare number is how this bug shipped the first time.
-function EachNoun([string]$item,[double]$n){
-  if(-not $enm.ContainsKey($item)){
-    throw ("no each-noun for '$item' - it reaches the FriendlyAmt each branch, so it needs a {one, many} entry in db\each-nouns.json (otherwise the card prints a count with no unit)")
-  }
-  if([Math]::Abs($n - 1.0) -lt 1e-9){ return [string]$enm[$item].one }
-  return [string]$enm[$item].many
-}
-function Frac([double]$v){
-  # friendly quantity: quarters for anything a quarter-unit or larger, 2 decimals below that so a
-  # small amount never prints as a bare "0" (r100 shipped "Bay Leaves ... 0 oz").
-  $r=[Math]::Round($v*4)/4
-  if($r -lt 0.25){ if($v -le 0){ return '0' }; return ([Math]::Max([Math]::Round($v,2),0.01)).ToString('0.##') }
-  if($r -eq [Math]::Floor($r)){ return ([string][int]$r) }
-  return $r.ToString('0.##')
-}
-# Items a shopper buys BY WEIGHT. Nobody scoops cups of turkey breast, kale or mushrooms into a cart
-# (r100's cup fallback printed "Turkey Breast: 14.25 cups" - writer-wave finding).
-$WEIGHT_MEAT   = 'Chicken|Beef|Turkey|Pork|Sausage|Chorizo|Bacon|\bHam\b|Brisket|Liver|Bratwurst|Lamb|Veal'
-$WEIGHT_FIRST  = 'Kale|Spinach|Cabbage|Mushrooms|Broccoli|Brussels|Sprouts|Green Beans|Snow Peas|Zucchini|Eggplant|Cauliflower|Collard|Bok Choy|Asparagus|Okra|Squash|Peas$|Corn$'
-# names that CONTAIN a meat word but are not sold as meat (r100 printed "Chicken Broth: 4.25 lb")
-$NOT_MEAT = 'Broth|Stock|Soup|Bouillon|Seasoning|Powder|Sauce|Gravy|Rub|Bacon Bits'
-function FriendlyAmt([string]$item,[double]$g){
-  if($item -match 'Broth|Stock'){
-    $cartons = Den $item 'carton'
-    if($cartons -and $g -ge ($cartons*0.85)){ $n=[Math]::Round($g/$cartons,1); if([Math]::Abs($n-[Math]::Round($n)) -lt 0.15){ $n=[Math]::Round($n) }; return ("$n carton" + $(if($n -ne 1){'s'})) }
-    return ((Frac ($g/240.0)) + ' cups')
-  }
-  if($item -match $WEIGHT_MEAT -and $item -notmatch $NOT_MEAT){ return ((Frac ($g/$LB)) + ' lb') }
-  if($item -eq 'Rice'){ return ((Frac ($g/185.0)) + ' cups dry') }
-  if($item -eq 'Eggs'){ return ([string][int][Math]::Round($g/50.0) + ' large eggs') }
-  if($item -match 'Pasta|Spaghetti|Ziti|Fettuccine|Orzo|Noodles|Gnocchi|Tortellini|Shells'){ return ((Frac ($g/$OZ)) + ' oz dry') }
-  if($item -match 'Cheese|Mozzarella|Cheddar|Feta|Parmesan|Ricotta'){ return ((Frac ($g/$OZ)) + ' oz') }
-  $can = Den $item 'can'
-  if($can -and $g -ge ($can*0.85)){ $n=[Math]::Round($g/$can,1); if([Math]::Abs($n-[Math]::Round($n)) -lt 0.15){ $n=[Math]::Round($n) }; return ("$n can" + $(if($n -ne 1){'s'})) }
-  $each = Den $item 'each'
-  if($each -and $each -ge 40 -and $g -ge ($each*0.6)){ $n=[Math]::Round($g/$each,1); if([Math]::Abs($n-[Math]::Round($n)) -lt 0.25){ $n=[Math]::Round($n) }; return ("$n " + (EachNoun $item $n)) }
-  if($item -match $WEIGHT_FIRST -or $item -match $WEIGHT_MEAT){
-    if($g -ge $LB){ return ((Frac ($g/$LB)) + ' lb') }
-    return ((Frac ($g/$OZ)) + ' oz')
-  }
-  $tb = Den $item 'tbsp'
-  if($tb -and $g -lt 120){ return ((Frac ($g/$tb)) + ' tbsp') }
-  $cup = Den $item 'cup'
-  if($cup){ return ((Frac ($g/$cup)) + ' cups') }
-  return ((Frac ($g/$OZ)) + ' oz')
-}
+# ---------------- friendly amounts ----------------
+# THE LABEL LOGIC IS NOT HERE. It lives in pipeline\friendly-amt-lib.ps1, dot-sourced at the top, and this
+# script calls Get-FriendlyAmt below.
+#
+# It used to live here, inline, as a private copy - and build-run-specs.ps1 carried a second copy, and the
+# library a third. That is why "1 cup" kept coming back: friendly-amt-lib grew the fix (Get-FriendlyAmt's
+# non-Faithful tail rewrites the hardcoded plural), the two builders never called it, and every spec they
+# wrote shipped "Salsa: 1 cups" anyway. 96 rows across 78 specs were still carrying it on 2026-08-07. Same
+# shape as the "per bowl" sentence that lived in both cost-render-lib.ps1 and build-run-specs.ps1.
+#
+# A fix to a label rule now has exactly one place to land. Do not re-inline this.
 function GpuStr([double]$v){ $v.ToString('0.000') }
 
 # ---------------- parallel ingredient arrays ----------------
@@ -214,7 +169,7 @@ foreach($ing in $intake.ingredients){
   $g = [int][Math]::Round([double]$ing.grams,0)
   if($g -le 0){ throw ("zero/negative grams on '$item' - intake must not carry zero-gram rows") }
   $dispItem = if((IProp $ing 'display_name') -and $ing.display_name){ [string]$ing.display_name } else { $item }
-  $buy = if((IProp $ing 'buy') -and $ing.buy){ [string]$ing.buy } else { FriendlyAmt $item $g }
+  $buy = if((IProp $ing 'buy') -and $ing.buy){ [string]$ing.buy } else { Get-FriendlyAmt $item $g }
   # brand paren from the food DB (same filter as r300 build-specs); a renamed ingredient carries its
   # own parenthetical - a second brand paren would read as nonsense and the brand belongs to the
   # canonical item, not the reader-facing name
@@ -274,7 +229,14 @@ if(-not $SkipMacroCheck){
   if([Math]::Abs($calPS - $stat.cal) -gt 5){ throw ("stat cal {0} != DB recompute {1} (tolerance 5)" -f $stat.cal,$calPS) }
   if([Math]::Abs($protPS - $stat.protein) -gt 2){ throw ("stat protein {0} != DB recompute {1} (tolerance 2)" -f $stat.protein,$protPS) }
 }
-if($stat.cal -lt 550){ Write-Warning ("550 GATE: {0} cal/serving is under the house floor - spec-guards will fail this" -f $stat.cal) }
+# CAL FLOOR (2026-08-06): the house dinner floor is 550, but a FORMAT may declare its own. Wrapped
+# burritos are capped at 400 cal by design (fixed 90-cal high-fiber tortilla + 4 oz raw meat), so a
+# constant 550 would reject the entire category. An intake may carry cal_floor; spec-guards enforces the
+# same number and asserts a lowered floor only ever appears on a burrito slug. Default stays 550, so
+# every existing recipe is unaffected.
+$calFloor = 550
+if((IProp $intake 'cal_floor') -and $null -ne $intake.cal_floor){ $calFloor = [int]$intake.cal_floor }
+if($stat.cal -lt $calFloor){ Write-Warning ("CAL FLOOR: {0} cal/serving is under the declared floor {1} - spec-guards will fail this" -f $stat.cal,$calFloor) }
 if($stat.protein -lt 25){ Write-Warning ("PROTEIN FLOOR: {0} g/serving is under 25 g - spec-guards will fail this" -f $stat.protein) }
 
 # ---------------- prose ----------------
@@ -386,6 +348,7 @@ function Build-Spec($cf){
   }
   if(IProp $intake 'writer_notes'){ $spec.writer_notes = @($intake.writer_notes) }
   if(IProp $intake 'forbidden_prose_terms'){ $spec.forbidden_prose_terms = @($intake.forbidden_prose_terms) }
+  if($calFloor -ne 550){ $spec.cal_floor = $calFloor }   # only written when the format overrides the house floor
   $psShow = if($null -ne $everydayPs){ $everydayPs } elseif($cf){ $cf.cps } else { $null }
   $statOut = [ordered]@{ cal=$stat.cal; protein=$stat.protein; carbs=$stat.carbs; fat=$stat.fat; cost_ps=$(if($null -ne $psShow){ $psShow.ToString('0.00') } else { '0.00' }) }
   $spec.stat = $statOut

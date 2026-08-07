@@ -123,6 +123,16 @@
       "buy_pkg_label":  "13.8oz can"
   },
   {
+      "item":  "Avocado",
+      "bid":  "avocados",
+      "gpu":  150,
+      "unit":  "each",
+      "board":  "weekly",
+      "buy_pkg_g":  150,
+      "buy_pkg_label":  "each",
+      "note":  "gpu = edible flesh per medium avocado, FDA NLEA basis (label serving 1/3 medium = 50 g). Grams in recipes are flesh grams."
+  },
+  {
       "item":  "Au Jus Gravy Mix",
       "bid":  "au-jus-gravy-mix",
       "gpu":  28.3495,
@@ -375,6 +385,25 @@
       "bulk":  true
   },
   {
+      "item":  "Canned Black Beans",
+      "bid":  "canned-black-beans",
+      "gpu":  28.3495,
+      "unit":  "oz",
+      "board":  "weekly",
+      "buy_pkg_g":  425,
+      "buy_pkg_label":  "15oz can",
+      "note":  "plain canned black beans - deliberately distinct from Seasoned Black Beans (denser macro row); do not consolidate"
+  },
+  {
+      "item":  "Canned Pinto Beans",
+      "bid":  "canned-pinto-beans",
+      "gpu":  28.3495,
+      "unit":  "oz",
+      "board":  "weekly",
+      "buy_pkg_g":  439,
+      "buy_pkg_label":  "15.5oz can"
+  },
+  {
       "item":  "Cannellini Beans",
       "bid":  "cannellini-beans",
       "gpu":  28.3495,
@@ -615,6 +644,10 @@
   },
   {
       "item":  "Cottage Cheese",
+      "bid":  "cottage-cheese",
+      "gpu":  28.3495,
+      "unit":  "oz",
+      "board":  "weekly",
       "buy_pkg_g":  680,
       "buy_pkg_label":  "24oz tub"
   },
@@ -867,7 +900,14 @@
       "buy_pkg_label":  "8oz bag"
   },
   {
-      "item":  "Fat Free Cottage Cheese"
+      "item":  "Fat Free Cottage Cheese",
+      "bid":  "cottage-cheese",
+      "gpu":  28.3495,
+      "unit":  "oz",
+      "board":  "weekly",
+      "buy_pkg_g":  680,
+      "buy_pkg_label":  "24oz tub",
+      "note":  "same cottage-cheese board id as the regular row: store lines price regular and fat free at the same shelf price class"
   },
   {
       "item":  "Fat Free Mozzarella"
@@ -1269,6 +1309,15 @@
       "buy_pkg_label":  "lb"
   },
   {
+      "item":  "High Fiber Tortilla",
+      "bid":  "high-fiber-tortillas",
+      "gpu":  65,
+      "unit":  "each",
+      "board":  "weekly",
+      "buy_pkg_g":  388,
+      "buy_pkg_label":  "6ct pack"
+  },
+  {
       "item":  "Hoisin Sauce",
       "bid":  "hoisin-sauce",
       "gpu":  29.57,
@@ -1481,6 +1530,16 @@
       "board":  "weekly",
       "buy_pkg_g":  397,
       "buy_pkg_label":  "14oz pack"
+  },
+  {
+      "item":  "Mango",
+      "bid":  "mangoes",
+      "gpu":  336,
+      "unit":  "each",
+      "board":  "weekly",
+      "buy_pkg_g":  336,
+      "buy_pkg_label":  "each",
+      "note":  "gpu = edible flesh per fruit (USDA FDC: mangos, raw, 1 fruit = 336 g). Grams in recipes are flesh grams."
   },
   {
       "item":  "Marinara Sauce",
@@ -1853,6 +1912,16 @@
       "buy_pkg_label":  "29oz can"
   },
   {
+      "item":  "Ranch Dressing",
+      "bid":  "ranch-dressing",
+      "gpu":  28,
+      "unit":  "floz",
+      "board":  "weekly",
+      "buy_pkg_g":  448,
+      "buy_pkg_label":  "16floz bottle",
+      "note":  "gpu 28 g/floz from the GV Classic Ranch label (2 tbsp = 28 g)"
+  },
+  {
       "item":  "Ranch Seasoning Mix",
       "bid":  "ranch-seasoning-mix",
       "gpu":  28.3495,
@@ -1924,6 +1993,15 @@
       "buy_pkg_label":  "8oz bag"
   },
   {
+      "item":  "Refried Beans",
+      "bid":  "refried-beans",
+      "gpu":  28.3495,
+      "unit":  "oz",
+      "board":  "weekly",
+      "buy_pkg_g":  454,
+      "buy_pkg_label":  "16oz can"
+  },
+  {
       "item":  "Refrigerated Biscuits",
       "bid":  "refrigerated-biscuits",
       "gpu":  28.3495,
@@ -1986,6 +2064,16 @@
       "board":  "recipe",
       "buy_pkg_g":  454,
       "buy_pkg_label":  "16oz box"
+  },
+  {
+      "item":  "Rotisserie Chicken",
+      "bid":  "rotisserie-chicken",
+      "gpu":  700,
+      "unit":  "each",
+      "board":  "weekly",
+      "buy_pkg_g":  700,
+      "buy_pkg_label":  "whole bird",
+      "note":  "gpu = pulled skinless meat per bird. Board cheapest is the Sam's Club warehouse-class bird (5-6 cups / 700-840 g yield); 700 is the LOW end so cost is not understated. Recipe grams are COOKED pulled meat."
   },
   {
       "item":  "Rye Bread",
@@ -2322,10 +2410,10 @@
   {
       "item":  "Tortilla",
       "bid":  "tortillas",
-      "gpu":  45,
+      "gpu":  36.85,
       "unit":  "each",
-      "buy_pkg_g":  300,
-      "buy_pkg_label":  "10ct pack"
+      "buy_pkg_g":  737,
+      "buy_pkg_label":  "20ct pack"
   },
   {
       "item":  "Traditional Pasta Sauce",

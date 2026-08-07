@@ -1,0 +1,31 @@
+﻿[
+  {
+    "proposed_name": "MF Two",
+    "slug": "mf-two",
+    "cost_batch": 1.7,
+    "cost_per_serving": 0.12,
+    "cost_batch_true": 1.7,
+    "cost_per_serving_true": 0.12,
+    "cost_pantry_add": 0.0,
+    "cost_first_run": 1.7,
+    "lines_priced": 1,
+    "lines_unpriced": 0,
+    "lines": [
+      {
+        "item": "MF Beans",
+        "grams": 425,
+        "util_cost": 1.7,
+        "basis": "board:mf-beans:walmart",
+        "bulk": false,
+        "buy_n": 1,
+        "buy_cost": 1.7,
+        "pkg": "15oz can",
+        "pkg_g": 425,
+        "starter_n": null,
+        "starter_cost": null,
+        "starter_pkg": null,
+        "starter_pkg_g": null
+      }
+    ]
+  }
+]

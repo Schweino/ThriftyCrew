@@ -1,0 +1,328 @@
+{
+    "name":  "Spicy Chipotle Turkey Burrito",
+    "slug":  "chipotle-turkey-burrito",
+    "cuisine":  "Chipotle",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.fivesilverspoons.com/chipotle-burritos-with-ground-turkey-and-veggies/",
+    "source_site":  "fivesilverspoons.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Stage 1 modeled the source veggie mix as sweet potato + zucchini + bell pepper (0.45 cal/g). Translated to those exact food-DB items at 20 g each per burrito. Flagged as a decomposition of an aggregate line.",
+                         "Greek yogurt is bound into the filling (source method), not a topping.",
+                         "Uses Chipotle in Adobo (board id chipotle-adobo).",
+                         "Strongest turkey record. Bowl cousin: Ground Turkey Burrito Bowl. This differs by the roasted sweet potato and zucchini mix and the chipotle-yogurt bound filling."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "pork"
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  386,
+                 "protein":  33,
+                 "carbs":  37,
+                 "fat":  14,
+                 "cost_ps":  "4.17"
+             },
+    "intro_html":  "\u003cp\u003eOne of only two turkey builds in this batch, and it earns the slot. It lands at 386 calories with 33 grams of protein, on a tortilla carrying 18 grams of fiber for about 5 grams of net carb. Lean ground turkey gets smoky heat from chipotle, body from roasted sweet potato and zucchini, and a creamy tang from Greek yogurt stirred right into the filling. If you have made our Ground Turkey Burrito Bowl, this is the wrapped version with a roasted-vegetable twist you cannot get in the bowl.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1582 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1.5 tbsp (20 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (210 g)",
+                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 4 tbsp, blended (63 g)",
+                                "\u003cstrong\u003eSweet Potatoes:\u003c/strong\u003e 2 sweet potatoes (280 g)",
+                                "\u003cstrong\u003eZucchini:\u003c/strong\u003e 1.4 zucchinis (280 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2.3 peppers (280 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.75 cups (420 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 1.3 cans (336 g)",
+                                "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 4 oz (112 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1.25 cups (322 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 bunch (28 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2.25 tbsp (14 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1.75 tbsp (14 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 2.25 tsp (7 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3.5 lb: ~$15.87. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
+                       "Vegetable Oil, 1.5 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.53. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Chipotle in Adobo, 4 tbsp, blended: ~$0.47. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sweet Potatoes, 2 sweet potatoes: ~$0.91. \u003cstrong\u003eBuy 1 lb: $1.48.\u003c/strong\u003e",
+                       "Zucchini, 1.4 zucchinis: ~$0.94. \u003cstrong\u003eBuy 1 lb: $1.52.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2.3 peppers: ~$2.29. \u003cstrong\u003eBuy 3 each: $2.94.\u003c/strong\u003e",
+                       "Chicken Broth, 1.75 cups: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Seasoned Black Beans, 1.3 cans: ~$2.19. \u003cstrong\u003eBuy 2 cans: $3.33.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 4 oz: ~$0.70. \u003cstrong\u003eBuy 1 8oz bag: $1.42.\u003c/strong\u003e",
+                       "Greek Yogurt, 1.25 cups: ~$1.16. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 bunch: ~$0.44. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, chili powder, garlic powder): ~$0.53. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $38.32 across 14 servings, so roughly $2.74 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $50.72 across 14 servings, roughly $3.62 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.66 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.38. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e$4.17 a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a build-your-own turkey burrito. The vegetables stretch the turkey, which is how the cost stays down.\u003c/p\u003e",
+    "shop_smart":  [
+                       "\u003cstrong\u003eGround turkey goes on sale as often as beef.\u003c/strong\u003e Buy the 93/7 when it drops and freeze it in one-pound packs. The leaner grinds cost more for almost no macro gain here, so 93/7 is the sweet spot.",
+                       "\u003cstrong\u003eOne sweet potato and one zucchini stretch across the batch.\u003c/strong\u003e They add fiber and bulk for pennies and keep the filling from being just meat and cheese. Dice them small so they cook fast.",
+                       "\u003cstrong\u003eA can of chipotle in adobo is your smoky heat for months.\u003c/strong\u003e You blend a few spoonfuls in, then freeze the rest in cubes. Buying a fresh can every time is money down the drain."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Dice the sweet potato, zucchini, red bell pepper, and yellow onion small so they cook quickly.",
+                    "Heat the vegetable oil in a large skillet and cook the ground turkey over medium-high heat, breaking it up, until browned.",
+                    "Add the diced vegetables, the blended chipotle in adobo, ground cumin, chili powder, and garlic powder, and cook until the vegetables are tender.",
+                    "Pour in the chicken broth and the drained black beans and simmer until the liquid cooks down.",
+                    "Off the heat, stir in the Greek yogurt, the Mexican cheese blend, and the chopped cilantro so the sauce goes creamy.",
+                    "Warm the tortillas so they roll cleanly, then fill and wrap each one."
+                ],
+    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near 386 calories with 33 grams of protein.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.fivesilverspoons.com/chipotle-burritos-with-ground-turkey-and-veggies/\" target=\"_blank\" rel=\"noopener\"\u003efivesilverspoons.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about $4.17 a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
+    "cost_batch":  38.32,
+    "cost_batch_true":  50.72,
+    "cost_per_serving":  2.74,
+    "cost_per_serving_true":  3.62,
+    "cost_pantry_add":  7.66,
+    "cost_first_run":  58.38,
+    "scaler":  {
+                   "cost":  "50.72",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1582,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  20,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  210,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chipotle in Adobo",
+                                   "canon":  "Chipotle in Adobo",
+                                   "grams":  63,
+                                   "buy":  "4 tbsp, blended",
+                                   "bid":  "chipotle-adobo",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Potatoes",
+                                   "canon":  "Sweet Potatoes",
+                                   "grams":  280,
+                                   "buy":  "2 sweet potatoes",
+                                   "bid":  "sweet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Zucchini",
+                                   "canon":  "Zucchini",
+                                   "grams":  280,
+                                   "buy":  "1.4 zucchinis",
+                                   "bid":  "zucchini",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  280,
+                                   "buy":  "2.3 peppers",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "canon":  "Chicken Broth",
+                                   "grams":  420,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "canon":  "Seasoned Black Beans",
+                                   "grams":  336,
+                                   "buy":  "1.3 cans",
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mexican Cheese Blend",
+                                   "canon":  "Mexican Cheese Blend",
+                                   "grams":  112,
+                                   "buy":  "4 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "canon":  "Greek Yogurt",
+                                   "grams":  322,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  28,
+                                   "buy":  "1 bunch",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  14,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  14,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  7,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A spicy chipotle ground turkey burrito under 400 calories, with roasted sweet potato and zucchini. About 386 calories and 33 grams of protein per serving, roughly $4.17 each (at everyday cost).",
+                 "keywords":  "chipotle turkey burrito, ground turkey meal prep, high protein burrito, low calorie meal prep, budget dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  4.17,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "93/7 Ground Turkey, 3.5 lb (1582 g)",
+                                          "Vegetable Oil, 1.5 tbsp (20 g)",
+                                          "Yellow Onion, 2 onions (210 g)",
+                                          "Chipotle in Adobo, 4 tbsp, blended (63 g)",
+                                          "Sweet Potatoes, 2 sweet potatoes (280 g)",
+                                          "Zucchini, 1.4 zucchinis (280 g)",
+                                          "Red Bell Pepper, 2.3 peppers (280 g)",
+                                          "Chicken Broth, 1.75 cups (420 g)",
+                                          "Seasoned Black Beans, 1.3 cans (336 g)",
+                                          "Mexican Cheese Blend, 4 oz (112 g)",
+                                          "Greek Yogurt, 1.25 cups (322 g)",
+                                          "Fresh Cilantro, 1 bunch (28 g)",
+                                          "Ground Cumin, 2.25 tbsp (14 g)",
+                                          "Chili Powder, 1.75 tbsp (14 g)",
+                                          "Garlic Powder, 2.25 tsp (7 g)"
+                                      ],
+                 "steps":  [
+                               "Dice the sweet potato, zucchini, red bell pepper, and onion small.",
+                               "Brown the ground turkey in the vegetable oil.",
+                               "Add the vegetables, blended chipotle, cumin, chili powder, and garlic powder and cook until tender.",
+                               "Simmer with the chicken broth and black beans until the liquid reduces.",
+                               "Off the heat, stir in the Greek yogurt, cheese blend, and cilantro, then fill the warmed tortillas.",
+                               "Weigh the batch and divide into 14 equal burritos."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1582
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Chipotle in Adobo",
+                                  "grams":  63
+                              },
+                              {
+                                  "item":  "Sweet Potatoes",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Zucchini",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Seasoned Black Beans",
+                                  "grams":  336
+                              },
+                              {
+                                  "item":  "Mexican Cheese Blend",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  322
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  7
+                              }
+                          ]
+}

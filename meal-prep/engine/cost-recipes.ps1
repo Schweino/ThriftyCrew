@@ -9,12 +9,22 @@
 #   prices ............. grocery\out comparison-*.json (weekly board) -> recipe-board.json -> smp-feed.json
 # Output: db\costed.json (one file, whole catalog) + db\cost-flags.txt. Takes -Slugs for a targeted
 # recost (splices into the existing db\costed.json). NOTHING here depends on how many recipes exist.
-param([string[]]$Slugs)
+#
+# -DbRoot/-GroceryOut/-OutFile/-FlagsFile exist ONLY so engine\golden-test.ps1 can run this engine
+# hermetically over a FROZEN input fixture (2026-08-06). Every default reproduces the live paths
+# exactly, so the daily automation path is unchanged. Two rules the golden test depends on:
+#   - a fixture run must never write where the live run writes (the harness always passes -OutFile
+#     to a temp dir; see grocery\test-auditors.ps1 for the same lesson learned the hard way);
+#   - the -Slugs splice reads the file it is about to WRITE ($OutFile), not a hardcoded db\costed.json,
+#     so a targeted recost against a fixture splices the fixture's own baseline.
+param([string[]]$Slugs,[string]$DbRoot,[string]$GroceryOut,[string]$OutFile,[string]$FlagsFile)
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
-$db = Join-Path $mp 'db'
-$gout = Join-Path (Split-Path $mp -Parent) 'grocery\out'
+$db = if($DbRoot){ $DbRoot } else { Join-Path $mp 'db' }
+$gout = if($GroceryOut){ $GroceryOut } else { Join-Path (Split-Path $mp -Parent) 'grocery\out' }
+$costedPath = if($OutFile){ $OutFile } else { Join-Path $db 'costed.json' }
+$flagsPath  = if($FlagsFile){ $FlagsFile } else { Join-Path $db 'cost-flags.txt' }
 $LB=453.592; $OZ=28.3495
 
 # ---- recipes from the spec store ----
@@ -205,12 +215,24 @@ foreach($r in $computed){
   }
 }
 if($Slugs){
-  $existingCost = Get-Content (Join-Path $db 'costed.json') -Raw | ConvertFrom-Json
+  $existingCost = Get-Content $costedPath -Raw | ConvertFrom-Json
   $newBySlug = @{}; foreach($r in $out){ $newBySlug[[string]$r.slug] = $r }
-  $out = @($existingCost | ForEach-Object { if($newBySlug.ContainsKey([string]$_.slug)){ $newBySlug[[string]$_.slug] } else { $_ } })
-  Write-Output ("targeted recost: spliced into {0} total" -f $out.Count)
+  $replaced = @{}
+  $merged = @($existingCost | ForEach-Object {
+    if($newBySlug.ContainsKey([string]$_.slug)){ $replaced[[string]$_.slug] = $true; $newBySlug[[string]$_.slug] } else { $_ }
+  })
+  # APPEND slugs that were costed but are not yet in costed.json. Without this a targeted recost could only
+  # ever UPDATE an existing row: a brand-new recipe was costed correctly, found no row to replace, and was
+  # silently dropped - which made build-v2-spec's documented -RunCost intake flow impossible for the very
+  # case it exists for (2026-08-06, found while costing 29 new burrito specs; build-v2-spec threw
+  # "cost-recipes ran but no costed row appeared" with an empty cost-flags.txt, because nothing was wrong
+  # with the costing itself). Existing-row behaviour is unchanged.
+  $appended = 0
+  foreach($r in $out){ if(-not $replaced.ContainsKey([string]$r.slug)){ $merged += $r; $appended++ } }
+  $out = $merged
+  Write-Output ("targeted recost: spliced into {0} total ({1} replaced, {2} newly added)" -f $out.Count, $replaced.Count, $appended)
 }
-$out | ConvertTo-Json -Depth 7 | Out-File (Join-Path $db 'costed.json') -Encoding utf8
-$costFlags | Out-File (Join-Path $db 'cost-flags.txt') -Encoding utf8
+$out | ConvertTo-Json -Depth 7 | Out-File $costedPath -Encoding utf8
+$costFlags | Out-File $flagsPath -Encoding utf8
 if($script:registerEst -gt 0){ Write-Output ("register-estimate lines (allowlisted): " + $script:registerEst) }
 Write-Output ("costed {0} recipes; flags {1}" -f @($out).Count, $costFlags.Count)

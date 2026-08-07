@@ -1,0 +1,329 @@
+{
+    "name":  "Salsa Verde Chicken Burrito",
+    "slug":  "salsa-verde-chicken-burrito",
+    "cuisine":  "Salsa Verde",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.anediblemosaic.com/chicken-meal-prep-burritos-recipe/",
+    "source_site":  "anediblemosaic.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "STAGE2: built from burrito-stage1-builds C1. Rotisserie basis is skinless pulled whole-bird meat, light and dark (USDA SR 05013, 190 cal/100g; basis corrected 2026-08-07, repair pass 2 B1), so the prose states skin removed per the batch rule; if the skin stays on, the published fat and calories are wrong.",
+                         "S1 crema owns this recipe: blended cottage cheese plus a little Greek yogurt, cumin, garlic, lime and cilantro. The pool S1 formula calls for 4 percent cottage cheese, but the DB carries one Cottage Cheese row (about 2 percent), so it is used as-is; the difference is under 4 cal per serving.",
+                         "Differs from the live Salsa Verde Chicken Burrito Bowl by cut (pulled rotisserie, not cooked breast), by the cottage-cheese crema, and by the tortilla format.",
+                         "FLAG for mapper: Rotisserie Chicken has a food-macros-db row but NO db/ingredients.json board row; Spinach has a board row but NO food-macros-db row. Both are needed for build-v2-spec to cost and macro-check this spec. [RESOLVED 2026-08-07: both rows exist; spinach repointed to canonical Frozen Chopped Spinach because the bid frozen-chopped-spinach prices the FROZEN form (repair pass 2 B6).]"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  390,
+                 "protein":  40,
+                 "carbs":  32,
+                 "fat":  15,
+                 "cost_ps":  "4.22"
+             },
+    "intro_html":  "This is the rotisserie chicken shortcut done right. You pull the meat off a store bird, fold it into onion, pepper and spinach, and bind the whole thing with a cool tomatillo salsa verde and a blended cottage cheese crema that hits like sour cream for a fraction of the fat. Each burrito lands \u003cstrong\u003eunder 400 calories with a full 4 ounces of meat\u003c/strong\u003e, carries \u003cstrong\u003e40 grams of protein\u003c/strong\u003e, and rides on a high fiber tortilla with 18 grams of fiber for about 5 grams of net carb. We already have a Salsa Verde Chicken Burrito Bowl on the site; this is its wrapped cousin, built on pulled rotisserie instead of cooked breast and finished with the cottage cheese crema instead of a plain scoop of rice.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eRotisserie Chicken (skin removed):\u003c/strong\u003e 2.62 lb (1190 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.25 tbsp (17 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (238 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2.3 peppers (280 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3.25 tbsp (28 g)",
+                                "\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 10 oz (280 g)",
+                                "\u003cstrong\u003eSalsa Verde (Herdez):\u003c/strong\u003e 1.25 cups (280 g)",
+                                "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 7 oz (196 g)",
+                                "\u003cstrong\u003eCottage Cheese (Darigold):\u003c/strong\u003e 20.75 oz (588 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 7.5 tbsp (112 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 2.25 tsp (7 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tsp (14 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1.75 tbsp (28 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 bunch (14 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Rotisserie Chicken (skin removed), 2.62 lb: ~$10.18. \u003cstrong\u003eBuy 2 whole birds: $11.98.\u003c/strong\u003e",
+                       "Olive Oil, 1.25 tbsp: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.60. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2.3 peppers: ~$2.29. \u003cstrong\u003eBuy 3 each: $2.94.\u003c/strong\u003e",
+                       "Garlic, 3.25 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Frozen Chopped Spinach, 10 oz: ~$1.14. \u003cstrong\u003eBuy 1 10oz box: $1.15.\u003c/strong\u003e",
+                       "Salsa Verde, 1.25 cups: ~$1.63. \u003cstrong\u003eBuy 1 16oz jar: $2.64.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 7 oz: ~$1.22. \u003cstrong\u003eBuy 1 8oz bag: $1.42.\u003c/strong\u003e",
+                       "Cottage Cheese, 20.75 oz: ~$2.36. \u003cstrong\u003eBuy 1 24oz tub: $2.73.\u003c/strong\u003e",
+                       "Greek Yogurt, 7.5 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Lime Juice, 1.75 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 bunch: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, garlic powder, salt): ~$0.24. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.01 across 14 servings, so roughly $2.36 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $44.51 across 14 servings, roughly $3.18 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.60 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.11. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.22 a burrito\u003c/strong\u003e (at everyday cost) for a rotisserie shortcut that tastes like you worked harder than you did. The bird does the heavy lifting, the crema costs pennies, and the tortilla keeps the carbs low.",
+    "shop_smart":  [
+                       "Rotisserie birds are the cheat code here. Two birds pull enough skinless meat for the batch and usually cost less than the same weight of raw breast once you factor in that they are already cooked. Pull the skin off before you weigh so the numbers stay honest.",
+                       "Cottage cheese is the quiet hero of this crema. Buy the tub, not the individual cups, and blend it smooth so nobody at the table knows it is not sour cream.",
+                       "Salsa verde in the jar is cheaper and more consistent than roasting your own tomatillos, and this batch uses close to a full jar so nothing goes fuzzy in the fridge.",
+                       "Bell peppers cost less in the three color bag than loose singles, and you only need the red one here, so the rest carries into next week\u0027s cooking."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Pull all the meat off the rotisserie chicken and discard the skin and bones. Weigh out the skinless meat and shred it with two forks.",
+                    "Warm the olive oil in a large skillet over medium heat and cook the diced onion and red bell pepper for 6 to 8 minutes until soft.",
+                    "Add the minced garlic, ground cumin and garlic powder and stir for one minute, then stir in the thawed spinach.",
+                    "Add the shredded chicken and the salsa verde, season with the salt, and warm it all through. Pull off the heat and stir in the shredded cheese so it melts into the filling.",
+                    "Blend the cottage cheese, Greek yogurt, lime juice and chopped cilantro until smooth to make the crema.",
+                    "Set the filling bowl on the scale, subtract the empty weight, and divide the number by 14. Lay a stripe of that much filling down each tortilla, spoon on a share of the crema, fold in the sides and roll tight.",
+                    "Wrap each burrito in foil or parchment and portion into containers."
+                ],
+    "portion_html":  "The honest way to keep 14 burritos equal is to weigh the filling, not eyeball the scoop. Set the bowl on the scale, subtract the empty weight, divide by 14, and give each tortilla that much before you add the crema and roll. Each burrito carries \u003cstrong\u003e390 calories and 40 grams of protein\u003c/strong\u003e. Reheat wrapped for a minute, then open and crisp the seam in a dry pan if you like.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.anediblemosaic.com/chicken-meal-prep-burritos-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eanediblemosaic.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Salsa verde chicken burritos, 14 wrapped and ready, for about $4.22 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  33.01,
+    "cost_batch_true":  44.51,
+    "cost_per_serving":  2.36,
+    "cost_per_serving_true":  3.18,
+    "cost_pantry_add":  14.6,
+    "cost_first_run":  59.11,
+    "scaler":  {
+                   "cost":  "44.51",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Rotisserie Chicken (skin removed)",
+                                   "canon":  "Rotisserie Chicken",
+                                   "grams":  1190,
+                                   "buy":  "2.62 lb",
+                                   "bid":  "rotisserie-chicken",
+                                   "gpu":  "700.000"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  17,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  238,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  280,
+                                   "buy":  "2.3 peppers",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  28,
+                                   "buy":  "3.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Frozen Chopped Spinach",
+                                   "canon":  "Frozen Chopped Spinach",
+                                   "grams":  280,
+                                   "buy":  "10 oz",
+                                   "bid":  "frozen-chopped-spinach",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salsa Verde",
+                                   "canon":  "Salsa Verde",
+                                   "grams":  280,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "salsa-verde",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mexican Cheese Blend",
+                                   "canon":  "Mexican Cheese Blend",
+                                   "grams":  196,
+                                   "buy":  "7 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cottage Cheese",
+                                   "canon":  "Cottage Cheese",
+                                   "grams":  588,
+                                   "buy":  "20.75 oz",
+                                   "bid":  "cottage-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "canon":  "Greek Yogurt",
+                                   "grams":  112,
+                                   "buy":  "7.5 tbsp",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  7,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  28,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  14,
+                                   "buy":  "1 bunch",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Salsa verde chicken burritos built on skinless rotisserie meat, spinach, peppers and a blended cottage cheese crema. 14 wrapped at 390 calories, 40g protein, about $4.22 (at everyday cost).",
+                 "keywords":  "salsa verde chicken burrito, rotisserie chicken burrito, high protein meal prep burrito, cottage cheese crema, low calorie burrito, budget chicken burrito",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT15M",
+                 "totalTime":  "PT35M",
+                 "costPerServing":  4.22,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Rotisserie Chicken (skin removed), 2.62 lb (1190 g)",
+                                          "Olive Oil, 1.25 tbsp (17 g)",
+                                          "Yellow Onion, 2 onions (238 g)",
+                                          "Red Bell Pepper, 2.3 peppers (280 g)",
+                                          "Garlic, 3.25 tbsp (28 g)",
+                                          "Frozen Chopped Spinach, 10 oz (280 g)",
+                                          "Salsa Verde, 1.25 cups (280 g)",
+                                          "Mexican Cheese Blend, 7 oz (196 g)",
+                                          "Cottage Cheese, 20.75 oz (588 g)",
+                                          "Greek Yogurt, 7.5 tbsp (112 g)",
+                                          "Ground Cumin, 1 tbsp (7 g)",
+                                          "Garlic Powder, 2.25 tsp (7 g)",
+                                          "Salt, 2.25 tsp (14 g)",
+                                          "Lime Juice, 1.75 tbsp (28 g)",
+                                          "Fresh Cilantro, 1 bunch (14 g)"
+                                      ],
+                 "steps":  [
+                               "Pull the skinless meat off a rotisserie chicken and shred it.",
+                               "Cook onion and red pepper in olive oil, add garlic, cumin and garlic powder, then stir in the thawed spinach.",
+                               "Fold in the chicken and salsa verde, season, and melt in the cheese off the heat.",
+                               "Blend cottage cheese, Greek yogurt, lime and cilantro into a crema.",
+                               "Weigh the filling, divide by 14, fill and roll each tortilla, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Rotisserie Chicken",
+                                  "grams":  1190
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  17
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  238
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Frozen Chopped Spinach",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Salsa Verde",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Mexican Cheese Blend",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Cottage Cheese",
+                                  "grams":  588
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  14
+                              }
+                          ]
+}

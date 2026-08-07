@@ -1,0 +1,223 @@
+{
+    "name":  "Baked Turkey Kibbeh Casserole",
+    "slug":  "baked-turkey-kibbeh-casserole",
+    "cuisine":  "lebanese",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://feelgoodfoodie.net/recipe/baked-kibbeh/",
+    "source_site":  "feelgoodfoodie.net",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Bulgur Wheat)",
+                   "portion factor 1.45"
+               ],
+    "writer_notes":  [
+                         "SELECTOR: Sheet-pan layered kibbeh - turkey-and-grain base, spiced turkey-and-nut filling, cut into squares, which is exactly weigh-and-divide portioning at 14 servings. Verified source: full recipe, 8 servings, 331 cal / 29g protein (beef version); source explicitly notes other ground meats work. Bulgur is the only real sourcing question. | HARVEST: Source uses ground beef for both layers, not turkey.",
+                         "SOURCE YIELD: 8 servings, rebuilt to 14.",
+                         "TUNING: base +60% (Bulgur Wheat)",
+                         "TUNING: portion factor 1.45",
+                         "OVERRIDE Fresh Basil: WAVE-4: source says \u0027fresh basil and/or mint\u0027 - kibbeh identity is MINT; 1/2 cup herb = 12 g",
+                         "OVERRIDE 93/7 Ground Beef: TITLE-PROTEIN SWAP: titled turkey; ground-\u003eground, grams kept"
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "stat":  {
+                 "cal":  576,
+                 "protein":  41,
+                 "carbs":  61,
+                 "fat":  19,
+                 "cost_ps":  "4.08"
+             },
+    "intro_html":  "Kibbeh is the national dish of Lebanon and it comes in a dozen forms. The tray version, kibbeh bil sanieh, is the one built for feeding a crowd: a bulgur and meat shell on the bottom, a spiced meat filling in the middle, another shell on top, scored into diamonds before it bakes. Warm allspice runs through the whole thing. Each serving carries \u003cstrong\u003e41 grams of protein\u003c/strong\u003e and 576 calories for about \u003cstrong\u003e$4.46\u003c/strong\u003e (at everyday cost), and it cuts into portions like it was designed for meal prep, because in a sense it was.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 5 tbsp (69 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 5 lb (2302 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 7 onions (761 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 3.5 tbsp (61 g)",
+                                "\u003cstrong\u003eGround Allspice (Great Value):\u003c/strong\u003e 1.75 oz (50 g)",
+                                "\u003cstrong\u003eBulgur Wheat (generic (USDA)):\u003c/strong\u003e 6.75 cups (957 g)",
+                                "\u003cstrong\u003eFresh Mint:\u003c/strong\u003e 18.75 tbsp (30 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 9.75 tbsp (61 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (6 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Olive Oil, 5 tbsp: ~$0.97. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 5 lb: ~$19.39. \u003cstrong\u003eBuy 6 lbs: $22.93.\u003c/strong\u003e",
+                       "Yellow Onion, 7 onions: ~$1.91. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Bulgur Wheat, 6.75 cups: ~$6.81. \u003cstrong\u003eBuy 3 bettergoods (Walmart) 12 ozes: $7.26.\u003c/strong\u003e",
+                       "Fresh Mint, 18.75 tbsp: ~$3.77. \u003cstrong\u003eBuy 3 0.5oz packs: $5.27.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, ground allspice, ground cumin, black pepper): ~$3.48. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $36.33 across 14 servings, so roughly $2.60 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $42.19 across 14 servings, roughly $3.01 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.86 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.05. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.46 a serving\u003c/strong\u003e (at everyday cost). Five pounds of turkey is the cost of this dish; the bulgur, onions, and spices together come to very little. Bulgur is one of the most underused cheap grains in an American grocery store.",
+    "shop_smart":  [
+                       "Bulgur is sold cheapest in international grocery stores and in the bulk aisle, often at half the price of the small boxes in the rice section. Fine grind is what you want for the shell layers.",
+                       "Onions are doing enormous work here at seven of them. Buy them by the bag rather than loose, since bagged onions run well under the each price.",
+                       "Allspice is the defining spice and a single jar lasts for years. If you buy one new spice for this recipe, that is the one.",
+                       "Fresh basil stands in for the traditional mint here. If your store carries fresh mint at a similar price, use it instead, and dried mint works too."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cover the bulgur with cold water and let it soak 20 to 30 minutes until the grains soften, then drain it and squeeze out every bit of excess water with your hands.",
+                    "Set aside about a third of the ground turkey and a third of the onions for the filling, then finely mince the remaining onions for the shell.",
+                    "Mix the soaked bulgur with two thirds of the ground turkey, the minced onion, the chopped fresh mint, the ground allspice, ground cumin, salt, and black pepper, kneading it with wet hands until it turns into a smooth, almost paste-like dough.",
+                    "For the filling, heat some of the olive oil in a skillet and brown the reserved turkey with the reserved diced onion, seasoning it with more allspice, salt, and black pepper.",
+                    "Press half the bulgur mixture into an oiled 9x13 pan in an even layer, spread the filling over it, then press the remaining bulgur mixture on top, smoothing it with wet hands.",
+                    "Score the top into diamonds with a wet knife, cutting through the top layer only, then drizzle the rest of the olive oil generously over the whole surface.",
+                    "Bake at 375F for 40 to 45 minutes until the top is deep golden and the edges pull away from the pan, then rest 15 minutes before portioning."
+                ],
+    "portion_html":  "Weigh the pan, subtract the empty pan weight, and divide by 14. The scored diamonds give you a natural cutting guide, but weigh them anyway since the corner pieces always run small. Each serving comes to \u003cstrong\u003e576 calories\u003c/strong\u003e and 41 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://feelgoodfoodie.net/recipe/baked-kibbeh/\" target=\"_blank\" rel=\"noopener\"\u003efeelgoodfoodie.net\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "A Lebanese classic built for a crowd, about $4.46 a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "cost_batch":  36.33,
+    "cost_batch_true":  42.19,
+    "cost_per_serving":  2.6,
+    "cost_per_serving_true":  3.01,
+    "cost_pantry_add":  15.86,
+    "cost_first_run":  58.05,
+    "scaler":  {
+                   "cost":  "42.19",
+                   "ing":  [
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  69,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  2302,
+                                   "buy":  "5 lb",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  453.592
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  761,
+                                   "buy":  "7 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  61,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Allspice",
+                                   "canon":  "Ground Allspice",
+                                   "grams":  50,
+                                   "buy":  "1.75 oz",
+                                   "bid":  "ground-allspice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bulgur Wheat",
+                                   "canon":  "Bulgur Wheat",
+                                   "grams":  957,
+                                   "buy":  "6.75 cups"
+                               },
+                               {
+                                   "item":  "Fresh Mint",
+                                   "canon":  "Fresh Mint",
+                                   "grams":  30,
+                                   "buy":  "18.75 tbsp",
+                                   "bid":  "fresh-mint",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  61,
+                                   "buy":  "9.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Baked turkey kibbeh casserole meal prep: layered bulgur and turkey shell with a spiced allspice filling, scored and baked. 576 calories, 41g protein, about $4.46 a serving (at everyday cost).",
+                 "keywords":  "baked kibbeh, kibbeh bil sanieh, lebanese casserole, bulgur wheat recipes, ground turkey middle eastern, high protein meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT40M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H25M",
+                 "costPerServing":  4.08,
+                 "recipeIngredient":  [
+                                          "Olive Oil, 5 tbsp (69 g)",
+                                          "93/7 Ground Turkey, 5 lb (2302 g)",
+                                          "Yellow Onion, 7 onions (761 g)",
+                                          "Salt, 3.5 tbsp (61 g)",
+                                          "Ground Allspice, 1.75 oz (50 g)",
+                                          "Bulgur Wheat, 6.75 cups (957 g)",
+                                          "Fresh Mint, 18.75 tbsp (30 g)",
+                                          "Ground Cumin, 9.75 tbsp (61 g)",
+                                          "Black Pepper, 0.75 tbsp (6 g)"
+                                      ],
+                 "steps":  [
+                               "Soak the bulgur in cold water 20 to 30 minutes, then drain and squeeze it dry.",
+                               "Knead the soaked bulgur with two thirds of the ground turkey, minced onion, chopped fresh mint, allspice, cumin, salt, and pepper into a smooth dough.",
+                               "Brown the remaining turkey with diced onion and more allspice for the filling.",
+                               "Press half the bulgur dough into an oiled 9x13 pan, spread the filling over it, and press the rest of the dough on top.",
+                               "Score the top into diamonds, drizzle with olive oil, bake at 375F for 40 to 45 minutes, rest 15 minutes, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  69
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  2302
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  761
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  61
+                              },
+                              {
+                                  "item":  "Ground Allspice",
+                                  "grams":  50
+                              },
+                              {
+                                  "item":  "Bulgur Wheat",
+                                  "grams":  957
+                              },
+                              {
+                                  "item":  "Fresh Mint",
+                                  "grams":  30
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  61
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  6
+                              }
+                          ]
+}

@@ -24,9 +24,9 @@
                  "protein":  34,
                  "carbs":  52,
                  "fat":  24,
-                 "cost_ps":  "4.39"
+                 "cost_ps":  "4.19"
              },
-    "intro_html":  "Swiss steak has nothing to do with Switzerland. The name comes from swissing, an old term for pounding tough meat until it gives up, and that is the whole idea here. Flour dredged beef braises in tomatoes, peppers, and onion until it cuts with a fork. No cream, no cheese, and not much fuss. Each bowl carries \u003cstrong\u003e34 grams of protein\u003c/strong\u003e and 575 calories for about \u003cstrong\u003e$4.39\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Swiss steak has nothing to do with Switzerland. The name comes from swissing, an old term for pounding tough meat until it gives up, and that is the whole idea here. Flour dredged beef braises in tomatoes, peppers, and onion until it cuts with a fork. No cream, no cheese, and not much fuss. Each bowl carries \u003cstrong\u003e34 grams of protein\u003c/strong\u003e and 575 calories for about \u003cstrong\u003e$4.19\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 4.25 lb (1984 g)",
                                 "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 13.5 tbsp (109 g)",
@@ -39,7 +39,7 @@
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (201 g)",
                                 "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 peppers (210 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp (18 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4 cups dry (700 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -52,13 +52,13 @@
                        "Yellow Onion, 2 onions: ~$0.51. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Green Bell Peppers, 2 peppers: ~$1.50. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
                        "Garlic, 2 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
-                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.07. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $42.66 across 14 servings, so roughly $3.05 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $49.30 across 14 servings, roughly $3.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $12.21 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.51. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.39 a bowl\u003c/strong\u003e (at everyday cost). Canned tomatoes and a couple of bell peppers turn a modest chunk of chuck into fourteen dinners, which is the entire trick of tomato braises.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.19 a bowl\u003c/strong\u003e (at everyday cost). Canned tomatoes and a couple of bell peppers turn a modest chunk of chuck into fourteen dinners, which is the entire trick of tomato braises.",
     "shop_smart":  [
                        "Canned diced tomatoes are the sauce. Compare the store brand against the name brand by the price per ounce tag, because in a long braise the difference on the plate is nothing.",
                        "Green bell peppers cost less than red, yellow, or orange, and in a braise the color cooks out anyway. Buy green here without a second thought.",
@@ -77,7 +77,7 @@
                 ],
     "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of beef and sauce into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e575 calories with 34 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-swiss-steak/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Swiss steak over rice for about $4.39 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Swiss steak over rice for about $4.19 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  42.66,
     "cost_batch_true":  49.3,
     "cost_per_serving":  3.05,
@@ -179,20 +179,20 @@
                                    "item":  "Rice",
                                    "canon":  "Rice",
                                    "grams":  700,
-                                   "buy":  "3.75 cups dry",
+                                   "buy":  "4 cups dry",
                                    "bid":"rice",
                                    "gpu":453.592
                                }
                            ]
                },
     "head":  {
-                 "description":  "Slow cooker Swiss steak meal prep: flour dredged chuck roast braised in tomatoes, onion, and bell pepper, served over rice. 575 calories, 34g protein, about $4.39 per serving (at everyday cost).",
+                 "description":  "Slow cooker Swiss steak meal prep: flour dredged chuck roast braised in tomatoes, onion, and bell pepper, served over rice. 575 calories, 34g protein, about $4.19 per serving (at everyday cost).",
                  "keywords":  "swiss steak, slow cooker swiss steak, tomato braised beef, beef and rice bowls, budget meal prep, chuck roast recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",
                  "cookTime":  "PT7H",
                  "totalTime":  "PT7H20M",
-                 "costPerServing":  4.39,
+                 "costPerServing":  4.19,
                  "recipeIngredient":  [
                                           "Beef Chuck Roast, 4.25 lb (1984 g)",
                                           "All-Purpose Flour, 13.5 tbsp (109 g)",
@@ -205,7 +205,7 @@
                                           "Yellow Onion, 2 onions (201 g)",
                                           "Green Bell Peppers, 2 peppers (210 g)",
                                           "Garlic, 2 tbsp (18 g)",
-                                          "Rice, 3.75 cups dry (700 g)"
+                                          "Rice, 4 cups dry (700 g)"
                                       ],
                  "steps":  [
                                "Cut the chuck into slabs, season, and dredge in flour.",

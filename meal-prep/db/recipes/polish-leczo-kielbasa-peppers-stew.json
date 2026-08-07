@@ -28,9 +28,9 @@
                  "protein":  26,
                  "carbs":  90,
                  "fat":  20,
-                 "cost_ps":  "3.54"
+                 "cost_ps":  "3.15"
              },
-    "intro_html":  "Leczo is the pepper and sausage stew that shows up on Polish and Hungarian tables all summer long, when peppers are stacked cheap at every market. Smoked sausage, a mountain of bell peppers, onions and a paprika tomato base, ladled over rice. It carries 26 grams of protein for about $3.54 (at everyday cost), and it is one of those pots that tastes better the second day.",
+    "intro_html":  "Leczo is the pepper and sausage stew that shows up on Polish and Hungarian tables all summer long, when peppers are stacked cheap at every market. Smoked sausage, a mountain of bell peppers, onions and a paprika tomato base, ladled over rice. It carries 26 grams of protein for about $3.15 (at everyday cost), and it is one of those pots that tastes better the second day.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5.6 onions (616 g)",
                                 "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 4 lb (1772 g)",
@@ -43,7 +43,7 @@
                                 "\u003cstrong\u003ePaprika:\u003c/strong\u003e 0.5 tbsp (3 g)",
                                 "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 6 cans (2520 g)",
                                 "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 5.5 tbsp (90 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (985 g)"
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.5 cups dry (985 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -54,13 +54,13 @@
                        "Garlic, 3.25 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Tomato Sauce, 6 cans: ~$5.69. \u003cstrong\u003eBuy 6 15oz cans: $5.76.\u003c/strong\u003e",
                        "Tomato Paste, 5.5 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
-                       "Rice, 5.25 cups dry: ~$1.22. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Rice, 5.5 cups dry: ~$1.22. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, smoked paprika, paprika): ~$0.73. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $35.68 across 14 servings, so roughly $2.55 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $38.37 across 14 servings, roughly $2.74 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $10.82 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.19. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.54 a bowl\u003c/strong\u003e (at everyday cost) for a stew whose price swings almost entirely on what peppers cost that week. Make it when the board shows peppers low and it gets noticeably cheaper.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.15 a bowl\u003c/strong\u003e (at everyday cost) for a stew whose price swings almost entirely on what peppers cost that week. Make it when the board shows peppers low and it gets noticeably cheaper.",
     "shop_smart":  [
                        "\u003cstrong\u003ePeppers are the price of this dish.\u003c/strong\u003e They are the biggest single line after the sausage. Late summer is when they bottom out, and that is the week to cook a double batch.",
                        "\u003cstrong\u003eGreen bell peppers are almost always cheaper than red.\u003c/strong\u003e Leczo is traditionally made with whatever is ripe, so green is authentic and easier on the wallet at the same time.",
@@ -79,7 +79,7 @@
                 ],
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and ladle the exact amount over a scoop of rice in each container. Every bowl lands near 630 calories and 26 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.polonist.com/polish-leczo-kielbasa-and-peppers/\" target=\"_blank\" rel=\"noopener\"\u003epolonist.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Peppers and sausage done right for about $3.54 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Peppers and sausage done right for about $3.15 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  35.68,
     "cost_batch_true":  38.37,
     "cost_per_serving":  2.55,
@@ -181,20 +181,20 @@
                                    "item":  "Rice",
                                    "canon":  "Rice",
                                    "grams":  985,
-                                   "buy":  "5.25 cups dry",
+                                   "buy":  "5.5 cups dry",
                                    "bid":"rice",
                                    "gpu":453.592
                                }
                            ]
                },
     "head":  {
-                 "description":  "Polish leczo, a smoked sausage and bell pepper stew in a paprika tomato base over rice, built for 14 servings. 630 calories, 26g protein, about $3.54 per serving (at everyday cost).",
+                 "description":  "Polish leczo, a smoked sausage and bell pepper stew in a paprika tomato base over rice, built for 14 servings. 630 calories, 26g protein, about $3.15 per serving (at everyday cost).",
                  "keywords":  "polish leczo, kielbasa and peppers, pepper stew, sausage tomato stew, polish recipe, budget meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M",
-                 "costPerServing":  3.54,
+                 "costPerServing":  3.15,
                  "recipeIngredient":  [
                                           "Yellow Onion, 5.6 onions (616 g)",
                                           "Smoked Turkey Sausage, 4 lb (1772 g)",
@@ -207,7 +207,7 @@
                                           "Paprika, 0.5 tbsp (3 g)",
                                           "Tomato Sauce, 6 cans (2520 g)",
                                           "Tomato Paste, 5.5 tbsp (90 g)",
-                                          "Rice, 5.25 cups dry (985 g)"
+                                          "Rice, 5.5 cups dry (985 g)"
                                       ],
                  "steps":  [
                                "Cook the sliced onions in vegetable oil until soft, then brown the sliced smoked sausage.",

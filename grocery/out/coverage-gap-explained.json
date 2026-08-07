@@ -1,57 +1,15 @@
 ﻿[
     {
-        "id":  "laundry-detergent",
-        "store":  "Family Fare",
-        "product":  "Arm \u0026 Hammer Stain Fighters Fresh Scent Detergent 32.5 Fl Oz",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "laundry-detergent",
-        "store":  "Family Fare",
-        "product":  "Arm \u0026 Hammer Stain Fighters Fresh Scent Detergent 100.5 Fl Oz",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "laundry-detergent",
-        "store":  "Baker\u0027s",
-        "product":  "ARM \u0026 HAMMER Clean Burst Scent Liquid Laundry Detergent",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "laundry-detergent",
-        "store":  "Baker\u0027s",
-        "product":  "ARM \u0026 HAMMER Sensitive Skin Plus Fresh Scent Liquid Laundry Detergent",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "laundry-detergent",
-        "store":  "Baker\u0027s",
-        "product":  "ARM \u0026 HAMMER Clean Burst Liquid Laundry Detergent",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "ground-beef-93-7",
+        "id":  "frozen-vegetables",
         "store":  "Walmart",
-        "product":  "Marketside Organic Grass-Fed Ground Beef, 93% Lean/7% Fat, 1 lb",
+        "product":  "Great Value Mixed Vegetables, 12 oz Steamable Bag (Frozen)",
         "verdict":  "EXCLUDED",
-        "detail":  "include \u002793\\s*%?\\s*lean\u0027 matched, exclude \u0027organic\u0027 killed it"
+        "detail":  "include \u0027mixed\\s+vegetables\u0027 matched, exclude \u0027great\\s+value\\s+mixed\\s+vegetables,\u0027 killed it"
     },
     {
-        "id":  "laundry-detergent",
-        "store":  "Baker\u0027s",
-        "product":  "ARM \u0026 HAMMER Plus OxiClean Fresh Scent Powder Laundry Detergent",
-        "verdict":  "EXCLUDED",
-        "detail":  "include \u0027arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)\u0027 matched, exclude \u0027\\bpowder\\b\u0027 killed it"
-    },
-    {
-        "id":  "cranberry-juice",
-        "store":  "Family Fare",
-        "product":  "Ocean Spray Juice Drink, Cranberry, Zero Sugar 64 Fl Oz",
+        "id":  "pickled-jalapenos",
+        "store":  "Walmart",
+        "product":  "Clemente Jacques Sliced JalapeÃ±o Peppers, Pickled JalapeÃ±os, 28 oz Can",
         "verdict":  "NO-INCLUDE",
         "detail":  "no include pattern matches"
     },
@@ -63,102 +21,46 @@
         "detail":  "include \u0027chicken\\s+(thigh|drumstick|leg)\u0027 matched, exclude \u0027\\bdrumsticks?\\b\u0027 killed it"
     },
     {
-        "id":  "frozen-lasagna",
+        "id":  "ground-beef-93-7",
         "store":  "Walmart",
-        "product":  "Stouffers Classic Lasagna with Meat and Sauce, Large Size, Oven Ready, Frozen Dinners 19 oz",
-        "verdict":  "EXCLUDED",
-        "detail":  "include \u0027lasagna\\b.{0,30}(?:frozen|family|meat|cheese)\u0027 matched, exclude \u0027oven[\\s-]?ready\u0027 killed it"
+        "product":  "73% Lean / 27% Fat Ground Beef, 3 lb Roll, Fresh, All Natural*",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
     },
     {
-        "id":  "laundry-detergent",
-        "store":  "Family Fare",
-        "product":  "Arm \u0026 Hammer Liquid Laundry Clean Burst",
+        "id":  "canned-chicken",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Premium Chicken Breast Chunk in Water",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "breakfast-sandwiches",
+        "store":  "Baker\u0027s",
+        "product":  "Kroger Sausage, Egg \u0026 Cheese Croissant 8 Sandwiches",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "quart-storage-bags",
+        "store":  "Aldi",
+        "product":  "Boulder Storage Twin Lock Bags 40 CT",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "soy-sauce",
+        "store":  "Aldi",
+        "product":  "Fusia Asian Inspirations Traditional 81 OZ",
         "verdict":  "NO-INCLUDE",
         "detail":  "no include pattern matches"
     },
     {
         "id":  "pork-tenderloin",
         "store":  "Walmart",
-        "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.5–1.9 lb, 20 Grams of Protein per 4 oz Serving",
+        "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.51.9 lb, 20 Grams of Protein per 4 oz Serving",
         "verdict":  "EXCLUDED",
         "detail":  "include \u0027pork\\s+tenderloin\u0027 matched, exclude \u0027seasoned\u0027 killed it"
-    },
-    {
-        "id":  "laundry-detergent",
-        "store":  "Family Fare",
-        "product":  "Arm \u0026 Hammer Lndry Dtrgnt Fresh Scent Pls O",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "laundry-detergent",
-        "store":  "Walmart",
-        "product":  "ARM \u0026 HAMMER Plus OxiClean 5-in-1 Laundry Detergent Paks, Fresh Scent, 42 Count",
-        "verdict":  "EXCLUDED",
-        "detail":  "include \u0027arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)\u0027 matched, exclude \u0027\\bpaks?\\b\u0027 killed it"
-    },
-    {
-        "id":  "walnuts",
-        "store":  "Walmart",
-        "product":  "Fisher Chef\u0027s Naturals Gluten Free, No Preservatives, Non-GM",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "ground-beef-93-7",
-        "store":  "Aldi",
-        "product":  "Simply Nature 93 07 Lean Organic Grass Fed Ground Beef 1 LB",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "cranberry-juice",
-        "store":  "Family Fare",
-        "product":  "Ocean Spray Juice Drink, Cranberry Mixed Berry, Zero Sugar 64 Fl Oz",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "ground-beef-8020",
-        "store":  "Baker\u0027s",
-        "product":  "Kroger 80/20 Ground Beef Patties",
-        "verdict":  "EXCLUDED",
-        "detail":  "include \u002780/20\\s+ground\u0027 matched, exclude \u0027patties\u0027 killed it"
-    },
-    {
-        "id":  "laundry-detergent",
-        "store":  "Baker\u0027s",
-        "product":  "ARM \u0026 HAMMER Baking Soda Fresh Sparkling Fresh Scent Liquid Laundry Detergent",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "laundry-detergent",
-        "store":  "Baker\u0027s",
-        "product":  "ARM \u0026 HAMMER Baking Soda Fresh Liquid Laundry Detergent Sparkling Fresh Scent",
-        "verdict":  "NO-INCLUDE",
-        "detail":  "no include pattern matches"
-    },
-    {
-        "id":  "frozen-fries",
-        "store":  "Baker\u0027s",
-        "product":  "Kroger Seasoned Crispy Frozen French Fries",
-        "verdict":  "EXCLUDED",
-        "detail":  "include \u0027french\\s+fri(?:es|ed)\u0027 matched, exclude \u0027seasoned\u0027 killed it"
-    },
-    {
-        "id":  "canned-pumpkin",
-        "store":  "Walmart",
-        "product":  "Libby\u0027s 100% Pure Pumpkin Puree, All Natural Gluten Free Canned Pumpkin for Baking Pumpkin Pie Dessert, 15 oz Can",
-        "verdict":  "EXCLUDED",
-        "detail":  "include \u0027pure\\s+pumpkin\u0027 matched, exclude \u0027\\bpie\\b\u0027 killed it"
-    },
-    {
-        "id":  "frozen-lasagna",
-        "store":  "Walmart",
-        "product":  "Stouffers Meat Lovers Lasagna, Family Size, Oven Ready Lasagna, Frozen Dinners 34 oz",
-        "verdict":  "EXCLUDED",
-        "detail":  "include \u0027lasagna\\b.{0,30}(?:frozen|family|meat|cheese)\u0027 matched, exclude \u0027oven[\\s-]?ready\u0027 killed it"
     },
     {
         "id":  "chicken-thighs",
@@ -168,24 +70,31 @@
         "detail":  "include \u0027chicken\\s+(thigh|drumstick|leg)\u0027 matched, exclude \u0027\\bdrumsticks?\\b\u0027 killed it"
     },
     {
-        "id":  "canned-pumpkin",
-        "store":  "Walmart",
-        "product":  "Libby\u0027s 100% Pure Pumpkin Puree, All Natural Gluten Free Canned Pumpkin for Baking Pumpkin Pie Dessert, 29 oz Can",
-        "verdict":  "EXCLUDED",
-        "detail":  "include \u0027pure\\s+pumpkin\u0027 matched, exclude \u0027\\bpie\\b\u0027 killed it"
-    },
-    {
         "id":  "chicken-thighs",
-        "store":  "Aldi",
-        "product":  "Kirkwood Fresh Chicken Drumsticks Per LB",
+        "store":  "Baker\u0027s",
+        "product":  "Heritage Farm Bone In Skin On Chicken Drumsticks",
         "verdict":  "EXCLUDED",
         "detail":  "include \u0027chicken\\s+(thigh|drumstick|leg)\u0027 matched, exclude \u0027\\bdrumsticks?\\b\u0027 killed it"
     },
     {
-        "id":  "almond-milk",
+        "id":  "canned-chicken",
+        "store":  "Walmart",
+        "product":  "Great Value Chunk Chicken in Water, 12.5 oz",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "fruit-cups",
         "store":  "Baker\u0027s",
-        "product":  "Simple Truth Dairy Free Chocolate Almond Milk Half Gallon",
+        "product":  "Dole Diced Mango In Juice",
+        "verdict":  "NO-INCLUDE",
+        "detail":  "no include pattern matches"
+    },
+    {
+        "id":  "ground-beef-8020",
+        "store":  "Walmart",
+        "product":  "80% Lean / 20% Fat Ground Beef Chuck Patties, 12 Count, 1/3 lb patties, 4 lb Tray, Fresh, All Natural*",
         "verdict":  "EXCLUDED",
-        "detail":  "include \u0027almond\\s*milk\u0027 matched, exclude \u0027chocolate\u0027 killed it"
+        "detail":  "include \u002780%?\\s*lean[^.]*20%?\\s*fat\u0027 matched, exclude \u0027patties\u0027 killed it"
     }
 ]

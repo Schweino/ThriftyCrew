@@ -1,0 +1,242 @@
+{
+    "name":  "Cheesy Green Chile Rotisserie Chicken Burrito",
+    "slug":  "green-chile-chicken-burrito",
+    "cuisine":  "Green Chile",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://masonfit.com/cheesy-rotisserie-chicken-burritos/",
+    "source_site":  "masonfit.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "ROTISSERIE MACRO BASIS is skinless pulled WHOLE-BIRD meat, light and dark (USDA SR 05013: 1.90 cal/g, 0.2893 P/g; basis corrected 2026-08-07, repair pass 2 B1). Prose MUST say skin removed.",
+                         "BLOCKER for costing: ingredients.json has NO Rotisserie Chicken row; falls to notPriced. Board id rotisserie-chicken exists. Mapper must add the row. Macro guard passes (food-DB row exists).",
+                         "RESPEC: source frozen onion-and-pepper blend replaced with FRESH Yellow Onion 25 g + Red Bell Pepper 25 g per burrito (a blend is not one of its vegetables). Fresh respec adds about 3.75 cal/serving vs the frozen blend basis; still under cap.",
+                         "Fire-roasted corn mapped to Sweet Whole Kernel Corn (canned-corn). Prose can say fire-roasted for flavor.",
+                         "Colby jack mapped to Mexican Cheese Blend (identical macro, 3.929 cal/g). Fat Free Cottage Cheese is a stub row: not cost-tracked. Flagged.",
+                         "Different protein from T4 green chile turkey. Bowl cousin: Slow Cooker Chicken Chile Verde Bowls."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "pork"
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  392,
+                 "protein":  40,
+                 "carbs":  41,
+                 "fat":  11,
+                 "cost_ps":  "3.19"
+             },
+    "intro_html":  "\u003cp\u003eGreen chile and cheese without the guilt trip. This one runs 392 calories with a huge 40 grams of protein, on a tortilla carrying 18 grams of fiber for about 5 grams of net carb. The cheesy pull comes from a blended cottage cheese and green chile sauce doing the work that a pound of cheese usually does. A store rotisserie chicken with the skin removed keeps it fast and lean. If you know our Slow Cooker Chicken Chile Verde Bowls, this is the handheld, cheesier take on that same green-chile comfort.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eRotisserie Chicken (generic (USDA)):\u003c/strong\u003e 2.62 lb pulled, skin removed (1190 g)",
+                                "\u003cstrong\u003eFat Free Cottage Cheese (Great Value):\u003c/strong\u003e 3.5 cups (798 g)",
+                                "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 1.7 cans (196 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 1.8 cans (448 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 9 oz (252 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (350 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3 peppers (350 g)",
+                                "\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 7 tbsp (56 g)",
+                                "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 3.5 oz (98 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Rotisserie Chicken, 2.62 lb pulled, skin removed: ~$10.18. \u003cstrong\u003eBuy 2 whole birds: $11.98.\u003c/strong\u003e",
+                       "Fat Free Cottage Cheese, 3.5 cups: ~$3.20. \u003cstrong\u003eBuy 2 24oz tubs: $5.46.\u003c/strong\u003e",
+                       "Diced Green Chiles, 1.7 cans: ~$1.88. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz cans.\u003c/strong\u003e",
+                       "Seasoned Black Beans, 1.8 cans: ~$2.92. \u003cstrong\u003eBuy 2 cans: $3.33.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 9 oz: ~$0.48. \u003cstrong\u003eBuy 1 can: $0.82.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Red Bell Pepper, 3 peppers: ~$2.86. \u003cstrong\u003eBuy 3 each: $2.94.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 3.5 oz: ~$0.61. \u003cstrong\u003eBuy 1 8oz bag: $1.42.\u003c/strong\u003e",
+                       "Pantry seasonings (taco seasoning): ~$0.60. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $35.21 across 14 servings, so roughly $2.52 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $44.40 across 14 servings, roughly $3.17 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $0.29 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.69. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e$3.19 a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a smothered green-chile burrito out. This one is cheesy, high-protein, and still costs about two bucks.\u003c/p\u003e",
+    "shop_smart":  [
+                       "\u003cstrong\u003eGrab the rotisserie chicken the day you cook.\u003c/strong\u003e Warm birds pull apart in minutes, and taking the skin off before you shred keeps the fat down while the protein stays high.",
+                       "\u003cstrong\u003eCanned green chiles are the flavor for almost nothing.\u003c/strong\u003e A couple of 4 ounce cans carry the whole green-chile note across all 14 burritos. Fire-roasted corn adds a smoky edge if your store carries it, but regular corn works fine.",
+                       "\u003cstrong\u003eCottage cheese is the sauce, not a side.\u003c/strong\u003e Blended with the chiles and taco seasoning, it melts into a creamy green sauce. Buy the big tub, it is cheaper by the ounce and you will use it."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Pull the skin off the rotisserie chicken and discard it, then shred the meat off the bones.",
+                    "Saute the diced yellow onion and red bell pepper in a dry or lightly sprayed skillet until soft.",
+                    "Make the green chile sauce: blend the fat free cottage cheese, diced green chiles, and taco seasoning until smooth.",
+                    "Warm the drained black beans and the corn through.",
+                    "Combine the shredded chicken, sauteed onion and pepper, beans, and corn in your pot, then fold in the green chile sauce and the Mexican cheese blend so it melts in.",
+                    "Warm the tortillas so they roll without cracking, then fill and wrap each one."
+                ],
+    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near 392 calories with 40 grams of protein.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/cheesy-rotisserie-chicken-burritos/\" target=\"_blank\" rel=\"noopener\"\u003emasonfit.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about $3.19 a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
+    "cost_batch":  35.21,
+    "cost_batch_true":  44.4,
+    "cost_per_serving":  2.52,
+    "cost_per_serving_true":  3.17,
+    "cost_pantry_add":  0.29,
+    "cost_first_run":  44.69,
+    "scaler":  {
+                   "cost":  "44.40",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Rotisserie Chicken",
+                                   "canon":  "Rotisserie Chicken",
+                                   "grams":  1190,
+                                   "buy":  "2.62 lb pulled, skin removed",
+                                   "bid":  "rotisserie-chicken",
+                                   "gpu":  "700.000"
+                               },
+                               {
+                                   "item":  "Fat Free Cottage Cheese",
+                                   "canon":  "Fat Free Cottage Cheese",
+                                   "grams":  798,
+                                   "buy":  "3.5 cups",
+                                   "bid":  "cottage-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Green Chiles",
+                                   "canon":  "Diced Green Chiles",
+                                   "grams":  196,
+                                   "buy":  "1.7 cans",
+                                   "bid":  "canned-green-chilies",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "canon":  "Seasoned Black Beans",
+                                   "grams":  448,
+                                   "buy":  "1.8 cans",
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Whole Kernel Corn",
+                                   "canon":  "Sweet Whole Kernel Corn",
+                                   "grams":  252,
+                                   "buy":  "9 oz",
+                                   "bid":  "canned-corn",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  350,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  350,
+                                   "buy":  "3 peppers",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Taco Seasoning",
+                                   "canon":  "Taco Seasoning",
+                                   "grams":  56,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "taco-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mexican Cheese Blend",
+                                   "canon":  "Mexican Cheese Blend",
+                                   "grams":  98,
+                                   "buy":  "3.5 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A cheesy green chile rotisserie chicken burrito under 400 calories. About 392 calories and 40 grams of protein per serving, roughly $3.19 each (at everyday cost).",
+                 "keywords":  "green chile chicken burrito, rotisserie chicken meal prep, high protein burrito, low calorie meal prep, budget dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT40M",
+                 "costPerServing":  3.19,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Rotisserie Chicken, 2.62 lb pulled, skin removed (1190 g)",
+                                          "Fat Free Cottage Cheese, 3.5 cups (798 g)",
+                                          "Diced Green Chiles, 1.7 cans (196 g)",
+                                          "Seasoned Black Beans, 1.8 cans (448 g)",
+                                          "Sweet Whole Kernel Corn, 9 oz (252 g)",
+                                          "Yellow Onion, 3 onions (350 g)",
+                                          "Red Bell Pepper, 3 peppers (350 g)",
+                                          "Taco Seasoning, 7 tbsp (56 g)",
+                                          "Mexican Cheese Blend, 3.5 oz (98 g)"
+                                      ],
+                 "steps":  [
+                               "Pull the skin off the rotisserie chicken and shred the meat.",
+                               "Saute the yellow onion and red bell pepper until soft.",
+                               "Blend the fat free cottage cheese, green chiles, and taco seasoning into a green chile sauce.",
+                               "Warm the black beans and corn, then combine with the chicken and vegetables.",
+                               "Fold in the green chile sauce and Mexican cheese blend, then fill the warmed tortillas.",
+                               "Weigh the batch and divide into 14 equal burritos."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Rotisserie Chicken",
+                                  "grams":  1190
+                              },
+                              {
+                                  "item":  "Fat Free Cottage Cheese",
+                                  "grams":  798
+                              },
+                              {
+                                  "item":  "Diced Green Chiles",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Seasoned Black Beans",
+                                  "grams":  448
+                              },
+                              {
+                                  "item":  "Sweet Whole Kernel Corn",
+                                  "grams":  252
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Taco Seasoning",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Mexican Cheese Blend",
+                                  "grams":  98
+                              }
+                          ]
+}

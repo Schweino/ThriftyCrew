@@ -1,0 +1,300 @@
+{
+    "name":  "Chicken Al Pastor Burrito",
+    "slug":  "chicken-al-pastor-burrito",
+    "cuisine":  "Al Pastor",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://playswellwithbutter.com/chicken-al-pastor/",
+    "source_site":  "playswellwithbutter.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "STAGE2: built from burrito-stage1-builds C7. Thigh normalized from 6 oz down to 4 oz. Pineapple trimmed and 40 g cooked rice added because the source is a filling only, not an assembled burrito.",
+                         "Both al pastor signatures are on the board: achiote paste and chipotle in adobo. The source\u0027s ancho chili powder is respecced to real Dried Ancho Chiles, the same chile in ground form, per the batch rule.",
+                         "Differs from anything live: there is no chicken al pastor in the catalog, so no bowl cousin to point at.",
+                         "Rice is entered as a DRY weight (200 g batch); the DB Rice row is dry basis. Do not re-enter cooked grams.",
+                         "Lowest protein of my slice at 30 g, still well clear of the 25 g floor."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  372,
+                 "protein":  30,
+                 "carbs":  55,
+                 "fat":  7,
+                 "cost_ps":  "3.86"
+             },
+    "intro_html":  "Al pastor is the taqueria classic where marinated pork meets charred pineapple on a spinning trompo. We keep the marinade and the pineapple and move it onto chicken thigh, which is cheaper, leaner and just as happy soaking up achiote, chipotle and citrus. Charred pineapple goes right in the wrap so every few bites turn sweet. Each burrito lands \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e30 grams of protein\u003c/strong\u003e, on a high fiber tortilla that holds near 5 grams of net carb. There is no al pastor in our catalog yet, so this one is new ground rather than a wrapped version of a bowl.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3.25 tbsp (28 g)",
+                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 5.75 tbsp (98 g)",
+                                "\u003cstrong\u003eOrange Juice:\u003c/strong\u003e 5 oranges worth (434 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 6.25 tbsp (84 g)",
+                                "\u003cstrong\u003eAchiote Paste (El Yucateco):\u003c/strong\u003e 3.25 tbsp (56 g)",
+                                "\u003cstrong\u003eDried Ancho Chiles (generic (USDA)):\u003c/strong\u003e 0.5 oz (14 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (6 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tsp (14 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 onions (266 g)",
+                                "\u003cstrong\u003ePineapple Chunks (generic):\u003c/strong\u003e 2 cans, drained (700 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 cup dry (200 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 bunch (14 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Thigh, 3.5 lb: ~$11.23. \u003cstrong\u003eBuy 4 lbs: $12.88.\u003c/strong\u003e",
+                       "Garlic, 3.25 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Chipotle in Adobo, 5.75 tbsp: ~$0.73. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Orange Juice, 5 oranges worth: ~$0.93. \u003cstrong\u003eBuy 1 52floz carton: $3.36.\u003c/strong\u003e",
+                       "Brown Sugar, 6.25 tbsp: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Achiote Paste, 3.25 tbsp: ~$0.76. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Dried Ancho Chiles, 0.5 oz: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2.4 onions: ~$0.67. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Pineapple Chunks, 2 cans, drained: ~$2.00. \u003cstrong\u003eBuy 2 20oz cans: $3.24.\u003c/strong\u003e",
+                       "Rice, 1 cup dry: ~$0.25. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 bunch: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, salt): ~$0.14. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.31 across 14 servings, so roughly $2.09 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.14 across 14 servings, roughly $2.80 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.04. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.86 a burrito\u003c/strong\u003e (at everyday cost) for taqueria al pastor built on cheap thigh instead of a trompo. The achiote brick and a can of pineapple do most of the flavor for almost nothing.",
+    "shop_smart":  [
+                       "Achiote paste comes in a cheap little brick that lasts for months and gives al pastor its brick red color and earthy flavor. One block seasons many batches.",
+                       "Chicken thigh is the right cut here and it is cheaper than breast. Buy the family pack and freeze what this batch does not use.",
+                       "A can of pineapple chunks is cheaper and more consistent than a fresh pineapple, and you want the juice for the marinade too, so nothing goes to waste.",
+                       "Dried ancho chiles cost little in the bagged section of the Mexican aisle. Toast and grind a couple and you have the real thing instead of a dusty jar of chili powder."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Toast the dried ancho chiles in a dry pan for a minute, then blend them with the garlic, chipotle in adobo, orange juice, brown sugar, achiote paste, ground cumin and salt into a smooth marinade.",
+                    "Coat the chicken thighs in the marinade and let them sit at least 30 minutes.",
+                    "Cook the rice until tender and set it aside.",
+                    "Sear or grill the marinated thighs until charred at the edges and cooked through, then chop them.",
+                    "Char the pineapple chunks and the sliced onion in a hot dry pan until they take on color.",
+                    "Weigh the rice, chicken, pineapple and onion together, subtract the empty bowl, and divide by 14. Lay that much down each tortilla, scatter on chopped cilantro, fold in the sides and roll.",
+                    "Wrap each burrito and portion into 14 containers."
+                ],
+    "portion_html":  "Weigh the filling, subtract the empty bowl, and divide by 14 so every burrito gets the same char and sweetness. Each burrito carries \u003cstrong\u003e372 calories and 30 grams of protein\u003c/strong\u003e. Reheat wrapped, and the pineapple keeps it juicy.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://playswellwithbutter.com/chicken-al-pastor/\" target=\"_blank\" rel=\"noopener\"\u003eplayswellwithbutter.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Chicken al pastor burritos, 14 wrapped and ready, for about $3.86 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  29.31,
+    "cost_batch_true":  39.14,
+    "cost_per_serving":  2.09,
+    "cost_per_serving_true":  2.8,
+    "cost_pantry_add":  14.9,
+    "cost_first_run":  54.04,
+    "scaler":  {
+                   "cost":  "39.14",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "canon":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  1582,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  28,
+                                   "buy":  "3.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Chipotle in Adobo",
+                                   "canon":  "Chipotle in Adobo",
+                                   "grams":  98,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "chipotle-adobo",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Orange Juice",
+                                   "canon":  "Orange Juice",
+                                   "grams":  434,
+                                   "buy":  "5 oranges worth",
+                                   "bid":  "orange-juice",
+                                   "gpu":  "31.000"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "canon":  "Brown Sugar",
+                                   "grams":  84,
+                                   "buy":  "6.25 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Achiote Paste",
+                                   "canon":  "Achiote Paste",
+                                   "grams":  56,
+                                   "buy":  "3.25 tbsp",
+                                   "bid":  "achiote-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Ancho Chiles",
+                                   "canon":  "Dried Ancho Chiles",
+                                   "grams":  14,
+                                   "buy":  "0.5 oz",
+                                   "bid":  "dried-ancho-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  6,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  266,
+                                   "buy":  "2.4 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Pineapple Chunks",
+                                   "canon":  "Pineapple Chunks",
+                                   "grams":  700,
+                                   "buy":  "2 cans, drained",
+                                   "bid":  "canned-pineapple",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  200,
+                                   "buy":  "1 cup dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  14,
+                                   "buy":  "1 bunch",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Chicken al pastor burritos with achiote and chipotle marinated thigh, charred pineapple and rice. 14 wrapped at 372 calories, 30g protein, about $3.86 (at everyday cost).",
+                 "keywords":  "chicken al pastor burrito, achiote chicken meal prep, charred pineapple burrito, high protein al pastor, low calorie burrito, budget chicken burrito",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  3.86,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Boneless Skinless Chicken Thigh, 3.5 lb (1582 g)",
+                                          "Garlic, 3.25 tbsp (28 g)",
+                                          "Chipotle in Adobo, 5.75 tbsp (98 g)",
+                                          "Orange Juice, 5 oranges worth (434 g)",
+                                          "Brown Sugar, 6.25 tbsp (84 g)",
+                                          "Achiote Paste, 3.25 tbsp (56 g)",
+                                          "Dried Ancho Chiles, 0.5 oz (14 g)",
+                                          "Ground Cumin, 1 tbsp (6 g)",
+                                          "Salt, 2.25 tsp (14 g)",
+                                          "Yellow Onion, 2.4 onions (266 g)",
+                                          "Pineapple Chunks, 2 cans, drained (700 g)",
+                                          "Rice, 1 cup dry (200 g)",
+                                          "Fresh Cilantro, 1 bunch (14 g)"
+                                      ],
+                 "steps":  [
+                               "Blend toasted ancho, garlic, chipotle in adobo, orange juice, brown sugar, achiote and cumin into a marinade and coat the thighs.",
+                               "Cook the rice; sear the thighs until charred and chop.",
+                               "Char the pineapple chunks and onion in a hot pan.",
+                               "Build each tortilla with rice, chicken, pineapple, onion and cilantro, weighing to divide by 14, roll and portion."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  1582
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Chipotle in Adobo",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Orange Juice",
+                                  "grams":  434
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Achiote Paste",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Dried Ancho Chiles",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  266
+                              },
+                              {
+                                  "item":  "Pineapple Chunks",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  200
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  14
+                              }
+                          ]
+}

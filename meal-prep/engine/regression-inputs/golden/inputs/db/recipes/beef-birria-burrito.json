@@ -1,0 +1,297 @@
+{
+    "name":  "Beef Birria Burrito",
+    "slug":  "beef-birria-burrito",
+    "cuisine":  "Birria",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://inmamamaggieskitchen.com/birria-burrito/",
+    "source_site":  "inmamamaggieskitchen.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Stage-1 build B12: mandated heavy surgery on the cheese, cut from about 56g to 18g per burrito. Held at 18g (252g batch). Lands 395 cal, 32g protein.",
+                         "Real dried guajillo and ancho chiles kept (both board-priced, both have DB rows). Split 1.5g guajillo / 1.0g ancho per burrito to reproduce the stage-1 chile line (2.5g at ~3.1 cal/g).",
+                         "Stage-1 \u0027bouillon+lime+cilantro\u0027 (3 cal) expanded into the real consomme aromatics: Beef Broth, Garlic, Cumin, Oregano, Bay Leaves, Lime Juice, Fresh Cilantro, Salt. Total stays inside the cap (395 of 400).",
+                         "Highest fat in the slice (21g) because chuck carries the birria the way it should; carbs are low (27g) with no rice or beans.",
+                         "Bowl cousin: Beef Birria Rice Bowls. Differentiated as a crisped, cheese-inside quesabirria-style wrap rather than shredded beef over rice."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  395,
+                 "protein":  32,
+                 "carbs":  27,
+                 "fat":  21,
+                 "cost_ps":  "5.21"
+             },
+    "intro_html":  "Birria is the chile-braised beef that took over every taco truck for a reason, and folded into a crisped, cheesy tortilla it is one of the best things you can meal prep. The cheese here is dialed back hard to keep it honest, but between the guajillo and ancho adobo and the fatty shredded chuck, you will not miss it. Each burrito lands at about \u003cstrong\u003e395 calories\u003c/strong\u003e and \u003cstrong\u003e32 grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. Our Beef Birria Rice Bowls give you the same braise over rice; this one crisps it inside the wrap with the cheese, closer to a quesabirria.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 9 oz (252 g)",
+                                "\u003cstrong\u003eDried Guajillo Chiles (generic (USDA)):\u003c/strong\u003e 0.75 oz (21 g)",
+                                "\u003cstrong\u003eDried Ancho Chiles (generic (USDA)):\u003c/strong\u003e 0.5 oz (14 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 onion (98 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 2.25 cups (560 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3.25 tbsp (28 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tbsp (3 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.07 oz (2 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 tbsp (14 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 14 tbsp (14 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (14 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Beef Chuck Roast, 3.5 lb: ~$27.90. \u003cstrong\u003eBuy 4 lbs: $31.88.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 9 oz: ~$1.57. \u003cstrong\u003eBuy 2 8oz bags: $2.84.\u003c/strong\u003e",
+                       "Dried Guajillo Chiles, 0.75 oz: ~$0.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Dried Ancho Chiles, 0.5 oz: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1 onion: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Beef Broth, 2.25 cups: ~$0.85. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 3.25 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Lime Juice, 1 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Cilantro, 14 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, dried oregano, bay leaves, salt): ~$0.36. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $43.99 across 14 servings, so roughly $3.14 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $54.17 across 14 servings, roughly $3.87 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $18.73 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $72.90. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "Dried chiles and chuck roast make a restaurant dish for grocery money, so the cost tab number stays low. Sale-priced chuck takes it lower still.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eDried chiles are the whole soul of this and they are cheap.\u003c/strong\u003e A bag of guajillo and a bag of ancho cost a few dollars and make several batches. Toast them in a dry pan before you soak them and the flavor jumps.",
+                       "\u003cstrong\u003eChuck roast is the right cut and the budget cut.\u003c/strong\u003e The fat is what makes birria birria, so do not reach for a leaner roast here. Buy it on sale and freeze extra.",
+                       "\u003cstrong\u003eSkip the birria paste in a jar.\u003c/strong\u003e Your adobo from whole dried chiles, garlic, and spices costs less and tastes better than the shortcut in the international aisle."
+                   ],
+    "make_it":  [
+                    "Weigh your empty pot on a kitchen scale and write the number down for portioning later.",
+                    "Toast the guajillo and ancho chiles in a dry pan until fragrant, then soak them in hot water until soft and pull the stems and seeds.",
+                    "Blend the soaked chiles with the beef broth, garlic, cumin, oregano, and salt into a smooth adobo.",
+                    "Brown the chuck, add the diced onion, the bay leaves, and the adobo, cover, and braise until the beef pulls apart with a fork.",
+                    "Shred the beef in the pot, fish out the bay leaves, and simmer uncovered a few minutes to thicken the consomme around it.",
+                    "Finish the shredded beef with the lime juice and chopped cilantro.",
+                    "Lay a warm tortilla, add the portioned beef and a share of the shredded cheese, and roll; crisp it seam down in a dry hot pan for extra credit."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total shredded-beef weight. Divide it by 14, spoon that amount onto each warm tortilla, add an even share of the cheese, and roll. Every burrito lands at about \u003cstrong\u003e395 calories and 32 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://inmamamaggieskitchen.com/birria-burrito/\" target=\"_blank\" rel=\"noopener\"\u003einmamamaggieskitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  43.99,
+    "cost_batch_true":  54.17,
+    "cost_per_serving":  3.14,
+    "cost_per_serving_true":  3.87,
+    "cost_pantry_add":  18.73,
+    "cost_first_run":  72.9,
+    "scaler":  {
+                   "cost":  "54.17",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "canon":  "Beef Chuck Roast",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Mexican Cheese Blend",
+                                   "canon":  "Mexican Cheese Blend",
+                                   "grams":  252,
+                                   "buy":  "9 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Guajillo Chiles",
+                                   "canon":  "Dried Guajillo Chiles",
+                                   "grams":  21,
+                                   "buy":  "0.75 oz",
+                                   "bid":  "dried-guajillo-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Ancho Chiles",
+                                   "canon":  "Dried Ancho Chiles",
+                                   "grams":  14,
+                                   "buy":  "0.5 oz",
+                                   "bid":  "dried-ancho-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  98,
+                                   "buy":  "1 onion",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "canon":  "Beef Broth",
+                                   "grams":  560,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  28,
+                                   "buy":  "3.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  3,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "canon":  "Bay Leaves",
+                                   "grams":  2,
+                                   "buy":  "0.07 oz",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  14,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  14,
+                                   "buy":  "14 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A beef birria burrito for meal prep: chuck braised in guajillo and ancho adobo, crisped in the tortilla with cheese. About 395 calories and 32 grams of protein per serving.",
+                 "keywords":  "birria burrito, quesabirria, guajillo ancho beef, birria meal prep, budget high protein burrito",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT3H",
+                 "totalTime":  "PT3H30M",
+                 "costPerServing":  5.21,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Beef Chuck Roast, 3.5 lb (1588 g)",
+                                          "Mexican Cheese Blend, 9 oz (252 g)",
+                                          "Dried Guajillo Chiles, 0.75 oz (21 g)",
+                                          "Dried Ancho Chiles, 0.5 oz (14 g)",
+                                          "Yellow Onion, 1 onion (98 g)",
+                                          "Beef Broth, 2.25 cups (560 g)",
+                                          "Garlic, 3.25 tbsp (28 g)",
+                                          "Ground Cumin, 1 tbsp (7 g)",
+                                          "Dried Oregano, 1 tbsp (3 g)",
+                                          "Bay Leaves, 0.07 oz (2 g)",
+                                          "Lime Juice, 1 tbsp (14 g)",
+                                          "Fresh Cilantro, 14 tbsp (14 g)",
+                                          "Salt, 0.75 tbsp (14 g)"
+                                      ],
+                 "steps":  [
+                               "Toast and soak the guajillo and ancho chiles, then remove stems and seeds.",
+                               "Blend the chiles with beef broth, garlic, cumin, oregano, and salt into an adobo.",
+                               "Brown the chuck, add onion, bay leaves, and adobo, and braise until it shreds.",
+                               "Shred the beef and finish with lime juice and cilantro.",
+                               "Weigh the beef, divide by 14, wrap with a share of cheese, and crisp seam down."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Beef Chuck Roast",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Mexican Cheese Blend",
+                                  "grams":  252
+                              },
+                              {
+                                  "item":  "Dried Guajillo Chiles",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Dried Ancho Chiles",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Beef Broth",
+                                  "grams":  560
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Bay Leaves",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              }
+                          ]
+}

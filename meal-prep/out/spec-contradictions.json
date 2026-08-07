@@ -1,6 +1,12 @@
 ﻿{
-    "specs":  513,
+    "specs":  542,
     "findings":  [
+                     {
+                         "run":  "live",
+                         "slug":  "baked-ziti-with-ground-turkey-and-ricotta",
+                         "cls":  "PHANTOM",
+                         "why":  "a step says \u0027tomato\u0027 but Tomato is in no ingredient line - it cannot be made as shopped"
+                     },
                      {
                          "run":  "live",
                          "slug":  "chicken-biryani-rice-bowls",
@@ -18,6 +24,12 @@
                          "slug":  "chile-relleno-casserole-ground-beef",
                          "cls":  "UNMEASURABLE-QTY",
                          "why":  "a line asks for \u00270.07 tbsp\u0027, which no kitchen measure shows: Hot Sauce (Frank\u0027s RedHot): 0.07 tbsp (1 g)"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "chili-lime-chicken-burrito",
+                         "cls":  "UNUSED",
+                         "why":  "\u0027cherry tomatoes\u0027 is bought and costed but never named in a step"
                      },
                      {
                          "run":  "live",
@@ -66,6 +78,96 @@
                          "slug":  "pozole-rojo-pork-hominy-bowls",
                          "cls":  "UNMEASURABLE-QTY",
                          "why":  "a line asks for \u00270.08 cups\u0027, which no kitchen measure shows: Dried Arbol Chiles (generic (USDA)): 0.08 cups (2 g)"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-butter-chicken-rice-bowls",
+                         "cls":  "STALE-MONEY",
+                         "why":  "portion_html quotes $2.00 but the per-serving cost is $3.76"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-chicken-chile-verde-bowls",
+                         "cls":  "STALE-MONEY",
+                         "why":  "portion_html quotes $2.44 but the per-serving cost is $4.13"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-chicken-curry-rice-bowls",
+                         "cls":  "STALE-MONEY",
+                         "why":  "portion_html quotes $2.03 but the per-serving cost is $2.29"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-chicken-korma-rice-bowls",
+                         "cls":  "STALE-MONEY",
+                         "why":  "portion_html quotes $2.08 but the per-serving cost is $2.83"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-chicken-pozole-bowls",
+                         "cls":  "STALE-MONEY",
+                         "why":  "portion_html quotes $2.50 but the per-serving cost is $3.03"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-chicken-saag-rice-bowls",
+                         "cls":  "STALE-MONEY",
+                         "why":  "portion_html quotes $2.33 but the per-serving cost is $2.90"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+                         "cls":  "STALE-MONEY",
+                         "why":  "portion_html quotes $2.31 but the per-serving cost is $3.08"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+                         "cls":  "STALE-MONEY",
+                         "why":  "portion_html quotes $2.24 but the per-serving cost is $3.15"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-chicken-tinga-bowls",
+                         "cls":  "STALE-MONEY",
+                         "why":  "portion_html quotes $2.26 but the per-serving cost is $2.21"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+                         "cls":  "STALE-MONEY",
+                         "why":  "portion_html quotes $2.07 but the per-serving cost is $3.30"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-cilantro-lime-chicken-bowls",
+                         "cls":  "STALE-MONEY",
+                         "why":  "portion_html quotes $2.25 but the per-serving cost is $2.98"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-honey-sesame-chicken-bowls",
+                         "cls":  "STALE-MONEY",
+                         "why":  "portion_html quotes $1.95 but the per-serving cost is $2.34"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-king-ranch-chicken-bowls",
+                         "cls":  "STALE-MONEY",
+                         "why":  "portion_html quotes $2.16 but the per-serving cost is $2.96"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-orange-chicken-rice-bowls",
+                         "cls":  "STALE-MONEY",
+                         "why":  "portion_html quotes $1.96 but the per-serving cost is $2.90"
+                     },
+                     {
+                         "run":  "live",
+                         "slug":  "slow-cooker-white-chicken-chili-bowls",
+                         "cls":  "STALE-MONEY",
+                         "why":  "portion_html quotes $2.60 but the per-serving cost is $3.49"
                      },
                      {
                          "run":  "live",
@@ -130,6 +232,9 @@
                  ],
     "generated":  "see git",
     "by_class":  {
-                     "UNMEASURABLE-QTY":  21
+                     "UNMEASURABLE-QTY":  21,
+                     "STALE-MONEY":  15,
+                     "UNUSED":  1,
+                     "PHANTOM":  1
                  }
 }

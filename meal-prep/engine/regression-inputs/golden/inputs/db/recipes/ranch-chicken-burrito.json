@@ -1,0 +1,321 @@
+{
+    "name":  "Ranch Chicken Burrito",
+    "slug":  "ranch-chicken-burrito",
+    "cuisine":  "Southwest-Ranch",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.staysnatched.com/protein-chicken-burrito/",
+    "source_site":  "staysnatched.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "RESOLVED by mapper stage 2 (2026-08-06): Ranch Dressing row added to food-macros-db from the real GV Classic Ranch label (2 tbsp 28 g = 130 cal / 14 F / 1 C / 0 P, 4.64 cal/g) - the proposed light-ranch 2.9 cal/g basis did not match the plain-ranch prose or the board\u0027s ranch-dressing commodity. Stat restated 387/39/39/12 -\u003e 396/39/39/13; still under the 400 cap.",
+                         "Sauce is library S4: Greek yogurt + ranch dressing + dry ranch seasoning + a little sugar + smoked paprika + cumin + cayenne. Bottled ranch and dry ranch are both in S4 by design; do not drop either.",
+                         "Sweetener mapped to Sugar (3.75 cal/g, the stage-1 basis).",
+                         "Cleanest of the three ranch chickens. Differs from chicken-bacon-ranch (C12) by having no bacon. No direct bowl cousin."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "pork"
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  396,
+                 "protein":  39,
+                 "carbs":  39,
+                 "fat":  13,
+                 "cost_ps":  "3.82"
+             },
+    "intro_html":  "\u003cp\u003eCool ranch, warm spice, and a number that stays in line. This burrito hits 396 calories with 39 grams of protein, on a tortilla carrying 18 grams of fiber for about 5 grams of net carb. The ranch here is a Greek yogurt sauce with real ranch stirred in, so you get the tang and the creaminess with a fraction of the fat a bottle of dressing brings. Fajita peppers, black beans, and a can of tomatoes with green chiles give it the southwestern backbone.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.75 tbsp (11 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 onion (98 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2 peppers (210 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 1.3 cans (322 g)",
+                                "\u003cstrong\u003eDiced Tomatoes \u0026 Green Chilies (Great Value (Ro-Tel style)):\u003c/strong\u003e 2 cans (560 g)",
+                                "\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 3.5 tbsp (28 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 7 oz (196 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 2.25 cups (532 g)",
+                                "\u003cstrong\u003eRanch Dressing (Great Value):\u003c/strong\u003e 5 tbsp (70 g)",
+                                "\u003cstrong\u003eRanch Seasoning Mix (Hidden Valley):\u003c/strong\u003e 3 tbsp (21 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 4.5 tbsp (56 g)",
+                                "\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 3.5 lb: ~$7.78. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "Yellow Onion, 1 onion: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2 peppers: ~$1.72. \u003cstrong\u003eBuy 2 each: $1.96.\u003c/strong\u003e",
+                       "Seasoned Black Beans, 1.3 cans: ~$2.10. \u003cstrong\u003eBuy 2 cans: $3.33.\u003c/strong\u003e",
+                       "Diced Tomatoes \u0026 Green Chilies, 2 cans: ~$1.92. \u003cstrong\u003eBuy 2 10oz cans: $1.94.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 7 oz: ~$1.49. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "Greek Yogurt, 2.25 cups: ~$1.92. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Ranch Dressing, 5 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 16floz bottle: $1.76.\u003c/strong\u003e",
+                       "Ranch Seasoning Mix, 3 tbsp: ~$0.34. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sugar, 4.5 tbsp: ~$0.09. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (olive oil, taco seasoning, smoked paprika, ground cumin, cayenne pepper): ~$0.79. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $30.28 across 14 servings, so roughly $2.16 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.11 across 14 servings, roughly $2.86 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.38 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.49. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e$3.82 a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a ranch chicken burrito at a fast-casual counter. Same flavor, a fifth of the price.\u003c/p\u003e",
+    "shop_smart":  "\u003cp\u003e\u003cstrong\u003eGreek yogurt is the base of the sauce, not sour cream.\u003c/strong\u003e It brings the protein up while it keeps the sauce creamy. Buy the big tub, it costs less per ounce and this recipe uses a lot of it.\u003c/p\u003e\u003cp\u003e\u003cstrong\u003eA packet of dry ranch plus a splash of bottled ranch is all the flavor.\u003c/strong\u003e You are not buying a whole bottle of dressing to pour on, just a few spoonfuls stirred into the yogurt, so one bottle lasts a long time.\u003c/p\u003e\u003cp\u003e\u003cstrong\u003eTomatoes with green chiles do double duty.\u003c/strong\u003e One can brings the tomato and the mild heat in a single step, so you skip buying both. Drain it well so the burritos hold up in the fridge.\u003c/p\u003e",
+    "make_it":  [
+                    "Weigh your empty mixing pot on a kitchen scale and write the number down for portioning later.",
+                    "Cube the chicken breast and cook it in a skillet with the olive oil over medium-high heat until it reaches 165F inside. Add the taco seasoning and toss to coat.",
+                    "Saute the diced yellow onion and red bell pepper until soft, then stir in the drained tomatoes with green chilies and the black beans and warm through.",
+                    "Make the ranch sauce: whisk the Greek yogurt, ranch dressing, ranch seasoning mix, sugar, smoked paprika, ground cumin, and cayenne pepper until smooth.",
+                    "Combine the chicken with the pepper, tomato, and bean mixture in your pot.",
+                    "Warm the tortillas, then fill each with the chicken mixture, a scatter of shredded cheddar, and a spoon of the ranch sauce before you wrap."
+                ],
+    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14, scoop the same amount into each tortilla, and finish with an even spoon of the ranch sauce. Every burrito lands near 396 calories with 39 grams of protein.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.staysnatched.com/protein-chicken-burrito/\" target=\"_blank\" rel=\"noopener\"\u003estaysnatched.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about $3.82 a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
+    "cost_batch":  30.28,
+    "cost_batch_true":  40.11,
+    "cost_per_serving":  2.16,
+    "cost_per_serving_true":  2.86,
+    "cost_pantry_add":  13.38,
+    "cost_first_run":  53.49,
+    "scaler":  {
+                   "cost":  "40.11",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1582,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  11,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  98,
+                                   "buy":  "1 onion",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  210,
+                                   "buy":  "2 peppers",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "canon":  "Seasoned Black Beans",
+                                   "grams":  322,
+                                   "buy":  "1.3 cans",
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes \u0026 Green Chilies",
+                                   "canon":  "Diced Tomatoes \u0026 Green Chilies",
+                                   "grams":  560,
+                                   "buy":  "2 cans",
+                                   "bid":  "tomatoes-green-chilies",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Taco Seasoning",
+                                   "canon":  "Taco Seasoning",
+                                   "grams":  28,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "taco-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  196,
+                                   "buy":  "7 oz",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "canon":  "Greek Yogurt",
+                                   "grams":  532,
+                                   "buy":  "2.25 cups",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ranch Dressing",
+                                   "canon":  "Ranch Dressing",
+                                   "grams":  70,
+                                   "buy":  "5 tbsp",
+                                   "bid":  "ranch-dressing",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Ranch Seasoning Mix",
+                                   "canon":  "Ranch Seasoning Mix",
+                                   "grams":  21,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "ranch-seasoning-mix",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "canon":  "Sugar",
+                                   "grams":  56,
+                                   "buy":  "4.5 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Smoked Paprika",
+                                   "canon":  "Smoked Paprika",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "smoked-paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "canon":  "Cayenne Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A creamy southwest ranch chicken burrito under 400 calories, built on a Greek yogurt ranch sauce. Fourteen servings at about 396 calories and 39 grams of protein for roughly $3.82 each (at everyday cost).",
+                 "keywords":  "ranch chicken burrito, high protein meal prep, low calorie burrito, cheap meal prep, budget dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  3.82,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Boneless Skinless Chicken Breast, 3.5 lb (1582 g)",
+                                          "Olive Oil, 0.75 tbsp (11 g)",
+                                          "Yellow Onion, 1 onion (98 g)",
+                                          "Red Bell Pepper, 2 peppers (210 g)",
+                                          "Seasoned Black Beans, 1.3 cans (322 g)",
+                                          "Diced Tomatoes \u0026 Green Chilies, 2 cans (560 g)",
+                                          "Taco Seasoning, 3.5 tbsp (28 g)",
+                                          "Cheddar Cheese, Shredded, 7 oz (196 g)",
+                                          "Greek Yogurt, 2.25 cups (532 g)",
+                                          "Ranch Dressing, 5 tbsp (70 g)",
+                                          "Ranch Seasoning Mix, 3 tbsp (21 g)",
+                                          "Sugar, 4.5 tbsp (56 g)",
+                                          "Smoked Paprika, 1 tbsp (7 g)",
+                                          "Ground Cumin, 1 tbsp (7 g)",
+                                          "Cayenne Pepper, 0.5 tbsp (3 g)"
+                                      ],
+                 "steps":  [
+                               "Cube and cook the chicken breast in the olive oil until it reaches 165F, then toss with taco seasoning.",
+                               "Saute the onion and red bell pepper, then add the drained tomatoes with green chilies and the black beans.",
+                               "Whisk the Greek yogurt, ranch dressing, ranch seasoning, sugar, smoked paprika, cumin, and cayenne into a smooth sauce.",
+                               "Combine the chicken with the vegetable and bean mixture.",
+                               "Fill warmed tortillas with the filling, shredded cheddar, and a spoon of ranch sauce.",
+                               "Weigh the batch and divide into 14 equal burritos."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1582
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  11
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Seasoned Black Beans",
+                                  "grams":  322
+                              },
+                              {
+                                  "item":  "Diced Tomatoes \u0026 Green Chilies",
+                                  "grams":  560
+                              },
+                              {
+                                  "item":  "Taco Seasoning",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  532
+                              },
+                              {
+                                  "item":  "Ranch Dressing",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Ranch Seasoning Mix",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Smoked Paprika",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Cayenne Pepper",
+                                  "grams":  3
+                              }
+                          ]
+}

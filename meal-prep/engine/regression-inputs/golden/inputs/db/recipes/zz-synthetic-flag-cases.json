@@ -1,0 +1,29 @@
+﻿{
+    "name":  "ZZ Synthetic Flag Cases",
+    "slug":  "zz-synthetic-flag-cases",
+    "_doc":  "NOT A RECIPE. Frozen fixture row that reaches the five cost-flag branches no live recipe reaches. See seed-golden-fixture.ps1.",
+    "scaler":  {
+                   "ing":  [
+                               {
+                                   "item":  "ZZ Unpriced Item",
+                                   "grams":  100
+                               },
+                               {
+                                   "item":  "ZZ Offboard Bid",
+                                   "grams":  100
+                               },
+                               {
+                                   "item":  "ZZ Bulk No Pantry",
+                                   "grams":  100
+                               },
+                               {
+                                   "item":  "ZZ No Package Def",
+                                   "grams":  100
+                               },
+                               {
+                                   "item":  "ZZ Unit Mismatch",
+                                   "grams":  100
+                               }
+                           ]
+               }
+}

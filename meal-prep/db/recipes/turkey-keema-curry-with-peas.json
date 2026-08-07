@@ -15,9 +15,9 @@
                  "protein":  36,
                  "carbs":  89,
                  "fat":  13,
-                 "cost_ps":  "3.62"
+                 "cost_ps":  "3.43"
              },
-    "intro_html":  "Keema is the weeknight curry of the Indian home kitchen: spiced ground meat and peas in a gravy that comes together in one pot. This turkey version lands \u003cstrong\u003e36 grams of protein\u003c/strong\u003e per bowl over rice for about \u003cstrong\u003e$3.62\u003c/strong\u003e (at everyday cost), with cumin, turmeric, and fresh ginger doing the talking.",
+    "intro_html":  "Keema is the weeknight curry of the Indian home kitchen: spiced ground meat and peas in a gravy that comes together in one pot. This turkey version lands \u003cstrong\u003e36 grams of protein\u003c/strong\u003e per bowl over rice for about \u003cstrong\u003e$3.43\u003c/strong\u003e (at everyday cost), with cumin, turmeric, and fresh ginger doing the talking.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.5 tbsp (49 g)",
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.75 lb (1750 g)",
@@ -32,7 +32,7 @@
                                 "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 6.5 cups (875 g)",
                                 "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 6 1/2 cups (105 g)",
                                 "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1.7 lemons worth (82 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7 cups dry (1295 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7.25 cups dry (1295 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
                             ],
@@ -48,13 +48,13 @@
                        "Frozen Green Peas, 6.5 cups: ~$1.89. \u003cstrong\u003eBuy 3 12oz bags: $2.20.\u003c/strong\u003e",
                        "Fresh Cilantro, 6 1/2 cups: ~$3.28. \u003cstrong\u003eBuy 2 bunchs: $3.56.\u003c/strong\u003e",
                        "Lemon Juice, 1.7 lemons worth: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Rice, 7 cups dry: ~$1.92. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 7.25 cups dry: ~$1.92. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (ground cumin, ground turmeric, ground coriander, salt, black pepper): ~$1.24. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $34.27 across 14 servings, so roughly $2.45 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $38.00 across 14 servings, roughly $2.71 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $15.50 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.50. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.62 a bowl\u003c/strong\u003e (at everyday cost) for turkey keema with peas over rice. An Indian restaurant charges $14 or more for keema and rice, and their portion does not survive to lunch tomorrow.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.43 a bowl\u003c/strong\u003e (at everyday cost) for turkey keema with peas over rice. An Indian restaurant charges $14 or more for keema and rice, and their portion does not survive to lunch tomorrow.",
     "shop_smart":  [
                        "Ground turkey handles the protein across 3.75 pounds, cheaper per gram of protein than the lamb or beef keema is traditionally made with, and leaner too.",
                        "Frozen peas are the best vegetable deal in the freezer aisle for what this needs. No shelling, no waste, no going bad on you.",
@@ -72,7 +72,7 @@
                 ],
     "portion_html":  "Weigh the full pot with rice and keema, subtract the empty pot weight you wrote down, and divide by 14. Portion to that number and each bowl lands at about 641 calories with 36 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://fellybull.com/turkey-keema-curry/\" target=\"_blank\" rel=\"noopener\"\u003eFelly Bull\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $3.62 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about $3.43 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  34.27,
     "cost_batch_true":  38,
     "cost_per_serving":  2.45,
@@ -176,7 +176,7 @@
                                {
                                    "item":  "Rice",
                                    "grams":  1295,
-                                   "buy":  "7 cups dry",
+                                   "buy":  "7.25 cups dry",
                                    "bid":  "rice",
                                    "gpu":  453.592
                                },
@@ -197,13 +197,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Turkey keema curry meal prep: 14 bowls, 641 calories and 36g protein each, about $3.62 a serving (at everyday cost). Spiced ground turkey and peas in gravy over rice.",
+                 "description":  "Turkey keema curry meal prep: 14 bowls, 641 calories and 36g protein each, about $3.43 a serving (at everyday cost). Spiced ground turkey and peas in gravy over rice.",
                  "keywords":  "turkey keema, keema curry, ground turkey curry, indian meal prep, keema matar, budget curry recipe",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT50M",
-                 "costPerServing":  3.62,
+                 "costPerServing":  3.43,
                  "recipeIngredient":  [
                                           "Vegetable Oil, 3.5 tbsp (49 g)",
                                           "93/7 Ground Turkey, 3.75 lb (1750 g)",
@@ -218,7 +218,7 @@
                                           "Frozen Green Peas, 6.5 cups (875 g)",
                                           "Fresh Cilantro, 6 1/2 cups (105 g)",
                                           "Lemon Juice, 1.7 lemons worth (82 g)",
-                                          "Rice, 7 cups dry (1295 g)",
+                                          "Rice, 7.25 cups dry (1295 g)",
                                           "Salt, 1 tbsp (20 g)",
                                           "Black Pepper, 0.5 tbsp (4 g)"
                                       ],

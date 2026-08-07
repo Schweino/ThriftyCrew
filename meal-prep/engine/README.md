@@ -23,6 +23,9 @@ Also canonical (already single-copy, unchanged): `recipes-db.json` (catalog inde
 
 ```
 engine\cost-recipes.ps1 [-Slugs ...]       specs + ingredients db + boards -> db\costed.json
+                                           (-DbRoot/-GroceryOut/-OutFile/-FlagsFile exist only so the
+                                            golden test can run it over a frozen fixture; defaults are
+                                            the live paths, so the daily call is unchanged)
 pipeline\compute-v2-perserving.ps1         costed + feed -> v2-perserving.json (everyday+cheapest)
 pipeline\reanchor-machine-fields.ps1       manifest -> stat.cost_ps + head.costPerServing in specs
 pipeline\reanchor-moved-prose.ps1          manifest delta -> prose $ figures in specs
@@ -38,6 +41,15 @@ they all have the same tail because `buy` is copied into three more places insid
 pipeline\repair-cook-measures.ps1 -Apply   a label naming a PACKAGE the recipe does not use ("1 bottle")
 pipeline\repair-unitless-buy.ps1  -Apply   a COUNT with no noun ("18.4" -> "18.4 potatoes")
 pipeline\repair-range-buy.ps1     -Apply   a RANGE where the quantity belongs ("2-3 cloves" -> "8 cloves")
+pipeline\repair-plural-unit.ps1   -Apply   a quantity of one against a plural unit ("1 cups" -> "1 cup")
+pipeline\repair-basis-relabel.ps1 -Apply -PreImage out\basis-preimage-<date>.json
+                                           labels derived against a cup/tbsp basis db\densities.json has
+                                           since corrected. REQUIRES a pre-image captured BEFORE the
+                                           densities edit (slug/canon/grams/stored/derived_old): the gate
+                                           is "stored == what the generator wrote under the OLD basis",
+                                           which is the only thing separating a machine label from a
+                                           writer's ("7/8 cup grated") - and it cannot be reconstructed
+                                           after the fact.
   then, for the slugs any of them touched:
 pipeline\repair-head-ingredients.ps1 -Apply  re-derive the JSON-LD list from the repaired display lines
 pipeline\sync-recipesdb-buy.ps1   -Apply   carry the label into recipes-db.json (planner-data reads THAT)
@@ -57,11 +69,26 @@ the derivation was in flight, and 423 of 513 specs needed re-deriving on top of 
 -Slugs $slugs`), never through `powershell -File`: that path marshals arguments as command-line strings,
 so a 10-slug array binds as one slug and the run reports a cheerful "built 1/1".
 
-The splice all three repairs share is `pipeline\buy-label-lib.ps1` - one implementation, because two
-copies of a four-surface text edit means the day someone fixes a splice bug in one, the other keeps
+The splice every one of these repairs shares is `pipeline\buy-label-lib.ps1` - one implementation, because
+two copies of a four-surface text edit means the day someone fixes a splice bug in one, the other keeps
 shipping it. Label semantics (`Test-RangeBuy`, `Resolve-RangeBuy`, `Get-CookMeasure`) live in
 `pipeline\cook-measure-lib.ps1` so `sync-recipesdb-buy` can read the same predicates without
 dot-sourcing a script that runs a catalog pass at the bottom.
+
+**The label a card prints lives in exactly one function: `Get-FriendlyAmt` in
+`pipeline\friendly-amt-lib.ps1`.** Until 2026-08-07 it also lived inline in `build-v2-spec.ps1` and again
+in `build-run-specs.ps1`, and the two builders called their own copies. So the library's singular-cup fix
+existed for days while every spec the builders wrote still shipped `Salsa: 1 cups` - 96 rows across 78
+specs by the time anyone compared them. Both builders now dot-source the library. Do not re-inline it,
+and do not add a second basis constant: the Rice cup used to be the literal `185.0` in four files at
+once, which is how `db\densities.json` (185) and `food-macros-db.json` (200 g/cup) got to disagree about
+a cup of rice without anything in the estate being able to notice.
+
+A repair that changes a label must also write a **carry manifest** to `out\<class>-carry.json`
+(`{slug, item, old, new}`, `item` = the CANONICAL name, because that is what `recipes-db.json` stores)
+and register it in `sync-recipesdb-buy.ps1`. That script carries only classes a manifest proves a repair
+actually performed - so a repair with no manifest silently stops at the specs and the cards, and
+`planner-data.js` goes on printing the old text with nothing to say so.
 
 Skipping the sync step leaves the Meal Plan Builder showing the old text with nothing to say so:
 audit-db-agreement compares slug and protein, not labels. Run `sync-recipesdb-buy.ps1` (read-only) any
@@ -79,14 +106,51 @@ cheapest_ps from the manifest (legacy fallback only if a slug is missing).
 2. `engine\cost-recipes.ps1 -Slugs <new...>` then compute + re-anchor + `build-cards -Slugs` +
    `publish -Slugs`. Add rows to recipes-db via the archive run's update-recipes-db pattern.
 
-## Provenance + the golden test
+## The golden test
+
+`engine\golden-test.ps1` is the engine's regression suite. Exit 0 pass, 2 fail. It runs in the daily
+`grocery\check-ad-cycles.ps1` sequence right after `cost-recipes`, and alerts on failure.
+
+```
+engine\golden-test.ps1                 both gating lanes (this is what the daily run invokes)
+engine\golden-test.ps1 -Structural     lane 1 only
+engine\golden-test.ps1 -Frozen         lane 2 only
+engine\golden-test.ps1 -Rebaseline     accept today's engine output over the frozen inputs
+engine\golden-test.ps1 -Provenance -Force   the 2026-07-26 port diff (informational, cannot pass)
+```
+
+| lane | what it asserts | what makes it durable |
+|---|---|---|
+| **STRUCTURAL** | the live `db\costed.json` against its own specs and the ingredient db: no missing or orphan rows, costed grams equal spec grams, `buy_n`/`starter_n` equal the engine's ceil, the pantry fold and every total add up, package sizes are ones the db actually defines | reads **no price board**, so no price move can make it lie |
+| **FROZEN** | the engine over pinned inputs in `regression-inputs\golden\inputs\` must reproduce `expected\costed.json` byte for byte, plus the `-Slugs` splice in both directions | the **inputs are frozen too**, so the output can only move when the *engine* moves |
+
+Both ship must-fire fixtures (`regression-inputs\golden\structural-fixtures\`, and the FROZEN lane
+perturbs a copied input and demands the output change), because a check that reports nothing is
+indistinguishable from a check that is broken.
+
+**When the engine changes on purpose:** run the test, read the per-slug diff it prints, and if the change
+is intended accept it with `-Rebaseline`. That rewrites *only* `expected\`, never the inputs, and records
+the engine hash + timestamp in `MANIFEST.json`. There is no refresh schedule to miss - the baseline moves
+when the engine moves. `seed-golden-fixture.ps1` built the input fixture once; re-running it is almost
+never right (regenerating a fixture from live data is how a fixture stops testing anything).
+
+WHY IT LOOKS LIKE THIS (2026-08-06). v1 diffed the daily-regenerated `db\costed.json` against outputs
+frozen on 2026-07-26. That is true for one day. By 2026-08-04 it emitted 10,339 diffs - nine days of
+grocery prices - and honestly disabled itself rather than report a false pass. The refusal was right and
+the consequence was still bad: THE engine behind every price on the site went eleven days with no
+regression test, and was modified on 2026-08-06 with nothing but a hand-rolled one-off diff to check it.
+A fresher output baseline just re-runs that clock. Freezing the inputs stops it.
+
+## Provenance of the port
 
 Built from the r100/r300/orig per-run engines (identical cores, drifted data tables) - full history in
 `meal-prep\archive\`. `engine\build-ingredients-db.ps1` merged every table (precedence: vetted maps
-override; the orig harvest map is fill-only); `engine\golden-test.ps1` proved the port against the
-per-run outputs at the same moment: r300 reproduced EXACTLY (0 diffs); r100/orig differed only by two
+override; the orig harvest map is fill-only); the golden test's PROVENANCE lane proved the port against
+the per-run outputs at the same moment: r300 reproduced EXACTLY (0 diffs); r100/orig differed only by two
 known correction classes (drained-can fix reaching r100, legacy-id cleanup on orig) - 142 recipes were
-re-anchored + republished with the corrected numbers on 2026-07-26.
+re-anchored + republished with the corrected numbers on 2026-07-26. That lane is kept so the history is
+re-readable, but it compares today's output to a 2026-07-26 baseline and so can never pass again; it is
+informational and does not gate.
 
 ## Traps (learned the hard way)
 

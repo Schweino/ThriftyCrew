@@ -1,0 +1,254 @@
+{
+    "name":  "Buffalo Chicken Burrito",
+    "slug":  "buffalo-chicken-burrito",
+    "cuisine":  "Buffalo",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://fitfoodiefinds.com/buffalo-chicken-burrito/",
+    "source_site":  "fitfoodiefinds.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "STAGE2: built from burrito-stage1-builds C2. REBUILT from the source\u0027s ground chicken onto diced and shredded chicken breast. This is a fidelity improvement, since classic buffalo chicken is shredded breast, not ground. Ground chicken is banned this batch and appears nowhere, including asides.",
+                         "S2 owns this recipe: the buffalo cottage sauce is blended cottage cheese plus shredded cheddar plus buffalo wing sauce, which carries the tang and heat without ranch-dressing calories.",
+                         "Carrot and celery are the buffalo-wing plate in vegetable form, cooked into the filling rather than served on the side.",
+                         "Differs from the live Slow Cooker Buffalo Chicken and Rice Bowl by cut (diced and shredded breast), by the blended cottage sauce, and by the tortilla format. Selection notes this is a tight fit under the 400 cap, not a headroom recipe.",
+                         "Buffalo Wing Sauce is 0 cal per the DB label, so the heat is free on the macro sheet."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "ground chicken"
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  357,
+                 "protein":  40,
+                 "carbs":  30,
+                 "fat":  12,
+                 "cost_ps":  "3.39"
+             },
+    "intro_html":  "Buffalo chicken done the way the sports bar wishes it could. We poach and shred lean chicken breast, cook it down with onion, carrot and celery so the whole wing-night plate ends up inside the wrap, and bind it with a blended cottage cheese and cheddar sauce spiked with buffalo wing sauce. No ranch, no blue cheese pour, no deep fryer. Each burrito comes in \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e40 grams of protein\u003c/strong\u003e, on a high fiber tortilla that keeps you at about 5 grams of net carb. We have a Slow Cooker Buffalo Chicken and Rice Bowl already; this is the handheld version, built on shredded breast and a creamy cottage sauce instead of rice.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.25 tbsp (17 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 onions (266 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 4 carrots (252 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 7 stalks (392 g)",
+                                "\u003cstrong\u003eCottage Cheese (Darigold):\u003c/strong\u003e 28.25 oz (798 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 7 oz (196 g)",
+                                "\u003cstrong\u003eBuffalo Wing Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 6.5 tbsp (98 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tsp (14 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tsp (3 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 3.5 lb: ~$7.78. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "Olive Oil, 1.25 tbsp: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2.4 onions: ~$0.67. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 4 carrots: ~$0.53. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Celery, 7 stalks: ~$1.64. \u003cstrong\u003eBuy 1 bunch: $1.88.\u003c/strong\u003e",
+                       "Cottage Cheese, 28.25 oz: ~$3.20. \u003cstrong\u003eBuy 2 24oz tubs: $5.46.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 7 oz: ~$1.49. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "Buffalo Wing Sauce, 6.5 tbsp: ~$0.67. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.85 across 14 servings, so roughly $1.99 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.85 across 14 servings, roughly $2.56 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.57 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.42. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.39 a burrito\u003c/strong\u003e (at everyday cost) for wing night without the wings, the fryer, or the guilt. The cottage sauce is the trick that keeps it both creamy and lean.",
+    "shop_smart":  [
+                       "Chicken breast is the whole game here, so buy it in the big family pack and freeze what this batch does not use. Shredded breast reheats better than diced, so cook it low and pull it apart.",
+                       "Cottage cheese blends into a sauce that does the job of ranch and blue cheese for a fraction of the fat. Buy the tub and blend it smooth.",
+                       "Carrots and celery are cheapest as whole bunches and bags, not the pre-cut snack packs, and this batch uses a good amount of both.",
+                       "Buffalo wing sauce keeps for months in the door of the fridge, so buy the bottle and let it ride through several batches."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Season the chicken breast with the salt and black pepper, then poach or bake it until cooked through and shred it with two forks.",
+                    "Warm the olive oil in a large skillet and cook the diced onion, carrot and celery for 8 to 10 minutes until soft and sweet.",
+                    "Add the shredded chicken to the pan and warm it through with the vegetables.",
+                    "Blend the cottage cheese, shredded cheddar and buffalo wing sauce until smooth, then stir the sauce into the warm chicken so every shred is coated.",
+                    "Set the bowl on the scale, subtract the empty weight, and divide by 14. Lay that much filling down each tortilla, fold in the sides and roll tight.",
+                    "Wrap each burrito and portion into 14 containers."
+                ],
+    "portion_html":  "Weigh the finished filling, subtract the empty bowl, and divide by 14 so every burrito gets the same load of chicken and sauce. Fill, fold and roll each tortilla. Each burrito carries \u003cstrong\u003e357 calories and 40 grams of protein\u003c/strong\u003e. Reheat wrapped, then crisp the seam in a dry pan if you want the edges to hold.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://fitfoodiefinds.com/buffalo-chicken-burrito/\" target=\"_blank\" rel=\"noopener\"\u003efitfoodiefinds.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Buffalo chicken burritos, 14 wrapped and ready, for about $3.39 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  27.85,
+    "cost_batch_true":  35.85,
+    "cost_per_serving":  1.99,
+    "cost_per_serving_true":  2.56,
+    "cost_pantry_add":  11.57,
+    "cost_first_run":  47.42,
+    "scaler":  {
+                   "cost":  "35.85",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1582,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  17,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  266,
+                                   "buy":  "2.4 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "canon":  "Carrots",
+                                   "grams":  252,
+                                   "buy":  "4 carrots",
+                                   "bid":  "carrots",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "canon":  "Celery",
+                                   "grams":  392,
+                                   "buy":  "7 stalks",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Cottage Cheese",
+                                   "canon":  "Cottage Cheese",
+                                   "grams":  798,
+                                   "buy":  "28.25 oz",
+                                   "bid":  "cottage-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  196,
+                                   "buy":  "7 oz",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Buffalo Wing Sauce",
+                                   "canon":  "Buffalo Wing Sauce",
+                                   "grams":  98,
+                                   "buy":  "6.5 tbsp",
+                                   "bid":  "buffalo-wing-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "canon":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "1.25 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Buffalo chicken burritos on shredded chicken breast with onion, carrot, celery and a blended cottage-cheddar buffalo sauce. 14 wrapped at 357 calories, 40g protein, about $3.39 (at everyday cost).",
+                 "keywords":  "buffalo chicken burrito, shredded buffalo chicken, high protein burrito meal prep, cottage cheese buffalo sauce, low calorie buffalo chicken, budget meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT40M",
+                 "costPerServing":  3.39,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Boneless Skinless Chicken Breast, 3.5 lb (1582 g)",
+                                          "Olive Oil, 1.25 tbsp (17 g)",
+                                          "Yellow Onion, 2.4 onions (266 g)",
+                                          "Carrots, 4 carrots (252 g)",
+                                          "Celery, 7 stalks (392 g)",
+                                          "Cottage Cheese, 28.25 oz (798 g)",
+                                          "Cheddar Cheese, Shredded, 7 oz (196 g)",
+                                          "Buffalo Wing Sauce, 6.5 tbsp (98 g)",
+                                          "Salt, 2.25 tsp (14 g)",
+                                          "Black Pepper, 1.25 tsp (3 g)"
+                                      ],
+                 "steps":  [
+                               "Season and cook the chicken breast, then shred it.",
+                               "Cook onion, carrot and celery in olive oil until soft, then warm the chicken through.",
+                               "Blend cottage cheese, cheddar and buffalo wing sauce and stir it into the chicken.",
+                               "Weigh the filling, divide by 14, fill and roll each tortilla, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1582
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  17
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  266
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  252
+                              },
+                              {
+                                  "item":  "Celery",
+                                  "grams":  392
+                              },
+                              {
+                                  "item":  "Cottage Cheese",
+                                  "grams":  798
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Buffalo Wing Sauce",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              }
+                          ]
+}

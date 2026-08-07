@@ -1,0 +1,178 @@
+{
+    "name":  "High-Protein Beef and Bean Burrito",
+    "slug":  "high-protein-beef-bean-burrito",
+    "cuisine":  "Tex-Mex",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://skinnyfitalicious.com/healthy-high-protein-burrito/",
+    "source_site":  "skinnyfitalicious.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Stage-1 build B2: no trims needed beyond the tortilla swap. 393 cal, 34g protein. Meat is a full 4 oz raw.",
+                         "Canned corn confirmed on the board (Sweet Whole Kernel Corn); an earlier no-board flag was wrong.",
+                         "No rice and no cheese by design; the calories go into beef and beans, which is what makes it the high-protein build.",
+                         "Bowl cousin: High-Protein Beef Burrito Bowls. Differentiated by dropping the rice and cheese entirely and leaning on a heavier bean load, so it earns the high-protein name in a wrap."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  393,
+                 "protein":  34,
+                 "carbs":  47,
+                 "fat":  11,
+                 "cost_ps":  "3.60"
+             },
+    "intro_html":  "When the goal is protein first and filler last, this is the burrito. There is no rice and no cheese hiding the numbers, just lean beef, a heavy pour of black beans, tomatoes, and sweet corn. Each one comes in at about \u003cstrong\u003e393 calories\u003c/strong\u003e and \u003cstrong\u003e34 grams of protein\u003c/strong\u003e, with a tortilla that brings 18 grams of fiber for 5 grams of net carb. It is the same family as our High-Protein Beef Burrito Bowls, but where the bowl leans on rice, this wrap trades the rice for more beans and hands you the protein without the padding.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eBlack Beans:\u003c/strong\u003e 3.5 cans (896 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (840 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2 cans (868 g)",
+                                "\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 12.25 tbsp (98 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 3.5 lb: ~$23.18. \u003cstrong\u003eBuy 4 lbs: $26.48.\u003c/strong\u003e",
+                       "Black Beans, 3.5 cans: ~$3.23. \u003cstrong\u003eBuy 4 15oz cans: $3.68.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2 cans: ~$1.72. \u003cstrong\u003eBuy 3 cans: $2.52.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 2 cans: ~$1.65. \u003cstrong\u003eBuy 2 cans: $1.65.\u003c/strong\u003e",
+                       "Pantry seasonings (taco seasoning): ~$1.04. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $42.42 across 14 servings, so roughly $3.03 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $50.20 across 14 servings, roughly $3.59 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $0.15 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.35. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "Beef aside, this is one of the cheapest builds in the batch because beans and canned vegetables carry the volume. Catch the beef on sale and the cost tab number falls further.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBeans by the case are the play.\u003c/strong\u003e This build uses the most beans of any burrito in the batch. Buy black beans by the case when the price per can drops and you are set for a month.",
+                       "\u003cstrong\u003eCanned corn and canned tomatoes are pantry gold.\u003c/strong\u003e Both keep for a year and both go on sale in cans that cost almost nothing per serving. Stock up when they do.",
+                       "\u003cstrong\u003eMix your own taco seasoning.\u003c/strong\u003e A jar of chili powder, cumin, paprika, garlic, and onion powder makes packets look expensive and lets you skip the added salt."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Brown the ground beef in a large skillet over medium high heat, breaking it up as it cooks. There is little to drain at 93/7.",
+                    "Stir in the taco seasoning with a splash of water until the beef is coated.",
+                    "Drain and rinse the black beans and drain the corn, then add them with the diced tomatoes and their juice.",
+                    "Simmer 5 to 8 minutes until the tomato liquid cooks down and the filling holds together on a spoon.",
+                    "Warm the tortillas so they roll without cracking, then portion and wrap as below."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total filling weight. Divide it by 14, spoon that exact amount onto each warm tortilla, and roll. Every burrito lands at about \u003cstrong\u003e393 calories and 34 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyfitalicious.com/healthy-high-protein-burrito/\" target=\"_blank\" rel=\"noopener\"\u003eskinnyfitalicious.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  42.42,
+    "cost_batch_true":  50.2,
+    "cost_per_serving":  3.03,
+    "cost_per_serving_true":  3.59,
+    "cost_pantry_add":  0.15,
+    "cost_first_run":  50.35,
+    "scaler":  {
+                   "cost":  "50.20",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Beans",
+                                   "canon":  "Canned Black Beans",
+                                   "grams":  896,
+                                   "buy":  "3.5 cans",
+                                   "bid":  "canned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "canon":  "Diced Tomatoes",
+                                   "grams":  840,
+                                   "buy":  "2 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Whole Kernel Corn",
+                                   "canon":  "Sweet Whole Kernel Corn",
+                                   "grams":  868,
+                                   "buy":  "2 cans",
+                                   "bid":  "canned-corn",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Taco Seasoning",
+                                   "canon":  "Taco Seasoning",
+                                   "grams":  98,
+                                   "buy":  "12.25 tbsp",
+                                   "bid":  "taco-seasoning",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A rice-free, high-protein beef and bean burrito for meal prep. Fourteen servings at about 393 calories and 34 grams of protein each.",
+                 "keywords":  "high protein burrito, beef and bean burrito, no rice burrito, budget meal prep, ground beef meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT15M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT40M",
+                 "costPerServing":  3.60,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "93/7 Ground Beef, 3.5 lb (1588 g)",
+                                          "Black Beans, 3.5 cans (896 g)",
+                                          "Diced Tomatoes, 2 cans (840 g)",
+                                          "Sweet Whole Kernel Corn, 2 cans (868 g)",
+                                          "Taco Seasoning, 12.25 tbsp (98 g)"
+                                      ],
+                 "steps":  [
+                               "Brown the ground beef, breaking it up as it cooks.",
+                               "Stir in the taco seasoning with a splash of water.",
+                               "Add drained black beans, drained corn, and the diced tomatoes with juice.",
+                               "Simmer until the liquid cooks down and the filling holds together.",
+                               "Weigh the filling, divide by 14, spoon onto warm tortillas, and roll."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Canned Black Beans",
+                                  "grams":  896
+                              },
+                              {
+                                  "item":  "Diced Tomatoes",
+                                  "grams":  840
+                              },
+                              {
+                                  "item":  "Sweet Whole Kernel Corn",
+                                  "grams":  868
+                              },
+                              {
+                                  "item":  "Taco Seasoning",
+                                  "grams":  98
+                              }
+                          ]
+}

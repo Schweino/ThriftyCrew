@@ -1,0 +1,31 @@
+﻿{
+    "_doc":  "Baseline acceptance record. Inputs are FROZEN; only expected\\ is rewritten, and only by -Rebaseline after a human read the diff.",
+    "accepted_utc":  "2026-08-07T01:19:39Z",
+    "engine_sha256":  "83A0B0FD3A0C640BD5CB6D150EC9D7768EAEDF2DCB87140CCFCD0306FA5D31C2",
+    "expected_costed":  "851584F05CE26A8736AC1B14154710BD8CA0EE04549F59665DA36A4C223CABA9",
+    "expected_flags":  "012DB872E73B91954EEBB066CB1D5EAC6F391C8BD82D56438803052021E64CE0",
+    "inputs":  {
+                   "db\\densities.json":  "0FC33D5FC679A944D8323BBA11B478168C3AA08A2184DE395DA5885DC4D3DED2",
+                   "db\\ingredients.json":  "0CFE510851742CB7E0EE21C3FFB8C1EA06F05236FA603CABA16CDC7DC0EC9B75",
+                   "db\\label-folds.json":  "A0AF5F70D7F78BF4D8C4A18D9233FDE9D0DBAFE8821F95176956445D64192D83",
+                   "db\\label-prices.json":  "EC5DB5BDA8D5507D46E3AA7FCFA474498C478760A802D8F45017289BA5F41D31",
+                   "db\\no-board-price-ok.json":  "45D247A5B589813C00A20141616A110CC8A9E9FFDBA90F05235E956EF5CBC0AF",
+                   "db\\recipes\\al-pastor-pork-taco-bowl-with-cilantro-lime-rice.json":  "140B13A3E48206091D13F88CB3BD4F4DA2D674F7726BF527E76C7FC36CD40773",
+                   "db\\recipes\\andong-jjimdak-braised-chicken.json":  "F0F504563D18FEDF1771CA7BA7FA6A540D1FCC9B6AB8797FADA9C4E32DFED998",
+                   "db\\recipes\\ants-climbing-a-tree-pork-noodles.json":  "9BB0C4CBCCF5DC71F5B6ED2AD59866D87CCD9D0D976A738E36EDF2CC7B54947D",
+                   "db\\recipes\\baked-turkey-kibbeh-casserole.json":  "1D37F6D36A35CC273C6394D7D72791A3A52E8AAE0AC634DC1A875D0970E7B6C7",
+                   "db\\recipes\\beef-birria-burrito.json":  "93938BC64B9464FD0F3A83413191B914ADAC3E53CA703261C553C33F823F207A",
+                   "db\\recipes\\beef-stuffed-shells.json":  "6435A11AD535AF27BEE30BA725E84F1F9A9F20635061A49947C07A2764C456CA",
+                   "db\\recipes\\chili-cornbread-casserole.json":  "51CC0B00A053C7D69988E0599550FE5E8B8088CB6F5857BE7082789BAD3EE1DF",
+                   "db\\recipes\\greek-ground-turkey-lemon-rice-bowls.json":  "533BDFB6D4B4B9096C2FAE2FE922833EC3FBDE880AE3DF0CDA47E00123184B10",
+                   "db\\recipes\\korean-turkey-japchae.json":  "BFFA64ED191027D203C5753C6CF565A25B82A1719A186581620089B1EA627480",
+                   "db\\recipes\\peruvian-pollo-saltado.json":  "3BC74992DF35593B69B3F6B3B66CACBA52EFCE2B4524A86C19C3916721AF43B6",
+                   "db\\recipes\\ranch-chicken-burrito.json":  "A9C04497E2CEA4F426297C89DF1C36A95AE4FB7911F14AD9CF5D5EA8CFA0E5E1",
+                   "db\\recipes\\sichuan-dan-dan-noodles-with-pork.json":  "C61BAA781C406014367744EC1A3C96CF6A99031AB3DECC6CC4BEB122B23C0D4D",
+                   "db\\recipes\\turkey-pozole-rojo.json":  "E9C113CD62EB03D3D11ED1DAC2A8F439AC6EE0CD0EAB64201C8AA23163726DD2",
+                   "db\\recipes\\zz-synthetic-flag-cases.json":  "0AC7EC3C405686D3A572F906ACA9762E8E2FEA3F308E26995A126713C466FB00",
+                   "grocery-out\\comparison-2026-01-01.json":  "43513823569008B46DE84845DEAA7D21D99C72FEC74C8106340829B2D5A7B0DF",
+                   "grocery-out\\recipe-board.json":  "12C30E0A2E0676BF7F99891672876DE840F3E41EDB2888CC3A1530FFCAE2BE3F",
+                   "grocery-out\\smp-feed.json":  "88E1E70876B16FC85268D1EC27E5674C1EFEA6B5B0C14A6AC25AD5A69EF82458"
+               }
+}

@@ -1,0 +1,299 @@
+{
+    "name":  "Carne Asada Burrito",
+    "slug":  "carne-asada-burrito",
+    "cuisine":  "Carne Asada",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.favfamilyrecipes.com/carne-asada-burrito/",
+    "source_site":  "favfamilyrecipes.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "REPAIR PASS 3 B3: cumin (7g) and chili powder (7g) ADDED to the marinade; a carne asada with only salt, garlic and lime was not a carne asada. The stage-1 claim that the spices would not fit was arithmetically false: both spices are about 46 cal per BATCH, roughly 3.3 cal per burrito. Rice trimmed 202g -\u003e 170g dry to buy the headroom back. Recompute lands 393 cal (was 398), 35g protein, both inside the 5cal/2g tolerance and clear of the 400 cap and 25g floor.",
+                         "Seasoning now: Salt, Garlic, Lime Juice, Ground Cumin, and Chili Powder carry the carne asada marinade. All five appear in a make_it step.",
+                         "BLOCKERS, flag for repair: Canned Black Beans and Avocado are in food-macros-db but NOT in ingredients.json, so build-v2-spec cannot derive bid/gpu and cost-recipes cannot cost them. Add both to ingredients.json before the spec builder runs.",
+                         "SUBSTITUTION: pico de gallo has no canonical item, so it is built from real board items: Cherry Tomatoes (displayed Tomato), Red Onion, Fresh Cilantro, Jalapeno, Lime Juice, sized to reproduce stage-1\u0027s 30g pico line. Avocado is the 20g-per-burrito guacamole.",
+                         "Rice stored as DRY grams (170g, trimmed from 202g in repair pass 3). Sirloin is the mandated cut, no cheese by design.",
+                         "Bowl cousin: Slow Cooker Carne Asada Rice Bowls. Differentiated as a seared-steak, fresh-pico-and-guac wrap rather than slow-cooked beef over rice."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  393,
+                 "protein":  35,
+                 "carbs":  44,
+                 "fat":  13,
+                 "cost_ps":  "5.00"
+             },
+    "intro_html":  "Carne asada is the taco truck classic, charred steak marinated with lime, garlic, cumin, and chili, then wrapped with fresh pico and a spoon of guacamole, and this build keeps every bit of that while staying under 400 calories. There is no cheese here and the guac is measured, because that is exactly what buys the room for a real 4 ounces of steak. Each burrito lands at about \u003cstrong\u003e393 calories\u003c/strong\u003e and \u003cstrong\u003e35 grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. Our Slow Cooker Carne Asada Rice Bowls take the low-and-slow road; this one sears the steak and wraps it with cold, bright pico.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eSirloin Steak:\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eBlack Beans:\u003c/strong\u003e 2.5 cans (630 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 0.85 cups dry (170 g)",
+                                "\u003cstrong\u003eTomato:\u003c/strong\u003e 2 cups (280 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 0.25 cups (28 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 bunch (28 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 3 tbsp (28 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1.75 tbsp (28 g)",
+                                "\u003cstrong\u003eAvocado:\u003c/strong\u003e 2 avocados (280 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.5 tsp (7 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tsp (14 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 tbsp (7 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Sirloin Steak, 3.5 lb: ~$30.87. \u003cstrong\u003eBuy 4 lbs: $35.27.\u003c/strong\u003e",
+                       "Black Beans, 2.5 cans: ~$2.27. \u003cstrong\u003eBuy 3 15oz cans: $2.76.\u003c/strong\u003e",
+                       "Rice, 0.85 cups dry: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Tomato, 2 cups: ~$1.76. \u003cstrong\u003eBuy 1 10oz clamshell: $1.78.\u003c/strong\u003e",
+                       "Red Onion, 0.25 cups: ~$0.08. \u003cstrong\u003eBuy 1 lb: $1.34.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 bunch: ~$0.44. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Jalapeno, 3 tbsp: ~$0.11. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Lime Juice, 1.75 tbsp: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Avocado, 2 avocados: ~$1.08. \u003cstrong\u003eBuy 2 each: $1.16.\u003c/strong\u003e",
+                       "Garlic, 2.5 tsp: ~$0.08. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, ground cumin, chili powder): ~$0.25. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $49.39 across 14 servings, so roughly $3.53 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $61.35 across 14 servings, roughly $4.38 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $70.03. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "Sirloin instead of a pricier steak keeps this affordable, and the pico and guac are just produce. Catch the beef on sale and the cost tab number falls with it.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eSirloin is the smart carne asada cut.\u003c/strong\u003e It grills fast, slices thin against the grain, and costs far less than the cuts the restaurants use. Buy it on sale and freeze extra.",
+                       "\u003cstrong\u003eBuy the avocados a little firm.\u003c/strong\u003e Grab them a few days ahead and let them ripen on the counter so they are perfect on prep day and you are not paying for pre-made guac.",
+                       "\u003cstrong\u003ePico is cheap produce and a knife.\u003c/strong\u003e A tomato, a bit of red onion, a jalapeno, cilantro, and lime make more pico than a plastic tub for a fraction of the price."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice per the package and set it aside.",
+                    "Toss the sliced sirloin with the minced garlic, the cumin, the chili powder, the salt, and half of the lime juice, then sear it hard in a hot dry pan until the edges char. Rest it and slice thin against the grain.",
+                    "Drain and rinse the black beans and warm them through.",
+                    "Make the pico: dice the tomato, red onion, and jalapeno, chop the cilantro, and toss with the rest of the lime juice and a pinch of salt.",
+                    "Mash the avocado into a quick guacamole with a little of the pico and a squeeze of lime.",
+                    "Warm the tortillas, then portion and wrap as below, layering rice, beans, steak, guacamole, and pico."
+                ],
+    "portion_html":  "Weigh the steak, the beans, and the rice together against the empty pot number from Step 1 for the hot portion, and divide by 14. Onto each warm tortilla goes that share of steak, beans, and rice, plus an even spoon of the guacamole and the pico. Every burrito lands at about \u003cstrong\u003e393 calories and 35 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.favfamilyrecipes.com/carne-asada-burrito/\" target=\"_blank\" rel=\"noopener\"\u003efavfamilyrecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  49.39,
+    "cost_batch_true":  61.35,
+    "cost_per_serving":  3.53,
+    "cost_per_serving_true":  4.38,
+    "cost_pantry_add":  8.68,
+    "cost_first_run":  70.03,
+    "scaler":  {
+                   "cost":  "61.35",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Beans",
+                                   "canon":  "Canned Black Beans",
+                                   "grams":  630,
+                                   "buy":  "2.5 cans",
+                                   "bid":  "canned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  170,
+                                   "buy":  "0.85 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Tomato",
+                                   "canon":  "Cherry Tomatoes",
+                                   "grams":  280,
+                                   "buy":  "2 cups",
+                                   "bid":  "cherry-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "canon":  "Red Onion",
+                                   "grams":  28,
+                                   "buy":  "0.25 cups",
+                                   "bid":  "red-onion",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "canon":  "Fresh Cilantro",
+                                   "grams":  28,
+                                   "buy":  "1 bunch",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "canon":  "Jalapeno",
+                                   "grams":  28,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  28,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Avocado",
+                                   "canon":  "Avocado",
+                                   "grams":  280,
+                                   "buy":  "2 avocados",
+                                   "bid":  "avocados",
+                                   "gpu":  "150.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  7,
+                                   "buy":  "2.5 tsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "canon":  "Chili Powder",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A carne asada burrito for meal prep: seared sirloin, black beans, rice, fresh pico, and guacamole, no cheese. About 393 calories and 35 grams of protein per serving.",
+                 "keywords":  "carne asada burrito, steak burrito, sirloin burrito, guacamole pico, budget high protein meal prep",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  5.00,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Sirloin Steak, 3.5 lb (1588 g)",
+                                          "Black Beans, 2.5 cans (630 g)",
+                                          "Rice, 0.85 cups dry (170 g)",
+                                          "Tomato, 2 cups (280 g)",
+                                          "Red Onion, 0.25 cups (28 g)",
+                                          "Fresh Cilantro, 1 bunch (28 g)",
+                                          "Jalapeno, 3 tbsp (28 g)",
+                                          "Lime Juice, 1.75 tbsp (28 g)",
+                                          "Avocado, 2 avocados (280 g)",
+                                          "Garlic, 2.5 tsp (7 g)",
+                                          "Salt, 2.25 tsp (14 g)",
+                                          "Ground Cumin, 1 tbsp (7 g)",
+                                          "Chili Powder, 1 tbsp (7 g)"
+                                      ],
+                 "steps":  [
+                               "Cook the rice per the package and set aside.",
+                               "Marinate the sliced sirloin in garlic, cumin, chili powder, salt, and lime, then sear hard and slice thin.",
+                               "Warm the drained black beans.",
+                               "Make pico from tomato, red onion, jalapeno, cilantro, lime, and salt; mash the avocado into guacamole.",
+                               "Portion steak, beans, and rice by weight, top each tortilla with guac and pico, and roll."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Canned Black Beans",
+                                  "grams":  630
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  170
+                              },
+                              {
+                                  "item":  "Cherry Tomatoes",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Avocado",
+                                  "grams":  280
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Chili Powder",
+                                  "grams":  7
+                              }
+                          ]
+}

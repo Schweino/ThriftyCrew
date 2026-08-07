@@ -25,9 +25,9 @@
                  "protein":  38,
                  "carbs":  43,
                  "fat":  36,
-                 "cost_ps":  "5.34"
+                 "cost_ps":  "4.96"
              },
-    "intro_html":  "Balsamic vinegar does something to beef that salt alone cannot. It cuts the richness, it caramelizes into the gravy over a long cook, and it turns a plain chuck roast into something sweet, tangy, and a little bit fancy for the price of a bottle of vinegar. Each bowl carries \u003cstrong\u003e38 grams of protein\u003c/strong\u003e and 665 calories for about \u003cstrong\u003e$5.34\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Balsamic vinegar does something to beef that salt alone cannot. It cuts the richness, it caramelizes into the gravy over a long cook, and it turns a plain chuck roast into something sweet, tangy, and a little bit fancy for the price of a bottle of vinegar. Each bowl carries \u003cstrong\u003e38 grams of protein\u003c/strong\u003e and 665 calories for about \u003cstrong\u003e$4.96\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 5.25 lb (2381 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.5 tbsp (49 g)",
@@ -39,7 +39,7 @@
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 onion (122 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.75 cups (175 g)",
                                 "\u003cstrong\u003eBalsamic Vinegar (generic):\u003c/strong\u003e 0.75 cups (223 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4 cups dry (700 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -49,13 +49,13 @@
                        "Yellow Onion, 1 onion: ~$0.31. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Olive Oil, 0.75 cups: ~$2.46. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Balsamic Vinegar, 0.75 cups: ~$1.81. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 4 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, dried oregano, dried basil): ~$0.21. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $47.98 across 14 servings, so roughly $3.43 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $55.00 across 14 servings, roughly $3.93 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $19.72 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $74.72. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$5.34 a bowl\u003c/strong\u003e (at everyday cost). Seven ingredients, most of them already in your kitchen, and the only one you might not own keeps for years once you buy it.",
+    "cost_closing_html":  "About \u003cstrong\u003e$4.96 a bowl\u003c/strong\u003e (at everyday cost). Seven ingredients, most of them already in your kitchen, and the only one you might not own keeps for years once you buy it.",
     "shop_smart":  [
                        "Store brand balsamic vinegar is the right buy here. Expensive aged balsamic is meant to be drizzled cold, and eight hours in a slow cooker erases everything you paid extra for.",
                        "Chuck roast is the cut. The vinegar and the long braise handle the toughness, so paying up for a tender cut is money set on fire.",
@@ -74,7 +74,7 @@
                 ],
     "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of shredded beef and gravy into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e665 calories with 38 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-balsamic-beef-pot-roast/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Balsamic pot roast for about $5.34 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Balsamic pot roast for about $4.96 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  47.98,
     "cost_batch_true":  55,
     "cost_per_serving":  3.43,
@@ -168,20 +168,20 @@
                                    "item":  "Rice",
                                    "canon":  "Rice",
                                    "grams":  700,
-                                   "buy":  "3.75 cups dry",
+                                   "buy":  "4 cups dry",
                                    "bid":"rice",
                                    "gpu":453.592
                                }
                            ]
                },
     "head":  {
-                 "description":  "Slow cooker balsamic beef pot roast meal prep: seared chuck roast braised 8 hours in balsamic vinegar, garlic, and herbs over rice. 665 calories, 38g protein, about $5.34 per serving (at everyday cost).",
+                 "description":  "Slow cooker balsamic beef pot roast meal prep: seared chuck roast braised 8 hours in balsamic vinegar, garlic, and herbs over rice. 665 calories, 38g protein, about $4.96 per serving (at everyday cost).",
                  "keywords":  "balsamic pot roast, slow cooker beef, balsamic beef, shredded beef bowls, budget meal prep, chuck roast recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",
                  "cookTime":  "PT8H",
                  "totalTime":  "PT8H15M",
-                 "costPerServing":  5.34,
+                 "costPerServing":  4.96,
                  "recipeIngredient":  [
                                           "Beef Chuck Roast, 5.25 lb (2381 g)",
                                           "Vegetable Oil, 3.5 tbsp (49 g)",
@@ -193,7 +193,7 @@
                                           "Yellow Onion, 1 onion (122 g)",
                                           "Olive Oil, 0.75 cups (175 g)",
                                           "Balsamic Vinegar, 0.75 cups (223 g)",
-                                          "Rice, 3.75 cups dry (700 g)"
+                                          "Rice, 4 cups dry (700 g)"
                                       ],
                  "steps":  [
                                "Season the chuck roast with salt, pepper, oregano, and basil.",

@@ -1,0 +1,253 @@
+{
+    "name":  "BBQ Chicken Burrito",
+    "slug":  "bbq-chicken-burrito",
+    "cuisine":  "BBQ",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://juicymacros.com/high-protein-chicken-burrito/",
+    "source_site":  "juicymacros.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Source portion was 7 oz chicken; normalized down to 4 oz raw per burrito, which is most of the calorie saving.",
+                         "Sauce is library S6: blended fat free cottage cheese + 1/3 fat cream cheese + BBQ sauce + lime + smoked paprika + garlic. Cheddar is a separate melt topping.",
+                         "Fat Free Cottage Cheese is a stub row in ingredients.json (no bid/packaging): not cost-tracked. Flagged.",
+                         "Bowl cousin: Lean BBQ Chicken and Rice Bowls. This differs as a wrapped burrito built on a blended BBQ crema, not a rice bowl."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "pork"
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  367,
+                 "protein":  39,
+                 "carbs":  35,
+                 "fat":  12,
+                 "cost_ps":  "3.32"
+             },
+    "intro_html":  "\u003cp\u003eSweet, smoky, and honest about its numbers. This one lands at 367 calories with 39 grams of protein, wrapped in a tortilla that brings 18 grams of fiber for about 5 grams of net carb. The trick is a BBQ crema: blended cottage cheese and a little cream cheese carry the sauce so you get the creamy, saucy feel without a cup of mayo behind it. If you like our Lean BBQ Chicken and Rice Bowls, this is the same flavor you can eat with one hand.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1.5 tbsp (21 g)",
+                                "\u003cstrong\u003eBBQ Sauce (generic):\u003c/strong\u003e 0.75 cups (238 g)",
+                                "\u003cstrong\u003eFat Free Cottage Cheese (Great Value):\u003c/strong\u003e 3 cups (700 g)",
+                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 5 oz (140 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 5 oz (140 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 2.75 cups (140 g)",
+                                "\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 2 tbsp (14 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 2.25 tsp (7 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 4.75 tbsp (70 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 3.5 lb: ~$7.78. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "Vegetable Oil, 1.5 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "BBQ Sauce, 0.75 cups: ~$0.62. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fat Free Cottage Cheese, 3 cups: ~$2.81. \u003cstrong\u003eBuy 2 24oz tubs: $5.46.\u003c/strong\u003e",
+                       "1/3 Fat Cream Cheese, 5 oz: ~$1.14. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 5 oz: ~$1.06. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "Green Onions, 2.75 cups: ~$1.23. \u003cstrong\u003eBuy 2 bunches: $1.58.\u003c/strong\u003e",
+                       "Lime Juice, 4.75 tbsp: ~$1.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (smoked paprika, garlic powder): ~$0.39. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $28.29 across 14 servings, so roughly $2.02 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $37.03 across 14 servings, roughly $2.64 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.43 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.46. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e$3.32 a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a BBQ chicken bowl at a fast-casual spot. Catch the breast on sale and it slides lower.\u003c/p\u003e",
+    "shop_smart":  [
+                       "\u003cstrong\u003eRegular BBQ sauce is fine, but read the label.\u003c/strong\u003e One bottle sauces the whole batch. If you want to shave carbs, the no-sugar-added versions taste nearly identical once they hit the hot chicken.",
+                       "\u003cstrong\u003eA little cream cheese goes a long way.\u003c/strong\u003e You only need part of one 8 ounce brick to make the crema silky, so the rest keeps for bagels or the next batch.",
+                       "\u003cstrong\u003eCottage cheese is the protein trick in the sauce.\u003c/strong\u003e Blended smooth, nobody knows it is there, and it turns a normally fatty sauce into a lean one. Buy the big tub and you will find other uses for it fast."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cube the chicken breast and cook it in a skillet with the vegetable oil over medium-high heat until it reaches 165F inside.",
+                    "Turn the heat low, pour in the BBQ sauce, and toss until every piece is coated.",
+                    "Make the crema: blend the fat free cottage cheese, cream cheese, smoked paprika, garlic powder, and lime juice until smooth.",
+                    "Fold the crema into the warm BBQ chicken.",
+                    "Warm the tortillas, then fill each with the BBQ chicken, a scatter of shredded cheddar, and the sliced green onions before you wrap."
+                ],
+    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near 367 calories with 39 grams of protein.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://juicymacros.com/high-protein-chicken-burrito/\" target=\"_blank\" rel=\"noopener\"\u003ejuicymacros.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about $3.32 a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
+    "cost_batch":  28.29,
+    "cost_batch_true":  37.03,
+    "cost_per_serving":  2.02,
+    "cost_per_serving_true":  2.64,
+    "cost_pantry_add":  9.43,
+    "cost_first_run":  46.46,
+    "scaler":  {
+                   "cost":  "37.03",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1582,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  21,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "BBQ Sauce",
+                                   "canon":  "BBQ Sauce",
+                                   "grams":  238,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "bbq-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fat Free Cottage Cheese",
+                                   "canon":  "Fat Free Cottage Cheese",
+                                   "grams":  700,
+                                   "buy":  "3 cups",
+                                   "bid":  "cottage-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "1/3 Fat Cream Cheese",
+                                   "canon":  "1/3 Fat Cream Cheese",
+                                   "grams":  140,
+                                   "buy":  "5 oz",
+                                   "bid":  "1-3-fat-cream-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "canon":  "Cheddar Cheese, Shredded",
+                                   "grams":  140,
+                                   "buy":  "5 oz",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  140,
+                                   "buy":  "2.75 cups",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Smoked Paprika",
+                                   "canon":  "Smoked Paprika",
+                                   "grams":  14,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "smoked-paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  7,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  70,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A sweet and smoky BBQ chicken burrito under 400 calories, built on a lean blended crema. Fourteen servings at about 367 calories and 39 grams of protein for roughly $3.32 each (at everyday cost).",
+                 "keywords":  "bbq chicken burrito, high protein meal prep, low calorie burrito, cheap meal prep, budget dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  3.32,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Boneless Skinless Chicken Breast, 3.5 lb (1582 g)",
+                                          "Vegetable Oil, 1.5 tbsp (21 g)",
+                                          "BBQ Sauce, 0.75 cups (238 g)",
+                                          "Fat Free Cottage Cheese, 3 cups (700 g)",
+                                          "1/3 Fat Cream Cheese, 5 oz (140 g)",
+                                          "Cheddar Cheese, Shredded, 5 oz (140 g)",
+                                          "Green Onions, 2.75 cups (140 g)",
+                                          "Smoked Paprika, 2 tbsp (14 g)",
+                                          "Garlic Powder, 2.25 tsp (7 g)",
+                                          "Lime Juice, 4.75 tbsp (70 g)"
+                                      ],
+                 "steps":  [
+                               "Cube and cook the chicken breast in the vegetable oil until it reaches 165F.",
+                               "Lower the heat, add the BBQ sauce, and toss to coat.",
+                               "Blend the fat free cottage cheese, cream cheese, smoked paprika, garlic powder, and lime juice into a smooth crema.",
+                               "Fold the crema into the BBQ chicken.",
+                               "Fill warmed tortillas with the chicken, shredded cheddar, and green onions.",
+                               "Weigh the batch and divide into 14 equal burritos."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1582
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "BBQ Sauce",
+                                  "grams":  238
+                              },
+                              {
+                                  "item":  "Fat Free Cottage Cheese",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "1/3 Fat Cream Cheese",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Cheddar Cheese, Shredded",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Smoked Paprika",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  70
+                              }
+                          ]
+}

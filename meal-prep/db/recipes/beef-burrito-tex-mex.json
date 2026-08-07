@@ -1,0 +1,210 @@
+{
+    "name":  "Classic Tex-Mex Beef Burrito",
+    "slug":  "beef-burrito-tex-mex",
+    "cuisine":  "Tex-Mex",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.cookedandloved.com/recipes/beef-burritos/",
+    "source_site":  "cookedandloved.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Cap-feasibility from stage-1 build B1: cheese held at 14g per burrito, no added oil, rice trimmed. Lands 387 cal, 34g protein.",
+                         "Rice stored as DRY grams (152g batch) so the food-DB Rice row (dry, 3.6 cal/g) reproduces stage-1\u0027s cooked-rice calories; do not read this as cooked weight.",
+                         "The generic stage-1 \u0027spices\u0027 line (3 cal) is carried as Taco Seasoning (14g batch).",
+                         "Bowl cousin: High-Protein Beef Burrito Bowls. Differentiated by the salsa-plus-BBQ glaze and the hand-wrapped format (the bowl is a corn-and-tomato-paste build over rice)."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "enchilada sauce"
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  387,
+                 "protein":  34,
+                 "carbs":  39,
+                 "fat":  14,
+                 "cost_ps":  "3.46"
+             },
+    "intro_html":  "This is the workhorse of the batch, the one you build when you want a burrito that tastes like a Tuesday night should and still keeps you honest. Each one lands at about \u003cstrong\u003e387 calories\u003c/strong\u003e with a full 4 ounces of beef and \u003cstrong\u003e34 grams of protein\u003c/strong\u003e, wrapped in a tortilla that carries 18 grams of fiber for only 5 grams of net carb. If you already love our High-Protein Beef Burrito Bowls, think of this as the same lean beef and beans with a smoky salsa glaze, folded into a tortilla you can eat with one hand.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eBlack Beans:\u003c/strong\u003e 1.25 cups (196 g)",
+                                "\u003cstrong\u003eSalsa (Pace):\u003c/strong\u003e 1.75 cups (392 g)",
+                                "\u003cstrong\u003eBBQ Sauce (generic):\u003c/strong\u003e 3.25 tbsp (56 g)",
+                                "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 7 oz (196 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 0.75 cups dry (152 g)",
+                                "\u003cstrong\u003eTaco Seasoning (Great Value):\u003c/strong\u003e 1.75 tbsp (14 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 3.5 lb: ~$23.18. \u003cstrong\u003eBuy 4 lbs: $26.48.\u003c/strong\u003e",
+                       "Black Beans, 1.25 cups: ~$0.71. \u003cstrong\u003eBuy 1 15oz can: $0.92.\u003c/strong\u003e",
+                       "Salsa, 1.75 cups: ~$1.70. \u003cstrong\u003eBuy 1 16oz jar: $1.97.\u003c/strong\u003e",
+                       "BBQ Sauce, 3.25 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 7 oz: ~$1.22. \u003cstrong\u003eBuy 1 8oz bag: $1.42.\u003c/strong\u003e",
+                       "Rice, 0.75 cups dry: ~$0.19. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (taco seasoning): ~$0.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $38.90 across 14 servings, so roughly $2.78 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $46.11 across 14 servings, roughly $3.29 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $2.27 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.38. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "The beef is the whole cost here, so catch it on sale and the per serving number in the cost tab drops even lower. Everything else in this one is pantry cheap.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy the beef on sale and freeze it.\u003c/strong\u003e Lean ground beef goes on sale constantly. Grab a few pounds when it does and freeze it in one pound packs. That one trip covers a month of these.",
+                       "\u003cstrong\u003eRice and canned beans are the cheap muscle.\u003c/strong\u003e A big bag of rice and beans by the can cost pennies a serving. Compare the price per ounce, not the sticker, to find the real deal.",
+                       "\u003cstrong\u003eStore brand seasoning and sauce win.\u003c/strong\u003e A store brand taco packet and a bottle of BBQ sauce both last several batches, so the cost per burrito is tiny."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice per the package and set it aside.",
+                    "Brown the ground beef in a large skillet over medium high heat, breaking it up as it cooks. At 93/7 there is almost nothing to drain.",
+                    "Stir in the taco seasoning and a splash of water, then add the salsa and the BBQ sauce and let it simmer a couple of minutes until the beef is glossy and coated.",
+                    "Drain and rinse the black beans, then fold them and the cooked rice into the beef and warm everything through.",
+                    "Kill the heat and fold in the shredded cheese so it melts into the warm filling.",
+                    "Warm the tortillas so they roll without cracking, then portion and wrap as below."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total filling weight. Divide it by 14, spoon that exact amount down the center of each warm tortilla, and roll it up. Every burrito lands right at about \u003cstrong\u003e387 calories and 34 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.cookedandloved.com/recipes/beef-burritos/\" target=\"_blank\" rel=\"noopener\"\u003ecookedandloved.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  38.9,
+    "cost_batch_true":  46.11,
+    "cost_per_serving":  2.78,
+    "cost_per_serving_true":  3.29,
+    "cost_pantry_add":  2.27,
+    "cost_first_run":  48.38,
+    "scaler":  {
+                   "cost":  "46.11",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "canon":  "93/7 Ground Beef",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Beans",
+                                   "canon":  "Canned Black Beans",
+                                   "grams":  196,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "canned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salsa",
+                                   "canon":  "Salsa",
+                                   "grams":  392,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "salsa",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "BBQ Sauce",
+                                   "canon":  "BBQ Sauce",
+                                   "grams":  56,
+                                   "buy":  "3.25 tbsp",
+                                   "bid":  "bbq-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mexican Cheese Blend",
+                                   "canon":  "Mexican Cheese Blend",
+                                   "grams":  196,
+                                   "buy":  "7 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  152,
+                                   "buy":  "0.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Taco Seasoning",
+                                   "canon":  "Taco Seasoning",
+                                   "grams":  14,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "taco-seasoning",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A hand-wrapped Tex-Mex beef burrito for meal prep. Fourteen servings at about 387 calories and 34 grams of protein each, built on lean beef, beans, and a smoky salsa glaze.",
+                 "keywords":  "beef burrito, tex-mex meal prep, high protein burrito, budget meal prep, ground beef burrito",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  3.46,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "93/7 Ground Beef, 3.5 lb (1588 g)",
+                                          "Black Beans, 1.25 cups (196 g)",
+                                          "Salsa, 1.75 cups (392 g)",
+                                          "BBQ Sauce, 3.25 tbsp (56 g)",
+                                          "Mexican Cheese Blend, 7 oz (196 g)",
+                                          "Rice, 0.75 cups dry (152 g)",
+                                          "Taco Seasoning, 1.75 tbsp (14 g)"
+                                      ],
+                 "steps":  [
+                               "Cook the rice per the package and set aside.",
+                               "Brown the ground beef, breaking it up as it cooks.",
+                               "Stir in taco seasoning, then the salsa and BBQ sauce, and simmer until glossy.",
+                               "Fold in the drained black beans and the rice and warm through.",
+                               "Off the heat, fold in the shredded cheese.",
+                               "Weigh the filling, divide by 14, spoon onto warm tortillas, and roll."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Canned Black Beans",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Salsa",
+                                  "grams":  392
+                              },
+                              {
+                                  "item":  "BBQ Sauce",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Mexican Cheese Blend",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  152
+                              },
+                              {
+                                  "item":  "Taco Seasoning",
+                                  "grams":  14
+                              }
+                          ]
+}

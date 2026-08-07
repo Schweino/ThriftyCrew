@@ -913,6 +913,38 @@ if ($SelfTest) {
     _Route 'R16 Pledge wood OIL has no word polish'      'Pledge Wood Oil, Expert Care, Trigger Spray - Moisturizes & Revives with Orange Scent, 16 oz' 'furniture-polish'
     _Route 'R16 twin: real navel oranges are untouched'  'Fresh Navel Oranges, 4 lb Bag' 'oranges'
     _Route 'R16 twin: real limes are untouched'          'Fresh Limes, Each' 'limes'
+
+    # --- R17, 2026-08-06: INFANT PUREE NAMING TWO VEGETABLES IS NOT PRODUCE ------------------------------
+    # THE FOUNDING BUG: "Cerebelly 6+ Months Organic Spinach Apple Sweet Potato Puree 4 Oz" matched the
+    # include of THREE produce commodities (apples \bapple(s)?\b, spinach, sweet-potatoes) and was excluded
+    # by none, so first-match-wins gave a 4 oz baby-food jar to whichever sorts first and priced fresh
+    # produce at a baby-food per-ounce rate. audit-match-soundness flagged it 'new-contested' and it was then
+    # ACCEPTED into the baseline as part of an unrelated tortilla move, so it would never have re-surfaced.
+    # THE SHAPE: this is the third instance (happy\s*tot 07-28, serenity\s*kids 08-01). Every one is a
+    # baby/toddler brand whose name happens to list the produce inside it. baby-food sits at index 297 and
+    # apples at 20, so widening baby-food's include can never win the race - the fix has to be an EXCLUDE,
+    # which is why all three live in $GLOBAL_EXCLUDE.
+    # Measured over all 28,526 estate names before shipping: 17 routing changes, nothing left a commodity it
+    # belonged to. The simulation also caught a defect in the FIX - carrying the brand token into baby-food's
+    # include dragged in "Little Journey Gentle Baby Wash Shampoo", so baby-food now excludes personal-care
+    # forms. That row is the clean twin below.
+    _Route 'R17 the founding Cerebelly jar leaves produce' 'Cerebelly 6+ Months Organic Spinach Apple Sweet Potato Puree 4 Oz' 'baby-food'
+    _Route 'R17 Aldi Little Journey puree leaves apples'   'Little Journey Apple Sweet Potato Puree 4 OZ' 'baby-food'
+    _Route 'R17 a toddler pouch leaves apples'             'Once Upon A Farm No Added Sugar Apple, Sweet Potato & Spinach Toddler Tractor Wheels 5 Ea' 'baby-food'
+    _Route 'R17 infant yogurt cup leaves yogurt'           'Little Journey Apple Banana Peach Yogurt 4 OZ' 'baby-food'
+    _Route 'R17 infant puree leaves bananas'               'Little Journey Apple Blueberry Banana Puree 4 OZ' 'baby-food'
+    # These two were globally excluded but had no home - the include widening is what recovers them.
+    _Route 'R17 Happy Tot pouch is no longer orphaned'     'Happy Tot Stage 4 Organic Pears Blueberries & Spinach Pouch' 'baby-food'
+    _Route 'R17 Serenity Kids pouch is no longer orphaned' 'Serenity Kids Free Range Chicken & Thyme with Organic Parsnip & Beet Pouch, 3.5oz' 'baby-food'
+    # CLEAN TWINS. The first is the fix's own near-miss; the rest prove the brand tokens did not evict the
+    # commodities that legitimately sell these brands (the eviction the serenity\s*kids note warns about).
+    _Route 'R17 twin: the brand SHAMPOO is not baby food'  'Little Journey Gentle Baby Wash Shampoo With Oatmeal Extract 16 FL OZ' '<unmatched>'
+    _Route 'R17 twin: Little Journey wipes keep their cell' 'Little Journey Sensitive Baby Wipes 192 CT' 'baby-wipes'
+    _Route 'R17 twin: Little Journey diapers keep theirs'  'Little Journey Size 4 Club Pack Diapers 82 CT' 'diapers'
+    _Route 'R17 twin: real apples are untouched'           'Fresh Gala Apples, 3 lb Bag' 'apples'
+    _Route 'R17 twin: real spinach is untouched'           'Fresh Baby Spinach, 10 oz Clamshell' 'spinach'
+    _Route 'R17 twin: real sweet potatoes are untouched'   'Sweet Potatoes, 3 lb Bag' 'sweet-potatoes'
+    _Route 'R17 twin: real yogurt is untouched'            'Great Value Plain Greek Yogurt, 32 oz' 'yogurt'
   }
 
   Write-Output ('-'*54)
@@ -1105,7 +1137,24 @@ $GLOBAL_EXCLUDE = @(
   # The brand is baby/toddler food only. baby-food declares this token in relax_global so its OWN 9 pouches
   # keep routing to baby-food: the first simulation without that relax EVICTED all nine, which is the
   # opposite of the fix. Never add a brand here without checking who legitimately sells under it.
-'dog\s+food','dog\s+treats?','dog\s+biscuits?','cat\s+food','cat\s+litter','beech[\s-]?nut','gerber','happy\s*baby','happy\s*tot','baby\s+food','serenity\s*kids'
+  # 'cerebelly','little\s+journey','once\s+upon\s+a\s+farm','plum\s+organics' added 2026-08-06: the THIRD
+  # instance of this same evasion, and the one that showed the shape of the hole. "Cerebelly 6+ Months Organic
+  # Spinach Apple Sweet Potato Puree 4 Oz" matches the include of THREE produce commodities (apples, spinach,
+  # sweet-potatoes) and is excluded by none, so first-match-wins handed a 4 oz baby-food jar to whichever is
+  # ordered first - pricing fresh produce at a baby-food per-ounce rate. It reached none of baby-food's own
+  # rules: brand not listed, age marker "6+ Months" is not "Stage 1/2", form "Puree" is not "pouches".
+  # WHY THIS LIST AND NOT baby-food's include: baby-food sits at index 297 and apples at 20, so Match-Category
+  # returns apples long before baby-food is ever considered. Widening baby-food's include CANNOT fix an
+  # earlier commodity's theft - only a global (or per-commodity) EXCLUDE can. That is why every fix in this
+  # class lands here.
+  # Measured over all 28,526 estate product names before shipping: 17 routing changes, no product left a
+  # commodity it legitimately belonged to. 8 were the defect itself (3 apples, 3 yogurt, 2 bananas), 8 were
+  # Happy Tot / Serenity Kids pouches that were globally excluded but orphaned (<unmatched> -> baby-food),
+  # and 1 was a 0.35 oz Plum Organics toddler fruit snack leaving fruit-snacks.
+  # Little Journey is Aldi's baby line and also sells wipes, diapers and formula, so baby-wipes, diapers and
+  # baby-formula each relax_global this token - without that they lose their own products, the same eviction
+  # the serenity\s*kids note warns about.
+'dog\s+food','dog\s+treats?','dog\s+biscuits?','cat\s+food','cat\s+litter','beech[\s-]?nut','gerber','happy\s*baby','happy\s*tot','baby\s+food','serenity\s*kids','cerebelly','little\s+journey','once\s+upon\s+a\s+farm','plum\s+organics'
 )
 # a wrapper rule-file can replace the global list (the recipe set relaxes sauce/canned/frozen/juice)
 if ($GEX_OVERRIDE) { $GLOBAL_EXCLUDE = $GEX_OVERRIDE }

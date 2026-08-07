@@ -30,7 +30,7 @@
                  "protein":  26,
                  "carbs":  92,
                  "fat":  13,
-                 "cost_ps":  "3.87"
+                 "cost_ps":  "3.75"
              },
     "intro_html":  "Chapli kebabs come from Peshawar and they are nothing like the smooth ground meat kebabs you get at most Pakistani restaurants. These are wide, flat, craggy patties packed with tomato, onion, cilantro, and whole coriander seeds that you crush yourself so they crunch. Pomegranate molasses brings the sour note that makes them unmistakable. Traditionally they are shallow fried one at a time, which is a nightmare at this scale, so we bake them on sheet pans instead and get the same crisp edges with none of the standing around.",
     "ingredients_display":  [
@@ -52,7 +52,7 @@
                                 "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 2 large eggs (84 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 0.5 cups (143 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 7.25 tbsp (101 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 8.25 cups dry (1508 g)"
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 8.5 cups dry (1508 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -68,13 +68,13 @@
                        "Eggs, 2 large eggs: ~$0.20. \u003cstrong\u003eBuy 1 dozen: $1.43.\u003c/strong\u003e",
                        "Diced Tomatoes, 0.5 cups: ~$0.33. \u003cstrong\u003eBuy 1 can: $0.96.\u003c/strong\u003e",
                        "Vegetable Oil, 7.25 tbsp: ~$0.25. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Rice, 8.25 cups dry: ~$1.86. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Rice, 8.5 cups dry: ~$1.86. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
                        "Pantry seasonings (ground coriander, ground cumin, red pepper flakes, chili powder, black pepper, salt): ~$1.31. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $21.94 across 14 servings, so roughly $1.57 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $34.25 across 14 servings, roughly $2.45 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $18.89 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.14. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.87 a bowl\u003c/strong\u003e (at everyday cost) for Peshawari kebabs that most people only ever eat at a restaurant.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.75 a bowl\u003c/strong\u003e (at everyday cost) for Peshawari kebabs that most people only ever eat at a restaurant.",
     "shop_smart":  [
                        "\u003cstrong\u003eCrush whole coriander seeds yourself.\u003c/strong\u003e The whole seed is cheaper than the ground jar and the crunch of the cracked seed is the entire texture of a chapli kebab.",
                        "\u003cstrong\u003eTomato and onion in the mix stretch the beef.\u003c/strong\u003e That is traditional, not a shortcut, and it is why the meat number stays modest while the patties stay big.",
@@ -93,7 +93,7 @@
                 ],
     "portion_html":  "Weigh the rice pot, subtract the empty-pot weight from Step 1, and divide by 14 for an even base in every container. Then split the kebabs evenly across the fourteen. Every bowl lands near \u003cstrong\u003e607 calories with 26 grams of protein\u003c/strong\u003e. Reheat them in a hot oven or a dry pan rather than the microwave if you want to keep the crisp edges.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.teaforturmeric.com/chapli-kabab/\" target=\"_blank\" rel=\"noopener\"\u003eteaforturmeric.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Spice-crusted dinners for about $3.87 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Spice-crusted dinners for about $3.75 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  21.94,
     "cost_batch_true":  34.25,
     "cost_per_serving":  1.57,
@@ -251,20 +251,20 @@
                                    "item":  "Rice",
                                    "canon":  "Rice",
                                    "grams":  1508,
-                                   "buy":  "8.25 cups dry",
+                                   "buy":  "8.5 cups dry",
                                    "bid":"rice",
                                    "gpu":453.592
                                }
                            ]
                },
     "head":  {
-                 "description":  "Pakistani chapli kebab rice bowls rebuilt for 14-serving meal prep: sheet-pan baked beef kebabs with cracked coriander and tomato. 607 calories, 26g protein, about $3.87 per serving (at everyday cost).",
+                 "description":  "Pakistani chapli kebab rice bowls rebuilt for 14-serving meal prep: sheet-pan baked beef kebabs with cracked coriander and tomato. 607 calories, 26g protein, about $3.75 per serving (at everyday cost).",
                  "keywords":  "chapli kebab, pakistani kebab, peshawari kabab, sheet pan kebabs, pakistani meal prep, budget beef kebabs",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",
                  "cookTime":  "PT25M",
                  "totalTime":  "PT55M",
-                 "costPerServing":  3.87,
+                 "costPerServing":  3.75,
                  "recipeIngredient":  [
                                           "Ground Coriander, 5 tbsp (27 g)",
                                           "Ground Cumin, 1.75 tbsp (11 g)",
@@ -284,7 +284,7 @@
                                           "Eggs, 2 large eggs (84 g)",
                                           "Diced Tomatoes, 0.5 cups (143 g)",
                                           "Vegetable Oil, 7.25 tbsp (101 g)",
-                                          "Rice, 8.25 cups dry (1508 g)"
+                                          "Rice, 8.5 cups dry (1508 g)"
                                       ],
                  "steps":  [
                                "Coarsely crush the whole coriander seeds and mix with the other spices.",

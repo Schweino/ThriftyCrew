@@ -98,8 +98,15 @@ function Render-CostFields($cost,$GramsArr,$ScalerIng,[string]$slug){
   if([Math]::Abs($batch-[double]$cost.cost_batch) -gt 0.005){ throw ($slug + ': rendered batch ' + $batch + ' != engine ' + $cost.cost_batch + ' (missing/extra ingredient vs the costed row?)') }
   if([Math]::Abs($trueC-[double]$cost.cost_batch_true) -gt 0.005){ throw ($slug + ': rendered true ' + $trueC + ' != engine ' + $cost.cost_batch_true) }
   if([Math]::Abs(($trueC+$pantryAdd)-$firstRun) -gt 0.005){ throw ($slug + ': first_run ' + $firstRun + ' != true+add ' + ($trueC+$pantryAdd)) }
-  $costHtml += ('<strong>Batch total: about $' + $batch.ToString('0.00') + ' across 14 servings, so roughly $' + $cps.ToString('0.00') + ' per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.')
-  $costHtml += ('<strong>True shopping cost: about $' + $trueC.ToString('0.00') + ' across 14 servings, roughly $' + $cpsTrue.ToString('0.00') + ' per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.')
+  # SERVING NOUN (2026-08-07): these two lines said "per bowl" unconditionally, which shipped on all 29
+  # wrapped burritos as "roughly $X per bowl" (58 wrong lines, caught at the pre-publish audit). The noun is
+  # now derived. Default stays "bowl" so the copy on the 513 existing recipes is byte-identical - this is
+  # deliberately NOT a switch to a universal "per serving", which would rewrite every live card.
+  # The 'bowl' test comes SECOND on purpose: beef-burrito-bowls, ground-turkey-burrito-bowl and
+  # grilled-pork-tenderloin-burrito-bowl all contain "burrito" and are bowls.
+  $servingNoun = if($slug -match 'burrito' -and $slug -notmatch 'bowl'){ 'burrito' } else { 'bowl' }
+  $costHtml += ('<strong>Batch total: about $' + $batch.ToString('0.00') + ' across 14 servings, so roughly $' + $cps.ToString('0.00') + ' per ' + $servingNoun + '.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.')
+  $costHtml += ('<strong>True shopping cost: about $' + $trueC.ToString('0.00') + ' across 14 servings, roughly $' + $cpsTrue.ToString('0.00') + ' per ' + $servingNoun + '.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.')
   if($pantryAdd -gt 0){
     $costHtml += ('<strong>Starting with an empty pantry? Add about $' + $pantryAdd.ToString('0.00') + ' one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $' + $firstRun.ToString('0.00') + '. Those containers then feed this batch and many more after it.')
   }

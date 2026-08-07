@@ -1,0 +1,1540 @@
+﻿{
+    "_doc":  "FROZEN fixture slice",
+    "generated":  "2026-01-01T00:00:00",
+    "week_of":  "2026-01-01",
+    "ingredients":  {
+                        "achiote-paste":  {
+                                              "unit":  "oz",
+                                              "cheapest":  0.3867,
+                                              "store":  "Walmart",
+                                              "type":  "everyday",
+                                              "url":  "https://www.walmart.com/ip/44014301",
+                                              "n":  1,
+                                              "stores":  {
+                                                             "Walmart":  0.3867
+                                                         }
+                                          },
+                        "ground-allspice":  {
+                                                "unit":  "oz",
+                                                "cheapest":  1.06,
+                                                "store":  "Walmart",
+                                                "type":  "everyday",
+                                                "url":  "https://www.walmart.com/ip/603026137",
+                                                "n":  5,
+                                                "stores":  {
+                                                               "Walmart":  1.06,
+                                                               "Baker\u0027s":  1.9867,
+                                                               "Fareway":  3.1868,
+                                                               "Family Fare":  3.3167,
+                                                               "Hy-Vee":  4.3435
+                                                           }
+                                            },
+                        "apple-cider-vinegar":  {
+                                                    "unit":  "floz",
+                                                    "cheapest":  0.0507,
+                                                    "store":  "Fareway",
+                                                    "type":  "everyday",
+                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/55441263-fareway-apple-cider-vinegar-128-fl-oz",
+                                                    "n":  6,
+                                                    "stores":  {
+                                                                   "Fareway":  0.0507,
+                                                                   "Walmart":  0.0521,
+                                                                   "Baker\u0027s":  0.0546,
+                                                                   "Family Fare":  0.1119,
+                                                                   "Sam\u0027s Club":  0.1327,
+                                                                   "Aldi":  0.1328
+                                                               }
+                                                },
+                        "bay-leaves":  {
+                                           "unit":  "oz",
+                                           "cheapest":  1.4369,
+                                           "store":  "Walmart",
+                                           "type":  "everyday",
+                                           "url":  "",
+                                           "n":  6,
+                                           "stores":  {
+                                                          "Walmart":  1.4369,
+                                                          "Sam\u0027s Club":  4.27,
+                                                          "Baker\u0027s":  7.9733,
+                                                          "Fareway":  9.8824,
+                                                          "Family Fare":  15.3,
+                                                          "Hy-Vee":  55.5
+                                                      }
+                                       },
+                        "beef-broth":  {
+                                           "unit":  "floz",
+                                           "cheapest":  0.0391,
+                                           "store":  "Aldi",
+                                           "type":  "everyday",
+                                           "url":  "https://www.aldi.us/store/aldi/products/18647720-chef-s-cupboard-beef-broth-32-oz",
+                                           "n":  7,
+                                           "stores":  {
+                                                          "Aldi":  0.0391,
+                                                          "Walmart":  0.045,
+                                                          "Baker\u0027s":  0.0497,
+                                                          "Family Fare":  0.0528,
+                                                          "Fareway":  0.0575,
+                                                          "Hy-Vee":  0.0622,
+                                                          "Sam\u0027s Club":  0.0623
+                                                      }
+                                       },
+                        "black-pepper":  {
+                                             "unit":  "oz",
+                                             "cheapest":  0.4167,
+                                             "store":  "Hy-Vee",
+                                             "type":  "everyday",
+                                             "url":  "",
+                                             "n":  7,
+                                             "stores":  {
+                                                            "Hy-Vee":  0.4167,
+                                                            "Sam\u0027s Club":  0.4433,
+                                                            "Fareway":  0.4994,
+                                                            "Baker\u0027s":  0.5556,
+                                                            "Family Fare":  0.695,
+                                                            "Walmart":  0.7954,
+                                                            "Aldi":  1.15
+                                                        }
+                                         },
+                        "chicken-breast":  {
+                                               "unit":  "lb",
+                                               "cheapest":  2.19,
+                                               "store":  "Aldi",
+                                               "type":  "everyday",
+                                               "url":  "https://www.aldi.us/store/aldi/products/19554637-fresh-family-pack-chicken-breasts-per-lb",
+                                               "n":  7,
+                                               "stores":  {
+                                                              "Aldi":  2.19,
+                                                              "Walmart":  2.2301,
+                                                              "Sam\u0027s Club":  2.48,
+                                                              "Baker\u0027s":  2.495,
+                                                              "Family Fare":  2.99,
+                                                              "Fareway":  2.99,
+                                                              "Hy-Vee":  3.99
+                                                          }
+                                           },
+                        "brown-sugar":  {
+                                            "unit":  "lb",
+                                            "cheapest":  0.925,
+                                            "store":  "Aldi",
+                                            "type":  "everyday",
+                                            "url":  "https://www.aldi.us/store/aldi/products/18647602-baker-s-corner-light-brown-sugar-32-oz",
+                                            "n":  6,
+                                            "stores":  {
+                                                           "Aldi":  0.925,
+                                                           "Hy-Vee":  0.985,
+                                                           "Walmart":  0.99,
+                                                           "Sam\u0027s Club":  0.9971,
+                                                           "Baker\u0027s":  1.145,
+                                                           "Fareway":  1.195
+                                                       }
+                                        },
+                        "butter":  {
+                                       "unit":  "lb",
+                                       "cheapest":  2.56,
+                                       "store":  "Walmart",
+                                       "type":  "everyday",
+                                       "url":  "",
+                                       "n":  7,
+                                       "stores":  {
+                                                      "Walmart":  2.56,
+                                                      "Aldi":  2.89,
+                                                      "Fareway":  2.98,
+                                                      "Baker\u0027s":  2.99,
+                                                      "Hy-Vee":  3.99,
+                                                      "Sam\u0027s Club":  4.2743,
+                                                      "Family Fare":  5.39
+                                                  }
+                                   },
+                        "cabbage":  {
+                                        "unit":  "lb",
+                                        "cheapest":  0.79,
+                                        "store":  "Aldi",
+                                        "type":  "everyday",
+                                        "url":  "https://www.aldi.us/store/aldi/products/25939587-cabbage-per-lb",
+                                        "n":  6,
+                                        "stores":  {
+                                                       "Aldi":  0.79,
+                                                       "Walmart":  0.85,
+                                                       "Hy-Vee":  0.89,
+                                                       "Family Fare":  0.99,
+                                                       "Baker\u0027s":  0.99,
+                                                       "Fareway":  0.99
+                                                   }
+                                    },
+                        "canned-corn":  {
+                                            "unit":  "oz",
+                                            "cheapest":  0.0498,
+                                            "store":  "Hy-Vee",
+                                            "type":  "everyday",
+                                            "url":  "https://www.hy-vee.com/aisles-online/p/2968066/that-s-smart-whole-kernel-golden-corn",
+                                            "n":  7,
+                                            "stores":  {
+                                                           "Hy-Vee":  0.0498,
+                                                           "Fareway":  0.0505,
+                                                           "Baker\u0027s":  0.0511,
+                                                           "Aldi":  0.0511,
+                                                           "Walmart":  0.0538,
+                                                           "Sam\u0027s Club":  0.0543,
+                                                           "Family Fare":  0.0649
+                                                       }
+                                        },
+                        "diced-tomatoes":  {
+                                               "unit":  "oz",
+                                               "cheapest":  0.0556,
+                                               "store":  "Sam\u0027s Club",
+                                               "type":  "everyday",
+                                               "url":  "",
+                                               "n":  7,
+                                               "stores":  {
+                                                              "Sam\u0027s Club":  0.0556,
+                                                              "Walmart":  0.0579,
+                                                              "Aldi":  0.0614,
+                                                              "Baker\u0027s":  0.0675,
+                                                              "Family Fare":  0.0683,
+                                                              "Fareway":  0.0683,
+                                                              "Hy-Vee":  0.0711
+                                                          }
+                                           },
+                        "hominy":  {
+                                       "unit":  "oz",
+                                       "cheapest":  0.0248,
+                                       "store":  "Walmart",
+                                       "type":  "everyday",
+                                       "url":  "",
+                                       "n":  4,
+                                       "stores":  {
+                                                      "Walmart":  0.0248,
+                                                      "Baker\u0027s":  0.0426,
+                                                      "Fareway":  0.0968,
+                                                      "Hy-Vee":  0.1219
+                                                  }
+                                   },
+                        "canned-pineapple":  {
+                                                 "unit":  "oz",
+                                                 "cheapest":  0.081,
+                                                 "store":  "Hy-Vee",
+                                                 "type":  "everyday",
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/2970344/that-s-smart-pineapple-chunks",
+                                                 "n":  6,
+                                                 "stores":  {
+                                                                "Hy-Vee":  0.081,
+                                                                "Walmart":  0.081,
+                                                                "Aldi":  0.0825,
+                                                                "Baker\u0027s":  0.0995,
+                                                                "Sam\u0027s Club":  0.1091,
+                                                                "Fareway":  0.1335
+                                                            }
+                                             },
+                        "carrots":  {
+                                        "unit":  "lb",
+                                        "cheapest":  0.628,
+                                        "store":  "Sam\u0027s Club",
+                                        "type":  "everyday",
+                                        "url":  "https://www.samsclub.com/ip/13593961664",
+                                        "n":  7,
+                                        "stores":  {
+                                                       "Sam\u0027s Club":  0.628,
+                                                       "Walmart":  0.954,
+                                                       "Hy-Vee":  0.995,
+                                                       "Aldi":  0.995,
+                                                       "Baker\u0027s":  0.998,
+                                                       "Family Fare":  1.145,
+                                                       "Fareway":  1.385
+                                                   }
+                                    },
+                        "cayenne-pepper":  {
+                                               "unit":  "oz",
+                                               "cheapest":  0.1367,
+                                               "store":  "Hy-Vee",
+                                               "type":  "everyday",
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/3225648/that-s-smart-cayenne-pepper-3-oz",
+                                               "n":  6,
+                                               "stores":  {
+                                                              "Hy-Vee":  0.1367,
+                                                              "Sam\u0027s Club":  0.4738,
+                                                              "Walmart":  0.7131,
+                                                              "Fareway":  0.96,
+                                                              "Baker\u0027s":  1.18,
+                                                              "Family Fare":  1.8663
+                                                          }
+                                           },
+                        "chicken-broth":  {
+                                              "unit":  "floz",
+                                              "cheapest":  0.0391,
+                                              "store":  "Aldi",
+                                              "type":  "everyday",
+                                              "url":  "https://www.aldi.us/store/aldi/products/18647589-fit-active-reduced-sodium-chicken-broth-32-oz",
+                                              "n":  7,
+                                              "stores":  {
+                                                             "Aldi":  0.0391,
+                                                             "Sam\u0027s Club":  0.0416,
+                                                             "Walmart":  0.045,
+                                                             "Baker\u0027s":  0.0477,
+                                                             "Family Fare":  0.0528,
+                                                             "Fareway":  0.0575,
+                                                             "Hy-Vee":  0.0622
+                                                         }
+                                          },
+                        "chili-crisp":  {
+                                            "unit":  "oz",
+                                            "cheapest":  0.3245,
+                                            "store":  "Hy-Vee",
+                                            "type":  "everyday",
+                                            "url":  "https://www.hy-vee.com/aisles-online/p/4223512/lee-kum-kee-chili-crisp-hot-honey-sauce",
+                                            "n":  5,
+                                            "stores":  {
+                                                           "Hy-Vee":  0.3245,
+                                                           "Walmart":  0.6707,
+                                                           "Baker\u0027s":  0.877,
+                                                           "Fareway":  1.0891,
+                                                           "Family Fare":  1.1862
+                                                       }
+                                        },
+                        "chili-powder":  {
+                                             "unit":  "oz",
+                                             "cheapest":  0.36,
+                                             "store":  "Walmart",
+                                             "type":  "everyday",
+                                             "url":  "https://www.walmart.com/ip/157643393",
+                                             "n":  7,
+                                             "stores":  {
+                                                            "Walmart":  0.36,
+                                                            "Hy-Vee":  0.3636,
+                                                            "Aldi":  0.396,
+                                                            "Sam\u0027s Club":  0.499,
+                                                            "Fareway":  0.4994,
+                                                            "Family Fare":  0.6145,
+                                                            "Baker\u0027s":  0.6313
+                                                        }
+                                         },
+                        "five-spice-powder":  {
+                                                  "unit":  "oz",
+                                                  "cheapest":  0.279,
+                                                  "store":  "Walmart",
+                                                  "type":  "everyday",
+                                                  "url":  "",
+                                                  "n":  2,
+                                                  "stores":  {
+                                                                 "Walmart":  0.279,
+                                                                 "Hy-Vee":  5.7086
+                                                             }
+                                              },
+                        "chipotle-adobo":  {
+                                               "unit":  "oz",
+                                               "cheapest":  0.2114,
+                                               "store":  "Walmart",
+                                               "type":  "everyday",
+                                               "url":  "https://www.walmart.com/ip/10322029",
+                                               "n":  5,
+                                               "stores":  {
+                                                              "Walmart":  0.2114,
+                                                              "Baker\u0027s":  0.2129,
+                                                              "Family Fare":  0.3053,
+                                                              "Fareway":  0.3987,
+                                                              "Hy-Vee":  0.47
+                                                          }
+                                           },
+                        "cilantro":  {
+                                         "unit":  "each",
+                                         "cheapest":  0.89,
+                                         "store":  "Aldi",
+                                         "type":  "everyday",
+                                         "url":  "https://www.aldi.us/store/aldi/products/3177720-cilantro-each",
+                                         "n":  5,
+                                         "stores":  {
+                                                        "Aldi":  0.89,
+                                                        "Hy-Vee":  0.99,
+                                                        "Family Fare":  0.99,
+                                                        "Baker\u0027s":  0.99,
+                                                        "Fareway":  1.49
+                                                    }
+                                     },
+                        "cocoa-powder":  {
+                                             "unit":  "oz",
+                                             "cheapest":  0.5209,
+                                             "store":  "Sam\u0027s Club",
+                                             "type":  "everyday",
+                                             "url":  "https://www.samsclub.com/ip/15318811753",
+                                             "n":  5,
+                                             "stores":  {
+                                                            "Sam\u0027s Club":  0.5209,
+                                                            "Walmart":  0.5825,
+                                                            "Fareway":  0.685,
+                                                            "Hy-Vee":  0.6862,
+                                                            "Baker\u0027s":  0.8488
+                                                        }
+                                         },
+                        "corn-muffin-mix":  {
+                                                "unit":  "oz",
+                                                "cheapest":  0.0705,
+                                                "store":  "Sam\u0027s Club",
+                                                "type":  "everyday",
+                                                "url":  "https://www.samsclub.com/ip/13875408667",
+                                                "n":  7,
+                                                "stores":  {
+                                                               "Sam\u0027s Club":  0.0705,
+                                                               "Hy-Vee":  0.072,
+                                                               "Baker\u0027s":  0.0841,
+                                                               "Fareway":  0.0847,
+                                                               "Aldi":  0.0847,
+                                                               "Walmart":  0.0847,
+                                                               "Family Fare":  0.0882
+                                                           }
+                                            },
+                        "crushed-tomatoes":  {
+                                                 "unit":  "oz",
+                                                 "cheapest":  0.0532,
+                                                 "store":  "Aldi",
+                                                 "type":  "everyday",
+                                                 "url":  "https://www.aldi.us/store/aldi/products/18648732-happy-harvest-crushed-tomatoes-28-oz",
+                                                 "n":  7,
+                                                 "stores":  {
+                                                                "Aldi":  0.0532,
+                                                                "Sam\u0027s Club":  0.0535,
+                                                                "Walmart":  0.0543,
+                                                                "Baker\u0027s":  0.0667,
+                                                                "Hy-Vee":  0.0711,
+                                                                "Fareway":  0.0711,
+                                                                "Family Fare":  0.1068
+                                                            }
+                                             },
+                        "tomatoes-green-chilies":  {
+                                                       "unit":  "oz",
+                                                       "cheapest":  0.0683,
+                                                       "store":  "Fareway",
+                                                       "type":  "everyday",
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20582500-fareway-tomatoes-diced-mexican-style-145-oz",
+                                                       "n":  7,
+                                                       "stores":  {
+                                                                      "Fareway":  0.0683,
+                                                                      "Family Fare":  0.0683,
+                                                                      "Hy-Vee":  0.0821,
+                                                                      "Aldi":  0.095,
+                                                                      "Walmart":  0.0971,
+                                                                      "Sam\u0027s Club":  0.0998,
+                                                                      "Baker\u0027s":  0.1
+                                                                  }
+                                                   },
+                        "dried-ancho-chiles":  {
+                                                   "unit":  "oz",
+                                                   "cheapest":  0.5619,
+                                                   "store":  "Family Fare",
+                                                   "type":  "everyday",
+                                                   "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/zamora_ancho_chile_peppers/p/1564405684706812661",
+                                                   "n":  1,
+                                                   "stores":  {
+                                                                  "Family Fare":  0.5619
+                                                              }
+                                               },
+                        "dried-arbol-chiles":  {
+                                                   "unit":  "oz",
+                                                   "cheapest":  0.83,
+                                                   "store":  "Family Fare",
+                                                   "type":  "everyday",
+                                                   "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/chile_de_arbol/p/1564405684702623794",
+                                                   "n":  2,
+                                                   "stores":  {
+                                                                  "Family Fare":  0.83,
+                                                                  "Hy-Vee":  5.98
+                                                              }
+                                               },
+                        "dried-guajillo-chiles":  {
+                                                      "unit":  "oz",
+                                                      "cheapest":  0.4317,
+                                                      "store":  "Sam\u0027s Club",
+                                                      "type":  "everyday",
+                                                      "url":  "https://www.samsclub.com/ip/13731661260",
+                                                      "n":  1,
+                                                      "stores":  {
+                                                                     "Sam\u0027s Club":  0.4317
+                                                                 }
+                                                  },
+                        "feta":  {
+                                     "unit":  "oz",
+                                     "cheapest":  0.3033,
+                                     "store":  "Sam\u0027s Club",
+                                     "type":  "everyday",
+                                     "url":  "https://www.samsclub.com/ip/13874852267",
+                                     "n":  7,
+                                     "stores":  {
+                                                    "Sam\u0027s Club":  0.3033,
+                                                    "Aldi":  0.4975,
+                                                    "Walmart":  0.5633,
+                                                    "Hy-Vee":  0.615,
+                                                    "Baker\u0027s":  0.7075,
+                                                    "Fareway":  0.745,
+                                                    "Family Fare":  1.2475
+                                                }
+                                 },
+                        "garlic":  {
+                                       "unit":  "each",
+                                       "cheapest":  0.498,
+                                       "store":  "Baker\u0027s",
+                                       "type":  "everyday",
+                                       "url":  "https://www.bakersplus.com/p/kroger-whole-garlic-bulbs/0001111002824",
+                                       "n":  6,
+                                       "stores":  {
+                                                      "Baker\u0027s":  0.498,
+                                                      "Aldi":  0.5633,
+                                                      "Walmart":  0.58,
+                                                      "Family Fare":  0.79,
+                                                      "Hy-Vee":  0.79,
+                                                      "Fareway":  0.99
+                                                  }
+                                   },
+                        "garlic-powder":  {
+                                              "unit":  "oz",
+                                              "cheapest":  0.3173,
+                                              "store":  "Aldi",
+                                              "type":  "everyday",
+                                              "url":  "https://www.aldi.us/store/aldi/products/19688296-stonemill-garlic-powder-3-12-oz",
+                                              "n":  7,
+                                              "stores":  {
+                                                             "Aldi":  0.3173,
+                                                             "Walmart":  0.3176,
+                                                             "Sam\u0027s Club":  0.3569,
+                                                             "Fareway":  0.38,
+                                                             "Hy-Vee":  0.4,
+                                                             "Family Fare":  0.556,
+                                                             "Baker\u0027s":  0.5935
+                                                         }
+                                          },
+                        "fresh-ginger":  {
+                                             "unit":  "lb",
+                                             "cheapest":  1.392,
+                                             "store":  "Walmart",
+                                             "type":  "everyday",
+                                             "url":  "",
+                                             "n":  6,
+                                             "stores":  {
+                                                            "Walmart":  1.392,
+                                                            "Aldi":  3.98,
+                                                            "Baker\u0027s":  3.9867,
+                                                            "Fareway":  3.99,
+                                                            "Family Fare":  4.99,
+                                                            "Hy-Vee":  5.99
+                                                        }
+                                         },
+                        "sugar":  {
+                                      "unit":  "lb",
+                                      "cheapest":  0.5992,
+                                      "store":  "Sam\u0027s Club",
+                                      "type":  "everyday",
+                                      "url":  "https://www.samsclub.com/ip/13624255514",
+                                      "n":  7,
+                                      "stores":  {
+                                                     "Sam\u0027s Club":  0.5992,
+                                                     "Baker\u0027s":  0.7196,
+                                                     "Aldi":  0.7225,
+                                                     "Walmart":  0.7296,
+                                                     "Hy-Vee":  0.78,
+                                                     "Fareway":  0.81,
+                                                     "Family Fare":  0.9975
+                                                 }
+                                  },
+                        "green-olives":  {
+                                             "unit":  "oz",
+                                             "cheapest":  0.21,
+                                             "store":  "Sam\u0027s Club",
+                                             "type":  "everyday",
+                                             "url":  "https://www.samsclub.com/ip/13636265901",
+                                             "n":  6,
+                                             "stores":  {
+                                                            "Sam\u0027s Club":  0.21,
+                                                            "Aldi":  0.229,
+                                                            "Hy-Vee":  0.2313,
+                                                            "Walmart":  0.28,
+                                                            "Fareway":  0.309,
+                                                            "Baker\u0027s":  0.4662
+                                                        }
+                                         },
+                        "green-onions":  {
+                                             "unit":  "each",
+                                             "cheapest":  0.79,
+                                             "store":  "Family Fare",
+                                             "type":  "sale",
+                                             "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/fresh_green_onions_scallions/p/111459",
+                                             "n":  4,
+                                             "stores":  {
+                                                            "Family Fare":  0.79,
+                                                            "Baker\u0027s":  1.19,
+                                                            "Hy-Vee":  1.25,
+                                                            "Fareway":  1.5
+                                                        },
+                                             "sale_end":  "2026-08-08"
+                                         },
+                        "ground-cumin":  {
+                                             "unit":  "oz",
+                                             "cheapest":  0.495,
+                                             "store":  "Aldi",
+                                             "type":  "everyday",
+                                             "url":  "https://www.aldi.us/store/aldi/products/19688303-stonemill-ground-cumin-2-oz",
+                                             "n":  7,
+                                             "stores":  {
+                                                            "Aldi":  0.495,
+                                                            "Walmart":  0.548,
+                                                            "Sam\u0027s Club":  0.5612,
+                                                            "Fareway":  0.57,
+                                                            "Hy-Vee":  0.705,
+                                                            "Baker\u0027s":  1.1633,
+                                                            "Family Fare":  1.745
+                                                        }
+                                         },
+                        "ground-pork":  {
+                                            "unit":  "lb",
+                                            "cheapest":  2.98,
+                                            "store":  "Sam\u0027s Club",
+                                            "type":  "everyday",
+                                            "url":  "https://www.samsclub.com/ip/13709709989",
+                                            "n":  7,
+                                            "stores":  {
+                                                           "Sam\u0027s Club":  2.98,
+                                                           "Aldi":  3.29,
+                                                           "Walmart":  3.9467,
+                                                           "Hy-Vee":  3.99,
+                                                           "Fareway":  3.99,
+                                                           "Family Fare":  4.49,
+                                                           "Baker\u0027s":  6
+                                                       }
+                                        },
+                        "high-fiber-tortillas":  {
+                                                     "unit":  "each",
+                                                     "cheapest":  0.598,
+                                                     "store":  "Sam\u0027s Club",
+                                                     "type":  "everyday",
+                                                     "url":  "",
+                                                     "n":  3,
+                                                     "stores":  {
+                                                                    "Sam\u0027s Club":  0.598,
+                                                                    "Baker\u0027s":  0.7817,
+                                                                    "Walmart":  0.8283
+                                                                }
+                                                 },
+                        "hoisin-sauce":  {
+                                             "unit":  "floz",
+                                             "cheapest":  0.2995,
+                                             "store":  "Baker\u0027s",
+                                             "type":  "everyday",
+                                             "url":  "https://www.bakersplus.com/p/lee-kum-kee-hoisin-sauce/0074281270061",
+                                             "n":  5,
+                                             "stores":  {
+                                                            "Baker\u0027s":  0.2995,
+                                                            "Walmart":  0.3318,
+                                                            "Family Fare":  0.3495,
+                                                            "Fareway":  0.3528,
+                                                            "Hy-Vee":  0.5871
+                                                        }
+                                         },
+                        "honey":  {
+                                      "unit":  "oz",
+                                      "cheapest":  0.1662,
+                                      "store":  "Sam\u0027s Club",
+                                      "type":  "everyday",
+                                      "url":  "https://www.samsclub.com/ip/15006863838",
+                                      "n":  7,
+                                      "stores":  {
+                                                     "Sam\u0027s Club":  0.1662,
+                                                     "Aldi":  0.2079,
+                                                     "Walmart":  0.2246,
+                                                     "Baker\u0027s":  0.2496,
+                                                     "Family Fare":  0.2915,
+                                                     "Fareway":  0.3122,
+                                                     "Hy-Vee":  0.3325
+                                                 }
+                                  },
+                        "hot-sauce":  {
+                                          "unit":  "floz",
+                                          "cheapest":  0.1085,
+                                          "store":  "Baker\u0027s",
+                                          "type":  "everyday",
+                                          "url":  "https://www.bakersplus.com/p/valentina-mexican-hot-sauce/0009733900003",
+                                          "n":  7,
+                                          "stores":  {
+                                                         "Baker\u0027s":  0.1085,
+                                                         "Walmart":  0.1111,
+                                                         "Sam\u0027s Club":  0.12,
+                                                         "Aldi":  0.1292,
+                                                         "Fareway":  0.1592,
+                                                         "Family Fare":  0.1658,
+                                                         "Hy-Vee":  0.1667
+                                                     }
+                                      },
+                        "italian-seasoning":  {
+                                                  "unit":  "oz",
+                                                  "cheapest":  1,
+                                                  "store":  "Hy-Vee",
+                                                  "type":  "everyday",
+                                                  "url":  "https://www.hy-vee.com/aisles-online/p/2955753/that-s-smart-italian-seasoning-1-oz",
+                                                  "n":  7,
+                                                  "stores":  {
+                                                                 "Hy-Vee":  1,
+                                                                 "Walmart":  1.06,
+                                                                 "Sam\u0027s Club":  1.1467,
+                                                                 "Aldi":  1.32,
+                                                                 "Fareway":  1.3317,
+                                                                 "Family Fare":  1.352,
+                                                                 "Baker\u0027s":  2.0833
+                                                             }
+                                              },
+                        "jalapenos":  {
+                                          "unit":  "lb",
+                                          "cheapest":  1.76,
+                                          "store":  "Walmart",
+                                          "type":  "everyday",
+                                          "url":  "https://www.walmart.com/ip/44391018",
+                                          "n":  6,
+                                          "stores":  {
+                                                         "Walmart":  1.76,
+                                                         "Aldi":  1.98,
+                                                         "Baker\u0027s":  1.99,
+                                                         "Family Fare":  2.99,
+                                                         "Hy-Vee":  2.99,
+                                                         "Fareway":  2.99
+                                                     }
+                                      },
+                        "kidney-beans":  {
+                                             "unit":  "oz",
+                                             "cheapest":  0.0539,
+                                             "store":  "Walmart",
+                                             "type":  "everyday",
+                                             "url":  "https://www.walmart.com/ip/194766473",
+                                             "n":  7,
+                                             "stores":  {
+                                                            "Walmart":  0.0539,
+                                                            "Aldi":  0.0548,
+                                                            "Baker\u0027s":  0.0638,
+                                                            "Fareway":  0.0639,
+                                                            "Hy-Vee":  0.0639,
+                                                            "Sam\u0027s Club":  0.0665,
+                                                            "Family Fare":  0.0927
+                                                        }
+                                         },
+                        "eggs":  {
+                                     "unit":  "dozen",
+                                     "cheapest":  1.45,
+                                     "store":  "Fareway",
+                                     "type":  "everyday",
+                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2915637-dutch-farms-18-grade-a-large-eggs-18-ct",
+                                     "n":  7,
+                                     "stores":  {
+                                                    "Fareway":  1.45,
+                                                    "Aldi":  1.46,
+                                                    "Hy-Vee":  1.47,
+                                                    "Walmart":  1.624,
+                                                    "Baker\u0027s":  1.75,
+                                                    "Sam\u0027s Club":  1.9113,
+                                                    "Family Fare":  2.156
+                                                }
+                                 },
+                        "lemon-juice":  {
+                                            "unit":  "floz",
+                                            "cheapest":  0.0675,
+                                            "store":  "Sam\u0027s Club",
+                                            "type":  "everyday",
+                                            "url":  "",
+                                            "n":  7,
+                                            "stores":  {
+                                                           "Sam\u0027s Club":  0.0675,
+                                                           "Aldi":  0.0684,
+                                                           "Walmart":  0.07,
+                                                           "Baker\u0027s":  0.1028,
+                                                           "Fareway":  0.1138,
+                                                           "Family Fare":  0.1247,
+                                                           "Hy-Vee":  0.1247
+                                                       }
+                                        },
+                        "limes":  {
+                                      "unit":  "each",
+                                      "cheapest":  0.69,
+                                      "store":  "Baker\u0027s",
+                                      "type":  "everyday",
+                                      "url":  "https://www.bakersplus.com/p/fresh-large-limes-each/0000000004048",
+                                      "n":  4,
+                                      "stores":  {
+                                                     "Baker\u0027s":  0.69,
+                                                     "Family Fare":  0.79,
+                                                     "Hy-Vee":  0.88,
+                                                     "Fareway":  0.99
+                                                 }
+                                  },
+                        "milk":  {
+                                     "unit":  "gallon",
+                                     "cheapest":  2.816,
+                                     "store":  "Walmart",
+                                     "type":  "everyday",
+                                     "url":  "https://www.walmart.com/ip/10450116",
+                                     "n":  7,
+                                     "stores":  {
+                                                    "Walmart":  2.816,
+                                                    "Aldi":  3.01,
+                                                    "Hy-Vee":  3.06,
+                                                    "Baker\u0027s":  3.19,
+                                                    "Family Fare":  3.59,
+                                                    "Sam\u0027s Club":  3.72,
+                                                    "Fareway":  5.98
+                                                }
+                                 },
+                        "fresh-mint":  {
+                                           "unit":  "oz",
+                                           "cheapest":  3.56,
+                                           "store":  "Walmart",
+                                           "type":  "everyday",
+                                           "url":  "https://www.walmart.com/ip/3107390475",
+                                           "n":  5,
+                                           "stores":  {
+                                                          "Walmart":  3.56,
+                                                          "Hy-Vee":  3.9867,
+                                                          "Fareway":  3.9867,
+                                                          "Baker\u0027s":  4.98,
+                                                          "Family Fare":  5.98
+                                                      }
+                                       },
+                        "mushrooms":  {
+                                          "unit":  "oz",
+                                          "cheapest":  0.1654,
+                                          "store":  "Sam\u0027s Club",
+                                          "type":  "everyday",
+                                          "url":  "https://www.samsclub.com/ip/13894703507",
+                                          "n":  7,
+                                          "stores":  {
+                                                         "Sam\u0027s Club":  0.1654,
+                                                         "Aldi":  0.1862,
+                                                         "Walmart":  0.2356,
+                                                         "Family Fare":  0.2492,
+                                                         "Baker\u0027s":  0.25,
+                                                         "Hy-Vee":  0.31,
+                                                         "Fareway":  0.3113
+                                                     }
+                                      },
+                        "olive-oil":  {
+                                          "unit":  "floz",
+                                          "cheapest":  0.1879,
+                                          "store":  "Sam\u0027s Club",
+                                          "type":  "everyday",
+                                          "url":  "https://www.samsclub.com/ip/13894506105",
+                                          "n":  7,
+                                          "stores":  {
+                                                         "Sam\u0027s Club":  0.1879,
+                                                         "Walmart":  0.2784,
+                                                         "Fareway":  0.2956,
+                                                         "Aldi":  0.3251,
+                                                         "Baker\u0027s":  0.3381,
+                                                         "Family Fare":  0.4491,
+                                                         "Hy-Vee":  0.47
+                                                     }
+                                      },
+                        "orange-juice":  {
+                                             "unit":  "floz",
+                                             "cheapest":  0.0585,
+                                             "store":  "Aldi",
+                                             "type":  "everyday",
+                                             "url":  "https://www.aldi.us/store/aldi/products/24519507-nature-s-nectar-orange-juice-from-concentrate-128-fl-oz",
+                                             "n":  7,
+                                             "stores":  {
+                                                            "Aldi":  0.0585,
+                                                            "Fareway":  0.0623,
+                                                            "Baker\u0027s":  0.0624,
+                                                            "Walmart":  0.0667,
+                                                            "Hy-Vee":  0.0702,
+                                                            "Family Fare":  0.0702,
+                                                            "Sam\u0027s Club":  0.1127
+                                                        }
+                                         },
+                        "dried-oregano":  {
+                                              "unit":  "oz",
+                                              "cheapest":  0.9307,
+                                              "store":  "Hy-Vee",
+                                              "type":  "everyday",
+                                              "url":  "https://www.hy-vee.com/aisles-online/p/4141455/hy-vee-oregano-leaves",
+                                              "n":  7,
+                                              "stores":  {
+                                                             "Hy-Vee":  0.9307,
+                                                             "Walmart":  0.945,
+                                                             "Sam\u0027s Club":  1.0873,
+                                                             "Aldi":  1.32,
+                                                             "Fareway":  1.4527,
+                                                             "Baker\u0027s":  1.6959,
+                                                             "Family Fare":  2.92
+                                                         }
+                                          },
+                        "oyster-sauce":  {
+                                             "unit":  "floz",
+                                             "cheapest":  0.1968,
+                                             "store":  "Fareway",
+                                             "type":  "everyday",
+                                             "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/82690-kikkoman-oyster-flavored-sauce-12-6-oz",
+                                             "n":  3,
+                                             "stores":  {
+                                                            "Fareway":  0.1968,
+                                                            "Walmart":  0.2587,
+                                                            "Baker\u0027s":  0.4433
+                                                        }
+                                         },
+                        "parmesan":  {
+                                         "unit":  "oz",
+                                         "cheapest":  0.3034,
+                                         "store":  "Aldi",
+                                         "type":  "everyday",
+                                         "url":  "https://www.aldi.us/store/aldi/products/18648122-earthly-grains-parmesan-couscous-5-9-oz",
+                                         "n":  7,
+                                         "stores":  {
+                                                        "Aldi":  0.3034,
+                                                        "Sam\u0027s Club":  0.3092,
+                                                        "Baker\u0027s":  0.3333,
+                                                        "Family Fare":  0.3333,
+                                                        "Walmart":  0.3425,
+                                                        "Fareway":  0.3675,
+                                                        "Hy-Vee":  0.4612
+                                                    }
+                                     },
+                        "pasta":  {
+                                      "unit":  "oz",
+                                      "cheapest":  0.0571,
+                                      "store":  "Sam\u0027s Club",
+                                      "type":  "everyday",
+                                      "url":  "https://www.samsclub.com/ip/17863853694",
+                                      "n":  7,
+                                      "stores":  {
+                                                     "Sam\u0027s Club":  0.0571,
+                                                     "Walmart":  0.0575,
+                                                     "Aldi":  0.0591,
+                                                     "Fareway":  0.0619,
+                                                     "Family Fare":  0.0778,
+                                                     "Baker\u0027s":  0.0781,
+                                                     "Hy-Vee":  0.0793
+                                                 }
+                                  },
+                        "peanut-butter":  {
+                                              "unit":  "oz",
+                                              "cheapest":  0.0831,
+                                              "store":  "Sam\u0027s Club",
+                                              "type":  "everyday",
+                                              "url":  "",
+                                              "n":  7,
+                                              "stores":  {
+                                                             "Sam\u0027s Club":  0.0831,
+                                                             "Walmart":  0.0895,
+                                                             "Baker\u0027s":  0.0936,
+                                                             "Aldi":  0.0988,
+                                                             "Fareway":  0.119,
+                                                             "Hy-Vee":  0.1244,
+                                                             "Family Fare":  0.1431
+                                                         }
+                                          },
+                        "peanuts":  {
+                                        "unit":  "oz",
+                                        "cheapest":  0.0873,
+                                        "store":  "Sam\u0027s Club",
+                                        "type":  "everyday",
+                                        "url":  "https://www.samsclub.com/ip/8186420180",
+                                        "n":  7,
+                                        "stores":  {
+                                                       "Sam\u0027s Club":  0.0873,
+                                                       "Walmart":  0.104,
+                                                       "Aldi":  0.1431,
+                                                       "Baker\u0027s":  0.1681,
+                                                       "Fareway":  0.1854,
+                                                       "Family Fare":  0.1869,
+                                                       "Hy-Vee":  0.2175
+                                                   }
+                                    },
+                        "ranch-dressing":  {
+                                               "unit":  "floz",
+                                               "cheapest":  0.08,
+                                               "store":  "Sam\u0027s Club",
+                                               "type":  "everyday",
+                                               "url":  "https://www.samsclub.com/ip/7874227011",
+                                               "n":  7,
+                                               "stores":  {
+                                                              "Sam\u0027s Club":  0.08,
+                                                              "Walmart":  0.1103,
+                                                              "Aldi":  0.1175,
+                                                              "Hy-Vee":  0.1386,
+                                                              "Fareway":  0.155,
+                                                              "Family Fare":  0.1744,
+                                                              "Baker\u0027s":  0.1744
+                                                          }
+                                           },
+                        "ranch-seasoning-mix":  {
+                                                    "unit":  "oz",
+                                                    "cheapest":  0.4525,
+                                                    "store":  "Walmart",
+                                                    "type":  "everyday",
+                                                    "url":  "",
+                                                    "n":  7,
+                                                    "stores":  {
+                                                                   "Walmart":  0.4525,
+                                                                   "Aldi":  0.55,
+                                                                   "Sam\u0027s Club":  0.5612,
+                                                                   "Hy-Vee":  0.66,
+                                                                   "Baker\u0027s":  0.6725,
+                                                                   "Family Fare":  0.7054,
+                                                                   "Fareway":  0.98
+                                                               }
+                                                },
+                        "red-onion":  {
+                                          "unit":  "lb",
+                                          "cheapest":  1.095,
+                                          "store":  "Aldi",
+                                          "type":  "everyday",
+                                          "url":  "https://www.aldi.us/store/aldi/products/16558450-red-onion-bag-2-lbs",
+                                          "n":  6,
+                                          "stores":  {
+                                                         "Aldi":  1.095,
+                                                         "Hy-Vee":  1.28,
+                                                         "Baker\u0027s":  1.33,
+                                                         "Walmart":  1.34,
+                                                         "Fareway":  1.69,
+                                                         "Family Fare":  1.99
+                                                     }
+                                      },
+                        "rice-noodles":  {
+                                             "unit":  "oz",
+                                             "cheapest":  0.235,
+                                             "store":  "Baker\u0027s",
+                                             "type":  "everyday",
+                                             "url":  "https://www.bakersplus.com/p/butterfly-brand-pad-thai-noodle/0001341202172",
+                                             "n":  5,
+                                             "stores":  {
+                                                            "Baker\u0027s":  0.235,
+                                                            "Fareway":  0.2494,
+                                                            "Walmart":  0.34,
+                                                            "Hy-Vee":  0.3744,
+                                                            "Family Fare":  0.869
+                                                        }
+                                         },
+                        "ricotta":  {
+                                        "unit":  "oz",
+                                        "cheapest":  0.166,
+                                        "store":  "Aldi",
+                                        "type":  "everyday",
+                                        "url":  "https://www.aldi.us/store/aldi/products/64344101-part-skim-ricotta-cheese",
+                                        "n":  6,
+                                        "stores":  {
+                                                       "Aldi":  0.166,
+                                                       "Walmart":  0.1806,
+                                                       "Baker\u0027s":  0.183,
+                                                       "Family Fare":  0.1872,
+                                                       "Fareway":  0.1872,
+                                                       "Hy-Vee":  0.2184
+                                                   }
+                                    },
+                        "russet-potatoes":  {
+                                                "unit":  "lb",
+                                                "cheapest":  0.409,
+                                                "store":  "Aldi",
+                                                "type":  "everyday",
+                                                "url":  "https://www.aldi.us/store/aldi/products/16725303-russet-potato-bag-10-lbs",
+                                                "n":  7,
+                                                "stores":  {
+                                                               "Aldi":  0.409,
+                                                               "Sam\u0027s Club":  0.456,
+                                                               "Hy-Vee":  0.49,
+                                                               "Baker\u0027s":  0.5,
+                                                               "Family Fare":  0.549,
+                                                               "Walmart":  0.568,
+                                                               "Fareway":  1.49
+                                                           }
+                                            },
+                        "sesame-oil":  {
+                                           "unit":  "floz",
+                                           "cheapest":  0.453,
+                                           "store":  "Walmart",
+                                           "type":  "everyday",
+                                           "url":  "",
+                                           "n":  5,
+                                           "stores":  {
+                                                          "Walmart":  0.453,
+                                                          "Baker\u0027s":  0.6653,
+                                                          "Hy-Vee":  0.7047,
+                                                          "Fareway":  0.7887,
+                                                          "Family Fare":  1.078
+                                                      }
+                                       },
+                        "shredded-cheese":  {
+                                                "unit":  "oz",
+                                                "cheapest":  0.1521,
+                                                "store":  "Sam\u0027s Club",
+                                                "type":  "everyday",
+                                                "url":  "https://www.samsclub.com/ip/13844016358",
+                                                "n":  7,
+                                                "stores":  {
+                                                               "Sam\u0027s Club":  0.1521,
+                                                               "Walmart":  0.1771,
+                                                               "Aldi":  0.2056,
+                                                               "Baker\u0027s":  0.2278,
+                                                               "Fareway":  0.2338,
+                                                               "Family Fare":  0.2466,
+                                                               "Hy-Vee":  0.2494
+                                                           }
+                                            },
+                        "sour-cream":  {
+                                           "unit":  "oz",
+                                           "cheapest":  0.1025,
+                                           "store":  "Walmart",
+                                           "type":  "everyday",
+                                           "url":  "https://www.walmart.com/ip/47386251",
+                                           "n":  7,
+                                           "stores":  {
+                                                          "Walmart":  0.1025,
+                                                          "Baker\u0027s":  0.1042,
+                                                          "Aldi":  0.1094,
+                                                          "Sam\u0027s Club":  0.1154,
+                                                          "Fareway":  0.1238,
+                                                          "Hy-Vee":  0.1244,
+                                                          "Family Fare":  0.1371
+                                                      }
+                                       },
+                        "soy-sauce":  {
+                                          "unit":  "floz",
+                                          "cheapest":  0.11,
+                                          "store":  "Aldi",
+                                          "type":  "everyday",
+                                          "url":  "https://www.aldi.us/store/aldi/products/18649296-fusia-asian-inspirations-traditionally-brewed-all-purpose-soy-sauce-15-fl-oz",
+                                          "n":  7,
+                                          "stores":  {
+                                                         "Aldi":  0.11,
+                                                         "Walmart":  0.112,
+                                                         "Sam\u0027s Club":  0.1153,
+                                                         "Baker\u0027s":  0.1247,
+                                                         "Family Fare":  0.169,
+                                                         "Fareway":  0.199,
+                                                         "Hy-Vee":  0.2124
+                                                     }
+                                      },
+                        "sun-dried-tomatoes":  {
+                                                   "unit":  "oz",
+                                                   "cheapest":  0.4158,
+                                                   "store":  "Sam\u0027s Club",
+                                                   "type":  "everyday",
+                                                   "url":  "https://www.samsclub.com/ip/17242460680",
+                                                   "n":  7,
+                                                   "stores":  {
+                                                                  "Sam\u0027s Club":  0.4158,
+                                                                  "Hy-Vee":  0.4988,
+                                                                  "Aldi":  0.4988,
+                                                                  "Walmart":  0.5275,
+                                                                  "Baker\u0027s":  0.61,
+                                                                  "Fareway":  0.6212,
+                                                                  "Family Fare":  1.33
+                                                              }
+                                               },
+                        "salt":  {
+                                     "unit":  "oz",
+                                     "cheapest":  0.0304,
+                                     "store":  "Aldi",
+                                     "type":  "everyday",
+                                     "url":  "https://www.aldi.us/store/aldi/products/18647588-stonemill-iodized-salt-26-oz",
+                                     "n":  7,
+                                     "stores":  {
+                                                    "Aldi":  0.0304,
+                                                    "Walmart":  0.0362,
+                                                    "Sam\u0027s Club":  0.0372,
+                                                    "Family Fare":  0.0381,
+                                                    "Baker\u0027s":  0.0381,
+                                                    "Hy-Vee":  0.0608,
+                                                    "Fareway":  0.0723
+                                                }
+                                 },
+                        "taco-seasoning":  {
+                                               "unit":  "oz",
+                                               "cheapest":  0.3017,
+                                               "store":  "Walmart",
+                                               "type":  "everyday",
+                                               "url":  "",
+                                               "n":  7,
+                                               "stores":  {
+                                                              "Walmart":  0.3017,
+                                                              "Sam\u0027s Club":  0.3035,
+                                                              "Baker\u0027s":  0.4439,
+                                                              "Aldi":  0.46,
+                                                              "Hy-Vee":  0.528,
+                                                              "Fareway":  0.6384,
+                                                              "Family Fare":  0.9753
+                                                          }
+                                           },
+                        "tomato-paste":  {
+                                             "unit":  "oz",
+                                             "cheapest":  0.1017,
+                                             "store":  "Walmart",
+                                             "type":  "everyday",
+                                             "url":  "https://www.walmart.com/ip/10415527",
+                                             "n":  7,
+                                             "stores":  {
+                                                            "Walmart":  0.1017,
+                                                            "Sam\u0027s Club":  0.1108,
+                                                            "Baker\u0027s":  0.1325,
+                                                            "Fareway":  0.1408,
+                                                            "Aldi":  0.1433,
+                                                            "Family Fare":  0.1575,
+                                                            "Hy-Vee":  0.1575
+                                                        }
+                                         },
+                        "tortillas":  {
+                                          "unit":  "each",
+                                          "cheapest":  0.106,
+                                          "store":  "Walmart",
+                                          "type":  "everyday",
+                                          "url":  "",
+                                          "n":  7,
+                                          "stores":  {
+                                                         "Walmart":  0.106,
+                                                         "Sam\u0027s Club":  0.123,
+                                                         "Hy-Vee":  0.1245,
+                                                         "Baker\u0027s":  0.1681,
+                                                         "Family Fare":  0.1825,
+                                                         "Fareway":  0.199,
+                                                         "Aldi":  0.2612
+                                                     }
+                                      },
+                        "turkey-breast":  {
+                                              "unit":  "lb",
+                                              "cheapest":  2.99,
+                                              "store":  "Fareway",
+                                              "type":  "everyday",
+                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387369-fareway-bonein-turkey-breast-1-each",
+                                              "n":  6,
+                                              "stores":  {
+                                                             "Fareway":  2.99,
+                                                             "Baker\u0027s":  4.9967,
+                                                             "Walmart":  5.0795,
+                                                             "Aldi":  6.0267,
+                                                             "Hy-Vee":  6.66,
+                                                             "Family Fare":  11.99
+                                                         }
+                                          },
+                        "vegetable-oil":  {
+                                              "unit":  "floz",
+                                              "cheapest":  0.0683,
+                                              "store":  "Walmart",
+                                              "type":  "everyday",
+                                              "url":  "https://www.walmart.com/ip/10451011",
+                                              "n":  7,
+                                              "stores":  {
+                                                             "Walmart":  0.0683,
+                                                             "Sam\u0027s Club":  0.0723,
+                                                             "Aldi":  0.074,
+                                                             "Fareway":  0.0741,
+                                                             "Hy-Vee":  0.0781,
+                                                             "Baker\u0027s":  0.0804,
+                                                             "Family Fare":  0.0937
+                                                         }
+                                          },
+                        "rice":  {
+                                     "unit":  "lb",
+                                     "cheapest":  0.4396,
+                                     "store":  "Sam\u0027s Club",
+                                     "type":  "everyday",
+                                     "url":  "https://www.samsclub.com/ip/13903457000",
+                                     "n":  7,
+                                     "stores":  {
+                                                    "Sam\u0027s Club":  0.4396,
+                                                    "Walmart":  0.56,
+                                                    "Aldi":  0.798,
+                                                    "Baker\u0027s":  0.895,
+                                                    "Hy-Vee":  0.938,
+                                                    "Family Fare":  1,
+                                                    "Fareway":  1.99
+                                                }
+                                 },
+                        "white-vinegar":  {
+                                              "unit":  "floz",
+                                              "cheapest":  0.0124,
+                                              "store":  "Aldi",
+                                              "type":  "everyday",
+                                              "url":  "https://www.aldi.us/store/aldi/products/71116-woeber-s-white-vinegar-distilled-5-acidity-1-gl",
+                                              "n":  7,
+                                              "stores":  {
+                                                             "Aldi":  0.0124,
+                                                             "Sam\u0027s Club":  0.0234,
+                                                             "Walmart":  0.0308,
+                                                             "Fareway":  0.0312,
+                                                             "Family Fare":  0.0327,
+                                                             "Baker\u0027s":  0.0327,
+                                                             "Hy-Vee":  0.039
+                                                         }
+                                          },
+                        "worcestershire":  {
+                                               "unit":  "floz",
+                                               "cheapest":  0.1,
+                                               "store":  "Hy-Vee",
+                                               "type":  "everyday",
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/2916225/that-s-smart-worcestershire-sauce",
+                                               "n":  6,
+                                               "stores":  {
+                                                              "Hy-Vee":  0.1,
+                                                              "Walmart":  0.1,
+                                                              "Baker\u0027s":  0.146,
+                                                              "Fareway":  0.1544,
+                                                              "Family Fare":  0.169,
+                                                              "Sam\u0027s Club":  0.2345
+                                                          }
+                                           },
+                        "onions":  {
+                                       "unit":  "lb",
+                                       "cheapest":  0.737,
+                                       "store":  "Sam\u0027s Club",
+                                       "type":  "everyday",
+                                       "url":  "https://www.samsclub.com/ip/13599313206",
+                                       "n":  7,
+                                       "stores":  {
+                                                      "Sam\u0027s Club":  0.737,
+                                                      "Aldi":  0.7967,
+                                                      "Family Fare":  0.998,
+                                                      "Walmart":  1.1403,
+                                                      "Hy-Vee":  1.1633,
+                                                      "Baker\u0027s":  1.29,
+                                                      "Fareway":  1.33
+                                                  }
+                                   },
+                        "93-7-ground-turkey":  {
+                                                   "unit":  "lb",
+                                                   "cheapest":  3.9083,
+                                                   "store":  "Aldi",
+                                                   "type":  "everyday",
+                                                   "url":  "https://www.aldi.us/store/aldi/products/17499020-fit-active-93-lean-fresh-ground-turkey-19-2-oz",
+                                                   "n":  6,
+                                                   "stores":  {
+                                                                  "Aldi":  3.9083,
+                                                                  "Sam\u0027s Club":  4.3265,
+                                                                  "Walmart":  4.55,
+                                                                  "Hy-Vee":  4.99,
+                                                                  "Baker\u0027s":  5.49,
+                                                                  "Family Fare":  7.99
+                                                              }
+                                               },
+                        "boneless-skinless-chicken-thigh":  {
+                                                                "unit":  "lb",
+                                                                "cheapest":  2.43,
+                                                                "store":  "Aldi",
+                                                                "type":  "everyday",
+                                                                "url":  "https://www.aldi.us/store/aldi/products/19347700-kirkwood-boneless-skinless-chicken-thighs-48-oz",
+                                                                "n":  6,
+                                                                "stores":  {
+                                                                               "Aldi":  2.43,
+                                                                               "Sam\u0027s Club":  2.48,
+                                                                               "Baker\u0027s":  2.495,
+                                                                               "Walmart":  3.2199,
+                                                                               "Hy-Vee":  3.996,
+                                                                               "Family Fare":  4.99
+                                                                           }
+                                                            },
+                        "cheddar-cheese-shredded":  {
+                                                        "unit":  "oz",
+                                                        "cheapest":  0.1521,
+                                                        "store":  "Sam\u0027s Club",
+                                                        "type":  "everyday",
+                                                        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Mild-Cheddar-Shredded-Cheese-16-oz-2-pk/13771120208",
+                                                        "n":  6,
+                                                        "stores":  {
+                                                                       "Sam\u0027s Club":  0.1521,
+                                                                       "Aldi":  0.2056,
+                                                                       "Walmart":  0.2155,
+                                                                       "Baker\u0027s":  0.2278,
+                                                                       "Family Fare":  0.2466,
+                                                                       "Hy-Vee":  0.2494
+                                                                   }
+                                                    },
+                        "fries":  {
+                                      "unit":  "oz",
+                                      "cheapest":  0.067,
+                                      "store":  "Sam\u0027s Club",
+                                      "type":  "everyday",
+                                      "url":  "https://www.samsclub.com/ip/Ore-Ida-Crispy-Crinkles-French-Fries-Frozen-8-lbs/13621707320",
+                                      "n":  6,
+                                      "stores":  {
+                                                     "Sam\u0027s Club":  0.067,
+                                                     "Aldi":  0.0903,
+                                                     "Baker\u0027s":  0.0911,
+                                                     "Walmart":  0.092,
+                                                     "Hy-Vee":  0.1374,
+                                                     "Family Fare":  0.1559
+                                                 }
+                                  },
+                        "frozen-chopped-spinach":  {
+                                                       "unit":  "oz",
+                                                       "cheapest":  0.115,
+                                                       "store":  "Walmart",
+                                                       "type":  "everyday",
+                                                       "url":  "https://www.walmart.com/ip/36817130",
+                                                       "n":  5,
+                                                       "stores":  {
+                                                                      "Walmart":  0.115,
+                                                                      "Baker\u0027s":  0.1325,
+                                                                      "Aldi":  0.1344,
+                                                                      "Hy-Vee":  0.149,
+                                                                      "Family Fare":  0.1492
+                                                                  }
+                                                   },
+                        "greek-yogurt":  {
+                                             "unit":  "oz",
+                                             "cheapest":  0.0872,
+                                             "store":  "Aldi",
+                                             "type":  "everyday",
+                                             "url":  "https://www.aldi.us/store/aldi/products/20249671-friendly-farms-nonfat-plain-greek-yogurt-32-oz",
+                                             "n":  6,
+                                             "stores":  {
+                                                            "Aldi":  0.0872,
+                                                            "Walmart":  0.1025,
+                                                            "Sam\u0027s Club":  0.1217,
+                                                            "Hy-Vee":  0.1403,
+                                                            "Baker\u0027s":  0.1466,
+                                                            "Family Fare":  0.2817
+                                                        }
+                                         },
+                        "marinara-sauce":  {
+                                               "unit":  "oz",
+                                               "cheapest":  0.0704,
+                                               "store":  "Aldi",
+                                               "type":  "everyday",
+                                               "url":  "https://www.aldi.us/store/aldi/products/18649702-reggano-marinara-pasta-sauce-24-oz",
+                                               "n":  5,
+                                               "stores":  {
+                                                              "Aldi":  0.0704,
+                                                              "Walmart":  0.0729,
+                                                              "Baker\u0027s":  0.0765,
+                                                              "Hy-Vee":  0.0767,
+                                                              "Family Fare":  0.0829
+                                                          }
+                                           },
+                        "red-bell-pepper":  {
+                                                "unit":  "each",
+                                                "cheapest":  0.98,
+                                                "store":  "Walmart",
+                                                "type":  "everyday",
+                                                "url":  "https://www.walmart.com/ip/44391581",
+                                                "n":  6,
+                                                "stores":  {
+                                                               "Sam\u0027s Club":  1.1283,
+                                                               "Walmart":  0.98,
+                                                               "Aldi":  1,
+                                                               "Baker\u0027s":  1.66,
+                                                               "Hy-Vee":  1.69,
+                                                               "Family Fare":  5
+                                                           }
+                                            },
+                        "93-7-ground-beef":  {
+                                                 "unit":  "lb",
+                                                 "cheapest":  6.17,
+                                                 "store":  "Sam\u0027s Club",
+                                                 "type":  "everyday",
+                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-93-7-Ground-Beef-priced-per-pound/13865573229",
+                                                 "n":  6,
+                                                 "stores":  {
+                                                                "Sam\u0027s Club":  6.17,
+                                                                "Walmart":  6.62,
+                                                                "Aldi":  7.39,
+                                                                "Hy-Vee":  8.99,
+                                                                "Family Fare":  9.29,
+                                                                "Baker\u0027s":  9.49
+                                                            }
+                                             },
+                        "beef-chuck-roast":  {
+                                                 "unit":  "lb",
+                                                 "cheapest":  6.64,
+                                                 "store":  "Sam\u0027s Club",
+                                                 "type":  "everyday",
+                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-USDA-Choice-Angus-Beef-Boneless-Chuck-Roast-priced-per-pound/13596802079",
+                                                 "n":  6,
+                                                 "stores":  {
+                                                                "Sam\u0027s Club":  6.64,
+                                                                "Walmart":  7.9689,
+                                                                "Aldi":  7.99,
+                                                                "Hy-Vee":  8.99,
+                                                                "Family Fare":  10.99,
+                                                                "Baker\u0027s":  10.99
+                                                            }
+                                             },
+                        "frozen-broccoli-florets":  {
+                                                        "unit":  "oz",
+                                                        "cheapest":  0.097,
+                                                        "store":  "Walmart",
+                                                        "type":  "everyday",
+                                                        "url":  "https://www.walmart.com/ip/735585383",
+                                                        "n":  6,
+                                                        "stores":  {
+                                                                       "Walmart":  0.097,
+                                                                       "Sam\u0027s Club":  0.0994,
+                                                                       "Aldi":  0.1075,
+                                                                       "Baker\u0027s":  0.13,
+                                                                       "Family Fare":  0.1408,
+                                                                       "Hy-Vee":  0.1579
+                                                                   }
+                                                    },
+                        "green-bell-pepper":  {
+                                                  "unit":  "each",
+                                                  "cheapest":  0.8283,
+                                                  "store":  "Sam\u0027s Club",
+                                                  "type":  "everyday",
+                                                  "url":  "https://www.samsclub.com/ip/Green-Bell-Peppers-6-ct/13888070896",
+                                                  "n":  6,
+                                                  "stores":  {
+                                                                 "Sam\u0027s Club":  0.8283,
+                                                                 "Aldi":  0.83,
+                                                                 "Walmart":  0.86,
+                                                                 "Baker\u0027s":  0.99,
+                                                                 "Hy-Vee":  1.5,
+                                                                 "Family Fare":  1.69
+                                                             }
+                                              },
+                        "reduced-fat-mozzarella":  {
+                                                       "unit":  "oz",
+                                                       "cheapest":  0.18,
+                                                       "store":  "Sam\u0027s Club",
+                                                       "type":  "everyday",
+                                                       "url":  "https://www.samsclub.com/ip/Member-s-Mark-Part-Skim-Shredded-Mozzarella-Cheese-1-lb-2-pk/13571719477",
+                                                       "n":  5,
+                                                       "stores":  {
+                                                                      "Sam\u0027s Club":  0.18,
+                                                                      "Walmart":  0.218,
+                                                                      "Baker\u0027s":  0.23,
+                                                                      "Family Fare":  0.2494,
+                                                                      "Hy-Vee":  0.31
+                                                                  }
+                                                   },
+                        "seasoned-black-beans":  {
+                                                     "unit":  "oz",
+                                                     "cheapest":  0.0993,
+                                                     "store":  "Hy-Vee",
+                                                     "type":  "everyday",
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/48195/bushs-seasoned-recipe-black-beans",
+                                                     "n":  4,
+                                                     "stores":  {
+                                                                    "Hy-Vee":  0.0993,
+                                                                    "Baker\u0027s":  0.1,
+                                                                    "Walmart":  0.111,
+                                                                    "Family Fare":  0.1193
+                                                                }
+                                                 },
+                        "pork-loin":  {
+                                          "unit":  "lb",
+                                          "cheapest":  1.98,
+                                          "store":  "Sam\u0027s Club",
+                                          "type":  "everyday",
+                                          "url":  "https://www.samsclub.com/ip/Member-s-Mark-Whole-Boneless-Pork-Loin-Vacuum-Pack-priced-per-pound/15607106819",
+                                          "n":  5,
+                                          "stores":  {
+                                                         "Sam\u0027s Club":  1.98,
+                                                         "Baker\u0027s":  1.99,
+                                                         "Aldi":  2.09,
+                                                         "Walmart":  2.14,
+                                                         "Hy-Vee":  3.89
+                                                     }
+                                      },
+                        "smoked-paprika":  {
+                                               "unit":  "oz",
+                                               "cheapest":  0.631,
+                                               "store":  "Walmart",
+                                               "type":  "everyday",
+                                               "url":  "https://www.walmart.com/ip/18807673941",
+                                               "n":  5,
+                                               "stores":  {
+                                                              "Walmart":  0.631,
+                                                              "Family Fare":  0.9986,
+                                                              "Aldi":  1.3688,
+                                                              "Baker\u0027s":  3.1371,
+                                                              "Hy-Vee":  3.3051
+                                                          }
+                                           }
+                    }
+}

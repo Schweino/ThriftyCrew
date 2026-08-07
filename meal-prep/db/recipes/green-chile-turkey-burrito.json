@@ -1,0 +1,269 @@
+{
+    "name":  "Green Chile Turkey Burrito",
+    "slug":  "green-chile-turkey-burrito",
+    "cuisine":  "Green Chile",
+    "protein":  "turkey",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.ambitiouskitchen.com/green-chile-chicken-burritos/",
+    "source_site":  "ambitiouskitchen.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "PROTEIN: source is a ground-CHICKEN recipe that offers turkey as an option. Ships as TURKEY (one of only two turkey builds).",
+                         "SAUCE: specced SALSA, not enchilada sauce, so it stays a wrapped burrito and not a wet/smothered one (batch format rule).",
+                         "Gold potatoes respecced to russet (mapped to food-DB Potato, russet basis).",
+                         "CULTURAL FLAG: stage-1 labeled the aromatic base recaito veg (0.35 cal/g). Recaito is a Puerto Rican sofrito and is out of place in a New Mexican green chile dish. Represented instead as a sauteed Yellow Onion + Green Bell Pepper base (the honest green-chile aromatic). Flagged for confirmation.",
+                         "Different protein from T11 green chile chicken. Bowl/skillet cousin: Green Chile Ground Turkey Skillet."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "pork",
+                                  "enchilada"
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  377,
+                 "protein":  30,
+                 "carbs":  36,
+                 "fat":  15,
+                 "cost_ps":  "3.75"
+             },
+    "intro_html":  "\u003cp\u003eGreen chile, potato, and turkey, wrapped and ready. This build comes in at 377 calories with 30 grams of protein, on a tortilla carrying 18 grams of fiber for about 5 grams of net carb. We kept it a proper wrapped burrito with salsa rather than drowning it in sauce, so it holds up in the fridge and eats clean out of hand. Diced russet potato stretches the lean turkey and soaks up the green chile. If you like our Green Chile Ground Turkey Skillet, this is that flavor you can wrap and take with you.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1582 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.75 tsp (8 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.5 onions (168 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 1 pepper (140 g)",
+                                "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 2 cans (224 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 1.25 lb russet (574 g)",
+                                "\u003cstrong\u003eSalsa (Pace):\u003c/strong\u003e 1 cup (210 g)",
+                                "\u003cstrong\u003eMexican Cheese Blend (Great Value):\u003c/strong\u003e 7 oz (196 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2.25 tbsp (14 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 2.25 tsp (7 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 2.25 tbsp (7 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 3.5 lb: ~$15.87. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
+                       "Yellow Onion, 1.5 onions: ~$0.42. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 1 pepper: ~$1.00. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "Diced Green Chiles, 2 cans: ~$2.15. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz cans.\u003c/strong\u003e",
+                       "Potato, 1.25 lb russet: ~$0.72. \u003cstrong\u003eBuy 2 lbs: $1.14.\u003c/strong\u003e",
+                       "Salsa, 1 cup: ~$0.91. \u003cstrong\u003eBuy 1 16oz jar: $1.97.\u003c/strong\u003e",
+                       "Mexican Cheese Blend, 7 oz: ~$1.22. \u003cstrong\u003eBuy 1 8oz bag: $1.42.\u003c/strong\u003e",
+                       "Pantry seasonings (olive oil, ground cumin, garlic powder, dried oregano): ~$0.66. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $34.55 across 14 servings, so roughly $2.47 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $43.23 across 14 servings, roughly $3.09 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.55. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e$3.75 a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$9 or more\u003c/strong\u003e for a green-chile burrito out. The potato is what keeps this one cheap and filling at the same time.\u003c/p\u003e",
+    "shop_smart":  [
+                       "\u003cstrong\u003eTurkey and potatoes are the cheap muscle here.\u003c/strong\u003e A pound and a quarter of russets bulks out the filling for almost nothing and carries the green chile flavor. Dice them small so they cook through with the meat.",
+                       "\u003cstrong\u003eCanned green chiles bring the whole profile.\u003c/strong\u003e A couple of 4 ounce cans give you the roasted chile note across all 14 burritos without a trip to a specialty store.",
+                       "\u003cstrong\u003eSalsa keeps it a burrito, not a wet mess.\u003c/strong\u003e One jar seasons and moistens the filling while it stays wrappable. Buy the medium and adjust the heat with the green chiles."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Dice the russet potato small and the yellow onion and green bell pepper as well.",
+                    "Heat the olive oil in a large skillet and saute the onion and green bell pepper until they soften.",
+                    "Add the ground turkey and cook, breaking it up, until browned, then stir in the ground cumin, garlic powder, and dried oregano.",
+                    "Add the diced potato and the green chiles, cover, and cook until the potato is tender.",
+                    "Stir in the salsa and warm through, then fold in the Mexican cheese blend so it melts.",
+                    "Warm the tortillas so they roll without cracking, then fill and wrap each one."
+                ],
+    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near 377 calories with 30 grams of protein.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.ambitiouskitchen.com/green-chile-chicken-burritos/\" target=\"_blank\" rel=\"noopener\"\u003eambitiouskitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about $3.75 a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
+    "cost_batch":  34.55,
+    "cost_batch_true":  43.23,
+    "cost_per_serving":  2.47,
+    "cost_per_serving_true":  3.09,
+    "cost_pantry_add":  9.32,
+    "cost_first_run":  52.55,
+    "scaler":  {
+                   "cost":  "43.23",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "canon":  "93/7 Ground Turkey",
+                                   "grams":  1582,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "canon":  "Olive Oil",
+                                   "grams":  8,
+                                   "buy":  "1.75 tsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  168,
+                                   "buy":  "1.5 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  140,
+                                   "buy":  "1 pepper",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Diced Green Chiles",
+                                   "canon":  "Diced Green Chiles",
+                                   "grams":  224,
+                                   "buy":  "2 cans",
+                                   "bid":  "canned-green-chilies",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "canon":  "Potato",
+                                   "grams":  574,
+                                   "buy":  "1.25 lb russet",
+                                   "bid":  "russet-potatoes",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salsa",
+                                   "canon":  "Salsa",
+                                   "grams":  210,
+                                   "buy":  "1 cup",
+                                   "bid":  "salsa",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mexican Cheese Blend",
+                                   "canon":  "Mexican Cheese Blend",
+                                   "grams":  196,
+                                   "buy":  "7 oz",
+                                   "bid":  "shredded-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  14,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  7,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "canon":  "Dried Oregano",
+                                   "grams":  7,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A wrapped green chile turkey burrito under 400 calories, with diced russet potato. About 377 calories and 30 grams of protein per serving, roughly $3.75 each (at everyday cost).",
+                 "keywords":  "green chile turkey burrito, ground turkey meal prep, high protein burrito, low calorie meal prep, budget dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  3.75,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "93/7 Ground Turkey, 3.5 lb (1582 g)",
+                                          "Olive Oil, 1.75 tsp (8 g)",
+                                          "Yellow Onion, 1.5 onions (168 g)",
+                                          "Green Bell Peppers, 1 pepper (140 g)",
+                                          "Diced Green Chiles, 2 cans (224 g)",
+                                          "Potato, 1.25 lb russet (574 g)",
+                                          "Salsa, 1 cup (210 g)",
+                                          "Mexican Cheese Blend, 7 oz (196 g)",
+                                          "Ground Cumin, 2.25 tbsp (14 g)",
+                                          "Garlic Powder, 2.25 tsp (7 g)",
+                                          "Dried Oregano, 2.25 tbsp (7 g)"
+                                      ],
+                 "steps":  [
+                               "Dice the russet potato, onion, and green bell pepper small.",
+                               "Saute the onion and pepper in the olive oil until soft.",
+                               "Brown the ground turkey, then add cumin, garlic powder, and oregano.",
+                               "Add the potato and green chiles, cover, and cook until the potato is tender.",
+                               "Stir in the salsa and the Mexican cheese blend, then fill the warmed tortillas.",
+                               "Weigh the batch and divide into 14 equal burritos."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "93/7 Ground Turkey",
+                                  "grams":  1582
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  8
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  168
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Diced Green Chiles",
+                                  "grams":  224
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  574
+                              },
+                              {
+                                  "item":  "Salsa",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Mexican Cheese Blend",
+                                  "grams":  196
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  7
+                              }
+                          ]
+}

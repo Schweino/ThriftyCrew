@@ -1,0 +1,284 @@
+{
+    "name":  "Creamy Chicken Fajita Burrito",
+    "slug":  "creamy-chicken-fajita-burrito",
+    "cuisine":  "Fajita",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://stealthhealthcookbook.com/blogs/recipes/creamy-chicken-fajita-burritos-big-flavor-better-tortilla",
+    "source_site":  "stealthhealthcookbook.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "STAGE2: built from burrito-stage1-builds C5. S5 owns this recipe: the chipotle Greek-yogurt add-in (Greek yogurt plus chipotle in adobo plus reduced fat mozzarella) is stirred into the hot filling to make it creamy.",
+                         "Peppers are split green and red to read as a proper fajita mix. Chipotle in adobo carries the smoke; it is on the board.",
+                         "Differs from the live Fajita Chicken Rice Bowl by the creamy chipotle-yogurt binder and by swapping the rice base for refried beans inside a wrap.",
+                         "Lowest-calorie recipe of my slice at 324; comfortable headroom under the cap."
+                     ],
+    "forbidden_prose_terms":  [
+
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  324,
+                 "protein":  37,
+                 "carbs":  35,
+                 "fat":  8,
+                 "cost_ps":  "3.24"
+             },
+    "intro_html":  "Fajitas are already a great deal. Peppers, onions and chicken hitting a hot pan is most of the flavor for very little money. We take that and make it creamy without making it heavy, stirring a chipotle Greek yogurt sauce and a little melty mozzarella straight into the filling so every bite is smoky and soft. Each burrito comes in \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e37 grams of protein\u003c/strong\u003e, on a high fiber tortilla that adds only about 5 grams of net carb of its own. We have a Fajita Chicken Rice Bowl on the site; this one trades the rice for refried beans and folds the peppers into a creamy chipotle wrap instead.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (336 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3 peppers (336 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (210 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1.5 tbsp (20 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1.25 tbsp (28 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1.25 cups (308 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 5 oz (140 g)",
+                                "\u003cstrong\u003eRefried Beans (Great Value):\u003c/strong\u003e 1 can (420 g)",
+                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 1.75 tbsp (28 g)",
+                                "\u003cstrong\u003eFajita Seasoning (Taco Bell):\u003c/strong\u003e 2.25 tbsp (18 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.25 tsp (14 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 3.5 lb: ~$7.78. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "Green Bell Peppers, 3 peppers: ~$2.41. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Red Bell Pepper, 3 peppers: ~$2.74. \u003cstrong\u003eBuy 3 each: $2.94.\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.53. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Vegetable Oil, 1.5 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 1.25 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Greek Yogurt, 1.25 cups: ~$1.11. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Reduced Fat Mozzarella, 5 oz: ~$1.08. \u003cstrong\u003eBuy 1 8oz bag: $1.75.\u003c/strong\u003e",
+                       "Refried Beans, 1 can: ~$1.00. \u003cstrong\u003eBuy 1 16oz can: $1.08.\u003c/strong\u003e",
+                       "Chipotle in Adobo, 1.75 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (fajita seasoning, salt): ~$0.35. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.08 across 14 servings, so roughly $2.08 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $37.35 across 14 servings, roughly $2.67 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.33. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.24 a burrito\u003c/strong\u003e (at everyday cost) for creamy chicken fajitas you can eat with one hand. Peppers and beans keep it cheap, the yogurt keeps it light.",
+    "shop_smart":  [
+                       "The three color bell pepper bag is cheaper than buying red and green loose, and fajitas want the mix anyway, so nothing is wasted.",
+                       "One small can of chipotles in adobo seasons several batches. Freeze the leftover peppers in a flat bag and snap off what you need.",
+                       "Refried beans in the can are the cheapest way to add body to a wrap. Buy the fat free version and season it yourself.",
+                       "Reduced fat mozzarella melts creamy for fewer calories than full fat, and the bag freezes well if you only use a handful here."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Slice the chicken breast into strips and toss with the fajita seasoning and salt.",
+                    "Warm the vegetable oil in a large skillet over medium high heat and cook the chicken strips until browned, then push them to one side.",
+                    "Add the sliced green and red bell peppers and onion to the pan and cook 6 to 8 minutes until they take on color and soften, then drizzle in the honey and toss.",
+                    "Warm the refried beans in a small pot until spreadable.",
+                    "Stir the Greek yogurt, chipotle in adobo and reduced fat mozzarella into the hot chicken and peppers so the cheese melts and the sauce turns creamy and smoky.",
+                    "Weigh the filling, subtract the empty bowl, and divide by 14. Spread refried beans down each tortilla, add a share of the creamy fajita filling, fold in the sides and roll.",
+                    "Wrap each burrito and portion into 14 containers."
+                ],
+    "portion_html":  "Weigh the creamy fajita filling, subtract the empty bowl, and divide by 14, then spread the beans and build each tortilla to the same number. Each burrito carries \u003cstrong\u003e324 calories and 37 grams of protein\u003c/strong\u003e. Reheat wrapped, and the yogurt sauce keeps it moist without going greasy.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://stealthhealthcookbook.com/blogs/recipes/creamy-chicken-fajita-burritos-big-flavor-better-tortilla\" target=\"_blank\" rel=\"noopener\"\u003estealthhealthcookbook.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Creamy chicken fajita burritos, 14 wrapped and ready, for about $3.24 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "cost_batch":  29.08,
+    "cost_batch_true":  37.35,
+    "cost_per_serving":  2.08,
+    "cost_per_serving_true":  2.67,
+    "cost_pantry_add":  7.98,
+    "cost_first_run":  45.33,
+    "scaler":  {
+                   "cost":  "37.35",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1582,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "canon":  "Green Bell Peppers",
+                                   "grams":  336,
+                                   "buy":  "3 peppers",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "canon":  "Red Bell Pepper",
+                                   "grams":  336,
+                                   "buy":  "3 peppers",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  210,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "canon":  "Vegetable Oil",
+                                   "grams":  20,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "canon":  "Honey",
+                                   "grams":  28,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "canon":  "Greek Yogurt",
+                                   "grams":  308,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Reduced Fat Mozzarella",
+                                   "canon":  "Reduced Fat Mozzarella",
+                                   "grams":  140,
+                                   "buy":  "5 oz",
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Refried Beans",
+                                   "canon":  "Refried Beans",
+                                   "grams":  420,
+                                   "buy":  "1 can",
+                                   "bid":  "refried-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chipotle in Adobo",
+                                   "canon":  "Chipotle in Adobo",
+                                   "grams":  28,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "chipotle-adobo",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fajita Seasoning",
+                                   "canon":  "Fajita Seasoning",
+                                   "grams":  18,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "fajita-seasoning",
+                                   "gpu":  "35.440"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "canon":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Creamy chicken fajita burritos with seared peppers and onion, refried beans and a chipotle Greek yogurt sauce. 14 wrapped at 324 calories, 37g protein, about $3.24 (at everyday cost).",
+                 "keywords":  "creamy chicken fajita burrito, chipotle greek yogurt sauce, high protein fajita meal prep, low calorie fajita burrito, budget chicken burrito, refried bean burrito",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT15M",
+                 "totalTime":  "PT35M",
+                 "costPerServing":  3.24,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Boneless Skinless Chicken Breast, 3.5 lb (1582 g)",
+                                          "Green Bell Peppers, 3 peppers (336 g)",
+                                          "Red Bell Pepper, 3 peppers (336 g)",
+                                          "Yellow Onion, 2 onions (210 g)",
+                                          "Vegetable Oil, 1.5 tbsp (20 g)",
+                                          "Honey, 1.25 tbsp (28 g)",
+                                          "Greek Yogurt, 1.25 cups (308 g)",
+                                          "Reduced Fat Mozzarella, 5 oz (140 g)",
+                                          "Refried Beans, 1 can (420 g)",
+                                          "Chipotle in Adobo, 1.75 tbsp (28 g)",
+                                          "Fajita Seasoning, 2.25 tbsp (18 g)",
+                                          "Salt, 2.25 tsp (14 g)"
+                                      ],
+                 "steps":  [
+                               "Season and sear the chicken strips with fajita seasoning.",
+                               "Cook the bell peppers and onion until colored, then glaze with honey.",
+                               "Stir Greek yogurt, chipotle in adobo and mozzarella into the hot filling.",
+                               "Spread refried beans on each tortilla, add filling weighed to divide by 14, roll and portion."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1582
+                              },
+                              {
+                                  "item":  "Green Bell Peppers",
+                                  "grams":  336
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  336
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  308
+                              },
+                              {
+                                  "item":  "Reduced Fat Mozzarella",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Refried Beans",
+                                  "grams":  420
+                              },
+                              {
+                                  "item":  "Chipotle in Adobo",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Fajita Seasoning",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  14
+                              }
+                          ]
+}

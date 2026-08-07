@@ -1,0 +1,810 @@
+﻿[
+    {
+        "slug":  "american-goulash-pasta",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  80,
+        "stored":  "1 cup",
+        "derived_old":  "2.75 oz"
+    },
+    {
+        "slug":  "asian-ground-pork-meatball-rice-bowls",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  791,
+        "stored":  "2 cans",
+        "derived_old":  "2 cans"
+    },
+    {
+        "slug":  "baked-ziti-with-ground-beef",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  158,
+        "stored":  "5.5 oz",
+        "derived_old":  "5.5 oz"
+    },
+    {
+        "slug":  "baked-ziti-with-ground-turkey-and-ricotta",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  52,
+        "stored":  "1.75 oz",
+        "derived_old":  "1.75 oz"
+    },
+    {
+        "slug":  "beef-burrito-tex-mex",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  392,
+        "stored":  "1.5 cups",
+        "derived_old":  "1.5 cups"
+    },
+    {
+        "slug":  "beef-ragu-pasta",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  80,
+        "stored":  "1 cup",
+        "derived_old":  "2.75 oz"
+    },
+    {
+        "slug":  "beef-rendang-rice-bowls",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  1582,
+        "stored":  "4 cans",
+        "derived_old":  "4 cans"
+    },
+    {
+        "slug":  "beef-stuffed-shells",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  105,
+        "stored":  "3.75 oz",
+        "derived_old":  "3.75 oz"
+    },
+    {
+        "slug":  "chicken-bean-burrito",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  280,
+        "stored":  "1 cup",
+        "derived_old":  "1 cup"
+    },
+    {
+        "slug":  "chicken-madras-curry",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  396,
+        "stored":  "1 can",
+        "derived_old":  "1 can"
+    },
+    {
+        "slug":  "chicken-parmesan-pasta",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  98,
+        "stored":  "7/8 cup grated",
+        "derived_old":  "3.5 oz"
+    },
+    {
+        "slug":  "chicken-scampi",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  120,
+        "stored":  "4.25 oz",
+        "derived_old":  "4.25 oz"
+    },
+    {
+        "slug":  "chuletas-guisadas-stewed-pork-chops-and-rice",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  336,
+        "stored":  "1.25 cups",
+        "derived_old":  "1.25 cups"
+    },
+    {
+        "slug":  "cottage-pie",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  42,
+        "stored":  "1.5 oz",
+        "derived_old":  "1.5 oz"
+    },
+    {
+        "slug":  "creamy-chicken-and-gnocchi-skillet",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  79,
+        "stored":  "2.75 oz",
+        "derived_old":  "2.75 oz"
+    },
+    {
+        "slug":  "creamy-ground-turkey-and-chorizo-pasta",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  140,
+        "stored":  "5 oz",
+        "derived_old":  "5 oz"
+    },
+    {
+        "slug":  "creamy-ground-turkey-shell-pasta",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  105,
+        "stored":  "3.75 oz",
+        "derived_old":  "3.75 oz"
+    },
+    {
+        "slug":  "creamy-ground-turkey-tortellini-skillet",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  210,
+        "stored":  "7.5 oz",
+        "derived_old":  "7.5 oz"
+    },
+    {
+        "slug":  "creamy-tomato-ground-turkey-gnocchi",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  105,
+        "stored":  "3.75 oz",
+        "derived_old":  "3.75 oz"
+    },
+    {
+        "slug":  "curry-ground-turkey-bowls",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  200,
+        "stored":  "1 cup",
+        "derived_old":  "1 cup"
+    },
+    {
+        "slug":  "escondidinho-de-carne-brazilian-beef-bake",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  63,
+        "stored":  "2.25 oz",
+        "derived_old":  "2.25 oz"
+    },
+    {
+        "slug":  "freezer-beef-burrito-greek-yogurt",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  420,
+        "stored":  "1.5 cups",
+        "derived_old":  "1.5 cups"
+    },
+    {
+        "slug":  "giouvetsi-greek-beef-orzo-bake",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  175,
+        "stored":  "6.25 oz",
+        "derived_old":  "6.25 oz"
+    },
+    {
+        "slug":  "greek-turkey-giouvetsi-baked-orzo",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  120,
+        "stored":  "4.25 oz",
+        "derived_old":  "4.25 oz"
+    },
+    {
+        "slug":  "greek-turkey-moussaka",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  38,
+        "stored":  "1.25 oz",
+        "derived_old":  "1.25 oz"
+    },
+    {
+        "slug":  "green-chile-ground-turkey-skillet",
+        "canon":  "Salsa Verde",
+        "disp":  "Salsa Verde",
+        "grams":  682,
+        "stored":  "2.5 cups",
+        "derived_old":  "2.5 cups"
+    },
+    {
+        "slug":  "green-chile-turkey-burrito",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  210,
+        "stored":  "0.75 cups",
+        "derived_old":  "0.75 cups"
+    },
+    {
+        "slug":  "ground-turkey-broccoli-cheddar-rice-skillet",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  63,
+        "stored":  "2.25 oz",
+        "derived_old":  "2.25 oz"
+    },
+    {
+        "slug":  "ground-turkey-burrito-bowl",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  1194,
+        "stored":  "4.5 cups",
+        "derived_old":  "4.5 cups"
+    },
+    {
+        "slug":  "ground-turkey-lasagna-casserole",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  35,
+        "stored":  "1.25 oz",
+        "derived_old":  "1.25 oz"
+    },
+    {
+        "slug":  "ground-turkey-shepherds-pie",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  96,
+        "stored":  "3.5 oz",
+        "derived_old":  "3.5 oz"
+    },
+    {
+        "slug":  "ground-turkey-stir-fry-bowls",
+        "canon":  "Teriyaki Sauce",
+        "disp":  "Teriyaki Sauce",
+        "grams":  180,
+        "stored":  "2/3 cup",
+        "derived_old":  "0.5 cups"
+    },
+    {
+        "slug":  "ground-turkey-sweet-potato-bowl",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  1092,
+        "stored":  "4.25 cups",
+        "derived_old":  "4.25 cups"
+    },
+    {
+        "slug":  "indian-turkey-kofta-meatball-curry",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  1488,
+        "stored":  "3.7 cans",
+        "derived_old":  "3.7 cans"
+    },
+    {
+        "slug":  "italian-sausage-minestrone",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  68,
+        "stored":  "2.5 oz",
+        "derived_old":  "2.5 oz"
+    },
+    {
+        "slug":  "italian-sausage-penne",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  98,
+        "stored":  "1 cup grated",
+        "derived_old":  "3.5 oz"
+    },
+    {
+        "slug":  "korean-ground-turkey-bowls",
+        "canon":  "Teriyaki Sauce",
+        "disp":  "Teriyaki Sauce",
+        "grams":  200,
+        "stored":  "2/3 cup",
+        "derived_old":  "0.75 cups"
+    },
+    {
+        "slug":  "kuku-paka-swahili-coconut-chicken-curry",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  1120,
+        "stored":  "2.8 cans",
+        "derived_old":  "2.8 cans"
+    },
+    {
+        "slug":  "loaded-ground-turkey-nacho-bake",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  336,
+        "stored":  "1.25 cups",
+        "derived_old":  "1.25 cups"
+    },
+    {
+        "slug":  "malaysian-chicken-rendang-bowls",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  791,
+        "stored":  "2 cans",
+        "derived_old":  "2 cans"
+    },
+    {
+        "slug":  "marry-me-pork-chops-over-pasta",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  158,
+        "stored":  "5.5 oz",
+        "derived_old":  "5.5 oz"
+    },
+    {
+        "slug":  "massaman-beef-curry-potatoes",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  1050,
+        "stored":  "2.6 cans",
+        "derived_old":  "2.6 cans"
+    },
+    {
+        "slug":  "massaman-chicken-curry",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  2240,
+        "stored":  "5.6 cans",
+        "derived_old":  "5.6 cans"
+    },
+    {
+        "slug":  "moussaka-greek-beef-eggplant-bake",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  105,
+        "stored":  "3.75 oz",
+        "derived_old":  "3.75 oz"
+    },
+    {
+        "slug":  "one-pot-creamy-cajun-sausage-pasta",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  210,
+        "stored":  "7.5 oz",
+        "derived_old":  "7.5 oz"
+    },
+    {
+        "slug":  "one-pot-jerk-chicken-and-rice",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  933,
+        "stored":  "2.3 cans",
+        "derived_old":  "2.3 cans"
+    },
+    {
+        "slug":  "one-pot-turkey-mexican-pasta",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  1001,
+        "stored":  "3.75 cups",
+        "derived_old":  "3.75 cups"
+    },
+    {
+        "slug":  "oneskillet-ground-turkey-thai-curry-with-rice",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  1400,
+        "stored":  "3.5 cans",
+        "derived_old":  "3.5 cans"
+    },
+    {
+        "slug":  "orecchiette-italian-sausage-broccoli",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  210,
+        "stored":  "7.5 oz",
+        "derived_old":  "7.5 oz"
+    },
+    {
+        "slug":  "panang-chicken-curry",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  791,
+        "stored":  "2 cans",
+        "derived_old":  "2 cans"
+    },
+    {
+        "slug":  "parmesan-garlic-sheet-pan-chicken-potatoes",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  105,
+        "stored":  "3.75 oz",
+        "derived_old":  "3.75 oz"
+    },
+    {
+        "slug":  "pasta-alla-norcina-creamy-sausage-pasta",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  78,
+        "stored":  "2.75 oz",
+        "derived_old":  "2.75 oz"
+    },
+    {
+        "slug":  "pastitsio",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  306,
+        "stored":  "10.75 oz",
+        "derived_old":  "10.75 oz"
+    },
+    {
+        "slug":  "peruvian-tallarines-verdes-con-carne",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  120,
+        "stored":  "4.25 oz",
+        "derived_old":  "4.25 oz"
+    },
+    {
+        "slug":  "puerto-rican-pollo-guisado",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  614,
+        "stored":  "2.25 cups",
+        "derived_old":  "2.25 cups"
+    },
+    {
+        "slug":  "salsa-verde-chicken-burrito",
+        "canon":  "Salsa Verde",
+        "disp":  "Salsa Verde",
+        "grams":  280,
+        "stored":  "1 cup",
+        "derived_old":  "1 cup"
+    },
+    {
+        "slug":  "slow-cooker-chicken-korma-rice-bowls",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  200,
+        "stored":  "1 cup",
+        "derived_old":  "1 cup"
+    },
+    {
+        "slug":  "slow-cooker-chicken-saag-rice-bowls",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  240,
+        "stored":  "1 cup",
+        "derived_old":  "1 cup"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  900,
+        "stored":  "2 jars",
+        "derived_old":  "3.5 cups"
+    },
+    {
+        "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  550,
+        "stored":  "2 1/2 cups",
+        "derived_old":  "1.4 cans"
+    },
+    {
+        "slug":  "slow-cooker-french-onion-chicken-bowls",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  140,
+        "stored":  "1 1/2 cups",
+        "derived_old":  "5 oz"
+    },
+    {
+        "slug":  "slow-cooker-italian-chicken-penne",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  240,
+        "stored":  "1 cup",
+        "derived_old":  "1 cup"
+    },
+    {
+        "slug":  "slow-cooker-italian-chicken-penne",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  98,
+        "stored":  "1 cup",
+        "derived_old":  "3.5 oz"
+    },
+    {
+        "slug":  "slow-cooker-pork-birria-bowls",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  303,
+        "stored":  "1.25 cups",
+        "derived_old":  "1.25 cups"
+    },
+    {
+        "slug":  "slow-cooker-pork-green-chili-bowls",
+        "canon":  "Salsa Verde",
+        "disp":  "Salsa Verde",
+        "grams":  450,
+        "stored":  "1 jar",
+        "derived_old":  "1.75 cups"
+    },
+    {
+        "slug":  "slow-cooker-salsa-chicken-bowl",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  1360,
+        "stored":  "5 1/4 cups",
+        "derived_old":  "5.25 cups"
+    },
+    {
+        "slug":  "slow-cooker-salsa-verde-chicken-bowl",
+        "canon":  "Salsa Verde",
+        "disp":  "Salsa Verde",
+        "grams":  900,
+        "stored":  "2 jars",
+        "derived_old":  "3.5 cups"
+    },
+    {
+        "slug":  "slow-cooker-salsa-verde-pork-bowls",
+        "canon":  "Salsa Verde",
+        "disp":  "Salsa Verde",
+        "grams":  450,
+        "stored":  "1 jar",
+        "derived_old":  "1.75 cups"
+    },
+    {
+        "slug":  "slow-cooker-teriyaki-pork-bowls",
+        "canon":  "Teriyaki Sauce",
+        "disp":  "Teriyaki Sauce",
+        "grams":  250,
+        "stored":  "3/4 cup",
+        "derived_old":  "0.75 cups"
+    },
+    {
+        "slug":  "slow-cooker-thai-peanut-chicken-bowls",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  180,
+        "stored":  "3/4 cup",
+        "derived_old":  "0.75 cups"
+    },
+    {
+        "slug":  "slow-cooker-turkey-pasta-e-fagioli",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  205,
+        "stored":  "7.25 oz",
+        "derived_old":  "7.25 oz"
+    },
+    {
+        "slug":  "slow-cooker-tuscan-chicken-pasta",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  320,
+        "stored":  "1 can",
+        "derived_old":  "1.5 cups"
+    },
+    {
+        "slug":  "slow-cooker-tuscan-chicken-pasta",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  84,
+        "stored":  "1 cup",
+        "derived_old":  "3 oz"
+    },
+    {
+        "slug":  "slow-cooker-white-chicken-chili-bowls",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  750,
+        "stored":  "2 cans",
+        "derived_old":  "2 cans"
+    },
+    {
+        "slug":  "soto-betawi-indonesian-beef-coconut-soup",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  1750,
+        "stored":  "4.4 cans",
+        "derived_old":  "4.4 cans"
+    },
+    {
+        "slug":  "spicy-italian-sausage-orzo",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  126,
+        "stored":  "4.5 oz",
+        "derived_old":  "4.5 oz"
+    },
+    {
+        "slug":  "spicy-vodka-rigatoni-italian-sausage",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  126,
+        "stored":  "4.5 oz",
+        "derived_old":  "4.5 oz"
+    },
+    {
+        "slug":  "teriyaki-chicken-bowl",
+        "canon":  "Teriyaki Sauce",
+        "disp":  "Teriyaki Sauce",
+        "grams":  700,
+        "stored":  "2 1/2 cups",
+        "derived_old":  "2.5 cups"
+    },
+    {
+        "slug":  "thai-basil-beef-bowls-with-coconut-rice",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  1389,
+        "stored":  "3.5 cans",
+        "derived_old":  "3.5 cans"
+    },
+    {
+        "slug":  "thai-coconut-curry-turkey-meatballs",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  926,
+        "stored":  "2.3 cans",
+        "derived_old":  "2.3 cans"
+    },
+    {
+        "slug":  "thai-green-curry-chicken",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  1400,
+        "stored":  "3.5 cans",
+        "derived_old":  "3.5 cans"
+    },
+    {
+        "slug":  "thai-peanut-pork-tenderloin-rice-bowl",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  580,
+        "stored":  "1.4 cans",
+        "derived_old":  "1.4 cans"
+    },
+    {
+        "slug":  "thai-red-curry-chicken-rice-bowls",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  1389,
+        "stored":  "3.5 cans",
+        "derived_old":  "3.5 cans"
+    },
+    {
+        "slug":  "trinidad-chicken-pelau",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  893,
+        "stored":  "2.2 cans",
+        "derived_old":  "2.2 cans"
+    },
+    {
+        "slug":  "tunisian-harissa-coconut-beef-meatballs",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  1339,
+        "stored":  "3.3 cans",
+        "derived_old":  "3.3 cans"
+    },
+    {
+        "slug":  "turkey-bolognese-penne",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  98,
+        "stored":  "about 7/8 cup grated",
+        "derived_old":  "3.5 oz"
+    },
+    {
+        "slug":  "turkey-chili-verde-white-beans",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  1820,
+        "stored":  "7 cups",
+        "derived_old":  "7 cups"
+    },
+    {
+        "slug":  "turkey-fajita-rice-bowls",
+        "canon":  "Salsa Verde",
+        "disp":  "Salsa Verde",
+        "grams":  130,
+        "stored":  "1/2 cup",
+        "derived_old":  "0.5 cups"
+    },
+    {
+        "slug":  "turkey-huevos-rancheros-rice-bowls",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  303,
+        "stored":  "1.25 cups",
+        "derived_old":  "1.25 cups"
+    },
+    {
+        "slug":  "turkey-lasagna-soup",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  138,
+        "stored":  "4.75 oz",
+        "derived_old":  "4.75 oz"
+    },
+    {
+        "slug":  "turkey-meatball-italian-wedding-soup",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  158,
+        "stored":  "5.5 oz",
+        "derived_old":  "5.5 oz"
+    },
+    {
+        "slug":  "turkey-meatball-marinara-pasta",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  140,
+        "stored":  "1 1/2 cups",
+        "derived_old":  "5 oz"
+    },
+    {
+        "slug":  "turkey-meatball-sub-bake",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  94,
+        "stored":  "3.25 oz",
+        "derived_old":  "3.25 oz"
+    },
+    {
+        "slug":  "turkey-minestrone",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  162,
+        "stored":  "5.75 oz",
+        "derived_old":  "5.75 oz"
+    },
+    {
+        "slug":  "turkey-sausage-and-cheesy-grits-bowl",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  31,
+        "stored":  "1 oz",
+        "derived_old":  "1 oz"
+    },
+    {
+        "slug":  "turkey-stuffed-pepper-soup",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  150,
+        "stored":  "5.25 oz",
+        "derived_old":  "5.25 oz"
+    },
+    {
+        "slug":  "turkey-taco-casserole",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  280,
+        "stored":  "1 cup",
+        "derived_old":  "1 cup"
+    },
+    {
+        "slug":  "turkey-taco-rice-skillet",
+        "canon":  "Salsa",
+        "disp":  "Salsa",
+        "grams":  850,
+        "stored":  "1 cup chunky tomato salsa (per 4)",
+        "derived_old":  "3.25 cups"
+    },
+    {
+        "slug":  "turkey-tetrazzini",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  39,
+        "stored":  "1.5 oz",
+        "derived_old":  "1.5 oz"
+    },
+    {
+        "slug":  "turkey-wild-rice-casserole",
+        "canon":  "Parmesan Cheese",
+        "disp":  "Parmesan Cheese",
+        "grams":  63,
+        "stored":  "2.25 oz",
+        "derived_old":  "2.25 oz"
+    },
+    {
+        "slug":  "vietnamese-chicken-curry-ca-ri-ga",
+        "canon":  "Coconut Milk",
+        "disp":  "Coconut Milk",
+        "grams":  1400,
+        "stored":  "3.5 cans",
+        "derived_old":  "3.5 cans"
+    }
+]

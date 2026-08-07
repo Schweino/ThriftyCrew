@@ -24,11 +24,11 @@
                  "protein":  29,
                  "carbs":  92,
                  "fat":  26,
-                 "cost_ps":  "3.51"
+                 "cost_ps":  "3.01"
              },
-    "intro_html":  "Rice, browned smoked sausage, broccoli and sweet peppers with cheddar melted through the whole thing. It is the dish that gets kids to eat broccoli without a negotiation, and it costs almost nothing because rice and broccoli are two of the cheapest items on the board. It carries 29 grams of protein for about $3.51 (at everyday cost).",
+    "intro_html":  "Rice, browned smoked sausage, broccoli and sweet peppers with cheddar melted through the whole thing. It is the dish that gets kids to eat broccoli without a negotiation, and it costs almost nothing because rice and broccoli are two of the cheapest items on the board. It carries 29 grams of protein for about $3.01 (at everyday cost).",
     "ingredients_display":  [
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7 cups dry (1295 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7.25 cups dry (1295 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3.5 tbsp (49 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.7 onions (402 g)",
@@ -44,7 +44,7 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Rice, 7 cups dry: ~$1.60. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Rice, 7.25 cups dry: ~$1.60. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
                        "Olive Oil, 3.5 tbsp: ~$0.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Butter, 3.5 tbsp: ~$0.32. \u003cstrong\u003eBuy 1 lb box: $2.98.\u003c/strong\u003e",
                        "Yellow Onion, 3.7 onions: ~$1.01. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
@@ -58,7 +58,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $32.33 across 14 servings, roughly $2.31 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $16.93 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.26. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.51 a bowl\u003c/strong\u003e (at everyday cost) for a cheesy skillet dinner with a green vegetable already folded in. Nobody is going to feel like they are eating on a budget.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.01 a bowl\u003c/strong\u003e (at everyday cost) for a cheesy skillet dinner with a green vegetable already folded in. Nobody is going to feel like they are eating on a budget.",
     "shop_smart":  [
                        "\u003cstrong\u003eRice is the cheapest base we track.\u003c/strong\u003e It fills out this whole skillet for a rounding error. Buy the big bag and it costs even less per batch.",
                        "\u003cstrong\u003eFrozen broccoli florets beat fresh on price and waste.\u003c/strong\u003e No stems to trim, no crisper drawer casualties, and they cook straight from the bag.",
@@ -77,7 +77,7 @@
                 ],
     "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, stirring between scoops so the sausage does not settle. Every bowl lands near 727 calories and 29 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.kyleecooks.com/smoked-sausage-cheesy-rice-skillet/\" target=\"_blank\" rel=\"noopener\"\u003ekyleecooks.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Cheesy skillet dinners for about $3.51 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Cheesy skillet dinners for about $3.01 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  27.44,
     "cost_batch_true":  32.33,
     "cost_per_serving":  1.96,
@@ -91,7 +91,7 @@
                                    "item":  "Rice",
                                    "canon":  "Rice",
                                    "grams":  1295,
-                                   "buy":  "7 cups dry",
+                                   "buy":  "7.25 cups dry",
                                    "bid":"rice",
                                    "gpu":453.592
                                },
@@ -194,15 +194,15 @@
                            ]
                },
     "head":  {
-                 "description":  "Cheesy smoked sausage skillet with rice, broccoli and sweet peppers, built for 14 servings. 727 calories, 29g protein, about $3.51 per serving (at everyday cost).",
+                 "description":  "Cheesy smoked sausage skillet with rice, broccoli and sweet peppers, built for 14 servings. 727 calories, 29g protein, about $3.01 per serving (at everyday cost).",
                  "keywords":  "cheesy smoked sausage rice skillet, sausage and rice, broccoli cheddar rice, one skillet dinner, budget meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT50M",
-                 "costPerServing":  3.51,
+                 "costPerServing":  3.01,
                  "recipeIngredient":  [
-                                          "Rice, 7 cups dry (1295 g)",
+                                          "Rice, 7.25 cups dry (1295 g)",
                                           "Olive Oil, 3.5 tbsp (47 g)",
                                           "Butter, 3.5 tbsp (49 g)",
                                           "Yellow Onion, 3.7 onions (402 g)",

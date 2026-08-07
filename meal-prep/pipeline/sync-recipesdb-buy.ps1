@@ -703,6 +703,42 @@ if (Test-Path $zeroCarryPath) {
     }
     Write-Output ("  unmeasurable-qty carry manifest: {0} row(s) from out\unmeasurable-qty-carry.json" -f $n)
 }
+# The plural-unit repair (repair-plural-unit.ps1) is the SAFEST class on this channel and still rides it,
+# because safety is not the same as derivability. "Soy Sauce: 1 cups" against 224 g is not false - the
+# quantity and the unit are both right, only the s is wrong - so Get-BuyCarryClass, which condemns a db
+# label by arithmetic, has nothing to condemn and will never derive the edit. What makes the carry sound
+# here is not evidence about the food but the SHAPE of the edit: old and new differ by one letter in the
+# unit token, so applying it cannot move a quantity, a unit or a gram figure. The manifest still gates it
+# the same way as every other class - match old byte for byte, then take new - because a class that
+# carries itself on its own good character is how a repair ratifies a hand edit nobody reviewed.
+$pluralCarryPath = Join-Path $mp 'out\plural-unit-carry.json'
+if (Test-Path $pluralCarryPath) {
+    if (-not $measureCarry) { $measureCarry = @{} }
+    $n = 0
+    foreach ($c in @((Get-Content $pluralCarryPath -Raw | ConvertFrom-Json))) {
+        if (-not $c -or -not $c.slug) { continue }
+        $measureCarry[([string]$c.slug + '|' + [string]$c.item)] = [pscustomobject]@{ Old = [string]$c.old; New = [string]$c.new }
+        $n++
+    }
+    Write-Output ("  plural-unit carry manifest: {0} row(s) from out\plural-unit-carry.json" -f $n)
+}
+# The basis relabel (repair-basis-relabel.ps1) rides the channel too, and it is the one class where the
+# db label was RIGHT when it was written. Nothing about "Salsa: 1 cup" against 280 g was ever false - it
+# was true at 260 g/cup, which is what db\densities.json said until the product label settled it at 240.
+# So no arithmetic performed today can condemn it; what condemns it is that the basis underneath it
+# moved, and only the pre-image captured before the move knows that. That is exactly why the manifest is
+# the trigger rather than corroboration, same as measure-vs-grams.
+$basisCarryPath = Join-Path $mp 'out\basis-relabel-carry.json'
+if (Test-Path $basisCarryPath) {
+    if (-not $measureCarry) { $measureCarry = @{} }
+    $n = 0
+    foreach ($c in @((Get-Content $basisCarryPath -Raw | ConvertFrom-Json))) {
+        if (-not $c -or -not $c.slug) { continue }
+        $measureCarry[([string]$c.slug + '|' + [string]$c.item)] = [pscustomobject]@{ Old = [string]$c.old; New = [string]$c.new }
+        $n++
+    }
+    Write-Output ("  basis-relabel carry manifest: {0} row(s) from out\basis-relabel-carry.json" -f $n)
+}
 # densities are what the cook-measure class weighs its evidence with. Missing them does not silently
 # downgrade the run to the unitless class alone - say so, because a clean "0 labels" line off a run that
 # could not evaluate the class reads exactly like a clean "0 labels" off a run that found nothing.

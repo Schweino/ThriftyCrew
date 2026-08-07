@@ -12,6 +12,41 @@
 # invisible in one of the two fields it lived in.
 $script:RX_CAL     = '(?i)\b(\d{3,4})\s*cal(?:orie)?s?\b'
 $script:RX_PROTEIN = '(?i)\b(\d{1,3})\s*(?:g\b|grams?\b)\s*(?:of\s+)?protein'
+
+# BOUNDED CALORIE CLAIMS (2026-08-07, Brad's ruling). RX_CAL exists to catch a STALE number: a card that
+# says "499 calories" when its stat says 373 is quoting a figure that moved. It cannot distinguish that
+# from a TRUE UPPER BOUND. "under 400 calories" on a 396-cal recipe is not stale, it is correct, and it is
+# the entire premise of the wrapped-burrito format (every one of those recipes is capped at 400 by design).
+# So a match preceded by an upper-bound word is exempt ONLY WHEN THE BOUND IS ACTUALLY SATISFIED.
+# "under 300 calories" on a 396-cal recipe still fires, because that claim is false - which is the whole
+# point: this narrows the rule to true statements, it does not switch it off. A bare "400 calories" with no
+# bound word still fires too.
+# NOT extended to protein: a LOWER bound ("at least 25g protein") is the mirror case and would need the
+# comparison inverted. No recipe currently needs it, and an untested second branch is how an exemption
+# becomes a hole. Fixtures live in pipeline\test-guards.ps1.
+# HARDENED 2026-08-07 (audit pass 4, both holes measured at ZERO occurrences across 542 live + 29 batch
+# specs before changing anything, so this is prophylactic):
+#   (?<!not\s)(?<!never\s)  a NEGATED bound is not a bound. "not under 400 calories" on a 396-cal recipe
+#                           claims the opposite of what the exemption assumes, and would have passed.
+#   (?<![a-z])              without a left boundary any word ENDING in a bound word reads as one
+#                           ("thunder 400 calories"). The lookback is a raw 24-char window, not a token
+#                           scan, so the boundary has to be in the pattern.
+# Both failure modes leaked toward PASSING a false claim, which is the direction an exemption must never
+# fail in. Fixtures for both are in pipeline\test-guards.ps1.
+$script:RX_CAL_BOUND = '(?i)(?<!\bnot\s)(?<!\bnever\s)(?<![a-z])(?:under|below|beneath|less than|fewer than|no more than|at most)\s*$'
+function Test-CalClaimContradiction {
+  <# Reads what the sentence actually CLAIMS, then checks that claim against the stat.
+     A bound word makes it "cal < N", true only when the real figure is strictly below N.
+     With no bound word the figure is a direct quote and must BE the stat, which is the original rule.
+     Written this way rather than as an equality test plus an exemption because the equality shortcut
+     silently passed "under 396 calories" on a 396-cal recipe: a false claim that skipped the bound
+     logic entirely by matching the stat. Measured before tightening - zero live specs are affected. #>
+  param([string]$Text,[int]$MatchIndex,[int]$Claimed,[int]$Actual)
+  $start = [Math]::Max(0, $MatchIndex - 24)
+  $bounded = ($Text.Substring($start, $MatchIndex - $start) -match $script:RX_CAL_BOUND)
+  if($bounded){ return ($Actual -ge $Claimed) }
+  return ($Claimed -ne $Actual)
+}
 # UNMEASURABLE-QTY: a quantity below a QUARTER of its stated unit is one no kitchen can act on. There is
 # no quarter-tablespoon in the drawer and no home scale that resolves 0.07 oz, so the reader is being
 # handed a number they can only ignore.
@@ -325,7 +360,10 @@ function Get-SpecContradictions($spec, $vocab) {
     if (-not $t) { continue }
     if ($cal -gt 0) {
       foreach ($m in [regex]::Matches($t, $script:RX_CAL)) {
-        if ([int]$m.Groups[1].Value -ne $cal) { $f.Add(@{ cls = 'STAT-PROSE'; why = ("$k says " + $m.Groups[1].Value + " calories, stat says " + $cal) }) }
+        $claimed = [int]$m.Groups[1].Value
+        if (Test-CalClaimContradiction -Text $t -MatchIndex $m.Index -Claimed $claimed -Actual $cal) {
+          $f.Add(@{ cls = 'STAT-PROSE'; why = ("$k says " + $m.Groups[1].Value + " calories, stat says " + $cal) })
+        }
       }
     }
     if ($pro -gt 0) {

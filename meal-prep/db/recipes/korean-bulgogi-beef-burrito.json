@@ -1,0 +1,271 @@
+{
+    "name":  "Korean Bulgogi Beef Burrito",
+    "slug":  "korean-bulgogi-beef-burrito",
+    "cuisine":  "Korean",
+    "protein":  "beef",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://fitsianfoodlife.com/korean-burrito/",
+    "source_site":  "fitsianfoodlife.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "Stage-1 build T8: chuck substituted to SIRLOIN (Beef Flank/Sirloin Steak), the swap that brings it under the cap. Sesame oil halved, cheese held at 10g per burrito. Lands 395 cal, 36g protein.",
+                         "MIRIN DECISION, flag for audit: the task mandates REAL mirin, but stage-1 subbed mirin to rice vinegar plus sugar (attributed to Brad) at 15 cal/serving to control calories. I honored the real-mirin mandate by using Mirin (board-priced, DB row 3.0 cal/g) at 70g batch = 5g/serving = 15 cal/serving, exactly matching stage-1\u0027s substitute calories, so the cap holds. Full authentic mirin (about 1 Tbsp/serving) would add roughly 30 cal/serving and push T8 over 400, so it is deliberately used at a restrained amount. Reconcile with Brad if a larger pour is wanted; T8 would then need another trim.",
+                         "KIMCHI: optional, uncosted garnish per the task. It is NOT an ingredient line and NOT used in any step, so the shopper is not charged for it. Mentioned in the intro only as a bring-your-own topper.",
+                         "SUBSTITUTION, flag for audit: stage-1\u0027s \u0027lettuce\u0027 has no canonical item; mapped to Green Cabbage (shredded), which holds up better for a week of meal prep. \u0027Scallion\u0027 mapped to Green Onions.",
+                         "Rice stored as DRY grams (152g). Grated apple is the marinade tenderizer and sweetener.",
+                         "SLUG NOTE: the task slice assigns this to slug korean-bulgogi-beef-burrito; selected.json lists T8 as korean-bulgogi-burrito. Filed under the task\u0027s slug; please reconcile the two before the serial build so the file is picked up.",
+                         "Bowl cousin: Beef Bulgogi Rice Bowls. Differentiated as a wrapped burrito with grated apple, melted mozzarella, crunchy cabbage, and an optional kimchi topper rather than bulgogi over rice."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "gochujang"
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  395,
+                 "protein":  36,
+                 "carbs":  41,
+                 "fat":  14,
+                 "cost_ps":  "4.65"
+             },
+    "intro_html":  "Bulgogi is Korean barbecue\u0027s greatest hit, thin beef marinated in soy, sesame, garlic, and a little grated apple until it is sweet, savory, and impossible to stop eating. Wrapped burrito style with rice, melty cheese, and crunchy cabbage, it travels better than any takeout box. Each one lands at about \u003cstrong\u003e395 calories\u003c/strong\u003e and \u003cstrong\u003e36 grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. Our Beef Bulgogi Rice Bowls plate it over rice; this wraps it up, and if you keep a jar of kimchi around, a forkful tucked inside at lunch is the move.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eSirloin Steak:\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cup (224 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 2.25 tbsp (31 g)",
+                                "\u003cstrong\u003eMirin (Mizkan):\u003c/strong\u003e 4 tbsp (70 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 10 tbsp (84 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (210 g)",
+                                "\u003cstrong\u003eApple (grated):\u003c/strong\u003e 2.5 oz (70 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 5 oz (140 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 0.75 cups dry (152 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 7.5 oz (210 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 11.75 tbsp (70 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Sirloin Steak, 3.5 lb: ~$30.87. \u003cstrong\u003eBuy 4 lbs: $35.27.\u003c/strong\u003e",
+                       "Soy Sauce, 1 cup: ~$0.85. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sesame Oil, 2.25 tbsp: ~$0.47. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Mirin, 4 tbsp: ~$0.62. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 10 tbsp: ~$0.97. \u003cstrong\u003eBuy 3 heads: $1.39.\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.53. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Apple (grated), 2.5 oz: ~$0.30. \u003cstrong\u003eBuy 1 each: $0.75.\u003c/strong\u003e",
+                       "Reduced Fat Mozzarella, 5 oz: ~$1.08. \u003cstrong\u003eBuy 1 8oz bag: $1.75.\u003c/strong\u003e",
+                       "Rice, 0.75 cups dry: ~$0.19. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Cabbage, 7.5 oz: ~$0.39. \u003cstrong\u003eBuy 1 head: $1.69.\u003c/strong\u003e",
+                       "Green Onions, 11.75 tbsp: ~$0.61. \u003cstrong\u003eBuy 1 bunch: $0.79.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $48.48 across 14 servings, so roughly $3.46 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $59.74 across 14 servings, roughly $4.27 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.35 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $65.09. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "The pantry Korean staples are one-time buys that stretch across many batches, so once they are on the shelf the cost tab number rides on the sirloin. Catch it on sale and it drops.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eSirloin is the bulgogi cut that fits the budget.\u003c/strong\u003e Freeze it 30 minutes and it slices paper thin, which is the whole trick to tender bulgogi. Buy it on sale and freeze extra.",
+                       "\u003cstrong\u003eSoy, sesame oil, and mirin are one-time buys that last.\u003c/strong\u003e A bottle of each sits in the pantry for months and flavors batch after batch, so the per serving cost is tiny.",
+                       "\u003cstrong\u003eA grated apple is the secret and it is free-ish.\u003c/strong\u003e Half an apple tenderizes and sweetens the marinade with no added sugar, and you eat the other half."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice per the package and set it aside.",
+                    "Whisk the soy sauce, sesame oil, mirin, minced garlic, and grated apple into a marinade, then toss the thinly sliced sirloin and the sliced onion in it for at least 20 minutes.",
+                    "Sear the beef and onion hard in a hot pan so the marinade caramelizes onto the meat, then pull it off the heat.",
+                    "Shred the cabbage and slice the green onions and keep them cold; they go on at wrap time for crunch.",
+                    "Warm the tortillas, then portion and wrap as below, adding the beef, rice, a share of shredded mozzarella, and the cold cabbage and green onions."
+                ],
+    "portion_html":  "Weigh the seared beef, onion, and rice together against the empty pot number from Step 1, and divide by 14. Onto each warm tortilla goes that hot share, an even share of the shredded mozzarella, and a handful of the cold cabbage and green onions. Every burrito lands at about \u003cstrong\u003e395 calories and 36 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://fitsianfoodlife.com/korean-burrito/\" target=\"_blank\" rel=\"noopener\"\u003efitsianfoodlife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  48.48,
+    "cost_batch_true":  59.74,
+    "cost_per_serving":  3.46,
+    "cost_per_serving_true":  4.27,
+    "cost_pantry_add":  5.35,
+    "cost_first_run":  65.09,
+    "scaler":  {
+                   "cost":  "59.74",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Sirloin Steak",
+                                   "canon":  "Beef Flank/Sirloin Steak",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "sirloin-steak",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "canon":  "Soy Sauce",
+                                   "grams":  224,
+                                   "buy":  "1 cup",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "canon":  "Sesame Oil",
+                                   "grams":  31,
+                                   "buy":  "2.25 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Mirin",
+                                   "canon":  "Mirin",
+                                   "grams":  70,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "mirin",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "canon":  "Garlic",
+                                   "grams":  84,
+                                   "buy":  "10 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "canon":  "Yellow Onion",
+                                   "grams":  210,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Apple (grated)",
+                                   "canon":  "Apple",
+                                   "grams":  70,
+                                   "buy":  "2.5 oz",
+                                   "bid":  "apple",
+                                   "gpu":  "175.000"
+                               },
+                               {
+                                   "item":  "Reduced Fat Mozzarella",
+                                   "canon":  "Reduced Fat Mozzarella",
+                                   "grams":  140,
+                                   "buy":  "5 oz",
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  152,
+                                   "buy":  "0.75 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Cabbage",
+                                   "canon":  "Green Cabbage",
+                                   "grams":  210,
+                                   "buy":  "7.5 oz",
+                                   "bid":  "cabbage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "canon":  "Green Onions",
+                                   "grams":  70,
+                                   "buy":  "11.75 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A Korean bulgogi beef burrito for meal prep: soy and sesame marinated sirloin with rice, cheese, and cabbage. About 395 calories and 36 grams of protein per serving.",
+                 "keywords":  "bulgogi burrito, korean beef burrito, korean meal prep, high protein burrito, budget bulgogi",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT20M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  4.65,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Sirloin Steak, 3.5 lb (1588 g)",
+                                          "Soy Sauce, 1 cup (224 g)",
+                                          "Sesame Oil, 2.25 tbsp (31 g)",
+                                          "Mirin, 4 tbsp (70 g)",
+                                          "Garlic, 10 tbsp (84 g)",
+                                          "Yellow Onion, 2 onions (210 g)",
+                                          "Apple (grated), 2.5 oz (70 g)",
+                                          "Reduced Fat Mozzarella, 5 oz (140 g)",
+                                          "Rice, 0.75 cups dry (152 g)",
+                                          "Green Cabbage, 7.5 oz (210 g)",
+                                          "Green Onions, 11.75 tbsp (70 g)"
+                                      ],
+                 "steps":  [
+                               "Cook the rice per the package and set aside.",
+                               "Marinate thin-sliced sirloin and onion in soy, sesame oil, mirin, garlic, and grated apple.",
+                               "Sear the beef and onion hard so the marinade caramelizes.",
+                               "Keep shredded cabbage and sliced green onions cold for crunch.",
+                               "Portion beef, onion, and rice by weight, add mozzarella and the cold cabbage and green onion, and roll."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Beef Flank/Sirloin Steak",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  224
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  31
+                              },
+                              {
+                                  "item":  "Mirin",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Apple",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Reduced Fat Mozzarella",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  152
+                              },
+                              {
+                                  "item":  "Green Cabbage",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  70
+                              }
+                          ]
+}

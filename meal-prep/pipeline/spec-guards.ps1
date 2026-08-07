@@ -208,7 +208,15 @@ foreach($sf in $specs){
   $calPS=[Math]::Round($cal/14,0); $pPS=[Math]::Round($p/14,0)
   if([Math]::Abs($calPS - $spec.stat.cal) -gt 5){ Fail $slug ("stat cal $($spec.stat.cal) != DB recompute $calPS") }
   if([Math]::Abs($pPS - $spec.stat.protein) -gt 2){ Fail $slug ("stat protein $($spec.stat.protein) != DB recompute $pPS") }
-  if($spec.stat.cal -lt 550){ Fail $slug '550 GATE FAIL' }
+  # CAL FLOOR (2026-08-06): was a flat 550. A FORMAT may now declare its own floor via spec.cal_floor,
+  # because wrapped burritos cap at 400 cal by design and a constant 550 rejected the whole category.
+  # Two assertions keep the escape hatch narrow: a lowered floor is burrito-only, and 200 is the hard
+  # minimum nothing may declare under. Absent cal_floor the behaviour is byte-identical to the old gate.
+  $calFloor = 550
+  if($spec.PSObject.Properties['cal_floor'] -and $null -ne $spec.cal_floor){ $calFloor = [int]$spec.cal_floor }
+  if($calFloor -ne 550 -and $slug -notmatch 'burrito'){ Fail $slug ("cal_floor $calFloor declared on a non-burrito spec - lowered floors are burrito-only") }
+  if($calFloor -lt 200){ Fail $slug ("cal_floor $calFloor is under the 200 hard minimum") }
+  if($spec.stat.cal -lt $calFloor){ Fail $slug ("CAL FLOOR FAIL: $($spec.stat.cal) cal < declared floor $calFloor") }
   if($spec.stat.protein -lt 25){ Fail $slug ('PROTEIN FLOOR FAIL (' + $spec.stat.protein + 'g)') }
   # BASIS CHECK (v2 redesign 2026-07-26): stat.cost_ps is EITHER the build-time batch/14 (a fresh
   # skeleton, pre-reanchor) OR the manifest everyday_ps (a re-anchored live spec). Anything else is

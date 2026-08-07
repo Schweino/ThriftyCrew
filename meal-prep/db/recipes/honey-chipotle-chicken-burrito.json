@@ -1,0 +1,254 @@
+{
+    "name":  "Honey Chipotle Chicken Burrito",
+    "slug":  "honey-chipotle-chicken-burrito",
+    "cuisine":  "Honey-Chipotle",
+    "protein":  "chicken",
+    "servings":  14,
+    "visibility":  "paid",
+    "source_url":  "https://www.tiktok.com/@aussiefitness/video/7513532240375090439",
+    "source_site":  "tiktok.com",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "writer_notes":  [
+                         "TIKTOK source (same creator as C12): macros rebuilt from ingredients against the food DB, not the caption.",
+                         "CAP: rice cut from 100 g to 50 g cooked per burrito (17.9 g dry x 14 = 250 g dry).",
+                         "Source called it chipotle paste; resolved to Chipotle in Adobo blended smooth (same product). Board id chipotle-adobo exists.",
+                         "Fat Free Cottage Cheese is a stub row in ingredients.json (no bid/packaging): not cost-tracked. Flagged.",
+                         "No direct bowl cousin."
+                     ],
+    "forbidden_prose_terms":  [
+                                  "pork"
+                              ],
+    "cal_floor":  250,
+    "stat":  {
+                 "cal":  377,
+                 "protein":  41,
+                 "carbs":  46,
+                 "fat":  7,
+                 "cost_ps":  "3.32"
+             },
+    "intro_html":  "\u003cp\u003eSweet heat that behaves itself. Honey and chipotle usually ride on a pile of sugar and oil, but this build lands at 377 calories with 41 grams of protein, on a tortilla carrying 18 grams of fiber for about 5 grams of net carb. The sauce is blended cottage cheese loosened with hot sauce, honey, and smoky chipotle, so it clings to the chicken like a glaze without a real glaze\u0027s calories. It is the kind of flavor you expect to pay for and do not.\u003c/p\u003e",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
+                                "\u003cstrong\u003eFat Free Cottage Cheese (Great Value):\u003c/strong\u003e 3 cups (700 g)",
+                                "\u003cstrong\u003eBuffalo Wing Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 7.5 tbsp (112 g)",
+                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 2 chiles, blended (14 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 4 tbsp (84 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 7.5 oz (210 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1.25 cups dry (250 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 2.25 tsp (7 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 4.75 tbsp (70 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "High Fiber Tortilla, 14 tortillas: ~$11.60. \u003cstrong\u003eBuy 3 6ct packs: $14.83.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 3.5 lb: ~$7.78. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "Fat Free Cottage Cheese, 3 cups: ~$2.81. \u003cstrong\u003eBuy 2 24oz tubs: $5.46.\u003c/strong\u003e",
+                       "Buffalo Wing Sauce, 7.5 tbsp: ~$0.77. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 4 tbsp: ~$0.67. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Reduced Fat Mozzarella, 7.5 oz: ~$1.61. \u003cstrong\u003eBuy 1 8oz bag: $1.75.\u003c/strong\u003e",
+                       "Rice, 1.25 cups dry: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 4.75 tbsp: ~$1.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (chipotle in adobo, ground cumin, garlic powder): ~$0.32. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.48 across 14 servings, so roughly $1.96 per burrito.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.64 across 14 servings, roughly $2.47 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.79 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.43. Those containers then feed this batch and many more after it."
+                   ],
+    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e$3.32 a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a honey chipotle chicken bowl out. The chicken is the cost. The flavor is nearly free.\u003c/p\u003e",
+    "shop_smart":  [
+                       "\u003cstrong\u003eOne can of chipotle in adobo lasts months.\u003c/strong\u003e You only blend a couple of chiles per batch, so freeze the rest in a spoon-sized ice cube tray and pull one out next time. Do not buy a fresh can every cook.",
+                       "\u003cstrong\u003eHoney is the whole sweet side, so a little is plenty.\u003c/strong\u003e A few tablespoons across 14 burritos is all it takes, and one bottle outlasts the season.",
+                       "\u003cstrong\u003eCottage cheese blended smooth is the sauce base.\u003c/strong\u003e It turns a sugary glaze into a high-protein one, and the big tub costs less per ounce than the small one."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook 1.25 cups of dry rice per the package and set it aside.",
+                    "Cube the chicken breast and cook it in a dry or lightly sprayed skillet over medium-high heat until it reaches 165F inside.",
+                    "Make the honey chipotle sauce: blend the fat free cottage cheese, buffalo wing sauce, the chipotle in adobo, honey, ground cumin, garlic powder, and lime juice until smooth.",
+                    "Turn the heat low and fold the sauce and the reduced fat mozzarella into the chicken so the cheese melts and the glaze coats every piece.",
+                    "Stir the rice into the saucy chicken.",
+                    "Warm the tortillas so they roll cleanly, then fill and wrap each one."
+                ],
+    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near 377 calories with 41 grams of protein.\u003c/p\u003e",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.tiktok.com/@aussiefitness/video/7513532240375090439\" target=\"_blank\" rel=\"noopener\"\u003etiktok.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about $3.32 a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
+    "cost_batch":  27.48,
+    "cost_batch_true":  34.64,
+    "cost_per_serving":  1.96,
+    "cost_per_serving_true":  2.47,
+    "cost_pantry_add":  11.79,
+    "cost_first_run":  46.43,
+    "scaler":  {
+                   "cost":  "34.64",
+                   "ing":  [
+                               {
+                                   "item":  "High Fiber Tortilla",
+                                   "canon":  "High Fiber Tortilla",
+                                   "grams":  910,
+                                   "buy":  "14 tortillas",
+                                   "bid":  "high-fiber-tortillas",
+                                   "gpu":  "65.000"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "canon":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1582,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fat Free Cottage Cheese",
+                                   "canon":  "Fat Free Cottage Cheese",
+                                   "grams":  700,
+                                   "buy":  "3 cups",
+                                   "bid":  "cottage-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Buffalo Wing Sauce",
+                                   "canon":  "Buffalo Wing Sauce",
+                                   "grams":  112,
+                                   "buy":  "7.5 tbsp",
+                                   "bid":  "buffalo-wing-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chipotle in Adobo",
+                                   "canon":  "Chipotle in Adobo",
+                                   "grams":  14,
+                                   "buy":  "2 chiles, blended",
+                                   "bid":  "chipotle-adobo",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "canon":  "Honey",
+                                   "grams":  84,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Reduced Fat Mozzarella",
+                                   "canon":  "Reduced Fat Mozzarella",
+                                   "grams":  210,
+                                   "buy":  "7.5 oz",
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "canon":  "Rice",
+                                   "grams":  250,
+                                   "buy":  "1.25 cups dry",
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "canon":  "Ground Cumin",
+                                   "grams":  7,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "canon":  "Garlic Powder",
+                                   "grams":  7,
+                                   "buy":  "2.25 tsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "canon":  "Lime Juice",
+                                   "grams":  70,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A sweet-and-smoky honey chipotle chicken burrito under 400 calories. About 377 calories and 41 grams of protein per serving, roughly $3.32 each (at everyday cost).",
+                 "keywords":  "honey chipotle chicken burrito, high protein meal prep, low calorie burrito, cheap meal prep, budget dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT50M",
+                 "costPerServing":  3.32,
+                 "recipeIngredient":  [
+                                          "High Fiber Tortilla, 14 tortillas (910 g)",
+                                          "Boneless Skinless Chicken Breast, 3.5 lb (1582 g)",
+                                          "Fat Free Cottage Cheese, 3 cups (700 g)",
+                                          "Buffalo Wing Sauce, 7.5 tbsp (112 g)",
+                                          "Chipotle in Adobo, 2 chiles, blended (14 g)",
+                                          "Honey, 4 tbsp (84 g)",
+                                          "Reduced Fat Mozzarella, 7.5 oz (210 g)",
+                                          "Rice, 1.25 cups dry (250 g)",
+                                          "Ground Cumin, 1 tbsp (7 g)",
+                                          "Garlic Powder, 2.25 tsp (7 g)",
+                                          "Lime Juice, 4.75 tbsp (70 g)"
+                                      ],
+                 "steps":  [
+                               "Cook 1.25 cups dry rice per the package.",
+                               "Cube and cook the chicken breast until it reaches 165F.",
+                               "Blend the fat free cottage cheese, buffalo wing sauce, chipotle in adobo, honey, cumin, garlic powder, and lime juice into a smooth sauce.",
+                               "Fold the sauce and mozzarella into the warm chicken, then stir in the rice.",
+                               "Fill the warmed tortillas.",
+                               "Weigh the batch and divide into 14 equal burritos."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "High Fiber Tortilla",
+                                  "grams":  910
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1582
+                              },
+                              {
+                                  "item":  "Fat Free Cottage Cheese",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Buffalo Wing Sauce",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Chipotle in Adobo",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Reduced Fat Mozzarella",
+                                  "grams":  210
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  250
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Lime Juice",
+                                  "grams":  70
+                              }
+                          ]
+}
