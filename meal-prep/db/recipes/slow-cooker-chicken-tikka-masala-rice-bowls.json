@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-chicken-tikka-masala-rice-bowls",
     "cuisine":  "Indian",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://ministryofcurry.com/slow-cooker-chicken-tikka-masala/",
     "source_site":  "Ministry of Curry",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  554,
                  "protein":  56,
@@ -37,6 +40,24 @@
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tbsp (34 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 7 lb: ~$15.24. \u003cstrong\u003eBuy 7 lbs: $15.61.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.01. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Diced Tomatoes, 2 cups: ~$1.02. \u003cstrong\u003eBuy 2 cans: $1.68.\u003c/strong\u003e",
+                       "Coconut Milk, 2 1/2 cups: ~$2.53. \u003cstrong\u003eBuy 2 13.5oz cans: $3.67.\u003c/strong\u003e",
+                       "Broccoli Florets, 4 2/3 cups: ~$1.37. \u003cstrong\u003eBuy 2 12oz bags: $2.33.\u003c/strong\u003e",
+                       "Yellow Onion, 2 medium: ~$1.26. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Garlic, 4 tbsp minced: ~$0.41. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Ginger, 5.75 tbsp grated: ~$0.11. \u003cstrong\u003eBuy 1 piece: $0.31.\u003c/strong\u003e",
+                       "Vegetable Oil, 4.75 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Plain Yogurt, 3 tbsp: ~$0.36. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Tomato Paste, 3 1/2 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
+                       "Lemon Juice, 1 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (garam masala, chili powder, ground turmeric, salt): ~$0.83. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.58 across 14 servings, so roughly $1.76 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.31 across 14 servings, roughly $2.31 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.69 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.00. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.00 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eCoconut milk\u003c/strong\u003e gives you that rich, creamy sauce for a fraction of what heavy cream costs.",
@@ -54,14 +75,14 @@
     "portion_html":  "Each of the 14 servings runs about 56g protein for roughly 554 calories, at around $2.24 a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://ministryofcurry.com/slow-cooker-chicken-tikka-masala/\" target=\"_blank\" rel=\"noopener\"\u003eMinistry of Curry\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Takeout flavor at meal-prep prices is exactly the kind of upgrade your week needs. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  34.17,
-    "cost_batch_true":  43.43,
-    "cost_per_serving":  2.44,
-    "cost_per_serving_true":  3.1,
-    "cost_pantry_add":  13.46,
-    "cost_first_run":  56.89,
+    "cost_batch":  24.58,
+    "cost_batch_true":  32.31,
+    "cost_per_serving":  1.76,
+    "cost_per_serving_true":  2.31,
+    "cost_pantry_add":  9.69,
+    "cost_first_run":  42,
     "scaler":  {
-                   "cost":  "43.43",
+                   "cost":  "32.31",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -214,5 +235,71 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3100
+        },
+        {
+            "item":  "Rice",
+            "grams":  820
+        },
+        {
+            "item":  "Diced Tomatoes",
+            "grams":  500
+        },
+        {
+            "item":  "Coconut Milk",
+            "grams":  550
+        },
+        {
+            "item":  "Broccoli Florets",
+            "grams":  400
+        },
+        {
+            "item":  "Garam Masala",
+            "grams":  14
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  500
+        },
+        {
+            "item":  "Garlic",
+            "grams":  35
+        },
+        {
+            "item":  "Ginger",
+            "grams":  35
+        },
+        {
+            "item":  "Vegetable Oil",
+            "grams":  65
+        },
+        {
+            "item":  "Chili Powder",
+            "grams":  16
+        },
+        {
+            "item":  "Ground Turmeric",
+            "grams":  4
+        },
+        {
+            "item":  "Plain Yogurt",
+            "grams":  100
+        },
+        {
+            "item":  "Tomato Paste",
+            "grams":  55
+        },
+        {
+            "item":  "Lemon Juice",
+            "grams":  35
+        },
+        {
+            "item":  "Salt",
+            "grams":  34
+        }
+    ]
 }

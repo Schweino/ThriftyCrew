@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-bbq-pulled-chicken-bowls",
     "cuisine":  "American",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.budgetbytes.com/slow-cooker-bbq-chicken/",
     "source_site":  "Budget Bytes",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  574,
                  "protein":  60,
@@ -29,6 +32,16 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.75 tsp (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 8 lb: ~$16.22. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
+                       "Rice, 5.25 cups dry: ~$1.17. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "BBQ Sauce (Sugar Free), 1 bottle: ~$3.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 4 1/2 cups: ~$1.42. \u003cstrong\u003eBuy 2 cans: $1.64.\u003c/strong\u003e",
+                       "Pantry seasonings (paprika, garlic powder, salt, black pepper): ~$0.43. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $22.31 across 14 servings, so roughly $1.59 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $24.15 across 14 servings, roughly $1.72 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.13 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $30.28. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.16 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Buy the chicken breast in an \u003cstrong\u003e8 lb bulk pack\u003c/strong\u003e instead of small trays. You are already cooking a big batch, so the per-pound price drops and you skip a second trip.",
@@ -46,14 +59,14 @@
     "portion_html":  "Each of the 14 servings runs about 574 calories with a serious 60 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/slow-cooker-bbq-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eBudget Bytes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Make it once and you will wonder why you ever paid for fast food lunches. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  32.77,
-    "cost_batch_true":  35.56,
-    "cost_per_serving":  2.34,
-    "cost_per_serving_true":  2.54,
-    "cost_pantry_add":  9.76,
-    "cost_first_run":  45.32,
+    "cost_batch":  22.31,
+    "cost_batch_true":  24.15,
+    "cost_per_serving":  1.59,
+    "cost_per_serving_true":  1.72,
+    "cost_pantry_add":  6.13,
+    "cost_first_run":  30.28,
     "scaler":  {
-                   "cost":  "35.56",
+                   "cost":  "24.15",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -142,5 +155,39 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3300
+        },
+        {
+            "item":  "Rice",
+            "grams":  950
+        },
+        {
+            "item":  "BBQ Sauce (Sugar Free)",
+            "grams":  500
+        },
+        {
+            "item":  "Sweet Whole Kernel Corn",
+            "grams":  750
+        },
+        {
+            "item":  "Paprika",
+            "grams":  14
+        },
+        {
+            "item":  "Garlic Powder",
+            "grams":  9
+        },
+        {
+            "item":  "Salt",
+            "grams":  10
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        }
+    ]
 }

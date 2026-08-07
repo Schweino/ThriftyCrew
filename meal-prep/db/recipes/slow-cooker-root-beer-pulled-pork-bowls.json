@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-root-beer-pulled-pork-bowls",
     "cuisine":  "American",
     "protein":  "pork",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://giveitsomethyme.com/slow-cooker-pulled-pork-tenderloin/",
     "source_site":  "Give it Some Thyme",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  560,
                  "protein":  59,
@@ -33,6 +36,19 @@
                                 "\u003cstrong\u003eCayenne Pepper (Great Value):\u003c/strong\u003e 1 teaspoon (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Tenderloin, 8 lb: ~$29.76. \u003cstrong\u003eBuy 8 lbs: $31.77.\u003c/strong\u003e",
+                       "Potato, 10 lb: ~$5.38. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.60. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 5 cloves: ~$0.28. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "BBQ Sauce (Sugar Free), 1 bottle: ~$1.84. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Zero-Sugar Soda, 1 1/2 cups: ~$0.18. \u003cstrong\u003eBuy 1 2L bottle: $1.01.\u003c/strong\u003e",
+                       "Green Cabbage, 2 lb: ~$0.94. \u003cstrong\u003eBuy 1 head: $1.69.\u003c/strong\u003e",
+                       "Pantry seasonings (smoked paprika, ground cumin, salt, black pepper, cayenne pepper): ~$0.76. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $39.74 across 14 servings, so roughly $2.84 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $44.35 across 14 servings, roughly $3.17 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.92 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.27. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.73 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Sugar-free barbecue sauce cuts the sugar without cutting flavor. \u003cstrong\u003eGrab the sugar-free bottle\u003c/strong\u003e and nobody will know the difference.",
@@ -50,14 +66,14 @@
     "portion_html":  "Each bowl delivers 59 grams of protein and 560 calories, with just 9 grams of fat per serving.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://giveitsomethyme.com/slow-cooker-pulled-pork-tenderloin/\" target=\"_blank\" rel=\"noopener\"\u003eGive it Some Thyme\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A fun little trick that turns cheap soda and lean pork into a dinner people ask about. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  42.85,
-    "cost_batch_true":  47.67,
-    "cost_per_serving":  3.06,
-    "cost_per_serving_true":  3.4,
-    "cost_pantry_add":  10.52,
-    "cost_first_run":  58.19,
+    "cost_batch":  39.74,
+    "cost_batch_true":  44.35,
+    "cost_per_serving":  2.84,
+    "cost_per_serving_true":  3.17,
+    "cost_pantry_add":  7.92,
+    "cost_first_run":  52.27,
     "scaler":  {
-                   "cost":  "47.67",
+                   "cost":  "44.35",
                    "ing":  [
                                {
                                    "item":  "Pork Tenderloin",
@@ -178,5 +194,55 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Pork Tenderloin",
+            "grams":  3400
+        },
+        {
+            "item":  "Potato",
+            "grams":  4300
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  240
+        },
+        {
+            "item":  "Garlic",
+            "grams":  24
+        },
+        {
+            "item":  "BBQ Sauce (Sugar Free)",
+            "grams":  300
+        },
+        {
+            "item":  "Zero-Sugar Soda",
+            "grams":  355
+        },
+        {
+            "item":  "Green Cabbage",
+            "grams":  500
+        },
+        {
+            "item":  "Smoked Paprika",
+            "grams":  20
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  7
+        },
+        {
+            "item":  "Salt",
+            "grams":  8
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        },
+        {
+            "item":  "Cayenne Pepper",
+            "grams":  2
+        }
+    ]
 }

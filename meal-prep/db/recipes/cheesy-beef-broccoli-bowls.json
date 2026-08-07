@@ -3,6 +3,7 @@
     "slug":  "cheesy-beef-broccoli-bowls",
     "cuisine":  "American",
     "protein":  "beef",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "",
     "source_site":  "",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  389,
                  "protein":  34,
@@ -30,6 +33,17 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 3.5 lb raw: ~$23.16. \u003cstrong\u003eBuy 4 lbs: $26.48.\u003c/strong\u003e",
+                       "Rice, 3.5 cups dry jasmine: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Broccoli Florets, 7 cups (about 21 oz): ~$2.04. \u003cstrong\u003eBuy 2 12oz bags: $2.33.\u003c/strong\u003e",
+                       "Fat Free Cheddar, 1 3/4 cups shredded: ~$1.94. \u003cstrong\u003eBuy 1 8oz bag: $2.25.\u003c/strong\u003e",
+                       "Beef Broth, 1 3/4 cups: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, onion powder, salt, black pepper): ~$0.37. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $29.01 across 14 servings, so roughly $2.07 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.93 across 14 servings, roughly $2.35 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.91 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.84. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.77 a bowl\u003c/strong\u003e (at everyday cost) for a balanced, veggie-loaded dinner. Frozen broccoli keeps this cheap and fast year round.",
     "shop_smart":  [
                        "\u003cstrong\u003eFrozen broccoli beats fresh here.\u003c/strong\u003e It is cheaper, lasts for months, and cooks straight from the bag with no waste.",
@@ -46,14 +60,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near 389 calories and 34 grams of protein.",
     "credit_html":  "",
     "upsell_html":  "Balanced dinners for about $2.77 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  31.32,
-    "cost_batch_true":  35.41,
-    "cost_per_serving":  2.24,
-    "cost_per_serving_true":  2.53,
-    "cost_pantry_add":  8.45,
-    "cost_first_run":  43.86,
+    "cost_batch":  29.01,
+    "cost_batch_true":  32.93,
+    "cost_per_serving":  2.07,
+    "cost_per_serving_true":  2.35,
+    "cost_pantry_add":  5.91,
+    "cost_first_run":  38.84,
     "scaler":  {
-                   "cost":  "35.41",
+                   "cost":  "32.93",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -149,5 +163,43 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Beef",
+            "grams":  1587
+        },
+        {
+            "item":  "Rice",
+            "grams":  700
+        },
+        {
+            "item":  "Broccoli Florets",
+            "grams":  595
+        },
+        {
+            "item":  "Fat Free Cheddar",
+            "grams":  196
+        },
+        {
+            "item":  "Beef Broth",
+            "grams":  420
+        },
+        {
+            "item":  "Garlic Powder",
+            "grams":  10
+        },
+        {
+            "item":  "Onion Powder",
+            "grams":  10
+        },
+        {
+            "item":  "Salt",
+            "grams":  20
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        }
+    ]
 }

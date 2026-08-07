@@ -3,6 +3,7 @@
     "slug":  "turkey-meatball-marinara-pasta",
     "cuisine":  "Italian",
     "protein":  "turkey",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://reciperunner.com/skillet-meatballs-marinara-sauce/",
     "source_site":  "Recipe Runner",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  654,
                  "protein":  57,
@@ -36,6 +39,23 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 7 lb: ~$31.40. \u003cstrong\u003eBuy 7 lbs: $31.85.\u003c/strong\u003e",
+                       "Penne Pasta, 7 1/2 cups: ~$1.60. \u003cstrong\u003eBuy 2 16oz boxes: $1.94.\u003c/strong\u003e",
+                       "Marinara Sauce, 6 cups: ~$3.86. \u003cstrong\u003eBuy 3 24oz jars: $5.25.\u003c/strong\u003e",
+                       "Parmesan Cheese, 1 1/2 cups: ~$1.69. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.60. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Olive Oil, 3 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Eggs, 1, slightly beaten: ~$0.41. \u003cstrong\u003eBuy 1 dozen: $1.62.\u003c/strong\u003e",
+                       "Panko Breadcrumbs, 1/4 cup: ~$0.35. \u003cstrong\u003eBuy 1 8oz box: $1.75.\u003c/strong\u003e",
+                       "Worcestershire Sauce, 2.75 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 1 clove: ~$0.17. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Mozzarella Cheese, 3 oz cubed + 3/4 cup shredded: ~$3.88. \u003cstrong\u003eBuy 3 8oz bags: $5.18.\u003c/strong\u003e",
+                       "Pantry seasonings (dried basil, dried oregano, salt, black pepper): ~$0.61. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $45.14 across 14 servings, so roughly $3.22 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $53.11 across 14 servings, roughly $3.79 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.06 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $64.17. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.58 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Jarred \u003cstrong\u003emarinara on sale\u003c/strong\u003e is cheaper and faster than building sauce from scratch, and three jars cover the whole batch.",
@@ -54,14 +74,14 @@
     "portion_html":  "Every one of the 14 servings packs 57 grams of protein and 654 calories, so it fuels you like a full plate should.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://reciperunner.com/skillet-meatballs-marinara-sauce/\" target=\"_blank\" rel=\"noopener\"\u003eRecipe Runner\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Comfort-food Italian, meal-prepped and budget-approved. Twirl your fork and enjoy. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  46.2,
-    "cost_batch_true":  54.29,
-    "cost_per_serving":  3.3,
-    "cost_per_serving_true":  3.88,
-    "cost_pantry_add":  16.25,
-    "cost_first_run":  70.54,
+    "cost_batch":  45.14,
+    "cost_batch_true":  53.11,
+    "cost_per_serving":  3.22,
+    "cost_per_serving_true":  3.79,
+    "cost_pantry_add":  11.06,
+    "cost_first_run":  64.17,
     "scaler":  {
-                   "cost":  "54.29",
+                   "cost":  "53.11",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -206,5 +226,67 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Turkey",
+            "grams":  3130
+        },
+        {
+            "item":  "Penne Pasta",
+            "grams":  749
+        },
+        {
+            "item":  "Marinara Sauce",
+            "grams":  1500
+        },
+        {
+            "item":  "Parmesan Cheese",
+            "grams":  140
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  240
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  42
+        },
+        {
+            "item":  "Eggs",
+            "grams":  150
+        },
+        {
+            "item":  "Panko Breadcrumbs",
+            "grams":  45
+        },
+        {
+            "item":  "Worcestershire Sauce",
+            "grams":  45
+        },
+        {
+            "item":  "Garlic",
+            "grams":  15
+        },
+        {
+            "item":  "Dried Basil",
+            "grams":  8
+        },
+        {
+            "item":  "Dried Oregano",
+            "grams":  8
+        },
+        {
+            "item":  "Mozzarella Cheese",
+            "grams":  510
+        },
+        {
+            "item":  "Salt",
+            "grams":  15
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        }
+    ]
 }

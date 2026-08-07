@@ -3,6 +3,7 @@
     "slug":  "korean-ground-beef-rice-bowls",
     "cuisine":  "Korean",
     "protein":  "beef",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://masonfit.com/healthy-korean-ground-beef/",
     "source_site":  "Mason Fit",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  615,
                  "protein":  50,
@@ -31,6 +34,21 @@
                                 "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1.5 tbsp (8 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 6 lb: ~$39.11. \u003cstrong\u003eBuy 6 lbs: $39.72.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Broccoli Florets, 12 cups: ~$3.42. \u003cstrong\u003eBuy 3 12oz bags: $3.49.\u003c/strong\u003e",
+                       "Gochujang, 1 tub: ~$1.93. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 1/2 cup: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sesame Oil, 3 tbsp: ~$0.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 1/4 cup: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 6 cloves: ~$0.35. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Roasted Red Peppers, 3 oz, from a jar: ~$1.88. \u003cstrong\u003eBuy 1 12oz jar: $2.13.\u003c/strong\u003e",
+                       "Pantry seasonings (red pepper flakes): ~$0.18. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $49.09 across 14 servings, so roughly $3.51 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $50.13 across 14 servings, roughly $3.58 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.02 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.15. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.15 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "A tub of gochujang seasons batch after batch. \u003cstrong\u003eBuy one tub of gochujang\u003c/strong\u003e and it will carry you through months of meals.",
@@ -48,14 +66,14 @@
     "portion_html":  "Each bowl brings 50 grams of protein and 615 calories across all 14 servings.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/healthy-korean-ground-beef/\" target=\"_blank\" rel=\"noopener\"\u003eMason Fit\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One tub of gochujang unlocks a whole world of cheap, punchy dinners, and this is a great place to start. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  52.98,
-    "cost_batch_true":  54.09,
-    "cost_per_serving":  3.78,
-    "cost_per_serving_true":  3.86,
-    "cost_pantry_add":  11.51,
-    "cost_first_run":  65.6,
+    "cost_batch":  49.09,
+    "cost_batch_true":  50.13,
+    "cost_per_serving":  3.51,
+    "cost_per_serving_true":  3.58,
+    "cost_pantry_add":  8.02,
+    "cost_first_run":  58.15,
     "scaler":  {
-                   "cost":  "54.09",
+                   "cost":  "50.13",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -160,5 +178,47 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Beef",
+            "grams":  2680
+        },
+        {
+            "item":  "Rice",
+            "grams":  861
+        },
+        {
+            "item":  "Broccoli Florets",
+            "grams":  1000
+        },
+        {
+            "item":  "Gochujang",
+            "grams":  210
+        },
+        {
+            "item":  "Soy Sauce",
+            "grams":  110
+        },
+        {
+            "item":  "Sesame Oil",
+            "grams":  40
+        },
+        {
+            "item":  "Brown Sugar",
+            "grams":  60
+        },
+        {
+            "item":  "Garlic",
+            "grams":  30
+        },
+        {
+            "item":  "Roasted Red Peppers",
+            "grams":  300
+        },
+        {
+            "item":  "Red Pepper Flakes",
+            "grams":  8
+        }
+    ]
 }

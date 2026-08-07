@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-greek-chicken-bowls",
     "cuisine":  "Greek",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.rachelcooks.com/slow-cooker-greek-chicken/",
     "source_site":  "Rachel Cooks",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  555,
                  "protein":  61,
@@ -31,6 +34,18 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tsp (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 8 lb: ~$16.96. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
+                       "Potato, 10 lb: ~$5.51. \u003cstrong\u003eBuy 10 lbs: $5.68.\u003c/strong\u003e",
+                       "Olive Oil, 3 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 2 tbsp: ~$0.69. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Red Wine Vinegar, 1 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 2 cloves: ~$0.10. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Pantry seasonings (dried oregano, salt, onion powder, black pepper): ~$0.33. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.05 across 14 servings, so roughly $1.72 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $25.46 across 14 servings, roughly $1.82 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.21 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.67. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.05 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Potatoes are one of the cheapest fillers going, so \u003cstrong\u003ebuy the ten-pound bag\u003c/strong\u003e and let it anchor meals all month.",
@@ -47,14 +62,14 @@
     "portion_html":  "Each bowl lands at 61 grams of protein and 555 calories, one of the leaner plates in the bunch.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.rachelcooks.com/slow-cooker-greek-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eRachel Cooks\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fresh, filling, and easy on the wallet. Weeknight dinner doesn\u0027t get much friendlier. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  34.87,
-    "cost_batch_true":  36.87,
-    "cost_per_serving":  2.49,
-    "cost_per_serving_true":  2.63,
-    "cost_pantry_add":  20.06,
-    "cost_first_run":  56.93,
+    "cost_batch":  24.05,
+    "cost_batch_true":  25.46,
+    "cost_per_serving":  1.72,
+    "cost_per_serving_true":  1.82,
+    "cost_pantry_add":  17.21,
+    "cost_first_run":  42.67,
     "scaler":  {
-                   "cost":  "36.87",
+                   "cost":  "25.46",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -158,5 +173,47 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3450
+        },
+        {
+            "item":  "Potato",
+            "grams":  4400
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  40
+        },
+        {
+            "item":  "Lime Juice",
+            "grams":  30
+        },
+        {
+            "item":  "Red Wine Vinegar",
+            "grams":  15
+        },
+        {
+            "item":  "Garlic",
+            "grams":  9
+        },
+        {
+            "item":  "Dried Oregano",
+            "grams":  6
+        },
+        {
+            "item":  "Salt",
+            "grams":  14
+        },
+        {
+            "item":  "Onion Powder",
+            "grams":  4
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  2
+        }
+    ]
 }

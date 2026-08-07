@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-chicken-adobo-rice-bowls",
     "cuisine":  "Filipino",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://hungryhobby.net/slow-cooker-adobo-chicken/",
     "source_site":  "Hungry Hobby",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  561,
                  "protein":  64,
@@ -31,6 +34,20 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2.25 tsp peppercorns (5 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 8 lb: ~$16.96. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Broccoli Florets, 12 cups: ~$3.42. \u003cstrong\u003eBuy 3 12oz bags: $3.49.\u003c/strong\u003e",
+                       "White Vinegar, 1/2 cup: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 1/2 cup: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 1 3/4 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.30. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 4 cloves: ~$0.21. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Pantry seasonings (bay leaves, black pepper): ~$0.29. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $22.91 across 14 servings, so roughly $1.64 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $24.95 across 14 servings, roughly $1.78 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.43 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $31.38. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.24 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "This whole dish rides on \u003cstrong\u003evinegar and soy sauce you can buy dirt cheap\u003c/strong\u003e, so it keeps the cost per bowl low.",
@@ -47,14 +64,14 @@
     "portion_html":  "Each serving delivers 64 grams of protein and 561 calories, big protein for barely two dollars.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://hungryhobby.net/slow-cooker-adobo-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eHungry Hobby\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Simple ingredients, huge payoff. That\u0027s the whole idea of eating well without overspending. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  32.77,
-    "cost_batch_true":  35.29,
-    "cost_per_serving":  2.34,
-    "cost_per_serving_true":  2.52,
-    "cost_pantry_add":  11.56,
-    "cost_first_run":  46.85,
+    "cost_batch":  22.91,
+    "cost_batch_true":  24.95,
+    "cost_per_serving":  1.64,
+    "cost_per_serving_true":  1.78,
+    "cost_pantry_add":  6.43,
+    "cost_first_run":  31.38,
     "scaler":  {
-                   "cost":  "35.29",
+                   "cost":  "24.95",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -158,5 +175,47 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3450
+        },
+        {
+            "item":  "Rice",
+            "grams":  900
+        },
+        {
+            "item":  "Broccoli Florets",
+            "grams":  1000
+        },
+        {
+            "item":  "White Vinegar",
+            "grams":  120
+        },
+        {
+            "item":  "Soy Sauce",
+            "grams":  120
+        },
+        {
+            "item":  "Brown Sugar",
+            "grams":  25
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  120
+        },
+        {
+            "item":  "Garlic",
+            "grams":  18
+        },
+        {
+            "item":  "Bay Leaves",
+            "grams":  3
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  5
+        }
+    ]
 }

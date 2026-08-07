@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-teriyaki-pork-bowls",
     "cuisine":  "Japanese",
     "protein":  "pork",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.eazypeazymealz.com/slow-cooker-teriyaki-pork-tenderloin/",
     "source_site":  "Easy Peasy Meals",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  565,
                  "protein":  58,
@@ -32,6 +35,21 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tsp (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Tenderloin, 8 lb: ~$28.89. \u003cstrong\u003eBuy 8 lbs: $31.77.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Broccoli Florets, 11 cups: ~$3.08. \u003cstrong\u003eBuy 3 12oz bags: $3.49.\u003c/strong\u003e",
+                       "Teriyaki Sauce, 3/4 cup: ~$1.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1 1/2 cups: ~$0.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.40. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Honey, 3 3/4 tbsp: ~$0.63. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 2 cloves: ~$0.14. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Pineapple Juice, 14 oz: ~$0.86. \u003cstrong\u003eBuy 1 46floz can: $2.91.\u003c/strong\u003e",
+                       "Pantry seasonings (red pepper flakes, black pepper): ~$0.11. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $36.82 across 14 servings, so roughly $2.63 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $43.22 across 14 servings, roughly $3.09 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.20. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.59 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Bottled teriyaki sauce carries the whole dish, but it is the priciest item here. \u003cstrong\u003eCompare the store brand\u003c/strong\u003e against the name brand, since they taste about the same in the slow cooker.",
@@ -49,14 +67,14 @@
     "portion_html":  "Each serving lands near 565 calories with 58 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eazypeazymealz.com/slow-cooker-teriyaki-pork-tenderloin/\" target=\"_blank\" rel=\"noopener\"\u003eEasy Peasy Meals\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Sweet, simple, and satisfying. This is comfort food that respects your budget. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  39.81,
-    "cost_batch_true":  46.3,
-    "cost_per_serving":  2.84,
-    "cost_per_serving_true":  3.31,
-    "cost_pantry_add":  11.62,
-    "cost_first_run":  57.92,
+    "cost_batch":  36.82,
+    "cost_batch_true":  43.22,
+    "cost_per_serving":  2.63,
+    "cost_per_serving_true":  3.09,
+    "cost_pantry_add":  6.98,
+    "cost_first_run":  50.2,
     "scaler":  {
-                   "cost":  "46.30",
+                   "cost":  "43.22",
                    "ing":  [
                                {
                                    "item":  "Pork Tenderloin",
@@ -169,5 +187,51 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Pork Tenderloin",
+            "grams":  3300
+        },
+        {
+            "item":  "Rice",
+            "grams":  850
+        },
+        {
+            "item":  "Broccoli Florets",
+            "grams":  900
+        },
+        {
+            "item":  "Teriyaki Sauce",
+            "grams":  250
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  360
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  160
+        },
+        {
+            "item":  "Honey",
+            "grams":  80
+        },
+        {
+            "item":  "Garlic",
+            "grams":  12
+        },
+        {
+            "item":  "Pineapple Juice",
+            "grams":  400
+        },
+        {
+            "item":  "Red Pepper Flakes",
+            "grams":  2
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  2
+        }
+    ]
 }

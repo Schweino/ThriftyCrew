@@ -3,6 +3,7 @@
     "slug":  "tex-mex-beef-rice-skillet-bowls",
     "cuisine":  "Tex-Mex",
     "protein":  "beef",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://masonfit.com/tex-mex-ground-beef-and-rice-skillet/",
     "source_site":  "Mason Fit",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  576,
                  "protein":  52,
@@ -33,6 +36,18 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.75 tsp (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 6 lb: ~$39.84. \u003cstrong\u003eBuy 6 lbs: $39.84.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.72. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Seasoned Black Beans, 4 1/2 cups: ~$5.09. \u003cstrong\u003eBuy 4 cans: $6.66.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 2 1/4 cups: ~$0.71. \u003cstrong\u003eBuy 1 can: $0.82.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2 cups: ~$0.99. \u003cstrong\u003eBuy 2 cans: $1.68.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 1 1/2 cups: ~$1.28. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "Pantry seasonings (paprika, ground cumin, chili powder, garlic powder, salt, black pepper): ~$0.78. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $49.41 across 14 servings, so roughly $3.53 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $52.23 across 14 servings, roughly $3.73 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.55. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.25 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Lean on \u003cstrong\u003edry rice by the bag\u003c/strong\u003e at about a dollar-fifty a pound to bulk this out for almost nothing.",
@@ -49,14 +64,14 @@
     "portion_html":  "Each of the 14 bowls delivers 52 grams of protein and about 576 calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/tex-mex-ground-beef-and-rice-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eMason Fit\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One skillet, a stack of containers, and your lunches practically make themselves. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  53.33,
-    "cost_batch_true":  56.36,
-    "cost_per_serving":  3.81,
-    "cost_per_serving_true":  4.03,
-    "cost_pantry_add":  10.12,
-    "cost_first_run":  66.48,
+    "cost_batch":  49.41,
+    "cost_batch_true":  52.23,
+    "cost_per_serving":  3.53,
+    "cost_per_serving_true":  3.73,
+    "cost_pantry_add":  7.32,
+    "cost_first_run":  59.55,
     "scaler":  {
-                   "cost":  "56.36",
+                   "cost":  "52.23",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -176,5 +191,55 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Beef",
+            "grams":  2730
+        },
+        {
+            "item":  "Rice",
+            "grams":  587
+        },
+        {
+            "item":  "Seasoned Black Beans",
+            "grams":  780
+        },
+        {
+            "item":  "Sweet Whole Kernel Corn",
+            "grams":  375
+        },
+        {
+            "item":  "Diced Tomatoes",
+            "grams":  484
+        },
+        {
+            "item":  "Cheddar Cheese, Shredded",
+            "grams":  168
+        },
+        {
+            "item":  "Paprika",
+            "grams":  14
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  8
+        },
+        {
+            "item":  "Chili Powder",
+            "grams":  16
+        },
+        {
+            "item":  "Garlic Powder",
+            "grams":  9
+        },
+        {
+            "item":  "Salt",
+            "grams":  9
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        }
+    ]
 }

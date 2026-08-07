@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-chicken-chile-verde-bowls",
     "cuisine":  "Mexican",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.ambitiouskitchen.com/healthy-slow-cooker-chicken-chile-verde/",
     "source_site":  "Ambitious Kitchen",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  557,
                  "protein":  52,
@@ -37,6 +40,24 @@
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 cup (240 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 8 lb: ~$22.72. \u003cstrong\u003eBuy 8 lbs: $25.76.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Tomatillos, 2 lb: ~$5.68. \u003cstrong\u003eBuy 2 lbs: $7.36.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.75. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Diced Green Chiles, 2 cans: ~$1.92. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz cans.\u003c/strong\u003e",
+                       "Broccoli Florets, 4 2/3 cups: ~$1.37. \u003cstrong\u003eBuy 2 12oz bags: $2.33.\u003c/strong\u003e",
+                       "Poblano Peppers, 1.5 poblano peppers: ~$1.44. \u003cstrong\u003eBuy 1 lb: $3.26.\u003c/strong\u003e",
+                       "Jalapeno, 1 jalapeno: ~$0.12. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Garlic, 2 cloves: ~$0.14. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 3/4 cups: ~$0.44. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Lime Juice, 2 limes, juiced: ~$1.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1 cup: ~$0.37. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, dried oregano, salt, black pepper): ~$0.40. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $37.84 across 14 servings, so roughly $2.70 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $48.14 across 14 servings, roughly $3.44 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.33 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.47. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.18 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Go with \u003cstrong\u003eboneless skinless thighs\u003c/strong\u003e here. They are cheaper than breast and stay tender through a long cook.",
@@ -54,14 +75,14 @@
     "portion_html":  "Each of the 14 servings runs about 52g protein for roughly 557 calories, at around $2.44 a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.ambitiouskitchen.com/healthy-slow-cooker-chicken-chile-verde/\" target=\"_blank\" rel=\"noopener\"\u003eAmbitious Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One pot of this and you will look forward to lunch instead of dreading it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  38.1,
-    "cost_batch_true":  48.64,
-    "cost_per_serving":  2.72,
-    "cost_per_serving_true":  3.47,
-    "cost_pantry_add":  10.08,
-    "cost_first_run":  58.72,
+    "cost_batch":  37.84,
+    "cost_batch_true":  48.14,
+    "cost_per_serving":  2.7,
+    "cost_per_serving_true":  3.44,
+    "cost_pantry_add":  10.33,
+    "cost_first_run":  58.47,
     "scaler":  {
-                   "cost":  "48.64",
+                   "cost":  "48.14",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Thigh",
@@ -214,5 +235,71 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Thigh",
+            "grams":  3200
+        },
+        {
+            "item":  "Rice",
+            "grams":  900
+        },
+        {
+            "item":  "Tomatillos",
+            "grams":  700
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  300
+        },
+        {
+            "item":  "Diced Green Chiles",
+            "grams":  200
+        },
+        {
+            "item":  "Broccoli Florets",
+            "grams":  400
+        },
+        {
+            "item":  "Poblano Peppers",
+            "grams":  200
+        },
+        {
+            "item":  "Jalapeno",
+            "grams":  30
+        },
+        {
+            "item":  "Garlic",
+            "grams":  12
+        },
+        {
+            "item":  "Fresh Cilantro",
+            "grams":  28
+        },
+        {
+            "item":  "Lime Juice",
+            "grams":  60
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  8
+        },
+        {
+            "item":  "Dried Oregano",
+            "grams":  4
+        },
+        {
+            "item":  "Salt",
+            "grams":  10
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  240
+        }
+    ]
 }

@@ -3,6 +3,7 @@
     "slug":  "turkey-bolognese-penne",
     "cuisine":  "Italian-American",
     "protein":  "turkey",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "",
     "source_site":  "",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  418,
                  "protein":  34,
@@ -32,6 +35,21 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 3.5 lb raw: ~$15.92. \u003cstrong\u003eBuy 4 lbs: $18.20.\u003c/strong\u003e",
+                       "Penne Pasta, 7 1/4 cups (14.5 oz each): ~$1.54. \u003cstrong\u003eBuy 2 16oz boxes: $1.94.\u003c/strong\u003e",
+                       "Marinara Sauce, 4 1/3 cups (24 oz each): ~$2.77. \u003cstrong\u003eBuy 2 24oz jars: $3.50.\u003c/strong\u003e",
+                       "Parmesan Cheese, about 7/8 cup grated: ~$1.18. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.50. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 3 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Olive Oil, 3 tbsp: ~$0.40. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Carrots, 3.3 carrots: ~$0.42. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Celery, 2.5 stalks: ~$0.58. \u003cstrong\u003eBuy 1 bunch: $1.88.\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.13. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $23.73 across 14 servings, so roughly $1.70 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.34 across 14 servings, roughly $2.24 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.65 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.99. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.93 a bowl\u003c/strong\u003e (at everyday cost) for a from-scratch bolognese. Swap in ground beef if it is cheaper that week, the macros barely move.",
     "shop_smart":  [
                        "\u003cstrong\u003eTurkey or beef, whichever is on sale.\u003c/strong\u003e Both work here. Buy the cheaper one and freeze extra in one-pound packs.",
@@ -49,14 +67,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near 418 calories and 34 grams of protein.",
     "credit_html":  "",
     "upsell_html":  "Comfort-food dinners for about $2.93 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  25.7,
-    "cost_batch_true":  35.05,
-    "cost_per_serving":  1.84,
-    "cost_per_serving_true":  2.5,
-    "cost_pantry_add":  14.66,
-    "cost_first_run":  49.71,
+    "cost_batch":  23.73,
+    "cost_batch_true":  31.34,
+    "cost_per_serving":  1.7,
+    "cost_per_serving_true":  2.24,
+    "cost_pantry_add":  9.65,
+    "cost_first_run":  40.99,
     "scaler":  {
-                   "cost":  "35.05",
+                   "cost":  "31.34",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -168,5 +186,51 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Turkey",
+            "grams":  1587
+        },
+        {
+            "item":  "Penne Pasta",
+            "grams":  719
+        },
+        {
+            "item":  "Marinara Sauce",
+            "grams":  1076
+        },
+        {
+            "item":  "Parmesan Cheese",
+            "grams":  98
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  200
+        },
+        {
+            "item":  "Garlic",
+            "grams":  25
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  40
+        },
+        {
+            "item":  "Carrots",
+            "grams":  200
+        },
+        {
+            "item":  "Celery",
+            "grams":  140
+        },
+        {
+            "item":  "Salt",
+            "grams":  15
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        }
+    ]
 }

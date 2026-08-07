@@ -3,6 +3,7 @@
     "slug":  "turkey-ragu-pasta",
     "cuisine":  "Italian",
     "protein":  "turkey",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.crunchtimekitchen.com/easy-turkey-ragu/",
     "source_site":  "Crunch Time Kitchen",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  604,
                  "protein":  52,
@@ -33,6 +36,21 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.75 tsp (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 7 lb: ~$31.10. \u003cstrong\u003eBuy 7 lbs: $31.85.\u003c/strong\u003e",
+                       "Penne Pasta, 7 cups: ~$1.50. \u003cstrong\u003eBuy 2 16oz boxes: $1.94.\u003c/strong\u003e",
+                       "Marinara Sauce, 5 2/3 cups: ~$3.60. \u003cstrong\u003eBuy 3 24oz jars: $5.25.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.75. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Shredded Carrots, 2 1/4 cups: ~$1.70. \u003cstrong\u003eBuy 1 10oz bag: $1.93.\u003c/strong\u003e",
+                       "Olive Oil, 3 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Turkey Bacon, 14 oz, chopped: ~$4.56. \u003cstrong\u003eBuy 2 12oz packs: $7.84.\u003c/strong\u003e",
+                       "Celery, 2 stalks, diced: ~$1.17. \u003cstrong\u003eBuy 1 bunch: $1.88.\u003c/strong\u003e",
+                       "Garlic, 2 cloves, chopped: ~$0.41. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Pantry seasonings (dried thyme, salt, black pepper): ~$0.28. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $45.49 across 14 servings, so roughly $3.25 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $52.99 across 14 servings, roughly $3.78 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.06 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.05. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.50 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e is the smart buy and keeps this hearty dish easy on the budget.",
@@ -50,14 +68,14 @@
     "portion_html":  "Each of the 14 servings delivers 52 grams of protein and about 604 calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.crunchtimekitchen.com/easy-turkey-ragu/\" target=\"_blank\" rel=\"noopener\"\u003eCrunch Time Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Comforting, filling, and easy on the wallet, this is a bowl of pasta you can feel good about. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  45.73,
-    "cost_batch_true":  52.85,
-    "cost_per_serving":  3.27,
+    "cost_batch":  45.49,
+    "cost_batch_true":  52.99,
+    "cost_per_serving":  3.25,
     "cost_per_serving_true":  3.78,
-    "cost_pantry_add":  15.34,
-    "cost_first_run":  68.19,
+    "cost_pantry_add":  10.06,
+    "cost_first_run":  63.05,
     "scaler":  {
-                   "cost":  "52.85",
+                   "cost":  "52.99",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -178,5 +196,55 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Turkey",
+            "grams":  3100
+        },
+        {
+            "item":  "Penne Pasta",
+            "grams":  700
+        },
+        {
+            "item":  "Marinara Sauce",
+            "grams":  1400
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  300
+        },
+        {
+            "item":  "Shredded Carrots",
+            "grams":  250
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  42
+        },
+        {
+            "item":  "Turkey Bacon",
+            "grams":  396
+        },
+        {
+            "item":  "Celery",
+            "grams":  280
+        },
+        {
+            "item":  "Garlic",
+            "grams":  35
+        },
+        {
+            "item":  "Dried Thyme",
+            "grams":  4
+        },
+        {
+            "item":  "Salt",
+            "grams":  10
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        }
+    ]
 }

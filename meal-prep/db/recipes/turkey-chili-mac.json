@@ -3,6 +3,7 @@
     "slug":  "turkey-chili-mac",
     "cuisine":  "American",
     "protein":  "turkey",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://skinnyfitalicious.com/healthy-chili-mac/",
     "source_site":  "Skinny Fitalicious",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  568,
                  "protein":  56,
@@ -37,6 +40,22 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 7 lb: ~$30.09. \u003cstrong\u003eBuy 7 lbs: $31.85.\u003c/strong\u003e",
+                       "Penne Pasta, 6 1/4 cups: ~$1.33. \u003cstrong\u003eBuy 2 16oz boxes: $1.94.\u003c/strong\u003e",
+                       "Seasoned Black Beans, 2 cans: ~$3.92. \u003cstrong\u003eBuy 3 cans: $4.99.\u003c/strong\u003e",
+                       "Diced Tomatoes, 3 3/4 cups: ~$1.84. \u003cstrong\u003eBuy 3 cans: $2.52.\u003c/strong\u003e",
+                       "Tomato Paste, 1/2 cup: ~$0.47. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.60. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Fat Free Cheddar, 1 2/3 cups: ~$1.78. \u003cstrong\u003eBuy 1 8oz bag: $2.25.\u003c/strong\u003e",
+                       "Olive Oil, 3 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 2 1/2 cups low sodium: ~$2.74. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Garlic, 1 tbsp minced (~3 cloves): ~$0.52. \u003cstrong\u003eBuy 2 heads: $0.93.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, paprika, chili powder, garlic powder, salt, black pepper): ~$0.93. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $44.64 across 14 servings, so roughly $3.19 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $50.32 across 14 servings, roughly $3.59 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.23 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.55. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.54 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Grab the \u003cstrong\u003estore-brand canned beans and tomatoes\u003c/strong\u003e. They are the same beans and tomatoes as the name brand for less, and this recipe uses a stack of them.",
@@ -54,14 +73,14 @@
     "portion_html":  "Each of the 14 bowls brings 56 grams of protein at 568 calories, making this one of the highest-protein plates in the lineup.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyfitalicious.com/healthy-chili-mac/\" target=\"_blank\" rel=\"noopener\"\u003eSkinny Fitalicious\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One pan, a pile of protein, and the kind of dinner that makes leftovers something to look forward to. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  45.54,
-    "cost_batch_true":  51.65,
-    "cost_per_serving":  3.25,
-    "cost_per_serving_true":  3.69,
-    "cost_pantry_add":  18.22,
-    "cost_first_run":  69.87,
+    "cost_batch":  44.64,
+    "cost_batch_true":  50.32,
+    "cost_per_serving":  3.19,
+    "cost_per_serving_true":  3.59,
+    "cost_pantry_add":  13.23,
+    "cost_first_run":  63.55,
     "scaler":  {
-                   "cost":  "51.65",
+                   "cost":  "50.32",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -213,5 +232,71 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Turkey",
+            "grams":  3000
+        },
+        {
+            "item":  "Penne Pasta",
+            "grams":  620
+        },
+        {
+            "item":  "Seasoned Black Beans",
+            "grams":  600
+        },
+        {
+            "item":  "Diced Tomatoes",
+            "grams":  900
+        },
+        {
+            "item":  "Tomato Paste",
+            "grams":  130
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  240
+        },
+        {
+            "item":  "Fat Free Cheddar",
+            "grams":  180
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  42
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  1800
+        },
+        {
+            "item":  "Garlic",
+            "grams":  45
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  15
+        },
+        {
+            "item":  "Paprika",
+            "grams":  15
+        },
+        {
+            "item":  "Chili Powder",
+            "grams":  15
+        },
+        {
+            "item":  "Garlic Powder",
+            "grams":  8
+        },
+        {
+            "item":  "Salt",
+            "grams":  18
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        }
+    ]
 }

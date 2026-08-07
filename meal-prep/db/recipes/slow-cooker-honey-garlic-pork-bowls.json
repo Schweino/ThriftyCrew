@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-honey-garlic-pork-bowls",
     "cuisine":  "Asian",
     "protein":  "pork",
+    "servings":  14,
     "visibility":  "public",
     "source_url":  "https://www.themagicalslowcooker.com/honey-garlic-pork-loin/",
     "source_site":  "The Magical Slow Cooker",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  586,
                  "protein":  54,
@@ -32,6 +35,20 @@
                                 "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 1 tsp (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Loin, 7 lb: ~$14.39. \u003cstrong\u003eBuy 7 lbs: $14.98.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.01. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Broccoli Florets, 14 cups: ~$4.11. \u003cstrong\u003eBuy 4 12oz bags: $4.65.\u003c/strong\u003e",
+                       "Honey, 1/2 cup: ~$1.19. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 2/3 cup: ~$0.68. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 12 cloves: ~$0.70. \u003cstrong\u003eBuy 2 heads: $0.93.\u003c/strong\u003e",
+                       "Chicken Broth, 3/4 cup: ~$0.49. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cornstarch, 3 Tbsp: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (onion powder, red pepper flakes, ground ginger): ~$0.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $22.89 across 14 servings, so roughly $1.64 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $24.25 across 14 servings, roughly $1.73 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $32.45. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.32 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Pork loin at around two dollars a pound is your workhorse here. \u003cstrong\u003eSkip the pre-cut pork chops\u003c/strong\u003e and buy the whole loin to slice yourself.",
@@ -49,14 +66,14 @@
     "portion_html":  "Every bowl brings 54 grams of protein at just 586 calories, which is a lot of eating for the money.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/honey-garlic-pork-loin/\" target=\"_blank\" rel=\"noopener\"\u003eThe Magical Slow Cooker\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One pot, a handful of pantry staples, and dinner practically makes itself. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  26.04,
-    "cost_batch_true":  27.46,
-    "cost_per_serving":  1.86,
-    "cost_per_serving_true":  1.96,
-    "cost_pantry_add":  13.61,
-    "cost_first_run":  41.07,
+    "cost_batch":  22.89,
+    "cost_batch_true":  24.25,
+    "cost_per_serving":  1.64,
+    "cost_per_serving_true":  1.73,
+    "cost_pantry_add":  8.2,
+    "cost_first_run":  32.45,
     "scaler":  {
-                   "cost":  "27.46",
+                   "cost":  "24.25",
                    "ing":  [
                                {
                                    "item":  "Pork Loin",
@@ -169,5 +186,51 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Pork Loin",
+            "grams":  3050
+        },
+        {
+            "item":  "Rice",
+            "grams":  820
+        },
+        {
+            "item":  "Broccoli Florets",
+            "grams":  1200
+        },
+        {
+            "item":  "Honey",
+            "grams":  150
+        },
+        {
+            "item":  "Soy Sauce",
+            "grams":  180
+        },
+        {
+            "item":  "Garlic",
+            "grams":  60
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  320
+        },
+        {
+            "item":  "Cornstarch",
+            "grams":  40
+        },
+        {
+            "item":  "Onion Powder",
+            "grams":  3
+        },
+        {
+            "item":  "Red Pepper Flakes",
+            "grams":  2
+        },
+        {
+            "item":  "Ground Ginger",
+            "grams":  2
+        }
+    ]
 }

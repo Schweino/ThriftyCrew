@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-mongolian-chicken-bowls",
     "cuisine":  "Chinese",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://chefsavvy.com/slow-cooker-mongolian-chicken/",
     "source_site":  "Chef Savvy",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  564,
                  "protein":  63,
@@ -33,6 +36,23 @@
                                 "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 3.5 tbsp (28 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 8 lb: ~$16.72. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.99. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Broccoli Florets, 14 cups: ~$4.11. \u003cstrong\u003eBuy 4 12oz bags: $4.65.\u003c/strong\u003e",
+                       "Soy Sauce, 2/3 cup: ~$0.68. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 1/4 cup: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Hoisin Sauce, 3 3/4 tbsp: ~$0.67. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sesame Oil, 1 1/2 tbsp: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 5 cloves: ~$0.28. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Rice Vinegar, 6.75 tbsp: ~$0.78. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Ginger, 1.25 tbsp grated: ~$0.02. \u003cstrong\u003eBuy 1 piece: $0.31.\u003c/strong\u003e",
+                       "Sriracha, 5 tsp: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cornstarch, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.98 across 14 servings, so roughly $1.78 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.11 across 14 servings, roughly $1.94 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.95 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.06. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.08 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Sesame oil looks pricey per bottle, but you use a splash, so \u003cstrong\u003eone bottle lasts most of a year\u003c/strong\u003e and pennies out per meal.",
@@ -49,14 +69,14 @@
     "portion_html":  "Each bowl carries 63 grams of protein and just 564 calories, a genuinely lean, high-protein plate.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://chefsavvy.com/slow-cooker-mongolian-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eChef Savvy\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "This one tastes like a splurge and cooks like a nap, which is exactly the deal we want. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  34.31,
-    "cost_batch_true":  37.55,
-    "cost_per_serving":  2.45,
-    "cost_per_serving_true":  2.68,
-    "cost_pantry_add":  19.09,
-    "cost_first_run":  56.64,
+    "cost_batch":  24.98,
+    "cost_batch_true":  27.11,
+    "cost_per_serving":  1.78,
+    "cost_per_serving_true":  1.94,
+    "cost_pantry_add":  15.95,
+    "cost_first_run":  43.06,
     "scaler":  {
-                   "cost":  "37.55",
+                   "cost":  "27.11",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -176,5 +196,55 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3400
+        },
+        {
+            "item":  "Rice",
+            "grams":  800
+        },
+        {
+            "item":  "Broccoli Florets",
+            "grams":  1200
+        },
+        {
+            "item":  "Soy Sauce",
+            "grams":  180
+        },
+        {
+            "item":  "Brown Sugar",
+            "grams":  55
+        },
+        {
+            "item":  "Hoisin Sauce",
+            "grams":  60
+        },
+        {
+            "item":  "Sesame Oil",
+            "grams":  20
+        },
+        {
+            "item":  "Garlic",
+            "grams":  24
+        },
+        {
+            "item":  "Rice Vinegar",
+            "grams":  100
+        },
+        {
+            "item":  "Ginger",
+            "grams":  7
+        },
+        {
+            "item":  "Sriracha",
+            "grams":  25
+        },
+        {
+            "item":  "Cornstarch",
+            "grams":  28
+        }
+    ]
 }

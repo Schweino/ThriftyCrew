@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-salsa-verde-pork-bowls",
     "cuisine":  "Mexican",
     "protein":  "pork",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://beginwithbalance.com/slow-cooker-salsa-verde-pork/",
     "source_site":  "Begin With Balance",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  579,
                  "protein":  55,
@@ -31,6 +34,21 @@
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tsp kosher salt (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Tenderloin, 8 lb: ~$28.89. \u003cstrong\u003eBuy 8 lbs: $31.77.\u003c/strong\u003e",
+                       "Rice, 5.25 cups dry: ~$1.16. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Salsa Verde, 1 jar: ~$2.62. \u003cstrong\u003eBuy 1 16oz jar: $2.64.\u003c/strong\u003e",
+                       "Diced Green Chiles, 8 tbsp: ~$1.15. \u003cstrong\u003ePantry staple; this batch alone uses about 2 4oz cans.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 4 1/2 cups: ~$1.42. \u003cstrong\u003eBuy 2 cans: $1.64.\u003c/strong\u003e",
+                       "Chicken Broth, 2 cups: ~$0.73. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 3 tbsp: ~$1.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 2 cloves: ~$0.14. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Brown Sugar, 0.75 cups: ~$0.33. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt): ~$0.01. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $37.48 across 14 servings, so roughly $2.68 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.92 across 14 servings, roughly $2.92 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.75 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.67. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.62 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Pork tenderloin runs lean and clean, but watch the tag. If the per-pound price is steep, \u003cstrong\u003echeck for pork loin instead\u003c/strong\u003e and save real money on the same batch.",
@@ -48,14 +66,14 @@
     "portion_html":  "You are looking at about 579 calories and 55 grams of protein in every serving.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://beginwithbalance.com/slow-cooker-salsa-verde-pork/\" target=\"_blank\" rel=\"noopener\"\u003eBegin With Balance\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One quiet afternoon of cooking buys you a week of bowls you will actually look forward to. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  39.87,
-    "cost_batch_true":  43.6,
-    "cost_per_serving":  2.85,
-    "cost_per_serving_true":  3.11,
-    "cost_pantry_add":  11.81,
-    "cost_first_run":  55.41,
+    "cost_batch":  37.48,
+    "cost_batch_true":  40.92,
+    "cost_per_serving":  2.68,
+    "cost_per_serving_true":  2.92,
+    "cost_pantry_add":  9.75,
+    "cost_first_run":  50.67,
     "scaler":  {
-                   "cost":  "43.60",
+                   "cost":  "40.92",
                    "ing":  [
                                {
                                    "item":  "Pork Tenderloin",
@@ -160,5 +178,47 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Pork Tenderloin",
+            "grams":  3300
+        },
+        {
+            "item":  "Rice",
+            "grams":  940
+        },
+        {
+            "item":  "Salsa Verde",
+            "grams":  450
+        },
+        {
+            "item":  "Diced Green Chiles",
+            "grams":  120
+        },
+        {
+            "item":  "Sweet Whole Kernel Corn",
+            "grams":  750
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  480
+        },
+        {
+            "item":  "Lime Juice",
+            "grams":  45
+        },
+        {
+            "item":  "Garlic",
+            "grams":  12
+        },
+        {
+            "item":  "Brown Sugar",
+            "grams":  150
+        },
+        {
+            "item":  "Salt",
+            "grams":  4
+        }
+    ]
 }

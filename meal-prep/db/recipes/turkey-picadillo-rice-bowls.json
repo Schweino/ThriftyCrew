@@ -3,6 +3,7 @@
     "slug":  "turkey-picadillo-rice-bowls",
     "cuisine":  "Cuban",
     "protein":  "turkey",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.skinnytaste.com/turkey-picadillo/",
     "source_site":  "Skinnytaste",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  552,
                  "protein":  47,
@@ -32,6 +35,20 @@
                                 "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 2 small (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 7 lb: ~$31.10. \u003cstrong\u003eBuy 7 lbs: $31.85.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Diced Tomatoes, 2 cans: ~$1.63. \u003cstrong\u003eBuy 2 cans: $1.68.\u003c/strong\u003e",
+                       "Tomato Paste, 1/2 cup: ~$0.47. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
+                       "Green Bell Peppers, 3 peppers: ~$2.58. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.60. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Olives, 2 tbsp pitted Spanish olives + 2 tbsp brine: ~$1.03. \u003cstrong\u003eBuy 1 5.75oz jar: $1.52.\u003c/strong\u003e",
+                       "Garlic, 2 cloves, minced: ~$0.44. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, salt, bay leaves): ~$0.36. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $39.07 across 14 servings, so roughly $2.79 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $41.06 across 14 servings, roughly $2.93 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $2.51 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.57. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.11 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e is the smart buy and keeps the cost per serving down.",
@@ -48,14 +65,14 @@
     "portion_html":  "Each of the 14 bowls delivers 47 grams of protein and about 552 calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.skinnytaste.com/turkey-picadillo/\" target=\"_blank\" rel=\"noopener\"\u003eSkinnytaste\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Big flavor, tiny price, and it might just become a regular on your rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  40.68,
-    "cost_batch_true":  42.64,
-    "cost_per_serving":  2.91,
-    "cost_per_serving_true":  3.05,
-    "cost_pantry_add":  4.37,
-    "cost_first_run":  47.01,
+    "cost_batch":  39.07,
+    "cost_batch_true":  41.06,
+    "cost_per_serving":  2.79,
+    "cost_per_serving_true":  2.93,
+    "cost_pantry_add":  2.51,
+    "cost_first_run":  43.57,
     "scaler":  {
-                   "cost":  "42.64",
+                   "cost":  "41.06",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -167,5 +184,51 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Turkey",
+            "grams":  3100
+        },
+        {
+            "item":  "Rice",
+            "grams":  700
+        },
+        {
+            "item":  "Diced Tomatoes",
+            "grams":  800
+        },
+        {
+            "item":  "Tomato Paste",
+            "grams":  132
+        },
+        {
+            "item":  "Green Bell Peppers",
+            "grams":  360
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  240
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  12
+        },
+        {
+            "item":  "Green Olives",
+            "grams":  110
+        },
+        {
+            "item":  "Garlic",
+            "grams":  38
+        },
+        {
+            "item":  "Salt",
+            "grams":  22
+        },
+        {
+            "item":  "Bay Leaves",
+            "grams":  2
+        }
+    ]
 }

@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-king-ranch-chicken-bowls",
     "cuisine":  "Tex-Mex",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://houseofyumm.com/slow-cooker-king-ranch-chicken-soup/",
     "source_site":  "House of Yumm",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  567,
                  "protein":  60,
@@ -37,6 +40,23 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 7 lb: ~$15.24. \u003cstrong\u003eBuy 7 lbs: $15.61.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Diced Tomatoes, 3/4 cup: ~$0.41. \u003cstrong\u003eBuy 1 can: $0.84.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 2 1/2 cups: ~$2.13. \u003cstrong\u003eBuy 2 8oz bags: $3.45.\u003c/strong\u003e",
+                       "Broccoli Florets, 4 2/3 cups: ~$1.37. \u003cstrong\u003eBuy 2 12oz bags: $2.33.\u003c/strong\u003e",
+                       "Corn Tortillas, 15 corn tortillas, torn: ~$0.84. \u003cstrong\u003eBuy 1 30ct pack: $1.40.\u003c/strong\u003e",
+                       "Butter, 1 cup: ~$1.41. \u003cstrong\u003eBuy 1 lb box: $2.56.\u003c/strong\u003e",
+                       "All-Purpose Flour, 1 cup: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 4 cups: ~$2.19. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Garlic, 2 cloves: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Jalapeno, 1 medium: ~$0.17. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Pantry seasonings (chili powder, ground cumin, garlic powder, salt, black pepper): ~$0.96. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.19 across 14 servings, so roughly $1.87 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.74 across 14 servings, roughly $2.34 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $41.06. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.93 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Buy the \u003cstrong\u003echeddar in the bigger two-bag size\u003c/strong\u003e. It is cheaper per ounce and this recipe puts it to good use.",
@@ -54,14 +74,14 @@
     "portion_html":  "Each of the 14 servings comes in around 60g protein for about 567 calories, at roughly $2.16 a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://houseofyumm.com/slow-cooker-king-ranch-chicken-soup/\" target=\"_blank\" rel=\"noopener\"\u003eHouse of Yumm\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheesy, comforting, and cheap, this bowl proves meal prep does not have to taste like a diet. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  34.81,
-    "cost_batch_true":  41.97,
-    "cost_per_serving":  2.49,
-    "cost_per_serving_true":  3,
-    "cost_pantry_add":  10.68,
-    "cost_first_run":  52.65,
+    "cost_batch":  26.19,
+    "cost_batch_true":  32.74,
+    "cost_per_serving":  1.87,
+    "cost_per_serving_true":  2.34,
+    "cost_pantry_add":  8.32,
+    "cost_first_run":  41.06,
     "scaler":  {
-                   "cost":  "41.97",
+                   "cost":  "32.74",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -214,5 +234,71 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3100
+        },
+        {
+            "item":  "Rice",
+            "grams":  850
+        },
+        {
+            "item":  "Diced Tomatoes",
+            "grams":  200
+        },
+        {
+            "item":  "Cheddar Cheese, Shredded",
+            "grams":  280
+        },
+        {
+            "item":  "Broccoli Florets",
+            "grams":  400
+        },
+        {
+            "item":  "Corn Tortillas",
+            "grams":  450
+        },
+        {
+            "item":  "Butter",
+            "grams":  250
+        },
+        {
+            "item":  "All-Purpose Flour",
+            "grams":  140
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  1440
+        },
+        {
+            "item":  "Garlic",
+            "grams":  25
+        },
+        {
+            "item":  "Chili Powder",
+            "grams":  24
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  16
+        },
+        {
+            "item":  "Garlic Powder",
+            "grams":  20
+        },
+        {
+            "item":  "Jalapeno",
+            "grams":  45
+        },
+        {
+            "item":  "Salt",
+            "grams":  14
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        }
+    ]
 }

@@ -3,6 +3,7 @@
     "slug":  "philly-cheesesteak-skillet-bowls",
     "cuisine":  "American",
     "protein":  "beef",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://masonfit.com/ground-beef-cheesesteak-skillet/",
     "source_site":  "Mason Fit",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  579,
                  "protein":  41,
@@ -32,6 +35,21 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2.5 tsp (6 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 5 lb: ~$28.61. \u003cstrong\u003eBuy 5 lbs: $33.10.\u003c/strong\u003e",
+                       "Rice, 6.5 cups dry: ~$1.47. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "White Mushrooms, 5 1/4 cups: ~$3.06. \u003cstrong\u003eBuy 2 8oz packs: $3.77.\u003c/strong\u003e",
+                       "Green Bell Peppers, 3 peppers: ~$2.20. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Yellow Onion, 4 onions: ~$0.88. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Provolone Cheese, 1 pack: ~$1.19. \u003cstrong\u003eBuy 1 8oz pack: $1.67.\u003c/strong\u003e",
+                       "Beef Broth, 1 cup: ~$0.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 3 cloves: ~$0.17. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Olive Oil, 3.25 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.20. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $38.61 across 14 servings, so roughly $2.76 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.22 across 14 servings, roughly $3.23 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.30 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.52. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.04 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Buy the \u003cstrong\u003e93/7 ground beef in the 5 lb value pack\u003c/strong\u003e instead of the little trays. The per-pound price drops and it is the biggest line on your bill.",
@@ -48,14 +66,14 @@
     "portion_html":  "Each of the 14 bowls gives you 41 grams of protein and about 579 calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/ground-beef-cheesesteak-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eMason Fit\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Make a batch Sunday and you have got lunch handled all week without touching a drive-thru. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  42.23,
-    "cost_batch_true":  49.16,
-    "cost_per_serving":  3.02,
-    "cost_per_serving_true":  3.51,
-    "cost_pantry_add":  17.08,
-    "cost_first_run":  66.24,
+    "cost_batch":  38.61,
+    "cost_batch_true":  45.22,
+    "cost_per_serving":  2.76,
+    "cost_per_serving_true":  3.23,
+    "cost_pantry_add":  11.3,
+    "cost_first_run":  56.52,
     "scaler":  {
-                   "cost":  "49.16",
+                   "cost":  "45.22",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -167,5 +185,51 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Beef",
+            "grams":  1960
+        },
+        {
+            "item":  "Rice",
+            "grams":  1188
+        },
+        {
+            "item":  "White Mushrooms",
+            "grams":  368
+        },
+        {
+            "item":  "Green Bell Peppers",
+            "grams":  307
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  350
+        },
+        {
+            "item":  "Provolone Cheese",
+            "grams":  162
+        },
+        {
+            "item":  "Beef Broth",
+            "grams":  250
+        },
+        {
+            "item":  "Garlic",
+            "grams":  15
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  45
+        },
+        {
+            "item":  "Salt",
+            "grams":  25
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  6
+        }
+    ]
 }

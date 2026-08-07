@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-chicken-curry-rice-bowls",
     "cuisine":  "Indian",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://laurenfitfoodie.com/slow-cooker-chicken-curry-low-fat-healthy-and-easy/",
     "source_site":  "Lauren Fit Foodie",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  568,
                  "protein":  59,
@@ -32,6 +35,20 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2.25 tsp (5 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 7 lb: ~$15.24. \u003cstrong\u003eBuy 7 lbs: $15.61.\u003c/strong\u003e",
+                       "Rice, 5.75 cups dry: ~$1.26. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.75. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 1 lb: ~$0.74. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Greek Yogurt, 1 tub: ~$1.23. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Garlic, 2 cloves: ~$0.14. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Chicken Broth, 1/2 cup: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cornstarch, 2 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (curry powder, salt, black pepper): ~$1.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $20.88 across 14 servings, so roughly $1.49 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $24.22 across 14 servings, roughly $1.73 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $7.62 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $31.84. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.27 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "A single \u003cstrong\u003ejar of curry powder\u003c/strong\u003e carries the whole flavor and stretches across many future batches.",
@@ -49,14 +66,14 @@
     "portion_html":  "Each of the 14 servings comes in around 59g protein for about 568 calories, at roughly $2.03 a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://laurenfitfoodie.com/slow-cooker-chicken-curry-low-fat-healthy-and-easy/\" target=\"_blank\" rel=\"noopener\"\u003eLauren Fit Foodie\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fragrant, filling, and easy on the budget, this curry is meal prep you will actually crave. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  31.96,
-    "cost_batch_true":  36.47,
-    "cost_per_serving":  2.28,
-    "cost_per_serving_true":  2.6,
-    "cost_pantry_add":  11.11,
-    "cost_first_run":  47.58,
+    "cost_batch":  20.88,
+    "cost_batch_true":  24.22,
+    "cost_per_serving":  1.49,
+    "cost_per_serving_true":  1.73,
+    "cost_pantry_add":  7.62,
+    "cost_first_run":  31.84,
     "scaler":  {
-                   "cost":  "36.47",
+                   "cost":  "24.22",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -169,5 +186,51 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3100
+        },
+        {
+            "item":  "Rice",
+            "grams":  1020
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  300
+        },
+        {
+            "item":  "Carrots",
+            "grams":  350
+        },
+        {
+            "item":  "Curry Powder",
+            "grams":  40
+        },
+        {
+            "item":  "Greek Yogurt",
+            "grams":  340
+        },
+        {
+            "item":  "Garlic",
+            "grams":  12
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  120
+        },
+        {
+            "item":  "Cornstarch",
+            "grams":  16
+        },
+        {
+            "item":  "Salt",
+            "grams":  36
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  5
+        }
+    ]
 }

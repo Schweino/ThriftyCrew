@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-thai-peanut-chicken-bowls",
     "cuisine":  "Thai",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.slenderkitchen.com/recipe/slow-cooker-thai-peanut-chicken",
     "source_site":  "Slender Kitchen",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  603,
                  "protein":  63,
@@ -31,6 +34,21 @@
                                 "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 4.75 tbsp (70 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 8 lb: ~$16.72. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.99. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Red Bell Pepper, 5 peppers: ~$4.90. \u003cstrong\u003eBuy 5 each: $4.90.\u003c/strong\u003e",
+                       "Peanut Butter, 2/3 cup: ~$0.54. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Coconut Milk, 3/4 cup: ~$0.83. \u003cstrong\u003eBuy 1 13.5oz can: $1.84.\u003c/strong\u003e",
+                       "Chicken Broth, 1/2 cup: ~$0.18. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 3 3/4 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 1 tbsp: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 2 cloves: ~$0.14. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Rice Vinegar, 4.75 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.25 across 14 servings, so roughly $1.80 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.70 across 14 servings, roughly $1.98 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.44 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $36.14. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.58 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "That jar of peanut butter powers the whole sauce for under a dollar\u0027s worth, so \u003cstrong\u003ethe pantry staple you already own\u003c/strong\u003e is doing the heavy lifting.",
@@ -47,14 +65,14 @@
     "portion_html":  "You get 63 grams of protein and 603 calories per serving, richer than the others but still a smart, filling plate.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.slenderkitchen.com/recipe/slow-cooker-thai-peanut-chicken\" target=\"_blank\" rel=\"noopener\"\u003eSlender Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Creamy, a little sweet, and cheap enough to keep on repeat. Hard combo to beat. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  34.59,
-    "cost_batch_true":  37.75,
-    "cost_per_serving":  2.47,
-    "cost_per_serving_true":  2.7,
-    "cost_pantry_add":  12.16,
-    "cost_first_run":  49.91,
+    "cost_batch":  25.25,
+    "cost_batch_true":  27.7,
+    "cost_per_serving":  1.8,
+    "cost_per_serving_true":  1.98,
+    "cost_pantry_add":  8.44,
+    "cost_first_run":  36.14,
     "scaler":  {
-                   "cost":  "37.75",
+                   "cost":  "27.70",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -158,5 +176,47 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3400
+        },
+        {
+            "item":  "Rice",
+            "grams":  800
+        },
+        {
+            "item":  "Red Bell Pepper",
+            "grams":  600
+        },
+        {
+            "item":  "Peanut Butter",
+            "grams":  170
+        },
+        {
+            "item":  "Coconut Milk",
+            "grams":  180
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  120
+        },
+        {
+            "item":  "Soy Sauce",
+            "grams":  60
+        },
+        {
+            "item":  "Honey",
+            "grams":  21
+        },
+        {
+            "item":  "Garlic",
+            "grams":  12
+        },
+        {
+            "item":  "Rice Vinegar",
+            "grams":  70
+        }
+    ]
 }

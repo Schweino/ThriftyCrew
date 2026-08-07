@@ -3,6 +3,7 @@
     "slug":  "mediterranean-ground-turkey-bowls",
     "cuisine":  "Mediterranean",
     "protein":  "turkey",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.budgetbytes.com/mediterranean-turkey-bowls/",
     "source_site":  "Budget Bytes",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  581,
                  "protein":  51,
@@ -36,6 +39,22 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tsp cracked (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 7 lb: ~$31.10. \u003cstrong\u003eBuy 7 lbs: $31.85.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Zucchini, 4 zucchinis: ~$2.08. \u003cstrong\u003eBuy 2 lbs: $3.04.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2 cups: ~$0.99. \u003cstrong\u003eBuy 2 cans: $1.68.\u003c/strong\u003e",
+                       "Greek Yogurt, 1 tub: ~$2.46. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.40. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Olive Oil, 2 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cucumber, 1 cucumber: ~$4.76. \u003cstrong\u003eBuy 4 each: $5.44.\u003c/strong\u003e",
+                       "Garlic, 2 cloves, minced: ~$0.41. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Lemon Juice, 1 lemon worth: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, dried oregano, garlic powder, dried dill, black pepper): ~$0.35. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $43.80 across 14 servings, so roughly $3.13 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $48.49 across 14 servings, roughly $3.46 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.41 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.90. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.49 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e keeps your cost per serving low, so buy the big size.",
@@ -53,14 +72,14 @@
     "portion_html":  "Each of the 14 bowls delivers 51 grams of protein and about 581 calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/mediterranean-turkey-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eBudget Bytes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Light on the wallet, big on flavor, and it keeps beautifully all week. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  43.77,
-    "cost_batch_true":  48.46,
+    "cost_batch":  43.8,
+    "cost_batch_true":  48.49,
     "cost_per_serving":  3.13,
     "cost_per_serving_true":  3.46,
-    "cost_pantry_add":  21.25,
-    "cost_first_run":  69.71,
+    "cost_pantry_add":  14.41,
+    "cost_first_run":  62.9,
     "scaler":  {
-                   "cost":  "48.46",
+                   "cost":  "48.49",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -204,5 +223,67 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Turkey",
+            "grams":  3100
+        },
+        {
+            "item":  "Rice",
+            "grams":  700
+        },
+        {
+            "item":  "Zucchini",
+            "grams":  620
+        },
+        {
+            "item":  "Diced Tomatoes",
+            "grams":  484
+        },
+        {
+            "item":  "Greek Yogurt",
+            "grams":  680
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  160
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  27
+        },
+        {
+            "item":  "Cucumber",
+            "grams":  1050
+        },
+        {
+            "item":  "Garlic",
+            "grams":  35
+        },
+        {
+            "item":  "Lemon Juice",
+            "grams":  50
+        },
+        {
+            "item":  "Salt",
+            "grams":  16
+        },
+        {
+            "item":  "Dried Oregano",
+            "grams":  4
+        },
+        {
+            "item":  "Garlic Powder",
+            "grams":  3
+        },
+        {
+            "item":  "Dried Dill",
+            "grams":  2
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  2
+        }
+    ]
 }

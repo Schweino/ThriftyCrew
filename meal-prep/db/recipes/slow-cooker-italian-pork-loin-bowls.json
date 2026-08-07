@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-italian-pork-loin-bowls",
     "cuisine":  "Italian",
     "protein":  "pork",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.bettycrocker.com/recipes/slow-cooker-italian-pork-loin/31f8297f-3fac-494f-93af-9f101e2d9c92",
     "source_site":  "Betty Crocker",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  593,
                  "protein":  66,
@@ -30,6 +33,19 @@
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (16 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Loin, 8 lb: ~$15.57. \u003cstrong\u003eBuy 8 lbs: $17.12.\u003c/strong\u003e",
+                       "Cannellini Beans, 15 cups: ~$8.10. \u003cstrong\u003eBuy 10 cans: $8.26.\u003c/strong\u003e",
+                       "Diced Tomatoes, 2 cans: ~$1.43. \u003cstrong\u003eBuy 2 cans: $1.68.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2 peppers: ~$1.22. \u003cstrong\u003eBuy 2 each: $1.96.\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.30. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Reduced Fat Mozzarella, 5 slices: ~$1.15. \u003cstrong\u003eBuy 1 8oz bag: $1.75.\u003c/strong\u003e",
+                       "Olive Oil, 2 1/4 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (italian seasoning, salt): ~$0.24. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $28.31 across 14 servings, so roughly $2.02 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.45 across 14 servings, roughly $2.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.05 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.50. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.89 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eCanned cannellini beans\u003c/strong\u003e are the base here, and they stretch the protein and fiber for about a dollar a can. No soaking required.",
@@ -47,14 +63,14 @@
     "portion_html":  "Each serving delivers around 593 calories and a hefty 66 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.bettycrocker.com/recipes/slow-cooker-italian-pork-loin/31f8297f-3fac-494f-93af-9f101e2d9c92\" target=\"_blank\" rel=\"noopener\"\u003eBetty Crocker\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Filling, comforting, and packed with protein. This is the bowl that keeps you full till dinner. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  28.63,
-    "cost_batch_true":  32.82,
-    "cost_per_serving":  2.04,
-    "cost_per_serving_true":  2.34,
-    "cost_pantry_add":  11.91,
-    "cost_first_run":  44.73,
+    "cost_batch":  28.31,
+    "cost_batch_true":  32.45,
+    "cost_per_serving":  2.02,
+    "cost_per_serving_true":  2.32,
+    "cost_pantry_add":  8.05,
+    "cost_first_run":  40.5,
     "scaler":  {
-                   "cost":  "32.82",
+                   "cost":  "32.45",
                    "ing":  [
                                {
                                    "item":  "Pork Loin",
@@ -151,5 +167,43 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Pork Loin",
+            "grams":  3300
+        },
+        {
+            "item":  "Cannellini Beans",
+            "grams":  2500
+        },
+        {
+            "item":  "Diced Tomatoes",
+            "grams":  700
+        },
+        {
+            "item":  "Red Bell Pepper",
+            "grams":  150
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  120
+        },
+        {
+            "item":  "Reduced Fat Mozzarella",
+            "grams":  150
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  30
+        },
+        {
+            "item":  "Italian Seasoning",
+            "grams":  6
+        },
+        {
+            "item":  "Salt",
+            "grams":  16
+        }
+    ]
 }

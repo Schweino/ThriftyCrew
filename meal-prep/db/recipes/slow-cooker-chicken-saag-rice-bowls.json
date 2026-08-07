@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-chicken-saag-rice-bowls",
     "cuisine":  "Indian",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.everydaymaven.com/slow-cooker-chicken-saag/",
     "source_site":  "EveryDay Maven",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  565,
                  "protein":  59,
@@ -33,6 +36,19 @@
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (23 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 8 lb: ~$15.73. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
+                       "Rice, 5.25 cups dry: ~$1.17. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Frozen Chopped Spinach, 11 cups: ~$3.65. \u003cstrong\u003eBuy 4 10oz boxes: $4.61.\u003c/strong\u003e",
+                       "Tomato Sauce, 1 can: ~$0.84. \u003cstrong\u003eBuy 1 15oz can: $0.84.\u003c/strong\u003e",
+                       "Coconut Milk, 1 cup: ~$1.10. \u003cstrong\u003eBuy 1 13.5oz can: $1.84.\u003c/strong\u003e",
+                       "Garlic, 4 cloves: ~$0.21. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Ginger, 3 inches: ~$0.23. \u003cstrong\u003eBuy 1 piece: $0.31.\u003c/strong\u003e",
+                       "Pantry seasonings (garam masala, ground coriander, ground cumin, cayenne pepper, salt): ~$1.43. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $24.36 across 14 servings, so roughly $1.74 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $28.50 across 14 servings, roughly $2.04 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.72 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.22. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.52 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eFrozen chopped spinach\u003c/strong\u003e is cheaper than fresh, lasts forever, and melts right into the sauce.",
@@ -50,14 +66,14 @@
     "portion_html":  "Each of the 14 servings lands around 59g protein for about 565 calories, at roughly $2.33 a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.everydaymaven.com/slow-cooker-chicken-saag/\" target=\"_blank\" rel=\"noopener\"\u003eEveryDay Maven\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Deep, savory, and simple, this saag makes healthy eating feel effortless all week long. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  33.28,
-    "cost_batch_true":  38.37,
-    "cost_per_serving":  2.38,
-    "cost_per_serving_true":  2.74,
-    "cost_pantry_add":  10.65,
-    "cost_first_run":  49.02,
+    "cost_batch":  24.36,
+    "cost_batch_true":  28.5,
+    "cost_per_serving":  1.74,
+    "cost_per_serving_true":  2.04,
+    "cost_pantry_add":  6.72,
+    "cost_first_run":  35.22,
     "scaler":  {
-                   "cost":  "38.37",
+                   "cost":  "28.50",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -178,5 +194,55 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3200
+        },
+        {
+            "item":  "Rice",
+            "grams":  950
+        },
+        {
+            "item":  "Frozen Chopped Spinach",
+            "grams":  900
+        },
+        {
+            "item":  "Tomato Sauce",
+            "grams":  425
+        },
+        {
+            "item":  "Coconut Milk",
+            "grams":  240
+        },
+        {
+            "item":  "Garlic",
+            "grams":  18
+        },
+        {
+            "item":  "Ginger",
+            "grams":  75
+        },
+        {
+            "item":  "Garam Masala",
+            "grams":  18
+        },
+        {
+            "item":  "Ground Coriander",
+            "grams":  15
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  18
+        },
+        {
+            "item":  "Cayenne Pepper",
+            "grams":  1
+        },
+        {
+            "item":  "Salt",
+            "grams":  23
+        }
+    ]
 }

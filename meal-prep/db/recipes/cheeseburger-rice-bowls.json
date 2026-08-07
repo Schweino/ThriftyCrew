@@ -3,6 +3,7 @@
     "slug":  "cheeseburger-rice-bowls",
     "cuisine":  "American",
     "protein":  "beef",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.budgetbytes.com/cheeseburger-rice/",
     "source_site":  "Budget Bytes",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  602,
                  "protein":  47,
@@ -34,6 +37,23 @@
                                 "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1 Tbsp (50 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 6 lb: ~$35.76. \u003cstrong\u003eBuy 6 lbs: $39.72.\u003c/strong\u003e",
+                       "Rice, 5.5 cups dry: ~$1.23. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.75. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Beef Broth, 3 cups: ~$1.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Diced Tomatoes, 1 can: ~$0.82. \u003cstrong\u003eBuy 1 can: $0.84.\u003c/strong\u003e",
+                       "Ketchup, 1/2 cup: ~$0.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Dijon Mustard, 2 2/3 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 1 2/3 cups: ~$1.37. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "Garlic, 3 cloves: ~$0.17. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Olive Oil, 1 Tbsp: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Worcestershire Sauce, 1 Tbsp: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.13. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $42.38 across 14 servings, so roughly $3.03 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $47.40 across 14 servings, roughly $3.39 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.38. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.38 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The special sauce is just \u003cstrong\u003eketchup and dijon mustard\u003c/strong\u003e you already have, so skip any bottled burger sauce.",
@@ -50,14 +70,14 @@
     "portion_html":  "Each of the 14 bowls serves 47 grams of protein at 602 calories, so this burger-in-a-bowl actually earns its keep on your plan.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/cheeseburger-rice/\" target=\"_blank\" rel=\"noopener\"\u003eBudget Bytes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheeseburger night, meal-prepped and budget-friendly. No bun, no regrets, all the flavor. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  46.1,
-    "cost_batch_true":  51.42,
-    "cost_per_serving":  3.29,
-    "cost_per_serving_true":  3.67,
-    "cost_pantry_add":  20.16,
-    "cost_first_run":  71.58,
+    "cost_batch":  42.38,
+    "cost_batch_true":  47.4,
+    "cost_per_serving":  3.03,
+    "cost_per_serving_true":  3.39,
+    "cost_pantry_add":  13.98,
+    "cost_first_run":  61.38,
     "scaler":  {
-                   "cost":  "51.42",
+                   "cost":  "47.40",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -185,5 +205,59 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Beef",
+            "grams":  2450
+        },
+        {
+            "item":  "Rice",
+            "grams":  1000
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  300
+        },
+        {
+            "item":  "Beef Broth",
+            "grams":  700
+        },
+        {
+            "item":  "Diced Tomatoes",
+            "grams":  400
+        },
+        {
+            "item":  "Ketchup",
+            "grams":  150
+        },
+        {
+            "item":  "Dijon Mustard",
+            "grams":  40
+        },
+        {
+            "item":  "Cheddar Cheese, Shredded",
+            "grams":  180
+        },
+        {
+            "item":  "Garlic",
+            "grams":  15
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  45
+        },
+        {
+            "item":  "Salt",
+            "grams":  18
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        },
+        {
+            "item":  "Worcestershire Sauce",
+            "grams":  50
+        }
+    ]
 }

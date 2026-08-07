@@ -3,6 +3,7 @@
     "slug":  "hot-honey-chicken-bowls",
     "cuisine":  "American",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "",
     "source_site":  "",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  357,
                  "protein":  31,
@@ -30,6 +33,19 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 3.5 lb raw: ~$7.80. \u003cstrong\u003eBuy 4 lbs: $8.92.\u003c/strong\u003e",
+                       "Rice, 3.5 cups dry jasmine: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Broccoli Florets, 7 cups (about 21 oz): ~$2.04. \u003cstrong\u003eBuy 2 12oz bags: $2.33.\u003c/strong\u003e",
+                       "Hot Honey, about 7 tbsp (7/16 cup): ~$2.14. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, ~2 tbsp (cook chicken/roast broccoli): ~$0.99. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 2 cloves, minced: ~$0.41. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Soy Sauce, 3 tbsp (in glaze): ~$0.34. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.14. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $14.72 across 14 servings, so roughly $1.05 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $16.18 across 14 servings, roughly $1.16 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.46 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $29.64. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.12 a bowl\u003c/strong\u003e (at everyday cost) for a lean, crave-worthy dinner that would run $12 or more at a fast-casual spot.",
     "shop_smart":  [
                        "\u003cstrong\u003eChicken on sale, frozen, is the move.\u003c/strong\u003e Buy a big pack when the price drops and freeze it in two-pound bags.",
@@ -47,14 +63,14 @@
     "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near 357 calories and 31 grams of protein at just 3 grams of fat.",
     "credit_html":  "",
     "upsell_html":  "Lean, crave-worthy dinners for about $2.12 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  20.03,
-    "cost_batch_true":  22.04,
-    "cost_per_serving":  1.43,
-    "cost_per_serving_true":  1.57,
-    "cost_pantry_add":  18.51,
-    "cost_first_run":  40.55,
+    "cost_batch":  14.72,
+    "cost_batch_true":  16.18,
+    "cost_per_serving":  1.05,
+    "cost_per_serving_true":  1.16,
+    "cost_pantry_add":  13.46,
+    "cost_first_run":  29.64,
     "scaler":  {
-                   "cost":  "22.04",
+                   "cost":  "16.18",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -151,5 +167,43 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  1587
+        },
+        {
+            "item":  "Rice",
+            "grams":  700
+        },
+        {
+            "item":  "Broccoli Florets",
+            "grams":  595
+        },
+        {
+            "item":  "Hot Honey",
+            "grams":  147
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  100
+        },
+        {
+            "item":  "Garlic",
+            "grams":  35
+        },
+        {
+            "item":  "Soy Sauce",
+            "grams":  90
+        },
+        {
+            "item":  "Salt",
+            "grams":  20
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        }
+    ]
 }

@@ -3,6 +3,7 @@
     "slug":  "sloppy-joe-rice-bowls",
     "cuisine":  "American",
     "protein":  "beef",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://therealfooddietitians.com/sloppy-joe-bowls/",
     "source_site":  "The Real Food Dietitians",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  584,
                  "protein":  45,
@@ -35,6 +38,23 @@
                                 "\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 2 tbsp (30 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 6 lb: ~$35.76. \u003cstrong\u003eBuy 6 lbs: $39.72.\u003c/strong\u003e",
+                       "Rice, 5.75 cups dry: ~$1.30. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Green Bell Peppers, 4 peppers: ~$2.87. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.75. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Tomato Sauce, 2 cans: ~$1.34. \u003cstrong\u003eBuy 2 15oz cans: $1.68.\u003c/strong\u003e",
+                       "Tomato Paste, 1/2 cup: ~$0.43. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
+                       "Ketchup, 1/2 cup: ~$0.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Dijon Mustard, 2 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 4 cloves: ~$0.23. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Olive Oil, 1.5 tbsp (beef) + oil for base: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Apple Cider Vinegar, 2 tbsp: ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, paprika): ~$0.15. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $43.49 across 14 servings, so roughly $3.11 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $49.16 across 14 servings, roughly $3.51 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.75 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $64.91. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.64 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The sauce is \u003cstrong\u003eketchup, tomato paste, and mustard\u003c/strong\u003e you likely already have, so skip the pricey sloppy joe seasoning packets.",
@@ -51,14 +71,14 @@
     "portion_html":  "Every one of the 14 bowls serves 45 grams of protein at 584 calories, so this childhood favorite pulls real nutritional weight.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://therealfooddietitians.com/sloppy-joe-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eThe Real Food Dietitians\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Nostalgia in a bowl, portioned and paid off. Some meals just make you smile. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  47.59,
-    "cost_batch_true":  53.64,
-    "cost_per_serving":  3.4,
-    "cost_per_serving_true":  3.83,
-    "cost_pantry_add":  22.68,
-    "cost_first_run":  76.32,
+    "cost_batch":  43.49,
+    "cost_batch_true":  49.16,
+    "cost_per_serving":  3.11,
+    "cost_per_serving_true":  3.51,
+    "cost_pantry_add":  15.75,
+    "cost_first_run":  64.91,
     "scaler":  {
-                   "cost":  "53.64",
+                   "cost":  "49.16",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -194,5 +214,63 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Beef",
+            "grams":  2450
+        },
+        {
+            "item":  "Rice",
+            "grams":  1050
+        },
+        {
+            "item":  "Green Bell Peppers",
+            "grams":  400
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  300
+        },
+        {
+            "item":  "Tomato Sauce",
+            "grams":  680
+        },
+        {
+            "item":  "Tomato Paste",
+            "grams":  120
+        },
+        {
+            "item":  "Ketchup",
+            "grams":  150
+        },
+        {
+            "item":  "Dijon Mustard",
+            "grams":  30
+        },
+        {
+            "item":  "Garlic",
+            "grams":  20
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  20
+        },
+        {
+            "item":  "Salt",
+            "grams":  15
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  3
+        },
+        {
+            "item":  "Paprika",
+            "grams":  3
+        },
+        {
+            "item":  "Apple Cider Vinegar",
+            "grams":  30
+        }
+    ]
 }

@@ -3,6 +3,7 @@
     "slug":  "ground-beef-gyro-bowls",
     "cuisine":  "Greek",
     "protein":  "beef",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.modernfarmhouseeats.com/easy-ground-beef-gyros-with-tzatziki/",
     "source_site":  "Modern Farmhouse Eats",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  593,
                  "protein":  46,
@@ -39,6 +42,21 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.75 tsp (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 5 lb: ~$32.69. \u003cstrong\u003eBuy 5 lbs: $33.10.\u003c/strong\u003e",
+                       "Rice, 6.75 cups dry: ~$1.48. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.63. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Greek Yogurt, 1 tub: ~$2.17. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Green Bell Peppers, 3 peppers: ~$2.15. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Garlic, 4 cloves: ~$0.23. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Cucumber, 1 cucumber grated (tzatziki): ~$1.36. \u003cstrong\u003eBuy 1 each: $1.36.\u003c/strong\u003e",
+                       "Lemon Juice, 1.5 tbsp (tzatziki): ~$0.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Feta Cheese, 4 oz crumbled (tzatziki): ~$2.25. \u003cstrong\u003eBuy 1 6oz tub: $3.38.\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, onion powder, ground cumin, dried oregano, dried thyme, ground nutmeg, dried dill, salt, black pepper): ~$1.89. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $44.90 across 14 servings, so roughly $3.21 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $48.72 across 14 servings, roughly $3.48 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.09 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.81. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.42 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "A \u003cstrong\u003ebig tub of plain greek yogurt\u003c/strong\u003e is cheaper per ounce than the small cups and doubles as both a sauce and a protein boost.",
@@ -55,14 +73,14 @@
     "portion_html":  "Every one of the 14 bowls delivers 46 grams of protein at 593 calories with just 11 grams of fat, making this the leanest beef bowl of the bunch.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.modernfarmhouseeats.com/easy-ground-beef-gyros-with-tzatziki/\" target=\"_blank\" rel=\"noopener\"\u003eModern Farmhouse Eats\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Bright, fresh, and light on the wallet. Sometimes eating well and spending less go together. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  48.67,
-    "cost_batch_true":  52.81,
-    "cost_per_serving":  3.48,
-    "cost_per_serving_true":  3.77,
-    "cost_pantry_add":  18.55,
-    "cost_first_run":  71.36,
+    "cost_batch":  44.9,
+    "cost_batch_true":  48.72,
+    "cost_per_serving":  3.21,
+    "cost_per_serving_true":  3.48,
+    "cost_pantry_add":  13.09,
+    "cost_first_run":  61.81,
     "scaler":  {
-                   "cost":  "52.81",
+                   "cost":  "48.72",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -230,5 +248,79 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Beef",
+            "grams":  2240
+        },
+        {
+            "item":  "Rice",
+            "grams":  1201
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  250
+        },
+        {
+            "item":  "Greek Yogurt",
+            "grams":  600
+        },
+        {
+            "item":  "Green Bell Peppers",
+            "grams":  300
+        },
+        {
+            "item":  "Garlic",
+            "grams":  20
+        },
+        {
+            "item":  "Garlic Powder",
+            "grams":  8
+        },
+        {
+            "item":  "Onion Powder",
+            "grams":  8
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  6
+        },
+        {
+            "item":  "Dried Oregano",
+            "grams":  7
+        },
+        {
+            "item":  "Dried Thyme",
+            "grams":  4
+        },
+        {
+            "item":  "Ground Nutmeg",
+            "grams":  2
+        },
+        {
+            "item":  "Cucumber",
+            "grams":  300
+        },
+        {
+            "item":  "Dried Dill",
+            "grams":  18
+        },
+        {
+            "item":  "Lemon Juice",
+            "grams":  21
+        },
+        {
+            "item":  "Feta Cheese",
+            "grams":  113
+        },
+        {
+            "item":  "Salt",
+            "grams":  20
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        }
+    ]
 }

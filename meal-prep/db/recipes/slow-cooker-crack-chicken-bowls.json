@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-crack-chicken-bowls",
     "cuisine":  "American",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://hungryhobby.net/crockpot-crack-chicken-recipe/",
     "source_site":  "Hungry Hobby",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  588,
                  "protein":  65,
@@ -28,6 +31,18 @@
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 cup (240 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 8 lb: ~$16.96. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
+                       "Potato, 8 lb: ~$4.38. \u003cstrong\u003eBuy 8 lbs: $4.54.\u003c/strong\u003e",
+                       "1/3 Fat Cream Cheese, 2/3 cup: ~$1.14. \u003cstrong\u003eBuy 1 8oz brick: $1.84.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 1 1/2 cups: ~$1.29. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "Ranch Seasoning Mix, 6 1/2 tbsp: ~$0.72. \u003cstrong\u003ePantry staple; this batch alone uses about 2 1oz packets.\u003c/strong\u003e",
+                       "Hickory Smoked Bacon, 5 slices: ~$0.52. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
+                       "Chicken Broth, 1 cup: ~$0.37. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $25.38 across 14 servings, so roughly $1.81 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.00 across 14 servings, roughly $2.21 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $1.18 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $32.18. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.30 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Bacon is the priciest bit here, so \u003cstrong\u003euse it as a topping, not a base\u003c/strong\u003e, and a little goes a long way for that smoky hit.",
@@ -44,14 +59,14 @@
     "portion_html":  "Each serving carries 65 grams of protein and 588 calories, indulgent tasting but still protein-forward.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://hungryhobby.net/crockpot-crack-chicken-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eHungry Hobby\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Sometimes the comfort-food bowl is exactly what gets you through a long week, and this one earns it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  35.74,
-    "cost_batch_true":  41.86,
-    "cost_per_serving":  2.55,
-    "cost_per_serving_true":  2.99,
-    "cost_pantry_add":  1.09,
-    "cost_first_run":  42.95,
+    "cost_batch":  25.38,
+    "cost_batch_true":  31,
+    "cost_per_serving":  1.81,
+    "cost_per_serving_true":  2.21,
+    "cost_pantry_add":  1.18,
+    "cost_first_run":  32.18,
     "scaler":  {
-                   "cost":  "41.86",
+                   "cost":  "31.00",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -131,5 +146,35 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3450
+        },
+        {
+            "item":  "Potato",
+            "grams":  3500
+        },
+        {
+            "item":  "1/3 Fat Cream Cheese",
+            "grams":  140
+        },
+        {
+            "item":  "Cheddar Cheese, Shredded",
+            "grams":  170
+        },
+        {
+            "item":  "Ranch Seasoning Mix",
+            "grams":  45
+        },
+        {
+            "item":  "Hickory Smoked Bacon",
+            "grams":  60
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  240
+        }
+    ]
 }

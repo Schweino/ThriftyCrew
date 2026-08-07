@@ -3,6 +3,7 @@
     "slug":  "thai-turkey-larb-bowls",
     "cuisine":  "Thai",
     "protein":  "turkey",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.trifectanutrition.com/blog/paleo-thai-turkey-larb-recipe",
     "source_site":  "Trifecta Nutrition",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  642,
                  "protein":  50,
@@ -32,6 +35,22 @@
                                 "\u003cstrong\u003eFresh Mint:\u003c/strong\u003e 15.5 tbsp fresh (25 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 8 lb: ~$33.10. \u003cstrong\u003eBuy 8 lbs: $36.40.\u003c/strong\u003e",
+                       "Rice, 5.25 cups dry: ~$1.17. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.75. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Lime Juice, 1/3 cup: ~$2.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 2 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Bell Peppers, 3 peppers: ~$2.15. \u003cstrong\u003eBuy 3 each: $2.58.\u003c/strong\u003e",
+                       "Olive Oil, 2 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fish Sauce, 0.5 cups: ~$2.02. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Jalapeno, 2 1/2 jalapenos: ~$0.14. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Fresh Cilantro, 1 3/4 cups rough chopped: ~$0.47. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Fresh Mint, 15.5 tbsp fresh: ~$3.14. \u003cstrong\u003eBuy 2 0.5oz packs: $3.52.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $45.61 across 14 servings, so roughly $3.26 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $52.15 across 14 servings, roughly $3.72 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $66.05. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.72 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The \u003cstrong\u003e8 lb ground turkey pack\u003c/strong\u003e is your best value, so buy the big size and portion it out.",
@@ -49,14 +68,14 @@
     "portion_html":  "Each of the 14 bowls gives you 50 grams of protein and about 642 calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.trifectanutrition.com/blog/paleo-thai-turkey-larb-recipe\" target=\"_blank\" rel=\"noopener\"\u003eTrifecta Nutrition\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fresh, punchy, and cheap, this is the bowl that keeps your taste buds interested all week. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  45.86,
-    "cost_batch_true":  52.55,
-    "cost_per_serving":  3.28,
-    "cost_per_serving_true":  3.75,
-    "cost_pantry_add":  18.98,
-    "cost_first_run":  71.53,
+    "cost_batch":  45.61,
+    "cost_batch_true":  52.15,
+    "cost_per_serving":  3.26,
+    "cost_per_serving_true":  3.72,
+    "cost_pantry_add":  13.9,
+    "cost_first_run":  66.05,
     "scaler":  {
-                   "cost":  "52.55",
+                   "cost":  "52.15",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -167,5 +186,51 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Turkey",
+            "grams":  3300
+        },
+        {
+            "item":  "Rice",
+            "grams":  950
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  300
+        },
+        {
+            "item":  "Lime Juice",
+            "grams":  90
+        },
+        {
+            "item":  "Honey",
+            "grams":  42
+        },
+        {
+            "item":  "Green Bell Peppers",
+            "grams":  300
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  27
+        },
+        {
+            "item":  "Fish Sauce",
+            "grams":  160
+        },
+        {
+            "item":  "Jalapeno",
+            "grams":  35
+        },
+        {
+            "item":  "Fresh Cilantro",
+            "grams":  30
+        },
+        {
+            "item":  "Fresh Mint",
+            "grams":  25
+        }
+    ]
 }

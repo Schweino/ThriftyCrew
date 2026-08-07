@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-pulled-pork-bowl",
     "cuisine":  "American",
     "protein":  "pork",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://skinnyfitalicious.com/healthy-crockpot-pulled-pork/",
     "source_site":  "Skinny Fitalicious",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  512,
                  "protein":  41,
@@ -31,6 +34,17 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (common in rub) (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Tenderloin, 5 lb: ~$19.85. \u003cstrong\u003eBuy 5 lbs: $19.85.\u003c/strong\u003e",
+                       "Chicken Broth, 1 cup: ~$0.37. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "BBQ Sauce (Sugar Free), 1 bottle: ~$2.76. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 5.5 cups dry: ~$1.23. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 5 cups: ~$1.59. \u003cstrong\u003eBuy 2 cans: $1.64.\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, onion powder, smoked paprika, salt, black pepper): ~$0.58. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.38 across 14 servings, so roughly $1.88 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $26.43 across 14 servings, roughly $1.89 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.18 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $34.61. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.47 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy the pork on sale.\u003c/strong\u003e Pork tenderloin and pork loin go on rotation often. When you see a good price per pound, grab it and freeze until slow-cooker day.",
@@ -49,14 +63,14 @@
     "portion_html":  "Weigh the full finished pot, subtract the empty pot weight you wrote down, and divide that number by 14. Scoop that same weight into each of your 14 containers so every bowl is even.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyfitalicious.com/healthy-crockpot-pulled-pork/\" target=\"_blank\" rel=\"noopener\"\u003eSkinny Fitalicious\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "That is a whole week of hearty dinners sorted in one afternoon, cheap, filling, and something you will actually look forward to opening at lunch. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  29.46,
-    "cost_batch_true":  29.55,
-    "cost_per_serving":  2.1,
-    "cost_per_serving_true":  2.11,
-    "cost_pantry_add":  11.62,
-    "cost_first_run":  41.17,
+    "cost_batch":  26.38,
+    "cost_batch_true":  26.43,
+    "cost_per_serving":  1.88,
+    "cost_per_serving_true":  1.89,
+    "cost_pantry_add":  8.18,
+    "cost_first_run":  34.61,
     "scaler":  {
-                   "cost":  "29.55",
+                   "cost":  "26.43",
                    "ing":  [
                                {
                                    "item":  "Pork Tenderloin",
@@ -162,5 +176,47 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Pork Tenderloin",
+            "grams":  2268
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  240
+        },
+        {
+            "item":  "BBQ Sauce (Sugar Free)",
+            "grams":  450
+        },
+        {
+            "item":  "Garlic Powder",
+            "grams":  8
+        },
+        {
+            "item":  "Onion Powder",
+            "grams":  8
+        },
+        {
+            "item":  "Rice",
+            "grams":  1000
+        },
+        {
+            "item":  "Sweet Whole Kernel Corn",
+            "grams":  840
+        },
+        {
+            "item":  "Smoked Paprika",
+            "grams":  12
+        },
+        {
+            "item":  "Salt",
+            "grams":  15
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        }
+    ]
 }

@@ -3,6 +3,7 @@
     "slug":  "unstuffed-cabbage-roll-bowls",
     "cuisine":  "Eastern European",
     "protein":  "beef",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://thewholecook.com/unstuffed-cabbage-skillet/",
     "source_site":  "The Whole Cook",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  560,
                  "protein":  49,
@@ -33,6 +36,19 @@
                                 "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1.75 tsp (3 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 6 lb: ~$39.55. \u003cstrong\u003eBuy 6 lbs: $39.72.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.00. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Cabbage, 4 lb: ~$2.62. \u003cstrong\u003eBuy 2 heads: $3.37.\u003c/strong\u003e",
+                       "Crushed Tomatoes, 5 cups: ~$2.30. \u003cstrong\u003eBuy 2 28oz cans: $3.04.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.60. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 2 cloves: ~$0.14. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Olive Oil, 6 tbsp: ~$0.80. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, dried oregano, paprika, red pepper flakes): ~$0.56. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $47.57 across 14 servings, so roughly $3.40 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $50.09 across 14 servings, roughly $3.58 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.70. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.41 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Buy the \u003cstrong\u003e6 lb ground beef value pack\u003c/strong\u003e and let the cheap cabbage do the rest of the stretching.",
@@ -49,14 +65,14 @@
     "portion_html":  "Each of the 14 bowls gives you 49 grams of protein and about 560 calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thewholecook.com/unstuffed-cabbage-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eThe Whole Cook\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheap, filling, and loaded with veggies, this is meal prep that earns its spot in the fridge. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  51.39,
-    "cost_batch_true":  54.01,
-    "cost_per_serving":  3.67,
-    "cost_per_serving_true":  3.86,
-    "cost_pantry_add":  16.67,
-    "cost_first_run":  70.68,
+    "cost_batch":  47.57,
+    "cost_batch_true":  50.09,
+    "cost_per_serving":  3.4,
+    "cost_per_serving_true":  3.58,
+    "cost_pantry_add":  11.61,
+    "cost_first_run":  61.7,
     "scaler":  {
-                   "cost":  "54.01",
+                   "cost":  "50.09",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -176,5 +192,55 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Beef",
+            "grams":  2710
+        },
+        {
+            "item":  "Rice",
+            "grams":  808
+        },
+        {
+            "item":  "Green Cabbage",
+            "grams":  1400
+        },
+        {
+            "item":  "Crushed Tomatoes",
+            "grams":  1200
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  240
+        },
+        {
+            "item":  "Garlic",
+            "grams":  12
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  80
+        },
+        {
+            "item":  "Salt",
+            "grams":  25
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  7
+        },
+        {
+            "item":  "Dried Oregano",
+            "grams":  5
+        },
+        {
+            "item":  "Paprika",
+            "grams":  6
+        },
+        {
+            "item":  "Red Pepper Flakes",
+            "grams":  3
+        }
+    ]
 }

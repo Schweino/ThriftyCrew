@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-turkey-chili-bowls",
     "cuisine":  "Tex-Mex",
     "protein":  "turkey",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://ifoodreal.com/high-protein-crockpot-turkey-chili-recipe/",
     "source_site":  "iFoodReal",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  568,
                  "protein":  54,
@@ -36,6 +39,23 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 7 lb: ~$31.30. \u003cstrong\u003eBuy 7 lbs: $31.85.\u003c/strong\u003e",
+                       "Seasoned Black Beans, 14 cups: ~$15.60. \u003cstrong\u003eBuy 10 cans: $16.64.\u003c/strong\u003e",
+                       "Diced Tomatoes, 5 cans: ~$3.68. \u003cstrong\u003eBuy 5 cans: $4.20.\u003c/strong\u003e",
+                       "Tomato Paste, 3/4 cup: ~$0.72. \u003cstrong\u003eBuy 2 6oz cans: $1.22.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.80. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 2 peppers: ~$1.72. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "Chipotle in Adobo, 3 1/2 tbsp: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Vegetable Oil, for frying (~1 tbsp): ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 3 cloves: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Celery, 3 large stalks: ~$0.84. \u003cstrong\u003eBuy 1 bunch: $1.88.\u003c/strong\u003e",
+                       "Chicken Broth, 1 cup: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (chili powder, taco seasoning, salt, black pepper): ~$0.52. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $56.62 across 14 servings, so roughly $4.04 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $60.78 across 14 servings, roughly $4.34 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $69.68. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.98 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  "Grab the 7 lb ground turkey pack. It is cheaper than beef and carries this whole pot.\nA little can of chipotle in adobo adds big smoky flavor for pocket change, so do not skip it.\nBuy your beans and tomatoes as store-brand cans and let the pantry staples keep the cost down.",
     "make_it":  [
@@ -48,14 +68,14 @@
     "portion_html":  "Each of the 14 bowls gives you 54 grams of protein and about 568 calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://ifoodreal.com/high-protein-crockpot-turkey-chili-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eiFoodReal\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Set it in the morning, come home to dinner, and stash the rest for the week ahead. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  57.79,
-    "cost_batch_true":  62.57,
-    "cost_per_serving":  4.13,
-    "cost_per_serving_true":  4.47,
-    "cost_pantry_add":  11.19,
-    "cost_first_run":  73.76,
+    "cost_batch":  56.62,
+    "cost_batch_true":  60.78,
+    "cost_per_serving":  4.04,
+    "cost_per_serving_true":  4.34,
+    "cost_pantry_add":  8.9,
+    "cost_first_run":  69.68,
     "scaler":  {
-                   "cost":  "62.57",
+                   "cost":  "60.78",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -199,5 +219,67 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Turkey",
+            "grams":  3120
+        },
+        {
+            "item":  "Seasoned Black Beans",
+            "grams":  2391
+        },
+        {
+            "item":  "Diced Tomatoes",
+            "grams":  1800
+        },
+        {
+            "item":  "Tomato Paste",
+            "grams":  200
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  320
+        },
+        {
+            "item":  "Green Bell Peppers",
+            "grams":  240
+        },
+        {
+            "item":  "Chili Powder",
+            "grams":  20
+        },
+        {
+            "item":  "Chipotle in Adobo",
+            "grams":  60
+        },
+        {
+            "item":  "Vegetable Oil",
+            "grams":  24
+        },
+        {
+            "item":  "Garlic",
+            "grams":  25
+        },
+        {
+            "item":  "Celery",
+            "grams":  200
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  420
+        },
+        {
+            "item":  "Taco Seasoning",
+            "grams":  14
+        },
+        {
+            "item":  "Salt",
+            "grams":  9
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        }
+    ]
 }

@@ -3,6 +3,7 @@
     "slug":  "american-goulash-pasta",
     "cuisine":  "American",
     "protein":  "beef",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://natashaskitchen.com/american-goulash-recipe/",
     "source_site":  "NatashasKitchen",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  598,
                  "protein":  55,
@@ -37,6 +40,24 @@
                                 "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 0.75 tsp (3 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 6 lb: ~$35.76. \u003cstrong\u003eBuy 6 lbs: $39.72.\u003c/strong\u003e",
+                       "Penne Pasta, 10 cups: ~$2.24. \u003cstrong\u003eBuy 3 16oz boxes: $2.91.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.75. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 1 lb: ~$0.42. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Crushed Tomatoes, 2 cans: ~$2.49. \u003cstrong\u003eBuy 2 28oz cans: $3.04.\u003c/strong\u003e",
+                       "Tomato Paste, 1/2 cup: ~$0.43. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
+                       "Beef Broth, 3 cups: ~$1.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Parmesan Cheese, 1 cup: ~$0.97. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
+                       "Garlic, 4 cloves: ~$0.23. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Olive Oil, 3 tbsp: ~$0.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Celery, 2 stalks, finely chopped: ~$0.50. \u003cstrong\u003eBuy 1 bunch: $1.88.\u003c/strong\u003e",
+                       "Worcestershire Sauce, 2.75 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (italian seasoning, salt, black pepper, sugar): ~$0.38. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $45.81 across 14 servings, so roughly $3.27 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $55.47 across 14 servings, roughly $3.96 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.25 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $69.72. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.98 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eCrushed tomatoes in the large can\u003c/strong\u003e are one of the cheapest ways to build a big pot of sauce, and this recipe leans right into that.",
@@ -53,14 +74,14 @@
     "portion_html":  "Each of the 14 servings delivers 55 grams of protein at 598 calories, proving this old-fashioned budget meal still competes on protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://natashaskitchen.com/american-goulash-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eNatashasKitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A classic that has stretched budgets for a hundred years, now stretching yours too. Grandma knew what she was doing. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  49.8,
-    "cost_batch_true":  61.56,
-    "cost_per_serving":  3.56,
-    "cost_per_serving_true":  4.4,
-    "cost_pantry_add":  19.39,
-    "cost_first_run":  80.95,
+    "cost_batch":  45.81,
+    "cost_batch_true":  55.47,
+    "cost_per_serving":  3.27,
+    "cost_per_serving_true":  3.96,
+    "cost_pantry_add":  14.25,
+    "cost_first_run":  69.72,
     "scaler":  {
-                   "cost":  "61.56",
+                   "cost":  "55.47",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -212,5 +233,71 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Beef",
+            "grams":  2450
+        },
+        {
+            "item":  "Penne Pasta",
+            "grams":  1050
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  300
+        },
+        {
+            "item":  "Carrots",
+            "grams":  200
+        },
+        {
+            "item":  "Crushed Tomatoes",
+            "grams":  1300
+        },
+        {
+            "item":  "Tomato Paste",
+            "grams":  120
+        },
+        {
+            "item":  "Beef Broth",
+            "grams":  700
+        },
+        {
+            "item":  "Parmesan Cheese",
+            "grams":  80
+        },
+        {
+            "item":  "Garlic",
+            "grams":  20
+        },
+        {
+            "item":  "Italian Seasoning",
+            "grams":  6
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  42
+        },
+        {
+            "item":  "Celery",
+            "grams":  120
+        },
+        {
+            "item":  "Worcestershire Sauce",
+            "grams":  45
+        },
+        {
+            "item":  "Salt",
+            "grams":  36
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        },
+        {
+            "item":  "Sugar",
+            "grams":  3
+        }
+    ]
 }

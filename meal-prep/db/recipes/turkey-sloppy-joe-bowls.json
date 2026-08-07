@@ -3,6 +3,7 @@
     "slug":  "turkey-sloppy-joe-bowls",
     "cuisine":  "American",
     "protein":  "turkey",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://therealfooddietitians.com/turkey-sloppy-joes/",
     "source_site":  "The Real Food Dietitians",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  681,
                  "protein":  46,
@@ -37,6 +40,25 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tsp (2 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 7 lb: ~$31.70. \u003cstrong\u003eBuy 7 lbs: $31.85.\u003c/strong\u003e",
+                       "Fries, 6 3/4 lb: ~$9.90. \u003cstrong\u003eBuy 4 32oz bags: $11.77.\u003c/strong\u003e",
+                       "Tomato Paste, 1 1/2 cups: ~$1.43. \u003cstrong\u003eBuy 3 6oz cans: $1.83.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.75. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Green Bell Peppers, 2 peppers: ~$1.72. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "Shredded Carrots, 1 1/2 cups: ~$1.16. \u003cstrong\u003eBuy 1 10oz bag: $1.93.\u003c/strong\u003e",
+                       "Honey, 2 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey Dijon Mustard, 2 2/3 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 12oz bottle: $1.72.\u003c/strong\u003e",
+                       "Olive Oil, 2 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 3 cloves (1 tbsp): ~$0.52. \u003cstrong\u003eBuy 2 heads: $0.93.\u003c/strong\u003e",
+                       "Chicken Broth, 2.25 cups: ~$0.82. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 1 tbsp (or 2 tbsp coconut aminos): ~$0.34. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Apple Cider Vinegar, 3 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, smoked paprika, black pepper): ~$0.17. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $49.40 across 14 servings, so roughly $3.53 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $54.91 across 14 servings, roughly $3.92 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.67 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $71.58. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$5.11 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e keeps your protein cost down, so buy the big size.",
@@ -53,14 +75,14 @@
     "portion_html":  "Each of the 14 bowls delivers 46 grams of protein and about 681 calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://therealfooddietitians.com/turkey-sloppy-joes/\" target=\"_blank\" rel=\"noopener\"\u003eThe Real Food Dietitians\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "It is nostalgic, it is filling, and it will make you the hero of the lunch line. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  50.67,
-    "cost_batch_true":  56.42,
-    "cost_per_serving":  3.62,
-    "cost_per_serving_true":  4.03,
-    "cost_pantry_add":  25.68,
-    "cost_first_run":  82.1,
+    "cost_batch":  49.4,
+    "cost_batch_true":  54.91,
+    "cost_per_serving":  3.53,
+    "cost_per_serving_true":  3.92,
+    "cost_pantry_add":  16.67,
+    "cost_first_run":  71.58,
     "scaler":  {
-                   "cost":  "56.42",
+                   "cost":  "54.91",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -212,5 +234,71 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Turkey",
+            "grams":  3160
+        },
+        {
+            "item":  "Fries",
+            "grams":  3051
+        },
+        {
+            "item":  "Tomato Paste",
+            "grams":  400
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  300
+        },
+        {
+            "item":  "Green Bell Peppers",
+            "grams":  240
+        },
+        {
+            "item":  "Shredded Carrots",
+            "grams":  170
+        },
+        {
+            "item":  "Honey",
+            "grams":  42
+        },
+        {
+            "item":  "Honey Dijon Mustard",
+            "grams":  40
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  28
+        },
+        {
+            "item":  "Garlic",
+            "grams":  45
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  540
+        },
+        {
+            "item":  "Soy Sauce",
+            "grams":  90
+        },
+        {
+            "item":  "Apple Cider Vinegar",
+            "grams":  45
+        },
+        {
+            "item":  "Salt",
+            "grams":  12
+        },
+        {
+            "item":  "Smoked Paprika",
+            "grams":  4
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  2
+        }
+    ]
 }

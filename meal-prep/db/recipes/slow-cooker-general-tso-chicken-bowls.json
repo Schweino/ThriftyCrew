@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-general-tso-chicken-bowls",
     "cuisine":  "Chinese",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.foodfaithfitness.com/slow-cooker-general-tsos-chicken/",
     "source_site":  "Food Faith Fitness",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  567,
                  "protein":  57,
@@ -33,6 +36,21 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.75 tsp (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 7 lb: ~$15.24. \u003cstrong\u003eBuy 7 lbs: $15.61.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Hoisin Sauce, 1/2 cup: ~$1.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 1/2 cup: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 1/2 cup: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cornstarch, 1/2 cup: ~$0.25. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 2 cloves: ~$0.09. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Broccoli Florets, 6 1/2 cups: ~$1.88. \u003cstrong\u003eBuy 2 12oz bags: $2.33.\u003c/strong\u003e",
+                       "Rice Vinegar, 4.75 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground ginger, red pepper flakes, black pepper): ~$0.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $21.39 across 14 servings, so roughly $1.53 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $22.58 across 14 servings, roughly $1.61 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.19. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.66 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Chicken breast is the whole game here, so \u003cstrong\u003ebuy the big family pack\u003c/strong\u003e when it goes on sale and freeze what you don\u0027t cook this week.",
@@ -49,14 +67,14 @@
     "portion_html":  "Each serving lands at 57 grams of protein and 567 calories, which is a lot of muscle-fueling food for the money.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.foodfaithfitness.com/slow-cooker-general-tsos-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eFood Faith Fitness\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Make it once and you\u0027ll wonder why you ever paid the delivery fee. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  30.35,
-    "cost_batch_true":  31.8,
-    "cost_per_serving":  2.17,
-    "cost_per_serving_true":  2.27,
-    "cost_pantry_add":  21.18,
-    "cost_first_run":  52.98,
+    "cost_batch":  21.39,
+    "cost_batch_true":  22.58,
+    "cost_per_serving":  1.53,
+    "cost_per_serving_true":  1.61,
+    "cost_pantry_add":  14.61,
+    "cost_first_run":  37.19,
     "scaler":  {
-                   "cost":  "31.80",
+                   "cost":  "22.58",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -176,5 +194,55 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3100
+        },
+        {
+            "item":  "Rice",
+            "grams":  900
+        },
+        {
+            "item":  "Hoisin Sauce",
+            "grams":  120
+        },
+        {
+            "item":  "Soy Sauce",
+            "grams":  120
+        },
+        {
+            "item":  "Brown Sugar",
+            "grams":  90
+        },
+        {
+            "item":  "Cornstarch",
+            "grams":  60
+        },
+        {
+            "item":  "Garlic",
+            "grams":  8
+        },
+        {
+            "item":  "Broccoli Florets",
+            "grams":  550
+        },
+        {
+            "item":  "Rice Vinegar",
+            "grams":  70
+        },
+        {
+            "item":  "Ground Ginger",
+            "grams":  4
+        },
+        {
+            "item":  "Red Pepper Flakes",
+            "grams":  2
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        }
+    ]
 }

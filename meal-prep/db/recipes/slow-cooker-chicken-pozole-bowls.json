@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-chicken-pozole-bowls",
     "cuisine":  "Mexican",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.isabeleats.com/mexican-slow-cooker-chicken-posole/",
     "source_site":  "Isabel Eats",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  549,
                  "protein":  55,
@@ -33,6 +36,20 @@
                                 "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 2 tbsp Mexican oregano (6 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 8 lb: ~$15.73. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
+                       "Hominy, 21 cups: ~$3.72. \u003cstrong\u003eBuy 10 cans: $3.72.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.75. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Enchilada Sauce, 1 1/4 cups: ~$1.12. \u003cstrong\u003eBuy 2 10oz cans: $2.12.\u003c/strong\u003e",
+                       "Green Cabbage, 1 lb: ~$0.75. \u003cstrong\u003eBuy 1 head: $1.69.\u003c/strong\u003e",
+                       "Olive Oil, 2/3 cup: ~$1.39. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 4 cups: ~$2.19. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Garlic, 4 cloves: ~$0.41. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Pantry seasonings (chili powder, ground cumin, salt, dried oregano): ~$0.61. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.67 across 14 servings, so roughly $1.90 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $31.16 across 14 servings, roughly $2.23 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.34 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.50. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.89 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Canned \u003cstrong\u003ehominy\u003c/strong\u003e is the cheap, filling base here, and it stretches the batch without stretching your budget.",
@@ -50,14 +67,14 @@
     "portion_html":  "Each of the 14 servings lands around 55g protein for about 549 calories, at roughly $2.50 a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/mexican-slow-cooker-chicken-posole/\" target=\"_blank\" rel=\"noopener\"\u003eIsabel Eats\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "This is the kind of bowl that feels like a hug after a long day, and it is waiting all week. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  37.17,
-    "cost_batch_true":  42.61,
-    "cost_per_serving":  2.66,
-    "cost_per_serving_true":  3.04,
-    "cost_pantry_add":  12.9,
-    "cost_first_run":  55.51,
+    "cost_batch":  26.67,
+    "cost_batch_true":  31.16,
+    "cost_per_serving":  1.9,
+    "cost_per_serving_true":  2.23,
+    "cost_pantry_add":  9.34,
+    "cost_first_run":  40.5,
     "scaler":  {
-                   "cost":  "42.61",
+                   "cost":  "31.16",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -178,5 +195,55 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3200
+        },
+        {
+            "item":  "Hominy",
+            "grams":  3400
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  300
+        },
+        {
+            "item":  "Enchilada Sauce",
+            "grams":  300
+        },
+        {
+            "item":  "Green Cabbage",
+            "grams":  400
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  140
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  1440
+        },
+        {
+            "item":  "Garlic",
+            "grams":  35
+        },
+        {
+            "item":  "Chili Powder",
+            "grams":  16
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  10
+        },
+        {
+            "item":  "Salt",
+            "grams":  12
+        },
+        {
+            "item":  "Dried Oregano",
+            "grams":  6
+        }
+    ]
 }

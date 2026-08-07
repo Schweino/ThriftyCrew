@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-balsamic-pork-bowls",
     "cuisine":  "American",
     "protein":  "pork",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.slenderkitchen.com/recipe/slow-cooker-balsamic-brown-sugar-pork-tenderloin",
     "source_site":  "Slender Kitchen",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  556,
                  "protein":  57,
@@ -34,6 +37,20 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (3 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Tenderloin, 8 lb: ~$29.76. \u003cstrong\u003eBuy 8 lbs: $31.77.\u003c/strong\u003e",
+                       "Potato, 8 lb: ~$4.26. \u003cstrong\u003eBuy 8 lbs: $4.54.\u003c/strong\u003e",
+                       "Green Beans, 8 1/4 cups: ~$1.94. \u003cstrong\u003eBuy 3 12oz bags: $2.19.\u003c/strong\u003e",
+                       "Balsamic Vinegar, 1/2 cup: ~$0.93. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 1/2 cup: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 3 3/4 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1 cup: ~$0.37. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Olive Oil, 2 1/4 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, garlic powder, chili powder, salt, black pepper): ~$0.24. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $38.23 across 14 servings, so roughly $2.73 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.77 across 14 servings, roughly $2.91 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.12 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.89. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.35 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "A \u003cstrong\u003ebottle of balsamic vinegar\u003c/strong\u003e costs a couple bucks and flavors many meals, so the splash here is basically free per serving.",
@@ -51,14 +68,14 @@
     "portion_html":  "Each serving comes in around 556 calories with 57 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.slenderkitchen.com/recipe/slow-cooker-balsamic-brown-sugar-pork-tenderloin\" target=\"_blank\" rel=\"noopener\"\u003eSlender Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A little tang, a little sweet, and a whole lot of easy. That is a keeper. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  41.05,
-    "cost_batch_true":  43.75,
-    "cost_per_serving":  2.93,
-    "cost_per_serving_true":  3.12,
-    "cost_pantry_add":  28.06,
-    "cost_first_run":  71.81,
+    "cost_batch":  38.23,
+    "cost_batch_true":  40.77,
+    "cost_per_serving":  2.73,
+    "cost_per_serving_true":  2.91,
+    "cost_pantry_add":  20.12,
+    "cost_first_run":  60.89,
     "scaler":  {
-                   "cost":  "43.75",
+                   "cost":  "40.77",
                    "ing":  [
                                {
                                    "item":  "Pork Tenderloin",
@@ -187,5 +204,59 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Pork Tenderloin",
+            "grams":  3400
+        },
+        {
+            "item":  "Potato",
+            "grams":  3400
+        },
+        {
+            "item":  "Green Beans",
+            "grams":  900
+        },
+        {
+            "item":  "Balsamic Vinegar",
+            "grams":  120
+        },
+        {
+            "item":  "Brown Sugar",
+            "grams":  90
+        },
+        {
+            "item":  "Soy Sauce",
+            "grams":  60
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  240
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  30
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  4
+        },
+        {
+            "item":  "Garlic Powder",
+            "grams":  4
+        },
+        {
+            "item":  "Chili Powder",
+            "grams":  2
+        },
+        {
+            "item":  "Salt",
+            "grams":  8
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  3
+        }
+    ]
 }

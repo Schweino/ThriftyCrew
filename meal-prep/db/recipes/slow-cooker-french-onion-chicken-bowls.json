@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-french-onion-chicken-bowls",
     "cuisine":  "American",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://ohsnapmacros.com/crockpot-french-onion-chicken/",
     "source_site":  "Oh Snap Macros",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  580,
                  "protein":  67,
@@ -33,6 +36,21 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (3 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 8 lb: ~$16.96. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.01. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 9 onions: ~$2.26. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",
+                       "Beef Broth, 2 cups: ~$0.73. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Greek Yogurt, 1 tub: ~$1.23. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Parmesan Cheese, 1 1/2 cups: ~$1.69. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
+                       "Condensed French Onion Soup, 2 cans (10.5 oz each): ~$2.26. \u003cstrong\u003eBuy 2 10.5oz cans: $2.26.\u003c/strong\u003e",
+                       "Swiss Cheese, 6.25 oz + topping: ~$1.33. \u003cstrong\u003eBuy 1 8oz: $1.67.\u003c/strong\u003e",
+                       "Worcestershire Sauce, 2.25 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.84 across 14 servings, so roughly $1.99 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.18 across 14 servings, roughly $2.30 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.74 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.92. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.71 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "This whole dish is built on onions, so \u003cstrong\u003ebuy the big three-pound bag\u003c/strong\u003e when it\u0027s cheap and you\u0027ve got the star ingredient covered.",
@@ -49,14 +67,14 @@
     "portion_html":  "You get a strong 67 grams of protein and 580 calories per serving, one of the highest-protein bowls here.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://ohsnapmacros.com/crockpot-french-onion-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eOh Snap Macros\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheap onions, patient cooking, and a big protein payoff. That\u0027s a win any way you slice it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  37.23,
-    "cost_batch_true":  42.4,
-    "cost_per_serving":  2.66,
-    "cost_per_serving_true":  3.03,
-    "cost_pantry_add":  8.13,
-    "cost_first_run":  50.53,
+    "cost_batch":  27.84,
+    "cost_batch_true":  32.18,
+    "cost_per_serving":  1.99,
+    "cost_per_serving_true":  2.3,
+    "cost_pantry_add":  5.74,
+    "cost_first_run":  37.92,
     "scaler":  {
-                   "cost":  "42.40",
+                   "cost":  "32.18",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -176,5 +194,55 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3450
+        },
+        {
+            "item":  "Rice",
+            "grams":  820
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  900
+        },
+        {
+            "item":  "Beef Broth",
+            "grams":  480
+        },
+        {
+            "item":  "Greek Yogurt",
+            "grams":  340
+        },
+        {
+            "item":  "Parmesan Cheese",
+            "grams":  140
+        },
+        {
+            "item":  "Garlic Powder",
+            "grams":  12
+        },
+        {
+            "item":  "Condensed French Onion Soup",
+            "grams":  600
+        },
+        {
+            "item":  "Swiss Cheese",
+            "grams":  180
+        },
+        {
+            "item":  "Worcestershire Sauce",
+            "grams":  40
+        },
+        {
+            "item":  "Salt",
+            "grams":  14
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  3
+        }
+    ]
 }

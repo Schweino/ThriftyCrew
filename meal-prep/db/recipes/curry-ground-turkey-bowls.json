@@ -3,6 +3,7 @@
     "slug":  "curry-ground-turkey-bowls",
     "cuisine":  "Indian",
     "protein":  "turkey",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.familyfoodonthetable.com/curry-ground-turkey-with-rice-and-peas/",
     "source_site":  "Family Food on the Table",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  600,
                  "protein":  51,
@@ -33,6 +36,20 @@
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.25 tbsp EVOO (16 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Turkey, 8 lb: ~$34.11. \u003cstrong\u003eBuy 8 lbs: $36.40.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Diced Tomatoes, 2 cans: ~$1.63. \u003cstrong\u003eBuy 2 cans: $1.68.\u003c/strong\u003e",
+                       "Coconut Milk, 0.75 cups: ~$0.92. \u003cstrong\u003eBuy 1 13.5oz can: $1.84.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.60. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Frozen Peas, 1 cup frozen: ~$1.06. \u003cstrong\u003eBuy 2 12oz bags: $1.47.\u003c/strong\u003e",
+                       "Garlic, 2 cloves, minced: ~$0.41. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Olive Oil, 1.25 tbsp EVOO: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (chili powder, ground cumin, curry powder, salt): ~$0.85. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $40.60 across 14 servings, so roughly $2.90 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $44.86 across 14 servings, roughly $3.20 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.86 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.72. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.98 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Grab the \u003cstrong\u003e8 lb ground turkey pack\u003c/strong\u003e for the lowest price on the biggest ingredient.",
@@ -49,14 +66,14 @@
     "portion_html":  "Each of the 14 bowls delivers 51 grams of protein and about 600 calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.familyfoodonthetable.com/curry-ground-turkey-with-rice-and-peas/\" target=\"_blank\" rel=\"noopener\"\u003eFamily Food on the Table\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cozy, filling, and easy on the budget, this is comfort food that loves you back. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  42.3,
-    "cost_batch_true":  46.67,
-    "cost_per_serving":  3.02,
-    "cost_per_serving_true":  3.33,
-    "cost_pantry_add":  15.55,
-    "cost_first_run":  62.22,
+    "cost_batch":  40.6,
+    "cost_batch_true":  44.86,
+    "cost_per_serving":  2.9,
+    "cost_per_serving_true":  3.2,
+    "cost_pantry_add":  10.86,
+    "cost_first_run":  55.72,
     "scaler":  {
-                   "cost":  "46.67",
+                   "cost":  "44.86",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Turkey",
@@ -176,5 +193,55 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Turkey",
+            "grams":  3400
+        },
+        {
+            "item":  "Rice",
+            "grams":  700
+        },
+        {
+            "item":  "Diced Tomatoes",
+            "grams":  800
+        },
+        {
+            "item":  "Coconut Milk",
+            "grams":  200
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  240
+        },
+        {
+            "item":  "Chili Powder",
+            "grams":  24
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  8
+        },
+        {
+            "item":  "Curry Powder",
+            "grams":  14
+        },
+        {
+            "item":  "Frozen Peas",
+            "grams":  490
+        },
+        {
+            "item":  "Garlic",
+            "grams":  35
+        },
+        {
+            "item":  "Salt",
+            "grams":  16
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  16
+        }
+    ]
 }

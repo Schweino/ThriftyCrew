@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-chicken-cacciatore-pasta",
     "cuisine":  "Italian",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.wellplated.com/slow-cooker-chicken-cacciatore/",
     "source_site":  "Well Plated",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  570,
                  "protein":  67,
@@ -33,6 +36,21 @@
                                 "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 2.75 tbsp (12 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 8 lb: ~$16.22. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
+                       "Penne Pasta, 9 3/4 cups: ~$2.09. \u003cstrong\u003eBuy 3 16oz boxes: $2.91.\u003c/strong\u003e",
+                       "Traditional Pasta Sauce, 3 2/3 cups: ~$2.31. \u003cstrong\u003eBuy 2 24oz jars: $3.50.\u003c/strong\u003e",
+                       "White Mushrooms, 6 1/2 cups: ~$3.74. \u003cstrong\u003eBuy 2 8oz packs: $3.77.\u003c/strong\u003e",
+                       "Green Bell Peppers, 2 peppers: ~$1.72. \u003cstrong\u003eBuy 2 each: $1.72.\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.40. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Olive Oil, 1 1/2 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 2 cloves: ~$0.10. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Balsamic Vinegar, 1 tbsp + 1/2 tsp: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, italian seasoning): ~$0.55. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.64 across 14 servings, so roughly $1.97 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.40 across 14 servings, roughly $2.31 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $13.78 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.18. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.30 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "A jar of traditional pasta sauce beats making it from scratch on both time and cost, so \u003cstrong\u003egrab the store-brand jar\u003c/strong\u003e and doctor it with the veg.",
@@ -49,14 +67,14 @@
     "portion_html":  "Each serving carries 67 grams of protein and 570 calories, a genuinely high-protein pasta plate.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.wellplated.com/slow-cooker-chicken-cacciatore/\" target=\"_blank\" rel=\"noopener\"\u003eWell Plated\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Big-batch Italian comfort that reheats like a dream. This one\u0027s a keeper. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  36,
-    "cost_batch_true":  41.82,
-    "cost_per_serving":  2.57,
-    "cost_per_serving_true":  2.99,
-    "cost_pantry_add":  19.03,
-    "cost_first_run":  60.85,
+    "cost_batch":  27.64,
+    "cost_batch_true":  32.4,
+    "cost_per_serving":  1.97,
+    "cost_per_serving_true":  2.31,
+    "cost_pantry_add":  13.78,
+    "cost_first_run":  46.18,
     "scaler":  {
-                   "cost":  "41.82",
+                   "cost":  "32.40",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -176,5 +194,55 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3300
+        },
+        {
+            "item":  "Penne Pasta",
+            "grams":  980
+        },
+        {
+            "item":  "Traditional Pasta Sauce",
+            "grams":  900
+        },
+        {
+            "item":  "White Mushrooms",
+            "grams":  450
+        },
+        {
+            "item":  "Green Bell Peppers",
+            "grams":  240
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  160
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  20
+        },
+        {
+            "item":  "Garlic",
+            "grams":  9
+        },
+        {
+            "item":  "Salt",
+            "grams":  12
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  3
+        },
+        {
+            "item":  "Balsamic Vinegar",
+            "grams":  40
+        },
+        {
+            "item":  "Italian Seasoning",
+            "grams":  12
+        }
+    ]
 }

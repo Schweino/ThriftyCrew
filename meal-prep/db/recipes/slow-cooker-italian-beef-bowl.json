@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-italian-beef-bowl",
     "cuisine":  "Italian",
     "protein":  "beef",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://tasteandsee.com/slow-cooker-italian-beef/",
     "source_site":  "Taste and See",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  504,
                  "protein":  36,
@@ -32,6 +35,21 @@
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tsp (8 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Beef Chuck Roast, 4 lb: ~$31.87. \u003cstrong\u003eBuy 4 lbs: $31.88.\u003c/strong\u003e",
+                       "Pepperoncini, 3 1/4 cups: ~$1.54. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Beef Broth, 1 2/3 cups: ~$0.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.32. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 3 cloves: ~$0.20. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.80. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Seasoned Black Beans, 2 cans: ~$2.97. \u003cstrong\u003eBuy 2 cans: $3.33.\u003c/strong\u003e",
+                       "Green Bell Peppers, 4 peppers: ~$3.41. \u003cstrong\u003eBuy 4 each: $3.44.\u003c/strong\u003e",
+                       "Reduced Fat Mozzarella, 7 slices: ~$1.51. \u003cstrong\u003eBuy 1 8oz bag: $1.75.\u003c/strong\u003e",
+                       "Pantry seasonings (italian seasoning, salt): ~$0.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $43.50 across 14 servings, so roughly $3.11 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.22 across 14 servings, roughly $3.23 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $2.83 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.05. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.43 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eWatch for chuck roast markdowns.\u003c/strong\u003e This cut is your cheapest path to fourteen filling dinners. Buy it when the price drops and freeze it until slow cooker day.",
@@ -50,14 +68,14 @@
     "portion_html":  "Weigh the full pot of finished beef and peppers, subtract the empty pot weight you wrote down, and divide by 14. Give each container that same scoop over an even bed of rice and beans so no bowl comes up short.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://tasteandsee.com/slow-cooker-italian-beef/\" target=\"_blank\" rel=\"noopener\"\u003eTaste and See\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "That is fourteen warm, satisfying Italian beef bowls from one roast and a jar of peppers, at a fraction of the cost of takeout. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  44.51,
-    "cost_batch_true":  46.31,
-    "cost_per_serving":  3.18,
-    "cost_per_serving_true":  3.31,
-    "cost_pantry_add":  4.31,
-    "cost_first_run":  50.62,
+    "cost_batch":  43.5,
+    "cost_batch_true":  45.22,
+    "cost_per_serving":  3.11,
+    "cost_per_serving_true":  3.23,
+    "cost_pantry_add":  2.83,
+    "cost_first_run":  48.05,
     "scaler":  {
-                   "cost":  "46.31",
+                   "cost":  "45.22",
                    "ing":  [
                                {
                                    "item":  "Beef Chuck Roast",
@@ -171,5 +189,51 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Beef Chuck Roast",
+            "grams":  1814
+        },
+        {
+            "item":  "Pepperoncini",
+            "grams":  300
+        },
+        {
+            "item":  "Beef Broth",
+            "grams":  400
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  128
+        },
+        {
+            "item":  "Garlic",
+            "grams":  17
+        },
+        {
+            "item":  "Italian Seasoning",
+            "grams":  7
+        },
+        {
+            "item":  "Rice",
+            "grams":  650
+        },
+        {
+            "item":  "Seasoned Black Beans",
+            "grams":  455
+        },
+        {
+            "item":  "Green Bell Peppers",
+            "grams":  476
+        },
+        {
+            "item":  "Reduced Fat Mozzarella",
+            "grams":  196
+        },
+        {
+            "item":  "Salt",
+            "grams":  8
+        }
+    ]
 }

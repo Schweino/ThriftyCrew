@@ -3,6 +3,7 @@
     "slug":  "fajita-chicken-rice-bowl",
     "cuisine":  "Tex-Mex",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "",
     "source_site":  "",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  541,
                  "protein":  49,
@@ -28,6 +31,18 @@
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tablespoons (100 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 5.5 lb raw: ~$12.27. \u003cstrong\u003eBuy 6 lbs: $13.38.\u003c/strong\u003e",
+                       "Seasoned Black Beans, 5 1/4 cups: ~$5.94. \u003cstrong\u003eBuy 4 cans: $6.66.\u003c/strong\u003e",
+                       "Rice, 4 cups dry jasmine: ~$0.99. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Bell Peppers, 6 medium: ~$5.12. \u003cstrong\u003eBuy 6 each: $5.16.\u003c/strong\u003e",
+                       "Yellow Onion, 1 small onion, sliced: ~$0.75. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Olive Oil, 2 tablespoons: ~$0.99. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (fajita seasoning): ~$4.30. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $30.36 across 14 servings, so roughly $2.17 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.62 across 14 servings, roughly $2.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.25 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.87. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "That\u0027s about \u003cstrong\u003e$2.78 a bowl\u003c/strong\u003e (at everyday cost), versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a single fast-casual fajita bowl.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy chicken when it\u0027s on sale, then freeze it.\u003c/strong\u003e Stores drop chicken to a sale price at random. We recently grabbed 50 lbs on a deep markdown instead of our usual shelf price and loaded the deep freezer. At about 5.5 lbs per batch, that one buy makes about 9 batches, or roughly 63 nights of dinner for two.",
@@ -47,14 +62,14 @@
     "portion_html":  "Set the full pot on your large scale and subtract the empty-pot weight you noted in Step 1. That\u0027s your total food weight. Divide it by 14, then scoop that amount into each glass container. Every bowl lands right at about 541 cal and 49g protein.",
     "credit_html":  "",
     "upsell_html":  "Two weeks of high-protein dinners for about $2.78 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money, work, and life lessons, all for $1 a month.",
-    "cost_batch":  37.71,
-    "cost_batch_true":  40.49,
-    "cost_per_serving":  2.69,
-    "cost_per_serving_true":  2.89,
-    "cost_pantry_add":  8.85,
-    "cost_first_run":  49.34,
+    "cost_batch":  30.36,
+    "cost_batch_true":  32.62,
+    "cost_per_serving":  2.17,
+    "cost_per_serving_true":  2.33,
+    "cost_pantry_add":  6.25,
+    "cost_first_run":  38.87,
     "scaler":  {
-                   "cost":  "40.49",
+                   "cost":  "32.62",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -135,5 +150,35 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  2495
+        },
+        {
+            "item":  "Seasoned Black Beans",
+            "grams":  910
+        },
+        {
+            "item":  "Rice",
+            "grams":  800
+        },
+        {
+            "item":  "Fajita Seasoning",
+            "grams":  238
+        },
+        {
+            "item":  "Green Bell Peppers",
+            "grams":  715
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  300
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  100
+        }
+    ]
 }

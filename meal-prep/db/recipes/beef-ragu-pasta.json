@@ -3,6 +3,7 @@
     "slug":  "beef-ragu-pasta",
     "cuisine":  "Italian",
     "protein":  "beef",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://inquiringchef.com/simple-beef-ragu-slow-cooker-instant-pot-stovetop/",
     "source_site":  "Inquiring Chef",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  603,
                  "protein":  55,
@@ -35,6 +38,22 @@
                                 "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 2.25 tsp (9 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 6 lb: ~$35.76. \u003cstrong\u003eBuy 6 lbs: $39.72.\u003c/strong\u003e",
+                       "Penne Pasta, 11 cups: ~$2.31. \u003cstrong\u003eBuy 3 16oz boxes: $2.91.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.75. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 1 lb: ~$0.42. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Crushed Tomatoes, 2 cans: ~$2.49. \u003cstrong\u003eBuy 2 28oz cans: $3.04.\u003c/strong\u003e",
+                       "Tomato Paste, 1/3 cup: ~$0.36. \u003cstrong\u003eBuy 1 6oz can: $0.61.\u003c/strong\u003e",
+                       "Beef Broth, 2 cups: ~$0.76. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Parmesan Cheese, 1 cup: ~$0.97. \u003cstrong\u003eBuy 1 8oz tub: $2.74.\u003c/strong\u003e",
+                       "Garlic, 4 cloves: ~$0.23. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Vegetable Oil, 2.25 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (italian seasoning, salt, black pepper, sugar): ~$0.30. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $44.42 across 14 servings, so roughly $3.17 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $52.70 across 14 servings, roughly $3.76 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.47 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.17. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.51 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Store-brand canned tomatoes make a sauce every bit as good as the name brands. \u003cstrong\u003eBuy the cheapest crushed tomatoes and tomato paste\u003c/strong\u003e and save the money.",
@@ -52,14 +71,14 @@
     "portion_html":  "Each of the 14 servings gives you 55 grams of protein at 603 calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://inquiringchef.com/simple-beef-ragu-slow-cooker-instant-pot-stovetop/\" target=\"_blank\" rel=\"noopener\"\u003eInquiring Chef\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Slow-simmered flavor, weeknight ease, and a price that lets you cook it as often as you like. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  48.04,
-    "cost_batch_true":  58.08,
-    "cost_per_serving":  3.43,
-    "cost_per_serving_true":  4.15,
-    "cost_pantry_add":  12.96,
-    "cost_first_run":  71.04,
+    "cost_batch":  44.42,
+    "cost_batch_true":  52.7,
+    "cost_per_serving":  3.17,
+    "cost_per_serving_true":  3.76,
+    "cost_pantry_add":  10.47,
+    "cost_first_run":  63.17,
     "scaler":  {
-                   "cost":  "58.08",
+                   "cost":  "52.70",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -195,5 +214,63 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Beef",
+            "grams":  2450
+        },
+        {
+            "item":  "Penne Pasta",
+            "grams":  1080
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  300
+        },
+        {
+            "item":  "Carrots",
+            "grams":  200
+        },
+        {
+            "item":  "Crushed Tomatoes",
+            "grams":  1300
+        },
+        {
+            "item":  "Tomato Paste",
+            "grams":  100
+        },
+        {
+            "item":  "Beef Broth",
+            "grams":  500
+        },
+        {
+            "item":  "Parmesan Cheese",
+            "grams":  80
+        },
+        {
+            "item":  "Garlic",
+            "grams":  20
+        },
+        {
+            "item":  "Italian Seasoning",
+            "grams":  6
+        },
+        {
+            "item":  "Vegetable Oil",
+            "grams":  30
+        },
+        {
+            "item":  "Salt",
+            "grams":  6
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  2
+        },
+        {
+            "item":  "Sugar",
+            "grams":  9
+        }
+    ]
 }

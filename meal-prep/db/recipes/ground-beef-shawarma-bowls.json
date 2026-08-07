@@ -3,6 +3,7 @@
     "slug":  "ground-beef-shawarma-bowls",
     "cuisine":  "Middle Eastern",
     "protein":  "beef",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.closetcooking.com/20-minute-skillet-beef-shawarma/",
     "source_site":  "Closet Cooking",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  595,
                  "protein":  48,
@@ -31,6 +34,19 @@
                                 "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 2/3 tbsp (6 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 6 lb: ~$35.76. \u003cstrong\u003eBuy 6 lbs: $39.72.\u003c/strong\u003e",
+                       "Rice, 6.25 cups dry: ~$1.38. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.75. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Greek Yogurt, 1 tub: ~$1.81. \u003cstrong\u003eBuy 1 32oz tub: $3.28.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1 can: ~$0.82. \u003cstrong\u003eBuy 1 can: $0.84.\u003c/strong\u003e",
+                       "Beef Broth, 1 1/4 cups: ~$0.46. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 5 cloves: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, paprika, garlic powder): ~$0.34. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $41.61 across 14 servings, so roughly $2.97 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $47.62 across 14 servings, roughly $3.40 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.92 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.54. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.75 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Build the shawarma spice from \u003cstrong\u003ecumin, paprika, and garlic powder\u003c/strong\u003e in your rack instead of paying up for a pre-mixed shawarma blend.",
@@ -47,14 +63,14 @@
     "portion_html":  "Every one of the 14 bowls carries 48 grams of protein at 595 calories, so this spiced favorite fuels you as well as it tastes.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.closetcooking.com/20-minute-skillet-beef-shawarma/\" target=\"_blank\" rel=\"noopener\"\u003eCloset Cooking\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Street-cart flavor from your own kitchen, portioned and ready. Adventure eating on a budget. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  45.68,
-    "cost_batch_true":  52.26,
-    "cost_per_serving":  3.26,
-    "cost_per_serving_true":  3.73,
-    "cost_pantry_add":  5.87,
-    "cost_first_run":  58.13,
+    "cost_batch":  41.61,
+    "cost_batch_true":  47.62,
+    "cost_per_serving":  2.97,
+    "cost_per_serving_true":  3.4,
+    "cost_pantry_add":  4.92,
+    "cost_first_run":  52.54,
     "scaler":  {
-                   "cost":  "52.26",
+                   "cost":  "47.62",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -158,5 +174,47 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Beef",
+            "grams":  2450
+        },
+        {
+            "item":  "Rice",
+            "grams":  1120
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  300
+        },
+        {
+            "item":  "Greek Yogurt",
+            "grams":  500
+        },
+        {
+            "item":  "Diced Tomatoes",
+            "grams":  400
+        },
+        {
+            "item":  "Beef Broth",
+            "grams":  300
+        },
+        {
+            "item":  "Garlic",
+            "grams":  25
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  8
+        },
+        {
+            "item":  "Paprika",
+            "grams":  8
+        },
+        {
+            "item":  "Garlic Powder",
+            "grams":  6
+        }
+    ]
 }

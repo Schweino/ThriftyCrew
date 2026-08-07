@@ -3,6 +3,7 @@
     "slug":  "mongolian-ground-beef-bowls",
     "cuisine":  "Chinese",
     "protein":  "beef",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.eatyourselfskinny.com/healthy-mongolian-ground-beef-bowls/",
     "source_site":  "Eat Yourself Skinny",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  559,
                  "protein":  43,
@@ -38,6 +41,27 @@
                                 "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 6.75 tbsp, thinly sliced (40 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 5 lb: ~$33.28. \u003cstrong\u003eBuy 6 lbs: $39.72.\u003c/strong\u003e",
+                       "Rice, 5.75 cups dry: ~$1.27. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Broccoli Florets, 8 1/4 cups: ~$2.40. \u003cstrong\u003eBuy 3 12oz bags: $3.49.\u003c/strong\u003e",
+                       "Red Bell Pepper, 3 peppers: ~$2.45. \u003cstrong\u003eBuy 3 each: $2.94.\u003c/strong\u003e",
+                       "Soy Sauce, 1/2 cup: ~$0.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 3 3/4 tbsp: ~$0.63. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 5 cloves: ~$0.28. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Ginger, 1 root: ~$0.06. \u003cstrong\u003eBuy 1 piece: $0.31.\u003c/strong\u003e",
+                       "Olive Oil, 3.75 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Hoisin Sauce, 3.25 tbsp: ~$0.58. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sesame Oil, 1.25 tbsp: ~$0.25. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice Vinegar, 1.25 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cornstarch, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Beef Broth, 1 cup (or water): ~$0.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Onions, 6.75 tbsp, thinly sliced: ~$0.35. \u003cstrong\u003eBuy 1 bunch: $0.79.\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, red pepper flakes): ~$0.11. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $43.18 across 14 servings, so roughly $3.08 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $52.07 across 14 servings, roughly $3.72 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $25.30 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $77.37. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$5.53 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Lean 93/7 ground beef is the priciest part, so shop the sales. \u003cstrong\u003eBuy ground beef in family packs when it is marked down\u003c/strong\u003e and freeze in meal-sized portions.",
@@ -55,14 +79,14 @@
     "portion_html":  "Each of the 14 servings delivers 43 grams of protein at 559 calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eatyourselfskinny.com/healthy-mongolian-ground-beef-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eEat Yourself Skinny\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fifteen minutes of work and you have takeout flavor at a fraction of the cost. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  47.84,
-    "cost_batch_true":  57.66,
-    "cost_per_serving":  3.42,
-    "cost_per_serving_true":  4.12,
-    "cost_pantry_add":  33.05,
-    "cost_first_run":  90.71,
+    "cost_batch":  43.18,
+    "cost_batch_true":  52.07,
+    "cost_per_serving":  3.08,
+    "cost_per_serving_true":  3.72,
+    "cost_pantry_add":  25.3,
+    "cost_first_run":  77.37,
     "scaler":  {
-                   "cost":  "57.66",
+                   "cost":  "52.07",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -223,5 +247,75 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Beef",
+            "grams":  2280
+        },
+        {
+            "item":  "Rice",
+            "grams":  1031
+        },
+        {
+            "item":  "Broccoli Florets",
+            "grams":  700
+        },
+        {
+            "item":  "Red Bell Pepper",
+            "grams":  300
+        },
+        {
+            "item":  "Soy Sauce",
+            "grams":  120
+        },
+        {
+            "item":  "Honey",
+            "grams":  80
+        },
+        {
+            "item":  "Garlic",
+            "grams":  24
+        },
+        {
+            "item":  "Ginger",
+            "grams":  20
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  50
+        },
+        {
+            "item":  "Hoisin Sauce",
+            "grams":  52
+        },
+        {
+            "item":  "Sesame Oil",
+            "grams":  16
+        },
+        {
+            "item":  "Rice Vinegar",
+            "grams":  17
+        },
+        {
+            "item":  "Cornstarch",
+            "grams":  28
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  2
+        },
+        {
+            "item":  "Red Pepper Flakes",
+            "grams":  2
+        },
+        {
+            "item":  "Beef Broth",
+            "grams":  210
+        },
+        {
+            "item":  "Green Onions",
+            "grams":  40
+        }
+    ]
 }

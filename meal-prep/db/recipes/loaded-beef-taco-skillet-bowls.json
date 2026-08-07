@@ -3,6 +3,7 @@
     "slug":  "loaded-beef-taco-skillet-bowls",
     "cuisine":  "Mexican",
     "protein":  "beef",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://wholesomemadeeasy.com/loaded-taco-skillet/",
     "source_site":  "Wholesome Made Easy",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  636,
                  "protein":  52,
@@ -39,6 +42,22 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (3 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 5 lb: ~$32.55. \u003cstrong\u003eBuy 5 lbs: $33.10.\u003c/strong\u003e",
+                       "Seasoned Black Beans, 14 cups: ~$15.44. \u003cstrong\u003eBuy 10 cans: $16.64.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.52. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 3 cups: ~$0.95. \u003cstrong\u003eBuy 2 cans: $1.64.\u003c/strong\u003e",
+                       "Zucchini, 2 zucchinis: ~$1.34. \u003cstrong\u003eBuy 1 lb: $1.52.\u003c/strong\u003e",
+                       "Tomato Sauce, 1 3/4 cups: ~$0.89. \u003cstrong\u003eBuy 2 15oz cans: $1.68.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 2 1/2 cups: ~$2.13. \u003cstrong\u003eBuy 2 8oz bags: $3.45.\u003c/strong\u003e",
+                       "Vegetable Oil, 2.25 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 1/2 cup diced: ~$0.70. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Red Bell Pepper, 2 peppers diced: ~$2.12. \u003cstrong\u003eBuy 3 each: $2.94.\u003c/strong\u003e",
+                       "Pantry seasonings (chili powder, ground cumin, garlic powder, dried oregano, paprika, salt, red pepper flakes, black pepper): ~$0.87. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $57.58 across 14 servings, so roughly $4.11 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $63.57 across 14 servings, roughly $4.54 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $12.14 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $75.71. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$5.41 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Canned black beans are one of the best cheap protein boosters you can buy. \u003cstrong\u003eStock up on canned beans\u003c/strong\u003e when they hit their lowest price.",
@@ -56,14 +75,14 @@
     "portion_html":  "Each of the 14 servings brings 52 grams of protein and 636 calories, a genuinely loaded bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://wholesomemadeeasy.com/loaded-taco-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eWholesome Made Easy\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Taco night flavor with the budget math working in your favor, all from one pan. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  61.09,
-    "cost_batch_true":  67.9,
-    "cost_per_serving":  4.36,
-    "cost_per_serving_true":  4.85,
-    "cost_pantry_add":  15.32,
-    "cost_first_run":  83.22,
+    "cost_batch":  57.58,
+    "cost_batch_true":  63.57,
+    "cost_per_serving":  4.11,
+    "cost_per_serving_true":  4.54,
+    "cost_pantry_add":  12.14,
+    "cost_first_run":  75.71,
     "scaler":  {
-                   "cost":  "67.90",
+                   "cost":  "63.57",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -231,5 +250,79 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Beef",
+            "grams":  2230
+        },
+        {
+            "item":  "Seasoned Black Beans",
+            "grams":  2366
+        },
+        {
+            "item":  "Rice",
+            "grams":  420
+        },
+        {
+            "item":  "Sweet Whole Kernel Corn",
+            "grams":  500
+        },
+        {
+            "item":  "Zucchini",
+            "grams":  400
+        },
+        {
+            "item":  "Tomato Sauce",
+            "grams":  450
+        },
+        {
+            "item":  "Cheddar Cheese, Shredded",
+            "grams":  280
+        },
+        {
+            "item":  "Chili Powder",
+            "grams":  18
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  8
+        },
+        {
+            "item":  "Vegetable Oil",
+            "grams":  30
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  280
+        },
+        {
+            "item":  "Red Bell Pepper",
+            "grams":  260
+        },
+        {
+            "item":  "Garlic Powder",
+            "grams":  9
+        },
+        {
+            "item":  "Dried Oregano",
+            "grams":  5
+        },
+        {
+            "item":  "Paprika",
+            "grams":  5
+        },
+        {
+            "item":  "Salt",
+            "grams":  5
+        },
+        {
+            "item":  "Red Pepper Flakes",
+            "grams":  2
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  3
+        }
+    ]
 }

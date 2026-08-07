@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-chicken-tagine-bowls",
     "cuisine":  "Moroccan",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.cookingclassy.com/slow-cooker-chicken-and-chick-pea-tagine/",
     "source_site":  "Cooking Classy",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  567,
                  "protein":  62,
@@ -39,6 +42,23 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 8 lb: ~$16.96. \u003cstrong\u003eBuy 8 lbs: $17.84.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.99. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chickpeas, 2 1/2 cups: ~$1.27. \u003cstrong\u003eBuy 2 cans: $1.62.\u003c/strong\u003e",
+                       "Diced Tomatoes, 1 can: ~$0.82. \u003cstrong\u003eBuy 1 can: $0.84.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.60. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 2 carrots: ~$0.25. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Olive Oil, 2 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Chicken Broth, 1/3 cup: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 2 cloves: ~$0.10. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Lime Juice, 1 1/2 tbsp: ~$0.51. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fresh Cilantro, 14 tbsp chopped: ~$0.22. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Pantry seasonings (ground coriander, ground cumin, ground turmeric, ground cinnamon, ground ginger, salt, black pepper): ~$0.86. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $22.98 across 14 servings, so roughly $1.64 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $26.50 across 14 servings, roughly $1.89 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.89 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.39. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.46 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Canned chickpeas and tomatoes are pantry gold, so \u003cstrong\u003ekeep a few cans stocked\u003c/strong\u003e and you can build this almost anytime.",
@@ -55,14 +75,14 @@
     "portion_html":  "Each serving lands at 62 grams of protein and 567 calories, hearty eating for barely over two dollars.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.cookingclassy.com/slow-cooker-chicken-and-chick-pea-tagine/\" target=\"_blank\" rel=\"noopener\"\u003eCooking Classy\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheap, cozy, and packed with protein. This is what a good slow cooker night looks like. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  33.03,
-    "cost_batch_true":  38.66,
-    "cost_per_serving":  2.36,
-    "cost_per_serving_true":  2.76,
-    "cost_pantry_add":  27.65,
-    "cost_first_run":  66.31,
+    "cost_batch":  22.98,
+    "cost_batch_true":  26.5,
+    "cost_per_serving":  1.64,
+    "cost_per_serving_true":  1.89,
+    "cost_pantry_add":  21.89,
+    "cost_first_run":  48.39,
     "scaler":  {
-                   "cost":  "38.66",
+                   "cost":  "26.50",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -230,5 +250,79 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3450
+        },
+        {
+            "item":  "Rice",
+            "grams":  800
+        },
+        {
+            "item":  "Chickpeas",
+            "grams":  400
+        },
+        {
+            "item":  "Diced Tomatoes",
+            "grams":  400
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  240
+        },
+        {
+            "item":  "Carrots",
+            "grams":  120
+        },
+        {
+            "item":  "Olive Oil",
+            "grams":  28
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  80
+        },
+        {
+            "item":  "Garlic",
+            "grams":  9
+        },
+        {
+            "item":  "Lime Juice",
+            "grams":  22
+        },
+        {
+            "item":  "Ground Coriander",
+            "grams":  10
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  9
+        },
+        {
+            "item":  "Ground Turmeric",
+            "grams":  5
+        },
+        {
+            "item":  "Ground Cinnamon",
+            "grams":  5
+        },
+        {
+            "item":  "Ground Ginger",
+            "grams":  3
+        },
+        {
+            "item":  "Fresh Cilantro",
+            "grams":  14
+        },
+        {
+            "item":  "Salt",
+            "grams":  15
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  4
+        }
+    ]
 }

@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-kalua-pork-bowls",
     "cuisine":  "Hawaiian",
     "protein":  "pork",
+    "servings":  14,
     "visibility":  "public",
     "source_url":  "https://downshiftology.com/recipes/slow-cooker-kalua-pork/",
     "source_site":  "Downshiftology",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  567,
                  "protein":  56,
@@ -26,6 +29,16 @@
                                 "\u003cstrong\u003eLiquid Smoke:\u003c/strong\u003e 15 g (15 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Loin, 8 lb: ~$16.04. \u003cstrong\u003eBuy 8 lbs: $17.12.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.99. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Cabbage, 4 lb: ~$2.62. \u003cstrong\u003eBuy 2 heads: $3.37.\u003c/strong\u003e",
+                       "Liquid Smoke, 15 g: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt): ~$0.02. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $19.88 across 14 servings, so roughly $1.42 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $21.71 across 14 servings, roughly $1.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $2.31 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $24.02. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$1.72 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "This recipe wins on a \u003cstrong\u003eshort ingredient list\u003c/strong\u003e. Just pork, rice, and cabbage means fewer things to buy and less to go wrong.",
@@ -43,14 +56,14 @@
     "portion_html":  "Every serving comes in around 567 calories with 56 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://downshiftology.com/recipes/slow-cooker-kalua-pork/\" target=\"_blank\" rel=\"noopener\"\u003eDownshiftology\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Three ingredients, about $1.72 a bowl (at everyday cost), and it tastes like the islands. Hard to argue with that. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  21.11,
-    "cost_batch_true":  22.94,
-    "cost_per_serving":  1.51,
-    "cost_per_serving_true":  1.64,
-    "cost_pantry_add":  3.67,
-    "cost_first_run":  26.61,
+    "cost_batch":  19.88,
+    "cost_batch_true":  21.71,
+    "cost_per_serving":  1.42,
+    "cost_per_serving_true":  1.55,
+    "cost_pantry_add":  2.31,
+    "cost_first_run":  24.02,
     "scaler":  {
-                   "cost":  "22.94",
+                   "cost":  "21.71",
                    "ing":  [
                                {
                                    "item":  "Pork Loin",
@@ -115,5 +128,27 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Pork Loin",
+            "grams":  3400
+        },
+        {
+            "item":  "Rice",
+            "grams":  800
+        },
+        {
+            "item":  "Green Cabbage",
+            "grams":  1400
+        },
+        {
+            "item":  "Salt",
+            "grams":  15
+        },
+        {
+            "item":  "Liquid Smoke",
+            "grams":  15
+        }
+    ]
 }

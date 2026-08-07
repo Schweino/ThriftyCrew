@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
     "cuisine":  "Mexican",
     "protein":  "chicken",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.eatyourselfskinny.com/chicken-tortilla-soup/",
     "source_site":  "Eat Yourself Skinny",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  559,
                  "protein":  57,
@@ -38,6 +41,24 @@
                                 "\u003cstrong\u003eLime Juice:\u003c/strong\u003e juice of 1 lime (60 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Breast, 7 lb: ~$14.75. \u003cstrong\u003eBuy 7 lbs: $15.61.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$1.01. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Crushed Tomatoes, 2 1/2 cups: ~$1.15. \u003cstrong\u003eBuy 1 28oz can: $1.52.\u003c/strong\u003e",
+                       "Seasoned Black Beans, 2 cans: ~$3.26. \u003cstrong\u003eBuy 2 cans: $3.33.\u003c/strong\u003e",
+                       "Sweet Whole Kernel Corn, 2 1/2 cups: ~$0.76. \u003cstrong\u003eBuy 1 can: $0.82.\u003c/strong\u003e",
+                       "Cheddar Cheese, Shredded, 1 cup: ~$0.85. \u003cstrong\u003eBuy 1 8oz bag: $1.73.\u003c/strong\u003e",
+                       "Yellow Onion, 1 medium: ~$0.55. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 3 cloves: ~$0.35. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Chicken Broth, 4 cups: ~$2.56. \u003cstrong\u003ePantry staple; this batch alone uses about 2 32oz cartons.\u003c/strong\u003e",
+                       "Enchilada Sauce, 10 oz can: ~$2.13. \u003cstrong\u003eBuy 2 10oz cans: $2.13.\u003c/strong\u003e",
+                       "Diced Green Chiles, 4.5 oz can: ~$2.45. \u003cstrong\u003ePantry staple; this batch alone uses about 3 4oz cans.\u003c/strong\u003e",
+                       "Lime Juice, juice of 1 lime: ~$1.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, chili powder, salt, black pepper, bay leaves): ~$0.64. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $31.84 across 14 servings, so roughly $2.27 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.78 across 14 servings, roughly $2.48 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $10.44 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.22. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.23 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Canned \u003cstrong\u003eblack beans and corn\u003c/strong\u003e are pantry-cheap and do a lot of the flavor and filling work here.",
@@ -55,14 +76,14 @@
     "portion_html":  "Each of the 14 servings comes in around 57g protein for about 559 calories, at roughly $2.07 a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eatyourselfskinny.com/chicken-tortilla-soup/\" target=\"_blank\" rel=\"noopener\"\u003eEat Yourself Skinny\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheap, cozy, and ready to go, this is meal prep that actually makes you smile. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  39.14,
-    "cost_batch_true":  42.58,
-    "cost_per_serving":  2.8,
-    "cost_per_serving_true":  3.04,
-    "cost_pantry_add":  10.62,
-    "cost_first_run":  53.2,
+    "cost_batch":  31.84,
+    "cost_batch_true":  34.78,
+    "cost_per_serving":  2.27,
+    "cost_per_serving_true":  2.48,
+    "cost_pantry_add":  10.44,
+    "cost_first_run":  45.22,
     "scaler":  {
-                   "cost":  "42.58",
+                   "cost":  "34.78",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",
@@ -223,5 +244,75 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Boneless Skinless Chicken Breast",
+            "grams":  3000
+        },
+        {
+            "item":  "Rice",
+            "grams":  820
+        },
+        {
+            "item":  "Crushed Tomatoes",
+            "grams":  600
+        },
+        {
+            "item":  "Seasoned Black Beans",
+            "grams":  500
+        },
+        {
+            "item":  "Sweet Whole Kernel Corn",
+            "grams":  400
+        },
+        {
+            "item":  "Cheddar Cheese, Shredded",
+            "grams":  112
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  220
+        },
+        {
+            "item":  "Garlic",
+            "grams":  30
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  1680
+        },
+        {
+            "item":  "Enchilada Sauce",
+            "grams":  570
+        },
+        {
+            "item":  "Diced Green Chiles",
+            "grams":  255
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  16
+        },
+        {
+            "item":  "Chili Powder",
+            "grams":  16
+        },
+        {
+            "item":  "Salt",
+            "grams":  12
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  2
+        },
+        {
+            "item":  "Bay Leaves",
+            "grams":  1
+        },
+        {
+            "item":  "Lime Juice",
+            "grams":  60
+        }
+    ]
 }

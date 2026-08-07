@@ -3,6 +3,7 @@
     "slug":  "ground-beef-fried-rice-bowls",
     "cuisine":  "Asian",
     "protein":  "beef",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://withthewoodruffs.com/ground-beef-fried-rice/",
     "source_site":  "With the Woodruffs",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  593,
                  "protein":  46,
@@ -34,6 +37,23 @@
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (6 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 6 lb: ~$35.76. \u003cstrong\u003eBuy 6 lbs: $39.72.\u003c/strong\u003e",
+                       "Rice, 5.75 cups dry: ~$1.26. \u003cstrong\u003ePantry staple; this batch alone uses about 2 2lb bags.\u003c/strong\u003e",
+                       "Frozen Green Peas, 3 cups: ~$0.86. \u003cstrong\u003eBuy 2 12oz bags: $1.47.\u003c/strong\u003e",
+                       "Carrots, 1 lb: ~$0.63. \u003cstrong\u003eBuy 1 lb: $0.95.\u003c/strong\u003e",
+                       "Yellow Onion, 3 onions: ~$0.63. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Soy Sauce, 2/3 cup: ~$0.68. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sesame Oil, 2 1/4 tbsp: ~$0.46. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 4 cloves: ~$0.23. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Ginger, 1 root: ~$0.04. \u003cstrong\u003eBuy 1 piece: $0.31.\u003c/strong\u003e",
+                       "Eggs, 3 large eggs: ~$1.35. \u003cstrong\u003eBuy 1 dozen: $1.62.\u003c/strong\u003e",
+                       "Vegetable Oil, 7.25 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper): ~$0.19. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $42.33 across 14 servings, so roughly $3.02 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $48.50 across 14 servings, roughly $3.46 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.18. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.16 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Use \u003cstrong\u003eday-old cold rice\u003c/strong\u003e if you can. It fries up firmer and cheaper than any restaurant version and keeps this recipe from going gummy.",
@@ -51,14 +71,14 @@
     "portion_html":  "Each of the 14 bowls serves 46 grams of protein at 593 calories, turning a takeout treat into a meal-prep workhorse.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://withthewoodruffs.com/ground-beef-fried-rice/\" target=\"_blank\" rel=\"noopener\"\u003eWith the Woodruffs\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "The cure for leftover rice and takeout cravings in one skillet. Cook once, eat all week. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  47.66,
-    "cost_batch_true":  55.46,
-    "cost_per_serving":  3.4,
-    "cost_per_serving_true":  3.96,
-    "cost_pantry_add":  13.77,
-    "cost_first_run":  69.23,
+    "cost_batch":  42.33,
+    "cost_batch_true":  48.5,
+    "cost_per_serving":  3.02,
+    "cost_per_serving_true":  3.46,
+    "cost_pantry_add":  9.68,
+    "cost_first_run":  58.18,
     "scaler":  {
-                   "cost":  "55.46",
+                   "cost":  "48.50",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",
@@ -187,5 +207,59 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "93/7 Ground Beef",
+            "grams":  2450
+        },
+        {
+            "item":  "Rice",
+            "grams":  1020
+        },
+        {
+            "item":  "Frozen Green Peas",
+            "grams":  400
+        },
+        {
+            "item":  "Carrots",
+            "grams":  300
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  250
+        },
+        {
+            "item":  "Soy Sauce",
+            "grams":  180
+        },
+        {
+            "item":  "Sesame Oil",
+            "grams":  30
+        },
+        {
+            "item":  "Garlic",
+            "grams":  20
+        },
+        {
+            "item":  "Ginger",
+            "grams":  12
+        },
+        {
+            "item":  "Eggs",
+            "grams":  500
+        },
+        {
+            "item":  "Vegetable Oil",
+            "grams":  100
+        },
+        {
+            "item":  "Salt",
+            "grams":  12
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  6
+        }
+    ]
 }

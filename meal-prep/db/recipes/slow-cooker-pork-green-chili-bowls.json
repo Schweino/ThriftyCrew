@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-pork-green-chili-bowls",
     "cuisine":  "New Mexican",
     "protein":  "pork",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.cakenknife.com/pork-green-chili/",
     "source_site":  "Cake \u0027n Knife",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  558,
                  "protein":  55,
@@ -39,6 +42,24 @@
                                 "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 lime (45 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Loin, 8 lb: ~$16.51. \u003cstrong\u003eBuy 8 lbs: $17.12.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Diced Green Chiles, 7 cans: ~$7.31. \u003cstrong\u003ePantry staple; this batch alone uses about 7 4oz cans.\u003c/strong\u003e",
+                       "Salsa Verde, 1 jar: ~$2.62. \u003cstrong\u003eBuy 1 16oz jar: $2.64.\u003c/strong\u003e",
+                       "Yellow Onion, 2 onions: ~$0.30. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Chicken Broth, 2 cups: ~$1.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Chile Sauce, 16 oz jar: ~$3.96. \u003cstrong\u003eBuy 2 16oz cans: $5.28.\u003c/strong\u003e",
+                       "Jalapeno, 3 jalapenos: ~$0.17. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Garlic, 4 cloves: ~$0.46. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Butter, 2 Tbsp: ~$0.28. \u003cstrong\u003eBuy 1 lb box: $2.56.\u003c/strong\u003e",
+                       "All-Purpose Flour, 1/4 cup: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lime Juice, 1 lime: ~$1.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, salt, black pepper, smoked paprika, cayenne pepper, dried oregano): ~$0.57. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $35.41 across 14 servings, so roughly $2.53 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $42.07 across 14 servings, roughly $3.00 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.75. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.05 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  "Canned diced green chiles give you all the roasted pepper flavor without any roasting or peeling. Stock up when they go on sale.\nA jar of salsa verde rounds out the sauce so you do not need extra spices. One jar covers the whole batch.\nPork loin keeps this cheap. It is the reason this bowl stays easy on the budget, so buy the big loin when it hits a sale.",
     "make_it":  [
@@ -52,14 +73,14 @@
     "portion_html":  "Every serving comes in around 558 calories with 55 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.cakenknife.com/pork-green-chili/\" target=\"_blank\" rel=\"noopener\"\u003eCake \u0027n Knife\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Tangy, warming, and easy on the wallet. Ladle it over rice and you are set. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  34.55,
-    "cost_batch_true":  41.7,
-    "cost_per_serving":  2.47,
-    "cost_per_serving_true":  2.98,
-    "cost_pantry_add":  14.93,
-    "cost_first_run":  56.63,
+    "cost_batch":  35.41,
+    "cost_batch_true":  42.07,
+    "cost_per_serving":  2.53,
+    "cost_per_serving_true":  3,
+    "cost_pantry_add":  14.68,
+    "cost_first_run":  56.75,
     "scaler":  {
-                   "cost":  "41.70",
+                   "cost":  "42.07",
                    "ing":  [
                                {
                                    "item":  "Pork Loin",
@@ -228,5 +249,79 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Pork Loin",
+            "grams":  3500
+        },
+        {
+            "item":  "Rice",
+            "grams":  700
+        },
+        {
+            "item":  "Diced Green Chiles",
+            "grams":  760
+        },
+        {
+            "item":  "Salsa Verde",
+            "grams":  450
+        },
+        {
+            "item":  "Yellow Onion",
+            "grams":  120
+        },
+        {
+            "item":  "Chicken Broth",
+            "grams":  840
+        },
+        {
+            "item":  "Green Chile Sauce",
+            "grams":  680
+        },
+        {
+            "item":  "Jalapeno",
+            "grams":  45
+        },
+        {
+            "item":  "Garlic",
+            "grams":  40
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  15
+        },
+        {
+            "item":  "Salt",
+            "grams":  8
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  3
+        },
+        {
+            "item":  "Smoked Paprika",
+            "grams":  3
+        },
+        {
+            "item":  "Cayenne Pepper",
+            "grams":  2
+        },
+        {
+            "item":  "Dried Oregano",
+            "grams":  2
+        },
+        {
+            "item":  "Butter",
+            "grams":  50
+        },
+        {
+            "item":  "All-Purpose Flour",
+            "grams":  60
+        },
+        {
+            "item":  "Lime Juice",
+            "grams":  45
+        }
+    ]
 }

@@ -3,6 +3,7 @@
     "slug":  "slow-cooker-cuban-mojo-pork-bowls",
     "cuisine":  "Cuban",
     "protein":  "pork",
+    "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.eatingonadime.com/crock-pot-cuban-mojo-pork-tenderloin/",
     "source_site":  "Eating on a Dime",
@@ -10,6 +11,8 @@
     "tuning":  [
 
                ],
+    "writer_notes":  [],
+    "forbidden_prose_terms":  [],
     "stat":  {
                  "cal":  565,
                  "protein":  60,
@@ -34,6 +37,21 @@
                                 "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 2.25 tbsp (18 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Tenderloin, 8 lb: ~$29.76. \u003cstrong\u003eBuy 8 lbs: $31.77.\u003c/strong\u003e",
+                       "Seasoned Black Beans, 7 cups: ~$7.83. \u003cstrong\u003eBuy 5 cans: $8.32.\u003c/strong\u003e",
+                       "Rice, 1 lb: ~$0.79. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Orange Juice, 2 cups: ~$1.03. \u003cstrong\u003eBuy 1 52floz carton: $3.36.\u003c/strong\u003e",
+                       "Lime Juice, 4 tbsp: ~$1.38. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 3 cloves: ~$0.17. \u003cstrong\u003eBuy 1 head: $0.46.\u003c/strong\u003e",
+                       "Fresh Cilantro, 2 1/4 cups chopped: ~$0.55. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
+                       "Fresh Mint, 1/3 cup chopped: ~$1.51. \u003cstrong\u003eBuy 1 0.5oz pack: $1.76.\u003c/strong\u003e",
+                       "Cornstarch, 2.25 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, dried oregano, salt, black pepper): ~$0.54. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $43.64 across 14 servings, so roughly $3.12 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $49.35 across 14 servings, roughly $3.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.09 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.44. Those containers then feed this batch and many more after it."
+                   ],
     "cost_closing_html":  "About \u003cstrong\u003e$4.32 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Canned \u003cstrong\u003eseasoned black beans save you the spices\u003c/strong\u003e and the soak time. They come pre-flavored, so you get more taste for less work.",
@@ -51,14 +69,14 @@
     "portion_html":  "Every serving delivers around 565 calories and a strong 60 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eatingonadime.com/crock-pot-cuban-mojo-pork-tenderloin/\" target=\"_blank\" rel=\"noopener\"\u003eEating on a Dime\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Bright, filling, and cheap. That is a combination worth keeping in your regular rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
-    "cost_batch":  43.96,
-    "cost_batch_true":  49.76,
-    "cost_per_serving":  3.14,
-    "cost_per_serving_true":  3.55,
-    "cost_pantry_add":  11.37,
-    "cost_first_run":  61.13,
+    "cost_batch":  43.64,
+    "cost_batch_true":  49.35,
+    "cost_per_serving":  3.12,
+    "cost_per_serving_true":  3.52,
+    "cost_pantry_add":  11.09,
+    "cost_first_run":  60.44,
     "scaler":  {
-                   "cost":  "49.76",
+                   "cost":  "49.35",
                    "ing":  [
                                {
                                    "item":  "Pork Tenderloin",
@@ -187,5 +205,59 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M"
-             }
+             },
+    "ingredients_grams":  [
+        {
+            "item":  "Pork Tenderloin",
+            "grams":  3400
+        },
+        {
+            "item":  "Seasoned Black Beans",
+            "grams":  1200
+        },
+        {
+            "item":  "Rice",
+            "grams":  640
+        },
+        {
+            "item":  "Orange Juice",
+            "grams":  480
+        },
+        {
+            "item":  "Lime Juice",
+            "grams":  60
+        },
+        {
+            "item":  "Garlic",
+            "grams":  15
+        },
+        {
+            "item":  "Ground Cumin",
+            "grams":  8
+        },
+        {
+            "item":  "Dried Oregano",
+            "grams":  6
+        },
+        {
+            "item":  "Fresh Cilantro",
+            "grams":  35
+        },
+        {
+            "item":  "Fresh Mint",
+            "grams":  12
+        },
+        {
+            "item":  "Salt",
+            "grams":  12
+        },
+        {
+            "item":  "Black Pepper",
+            "grams":  6
+        },
+        {
+            "item":  "Cornstarch",
+            "grams":  18
+        }
+    ]
 }
