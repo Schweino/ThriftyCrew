@@ -4,42 +4,14 @@
     "price_type":  "everyday",
     "source":  "Freshop catalog base_price (store_id 6401, Omaha), NOT Instacart",
     "deal_count":  4853,
-    "fresh_count":  231,
-    "carried_count":  4622,
+    "fresh_count":  0,
+    "carried_count":  4853,
     "expired_count":  0,
     "expired_starved":  0,
     "expired_churn":  0,
     "expired_unknown":  0,
     "max_carry_days":  14,
     "empty_terms":  [
-                        "poblano peppers",
-                        "fresh basil",
-                        "fresh mint",
-                        "turkey breast",
-                        "chile de arbol",
-                        "guajillo chiles",
-                        "ancho chiles",
-                        "diced ham",
-                        "sazon",
-                        "eggplant",
-                        "brown gravy mix",
-                        "chicken livers",
-                        "sweet soy sauce",
-                        "caraway seed",
-                        "poultry seasoning",
-                        "papaya",
-                        "fresh cranberries",
-                        "plantains",
-                        "whole coconut",
-                        "medjool dates",
-                        "dried cranberries",
-                        "prunes",
-                        "shallots",
-                        "yukon gold potatoes",
-                        "mini sweet peppers",
-                        "serrano peppers",
-                        "anaheim peppers",
-                        "habanero peppers",
                         "fresh bean sprouts",
                         "broccolini",
                         "fennel bulb",
@@ -480,7 +452,95 @@
                         "curry powder",
                         "garam masala",
                         "five spice powder",
-                        "cayenne pepper"
+                        "cayenne pepper",
+                        "dried thyme",
+                        "dried basil",
+                        "dill weed",
+                        "bay leaves",
+                        "ground cloves",
+                        "ground coriander",
+                        "ground allspice",
+                        "ground nutmeg",
+                        "ground ginger",
+                        "poppy seeds",
+                        "chopped walnuts",
+                        "quick grits",
+                        "corn muffin mix",
+                        "refrigerated biscuits",
+                        "cheese tortellini",
+                        "gnocchi",
+                        "rice noodles",
+                        "sun dried tomatoes",
+                        "chipotle peppers in adobo",
+                        "tomatillos",
+                        "poblano peppers",
+                        "fresh basil",
+                        "fresh mint",
+                        "turkey breast",
+                        "chile de arbol",
+                        "guajillo chiles",
+                        "ancho chiles",
+                        "diced ham",
+                        "sazon",
+                        "eggplant",
+                        "brown gravy mix",
+                        "chicken livers",
+                        "sweet soy sauce",
+                        "caraway seed",
+                        "poultry seasoning",
+                        "wild rice",
+                        "chili bean sauce",
+                        "fennel seed",
+                        "snow peas",
+                        "horseradish sauce",
+                        "corned beef brisket",
+                        "pigeon peas",
+                        "aji amarillo paste",
+                        "rye bread",
+                        "ricotta cheese",
+                        "red onion",
+                        "cherry tomatoes",
+                        "ginger snaps",
+                        "corn chips",
+                        "turkey smoked sausage",
+                        "93 lean ground beef",
+                        "jumbo pasta shells",
+                        "nectarines",
+                        "fresh apricots",
+                        "pomegranate",
+                        "papaya",
+                        "fresh cranberries",
+                        "plantains",
+                        "whole coconut",
+                        "medjool dates",
+                        "dried cranberries",
+                        "prunes",
+                        "shallots",
+                        "yukon gold potatoes",
+                        "mini sweet peppers",
+                        "serrano peppers",
+                        "anaheim peppers",
+                        "habanero peppers",
+                        "fresh beets",
+                        "turnips",
+                        "parsnips",
+                        "rutabaga",
+                        "leeks",
+                        "collard greens",
+                        "mustard greens",
+                        "turnip greens",
+                        "swiss chard",
+                        "bok choy",
+                        "butternut squash",
+                        "acorn squash",
+                        "spaghetti squash",
+                        "sugar snap peas",
+                        "spring mix",
+                        "baby arugula",
+                        "garden salad bag",
+                        "caesar salad kit",
+                        "coleslaw mix",
+                        "fresh stir fry vegetables"
                     ],
     "deals":  [
                   {
@@ -495,7 +555,8 @@
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/crackers/other_crackers/simple_mills_almond_flour_crackers_tomato_basil_sun_dried_4_25_oz/p/5979802",
                       "product_id":  "5979802",
-                      "found_by_term":  "dried basil"
+                      "found_by_term":  "dried basil",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -509,7 +570,8 @@
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/sausage/smoked/gilbert_s_sausage_chicken_caprese_with_basil_mozzarella_sun_dried_tomatoes_10_oz/p/5588160",
                       "product_id":  "5588160",
-                      "found_by_term":  "dried basil"
+                      "found_by_term":  "dried basil",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -523,7 +585,8 @@
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/our_family_dill_weed_0_56_oz/p/1564405684702629730",
                       "product_id":  "1564405684702629730",
-                      "found_by_term":  "dill weed"
+                      "found_by_term":  "dill weed",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -537,7 +600,8 @@
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/tone_s_dill_weed_0_25_oz/p/235165",
                       "product_id":  "235165",
-                      "found_by_term":  "dill weed"
+                      "found_by_term":  "dill weed",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -551,7 +615,8 @@
                       "base_price":  7.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/mc_cormick_gourmet_organic_dill_weed_0_5_oz/p/2371535",
                       "product_id":  "2371535",
-                      "found_by_term":  "dill weed"
+                      "found_by_term":  "dill weed",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -565,7 +630,8 @@
                       "base_price":  4.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/dan_s_dill_weed/p/5782328",
                       "product_id":  "5782328",
-                      "found_by_term":  "dill weed"
+                      "found_by_term":  "dill weed",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -579,7 +645,8 @@
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/dill_weed_full_circle_organic/p/596629",
                       "product_id":  "596629",
-                      "found_by_term":  "dill weed"
+                      "found_by_term":  "dill weed",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -593,7 +660,8 @@
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/our_family_bay_leaves_0_12_oz/p/7194347",
                       "product_id":  "7194347",
-                      "found_by_term":  "bay leaves"
+                      "found_by_term":  "bay leaves",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -607,7 +675,8 @@
                       "base_price":  4.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/full_circle_market_bay_leaves_organic/p/604551",
                       "product_id":  "604551",
-                      "found_by_term":  "bay leaves"
+                      "found_by_term":  "bay leaves",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -621,7 +690,8 @@
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/mc_cormick_bay_leaves_0_12_oz/p/34740",
                       "product_id":  "34740",
-                      "found_by_term":  "bay leaves"
+                      "found_by_term":  "bay leaves",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -635,7 +705,8 @@
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/tone_s_cloves_ground_0_55_oz/p/235160",
                       "product_id":  "235160",
-                      "found_by_term":  "ground cloves"
+                      "found_by_term":  "ground cloves",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -649,7 +720,8 @@
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/our_family_cloves_ground_2_oz/p/1564405684709172594",
                       "product_id":  "1564405684709172594",
-                      "found_by_term":  "ground cloves"
+                      "found_by_term":  "ground cloves",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -663,7 +735,8 @@
                       "base_price":  2.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/sugar_n_spice_cloves_ground_pp/p/1564405684701720687",
                       "product_id":  "1564405684701720687",
-                      "found_by_term":  "ground cloves"
+                      "found_by_term":  "ground cloves",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -677,7 +750,8 @@
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/tone_s_allspice_ground_0_6_oz/p/235148",
                       "product_id":  "235148",
-                      "found_by_term":  "ground allspice"
+                      "found_by_term":  "ground allspice",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -691,7 +765,8 @@
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/tone_s_nutmeg_ground_0_6_oz/p/235176",
                       "product_id":  "235176",
-                      "found_by_term":  "ground nutmeg"
+                      "found_by_term":  "ground nutmeg",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -705,7 +780,8 @@
                       "base_price":  6.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/mc_cormick_ground_nutmeg_1_1_oz/p/34656",
                       "product_id":  "34656",
-                      "found_by_term":  "ground nutmeg"
+                      "found_by_term":  "ground nutmeg",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -719,7 +795,8 @@
                       "base_price":  6.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/our_family_nutmeg_ground_2_12_oz/p/7194337",
                       "product_id":  "7194337",
-                      "found_by_term":  "ground nutmeg"
+                      "found_by_term":  "ground nutmeg",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -733,7 +810,8 @@
                       "base_price":  6.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/finest_reserve_nutmeg_ground_1_8_oz/p/1564405684714873803",
                       "product_id":  "1564405684714873803",
-                      "found_by_term":  "ground nutmeg"
+                      "found_by_term":  "ground nutmeg",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -747,7 +825,8 @@
                       "base_price":  3.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/sugar_n_spice_nutmeg_ground_pp/p/1564405684701720747",
                       "product_id":  "1564405684701720747",
-                      "found_by_term":  "ground nutmeg"
+                      "found_by_term":  "ground nutmeg",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -761,7 +840,8 @@
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/mc_cormick_ground_ginger_0_7_oz/p/7584971",
                       "product_id":  "7584971",
-                      "found_by_term":  "ground ginger"
+                      "found_by_term":  "ground ginger",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -775,7 +855,8 @@
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/tone_s_ginger_ground_0_55_oz/p/235168",
                       "product_id":  "235168",
-                      "found_by_term":  "ground ginger"
+                      "found_by_term":  "ground ginger",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -789,7 +870,8 @@
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/full_circle_market_ground_ginger_1_6_oz/p/599157",
                       "product_id":  "599157",
-                      "found_by_term":  "ground ginger"
+                      "found_by_term":  "ground ginger",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -803,7 +885,8 @@
                       "base_price":  10.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/spice_islands_ground_ginger_1_9_oz/p/1564405684704747758",
                       "product_id":  "1564405684704747758",
-                      "found_by_term":  "ground ginger"
+                      "found_by_term":  "ground ginger",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -817,7 +900,8 @@
                       "base_price":  6.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/finest_reserve_ginger_ground_1_6_oz/p/1564405684714873777",
                       "product_id":  "1564405684714873777",
-                      "found_by_term":  "ground ginger"
+                      "found_by_term":  "ground ginger",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -831,7 +915,8 @@
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/mc_cormick_poppy_seed_1_25_oz/p/2370995",
                       "product_id":  "2370995",
-                      "found_by_term":  "poppy seeds"
+                      "found_by_term":  "poppy seeds",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -845,7 +930,8 @@
                       "base_price":  4.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/finest_reserve_dressing_creamy_poppy_seed_12_fl_oz/p/1564405684715389577",
                       "product_id":  "1564405684715389577",
-                      "found_by_term":  "poppy seeds"
+                      "found_by_term":  "poppy seeds",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -859,7 +945,8 @@
                       "base_price":  5.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressings_gourmet/newman_s_own_dressing_poppy_seed_16_fl_oz/p/2326071",
                       "product_id":  "2326071",
-                      "found_by_term":  "poppy seeds"
+                      "found_by_term":  "poppy seeds",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -873,7 +960,8 @@
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/spice_islands_poppy_seed_2_6_oz/p/1564405684704747770",
                       "product_id":  "1564405684704747770",
-                      "found_by_term":  "poppy seeds"
+                      "found_by_term":  "poppy seeds",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -887,7 +975,8 @@
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/whole_grains/poppy_seeds_sugar_n_spice/p/1564405684701719823",
                       "product_id":  "1564405684701719823",
-                      "found_by_term":  "poppy seeds"
+                      "found_by_term":  "poppy seeds",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -901,7 +990,8 @@
                       "base_price":  5.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/briannas_dressing_sugar_free_rich_poppy_seed_12_fl_oz/p/1564405684713865674",
                       "product_id":  "1564405684713865674",
-                      "found_by_term":  "poppy seeds"
+                      "found_by_term":  "poppy seeds",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -915,7 +1005,8 @@
                       "base_price":  5.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/baking/nuts_more/our_family_chopped_walnuts_8_oz/p/1564405684689268171",
                       "product_id":  "1564405684689268171",
-                      "found_by_term":  "chopped walnuts"
+                      "found_by_term":  "chopped walnuts",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -929,7 +1020,8 @@
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/baking/nuts_more/our_family_chopped_walnuts_2_25_oz/p/1564405684689268163",
                       "product_id":  "1564405684689268163",
-                      "found_by_term":  "chopped walnuts"
+                      "found_by_term":  "chopped walnuts",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -943,7 +1035,8 @@
                       "base_price":  3.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/nuts/diamond_of_california_walnut_chopped_2_25_oz/p/262543",
                       "product_id":  "262543",
-                      "found_by_term":  "chopped walnuts"
+                      "found_by_term":  "chopped walnuts",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -957,7 +1050,8 @@
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/baking/nuts_more/diamond_of_california_walnuts_chopped_8_oz/p/1564405684703827653",
                       "product_id":  "1564405684703827653",
-                      "found_by_term":  "chopped walnuts"
+                      "found_by_term":  "chopped walnuts",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -971,7 +1065,8 @@
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/breakfast/hot_cereals/quaker_quick_5_minute_grits_24_oz/p/22154",
                       "product_id":  "22154",
-                      "found_by_term":  "quick grits"
+                      "found_by_term":  "quick grits",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -985,7 +1080,8 @@
                       "base_price":  1.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/baking/bread_muffin_mixes/jiffy_sweet_spicy_hot_honey_corn_muffin_mix_7_oz/p/1764405684715965258",
                       "product_id":  "1764405684715965258",
-                      "found_by_term":  "corn muffin mix"
+                      "found_by_term":  "corn muffin mix",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -999,7 +1095,8 @@
                       "base_price":  0.75,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/baking/bread_muffin_mixes/jiffy_corn_muffin_mix_8_5_oz/p/8934",
                       "product_id":  "8934",
-                      "found_by_term":  "corn muffin mix"
+                      "found_by_term":  "corn muffin mix",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1013,7 +1110,8 @@
                       "base_price":  0.75,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/baking/bread_muffin_mixes/jiffy_corn_muffin_mix_vegetarian_8_5_oz/p/40622",
                       "product_id":  "40622",
-                      "found_by_term":  "corn muffin mix"
+                      "found_by_term":  "corn muffin mix",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1027,7 +1125,8 @@
                       "base_price":  4.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/baking/bread_muffin_mixes/famous_dave_s_original_recipe_corn_bread_mix_15_oz/p/2042241",
                       "product_id":  "2042241",
-                      "found_by_term":  "corn muffin mix"
+                      "found_by_term":  "corn muffin mix",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1041,7 +1140,8 @@
                       "base_price":  4.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/baking/bread_muffin_mixes/famous_dave_s_medium_jalapeno_corn_bread_mix_15_oz/p/1564405684710423282",
                       "product_id":  "1564405684710423282",
-                      "found_by_term":  "corn muffin mix"
+                      "found_by_term":  "corn muffin mix",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1055,7 +1155,8 @@
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/buttermilk_flavored_jumbo_biscuits/p/6787398",
                       "product_id":  "6787398",
-                      "found_by_term":  "refrigerated biscuits"
+                      "found_by_term":  "refrigerated biscuits",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1069,7 +1170,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/pillsbury_southern_homestyle_buttermilk_biscuits_8_ea/p/10490",
                       "product_id":  "10490",
-                      "found_by_term":  "refrigerated biscuits"
+                      "found_by_term":  "refrigerated biscuits",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1083,7 +1185,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/pillsbury_flaky_layers_butter_tastin_biscuits_8_ea/p/5898",
                       "product_id":  "5898",
-                      "found_by_term":  "refrigerated biscuits"
+                      "found_by_term":  "refrigerated biscuits",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1097,7 +1200,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/pillsbury_flaky_layers_honey_butter_biscuits_8_ea/p/16750",
                       "product_id":  "16750",
-                      "found_by_term":  "refrigerated biscuits"
+                      "found_by_term":  "refrigerated biscuits",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1111,7 +1215,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/pillsbury_southern_homestyle_butter_tastin_biscuits_8_ea/p/16725",
                       "product_id":  "16725",
-                      "found_by_term":  "refrigerated biscuits"
+                      "found_by_term":  "refrigerated biscuits",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1125,7 +1230,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/pillsbury_southern_homestyle_butter_tastin_biscuits_5_ea/p/562276",
                       "product_id":  "562276",
-                      "found_by_term":  "refrigerated biscuits"
+                      "found_by_term":  "refrigerated biscuits",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1139,7 +1245,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/pillsbury_southern_homestyle_buttermilk_biscuits_5_ea/p/2324100",
                       "product_id":  "2324100",
-                      "found_by_term":  "refrigerated biscuits"
+                      "found_by_term":  "refrigerated biscuits",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1153,7 +1260,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/pillsbury_maple_biscuits_8_ea/p/1764405684715980316",
                       "product_id":  "1764405684715980316",
-                      "found_by_term":  "refrigerated biscuits"
+                      "found_by_term":  "refrigerated biscuits",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1167,7 +1275,8 @@
                       "base_price":  1.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/our_family_biscuits_buttermilk_10_ea/p/6787396",
                       "product_id":  "6787396",
-                      "found_by_term":  "refrigerated biscuits"
+                      "found_by_term":  "refrigerated biscuits",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1181,7 +1290,8 @@
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/our_family_biscuits_butter_jumbo_8_ea/p/6787399",
                       "product_id":  "6787399",
-                      "found_by_term":  "refrigerated biscuits"
+                      "found_by_term":  "refrigerated biscuits",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1195,7 +1305,8 @@
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/jumbo_butter_flaky_biscuit_dough_our_family_8_ct/p/1564405684703971373",
                       "product_id":  "1564405684703971373",
-                      "found_by_term":  "refrigerated biscuits"
+                      "found_by_term":  "refrigerated biscuits",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1209,7 +1320,8 @@
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/refrigerated_doughs_batters/biscuit_dough_jumbo_flaky_our_family_8_ct/p/6787401",
                       "product_id":  "6787401",
-                      "found_by_term":  "refrigerated biscuits"
+                      "found_by_term":  "refrigerated biscuits",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1223,7 +1335,8 @@
                       "base_price":  5.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_pasta_plus/our_family_tortellini_cheese_classic_curls_19_oz/p/7081925",
                       "product_id":  "7081925",
-                      "found_by_term":  "cheese tortellini"
+                      "found_by_term":  "cheese tortellini",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1237,7 +1350,8 @@
                       "base_price":  11.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/ready_to_go_cold/rana_5_cheese_tortellini_family_size_20_oz/p/5594542",
                       "product_id":  "5594542",
-                      "found_by_term":  "cheese tortellini"
+                      "found_by_term":  "cheese tortellini",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1251,7 +1365,8 @@
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/other_soups/campbell_s_homestyle_soup_cheese_tortellini_with_italian_sausage_16_300_oz/p/1764405684715322322",
                       "product_id":  "1764405684715322322",
-                      "found_by_term":  "cheese tortellini"
+                      "found_by_term":  "cheese tortellini",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1265,7 +1380,8 @@
                       "base_price":  3.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/other_soups/progresso_traditional_cheese_tortellini_soup_18_5_oz/p/1564405684703096513",
                       "product_id":  "1564405684703096513",
-                      "found_by_term":  "cheese tortellini"
+                      "found_by_term":  "cheese tortellini",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1279,7 +1395,8 @@
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/other_pastas/de_lallo_potato_gnocchi_16_oz/p/3686",
                       "product_id":  "3686",
-                      "found_by_term":  "gnocchi"
+                      "found_by_term":  "gnocchi",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1293,7 +1410,8 @@
                       "base_price":  6.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/other_soups/rao_s_chicken_and_gnocchi_soup/p/1764405684716109210",
                       "product_id":  "1764405684716109210",
-                      "found_by_term":  "gnocchi"
+                      "found_by_term":  "gnocchi",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1307,7 +1425,8 @@
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/ready_to_go_cold/rana_skillet_gnocchi_12_oz/p/1564405684689324737",
                       "product_id":  "1564405684689324737",
-                      "found_by_term":  "gnocchi"
+                      "found_by_term":  "gnocchi",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1321,7 +1440,8 @@
                       "base_price":  8.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/packaged_meals/thai_kitchen_med_pad_thai_rice_noodle_cart_9_77_oz/p/2449732",
                       "product_id":  "2449732",
-                      "found_by_term":  "rice noodles"
+                      "found_by_term":  "rice noodles",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1335,7 +1455,8 @@
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/california_sun_dry_sun_dry_tomatoes_jar_halves/p/1764405684715632116",
                       "product_id":  "1764405684715632116",
-                      "found_by_term":  "sun dried tomatoes"
+                      "found_by_term":  "sun dried tomatoes",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1349,7 +1470,8 @@
                       "base_price":  5.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/tomatoes/alessi_tomatoes_sun_dried_julienne_cut_7_oz/p/528394",
                       "product_id":  "528394",
-                      "found_by_term":  "sun dried tomatoes"
+                      "found_by_term":  "sun dried tomatoes",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1363,7 +1485,8 @@
                       "base_price":  5.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/tomatoes/alessi_tomatoes_sun_dried_in_extra_virgin_olive_oil_7_oz/p/38493",
                       "product_id":  "38493",
-                      "found_by_term":  "sun dried tomatoes"
+                      "found_by_term":  "sun dried tomatoes",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1377,7 +1500,8 @@
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/snacks_desserts/fresh_finest_by_our_family_sun_dried_tomato_feta_dip_10_oz/p/1564405684716878403",
                       "product_id":  "1564405684716878403",
-                      "found_by_term":  "sun dried tomatoes"
+                      "found_by_term":  "sun dried tomatoes",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1391,7 +1515,8 @@
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/california_sun_dry_julienne_cut_sun_dried_tomatoes_3_oz/p/55375",
                       "product_id":  "55375",
-                      "found_by_term":  "sun dried tomatoes"
+                      "found_by_term":  "sun dried tomatoes",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1405,7 +1530,8 @@
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/la_costena_chipotles_peppers_in_adobo_sauce_7_oz/p/44529",
                       "product_id":  "44529",
-                      "found_by_term":  "chipotle peppers in adobo"
+                      "found_by_term":  "chipotle peppers in adobo",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1419,7 +1545,8 @@
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/san_marcos_original_recipe_chipotles_peppers_in_adobo_sauce_7_5_oz/p/2392969",
                       "product_id":  "2392969",
-                      "found_by_term":  "chipotle peppers in adobo"
+                      "found_by_term":  "chipotle peppers in adobo",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1433,7 +1560,8 @@
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/other_vegetables/tomatillos/p/12573",
                       "product_id":  "12573",
-                      "found_by_term":  "tomatillos"
+                      "found_by_term":  "tomatillos",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1447,7 +1575,8 @@
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/rice/canoe_white_n_wild_rice_6_oz/p/5779677",
                       "product_id":  "5779677",
-                      "found_by_term":  "wild rice"
+                      "found_by_term":  "wild rice",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1461,7 +1590,8 @@
                       "base_price":  1.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/rice/long_grain_wild_rice_our_family/p/1564405684703913335",
                       "product_id":  "1564405684703913335",
-                      "found_by_term":  "wild rice"
+                      "found_by_term":  "wild rice",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1475,7 +1605,8 @@
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/rice/ben_s_original_original_recipe_long_grain_wild_rice_6_oz/p/1564405684711479277",
                       "product_id":  "1564405684711479277",
-                      "found_by_term":  "wild rice"
+                      "found_by_term":  "wild rice",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1489,7 +1620,8 @@
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/rice/ben_s_original_long_grain_wild_rice_fast_cook_6_2_oz/p/1564405684711479278",
                       "product_id":  "1564405684711479278",
-                      "found_by_term":  "wild rice"
+                      "found_by_term":  "wild rice",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1503,7 +1635,8 @@
                       "base_price":  3.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/chicken_soups/campbell_s_savory_chicken_with_white_and_wild_rice_soup_18_800_oz/p/33842",
                       "product_id":  "33842",
-                      "found_by_term":  "wild rice"
+                      "found_by_term":  "wild rice",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1517,7 +1650,8 @@
                       "base_price":  3.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/chicken_soups/progresso_creamy_roasted_chicken_wild_rice_soup_18_5_oz/p/89522",
                       "product_id":  "89522",
-                      "found_by_term":  "wild rice"
+                      "found_by_term":  "wild rice",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1531,7 +1665,8 @@
                       "base_price":  3.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pets_wildlife/dog/canned_fresh_dog_food/beneful_freshly_prepared_meals_simmered_chicken_medley_with_carrots_green_beans_wild_rice_dog_food_10_oz/p/16598",
                       "product_id":  "16598",
-                      "found_by_term":  "wild rice"
+                      "found_by_term":  "wild rice",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1545,7 +1680,8 @@
                       "base_price":  5.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/soups/fresh_finest_creamy_chicken_wild_rice_soup/p/1564405684714445185",
                       "product_id":  "1564405684714445185",
-                      "found_by_term":  "wild rice"
+                      "found_by_term":  "wild rice",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1559,7 +1695,8 @@
                       "base_price":  5.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/soup_mixes/bear_creek_country_kitchens_creamy_wild_rice_soup_mix_9_6_oz/p/1564405684712936685",
                       "product_id":  "1564405684712936685",
-                      "found_by_term":  "wild rice"
+                      "found_by_term":  "wild rice",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1573,7 +1710,8 @@
                       "base_price":  3.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/chicken_soups/progresso_traditional_chicken_wild_rice_soup_19_oz/p/27890",
                       "product_id":  "27890",
-                      "found_by_term":  "wild rice"
+                      "found_by_term":  "wild rice",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1587,7 +1725,8 @@
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/rice/uncle_bens_ready_rice_rice_long_grain_wild/p/35445",
                       "product_id":  "35445",
-                      "found_by_term":  "wild rice"
+                      "found_by_term":  "wild rice",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1601,7 +1740,8 @@
                       "base_price":  1.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/rice/rice_a_roni_rice_long_grain_wild_original_4_3_oz/p/15963",
                       "product_id":  "15963",
-                      "found_by_term":  "wild rice"
+                      "found_by_term":  "wild rice",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1615,7 +1755,8 @@
                       "base_price":  1.89,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/rice/our_family_rice_with_herbs_spices_long_grain_wild_8_8_oz/p/7194726",
                       "product_id":  "7194726",
-                      "found_by_term":  "wild rice"
+                      "found_by_term":  "wild rice",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1629,7 +1770,8 @@
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/mrs_grimes_original_in_chili_sauce_chili_beans_15_oz/p/597570",
                       "product_id":  "597570",
-                      "found_by_term":  "chili bean sauce"
+                      "found_by_term":  "chili bean sauce",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1643,7 +1785,8 @@
                       "base_price":  2.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/mrs_grimes_original_in_chili_sauce_chili_beans_30_oz/p/598332",
                       "product_id":  "598332",
-                      "found_by_term":  "chili bean sauce"
+                      "found_by_term":  "chili bean sauce",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1657,7 +1800,8 @@
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/mrs_grimes_tex_mex_in_chili_sauce_chili_beans_15_oz/p/6768774",
                       "product_id":  "6768774",
-                      "found_by_term":  "chili bean sauce"
+                      "found_by_term":  "chili bean sauce",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1671,7 +1815,8 @@
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_low_sodium_red_beans_mild_chili_sauce_chili_beans_15_oz/p/1564405684704083960",
                       "product_id":  "1564405684704083960",
-                      "found_by_term":  "chili bean sauce"
+                      "found_by_term":  "chili bean sauce",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1685,7 +1830,8 @@
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_red_beans_medium_chili_sauce_chili_beans_16_oz/p/26830",
                       "product_id":  "26830",
-                      "found_by_term":  "chili bean sauce"
+                      "found_by_term":  "chili bean sauce",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1699,7 +1845,8 @@
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_red_beans_spicy_chili_sauce_chili_beans_16_oz/p/26831",
                       "product_id":  "26831",
-                      "found_by_term":  "chili bean sauce"
+                      "found_by_term":  "chili bean sauce",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1713,7 +1860,8 @@
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_black_beans_mild_chili_sauce_chili_beans_15_5_oz/p/26820",
                       "product_id":  "26820",
-                      "found_by_term":  "chili bean sauce"
+                      "found_by_term":  "chili bean sauce",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1727,7 +1875,8 @@
                       "base_price":  3.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/mrs_grimes_original_chili_beans_in_chili_sauce_40_oz/p/5986303",
                       "product_id":  "5986303",
-                      "found_by_term":  "chili bean sauce"
+                      "found_by_term":  "chili bean sauce",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1741,7 +1890,8 @@
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_kidney_pinto_beans_mild_chili_sauce_mixed_chili_beans_15_5_oz/p/7234484",
                       "product_id":  "7234484",
-                      "found_by_term":  "chili bean sauce"
+                      "found_by_term":  "chili bean sauce",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1755,7 +1905,8 @@
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_great_northern_beans_mild_chili_sauce_white_chili_beans_15_5_oz/p/26819",
                       "product_id":  "26819",
-                      "found_by_term":  "chili bean sauce"
+                      "found_by_term":  "chili bean sauce",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1769,7 +1920,8 @@
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_chili_beans_mild_chili_sauce_red_beans_16_oz/p/26829",
                       "product_id":  "26829",
-                      "found_by_term":  "chili bean sauce"
+                      "found_by_term":  "chili bean sauce",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1783,7 +1935,8 @@
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_chili_beans_mild_chili_sauce_pinto_beans_16_oz/p/561262",
                       "product_id":  "561262",
-                      "found_by_term":  "chili bean sauce"
+                      "found_by_term":  "chili bean sauce",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1797,7 +1950,8 @@
                       "base_price":  0.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/our_family_chili_beans_in_mild_chili_sauce_15_5_oz/p/6786953",
                       "product_id":  "6786953",
-                      "found_by_term":  "chili bean sauce"
+                      "found_by_term":  "chili bean sauce",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1811,7 +1965,8 @@
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_southwest_zest_pinto_beans_in_a_medium_red_chili_sauce_15_oz/p/1564405684711329307",
                       "product_id":  "1564405684711329307",
-                      "found_by_term":  "chili bean sauce"
+                      "found_by_term":  "chili bean sauce",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1825,7 +1980,8 @@
                       "base_price":  1.89,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/sugar_n_spice_fennel_seed_whole_pp/p/1564405684701720729",
                       "product_id":  "1564405684701720729",
-                      "found_by_term":  "fennel seed"
+                      "found_by_term":  "fennel seed",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1839,7 +1995,8 @@
                       "base_price":  6.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/finest_reserve_fennel_seeds_1_6_oz/p/1564405684714873809",
                       "product_id":  "1564405684714873809",
-                      "found_by_term":  "fennel seed"
+                      "found_by_term":  "fennel seed",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1853,7 +2010,8 @@
                       "base_price":  4.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/mc_cormick_fennel_seed_0_85_oz/p/125719",
                       "product_id":  "125719",
-                      "found_by_term":  "fennel seed"
+                      "found_by_term":  "fennel seed",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1867,7 +2025,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/sugar_n_spice_fennel_seed_whole/p/5920282",
                       "product_id":  "5920282",
-                      "found_by_term":  "fennel seed"
+                      "found_by_term":  "fennel seed",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1881,7 +2040,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/silver_spring_sassy_horseradish_sauce_9_25_oz/p/2009254",
                       "product_id":  "2009254",
-                      "found_by_term":  "horseradish sauce"
+                      "found_by_term":  "horseradish sauce",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1895,7 +2055,8 @@
                       "base_price":  8.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/beef/roasts/corned_beef_brisket_flat_cut_colorado_premium_limit_2_per_customer/p/1564405684713031155",
                       "product_id":  "1564405684713031155",
-                      "found_by_term":  "corned beef brisket"
+                      "found_by_term":  "corned beef brisket",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1909,7 +2070,8 @@
                       "base_price":  5.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/rye_bread/village_hearth_bread_rye_unseeded_16_oz/p/2038460",
                       "product_id":  "2038460",
-                      "found_by_term":  "rye bread"
+                      "found_by_term":  "rye bread",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1923,7 +2085,8 @@
                       "base_price":  5.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/rye_bread/village_hearth_bread_rye_seeded_16_oz/p/2040418",
                       "product_id":  "2040418",
-                      "found_by_term":  "rye bread"
+                      "found_by_term":  "rye bread",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1937,7 +2100,8 @@
                       "base_price":  4.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/bakery/fresh_baked_breads/fresh_finest_marble_rye_bread/p/1564405684713022831",
                       "product_id":  "1564405684713022831",
-                      "found_by_term":  "rye bread"
+                      "found_by_term":  "rye bread",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1951,7 +2115,8 @@
                       "base_price":  4.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/bakery/fresh_baked_breads/fresh_finest_rye_bread/p/1564405684713022826",
                       "product_id":  "1564405684713022826",
-                      "found_by_term":  "rye bread"
+                      "found_by_term":  "rye bread",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1965,7 +2130,8 @@
                       "base_price":  4.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/bakery/fresh_baked_breads/fresh_finest_pumpernickel_rye_bread/p/1564405684713022830",
                       "product_id":  "1564405684713022830",
-                      "found_by_term":  "rye bread"
+                      "found_by_term":  "rye bread",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1979,7 +2145,8 @@
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/s_rosen_s_cocktail_size_caraway_rye_bread_12_oz/p/530132",
                       "product_id":  "530132",
-                      "found_by_term":  "rye bread"
+                      "found_by_term":  "rye bread",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -1993,7 +2160,8 @@
                       "base_price":  5.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/rye_bread/village_hearth_bread_pumpernickel_rye_16_oz/p/2043327",
                       "product_id":  "2043327",
-                      "found_by_term":  "rye bread"
+                      "found_by_term":  "rye bread",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2007,7 +2175,8 @@
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/rye_bread/beefsteak_bread_hearty_rye_seeded_18_oz/p/41612",
                       "product_id":  "41612",
-                      "found_by_term":  "rye bread"
+                      "found_by_term":  "rye bread",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2021,7 +2190,8 @@
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/rye_bread/beefsteak_bread_soft_rye_no_seeds_18_oz/p/41613",
                       "product_id":  "41613",
-                      "found_by_term":  "rye bread"
+                      "found_by_term":  "rye bread",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2035,7 +2205,8 @@
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/rye_bread/pepperidge_farm_deli_rye_pump_swirl_bread_16_000_oz/p/15417",
                       "product_id":  "15417",
-                      "found_by_term":  "rye bread"
+                      "found_by_term":  "rye bread",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2049,7 +2220,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/our_family_ricotta_cheese_whole_milk_15_oz/p/1564405684702179158",
                       "product_id":  "1564405684702179158",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2063,7 +2235,8 @@
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/our_family_ricotta_cheese_whole_milk_32_oz/p/1564405684713608136",
                       "product_id":  "1564405684713608136",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2077,7 +2250,8 @@
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/healthier_choices/lean_cuisine_signature_ricotta_cheese_spinach_ravioli_in_a_tomato_garlic_sauce_8_oz/p/2319916",
                       "product_id":  "2319916",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2091,7 +2265,8 @@
                       "base_price":  2.89,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/pasta_sauce_tomato_based/prego_creamy_tomato_pasta_sauce_with_ricotta_cheese_23_750_oz/p/1564405684716721779",
                       "product_id":  "1564405684716721779",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2105,7 +2280,8 @@
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/daisy_low_fat_2_milkfat_cottage_cheese_2_ea/p/1564405684710576404",
                       "product_id":  "1564405684710576404",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2119,7 +2295,8 @@
                       "base_price":  4.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/daisy_low_fat_2_milkfat_small_curd_cottage_cheese_16_oz/p/1535",
                       "product_id":  "1535",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2133,7 +2310,8 @@
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/daisy_low_fat_2_milkfat_small_curd_cottage_cheese_24_oz/p/538301",
                       "product_id":  "538301",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2147,7 +2325,8 @@
                       "base_price":  4.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/daisy_classic_4_milkfat_small_curd_cottage_cheese_16_oz/p/42030",
                       "product_id":  "42030",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2161,7 +2340,8 @@
                       "base_price":  9.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/daisy_4_milkfat_small_curd_classic_cottage_cheese_3_lb/p/1564405684703701451",
                       "product_id":  "1564405684703701451",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2175,7 +2355,8 @@
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/kemps_2_lowfat_2_milkfat_min_small_curd_cottage_cheese_22_oz/p/2038748",
                       "product_id":  "2038748",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2189,7 +2370,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/kemps_small_curd_2_milkfat_min_2_lowfat_cottage_cheese_16_oz/p/561300",
                       "product_id":  "561300",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2203,7 +2385,8 @@
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/daisy_4_milkfat_with_crushed_pineapples_cottage_cheese_6_oz/p/1564405684710268958",
                       "product_id":  "1564405684710268958",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2217,7 +2400,8 @@
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/kemps_1_lowfat_small_curd_cottage_cheese_22_oz/p/2034414",
                       "product_id":  "2034414",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2231,7 +2415,8 @@
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/daisy_4_milkfat_small_curd_classic_cottage_cheese_24_oz/p/521219",
                       "product_id":  "521219",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2245,7 +2430,8 @@
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/daisy_classic_cottage_cheese_2_ea/p/1564405684710576403",
                       "product_id":  "1564405684710576403",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2259,7 +2445,8 @@
                       "base_price":  4.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/kemps_small_curd_4_milkfat_min_cottage_cheese_22_oz/p/580742",
                       "product_id":  "580742",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2273,7 +2460,8 @@
                       "base_price":  3.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/our_family_cottage_cheese_small_curd_4_milkfat_minimum_24_oz/p/7081910",
                       "product_id":  "7081910",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2287,7 +2475,8 @@
                       "base_price":  3.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/our_family_cottage_cheese_large_curd_4_milkfat_minimum_24_oz/p/1564405684702751833",
                       "product_id":  "1564405684702751833",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2301,7 +2490,8 @@
                       "base_price":  2.89,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/our_family_cottage_cheese_small_curd_4_milkfat_min_16_oz/p/7083874",
                       "product_id":  "7083874",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2315,7 +2505,8 @@
                       "base_price":  2.89,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/our_family_cottage_cheese_large_curd_4_milkfat_minimum_16_oz/p/1564405684703027354",
                       "product_id":  "1564405684703027354",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2329,7 +2520,8 @@
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/daisy_cottage_cheese_with_peaches_4_milkfat_minimum_6_oz/p/1564405684712883243",
                       "product_id":  "1564405684712883243",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2343,7 +2535,8 @@
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/daisy_cottage_cheese_with_blueberries_4_milkfat_minimum_6_oz/p/1564405684710268960",
                       "product_id":  "1564405684710268960",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2357,7 +2550,8 @@
                       "base_price":  2.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/daisy_cottage_cheese_with_strawberries_4_milkfat_minimum_6_oz/p/1564405684710268959",
                       "product_id":  "1564405684710268959",
-                      "found_by_term":  "ricotta cheese"
+                      "found_by_term":  "ricotta cheese",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2371,7 +2565,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/our_family_onion_red/p/2341162",
                       "product_id":  "2341162",
-                      "found_by_term":  "red onion"
+                      "found_by_term":  "red onion",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2385,7 +2580,8 @@
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/organic_red_onions/p/2313279",
                       "product_id":  "2313279",
-                      "found_by_term":  "red onion"
+                      "found_by_term":  "red onion",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2399,7 +2595,8 @@
                       "base_price":  1.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/red_onion_set/p/1564405684713020773",
                       "product_id":  "1564405684713020773",
-                      "found_by_term":  "red onion"
+                      "found_by_term":  "red onion",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2413,7 +2610,8 @@
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/the_fresh_divide/fresh_red_onions_sliced_fresh_divide/p/1564405684713033936",
                       "product_id":  "1564405684713033936",
-                      "found_by_term":  "red onion"
+                      "found_by_term":  "red onion",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2427,7 +2625,8 @@
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/the_fresh_divide/fresh_fajita_mix_onions_red_yellow_green_peppers_fresh_divide/p/1564405684713033958",
                       "product_id":  "1564405684713033958",
-                      "found_by_term":  "red onion"
+                      "found_by_term":  "red onion",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2441,7 +2640,8 @@
                       "base_price":  2.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/del_monte_green_beans_french_style_with_onion_red_pepper_garlic_14_5_oz/p/2330574",
                       "product_id":  "2330574",
-                      "found_by_term":  "red onion"
+                      "found_by_term":  "red onion",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2455,7 +2655,8 @@
                       "base_price":  3.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/mt_olive_pickled_red_onions_12_fl_oz/p/1764405684714921934",
                       "product_id":  "1764405684714921934",
-                      "found_by_term":  "red onion"
+                      "found_by_term":  "red onion",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2469,7 +2670,8 @@
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/litehouse_herb_freeze_dried_red_onion_0_6_oz/p/3745",
                       "product_id":  "3745",
-                      "found_by_term":  "red onion"
+                      "found_by_term":  "red onion",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2483,7 +2685,8 @@
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/sweet_red_italian_onions/p/606958",
                       "product_id":  "606958",
-                      "found_by_term":  "red onion"
+                      "found_by_term":  "red onion",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2497,7 +2700,8 @@
                       "base_price":  6.89,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/appetizers_snacks_side_dishes/red_robin_crispy_onion_rings_14_oz/p/2139196",
                       "product_id":  "2139196",
-                      "found_by_term":  "red onion"
+                      "found_by_term":  "red onion",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2511,7 +2715,8 @@
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/bushel_boy_cherry_on_the_vine_tomatoes/p/1564405684712126598",
                       "product_id":  "1564405684712126598",
-                      "found_by_term":  "cherry tomatoes"
+                      "found_by_term":  "cherry tomatoes",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2525,7 +2730,8 @@
                       "base_price":  8.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/cookies/ginger_snaps_cookies_1_lb/p/31722",
                       "product_id":  "31722",
-                      "found_by_term":  "ginger snaps"
+                      "found_by_term":  "ginger snaps",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2539,7 +2745,8 @@
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/seasonal_special_occasion/trial_sizes_store/lil_dutch_maid_ginger_snaps/p/1564405684712196045",
                       "product_id":  "1564405684712196045",
-                      "found_by_term":  "ginger snaps"
+                      "found_by_term":  "ginger snaps",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2553,7 +2760,8 @@
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/seasonal_special_occasion/trial_sizes_store/buds_best_cookies_ginger_snaps_old_fashioned_6_oz/p/55621",
                       "product_id":  "55621",
-                      "found_by_term":  "ginger snaps"
+                      "found_by_term":  "ginger snaps",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2567,7 +2775,8 @@
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/corn_chips/our_family_corn_chips_original/p/1564405684715479675",
                       "product_id":  "1564405684715479675",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2581,7 +2790,8 @@
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/corn_chips/our_family_corn_chips_chili_cheese/p/1564405684715479679",
                       "product_id":  "1564405684715479679",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2595,7 +2805,8 @@
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/corn_chips/our_family_corn_chips_9_oz/p/1564405684716556133",
                       "product_id":  "1564405684716556133",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2609,7 +2820,8 @@
                       "base_price":  5.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/corn_chips/fritos_the_original_corn_chips_9_25_oz/p/5198074",
                       "product_id":  "5198074",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2623,7 +2835,8 @@
                       "base_price":  5.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/corn_chips/fritos_chili_cheese_flavored_corn_chips_9_25_oz/p/5216375",
                       "product_id":  "5216375",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2637,7 +2850,8 @@
                       "base_price":  5.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/corn_chips/fritos_corn_chips_9_25_oz/p/5196207",
                       "product_id":  "5196207",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2651,7 +2865,8 @@
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/corn_chips/corn_chips_scoops_our_family/p/7081249",
                       "product_id":  "7081249",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2665,7 +2880,8 @@
                       "base_price":  7.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/corn_chips/fritos_corn_chips_party_size_15_5_oz/p/1564405684705313876",
                       "product_id":  "1564405684705313876",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2679,7 +2895,8 @@
                       "base_price":  2.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/other_crispy_snacks/fritos_corn_chips_the_original_3_375_oz/p/1764405684715002268",
                       "product_id":  "1764405684715002268",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2693,7 +2910,8 @@
                       "base_price":  2.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/other_crispy_snacks/fritos_chili_cheese_flavored_corn_chips_3_375_oz/p/1764405684715002264",
                       "product_id":  "1764405684715002264",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2707,7 +2925,8 @@
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/tortilla_chips/santitas_yellow_corn_tortilla_chips_11_oz/p/1564405684713338021",
                       "product_id":  "1564405684713338021",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2721,7 +2940,8 @@
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/tortilla_chips/santitas_white_corn_tortilla_chips_11_oz/p/1564405684713338023",
                       "product_id":  "1564405684713338023",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2735,7 +2955,8 @@
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/tortilla_chips/our_family_blue_corn_tortilla_chips_10_oz/p/1564405684709924548",
                       "product_id":  "1564405684709924548",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2749,7 +2970,8 @@
                       "base_price":  5.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/tortilla_chips/tostitos_organic_blue_corn_tortilla_chips_10_oz/p/1564405684716554665",
                       "product_id":  "1564405684716554665",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2763,7 +2985,8 @@
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/bakery/tortillas/calidad_corn_tortilla_chips_11_oz/p/1564405684713126888",
                       "product_id":  "1564405684713126888",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2777,7 +3000,8 @@
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/bakery/tortillas/calidad_white_corn_tortilla_chips_11_oz/p/1564405684713126887",
                       "product_id":  "1564405684713126887",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2791,7 +3015,8 @@
                       "base_price":  4.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/tortilla_chips/tostitos_yellow_corn_traditional_tortilla_chips_11_oz/p/1764405684715850766",
                       "product_id":  "1764405684715850766",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2805,7 +3030,8 @@
                       "base_price":  5.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/corn_chips/fritos_honey_bbq_flavored_corn_snacks_9_25_oz/p/5198067",
                       "product_id":  "5198067",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2819,7 +3045,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/corn_chips/bugles_original_flavor_crispy_corn_snacks_7_5_oz/p/16119",
                       "product_id":  "16119",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2833,7 +3060,8 @@
                       "base_price":  2.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/tortilla_chips/takis_fuego_corn_snack_sticks_4_oz/p/186104",
                       "product_id":  "186104",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2847,7 +3075,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/tortilla_chips/barcel_corn_snack_chile_lime_9_9_oz/p/1564405684716324467",
                       "product_id":  "1564405684716324467",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2861,7 +3090,8 @@
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/tortilla_chips/barcel_corn_snack_chile_lime_4_oz/p/1564405684715617623",
                       "product_id":  "1564405684715617623",
-                      "found_by_term":  "corn chips"
+                      "found_by_term":  "corn chips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2875,7 +3105,8 @@
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/sausage/smoked/johnsonville_turkey_sausage_smoked_13_5_oz/p/597752",
                       "product_id":  "597752",
-                      "found_by_term":  "turkey smoked sausage"
+                      "found_by_term":  "turkey smoked sausage",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2889,7 +3120,8 @@
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/sausage/smoked/eckrich_skinless_turkey_smoked_sausage_12_oz/p/20954",
                       "product_id":  "20954",
-                      "found_by_term":  "turkey smoked sausage"
+                      "found_by_term":  "turkey smoked sausage",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2903,7 +3135,8 @@
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/snacks_desserts/old_wisconsin_smoked_sausage_turkey_bites_6_oz/p/542208",
                       "product_id":  "542208",
-                      "found_by_term":  "turkey smoked sausage"
+                      "found_by_term":  "turkey smoked sausage",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2917,7 +3150,8 @@
                       "base_price":  9.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/beef/ground/our_certified_93_lean_7_fat_lean_ground_beef_roll_1_lb_16_oz/p/6427566",
                       "product_id":  "6427566",
-                      "found_by_term":  "93 lean ground beef"
+                      "found_by_term":  "93 lean ground beef",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2931,7 +3165,8 @@
                       "base_price":  9.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/meat/beef/ground/fresh_93_lean_ground_beef/p/1564405684713030570",
                       "product_id":  "1564405684713030570",
-                      "found_by_term":  "93 lean ground beef"
+                      "found_by_term":  "93 lean ground beef",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2945,7 +3180,8 @@
                       "base_price":  4.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tropical_fruits/yellow_nectarines/p/78505",
                       "product_id":  "78505",
-                      "found_by_term":  "nectarines"
+                      "found_by_term":  "nectarines",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2959,7 +3195,8 @@
                       "base_price":  1.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/water/sparkling_ice_sparkling_water_zero_sugar_peach_nectarine_17_fl_oz/p/2421",
                       "product_id":  "2421",
-                      "found_by_term":  "nectarines"
+                      "found_by_term":  "nectarines",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2973,7 +3210,8 @@
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/other_fruits/white_nectarine/p/12399",
                       "product_id":  "12399",
-                      "found_by_term":  "nectarines"
+                      "found_by_term":  "nectarines",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -2987,7 +3225,8 @@
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/water/waterloo_raspberry_nectarine_sparkling_water_8_ea/p/1564405684715625911",
                       "product_id":  "1564405684715625911",
-                      "found_by_term":  "nectarines"
+                      "found_by_term":  "nectarines",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3001,7 +3240,8 @@
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/water/specialty_enhanced/vitaminwater_acai_blueberry_pomegranate_flavored_water_bottle_20_fl_oz/p/4717",
                       "product_id":  "4717",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3015,7 +3255,8 @@
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/other_juice/pom_wonderful_from_concentrate_100_pomegranate_juice_16_fl_oz/p/57889",
                       "product_id":  "57889",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3029,7 +3270,8 @@
                       "base_price":  1.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/sport_energy/sport/bodyarmor_blueberry_pomegranate_sports_drink_bottle_16_fl_oz/p/1564405684696925161",
                       "product_id":  "1564405684696925161",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3043,7 +3285,8 @@
                       "base_price":  4.29,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/powdered_fluid_drink_mixes/fluid_mixes/mi_o_liquid_water_enhancer_berry_pomegranate_1_62_fl_oz/p/2360302",
                       "product_id":  "2360302",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3057,7 +3300,8 @@
                       "base_price":  3.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/other_juice/tropicana_cherry_pomegranate_juice_drink_blend_from_concentrate_46_fl_oz/p/1764405684714691290",
                       "product_id":  "1764405684714691290",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3071,7 +3315,8 @@
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/cranberry_juice/ocean_spray_juice_cran_x_pomegranate_64_fl_oz/p/10387",
                       "product_id":  "10387",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3085,7 +3330,8 @@
                       "base_price":  6.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/fruit_blend_juice/v8_pomegranate_blueberry_energy_drink_48_000_fl_oz/p/94054",
                       "product_id":  "94054",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3099,7 +3345,8 @@
                       "base_price":  3.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/other_juice/pom_wonderful_100_pomegranate_juice_8_fl_oz/p/2459406",
                       "product_id":  "2459406",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3113,7 +3360,8 @@
                       "base_price":  5.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/water/bubly_blueberry_pomegranate_sparkling_water_8_ea/p/1564405684706816267",
                       "product_id":  "1564405684706816267",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3127,7 +3375,8 @@
                       "base_price":  2.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/powdered_fluid_drink_mixes/fluid_mixes/berry_pomegranate_water_enhancer/p/7081125",
                       "product_id":  "7081125",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3141,7 +3390,8 @@
                       "base_price":  2.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/tea/ready_to_drink/pomegranate_lemonade_tea_12_fl_oz/p/57888",
                       "product_id":  "57888",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3155,7 +3405,8 @@
                       "base_price":  7.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/water/bubbl_r_sparkling_water_antioxidant_pomegranate_acai_refresh_r_6_ea/p/1564405684711559371",
                       "product_id":  "1564405684711559371",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3169,7 +3420,8 @@
                       "base_price":  8.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/water/specialty_enhanced/vitaminwater_acai_blueberry_pomegranate_flavored_water_bottles_6_ct/p/56678",
                       "product_id":  "56678",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3183,7 +3435,8 @@
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/fruit_blend_juice/v8_pomegranate_blueberry_100_fruit_and_vegetable_juice_46_000_fl_oz/p/33997",
                       "product_id":  "33997",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3197,7 +3450,8 @@
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/bar_liquid_soap/dial_pomegranate_tangerine_scent_hand_soap_aloe_11_fl_oz/p/1564405684712933894",
                       "product_id":  "1564405684712933894",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3211,7 +3465,8 @@
                       "base_price":  12.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/other_juice/pom_wonderful_100_pomegranate_juice_48_fl_oz/p/57891",
                       "product_id":  "57891",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3225,7 +3480,8 @@
                       "base_price":  12.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/juice_boxes_pouches/v8_pomegranate_blueberry_energy_drink_96_000_fl_oz/p/8134906",
                       "product_id":  "8134906",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3239,7 +3495,8 @@
                       "base_price":  6.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/candy/chocolate_covered_treats/brookside_pomegranate_flavor_dark_chocolate_7_oz/p/36186",
                       "product_id":  "36186",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3253,7 +3510,8 @@
                       "base_price":  6.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/powdered_fluid_drink_mixes/powdered_mixes/v8_pomegranate_blueberry_powder_1_000_oz/p/1564405684716737417",
                       "product_id":  "1564405684716737417",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3267,7 +3525,8 @@
                       "base_price":  6.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/body_washes/softsoap_energizing_moisturizing_pomegranate_mango_spritz_body_wash_20_fl_oz/p/1564405684704823935",
                       "product_id":  "1564405684704823935",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3281,7 +3540,8 @@
                       "base_price":  7.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/other_sodas/sanpellegrino_zero_added_sugar_pomegranate_orange_soda_6_ea/p/1564405684715506657",
                       "product_id":  "1564405684715506657",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3295,7 +3555,8 @@
                       "base_price":  4.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/other_juice/northland_100_juice_cranberry_pomegranate_64_oz/p/55984",
                       "product_id":  "55984",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3309,7 +3570,8 @@
                       "base_price":  8.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/pharmacy/cold_flu/alka_seltzer_plus_cough_chest_congestion_maximum_strength_cool_blueberry_pomegranate_flavor_24_ea/p/1564405684714115718",
                       "product_id":  "1564405684714115718",
-                      "found_by_term":  "pomegranate"
+                      "found_by_term":  "pomegranate",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3323,7 +3585,8 @@
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/deli/salads/fresh_deli_salads/fresh_beet_onion_salad/p/1564405684714636460",
                       "product_id":  "1564405684714636460",
-                      "found_by_term":  "fresh beets"
+                      "found_by_term":  "fresh beets",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3337,7 +3600,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/other_vegetables/turnips/p/2311744",
                       "product_id":  "2311744",
-                      "found_by_term":  "turnips"
+                      "found_by_term":  "turnips",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3351,7 +3615,8 @@
                       "base_price":  2.19,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/other_vegetables/rutabagas_swede/p/2311700",
                       "product_id":  "2311700",
-                      "found_by_term":  "rutabaga"
+                      "found_by_term":  "rutabaga",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3365,7 +3630,8 @@
                       "base_price":  1.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/lettuce_cabbage_greens/collard_greens/p/78699",
                       "product_id":  "78699",
-                      "found_by_term":  "collard greens"
+                      "found_by_term":  "collard greens",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3379,7 +3645,8 @@
                       "base_price":  1.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/squashes/butternut_squash/p/12561",
                       "product_id":  "12561",
-                      "found_by_term":  "butternut squash"
+                      "found_by_term":  "butternut squash",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3393,7 +3660,8 @@
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_meals_more/healthier_choices/lean_cuisine_signature_butternut_squash_ravioli_with_peas_and_carrots_in_a_creamy_sauce_9_875_oz/p/15199",
                       "product_id":  "15199",
-                      "found_by_term":  "butternut squash"
+                      "found_by_term":  "butternut squash",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3407,7 +3675,8 @@
                       "base_price":  1.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/other_vegetables/steamable_diced_butternut_squash/p/1564405684703626617",
                       "product_id":  "1564405684703626617",
-                      "found_by_term":  "butternut squash"
+                      "found_by_term":  "butternut squash",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3421,7 +3690,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/other_soups/campbell_s_butternut_squash_and_sweet_potato_soup_11_100_oz/p/1564405684715532027",
                       "product_id":  "1564405684715532027",
-                      "found_by_term":  "butternut squash"
+                      "found_by_term":  "butternut squash",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3435,7 +3705,8 @@
                       "base_price":  1.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/tippy_toes_baby_food_apple_carrot_butternut_squash_chia_2_6_months_up_3_5_oz/p/1564405684710495842",
                       "product_id":  "1564405684710495842",
-                      "found_by_term":  "butternut squash"
+                      "found_by_term":  "butternut squash",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3449,7 +3720,8 @@
                       "base_price":  1.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/tippy_toes_baby_food_apple_butternut_squash_raspberry_2_months_up_3_5_oz/p/1564405684711192360",
                       "product_id":  "1564405684711192360",
-                      "found_by_term":  "butternut squash"
+                      "found_by_term":  "butternut squash",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3463,7 +3735,8 @@
                       "base_price":  6.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/other_soups/rao_s_butternut_squash_soup/p/1764405684716109213",
                       "product_id":  "1764405684716109213",
-                      "found_by_term":  "butternut squash"
+                      "found_by_term":  "butternut squash",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3477,7 +3750,8 @@
                       "base_price":  4.39,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/serenity_kids_wild_caught_salmon_with_organic_butternut_squash_beet_baby_food_pouch_3_5_oz/p/1564405684704368448",
                       "product_id":  "1564405684704368448",
-                      "found_by_term":  "butternut squash"
+                      "found_by_term":  "butternut squash",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3491,7 +3765,8 @@
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/gerber_supported_sitter_1st_foods_butternut_squash_4_oz/p/1564405684711377303",
                       "product_id":  "1564405684711377303",
-                      "found_by_term":  "butternut squash"
+                      "found_by_term":  "butternut squash",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3505,7 +3780,8 @@
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/squashes/acorn_table_queen_squash/p/2311701",
                       "product_id":  "2311701",
-                      "found_by_term":  "acorn squash"
+                      "found_by_term":  "acorn squash",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3519,7 +3795,8 @@
                       "base_price":  2.59,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/mixed/birds_eye_broccoli_carrots_sugar_snap_peas_water_chestnuts_10_8_oz/p/5993879",
                       "product_id":  "5993879",
-                      "found_by_term":  "sugar snap peas"
+                      "found_by_term":  "sugar snap peas",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3533,7 +3810,8 @@
                       "base_price":  3.49,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/salad_mixes_kits/revol_greens_spring_mix/p/1564405684702750966",
                       "product_id":  "1564405684702750966",
-                      "found_by_term":  "spring mix"
+                      "found_by_term":  "spring mix",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3547,7 +3825,8 @@
                       "base_price":  3.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/salad_mixes_kits/fresh_express_salad_spring_mix_1_ea/p/38784",
                       "product_id":  "38784",
-                      "found_by_term":  "spring mix"
+                      "found_by_term":  "spring mix",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3561,7 +3840,8 @@
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/salad_mixes_kits/fresh_express_salad_spring_mix_10_oz/p/268916",
                       "product_id":  "268916",
-                      "found_by_term":  "spring mix"
+                      "found_by_term":  "spring mix",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3575,7 +3855,8 @@
                       "base_price":  5.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/salad_mixes_kits/spring_mix_full_circle_organic/p/1564405684712838205",
                       "product_id":  "1564405684712838205",
-                      "found_by_term":  "spring mix"
+                      "found_by_term":  "spring mix",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3589,7 +3870,8 @@
                       "base_price":  4.79,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/mixed/birds_eye_spring_mix_garlic_butter_sauce_11_oz/p/1564405684713790077",
                       "product_id":  "1564405684713790077",
-                      "found_by_term":  "spring mix"
+                      "found_by_term":  "spring mix",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3603,7 +3885,8 @@
                       "base_price":  4.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/salad_mixes_kits/fresh_express_caesar_salad_kit_9_8_oz/p/2380649",
                       "product_id":  "2380649",
-                      "found_by_term":  "caesar salad kit"
+                      "found_by_term":  "caesar salad kit",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3617,7 +3900,8 @@
                       "base_price":  4.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/salad_mixes_kits/fresh_express_bacon_caesar_salad_kit_10_3_oz/p/38797",
                       "product_id":  "38797",
-                      "found_by_term":  "caesar salad kit"
+                      "found_by_term":  "caesar salad kit",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3631,7 +3915,8 @@
                       "base_price":  4.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/salad_mixes_kits/fresh_express_caesar_supreme_salad_kit_10_5_oz/p/2380651",
                       "product_id":  "2380651",
-                      "found_by_term":  "caesar salad kit"
+                      "found_by_term":  "caesar salad kit",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3645,7 +3930,8 @@
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/salad_mixes_kits/fresh_express_twisted_caesar_avocado_caesar_chopped_salad_kit_10_2_oz/p/1564405684704818671",
                       "product_id":  "1564405684704818671",
-                      "found_by_term":  "caesar salad kit"
+                      "found_by_term":  "caesar salad kit",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3659,7 +3945,8 @@
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/salad_mixes_kits/fresh_express_caesar_chopped_kit_9_9_oz/p/1564405684703904228",
                       "product_id":  "1564405684703904228",
-                      "found_by_term":  "caesar salad kit"
+                      "found_by_term":  "caesar salad kit",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3673,7 +3960,8 @@
                       "base_price":  3.69,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/meal_kits_helpers/suddenly_caesar_pasta_salad_7_25_oz/p/1564405684715303953",
                       "product_id":  "1564405684715303953",
-                      "found_by_term":  "caesar salad kit"
+                      "found_by_term":  "caesar salad kit",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3687,7 +3975,8 @@
                       "base_price":  4.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/salad_mixes_kits/tay_farm_chick_caesar/p/3131075",
                       "product_id":  "3131075",
-                      "found_by_term":  "caesar salad kit"
+                      "found_by_term":  "caesar salad kit",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3701,7 +3990,8 @@
                       "base_price":  1.78,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/salad_mixes_kits/fresh_express_cole_slaw_3_color_deli_14_oz/p/2380598",
                       "product_id":  "2380598",
-                      "found_by_term":  "coleslaw mix"
+                      "found_by_term":  "coleslaw mix",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
@@ -3715,7 +4005,8 @@
                       "base_price":  1.99,
                       "canonical_url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/mixed/our_family_vegetable_blend_stir_fry_fresh_frozen_12_oz/p/1564405684703626606",
                       "product_id":  "1564405684703626606",
-                      "found_by_term":  "fresh stir fry vegetables"
+                      "found_by_term":  "fresh stir fry vegetables",
+                      "carried_forward":  true
                   },
                   {
                       "store":  "Family Fare",
