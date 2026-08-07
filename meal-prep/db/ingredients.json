@@ -618,11 +618,11 @@
   {
       "item":  "Corn Tortillas",
       "bid":  "corn-tortillas",
-      "gpu":  30,
+      "gpu":  23.5,
       "unit":  "each",
       "board":  "recipe",
-      "buy_pkg_g":  750,
-      "buy_pkg_label":  "30ct pack"
+      "buy_pkg_g":  1880,
+      "buy_pkg_label":  "80ct pack"
   },
   {
       "item":  "Corned Beef Brisket",
@@ -1040,10 +1040,10 @@
   {
       "item":  "Garlic",
       "bid":  "garlic",
-      "gpu":  50,
+      "gpu":  42.6,
       "unit":  "each",
       "board":  "recipe",
-      "buy_pkg_g":  40,
+      "buy_pkg_g":  42.6,
       "buy_pkg_label":  "head"
   },
   {
