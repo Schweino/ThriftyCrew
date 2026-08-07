@@ -55,6 +55,18 @@ $script:STORE_FILES = @{
   'Fareway'     = @('fareway\fareway-deals-*.json','regular\fareway-regular-*.json')
 }
 
+# WEEKLY-AD FILES ARE AGED BY THEIR WINDOW, NOT BY A PER-ROW DATE. out\bakers\bakers-deals-*.json and
+# out\fareway\fareway-deals-*.json are ad captures: they carry ad_from/ad_to in the header and their rows
+# carry no as_of. The first instinct was to stamp a per-row as_of the way Walmart and Sam's now do - that is
+# WRONG here, and audit-asof-evidence.ps1 is a whole guard explaining why: writing a date the row did not
+# earn is worse than having none, because every freshness check in the estate then reads a number the
+# builder wrote to be true. An ad price's honest expiry is the day its window closes, which is a sharper
+# test than "capture + 14 days" and is already on disk.
+function Test-AdWindowExpired { param($Header,[datetime]$Today)
+  if(-not $Header.ad_to){ return $false }
+  try { return ([datetime]$Header.ad_to -lt $Today) } catch { return $false }
+}
+
 function Get-AgeProfile { param($Rows,[datetime]$Today,[int]$MaxDays)
   $all = @($Rows); $dated = @($all | Where-Object { $_.as_of })
   $ages = @($dated | ForEach-Object { ($Today - [datetime]$_.as_of).Days })
@@ -87,6 +99,15 @@ if($SelfTest){
   $edge = @(1..4 | ForEach-Object { [pscustomobject]@{ as_of='2026-07-25' } })
   $p4 = Get-AgeProfile $edge $today 14
   T 'CLEAN TWIN a row exactly inside the window is not counted stale'             ($p4.over -eq 0) "over=$($p4.over)"
+  # FROZEN FIXTURE: Fareway's ad file as it stood on 2026-08-07 - window closed 08-01, 11 rows, and the live
+  # board still crowned its $1.99 "All-Natural Iowa Pork Chops" as the cheapest pork chops in Omaha six days
+  # after the sale ended. These rows carry no as_of and never should: the ad window is the honest expiry.
+  T 'MUST FIRE  an ad file whose window has closed (Fareway 2026-07-26..08-01, read on 08-07)' `
+    (Test-AdWindowExpired ([pscustomobject]@{ ad_from='2026-07-26'; ad_to='2026-08-01' }) $today) 'expired ad read as current'
+  # CLEAN TWIN: Baker's on the same day, still inside its window.
+  T 'CLEAN TWIN an ad still inside its window (Baker''s 2026-08-05..08-11)' `
+    (-not (Test-AdWindowExpired ([pscustomobject]@{ ad_from='2026-08-05'; ad_to='2026-08-11' }) $today)) 'spurious finding'
+  T 'CLEAN TWIN a non-ad file with no window is never called expired'             (-not (Test-AdWindowExpired ([pscustomobject]@{ store='Walmart' }) $today)) 'spurious finding'
   # DRIFT CHECK, not a frozen copy. $STORE_FILES is duplicated from build-deals-page.ps1's $storeFiles, and a
   # duplicated rule that nothing compares is the two-copies-of-a-rule class: the board starts pricing from a
   # file this guard never opens, and the guard keeps reporting confidently about the wrong rows. That is not
@@ -125,6 +146,7 @@ if($SelfTest){
 $today = (Get-Date).Date
 $profiles = @{}
 $sources  = @{}
+$expired  = @()
 foreach($store in ($script:STORE_FILES.Keys | Sort-Object)){
   $rows = New-Object System.Collections.Generic.List[object]
   $used = @()
@@ -141,6 +163,11 @@ foreach($store in ($script:STORE_FILES.Keys | Sort-Object)){
       if($rs -and $rs -ne $store){ continue }
       if(-not $rs -and [string]$j.store -and [string]$j.store -ne $store){ continue }
       $rows.Add($r)
+    }
+    # an ad file past its window is stale WHOLESALE - every row in it, regardless of as_of
+    if(Test-AdWindowExpired $j $today){
+      $expired += [pscustomobject]@{ store=$store; file=$fl[0].Name; to=[string]$j.ad_to; rows=@($j.deals).Count
+                                     days=[int]($today - [datetime]$j.ad_to).TotalDays }
     }
     $used += $fl[0].Name
   }
@@ -197,6 +224,9 @@ foreach($s in ($profiles.Keys | Sort-Object)){
   } else {
     $info.Add(("  {0,-14} rows {1,6}  over {2}d: {3,5} ({4}%)  oldest {5}d{6}" -f $s,$p.rows,$MaxDays,$p.over,$p.pct,$p.oldest,$undTxt))
   }
+}
+foreach($x in $expired){
+  $hard.Add(("AD EXPIRED: {0}'s ad file {1} closed {2} ({3} day(s) ago) and its {4} row(s) are still the newest this store has - the board can still crown a sale price whose sale is over" -f $x.store,$x.file,$x.to,$x.days,$x.rows))
 }
 Write-Output ("row-age: {0} hard finding(s) across {1} store(s)" -f $hard.Count, $profiles.Count)
 $info | ForEach-Object { Write-Output $_ }
