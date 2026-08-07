@@ -29,7 +29,7 @@
                  "fat":  10,
                  "cost_ps":  "5.76"
              },
-    "intro_html":  "",
+    "intro_html":  "Pozole is a celebration soup in Mexico, the pot that comes out for birthdays, Christmas and the days after. The red version gets its color and its depth from dried ancho and guajillo chiles, toasted and blended into the broth. Hominy gives it that chewy, nutty bite you cannot get from anything else, and the shredded turkey makes it a serious protein dinner. Crisp cabbage, cilantro and lime go on at the table, not in the pot.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 5 tbsp (69 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 onions (381 g)",
@@ -46,7 +46,7 @@
                                 "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1.25 lb (533 g)",
                                 "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 2 1/4 cups (36 g)",
                                 "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 4.25 tbsp (65 g)",
-                                "\u003cstrong\u003eTortilla (La Banderita):\u003c/strong\u003e 67.5 oz (1914 g)",
+                                "\u003cstrong\u003eCorn Tortillas:\u003c/strong\u003e 20.3 oz (575 g)",
                                 "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 7.5 tbsp (114 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.75 tbsp (6 g)"
                             ],
@@ -63,14 +63,14 @@
                        "Green Cabbage, 1.25 lb: ~$1.00. \u003cstrong\u003eBuy 1 head: $1.69.\u003c/strong\u003e",
                        "Fresh Cilantro, 2 1/4 cups: ~$0.56. \u003cstrong\u003eBuy 1 bunch: $0.89.\u003c/strong\u003e",
                        "Lime Juice, 4.25 tbsp: ~$1.50. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Corn Tortillas, 67.5 oz: ~$1.37. \u003cstrong\u003eBuy 1 80ct pack: $4.49.\u003c/strong\u003e",
+                       "Corn Tortillas, 20.3 oz: ~$1.37. \u003cstrong\u003eBuy 1 80ct pack: $4.49.\u003c/strong\u003e",
                        "White Vinegar, 7.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (dried oregano, ground cumin, bay leaves, salt, black pepper): ~$0.71. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
                        "\u003cstrong\u003eBatch total: about $41.67 across 14 servings, so roughly $2.98 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $57.45 across 14 servings, roughly $4.10 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $23.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $80.65. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "",
+    "cost_closing_html":  "About \u003cstrong\u003e$5.76 a bowl\u003c/strong\u003e (at everyday cost). The dried chiles and the turkey breast are the two real costs, and the chiles keep for a year in a sealed bag, so the next pot is cheaper than this one.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy dried chiles from the Hispanic aisle, not the spice rack.\u003c/strong\u003e The big bags of ancho and guajillo cost a fraction of what the little branded packets do, and they keep for a year sealed in the pantry.",
                        "\u003cstrong\u003eCanned hominy is the cheap route.\u003c/strong\u003e Dried hominy needs an overnight soak and hours of cooking. Canned is drained, rinsed and ready, and it costs about the same per serving.",
@@ -86,9 +86,9 @@
                     "Add the drained hominy and the shredded turkey breast and simmer another 20 minutes until everything has taken on the red broth. Stir in the splash of white vinegar to brighten it.",
                     "Shred the cabbage and chop the cilantro into separate containers, cut the lime, and toast or crisp the tortillas to serve alongside."
                 ],
-    "portion_html":  "",
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide by 14 and ladle that exact weight into each container, keeping the cabbage, cilantro, lime and tortillas packed separately. Every bowl lands near 460 calories with 38 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://themodernproper.com/turkey-pozole-rojo\" target=\"_blank\" rel=\"noopener\"\u003ethemodernproper.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "",
+    "upsell_html":  "\u003cem\u003eA celebration pot of red pozole for about $5.76 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  41.67,
     "cost_batch_true":  57.45,
     "cost_per_serving":  2.98,
@@ -245,7 +245,7 @@
                            ]
                },
     "head":  {
-                 "description":  "",
+                 "description":  "Shredded turkey and hominy in a toasted ancho and guajillo chile broth, with cabbage, cilantro and lime. A 14 serving pozole rojo for meal prep.",
                  "keywords":  "turkey pozole rojo, pozole recipe, hominy stew, mexican soup recipe, budget meal prep, leftover turkey recipe",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT35M",
@@ -268,7 +268,7 @@
                                           "Green Cabbage, 1.25 lb (533 g)",
                                           "Fresh Cilantro, 2 1/4 cups (36 g)",
                                           "Lime Juice, 4.25 tbsp (65 g)",
-                                          "Tortilla (La Banderita), 67.5 oz (1914 g)",
+                                          "Corn Tortillas, 20.3 oz (575 g)",
                                           "White Vinegar, 7.5 tbsp (114 g)",
                                           "Black Pepper, 0.75 tbsp (6 g)"
                                       ],

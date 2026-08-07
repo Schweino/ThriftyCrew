@@ -71,6 +71,12 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
 # Read the name off the file itself so the next fork renames itself. Captured ONCE at script scope on
 # purpose: inside a function $MyInvocation.MyCommand.Name returns the FUNCTION name, not the file.
 $Me = $MyInvocation.MyCommand.Name
+# The CAPTURE date every emitted row is stamped with. Script-scoped for the same reason $Me is: the row
+# builder is a function and cannot see the param block's $Date. Falls back to the date in the input
+# filename, then to today - in that order, because the filename is evidence and today is a guess.
+$script:CaptureDate = $Date
+if (-not $script:CaptureDate -and $In) { $m = [regex]::Match($In, '\d{4}-\d{2}-\d{2}'); if ($m.Success) { $script:CaptureDate = $m.Value } }
+if (-not $script:CaptureDate) { $script:CaptureDate = (Get-Date).ToString('yyyy-MM-dd') }
 . (Join-Path $root 'capture-lib.ps1')   # UTF-8 capture read + mojibake repair, shared by every builder
 
 # ---- lift the REAL pricing math out of the engine (it runs a pipeline on load, so we can't dot-source it) ----
@@ -383,6 +389,15 @@ function Build-Row($raw) {
       # gate instead of publishing. The independent store-truth check remains the builder's reproduce-invariant
       # at capture time (same division of labor as Baker's guard 11 raw-capture check).
       current_price = $t.ad
+      # PER-ROW as_of (2026-08-07). Walmart rows shipped with NO date at all - 11,092 of them - so the only
+      # freshness signal was the FILENAME, and compare-deals unions captures across 14 days. Guard 9 reads
+      # file age, the file is rewritten daily, so it passed every run while individual prices aged for weeks
+      # underneath. Same shape as the feed assert that stamped its own date and could not detect the failure
+      # it existed for.
+      # This is the CAPTURE date ($Date, the -Date parameter naming the capture being built), never the
+      # build date: stamping "today" onto a row lifted from a 14-day-old capture would be the exact
+      # dates-written-not-measured lie the stamp exists to end.
+      as_of         = $script:CaptureDate
       wm_unit_price = $upm.Groups[0].Value.Trim()   # kept for audit; the engine ignores unknown fields
       item_id       = [string]$raw.id
       qty_basis     = ($t.shape + '; qty ' + $basis)

@@ -68,6 +68,17 @@ foreach($slug in $Slugs){
       codeinjection_head=$head
       meta_title=($spec.name + ' | Thrifty Crew')
       meta_description=$desc
+      # og_/twitter_ ARE SEPARATE STORED FIELDS, not fallbacks (2026-08-07). Ghost only falls back to
+      # custom_excerpt when these are empty; once a post is created with them set they are frozen, and this
+      # publisher rewrote meta_description on every run while leaving them untouched. Measured on
+      # slow-cooker-butter-chicken-rice-bowls: meta_description and the JSON-LD both said "610 calories ...
+      # $3.58 each" while og:description and twitter:description still said "592 cal ... about $1.90 a bowl" -
+      # the numbers every social share and some search snippets actually show. Same $desc, so all four
+      # surfaces now move together or none do.
+      og_description=$desc
+      twitter_description=$desc
+      og_title=$spec.name
+      twitter_title=$spec.name
     }
     try {
       if($existing){

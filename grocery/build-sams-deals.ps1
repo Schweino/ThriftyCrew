@@ -285,6 +285,12 @@ function Build-Row($raw) {
       size      = $t.size
       regular   = $null
       source_ad = 'everyday club price (Omaha 68137)'
+      # PER-ROW as_of (2026-08-07). Sam's rows shipped with no date at all - 1,808 of them - so the whole
+      # store opted out of every staleness check silently: the FILE was rewritten each pull while the rows
+      # inside aged independently, and audit-row-age.ps1 could not measure a single one. The header's
+      # `captured` field is not a substitute, because compare-deals unions slices across 14 days and the
+      # merged set then carries one date for prices captured on different days.
+      as_of     = $Date
       # THE current_price CONTRACT (guard 10), added 2026-07-23: what the store CHARGES, same basis as
       # ad_price - here the same store-sourced number ad_price was built from (Sam's own lp/up; the emit
       # invariant above proves ad_price reproduces it through the real engine). Guard 10's ad==current check
@@ -430,6 +436,11 @@ if ($SelfTest) {
 
 # ---------------------------------------------------------------- build
 if (-not $In -or -not (Test-Path $In)) { throw "build-sams-deals: -In not found: $In" }
+# PREFER THE CAPTURE'S OWN DATE over today's. Falling straight to (Get-Date) stamps the day the BUILDER ran
+# onto prices the browser captured days earlier - the dates-written-not-measured class, which surfaces as a
+# wrong PRICE rather than a wrong date because compare-deals unions slices across a 14-day window and an
+# over-fresh stamp keeps a stale slice alive past its cliff. Same order build-walmart-deals.ps1 uses.
+if (-not $Date -and $In) { $m = [regex]::Match($In, '\d{4}-\d{2}-\d{2}'); if ($m.Success) { $Date = $m.Value } }
 if (-not $Date) { $Date = (Get-Date).ToString('yyyy-MM-dd') }
 $raw = Import-CaptureCsv -Path $In -Delimiter '|'   # UTF-8 + repairs names mangled by an upstream ANSI read
 if ($script:CaptureRepairCount -gt 0) { Write-Output ("  repaired $($script:CaptureRepairCount) mangled product name(s) on ingest (UTF-8 read as ANSI upstream)") }

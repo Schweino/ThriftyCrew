@@ -53,6 +53,15 @@ if($VerifyOnly){
   exit $(if($d.Count){ 1 } else { 0 })
 }
 
+$listPath = Join-Path $here 'reanchor-stale-cards.txt'
+# TRUNCATE BEFORE ANY WORK, not after it. Writing the list only at the END means a crash between
+# machine-fields and moved-prose leaves YESTERDAY's list sitting on disk - and the daily chain's Test-Path
+# then finds a perfectly readable file and republishes those slugs from specs that are now half-anchored,
+# quoting two prices. Emptying it first makes a crash publish NOTHING, which is the safe direction. This is
+# the same stale-proof-file class the end-of-run write already fixed for the clean-day case; the crash case
+# was still open.
+'' | Out-File $listPath -Encoding utf8
+
 if(-not (Test-Path $prev)){
   throw ("no $prev - compute-v2-perserving.ps1 writes it before overwriting the manifest. If this is the first run after that change landed, run compute-v2-perserving.ps1 once and re-run this.")
 }
@@ -74,22 +83,36 @@ if($d.Count){
 }
 
 # ---- which live cards are now stale? ----
+# A spec that FAILED the invariant above is excluded, and named separately. It quotes two different prices
+# for one serving, so rebuilding its card would take that contradiction from the spec file to the live page.
+# Excluding per-slug rather than refusing the whole run is deliberate: a handful of specs carry figures that
+# predate the manifest and are unreachable by moved-prose (today: 15 slow-cooker slugs). Blocking everything
+# on them would mean the other 500-odd cards silently keep drifting - trading a visible contradiction for
+# the invisible staleness this whole loop exists to end.
+$blocked = @($d | Select-Object -ExpandProperty slug -Unique)
 $stale = New-Object System.Collections.Generic.List[string]
+$held  = New-Object System.Collections.Generic.List[string]
 foreach($f in (Get-ChildItem (Join-Path $specDir '*.json'))){
   $card = Join-Path $builtDir ($f.BaseName + '.body.html')
   if(-not (Test-Path $card)){ continue }
   $s = Get-Content $f.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
   $html = [IO.File]::ReadAllText($card)
   $m = [regex]::Match($html, '\$(\d+\.\d{2})\s*per serving')
-  if($m.Success -and [Math]::Abs([double]$m.Groups[1].Value - [double]$s.stat.cost_ps) -gt 0.005){ $stale.Add($f.BaseName) }
+  if($m.Success -and [Math]::Abs([double]$m.Groups[1].Value - [double]$s.stat.cost_ps) -gt 0.005){
+    if($blocked -contains $f.BaseName){ $held.Add($f.BaseName) } else { $stale.Add($f.BaseName) }
+  }
 }
 Write-Output ''
 # The list is written on EVERY run, empty included. Writing it only when non-empty leaves yesterday's list
 # on disk, and the daily chain reads this file to decide what to republish - so a clean day would have
 # rebuilt and published whatever the last dirty day happened to contain. That is the stale-proof-file class
 # (a proof that outlives the work it certifies), and it was caught the first time this was dry-run.
-$listPath = Join-Path $here 'reanchor-stale-cards.txt'
 $stale | Out-File $listPath -Encoding utf8
+if($held.Count){
+  Write-Output ("{0} stale card(s) HELD BACK - their spec fails the money invariant, so republishing would" -f $held.Count)
+  Write-Output '  move a two-price contradiction onto the live page. Fix the spec, then they republish normally:'
+  $held | Select-Object -First 15 | ForEach-Object { Write-Output ("    HELD $_") }
+}
 if($stale.Count){
   Write-Output ("{0} built card(s) now show a cost their spec no longer holds. They are NOT rebuilt by this" -f $stale.Count)
   Write-Output 'script. To land them on the live site:'
@@ -100,4 +123,8 @@ if($stale.Count){
   Write-Output 'every built card agrees with its spec cost - nothing to rebuild'
   Write-Output ("  (empty list written to {0} so a stale one cannot be re-read)" -f $listPath)
 }
+# A COMPLETION MARKER, because the exit code cannot carry this. Under EAP=Stop a throw also exits 1, which is
+# the same code "some specs still disagree" uses - so rc alone cannot tell the daily chain "I finished and the
+# list below is mine" from "I died half way". The caller requires this line before it publishes anything.
+Write-Output ("REANCHOR-COMPLETE stale={0} held={1} disagreements={2}" -f $stale.Count, $held.Count, $d.Count)
 exit $(if($d.Count){ 1 } else { 0 })

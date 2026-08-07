@@ -43,6 +43,23 @@ function Test-BatchStale { param($Batch,[datetime]$Now,[int]$MaxAgeHours)
   return (($Now - $last).TotalHours -gt $MaxAgeHours)
 }
 
+# A last_activity AHEAD of now is corrupt, and it is the one value that makes Test-BatchStale unable to fire:
+# elapsed hours go negative and can never exceed the limit, so the batch is exempt for as long as the stamp
+# stays in the future. Clamping it to now is NOT the fix - that just makes it silently "fresh", which is the
+# same exemption wearing a different hat. It has to be its own finding.
+function Test-FutureStamp { param($Batch,[datetime]$Now)
+  if(-not $Batch.last_activity){ return $false }
+  return ([datetime]$Batch.last_activity -gt $Now.AddMinutes(5))   # 5 min of clock slop
+}
+
+# A CLOSED batch is not automatically a finished one. -Verify used to `continue` on every closed row, so the
+# founding bug - closing a batch whose post-publish review never ran - became invisible the instant someone
+# closed it. Closing is a claim; this is the check on the claim.
+function Test-ClosedIncomplete { param($Batch)
+  if(-not $Batch.closed){ return @() }
+  return (Test-BatchComplete $Batch)
+}
+
 if($SelfTest){
   $f=0
   function T($m,$c,$g){ if($c){ Write-Output ("ok    "+$m) } else { Write-Output ("FAIL  "+$m+"   got: "+$g); $script:f++ } }
@@ -60,6 +77,23 @@ if($SelfTest){
   $fresh = [pscustomobject]@{ closed=$false; last_activity=$now.AddHours(-2).ToString('s'); stages=@(@{stage='select'}) }
   T 'CLEAN TWIN an open batch still inside the window is not yet a finding'       (-not (Test-BatchStale $fresh $now 24)) 'spurious finding'
   T 'MUST FIRE  that same young batch is still INCOMPLETE'                        ((Test-BatchComplete $fresh).Count -gt 0) 'not reported'
+
+  # FROZEN FIXTURE: the founding bug AFTER someone closes it. -Verify used to `continue` on every closed row,
+  # so closing an unfinished batch made it permanently invisible - the one action most likely to happen when
+  # a session ends and somebody tidies up.
+  $closedBad = [pscustomobject]@{ closed=$true; closed_at='2026-08-07T14:00:00'; last_activity='2026-08-07T14:00:00'
+    stages=@(@{stage='select'},@{stage='map'},@{stage='write'},@{stage='build-specs'},@{stage='audit'},@{stage='recipes-db'},@{stage='build-cards'},@{stage='publish'}) }
+  T 'MUST FIRE  a batch CLOSED while the post-publish review was never stamped'   ((Test-ClosedIncomplete $closedBad) -contains 'post-publish-review') 'invisible once closed'
+  T 'CLEAN TWIN a properly closed batch reports nothing'                          ((Test-ClosedIncomplete $done).Count -eq 0) 'spurious finding'
+
+  # FROZEN FIXTURE: a last_activity in the FUTURE. Test-BatchStale structurally CANNOT fire on it (negative
+  # elapsed), so it is exempt for as long as the stamp stays ahead - the gates-that-can-never-arm class.
+  $future = [pscustomobject]@{ closed=$false; last_activity=$now.AddDays(30).ToString('s'); stages=@(@{stage='select'}) }
+  T 'MUST FIRE  a future-dated last_activity is reported as corrupt'              (Test-FutureStamp $future $now) 'exempt forever, silently'
+  T 'the staleness test genuinely cannot catch it (which is WHY the check above exists)' `
+    (-not (Test-BatchStale $future $now 24)) 'staleness caught it after all'
+  T 'CLEAN TWIN an ordinary past stamp is not called corrupt'                     (-not (Test-FutureStamp $interrupted $now)) 'spurious finding'
+
   if($f -eq 0){ Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
@@ -98,15 +132,31 @@ if($Stamp -or $Close){
   Save-Ledger $ledger
   Write-Output ("{0}: {1}{2}" -f $Batch, $(if($Close){'CLOSED'}else{"stamped '$Stage'"}), $(if($Detail){" - $Detail"}else{''}))
   $miss = Test-BatchComplete $row
-  if($Close -and $miss.Count){ Write-Output ("  WARNING closed with unstamped stage(s): " + ($miss -join ', ')) }
+  # EXIT 1, not 0. This printed a WARNING and returned success, so a caller (or a human reading rc) could not
+  # tell "batch finished" from "batch closed with the post-publish review never run" - which is the exact
+  # failure this ledger was built for. The close still LANDS: refusing it would leave the batch open and
+  # double-count as stale. It just stops reporting success it does not have.
+  if($Close -and $miss.Count){
+    Write-Output ("  WARNING closed with unstamped stage(s): " + ($miss -join ', '))
+    Write-Output '  (recorded, but this is NOT a clean close - -Verify will keep reporting it)'
+    exit 1
+  }
   exit 0
 }
 if($Verify){
   $now2 = Get-Date; $findings = @()
   foreach($b in $ledger){
-    if($b.closed){ continue }
+    if($b.closed){
+      # a closed batch still owes an answer if it was closed with stages unstamped
+      $ci = Test-ClosedIncomplete $b
+      if($ci.Count){ $findings += ("CLOSED INCOMPLETE: batch '{0}' was closed on {1} without ever stamping: {2}" -f $b.batch, $b.closed_at, ($ci -join ', ')) }
+      continue
+    }
     $miss = Test-BatchComplete $b
-    if(Test-BatchStale $b $now2 $MaxAgeHours){
+    if(Test-FutureStamp $b $now2){
+      $findings += ("FUTURE STAMP: batch '{0}' claims last_activity {1}, which is ahead of now - the staleness check cannot fire on it, so it is exempt until that time passes. Missing: {2}" -f $b.batch, $b.last_activity, ($miss -join ', '))
+    }
+    elseif(Test-BatchStale $b $now2 $MaxAgeHours){
       $findings += ("OPEN+STALE: batch '{0}' last touched {1} ({2}h ago), missing: {3}" -f $b.batch, $b.last_activity, [int]($now2-[datetime]$b.last_activity).TotalHours, ($miss -join ', '))
     } elseif($miss.Count){
       Write-Output ("  in flight: '{0}' still owes {1}" -f $b.batch, ($miss -join ', '))

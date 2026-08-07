@@ -29,6 +29,12 @@ function Test-MissingSide { param($Item,$InPrice,$InMacro)
   if(-not $InMacro){ $m+='no food-macros-db row (the macro recompute cannot run)' }; return $m }
 function Test-NameSplit { param([string]$ScalerName,[string]$MacroName)
   return ($ScalerName -ne $MacroName) }
+# HARD or WARN for a name split. Pairing decides it, not resolvability: an intentional display override
+# renames one item, so exactly one macro-only name is balanced by one scaler-only name. An UNBALANCED split
+# means a line exists on one side and nowhere on the other, which is a dropped cost line or an uncounted
+# ingredient - and this is what tiered the founding defect into a WARN nobody alerts on.
+function Test-SplitPaired { param([int]$MacroOnly,[int]$ScalerOnly)
+  return ($MacroOnly -gt 0 -and $MacroOnly -eq $ScalerOnly) }
 function Test-BaseDrift { param([double]$DensityGrams,[double]$FoodDbGrams,[double]$Tol=0.05)
   if($FoodDbGrams -le 0 -or $DensityGrams -le 0){ return $false }
   return ([Math]::Abs($DensityGrams-$FoodDbGrams)/$FoodDbGrams -gt $Tol) }
@@ -36,6 +42,16 @@ function Test-BaseDrift { param([double]$DensityGrams,[double]$FoodDbGrams,[doub
 if($SelfTest){
   $f=0
   function T($m,$c,$g){ if($c){ Write-Output ("ok    "+$m) } else { Write-Output ("FAIL  "+$m+"   got: "+$g); $script:f++ } }
+  # FROZEN FIXTURE: creamy-mushroom-pork-chops-over-mashed-potatoes as it shipped - 13 macro items, 12 scaler
+  # items, Garlic Powder counted in the macros with no cost line anywhere. "Garlic Powder" resolves in both
+  # stores, so the old resolvability tiering filed this WARN and the daily chain alerts on HARD only.
+  T 'MUST FIRE  a ONE-SIDED split is a dropped cost line, not a rename (macros 13, scaler 12)' `
+    (-not (Test-SplitPaired 1 0)) 'tiered WARN, which is how the founding defect stayed quiet'
+  # CLEAN TWIN: the japchae display override, which is the reason the WARN tier exists at all.
+  T 'CLEAN TWIN a PAIRED rename (Rice Noodles <-> Korean glass noodles) stays a WARN' `
+    (Test-SplitPaired 1 1) 'promoted a legitimate display override to HARD'
+  T 'CLEAN TWIN no split at all is not paired'                                          (-not (Test-SplitPaired 0 0)) 'spurious'
+  T 'MUST FIRE  an uncounted-but-costed ingredient (scaler surplus) is also unpaired'    (-not (Test-SplitPaired 0 1)) 'missed'
   # FROZEN FIXTURES - each is a real defect this estate actually shipped, with the twin that must stay quiet.
   T 'MUST FIRE  macros but no price row (the 6 items that dropped out of recipe cost)' ((Test-MissingSide -Item 'Rotisserie Chicken' -InPrice $false -InMacro $true).Count -eq 1) 'no finding'
   T 'MUST FIRE  price row but no macros (the spinach that made build-v2-spec throw)'   ((Test-MissingSide -Item 'Spinach' -InPrice $true -InMacro $false).Count -eq 1) 'no finding'
@@ -74,14 +90,41 @@ foreach($sf in (Get-ChildItem (Join-Path $mp 'db\recipes\*.json'))){
   # TIERING: a DISPLAY OVERRIDE is legitimate and documented (build-run-specs.ps1: a japchae card must say
   # "Korean glass noodles (dangmyeon)", never "Rice Noodles"). Those resolve on BOTH sides, so they are WARN.
   # A split where one side does NOT resolve is a half-finished rename with a real break behind it - HARD.
-  foreach($n in $macroNames){ if($scalerNames -notcontains $n){
+  # PAIRING, not resolvability, is what separates a rename from a dropped line. The first version tiered on
+  # "does the name resolve in both stores", which says nothing about whether the spec actually COSTS the item -
+  # so creamy-mushroom-pork-chops-over-mashed-potatoes, which counts Garlic Powder in its macros and has no
+  # scaler line for it at all (macros 13, scaler 12), was filed WARN and the caller only alerts on HARD. That
+  # is the founding dropped-cost-line defect, tiered into silence.
+  # A genuine display override is PAIRED: the japchae card renames "Rice Noodles" to "Korean glass noodles",
+  # so one macro-only name is matched by one scaler-only name and the arrays stay the same length. A ONE-SIDED
+  # split means a line exists on one side and nowhere on the other - macro-only is a cost line silently
+  # dropped from the total, scaler-only is an ingredient costed but not counted in the macros.
+  $macroOnly  = @($macroNames  | Where-Object { $scalerNames -notcontains $_ })
+  $scalerOnly = @($scalerNames | Where-Object { $macroNames  -notcontains $_ })
+  $paired = Test-SplitPaired $macroOnly.Count $scalerOnly.Count
+  foreach($n in $macroOnly){
     $line = "NAME-SPLIT: $($sf.BaseName) macro basis says '$n', the scaler does not"
-    if($fdbm.ContainsKey($n) -and $ingm.ContainsKey($n)){ $warn.Add($line + ' (both names resolve - looks like an intentional display override)') }
-    else { $hard.Add($line + ' - and it does not resolve on both sides, so this is a half-finished rename') } } }
-  foreach($n in $scalerNames){ if($macroNames -notcontains $n){
+    if(-not ($fdbm.ContainsKey($n) -and $ingm.ContainsKey($n))){ $hard.Add($line + ' - and it does not resolve on both sides, so this is a half-finished rename') }
+    elseif($paired){ $warn.Add($line + ' (paired with a scaler-only name and both resolve - an intentional display override)') }
+    else { $hard.Add($line + " - and NOTHING on the scaler side is unmatched to pair it with, so this item's cost is silently missing from the recipe total (macros $($macroNames.Count), scaler $($scalerNames.Count))") }
+  }
+  foreach($n in $scalerOnly){
     $line = "NAME-SPLIT: $($sf.BaseName) scaler says '$n', the macro basis does not"
-    if($fdbm.ContainsKey($n) -and $ingm.ContainsKey($n)){ $warn.Add($line + ' (both names resolve - looks like an intentional display override)') }
-    else { $hard.Add($line + ' - and it does not resolve on both sides, so this is a half-finished rename') } } }
+    if(-not ($fdbm.ContainsKey($n) -and $ingm.ContainsKey($n))){ $hard.Add($line + ' - and it does not resolve on both sides, so this is a half-finished rename') }
+    elseif($paired){ $warn.Add($line + ' (paired with a macro-only name and both resolve - an intentional display override)') }
+    else { $hard.Add($line + " - and NOTHING on the macro side is unmatched to pair it with, so this item is bought and costed but not counted in the macros (macros $($macroNames.Count), scaler $($scalerNames.Count))") }
+  }
+
+  # ---- BID TARGET is NOT checked here, deliberately. ----------------------------------------------------
+  # engine\audit-db-agreement.ps1 (see its note at "BID single-source") already holds it: db\ingredients.json
+  # is canonical, a spec's scaler bid is a derived copy, and any mismatch NOT enumerated in
+  # db\spec-bid-overrides.json fails that guard closed. So the Turkey Bacon defect named in this file's header
+  # DOES have detection - in the sibling guard, not here.
+  # A version of this check was added here on 2026-08-07 and removed the same hour: it reported 79 HARD
+  # findings because it did not consult the overrides list, and every one of them was the intentional
+  # Rice -> jasmine-rice variant. That is the two-copies-of-a-rule class arriving as a false-positive flood -
+  # a second copy of a rule that disagrees with the first is worse than no copy, because it trains people to
+  # scroll past the guard. If bid coverage ever needs widening, widen it in audit-db-agreement.
 }
 
 # ---- 3: densities vs the food DB's own serving base ----

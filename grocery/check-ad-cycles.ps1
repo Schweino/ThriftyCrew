@@ -720,9 +720,19 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # compute-v2 now SKIPS bad recipes and exits 1 with the list (was: throw -> whole manifest stale,
       # and a child exit-1 does NOT raise in this parent, so the old code logged success falsely). Check
       # the exit code explicitly and alert on any skipped recipe.
+      # $cv2Ok is captured HERE, at the call site, and nowhere else. It used to be re-read 60 lines below as a
+      # bare $LASTEXITCODE, by which point three more `& powershell` children had overwritten it - so the
+      # close-the-loop gate was testing batch-ledger's exit code and calling it compute-v2's. It failed both
+      # ways: a partial manifest (rc 1) sailed through whenever batch-ledger was clean, and a stalled batch
+      # (rc 1) skipped the loop while logging "compute-v2 did not succeed". Start it FALSE so a throw before
+      # the assignment leaves the gate shut; the old `-or $null -eq $cv2` arm did the exact opposite and let
+      # a compute-v2 that died at launch pass as success.
+      $cv2Ok = $false
       try {
-        $cv2 = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\compute-v2-perserving.ps1') -FeedPath (Join-Path $OutDir 'smp-feed.json') 2>&1
-        if ($LASTEXITCODE -ne 0) {
+        $cv2   = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\compute-v2-perserving.ps1') -FeedPath (Join-Path $OutDir 'smp-feed.json')
+        $cv2Rc = $LASTEXITCODE
+        $cv2Ok = ($cv2Rc -eq 0)
+        if ($cv2Rc -ne 0) {
           $cv2Bad = @($cv2 | Where-Object { $_ -match '^\s+\S' -or $_ -match 'SKIPPED' })
           Log ('compute-v2 SKIPPED recipe(s) with bad cost data: ' + (($cv2Bad | Select-Object -First 6) -join ' | '))
           $summary += 'REVIEW    v2 per-serving manifest skipped recipe(s) with bad cost data - top5/rotation may be stale for them (see compute-v2 output)'
@@ -740,10 +750,19 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # the spec builder throw; Rice was 185 g/cup in densities and 200 in the food DB; Turkey Bacon's bid
       # pointed at PORK and mispriced a live recipe for weeks. HARD findings mean a wrong number or a dropped
       # line is already live; WARN means a disagreement worth fixing that is not yet producing one.
+      # No 2>&1 (the file's own rule, lines 148 and 190): under EAP=Stop a native child's first stderr line
+      # becomes a terminating throw, so the guard would land in catch as one log line - and since the caller
+      # greps stdout for '^\s*!' and ignored the exit code, a CRASH was indistinguishable from CLEAN. This
+      # guard prints a summary line on every completion, so zero output is itself the failure.
       try {
-        $si = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-store-integrity.ps1') 2>&1
+        $si   = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-store-integrity.ps1')
+        $siRc = $LASTEXITCODE
         $siHard = @($si | Where-Object { $_ -match '^\s*!' })
-        if ($siHard.Count) {
+        if (@($si).Count -eq 0) {
+          Log ("store-integrity DID NOT RUN - exit $siRc with no output; the ingredient stores were not compared this cycle")
+          $summary += 'REVIEW    store-integrity produced no output - the cross-store guard did not run (it is silent-clean and silent-crashed the same way otherwise)'
+        }
+        elseif ($siHard.Count) {
           Log ('store-integrity HARD: ' + (($siHard | Select-Object -First 4) -join ' | '))
           $summary += "REVIEW    store-integrity found $($siHard.Count) HARD finding(s) - an ingredient store disagrees with another and a live number is wrong (run meal-prep\pipeline\audit-store-integrity.ps1 -ShowAll)"
           if (-not $NoAlert) { try { Send-Alert -Subject "Ingredient stores disagree: $($siHard.Count) hard finding(s)" -Body ("meal-prep\pipeline\audit-store-integrity.ps1 found cross-store defects. Each of these means a published number is wrong or a cost line is silently missing.`n`n" + (($siHard | Select-Object -First 15) -join "`n")) | Out-Null } catch {} }
@@ -754,15 +773,41 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # reported and NOTHING NOTICED. 29 pages were live and unverified, and it only surfaced hours later by
       # accident. A batch now carries a ledger stamped after each stage completes, and an open batch that has
       # gone quiet is a finding rather than silence.
+      # No 2>&1, and zero output is a failure, for the same reason as store-integrity above.
       try {
-        $bl = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\batch-ledger.ps1') -Verify 2>&1
+        $bl   = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\batch-ledger.ps1') -Verify
+        $blRc = $LASTEXITCODE
         $blBad = @($bl | Where-Object { $_ -match '^\s*!' })
-        if ($blBad.Count) {
+        if (@($bl).Count -eq 0) {
+          Log ("batch-ledger DID NOT RUN - exit $blRc with no output; unfinished batches were not checked this cycle")
+          $summary += 'REVIEW    batch-ledger produced no output - the unfinished-batch check did not run'
+        }
+        elseif ($blBad.Count) {
           Log ('batch-ledger: ' + ($blBad -join ' | '))
           $summary += "REVIEW    $($blBad.Count) recipe batch(es) stalled part-way - a stage never completed (meal-prep\pipeline\batch-ledger.ps1 -Verify)"
           if (-not $NoAlert) { try { Send-Alert -Subject "Recipe batch stalled with stages unfinished" -Body ("A recipe batch was opened, ran part-way, and went quiet. Whatever it published is live WITHOUT the stages below having completed - the post-publish review is the one that has silently failed before.`n`n" + ($blBad -join "`n")) | Out-Null } catch {} }
         } else { Log 'batch-ledger: no stalled batches' }
       } catch { Log ('batch-ledger threw: ' + $_.Exception.Message) }
+      # ---- PER-ROW STALENESS (2026-08-07) ----------------------------------------------------------------
+      # guards.ps1 guard 9 tests the AGE OF THE FILE, and every puller rewrites its file daily, so that check
+      # passes every run while the rows INSIDE age independently - each store carries forward whatever it could
+      # not re-verify. Measured the day this landed: Hy-Vee 414 rows past 14 days (oldest 24d), and Walmart's
+      # 11,092 rows plus Sam's 1,808 carried no date AT ALL, so neither store could be age-checked by anything.
+      # Those prices are on 542 live recipe pages. No 2>&1 and zero-output-is-failure, same as the guards above.
+      try {
+        $ra   = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-row-age.ps1') -OutDir $OutDir
+        $raRc = $LASTEXITCODE
+        $raBad = @($ra | Where-Object { $_ -match '^\s*!' })
+        if (@($ra).Count -eq 0) {
+          Log ("row-age DID NOT RUN - exit $raRc with no output; per-row price staleness was not measured this cycle")
+          $summary += 'REVIEW    audit-row-age produced no output - per-row price staleness was not measured'
+        }
+        elseif ($raBad.Count) {
+          Log ('row-age: ' + (($raBad | Select-Object -First 4) -join ' | '))
+          $summary += "REVIEW    $($raBad.Count) per-row staleness finding(s) - prices are aging faster than a puller refreshes them, or a store stopped dating its rows (grocery\audit-row-age.ps1)"
+          if (-not $NoAlert) { try { Send-Alert -Subject "Board prices aging inside a fresh file" -Body ("audit-row-age.ps1 found rows aging past the window, or a store that stopped stamping as_of. The FILE dates look fine either way, which is why guard 9 stays quiet. These prices are what 542 live recipe pages quote.`n`n" + ($raBad -join "`n")) | Out-Null } catch {} }
+        } else { Log ('row-age: no findings (' + (@($ra | Where-Object { $_ -match 'rows' }).Count) + ' store(s) profiled)') }
+      } catch { Log ('audit-row-age threw: ' + $_.Exception.Message) }
       # ---- CLOSE THE LOOP: re-anchor the specs and republish the cards the board just moved ------------
       # THE GAP THIS FILLS (2026-08-07, Brad approved unattended republish). This chain recomputed prices
       # every day and never propagated them: reanchor + build-cards + publish were manual, so every baked
@@ -779,25 +824,60 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       #    live pages are rewritten unattended. Over the cap we alert and skip rather than publish.
       #  * -Slugs is passed IN-PROCESS. engine\README.md: `powershell -File` marshals an array as one
       #    command-line string, so a 300-slug run binds as one slug and reports a cheerful "built 1/1".
-      if ($LASTEXITCODE -eq 0 -or $null -eq $cv2) {
+      #  * The publish only runs if reanchor-all printed its REANCHOR-COMPLETE marker. Its exit code cannot
+      #    carry that: under EAP=Stop a throw exits 1, the same code it uses for "some specs still disagree".
+      #    Without the marker a crash between the two halves would have republished cards from half-anchored
+      #    specs - and reanchor-all now empties its slug list before starting, so a crash publishes nothing.
+      if ($cv2Ok) {
         try {
           $mp = Split-Path $root -Parent
-          & powershell -ExecutionPolicy Bypass -File (Join-Path $mp 'meal-prep\pipeline\reanchor-all.ps1') 2>&1 | ForEach-Object { Log ('reanchor: ' + $_) }
+          $raOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $mp 'meal-prep\pipeline\reanchor-all.ps1')
+          foreach ($l in @($raOut)) { Log ('reanchor: ' + $l) }
+          $raDone = @($raOut | Where-Object { $_ -match 'REANCHOR-COMPLETE' }).Count -gt 0
           $staleList = Join-Path $mp 'meal-prep\pipeline\reanchor-stale-cards.txt'
           $stale = @()
-          if (Test-Path $staleList) { $stale = @(Get-Content $staleList | Where-Object { $_.Trim() -ne '' }) }
+          if ($raDone -and (Test-Path $staleList)) { $stale = @(Get-Content $staleList | Where-Object { $_.Trim() -ne '' }) }
           $CAP = 150
-          if ($stale.Count -eq 0) { Log 'loop closed: no card cost moved today' }
+          if (-not $raDone) {
+            Log 'loop NOT closed: reanchor-all did not finish (no completion marker) - specs may be half-anchored, nothing republished'
+            $summary += 'REVIEW    reanchor-all did not complete - the specs may be half re-anchored (quoting two prices) and no cards were republished'
+            if (-not $NoAlert) { try { Send-Alert -Subject "Re-anchor did not complete - cards not republished" -Body ("reanchor-all.ps1 exited without its REANCHOR-COMPLETE marker, which means it died part-way through. Machine fields may be stamped while the prose still quotes the old price. Nothing was rebuilt or published. Run meal-prep\pipeline\reanchor-all.ps1 by hand and read the output.`n`nLast lines:`n" + ((@($raOut) | Select-Object -Last 10) -join "`n")) | Out-Null } catch {} }
+          }
+          elseif ($stale.Count -eq 0) { Log 'loop closed: no card cost moved today' }
           elseif ($stale.Count -gt $CAP) {
             Log ("loop NOT closed: $($stale.Count) cards moved, over the $CAP sanity cap - not republishing unattended")
             $summary += "REVIEW    $($stale.Count) recipe cards moved cost today (cap $CAP). Something systemic changed; review then run build-cards + publish for meal-prep\pipeline\reanchor-stale-cards.txt"
             if (-not $NoAlert) { try { Send-Alert -Subject "Recipe cards: $($stale.Count) moved, over the daily cap" -Body ("The daily chain re-anchored the specs but did NOT republish, because $($stale.Count) cards changed cost and the sanity cap is $CAP. A number this large usually means a shared row, a gpu, or a DB rename moved rather than ordinary price drift. Slug list: meal-prep\pipeline\reanchor-stale-cards.txt") | Out-Null } catch {} }
           } else {
-            Push-Location (Join-Path $mp 'meal-prep')
-            & '.\engine\build-cards.ps1' -Slugs $stale 2>&1 | Select-Object -Last 1 | ForEach-Object { Log ('build-cards: ' + $_) }
-            & '.\engine\publish.ps1' -Slugs $stale 2>&1 | Select-Object -Last 1 | ForEach-Object { Log ('publish: ' + $_) }
-            Pop-Location
-            Log ("loop closed: $($stale.Count) card(s) re-anchored and republished")
+            # A FAILED PUBLISH MUST SURVIVE THE RUN. Staleness is measured spec-vs-BUILT-card, and build-cards
+            # runs first - so the moment the cards are rebuilt the spec and the card agree and tomorrow reports
+            # a clean loop, while the LIVE page keeps the old number forever. The failure erases its own
+            # evidence. Slugs therefore go into a pending file BEFORE the publish and are only cleared once it
+            # actually succeeds, so a bad night retries on the next run instead of going quiet.
+            $pendPath = Join-Path $mp 'meal-prep\pipeline\republish-pending.txt'
+            if (Test-Path $pendPath) { $stale = @(@($stale) + @(Get-Content $pendPath | Where-Object { $_.Trim() -ne '' }) | Select-Object -Unique) }
+            $stale | Out-File $pendPath -Encoding utf8
+            $pubOk = $false
+            try {
+              Push-Location (Join-Path $mp 'meal-prep')
+              try {
+                & '.\engine\build-cards.ps1' -Slugs $stale | Select-Object -Last 1 | ForEach-Object { Log ('build-cards: ' + $_) }
+                $bcRc = $LASTEXITCODE
+                $pubOut = & '.\engine\publish.ps1' -Slugs $stale
+                $pubRc  = $LASTEXITCODE
+                foreach ($l in (@($pubOut) | Select-Object -Last 1)) { Log ('publish: ' + $l) }
+                $pubOk = ($bcRc -eq 0 -and $pubRc -eq 0 -and @($pubOut).Count -gt 0)
+                if (-not $pubOk) { Log ("publish did NOT succeed: build-cards rc=$bcRc, publish rc=$pubRc, " + @($pubOut).Count + ' output line(s)') }
+              } finally { Pop-Location }   # without this a throw leaks CWD to meal-prep for the rest of the run
+            } catch { Log ('build/publish threw: ' + $_.Exception.Message) }
+            if ($pubOk) {
+              Remove-Item $pendPath -ErrorAction SilentlyContinue
+              Log ("loop closed: $($stale.Count) card(s) re-anchored and republished")
+            } else {
+              Log ("loop NOT closed: $($stale.Count) card(s) rebuilt but the publish failed - slugs held in republish-pending.txt for the next run")
+              $summary += "REVIEW    $($stale.Count) recipe card(s) were rebuilt but did NOT publish - the live pages still show the old cost (meal-prep\pipeline\republish-pending.txt)"
+              if (-not $NoAlert) { try { Send-Alert -Subject "Recipe cards rebuilt but publish failed" -Body ("The daily loop re-anchored $($stale.Count) card(s) and rebuilt them, but the publish step failed. The LIVE pages still show the old per-serving cost. Because staleness is measured spec-vs-built-card, this would otherwise read as clean from tomorrow on - the slugs are held in meal-prep\pipeline\republish-pending.txt and retried on the next run.") | Out-Null } catch {} }
+            }
           }
         } catch { Log ('close-the-loop threw: ' + $_.Exception.Message) }
       } else { Log 'loop NOT closed: compute-v2 did not succeed, so the manifest is not trustworthy to re-anchor from' }
