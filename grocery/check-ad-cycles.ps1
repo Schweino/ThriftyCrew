@@ -733,6 +733,44 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # scaler payloads + live feed (it was a hand-authored file frozen since 07-07, missing 58 items). Runs
       # BEFORE top5 (which reads it for sale badges); dinner/protein tool builders read it on their own runs.
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\regenerate-ingredient-map.ps1') | Out-Null; Log 'ingredient-map regenerated (derived from specs + feed)' } catch { Log ('regenerate-ingredient-map threw: ' + $_.Exception.Message) }
+      # ---- CLOSE THE LOOP: re-anchor the specs and republish the cards the board just moved ------------
+      # THE GAP THIS FILLS (2026-08-07, Brad approved unattended republish). This chain recomputed prices
+      # every day and never propagated them: reanchor + build-cards + publish were manual, so every baked
+      # number on 542 live pages drifted by exactly the daily board move. Measured before this landed: 471
+      # cards showed a per-serving cost their own spec no longer held, 452 of them TOO HIGH by up to $1.26
+      # on a site whose whole promise is cheap. That was the steady-state error of the design, not a bug.
+      #
+      # Guards on it:
+      #  * SKIPPED ENTIRELY if compute-v2 failed - re-anchoring to a partial manifest would stamp bad numbers.
+      #  * reanchor-all runs BOTH halves (machine fields + prose). Running machine-fields alone leaves every
+      #    touched spec quoting two different prices; that happened twice by hand on 2026-08-07.
+      #  * A SANITY CAP: normal daily drift is a handful to a few dozen slugs. A number far above that means
+      #    something systemic moved (a gpu, a shared row, a DB rename) and a human should look before 500
+      #    live pages are rewritten unattended. Over the cap we alert and skip rather than publish.
+      #  * -Slugs is passed IN-PROCESS. engine\README.md: `powershell -File` marshals an array as one
+      #    command-line string, so a 300-slug run binds as one slug and reports a cheerful "built 1/1".
+      if ($LASTEXITCODE -eq 0 -or $null -eq $cv2) {
+        try {
+          $mp = Split-Path $root -Parent
+          & powershell -ExecutionPolicy Bypass -File (Join-Path $mp 'meal-prep\pipeline\reanchor-all.ps1') 2>&1 | ForEach-Object { Log ('reanchor: ' + $_) }
+          $staleList = Join-Path $mp 'meal-prep\pipeline\reanchor-stale-cards.txt'
+          $stale = @()
+          if (Test-Path $staleList) { $stale = @(Get-Content $staleList | Where-Object { $_.Trim() -ne '' }) }
+          $CAP = 150
+          if ($stale.Count -eq 0) { Log 'loop closed: no card cost moved today' }
+          elseif ($stale.Count -gt $CAP) {
+            Log ("loop NOT closed: $($stale.Count) cards moved, over the $CAP sanity cap - not republishing unattended")
+            $summary += "REVIEW    $($stale.Count) recipe cards moved cost today (cap $CAP). Something systemic changed; review then run build-cards + publish for meal-prep\pipeline\reanchor-stale-cards.txt"
+            if (-not $NoAlert) { try { Send-Alert -Subject "Recipe cards: $($stale.Count) moved, over the daily cap" -Body ("The daily chain re-anchored the specs but did NOT republish, because $($stale.Count) cards changed cost and the sanity cap is $CAP. A number this large usually means a shared row, a gpu, or a DB rename moved rather than ordinary price drift. Slug list: meal-prep\pipeline\reanchor-stale-cards.txt") | Out-Null } catch {} }
+          } else {
+            Push-Location (Join-Path $mp 'meal-prep')
+            & '.\engine\build-cards.ps1' -Slugs $stale 2>&1 | Select-Object -Last 1 | ForEach-Object { Log ('build-cards: ' + $_) }
+            & '.\engine\publish.ps1' -Slugs $stale 2>&1 | Select-Object -Last 1 | ForEach-Object { Log ('publish: ' + $_) }
+            Pop-Location
+            Log ("loop closed: $($stale.Count) card(s) re-anchored and republished")
+          }
+        } catch { Log ('close-the-loop threw: ' + $_.Exception.Message) }
+      } else { Log 'loop NOT closed: compute-v2 did not succeed, so the manifest is not trustworthy to re-anchor from' }
       # re-cost the recipes from today's board + refresh the hub's Top 5 (only publishes on change). Non-fatal.
       # Brad's final call 2026-07-25: the ORIGINAL SMP-TOP5 hub section stays (he preferred it over the
       # green free-week grid, which was removed same day). The free ROTATION still runs below - it just

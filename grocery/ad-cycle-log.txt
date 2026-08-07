@@ -5534,3 +5534,70 @@
 [2026-08-07T06:25:23] run complete; flips=0; pull=(no pull - -NoPull; latest ads file reused)
 [2026-08-07T08:31:01] pull attempt 1 ok=True
 [2026-08-07T08:32:31] FF everyday refreshed
+[2026-08-07T08:45:50] Hy-Vee: Hy-Vee: 1538 products (935 refreshable via GraphQL; 603 have no link so their price cannot be re-verified)
+[2026-08-07T08:45:50] Hy-Vee: Hy-Vee: 886 refreshed today (158 marked down), 0 newly priced, 652 not re-verified, 32 REFUSED (productId is a different size than our row), 0 never asked (wall-clock cap), 0 failed
+[2026-08-07T08:45:50] Hy-Vee: WARNING:   size conflict, refresh refused: Clorox Disinfecting Bleach Free Crisp Lemon Cleaning Wipes  ours=[35 ct] 
+[2026-08-07T08:45:50] Hy-Vee: hy-vee=[each]  qty 35 vs 1  (productId 50222)
+[2026-08-07T08:45:50] Hy-Vee: WARNING:   size conflict, refresh refused: That's Smart Ground Cinnamon  ours=[2.5 oz] hy-vee=[2.38 oz]  qty 2.5 vs 
+[2026-08-07T08:45:50] Hy-Vee: 2.38  (productId 2950925)
+[2026-08-07T08:45:50] Hy-Vee: WARNING:   size conflict, refresh refused: Lee Kum Kee Premium Dark Soy Sauce  ours=[16.9 fl oz] hy-vee=[16.9 ml]  qty 
+[2026-08-07T08:45:50] Hy-Vee: 16.9 vs 0.57  (productId 731717)
+[2026-08-07T08:45:50] Hy-Vee: WARNING:   size conflict, refresh refused: Dinty Moore Beef Stew  ours=[15 oz] hy-vee=[38 oz]  qty 15 vs 38  (productId
+[2026-08-07T08:45:50] Hy-Vee:  11342)
+[2026-08-07T08:45:50] Hy-Vee: WARNING:   size conflict, refresh refused: Hormel Mary Kitchen Homestyle Corned Beef Hash  ours=[14 oz] hy-vee=[25 oz] 
+[2026-08-07T08:45:50] Hy-Vee:  qty 14 vs 25  (productId 47144)
+[2026-08-07T08:45:50] Hy-Vee: WARNING:   size conflict, refresh refused: Hy-Vee Mild Green Chiles Diced  ours=[7 oz] hy-vee=[4 oz]  qty 7 vs 4  
+[2026-08-07T08:45:50] Hy-Vee: (productId 1722234)
+[2026-08-07T08:45:50] Hy-Vee: WARNING:   size conflict, refresh refused: Hy-Vee Sloppy Joe Sauce  ours=[24 oz] hy-vee=[15 oz]  qty 24 vs 15  
+[2026-08-07T08:45:50] Hy-Vee: (productId 444508)
+[2026-08-07T08:45:50] Hy-Vee: WARNING:   size conflict, refresh refused: Spice World Minced Garlic  ours=[4.5 oz] hy-vee=[32 oz]  qty 4.5 vs 32  
+[2026-08-07T08:45:50] Hy-Vee: (productId 19478)
+[2026-08-07T08:45:50] Hy-Vee: WARNING:   size conflict, refresh refused: Hy-Vee Dill Weed  ours=[0.25 oz] hy-vee=[0.75 oz]  qty 0.25 vs 0.75  
+[2026-08-07T08:45:50] Hy-Vee: (productId 2918306)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Hy-Vee Ground Cloves  ours=[0.55 oz] hy-vee=[2 oz]  qty 0.55 vs 2  
+[2026-08-07T08:45:51] Hy-Vee: (productId 55979)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Hy-Vee Ground Ginger  ours=[0.55 oz] hy-vee=[2 oz]  qty 0.55 vs 2  
+[2026-08-07T08:45:51] Hy-Vee: (productId 2925188)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Hy-Vee Select Cheese Tortellini  ours=[19 oz] hy-vee=[42 oz]  qty 19 vs 42  
+[2026-08-07T08:45:51] Hy-Vee: (productId 1334638)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Tomatillos  ours=[0.15 lbs ($3.99/lb)] hy-vee=[lb]  qty 0.25 vs 1  
+[2026-08-07T08:45:51] Hy-Vee: (productId 37464)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Poblano Peppers  ours=[0.25 lbs ($4.99/lb)] hy-vee=[lb]  qty 0.2 vs 1  
+[2026-08-07T08:45:51] Hy-Vee: (productId 37443)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Johnson Family Farm Fresh Basil  ours=[0.75 oz] hy-vee=[0.8 oz]  qty 0.75 vs
+[2026-08-07T08:45:51] Hy-Vee:  0.8  (productId 332699)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Johnson Family Farm Fresh Mint  ours=[0.75 oz] hy-vee=[0.8 oz]  qty 0.75 vs 
+[2026-08-07T08:45:51] Hy-Vee: 0.8  (productId 269490)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Southeastern Mills Brown Gravy Mix  ours=[2.75 oz] hy-vee=[1.76 oz]  qty 
+[2026-08-07T08:45:51] Hy-Vee: 2.75 vs 1.76  (productId 54194)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Yellow Flesh Nectarines  ours=[0.55 lbs ($2.99/lb)] hy-vee=[lb]  qty 0.33 vs
+[2026-08-07T08:45:51] Hy-Vee:  1  (productId 8698)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Ocean Sprayr Craisinsr Original Dried Cranberries, Dried Fruit  ours=[6 oz] 
+[2026-08-07T08:45:51] Hy-Vee: hy-vee=[24 oz]  qty 6 vs 24  (productId 387023)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Ocean Sprayr Craisinsr Original Dried Cranberries, Dried Fruit  ours=[12 oz]
+[2026-08-07T08:45:51] Hy-Vee:  hy-vee=[24 oz]  qty 12 vs 24  (productId 387023)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Shallots  ours=[0.15 lbs ($3.99/lb)] hy-vee=[lb]  qty 0.25 vs 1  (productId 
+[2026-08-07T08:45:51] Hy-Vee: 37367)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: B-Size Gold Potatoes  ours=[0.15 lbs ($1.29/lb)] hy-vee=[lb]  qty 0.78 vs 1 
+[2026-08-07T08:45:51] Hy-Vee:  (productId 86415)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Green Serrano Peppers  ours=[0.05 lbs ($4.99/lb)] hy-vee=[lb]  qty 0.2 vs 1 
+[2026-08-07T08:45:51] Hy-Vee:  (productId 37444)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Anaheim Peppers  ours=[0.25 lbs ($4.99/lb)] hy-vee=[lb]  qty 0.2 vs 1  
+[2026-08-07T08:45:51] Hy-Vee: (productId 37372)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Bok Choy  ours=[1.35 lbs ($3.99/lb)] hy-vee=[lb]  qty 0.25 vs 1  (productId 
+[2026-08-07T08:45:51] Hy-Vee: 37343)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Butternut Squash  ours=[2.5 lbs ($1.49/lb)] hy-vee=[lb]  qty 0.67 vs 1  
+[2026-08-07T08:45:51] Hy-Vee: (productId 8845)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Acorn Squash  ours=[1.35 lbs ($1.49/lb)] hy-vee=[lb]  qty 0.67 vs 1  
+[2026-08-07T08:45:51] Hy-Vee: (productId 37453)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Spaghetti Squash  ours=[2.4 lbs ($1.49/lb)] hy-vee=[lb]  qty 0.67 vs 1  
+[2026-08-07T08:45:51] Hy-Vee: (productId 8849)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Jicama  ours=[1.4 lbs ($1.99/lb)] hy-vee=[lb]  qty 0.5 vs 1  (productId 
+[2026-08-07T08:45:51] Hy-Vee: 37358)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Johnson Family Farm Fresh Dill  ours=[0.75 oz] hy-vee=[0.8 oz]  qty 0.75 vs 
+[2026-08-07T08:45:51] Hy-Vee: 0.8  (productId 276428)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Johnson Family Farm Fresh Rosemary  ours=[0.75 oz] hy-vee=[0.8 oz]  qty 0.75
+[2026-08-07T08:45:51] Hy-Vee:  vs 0.8  (productId 332701)
+[2026-08-07T08:45:51] Hy-Vee: WARNING:   size conflict, refresh refused: Johnson Family Farm Fresh Thyme  ours=[0.75 oz] hy-vee=[0.8 oz]  qty 0.75 vs
+[2026-08-07T08:45:51] Hy-Vee:  0.8  (productId 332702)
+[2026-08-07T08:45:51] Hy-Vee: Hy-Vee everyday prices -> C:\Codex\income\grocery\out\regular\hyvee-regular-2026-08-07.json

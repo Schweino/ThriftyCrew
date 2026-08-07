@@ -84,15 +84,20 @@ foreach($f in (Get-ChildItem (Join-Path $specDir '*.json'))){
   if($m.Success -and [Math]::Abs([double]$m.Groups[1].Value - [double]$s.stat.cost_ps) -gt 0.005){ $stale.Add($f.BaseName) }
 }
 Write-Output ''
+# The list is written on EVERY run, empty included. Writing it only when non-empty leaves yesterday's list
+# on disk, and the daily chain reads this file to decide what to republish - so a clean day would have
+# rebuilt and published whatever the last dirty day happened to contain. That is the stale-proof-file class
+# (a proof that outlives the work it certifies), and it was caught the first time this was dry-run.
+$listPath = Join-Path $here 'reanchor-stale-cards.txt'
+$stale | Out-File $listPath -Encoding utf8
 if($stale.Count){
   Write-Output ("{0} built card(s) now show a cost their spec no longer holds. They are NOT rebuilt by this" -f $stale.Count)
   Write-Output 'script. To land them on the live site:'
   Write-Output ('  & .\engine\build-cards.ps1 -Slugs <slugs>   then   & .\engine\publish.ps1 -Slugs <slugs>')
   Write-Output ('  (publish is content-hash gated, so unchanged cards are skipped)')
-  $listPath = Join-Path $here 'reanchor-stale-cards.txt'
-  $stale | Out-File $listPath -Encoding utf8
   Write-Output ("  slug list written to: {0}" -f $listPath)
 } else {
   Write-Output 'every built card agrees with its spec cost - nothing to rebuild'
+  Write-Output ("  (empty list written to {0} so a stale one cannot be re-read)" -f $listPath)
 }
 exit $(if($d.Count){ 1 } else { 0 })
