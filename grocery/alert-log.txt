@@ -51,3 +51,5 @@
 [2026-08-07T06:18:50] SENT 'Grocery: 17 NEW price flag(s) - 2026-08-07' -> schweino68@gmail.com (id 19fdbf27b7aa8759)
 [2026-08-07T06:19:54] SENT 'Grocery: Walmart full capture aging - 2026-08-07' -> schweino68@gmail.com (id 19fdbf3719806d29)
 [2026-08-07T06:25:18] SENT 'Grocery: a GUARD has gone blind (test-auditors failed)' -> schweino68@gmail.com (id 19fdbf865b1b172f)
+[2026-08-07T06:37:22] SENT 'Recipe price inversion: 4 clamped' -> schweino68@gmail.com (id 19fdc037238eb121)
+[2026-08-07T06:38:11] SUPPRESSED (already sent this type today) 'Recipe price inversion: 4 clamped' [type: recipe price inversion clamped]
