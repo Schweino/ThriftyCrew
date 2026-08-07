@@ -200,7 +200,7 @@ test-auditors: can each watcher still see the bug it was written for?
   PASS  run-daily-local still checks the weekly lock, stands down on HELD, and sweeps a stale one
   PASS  weekly-post-capture still takes the lock on every phase
   PASS  weekly-post-capture never hands the tree back mid-run (the lock expires on its own TTL)
-  PASS  script-census clean twin: no unrecorded orphan, out\ at baseline, and it still SEES its recorded set (33 uncalled)
+  PASS  script-census clean twin: no unrecorded orphan, out\ at baseline, and it still SEES its recorded set (32 uncalled)
   PASS  script-census FIRES on a script no executable file names
   PASS  script-census SILENT once that script is wired in (a .cmd launcher counts as a caller)
   PASS  script-census ratchet FIRES when a one-off is written into out\
@@ -388,7 +388,7 @@ test-auditors: can each watcher still see the bug it was written for?
   PASS  compare-deals and audit-capture-eviction still state the SAME coverage-depth eligibility rule
   PASS  compare-deals still emits src_date into candidates (the field the per-store ranking turns on)
   PASS  audit-capture-eviction is ROSTERED in check-ad-cycles - the eviction check runs on every board generation, not only when a human remembers it
-  PASS  capture-eviction roster is ARMED: capture-evictions.json (2026-08-07T09:08:59) post-dates the newest board comparison-2026-08-07.json (built_at 2026-08-07T08:58:46)
+  FAIL  capture-evictions.json is stamped 2026-08-07T09:08:59, OLDER than the comparison-2026-08-07.json generation it names (built_at 2026-08-07T17:14:50) - the rostered pass did not run on this board, so its zero findings describe a board that no longer exists
   PASS  prompt-backup: every agent prompt and scheduled-task SKILL is backed up in ops\prompt-backup and identical across scopes
   PASS  fmt-lib: per-unit display still rolls over at a dollar and still shows a real sub-cent price
   PASS  basis-outlier: still catches a pack price on a single-unit size, and still stays silent on an ordinary premium spread
@@ -410,9 +410,9 @@ test-auditors: can each watcher still see the bug it was written for?
   PASS  prose-sync covers every field spec-guards merges (no field can revert unwatched)
   PASS  spec-contradictions: all five classes still fire on the frozen live cases, and a self-consistent spec still produces nothing
   PASS  contradiction repair: still refuses a two-quantity head line, "rice vinegar", and "wild rice" - and still matches "93/7 ground turkey" to its own line
-  FAIL  a spec-contradiction class got WORSE: spec-contradictions FAIL - a class got WORSE than out\spec-contradictions-baseline.json: STALE-MONEY: 15 now, baseline 0 | PHANTOM: 1 now, baseline 0
+  FAIL  a spec-contradiction class got WORSE: spec-contradictions FAIL - a class got WORSE than out\spec-contradictions-baseline.json: PHANTOM: 1 now, baseline 0
   PASS  cook measures: a package noun that cannot prove it equals the grams is still replaced, a whole can is still left alone, and a WEIGHT label is still out of scope
-  FAIL  17 ingredient line(s) again state a package quantity the recipe does not use - the Ingredients list is telling a cook to measure out a bottle or a bag. Run meal-prep\pipeline\repair-cook-measures.ps1 -Apply, then rebuild and republish those cards.
+  PASS  no ingredient line names a package the recipe does not actually use (0 false labels across 513 specs)
   PASS  serving scaler still scales only the leading quantity and understands fractions (the JS matches its PowerShell twin)
   PASS  range labels: the founding garlic case still resolves to the grams, a range with an unweighable unit is still REFUSED rather than guessed, and "12-oz bag" is still not a range
   PASS  no ingredient line states a range where the quantity belongs (the serving scaler can render every label in the catalog)
