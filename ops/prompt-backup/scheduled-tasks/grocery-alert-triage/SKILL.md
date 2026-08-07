@@ -19,6 +19,14 @@ The handoff is a FILE, never a message: `grocery/triage-plans/plan-<yyyy-MM-dd>[
 `grocery/triage-plans/README.md`. Read that README once before you start so you can check the plan is
 well formed.
 
+`-N` IS A SEQUENCE NUMBER FOR THE DAY, NOT A ROUND MARKER. Before naming a plan, list
+`grocery/triage-plans/plan-<today>*.json` and take the highest N plus one; a bare `plan-<today>.json` counts
+as N=1. Round semantics live in the plan's `round` FIELD, which is what the gate reads and prints. These
+were the same thing until 2026-08-06, when a 07:50 run had already taken the bare name and a second run
+needed `-2` and `-3` for two fresh investigations. Had the developer bounced that day, round 2 would have
+had nowhere clean to write, because `-2` was already a different investigation. Never overwrite an existing
+plan: they are committed with their fixes and are the record of why a rule exists.
+
 STEP 0 - GUARD: run
   powershell -ExecutionPolicy Bypass -File C:\Codex\income\grocery\triage-due.ps1
 IDLE means report one line and STOP (no agents, no plan, no cost). DUE means proceed. Items with status
@@ -39,13 +47,35 @@ STEP 0.75 - TRIAGE THE TRIAGE (cheap, and it is most of the savings). Before spa
 - ROUTE THE CHEAP ONES: items whose owner is another job (browser-store link drift, a missed Wednesday
   refresh, anything the SKILL already says waits for the Wednesday browser agent) are named in the
   dispatch as ONE-LINE items. The reviewer must not spend a blast radius on them.
+- BUDGET THE WALLS. An alert whose blocking condition is OUTSIDE our control - a CAPTCHA or bot wall, an
+  expired credential, a job that did not run - and that carries NO price flag with it, gets a SHORT FIXED
+  budget of roughly 10 tool calls, not a consequence audit. Do not send the reviewer past the wall by
+  default. The wall is Brad's; the alert already asked him. Give the reviewer exactly one cheap question
+  to answer: **does a check own this condition, and did that check actually run?** That question is what
+  pays. On 2026-08-06 two Walmart bot-wall alerts cost about an hour of reviewer time to prove the board
+  had published honestly on a 107-of-526-term pull, and it HAD - the union was real, no cell was lost, the
+  dates were honest. The one real find was that `audit-capture-eviction` was rostered in no cycle at all
+  and only ran when a human remembered, and that came from asking who checks this, not from the audit.
+- ESCALATE A WALL ONLY ON A MEASURED SIGNAL. The short budget is not a blind spot, because the risk of a
+  wall is never the wall - it is what the board publishes on thin data, and this estate has already been
+  bitten by a 1-row capture evicting a 20-row one. So before you accept the short budget, run the ONE
+  cheap comparison yourself: the affected store's newest capture file against its previous generation,
+  rows and terms. If depth dropped materially and the board still admitted the thin capture, that is the
+  trigger: order the full consequence audit (union composition, cells held vs lost, `src_date` honesty,
+  what was quarantined) and treat it as the substantive item of the day. If depth held, say so with both
+  numbers and keep the item short. A one-line "capture depth held, 4259 rows vs 4881 last generation" is a
+  checkable claim; "the wall is Brad's" alone is not.
 On 2026-07-31 this step would have taken a 14-item review down to 4 substantive ones.
 
 STEP 1 - DIAGNOSE: spawn the reviewer, synchronously (run_in_background: false), with subagent_type
 "triage-reviewer". Tell it: the open queue ids in priority order from STEP 0.75, which ones are one-liners
 or superseded, the foreign-dirty file list, the plan path to write
-(`C:\Codex\income\grocery\triage-plans\plan-<today>.json`), that round = 1, and a per-item effort ceiling
-(a tool-call budget for any single item, past which it parks the item as `needs-more-time`).
+(`C:\Codex\income\grocery\triage-plans\` plus the next free sequence name per the rule above, which is NOT
+always the bare `plan-<today>.json`), that round = 1, and a per-item effort ceiling
+(a tool-call budget for any single item, past which it parks the item as `needs-more-time`). The ceiling is
+PER ITEM AND PER CLASS, not one number for the run: name the short wall budget from STEP 0.75 on the items
+it applies to, and a real ceiling on the substantive ones. A single ceiling quoted for a mixed dispatch is
+how a wall alert ends up costing what a wrong-product alert should.
 
 STEP 2 - GATE THE HANDOFF, DETERMINISTICALLY. Do not eyeball the plan; run:
   powershell -ExecutionPolicy Bypass -File C:\Codex\income\grocery\validate-triage-plan.ps1 -Plan <plan> -OpenIds <every open id>
@@ -72,7 +102,7 @@ per `publish_batch`, not once per item.
 
 STEP 4 - ONE BOUNCE ROUND, MAX. If the developer reports items with status "bounced" (a genuinely NEW
 failure class it found while implementing, not a detail), spawn the reviewer again for round 2 with ONLY
-those items, writing `plan-<today>-2.json`, then the developer again on that plan. Pass the bounce's own
+those items, writing the next sequence number, then the developer again on that plan. Pass the bounce's own
 MEASUREMENT to the reviewer, and tell it to test that measurement first: on 2026-07-31 a bounce claimed two
 commodities had no sanity band, both did, and round 2's first job was disproving its own premise. Stop after round 2:
 anything still unresolved becomes needs-brad with ONE specific email via
@@ -80,8 +110,28 @@ anything still unresolved becomes needs-brad with ONE specific email via
 wrong-product cell only appeared after the first exclusion rebuilt the board), which is why this round
 exists and why it is capped.
 
+STEP 4.5 - ALERTS THAT ARRIVE MID-RUN ARE STALE BY CONSTRUCTION. The run's scope is the open queue as it
+stood at STEP 0. The daily cycle keeps firing while you work, so re-read the queue before STEP 5 and expect
+new ids. They are NOT a bounce and they do not belong to STEP 4's cap.
+- NEVER dispatch one as written. Every mid-run alert was measured against a board generation your own run
+  is in the process of replacing, so its numbers describe a snapshot that no longer exists. Tell the
+  reviewer to re-measure each against the CURRENT board FIRST, and to treat "this already resolved itself"
+  as a legitimate finding reported with before/after numbers, not as a reason to manufacture a fix. On
+  2026-08-06 five alerts fired at 11:25-11:31 off the 11:23:15 board, which was built from a 107-of-526-term
+  Walmart pull; by the time they were read, the wall had been cleared, a 420-term rescue pull had landed and
+  the board had rebuilt twice. Several flags named Walmart as the runner-up. Diagnosed as written they would
+  have been confident answers about a dead board.
+- Drain them in ONE additional round, then STOP, even if more have arrived by then. A run must not chase its
+  own rebuilds: your publish can fire the next cycle's flags, and without a stop condition the day never
+  ends. Whatever is still open at that point is left `open` for the next scheduled run, and the report says
+  so by id rather than leaving it silent.
+- Brad's never-wait rule is why they get drained at all rather than parked for tomorrow. The cap is what
+  keeps that from becoming an unbounded run.
+
 STEP 5 - VERIFY THE RUN, DO NOT TAKE ITS WORD FOR IT:
-- `triage-due.ps1` again: it should be IDLE, or list only needs-brad items.
+- `triage-due.ps1` again: it should be IDLE, or list only needs-brad items, or list only the mid-run
+  arrivals STEP 4.5 deliberately left for the next run. Those three are the ONLY clean endings. If it is
+  DUE for anything else, that is an item the run dropped, and the report names it rather than closing quiet.
 - `git -C C:\Codex\income status --porcelain`: no .ps1, commodities.json, categories.json,
   commodity-search.json, allowlist/config json, SKILL or plan file left uncommitted. Regenerated pipeline
   output (out\*, board.json, feed, logs) is the pipeline's, not ours.
