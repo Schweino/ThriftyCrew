@@ -31,7 +31,7 @@
                  "fat":  18,
                  "cost_ps":  "3.71"
              },
-    "intro_html":  "Musakhan is Palestine\u0027s national dish and it is built on two things almost nobody in an American kitchen thinks of as a main event: onions and bread. Pounds of onions cook down slowly in olive oil until they are soft and sweet, sumac turns them a dusty red and makes them taste like lemon without any lemon in the pot, and it all goes over flatbread that soaks up everything. Roast chicken sits on top. Each portion runs \u003cstrong\u003e571 calories and 34 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.71\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Musakhan is Palestine\u0027s national dish and it is built on two things almost nobody in an American kitchen thinks of as a main event: onions and bread. Pounds of onions cook down slowly in olive oil until they are soft and sweet, sumac turns them a dusty red and makes them taste like lemon without any lemon in the pot, and it all goes over flatbread that soaks up everything. Roast chicken sits on top. Each portion runs \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eGround Allspice (Great Value):\u003c/strong\u003e 0.75 oz (18 g)",
                                 "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 6 tbsp (46 g)",
@@ -60,7 +60,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $29.56 across 14 servings, roughly $2.11 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $22.40 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.96. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.71 a portion\u003c/strong\u003e (at everyday cost). The flatbread and the onions together cost more than the chicken does, which tells you exactly what kind of dish this is: one that was designed to make a little meat feed a lot of people.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a portion\u003c/strong\u003e (at everyday cost). The flatbread and the onions together cost more than the chicken does, which tells you exactly what kind of dish this is: one that was designed to make a little meat feed a lot of people.",
     "shop_smart":  [
                        "You need a serious quantity of onions, so buy the five pound bag. The per-pound price on a big bag runs a fraction of the loose bin and onions keep for a month in a dry cabinet.",
                        "Sumac is the one spice with no substitute here, since it is what makes musakhan taste like musakhan. Buy it from a Middle Eastern grocer where it costs a third of what the gourmet spice shops charge, and one bag lasts a very long time.",
@@ -77,9 +77,9 @@
                     "Warm the tortillas, tear them into large pieces, and toss them in your mixing pot with the pan drippings so they soak up the fat rather than staying dry.",
                     "Chop the chicken, fold it together with the sumac onions and the soaked bread, and finish with the chopped cilantro."
                 ],
-    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Fourteen equal containers. Each one carries \u003cstrong\u003e571 calories\u003c/strong\u003e, and the bread softens as it sits, which is not a flaw here, it is the entire idea behind the dish.",
+    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Fourteen equal containers. Each one carries \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e, and the bread softens as it sits, which is not a flaw here, it is the entire idea behind the dish.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themediterraneandish.com/musakhan-sumac-chicken/\" target=\"_blank\" rel=\"noopener\"\u003ethemediterraneandish.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Palestinian musakhan for about $3.71 a portion (at everyday cost). This is one of a few hundred recipes on the site. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Palestinian musakhan for about ${{cost_ps}} a portion (at everyday cost). This is one of a few hundred recipes on the site. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  26.78,
     "cost_batch_true":  29.56,
     "cost_per_serving":  1.91,
@@ -194,7 +194,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Musakhan: Palestinian sumac chicken roasted over deeply caramelized onions and flatbread. Built as 14 meal prep portions at 571 calories, 34g protein, about $3.71 each (at everyday cost).",
+                 "description":  "Musakhan: Palestinian sumac chicken roasted over deeply caramelized onions and flatbread. Built as 14 meal prep portions at {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "musakhan, sumac chicken, palestinian chicken, caramelized onion chicken, middle eastern meal prep, flatbread chicken",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

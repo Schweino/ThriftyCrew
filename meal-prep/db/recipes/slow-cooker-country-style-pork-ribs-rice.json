@@ -26,7 +26,7 @@
                  "fat":  30,
                  "cost_ps":  "2.22"
              },
-    "intro_html":  "Five minutes of work in the morning, barbecue for a week. Country style ribs are cut from the shoulder, which means they are cheap, forgiving, and they turn to shreds after a long slow cook. Pile them over rice and you have 47 grams of protein sitting at about $2.22 a bowl (at everyday cost).",
+    "intro_html":  "Five minutes of work in the morning, barbecue for a week. Country style ribs are cut from the shoulder, which means they are cheap, forgiving, and they turn to shreds after a long slow cook. Pile them over rice and you have {{protein}} grams of protein sitting at about ${{cost_ps}} a bowl (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 7.5 lb (3360 g)",
                                 "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 7 tbsp (94 g)",
@@ -51,7 +51,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $29.36 across 14 servings, roughly $2.10 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.96 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.32. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.22 a bowl\u003c/strong\u003e (at everyday cost) for slow cooked barbecue pork over rice. A barbecue joint plate would cost you several times that and would not be waiting in your fridge on Wednesday.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for slow cooked barbecue pork over rice. A barbecue joint plate would cost you several times that and would not be waiting in your fridge on Wednesday.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy the whole pork shoulder, not the trimmed ribs.\u003c/strong\u003e Country style ribs come off the shoulder anyway. Buying the bigger primal cut usually drops the per pound price, and you cut it down at home.",
                        "\u003cstrong\u003eBarbecue sauce is the second biggest line.\u003c/strong\u003e Buy the large bottle of store brand rather than a boutique one. This batch uses a lot of it, and the big bottle is often half the price per ounce.",
@@ -68,9 +68,9 @@
                     "Cook the rice near the end so it is fresh and hot when the pork is done.",
                     "Shred the pork right in the cooker, stir in the rest of the barbecue sauce and the juices, then combine with the rice in your big pot."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container so nobody gets shorted on meat. Every bowl lands near 785 calories and 47 grams of protein.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container so nobody gets shorted on meat. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-country-style-ribs/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Slow cooker barbecue for about $2.22 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Slow cooker barbecue for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  26.97,
     "cost_batch_true":  29.36,
     "cost_per_serving":  1.93,
@@ -163,7 +163,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Slow cooker barbecue country style pork ribs shredded over rice, built for 14 servings. 785 calories, 47g protein, about $2.22 per serving (at everyday cost).",
+                 "description":  "Slow cooker barbecue country style pork ribs shredded over rice, built for 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "slow cooker country style ribs, bbq pork rice bowls, crockpot pork ribs, budget bbq meal prep, cheap pork dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",

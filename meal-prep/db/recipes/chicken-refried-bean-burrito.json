@@ -28,7 +28,7 @@
                  "fat":  10,
                  "cost_ps":  "2.73"
              },
-    "intro_html":  "This is the burrito you make when the week is already tired and you need something that eats like a hug. Diced chicken breast gets a hard hit of taco seasoning, then it rides a layer of warm refried beans and a swipe of Greek yogurt that stands in for sour cream and pays you back in protein. Every burrito lands \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e38 grams of protein\u003c/strong\u003e, on a high fiber tortilla that brings only about 5 grams of net carb of its own. It is the creamy, refried-bean cousin to our whole black bean and salsa chicken burrito. That one pulls a rotisserie bird and leans on salsa and a Mexican cheese blend; this one hits diced breast with taco seasoning, folds in a Greek yogurt crema and cheddar, and swaps the whole beans for refried.",
+    "intro_html":  "This is the burrito you make when the week is already tired and you need something that eats like a hug. Diced chicken breast gets a hard hit of taco seasoning, then it rides a layer of warm refried beans and a swipe of Greek yogurt that stands in for sour cream and pays you back in protein. Every burrito lands \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, on a high fiber tortilla that brings only about 5 grams of net carb of its own. It is the creamy, refried-bean cousin to our whole black bean and salsa chicken burrito. That one pulls a rotisserie bird and leans on salsa and a Mexican cheese blend; this one hits diced breast with taco seasoning, folds in a Greek yogurt crema and cheddar, and swaps the whole beans for refried.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
@@ -53,7 +53,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $33.19 across 14 servings, roughly $2.37 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $4.96 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.15. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.73 a burrito\u003c/strong\u003e (at everyday cost) for the kind of cheap, creamy, filling dinner that made bean burritos famous in the first place. The beans carry the cost down and the yogurt carries the protein up.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) for the kind of cheap, creamy, filling dinner that made bean burritos famous in the first place. The beans carry the cost down and the yogurt carries the protein up.",
     "shop_smart":  [
                        "Refried beans in the can are one of the cheapest, most filling things in the store. Buy the plain or the fat free version and season them yourself so you control the salt.",
                        "Taco seasoning costs almost nothing if you buy the bulk container instead of the single packets, and this batch uses a good spoonful per burrito.",
@@ -69,9 +69,9 @@
                     "To keep them even, weigh the beans, chicken and cheese together, subtract the empty bowl, and divide by 14 before you build, so each burrito gets the same load.",
                     "Fold in the sides, roll tight, wrap each one, and portion into 14 containers."
                 ],
-    "portion_html":  "Weigh the components, divide by 14, and build each burrito to the same number so nobody gets the sad one. Each burrito carries \u003cstrong\u003e347 calories and 38 grams of protein\u003c/strong\u003e. Reheat wrapped for a minute or two, and the beans keep everything moist.",
+    "portion_html":  "Weigh the components, divide by 14, and build each burrito to the same number so nobody gets the sad one. Each burrito carries \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e. Reheat wrapped for a minute or two, and the beans keep everything moist.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.onelovelylife.com/ground-chicken-burritos/\" target=\"_blank\" rel=\"noopener\"\u003eonelovelylife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Chicken and refried bean burritos, 14 wrapped and ready, for about $2.73 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "upsell_html":  "Chicken and refried bean burritos, 14 wrapped and ready, for about ${{cost_ps}} each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
     "cost_batch":  25.56,
     "cost_batch_true":  33.19,
     "cost_per_serving":  1.83,
@@ -148,7 +148,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Chicken and refried bean burritos with taco-seasoned diced breast, warm refried beans and a Greek yogurt crema. 14 wrapped at 347 calories, 38g protein, about $2.73 (at everyday cost).",
+                 "description":  "Chicken and refried bean burritos with taco-seasoned diced breast, warm refried beans and a Greek yogurt crema. 14 wrapped at {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
                  "keywords":  "chicken refried bean burrito, high protein bean burrito, taco chicken meal prep, greek yogurt crema burrito, budget burrito meal prep, low calorie chicken burrito",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",

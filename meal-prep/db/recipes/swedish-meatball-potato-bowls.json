@@ -20,7 +20,7 @@
                  "fat":  23,
                  "cost_ps":  "5.62"
              },
-    "intro_html":  "Comfort food that actually works for meal prep, with a creamy gravy that clings to tender potatoes. You get a big 50 grams of protein per bowl for about $5.62 a serving (at everyday cost). It makes 14 servings, so cook once and you are set.",
+    "intro_html":  "Comfort food that actually works for meal prep, with a creamy gravy that clings to tender potatoes. You get a big {{protein}} grams of protein per bowl for about ${{cost_ps}} a serving (at everyday cost). It makes 14 servings, so cook once and you are set.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2730 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 8 lb (3505 g)",
@@ -60,7 +60,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $56.38 across 14 servings, roughly $4.03 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $22.25 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $78.63. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$5.62 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The \u003cstrong\u003e6 lb ground beef pack\u003c/strong\u003e is the whole ballgame here, so buy the big size and skip the small trays.",
                        "Grab \u003cstrong\u003eplain russet or gold potatoes by the bag\u003c/strong\u003e. An 8 lb bag runs about a buck a pound and beats anything pre-cut.",
@@ -73,7 +73,7 @@
                     "Stir in the sour cream and the last teaspoon of brown sugar off the heat, then return the meatballs to warm through.",
                     "Serve the meatballs and gravy over cooked potatoes and spoon extra sauce on top."
                 ],
-    "portion_html":  "Each of the 14 bowls delivers 50 grams of protein and about 642 calories.",
+    "portion_html":  "Each of the 14 bowls delivers {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.melskitchencafe.com/skillet-swedish-meatballs/\" target=\"_blank\" rel=\"noopener\"\u003eMel\u0027s Kitchen Cafe\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "This is the kind of dinner that feels like a treat but keeps your grocery budget right where you want it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  48.08,
@@ -207,7 +207,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Swedish meal prep. Fourteen servings at about 642 calories and 50 grams of protein for roughly $5.62 each (at everyday cost).",
+                 "description":  "A high-protein Swedish meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, swedish meatball and potato bowls, budget dinner",
                  "costPerServing":  5.62,
                  "recipeIngredient":  [

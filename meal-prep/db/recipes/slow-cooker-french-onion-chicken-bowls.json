@@ -20,7 +20,7 @@
                  "fat":  14,
                  "cost_ps":  "2.71"
              },
-    "intro_html":  "French onion soup gets all its magic from slow-cooked onions, and that same trick makes this chicken bowl shine. It brings a big 70 grams of protein for about $2.71 (at everyday cost), with deep, savory, oniony flavor throughout. One batch makes 14 servings, so a bag of cheap onions carries you a long way.",
+    "intro_html":  "French onion soup gets all its magic from slow-cooked onions, and that same trick makes this chicken bowl shine. It brings a big {{protein}} grams of protein for about ${{cost_ps}} (at everyday cost), with deep, savory, oniony flavor throughout. One batch makes 14 servings, so a bag of cheap onions carries you a long way.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3450 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (820 g)",
@@ -51,7 +51,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $32.18 across 14 servings, roughly $2.30 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $5.74 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.92. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.71 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "This whole dish is built on onions, so \u003cstrong\u003ebuy the big three-pound bag\u003c/strong\u003e when it\u0027s cheap and you\u0027ve got the star ingredient covered.",
                        "Greek yogurt stands in for cream here, so \u003cstrong\u003euse plain yogurt instead of heavy cream\u003c/strong\u003e to cut cost and add protein.",
@@ -64,7 +64,7 @@
                     "Stir in the Greek yogurt off the heat for a creamy, tangy finish, then lay the Swiss cheese over the top and let it melt into the warm chicken.",
                     "Serve over white rice and top each bowl with grated parmesan."
                 ],
-    "portion_html":  "You get a strong 70 grams of protein and 657 calories per serving, one of the highest-protein bowls here.",
+    "portion_html":  "You get a strong {{protein}} grams of protein and {{cal}} calories per serving, one of the highest-protein bowls here.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://ohsnapmacros.com/crockpot-french-onion-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eOh Snap Macros\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheap onions, patient cooking, and a big protein payoff. That\u0027s a win any way you slice it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  27.84,
@@ -163,7 +163,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 657 calories and 70 grams of protein for roughly $2.71 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker french onion chicken bowls, budget dinner",
                  "costPerServing":  2.71,
                  "recipeIngredient":  [

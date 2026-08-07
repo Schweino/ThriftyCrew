@@ -20,7 +20,7 @@
                  "fat":  18,
                  "cost_ps":  "4.22"
              },
-    "intro_html":  "Creamy beef stroganoff turned into a make-ahead skillet that fits your macros. Each bowl carries 53 grams of protein for around $4.22 (at everyday cost) and the batch makes 14 servings. This is the kind of stick-to-your-ribs dinner that usually costs a lot more away from home.",
+    "intro_html":  "Creamy beef stroganoff turned into a make-ahead skillet that fits your macros. Each bowl carries {{protein}} grams of protein for around ${{cost_ps}} (at everyday cost) and the batch makes 14 servings. This is the kind of stick-to-your-ribs dinner that usually costs a lot more away from home.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2240 g)",
                                 "\u003cstrong\u003eRotini Pasta (Barilla):\u003c/strong\u003e 12 cups (1166 g)",
@@ -54,7 +54,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $51.13 across 14 servings, roughly $3.65 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.80 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.93. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.22 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eWhite mushrooms\u003c/strong\u003e cost less than baby bellas and cook down the same, so grab the cheaper carton.",
                        "\u003cstrong\u003eLight sour cream\u003c/strong\u003e gives you the classic creamy tang with less fat, and one tub covers the whole batch.",
@@ -67,7 +67,7 @@
                     "Pour in the beef broth, the dijon, and the worcestershire, simmer until it thickens, then stir in the light sour cream off the heat so it stays smooth.",
                     "Fold the cooked rotini into the creamy sauce and portion it out."
                 ],
-    "portion_html":  "Every one of the 14 servings delivers 53 grams of protein and 622 calories, so this creamy classic still earns its spot on a lean plan.",
+    "portion_html":  "Every one of the 14 servings delivers {{protein}} grams of protein and {{cal}} calories, so this creamy classic still earns its spot on a lean plan.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thecozycook.com/ground-beef-stroganoff/\" target=\"_blank\" rel=\"noopener\"\u003eThe Cozy Cook\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Rich, creamy, and ready in the fridge all week. Comfort food does not have to break the budget. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  45.14,
@@ -173,7 +173,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 622 calories and 53 grams of protein for roughly $4.22 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, ground beef stroganoff pasta, budget dinner",
                  "costPerServing":  4.22,
                  "recipeIngredient":  [

@@ -67,7 +67,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $54.83 across 14 servings, roughly $3.92 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $21.03 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $75.86. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.94 a bowl\u003c/strong\u003e (at everyday cost) for a thick, bacon-smoked chowder. Potatoes and canned corn are two of the cheapest things you can buy, and here they are doing most of the heavy lifting.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a thick, bacon-smoked chowder. Potatoes and canned corn are two of the cheapest things you can buy, and here they are doing most of the heavy lifting.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy potatoes in the big bag.\u003c/strong\u003e This chowder leans on them hard, and the per pound price on an eight or ten pound bag is a fraction of what loose potatoes cost.",
                        "\u003cstrong\u003eCanned corn beats frozen for a chowder.\u003c/strong\u003e It is cheaper, it is already soft, and the liquid in the can can go right into the pot instead of down the drain.",
@@ -83,9 +83,9 @@
                     "Add the drained corn and the cooked turkey breast and bring it back to a simmer.",
                     "Stir in the heavy cream and the hot sauce, warm it through without boiling, then season with salt and black pepper and scatter the reserved bacon back on top."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide by 14 and ladle that exact weight into each container. Every bowl lands near 581 calories with 36 grams of protein. Potato chowders thicken hard in the fridge, so a splash of broth on reheat brings it right back.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide by 14 and ladle that exact weight into each container. Every bowl lands near {{cal}} calories with {{protein}} grams of protein. Potato chowders thicken hard in the fridge, so a splash of broth on reheat brings it right back.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://bowl-me-over.com/turkey-corn-chowder/\" target=\"_blank\" rel=\"noopener\"\u003ebowl-me-over.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cem\u003eA thick, smoky chowder for about $4.94 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "upsell_html":  "\u003cem\u003eA thick, smoky chowder for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  33.7,
     "cost_batch_true":  54.83,
     "cost_per_serving":  2.41,

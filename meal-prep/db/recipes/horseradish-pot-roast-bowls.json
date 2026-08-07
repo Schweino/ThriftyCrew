@@ -26,7 +26,7 @@
                  "fat":  37,
                  "cost_ps":  "5.23"
              },
-    "intro_html":  "Horseradish and beef have been a pairing since long before anybody wrote it down, and a slow cooker is where that pairing gets easy. The heat mellows over eight hours into something warm rather than sharp, the mushrooms go deep and savory, and the gravy ends up creamy without a drop of cream. Each bowl carries \u003cstrong\u003e50 grams of protein\u003c/strong\u003e and 727 calories for about \u003cstrong\u003e$5.23\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Horseradish and beef have been a pairing since long before anybody wrote it down, and a slow cooker is where that pairing gets easy. The heat mellows over eight hours into something warm rather than sharp, the mushrooms go deep and savory, and the gravy ends up creamy without a drop of cream. Each bowl carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 7 lb (3175 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.5 tbsp (49 g)",
@@ -55,7 +55,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $63.58 across 14 servings, roughly $4.54 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $12.15 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $75.73. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$5.23 a bowl\u003c/strong\u003e (at everyday cost). Mushrooms and a jar of horseradish sauce are what separate this from a plain pot roast, and neither one is expensive.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Mushrooms and a jar of horseradish sauce are what separate this from a plain pot roast, and neither one is expensive.",
     "shop_smart":  [
                        "White button mushrooms cost a fraction of what the specialty varieties run and they behave better in a long braise anyway. Buy the sealed packs, not the loose bin, when the price is close.",
                        "Creamy horseradish sauce keeps for months in the fridge and a jar covers more than one batch. Check the label to be sure you are buying the sauce and not the straight prepared root.",
@@ -72,9 +72,9 @@
                     "Shred the beef in the cooker with two forks and stir it through the horseradish gravy.",
                     "Cook the rice separately and taste the gravy for salt before you portion."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of beef, mushrooms, and gravy into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e727 calories with 50 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of beef, mushrooms, and gravy into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-horseradish-pot-roast/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Horseradish pot roast for about $5.23 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Horseradish pot roast for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  62.21,
     "cost_batch_true":  63.58,
     "cost_per_serving":  4.44,
@@ -175,7 +175,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Horseradish pot roast bowls meal prep: chuck roast slow cooked with creamy horseradish, Worcestershire, and mushrooms over rice. 727 calories, 50g protein, about $5.23 per serving (at everyday cost).",
+                 "description":  "Horseradish pot roast bowls meal prep: chuck roast slow cooked with creamy horseradish, Worcestershire, and mushrooms over rice. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "horseradish pot roast, slow cooker beef, mushroom pot roast, shredded beef bowls, budget meal prep, chuck roast recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

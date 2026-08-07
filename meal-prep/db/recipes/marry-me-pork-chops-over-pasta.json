@@ -18,7 +18,7 @@
                  "fat":  31,
                  "cost_ps":  "3.51"
              },
-    "intro_html":  "Seared cajun-dusted pork chops in a creamy sun-dried tomato and parmesan sauce, the same sauce that made marry me chicken famous. Each serving packs \u003cstrong\u003e45 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.51\u003c/strong\u003e (at everyday cost). The name says pasta, but our grocery board priced the base and rice won, so rice it is. The sauce does not care.",
+    "intro_html":  "Seared cajun-dusted pork chops in a creamy sun-dried tomato and parmesan sauce, the same sauce that made marry me chicken famous. Each serving packs \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). The name says pasta, but our grocery board priced the base and rice won, so rice it is. The sauce does not care.",
     "ingredients_display": ["\u003cstrong\u003ePork Chops:\u003c/strong\u003e 5.25 lb (2380 g)","\u003cstrong\u003eCajun Seasoning (Tony Chachere\u0027s):\u003c/strong\u003e 3.5 tbsp (32 g)","\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1 tbsp (8 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1.25 tbsp (11 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)","\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3.5 tbsp (49 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.75 lb (840 g)","\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 1.75 cups (416 g)","\u003cstrong\u003eSun-Dried Tomatoes:\u003c/strong\u003e 1 2/3 cups (94 g)","\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eDried Basil (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 5.5 oz (158 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4 cups dry (700 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -36,7 +36,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $40.87 across 14 servings, roughly $2.92 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $19.66 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $60.53. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.51 a bowl\u003c/strong\u003e (at everyday cost) for a creamy sun-dried tomato pork dinner that reads like an $18 date-night entree at an Italian place.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a creamy sun-dried tomato pork dinner that reads like an $18 date-night entree at an Italian place.",
     "shop_smart":  ["Pork chops are two thirds of the batch, so this is a recipe to cook when chops hit the weekly board on sale. Every drop in the per-pound price saves you real money across the batch.","Real parmesan from the 8 ounce tub beats the green shaker can on both flavor and per-ounce price. Grate it yourself.","Sun-dried tomatoes keep for months. One jar covers this batch with plenty to spare and hangs around for the next marry me anything."],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -48,9 +48,9 @@
                     "Off the heat, stir in the parmesan until smooth. Slice the rested chops and return them to the sauce.",
                     "Serve the saucy pork over the rice."
                 ],
-    "portion_html":  "Weigh the pot of pork and sauce, subtract the empty pot number from step 1, and divide by 14. Portion that weight over even scoops of rice in 14 containers. Every bowl lands at 669 calories and 45 grams of protein.",
+    "portion_html":  "Weigh the pot of pork and sauce, subtract the empty pot number from step 1, and divide by 14. Portion that weight over even scoops of rice in 14 containers. Every bowl lands at {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://soulfulpork.com/recipes/marry-me-pork-chops/\" target=\"_blank\" rel=\"noopener\"\u003eSoulful Pork\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $3.51 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  33.72,
     "cost_batch_true":  40.87,
     "cost_per_serving":  2.41,
@@ -175,7 +175,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Marry Me pork chops meal prep: 669 calories and 45g protein at about $3.51 a serving (at everyday cost). Creamy sun-dried tomato parmesan sauce over rice, 14 bowls.",
+                 "description":  "Marry Me pork chops meal prep: {{cal}} calories and {{protein}}g protein at about ${{cost_ps}} a serving (at everyday cost). Creamy sun-dried tomato parmesan sauce over rice, 14 bowls.",
                  "keywords":  "marry me pork chops, creamy sun-dried tomato pork, budget pork chop recipe, meal prep pork dinner, parmesan cream sauce, cheap date night dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",

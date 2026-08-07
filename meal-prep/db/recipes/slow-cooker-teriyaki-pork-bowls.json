@@ -20,7 +20,7 @@
                  "fat":  8,
                  "cost_ps":  "3.59"
              },
-    "intro_html":  "This one is sweet, savory, and about as easy as dinner gets. Tender teriyaki pork over rice with broccoli and onion gives you 57 grams of protein a bowl for around $3.59 (at everyday cost). Fourteen servings means you cook once and eat well all week.",
+    "intro_html":  "This one is sweet, savory, and about as easy as dinner gets. Tender teriyaki pork over rice with broccoli and onion gives you {{protein}} grams of protein a bowl for around ${{cost_ps}} (at everyday cost). Fourteen servings means you cook once and eat well all week.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3300 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (850 g)",
@@ -50,7 +50,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $43.22 across 14 servings, roughly $3.09 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $6.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.20. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.59 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Bottled teriyaki sauce carries the whole dish, but it is the priciest item here. \u003cstrong\u003eCompare the store brand\u003c/strong\u003e against the name brand, since they taste about the same in the slow cooker.",
                        "Stretch it with a little honey and broth. A \u003cstrong\u003esplash of each thins the sauce\u003c/strong\u003e so one bottle coats the entire batch.",
@@ -64,7 +64,7 @@
                     "Steam the broccoli florets until just tender.",
                     "Serve over cooked white rice and divide into containers."
                 ],
-    "portion_html":  "Each serving lands near 579 calories with 57 grams of protein.",
+    "portion_html":  "Each serving lands near {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eazypeazymealz.com/slow-cooker-teriyaki-pork-tenderloin/\" target=\"_blank\" rel=\"noopener\"\u003eEasy Peasy Meals\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Sweet, simple, and satisfying. This is comfort food that respects your budget. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  36.82,
@@ -156,7 +156,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Japanese meal prep. Fourteen servings at about 579 calories and 57 grams of protein for roughly $3.59 each (at everyday cost).",
+                 "description":  "A high-protein Japanese meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker teriyaki pork bowls, budget dinner",
                  "costPerServing":  3.59,
                  "recipeIngredient":  [

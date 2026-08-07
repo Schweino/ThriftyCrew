@@ -49,7 +49,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $22.61 across 14 servings, roughly $1.62 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $10.39 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.00. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.36 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy chicken breast in bulk.\u003c/strong\u003e The big family packs run far cheaper per pound than the small trays. Grab it when it dips under a couple dollars a pound and freeze what you are not cooking today.",
                        "\u003cstrong\u003eSkip the pricey Italian seasoning jar.\u003c/strong\u003e If you already own oregano, basil, and parsley, mix your own. It is the same herbs for a fraction of the cost.",
@@ -64,7 +64,7 @@
                     "Boil the protein penne until just tender, drain, and add it to your empty weighed mixing pot.",
                     "Tip the shredded chicken and sauce over the pasta, add the grated parmesan, and stir until everything is coated and glossy."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide the remaining weight by 14. That gives you the grams per container. Scoop each one to that number so every meal comes out even, and you land right around 55 grams of protein per serving.",
+    "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide the remaining weight by 14. That gives you the grams per container. Scoop each one to that number so every meal comes out even, and you land right around {{protein}} grams of protein per serving.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thewholecook.com/slow-cooker-italian-pulled-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eThe Whole Cook\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fourteen creamy Italian dinners cooked while you were busy, for a fraction of what one restaurant plate would cost. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  19.18,
@@ -170,7 +170,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Italian meal prep. Fourteen servings at about 503 calories and 55 grams of protein for roughly $2.36 each (at everyday cost).",
+                 "description":  "A high-protein Italian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker italian chicken penne, budget dinner",
                  "costPerServing":  2.36,
                  "recipeIngredient":  [

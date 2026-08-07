@@ -29,7 +29,7 @@
                  "fat":  12,
                  "cost_ps":  "3.39"
              },
-    "intro_html":  "Buffalo chicken done the way the sports bar wishes it could. We poach and shred lean chicken breast, cook it down with onion, carrot and celery so the whole wing-night plate ends up inside the wrap, and bind it with a blended cottage cheese and cheddar sauce spiked with buffalo wing sauce. No ranch, no blue cheese pour, no deep fryer. Each burrito comes in \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e40 grams of protein\u003c/strong\u003e, on a high fiber tortilla that keeps you at about 5 grams of net carb. We have a Slow Cooker Buffalo Chicken and Rice Bowl already; this is the handheld version, built on shredded breast and a creamy cottage sauce instead of rice.",
+    "intro_html":  "Buffalo chicken done the way the sports bar wishes it could. We poach and shred lean chicken breast, cook it down with onion, carrot and celery so the whole wing-night plate ends up inside the wrap, and bind it with a blended cottage cheese and cheddar sauce spiked with buffalo wing sauce. No ranch, no blue cheese pour, no deep fryer. Each burrito comes in \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, on a high fiber tortilla that keeps you at about 5 grams of net carb. We have a Slow Cooker Buffalo Chicken and Rice Bowl already; this is the handheld version, built on shredded breast and a creamy cottage sauce instead of rice.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
@@ -59,7 +59,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $35.85 across 14 servings, roughly $2.56 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $11.57 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.42. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.39 a burrito\u003c/strong\u003e (at everyday cost) for wing night without the wings, the fryer, or the guilt. The cottage sauce is the trick that keeps it both creamy and lean.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) for wing night without the wings, the fryer, or the guilt. The cottage sauce is the trick that keeps it both creamy and lean.",
     "shop_smart":  [
                        "Chicken breast is the whole game here, so buy it in the big family pack and freeze what this batch does not use. Shredded breast reheats better than diced, so cook it low and pull it apart.",
                        "Cottage cheese blends into a sauce that does the job of ranch and blue cheese for a fraction of the fat. Buy the tub and blend it smooth.",
@@ -75,9 +75,9 @@
                     "Set the bowl on the scale, subtract the empty weight, and divide by 14. Lay that much filling down each tortilla, fold in the sides and roll tight.",
                     "Wrap each burrito and portion into 14 containers."
                 ],
-    "portion_html":  "Weigh the finished filling, subtract the empty bowl, and divide by 14 so every burrito gets the same load of chicken and sauce. Fill, fold and roll each tortilla. Each burrito carries \u003cstrong\u003e357 calories and 40 grams of protein\u003c/strong\u003e. Reheat wrapped, then crisp the seam in a dry pan if you want the edges to hold.",
+    "portion_html":  "Weigh the finished filling, subtract the empty bowl, and divide by 14 so every burrito gets the same load of chicken and sauce. Fill, fold and roll each tortilla. Each burrito carries \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e. Reheat wrapped, then crisp the seam in a dry pan if you want the edges to hold.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://fitfoodiefinds.com/buffalo-chicken-burrito/\" target=\"_blank\" rel=\"noopener\"\u003efitfoodiefinds.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Buffalo chicken burritos, 14 wrapped and ready, for about $3.39 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "upsell_html":  "Buffalo chicken burritos, 14 wrapped and ready, for about ${{cost_ps}} each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
     "cost_batch":  27.85,
     "cost_batch_true":  35.85,
     "cost_per_serving":  1.99,
@@ -178,7 +178,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Buffalo chicken burritos on shredded chicken breast with onion, carrot, celery and a blended cottage-cheddar buffalo sauce. 14 wrapped at 357 calories, 40g protein, about $3.39 (at everyday cost).",
+                 "description":  "Buffalo chicken burritos on shredded chicken breast with onion, carrot, celery and a blended cottage-cheddar buffalo sauce. 14 wrapped at {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
                  "keywords":  "buffalo chicken burrito, shredded buffalo chicken, high protein burrito meal prep, cottage cheese buffalo sauce, low calorie buffalo chicken, budget meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

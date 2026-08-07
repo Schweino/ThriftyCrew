@@ -26,7 +26,7 @@
                  "fat":  8,
                  "cost_ps":  "3.82"
              },
-    "intro_html":  "Gyudon is the Japanese lunch counter bowl: paper-thin beef and onions simmered in a sweet soy broth and spooned over rice. It takes about twenty minutes of actual cooking, which makes it the fastest beef dish in this whole lineup. Slicing the meat thin is the budget trick too, because a little beef spread across a lot of surface area feels like a lot of beef. Each bowl runs 607 calories and \u003cstrong\u003e35 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.82 a serving\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Gyudon is the Japanese lunch counter bowl: paper-thin beef and onions simmered in a sweet soy broth and spooned over rice. It takes about twenty minutes of actual cooking, which makes it the fastest beef dish in this whole lineup. Slicing the meat thin is the budget trick too, because a little beef spread across a lot of surface area feels like a lot of beef. Each bowl runs {{cal}} calories and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 3.5 lb (1588 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 onions (385 g)",
@@ -54,7 +54,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $45.42 across 14 servings, roughly $3.24 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $11.01 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.43. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.82 a bowl\u003c/strong\u003e (at everyday cost) for steak and rice, which sounds impossible until you see how thin the beef is sliced. That is the entire idea behind gyudon and it has worked in Japan for a hundred years.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for steak and rice, which sounds impossible until you see how thin the beef is sliced. That is the entire idea behind gyudon and it has worked in Japan for a hundred years.",
     "shop_smart":  [
                        "Freeze the steak for about 45 minutes before you slice it. Firm meat cuts thin and clean, and thin slices are what make a small amount of beef stretch across fourteen bowls. This one habit is worth more than any coupon.",
                        "Mirin and soy sauce are the whole sauce. Both are one-bottle purchases that last for months of cooking, so the per-bowl cost of the flavor here is close to nothing.",
@@ -71,9 +71,9 @@
                     "Skim any foam off the top, season with a little salt and pepper, and scatter the sliced green onions over the pan.",
                     "Let it sit off the heat for five minutes so the beef soaks up the broth before you portion."
                 ],
-    "portion_html":  "Weigh the cooked rice into the containers first so every bowl gets the same base, then set the beef pan on the scale, subtract the empty weight you wrote down, and divide by 14. Spoon a little of the broth over each one, since that is where most of the flavor is. Every bowl lands at \u003cstrong\u003e607 calories\u003c/strong\u003e.",
+    "portion_html":  "Weigh the cooked rice into the containers first so every bowl gets the same base, then set the beef pan on the scale, subtract the empty weight you wrote down, and divide by 14. Spoon a little of the broth over each one, since that is where most of the flavor is. Every bowl lands at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.justonecookbook.com/gyudon/\" target=\"_blank\" rel=\"noopener\"\u003ejustonecookbook.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Japanese beef bowls for about \u003cstrong\u003e$3.82 a serving\u003c/strong\u003e (at everyday cost), ready in half an hour. Members get every recipe in the Meal Prep section along with the full money lesson library and all the site tools for $1 a month.",
+    "upsell_html":  "Japanese beef bowls for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost), ready in half an hour. Members get every recipe in the Meal Prep section along with the full money lesson library and all the site tools for $1 a month.",
     "cost_batch":  39.96,
     "cost_batch_true":  45.42,
     "cost_per_serving":  2.85,
@@ -166,7 +166,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Gyudon, Japanese beef and onion rice bowls simmered in sweet soy broth, rebuilt for 14 meal prep servings at 607 calories for about $3.82 a bowl (at everyday cost).",
+                 "description":  "Gyudon, Japanese beef and onion rice bowls simmered in sweet soy broth, rebuilt for 14 meal prep servings at {{cal}} calories for about ${{cost_ps}} a bowl (at everyday cost).",
                  "keywords":  "gyudon, japanese beef bowl, beef and onion rice bowl, mirin soy sauce beef, japanese meal prep, budget beef recipe, quick meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

@@ -28,7 +28,7 @@
                  "fat":  8,
                  "cost_ps":  "3.24"
              },
-    "intro_html":  "Fajitas are already a great deal. Peppers, onions and chicken hitting a hot pan is most of the flavor for very little money. We take that and make it creamy without making it heavy, stirring a chipotle Greek yogurt sauce and a little melty mozzarella straight into the filling so every bite is smoky and soft. Each burrito comes in \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e37 grams of protein\u003c/strong\u003e, on a high fiber tortilla that adds only about 5 grams of net carb of its own. We have a Fajita Chicken Rice Bowl on the site; this one trades the rice for refried beans and folds the peppers into a creamy chipotle wrap instead.",
+    "intro_html":  "Fajitas are already a great deal. Peppers, onions and chicken hitting a hot pan is most of the flavor for very little money. We take that and make it creamy without making it heavy, stirring a chipotle Greek yogurt sauce and a little melty mozzarella straight into the filling so every bite is smoky and soft. Each burrito comes in \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, on a high fiber tortilla that adds only about 5 grams of net carb of its own. We have a Fajita Chicken Rice Bowl on the site; this one trades the rice for refried beans and folds the peppers into a creamy chipotle wrap instead.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
@@ -62,7 +62,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $37.35 across 14 servings, roughly $2.67 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.33. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.24 a burrito\u003c/strong\u003e (at everyday cost) for creamy chicken fajitas you can eat with one hand. Peppers and beans keep it cheap, the yogurt keeps it light.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) for creamy chicken fajitas you can eat with one hand. Peppers and beans keep it cheap, the yogurt keeps it light.",
     "shop_smart":  [
                        "The three color bell pepper bag is cheaper than buying red and green loose, and fajitas want the mix anyway, so nothing is wasted.",
                        "One small can of chipotles in adobo seasons several batches. Freeze the leftover peppers in a flat bag and snap off what you need.",
@@ -79,9 +79,9 @@
                     "Weigh the filling, subtract the empty bowl, and divide by 14. Spread refried beans down each tortilla, add a share of the creamy fajita filling, fold in the sides and roll.",
                     "Wrap each burrito and portion into 14 containers."
                 ],
-    "portion_html":  "Weigh the creamy fajita filling, subtract the empty bowl, and divide by 14, then spread the beans and build each tortilla to the same number. Each burrito carries \u003cstrong\u003e324 calories and 37 grams of protein\u003c/strong\u003e. Reheat wrapped, and the yogurt sauce keeps it moist without going greasy.",
+    "portion_html":  "Weigh the creamy fajita filling, subtract the empty bowl, and divide by 14, then spread the beans and build each tortilla to the same number. Each burrito carries \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e. Reheat wrapped, and the yogurt sauce keeps it moist without going greasy.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://stealthhealthcookbook.com/blogs/recipes/creamy-chicken-fajita-burritos-big-flavor-better-tortilla\" target=\"_blank\" rel=\"noopener\"\u003estealthhealthcookbook.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Creamy chicken fajita burritos, 14 wrapped and ready, for about $3.24 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "upsell_html":  "Creamy chicken fajita burritos, 14 wrapped and ready, for about ${{cost_ps}} each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
     "cost_batch":  29.08,
     "cost_batch_true":  37.35,
     "cost_per_serving":  2.08,
@@ -198,7 +198,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Creamy chicken fajita burritos with seared peppers and onion, refried beans and a chipotle Greek yogurt sauce. 14 wrapped at 324 calories, 37g protein, about $3.24 (at everyday cost).",
+                 "description":  "Creamy chicken fajita burritos with seared peppers and onion, refried beans and a chipotle Greek yogurt sauce. 14 wrapped at {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
                  "keywords":  "creamy chicken fajita burrito, chipotle greek yogurt sauce, high protein fajita meal prep, low calorie fajita burrito, budget chicken burrito, refried bean burrito",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

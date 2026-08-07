@@ -72,7 +72,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $64.28 across 14 servings, roughly $4.59 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $26.54 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $90.82. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$5.99 a bowl\u003c/strong\u003e (at everyday cost) for a Chilean corn-topped beef bake that nobody at your table will have had before.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a Chilean corn-topped beef bake that nobody at your table will have had before.",
     "shop_smart":  [
                        "\u003cstrong\u003eThe beef is where the money goes and where the savings are.\u003c/strong\u003e This bake is otherwise corn, onions, and eggs. Buy ground beef on markdown, freeze it in batch portions, and this number comes down.",
                        "\u003cstrong\u003eCanned corn is cheaper than fresh and it blends smoother.\u003c/strong\u003e The traditional version grinds fresh kernels, but the corn layer gets pureed and baked either way, so the can wins on both price and effort.",
@@ -89,9 +89,9 @@
                     "Spread the beef filling in a large baking dish, arrange the hard boiled eggs over it, and spread the corn mixture across the top.",
                     "Sprinkle the sugar over the corn layer and bake at 400 degrees until the top is set and browned in patches."
                 ],
-    "portion_html":  "Weigh the whole baking dish, subtract the empty dish weight, and divide by 14. Cut and lift to that weight so nobody ends up with all corn and no pino. Every serving comes in at \u003cstrong\u003e580 calories with 44 grams of protein\u003c/strong\u003e. Rest it a good twenty minutes before cutting or the corn layer will not hold its edge.",
+    "portion_html":  "Weigh the whole baking dish, subtract the empty dish weight, and divide by 14. Cut and lift to that weight so nobody ends up with all corn and no pino. Every serving comes in at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e. Rest it a good twenty minutes before cutting or the corn layer will not hold its edge.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/pastel-de-choclo-chilean-corn-and-beef-casserole/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "South American comfort food for about $5.99 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "South American comfort food for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  51.66,
     "cost_batch_true":  64.28,
     "cost_per_serving":  3.69,
@@ -256,7 +256,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Chilean pastel de choclo rebuilt for 14-serving meal prep: seasoned beef pino with olives and raisins under a basil sweet corn topping. 580 calories, 44g protein, about $5.99 per serving (at everyday cost).",
+                 "description":  "Chilean pastel de choclo rebuilt for 14-serving meal prep: seasoned beef pino with olives and raisins under a basil sweet corn topping. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "pastel de choclo, chilean corn and beef casserole, pino filling, south american meal prep, corn topped beef bake, global casserole",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",

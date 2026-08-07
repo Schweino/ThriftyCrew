@@ -31,7 +31,7 @@
                  "fat":  4,
                  "cost_ps":  "4.04"
              },
-    "intro_html":  "Nikujaga is Japanese comfort food at its plainest and best: meat and potatoes simmered in soy, mirin, and a little sugar until the potatoes go soft enough to break with chopsticks. Every Japanese household makes it a slightly different way and every one of them is convinced theirs is correct. Ours leans turkey-forward so it works as a full container, at \u003cstrong\u003e561 calories and 40 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.04\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Nikujaga is Japanese comfort food at its plainest and best: meat and potatoes simmered in soy, mirin, and a little sugar until the potatoes go soft enough to break with chopsticks. Every Japanese household makes it a slightly different way and every one of them is convinced theirs is correct. Ours leans turkey-forward so it works as a full container, at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 4 lb (1811 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 24 potatoes (5060 g)",
@@ -63,7 +63,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $43.64 across 14 servings, roughly $3.12 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $13.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.32. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.04\u003c/strong\u003e a container (at everyday cost). Potatoes, onions, and carrots are the three cheapest things in the produce section, and this dish is built almost entirely out of them.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost). Potatoes, onions, and carrots are the three cheapest things in the produce section, and this dish is built almost entirely out of them.",
     "shop_smart":  [
                        "Potatoes by the 12 pound bag are the cheapest starch in the store. This recipe uses a serious pile of them, so the bag price is the difference between cheap and very cheap.",
                        "Turkey breast is the big line here. Frozen roasts run far below fresh cuts, and the deepest discounts land in the weeks right after the holidays.",
@@ -80,9 +80,9 @@
                     "Simmer on low for 25 to 30 minutes until the potatoes are fork tender and the turkey has reached 165F, shaking the pot instead of stirring so nothing breaks up.",
                     "Add the green beans in the last 5 minutes, then let the pot sit off the heat for 15 minutes, which is when the potatoes actually drink up the broth."
                 ],
-    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Scoop gently from the bottom so each container gets potato, carrot, and turkey along with a share of the broth. Every serving lands at \u003cstrong\u003e561 calories and 40 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is your per-container gram target. Scoop gently from the bottom so each container gets potato, carrot, and turkey along with a share of the broth. Every serving lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.chopstickchronicles.com/nikujaga/\" target=\"_blank\" rel=\"noopener\"\u003echopstickchronicles.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Japanese meat and potato stew for about \u003cstrong\u003e$4.04\u003c/strong\u003e a container (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Japanese meat and potato stew for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  32.13,
     "cost_batch_true":  43.64,
     "cost_per_serving":  2.3,
@@ -191,7 +191,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Japanese turkey nikujaga meal prep: potatoes, carrots, and turkey simmered in soy, mirin, and sugar. 561 calories, 40g protein, about $4.04 a serving (at everyday cost).",
+                 "description":  "Japanese turkey nikujaga meal prep: potatoes, carrots, and turkey simmered in soy, mirin, and sugar. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a serving (at everyday cost).",
                  "keywords":  "nikujaga, japanese stew, meat and potato stew, turkey meal prep, budget meal prep, soy mirin braise",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

@@ -20,7 +20,7 @@
                  "fat":  13,
                  "cost_ps":  "3.58"
              },
-    "intro_html":  "Butter chicken is rich, golden, and downright luxurious, yet this batch clocks in at about $3.58 a bowl (at everyday cost). It is creamy, high in protein, and a rich one to keep in the rotation. One batch makes 14 servings.",
+    "intro_html":  "Butter chicken is rich, golden, and downright luxurious, yet this batch clocks in at about ${{cost_ps}} a bowl (at everyday cost). It is creamy, high in protein, and a rich one to keep in the rotation. One batch makes 14 servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3000 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.5 cups dry (980 g)",
@@ -61,7 +61,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $31.46 across 14 servings, roughly $2.25 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $18.48 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.94. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.58 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Stir in \u003cstrong\u003eGreek yogurt and milk\u003c/strong\u003e instead of heavy cream to get the richness for a lower cost.",
                        "You only need a \u003cstrong\u003elittle butter\u003c/strong\u003e for the flavor, so one box lasts across several batches.",
@@ -75,7 +75,7 @@
                     "Cook the rice while the sauce warms through.",
                     "Spoon the butter chicken over rice and serve."
                 ],
-    "portion_html":  "Each of the 14 servings lands around 57g protein for about 610 calories, at roughly $3.58 a bowl.",
+    "portion_html":  "Each of the 14 servings lands around {{protein}}g protein for about {{cal}} calories, at roughly ${{cost_ps}} a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.slenderkitchen.com/recipe/slow-cooker-butter-chicken\" target=\"_blank\" rel=\"noopener\"\u003eSlender Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Rich and restaurant-worthy, this one will spoil you in the best way. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  21.42,
@@ -223,7 +223,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Indian meal prep. Fourteen servings at about 610 calories and 57 grams of protein for roughly $3.58 each (at everyday cost).",
+                 "description":  "A high-protein Indian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker butter chicken rice bowls, budget dinner",
                  "costPerServing":  3.58,
                  "recipeIngredient":  [

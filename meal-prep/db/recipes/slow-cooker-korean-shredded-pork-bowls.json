@@ -20,7 +20,7 @@
                  "fat":  8,
                  "cost_ps":  "3.43"
              },
-    "intro_html":  "This Korean-style shredded pork brings a sweet and savory punch for about $3.43 a bowl (at everyday cost). Lean tenderloin slow cooks in soy, brown sugar, garlic, and ginger until it shreds like a dream, then goes over rice with carrots. It makes 14 servings and hands you 54 grams of protein each.",
+    "intro_html":  "This Korean-style shredded pork brings a sweet and savory punch for about ${{cost_ps}} a bowl (at everyday cost). Lean tenderloin slow cooks in soy, brown sugar, garlic, and ginger until it shreds like a dream, then goes over rice with carrots. It makes 14 servings and hands you {{protein}} grams of protein each.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3200 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (950 g)",
@@ -49,7 +49,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $41.31 across 14 servings, roughly $2.95 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $6.65 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.96. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.43 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Fresh ginger freezes well and grates straight from frozen. \u003cstrong\u003eBuy a knob of ginger and freeze it\u003c/strong\u003e so it never goes bad on you.",
                        "Bagged shredded carrots save you the peeling and cost little. \u003cstrong\u003eGrab the pre-shredded carrots\u003c/strong\u003e to keep prep fast.",
@@ -63,7 +63,7 @@
                     "Cook the rice and warm the shredded carrots for a fresh crunch.",
                     "Pile the pork over rice and top with the carrots."
                 ],
-    "portion_html":  "Each bowl gives you 54 grams of protein at 569 calories, with only 8 grams of fat.",
+    "portion_html":  "Each bowl gives you {{protein}} grams of protein at {{cal}} calories, with only 8 grams of fat.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.slenderkitchen.com/recipe/slow-cooker-shredded-korean-pork\" target=\"_blank\" rel=\"noopener\"\u003eSlender Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Bold flavor, easy prep, and a price that keeps your grocery budget happy. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  34.41,
@@ -148,7 +148,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Korean meal prep. Fourteen servings at about 569 calories and 54 grams of protein for roughly $3.43 each (at everyday cost).",
+                 "description":  "A high-protein Korean meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker korean shredded pork bowls, budget dinner",
                  "costPerServing":  3.43,
                  "recipeIngredient":  [

@@ -31,7 +31,7 @@
                  "fat":  8,
                  "cost_ps":  "4.43"
              },
-    "intro_html":  "Jerk chicken and cold mango salsa is one of the great flavor pairings, sweet and fiery in the same bite. We marinate skinless thigh in a jerk-spiced mix of citrus, soy and a little brown sugar and honey, tuck it into a wrap with a modest scoop of rice and kidney beans, and top it with a fresh mango, tomato and red onion salsa. It is the only Caribbean plate in this batch, and every burrito still lands \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e36 grams of protein\u003c/strong\u003e, on a high fiber tortilla that keeps you near 5 grams of net carb. We have a One Pot Caribbean Jerk Chicken and Rice on the site; this is the marinated, hand-held version finished with a bright salsa instead of a baked rice pot.",
+    "intro_html":  "Jerk chicken and cold mango salsa is one of the great flavor pairings, sweet and fiery in the same bite. We marinate skinless thigh in a jerk-spiced mix of citrus, soy and a little brown sugar and honey, tuck it into a wrap with a modest scoop of rice and kidney beans, and top it with a fresh mango, tomato and red onion salsa. It is the only Caribbean plate in this batch, and every burrito still lands \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, on a high fiber tortilla that keeps you near 5 grams of net carb. We have a One Pot Caribbean Jerk Chicken and Rice on the site; this is the marinated, hand-held version finished with a bright salsa instead of a baked rice pot.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
@@ -73,7 +73,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $45.16 across 14 servings, roughly $3.23 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $16.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.03. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.43 a burrito\u003c/strong\u003e (at everyday cost) for a Caribbean plate most people only order out. Thigh keeps the cost down, the mango salsa does the celebrating.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) for a Caribbean plate most people only order out. Thigh keeps the cost down, the mango salsa does the celebrating.",
     "shop_smart":  [
                        "Skinless thigh is cheaper than breast, stays juicy through reheating, and is the right cut for jerk. Buy the family pack and freeze the extra.",
                        "One ripe mango does the salsa. Buy it a few days ahead and let it soften on the counter so it dices sweet instead of sour.",
@@ -90,9 +90,9 @@
                     "Weigh the rice, beans and chicken together, subtract the empty bowl, and divide by 14 so each burrito gets the same base before you add the salsa.",
                     "Fold in the sides, roll tight, wrap each one, and portion into 14 containers."
                 ],
-    "portion_html":  "Weigh the rice, beans and chicken, subtract the empty bowl, and divide by 14 so the calorie count actually holds across all 14. Add the salsa and the spoon of yogurt on top, then roll. Each burrito carries \u003cstrong\u003e391 calories and 36 grams of protein\u003c/strong\u003e. Keep the salsa in a separate cup if you are freezing these, and add it fresh after reheating.",
+    "portion_html":  "Weigh the rice, beans and chicken, subtract the empty bowl, and divide by 14 so the calorie count actually holds across all 14. Add the salsa and the spoon of yogurt on top, then roll. Each burrito carries \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e. Keep the salsa in a separate cup if you are freezing these, and add it fresh after reheating.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://saucedupfoods.com/the-greatest-jerk-chicken-burritos-with-mango-salsa/\" target=\"_blank\" rel=\"noopener\"\u003esaucedupfoods.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Jerk chicken burritos with mango salsa, 14 wrapped and ready, for about $4.43 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "upsell_html":  "Jerk chicken burritos with mango salsa, 14 wrapped and ready, for about ${{cost_ps}} each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
     "cost_batch":  31.06,
     "cost_batch_true":  45.16,
     "cost_per_serving":  2.22,
@@ -241,7 +241,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Jerk chicken burritos on skinless thigh with rice, kidney beans and a fresh mango salsa. 14 wrapped at 391 calories, 36g protein, about $4.43 (at everyday cost).",
+                 "description":  "Jerk chicken burritos on skinless thigh with rice, kidney beans and a fresh mango salsa. 14 wrapped at {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
                  "keywords":  "jerk chicken burrito, mango salsa burrito, caribbean chicken meal prep, high protein jerk chicken, low calorie burrito, budget meal prep burrito",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

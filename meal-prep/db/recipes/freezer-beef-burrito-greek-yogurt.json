@@ -29,7 +29,7 @@
                  "fat":  12,
                  "cost_ps":  "4.09"
              },
-    "intro_html":  "This is the one you build a big batch of and stack in the freezer, so a real dinner is always ninety seconds away. Greek yogurt stirred into the filling makes it creamy and pushes the protein up without adding a wet sauce that would turn the tortilla to mush. Each burrito lands at about \u003cstrong\u003e365 calories\u003c/strong\u003e and \u003cstrong\u003e38 grams of protein\u003c/strong\u003e, the highest protein in this slice, in a tortilla with 18 grams of fiber for 5 grams of net carb. It is a cousin of our High-Protein Beef Burrito Bowls, rebuilt to survive a freezer and a microwave.",
+    "intro_html":  "This is the one you build a big batch of and stack in the freezer, so a real dinner is always ninety seconds away. Greek yogurt stirred into the filling makes it creamy and pushes the protein up without adding a wet sauce that would turn the tortilla to mush. Each burrito lands at about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, the highest protein in this slice, in a tortilla with 18 grams of fiber for 5 grams of net carb. It is a cousin of our High-Protein Beef Burrito Bowls, rebuilt to survive a freezer and a microwave.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)",
@@ -70,7 +70,7 @@
                     "Fold in the Greek yogurt and the shredded mozzarella until the filling is creamy and even.",
                     "Warm the tortillas so they roll without cracking, then portion and wrap as below, and freeze what you are not eating this week."
                 ],
-    "portion_html":  "Set the cooled pot on your scale and subtract the empty pot weight from Step 1. That is your total filling weight. Divide it by 14, spoon that amount onto each tortilla, and roll tight. Every burrito lands at about \u003cstrong\u003e365 calories and 38 grams of protein\u003c/strong\u003e. To reheat from frozen, microwave wrapped in a paper towel for about 90 seconds.",
+    "portion_html":  "Set the cooled pot on your scale and subtract the empty pot weight from Step 1. That is your total filling weight. Divide it by 14, spoon that amount onto each tortilla, and roll tight. Every burrito lands at about \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e. To reheat from frozen, microwave wrapped in a paper towel for about 90 seconds.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://ourbestbites.com/high-protein-freezer-burritos/\" target=\"_blank\" rel=\"noopener\"\u003eourbestbites.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  42.18,
@@ -157,7 +157,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A freezer-friendly Greek-yogurt beef burrito for meal prep: creamy beef and refried bean filling, salsa not sauce, about 365 calories and 38 grams of protein per serving.",
+                 "description":  "A freezer-friendly Greek-yogurt beef burrito for meal prep: creamy beef and refried bean filling, salsa not sauce, about {{cal}} calories and {{protein}} grams of protein per serving.",
                  "keywords":  "freezer burrito, high protein freezer burrito, greek yogurt burrito, make ahead meal prep, budget beef burrito",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

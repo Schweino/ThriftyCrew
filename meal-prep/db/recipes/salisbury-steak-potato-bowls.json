@@ -20,7 +20,7 @@
                  "fat":  12,
                  "cost_ps":  "4.03"
              },
-    "intro_html":  "This is old-fashioned comfort food done lean and cheap. Ground beef patties simmer in a mushroom and onion gravy, all spooned over potatoes for a stick-to-your-ribs bowl. It runs around $4.03 a serving (at everyday cost) with 43 grams of protein and makes 14 hearty servings.",
+    "intro_html":  "This is old-fashioned comfort food done lean and cheap. Ground beef patties simmer in a mushroom and onion gravy, all spooned over potatoes for a stick-to-your-ribs bowl. It runs around ${{cost_ps}} a serving (at everyday cost) with {{protein}} grams of protein and makes 14 hearty servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2170 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 11 lb (4562 g)",
@@ -54,7 +54,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $46.82 across 14 servings, roughly $3.34 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $9.62 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $56.44. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.03 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Bread crumbs stretch the beef and cost almost nothing. \u003cstrong\u003eA single container of bread crumbs\u003c/strong\u003e makes many batches of patties.",
                        "Mushrooms add meaty flavor cheaply, especially on sale. \u003cstrong\u003eBuy whole mushrooms and slice them yourself\u003c/strong\u003e instead of paying for pre-sliced.",
@@ -68,7 +68,7 @@
                     "Roast or boil the potatoes until fork tender.",
                     "Serve the patties and gravy over the potatoes."
                 ],
-    "portion_html":  "Each bowl delivers 43 grams of protein and just 548 calories, one of the lighter dinners in the lineup.",
+    "portion_html":  "Each bowl delivers {{protein}} grams of protein and just {{cal}} calories, one of the lighter dinners in the lineup.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://cincyshopper.com/simple-salisbury-steak/\" target=\"_blank\" rel=\"noopener\"\u003eCincy Shopper\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Warm, filling, and easy on the wallet, this is comfort food that loves your budget back. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  43.92,
@@ -181,7 +181,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 548 calories and 43 grams of protein for roughly $4.03 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, salisbury steak and potato bowls, budget dinner",
                  "costPerServing":  4.03,
                  "recipeIngredient":  [

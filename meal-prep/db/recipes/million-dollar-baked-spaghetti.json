@@ -18,7 +18,7 @@
                  "fat":  26,
                  "cost_ps":  "2.79"
              },
-    "intro_html":  "Million Dollar spaghetti stacks a beef and hot Italian sausage marinara over noodles with a secret middle layer of ricotta, cream cheese, and sour cream, then buries it in mozzarella. Rich name, poverty price: \u003cstrong\u003e35 grams of protein\u003c/strong\u003e per serving for about \u003cstrong\u003e$2.79\u003c/strong\u003e (at everyday cost). The name oversells the cost by roughly a million dollars.",
+    "intro_html":  "Million Dollar spaghetti stacks a beef and hot Italian sausage marinara over noodles with a secret middle layer of ricotta, cream cheese, and sour cream, then buries it in mozzarella. Rich name, poverty price: \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e per serving for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). The name oversells the cost by roughly a million dollars.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eSpaghetti (Great Value):\u003c/strong\u003e 22.5 oz dry (635 g)",
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 1.5 lb (635 g)",
@@ -47,7 +47,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $34.23 across 14 servings, roughly $2.44 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $4.83 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.06. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.79 a bowl\u003c/strong\u003e (at everyday cost) for a three-cheese baked spaghetti that an Italian restaurant would price at $14 a plate, and this makes fourteen servings.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a three-cheese baked spaghetti that an Italian restaurant would price at $14 a plate, and this makes fourteen servings.",
     "shop_smart":  "Splitting the meat between beef and hot Italian sausage is the trick: the sausage runs about half the per-pound price of beef and brings its own seasoning for free.\nStore-brand marinara is fine here because the cheese layer and sausage do the flavor work. Save the fancy jar for a dish where the sauce stands alone.\nCream cheese, ricotta, and sour cream all go on sale around holidays. Every one of them freezes acceptably for baked dishes like this, so stock the freezer when they dip.",
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -58,9 +58,9 @@
                     "Top with the mozzarella and bake at 350 F for 25 to 30 minutes until melted and bubbling at the edges.",
                     "Rest 10 minutes before cutting so the layers hold."
                 ],
-    "portion_html":  "Weigh the pot of finished meat sauce before layering, subtract the empty pot number from step 1, and spread it evenly. After baking and resting, cut the pan into 14 squares and box them. Each serving comes in at 566 calories and 35 grams of protein.",
+    "portion_html":  "Weigh the pot of finished meat sauce before layering, subtract the empty pot number from step 1, and spread it evenly. After baking and resting, cut the pan into 14 squares and box them. Each serving comes in at {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://easyfamilyrecipes.com/million-dollar-spaghetti/\" target=\"_blank\" rel=\"noopener\"\u003eEasy Family Recipes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $2.79 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  24.42,
     "cost_batch_true":  34.23,
     "cost_per_serving":  1.74,
@@ -150,7 +150,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Million Dollar baked spaghetti meal prep: 566 calories and 35g protein at about $2.79 a serving (at everyday cost). Three-cheese layered spaghetti bake in 14 servings.",
+                 "description":  "Million Dollar baked spaghetti meal prep: {{cal}} calories and {{protein}}g protein at about ${{cost_ps}} a serving (at everyday cost). Three-cheese layered spaghetti bake in 14 servings.",
                  "keywords":  "million dollar spaghetti, baked spaghetti casserole, cheap pasta bake, budget ground beef dinner, meal prep spaghetti, three cheese pasta",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

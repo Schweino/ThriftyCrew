@@ -28,7 +28,7 @@
                  "fat":  25,
                  "cost_ps":  "3.95"
              },
-    "intro_html":  "Trinidadian curry beef starts somewhere most curries do not: you burn the curry powder in hot oil first, on purpose, until it goes dark and nutty. Then the beef goes in, the potatoes go in later, and the whole thing simmers into its own thick gravy. Green seasoning does the rest. Each bowl carries \u003cstrong\u003e30 grams of protein\u003c/strong\u003e and 586 calories for about \u003cstrong\u003e$3.95\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Trinidadian curry beef starts somewhere most curries do not: you burn the curry powder in hot oil first, on purpose, until it goes dark and nutty. Then the beef goes in, the potatoes go in later, and the whole thing simmers into its own thick gravy. Green seasoning does the rest. Each bowl carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 3.75 lb (1667 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (22 g)",
@@ -62,7 +62,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $47.76 across 14 servings, roughly $3.41 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $11.94 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.70. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.95 a bowl\u003c/strong\u003e (at everyday cost). Potatoes are the reason. They soak up the curry, they cost almost nothing per pound, and they turn under four pounds of beef into fourteen full plates.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Potatoes are the reason. They soak up the curry, they cost almost nothing per pound, and they turn under four pounds of beef into fourteen full plates.",
     "shop_smart":  [
                        "Buy potatoes in the ten pound bag. The per pound price is usually less than half of what the small bags run, and this recipe uses a serious amount of them.",
                        "Curry powder is the soul of the dish and Caribbean blends are different from Indian ones. If you can find a Trinidadian style blend, buy the big bag, it will not sit unused.",
@@ -79,9 +79,9 @@
                     "Add the peeled and chunked potatoes and simmer uncovered another 25 to 30 minutes, until they are soft and starting to break down and thicken the gravy.",
                     "Taste for salt and pepper and finish with the last of the chopped cilantro."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight into each of 14 containers, stirring between scoops so the beef does not all end up in the first four. Each bowl lands at \u003cstrong\u003e586 calories with 30 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight into each of 14 containers, stirring between scoops so the beef does not all end up in the first four. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://caribbeanpot.com/tropical-curry-beef-with-potato/\" target=\"_blank\" rel=\"noopener\"\u003ecaribbeanpot.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Caribbean curry beef for about $3.95 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Caribbean curry beef for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  40.48,
     "cost_batch_true":  47.76,
     "cost_per_serving":  2.89,
@@ -206,7 +206,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Trinidadian curry beef meal prep: chuck roast marinated in green seasoning and stewed with burnt curry powder and potatoes. 586 calories, 30g protein, about $3.95 per serving (at everyday cost).",
+                 "description":  "Trinidadian curry beef meal prep: chuck roast marinated in green seasoning and stewed with burnt curry powder and potatoes. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "caribbean curry beef, trinidad curry beef, curry beef and potatoes, green seasoning, budget meal prep, trinidadian recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

@@ -25,7 +25,7 @@
                  "fat":  30,
                  "cost_ps":  "3.82"
              },
-    "intro_html":  "Jamaican jerk is a seasoning and a cooking method, and the seasoning is the part that travels. Allspice, thyme, cinnamon, nutmeg and heat go onto the chicken, then the whole thing cooks down over rice and peas made the island way, with coconut milk and kidney beans in the pot. It is the single richest bowl in this batch at \u003cstrong\u003e751 calories and 51 grams of protein\u003c/strong\u003e, and it costs about \u003cstrong\u003e$3.82\u003c/strong\u003e (at everyday cost). One pot, one lid, no side dishes to think about.",
+    "intro_html":  "Jamaican jerk is a seasoning and a cooking method, and the seasoning is the part that travels. Allspice, thyme, cinnamon, nutmeg and heat go onto the chicken, then the whole thing cooks down over rice and peas made the island way, with coconut milk and kidney beans in the pot. It is the single richest bowl in this batch at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e, and it costs about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). One pot, one lid, no side dishes to think about.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 6.5 lb (2911 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (19 g)",
@@ -62,7 +62,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $31.02 across 14 servings, roughly $2.22 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $17.39 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.41. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.82 a bowl\u003c/strong\u003e (at everyday cost) for the biggest, heaviest dinner in this batch. Coconut milk and chicken are the two lines that matter and everything else rounds to loose change.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for the biggest, heaviest dinner in this batch. Coconut milk and chicken are the two lines that matter and everything else rounds to loose change.",
     "shop_smart":  [
                        "Coconut milk is the second biggest line. Buy the store brand cans in the international aisle, check for full fat, and buy several when they go on sale because the cans last a year on a shelf.",
                        "Canned kidney beans are what Jamaicans call peas in rice and peas, and they are one of the cheapest sources of anything in the store. Two cans covers the batch. Dried beans are cheaper still if you plan the soak.",
@@ -79,9 +79,9 @@
                     "Cover tightly and cook on the lowest burner setting, or in a 350F oven, for 25 to 30 minutes until the rice is tender and the chicken reads 165F. Rest it covered another 10 minutes off the heat.",
                     "Pull the bay leaves, chop the chicken, fold everything together in your mixing pot, and finish with the sliced green onions."
                 ],
-    "portion_html":  "Set the loaded pot on the scale, subtract the empty-pot weight, and divide by 14. That number goes in every container. Each one carries \u003cstrong\u003e751 calories\u003c/strong\u003e, which makes this the bowl to grab on a day you actually worked for it.",
+    "portion_html":  "Set the loaded pot on the scale, subtract the empty-pot weight, and divide by 14. That number goes in every container. Each one carries \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e, which makes this the bowl to grab on a day you actually worked for it.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.africanbites.com/one-pot-caribbean-jerk-chicken-rice/\" target=\"_blank\" rel=\"noopener\"\u003eafricanbites.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Caribbean jerk chicken and rice, cooked in one pot, for about $3.82 a bowl (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "upsell_html":  "Caribbean jerk chicken and rice, cooked in one pot, for about ${{cost_ps}} a bowl (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
     "cost_batch":  24.78,
     "cost_batch_true":  31.02,
     "cost_per_serving":  1.77,
@@ -230,7 +230,7 @@
                            ]
                },
     "head":  {
-                 "description":  "One pot Caribbean jerk chicken with coconut rice and kidney beans, built as 14 meal prep bowls. 751 calories, 51g protein, about $3.82 a bowl (at everyday cost).",
+                 "description":  "One pot Caribbean jerk chicken with coconut rice and kidney beans, built as 14 meal prep bowls. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a bowl (at everyday cost).",
                  "keywords":  "jerk chicken and rice, caribbean chicken meal prep, rice and peas, one pot jerk chicken, jamaican chicken recipe, budget meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

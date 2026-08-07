@@ -26,7 +26,7 @@
                  "fat":  23,
                  "cost_ps":  "4.95"
              },
-    "intro_html":  "Beef tips and gravy is diner food made honestly: cubes of chuck cooked until tender in a from scratch gravy, no packet required. Cornstarch thickens it at the end, which means you control how thick it gets instead of hoping a packet guessed right. Each bowl carries \u003cstrong\u003e39 grams of protein\u003c/strong\u003e and 561 calories for about \u003cstrong\u003e$4.95\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Beef tips and gravy is diner food made honestly: cubes of chuck cooked until tender in a from scratch gravy, no packet required. Cornstarch thickens it at the end, which means you control how thick it gets instead of hoping a packet guessed right. Each bowl carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)",
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 5.25 lb (2381 g)",
@@ -55,7 +55,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $53.77 across 14 servings, roughly $3.84 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $20.48 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $74.25. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.95 a bowl\u003c/strong\u003e (at everyday cost). Seven ingredients, one of which is oil and one of which is cornstarch, so the beef and the broth are essentially the whole cost.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Seven ingredients, one of which is oil and one of which is cornstarch, so the beef and the broth are essentially the whole cost.",
     "shop_smart":  [
                        "Buy a chuck roast and cube it yourself instead of buying packaged stew meat or beef tips. You will pay less per pound and you will know exactly what cut you got.",
                        "Cornstarch is the cheapest thickener there is and a box lasts years. Mix it with cold water before it goes anywhere near the hot pot or you will be picking out lumps.",
@@ -72,9 +72,9 @@
                     "Whisk the cornstarch with a little cold water, stir it into the hot liquid, and cook on high 15 to 20 minutes until the gravy thickens and turns glossy.",
                     "Cook the rice separately and spoon the beef tips and gravy over it. A diner would put this over a mash, and any starch you already keep on hand works the same way."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of beef tips and gravy into each container, then give every one the same weight of rice. Each bowl lands at \u003cstrong\u003e561 calories with 39 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of beef tips and gravy into each container, then give every one the same weight of rice. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://houseofyumm.com/slow-cooker-beef-tips-and-gravy/\" target=\"_blank\" rel=\"noopener\"\u003ehouseofyumm.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Beef tips and gravy for about $4.95 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Beef tips and gravy for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  46.81,
     "cost_batch_true":  53.77,
     "cost_per_serving":  3.34,
@@ -183,7 +183,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Slow cooker beef tips and gravy meal prep: cubed chuck roast braised in a from scratch cornstarch gravy over a starch base. 561 calories, 39g protein, about $4.95 per serving (at everyday cost).",
+                 "description":  "Slow cooker beef tips and gravy meal prep: cubed chuck roast braised in a from scratch cornstarch gravy over a starch base. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "beef tips and gravy, slow cooker beef tips, brown gravy from scratch, beef bowls, budget meal prep, chuck roast recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

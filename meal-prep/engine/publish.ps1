@@ -20,6 +20,7 @@ $apiUrl = 'https://map-to-success.ghost.io'
 $pubBase = 'https://www.thriftycrew.com'
 $adminKey = (Get-Content (Join-Path $here '..\.ghostkey') -Raw).Trim()
 . (Join-Path $PSScriptRoot '..\..\lib\ghost-lib.ps1')   # Get-GhostJWT + Invoke-GhostApi (timeout/retry)
+. (Join-Path $PSScriptRoot '..\lib\render-tokens.ps1')  # Expand-SpecProse: {{stat}} tokens -> this spec's numbers
 function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 function Get-ContentHash([string]$s){ $sha=[System.Security.Cryptography.SHA1]::Create(); return ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($s))) -replace '-','') }
 
@@ -34,6 +35,11 @@ if(Test-Path $hashFile){ try { $o=(Get-Content $hashFile -Raw | ConvertFrom-Json
 $ok=0; $skipped=0; $failed=@()
 foreach($slug in $Slugs){
   $spec = Get-Content (Join-Path $root "db\recipes\$slug.json") -Raw | ConvertFrom-Json
+  # expand {{stat}} tokens BEFORE any field leaves this script: $desc feeds custom_excerpt, meta_description
+  # AND the og/twitter pair, so an unexpanded token would ship to social verbatim. Expansion resolves from
+  # this spec's own stat, and the change-gate hash is computed over the EXPANDED text - identical numbers
+  # mean an identical hash, so the token migration itself republishes nothing.
+  $spec = Expand-SpecProse $spec
   $body = [IO.File]::ReadAllText((Join-Path $root "db\built\$slug.body.html"), [Text.Encoding]::UTF8)
   $head = [IO.File]::ReadAllText((Join-Path $root "db\built\$slug.head.html"), [Text.Encoding]::UTF8)
   $desc = [string]$spec.head.description

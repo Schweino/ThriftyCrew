@@ -20,7 +20,7 @@
                  "fat":  9,
                  "cost_ps":  "3.31"
              },
-    "intro_html":  "Three main ingredients, one slow cooker, and dinner is basically done. Sugar-free maple syrup and dijon mustard glaze lean pork tenderloin until it is tender and just a little sweet, served over potatoes with green beans. It runs around $3.31 a serving (at everyday cost) and gives you 59 grams of protein across 14 bowls.",
+    "intro_html":  "Three main ingredients, one slow cooker, and dinner is basically done. Sugar-free maple syrup and dijon mustard glaze lean pork tenderloin until it is tender and just a little sweet, served over potatoes with green beans. It runs around ${{cost_ps}} a serving (at everyday cost) and gives you {{protein}} grams of protein across 14 bowls.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3400 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 10 lb (4500 g)",
@@ -43,7 +43,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $40.03 across 14 servings, roughly $2.86 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $6.35 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.38. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.31 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Sugar-free maple syrup keeps this glaze sweet without the sugar hit. \u003cstrong\u003eBuy one bottle of sugar-free syrup\u003c/strong\u003e and it lasts through many batches.",
                        "Frozen green beans cost less than fresh and never spoil on you. \u003cstrong\u003eKeep bags of frozen green beans on hand\u003c/strong\u003e for meals like this.",
@@ -57,7 +57,7 @@
                     "Roast or boil the potatoes until soft.",
                     "Slice or shred the pork, serve it over potatoes, and add the green beans on the side."
                 ],
-    "portion_html":  "Each of the 14 servings comes in at 59 grams of protein and just 565 calories.",
+    "portion_html":  "Each of the 14 servings comes in at {{protein}} grams of protein and just {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.hungry-girl.com/weekly-recipes/3-ingredient-slow-cooker-maple-dijon-pork-tenderloin-recipe\" target=\"_blank\" rel=\"noopener\"\u003eHungry Girl\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "When a meal is this easy and this cheap, there is no reason not to keep it in the rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  37.81,
@@ -128,7 +128,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 565 calories and 59 grams of protein for roughly $3.31 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker maple dijon pork bowls, budget dinner",
                  "costPerServing":  3.31,
                  "recipeIngredient":  [

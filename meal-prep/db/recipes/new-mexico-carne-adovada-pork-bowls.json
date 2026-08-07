@@ -62,7 +62,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $38.85 across 14 servings, roughly $2.78 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $28.55 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $67.40. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.17 a bowl\u003c/strong\u003e (at everyday cost). The dried chiles carry a real cost the first time, but they are shelf stable for a year, so every batch after this one is cheaper.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). The dried chiles carry a real cost the first time, but they are shelf stable for a year, so every batch after this one is cheaper.",
     "shop_smart":  [
                        "\u003cstrong\u003eDried chiles from the Hispanic aisle, in the bag.\u003c/strong\u003e Ancho and guajillo in the big bags cost a fraction of the branded spice-rack packets, and they keep a year sealed in the pantry.",
                        "\u003cstrong\u003ePork shoulder is the right cut and the cheap cut.\u003c/strong\u003e A long braise in acidic chile sauce is exactly what a tough shoulder wants. A lean loin would dry out here.",
@@ -78,9 +78,9 @@
                     "Cover and braise at 325F for about 3 hours, stirring once an hour, until the pork shreds under a fork and the sauce has gone dark and thick.",
                     "Cook the rice per the package, then taste the chile for salt and pull out the bay leaves before you portion."
                 ],
-    "portion_html":  "Spread the cooked rice across your 14 containers, then set the braising pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight of pork and red chile over the rice. Every bowl lands near 645 calories with 38 grams of protein.",
+    "portion_html":  "Spread the cooked rice across your 14 containers, then set the braising pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight of pork and red chile over the rice. Every bowl lands near {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/carne-adovada/\" target=\"_blank\" rel=\"noopener\"\u003eisabeleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cem\u003eNew Mexico red chile pork for about $3.17 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "upsell_html":  "\u003cem\u003eNew Mexico red chile pork for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  35.37,
     "cost_batch_true":  38.85,
     "cost_per_serving":  2.53,

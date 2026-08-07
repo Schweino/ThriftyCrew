@@ -58,7 +58,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $47.80 across 14 servings, roughly $3.41 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $17.62 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $65.42. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.19 a bowl\u003c/strong\u003e (at everyday cost) for a Greek braise where the pasta cooks in the sauce instead of in a separate pot of water.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a Greek braise where the pasta cooks in the sauce instead of in a separate pot of water.",
     "shop_smart":  [
                        "\u003cstrong\u003eChuck roast is the cut this dish wants.\u003c/strong\u003e It needs a long braise to get tender, so the cheaper cut is also the correct one. Watch for the family pack price.",
                        "\u003cstrong\u003eOrzo is one of the cheapest pastas per pound.\u003c/strong\u003e It is also the only shape that works here, because it needs to cook in a shallow layer of liquid without clumping.",
@@ -75,9 +75,9 @@
                     "Stir the dry orzo into the pot with enough hot water or broth to cover it, since the pasta will drink a surprising amount.",
                     "Return it to the oven uncovered until the orzo is tender and the liquid is mostly absorbed, then stir in most of the parmesan cheese and scatter the rest over the top."
                 ],
-    "portion_html":  "Weigh the whole pot, subtract the empty-pot weight from Step 1, and divide by 14. Stir it well before you weigh, because the orzo settles and the beef floats. Every serving comes in at \u003cstrong\u003e700 calories with 39 grams of protein\u003c/strong\u003e. Orzo keeps absorbing overnight, so a splash of water on reheat brings it right back.",
+    "portion_html":  "Weigh the whole pot, subtract the empty-pot weight from Step 1, and divide by 14. Stir it well before you weigh, because the orzo settles and the beef floats. Every serving comes in at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e. Orzo keeps absorbing overnight, so a splash of water on reheat brings it right back.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.mygreekdish.com/recipe/giouvetsi-beef-stew-with-orzo-pasta/\" target=\"_blank\" rel=\"noopener\"\u003emygreekdish.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Slow-braised Greek dinners for about $4.19 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Slow-braised Greek dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  44.59,
     "cost_batch_true":  47.8,
     "cost_per_serving":  3.18,
@@ -194,7 +194,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Greek giouvetsi rebuilt for 14-serving meal prep: cinnamon-scented beef braise with orzo cooked right in the sauce. 700 calories, 39g protein, about $4.19 per serving (at everyday cost).",
+                 "description":  "Greek giouvetsi rebuilt for 14-serving meal prep: cinnamon-scented beef braise with orzo cooked right in the sauce. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "giouvetsi, greek beef and orzo, orzo bake, greek braised beef, greek meal prep, one pot pasta bake",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

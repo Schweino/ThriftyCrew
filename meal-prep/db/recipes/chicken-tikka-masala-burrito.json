@@ -28,7 +28,7 @@
                  "fat":  8,
                  "cost_ps":  "2.99"
              },
-    "intro_html":  "Tikka masala is the most ordered curry in the world for a reason, and it wraps up better than you would think. We marinate chicken breast in spiced yogurt the traditional way, sear it, and simmer it into a tomato masala loosened with a little more yogurt instead of cream, then fold it around rice in a wrap. Each burrito lands \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e36 grams of protein\u003c/strong\u003e, on a high fiber tortilla that keeps you near 5 grams of net carb. We have Slow Cooker Chicken Tikka Masala Rice Bowls on the site; this is the seared, hand-held version, and it is the only Indian plate in this batch.",
+    "intro_html":  "Tikka masala is the most ordered curry in the world for a reason, and it wraps up better than you would think. We marinate chicken breast in spiced yogurt the traditional way, sear it, and simmer it into a tomato masala loosened with a little more yogurt instead of cream, then fold it around rice in a wrap. Each burrito lands \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, on a high fiber tortilla that keeps you near 5 grams of net carb. We have Slow Cooker Chicken Tikka Masala Rice Bowls on the site; this is the seared, hand-held version, and it is the only Indian plate in this batch.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
@@ -63,7 +63,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $35.44 across 14 servings, roughly $2.53 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $6.71 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.15. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.99 a burrito\u003c/strong\u003e (at everyday cost) for the world\u0027s favorite curry you can eat with one hand. A jar of garam masala and a couple of cans of tomato do most of the work.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) for the world\u0027s favorite curry you can eat with one hand. A jar of garam masala and a couple of cans of tomato do most of the work.",
     "shop_smart":  [
                        "Garam masala is the one spice that makes this taste like the restaurant, and a jar lasts for many batches, so buy it once and use it freely.",
                        "Tomato paste and canned diced tomatoes are the cheap backbone of the sauce, and this batch uses close to a full can of each, so nothing dries out in the fridge.",
@@ -80,9 +80,9 @@
                     "Weigh the rice and the masala chicken together, subtract the empty bowl, and divide by 14. Lay that much down each tortilla, fold in the sides and roll.",
                     "Wrap each burrito and portion into 14 containers."
                 ],
-    "portion_html":  "Weigh the rice and masala chicken together, subtract the empty bowl, and divide by 14 so each burrito carries the same curry. Each burrito holds \u003cstrong\u003e364 calories and 36 grams of protein\u003c/strong\u003e. Reheat wrapped, and the sauce keeps the rice soft.",
+    "portion_html":  "Weigh the rice and masala chicken together, subtract the empty bowl, and divide by 14 so each burrito carries the same curry. Each burrito holds \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e. Reheat wrapped, and the sauce keeps the rice soft.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://stealthhealthcookbook.com/blogs/recipes/tikka-masala-burritos-big-flavor-little-prep\" target=\"_blank\" rel=\"noopener\"\u003estealthhealthcookbook.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Chicken tikka masala burritos, 14 wrapped and ready, for about $2.99 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "upsell_html":  "Chicken tikka masala burritos, 14 wrapped and ready, for about ${{cost_ps}} each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
     "cost_batch":  25.19,
     "cost_batch_true":  35.44,
     "cost_per_serving":  1.8,
@@ -215,7 +215,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Chicken tikka masala burritos with yogurt-marinated seared breast, a tomato masala and rice folded into a wrap. 14 wrapped at 364 calories, 36g protein, about $2.99 (at everyday cost).",
+                 "description":  "Chicken tikka masala burritos with yogurt-marinated seared breast, a tomato masala and rice folded into a wrap. 14 wrapped at {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
                  "keywords":  "chicken tikka masala burrito, tikka masala meal prep, high protein indian meal prep, low calorie curry burrito, budget chicken burrito, garam masala chicken",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

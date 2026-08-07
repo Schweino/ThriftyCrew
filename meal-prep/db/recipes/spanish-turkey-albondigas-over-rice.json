@@ -28,7 +28,7 @@
                  "fat":  25,
                  "cost_ps":  "3.93"
              },
-    "intro_html":  "Spanish albondigas have a trick worth stealing: rice goes inside the meatball, not just under it. That rice holds moisture, which is exactly what lean ground turkey needs to survive a week in the fridge. They simmer in a smoked paprika tomato sauce with a little cream stirred in at the end, and each bowl runs \u003cstrong\u003e565 calories and 35 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.93\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Spanish albondigas have a trick worth stealing: rice goes inside the meatball, not just under it. That rice holds moisture, which is exactly what lean ground turkey needs to survive a week in the fridge. They simmer in a smoked paprika tomato sauce with a little cream stirred in at the end, and each bowl runs \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 4.25 lb (1984 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 2.75 cups dry (511 g)",
@@ -63,7 +63,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $36.28 across 14 servings, roughly $2.59 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $22.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.48. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.93\u003c/strong\u003e a bowl (at everyday cost) for tapas-bar meatballs. The bar charges more than that for three of them and calls it a small plate.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a bowl (at everyday cost) for tapas-bar meatballs. The bar charges more than that for three of them and calls it a small plate.",
     "shop_smart":  [
                        "The turkey is two thirds of this batch, so the 5 pound pack is the buy. Larger packs almost always beat the pound price of the small trays, and turkey freezes without complaint.",
                        "Tomato sauce in the 15 ounce can is the cheapest sauce base in the store. Seven cans still cost less than one jar of the fancy stuff with a chef on the label.",
@@ -80,9 +80,9 @@
                     "Stir in the heavy cream off the heat and taste for salt. It should look like tomato soup that went to finishing school.",
                     "Cook the remaining rice, move it into your weighed pot, and keep the meatballs in their sauce for portioning."
                 ],
-    "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed for each container. Then count the meatballs, divide them evenly across all 14, and ladle the sauce over the top. Each bowl lands at \u003cstrong\u003e565 calories and 35 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed for each container. Then count the meatballs, divide them evenly across all 14, and ladle the sauce over the top. Each bowl lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://foodwishes.blogspot.com/2015/11/turkey-rice-meatballs-albondigas.html\" target=\"_blank\" rel=\"noopener\"\u003efoodwishes.blogspot.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Spanish albondigas for about \u003cstrong\u003e$3.93\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Spanish albondigas for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  31.31,
     "cost_batch_true":  36.28,
     "cost_per_serving":  2.24,
@@ -223,7 +223,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Spanish turkey albondigas over rice: rice-bound turkey meatballs simmered in a creamy smoked paprika tomato sauce. 565 calories, 35g protein, about $3.93 a bowl (at everyday cost).",
+                 "description":  "Spanish turkey albondigas over rice: rice-bound turkey meatballs simmered in a creamy smoked paprika tomato sauce. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a bowl (at everyday cost).",
                  "keywords":  "albondigas, spanish meatballs, turkey meatballs, turkey meal prep, budget meal prep, smoked paprika sauce",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

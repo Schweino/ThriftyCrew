@@ -23,33 +23,44 @@ param([switch]$VerifyOnly)
 $ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp   = Split-Path -Parent $here
+$isVerifyOnly = [bool]$VerifyOnly            # capture BEFORE dot-sourcing: a lib's param() binds into THIS scope
+. (Join-Path $mp 'lib\render-tokens.ps1')    # Expand-SpecProse, used by the token half of the invariant
 $prev = Join-Path $here 'v2-perserving.prev.json'
 $specDir = Join-Path $mp 'db\recipes'
 $builtDir = Join-Path $mp 'db\built'
 
-# ---- the invariant this whole script exists to hold ----
-# every $N.NN in a spec's reader-facing money fields must equal that spec's own stat.cost_ps
+# ---- the invariant this whole script exists to hold - REWRITTEN 2026-08-08 for prose templating ----
+# Prose no longer stores money figures at all: it stores {{cost_ps}}/{{cal}}/{{protein}} tokens, and
+# lib\render-tokens.ps1 substitutes the spec's own stat at render. So the old invariant ("every $N.NN in
+# prose equals stat.cost_ps") is superseded by two stronger ones:
+#   1. NO money literal may exist in the five reader-prose surfaces AT ALL. A literal can only arrive from
+#      a batch promote whose writers typed real numbers and skipped migrate-prose-tokens - and a literal is
+#      a number that will silently rot the day the stat moves, which is the whole class templating ended.
+#   2. Every token must EXPAND: unknown token names or empty stats throw at render, so they must throw
+#      here first, where the daily chain reports them, not at 6:31am inside build-cards.
 function Get-ProseMoneyDisagreements {
   $out = New-Object System.Collections.Generic.List[object]
   foreach($f in (Get-ChildItem (Join-Path $specDir '*.json'))){
     $s = Get-Content $f.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
-    $cps = [string]$s.stat.cost_ps
     foreach($fld in @('intro_html','portion_html','cost_closing_html','upsell_html')){
       foreach($m in [regex]::Matches([string]$s.$fld, '\$(\d+\.\d{2})')){
-        if($m.Groups[1].Value -ne $cps){ $out.Add([pscustomobject]@{ slug=$f.BaseName; field=$fld; quotes=$m.Groups[1].Value; cost_ps=$cps }) }
+        $out.Add([pscustomobject]@{ slug=$f.BaseName; field=$fld; quotes=$m.Groups[1].Value; why='money LITERAL in templated prose - run migrate-prose-tokens.ps1 -Slugs ' + $f.BaseName + ' -Apply' })
       }
     }
     foreach($m in [regex]::Matches([string]$s.head.description, '\$(\d+\.\d{2})')){
-      if($m.Groups[1].Value -ne $cps){ $out.Add([pscustomobject]@{ slug=$f.BaseName; field='head.description'; quotes=$m.Groups[1].Value; cost_ps=$cps }) }
+      $out.Add([pscustomobject]@{ slug=$f.BaseName; field='head.description'; quotes=$m.Groups[1].Value; why='money LITERAL in templated prose' })
     }
+    # every token must expand against this spec's own stat (typo'd names and empty stats throw)
+    try { Expand-SpecProse ($s) | Out-Null }
+    catch { $out.Add([pscustomobject]@{ slug=$f.BaseName; field='(tokens)'; quotes=''; why=$_.Exception.Message }) }
   }
   return $out
 }
 
-if($VerifyOnly){
+if($isVerifyOnly){
   $d = Get-ProseMoneyDisagreements
-  Write-Output ("verify only: {0} prose/stat money disagreement(s) across {1} spec(s)" -f $d.Count, (@($d | Select-Object -ExpandProperty slug -Unique)).Count)
-  $d | Select-Object -First 20 | ForEach-Object { Write-Output ("  {0} {1} quotes `${2}, stat says `${3}" -f $_.slug,$_.field,$_.quotes,$_.cost_ps) }
+  Write-Output ("verify only: {0} prose money/token finding(s) across {1} spec(s)" -f $d.Count, (@($d | Select-Object -ExpandProperty slug -Unique)).Count)
+  $d | Select-Object -First 20 | ForEach-Object { Write-Output ("  {0} {1} {2} - {3}" -f $_.slug,$_.field,$(if($_.quotes){'$'+$_.quotes}else{''}),$_.why) }
   exit $(if($d.Count){ 1 } else { 0 })
 }
 
@@ -66,20 +77,21 @@ if(-not (Test-Path $prev)){
   throw ("no $prev - compute-v2-perserving.ps1 writes it before overwriting the manifest. If this is the first run after that change landed, run compute-v2-perserving.ps1 once and re-run this.")
 }
 
-Write-Output '1/3 reanchor-machine-fields'
+Write-Output '1/2 reanchor-machine-fields'
 & (Join-Path $here 'reanchor-machine-fields.ps1') | Select-Object -Last 1
-Write-Output '2/3 reanchor-moved-prose (vs the pre-recompute snapshot)'
-& (Join-Path $here 'reanchor-moved-prose.ps1') -Baseline $prev | Select-Object -Last 1
+# STEP 2 (reanchor-moved-prose) IS GONE - RETIRED BY TEMPLATING (2026-08-08). Prose stores {{tokens}} that
+# resolve from stat at render, so there is no prose figure to move: the machine-field re-anchor above IS the
+# whole re-anchor now. The script (and the pre-recompute snapshot dance it needed) lives on in
+# archive\retired-by-templating\ with the full story. The $prev gate above stays: compute-v2's snapshot is
+# still the proof a recompute actually ran before we stamp machine fields from its output.
 
-Write-Output '3/3 verify the invariant'
+Write-Output '2/2 verify the invariant (no money literals; every token expands)'
 $d = Get-ProseMoneyDisagreements
 if($d.Count){
-  Write-Output ("  STILL DISAGREEING: {0} finding(s) across {1} spec(s)" -f $d.Count, (@($d | Select-Object -ExpandProperty slug -Unique)).Count)
-  $d | Select-Object -First 15 | ForEach-Object { Write-Output ("    {0} {1} quotes `${2}, stat says `${3}" -f $_.slug,$_.field,$_.quotes,$_.cost_ps) }
-  Write-Output '  NOTE: reanchor-moved-prose only rewrites the PREVIOUS manifest value. A figure that was already'
-  Write-Output '  wrong before the move is unreachable by it and needs repair-basis-relabel or a hand fix.'
+  Write-Output ("  FINDINGS: {0} across {1} spec(s)" -f $d.Count, (@($d | Select-Object -ExpandProperty slug -Unique)).Count)
+  $d | Select-Object -First 15 | ForEach-Object { Write-Output ("    {0} {1} {2} - {3}" -f $_.slug,$_.field,$(if($_.quotes){'$'+$_.quotes}else{''}),$_.why) }
 } else {
-  Write-Output '  clean: every prose dollar figure equals its own spec stat.cost_ps'
+  Write-Output '  clean: no money literal in prose, every token expands against its own stat'
 }
 
 # ---- which live cards are now stale? ----

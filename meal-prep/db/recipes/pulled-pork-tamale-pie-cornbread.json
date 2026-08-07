@@ -68,7 +68,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $23.21 across 14 servings, roughly $1.66 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $21.58 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.79. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.72 a bowl\u003c/strong\u003e (at everyday cost). Corn and flour are inexpensive carbs, and they are what make up the entire topping.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Corn and flour are inexpensive carbs, and they are what make up the entire topping.",
     "shop_smart":  [
                        "\u003cstrong\u003eGrits are the cheap route to a corn topping.\u003c/strong\u003e They are the same ground corn as cornmeal at a lower price per pound in most stores. Check both shelf tags and buy whichever is cheaper.",
                        "\u003cstrong\u003eCanned diced green chiles are the whole flavor.\u003c/strong\u003e They cost about a dollar a can and they bring the mild heat that makes this read as tamale pie instead of just cornbread over meat.",
@@ -84,9 +84,9 @@
                     "In another bowl whisk the eggs with the heavy cream, the melted butter and the sour cream, then stir the wet into the dry just until it comes together. Do not overmix or the topping goes tough.",
                     "Pour the batter over the pork, spread it to the edges, top with the remaining cheddar, and bake at 375F for 35 to 40 minutes until the top is golden and set."
                 ],
-    "portion_html":  "Weigh the finished pie in its dish, subtract the dish weight, divide by 14, and cut squares to that exact weight so nobody gets all crust and no filling. Every serving lands near 584 calories with 26 grams of protein.",
+    "portion_html":  "Weigh the finished pie in its dish, subtract the dish weight, divide by 14, and cut squares to that exact weight so nobody gets all crust and no filling. Every serving lands near {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://hungryenoughtoeatsix.com/savory-shredded-pork-cornbread-pie/\" target=\"_blank\" rel=\"noopener\"\u003ehungryenoughtoeatsix.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cem\u003eTamale flavor without the tamale labor, about $2.72 a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "upsell_html":  "\u003cem\u003eTamale flavor without the tamale labor, about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  17.07,
     "cost_batch_true":  23.21,
     "cost_per_serving":  1.22,

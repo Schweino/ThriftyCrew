@@ -31,7 +31,7 @@
                  "fat":  11,
                  "cost_ps":  "4.39"
              },
-    "intro_html":  "Picadillo is the Cuban answer to weeknight ground beef, a sweet and briny simmer of beef, tomato, pepper, green olives, raisins, and capers that tastes like it took all day and does not. This wrap comes in at about \u003cstrong\u003e358 calories\u003c/strong\u003e and \u003cstrong\u003e31 grams of protein\u003c/strong\u003e, the leanest beef burrito in the batch, in a tortilla that carries 18 grams of fiber for 5 grams of net carb. If our Cuban Beef Picadillo Rice Bowls are on your rotation, this wrap goes fuller Havana, sweet raisins and briny capers folded right into the beef and rice for the classic sweet and salty picadillo you can eat with one hand.",
+    "intro_html":  "Picadillo is the Cuban answer to weeknight ground beef, a sweet and briny simmer of beef, tomato, pepper, green olives, raisins, and capers that tastes like it took all day and does not. This wrap comes in at about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, the leanest beef burrito in the batch, in a tortilla that carries 18 grams of fiber for 5 grams of net carb. If our Cuban Beef Picadillo Rice Bowls are on your rotation, this wrap goes fuller Havana, sweet raisins and briny capers folded right into the beef and rice for the classic sweet and salty picadillo you can eat with one hand.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)",
@@ -79,7 +79,7 @@
                     "Fold the cooked rice into the filling and warm everything through.",
                     "Warm the tortillas, then portion and wrap as below."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total filling weight. Divide it by 14, spoon that amount onto each warm tortilla, and roll. Every burrito lands at about \u003cstrong\u003e358 calories and 31 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total filling weight. Divide it by 14, spoon that amount onto each warm tortilla, and roll. Every burrito lands at about \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.skinnytaste.com/picadillo-6-ww-pts/\" target=\"_blank\" rel=\"noopener\"\u003eskinnytaste.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  42.27,
@@ -198,7 +198,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A Cuban picadillo burrito for meal prep: lean beef simmered with tomato, pepper, green olives, raisins, and capers, folded with rice. About 358 calories and 31 grams of protein per serving.",
+                 "description":  "A Cuban picadillo burrito for meal prep: lean beef simmered with tomato, pepper, green olives, raisins, and capers, folded with rice. About {{cal}} calories and {{protein}} grams of protein per serving.",
                  "keywords":  "cuban picadillo, picadillo burrito, beef with olives, cuban meal prep, budget high protein burrito",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

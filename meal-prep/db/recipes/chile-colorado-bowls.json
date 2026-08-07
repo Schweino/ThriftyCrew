@@ -26,7 +26,7 @@
                  "fat":  23,
                  "cost_ps":  "5.30"
              },
-    "intro_html":  "Chile colorado is beef stewed in pure red chile sauce. No beans, no tomato base, no shortcuts through a can of enchilada sauce. Dried guajillos and anchos get soaked and blended, the chuck browns in flour first so the sauce clings, and then it just simmers until the beef gives up. Each bowl carries \u003cstrong\u003e36 grams of protein\u003c/strong\u003e and 570 calories for about \u003cstrong\u003e$5.30\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Chile colorado is beef stewed in pure red chile sauce. No beans, no tomato base, no shortcuts through a can of enchilada sauce. Dried guajillos and anchos get soaked and blended, the chuck browns in flour first so the sauce clings, and then it just simmers until the beef gives up. Each bowl carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eDried Guajillo Chiles (generic (USDA)):\u003c/strong\u003e 4 oz (112 g)",
                                 "\u003cstrong\u003eDried Ancho Chiles (generic (USDA)):\u003c/strong\u003e 2.75 oz (79 g)",
@@ -60,7 +60,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $54.14 across 14 servings, roughly $3.87 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $30.99 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $85.13. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$5.30 a bowl\u003c/strong\u003e (at everyday cost). Nine ingredients, and once you own the bag of dried chiles the recurring cost is basically beef, broth, and rice.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Nine ingredients, and once you own the bag of dried chiles the recurring cost is basically beef, broth, and rice.",
     "shop_smart":  [
                        "Buy dried chiles by the bag in the Latin foods aisle rather than in spice jars. The price difference per ounce is not small, it is enormous.",
                        "Chuck roast is the correct cut for a two hour braise. Anything more tender would cost more and fall apart into strings.",
@@ -77,9 +77,9 @@
                     "Cover and simmer on the lowest heat for 2 to 2.5 hours, stirring now and then, until the beef is fork tender and the sauce has darkened and thickened.",
                     "Pull the bay leaves, taste for salt, and cook the rice separately."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of beef and red chile sauce into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e570 calories with 36 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of beef and red chile sauce into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/chile-colorado-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eisabeleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Chile colorado for about $5.30 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Chile colorado for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  50.26,
     "cost_batch_true":  54.14,
     "cost_per_serving":  3.59,
@@ -212,7 +212,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Chile colorado meal prep: chuck roast dredged in flour and braised in a pure guajillo and ancho red chile sauce, served over rice. 570 calories, 36g protein, about $5.30 per serving (at everyday cost).",
+                 "description":  "Chile colorado meal prep: chuck roast dredged in flour and braised in a pure guajillo and ancho red chile sauce, served over rice. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "chile colorado, red chile beef, guajillo beef stew, mexican beef bowls, budget meal prep, mexican recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

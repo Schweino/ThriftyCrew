@@ -42,6 +42,12 @@ param(
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $spec = Get-Content $SpecFile -Raw | ConvertFrom-Json
+# TOKEN EXPANSION AT THE RENDER BOUNDARY (2026-08-08). Spec prose stores {{cost_ps}}/{{cal}}/{{protein}}
+# instead of literals; they resolve from THIS spec's own stat right here, so nothing downstream - the card
+# body, the JSON-LD, the meta description - can ever quote a number the stat has moved away from. A spec
+# still holding plain literals passes through untouched (expansion is a no-op without tokens).
+. (Join-Path $here '..\lib\render-tokens.ps1')
+$spec = Expand-SpecProse $spec
 $utf8 = New-Object Text.UTF8Encoding($false)
 . (Join-Path $here '..\..\lib\design-tokens.ps1')
 

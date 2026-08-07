@@ -30,7 +30,7 @@
                  "fat":  15,
                  "cost_ps":  "3.75"
              },
-    "intro_html":  "\u003cp\u003eGreen chile, potato, and turkey, wrapped and ready. This build comes in at 377 calories with 30 grams of protein, on a tortilla carrying 18 grams of fiber for about 5 grams of net carb. We kept it a proper wrapped burrito with salsa rather than drowning it in sauce, so it holds up in the fridge and eats clean out of hand. Diced russet potato stretches the lean turkey and soaks up the green chile. If you like our Green Chile Ground Turkey Skillet, this is that flavor you can wrap and take with you.\u003c/p\u003e",
+    "intro_html":  "\u003cp\u003eGreen chile, potato, and turkey, wrapped and ready. This build comes in at {{cal}} calories with {{protein}} grams of protein, on a tortilla carrying 18 grams of fiber for about 5 grams of net carb. We kept it a proper wrapped burrito with salsa rather than drowning it in sauce, so it holds up in the fridge and eats clean out of hand. Diced russet potato stretches the lean turkey and soaks up the green chile. If you like our Green Chile Ground Turkey Skillet, this is that flavor you can wrap and take with you.\u003c/p\u003e",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1582 g)",
@@ -60,7 +60,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $43.23 across 14 servings, roughly $3.09 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $9.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.55. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e$3.75 a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$9 or more\u003c/strong\u003e for a green-chile burrito out. The potato is what keeps this one cheap and filling at the same time.\u003c/p\u003e",
+    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$9 or more\u003c/strong\u003e for a green-chile burrito out. The potato is what keeps this one cheap and filling at the same time.\u003c/p\u003e",
     "shop_smart":  [
                        "\u003cstrong\u003eTurkey and potatoes are the cheap muscle here.\u003c/strong\u003e A pound and a quarter of russets bulks out the filling for almost nothing and carries the green chile flavor. Dice them small so they cook through with the meat.",
                        "\u003cstrong\u003eCanned green chiles bring the whole profile.\u003c/strong\u003e A couple of 4 ounce cans give you the roasted chile note across all 14 burritos without a trip to a specialty store.",
@@ -75,9 +75,9 @@
                     "Stir in the salsa and warm through, then fold in the Mexican cheese blend so it melts.",
                     "Warm the tortillas so they roll without cracking, then fill and wrap each one."
                 ],
-    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near 377 calories with 30 grams of protein.\u003c/p\u003e",
+    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near {{cal}} calories with {{protein}} grams of protein.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.ambitiouskitchen.com/green-chile-chicken-burritos/\" target=\"_blank\" rel=\"noopener\"\u003eambitiouskitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about $3.75 a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
+    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about ${{cost_ps}} a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
     "cost_batch":  34.55,
     "cost_batch_true":  43.23,
     "cost_per_serving":  2.47,
@@ -186,7 +186,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A wrapped green chile turkey burrito under 400 calories, with diced russet potato. About 377 calories and 30 grams of protein per serving, roughly $3.75 each (at everyday cost).",
+                 "description":  "A wrapped green chile turkey burrito under 400 calories, with diced russet potato. About {{cal}} calories and {{protein}} grams of protein per serving, roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "green chile turkey burrito, ground turkey meal prep, high protein burrito, low calorie meal prep, budget dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

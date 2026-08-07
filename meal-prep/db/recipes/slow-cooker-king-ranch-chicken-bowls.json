@@ -57,7 +57,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $32.74 across 14 servings, roughly $2.34 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $8.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $41.06. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.16 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Buy the \u003cstrong\u003echeddar in the bigger two-bag size\u003c/strong\u003e. It is cheaper per ounce and this recipe puts it to good use.",
                        "Reach for the \u003cstrong\u003ebulk chicken breast\u003c/strong\u003e to keep the per serving price low.",
@@ -71,7 +71,7 @@
                     "Steam the broccoli and cook the rice.",
                     "Build bowls with rice, king ranch chicken, broccoli, and the last of the cheese on top."
                 ],
-    "portion_html":  "Each of the 14 servings comes in around 63g protein for about 816 calories, at roughly $3.16 a bowl.",
+    "portion_html":  "Each of the 14 servings comes in around {{protein}}g protein for about {{cal}} calories, at roughly ${{cost_ps}} a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://houseofyumm.com/slow-cooker-king-ranch-chicken-soup/\" target=\"_blank\" rel=\"noopener\"\u003eHouse of Yumm\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheesy, comforting, and cheap, this bowl proves meal prep does not have to taste like a diet. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  26.19,
@@ -198,7 +198,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about 816 calories and 63 grams of protein for roughly $3.16 each (at everyday cost).",
+                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker king ranch chicken bowls, budget dinner",
                  "costPerServing":  3.16,
                  "recipeIngredient":  [

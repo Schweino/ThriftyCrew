@@ -55,7 +55,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $37.71 across 14 servings, roughly $2.69 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $10.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.32. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.46 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Canned \u003cstrong\u003ecannellini beans\u003c/strong\u003e are the cheap, protein-packed backbone of this chili, so stock up when they go on sale.",
                        "\u003cstrong\u003eCoconut milk\u003c/strong\u003e gives you a rich, creamy base for less than cream or half-and-half.",
@@ -69,7 +69,7 @@
                     "Let it warm through and thicken for another 20 minutes, then stir in the lime juice and chopped cilantro.",
                     "Ladle into bowls and dig in."
                 ],
-    "portion_html":  "Each of the 14 servings lands around 65g protein for about 587 calories, at roughly $3.46 a bowl.",
+    "portion_html":  "Each of the 14 servings lands around {{protein}}g protein for about {{cal}} calories, at roughly ${{cost_ps}} a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://therealfooddietitians.com/slow-cooker-white-chicken-chili/\" target=\"_blank\" rel=\"noopener\"\u003eThe Real Food Dietitians\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "This is a seriously high-protein bowl, and it tastes like pure comfort while it fuels you up. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  33.21,
@@ -189,7 +189,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about 587 calories and 65 grams of protein for roughly $3.46 each (at everyday cost).",
+                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker white chicken chili bowls, budget dinner",
                  "costPerServing":  3.46,
                  "recipeIngredient":  [

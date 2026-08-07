@@ -51,7 +51,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $25.95 across 14 servings, roughly $1.85 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.96 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.91. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.16 a bowl\u003c/strong\u003e (at everyday cost) for a pot of sausage, bacon, and potatoes that could feed a construction crew.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a pot of sausage, bacon, and potatoes that could feed a construction crew.",
     "shop_smart":  [
                        "\u003cstrong\u003ePotatoes are the cheapest calorie in the store and they are the backbone here.\u003c/strong\u003e Buy the big bag, not the loose ones, and keep them somewhere dark so they do not sprout.",
                        "\u003cstrong\u003eBratwurst stands in for Irish bangers without apology.\u003c/strong\u003e Bangers are hard to find and cost a premium when you do. Brats are the same idea, always stocked, and often on sale.",
@@ -68,9 +68,9 @@
                     "Cover and cook low, either on the stovetop or in a moderate oven, until the potatoes are completely tender and the broth has turned cloudy and rich.",
                     "Uncover for the last stretch if you want the top layer to color, then taste and adjust the salt."
                 ],
-    "portion_html":  "Put the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Scoop that weight into each container, making sure every one gets sausage, bacon, and potato rather than all broth. Every serving lands near \u003cstrong\u003e773 calories with 38 grams of protein\u003c/strong\u003e. It thickens as it cools, which is exactly what you want.",
+    "portion_html":  "Put the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Scoop that weight into each container, making sure every one gets sausage, bacon, and potato rather than all broth. Every serving lands near \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e. It thickens as it cools, which is exactly what you want.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/dublin-coddle/\" target=\"_blank\" rel=\"noopener\"\u003ebudgetbytes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Stick-to-your-ribs dinners for about $2.16 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Stick-to-your-ribs dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  21.46,
     "cost_batch_true":  25.95,
     "cost_per_serving":  1.53,
@@ -163,7 +163,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Irish Dublin coddle rebuilt for 14-serving meal prep: sausage, bacon, onions, and potatoes slow-cooked in broth. 773 calories, 38g protein, about $2.16 per serving (at everyday cost).",
+                 "description":  "Irish Dublin coddle rebuilt for 14-serving meal prep: sausage, bacon, onions, and potatoes slow-cooked in broth. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "dublin coddle, irish sausage and potatoes, one pot irish stew, bratwurst and bacon, budget meal prep, comfort food meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

@@ -20,7 +20,7 @@
                  "fat":  41,
                  "cost_ps":  "5.61"
              },
-    "intro_html":  "Com suon is Saigon street food royalty: lemongrass-marinated pork chops charred hard, served over rice with a fried egg and fresh cucumber and tomato. This is the big-appetite bowl of the library, \u003cstrong\u003e65 grams of protein\u003c/strong\u003e and 950 calories for about \u003cstrong\u003e$5.61\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Com suon is Saigon street food royalty: lemongrass-marinated pork chops charred hard, served over rice with a fried egg and fresh cucumber and tomato. This is the big-appetite bowl of the library, \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display": ["\u003cstrong\u003ePork Chops:\u003c/strong\u003e 7 lb (3175 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)","\u003cstrong\u003eLemongrass Paste (Gourmet Garden (McCormick)):\u003c/strong\u003e 6 oz (168 g)","\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 1.25 cups (378 g)","\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 4.5 oz (126 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 7 onions (770 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1.25 cups (252 g)","\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1.25 cups (336 g)","\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 0.5 cups (147 g)","\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 7 tbsp (94 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 4.25 cups (210 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.25 cups dry (600 g)","\u003cstrong\u003eCucumber:\u003c/strong\u003e 7 cucumbers (2100 g)","\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 7 cans (2877 g)","\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 14 large eggs (700 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -44,7 +44,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $67.11 across 14 servings, roughly $4.79 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $14.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $82.09. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$5.61 a bowl\u003c/strong\u003e (at everyday cost) for lemongrass pork chops with rice, egg, and vegetables. A Vietnamese restaurant charges $16 for com suon, and their chop is half the size of yours.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for lemongrass pork chops with rice, egg, and vegetables. A Vietnamese restaurant charges $16 for com suon, and their chop is half the size of yours.",
     "shop_smart":  "Pork chops are the headline across 7 pounds. That is a serious protein haul, and chops routinely hit sale prices, so time the buy and this bowl gets even cheaper.\nThe marinade is built from bottles you buy once: fish sauce, soy, oyster sauce, and honey. Spread across the jars that last months, their cost against this batch is small.\nEggs and canned diced tomatoes round out the bowl for very little combined. The canned tomatoes skip the produce-aisle price roulette and taste fine chilled next to rich pork.",
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -56,9 +56,9 @@
                     "Slice the cucumbers and drain the diced tomatoes for the fresh side.",
                     "Build bowls: rice, sliced pork, egg on top, cucumber and tomato beside, sauce and green onions over everything."
                 ],
-    "portion_html":  "Weigh the rice and sliced pork in the pot, subtract the empty pot weight you wrote down, and divide by 14, then add an egg and an even share of the vegetables to each container. Every bowl lands at about 950 calories with 65 grams of protein. This is the biggest bowl on the site, plan your day around it.",
+    "portion_html":  "Weigh the rice and sliced pork in the pot, subtract the empty pot weight you wrote down, and divide by 14, then add an egg and an even share of the vegetables to each container. Every bowl lands at about {{cal}} calories with {{protein}} grams of protein. This is the biggest bowl on the site, plan your day around it.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.cooking-therapy.com/com-suon-lemongrass-pork/\" target=\"_blank\" rel=\"noopener\"\u003eCooking Therapy\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $5.61 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  64.7,
     "cost_batch_true":  67.11,
     "cost_per_serving":  4.62,
@@ -190,7 +190,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Com suon meal prep: 14 bowls, 950 calories and 65g protein each, about $5.61 a serving (at everyday cost). Charred lemongrass pork chops with rice, egg, and vegetables.",
+                 "description":  "Com suon meal prep: 14 bowls, {{cal}} calories and {{protein}}g protein each, about ${{cost_ps}} a serving (at everyday cost). Charred lemongrass pork chops with rice, egg, and vegetables.",
                  "keywords":  "com suon, vietnamese pork chops, lemongrass pork, broken rice bowl, high protein meal prep, vietnamese meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",

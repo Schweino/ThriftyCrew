@@ -20,7 +20,7 @@
                  "fat":  19,
                  "cost_ps":  "4.99"
              },
-    "intro_html":  "Dump-and-go chili that does all the work while you go live your life. Each bowl brings 55 grams of protein for about $4.99 a serving (at everyday cost). It makes 14 servings, so your crock pot is basically running a meal-prep shop.",
+    "intro_html":  "Dump-and-go chili that does all the work while you go live your life. Each bowl brings {{protein}} grams of protein for about ${{cost_ps}} a serving (at everyday cost). It makes 14 servings, so your crock pot is basically running a meal-prep shop.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3120 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 14 cups (2391 g)",
@@ -56,7 +56,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $60.78 across 14 servings, roughly $4.34 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $8.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $69.68. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.99 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  "Grab the 7 lb ground turkey pack. It is cheaper than beef and carries this whole pot.\nA little can of chipotle in adobo adds big smoky flavor for pocket change, so do not skip it.\nBuy your beans and tomatoes as store-brand cans and let the pantry staples keep the cost down.",
     "make_it":  [
                     "Brown the ground turkey in the vegetable oil in a skillet, breaking it into crumbles, then add the chopped onion, garlic, celery, and bell peppers for a couple of minutes to soften.",
@@ -65,7 +65,7 @@
                     "Cover and cook on low for 6 to 8 hours, giving it one stir partway through if you are around.",
                     "Break up any big pieces of turkey, then serve it over or alongside more beans."
                 ],
-    "portion_html":  "Each of the 14 bowls gives you 55 grams of protein and about 592 calories.",
+    "portion_html":  "Each of the 14 bowls gives you {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://ifoodreal.com/high-protein-crockpot-turkey-chili-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eiFoodReal\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Set it in the morning, come home to dinner, and stash the rest for the week ahead. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  56.62,
@@ -185,7 +185,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about 592 calories and 55 grams of protein for roughly $4.99 each (at everyday cost).",
+                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker turkey chili bowls, budget dinner",
                  "costPerServing":  4.99,
                  "recipeIngredient":  [

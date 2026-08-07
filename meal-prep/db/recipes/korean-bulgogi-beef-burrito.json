@@ -31,7 +31,7 @@
                  "fat":  14,
                  "cost_ps":  "4.63"
              },
-    "intro_html":  "Bulgogi is Korean barbecue\u0027s greatest hit, thin beef marinated in soy, sesame, garlic, and a little grated apple until it is sweet, savory, and impossible to stop eating. Wrapped burrito style with rice, melty cheese, and crunchy cabbage, it travels better than any takeout box. Each one lands at about \u003cstrong\u003e395 calories\u003c/strong\u003e and \u003cstrong\u003e36 grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. Our Beef Bulgogi Rice Bowls plate it over rice; this wraps it up, and if you keep a jar of kimchi around, a forkful tucked inside at lunch is the move.",
+    "intro_html":  "Bulgogi is Korean barbecue\u0027s greatest hit, thin beef marinated in soy, sesame, garlic, and a little grated apple until it is sweet, savory, and impossible to stop eating. Wrapped burrito style with rice, melty cheese, and crunchy cabbage, it travels better than any takeout box. Each one lands at about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. Our Beef Bulgogi Rice Bowls plate it over rice; this wraps it up, and if you keep a jar of kimchi around, a forkful tucked inside at lunch is the move.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eSirloin Steak:\u003c/strong\u003e 3.5 lb (1588 g)",
@@ -78,7 +78,7 @@
                     "Shred the cabbage and slice the green onions and keep them cold; they go on at wrap time for crunch.",
                     "Warm the tortillas, then portion and wrap as below, adding the beef, rice, a share of shredded mozzarella, and the cold cabbage and green onions."
                 ],
-    "portion_html":  "Weigh the seared beef, onion, and rice together against the empty pot number from Step 1, and divide by 14. Onto each warm tortilla goes that hot share, an even share of the shredded mozzarella, and a handful of the cold cabbage and green onions. Every burrito lands at about \u003cstrong\u003e395 calories and 36 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Weigh the seared beef, onion, and rice together against the empty pot number from Step 1, and divide by 14. Onto each warm tortilla goes that hot share, an even share of the shredded mozzarella, and a handful of the cold cabbage and green onions. Every burrito lands at about \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://fitsianfoodlife.com/korean-burrito/\" target=\"_blank\" rel=\"noopener\"\u003efitsianfoodlife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  48.48,
@@ -189,7 +189,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A Korean bulgogi beef burrito for meal prep: soy and sesame marinated sirloin with rice, cheese, and cabbage. About 395 calories and 36 grams of protein per serving.",
+                 "description":  "A Korean bulgogi beef burrito for meal prep: soy and sesame marinated sirloin with rice, cheese, and cabbage. About {{cal}} calories and {{protein}} grams of protein per serving.",
                  "keywords":  "bulgogi burrito, korean beef burrito, korean meal prep, high protein burrito, budget bulgogi",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",

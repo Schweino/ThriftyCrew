@@ -29,7 +29,7 @@
                  "fat":  10,
                  "cost_ps":  "3.51"
              },
-    "intro_html":  "\u003cp\u003eUnder 400 calories, a full 4 ounces of chicken, and 44 grams of protein, all wrapped in a tortilla that carries 18 grams of fiber for about 5 grams of net carb. That is the whole trick here. Bacon, ranch, and cheese usually means a calorie bomb, so we did the math instead of guessing. The ranch is a blended cottage cheese and Greek yogurt sauce, the bacon is turkey bacon crisped and crumbled, and the rice is measured, not dumped. It tastes like the indulgent one and eats like the disciplined one.\u003c/p\u003e",
+    "intro_html":  "\u003cp\u003eUnder 400 calories, a full 4 ounces of chicken, and {{protein}} grams of protein, all wrapped in a tortilla that carries 18 grams of fiber for about 5 grams of net carb. That is the whole trick here. Bacon, ranch, and cheese usually means a calorie bomb, so we did the math instead of guessing. The ranch is a blended cottage cheese and Greek yogurt sauce, the bacon is turkey bacon crisped and crumbled, and the rice is measured, not dumped. It tastes like the indulgent one and eats like the disciplined one.\u003c/p\u003e",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
@@ -60,7 +60,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $43.05 across 14 servings, roughly $3.08 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $6.14 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.19. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e$3.51 a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a fast-casual chicken burrito. Catch the breast on sale and it drops from there.\u003c/p\u003e",
+    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a fast-casual chicken burrito. Catch the breast on sale and it drops from there.\u003c/p\u003e",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy the chicken on sale and freeze it.\u003c/strong\u003e When breast drops in price, grab a big pack and split it into 3.5 pound bags. One sale trip covers a month of these.",
                        "\u003cstrong\u003eOne packet of ranch seasoning does the heavy lifting.\u003c/strong\u003e A single 1 ounce packet flavors the whole batch of sauce, so you are not buying a bottle of dressing you will forget in the door of the fridge.",
@@ -76,9 +76,9 @@
                     "Stir in the rice, then the turkey bacon crumble. Finish with the sliced green onions and the lime juice.",
                     "Warm the tortillas so they roll without cracking, then fill and wrap each one."
                 ],
-    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight you wrote down in Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla before you roll. Every burrito lands near 394 calories with 44 grams of protein.\u003c/p\u003e",
+    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight you wrote down in Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla before you roll. Every burrito lands near {{cal}} calories with {{protein}} grams of protein.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.tiktok.com/@aussiefitness/video/7397374558745005330\" target=\"_blank\" rel=\"noopener\"\u003etiktok.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about $3.51 a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
+    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about ${{cost_ps}} a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
     "cost_batch":  29.31,
     "cost_batch_true":  43.05,
     "cost_per_serving":  2.09,
@@ -179,7 +179,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein chicken bacon ranch burrito that stays under 400 calories. Fourteen servings at about 394 calories and 44 grams of protein for roughly $3.51 each (at everyday cost).",
+                 "description":  "A high-protein chicken bacon ranch burrito that stays under 400 calories. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "chicken bacon ranch burrito, high protein meal prep, low calorie burrito, cheap meal prep, budget dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

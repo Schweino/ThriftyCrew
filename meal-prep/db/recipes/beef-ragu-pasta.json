@@ -20,7 +20,7 @@
                  "fat":  18,
                  "cost_ps":  "4.52"
              },
-    "intro_html":  "A good beef ragu is the kind of meal that tastes expensive and cooks for almost nothing. Lean ground beef simmers with carrots, onion, and crushed tomatoes into a rich sauce, then tosses with penne and a little parmesan. It runs around $4.52 a serving (at everyday cost) with 55 grams of protein and makes 14 bowls.",
+    "intro_html":  "A good beef ragu is the kind of meal that tastes expensive and cooks for almost nothing. Lean ground beef simmers with carrots, onion, and crushed tomatoes into a rich sauce, then tosses with penne and a little parmesan. It runs around ${{cost_ps}} a serving (at everyday cost) with {{protein}} grams of protein and makes 14 bowls.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
                                 "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 11 cups (1080 g)",
@@ -54,7 +54,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $52.70 across 14 servings, roughly $3.76 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $10.47 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.17. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.52 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Store-brand canned tomatoes make a sauce every bit as good as the name brands. \u003cstrong\u003eBuy the cheapest crushed tomatoes and tomato paste\u003c/strong\u003e and save the money.",
                        "A wedge of parmesan grated at home costs less and tastes better than the pre-grated stuff. \u003cstrong\u003eBuy a block of parmesan and grate it yourself\u003c/strong\u003e.",
@@ -68,7 +68,7 @@
                     "Cook the penne until just tender, then toss it with the sauce.",
                     "Finish with a shower of parmesan over the top."
                 ],
-    "portion_html":  "Each of the 14 servings gives you 55 grams of protein at 624 calories.",
+    "portion_html":  "Each of the 14 servings gives you {{protein}} grams of protein at {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://inquiringchef.com/simple-beef-ragu-slow-cooker-instant-pot-stovetop/\" target=\"_blank\" rel=\"noopener\"\u003eInquiring Chef\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Slow-simmered flavor, weeknight ease, and a price that lets you cook it as often as you like. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  44.42,
@@ -181,7 +181,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Italian meal prep. Fourteen servings at about 624 calories and 55 grams of protein for roughly $4.52 each (at everyday cost).",
+                 "description":  "A high-protein Italian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, simple beef ragu pasta, budget dinner",
                  "costPerServing":  4.52,
                  "recipeIngredient":  [

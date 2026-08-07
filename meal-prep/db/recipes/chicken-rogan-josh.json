@@ -25,7 +25,7 @@
                  "fat":  41,
                  "cost_ps":  "3.97"
              },
-    "intro_html":  "Rogan josh is a Kashmiri dish, and the authentic version does something almost no other Indian curry does: it uses no onions and no tomatoes at all. The deep red color comes from Kashmiri chiles, which are more about pigment than punishment. The body comes from yogurt, whisked in slowly so it does not split, and the perfume comes from dried ginger and fennel. It is a short list of ingredients doing very precise work. Each serving runs \u003cstrong\u003e659 calories and 54 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.97\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Rogan josh is a Kashmiri dish, and the authentic version does something almost no other Indian curry does: it uses no onions and no tomatoes at all. The deep red color comes from Kashmiri chiles, which are more about pigment than punishment. The body comes from yogurt, whisked in slowly so it does not split, and the perfume comes from dried ginger and fennel. It is a short list of ingredients doing very precise work. Each serving runs \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 7 tbsp (105 g)",
                                 "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 2.75 tbsp (17 g)",
@@ -59,7 +59,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $41.20 across 14 servings, roughly $2.94 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $18.45 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.65. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.97 a serving\u003c/strong\u003e (at everyday cost). This one is priced by its spice cabinet, not its produce, because the recipe skips vegetables entirely. Buy the ginger, fennel and dried chiles once and the next batch costs you a lot less.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). This one is priced by its spice cabinet, not its produce, because the recipe skips vegetables entirely. Buy the ginger, fennel and dried chiles once and the next batch costs you a lot less.",
     "shop_smart":  [
                        "Dried chiles, ground ginger and ground fennel together make up more of this batch than the vegetables in most of our recipes. All three are dramatically cheaper in bags from an international grocer than in branded jars, and all three keep for a year in sealed containers.",
                        "Greek yogurt is the sauce. Buy the big tub of plain full fat, not the flavored cups, and let it come to room temperature before it goes in the pot so it is less likely to split.",
@@ -76,9 +76,9 @@
                     "Turn the heat to low and add the yogurt mixture a ladle at a time, stirring constantly and letting each addition come together before the next goes in. Rushing this is how you end up with curdled sauce.",
                     "Cover and simmer gently 35 to 40 minutes until the chicken is tender and the sauce is glossy, then stir in the garam masala off the heat."
                 ],
-    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Fourteen even portions, no arguing about it. Each one carries \u003cstrong\u003e659 calories\u003c/strong\u003e, and reheat this one gently at half power, because a yogurt sauce that boils will break on you.",
+    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Fourteen even portions, no arguing about it. Each one carries \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e, and reheat this one gently at half power, because a yogurt sauce that boils will break on you.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.whiskaffair.com/chicken-rogan-josh-recipe/\" target=\"_blank\" rel=\"noopener\"\u003ewhiskaffair.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Kashmiri rogan josh, no onions and no tomatoes, for about $3.97 a serving (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "upsell_html":  "Kashmiri rogan josh, no onions and no tomatoes, for about ${{cost_ps}} a serving (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
     "cost_batch":  34.06,
     "cost_batch_true":  41.2,
     "cost_per_serving":  2.43,
@@ -211,7 +211,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Chicken rogan josh, the Kashmiri way: no onion or tomato, deep red from dried chiles, thickened with yogurt. 14 meal prep servings at 659 calories, 54g protein, about $3.97 (at everyday cost).",
+                 "description":  "Chicken rogan josh, the Kashmiri way: no onion or tomato, deep red from dried chiles, thickened with yogurt. 14 meal prep servings at {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
                  "keywords":  "chicken rogan josh, kashmiri curry, yogurt curry, indian chicken curry, no onion curry, high protein meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

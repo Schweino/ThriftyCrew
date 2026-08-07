@@ -20,7 +20,7 @@
                  "fat":  20,
                  "cost_ps":  "3.94"
              },
-    "intro_html":  "All the saucy, cheesy comfort of enchiladas with zero rolling and zero oven fuss. Each bowl brings 51 grams of protein for about $3.94 a serving (at everyday cost). Fourteen servings out of one skillet keeps the whole week covered.",
+    "intro_html":  "All the saucy, cheesy comfort of enchiladas with zero rolling and zero oven fuss. Each bowl brings {{protein}} grams of protein for about ${{cost_ps}} a serving (at everyday cost). Fourteen servings out of one skillet keeps the whole week covered.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3000 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (750 g)",
@@ -51,7 +51,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $49.18 across 14 servings, roughly $3.51 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $5.83 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.01. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.94 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Buy the \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e and let the cheap beans and rice do the stretching.",
                        "Canned \u003cstrong\u003eenchilada sauce in the store brand\u003c/strong\u003e saves money over the name brands and tastes just as good in the pan.",
@@ -64,7 +64,7 @@
                     "Fold in the cooked rice and stir until everything is warm and coated.",
                     "Top with shredded cheddar, cover for a minute to melt it, then dish into bowls."
                 ],
-    "portion_html":  "Each of the 14 bowls gives you 51 grams of protein and about 679 calories.",
+    "portion_html":  "Each of the 14 bowls gives you {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://healthyfoodiegirl.com/ground-turkey-enchilada-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eHealthy Foodie Girl\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheesy, saucy, and cheap, this one disappears fast, so make the full batch. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  43.92,
@@ -163,7 +163,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about 679 calories and 51 grams of protein for roughly $3.94 each (at everyday cost).",
+                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, ground turkey enchilada skillet bowls, budget dinner",
                  "costPerServing":  3.94,
                  "recipeIngredient":  [

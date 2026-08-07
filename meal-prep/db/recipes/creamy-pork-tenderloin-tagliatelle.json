@@ -18,7 +18,7 @@
                  "fat":  43,
                  "cost_ps":  "2.43"
              },
-    "intro_html":  "An old-school Italian countryside pasta: strips of pork tenderloin, bacon, and mushrooms in a buttery cream sauce over ribbon noodles. Each bowl is 788 calories with \u003cstrong\u003e28 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.43\u003c/strong\u003e (at everyday cost), and it still eats like a restaurant-style plate for meal prep money.",
+    "intro_html":  "An old-school Italian countryside pasta: strips of pork tenderloin, bacon, and mushrooms in a buttery cream sauce over ribbon noodles. Each bowl is {{cal}} calories with \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost), and it still eats like a restaurant-style plate for meal prep money.",
     "ingredients_display": ["\u003cstrong\u003eFettuccine (Great Value):\u003c/strong\u003e 42 oz dry (1191 g)","\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 1 lb (496 g)","\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 0.75 lb (347 g)","\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 7 cups (496 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp (18 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 onions (385 g)","\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.75 cups (198 g)","\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 3 cups (704 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.25 lb (104 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 tbsp (14 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -36,7 +36,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $31.99 across 14 servings, roughly $2.28 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $4.97 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $36.96. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.43 a bowl\u003c/strong\u003e (at everyday cost) for pasta alla castellana. A cream-sauce pasta with pork and pancetta at an Italian place starts around $16 a plate, which makes a batch like this an easy call.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for pasta alla castellana. A cream-sauce pasta with pork and pancetta at an Italian place starts around $16 a plate, which makes a batch like this an easy call.",
     "shop_smart":  ["One pound of pork tenderloin plus three quarters of a pound of bacon covers all 14 servings. Small amounts of two flavorful meats beat a big pile of one bland one, and the math agrees.","Store-brand fettuccine stands in for tagliatelle in a 42 ounce package. Same egg-pasta idea, same ribbon shape, and it runs about half the specialty price.","Mushrooms and onion cost little combined and bulk up the sauce so the meat can stay small. That is how the whole bowl stays cheap."],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -48,9 +48,9 @@
                     "Fold in the fettuccine and toss until every ribbon is coated. Season generously with black pepper.",
                     "Portion into 14 containers while the sauce is still loose."
                 ],
-    "portion_html":  "Set the full pot on the scale, subtract the empty pot weight you wrote down, and divide by 14. Weigh that into each container. Each bowl comes out to about 788 calories with 28 grams of protein.",
+    "portion_html":  "Set the full pot on the scale, subtract the empty pot weight you wrote down, and divide by 14. Weigh that into each container. Each bowl comes out to about {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.the-pasta-project.com/creamy-pork-fillet-tagliatelle-alla-castellana/\" target=\"_blank\" rel=\"noopener\"\u003eThe Pasta Project\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $2.43 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  21.86,
     "cost_batch_true":  31.99,
     "cost_per_serving":  1.56,
@@ -140,7 +140,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Creamy pork tenderloin tagliatelle with bacon and mushrooms. 14 meal prep bowls at 788 calories and 28g protein each, about $2.43 a serving (at everyday cost).",
+                 "description":  "Creamy pork tenderloin tagliatelle with bacon and mushrooms. 14 meal prep bowls at {{cal}} calories and {{protein}}g protein each, about ${{cost_ps}} a serving (at everyday cost).",
                  "keywords":  "pork tenderloin pasta, tagliatelle alla castellana, creamy pork pasta, budget meal prep, cheap pasta recipes, bacon mushroom pasta",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",

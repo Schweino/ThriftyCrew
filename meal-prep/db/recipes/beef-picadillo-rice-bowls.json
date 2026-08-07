@@ -20,7 +20,7 @@
                  "fat":  13,
                  "cost_ps":  "4.56"
              },
-    "intro_html":  "Cuban picadillo is a beautiful mix of savory and sweet, with olives and golden raisins playing off cumin-spiced beef. It browns and simmers in one skillet, then goes over rice for an easy meal-prep bowl. This one runs around $4.56 a serving (at everyday cost) with 42 grams of protein and makes 14 bowls.",
+    "intro_html":  "Cuban picadillo is a beautiful mix of savory and sweet, with olives and golden raisins playing off cumin-spiced beef. It browns and simmers in one skillet, then goes over rice for an easy meal-prep bowl. This one runs around ${{cost_ps}} a serving (at everyday cost) with {{protein}} grams of protein and makes 14 bowls.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2330 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (946 g)",
@@ -53,7 +53,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $51.87 across 14 servings, roughly $3.70 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $11.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.77. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.56 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The olives and raisins are what make picadillo special for very little money. \u003cstrong\u003eA single jar of olives and one bag of raisins\u003c/strong\u003e carry the whole batch.",
                        "Store-brand tomato sauce works perfectly here. \u003cstrong\u003eBuy the cheapest canned tomato sauce\u003c/strong\u003e and save the difference.",
@@ -67,7 +67,7 @@
                     "Cook the rice while the picadillo simmers.",
                     "Spoon the beef over rice and serve."
                 ],
-    "portion_html":  "Each of the 14 servings gives you 42 grams of protein at 565 calories.",
+    "portion_html":  "Each of the 14 servings gives you {{protein}} grams of protein at {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://therealfooddietitians.com/picadillo/\" target=\"_blank\" rel=\"noopener\"\u003eThe Real Food Dietitians\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Sweet, salty, savory, and cheap all at once, this bowl earns a permanent spot in the rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  44.77,
@@ -180,7 +180,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Cuban meal prep. Fourteen servings at about 565 calories and 42 grams of protein for roughly $4.56 each (at everyday cost).",
+                 "description":  "A high-protein Cuban meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, cuban beef picadillo rice bowls, budget dinner",
                  "costPerServing":  4.56,
                  "recipeIngredient":  [

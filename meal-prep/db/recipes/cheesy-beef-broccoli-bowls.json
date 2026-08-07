@@ -20,7 +20,7 @@
                  "fat":  8,
                  "cost_ps":  "2.77"
              },
-    "intro_html":  "This is the bowl for when you want something that feels a little lighter but still fills you up. Lean beef and tender broccoli over rice, pulled together with a splash of beef broth and a melt of cheddar. Real vegetables, real protein, and it still lands right around $2.77 a bowl (at everyday cost). Your future self, opening the fridge on a busy Tuesday, will thank you.",
+    "intro_html":  "This is the bowl for when you want something that feels a little lighter but still fills you up. Lean beef and tender broccoli over rice, pulled together with a splash of beef broth and a melt of cheddar. Real vegetables, real protein, and it still lands right around ${{cost_ps}} a bowl (at everyday cost). Your future self, opening the fridge on a busy Tuesday, will thank you.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb raw (1587 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.5 cups dry jasmine (700 g)",
@@ -44,7 +44,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $32.93 across 14 servings, roughly $2.35 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $5.91 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.84. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.77 a bowl\u003c/strong\u003e (at everyday cost) for a balanced, veggie-loaded dinner. Frozen broccoli keeps this cheap and fast year round.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a balanced, veggie-loaded dinner. Frozen broccoli keeps this cheap and fast year round.",
     "shop_smart":  [
                        "\u003cstrong\u003eFrozen broccoli beats fresh here.\u003c/strong\u003e It is cheaper, lasts for months, and cooks straight from the bag with no waste.",
                        "\u003cstrong\u003eBuy the beef on sale and freeze.\u003c/strong\u003e The one rule that quietly lowers the cost of every batch you make.",
@@ -57,9 +57,9 @@
                     "Add the broccoli and the beef broth, cover, and steam a few minutes until the broccoli is bright and tender.",
                     "Combine the rice, beef, and broccoli in your big pot and stir. Fold in the shredded cheddar."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near 389 calories and 34 grams of protein.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "",
-    "upsell_html":  "Balanced dinners for about $2.77 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Balanced dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  29.01,
     "cost_batch_true":  32.93,
     "cost_per_serving":  2.07,
@@ -135,7 +135,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A lean beef, broccoli, and rice meal prep bowl with cheddar. Fourteen servings at about 389 calories and 34 grams of protein for roughly $2.77 each (at everyday cost).",
+                 "description":  "A lean beef, broccoli, and rice meal prep bowl with cheddar. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, beef and broccoli, budget dinner, veggie meal prep",
                  "costPerServing":  2.77,
                  "recipeIngredient":  [

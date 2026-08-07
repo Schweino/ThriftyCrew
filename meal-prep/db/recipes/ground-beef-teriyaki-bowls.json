@@ -20,7 +20,7 @@
                  "fat":  16,
                  "cost_ps":  "5.08"
              },
-    "intro_html":  "Sweet, savory teriyaki beef over rice, prepped ahead so weeknights run themselves. You get 43 grams of protein per bowl for about $5.08 (at everyday cost), and the pan makes 14 servings. All the flavor of the food-court plate, none of the food-court price.",
+    "intro_html":  "Sweet, savory teriyaki beef over rice, prepped ahead so weeknights run themselves. You get {{protein}} grams of protein per bowl for about ${{cost_ps}} (at everyday cost), and the pan makes 14 servings. All the flavor of the food-court plate, none of the food-court price.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2240 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.75 cups dry (1031 g)",
@@ -60,7 +60,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $45.93 across 14 servings, roughly $3.28 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $25.01 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $70.94. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$5.08 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eHoney and hoisin\u003c/strong\u003e do the heavy lifting here, so skip the bottled teriyaki sauce that charges extra for the same sweet-savory mix.",
                        "A \u003cstrong\u003ebag of frozen broccoli\u003c/strong\u003e is the cheapest veg in the recipe and keeps for weeks, so lean on it.",
@@ -73,7 +73,7 @@
                     "Pour the glaze over the beef and simmer until it thickens and coats the meat.",
                     "Serve the teriyaki beef and veggies over rice in each container."
                 ],
-    "portion_html":  "Each of the 14 bowls carries 43 grams of protein at just 617 calories, keeping this one light, sweet, and filling.",
+    "portion_html":  "Each of the 14 bowls carries {{protein}} grams of protein at just {{cal}} calories, keeping this one light, sweet, and filling.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eatyourselfskinny.com/healthy-mongolian-ground-beef-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eEat Yourself Skinny\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Food-court flavor, home-cook price, and a fridge full of dinners already handled. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  44.31,
@@ -200,7 +200,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Asian meal prep. Fourteen servings at about 617 calories and 43 grams of protein for roughly $5.08 each (at everyday cost).",
+                 "description":  "A high-protein Asian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, ground beef teriyaki bowls, budget dinner",
                  "costPerServing":  5.08,
                  "recipeIngredient":  [

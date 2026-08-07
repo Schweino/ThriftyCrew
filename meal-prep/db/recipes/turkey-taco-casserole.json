@@ -30,7 +30,7 @@
                  "fat":  32,
                  "cost_ps":  "4.77"
              },
-    "intro_html":  "This is built like a lasagna and eats like a taco. Corn tortillas layered flat with seasoned turkey, black beans, salsa and cheese, baked until the layers fuse, then loaded with cold toppings at the end. Each serving carries \u003cstrong\u003e47 grams of protein\u003c/strong\u003e and 750 calories for about \u003cstrong\u003e$4.77\u003c/strong\u003e (at everyday cost). That is a genuinely high protein count, and it comes from four pounds of turkey plus nearly five cans of beans doing the work together.",
+    "intro_html":  "This is built like a lasagna and eats like a taco. Corn tortillas layered flat with seasoned turkey, black beans, salsa and cheese, baked until the layers fuse, then loaded with cold toppings at the end. Each serving carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). That is a genuinely high protein count, and it comes from four pounds of turkey plus nearly five cans of beans doing the work together.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1.5 tbsp (21 g)",
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 4 lb (1852 g)",
@@ -73,7 +73,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $56.84 across 14 servings, roughly $4.06 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $9.93 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $66.77. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.77 a serving\u003c/strong\u003e (at everyday cost), and you are getting a genuinely high protein number for it. Cost per serving matters, but cost per gram of protein is the number that actually tells you whether a meal is a good deal.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost), and you are getting a genuinely high protein number for it. Cost per serving matters, but cost per gram of protein is the number that actually tells you whether a meal is a good deal.",
     "shop_smart":  [
                        "Corn tortillas cost far less than flour and hold their shape in a layered bake instead of turning to paste. Buy the bigger packs.",
                        "Canned black beans are the cheapest protein per dollar in the entire recipe and this pan uses nearly five cans. Dried beans cut that cost further if you plan a day ahead.",
@@ -90,9 +90,9 @@
                     "Rest 20 minutes. Layered casseroles need that time or the first slice will slide apart on the spatula.",
                     "Top with the drained diced tomatoes, sliced olives, green onions, red onion, diced bell peppers, jalapenos, cilantro, and light sour cream just before portioning."
                 ],
-    "portion_html":  "Weigh the pan, subtract the empty pan weight, and divide by 14. Cut to that number and lift each square flat so the tortilla layers stay stacked. Every serving comes to \u003cstrong\u003e750 calories\u003c/strong\u003e and 47 grams of protein.",
+    "portion_html":  "Weigh the pan, subtract the empty pan weight, and divide by 14. Cut to that number and lift each square flat so the tortilla layers stay stacked. Every serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://getonmyplate.com/turkey-taco-casserole/\" target=\"_blank\" rel=\"noopener\"\u003egetonmyplate.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "A protein-packed dinner for about $4.77 a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "upsell_html":  "A protein-packed dinner for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
     "cost_batch":  43.87,
     "cost_batch_true":  56.84,
     "cost_per_serving":  3.13,
@@ -249,7 +249,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Turkey taco casserole meal prep: corn tortillas layered with seasoned turkey, black beans, salsa, and cheese, loaded with fresh toppings. 750 calories, 47g protein, about $4.77 a serving (at everyday cost).",
+                 "description":  "Turkey taco casserole meal prep: corn tortillas layered with seasoned turkey, black beans, salsa, and cheese, loaded with fresh toppings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a serving (at everyday cost).",
                  "keywords":  "turkey taco casserole, layered taco bake, corn tortilla casserole, black bean taco bake, high protein meal prep, tex mex dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",

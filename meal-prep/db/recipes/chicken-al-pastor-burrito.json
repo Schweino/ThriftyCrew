@@ -29,7 +29,7 @@
                  "fat":  7,
                  "cost_ps":  "3.87"
              },
-    "intro_html":  "Al pastor is the taqueria classic where marinated pork meets charred pineapple on a spinning trompo. We keep the marinade and the pineapple and move it onto chicken thigh, which is cheaper, leaner and just as happy soaking up achiote, chipotle and citrus. Charred pineapple goes right in the wrap so every few bites turn sweet. Each burrito lands \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e30 grams of protein\u003c/strong\u003e, on a high fiber tortilla that holds near 5 grams of net carb. There is no al pastor in our catalog yet, so this one is new ground rather than a wrapped version of a bowl.",
+    "intro_html":  "Al pastor is the taqueria classic where marinated pork meets charred pineapple on a spinning trompo. We keep the marinade and the pineapple and move it onto chicken thigh, which is cheaper, leaner and just as happy soaking up achiote, chipotle and citrus. Charred pineapple goes right in the wrap so every few bites turn sweet. Each burrito lands \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, on a high fiber tortilla that holds near 5 grams of net carb. There is no al pastor in our catalog yet, so this one is new ground rather than a wrapped version of a bowl.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
@@ -65,7 +65,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $39.14 across 14 servings, roughly $2.80 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $14.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.04. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.87 a burrito\u003c/strong\u003e (at everyday cost) for taqueria al pastor built on cheap thigh instead of a trompo. The achiote brick and a can of pineapple do most of the flavor for almost nothing.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) for taqueria al pastor built on cheap thigh instead of a trompo. The achiote brick and a can of pineapple do most of the flavor for almost nothing.",
     "shop_smart":  [
                        "Achiote paste comes in a cheap little brick that lasts for months and gives al pastor its brick red color and earthy flavor. One block seasons many batches.",
                        "Chicken thigh is the right cut here and it is cheaper than breast. Buy the family pack and freeze what this batch does not use.",
@@ -82,9 +82,9 @@
                     "Weigh the rice, chicken, pineapple and onion together, subtract the empty bowl, and divide by 14. Lay that much down each tortilla, scatter on chopped cilantro, fold in the sides and roll.",
                     "Wrap each burrito and portion into 14 containers."
                 ],
-    "portion_html":  "Weigh the filling, subtract the empty bowl, and divide by 14 so every burrito gets the same char and sweetness. Each burrito carries \u003cstrong\u003e372 calories and 30 grams of protein\u003c/strong\u003e. Reheat wrapped, and the pineapple keeps it juicy.",
+    "portion_html":  "Weigh the filling, subtract the empty bowl, and divide by 14 so every burrito gets the same char and sweetness. Each burrito carries \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e. Reheat wrapped, and the pineapple keeps it juicy.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://playswellwithbutter.com/chicken-al-pastor/\" target=\"_blank\" rel=\"noopener\"\u003eplayswellwithbutter.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Chicken al pastor burritos, 14 wrapped and ready, for about $3.87 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "upsell_html":  "Chicken al pastor burritos, 14 wrapped and ready, for about ${{cost_ps}} each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
     "cost_batch":  29.31,
     "cost_batch_true":  39.14,
     "cost_per_serving":  2.09,
@@ -209,7 +209,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Chicken al pastor burritos with achiote and chipotle marinated thigh, charred pineapple and rice. 14 wrapped at 372 calories, 30g protein, about $3.87 (at everyday cost).",
+                 "description":  "Chicken al pastor burritos with achiote and chipotle marinated thigh, charred pineapple and rice. 14 wrapped at {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
                  "keywords":  "chicken al pastor burrito, achiote chicken meal prep, charred pineapple burrito, high protein al pastor, low calorie burrito, budget chicken burrito",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

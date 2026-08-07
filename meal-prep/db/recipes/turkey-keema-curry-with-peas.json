@@ -18,7 +18,7 @@
                  "fat":  13,
                  "cost_ps":  "3.16"
              },
-    "intro_html":  "Keema is the weeknight curry of the Indian home kitchen: spiced ground meat and peas in a gravy that comes together in one pot. This turkey version lands \u003cstrong\u003e36 grams of protein\u003c/strong\u003e per bowl over rice for about \u003cstrong\u003e$3.16\u003c/strong\u003e (at everyday cost), with cumin, turmeric, and fresh ginger doing the talking.",
+    "intro_html":  "Keema is the weeknight curry of the Indian home kitchen: spiced ground meat and peas in a gravy that comes together in one pot. This turkey version lands \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e per bowl over rice for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost), with cumin, turmeric, and fresh ginger doing the talking.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.5 tbsp (49 g)",
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.75 lb (1750 g)",
@@ -55,7 +55,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $38.00 across 14 servings, roughly $2.71 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $15.50 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.50. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.16 a bowl\u003c/strong\u003e (at everyday cost) for turkey keema with peas over rice. An Indian restaurant charges $14 or more for keema and rice, and their portion does not survive to lunch tomorrow.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for turkey keema with peas over rice. An Indian restaurant charges $14 or more for keema and rice, and their portion does not survive to lunch tomorrow.",
     "shop_smart":  [
                        "Ground turkey handles the protein across 3.75 pounds, cheaper per gram of protein than the lamb or beef keema is traditionally made with, and leaner too.",
                        "Frozen peas are the best vegetable deal in the freezer aisle for what this needs. No shelling, no waste, no going bad on you.",
@@ -71,9 +71,9 @@
                     "Stir in the frozen peas and cook 3 minutes, then finish with the lemon juice and most of the cilantro.",
                     "Serve the keema over the rice with the remaining cilantro on top."
                 ],
-    "portion_html":  "Weigh the full pot with rice and keema, subtract the empty pot weight you wrote down, and divide by 14. Portion to that number and each bowl lands at about 641 calories with 36 grams of protein.",
+    "portion_html":  "Weigh the full pot with rice and keema, subtract the empty pot weight you wrote down, and divide by 14. Portion to that number and each bowl lands at about {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://fellybull.com/turkey-keema-curry/\" target=\"_blank\" rel=\"noopener\"\u003eFelly Bull\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $3.16 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  34.27,
     "cost_batch_true":  38,
     "cost_per_serving":  2.45,
@@ -198,7 +198,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Turkey keema curry meal prep: 14 bowls, 641 calories and 36g protein each, about $3.16 a serving (at everyday cost). Spiced ground turkey and peas in gravy over rice.",
+                 "description":  "Turkey keema curry meal prep: 14 bowls, {{cal}} calories and {{protein}}g protein each, about ${{cost_ps}} a serving (at everyday cost). Spiced ground turkey and peas in gravy over rice.",
                  "keywords":  "turkey keema, keema curry, ground turkey curry, indian meal prep, keema matar, budget curry recipe",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",

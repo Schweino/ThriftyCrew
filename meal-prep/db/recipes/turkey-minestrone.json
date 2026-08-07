@@ -29,7 +29,7 @@
                  "fat":  8,
                  "cost_ps":  "3.97"
              },
-    "intro_html":  "Minestrone was never a recipe. It was Italian for whatever is in the garden plus beans plus pasta, and that is exactly why it belongs in a budget kitchen. Ours is built with turkey breast, cannellini beans, and small shells so it eats like dinner rather than a first course. Each bowl comes to \u003cstrong\u003e561 calories and 39 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.97\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Minestrone was never a recipe. It was Italian for whatever is in the garden plus beans plus pasta, and that is exactly why it belongs in a budget kitchen. Ours is built with turkey breast, cannellini beans, and small shells so it eats like dinner rather than a first course. Each bowl comes to \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2.25 tbsp (32 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.4 onions (260 g)",
@@ -70,7 +70,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $43.11 across 14 servings, roughly $3.08 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $16.67 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.78. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.97\u003c/strong\u003e a bowl (at everyday cost). Beans, pasta, and whatever vegetables were cheapest that week. This soup has been feeding people on tight budgets for four hundred years, and it is still good at it.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a bowl (at everyday cost). Beans, pasta, and whatever vegetables were cheapest that week. This soup has been feeding people on tight budgets for four hundred years, and it is still good at it.",
     "shop_smart":  [
                        "Cannellini beans are the cheapest protein in this pot. Beans and pasta together are the reason a soup like this can carry 39 grams of protein without a big meat bill.",
                        "The vegetables are meant to flex. Carrot, celery, and zucchini are the classic base, but this is the one recipe in the library where you should buy whatever is marked down and use it.",
@@ -87,9 +87,9 @@
                     "Stir in the chopped kale for the last 3 minutes and taste for salt one more time.",
                     "Cook the pasta shells separately, drain them, and move them into your weighed pot. Grate the parmesan over each bowl when you serve it, keeping it off until then so it does not clump in the fridge."
                 ],
-    "portion_html":  "Set the pot of drained pasta on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the pasta in each container. Ladle the soup evenly across all 14, digging deep so the beans and turkey get shared out, then grate parmesan over each. Every bowl lands at \u003cstrong\u003e561 calories and 39 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Set the pot of drained pasta on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the pasta in each container. Ladle the soup evenly across all 14, digging deep so the beans and turkey get shared out, then grate parmesan over each. Every bowl lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyspatula.com/turkey-minestrone-soup/\" target=\"_blank\" rel=\"noopener\"\u003eskinnyspatula.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "A pot of minestrone for about \u003cstrong\u003e$3.97\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "A pot of minestrone for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  32.02,
     "cost_batch_true":  43.11,
     "cost_per_serving":  2.29,
@@ -246,7 +246,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Turkey minestrone meal prep: turkey breast, cannellini beans, and small shells in a tomato vegetable soup. 561 calories, 39g protein, about $3.97 a bowl (at everyday cost).",
+                 "description":  "Turkey minestrone meal prep: turkey breast, cannellini beans, and small shells in a tomato vegetable soup. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a bowl (at everyday cost).",
                  "keywords":  "turkey minestrone, italian vegetable soup, bean pasta soup, turkey meal prep, budget meal prep, cannellini soup",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

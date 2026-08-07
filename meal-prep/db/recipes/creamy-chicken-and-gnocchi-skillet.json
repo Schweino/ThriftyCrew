@@ -18,7 +18,7 @@
                  "fat":  30,
                  "cost_ps":  "3.33"
              },
-    "intro_html":  "Pillowy gnocchi and seared chicken thighs in a garlic cream sauce with spinach and parmesan. It eats like the Olive Garden soup grew up into a dinner: \u003cstrong\u003e36 grams of protein\u003c/strong\u003e, 624 calories, and about \u003cstrong\u003e$3.33 a bowl\u003c/strong\u003e (at everyday cost). Chicken thighs keep it juicy through a week in the fridge.",
+    "intro_html":  "Pillowy gnocchi and seared chicken thighs in a garlic cream sauce with spinach and parmesan. It eats like the Olive Garden soup grew up into a dinner: \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, {{cal}} calories, and about \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Chicken thighs keep it juicy through a week in the fridge.",
     "ingredients_display": ["\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 4.25 lb (1984 g)","\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 3.5 tbsp (15 g)","\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 7 tbsp (98 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 onions (385 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)","\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7 tbsp (98 g)","\u003cstrong\u003ePotato Gnocchi (Great Value):\u003c/strong\u003e 56 oz dry (1588 g)","\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 7 cups (595 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.75 lb (840 g)","\u003cstrong\u003eHeavy Cream (Great Value):\u003c/strong\u003e 1.75 cups (416 g)","\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 2.75 oz (79 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -37,7 +37,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $39.02 across 14 servings, roughly $2.79 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $8.34 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.36. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.33 a bowl\u003c/strong\u003e (at everyday cost) for creamy chicken and gnocchi. A gnocchi dish at an Italian restaurant runs $15 to $18, and it will not come with 13 backup dinners waiting at home.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for creamy chicken and gnocchi. A gnocchi dish at an Italian restaurant runs $15 to $18, and it will not come with 13 backup dinners waiting at home.",
     "shop_smart":  ["Chicken thighs run cheaper per pound than breast in the club pack, and they stay tender when reheated. For creamy skillet meals, thighs are the better tool and the better price.","Shelf-stable gnocchi is the fastest pasta in the store: no boiling pot required, it cooks right in the sauce, and it costs next to nothing a pack.","Frozen chopped spinach delivers the same nutrition as fresh bags for about a third of the cost, and it is already prepped."],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -49,9 +49,9 @@
                     "Return the chicken, stir in the parmesan, and taste for salt.",
                     "Portion into 14 containers while warm."
                 ],
-    "portion_html":  "Weigh the finished pot, subtract the empty pot weight you wrote down, and divide by 14. Scale that amount into each container. Each bowl lands at about 624 calories with 36 grams of protein.",
+    "portion_html":  "Weigh the finished pot, subtract the empty pot weight you wrote down, and divide by 14. Scale that amount into each container. Each bowl lands at about {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/creamy-chicken-and-gnocchi/\" target=\"_blank\" rel=\"noopener\"\u003eBudget Bytes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $3.33 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  28.9,
     "cost_batch_true":  39.02,
     "cost_per_serving":  2.06,
@@ -162,7 +162,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Creamy chicken and gnocchi skillet meal prep with spinach and parmesan. 14 bowls at 624 calories and 36g protein each, about $3.33 a serving (at everyday cost).",
+                 "description":  "Creamy chicken and gnocchi skillet meal prep with spinach and parmesan. 14 bowls at {{cal}} calories and {{protein}}g protein each, about ${{cost_ps}} a serving (at everyday cost).",
                  "keywords":  "chicken and gnocchi, creamy gnocchi skillet, gnocchi meal prep, budget meal prep, one pot dinner, cheap dinner recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",

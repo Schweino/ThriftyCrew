@@ -20,7 +20,7 @@
                  "fat":  18,
                  "cost_ps":  "4.25"
              },
-    "intro_html":  "A loaded Tex-Mex skillet where beef, beans, corn, and rice all cook down together into one easy bowl. You get 52 grams of protein per serving for about $4.25 a plate (at everyday cost). It makes 14 servings, so batch it and forget it.",
+    "intro_html":  "A loaded Tex-Mex skillet where beef, beans, corn, and rice all cook down together into one easy bowl. You get {{protein}} grams of protein per serving for about ${{cost_ps}} a plate (at everyday cost). It makes 14 servings, so batch it and forget it.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2730 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (587 g)",
@@ -48,7 +48,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $52.23 across 14 servings, roughly $3.73 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.55. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.25 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Lean on \u003cstrong\u003edry rice by the bag\u003c/strong\u003e at about a dollar-fifty a pound to bulk this out for almost nothing.",
                        "Canned beans, corn, and tomatoes are all cheaper in the \u003cstrong\u003estore-brand cans\u003c/strong\u003e, so build your cart there.",
@@ -61,7 +61,7 @@
                     "Fold in the cooked rice and stir until it is heated through and coated.",
                     "Top with shredded cheddar and let it melt before you dish it into bowls."
                 ],
-    "portion_html":  "Each of the 14 bowls delivers 52 grams of protein and about 576 calories.",
+    "portion_html":  "Each of the 14 bowls delivers {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/tex-mex-ground-beef-and-rice-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eMason Fit\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One skillet, a stack of containers, and your lunches practically make themselves. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  49.41,
@@ -160,7 +160,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about 576 calories and 52 grams of protein for roughly $4.25 each (at everyday cost).",
+                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, tex-mex beef and rice skillet bowls, budget dinner",
                  "costPerServing":  4.25,
                  "recipeIngredient":  [

@@ -18,7 +18,7 @@
                  "fat":  16,
                  "cost_ps":  "3.48"
              },
-    "intro_html":  "Takeout lo mein without the takeout markup: chewy noodles, tender chicken, and a glossy hoisin-soy sauce that clings to everything. Each bowl packs \u003cstrong\u003e57 grams of protein\u003c/strong\u003e at 660 calories for about \u003cstrong\u003e$3.48\u003c/strong\u003e (at everyday cost). The delivery apps want triple that before the fees even start.",
+    "intro_html":  "Takeout lo mein without the takeout markup: chewy noodles, tender chicken, and a glossy hoisin-soy sauce that clings to everything. Each bowl packs \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e at {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). The delivery apps want triple that before the fees even start.",
     "ingredients_display": ["\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 6.25 lb (2800 g)","\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2 peppers (210 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.5 tbsp (49 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)","\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 3.5 tbsp (21 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 4.25 cups (210 g)","\u003cstrong\u003eEgg Noodles (Great Value wide):\u003c/strong\u003e 31.5 oz dry (892 g)","\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 2.25 cups (560 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 lb (420 g)","\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cup (224 g)","\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 4.5 oz (126 g)","\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 2.25 tbsp (32 g)","\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 4.75 tbsp (38 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -39,7 +39,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $35.27 across 14 servings, roughly $2.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $16.59 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.86. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.48 a bowl\u003c/strong\u003e (at everyday cost) for a full plate of chicken lo mein. The same order at a Chinese takeout spot runs $11 to $14 before tip and delivery fees, so this batch pays for itself by the second container.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a full plate of chicken lo mein. The same order at a Chinese takeout spot runs $11 to $14 before tip and delivery fees, so this batch pays for itself by the second container.",
     "shop_smart":  ["Chicken breast in the big club pack drives the per-pound price way down. The 6.25 pounds here is the priciest line in the batch, and it is still cheaper than a couple pounds of restaurant chicken.","Regular wide egg noodles do the job of \u0027lo mein noodles\u0027 for a third of the price of anything labeled Asian noodles. Same wheat, same egg, different label.","Hoisin and oyster sauce look expensive per bottle, but they last across several batches. Counted at what this recipe actually uses, they add just pennies per bowl of restaurant-level flavor."],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -51,9 +51,9 @@
                     "Add the noodles and toss until every strand is coated. Finish with the remaining green onions.",
                     "Portion into 14 containers while still warm so the sauce distributes evenly."
                 ],
-    "portion_html":  "Set the full pot on the scale, subtract the empty pot weight you wrote down, and divide by 14. Weigh that amount into each container. Every bowl comes out to about 660 calories with 57 grams of protein.",
+    "portion_html":  "Set the full pot on the scale, subtract the empty pot weight you wrote down, and divide by 14. Weigh that amount into each container. Every bowl comes out to about {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/chicken-lo-mein-take-out/\" target=\"_blank\" rel=\"noopener\"\u003eSpend With Pennies\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $3.48 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  31.17,
     "cost_batch_true":  35.27,
     "cost_per_serving":  2.23,
@@ -171,7 +171,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Takeout-style chicken lo mein meal prep. 14 noodle bowls at 660 calories and 57g protein each, about $3.48 a serving (at everyday cost) instead of $12 delivery.",
+                 "description":  "Takeout-style chicken lo mein meal prep. 14 noodle bowls at {{cal}} calories and {{protein}}g protein each, about ${{cost_ps}} a serving (at everyday cost) instead of $12 delivery.",
                  "keywords":  "chicken lo mein, lo mein meal prep, takeout fakeout, budget meal prep, high protein noodles, cheap dinner recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

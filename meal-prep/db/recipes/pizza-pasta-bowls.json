@@ -20,7 +20,7 @@
                  "fat":  10,
                  "cost_ps":  "1.12"
              },
-    "intro_html":  "All the fun of pizza night, none of the delivery fee. Turkey pepperoni, high-protein rotini, marinara, and gooey mozzarella bake up into a bowl the kids will actually ask for again. It reheats great, it costs about $1.12 a serving (at everyday cost), and it scratches the pizza itch without the twenty-dollar order.",
+    "intro_html":  "All the fun of pizza night, none of the delivery fee. Turkey pepperoni, high-protein rotini, marinara, and gooey mozzarella bake up into a bowl the kids will actually ask for again. It reheats great, it costs about ${{cost_ps}} a serving (at everyday cost), and it scratches the pizza itch without the twenty-dollar order.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eTurkey Pepperoni (Great Value):\u003c/strong\u003e 9 1/4 oz (about 9.5 oz) (261 g)",
                                 "\u003cstrong\u003eRotini Pasta (Barilla):\u003c/strong\u003e 9 2/3 cups (14.5 oz each) (959 g)",
@@ -36,7 +36,7 @@
                        "\u003cstrong\u003eBatch total: about $13.39 across 14 servings, so roughly $0.96 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
                        "\u003cstrong\u003eTrue shopping cost: about $15.75 across 14 servings, roughly $1.12 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$1.12 a bowl\u003c/strong\u003e (at everyday cost) for pizza-night flavor. A large delivery pizza runs $18 or more, so this is one of the easiest swaps on the menu.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for pizza-night flavor. A large delivery pizza runs $18 or more, so this is one of the easiest swaps on the menu.",
     "shop_smart":  [
                        "\u003cstrong\u003eTurkey pepperoni beats regular on macros.\u003c/strong\u003e It brings the same pizza flavor with less fat, which is why it earns its spot here.",
                        "\u003cstrong\u003eProtein pasta or regular, your call.\u003c/strong\u003e Regular rotini is a bit cheaper. The protein version adds a few grams per serving for about the same price.",
@@ -49,9 +49,9 @@
                     "Add the drained pasta and stir to coat.",
                     "Fold in the mozzarella off the heat until melty, then scatter the reserved pepperoni on top."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near 396 calories and 28 grams of protein.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "",
-    "upsell_html":  "Pizza-night dinners for about $1.12 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Pizza-night dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  13.39,
     "cost_batch_true":  15.75,
     "cost_per_serving":  0.96,
@@ -92,7 +92,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A kid-friendly turkey pepperoni, protein pasta, marinara, and mozzarella meal prep. Fourteen servings at about 396 calories and 28 grams of protein for roughly $1.12 each (at everyday cost).",
+                 "description":  "A kid-friendly turkey pepperoni, protein pasta, marinara, and mozzarella meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "cheap meal prep, pizza pasta, kid friendly meal prep, high protein pasta, budget dinner",
                  "costPerServing":  1.12,
                  "recipeIngredient":  [

@@ -25,7 +25,7 @@
                  "fat":  20,
                  "cost_ps":  "5.59"
              },
-    "intro_html":  "Taiwanese beef noodle is the closest thing Taiwan has to a national dish, and it is a serious bowl, not a thin soup with a few pieces of meat floating in it. Chuck roast braises in soy sauce and doubanjiang until it falls apart, and the broth that comes out of it is worth the afternoon by itself. Each bowl runs 628 calories and \u003cstrong\u003e38 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$5.59 a serving\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Taiwanese beef noodle is the closest thing Taiwan has to a national dish, and it is a serious bowl, not a thin soup with a few pieces of meat floating in it. Chuck roast braises in soy sauce and doubanjiang until it falls apart, and the broth that comes out of it is worth the afternoon by itself. Each bowl runs {{cal}} calories and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 4.25 lb (1905 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 2.75 tbsp (39 g)",
@@ -65,7 +65,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $59.71 across 14 servings, roughly $4.26 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $27.19 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $86.90. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$5.59 a bowl\u003c/strong\u003e (at everyday cost). A restaurant in Taipei would charge more than that, and the ones here charge well above it. The noodles and the broth are cheap. The beef is the investment.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). A restaurant in Taipei would charge more than that, and the ones here charge well above it. The noodles and the broth are cheap. The beef is the investment.",
     "shop_smart":  [
                        "Doubanjiang, the fermented chili bean paste, is the flavor of this dish and there is no real substitute. It costs a few dollars for a jar that lasts through many batches, so the per-bowl cost of it is basically nothing.",
                        "Lo mein noodles by the pack are far cheaper than fresh noodles and hold up better in a container. Cook them a minute under the package time so they do not go mushy on reheat.",
@@ -82,9 +82,9 @@
                     "Cook the lo mein noodles just short of done, drain, and rinse them in cold water so they stop cooking and do not clump.",
                     "Divide the noodles into the containers, ladle the beef and broth over the top, and finish with the green onion tops and chopped cilantro."
                 ],
-    "portion_html":  "Weigh the noodles into the containers first so each one gets the same base, then put the pot on the scale, subtract the empty-pot weight, and divide the beef and broth by 14. Every bowl lands at \u003cstrong\u003e628 calories\u003c/strong\u003e that way. If you are eating these across several days, keep the broth in a separate container and pour it over hot. Noodles sitting in liquid all week turn to paste.",
+    "portion_html":  "Weigh the noodles into the containers first so each one gets the same base, then put the pot on the scale, subtract the empty-pot weight, and divide the beef and broth by 14. Every bowl lands at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e that way. If you are eating these across several days, keep the broth in a separate container and pour it over hot. Noodles sitting in liquid all week turn to paste.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thewoksoflife.com/taiwanese-beef-noodle-soup-instant-pot/\" target=\"_blank\" rel=\"noopener\"\u003ethewoksoflife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Taiwan\u0027s national dish for about \u003cstrong\u003e$5.59 a bowl\u003c/strong\u003e (at everyday cost). Members get every recipe in the Meal Prep section plus the full library of money lessons and tools for $1 a month.",
+    "upsell_html":  "Taiwan\u0027s national dish for about \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Members get every recipe in the Meal Prep section plus the full library of money lessons and tools for $1 a month.",
     "cost_batch":  47.1,
     "cost_batch_true":  59.71,
     "cost_per_serving":  3.36,
@@ -233,7 +233,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Taiwanese braised beef noodle bowls with chuck roast, doubanjiang, and lo mein noodles, rebuilt for 14 meal prep servings at about $5.59 a bowl (at everyday cost).",
+                 "description":  "Taiwanese braised beef noodle bowls with chuck roast, doubanjiang, and lo mein noodles, rebuilt for 14 meal prep servings at about ${{cost_ps}} a bowl (at everyday cost).",
                  "keywords":  "taiwanese beef noodle soup, braised beef noodles, doubanjiang beef, asian meal prep, budget noodle bowl, high protein meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",

@@ -20,7 +20,7 @@
                  "fat":  9,
                  "cost_ps":  "3.46"
              },
-    "intro_html":  "Moroccan tagine sounds fancy, but it\u0027s really just chicken, chickpeas, and warm spices doing their thing all day. This bowl brings 62 grams of protein for about $3.46 a serving (at everyday cost). Fourteen servings means the cheapest ingredients feed you the longest.",
+    "intro_html":  "Moroccan tagine sounds fancy, but it\u0027s really just chicken, chickpeas, and warm spices doing their thing all day. This bowl brings {{protein}} grams of protein for about ${{cost_ps}} a serving (at everyday cost). Fourteen servings means the cheapest ingredients feed you the longest.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3450 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (800 g)",
@@ -59,7 +59,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $26.50 across 14 servings, roughly $1.89 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $21.89 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.39. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.46 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Canned chickpeas and tomatoes are pantry gold, so \u003cstrong\u003ekeep a few cans stocked\u003c/strong\u003e and you can build this almost anytime.",
                        "Carrots and onions store for weeks, so \u003cstrong\u003ebuy them in bulk bags\u003c/strong\u003e and let the cheap vegetables do the stretching.",
@@ -72,7 +72,7 @@
                     "Shred the chicken into the stew, stir in the chopped cilantro, and let it simmer together for a few minutes.",
                     "Spoon the tagine over white rice with plenty of the tomatoey broth."
                 ],
-    "portion_html":  "Each serving lands at 62 grams of protein and 567 calories, hearty eating for barely over two dollars.",
+    "portion_html":  "Each serving lands at {{protein}} grams of protein and {{cal}} calories, hearty eating for barely over two dollars.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.cookingclassy.com/slow-cooker-chicken-and-chick-pea-tagine/\" target=\"_blank\" rel=\"noopener\"\u003eCooking Classy\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheap, cozy, and packed with protein. This is what a good slow cooker night looks like. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  22.98,
@@ -213,7 +213,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Moroccan meal prep. Fourteen servings at about 567 calories and 62 grams of protein for roughly $3.46 each (at everyday cost).",
+                 "description":  "A high-protein Moroccan meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken tagine bowls, budget dinner",
                  "costPerServing":  3.46,
                  "recipeIngredient":  [

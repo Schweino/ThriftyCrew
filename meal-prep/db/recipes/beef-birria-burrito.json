@@ -29,7 +29,7 @@
                  "fat":  21,
                  "cost_ps":  "5.22"
              },
-    "intro_html":  "Birria is the chile-braised beef that took over every taco truck for a reason, and folded into a crisped, cheesy tortilla it is one of the best things you can meal prep. The cheese here is dialed back hard to keep it honest, but between the guajillo and ancho adobo and the fatty shredded chuck, you will not miss it. Each burrito lands at about \u003cstrong\u003e395 calories\u003c/strong\u003e and \u003cstrong\u003e32 grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. Our Beef Birria Rice Bowls give you the same braise over rice; this one crisps it inside the wrap with the cheese, closer to a quesabirria.",
+    "intro_html":  "Birria is the chile-braised beef that took over every taco truck for a reason, and folded into a crisped, cheesy tortilla it is one of the best things you can meal prep. The cheese here is dialed back hard to keep it honest, but between the guajillo and ancho adobo and the fatty shredded chuck, you will not miss it. Each burrito lands at about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. Our Beef Birria Rice Bowls give you the same braise over rice; this one crisps it inside the wrap with the cheese, closer to a quesabirria.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 3.5 lb (1588 g)",
@@ -78,7 +78,7 @@
                     "Finish the shredded beef with the lime juice and chopped cilantro.",
                     "Lay a warm tortilla, add the portioned beef and a share of the shredded cheese, and roll; crisp it seam down in a dry hot pan for extra credit."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total shredded-beef weight. Divide it by 14, spoon that amount onto each warm tortilla, add an even share of the cheese, and roll. Every burrito lands at about \u003cstrong\u003e395 calories and 32 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total shredded-beef weight. Divide it by 14, spoon that amount onto each warm tortilla, add an even share of the cheese, and roll. Every burrito lands at about \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://inmamamaggieskitchen.com/birria-burrito/\" target=\"_blank\" rel=\"noopener\"\u003einmamamaggieskitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  43.99,
@@ -205,7 +205,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A beef birria burrito for meal prep: chuck braised in guajillo and ancho adobo, crisped in the tortilla with cheese. About 395 calories and 32 grams of protein per serving.",
+                 "description":  "A beef birria burrito for meal prep: chuck braised in guajillo and ancho adobo, crisped in the tortilla with cheese. About {{cal}} calories and {{protein}} grams of protein per serving.",
                  "keywords":  "birria burrito, quesabirria, guajillo ancho beef, birria meal prep, budget high protein burrito",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",

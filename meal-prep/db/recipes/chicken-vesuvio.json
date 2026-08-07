@@ -26,7 +26,7 @@
                  "fat":  27,
                  "cost_ps":  "3.59"
              },
-    "intro_html":  "Chicken Vesuvio is Chicago Italian, born in the old neighborhood restaurants and never quite famous outside of them. Chicken and potato wedges roast in the same pan with garlic, olive oil, oregano, and lemon until the potatoes go crisp at the corners, and a handful of peas goes in at the end for color. It is a whole dinner in one pan with no side dish required. Each serving lands at 607 calories and \u003cstrong\u003e52 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.59 a serving\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Chicken Vesuvio is Chicago Italian, born in the old neighborhood restaurants and never quite famous outside of them. Chicken and potato wedges roast in the same pan with garlic, olive oil, oregano, and lemon until the potatoes go crisp at the corners, and a handful of peas goes in at the end for color. It is a whole dinner in one pan with no side dish required. Each serving lands at {{cal}} calories and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 10 potatoes (2117 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 cup (189 g)",
@@ -56,7 +56,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $27.81 across 14 servings, roughly $1.99 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $17.72 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.53. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.59 a serving\u003c/strong\u003e (at everyday cost) for a complete dinner in one pan. Chicken thighs and potatoes are two of the cheapest items on the grocery board, which is exactly why this number looks the way it does.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a complete dinner in one pan. Chicken thighs and potatoes are two of the cheapest items on the grocery board, which is exactly why this number looks the way it does.",
     "shop_smart":  [
                        "Potatoes in the five pound bag are the best deal in the produce section, and here they are half the meal rather than a side you have to make separately. One pan, no extra starch to buy.",
                        "Boneless thighs are the cheap cut and they stay juicy through a hot roast. Breast would need babysitting and would cost more for the privilege.",
@@ -73,9 +73,9 @@
                     "Stir the butter into the pan juices off the heat so the sauce goes glossy.",
                     "Scatter the frozen peas over the top and let the residual heat warm them through, about 3 minutes. Do not roast them or they turn gray and sad."
                 ],
-    "portion_html":  "Set the full pan on the scale, subtract the empty weight you wrote down, and divide by 14. Get chicken, potatoes, and peas into every container, and spoon the garlicky pan juices over each one before you close the lid. Every portion comes in at \u003cstrong\u003e607 calories\u003c/strong\u003e.",
+    "portion_html":  "Set the full pan on the scale, subtract the empty weight you wrote down, and divide by 14. Get chicken, potatoes, and peas into every container, and spoon the garlicky pan juices over each one before you close the lid. Every portion comes in at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://scarlatifamilykitchen.com/chicken-vesuvio/\" target=\"_blank\" rel=\"noopener\"\u003escarlatifamilykitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "A one pan Chicago Italian dinner for about \u003cstrong\u003e$3.59 a serving\u003c/strong\u003e (at everyday cost). Members get the whole Meal Prep library plus every money lesson, calculator, and tool on the site for $1 a month.",
+    "upsell_html":  "A one pan Chicago Italian dinner for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Members get the whole Meal Prep library plus every money lesson, calculator, and tool on the site for $1 a month.",
     "cost_batch":  23.92,
     "cost_batch_true":  27.81,
     "cost_per_serving":  1.71,
@@ -184,7 +184,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Chicken Vesuvio, a one pan Chicago Italian roast of chicken thighs, potato wedges, garlic, and peas, at about $3.59 per meal prep serving (at everyday cost).",
+                 "description":  "Chicken Vesuvio, a one pan Chicago Italian roast of chicken thighs, potato wedges, garlic, and peas, at about ${{cost_ps}} per meal prep serving (at everyday cost).",
                  "keywords":  "chicken vesuvio, one pan chicken and potatoes, italian american chicken, garlic roasted chicken, budget meal prep, high protein one pan dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

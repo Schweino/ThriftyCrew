@@ -20,7 +20,7 @@
                  "fat":  7,
                  "cost_ps":  "2.16"
              },
-    "intro_html":  "This is the kind of meal that makes the whole week easier. You get tender BBQ pulled chicken over rice with a hit of sweet corn, 60 grams of protein a serving, and it lands right around $2.16 a bowl (at everyday cost). Fourteen servings out of one pot means lunch is handled before Monday even starts.",
+    "intro_html":  "This is the kind of meal that makes the whole week easier. You get tender BBQ pulled chicken over rice with a hit of sweet corn, {{protein}} grams of protein a serving, and it lands right around ${{cost_ps}} a bowl (at everyday cost). Fourteen servings out of one pot means lunch is handled before Monday even starts.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3300 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (950 g)",
@@ -42,7 +42,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $24.15 across 14 servings, roughly $1.72 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $6.13 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $30.28. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.16 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Buy the chicken breast in an \u003cstrong\u003e8 lb bulk pack\u003c/strong\u003e instead of small trays. You are already cooking a big batch, so the per-pound price drops and you skip a second trip.",
                        "Grab a \u003cstrong\u003esugar-free BBQ sauce\u003c/strong\u003e to keep the carbs and calories in check without giving up the flavor that carries this whole bowl.",
@@ -56,7 +56,7 @@
                     "Warm the corn and fold it in, or spoon it over the top.",
                     "Serve over cooked white rice and portion into your containers."
                 ],
-    "portion_html":  "Each of the 14 servings runs about 574 calories with a serious 60 grams of protein.",
+    "portion_html":  "Each of the 14 servings runs about {{cal}} calories with a serious {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/slow-cooker-bbq-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eBudget Bytes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Make it once and you will wonder why you ever paid for fast food lunches. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  22.31,
@@ -127,7 +127,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 574 calories and 60 grams of protein for roughly $2.16 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker bbq pulled chicken bowls, budget dinner",
                  "costPerServing":  2.16,
                  "recipeIngredient":  [

@@ -29,7 +29,7 @@
                  "fat":  11,
                  "cost_ps":  "5.39"
              },
-    "intro_html":  "This is the fast-casual burrito you build at home for a fraction of the counter price, rice and beans and chipotle steak wrapped tight with a cool crema. The sour cream is swapped for Greek yogurt, which is where a lot of the protein comes from, and the steak gets its smoke from chipotle in adobo. Each one lands at about \u003cstrong\u003e388 calories\u003c/strong\u003e and \u003cstrong\u003e37 grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. If you like our Steak Fajita Rice Bowls, this takes the same steak in a smokier, mission-style direction and folds it into a wrap.",
+    "intro_html":  "This is the fast-casual burrito you build at home for a fraction of the counter price, rice and beans and chipotle steak wrapped tight with a cool crema. The sour cream is swapped for Greek yogurt, which is where a lot of the protein comes from, and the steak gets its smoke from chipotle in adobo. Each one lands at about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. If you like our Steak Fajita Rice Bowls, this takes the same steak in a smokier, mission-style direction and folds it into a wrap.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eSirloin Steak:\u003c/strong\u003e 3.5 lb (1588 g)",
@@ -80,7 +80,7 @@
                     "Stir the reserved spoon of chipotle into the Greek yogurt to make the crema.",
                     "Warm the tortillas, then portion and wrap as below, layering rice, beans, steak, crema, and pico."
                 ],
-    "portion_html":  "Weigh the steak, beans, and rice together against the empty pot number from Step 1, and divide by 14. Onto each warm tortilla goes that hot share plus an even spoon of the chipotle crema and the pico. Every burrito lands at about \u003cstrong\u003e388 calories and 37 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Weigh the steak, beans, and rice together against the empty pot number from Step 1, and divide by 14. Onto each warm tortilla goes that hot share plus an even spoon of the chipotle crema and the pico. Every burrito lands at about \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://bellyfull.net/chipotle-steak-burrito/\" target=\"_blank\" rel=\"noopener\"\u003ebellyfull.net\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  48.92,
@@ -207,7 +207,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A mission-style chipotle steak burrito for meal prep: sirloin in chipotle adobo with rice, beans, and a Greek-yogurt crema. About 388 calories and 37 grams of protein per serving.",
+                 "description":  "A mission-style chipotle steak burrito for meal prep: sirloin in chipotle adobo with rice, beans, and a Greek-yogurt crema. About {{cal}} calories and {{protein}} grams of protein per serving.",
                  "keywords":  "chipotle steak burrito, mission burrito, sirloin burrito, greek yogurt crema, budget high protein meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

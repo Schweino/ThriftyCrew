@@ -56,7 +56,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $21.91 across 14 servings, roughly $1.56 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $9.44 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $31.35. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.02 a bowl\u003c/strong\u003e (at everyday cost). Sauerkraut, apples and apple juice are all inexpensive, and pork loin on sale finishes the job.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Sauerkraut, apples and apple juice are all inexpensive, and pork loin on sale finishes the job.",
     "shop_smart":  [
                        "\u003cstrong\u003eCanned sauerkraut is the value buy.\u003c/strong\u003e The refrigerated jars cost more and this recipe cooks the kraut for hours anyway, so the shelf stable cans do exactly the same work for less.",
                        "\u003cstrong\u003eWatch for whole pork loin on sale and cut it down yourself.\u003c/strong\u003e A whole loin runs well under the price of precut roasts or chops, and it freezes in portions beautifully.",
@@ -72,9 +72,9 @@
                     "Cover and cook on low for 7 to 8 hours, until the pork pulls apart easily with a fork.",
                     "Shred the pork right in the crock so it takes the juices back up, and cook the rice per the package to serve underneath."
                 ],
-    "portion_html":  "Spread the cooked rice across your 14 containers, then set your mixing pot of pork and kraut on the scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight over the rice. Every serving lands near 562 calories with 42 grams of protein, which is a strong protein number for a dollar and change.",
+    "portion_html":  "Spread the cooked rice across your 14 containers, then set your mixing pot of pork and kraut on the scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight over the rice. Every serving lands near {{cal}} calories with {{protein}} grams of protein, which is a strong protein number for a dollar and change.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://amindfullmom.com/pork-and-sauerkraut/\" target=\"_blank\" rel=\"noopener\"\u003eamindfullmom.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cem\u003eNew Year\u0027s Day pork and kraut for about $2.02 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "upsell_html":  "\u003cem\u003eNew Year\u0027s Day pork and kraut for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  17.41,
     "cost_batch_true":  21.91,
     "cost_per_serving":  1.24,

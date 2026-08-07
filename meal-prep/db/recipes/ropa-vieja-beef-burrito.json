@@ -29,7 +29,7 @@
                  "fat":  13,
                  "cost_ps":  "5.39"
              },
-    "intro_html":  "Ropa vieja means old clothes, which is what shredded beef in a pepper and tomato sauce apparently looked like to whoever named it. It is Cuba\u0027s national dish, and the olives at the end are not a garnish, they are the salt and the sharpness that make the whole thing sing. This wrap lands at about \u003cstrong\u003e384 calories\u003c/strong\u003e and \u003cstrong\u003e33 grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. We already run Ropa Vieja Rice Bowls, so this one takes a different road on purpose: a tomato paste and chicken broth base brightened with white wine vinegar, a little carrot for sweetness, all folded into a tortilla.",
+    "intro_html":  "Ropa vieja means old clothes, which is what shredded beef in a pepper and tomato sauce apparently looked like to whoever named it. It is Cuba\u0027s national dish, and the olives at the end are not a garnish, they are the salt and the sharpness that make the whole thing sing. This wrap lands at about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. We already run Ropa Vieja Rice Bowls, so this one takes a different road on purpose: a tomato paste and chicken broth base brightened with white wine vinegar, a little carrot for sweetness, all folded into a tortilla.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eSirloin Steak:\u003c/strong\u003e 3.5 lb (1588 g)",
@@ -79,7 +79,7 @@
                     "Stir in the sliced green olives and the white wine vinegar and let it sit a few minutes off direct heat so the flavors settle.",
                     "Fold the cooked rice into the filling, then warm the tortillas and portion and wrap as below."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total filling weight. Divide it by 14, spoon that amount onto each warm tortilla, and roll. Every burrito lands at about \u003cstrong\u003e384 calories and 33 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total filling weight. Divide it by 14, spoon that amount onto each warm tortilla, and roll. Every burrito lands at about \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.skinnytaste.com/ropa-vieja/\" target=\"_blank\" rel=\"noopener\"\u003eskinnytaste.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  50.49,
@@ -214,7 +214,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A Cuban ropa vieja burrito for meal prep: shredded sirloin braised with peppers, tomato, and olives, folded with rice. About 384 calories and 33 grams of protein per serving.",
+                 "description":  "A Cuban ropa vieja burrito for meal prep: shredded sirloin braised with peppers, tomato, and olives, folded with rice. About {{cal}} calories and {{protein}} grams of protein per serving.",
                  "keywords":  "ropa vieja, cuban shredded beef, ropa vieja burrito, cuban meal prep, budget high protein burrito",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

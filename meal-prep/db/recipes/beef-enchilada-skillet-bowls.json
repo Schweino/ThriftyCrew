@@ -20,7 +20,7 @@
                  "fat":  22,
                  "cost_ps":  "6.22"
              },
-    "intro_html":  "Enchilada night, minus the rolling and the oven time, all in one pan. These bowls hit a serious 54 grams of protein each and come in around $6.22 a serving (at everyday cost). Fourteen servings from one skillet means the whole week is covered.",
+    "intro_html":  "Enchilada night, minus the rolling and the oven time, all in one pan. These bowls hit a serious {{protein}} grams of protein each and come in around ${{cost_ps}} a serving (at everyday cost). Fourteen servings from one skillet means the whole week is covered.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2280 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 18 cups (3066 g)",
@@ -51,7 +51,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $71.41 across 14 servings, roughly $5.10 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $12.51 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $83.92. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$6.22 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Buy your \u003cstrong\u003eblack beans by the case of store-brand cans\u003c/strong\u003e. They are the cheap workhorse that stretches the beef.",
                        "A \u003cstrong\u003esingle bag of shredded cheddar\u003c/strong\u003e is plenty for the whole batch, so no need to overbuy.",
@@ -64,9 +64,9 @@
                     "Fold in the seasoned black beans and warm everything through.",
                     "Spoon it into bowls over the beans, then top with shredded cheddar so it melts in."
                 ],
-    "portion_html":  "Each of the 14 bowls packs 54 grams of protein and about 664 calories.",
+    "portion_html":  "Each of the 14 bowls packs {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://reciperunner.com/beef-enchilada-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eRecipe Runner\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Big Tex-Mex flavor with 54 grams of protein a bowl, and it reheats like a champ. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "upsell_html":  "Big Tex-Mex flavor with {{protein}} grams of protein a bowl, and it reheats like a champ. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  60.46,
     "cost_batch_true":  71.41,
     "cost_per_serving":  4.32,
@@ -170,7 +170,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about 664 calories and 54 grams of protein for roughly $6.22 each (at everyday cost).",
+                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, beef enchilada skillet bowls, budget dinner",
                  "costPerServing":  6.22,
                  "recipeIngredient":  [

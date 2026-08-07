@@ -20,7 +20,7 @@
                  "fat":  17,
                  "cost_ps":  "4.16"
              },
-    "intro_html":  "Gochujang gives these Korean ground beef bowls a deep, savory heat that tastes like you fussed for hours. Lean beef browns and simmers in a spicy sweet sauce, then goes over rice with broccoli. It runs a bit higher at around $4.16 a serving (at everyday cost), but you still get a big 50 grams of protein across 14 bowls.",
+    "intro_html":  "Gochujang gives these Korean ground beef bowls a deep, savory heat that tastes like you fussed for hours. Lean beef browns and simmers in a spicy sweet sauce, then goes over rice with broccoli. It runs a bit higher at around ${{cost_ps}} a serving (at everyday cost), but you still get a big {{protein}} grams of protein across 14 bowls.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2680 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (861 g)",
@@ -49,7 +49,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $50.13 across 14 servings, roughly $3.58 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $8.02 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.15. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.16 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "A tub of gochujang seasons batch after batch. \u003cstrong\u003eBuy one tub of gochujang\u003c/strong\u003e and it will carry you through months of meals.",
                        "Sesame oil is strong, so a little goes a long way. \u003cstrong\u003eOne small bottle of sesame oil\u003c/strong\u003e lasts a very long time.",
@@ -63,7 +63,7 @@
                     "Cook the rice while the skillet simmers.",
                     "Pile the beef and broccoli over the rice and serve."
                 ],
-    "portion_html":  "Each bowl brings 50 grams of protein and 615 calories across all 14 servings.",
+    "portion_html":  "Each bowl brings {{protein}} grams of protein and {{cal}} calories across all 14 servings.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/healthy-korean-ground-beef/\" target=\"_blank\" rel=\"noopener\"\u003eMason Fit\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One tub of gochujang unlocks a whole world of cheap, punchy dinners, and this is a great place to start. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  49.09,
@@ -148,7 +148,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Korean meal prep. Fourteen servings at about 615 calories and 50 grams of protein for roughly $4.16 each (at everyday cost).",
+                 "description":  "A high-protein Korean meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, korean ground beef rice bowls, budget dinner",
                  "costPerServing":  4.16,
                  "recipeIngredient":  [

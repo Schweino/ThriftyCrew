@@ -28,7 +28,7 @@
                  "fat":  21,
                  "cost_ps":  "4.01"
              },
-    "intro_html":  "Pollo guisado is the stew every Puerto Rican grandmother makes a little differently and every one of them insists hers is correct. Chicken braised down with sofrito, sazon, olives, potatoes and carrots until the broth turns into gravy and the potatoes start to fall apart on purpose. This is a big, generous pot. Each bowl runs \u003cstrong\u003e577 calories and 51 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.01\u003c/strong\u003e (at everyday cost), and there is one line item driving that number that I want to talk about.",
+    "intro_html":  "Pollo guisado is the stew every Puerto Rican grandmother makes a little differently and every one of them insists hers is correct. Chicken braised down with sofrito, sazon, olives, potatoes and carrots until the broth turns into gravy and the potatoes start to fall apart on purpose. This is a big, generous pot. Each bowl runs \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost), and there is one line item driving that number that I want to talk about.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3215 g)",
                                 "\u003cstrong\u003eSazon Seasoning (Goya):\u003c/strong\u003e 2.5 oz (74 g)",
@@ -63,7 +63,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $40.01 across 14 servings, roughly $2.86 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $9.36 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.37. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.01 a bowl\u003c/strong\u003e (at everyday cost), and the reason it lands where it does is jarred salsa standing in for fresh sofrito. Make your own sofrito from onions, peppers, garlic and cilantro and that single line drops by most of its cost, which would pull this bowl down near the rest of the batch.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost), and the reason it lands where it does is jarred salsa standing in for fresh sofrito. Make your own sofrito from onions, peppers, garlic and cilantro and that single line drops by most of its cost, which would pull this bowl down near the rest of the batch.",
     "shop_smart":  [
                        "Jarred salsa is the most expensive thing in this recipe by far, well past what the potatoes, carrots and onions cost combined. Real sofrito is onion, bell pepper, garlic and cilantro blended together, it freezes in ice cube trays for months, and it costs a fraction of what the jar does.",
                        "Chicken thighs are the second big line and the right cut for a long braise. The eight pound club pack is the best per-pound buy in the case, and this recipe uses nearly all of it.",
@@ -80,9 +80,9 @@
                     "Stir in the olives during the last 5 minutes so they warm through without going rubbery.",
                     "Pull the bay leaves, break the chicken into large chunks with a spoon, and stir the whole pot so the potato starch thickens the gravy."
                 ],
-    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight, and divide by 14. Same scoop in every container. Each one carries \u003cstrong\u003e577 calories\u003c/strong\u003e, and stews like this genuinely improve by day two once the gravy has had time to settle in.",
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight, and divide by 14. Same scoop in every container. Each one carries \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e, and stews like this genuinely improve by day two once the gravy has had time to settle in.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/pollo-guisado/\" target=\"_blank\" rel=\"noopener\"\u003ebudgetbytes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Puerto Rican pollo guisado for about $4.01 a bowl (at everyday cost), with a clear path to making it cheaper. This is one of a few hundred recipes here. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Puerto Rican pollo guisado for about ${{cost_ps}} a bowl (at everyday cost), with a clear path to making it cheaper. This is one of a few hundred recipes here. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  34.96,
     "cost_batch_true":  40.01,
     "cost_per_serving":  2.5,
@@ -215,7 +215,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Puerto Rican pollo guisado: chicken thighs braised with sofrito, sazon, olives, potatoes and carrots. 14 meal prep bowls at 577 calories, 51g protein, about $4.01 each (at everyday cost).",
+                 "description":  "Puerto Rican pollo guisado: chicken thighs braised with sofrito, sazon, olives, potatoes and carrots. 14 meal prep bowls at {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "pollo guisado, puerto rican chicken stew, sofrito chicken, sazon chicken, latin meal prep, chicken potato stew",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

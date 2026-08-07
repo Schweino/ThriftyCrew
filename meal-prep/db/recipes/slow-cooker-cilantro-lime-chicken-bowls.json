@@ -48,7 +48,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $28.58 across 14 servings, roughly $2.04 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $13.15 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $41.73. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.99 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Bottled \u003cstrong\u003elime juice\u003c/strong\u003e costs a fraction of fresh limes and works perfectly in a slow cooker.",
                        "A little \u003cstrong\u003ehoney\u003c/strong\u003e goes a long way here, so one bottle carries you through many batches.",
@@ -62,7 +62,7 @@
                     "Steam the broccoli and cook the rice.",
                     "Build bowls with rice, cilantro lime chicken, and broccoli."
                 ],
-    "portion_html":  "Each of the 14 servings runs about 57g protein for roughly 578 calories, at around $2.99 a bowl.",
+    "portion_html":  "Each of the 14 servings runs about {{protein}}g protein for roughly {{cal}} calories, at around ${{cost_ps}} a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://realfoodwholelife.com/recipes/crockpot-cilantro-lime-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eReal Food Whole Life\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fresh, easy, and endlessly repeatable, this one earns a permanent spot in your rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  24.54,
@@ -147,7 +147,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 578 calories and 57 grams of protein for roughly $2.99 each (at everyday cost).",
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker cilantro lime chicken bowls, budget dinner",
                  "costPerServing":  2.99,
                  "recipeIngredient":  [

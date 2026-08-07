@@ -20,7 +20,7 @@
                  "fat":  27,
                  "cost_ps":  "4.51"
              },
-    "intro_html":  "A hearty, saucy ragu that tastes like it simmered all day but comes together in one skillet. At about $4.51 a serving (at everyday cost) with 57 grams of protein, it is a comforting one. It makes 14 servings, so cook once and eat all week.",
+    "intro_html":  "A hearty, saucy ragu that tastes like it simmered all day but comes together in one skillet. At about ${{cost_ps}} a serving (at everyday cost) with {{protein}} grams of protein, it is a comforting one. It makes 14 servings, so cook once and eat all week.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3100 g)",
                                 "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 7 cups (700 g)",
@@ -51,7 +51,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $52.99 across 14 servings, roughly $3.78 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $10.06 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.05. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.51 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e is the smart buy and keeps this hearty dish easy on the budget.",
                        "Jarred \u003cstrong\u003emarinara in the store brand\u003c/strong\u003e saves a couple bucks a jar over the name brands and works great as your base.",
@@ -65,7 +65,7 @@
                     "Pour in the marinara and let it simmer 15 minutes so it turns rich and thick.",
                     "Toss the cooked penne into the sauce and stir until every noodle is coated."
                 ],
-    "portion_html":  "Each of the 14 servings delivers 57 grams of protein and about 682 calories.",
+    "portion_html":  "Each of the 14 servings delivers {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.crunchtimekitchen.com/easy-turkey-ragu/\" target=\"_blank\" rel=\"noopener\"\u003eCrunch Time Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Comforting, filling, and easy on the wallet, this is a bowl of pasta you can feel good about. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  45.49,
@@ -164,7 +164,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Italian meal prep. Fourteen servings at about 682 calories and 57 grams of protein for roughly $4.51 each (at everyday cost).",
+                 "description":  "A high-protein Italian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, turkey ragu pasta, budget dinner",
                  "costPerServing":  4.51,
                  "recipeIngredient":  [

@@ -20,7 +20,7 @@
                  "fat":  9,
                  "cost_ps":  "3.37"
              },
-    "intro_html":  "Kung Pao is one of those dishes people assume you have to order out, and that assumption costs them real money every week. This version leans on the slow cooker to do the work, delivering 58 grams of protein per bowl at about $3.37 a serving (at everyday cost). Fourteen servings out of one pot means the math finally works in your favor.",
+    "intro_html":  "Kung Pao is one of those dishes people assume you have to order out, and that assumption costs them real money every week. This version leans on the slow cooker to do the work, delivering {{protein}} grams of protein per bowl at about ${{cost_ps}} a serving (at everyday cost). Fourteen servings out of one pot means the math finally works in your favor.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3200 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.5 cups dry (980 g)",
@@ -55,7 +55,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $26.05 across 14 servings, roughly $1.86 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $21.03 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.08. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.37 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Green peppers and zucchini are cheapest in summer, so \u003cstrong\u003ebuy them in season\u003c/strong\u003e and let the price, not the recipe, pick your veg.",
                        "Honey and hoisin both keep nearly forever, so \u003cstrong\u003estock the small jars once\u003c/strong\u003e instead of buying fresh every time.",
@@ -68,7 +68,7 @@
                     "Whisk the cornstarch with cold water, stir it in, and let the sauce cook down and thicken for 20 minutes.",
                     "Shred the chicken into the sauce and spoon it over hot white rice."
                 ],
-    "portion_html":  "You\u0027re looking at 58 grams of protein and 576 calories per serving, the kind of number that keeps you full through the afternoon.",
+    "portion_html":  "You\u0027re looking at {{protein}} grams of protein and {{cal}} calories per serving, the kind of number that keeps you full through the afternoon.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.crockpotsandflipflops.com/kung-pao-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eCrockpots and Flip Flops\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A little chopping up front buys you nine dinners that beat the drive-thru cold. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  22.37,
@@ -181,7 +181,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 576 calories and 58 grams of protein for roughly $3.37 each (at everyday cost).",
+                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker kung pao chicken bowls, budget dinner",
                  "costPerServing":  3.37,
                  "recipeIngredient":  [

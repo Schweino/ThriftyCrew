@@ -56,7 +56,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $34.93 across 14 servings, roughly $2.50 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $13.67 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $48.60. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.24 a bowl\u003c/strong\u003e (at everyday cost) for a five-ingredient beef and noodle skillet that eats like a much bigger recipe.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a five-ingredient beef and noodle skillet that eats like a much bigger recipe.",
     "shop_smart":  [
                        "\u003cstrong\u003eRegular spaghetti broken into short pieces is fideo.\u003c/strong\u003e The little bags of pre-cut fideo cost more per ounce for a noodle you can make with your hands in ten seconds.",
                        "\u003cstrong\u003eThe beef is the entire receipt.\u003c/strong\u003e Five ingredients means nowhere to hide, so buy ground beef when it is marked down and freeze it in batch portions.",
@@ -73,9 +73,9 @@
                     "Add the diced tomatoes, tomato sauce, and chicken broth and bring it to a boil.",
                     "Return the toasted pasta, lower the heat, and simmer uncovered until the noodles are tender and the liquid has cooked down to a thick sauce rather than a soup."
                 ],
-    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Weigh it into the containers, because toasted fideo settles unevenly and scoops lie to you. Every serving comes in at \u003cstrong\u003e570 calories with 37 grams of protein\u003c/strong\u003e. It thickens overnight, so add a splash of water when you reheat.",
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Weigh it into the containers, because toasted fideo settles unevenly and scoops lie to you. Every serving comes in at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e. It thickens overnight, so add a splash of water when you reheat.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://24bite.com/easy-fideo-soup-with-beef-and-tomato/\" target=\"_blank\" rel=\"noopener\"\u003e24bite.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Simple Mexican dinners for about $3.24 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Simple Mexican dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  30.09,
     "cost_batch_true":  34.93,
     "cost_per_serving":  2.15,
@@ -184,7 +184,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Sopa de fideo con carne molida rebuilt for 14-serving meal prep: toasted noodles and ground beef in a thick tomato sauce. 570 calories, 37g protein, about $3.24 per serving (at everyday cost).",
+                 "description":  "Sopa de fideo con carne molida rebuilt for 14-serving meal prep: toasted noodles and ground beef in a thick tomato sauce. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "sopa de fideo, fideo con carne molida, mexican beef noodle skillet, toasted noodle soup, budget mexican meal prep, ground beef pasta",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT10M",

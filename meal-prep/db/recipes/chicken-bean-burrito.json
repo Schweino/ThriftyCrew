@@ -29,7 +29,7 @@
                  "fat":  13,
                  "cost_ps":  "2.59"
              },
-    "intro_html":  "\u003cp\u003eThis is the cheapest, simplest burrito in the batch, and it still turns in 36 grams of protein at about 368 calories on a tortilla with 18 grams of fiber. The move is a rotisserie chicken with the skin pulled off, which gives you tender pulled meat with none of the fat the skin adds. Whole black beans, salsa, a little cheese, and warm spices do the rest. When you are tired and hungry, this is the one you can build with a store chicken and a can opener.\u003c/p\u003e",
+    "intro_html":  "\u003cp\u003eThis is the cheapest, simplest burrito in the batch, and it still turns in {{protein}} grams of protein at about {{cal}} calories on a tortilla with 18 grams of fiber. The move is a rotisserie chicken with the skin pulled off, which gives you tender pulled meat with none of the fat the skin adds. Whole black beans, salsa, a little cheese, and warm spices do the rest. When you are tired and hungry, this is the one you can build with a store chicken and a can opener.\u003c/p\u003e",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eRotisserie Chicken (generic (USDA)):\u003c/strong\u003e 2.62 lb pulled, skin removed (1190 g)",
@@ -52,7 +52,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $33.49 across 14 servings, roughly $2.39 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $2.77 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $36.26. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e$2.59 a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$8 or more\u003c/strong\u003e for a fast-food bean and chicken burrito. A rotisserie bird on a busy night is still cheaper than the drive-through.\u003c/p\u003e",
+    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$8 or more\u003c/strong\u003e for a fast-food bean and chicken burrito. A rotisserie bird on a busy night is still cheaper than the drive-through.\u003c/p\u003e",
     "shop_smart":  [
                        "\u003cstrong\u003eA store rotisserie chicken is a deal in disguise.\u003c/strong\u003e It is already cooked, and pulling the skin off before you shred it drops the fat without touching the protein. Buy the birds the day you cook so they are still warm and easy to pull.",
                        "\u003cstrong\u003eCanned black beans are the budget engine here.\u003c/strong\u003e Buy the standard 15 ounce cans, drain and rinse, and they add protein and fiber for pennies. Season them yourself so you control the salt.",
@@ -66,9 +66,9 @@
                     "Warm the tortillas so they roll without cracking.",
                     "Spoon a layer of the spiced black beans on each tortilla, add the salsa chicken, and top with the Mexican cheese blend before you wrap."
                 ],
-    "portion_html":  "\u003cp\u003eSet the pot of beans on your scale and subtract the empty-pot weight from Step 1, and portion the chicken the same way. Divide each by 14 so every burrito lands near 368 calories with 36 grams of protein.\u003c/p\u003e",
+    "portion_html":  "\u003cp\u003eSet the pot of beans on your scale and subtract the empty-pot weight from Step 1, and portion the chicken the same way. Divide each by 14 so every burrito lands near {{cal}} calories with {{protein}} grams of protein.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://projectmealplan.com/easy-chicken-bean-burritos-meal-prep/\" target=\"_blank\" rel=\"noopener\"\u003eprojectmealplan.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about $2.59 a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
+    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about ${{cost_ps}} a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
     "cost_batch":  27.27,
     "cost_batch_true":  33.49,
     "cost_per_serving":  1.95,
@@ -145,7 +145,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A quick rotisserie chicken and black bean burrito under 400 calories. Fourteen servings at about 368 calories and 36 grams of protein for roughly $2.59 each (at everyday cost).",
+                 "description":  "A quick rotisserie chicken and black bean burrito under 400 calories. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "chicken bean burrito, rotisserie chicken meal prep, high protein burrito, cheap meal prep, budget dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",

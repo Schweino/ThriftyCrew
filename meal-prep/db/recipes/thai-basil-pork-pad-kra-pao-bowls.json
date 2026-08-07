@@ -60,7 +60,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $38.94 across 14 servings, roughly $2.78 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $14.62 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.56. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.72 a bowl\u003c/strong\u003e (at everyday cost) for a Thai street-food staple made with more pork than any restaurant would give you.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a Thai street-food staple made with more pork than any restaurant would give you.",
     "shop_smart":  [
                        "\u003cstrong\u003eGround pork is the whole point and the whole cost.\u003c/strong\u003e It is the largest line on this receipt by a wide margin, so buy it when the meat case marks it down and freeze it in batch-sized bags.",
                        "\u003cstrong\u003eFresh basil is the second biggest line, and it is worth it.\u003c/strong\u003e If you have a sunny windowsill, one basil plant costs about what a single clamshell does and keeps producing all summer.",
@@ -79,9 +79,9 @@
                     "Kill the heat, dump in all the basil at once, and fold it through until it just wilts.",
                     "Divide the rice into the containers and spoon the basil pork over the top."
                 ],
-    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Scoop that weight into each container. Every serving comes in at \u003cstrong\u003e838 calories with 37 grams of protein\u003c/strong\u003e. The basil darkens overnight, which is normal and does not hurt a thing.",
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight from Step 1, and divide by 14. Scoop that weight into each container. Every serving comes in at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e. The basil darkens overnight, which is normal and does not hurt a thing.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://hungryinthailand.com/pad-kra-pao/\" target=\"_blank\" rel=\"noopener\"\u003ehungryinthailand.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Fast, punchy dinners for about $3.72 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Fast, punchy dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  35.86,
     "cost_batch_true":  38.94,
     "cost_per_serving":  2.56,
@@ -198,7 +198,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Thai pad kra pao rebuilt for 14-serving meal prep: ground pork stir-fried with garlic, chilies, and a mountain of basil. 838 calories, 37g protein, about $3.72 per serving (at everyday cost).",
+                 "description":  "Thai pad kra pao rebuilt for 14-serving meal prep: ground pork stir-fried with garlic, chilies, and a mountain of basil. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "pad kra pao, thai basil pork, ground pork stir fry, thai meal prep, high protein meal prep, budget thai dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",

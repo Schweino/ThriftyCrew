@@ -20,7 +20,7 @@
                  "fat":  4,
                  "cost_ps":  "1.63"
              },
-    "intro_html":  "All the cozy flavor of chicken enchiladas without the rolling, the frying, or the fuss. Chicken, rice, black beans, and corn get smothered in enchilada sauce and cheddar for a bowl that is big on flavor and shockingly light on fat. Thirty-eight grams of protein, four grams of fat, and about $1.63 a serving (at everyday cost).",
+    "intro_html":  "All the cozy flavor of chicken enchiladas without the rolling, the frying, or the fuss. Chicken, rice, black beans, and corn get smothered in enchilada sauce and cheddar for a bowl that is big on flavor and shockingly light on fat. Thirty-eight grams of protein, four grams of fat, and about ${{cost_ps}} a serving (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb raw (1587 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.5 cups dry jasmine (700 g)",
@@ -43,7 +43,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $21.64 across 14 servings, roughly $1.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $1.19 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $22.83. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$1.63 a bowl\u003c/strong\u003e (at everyday cost) for a lean, cheesy enchilada bowl that beats the frozen dinner on every count.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a lean, cheesy enchilada bowl that beats the frozen dinner on every count.",
     "shop_smart":  [
                        "\u003cstrong\u003eChicken on sale, frozen,\u003c/strong\u003e is the single best habit for keeping these bowls cheap.",
                        "\u003cstrong\u003eEnchilada sauce comes in mild and hot.\u003c/strong\u003e Grab whichever your table likes. The macros are the same.",
@@ -57,9 +57,9 @@
                     "Drain the beans and corn and warm them through.",
                     "Combine the rice, saucy chicken, beans, and corn in your big pot and stir. Fold in the shredded cheddar."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near 426 calories and 38 grams of protein at just 4 grams of fat.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near {{cal}} calories and {{protein}} grams of protein at just 4 grams of fat.",
     "credit_html":  "",
-    "upsell_html":  "Lean, cheesy dinners for about $1.63 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Lean, cheesy dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  18.92,
     "cost_batch_true":  21.64,
     "cost_per_serving":  1.35,
@@ -121,7 +121,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A lean chicken enchilada meal prep with rice, black beans, corn, and cheddar. Fourteen servings at about 426 calories, 38 grams of protein, and only 4 grams of fat for roughly $1.63 each (at everyday cost).",
+                 "description":  "A lean chicken enchilada meal prep with rice, black beans, corn, and cheddar. Fourteen servings at about {{cal}} calories, {{protein}} grams of protein, and only 4 grams of fat for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, chicken enchilada bowl, low fat meal prep, budget dinner",
                  "costPerServing":  1.63,
                  "recipeIngredient":  [

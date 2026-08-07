@@ -53,7 +53,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $41.36 across 14 servings, roughly $2.95 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.86 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.22. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.52 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eWatch for markdowns on lean ground beef.\u003c/strong\u003e Buy it when it hits a low price per pound, then brown and freeze what you are not using today. Browned beef freezes great and thaws fast for the next batch.",
                        "\u003cstrong\u003eSkip the seasoning packet and mix your own.\u003c/strong\u003e Chili powder, cumin, garlic powder, and paprika from your pantry cost pennies per batch compared to the little envelopes, and you control the salt.",
@@ -174,7 +174,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 539 calories and 39 grams of protein for roughly $3.52 each (at everyday cost).",
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, cheesy zucchini beef and rice skillet, budget dinner",
                  "costPerServing":  3.52,
                  "recipeIngredient":  [

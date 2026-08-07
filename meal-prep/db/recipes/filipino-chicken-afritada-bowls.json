@@ -18,7 +18,7 @@
                  "fat":  24,
                  "cost_ps":  "4.45"
              },
-    "intro_html":  "Filipino comfort in a bowl: chicken thighs braised in a tomato sauce with potatoes, carrots, bell peppers, and peas, seasoned the traditional way with fish sauce. Each serving lands \u003cstrong\u003e57 grams of protein\u003c/strong\u003e at 675 calories for about \u003cstrong\u003e$4.45\u003c/strong\u003e (at everyday cost). The potatoes cook in the stew, so the starch is built right in.",
+    "intro_html":  "Filipino comfort in a bowl: chicken thighs braised in a tomato sauce with potatoes, carrots, bell peppers, and peas, seasoned the traditional way with fish sauce. Each serving lands \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e at {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). The potatoes cook in the stew, so the starch is built right in.",
     "ingredients_display": ["\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1 cup (191 g)","\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 7 potatoes (1491 g)","\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.5 carrots (214 g)","\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2 peppers (210 g)","\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 peppers (210 g)","\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7.5 lb (3360 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 onions (385 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)","\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 21 cans (8631 g)","\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 3.5 tbsp (63 g)","\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 1.75 cups (234 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 tbsp (14 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -37,7 +37,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $45.79 across 14 servings, roughly $3.27 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.91 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.70. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.45 a bowl\u003c/strong\u003e (at everyday cost) for chicken afritada. Filipino turo-turo plates run $12 to $15 where you can find them, and in most of the Midwest you cannot, which makes your version priceless and also $4.45.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for chicken afritada. Filipino turo-turo plates run $12 to $15 where you can find them, and in most of the Midwest you cannot, which makes your version priceless and also ${{cost_ps}}.",
     "shop_smart":  "Chicken thighs carry the dish at 7.5 pounds. The clamp on this recipe keeps portions honest at a still-huge 57 grams of protein.\nThe tomato base is the other big line in canned diced tomatoes. Store-brand cans are the move, and if crushed tomatoes are cheaper that week they work the same here.\nA splash of fish sauce is the authentic secret and costs almost nothing per batch. The bottle lasts a year of Filipino and Thai recipes.",
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -49,9 +49,9 @@
                     "Stir in the sliced green and red bell peppers and the peas for the last 5 minutes so they keep some snap. Season with black pepper and salt to taste.",
                     "Portion into 14 containers, distributing chicken and vegetables evenly."
                 ],
-    "portion_html":  "Weigh the finished pot, subtract the empty pot weight you wrote down, and divide by 14. Scale that into each container. Each bowl comes in at about 675 calories with 57 grams of protein.",
+    "portion_html":  "Weigh the finished pot, subtract the empty pot weight you wrote down, and divide by 14. Scale that into each container. Each bowl comes in at about {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.kawalingpinoy.com/chicken-afritada/\" target=\"_blank\" rel=\"noopener\"\u003eKawaling Pinoy\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $4.45 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  42.52,
     "cost_batch_true":  45.79,
     "cost_per_serving":  3.04,
@@ -155,7 +155,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Filipino chicken afritada meal prep: tomato-braised thighs with potatoes and peppers. 14 bowls, 675 calories and 57g protein each, about $4.45 (at everyday cost).",
+                 "description":  "Filipino chicken afritada meal prep: tomato-braised thighs with potatoes and peppers. 14 bowls, {{cal}} calories and {{protein}}g protein each, about ${{cost_ps}} (at everyday cost).",
                  "keywords":  "chicken afritada, filipino chicken stew, filipino meal prep, tomato braised chicken, budget meal prep, high protein dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

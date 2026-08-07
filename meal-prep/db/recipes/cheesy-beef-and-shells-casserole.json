@@ -18,7 +18,7 @@
                  "fat":  22,
                  "cost_ps":  "2.99"
              },
-    "intro_html":  "This is the homemade answer to the boxed cheeseburger-pasta stuff, except the beef is real, the cheese is real, and the math is better. Each bowl packs \u003cstrong\u003e41 grams of protein\u003c/strong\u003e and 616 calories for about \u003cstrong\u003e$2.99\u003c/strong\u003e (at everyday cost). One pot, no powder packets, no regrets.",
+    "intro_html":  "This is the homemade answer to the boxed cheeseburger-pasta stuff, except the beef is real, the cheese is real, and the math is better. Each bowl packs \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). One pot, no powder packets, no regrets.",
     "ingredients_display": ["\u003cstrong\u003ePasta Shells (Great Value):\u003c/strong\u003e 37.25 oz dry (1058 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1058 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (7 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 onion (128 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (23 g)","\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 2.5 tbsp (10 g)","\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 3 cans (1323 g)","\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 18.5 oz (527 g)","\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 9.25 oz (264 g)","\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 0.5 lb (280 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -35,7 +35,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $37.95 across 14 servings, roughly $2.71 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $5.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.63. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.99 a bowl\u003c/strong\u003e (at everyday cost) for cheesy beef and shells that beats any drive-thru combo on price, protein, and the fact that it is actually food.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for cheesy beef and shells that beats any drive-thru combo on price, protein, and the fact that it is actually food.",
     "shop_smart":  ["Ground beef is two-thirds of this batch\u0027s cost, so buy the 3 lb pack at the lower per-pound price and freeze the extra portion for the next batch.","Store-brand tomato sauce cans are the cheap play. Compare per-ounce against the jarred pasta sauces; the plain cans win and you season them yourself anyway.","Buy cheddar in 8 oz bags when they drop on sale and stash them in the freezer. Shredded cheese thaws and melts just fine in a casserole."],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -46,9 +46,9 @@
                     "Scatter the remaining cheddar and the mozzarella over the top, drop the heat to low, and cover 3 to 4 minutes until the top layer melts.",
                     "Let it rest 5 minutes off the heat; the sauce tightens up and clings to the shells."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Scoop even portions into 14 containers and stack them for the week. Each bowl carries \u003cstrong\u003e616 calories and 41 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Scoop even portions into 14 containers and stack them for the week. Each bowl carries \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.familyfreshmeals.com/cheesy-beef-and-shells-casserole/\" target=\"_blank\" rel=\"noopener\"\u003eFamily Fresh Meals\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $2.99 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  28.21,
     "cost_batch_true":  37.95,
     "cost_per_serving":  2.02,
@@ -138,7 +138,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Cheesy beef and shells meal prep casserole: real beef, real cheddar, one pot. 616 calories and 41g protein per serving at about $2.99 a bowl (at everyday cost).",
+                 "description":  "Cheesy beef and shells meal prep casserole: real beef, real cheddar, one pot. {{cal}} calories and {{protein}}g protein per serving at about ${{cost_ps}} a bowl (at everyday cost).",
                  "keywords":  "cheesy beef and shells, beef pasta casserole, homemade hamburger helper, budget meal prep, ground beef meal prep, one pot pasta",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",

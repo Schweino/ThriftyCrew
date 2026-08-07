@@ -20,7 +20,7 @@
                  "fat":  17,
                  "cost_ps":  "2.89"
              },
-    "intro_html":  "This one eats like a rustic Italian dinner, with tender pork, white beans, tomatoes, and a little melted mozzarella on top. It is the protein champ of the group at 66 grams a bowl, all for about $2.89 a serving (at everyday cost). Fourteen servings from one pot is a hearty, filling week sorted.",
+    "intro_html":  "This one eats like a rustic Italian dinner, with tender pork, white beans, tomatoes, and a little melted mozzarella on top. It is the protein champ of the group at 66 grams a bowl, all for about ${{cost_ps}} a serving (at everyday cost). Fourteen servings from one pot is a hearty, filling week sorted.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3300 g)",
                                 "\u003cstrong\u003eCannellini Beans (generic):\u003c/strong\u003e 15 cups (2500 g)",
@@ -46,7 +46,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $32.45 across 14 servings, roughly $2.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $8.05 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.50. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.89 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "\u003cstrong\u003eCanned cannellini beans\u003c/strong\u003e are the base here, and they stretch the protein and fiber for about a dollar a can. No soaking required.",
                        "A little \u003cstrong\u003echeese goes a long way\u003c/strong\u003e. One bag of reduced-fat mozzarella tops the whole batch, so buy the small size.",
@@ -60,7 +60,7 @@
                     "Cook another 15 to 20 minutes to warm the beans through.",
                     "Spoon into bowls, top with the shredded mozzarella, and let it melt before packing up."
                 ],
-    "portion_html":  "Each serving delivers around 593 calories and a hefty 66 grams of protein.",
+    "portion_html":  "Each serving delivers around {{cal}} calories and a hefty {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.bettycrocker.com/recipes/slow-cooker-italian-pork-loin/31f8297f-3fac-494f-93af-9f101e2d9c92\" target=\"_blank\" rel=\"noopener\"\u003eBetty Crocker\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Filling, comforting, and packed with protein. This is the bowl that keeps you full till dinner. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  28.31,
@@ -138,7 +138,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Italian meal prep. Fourteen servings at about 593 calories and 66 grams of protein for roughly $2.89 each (at everyday cost).",
+                 "description":  "A high-protein Italian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker italian pork and white bean bowls, budget dinner",
                  "costPerServing":  2.89,
                  "recipeIngredient":  [

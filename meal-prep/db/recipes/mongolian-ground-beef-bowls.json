@@ -20,7 +20,7 @@
                  "fat":  16,
                  "cost_ps":  "5.53"
              },
-    "intro_html":  "This Mongolian beef bowl gives you that sweet and savory restaurant flavor without the restaurant bill. Lean ground beef browns fast, then simmers in a honey soy garlic sauce with broccoli and peppers over rice. It runs about $5.53 a serving (at everyday cost) with 43 grams of protein, and it makes 14 bowls.",
+    "intro_html":  "This Mongolian beef bowl gives you that sweet and savory restaurant flavor without the restaurant bill. Lean ground beef browns fast, then simmers in a honey soy garlic sauce with broccoli and peppers over rice. It runs about ${{cost_ps}} a serving (at everyday cost) with {{protein}} grams of protein, and it makes 14 bowls.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2280 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.75 cups dry (1031 g)",
@@ -62,7 +62,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $52.07 across 14 servings, roughly $3.72 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $25.30 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $77.37. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$5.53 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Lean 93/7 ground beef is the priciest part, so shop the sales. \u003cstrong\u003eBuy ground beef in family packs when it is marked down\u003c/strong\u003e and freeze in meal-sized portions.",
                        "Frozen broccoli is cheaper than fresh and skillet-ready. \u003cstrong\u003eKeep frozen florets on hand\u003c/strong\u003e and add them straight to the pan.",
@@ -76,7 +76,7 @@
                     "Add the broccoli florets and sliced red pepper and cook until just tender.",
                     "Cook the rice, then spoon the saucy beef and vegetables over the rice and finish with the sliced green onions."
                 ],
-    "portion_html":  "Each of the 14 servings delivers 43 grams of protein at 615 calories.",
+    "portion_html":  "Each of the 14 servings delivers {{protein}} grams of protein at {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eatyourselfskinny.com/healthy-mongolian-ground-beef-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eEat Yourself Skinny\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fifteen minutes of work and you have takeout flavor at a fraction of the cost. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  43.18,
@@ -210,7 +210,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 615 calories and 43 grams of protein for roughly $5.53 each (at everyday cost).",
+                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, mongolian ground beef bowls, budget dinner",
                  "costPerServing":  5.53,
                  "recipeIngredient":  [

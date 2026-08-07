@@ -47,7 +47,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $37.61 across 14 servings, roughly $2.69 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.80 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.41. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.24 a bowl\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$11 or more\u003c/strong\u003e for a fast-casual burrito bowl. Catch turkey on sale and it drops further.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$11 or more\u003c/strong\u003e for a fast-casual burrito bowl. Catch turkey on sale and it drops further.",
     "shop_smart":  [
                        "\u003cstrong\u003eTurkey and beef are interchangeable here.\u003c/strong\u003e Whichever is cheaper that week wins. Turkey runs leaner, beef runs a touch cheaper on sale.",
                        "\u003cstrong\u003eBuy the ground meat on sale and freeze it\u003c/strong\u003e in one-pound packs. Same rule that makes every batch cheaper over time.",
@@ -61,9 +61,9 @@
                     "Drain and rinse the beans and corn, then warm them through.",
                     "Combine the rice, turkey, beans, and corn in your big pot and stir. Fold in the shredded cheddar."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near 544 calories and 34 grams of protein.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "",
-    "upsell_html":  "High-protein dinners for about $3.24 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "High-protein dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  34,
     "cost_batch_true":  37.61,
     "cost_per_serving":  2.43,
@@ -139,7 +139,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A lean ground turkey, rice, black bean, and corn taco skillet meal prep. Fourteen servings at about 544 calories and 34 grams of protein for roughly $3.24 each (at everyday cost).",
+                 "description":  "A lean ground turkey, rice, black bean, and corn taco skillet meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, ground turkey, taco bowl, budget dinner",
                  "costPerServing":  3.24,
                  "recipeIngredient":  [

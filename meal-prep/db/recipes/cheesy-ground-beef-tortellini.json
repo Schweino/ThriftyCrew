@@ -18,7 +18,7 @@
                  "fat":  26,
                  "cost_ps":  "3.88"
              },
-    "intro_html":  "Cheese tortellini in a creamy tomato-beef sauce under a blanket of melted mozzarella. It is pasta stuffed with cheese, sauced with cheese, topped with cheese, and somehow still lands at \u003cstrong\u003e42 grams of protein\u003c/strong\u003e and 566 calories per bowl for about \u003cstrong\u003e$3.88\u003c/strong\u003e (at everyday cost). We checked the math twice.",
+    "intro_html":  "Cheese tortellini in a creamy tomato-beef sauce under a blanket of melted mozzarella. It is pasta stuffed with cheese, sauced with cheese, topped with cheese, and somehow still lands at \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories per bowl for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). We checked the math twice.",
     "ingredients_display": ["\u003cstrong\u003eCheese Tortellini (Great Value):\u003c/strong\u003e 41.5 oz dry (1173 g)","\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 2.25 lb (1058 g)","\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 18.75 oz (529 g)","\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 6.25 cups (1588 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (14 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (3 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.75 tbsp (7 g)","\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1.5 tbsp (11 g)","\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.75 tbsp (5 g)","\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 28 oz (791 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -32,7 +32,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $47.75 across 14 servings, roughly $3.41 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $6.81 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.56. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.88 a bowl\u003c/strong\u003e (at everyday cost) for cheesy beef tortellini that an Italian chain would put on the menu at five times the price with a breadstick as an apology.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for cheesy beef tortellini that an Italian chain would put on the menu at five times the price with a breadstick as an apology.",
     "shop_smart":  "Tortellini is the splurge in this batch, so compare the dry, refrigerated, and frozen versions per ounce; dry store-brand is usually the winner by a wide margin.\nOne-third fat cream cheese makes the sauce creamy for less money and fewer calories than heavy cream, and the bricks are cheaper per ounce than the tubs.\nStore-brand marinara plus cream cheese beats any jarred rosa or vodka sauce on price, and it tastes like you made it on purpose.",
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -43,9 +43,9 @@
                     "Fold the tortellini into the sauce gently so they do not tear.",
                     "Scatter the mozzarella over the top, cover, and heat on low 3 to 4 minutes until melted. Rest 5 minutes before portioning."
                 ],
-    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight, and divide by 14. Scoop carefully so each container gets its share of tortellini and sauce. Every bowl comes in at \u003cstrong\u003e566 calories with 42 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight, and divide by 14. Scoop carefully so each container gets its share of tortellini and sauce. Every bowl comes in at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://plowingthroughlife.com/ground-beef-tortellini/\" target=\"_blank\" rel=\"noopener\"\u003ePlowing Through Life\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $3.88 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  37.42,
     "cost_batch_true":  47.75,
     "cost_per_serving":  2.67,
@@ -128,7 +128,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Cheesy ground beef tortellini meal prep in a creamy tomato sauce under melted mozzarella. 566 calories, 42g protein, about $3.88 per serving (at everyday cost).",
+                 "description":  "Cheesy ground beef tortellini meal prep in a creamy tomato sauce under melted mozzarella. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "ground beef tortellini, cheese tortellini recipe, creamy tomato pasta, budget meal prep, beef pasta meal prep, one pot tortellini",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT10M",

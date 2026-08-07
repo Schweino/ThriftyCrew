@@ -59,7 +59,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $34.78 across 14 servings, roughly $2.48 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $10.44 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.22. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.24 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Canned \u003cstrong\u003eblack beans and corn\u003c/strong\u003e are pantry-cheap and do a lot of the flavor and filling work here.",
                        "Buy the \u003cstrong\u003echicken breast in bulk\u003c/strong\u003e to keep every bowl well under budget.",
@@ -73,7 +73,7 @@
                     "Cook your rice while the pot finishes.",
                     "Spoon over rice and finish each bowl with a little cheddar."
                 ],
-    "portion_html":  "Each of the 14 servings comes in around 58g protein for about 596 calories, at roughly $3.24 a bowl.",
+    "portion_html":  "Each of the 14 servings comes in around {{protein}}g protein for about {{cal}} calories, at roughly ${{cost_ps}} a bowl.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eatyourselfskinny.com/chicken-tortilla-soup/\" target=\"_blank\" rel=\"noopener\"\u003eEat Yourself Skinny\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheap, cozy, and ready to go, this is meal prep that actually makes you smile. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  31.84,
@@ -207,7 +207,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 596 calories and 58 grams of protein for roughly $3.24 each (at everyday cost).",
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken tortilla soup bowls, budget dinner",
                  "costPerServing":  3.24,
                  "recipeIngredient":  [

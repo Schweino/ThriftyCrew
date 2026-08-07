@@ -30,7 +30,7 @@
                  "fat":  19,
                  "cost_ps":  "3.87"
              },
-    "intro_html":  "Smoked sausage, cabbage and apple is one of those old pairings that works because the sweet and the salty need each other. A splash of cider vinegar and a spoon of dijon keep it from tipping into dessert territory. Served over rice it lands at 26 grams of protein for about $3.87 a serving (at everyday cost), and apples are one of the cheapest fruits on the board most of the year.",
+    "intro_html":  "Smoked sausage, cabbage and apple is one of those old pairings that works because the sweet and the salty need each other. A splash of cider vinegar and a spoon of dijon keep it from tipping into dessert territory. Served over rice it lands at {{protein}} grams of protein for about ${{cost_ps}} a serving (at everyday cost), and apples are one of the cheapest fruits on the board most of the year.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)",
                                 "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 4.5 lb (2026 g)",
@@ -63,7 +63,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $32.50 across 14 servings, roughly $2.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $21.04 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.54. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.87 a bowl\u003c/strong\u003e (at everyday cost) for a skillet dinner with fruit, vegetables and protein already in it. There is nothing else to cook and nothing else to buy.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a skillet dinner with fruit, vegetables and protein already in it. There is nothing else to cook and nothing else to buy.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy apples loose, not in the bag.\u003c/strong\u003e Bagged apples are usually smaller and priced by convenience. Buying loose lets you pick firm ones that hold up to heat, and it is often cheaper per apple.",
                        "\u003cstrong\u003eA firm tart apple is the right apple.\u003c/strong\u003e Softer sweet varieties turn to sauce in the pan. You want something that keeps its shape when it cooks.",
@@ -80,9 +80,9 @@
                     "Whisk the chicken broth, apple juice, dijon mustard, apple cider vinegar and dried thyme together, pour it into the skillet, and simmer until it reduces and glazes everything.",
                     "Return the sausage, season with salt and black pepper, and cook the rice separately to serve underneath."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount over rice in each container. Every bowl lands near 624 calories and 26 grams of protein.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount over rice in each container. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/sausage-cabbage-and-apple-skillet/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Sweet and savory skillet dinners for about $3.87 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Sweet and savory skillet dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  27.8,
     "cost_batch_true":  32.5,
     "cost_per_serving":  1.99,
@@ -199,7 +199,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Smoked sausage skillet with cabbage, apples and a cider mustard glaze over rice, built for 14 servings. 624 calories, 26g protein, about $3.87 per serving (at everyday cost).",
+                 "description":  "Smoked sausage skillet with cabbage, apples and a cider mustard glaze over rice, built for 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "sausage cabbage and apple skillet, smoked sausage and apples, cabbage skillet dinner, budget meal prep, one pan sausage",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

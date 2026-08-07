@@ -29,7 +29,7 @@
                  "fat":  7,
                  "cost_ps":  "3.32"
              },
-    "intro_html":  "\u003cp\u003eSweet heat that behaves itself. Honey and chipotle usually ride on a pile of sugar and oil, but this build lands at 377 calories with 41 grams of protein, on a tortilla carrying 18 grams of fiber for about 5 grams of net carb. The sauce is blended cottage cheese loosened with hot sauce, honey, and smoky chipotle, so it clings to the chicken like a glaze without a real glaze\u0027s calories. It is the kind of flavor you expect to pay for and do not.\u003c/p\u003e",
+    "intro_html":  "\u003cp\u003eSweet heat that behaves itself. Honey and chipotle usually ride on a pile of sugar and oil, but this build lands at {{cal}} calories with {{protein}} grams of protein, on a tortilla carrying 18 grams of fiber for about 5 grams of net carb. The sauce is blended cottage cheese loosened with hot sauce, honey, and smoky chipotle, so it clings to the chicken like a glaze without a real glaze\u0027s calories. It is the kind of flavor you expect to pay for and do not.\u003c/p\u003e",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
@@ -58,7 +58,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $34.64 across 14 servings, roughly $2.47 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $11.79 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.43. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e$3.32 a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a honey chipotle chicken bowl out. The chicken is the cost. The flavor is nearly free.\u003c/p\u003e",
+    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a honey chipotle chicken bowl out. The chicken is the cost. The flavor is nearly free.\u003c/p\u003e",
     "shop_smart":  [
                        "\u003cstrong\u003eOne can of chipotle in adobo lasts months.\u003c/strong\u003e You only blend a couple of chiles per batch, so freeze the rest in a spoon-sized ice cube tray and pull one out next time. Do not buy a fresh can every cook.",
                        "\u003cstrong\u003eHoney is the whole sweet side, so a little is plenty.\u003c/strong\u003e A few tablespoons across 14 burritos is all it takes, and one bottle outlasts the season.",
@@ -73,9 +73,9 @@
                     "Stir the rice into the saucy chicken.",
                     "Warm the tortillas so they roll cleanly, then fill and wrap each one."
                 ],
-    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near 377 calories with 41 grams of protein.\u003c/p\u003e",
+    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near {{cal}} calories with {{protein}} grams of protein.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.tiktok.com/@aussiefitness/video/7513532240375090439\" target=\"_blank\" rel=\"noopener\"\u003etiktok.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about $3.32 a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
+    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about ${{cost_ps}} a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
     "cost_batch":  27.48,
     "cost_batch_true":  34.64,
     "cost_per_serving":  1.96,
@@ -176,7 +176,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A sweet-and-smoky honey chipotle chicken burrito under 400 calories. About 377 calories and 41 grams of protein per serving, roughly $3.32 each (at everyday cost).",
+                 "description":  "A sweet-and-smoky honey chipotle chicken burrito under 400 calories. About {{cal}} calories and {{protein}} grams of protein per serving, roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "honey chipotle chicken burrito, high protein meal prep, low calorie burrito, cheap meal prep, budget dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

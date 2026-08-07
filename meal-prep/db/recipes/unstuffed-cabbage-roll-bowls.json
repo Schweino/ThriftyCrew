@@ -20,7 +20,7 @@
                  "fat":  20,
                  "cost_ps":  "4.42"
              },
-    "intro_html":  "All the cozy flavor of cabbage rolls without the fussy rolling and stuffing. Each bowl brings 48 grams of protein and costs about $4.42 a serving (at everyday cost). One skillet, 14 servings, and none of the babysitting.",
+    "intro_html":  "All the cozy flavor of cabbage rolls without the fussy rolling and stuffing. Each bowl brings {{protein}} grams of protein and costs about ${{cost_ps}} a serving (at everyday cost). One skillet, 14 servings, and none of the babysitting.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2710 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (808 g)",
@@ -49,7 +49,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $50.09 across 14 servings, roughly $3.58 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $11.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.70. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.42 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Buy the \u003cstrong\u003e6 lb ground beef value pack\u003c/strong\u003e and let the cheap cabbage do the rest of the stretching.",
                        "A \u003cstrong\u003ewhole head of green cabbage runs under a dollar a pound\u003c/strong\u003e and shreds down to a huge pile, so it is one of the best deals in the store.",
@@ -62,7 +62,7 @@
                     "Fold in the cooked rice and let it warm through so it soaks up the sauce.",
                     "Taste, adjust the salt and pepper, and serve it up in bowls."
                 ],
-    "portion_html":  "Each of the 14 bowls gives you 48 grams of protein and about 611 calories.",
+    "portion_html":  "Each of the 14 bowls gives you {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thewholecook.com/unstuffed-cabbage-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eThe Whole Cook\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cheap, filling, and loaded with veggies, this is meal prep that earns its spot in the fridge. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  47.57,
@@ -161,7 +161,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Eastern European meal prep. Fourteen servings at about 611 calories and 48 grams of protein for roughly $4.42 each (at everyday cost).",
+                 "description":  "A high-protein Eastern European meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, unstuffed cabbage roll bowls, budget dinner",
                  "costPerServing":  4.42,
                  "recipeIngredient":  [

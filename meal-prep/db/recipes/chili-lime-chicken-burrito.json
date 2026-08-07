@@ -29,7 +29,7 @@
                  "fat":  9,
                  "cost_ps":  "3.64"
              },
-    "intro_html":  "Chili and lime is the two ingredient handshake that makes cheap chicken taste like a taqueria. We rub breast with chili powder, lime and salt, sear it hard, and drizzle on a spicy Greek yogurt sauce, then load in fresh tomato and red onion for crunch and a little melty mozzarella to hold it together. Every burrito comes in \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e38 grams of protein\u003c/strong\u003e, on a high fiber tortilla that keeps you near 5 grams of net carb. We have Slow Cooker Cilantro Lime Chicken Bowls on the site; this is the faster, spicier, hand-held take, seared instead of slow cooked and finished with a hot yogurt drizzle.",
+    "intro_html":  "Chili and lime is the two ingredient handshake that makes cheap chicken taste like a taqueria. We rub breast with chili powder, lime and salt, sear it hard, and drizzle on a spicy Greek yogurt sauce, then load in fresh tomato and red onion for crunch and a little melty mozzarella to hold it together. Every burrito comes in \u003cstrong\u003eunder 400 calories with 4 ounces of meat\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, on a high fiber tortilla that keeps you near 5 grams of net carb. We have Slow Cooker Cilantro Lime Chicken Bowls on the site; this is the faster, spicier, hand-held take, seared instead of slow cooked and finished with a hot yogurt drizzle.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
@@ -59,7 +59,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $36.98 across 14 servings, roughly $2.64 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $13.95 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.93. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.64 a burrito\u003c/strong\u003e (at everyday cost) for chili lime chicken that costs a rub and a squeeze. The yogurt and hot sauce do the work a bottle of dressing usually charges you for.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) for chili lime chicken that costs a rub and a squeeze. The yogurt and hot sauce do the work a bottle of dressing usually charges you for.",
     "shop_smart":  [
                        "Chili powder is cheapest in the bulk container, and a burrito batch this size uses a real spoonful, so the small jar will not cut it.",
                        "Limes are cheapest by the bag, and you want the juice fresh here, so buy a handful and roll them hard before you squeeze.",
@@ -76,9 +76,9 @@
                     "Weigh the chicken, tomato and onion together, subtract the empty bowl, and divide by 14 so each burrito is even, then fold in the sides and roll.",
                     "Wrap each burrito and portion into 14 containers."
                 ],
-    "portion_html":  "Weigh the chicken and the fresh vegetables, subtract the empty bowl, and divide by 14, then sauce, cheese and roll each tortilla to match. Each burrito carries \u003cstrong\u003e315 calories and 38 grams of protein\u003c/strong\u003e. If you are freezing these, keep the yogurt drizzle in a side cup and add it after reheating.",
+    "portion_html":  "Weigh the chicken and the fresh vegetables, subtract the empty bowl, and divide by 14, then sauce, cheese and roll each tortilla to match. Each burrito carries \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e. If you are freezing these, keep the yogurt drizzle in a side cup and add it after reheating.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.tiktok.com/@its.razi/video/7257568505195728133\" target=\"_blank\" rel=\"noopener\"\u003etiktok.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Chili lime chicken burritos, 14 wrapped and ready, for about $3.64 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "upsell_html":  "Chili lime chicken burritos, 14 wrapped and ready, for about ${{cost_ps}} each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
     "cost_batch":  29.94,
     "cost_batch_true":  36.98,
     "cost_per_serving":  2.14,
@@ -179,7 +179,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Chili lime chicken burritos with seared breast, a spicy Greek yogurt drizzle, fresh tomato and red onion. 14 wrapped at 315 calories, 38g protein, about $3.64 (at everyday cost).",
+                 "description":  "Chili lime chicken burritos with seared breast, a spicy Greek yogurt drizzle, fresh tomato and red onion. 14 wrapped at {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
                  "keywords":  "chili lime chicken burrito, spicy yogurt sauce, high protein chicken meal prep, low calorie burrito, budget chicken burrito, tiktok chicken burrito",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",

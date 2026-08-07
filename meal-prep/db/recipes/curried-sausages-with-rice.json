@@ -27,7 +27,7 @@
                  "fat":  41,
                  "cost_ps":  "2.32"
              },
-    "intro_html":  "Curried sausages are an Australian and New Zealand staple that most Americans have never heard of, which is a shame, because it is one of the cheapest good dinners there is. Whole browned sausages simmered in a curry gravy with carrots and peas, spooned over rice. It carries 34 grams of protein at about $2.32 a bowl (at everyday cost).",
+    "intro_html":  "Curried sausages are an Australian and New Zealand staple that most Americans have never heard of, which is a shame, because it is one of the cheapest good dinners there is. Whole browned sausages simmered in a curry gravy with carrots and peas, spooned over rice. It carries {{protein}} grams of protein at about ${{cost_ps}} a bowl (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1.75 tbsp (24 g)",
                                 "\u003cstrong\u003eBratwurst (Johnsonville):\u003c/strong\u003e 4.75 lb (2100 g)",
@@ -60,7 +60,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $20.51 across 14 servings, roughly $1.46 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $15.40 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $35.91. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.32 a bowl\u003c/strong\u003e (at everyday cost) for a curry gravy dinner. The sausages are nearly the whole cost, so a sale on them is the single biggest lever you have on this recipe.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a curry gravy dinner. The sausages are nearly the whole cost, so a sale on them is the single biggest lever you have on this recipe.",
     "shop_smart":  [
                        "\u003cstrong\u003eAny sausage works, so buy whatever is cheapest.\u003c/strong\u003e The original recipe literally says sausages of choice. The curry gravy is doing all the flavor work, so this is not the week to buy premium links.",
                        "\u003cstrong\u003eCurry powder is a one time purchase that lasts a year.\u003c/strong\u003e One jar seasons many batches. Buy a decent one, keep it away from the stove heat, and replace it when it stops smelling like anything.",
@@ -77,9 +77,9 @@
                     "Slice the browned sausages into thick coins, return them to the pan, and simmer so they soak up the gravy and finish cooking through.",
                     "Stir in the frozen peas at the very end, season with salt and black pepper, and serve it over hot rice."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and spoon the exact amount over rice in each container, counting sausage coins so the protein lands even. Every bowl comes in near 773 calories and 34 grams of protein.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and spoon the exact amount over rice in each container, counting sausage coins so the protein lands even. Every bowl comes in near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/curried-sausages/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Cheap curry dinners for about $2.32 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Cheap curry dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  18.99,
     "cost_batch_true":  20.51,
     "cost_per_serving":  1.36,
@@ -196,7 +196,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Australian style curried sausages simmered in a curry gravy with carrots and peas, served over rice. 14 servings, 773 calories, 34g protein, about $2.32 each (at everyday cost).",
+                 "description":  "Australian style curried sausages simmered in a curry gravy with carrots and peas, served over rice. 14 servings, {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "curried sausages, sausage curry, australian curried sausages, curry gravy, cheap dinner, budget meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",

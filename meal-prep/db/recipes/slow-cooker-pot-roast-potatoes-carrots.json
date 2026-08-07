@@ -25,7 +25,7 @@
                  "fat":  33,
                  "cost_ps":  "6.29"
              },
-    "intro_html":  "This is the pot roast every other pot roast is measured against. Chuck roast, onion, carrots, celery, potatoes, and broth, all in one vessel, cooked long enough that the meat gives up and the vegetables take on the gravy. Nothing clever, nothing trendy, just the dinner that has worked for a hundred years. Each bowl carries \u003cstrong\u003e54 grams of protein\u003c/strong\u003e and 636 calories for about \u003cstrong\u003e$6.29\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "This is the pot roast every other pot roast is measured against. Chuck roast, onion, carrots, celery, potatoes, and broth, all in one vessel, cooked long enough that the meat gives up and the vegetables take on the gravy. Nothing clever, nothing trendy, just the dinner that has worked for a hundred years. Each bowl carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 7.75 lb (3500 g)",
                                 "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
@@ -57,7 +57,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $75.63 across 14 servings, roughly $5.40 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $18.13 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $93.76. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$6.29 a bowl\u003c/strong\u003e (at everyday cost), and the roast is nearly all of it. Everything else in this pot is under a dollar a line, which tells you exactly where to shop carefully.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost), and the roast is nearly all of it. Everything else in this pot is under a dollar a line, which tells you exactly where to shop carefully.",
     "shop_smart":  [
                        "Chuck roast is the whole budget. Set a price in your head that counts as a good deal in your store, and buy two when you see it. The second one freezes for months.",
                        "Carrots and celery are cheapest as whole bunches and bags, not as pre cut sticks. You are chopping them into big chunks anyway.",
@@ -74,9 +74,9 @@
                     "Lift the roast out, shred it, and stir it back into the vegetables and gravy.",
                     "Taste the gravy and correct the salt. Long cooks dull seasoning, so it almost always needs a little at the end."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Scoop that weight into each of 14 containers, mixing between scoops so every one gets beef, vegetables, and gravy in the same ratio. Each bowl lands at \u003cstrong\u003e636 calories with 54 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Scoop that weight into each of 14 containers, mixing between scoops so every one gets beef, vegetables, and gravy in the same ratio. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/slow-cooker-beef-pot-roast/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Classic pot roast for about $6.29 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Classic pot roast for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  70.49,
     "cost_batch_true":  75.63,
     "cost_per_serving":  5.03,
@@ -193,7 +193,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Classic slow cooker pot roast meal prep: seared chuck roast braised 8 hours with potatoes, carrots, and celery in a flour thickened gravy. 636 calories, 54g protein, about $6.29 per serving (at everyday cost).",
+                 "description":  "Classic slow cooker pot roast meal prep: seared chuck roast braised 8 hours with potatoes, carrots, and celery in a flour thickened gravy. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "slow cooker pot roast, pot roast with potatoes and carrots, chuck roast recipes, shredded beef, budget meal prep, sunday dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

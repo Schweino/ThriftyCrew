@@ -30,7 +30,7 @@
                  "fat":  13,
                  "cost_ps":  "5.01"
              },
-    "intro_html":  "Carne asada is the taco truck classic, charred steak marinated with lime, garlic, cumin, and chili, then wrapped with fresh pico and a spoon of guacamole, and this build keeps every bit of that while staying under 400 calories. There is no cheese here and the guac is measured, because that is exactly what buys the room for a real 4 ounces of steak. Each burrito lands at about \u003cstrong\u003e393 calories\u003c/strong\u003e and \u003cstrong\u003e35 grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. Our Slow Cooker Carne Asada Rice Bowls take the low-and-slow road; this one sears the steak and wraps it with cold, bright pico.",
+    "intro_html":  "Carne asada is the taco truck classic, charred steak marinated with lime, garlic, cumin, and chili, then wrapped with fresh pico and a spoon of guacamole, and this build keeps every bit of that while staying under 400 calories. There is no cheese here and the guac is measured, because that is exactly what buys the room for a real 4 ounces of steak. Each burrito lands at about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, in a tortilla with 18 grams of fiber for 5 grams of net carb. Our Slow Cooker Carne Asada Rice Bowls take the low-and-slow road; this one sears the steak and wraps it with cold, bright pico.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eSirloin Steak:\u003c/strong\u003e 3.5 lb (1588 g)",
@@ -80,7 +80,7 @@
                     "Mash the avocado into a quick guacamole with a little of the pico and a squeeze of lime.",
                     "Warm the tortillas, then portion and wrap as below, layering rice, beans, steak, guacamole, and pico."
                 ],
-    "portion_html":  "Weigh the steak, the beans, and the rice together against the empty pot number from Step 1 for the hot portion, and divide by 14. Onto each warm tortilla goes that share of steak, beans, and rice, plus an even spoon of the guacamole and the pico. Every burrito lands at about \u003cstrong\u003e393 calories and 35 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Weigh the steak, the beans, and the rice together against the empty pot number from Step 1 for the hot portion, and divide by 14. Onto each warm tortilla goes that share of steak, beans, and rice, plus an even spoon of the guacamole and the pico. Every burrito lands at about \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.favfamilyrecipes.com/carne-asada-burrito/\" target=\"_blank\" rel=\"noopener\"\u003efavfamilyrecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  49.39,
@@ -207,7 +207,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A carne asada burrito for meal prep: seared sirloin, black beans, rice, fresh pico, and guacamole, no cheese. About 393 calories and 35 grams of protein per serving.",
+                 "description":  "A carne asada burrito for meal prep: seared sirloin, black beans, rice, fresh pico, and guacamole, no cheese. About {{cal}} calories and {{protein}} grams of protein per serving.",
                  "keywords":  "carne asada burrito, steak burrito, sirloin burrito, guacamole pico, budget high protein meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

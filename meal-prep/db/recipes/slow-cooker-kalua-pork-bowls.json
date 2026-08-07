@@ -20,7 +20,7 @@
                  "fat":  13,
                  "cost_ps":  "1.72"
              },
-    "intro_html":  "Kalua pork is Hawaiian comfort food at its simplest: pork, cabbage, and a long slow cook. This is a genuinely cheap bowl at just $1.72 a serving (at everyday cost), and it still delivers 56 grams of protein. Fourteen servings from a short ingredient list is proof that good food does not have to be complicated.",
+    "intro_html":  "Kalua pork is Hawaiian comfort food at its simplest: pork, cabbage, and a long slow cook. This is a genuinely cheap bowl at just ${{cost_ps}} a serving (at everyday cost), and it still delivers {{protein}} grams of protein. Fourteen servings from a short ingredient list is proof that good food does not have to be complicated.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3400 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (800 g)",
@@ -39,7 +39,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $21.71 across 14 servings, roughly $1.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $2.31 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $24.02. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$1.72 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "This recipe wins on a \u003cstrong\u003eshort ingredient list\u003c/strong\u003e. Just pork, rice, and cabbage means fewer things to buy and less to go wrong.",
                        "Green cabbage is one of the best deals in the produce aisle at \u003cstrong\u003eunder 70 cents a pound\u003c/strong\u003e, and it cooks down soft and savory.",
@@ -53,9 +53,9 @@
                     "Cover and cook another 30 to 45 minutes until the cabbage is tender.",
                     "Serve the pork and cabbage over cooked white rice and portion out."
                 ],
-    "portion_html":  "Every serving comes in around 567 calories with 56 grams of protein.",
+    "portion_html":  "Every serving comes in around {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://downshiftology.com/recipes/slow-cooker-kalua-pork/\" target=\"_blank\" rel=\"noopener\"\u003eDownshiftology\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Three ingredients, about $1.72 a bowl (at everyday cost), and it tastes like the islands. Hard to argue with that. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "upsell_html":  "Three ingredients, about ${{cost_ps}} a bowl (at everyday cost), and it tastes like the islands. Hard to argue with that. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  19.88,
     "cost_batch_true":  21.71,
     "cost_per_serving":  1.42,
@@ -103,7 +103,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Hawaiian meal prep. Fourteen servings at about 567 calories and 56 grams of protein for roughly $1.72 each (at everyday cost).",
+                 "description":  "A high-protein Hawaiian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker kalua pork bowls, budget dinner",
                  "costPerServing":  1.72,
                  "recipeIngredient":  [

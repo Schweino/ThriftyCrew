@@ -1,4 +1,4 @@
-﻿# Recipe expansion run playbook (model-routed, zero /model flips)
+# Recipe expansion run playbook (model-routed, zero /model flips)
 
 Brad's requirement (2026-07-25): he should never have to remember to flip models mid-run. The routing
 lives in the AGENT definitions (C:\Codex\.claude\agents\), each pinned to its model. Whatever model the
@@ -125,6 +125,21 @@ TOOLING GOTCHAS (cost real time on r300)
 16. Publishing is a ~1 post/sec continuous run; 4x75 batches with a live-verify each is fine, but the
     post-publish reviewer for an early batch may still be running when later batches land - tell it which
     slugs are its scope and that later publishes landing mid-review are the pipeline, not corruption.
+
+## Prose is TEMPLATED (2026-08-08) - the rule every new batch must follow
+
+Spec prose stores `{{cost_ps}}`/`{{cal}}`/`{{protein}}` tokens, never money or macro literals;
+`lib\render-tokens.ps1` substitutes the spec's own stat at render (build-card2 + publish). Writers write
+natural sentences WITH real numbers - that is fine and keeps the writer wave simple - but the promote step
+MUST run:
+
+    powershell -File pipeline\migrate-prose-tokens.ps1 -Slugs <batch slugs> -Apply
+
+right after specs land in `db\recipes`. It only swaps literals that exactly equal the spec's stat and
+proves each swap round-trips before writing. A missed run is caught within a day: reanchor-all's verify
+(in the daily chain) hard-fails on ANY `.NN` literal in the five prose surfaces, naming the slug and
+this exact command. Bounds ("under 400 calories") are deliberately left as literals - the bounded-claim
+gate owns their truth.
 
 ## Shared pipeline (promoted 2026-07-26) - reference, do not re-port
 

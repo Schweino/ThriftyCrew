@@ -20,7 +20,7 @@
                  "fat":  11,
                  "cost_ps":  "2.78"
              },
-    "intro_html":  "This is the bowl that quietly ends your takeout habit. One skillet of seasoned lean beef, fluffy rice, black beans, and sweet corn, portioned into a week of dinners that each land near 37 grams of protein without wrecking the grocery budget. Cook it Sunday, eat like a champ through Friday.",
+    "intro_html":  "This is the bowl that quietly ends your takeout habit. One skillet of seasoned lean beef, fluffy rice, black beans, and sweet corn, portioned into a week of dinners that each land near {{protein}} grams of protein without wrecking the grocery budget. Cook it Sunday, eat like a champ through Friday.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb raw (1587 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.5 cups dry jasmine (700 g)",
@@ -43,7 +43,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $38.52 across 14 servings, roughly $2.75 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $0.34 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.86. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "That is about \u003cstrong\u003e$2.78 a bowl\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a single fast-casual burrito bowl. The ground beef is your whole cost, so catch it on sale and this drops even lower.",
+    "cost_closing_html":  "That is about \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a single fast-casual burrito bowl. The ground beef is your whole cost, so catch it on sale and this drops even lower.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy the beef on sale and freeze it.\u003c/strong\u003e Lean ground beef goes on sale constantly. When it does, grab several pounds and freeze in one-pound packs. One buy can cover a month of these bowls.",
                        "\u003cstrong\u003eRice and beans are the cheap muscle.\u003c/strong\u003e A big bag of rice and canned beans by the case cost pennies per serving. Compare the price per ounce, not the sticker, to find the real deal.",
@@ -57,9 +57,9 @@
                     "Drain and rinse the black beans and corn, then warm them through.",
                     "Combine the rice, beef, beans, and corn in your big pot and stir. Fold in the shredded mozzarella so it melts into the warm mix."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. That is your total food weight. Divide it by 14, then scoop that exact amount into each container. Every bowl lands right at about 499 calories and 37 grams of protein.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. That is your total food weight. Divide it by 14, then scoop that exact amount into each container. Every bowl lands right at about {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "",
-    "upsell_html":  "High-protein dinners for about $2.78 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "High-protein dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  33.78,
     "cost_batch_true":  38.52,
     "cost_per_serving":  2.41,
@@ -121,7 +121,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A lean beef, rice, black bean, and corn meal-prep bowl. Fourteen servings at about 499 calories and 37 grams of protein for roughly $2.78 each (at everyday cost).",
+                 "description":  "A lean beef, rice, black bean, and corn meal-prep bowl. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, burrito bowl, budget dinner, ground beef meal prep",
                  "costPerServing":  2.78,
                  "recipeIngredient":  [

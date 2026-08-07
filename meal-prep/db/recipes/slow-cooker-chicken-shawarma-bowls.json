@@ -20,7 +20,7 @@
                  "fat":  10,
                  "cost_ps":  "3.95"
              },
-    "intro_html":  "Shawarma spices turn plain chicken into something that smells like a street cart in the best way. This bowl brings 65 grams of protein for about $3.95 (at everyday cost), with a creamy yogurt-tahini sauce that ties it all together. One batch is 14 servings, so you can skip the food-court line for a week and a half.",
+    "intro_html":  "Shawarma spices turn plain chicken into something that smells like a street cart in the best way. This bowl brings {{protein}} grams of protein for about ${{cost_ps}} (at everyday cost), with a creamy yogurt-tahini sauce that ties it all together. One batch is 14 servings, so you can skip the food-court line for a week and a half.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3450 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (880 g)",
@@ -55,7 +55,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $29.22 across 14 servings, roughly $2.09 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $26.02 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.24. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.95 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "A tub of Greek yogurt does double duty as sauce base and protein boost, so \u003cstrong\u003eone tub covers several recipes\u003c/strong\u003e before it\u0027s gone.",
                        "Tahini keeps for months in the pantry, so \u003cstrong\u003ebuy the jar once\u003c/strong\u003e and a spoonful lifts this sauce for pennies.",
@@ -68,7 +68,7 @@
                     "Steam or roast the broccoli florets while the chicken finishes.",
                     "Shred the chicken, pile it over white rice with the broccoli, and spoon the yogurt-tahini sauce on top."
                 ],
-    "portion_html":  "You get 65 grams of protein and 585 calories per serving, a big, satisfying bowl for the price.",
+    "portion_html":  "You get {{protein}} grams of protein and {{cal}} calories per serving, a big, satisfying bowl for the price.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyfitalicious.com/crockpot-chicken-shawarma/\" target=\"_blank\" rel=\"noopener\"\u003eSkinny Fitalicious\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "That sauce alone is worth making a double batch. Trust me on this one. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  25.61,
@@ -202,7 +202,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Middle Eastern meal prep. Fourteen servings at about 585 calories and 65 grams of protein for roughly $3.95 each (at everyday cost).",
+                 "description":  "A high-protein Middle Eastern meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken shawarma bowls, budget dinner",
                  "costPerServing":  3.95,
                  "recipeIngredient":  [

@@ -30,7 +30,7 @@
                  "fat":  17,
                  "cost_ps":  "5.94"
              },
-    "intro_html":  "Carne guisada is the Tex-Mex stew that shows up in a bowl at lunch and in a tortilla at breakfast. Sirloin, tomatoes, jalapeno, and a spoonful of flour that turns the whole thing into its own gravy as it cooks. It thickens up in the fridge, which makes it one of the better containers to open on day four. Each bowl carries \u003cstrong\u003e45 grams of protein\u003c/strong\u003e and 586 calories for about \u003cstrong\u003e$5.94\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Carne guisada is the Tex-Mex stew that shows up in a bowl at lunch and in a tortilla at breakfast. Sirloin, tomatoes, jalapeno, and a spoonful of flour that turns the whole thing into its own gravy as it cooks. It thickens up in the fridge, which makes it one of the better containers to open on day four. Each bowl carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 5.25 lb (2328 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (23 g)",
@@ -63,7 +63,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $67.58 across 14 servings, roughly $4.83 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $20.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $88.56. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$5.94 a bowl\u003c/strong\u003e (at everyday cost). Canned tomatoes stretch the beef, the flour thickens without anything expensive, and rice finishes the job.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Canned tomatoes stretch the beef, the flour thickens without anything expensive, and rice finishes the job.",
     "shop_smart":  [
                        "Canned diced tomatoes go in by the stack here. Compare the store brand to the name brand on the price per ounce tag, because in a stew they are the same tomatoes.",
                        "Buy a whole sirloin and cube it yourself. Pre cut stew meat costs more per pound and gives you less say in the trim.",
@@ -80,9 +80,9 @@
                     "Cover and simmer low for 75 to 90 minutes, until the beef and potatoes are tender and the liquid has reduced into a gravy that clings.",
                     "Taste for salt and heat before portioning."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of stew into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e586 calories with 45 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of stew into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/carne-guisada/\" target=\"_blank\" rel=\"noopener\"\u003eisabeleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Carne guisada for about $5.94 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Carne guisada for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  56.89,
     "cost_batch_true":  67.58,
     "cost_per_serving":  4.06,
@@ -207,7 +207,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Tex-Mex carne guisada meal prep: cubed sirloin browned and stewed with tomatoes, jalapeno, and cumin into its own thick gravy over rice. 586 calories, 45g protein, about $5.94 per serving (at everyday cost).",
+                 "description":  "Tex-Mex carne guisada meal prep: cubed sirloin browned and stewed with tomatoes, jalapeno, and cumin into its own thick gravy over rice. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "carne guisada, tex mex beef stew, mexican beef gravy, beef and rice bowls, budget meal prep, tex mex recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

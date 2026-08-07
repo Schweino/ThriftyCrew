@@ -30,7 +30,7 @@
                  "fat":  14,
                  "cost_ps":  "1.91"
              },
-    "intro_html":  "Fried rice was invented to use up leftovers, which tells you everything about why it belongs in a budget meal prep rotation. Day old rice, a little chicken, a couple of eggs, and soy sauce, cooked fast in a hot pan. This is one of the most wallet-friendly dinners in the rotation and it does not taste like a compromise. Each bowl runs 586 calories and \u003cstrong\u003e25 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.91 a serving\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Fried rice was invented to use up leftovers, which tells you everything about why it belongs in a budget meal prep rotation. Day old rice, a little chicken, a couple of eggs, and soy sauce, cooked fast in a hot pan. This is one of the most wallet-friendly dinners in the rotation and it does not taste like a compromise. Each bowl runs {{cal}} calories and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 1.75 lb (844 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 5 tbsp (78 g)",
@@ -61,7 +61,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $12.97 across 14 servings, roughly $0.93 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $19.21 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $32.18. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$1.91 a bowl\u003c/strong\u003e (at everyday cost). Fourteen dinners of fried rice with more chicken in it than the takeout version, built from a day old pot of rice and a couple of eggs.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Fourteen dinners of fried rice with more chicken in it than the takeout version, built from a day old pot of rice and a couple of eggs.",
     "shop_smart":  [
                        "Cook the rice the day before and refrigerate it uncovered. Cold, dried out rice fries into separate grains. Fresh warm rice turns into a sticky clump no matter how good your pan is, and no technique will save it.",
                        "Eggs are the cheapest protein in the store. Two or three scrambled into a batch of fried rice add real nutrition for pocket change.",
@@ -78,9 +78,9 @@
                     "Return the chicken and eggs, add the remaining soy sauce, sesame oil, sugar, salt, and pepper, and toss everything together for two minutes.",
                     "Kill the heat and fold in the sliced green onions."
                 ],
-    "portion_html":  "Set the full skillet on the scale, subtract the empty weight you wrote down, and divide by 14. Toss the pan thoroughly first so the chicken and egg are spread through the rice, otherwise the containers on the bottom of the stack end up as plain rice. Every portion lands at \u003cstrong\u003e586 calories\u003c/strong\u003e.",
+    "portion_html":  "Set the full skillet on the scale, subtract the empty weight you wrote down, and divide by 14. Toss the pan thoroughly first so the chicken and egg are spread through the rice, otherwise the containers on the bottom of the stack end up as plain rice. Every portion lands at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thewoksoflife.com/classic-chicken-fried-rice/\" target=\"_blank\" rel=\"noopener\"\u003ethewoksoflife.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Fried rice for about \u003cstrong\u003e$1.91 a serving\u003c/strong\u003e (at everyday cost), made in one skillet. Members get every recipe in the Meal Prep section plus the full library of money lessons and tools for $1 a month.",
+    "upsell_html":  "Fried rice for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost), made in one skillet. Members get every recipe in the Meal Prep section plus the full library of money lessons and tools for $1 a month.",
     "cost_batch":  10.89,
     "cost_batch_true":  12.97,
     "cost_per_serving":  0.78,
@@ -197,7 +197,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Classic chicken fried rice made with cold day old rice, egg, and green onion, rebuilt for 14 meal prep servings at about $1.91 a bowl (at everyday cost).",
+                 "description":  "Classic chicken fried rice made with cold day old rice, egg, and green onion, rebuilt for 14 meal prep servings at about ${{cost_ps}} a bowl (at everyday cost).",
                  "keywords":  "chicken fried rice, cheap meal prep, leftover rice recipe, budget dinner, one skillet chicken, easy meal prep, high volume meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

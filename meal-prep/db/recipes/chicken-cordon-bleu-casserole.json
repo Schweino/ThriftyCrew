@@ -26,7 +26,7 @@
                  "fat":  29,
                  "cost_ps":  "2.70"
              },
-    "intro_html":  "Real chicken cordon bleu means pounding cutlets flat, rolling them around ham and cheese, breading each one, and praying nothing leaks in the oven. Nobody is doing that fourteen times on a Sunday. This casserole takes the same four flavors, chicken, ham, swiss, and dijon, and layers them in one dish with a cracker topping. Each serving carries 645 calories and \u003cstrong\u003e43 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.70 a serving\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Real chicken cordon bleu means pounding cutlets flat, rolling them around ham and cheese, breading each one, and praying nothing leaks in the oven. Nobody is doing that fourteen times on a Sunday. This casserole takes the same four flavors, chicken, ham, swiss, and dijon, and layers them in one dish with a cracker topping. Each serving carries {{cal}} calories and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3 lb (1307 g)",
                                 "\u003cstrong\u003eDiced Ham (John Morrell (Smithfield)):\u003c/strong\u003e 1.25 lb (529 g)",
@@ -57,7 +57,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $32.87 across 14 servings, roughly $2.35 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $10.81 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.68. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.70 a serving\u003c/strong\u003e (at everyday cost). Ham is the trick on that number, because it adds protein and salt cured flavor for less than chicken costs per pound, which lets the whole dish punch above its price.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Ham is the trick on that number, because it adds protein and salt cured flavor for less than chicken costs per pound, which lets the whole dish punch above its price.",
     "shop_smart":  [
                        "Diced ham is the second biggest line and it earns its place. It brings protein and a cured, salty depth that chicken alone cannot, and it costs less per pound than most cuts of meat in the case.",
                        "Swiss cheese is what makes this cordon bleu rather than generic cheesy chicken. Buy the block and slice or shred it yourself, since pre-shredded swiss is usually a poor value and does not melt as well.",
@@ -74,9 +74,9 @@
                     "Crush the butter crackers, toss them with the melted butter, and scatter them over the surface in an even layer.",
                     "Bake 30 to 35 minutes until it bubbles around the edges and the topping is golden, then rest 10 minutes before cutting."
                 ],
-    "portion_html":  "Score the bake into 14 even squares and lift one into each container. Weigh a couple of them to confirm your squares are honest, since the corners always look bigger than they are. Every portion lands at \u003cstrong\u003e645 calories\u003c/strong\u003e. Reheat uncovered so the cracker topping crisps instead of going soft.",
+    "portion_html":  "Score the bake into 14 even squares and lift one into each container. Weigh a couple of them to confirm your squares are honest, since the corners always look bigger than they are. Every portion lands at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e. Reheat uncovered so the cracker topping crisps instead of going soft.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.plainchicken.com/easy-chicken-cordon-bleu-casserole/\" target=\"_blank\" rel=\"noopener\"\u003eplainchicken.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "All the cordon bleu flavor with none of the rolling and breading, for about \u003cstrong\u003e$2.70 a serving\u003c/strong\u003e (at everyday cost). Members get every recipe in the Meal Prep section plus the full library of money lessons and tools for $1 a month.",
+    "upsell_html":  "All the cordon bleu flavor with none of the rolling and breading, for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Members get every recipe in the Meal Prep section plus the full library of money lessons and tools for $1 a month.",
     "cost_batch":  24.93,
     "cost_batch_true":  32.87,
     "cost_per_serving":  1.78,
@@ -193,7 +193,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Chicken cordon bleu casserole with ham, swiss, dijon, and a buttery cracker topping over rice, rebuilt for 14 meal prep servings at about $2.70 a serving (at everyday cost).",
+                 "description":  "Chicken cordon bleu casserole with ham, swiss, dijon, and a buttery cracker topping over rice, rebuilt for 14 meal prep servings at about ${{cost_ps}} a serving (at everyday cost).",
                  "keywords":  "chicken cordon bleu casserole, ham and swiss chicken bake, cracker topped casserole, budget casserole, cheap meal prep, make ahead dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

@@ -19,7 +19,7 @@
                  "fat":  15,
                  "cost_ps":  "2.26"
              },
-    "intro_html":  "Crispy-coated chicken baked in a glossy sweet and sour sauce, no deep fryer and no delivery fee. Each bowl brings \u003cstrong\u003e37 grams of protein\u003c/strong\u003e and 678 calories for about \u003cstrong\u003e$2.26\u003c/strong\u003e (at everyday cost). It is a takeout favorite you can make at home for a fraction of the delivery price.",
+    "intro_html":  "Crispy-coated chicken baked in a glossy sweet and sour sauce, no deep fryer and no delivery fee. Each bowl brings \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). It is a takeout favorite you can make at home for a fraction of the delivery price.",
     "ingredients_display": ["\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 4 lb (1867 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tbsp (9 g)","\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 3.5 cups (448 g)","\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 7 large eggs (350 g)","\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1.75 cups (336 g)","\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 0.5 cups (160 g)","\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 0.5 cups (140 g)","\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 0.5 cups (140 g)","\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 2.25 tbsp (37 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.75 tbsp (7 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.5 cups (127 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4 cups dry (700 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -38,7 +38,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $18.00 across 14 servings, roughly $1.29 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $16.70 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $34.70. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.26 a bowl\u003c/strong\u003e (at everyday cost) for sweet and sour chicken that costs far more as a takeout combo, and theirs gets soggy in the car.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for sweet and sour chicken that costs far more as a takeout combo, and theirs gets soggy in the car.",
     "shop_smart":  [
                        "Chicken breast in the 5 lb club pack is the price-per-pound winner, and the extra pound goes in the freezer for next week\u0027s batch.",
                        "Cornstarch, sugar, ketchup, and vinegar are all pantry cheapos that last many batches, so the real recurring cost of this dish is basically just the chicken and eggs.",
@@ -54,9 +54,9 @@
                     "While it bakes, cook the rice with water per package directions.",
                     "Combine the rice and glazed chicken in your big pot, scraping every bit of sauce out of the baking dishes."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty-pot weight you wrote down, and divide by 14. Portion into 14 containers so every lunch is the same size. Each bowl checks in at \u003cstrong\u003e678 calories and 37 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Weigh the full pot, subtract the empty-pot weight you wrote down, and divide by 14. Portion into 14 containers so every lunch is the same size. Each bowl checks in at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://therecipecritic.com/baked-sweet-and-sour-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eThe Recipe Critic\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $2.26 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  15.42,
     "cost_batch_true":  18,
     "cost_per_serving":  1.1,
@@ -160,7 +160,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Baked sweet and sour chicken meal prep bowls over rice, no deep fryer needed. 678 calories, 37g protein, about $2.26 a serving (at everyday cost). Takeout, dethroned.",
+                 "description":  "Baked sweet and sour chicken meal prep bowls over rice, no deep fryer needed. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a serving (at everyday cost). Takeout, dethroned.",
                  "keywords":  "sweet and sour chicken, baked chicken meal prep, budget meal prep, chinese takeout at home, chicken rice bowls, cheap high protein meals",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

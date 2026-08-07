@@ -20,7 +20,7 @@
                  "fat":  29,
                  "cost_ps":  "3.87"
              },
-    "intro_html":  "Buffalo wings without the wing prices, and a whole lot more protein per bite. This skillet packs 44 grams of protein into a bowl that lands at about $3.87 (at everyday cost). Fourteen servings out of one pan means lunch is handled for the better part of two weeks.",
+    "intro_html":  "Buffalo wings without the wing prices, and a whole lot more protein per bite. This skillet packs {{protein}} grams of protein into a bowl that lands at about ${{cost_ps}} (at everyday cost). Fourteen servings out of one pan means lunch is handled for the better part of two weeks.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 6 lb (2710 g)",
                                 "\u003cstrong\u003eFries (Great Value):\u003c/strong\u003e 8 lb (3579 g)",
@@ -46,7 +46,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $50.41 across 14 servings, roughly $3.60 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $3.72 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.13. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.87 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Buy the store-brand frozen fries. They cook up the same as the name brand and save you real money across four bags.",
                        "One bottle of buffalo sauce covers the whole batch, so skip the fancy small-batch stuff and grab the standard wing sauce.",
@@ -59,7 +59,7 @@
                     "Pile the buffalo turkey over the fries in each container.",
                     "Sprinkle the fat-free cheddar on top while everything is hot so it melts in."
                 ],
-    "portion_html":  "Each of the 14 bowls delivers 44 grams of protein and 670 calories, so it eats like a real meal, not a snack.",
+    "portion_html":  "Each of the 14 bowls delivers {{protein}} grams of protein and {{cal}} calories, so it eats like a real meal, not a snack.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.jillianshealthfuleats.com/buffalo-ground-turkey-skillet/\" target=\"_blank\" rel=\"noopener\"\u003eJillian\u0027s Healthful Eats\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Big flavor, small price, and two weeks of lunches ready to grab. That is a win any way you count it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  45.62,
@@ -137,7 +137,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 670 calories and 44 grams of protein for roughly $3.87 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, buffalo turkey and potato bowls, budget dinner",
                  "costPerServing":  3.87,
                  "recipeIngredient":  [

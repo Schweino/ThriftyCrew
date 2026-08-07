@@ -222,6 +222,23 @@ $script:PHANTOM_CMP = '(?:^|\s)than\s+$'
 # instead of turning mushy" is the ingredient Fries, spelled identically, in the one grammatical slot an
 # ingredient can never occupy. English does not put a bare noun there.
 $script:PHANTOM_SUBJ = '(?:^|\s)(?:it|they|we|you|i|he|she|that|this|which|who)\s+$'
+# A CONSTITUENT of a bought product is not a missing ingredient. baked-ziti's make_it says the turkey
+# "soaks up the tomato flavor" - the marinara IS the tomato, and the matcher reported a phantom Tomato in a
+# recipe that buys Marinara Sauce (the one PHANTOM finding on the live board for weeks, 2026-08-08). Keyed
+# on a token of the OWNED ingredient; the values are foods a step may name that the product accounts for.
+# Deliberately tiny: each entry is a measured false positive, not a food-knowledge project.
+$script:PHANTOM_CONSTITUENT = @{
+  'marinara' = @('tomato')
+  'ketchup'  = @('tomato')
+}
+function Test-FoodConstituent($ownTok, $namTok) {
+  foreach ($o in @($ownTok)) {
+    if ($script:PHANTOM_CONSTITUENT.ContainsKey($o)) {
+      foreach ($n in @($namTok)) { if (@($script:PHANTOM_CONSTITUENT[$o]) -contains $n) { return $true } }
+    }
+  }
+  return $false
+}
 
 function Get-FoodStem([string]$w) {
   <# Plural -> singular, enough for ingredient nouns. The 'oes' arm is not decoration: without it
@@ -340,7 +357,7 @@ function Get-PhantomIngredients($spec, $vocab) {
     }
     if ($made -or -not $said) { continue }
     $cov = $false
-    foreach ($o in $own) { if (Test-FoodCovered $o $v.stem) { $cov = $true; break } }
+    foreach ($o in $own) { if ((Test-FoodCovered $o $v.stem) -or (Test-FoodConstituent $o $v.stem)) { $cov = $true; break } }
     if ($cov) { continue }
     $hits.Add(@{ name = $v.name; said = $said })
   }

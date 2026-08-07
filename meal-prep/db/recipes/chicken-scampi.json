@@ -19,7 +19,7 @@
                  "fat":  38,
                  "cost_ps":  "3.41"
              },
-    "intro_html":  "The Olive Garden favorite, rebuilt at home: golden chicken strips, bell peppers, and red onion over spaghetti in a garlic butter sauce. Each bowl carries \u003cstrong\u003e60 grams of protein\u003c/strong\u003e at 871 calories for about \u003cstrong\u003e$3.41\u003c/strong\u003e (at everyday cost). The restaurant version is mostly butter and pasta anyway, and those are two of the cheapest things you can buy.",
+    "intro_html":  "The Olive Garden favorite, rebuilt at home: golden chicken strips, bell peppers, and red onion over spaghetti in a garlic butter sauce. Each bowl carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e at {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). The restaurant version is mostly butter and pasta anyway, and those are two of the cheapest things you can buy.",
     "ingredients_display": ["\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2778 g)","\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1.75 cups (219 g)","\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6 tbsp (84 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 4 tbsp (70 g)","\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.5 peppers (420 g)","\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 2 peppers (210 g)","\u003cstrong\u003eRed Onion:\u003c/strong\u003e 1.7 onions (192 g)","\u003cstrong\u003eSpaghetti (Great Value):\u003c/strong\u003e 36 oz dry (1021 g)","\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1.75 cups (392 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (201 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 7 tbsp (60 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3.75 lb (1680 g)","\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 2 lemons worth (105 g)","\u003cstrong\u003eDried Parsley (Great Value):\u003c/strong\u003e 3.25 tbsp (5 g)","\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)","\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 4.25 oz (120 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -40,7 +40,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $36.81 across 14 servings, roughly $2.63 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $14.38 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.19. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.41 a bowl\u003c/strong\u003e (at everyday cost) for chicken scampi that would run you $16 to $18 with breadsticks and a tip at the chain that made it famous. Fourteen bowls for the price of two restaurant plates is the whole argument.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for chicken scampi that would run you $16 to $18 with breadsticks and a tip at the chain that made it famous. Fourteen bowls for the price of two restaurant plates is the whole argument.",
     "shop_smart":  "Six pounds of chicken breast is the anchor here. Club packs are the play; small grocery trays can run nearly double the per-pound price.\nStore-brand spaghetti covers 36 ounces for the same job. Pasta is one of the last places in the store where a name brand buys you almost nothing.\nOne pound of butter makes the entire sauce rich. Compare that to a jar of alfredo that costs more and would only cover half the batch.",
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -52,9 +52,9 @@
                     "Return the chicken, peppers, and onions, then toss with the spaghetti and half the parmesan.",
                     "Portion into 14 containers and top with the remaining parmesan."
                 ],
-    "portion_html":  "Weigh the loaded pot, subtract the empty pot number you wrote down, and divide by 14. Scale that into each container. Every bowl comes in around 871 calories with 60 grams of protein.",
+    "portion_html":  "Weigh the loaded pot, subtract the empty pot number you wrote down, and divide by 14. Scale that into each container. Every bowl comes in around {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.threeolivesbranch.com/copycat-olive-garden-chicken-scampi/\" target=\"_blank\" rel=\"noopener\"\u003eThree Olives Branch\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $3.41 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  30.09,
     "cost_batch_true":  36.81,
     "cost_per_serving":  2.15,
@@ -186,7 +186,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Copycat chicken scampi meal prep with garlic butter sauce and peppers. 14 bowls at 871 calories and 60g protein each, about $3.41 a serving (at everyday cost).",
+                 "description":  "Copycat chicken scampi meal prep with garlic butter sauce and peppers. 14 bowls at {{cal}} calories and {{protein}}g protein each, about ${{cost_ps}} a serving (at everyday cost).",
                  "keywords":  "chicken scampi, olive garden copycat, garlic butter pasta, budget meal prep, high protein pasta, cheap dinner recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

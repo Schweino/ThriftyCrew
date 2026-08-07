@@ -59,7 +59,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $20.07 across 14 servings, roughly $1.43 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $13.08 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $33.15. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.37 a bowl\u003c/strong\u003e (at everyday cost). A block of achiote paste costs a few dollars, lasts through several batches, and does flavor work you cannot buy any other way.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). A block of achiote paste costs a few dollars, lasts through several batches, and does flavor work you cannot buy any other way.",
     "shop_smart":  [
                        "\u003cstrong\u003eAchiote paste is the whole flavor and it is cheap.\u003c/strong\u003e Look for the small red brick in the Hispanic aisle. One block seasons this batch and several more after it, so the per serving cost is tiny.",
                        "\u003cstrong\u003eOrange juice, vinegar and lime stand in for sour orange.\u003c/strong\u003e Real sour orange is hard to find outside a Latin market. This combination is what every cook in the States uses and it costs pennies.",
@@ -75,9 +75,9 @@
                     "Shred the pork right in the cooking liquid so it soaks the sauce back up. Do not drain it, that red liquid is the whole point.",
                     "Cook the rice per the package and warm the tortillas just before you assemble."
                 ],
-    "portion_html":  "Spread the cooked rice across your 14 containers, then set your mixing pot of shredded pork and its juices on the scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight over the rice. Top each with the pickled onion and pack the tortillas alongside. Every bowl lands near 618 calories with 29 grams of protein.",
+    "portion_html":  "Spread the cooked rice across your 14 containers, then set your mixing pot of shredded pork and its juices on the scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight over the rice. Top each with the pickled onion and pack the tortillas alongside. Every bowl lands near {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thelemonbowl.com/slow-cooker-cochinita-pibil/\" target=\"_blank\" rel=\"noopener\"\u003ethelemonbowl.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cem\u003eYucatecan slow cooker pork for about $2.37 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "upsell_html":  "\u003cem\u003eYucatecan slow cooker pork for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  14.09,
     "cost_batch_true":  20.07,
     "cost_per_serving":  1.01,

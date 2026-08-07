@@ -20,7 +20,7 @@
                  "fat":  13,
                  "cost_ps":  "2.29"
              },
-    "intro_html":  "Gochujang brings sweet heat and a deep savory kick, and it turns cheap pork loin into something that tastes like takeout. Each bowl packs 56 grams of protein over rice and broccoli for about $2.29 (at everyday cost). Fourteen servings at that price is the kind of math that keeps money in your pocket.",
+    "intro_html":  "Gochujang brings sweet heat and a deep savory kick, and it turns cheap pork loin into something that tastes like takeout. Each bowl packs {{protein}} grams of protein over rice and broccoli for about ${{cost_ps}} (at everyday cost). Fourteen servings at that price is the kind of math that keeps money in your pocket.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3300 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (640 g)",
@@ -43,7 +43,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $25.09 across 14 servings, roughly $1.79 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $6.99 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $32.08. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.29 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  "Pork loin is your cheap workhorse. It costs about half what tenderloin does and shreds up just as nicely.\nA tub of gochujang looks pricey up front, but you use a little at a time. One tub flavors several batches, so the real cost per meal is tiny.\nGrab frozen broccoli florets instead of fresh. They are cheaper, they never spoil on you, and they steam straight from the bag.",
     "make_it":  [
                     "Set the pork loin in the slow cooker.",
@@ -53,7 +53,7 @@
                     "Steam the broccoli florets until just tender and set aside.",
                     "Serve the pork and broccoli over cooked white rice and portion out."
                 ],
-    "portion_html":  "Each of the 14 servings comes in around 576 calories with 56 grams of protein.",
+    "portion_html":  "Each of the 14 servings comes in around {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theendlessmeal.com/crock-pot-korean-gochujang-pork/\" target=\"_blank\" rel=\"noopener\"\u003eThe Endless Meal\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Big flavor, small price, and it hits that sweet-and-spicy spot every single time. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  23.13,
@@ -117,7 +117,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Korean meal prep. Fourteen servings at about 576 calories and 56 grams of protein for roughly $2.29 each (at everyday cost).",
+                 "description":  "A high-protein Korean meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker korean gochujang pork bowls, budget dinner",
                  "costPerServing":  2.29,
                  "recipeIngredient":  [

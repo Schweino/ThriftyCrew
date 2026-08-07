@@ -28,7 +28,7 @@
                  "fat":  15,
                  "cost_ps":  "4.23"
              },
-    "intro_html":  "This is the rotisserie chicken shortcut done right. You pull the meat off a store bird, fold it into onion, pepper and spinach, and bind the whole thing with a cool tomatillo salsa verde and a blended cottage cheese crema that hits like sour cream for a fraction of the fat. Each burrito lands \u003cstrong\u003eunder 400 calories with a full 4 ounces of meat\u003c/strong\u003e, carries \u003cstrong\u003e40 grams of protein\u003c/strong\u003e, and rides on a high fiber tortilla with 18 grams of fiber for about 5 grams of net carb. We already have a Salsa Verde Chicken Burrito Bowl on the site; this is its wrapped cousin, built on pulled rotisserie instead of cooked breast and finished with the cottage cheese crema instead of a plain scoop of rice.",
+    "intro_html":  "This is the rotisserie chicken shortcut done right. You pull the meat off a store bird, fold it into onion, pepper and spinach, and bind the whole thing with a cool tomatillo salsa verde and a blended cottage cheese crema that hits like sour cream for a fraction of the fat. Each burrito lands \u003cstrong\u003eunder 400 calories with a full 4 ounces of meat\u003c/strong\u003e, carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, and rides on a high fiber tortilla with 18 grams of fiber for about 5 grams of net carb. We already have a Salsa Verde Chicken Burrito Bowl on the site; this is its wrapped cousin, built on pulled rotisserie instead of cooked breast and finished with the cottage cheese crema instead of a plain scoop of rice.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eRotisserie Chicken (skin removed):\u003c/strong\u003e 2.62 lb (1190 g)",
@@ -67,7 +67,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $44.51 across 14 servings, roughly $3.18 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $14.60 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.11. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.23 a burrito\u003c/strong\u003e (at everyday cost) for a rotisserie shortcut that tastes like you worked harder than you did. The bird does the heavy lifting, the crema costs pennies, and the tortilla keeps the carbs low.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) for a rotisserie shortcut that tastes like you worked harder than you did. The bird does the heavy lifting, the crema costs pennies, and the tortilla keeps the carbs low.",
     "shop_smart":  [
                        "Rotisserie birds are the cheat code here. Two birds pull enough skinless meat for the batch and usually cost less than the same weight of raw breast once you factor in that they are already cooked. Pull the skin off before you weigh so the numbers stay honest.",
                        "Cottage cheese is the quiet hero of this crema. Buy the tub, not the individual cups, and blend it smooth so nobody at the table knows it is not sour cream.",
@@ -84,9 +84,9 @@
                     "Set the filling bowl on the scale, subtract the empty weight, and divide the number by 14. Lay a stripe of that much filling down each tortilla, spoon on a share of the crema, fold in the sides and roll tight.",
                     "Wrap each burrito in foil or parchment and portion into containers."
                 ],
-    "portion_html":  "The honest way to keep 14 burritos equal is to weigh the filling, not eyeball the scoop. Set the bowl on the scale, subtract the empty weight, divide by 14, and give each tortilla that much before you add the crema and roll. Each burrito carries \u003cstrong\u003e390 calories and 40 grams of protein\u003c/strong\u003e. Reheat wrapped for a minute, then open and crisp the seam in a dry pan if you like.",
+    "portion_html":  "The honest way to keep 14 burritos equal is to weigh the filling, not eyeball the scoop. Set the bowl on the scale, subtract the empty weight, divide by 14, and give each tortilla that much before you add the crema and roll. Each burrito carries \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e. Reheat wrapped for a minute, then open and crisp the seam in a dry pan if you like.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.anediblemosaic.com/chicken-meal-prep-burritos-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eanediblemosaic.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Salsa verde chicken burritos, 14 wrapped and ready, for about $4.23 each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
+    "upsell_html":  "Salsa verde chicken burritos, 14 wrapped and ready, for about ${{cost_ps}} each (at everyday cost). This is one of a few hundred recipes on the site. Members get the whole Meal Prep section plus every money lesson, calculator, and tool for $1 a month.",
     "cost_batch":  33.01,
     "cost_batch_true":  44.51,
     "cost_per_serving":  2.36,
@@ -227,7 +227,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Salsa verde chicken burritos built on skinless rotisserie meat, spinach, peppers and a blended cottage cheese crema. 14 wrapped at 390 calories, 40g protein, about $4.23 (at everyday cost).",
+                 "description":  "Salsa verde chicken burritos built on skinless rotisserie meat, spinach, peppers and a blended cottage cheese crema. 14 wrapped at {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} (at everyday cost).",
                  "keywords":  "salsa verde chicken burrito, rotisserie chicken burrito, high protein meal prep burrito, cottage cheese crema, low calorie burrito, budget chicken burrito",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

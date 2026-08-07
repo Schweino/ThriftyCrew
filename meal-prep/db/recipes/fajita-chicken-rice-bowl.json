@@ -20,7 +20,7 @@
                  "fat":  12,
                  "cost_ps":  "2.78"
              },
-    "intro_html":  "A high-protein, low-fat Tex-Mex chicken, rice, black bean, and pepper meal prep. Fourteen servings at about 610 calories and 48 grams of protein for roughly $2.78 each (at everyday cost).",
+    "intro_html":  "A high-protein, low-fat Tex-Mex chicken, rice, black bean, and pepper meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 5.5 lb raw (2495 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 5 1/4 cups (910 g)",
@@ -43,7 +43,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $32.62 across 14 servings, roughly $2.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $6.25 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $38.87. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "That\u0027s about \u003cstrong\u003e$2.78 a bowl\u003c/strong\u003e (at everyday cost), versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a single fast-casual fajita bowl.",
+    "cost_closing_html":  "That\u0027s about \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost), versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a single fast-casual fajita bowl.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy chicken when it\u0027s on sale, then freeze it.\u003c/strong\u003e Stores drop chicken to a sale price at random. We recently grabbed 50 lbs on a deep markdown instead of our usual shelf price and loaded the deep freezer. At about 5.5 lbs per batch, that one buy makes about 9 batches, or roughly 63 nights of dinner for two.",
                        "\u003cstrong\u003eThe seasoning is your priciest line per ounce.\u003c/strong\u003e Six Taco Bell packets are what drives that. A store-brand fajita or taco seasoning is a fraction of the cost, and mixing your own from chili powder, cumin, paprika, garlic, and onion powder costs pennies. Just know the macros shift a little if you swap.",
@@ -59,9 +59,9 @@
                     "Warm the black beans through.",
                     "Combine the rice, seasoned chicken and vegetables, and beans back in the big pot and stir."
                 ],
-    "portion_html":  "Set the full pot on your large scale and subtract the empty-pot weight you noted in Step 1. That\u0027s your total food weight. Divide it by 14, then scoop that amount into each glass container. Every bowl lands right at about 610 cal and 48g protein.",
+    "portion_html":  "Set the full pot on your large scale and subtract the empty-pot weight you noted in Step 1. That\u0027s your total food weight. Divide it by 14, then scoop that amount into each glass container. Every bowl lands right at about {{cal}} cal and {{protein}}g protein.",
     "credit_html":  "",
-    "upsell_html":  "Two weeks of high-protein dinners for about $2.78 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money, work, and life lessons, all for $1 a month.",
+    "upsell_html":  "Two weeks of high-protein dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money, work, and life lessons, all for $1 a month.",
     "cost_batch":  30.36,
     "cost_batch_true":  32.62,
     "cost_per_serving":  2.17,
@@ -123,7 +123,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein, low-fat Tex-Mex chicken, rice, black bean, and pepper meal prep. Fourteen servings at about 610 calories and 48 grams of protein for roughly $2.78 each (at everyday cost).",
+                 "description":  "A high-protein, low-fat Tex-Mex chicken, rice, black bean, and pepper meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, fajita chicken, budget dinner, tex-mex meal prep",
                  "costPerServing":  2.78,
                  "recipeIngredient":  [

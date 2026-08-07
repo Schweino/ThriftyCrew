@@ -20,7 +20,7 @@
                  "fat":  19,
                  "cost_ps":  "4.72"
              },
-    "intro_html":  "Bright, zesty, and a little addictive, this Thai-style larb is proof that healthy prep never has to be boring. Each bowl brings 50 grams of protein for about $4.72 a serving (at everyday cost). One skillet makes 14 servings.",
+    "intro_html":  "Bright, zesty, and a little addictive, this Thai-style larb is proof that healthy prep never has to be boring. Each bowl brings {{protein}} grams of protein for about ${{cost_ps}} a serving (at everyday cost). One skillet makes 14 servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 8 lb (3300 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (950 g)",
@@ -51,7 +51,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $52.15 across 14 servings, roughly $3.72 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $13.90 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $66.05. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.72 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The \u003cstrong\u003e8 lb ground turkey pack\u003c/strong\u003e is your best value, so buy the big size and portion it out.",
                        "A \u003cstrong\u003ebottle of lime juice\u003c/strong\u003e is cheaper than fresh limes for a big batch and lasts a long time in the fridge.",
@@ -65,7 +65,7 @@
                     "Fold in the chopped fresh cilantro and fresh mint so they stay bright. Those herbs are half of what makes this larb, not a garnish set on the side.",
                     "Serve it over cooked white rice with extra lime on the side."
                 ],
-    "portion_html":  "Each of the 14 bowls gives you 50 grams of protein and about 642 calories.",
+    "portion_html":  "Each of the 14 bowls gives you {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.trifectanutrition.com/blog/paleo-thai-turkey-larb-recipe\" target=\"_blank\" rel=\"noopener\"\u003eTrifecta Nutrition\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Fresh, punchy, and cheap, this is the bowl that keeps your taste buds interested all week. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  45.61,
@@ -157,7 +157,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Thai meal prep. Fourteen servings at about 642 calories and 50 grams of protein for roughly $4.72 each (at everyday cost).",
+                 "description":  "A high-protein Thai meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, thai turkey larb bowls, budget dinner",
                  "costPerServing":  4.72,
                  "recipeIngredient":  [

@@ -18,7 +18,7 @@
                  "fat":  9,
                  "cost_ps":  "4.44"
              },
-    "intro_html":  "Drunken noodles with ground turkey: all the basil, jalapeno, and chewy rice noodles of pad kee mao, with 9 grams of fat per bowl instead of takeout\u0027s mystery number. Each serving brings \u003cstrong\u003e30 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.44\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Drunken noodles with ground turkey: all the basil, jalapeno, and chewy rice noodles of pad kee mao, with 9 grams of fat per bowl instead of takeout\u0027s mystery number. Each serving brings \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eRice Noodles (Thai Kitchen):\u003c/strong\u003e 45.5 oz dry (1293 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.75 cups (223 g)",
@@ -51,7 +51,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $56.62 across 14 servings, roughly $4.04 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $11.16 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $67.78. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.44 a bowl\u003c/strong\u003e (at everyday cost) for lean drunken noodles. The Thai restaurant charges $14 for pad kee mao, and theirs is not built around 93/7 turkey with macros you can actually track.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for lean drunken noodles. The Thai restaurant charges $14 for pad kee mao, and theirs is not built around 93/7 turkey with macros you can actually track.",
     "shop_smart":  "Rice noodles are the top line here. An Asian market sells wide rice noodles for a fraction of the name-brand box price, and wide noodles are the authentic move for pad kee mao anyway.\nGround turkey across 3.5 pounds beats ground beef on price and fat both. Watch for the frozen rolls, they run cheaper still.\nOyster sauce, fish sauce, and sriracha are all one-bottle buys that season this batch for very little combined and stay in your fridge door for the next ten recipes.",
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -62,9 +62,9 @@
                     "Add the noodles and the sauce and toss until the noodles drink up the sauce and everything is glossy.",
                     "Off the heat, fold in the green onions and fresh basil so they wilt without cooking flat."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty pot weight you wrote down, and divide by 14. Portion to that number and each bowl lands at about 562 calories with 30 grams of protein.",
+    "portion_html":  "Weigh the full pot, subtract the empty pot weight you wrote down, and divide by 14. Portion to that number and each bowl lands at about {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theroastedroot.net/drunken-noodles-pad-kee-mao-with-ground-turkey/\" target=\"_blank\" rel=\"noopener\"\u003eThe Roasted Root\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $4.44 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  48.3,
     "cost_batch_true":  56.62,
     "cost_per_serving":  3.45,
@@ -168,7 +168,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Turkey drunken noodles meal prep: 14 bowls, 562 calories and 30g protein each, about $4.44 a serving (at everyday cost). Lean pad kee mao with basil and jalapeno heat.",
+                 "description":  "Turkey drunken noodles meal prep: 14 bowls, {{cal}} calories and {{protein}}g protein each, about ${{cost_ps}} a serving (at everyday cost). Lean pad kee mao with basil and jalapeno heat.",
                  "keywords":  "turkey drunken noodles, pad kee mao, ground turkey recipe, lean noodle meal prep, thai turkey noodles, budget thai",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

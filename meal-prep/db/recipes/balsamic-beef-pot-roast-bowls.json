@@ -27,7 +27,7 @@
                  "fat":  36,
                  "cost_ps":  "4.92"
              },
-    "intro_html":  "Balsamic vinegar does something to beef that salt alone cannot. It cuts the richness, it caramelizes into the gravy over a long cook, and it turns a plain chuck roast into something sweet, tangy, and a little bit fancy for the price of a bottle of vinegar. Each bowl carries \u003cstrong\u003e38 grams of protein\u003c/strong\u003e and 665 calories for about \u003cstrong\u003e$4.92\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Balsamic vinegar does something to beef that salt alone cannot. It cuts the richness, it caramelizes into the gravy over a long cook, and it turns a plain chuck roast into something sweet, tangy, and a little bit fancy for the price of a bottle of vinegar. Each bowl carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 5.25 lb (2381 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.5 tbsp (49 g)",
@@ -55,7 +55,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $55.00 across 14 servings, roughly $3.93 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $19.72 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $74.72. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.92 a bowl\u003c/strong\u003e (at everyday cost). Seven ingredients, most of them already in your kitchen, and the only one you might not own keeps for years once you buy it.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Seven ingredients, most of them already in your kitchen, and the only one you might not own keeps for years once you buy it.",
     "shop_smart":  [
                        "Store brand balsamic vinegar is the right buy here. Expensive aged balsamic is meant to be drizzled cold, and eight hours in a slow cooker erases everything you paid extra for.",
                        "Chuck roast is the cut. The vinegar and the long braise handle the toughness, so paying up for a tender cut is money set on fire.",
@@ -72,9 +72,9 @@
                     "Shred the beef in the cooker and stir it through the balsamic gravy, letting it sit 10 minutes so the meat drinks some back up.",
                     "Cook the rice separately and keep it plain so the vinegar has something to land on."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of shredded beef and gravy into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e665 calories with 38 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of shredded beef and gravy into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-balsamic-beef-pot-roast/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Balsamic pot roast for about $4.92 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Balsamic pot roast for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  47.98,
     "cost_batch_true":  55,
     "cost_per_serving":  3.43,
@@ -175,7 +175,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Slow cooker balsamic beef pot roast meal prep: seared chuck roast braised 8 hours in balsamic vinegar, garlic, and herbs over rice. 665 calories, 38g protein, about $4.92 per serving (at everyday cost).",
+                 "description":  "Slow cooker balsamic beef pot roast meal prep: seared chuck roast braised 8 hours in balsamic vinegar, garlic, and herbs over rice. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "balsamic pot roast, slow cooker beef, balsamic beef, shredded beef bowls, budget meal prep, chuck roast recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",

@@ -26,7 +26,7 @@
                  "fat":  30,
                  "cost_ps":  "4.18"
              },
-    "intro_html":  "Mississippi pot roast is the most searched chuck roast recipe in America, and there is a reason: you put five things in a slow cooker, add no liquid at all, walk away, and come back to beef that falls apart under a fork. Ranch, gravy mix, butter, and pepperoncini do all of it. Each bowl carries \u003cstrong\u003e40 grams of protein\u003c/strong\u003e and 629 calories for about \u003cstrong\u003e$4.18\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Mississippi pot roast is the most searched chuck roast recipe in America, and there is a reason: you put five things in a slow cooker, add no liquid at all, walk away, and come back to beef that falls apart under a fork. Ranch, gravy mix, butter, and pepperoncini do all of it. Each bowl carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 5.5 lb (2540 g)",
                                 "\u003cstrong\u003eRanch Seasoning Mix (Hidden Valley):\u003c/strong\u003e 5.75 tbsp (40 g)",
@@ -50,7 +50,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $54.02 across 14 servings, roughly $3.86 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.44 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.46. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.18 a bowl\u003c/strong\u003e (at everyday cost) for a dinner with a ten minute prep. The chuck roast is nearly the whole cost, so this is a recipe that rewards buying beef on the dip.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a dinner with a ten minute prep. The chuck roast is nearly the whole cost, so this is a recipe that rewards buying beef on the dip.",
     "shop_smart":  [
                        "Chuck roast is the correct cut and the cheap one. Do not substitute a lean roast, because there is no added liquid here and the fat in the chuck is what keeps it moist.",
                        "Ranch seasoning and gravy mix both come in multi packet boxes that cost less per packet than the singles. They keep in the pantry indefinitely.",
@@ -67,9 +67,9 @@
                     "Shred the beef with two forks directly in the cooker and stir it through the gravy that has collected at the bottom.",
                     "Cook the rice separately and keep it plain, because the gravy is doing plenty."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of shredded beef and gravy into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e629 calories with 40 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Spoon that weight of shredded beef and gravy into each container, then add the same weight of rice to every one. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/mississippi-pot-roast/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Slow cooker pot roast for about $4.18 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Slow cooker pot roast for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  48.89,
     "cost_batch_true":  54.02,
     "cost_per_serving":  3.49,
@@ -146,7 +146,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Mississippi pot roast meal prep: chuck roast slow cooked with ranch mix, gravy mix, butter, and pepperoncini, shredded over rice. 629 calories, 40g protein, about $4.18 per serving (at everyday cost).",
+                 "description":  "Mississippi pot roast meal prep: chuck roast slow cooked with ranch mix, gravy mix, butter, and pepperoncini, shredded over rice. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "mississippi pot roast, slow cooker pot roast, shredded beef bowls, ranch pot roast, budget meal prep, chuck roast recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT10M",

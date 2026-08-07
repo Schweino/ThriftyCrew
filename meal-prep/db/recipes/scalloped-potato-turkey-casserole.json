@@ -26,7 +26,7 @@
                  "fat":  20,
                  "cost_ps":  "2.76"
              },
-    "intro_html":  "Scalloped potatoes are just thin potato slices baked in seasoned dairy until they collapse into layers. Add turkey and cheddar and it stops being a side dish and becomes dinner. Each serving carries \u003cstrong\u003e38 grams of protein\u003c/strong\u003e and 562 calories for about \u003cstrong\u003e$2.76\u003c/strong\u003e (at everyday cost). Potatoes are the cheapest thing in the produce section by a wide margin, and this pan uses most of a nine pound bag.",
+    "intro_html":  "Scalloped potatoes are just thin potato slices baked in seasoned dairy until they collapse into layers. Add turkey and cheddar and it stops being a side dish and becomes dinner. Each serving carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). Potatoes are the cheapest thing in the produce section by a wide margin, and this pan uses most of a nine pound bag.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 18.5 potatoes (3940 g)",
                                 "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 2.75 lb (1270 g)",
@@ -56,7 +56,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $31.78 across 14 servings, roughly $2.27 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $8.82 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $40.60. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.76 a serving\u003c/strong\u003e (at everyday cost). Nearly a third of the food weight in this pan is potato, which is exactly why the number lands where it does.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Nearly a third of the food weight in this pan is potato, which is exactly why the number lands where it does.",
     "shop_smart":  [
                        "Buy the largest sack of potatoes the store sells. This bake runs through most of a 9 lb bag, and loose potatoes cost noticeably more per pound.",
                        "A mandoline is not required but a steady hand is. Even slices are the difference between creamy layers and a pan with raw spots, and thin slices cook faster and cost the same.",
@@ -73,9 +73,9 @@
                     "Cover with foil and bake at 375F for 50 minutes, then uncover, add the last of the cheddar, and bake 20 to 25 minutes more until the top is browned and a knife slides through with no resistance.",
                     "Rest 20 minutes before portioning. Scalloped potatoes need that time to firm up or they will slide apart on the spatula."
                 ],
-    "portion_html":  "Weigh the pan, subtract the empty pan weight, and divide by 14. Cut squares to the scale and lift them with a wide spatula so the layers stay stacked. Each serving comes to \u003cstrong\u003e562 calories\u003c/strong\u003e and 38 grams of protein.",
+    "portion_html":  "Weigh the pan, subtract the empty pan weight, and divide by 14. Cut squares to the scale and lift them with a wide spatula so the layers stay stacked. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://12tomatoes.com/cs-potato-turkey-casserole-move/\" target=\"_blank\" rel=\"noopener\"\u003e12tomatoes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "A layered potato and turkey bake for about $2.76 a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "upsell_html":  "A layered potato and turkey bake for about ${{cost_ps}} a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
     "cost_batch":  24.3,
     "cost_batch_true":  31.78,
     "cost_per_serving":  1.74,
@@ -176,7 +176,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Scalloped potato turkey casserole meal prep: thin potato layers with turkey and cheddar in a Dijon custard. 562 calories, 38g protein, about $2.76 a serving (at everyday cost).",
+                 "description":  "Scalloped potato turkey casserole meal prep: thin potato layers with turkey and cheddar in a Dijon custard. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a serving (at everyday cost).",
                  "keywords":  "scalloped potato casserole, turkey potato bake, leftover turkey recipes, cheap potato dinner, high protein casserole, budget meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",

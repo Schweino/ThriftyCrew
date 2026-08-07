@@ -62,7 +62,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $41.16 across 14 servings, roughly $2.94 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $12.16 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.32. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.82 a bowl\u003c/strong\u003e (at everyday cost). The pork and the cheese are the two real costs here, and the beans, corn and tortillas that fill out the pan are close to free per serving.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). The pork and the cheese are the two real costs here, and the beans, corn and tortillas that fill out the pan are close to free per serving.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy the block of cheddar and shred it.\u003c/strong\u003e This bake uses a lot of cheese, and block cheese runs cheaper per ounce than bagged shreds while melting noticeably better.",
                        "\u003cstrong\u003eCorn tortillas over flour for a layered bake.\u003c/strong\u003e They cost less, they hold their structure under sauce, and they will not go gummy in the middle of the pan.",
@@ -78,9 +78,9 @@
                     "Finish with tortillas, the last of the enchilada sauce and a heavy layer of cheddar on top.",
                     "Bake at 375F for 30 to 35 minutes until it bubbles at the edges, then let it rest 15 minutes before cutting so the layers set."
                 ],
-    "portion_html":  "Weigh the finished bake in its pan, subtract the pan weight, divide by 14, and cut squares to that exact weight instead of eyeballing them. Every serving lands near 922 calories with 47 grams of protein, which makes this one of the biggest plates in the section.",
+    "portion_html":  "Weigh the finished bake in its pan, subtract the pan weight, divide by 14, and cut squares to that exact weight instead of eyeballing them. Every serving lands near {{cal}} calories with {{protein}} grams of protein, which makes this one of the biggest plates in the section.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.theseasonedmom.com/pulled-pork-enchiladas/\" target=\"_blank\" rel=\"noopener\"\u003etheseasonedmom.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cem\u003eLayered enchiladas with pulled pork for about $3.82 a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "upsell_html":  "\u003cem\u003eLayered enchiladas with pulled pork for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  34.42,
     "cost_batch_true":  41.16,
     "cost_per_serving":  2.46,

@@ -30,7 +30,7 @@
                  "fat":  22,
                  "cost_ps":  "4.52"
              },
-    "intro_html":  "Moussaka is the Greek casserole everybody admires and almost nobody makes, because it has three parts and a reputation. Here is the truth: roasted eggplant, a cinnamon-warmed turkey tomato sauce, and a bechamel you whisk in eight minutes. Bake it, cut it into squares, set each square over rice, and you have \u003cstrong\u003e575 calories and 29 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.52\u003c/strong\u003e a container (at everyday cost).",
+    "intro_html":  "Moussaka is the Greek casserole everybody admires and almost nobody makes, because it has three parts and a reputation. Here is the truth: roasted eggplant, a cinnamon-warmed turkey tomato sauce, and a bechamel you whisk in eight minutes. Bake it, cut it into squares, set each square over rice, and you have \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 6.75 tbsp (92 g)",
                                 "\u003cstrong\u003eEggplant:\u003c/strong\u003e 8.3 eggplants (3754 g)",
@@ -73,7 +73,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $44.80 across 14 servings, roughly $3.20 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $23.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $68.78. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.52\u003c/strong\u003e a container (at everyday cost) for a dish restaurants treat as a special occasion. The eggplant is the single biggest line on the list, and it is still a vegetable.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost) for a dish restaurants treat as a special occasion. The eggplant is the single biggest line on the list, and it is still a vegetable.",
     "shop_smart":  [
                        "Eggplant is the biggest line on this list, so buy it in season when the price per each drops. Late summer is when it practically gives itself away in the Midwest.",
                        "The bechamel is butter, flour, milk, an egg, and a little parmesan. That is a small pile of dairy doing the job of a sauce most people think is fancy.",
@@ -91,9 +91,9 @@
                     "Bake at 350F for 45 minutes until the top is set and golden, then let it rest at least 20 minutes so the squares hold together when you cut them.",
                     "Cut the moussaka into 14 even squares and move them into your weighed containers."
                 ],
-    "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed in each container. Lay one moussaka square on top of each bed and you are done, no guessing required. Each portion lands at \u003cstrong\u003e575 calories and 29 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed in each container. Lay one moussaka square on top of each bed and you are done, no guessing required. Each portion lands at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://coleycooks.com/turkey-moussaka/\" target=\"_blank\" rel=\"noopener\"\u003ecoleycooks.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Greek moussaka for about \u003cstrong\u003e$4.52\u003c/strong\u003e a container (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Greek moussaka for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e a container (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  32.86,
     "cost_batch_true":  44.8,
     "cost_per_serving":  2.35,
@@ -266,7 +266,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Greek turkey moussaka meal prep: roasted eggplant, cinnamon turkey tomato sauce, and bechamel, cut into squares over rice. 575 calories, 29g protein, about $4.52 a serving (at everyday cost).",
+                 "description":  "Greek turkey moussaka meal prep: roasted eggplant, cinnamon turkey tomato sauce, and bechamel, cut into squares over rice. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a serving (at everyday cost).",
                  "keywords":  "turkey moussaka, greek casserole, eggplant casserole, turkey meal prep, budget meal prep, bechamel",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",

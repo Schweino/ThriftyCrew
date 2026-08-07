@@ -26,7 +26,7 @@
                  "fat":  27,
                  "cost_ps":  "3.38"
              },
-    "intro_html":  "Gai pad med mamuang is Thai cashew chicken, and the thing that makes it different from every Chinese cashew dish is the seasoning: fish sauce instead of just soy, and a lot more of it. Peppers and onion stay crunchy, the cashews get toasted first so they stay crisp instead of going soft, and the sauce is thin and salty rather than thick and gloppy. Each bowl comes in at \u003cstrong\u003e606 calories and 34 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.38\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Gai pad med mamuang is Thai cashew chicken, and the thing that makes it different from every Chinese cashew dish is the seasoning: fish sauce instead of just soy, and a lot more of it. Peppers and onion stay crunchy, the cashews get toasted first so they stay crisp instead of going soft, and the sauce is thin and salty rather than thick and gloppy. Each bowl comes in at \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3 lb (1323 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.5 cups (131 g)",
@@ -62,7 +62,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $37.29 across 14 servings, roughly $2.66 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $13.80 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.09. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.38 a bowl\u003c/strong\u003e (at everyday cost). Cashews are the second biggest line after the chicken, and there is no way around that, because a cashew chicken without enough cashews is just a stir fry with regrets.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Cashews are the second biggest line after the chicken, and there is no way around that, because a cashew chicken without enough cashews is just a stir fry with regrets.",
     "shop_smart":  [
                        "Cashews are the expensive part. Buy them from the bulk bin or in a large bag rather than in the small cans on the snack aisle, where you pay a premium for the packaging and nothing else.",
                        "Toast the cashews in a dry pan before they go in. It costs nothing, takes three minutes, and doubles how much they taste like cashews, which matters when they are the priciest thing in the pan.",
@@ -79,9 +79,9 @@
                     "Return the chicken, pour in the sauce, and toss for a minute until everything is coated and the liquid has reduced to a glaze.",
                     "Kill the heat and fold in the toasted cashews and the green onions, then combine with the rice in your mixing pot."
                 ],
-    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Fourteen equal containers. Each one carries \u003cstrong\u003e606 calories\u003c/strong\u003e, and if you want the cashews crunchy all week, hold half of them out and drop them on top after reheating.",
+    "portion_html":  "Set the pot on the scale, subtract the empty-pot weight, and divide by 14. Fourteen equal containers. Each one carries \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e, and if you want the cashews crunchy all week, hold half of them out and drop them on top after reheating.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://rasamalaysia.com/thai-cashew-chicken/\" target=\"_blank\" rel=\"noopener\"\u003erasamalaysia.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Thai cashew chicken over rice for about $3.38 a bowl (at everyday cost). This is one of a few hundred recipes here. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Thai cashew chicken over rice for about ${{cost_ps}} a bowl (at everyday cost). This is one of a few hundred recipes here. Members get every recipe in the Meal Prep section plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  29.81,
     "cost_batch_true":  37.29,
     "cost_per_serving":  2.13,
@@ -206,7 +206,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Thai cashew chicken with toasted cashews, peppers and a fish sauce glaze over rice. Built as 14 meal prep bowls at 606 calories, 34g protein, about $3.38 each (at everyday cost).",
+                 "description":  "Thai cashew chicken with toasted cashews, peppers and a fish sauce glaze over rice. Built as 14 meal prep bowls at {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "thai cashew chicken, gai pad med mamuang, cashew chicken meal prep, thai stir fry, chicken rice bowls, budget thai recipe",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

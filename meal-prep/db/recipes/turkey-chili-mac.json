@@ -20,7 +20,7 @@
                  "fat":  20,
                  "cost_ps":  "4.56"
              },
-    "intro_html":  "Chili and mac and cheese had a baby, and it happens to be loaded with protein. This one-skillet meal hits a serious 57 grams of protein per serving for around $4.56 (at everyday cost), and it makes 14 hearty bowls. Comfort food that actually works for your goals and your wallet.",
+    "intro_html":  "Chili and mac and cheese had a baby, and it happens to be loaded with protein. This one-skillet meal hits a serious {{protein}} grams of protein per serving for around ${{cost_ps}} (at everyday cost), and it makes 14 hearty bowls. Comfort food that actually works for your goals and your wallet.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3000 g)",
                                 "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 6 1/4 cups (620 g)",
@@ -56,7 +56,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $50.32 across 14 servings, roughly $3.59 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $13.23 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.55. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.56 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Grab the \u003cstrong\u003estore-brand canned beans and tomatoes\u003c/strong\u003e. They are the same beans and tomatoes as the name brand for less, and this recipe uses a stack of them.",
                        "Undercook the pasta by a minute so it \u003cstrong\u003eholds its bite after reheating\u003c/strong\u003e all week instead of going mushy.",
@@ -70,7 +70,7 @@
                     "Fold in the cooked pasta so every noodle catches the chili.",
                     "Melt the fat-free cheddar over the top and stir it through before you portion it out."
                 ],
-    "portion_html":  "Each of the 14 bowls brings 57 grams of protein at 616 calories, making this one of the highest-protein plates in the lineup.",
+    "portion_html":  "Each of the 14 bowls brings {{protein}} grams of protein at {{cal}} calories, making this one of the highest-protein plates in the lineup.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyfitalicious.com/healthy-chili-mac/\" target=\"_blank\" rel=\"noopener\"\u003eSkinny Fitalicious\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "One pan, a pile of protein, and the kind of dinner that makes leftovers something to look forward to. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  44.64,
@@ -197,7 +197,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 616 calories and 57 grams of protein for roughly $4.56 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, high-protein turkey chili mac, budget dinner",
                  "costPerServing":  4.56,
                  "recipeIngredient":  [

@@ -20,7 +20,7 @@
                  "fat":  9,
                  "cost_ps":  "3.22"
              },
-    "intro_html":  "This Mediterranean bowl leans on roasted peppers and briny olives to make chicken taste like a vacation. It brings 61 grams of protein for about $3.22 a serving (at everyday cost), no fancy technique required. One batch makes 14 servings, so a few jars from the pantry aisle stretch a long way.",
+    "intro_html":  "This Mediterranean bowl leans on roasted peppers and briny olives to make chicken taste like a vacation. It brings {{protein}} grams of protein for about ${{cost_ps}} a serving (at everyday cost), no fancy technique required. One batch makes 14 servings, so a few jars from the pantry aisle stretch a long way.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3450 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (940 g)",
@@ -54,7 +54,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $27.04 across 14 servings, roughly $1.93 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $17.96 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.00. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.22 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Jarred roasted red peppers and olives keep for ages, so \u003cstrong\u003estock a jar of each\u003c/strong\u003e and pull them out whenever a meal needs a lift.",
                        "Onions and garlic are the cheap flavor backbone here, so \u003cstrong\u003ealways keep both in the house\u003c/strong\u003e.",
@@ -67,7 +67,7 @@
                     "Shred the chicken into the pot so it soaks up the savory, briny juices.",
                     "Discard the bay leaves and serve over white rice with plenty of the peppers and olives spooned on top."
                 ],
-    "portion_html":  "Each bowl delivers 61 grams of protein and 562 calories, a light but substantial plate.",
+    "portion_html":  "Each bowl delivers {{protein}} grams of protein and {{cal}} calories, a light but substantial plate.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.slenderkitchen.com/recipe/slow-cooker-mediterranean-chicken\" target=\"_blank\" rel=\"noopener\"\u003eSlender Kitchen\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A few smart pantry jars turn plain chicken into something worth looking forward to. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  23.64,
@@ -187,7 +187,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Mediterranean meal prep. Fourteen servings at about 562 calories and 61 grams of protein for roughly $3.22 each (at everyday cost).",
+                 "description":  "A high-protein Mediterranean meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker mediterranean chicken bowls, budget dinner",
                  "costPerServing":  3.22,
                  "recipeIngredient":  [

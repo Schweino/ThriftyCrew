@@ -20,7 +20,7 @@
                  "fat":  13,
                  "cost_ps":  "3.58"
              },
-    "intro_html":  "Mississippi pork is that tangy, buttery, ranch-and-pepperoncini magic, and it works just as well on pork as it does on the classic pot roast. Piled over potatoes with carrots, each bowl brings 52 grams of protein for about $3.58 (at everyday cost). Fourteen servings out of one pot keeps the whole week covered.",
+    "intro_html":  "Mississippi pork is that tangy, buttery, ranch-and-pepperoncini magic, and it works just as well on pork as it does on the classic pot roast. Piled over potatoes with carrots, each bowl brings {{protein}} grams of protein for about ${{cost_ps}} (at everyday cost). Fourteen servings out of one pot keeps the whole week covered.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 7 lb (3120 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 8 lb (3606 g)",
@@ -45,7 +45,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $46.99 across 14 servings, roughly $3.36 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $3.14 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.13. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.58 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Potatoes are one of the cheapest bases going. An \u003cstrong\u003e8 lb bag\u003c/strong\u003e runs cheap and doubles as your starch, so skip buying rice for this one.",
                        "One \u003cstrong\u003epacket of ranch seasoning\u003c/strong\u003e does all the flavor work. No need for a cabinet full of separate spices.",
@@ -60,7 +60,7 @@
                     "Whisk the cornstarch with a splash of cold water, stir it into the juices, and let them bubble a minute or two until the sauce thickens.",
                     "Divide the pork and potatoes into your containers."
                 ],
-    "portion_html":  "Every serving comes in around 569 calories with 52 grams of protein.",
+    "portion_html":  "Every serving comes in around {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.saltandlavender.com/mississippi-slow-cooker-pork-tenderloin/\" target=\"_blank\" rel=\"noopener\"\u003eSalt \u0026amp; Lavender\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Tangy, hearty, and dead simple. Set it in the morning and dinner takes care of itself. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  42.21,
@@ -131,7 +131,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 569 calories and 52 grams of protein for roughly $3.58 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker mississippi pork bowls, budget dinner",
                  "costPerServing":  3.58,
                  "recipeIngredient":  [

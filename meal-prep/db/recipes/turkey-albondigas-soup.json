@@ -72,7 +72,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $45.10 across 14 servings, roughly $3.22 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $12.20 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.30. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.08 a bowl\u003c/strong\u003e (at everyday cost). This is a vegetable heavy pot, and the zucchini and canned tomatoes are what push it up, not the meat.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). This is a vegetable heavy pot, and the zucchini and canned tomatoes are what push it up, not the meat.",
     "shop_smart":  [
                        "\u003cstrong\u003eZucchini is a summer buy.\u003c/strong\u003e In season it is one of the cheapest vegetables on the shelf. Out of season it is one of the most expensive. Make this pot when the price is right and it drops a good bit.",
                        "\u003cstrong\u003eBread crumbs are worth making, not buying.\u003c/strong\u003e Heels and stale slices, dried in a low oven and pulsed, cost you nothing and bind meatballs exactly the same way.",
@@ -88,9 +88,9 @@
                     "Slide the meatballs in gently and simmer 20 minutes, until the rice inside them has swelled and the potatoes are tender.",
                     "Add the chopped zucchini and simmer just 5 more minutes so it stays firm, then stir in the chopped cilantro off the heat."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide by 14 and ladle that exact weight into each container, spreading the meatballs evenly so nobody gets a bowl of broth. Every serving lands near 575 calories with 33 grams of protein.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide by 14 and ladle that exact weight into each container, spreading the meatballs evenly so nobody gets a bowl of broth. Every serving lands near {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://amiraspantry.com/turkey-albondigas-soup-sopa-de-albondigas-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eamiraspantry.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cem\u003eMexican meatball soup for about $4.08 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "upsell_html":  "\u003cem\u003eMexican meatball soup for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  36.74,
     "cost_batch_true":  45.1,
     "cost_per_serving":  2.62,

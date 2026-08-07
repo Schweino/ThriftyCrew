@@ -20,7 +20,7 @@
                  "fat":  18,
                  "cost_ps":  "4.50"
              },
-    "intro_html":  "Bright, fresh, and creamy, these bowls bring a little Mediterranean sunshine to your meal prep. You get 52 grams of protein per serving for about $4.50 (at everyday cost), which is a great price for eating this well. One skillet makes 14 servings.",
+    "intro_html":  "Bright, fresh, and creamy, these bowls bring a little Mediterranean sunshine to your meal prep. You get {{protein}} grams of protein per serving for about ${{cost_ps}} (at everyday cost), which is a great price for eating this well. One skillet makes 14 servings.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3100 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (700 g)",
@@ -55,7 +55,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $48.49 across 14 servings, roughly $3.46 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $14.41 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.90. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.50 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e keeps your cost per serving low, so buy the big size.",
                        "A \u003cstrong\u003etub of plain Greek yogurt\u003c/strong\u003e doubles as your creamy topping and a protein boost, so buy it instead of pricey tzatziki.",
@@ -69,7 +69,7 @@
                     "Dice the cucumber for topping.",
                     "Serve over cooked white rice with the turkey, a big dollop of the yogurt sauce, and the diced cucumber on top."
                 ],
-    "portion_html":  "Each of the 14 bowls delivers 52 grams of protein and about 594 calories.",
+    "portion_html":  "Each of the 14 bowls delivers {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/mediterranean-turkey-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eBudget Bytes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Light on the wallet, big on flavor, and it keeps beautifully all week. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  43.8,
@@ -189,7 +189,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Mediterranean meal prep. Fourteen servings at about 594 calories and 52 grams of protein for roughly $4.50 each (at everyday cost).",
+                 "description":  "A high-protein Mediterranean meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, mediterranean ground turkey bowls, budget dinner",
                  "costPerServing":  4.50,
                  "recipeIngredient":  [

@@ -29,7 +29,7 @@
                  "fat":  36,
                  "cost_ps":  "2.83"
              },
-    "intro_html":  "In Minnesota and the Dakotas this is not a casserole, it is a hotdish, and correcting people on that is practically a regional sport. Seasoned ground turkey and a creamy mushroom base underneath, a full armor of tater tots on top, baked until the tots go golden and crackly. Each serving runs 563 calories with \u003cstrong\u003e28 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.83\u003c/strong\u003e (at everyday cost). It is the friendliest dish in this whole collection to make on a Sunday and eat all week.",
+    "intro_html":  "In Minnesota and the Dakotas this is not a casserole, it is a hotdish, and correcting people on that is practically a regional sport. Seasoned ground turkey and a creamy mushroom base underneath, a full armor of tater tots on top, baked until the tots go golden and crackly. Each serving runs {{cal}} calories with \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). It is the friendliest dish in this whole collection to make on a Sunday and eat all week.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3 lb (1334 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.5 onions (162 g)",
@@ -56,7 +56,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $27.36 across 14 servings, roughly $1.95 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $15.03 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.39. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.83 a serving\u003c/strong\u003e (at everyday cost), and most of that is the turkey. Tater tots, canned soup, and shredded cheddar are three of the steadiest low-price items in the freezer and center aisles, which is exactly why this dish has fed the upper Midwest for sixty years.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost), and most of that is the turkey. Tater tots, canned soup, and shredded cheddar are three of the steadiest low-price items in the freezer and center aisles, which is exactly why this dish has fed the upper Midwest for sixty years.",
     "shop_smart":  [
                        "The single large bag of tater tots beats buying several small ones almost every time. Check the per-ounce tag, then buy the big bag and keep what you do not use frozen for the next batch.",
                        "Cream of mushroom soup is the base and you need three cans. Store-brand condensed soup performs the same in a bake, since it is getting stirred into meat and covered in cheese either way.",
@@ -73,9 +73,9 @@
                     "Bake at 400F for 40 to 45 minutes, until the tots are deep golden and the edges of the pan are bubbling.",
                     "Scatter the rest of the cheddar over the tots, return the pan for 5 minutes to melt it, then rest 10 minutes before portioning."
                 ],
-    "portion_html":  "Put the pan on the scale, subtract the empty pan weight, and divide by 14. Cut squares to that weight rather than eyeballing them, because the corners always look bigger than they are. Every serving comes to \u003cstrong\u003e563 calories\u003c/strong\u003e and 28 grams of protein.",
+    "portion_html":  "Put the pan on the scale, subtract the empty pan weight, and divide by 14. Cut squares to that weight rather than eyeballing them, because the corners always look bigger than they are. Every serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://ohsnapmacros.com/turkey-tater-tot-casserole/\" target=\"_blank\" rel=\"noopener\"\u003eohsnapmacros.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "A whole week of hotdish for about $2.83 a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "A whole week of hotdish for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  25.11,
     "cost_batch_true":  27.36,
     "cost_per_serving":  1.79,
@@ -168,7 +168,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Turkey tater tot hotdish meal prep: ground turkey in a creamy mushroom base under a crisp tot crust. 563 calories, 28g protein, about $2.83 a serving (at everyday cost).",
+                 "description":  "Turkey tater tot hotdish meal prep: ground turkey in a creamy mushroom base under a crisp tot crust. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a serving (at everyday cost).",
                  "keywords":  "turkey tater tot hotdish, tater tot casserole, ground turkey casserole, midwest hotdish, budget meal prep, 9x13 casserole, cheap dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

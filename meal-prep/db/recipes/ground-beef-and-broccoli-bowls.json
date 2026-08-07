@@ -20,7 +20,7 @@
                  "fat":  14,
                  "cost_ps":  "3.97"
              },
-    "intro_html":  "Takeout beef and broccoli, made at home for a fraction of the delivery bill. This skillet stacks 45 grams of protein over rice for about $3.97 a bowl (at everyday cost) and makes 14 servings. Same savory, garlicky, gingery flavor you order out, minus the tip and the wait.",
+    "intro_html":  "Takeout beef and broccoli, made at home for a fraction of the delivery bill. This skillet stacks {{protein}} grams of protein over rice for about ${{cost_ps}} a bowl (at everyday cost) and makes 14 servings. Same savory, garlicky, gingery flavor you order out, minus the tip and the wait.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2240 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.5 cups dry (981 g)",
@@ -54,7 +54,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $44.05 across 14 servings, roughly $3.15 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $11.38 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.43. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.97 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "A \u003cstrong\u003ebag of frozen broccoli florets\u003c/strong\u003e costs less than fresh, never wilts in the fridge, and steams in minutes.",
                        "The sauce is just \u003cstrong\u003esoy sauce, broth, and pantry staples\u003c/strong\u003e, so skip the bottled stir-fry sauces that charge you double for the same thing.",
@@ -67,7 +67,7 @@
                     "Pour the sauce over the beef and simmer until it thickens and glossy-coats the meat.",
                     "Fold in the broccoli, then serve everything over cooked rice in each container."
                 ],
-    "portion_html":  "Each of the 14 bowls serves up 45 grams of protein at 596 calories, so it satisfies without weighing you down.",
+    "portion_html":  "Each of the 14 bowls serves up {{protein}} grams of protein at {{cal}} calories, so it satisfies without weighing you down.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://therecipecritic.com/ground-beef-and-broccoli/\" target=\"_blank\" rel=\"noopener\"\u003eThe Recipe Critic\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Skip the delivery app this week. You just made it better and cheaper at home. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  42.07,
@@ -173,7 +173,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 596 calories and 45 grams of protein for roughly $3.97 each (at everyday cost).",
+                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, ground beef and broccoli bowls, budget dinner",
                  "costPerServing":  3.97,
                  "recipeIngredient":  [

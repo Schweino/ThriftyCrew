@@ -119,7 +119,8 @@ if ($SelfTest) {
   $vocabFx = New-FoodVocabulary @(
     'Zero-Sugar Soda', 'Soda', 'Sugar', 'Brown Sugar', 'Olives', 'Olive Oil', 'Rice', 'Rice Vinegar',
     'Potato', 'Sweet Potatoes', 'Peas', 'Frozen Green Peas', 'Cheddar Cheese, Shredded', 'Fries',
-    'Salsa', 'Tomatillos', 'BBQ Sauce (Sugar Free)', 'Pork Loin', 'Salt', 'Black Pepper'
+    'Salsa', 'Tomatillos', 'BBQ Sauce (Sugar Free)', 'Pork Loin', 'Salt', 'Black Pepper',
+    'Tomato', 'Marinara Sauce'   # the constituent-rule pair - without Tomato in this vocab both its fixtures are vacuous
   )
   $r = @(Get-SpecContradictions $bad $vocabFx)
   $cls = @($r | ForEach-Object { $_.cls })
@@ -224,6 +225,28 @@ if ($SelfTest) {
   }
   $ph4 = @(Get-SpecContradictions $phantomGood $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
   Chk 'CLEAN TWIN the same steps over a list that DOES buy the soda are silent' ($ph4.Count -eq 0) (($ph4 | ForEach-Object { $_.why }) -join ' | ')
+
+  # FROZEN FIXTURE (2026-08-08): the CONSTITUENT rule's founding case - baked-ziti's make_it says the
+  # turkey "soaks up the tomato flavor", and the marinara IS the tomato. This sat as the live board's one
+  # PHANTOM for weeks because the matcher had no idea marinara contains tomatoes. Its MUST-FIRE twin buys
+  # nothing tomato-derived, so the same sentence stays a real phantom - the rule must forgive the
+  # constituent, not the word.
+  $phantomConstituent = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 590; protein = 45; cost_ps = '2.61' }
+    ingredients_display = @('<strong>Ziti Pasta:</strong> 2 lb (908 g)', '<strong>Marinara Sauce:</strong> 2 jars (1320 g)')
+    scaler = [pscustomobject]@{ ing = @([pscustomobject]@{ item = 'Ziti Pasta'; grams = 908 }, [pscustomobject]@{ item = 'Marinara Sauce'; grams = 1320 }) }
+    make_it = @('Pour in the marinara sauce and simmer 5 minutes so the turkey soaks up the tomato flavor.')
+  }
+  $ph5 = @(Get-SpecContradictions $phantomConstituent $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' })
+  Chk 'CLEAN TWIN "tomato flavor" is covered by the bought MARINARA (constituent rule)' ($ph5.Count -eq 0) (($ph5 | ForEach-Object { $_.why }) -join ' | ')
+  $phantomNoTomato = [pscustomobject]@{
+    stat = [pscustomobject]@{ cal = 590; protein = 45; cost_ps = '2.61' }
+    ingredients_display = @('<strong>Ziti Pasta:</strong> 2 lb (908 g)', '<strong>Alfredo Sauce:</strong> 2 jars (1320 g)')
+    scaler = [pscustomobject]@{ ing = @([pscustomobject]@{ item = 'Ziti Pasta'; grams = 908 }, [pscustomobject]@{ item = 'Alfredo Sauce'; grams = 1320 }) }
+    make_it = @('Stir in the diced tomato before serving.')
+  }
+  $ph6 = @(Get-SpecContradictions $phantomNoTomato $vocabFx | Where-Object { $_.cls -eq 'PHANTOM' -and $_.why -match 'omato' })
+  Chk 'MUST FIRE  PHANTOM     tomato over an ALFREDO recipe is still a real phantom' ($ph6.Count -ge 1) 'constituent rule over-forgave'
 
   # THE FOUR NOISE RULES. Each line is a false positive this matcher produced against the live catalogue
   # before the rule above it existed; without them the class gives 555 hits and gets switched off.

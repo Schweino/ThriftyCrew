@@ -20,7 +20,7 @@
                  "fat":  26,
                  "cost_ps":  "4.16"
              },
-    "intro_html":  "Fried rice built on ground beef, which is cheaper than takeout and loaded with more protein. Each bowl carries 46 grams for about $4.16 (at everyday cost), and the pan makes 14 servings. This is the perfect home for leftover rice, and it beats the delivery version every time.",
+    "intro_html":  "Fried rice built on ground beef, which is cheaper than takeout and loaded with more protein. Each bowl carries 46 grams for about ${{cost_ps}} (at everyday cost), and the pan makes 14 servings. This is the perfect home for leftover rice, and it beats the delivery version every time.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.75 cups dry (1020 g)",
@@ -54,7 +54,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $48.50 across 14 servings, roughly $3.46 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $9.68 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.18. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.16 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Use \u003cstrong\u003eday-old cold rice\u003c/strong\u003e if you can. It fries up firmer and cheaper than any restaurant version and keeps this recipe from going gummy.",
                        "A \u003cstrong\u003ebag of frozen peas and carrots\u003c/strong\u003e costs next to nothing, never spoils, and cooks straight from the freezer.",
@@ -68,7 +68,7 @@
                     "Drizzle in the soy sauce and sesame oil with the garlic and ginger, stirring until everything is coated.",
                     "Push it around the hot skillet a couple minutes to get that fried-rice edge, then portion out."
                 ],
-    "portion_html":  "Each of the 14 bowls serves 49 grams of protein at 702 calories, turning a takeout treat into a meal-prep workhorse.",
+    "portion_html":  "Each of the 14 bowls serves {{protein}} grams of protein at {{cal}} calories, turning a takeout treat into a meal-prep workhorse.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://withthewoodruffs.com/ground-beef-fried-rice/\" target=\"_blank\" rel=\"noopener\"\u003eWith the Woodruffs\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "The cure for leftover rice and takeout cravings in one skillet. Cook once, eat all week. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  42.33,
@@ -174,7 +174,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Asian meal prep. Fourteen servings at about 702 calories and 49 grams of protein for roughly $4.16 each (at everyday cost).",
+                 "description":  "A high-protein Asian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, ground beef fried rice bowls, budget dinner",
                  "costPerServing":  4.16,
                  "recipeIngredient":  [

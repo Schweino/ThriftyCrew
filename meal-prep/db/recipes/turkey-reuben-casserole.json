@@ -26,7 +26,7 @@
                  "fat":  39,
                  "cost_ps":  "4.23"
              },
-    "intro_html":  "Order a turkey Reuben at a deli and you get turkey, sauerkraut, Swiss, and Russian dressing on grilled rye. Order fourteen of them and you get a bill you do not want to look at. This bakes the whole sandwich into a pan instead: buttered rye cubes on the bottom, turkey and kraut and Swiss layered through, dressing whisked in. Each serving lands at 623 calories with \u003cstrong\u003e42 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.23\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Order a turkey Reuben at a deli and you get turkey, sauerkraut, Swiss, and Russian dressing on grilled rye. Order fourteen of them and you get a bill you do not want to look at. This bakes the whole sandwich into a pan instead: buttered rye cubes on the bottom, turkey and kraut and Swiss layered through, dressing whisked in. Each serving lands at {{cal}} calories with \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eRye Bread (generic (USDA)):\u003c/strong\u003e 23.75 oz (672 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.75 cups (177 g)",
@@ -57,7 +57,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $43.07 across 14 servings, roughly $3.08 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $48.12 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $91.19. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.23 a serving\u003c/strong\u003e (at everyday cost) for a deli sandwich you would pay far more than that for at the counter. Sauerkraut is one of the cheapest things in the store and it is the ingredient that makes this taste like the real thing.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost) for a deli sandwich you would pay far more than that for at the counter. Sauerkraut is one of the cheapest things in the store and it is the ingredient that makes this taste like the real thing.",
     "shop_smart":  [
                        "A single loaf of rye covers this whole pan. Marked-down day-old rye is actually better here, because stale bread holds its structure under the dressing instead of turning to paste.",
                        "Canned sauerkraut costs less than the refrigerated bags and works fine once it is squeezed dry. That squeeze is not optional; wet kraut will flood the pan.",
@@ -74,9 +74,9 @@
                     "Cover with foil and bake at 350F for 30 minutes, then uncover, add the rest of the Swiss, and bake 15 minutes more until browned and bubbling.",
                     "Rest 15 minutes before portioning so the layers hold together on the spatula."
                 ],
-    "portion_html":  "Weigh the pan, subtract the empty pan weight, and divide by 14. Cut squares to that number and lift them flat so the rye layers stay stacked. Each serving comes to \u003cstrong\u003e623 calories\u003c/strong\u003e and 42 grams of protein.",
+    "portion_html":  "Weigh the pan, subtract the empty pan weight, and divide by 14. Cut squares to that number and lift them flat so the rye layers stay stacked. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/reuben-casserole-2/\" target=\"_blank\" rel=\"noopener\"\u003espendwithpennies.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "A deli Reuben for about $4.23 a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "upsell_html":  "A deli Reuben for about ${{cost_ps}} a serving (at everyday cost), and this is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
     "cost_batch":  27.78,
     "cost_batch_true":  43.07,
     "cost_per_serving":  1.98,
@@ -193,7 +193,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Turkey Reuben casserole meal prep: rye bread, turkey, sauerkraut, and Swiss baked with a homemade Russian dressing. 623 calories, 42g protein, about $4.23 a serving (at everyday cost).",
+                 "description":  "Turkey Reuben casserole meal prep: rye bread, turkey, sauerkraut, and Swiss baked with a homemade Russian dressing. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a serving (at everyday cost).",
                  "keywords":  "turkey reuben casserole, reuben bake, sauerkraut casserole, deli sandwich casserole, high protein meal prep, budget dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

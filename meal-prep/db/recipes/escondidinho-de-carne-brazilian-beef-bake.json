@@ -64,7 +64,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $46.46 across 14 servings, roughly $3.32 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $15.87 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $62.33. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.04 a bowl\u003c/strong\u003e (at everyday cost) for a Brazilian bake with a cheese-blistered mashed potato lid.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a Brazilian bake with a cheese-blistered mashed potato lid.",
     "shop_smart":  [
                        "\u003cstrong\u003ePotatoes are the cheapest thing in this dish and they are half of it.\u003c/strong\u003e Buy the big bag and store them cool and dark, and the mash layer costs next to nothing.",
                        "\u003cstrong\u003eCream cheese replaces catupiry and is a fraction of the price of imported cheese.\u003c/strong\u003e Buy the store brand bricks, which behave identically once melted into a mash.",
@@ -81,9 +81,9 @@
                     "Spread the beef in an even layer in a large baking dish and blanket it with the mashed potato.",
                     "Scatter the mozzarella over the top and bake at 400 degrees until melted, bubbling, and browned in spots."
                 ],
-    "portion_html":  "Weigh the whole baking dish, subtract the empty dish weight, and divide by 14. Cut to that weight so the beef layer gets divided as evenly as the potato does. Every serving comes in at \u003cstrong\u003e570 calories with 38 grams of protein\u003c/strong\u003e. Let it rest fifteen minutes so the layers hold together when you lift them out.",
+    "portion_html":  "Weigh the whole baking dish, subtract the empty dish weight, and divide by 14. Cut to that weight so the beef layer gets divided as evenly as the potato does. Every serving comes in at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e. Let it rest fifteen minutes so the layers hold together when you lift them out.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://easybrazilianfood.com/brazilian-dutch-oven-shepherds-pie-escondidinho/\" target=\"_blank\" rel=\"noopener\"\u003eeasybrazilianfood.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Cheesy, layered dinners for about $4.04 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Cheesy, layered dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  33.2,
     "cost_batch_true":  46.46,
     "cost_per_serving":  2.37,
@@ -216,7 +216,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Brazilian escondidinho de carne rebuilt for 14-serving meal prep: creamy beef under a mashed potato and mozzarella lid. 570 calories, 38g protein, about $4.04 per serving (at everyday cost).",
+                 "description":  "Brazilian escondidinho de carne rebuilt for 14-serving meal prep: creamy beef under a mashed potato and mozzarella lid. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "escondidinho de carne, brazilian beef and potato bake, brazilian shepherds pie, cream cheese beef bake, brazilian meal prep, cheesy casserole",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

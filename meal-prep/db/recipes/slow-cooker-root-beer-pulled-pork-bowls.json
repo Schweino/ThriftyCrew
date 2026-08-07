@@ -20,7 +20,7 @@
                  "fat":  9,
                  "cost_ps":  "3.74"
              },
-    "intro_html":  "Yes, root beer, and yes, it works. Zero-sugar soda and sugar-free barbecue sauce keep this pulled pork lean while the slow cooker turns tenderloin into fork-tender shreds. It goes over potatoes with a little cabbage on the side, runs around $3.74 a serving (at everyday cost), and packs 59 grams of protein across 14 bowls.",
+    "intro_html":  "Yes, root beer, and yes, it works. Zero-sugar soda and sugar-free barbecue sauce keep this pulled pork lean while the slow cooker turns tenderloin into fork-tender shreds. It goes over potatoes with a little cabbage on the side, runs around ${{cost_ps}} a serving (at everyday cost), and packs {{protein}} grams of protein across 14 bowls.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3400 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 10 lb (4300 g)",
@@ -49,7 +49,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $44.35 across 14 servings, roughly $3.17 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.92 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.27. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.74 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Sugar-free barbecue sauce cuts the sugar without cutting flavor. \u003cstrong\u003eGrab the sugar-free bottle\u003c/strong\u003e and nobody will know the difference.",
                        "Zero-sugar soda is often cheaper by the store brand. \u003cstrong\u003eBuy the generic diet soda\u003c/strong\u003e instead of the name brand for the same result.",
@@ -63,7 +63,7 @@
                     "Roast or boil the potatoes until fork tender.",
                     "Pile the pulled pork over the potatoes and top with the shredded cabbage for crunch."
                 ],
-    "portion_html":  "Each bowl delivers 59 grams of protein and 566 calories, with just 9 grams of fat per serving.",
+    "portion_html":  "Each bowl delivers {{protein}} grams of protein and {{cal}} calories, with just 9 grams of fat per serving.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://giveitsomethyme.com/slow-cooker-pulled-pork-tenderloin/\" target=\"_blank\" rel=\"noopener\"\u003eGive it Some Thyme\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "A fun little trick that turns cheap soda and lean pork into a dinner people ask about. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  39.74,
@@ -162,7 +162,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 566 calories and 59 grams of protein for roughly $3.74 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker root beer pulled pork bowls, budget dinner",
                  "costPerServing":  3.74,
                  "recipeIngredient":  [

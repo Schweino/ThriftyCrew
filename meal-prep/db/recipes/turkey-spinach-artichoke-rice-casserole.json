@@ -29,7 +29,7 @@
                  "fat":  15,
                  "cost_ps":  "2.98"
              },
-    "intro_html":  "Spinach artichoke dip is the appetizer everybody hovers over until the bowl is scraped. This takes that exact flavor, drops the mayonnaise-heavy base, and builds it into a wild rice casserole with ground turkey underneath. Each serving carries \u003cstrong\u003e45 grams of protein\u003c/strong\u003e and 568 calories for about \u003cstrong\u003e$2.98\u003c/strong\u003e (at everyday cost). Wild rice is what drives the cost, and it also makes it taste like nothing else on the list.",
+    "intro_html":  "Spinach artichoke dip is the appetizer everybody hovers over until the bowl is scraped. This takes that exact flavor, drops the mayonnaise-heavy base, and builds it into a wild rice casserole with ground turkey underneath. Each serving carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). Wild rice is what drives the cost, and it also makes it taste like nothing else on the list.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (804 g)",
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 2.75 lb (1270 g)",
@@ -58,7 +58,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $33.73 across 14 servings, roughly $2.41 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $10.00 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.73. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.98 a serving\u003c/strong\u003e (at everyday cost). Wild rice and canned artichoke hearts are both premium items, and they are the two things that make this dish what it is. A wild rice blend cuts the price meaningfully if you want the same flavor for less.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Wild rice and canned artichoke hearts are both premium items, and they are the two things that make this dish what it is. A wild rice blend cuts the price meaningfully if you want the same flavor for less.",
     "shop_smart":  [
                        "Wild rice is the biggest single cost in this recipe by a wide margin. A wild rice blend costs a fraction as much and still gives you the chew and the nutty flavor.",
                        "Canned artichoke hearts in water cost far less than marinated ones in oil, and marinated hearts would fight the cream sauce anyway. Drain and chop them yourself.",
@@ -75,9 +75,9 @@
                     "Spread everything into a greased 9x13 pan and cover with the remaining mozzarella.",
                     "Bake at 375F for 30 minutes until bubbling and browned at the edges, then rest 10 minutes before portioning."
                 ],
-    "portion_html":  "Weigh the pan, subtract the empty pan weight, and divide by 14. Wild rice settles unevenly, so cut to the scale rather than trusting the look of the squares. Each serving comes to \u003cstrong\u003e568 calories\u003c/strong\u003e and 45 grams of protein.",
+    "portion_html":  "Weigh the pan, subtract the empty pan weight, and divide by 14. Wild rice settles unevenly, so cut to the scale rather than trusting the look of the squares. Each serving comes to \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://wonkywonderful.com/turkey-spinach-artichoke-wild-rice-casserole/\" target=\"_blank\" rel=\"noopener\"\u003ewonkywonderful.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Spinach artichoke dip turned into dinner, about $2.98 a serving (at everyday cost). Most recipes on this site land well under that. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
+    "upsell_html":  "Spinach artichoke dip turned into dinner, about ${{cost_ps}} a serving (at everyday cost). Most recipes on this site land well under that. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, for $1 a month.",
     "cost_batch":  27.98,
     "cost_batch_true":  33.73,
     "cost_per_serving":  2,
@@ -186,7 +186,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Turkey spinach artichoke wild rice casserole meal prep: ground turkey, spinach, and artichoke hearts in a mozzarella cream sauce over wild rice. 568 calories, 45g protein, about $2.98 a serving (at everyday cost).",
+                 "description":  "Turkey spinach artichoke wild rice casserole meal prep: ground turkey, spinach, and artichoke hearts in a mozzarella cream sauce over wild rice. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a serving (at everyday cost).",
                  "keywords":  "spinach artichoke casserole, turkey wild rice bake, artichoke heart recipes, high protein casserole, budget meal prep, creamy rice casserole",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

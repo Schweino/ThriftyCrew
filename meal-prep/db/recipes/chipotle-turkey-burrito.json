@@ -28,7 +28,7 @@
                  "fat":  14,
                  "cost_ps":  "4.17"
              },
-    "intro_html":  "\u003cp\u003eOne of only two turkey builds in this batch, and it earns the slot. It lands at 386 calories with 33 grams of protein, on a tortilla carrying 18 grams of fiber for about 5 grams of net carb. Lean ground turkey gets smoky heat from chipotle, body from roasted sweet potato and zucchini, and a creamy tang from Greek yogurt stirred right into the filling. If you have made our Ground Turkey Burrito Bowl, this is the wrapped version with a roasted-vegetable twist you cannot get in the bowl.\u003c/p\u003e",
+    "intro_html":  "\u003cp\u003eOne of only two turkey builds in this batch, and it earns the slot. It lands at {{cal}} calories with {{protein}} grams of protein, on a tortilla carrying 18 grams of fiber for about 5 grams of net carb. Lean ground turkey gets smoky heat from chipotle, body from roasted sweet potato and zucchini, and a creamy tang from Greek yogurt stirred right into the filling. If you have made our Ground Turkey Burrito Bowl, this is the wrapped version with a roasted-vegetable twist you cannot get in the bowl.\u003c/p\u003e",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb (1582 g)",
@@ -67,7 +67,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $50.72 across 14 servings, roughly $3.62 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.66 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.38. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e$4.17 a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a build-your-own turkey burrito. The vegetables stretch the turkey, which is how the cost stays down.\u003c/p\u003e",
+    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a build-your-own turkey burrito. The vegetables stretch the turkey, which is how the cost stays down.\u003c/p\u003e",
     "shop_smart":  [
                        "\u003cstrong\u003eGround turkey goes on sale as often as beef.\u003c/strong\u003e Buy the 93/7 when it drops and freeze it in one-pound packs. The leaner grinds cost more for almost no macro gain here, so 93/7 is the sweet spot.",
                        "\u003cstrong\u003eOne sweet potato and one zucchini stretch across the batch.\u003c/strong\u003e They add fiber and bulk for pennies and keep the filling from being just meat and cheese. Dice them small so they cook fast.",
@@ -82,9 +82,9 @@
                     "Off the heat, stir in the Greek yogurt, the Mexican cheese blend, and the chopped cilantro so the sauce goes creamy.",
                     "Warm the tortillas so they roll cleanly, then fill and wrap each one."
                 ],
-    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near 386 calories with 33 grams of protein.\u003c/p\u003e",
+    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near {{cal}} calories with {{protein}} grams of protein.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.fivesilverspoons.com/chipotle-burritos-with-ground-turkey-and-veggies/\" target=\"_blank\" rel=\"noopener\"\u003efivesilverspoons.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about $4.17 a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
+    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about ${{cost_ps}} a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
     "cost_batch":  38.32,
     "cost_batch_true":  50.72,
     "cost_per_serving":  2.74,
@@ -225,7 +225,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A spicy chipotle ground turkey burrito under 400 calories, with roasted sweet potato and zucchini. About 386 calories and 33 grams of protein per serving, roughly $4.17 each (at everyday cost).",
+                 "description":  "A spicy chipotle ground turkey burrito under 400 calories, with roasted sweet potato and zucchini. About {{cal}} calories and {{protein}} grams of protein per serving, roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "chipotle turkey burrito, ground turkey meal prep, high protein burrito, low calorie meal prep, budget dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

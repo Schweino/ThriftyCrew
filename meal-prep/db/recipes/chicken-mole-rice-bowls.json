@@ -19,7 +19,7 @@
                  "fat":  10,
                  "cost_ps":  "3.17"
              },
-    "intro_html":  "A weeknight-friendly mole: charred poblanos, onion, and peanuts blended into a deep, smoky sauce over tender chicken thighs and rice. Each bowl delivers \u003cstrong\u003e52 grams of protein\u003c/strong\u003e at 560 calories for about \u003cstrong\u003e$3.17\u003c/strong\u003e (at everyday cost). Poblanos and peanuts are doing work here that usually takes a restaurant kitchen all afternoon.",
+    "intro_html":  "A weeknight-friendly mole: charred poblanos, onion, and peanuts blended into a deep, smoky sauce over tender chicken thighs and rice. Each bowl delivers \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e at {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). Poblanos and peanuts are doing work here that usually takes a restaurant kitchen all afternoon.",
     "ingredients_display": ["\u003cstrong\u003ePeanuts (Great Value):\u003c/strong\u003e 3.5 tbsp (32 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 onions (385 g)","\u003cstrong\u003eJalapeno:\u003c/strong\u003e 5.5 tbsp (49 g)","\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3175 g)","\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 tbsp (9 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1.25 tbsp (11 g)","\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1.25 tbsp (4 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 2 tbsp (14 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2.75 lb (1260 g)","\u003cstrong\u003ePoblano Peppers (generic):\u003c/strong\u003e 7.6 peppers (644 g)","\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 1/2 cups (25 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5 cups dry (894 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -36,7 +36,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $30.21 across 14 servings, roughly $2.16 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $7.10 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.31. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.17 a bowl\u003c/strong\u003e (at everyday cost) for real mole flavor over rice. A mole plate at a Mexican restaurant typically runs $13 to $16, and this batch feeds you all week for a fraction of eating out.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for real mole flavor over rice. A mole plate at a Mexican restaurant typically runs $13 to $16, and this batch feeds you all week for a fraction of eating out.",
     "shop_smart":  "Chicken thighs beat breasts here twice: they cost less per pound and they stay juicy through the long simmer and the fridge week.\nPoblanos are the flavor backbone for what this batch needs. They are usually the cheapest fresh chile on the wall, and charring them is free flavor.\nA small handful of peanuts from a single jar replaces the pricey nuts and seeds a traditional mole calls for. That one jar covers several batches.",
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -47,9 +47,9 @@
                     "Cut the chicken thighs into large chunks, season with salt, and simmer them in the sauce 20 to 25 minutes until they reach 165 F and the sauce has thickened.",
                     "Portion rice into 14 containers, ladle chicken and mole sauce over, and finish with chopped cilantro."
                 ],
-    "portion_html":  "Weigh the finished pot, subtract the empty pot weight you wrote down, and divide by 14 for the chicken and sauce. Split the rice evenly underneath. Each bowl lands at about 560 calories with 52 grams of protein.",
+    "portion_html":  "Weigh the finished pot, subtract the empty pot weight you wrote down, and divide by 14 for the chicken and sauce. Split the rice evenly underneath. Each bowl lands at about {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.chilipeppermadness.com/recipes/chicken-mole/\" target=\"_blank\" rel=\"noopener\"\u003eChili Pepper Madness\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $3.17 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  23.18,
     "cost_batch_true":  30.21,
     "cost_per_serving":  1.66,
@@ -153,7 +153,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Chicken mole rice bowls with smoky charred poblanos and peanuts. 14 meal prep servings, 560 calories and 52g protein each, about $3.17 a bowl (at everyday cost).",
+                 "description":  "Chicken mole rice bowls with smoky charred poblanos and peanuts. 14 meal prep servings, {{cal}} calories and {{protein}}g protein each, about ${{cost_ps}} a bowl (at everyday cost).",
                  "keywords":  "chicken mole, mole rice bowls, poblano sauce, mexican meal prep, budget meal prep, high protein dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

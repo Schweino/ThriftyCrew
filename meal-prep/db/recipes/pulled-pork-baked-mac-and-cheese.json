@@ -68,7 +68,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $39.48 across 14 servings, roughly $2.82 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $21.52 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.00. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.47 a bowl\u003c/strong\u003e (at everyday cost) for pulled pork and a three cheese sauce baked together. Very few dishes deliver this much comfort for that number.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for pulled pork and a three cheese sauce baked together. Very few dishes deliver this much comfort for that number.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy blocks of cheese and shred them yourself.\u003c/strong\u003e Bagged shredded cheese costs more per ounce and is coated in starch that keeps it from melting smooth. This sauce deserves better.",
                        "\u003cstrong\u003eBraise the pork the day before.\u003c/strong\u003e The pork can sit in the fridge overnight and the assembly the next day takes 20 minutes. That is a free schedule upgrade.",
@@ -84,9 +84,9 @@
                     "Stir in the shredded cheddar, mozzarella and Mexican cheese blend a handful at a time until the sauce is smooth, then fold in the drained pasta.",
                     "Spread half the mac in a large baking dish, layer the pulled pork across it, top with the rest of the mac, and bake at 375F for 25 minutes, then broil briefly for a browned top."
                 ],
-    "portion_html":  "Weigh the finished dish, subtract the pan weight, divide by 14, and cut to that exact weight so every container gets the same ratio of pork to pasta. Every serving lands near 862 calories with 33 grams of protein. Reheat covered with a splash of milk so the sauce loosens back up.",
+    "portion_html":  "Weigh the finished dish, subtract the pan weight, divide by 14, and cut to that exact weight so every container gets the same ratio of pork to pasta. Every serving lands near {{cal}} calories with {{protein}} grams of protein. Reheat covered with a splash of milk so the sauce loosens back up.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.butterandbaggage.com/mac-and-cheese-with-pulled-pork/\" target=\"_blank\" rel=\"noopener\"\u003ebutterandbaggage.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cem\u003eBarbecue joint mac and cheese for about $3.47 a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "upsell_html":  "\u003cem\u003eBarbecue joint mac and cheese for about ${{cost_ps}} a serving (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  26.68,
     "cost_batch_true":  39.48,
     "cost_per_serving":  1.91,

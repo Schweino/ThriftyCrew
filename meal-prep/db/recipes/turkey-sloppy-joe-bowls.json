@@ -20,7 +20,7 @@
                  "fat":  31,
                  "cost_ps":  "5.13"
              },
-    "intro_html":  "The messy sandwich you grew up on, turned into a tidy bowl over crispy potatoes. Each serving carries 47 grams of protein for about $5.13 (at everyday cost). Fourteen servings means the whole family or the whole week is handled.",
+    "intro_html":  "The messy sandwich you grew up on, turned into a tidy bowl over crispy potatoes. Each serving carries {{protein}} grams of protein for about ${{cost_ps}} (at everyday cost). Fourteen servings means the whole family or the whole week is handled.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3160 g)",
                                 "\u003cstrong\u003eFries (Great Value):\u003c/strong\u003e 6 3/4 lb (3051 g)",
@@ -59,7 +59,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $54.91 across 14 servings, roughly $3.92 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $16.67 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $71.58. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$5.13 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e keeps your protein cost down, so buy the big size.",
                        "Buy \u003cstrong\u003efrozen fries by the bag\u003c/strong\u003e for the base. They are cheaper and last longer than fresh potatoes you cut yourself.",
@@ -72,7 +72,7 @@
                     "Pour in the chicken broth and simmer until the veggies are tender and the sauce thickens, adding a splash more broth if it gets too thick.",
                     "Spoon the sloppy joe mix right over the baked fries and dig in."
                 ],
-    "portion_html":  "Each of the 14 bowls delivers 47 grams of protein and about 709 calories.",
+    "portion_html":  "Each of the 14 bowls delivers {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://therealfooddietitians.com/turkey-sloppy-joes/\" target=\"_blank\" rel=\"noopener\"\u003eThe Real Food Dietitians\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "It is nostalgic, it is filling, and it will make you the hero of the lunch line. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  49.4,
@@ -199,7 +199,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein American meal prep. Fourteen servings at about 709 calories and 47 grams of protein for roughly $5.13 each (at everyday cost).",
+                 "description":  "A high-protein American meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, turkey sloppy joe bowls, budget dinner",
                  "costPerServing":  5.13,
                  "recipeIngredient":  [

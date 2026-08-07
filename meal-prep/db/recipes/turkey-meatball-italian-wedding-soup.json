@@ -66,7 +66,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $47.50 across 14 servings, roughly $3.39 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $14.16 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.66. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.12 a bowl\u003c/strong\u003e (at everyday cost) for a soup with real meat, real greens and real pasta in it. The ground turkey is most of the ticket. Everything else in that pot is pocket change.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a soup with real meat, real greens and real pasta in it. The ground turkey is most of the ticket. Everything else in that pot is pocket change.",
     "shop_smart":  [
                        "\u003cstrong\u003eThe ground turkey is the entire budget.\u003c/strong\u003e Everything else here is broth, vegetables and pasta. Buy the turkey when the price drops, then freeze it flat in one pound sheets so it thaws in an hour instead of a day.",
                        "\u003cstrong\u003eFrozen chopped spinach beats fresh for this pot.\u003c/strong\u003e It costs less per usable ounce, it keeps for months, and it goes into hot broth straight from the box. Nobody is washing sand out of anything.",
@@ -82,9 +82,9 @@
                     "Stir in the kale and the thawed chopped spinach and simmer until the greens go dark and silky.",
                     "Slide the meatballs into the pot, simmer a few minutes more so the flavors marry, then kill the heat and stir in the rest of the parmesan."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight you wrote down in Step 1. Divide what is left by 14 and ladle that exact weight into each container. Every bowl lands near 562 calories with 37 grams of protein, which makes this a dinner and not a cup of soup you eat before dinner.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight you wrote down in Step 1. Divide what is left by 14 and ladle that exact weight into each container. Every bowl lands near {{cal}} calories with {{protein}} grams of protein, which makes this a dinner and not a cup of soup you eat before dinner.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.sipandfeast.com/italian-wedding-soup/\" target=\"_blank\" rel=\"noopener\"\u003esipandfeast.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cem\u003eReal dinners for about $4.12 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "upsell_html":  "\u003cem\u003eReal dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  35.77,
     "cost_batch_true":  47.5,
     "cost_per_serving":  2.56,

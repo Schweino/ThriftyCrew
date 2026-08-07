@@ -18,7 +18,7 @@
                  "fat":  16,
                  "cost_ps":  "3.69"
              },
-    "intro_html":  "Pillowy potato gnocchi baked right in a beefy marinara with pockets of ricotta and a melted mozzarella top. Each serving delivers \u003cstrong\u003e37 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.69\u003c/strong\u003e (at everyday cost). It is lasagna comfort with a fraction of the assembly work.",
+    "intro_html":  "Pillowy potato gnocchi baked right in a beefy marinara with pockets of ricotta and a melted mozzarella top. Each serving delivers \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). It is lasagna comfort with a fraction of the assembly work.",
     "ingredients_display": ["\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 onions (192 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)","\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1.25 tbsp (5 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)","\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 9.5 cups (2381 g)","\u003cstrong\u003ePotato Gnocchi (Great Value):\u003c/strong\u003e 68 oz dry (1930 g)","\u003cstrong\u003eRicotta Cheese (Great Value):\u003c/strong\u003e 7.5 oz (215 g)","\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 7 oz (198 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -34,7 +34,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $49.50 across 14 servings, roughly $3.54 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $4.89 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.39. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.69 a bowl\u003c/strong\u003e (at everyday cost) for a baked pasta dish the casual Italian places list at $15. The gnocchi never even gets boiled separately, so you save on dishes too.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a baked pasta dish the casual Italian places list at $15. The gnocchi never even gets boiled separately, so you save on dishes too.",
     "shop_smart":  ["Shelf-stable gnocchi is cheap by the pack here and cooks straight in the sauce, no boiling pot, no waste.","The 93/7 beef is over half the batch cost. Time this recipe to the 4 lb pack sale and the per-bowl price drops fast.","Jarred marinara in four store-brand jars beats making sauce from canned tomatoes once you count the herbs, oil, and simmer time."],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -45,9 +45,9 @@
                     "Bake 15 to 20 minutes until the cheese is melted and the sauce bubbles at the edges. Rest 5 minutes.",
                     "Portion evenly into 14 containers."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide by 14. Scoop that weight into each container and every serving lands at about 561 calories and 37 grams of protein.",
+    "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide by 14. Scoop that weight into each container and every serving lands at about {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.nourish-and-fete.com/ground-beef-baked-gnocchi/\" target=\"_blank\" rel=\"noopener\"\u003eNourish and Fete\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $3.69 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  43.25,
     "cost_batch_true":  49.5,
     "cost_per_serving":  3.09,
@@ -130,7 +130,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Ground beef baked gnocchi meal prep: 561 calories and 37g protein at about $3.69 a serving (at everyday cost). Beefy marinara, pillowy gnocchi, ricotta, mozzarella.",
+                 "description":  "Ground beef baked gnocchi meal prep: {{cal}} calories and {{protein}}g protein at about ${{cost_ps}} a serving (at everyday cost). Beefy marinara, pillowy gnocchi, ricotta, mozzarella.",
                  "keywords":  "baked gnocchi, ground beef gnocchi, gnocchi meal prep, budget dinner recipe, cheap pasta bake, high protein pasta",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",

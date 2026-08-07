@@ -18,7 +18,7 @@
                  "fat":  20,
                  "cost_ps":  "4.82"
              },
-    "intro_html":  "Takeout-style lo mein with a honey soy sriracha sauce, a mountain of vegetables, and lean turkey doing the protein work. Every serving lands \u003cstrong\u003e43 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.82 a bowl\u003c/strong\u003e (at everyday cost). The delivery app cannot touch those macros or that price.",
+    "intro_html":  "Takeout-style lo mein with a honey soy sriracha sauce, a mountain of vegetables, and lean turkey doing the protein work. Every serving lands \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). The delivery app cannot touch those macros or that price.",
     "ingredients_display": ["\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 5.5 lb (2542 g)","\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 5 carrots (316 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2.5 onions (280 g)","\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3.5 peppers (420 g)","\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 9 cups (636 g)","\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 4.75 cups (336 g)","\u003cstrong\u003eFrozen Chopped Spinach (generic):\u003c/strong\u003e 1.5 cups (126 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 5.75 tbsp (76 g)","\u003cstrong\u003eLo Mein Noodles (Simply Asia):\u003c/strong\u003e 24 oz dry (681 g)","\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 4.25 tbsp (88 g)","\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 6.5 tbsp (104 g)","\u003cstrong\u003eSriracha (Huy Fong Foods):\u003c/strong\u003e 2.75 tbsp (42 g)","\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 2 tbsp (34 g)","\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 0.25 oz (5 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -40,7 +40,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $54.15 across 14 servings, roughly $3.87 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $24.75 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $78.90. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.82 a bowl\u003c/strong\u003e (at everyday cost) for lo mein a takeout counter sells for $12 a container, with maybe half the meat and none of the leftovers.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for lo mein a takeout counter sells for $12 a container, with maybe half the meat and none of the leftovers.",
     "shop_smart":  ["The lo mein noodles are the shocker in this batch, easily the priciest noodle option on the shelf. Plain spaghetti pulls the same duty in a stir fry for a fraction of the price, and it would knock a real chunk off every bowl.","Cabbage is the cheapest vegetable in the cart: a slice of one head fills nearly 5 cups of this batch.","This uses 5.5 lb of turkey, so buy the big 6 lb pack. The per-pound savings over small trays covers the mushrooms."],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -51,9 +51,9 @@
                     "Return the turkey, add the noodles and sauce, and toss over high heat until everything is coated and glossy.",
                     "Portion evenly into 14 containers."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide by 14. Scoop that weight into each container and every bowl comes out to about 565 calories and 43 grams of protein.",
+    "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide by 14. Scoop that weight into each container and every bowl comes out to about {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://mealprepmanual.com/lo-mein/\" target=\"_blank\" rel=\"noopener\"\u003eThe Meal Prep Manual\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $4.82 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  47.8,
     "cost_batch_true":  54.15,
     "cost_per_serving":  3.41,
@@ -178,7 +178,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Ground turkey lo mein meal prep: 565 calories and 43g protein at about $4.82 a bowl (at everyday cost). Honey soy sriracha noodles loaded with turkey and vegetables.",
+                 "description":  "Ground turkey lo mein meal prep: {{cal}} calories and {{protein}}g protein at about ${{cost_ps}} a bowl (at everyday cost). Honey soy sriracha noodles loaded with turkey and vegetables.",
                  "keywords":  "ground turkey lo mein, healthy lo mein, turkey noodle stir fry, budget meal prep, high protein takeout copycat",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

@@ -25,7 +25,7 @@
                  "fat":  31,
                  "cost_ps":  "5.43"
              },
-    "intro_html":  "This is the pot roast for the first cold week of the year. Apple juice stands in for cider, Dijon and tomato paste keep it from going sweet, and the carrots and potatoes cook in the same liquid until they taste like the roast. It is a full dinner in one vessel with no separate starch to make. Each bowl carries \u003cstrong\u003e48 grams of protein\u003c/strong\u003e and 598 calories for about \u003cstrong\u003e$5.43\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "This is the pot roast for the first cold week of the year. Apple juice stands in for cider, Dijon and tomato paste keep it from going sweet, and the carrots and potatoes cook in the same liquid until they taste like the roast. It is a full dinner in one vessel with no separate starch to make. Each bowl carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 7 lb (3175 g)",
                                 "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.75 tbsp (14 g)",
@@ -59,7 +59,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $66.63 across 14 servings, roughly $4.76 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $12.51 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $79.14. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$5.43 a bowl\u003c/strong\u003e (at everyday cost), vegetables included, with no rice or noodles to buy on the side. The carrots and potatoes are doing double duty as flavor and as filler.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost), vegetables included, with no rice or noodles to buy on the side. The carrots and potatoes are doing double duty as flavor and as filler.",
     "shop_smart":  [
                        "Plain apple juice does the job of cider for less money and it is on the shelf all year. Skip the seasonal spiced cider, which is sweeter and priced like a treat.",
                        "Carrots are the biggest produce line here. The three pound bag almost always beats loose carrots on price per pound, and they keep for weeks in the crisper.",
@@ -76,9 +76,9 @@
                     "Lift the roast out, shred it, and return it to the pot with the vegetables.",
                     "Taste the liquid. If it reads too sweet, a splash more Dijon or a pinch of salt will square it up."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Scoop that weight into each of 14 containers, mixing as you go so each one gets beef, carrot, and potato in the same proportion. Each bowl lands at \u003cstrong\u003e598 calories with 48 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Weigh the full pot, subtract the empty-pot number you wrote down, and divide by 14. Scoop that weight into each of 14 containers, mixing as you go so each one gets beef, carrot, and potato in the same proportion. Each bowl lands at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.themagicalslowcooker.com/slow-cooker-apple-cider-pot-roast/\" target=\"_blank\" rel=\"noopener\"\u003ethemagicalslowcooker.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Apple cider pot roast for about $5.43 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Apple cider pot roast for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  62.93,
     "cost_batch_true":  66.63,
     "cost_per_serving":  4.5,
@@ -203,7 +203,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Apple cider beef pot roast meal prep: chuck roast slow cooked in apple juice, Dijon, and Worcestershire with carrots and potatoes. 598 calories, 48g protein, about $5.43 per serving (at everyday cost).",
+                 "description":  "Apple cider beef pot roast meal prep: chuck roast slow cooked in apple juice, Dijon, and Worcestershire with carrots and potatoes. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "apple cider pot roast, slow cooker beef, fall pot roast, beef with carrots and potatoes, budget meal prep, chuck roast recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

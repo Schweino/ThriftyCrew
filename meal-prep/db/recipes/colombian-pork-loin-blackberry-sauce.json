@@ -29,7 +29,7 @@
                  "fat":  13,
                  "cost_ps":  "2.95"
              },
-    "intro_html":  "Lomo de cerdo con salsa de moras is a Colombian classic, and it is the rare fruit sauce that is genuinely tart instead of just sweet. Roasted garlic rubbed pork loin, sliced thin, under a blackberry sauce cooked down with lime and a little sugar, all over rice. Pork loin is one of the leanest cuts we track, so this plate carries 55 grams of protein for about $2.95 (at everyday cost).",
+    "intro_html":  "Lomo de cerdo con salsa de moras is a Colombian classic, and it is the rare fruit sauce that is genuinely tart instead of just sweet. Roasted garlic rubbed pork loin, sliced thin, under a blackberry sauce cooked down with lime and a little sugar, all over rice. Pork loin is one of the leanest cuts we track, so this plate carries {{protein}} grams of protein for about ${{cost_ps}} (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBlackberries:\u003c/strong\u003e 7 cups (1008 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (840 g)",
@@ -55,7 +55,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $37.37 across 14 servings, roughly $2.67 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $15.44 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.81. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.95 a bowl\u003c/strong\u003e (at everyday cost) for a roast pork dinner with a real fruit sauce on it. Make this in berry season and the cost drops further, because the blackberries are the single biggest line on the list.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a roast pork dinner with a real fruit sauce on it. Make this in berry season and the cost drops further, because the blackberries are the single biggest line on the list.",
     "shop_smart":  [
                        "\u003cstrong\u003eWatch the blackberries.\u003c/strong\u003e They are more than half the cost of this entire batch. In peak season the price falls hard, and this is the recipe to make when the board shows berries cheap.",
                        "\u003cstrong\u003eFrozen blackberries work perfectly here.\u003c/strong\u003e The sauce gets cooked down and strained anyway, so nobody can tell. Frozen is usually the cheaper and steadier option out of season.",
@@ -72,9 +72,9 @@
                     "Cook the rice per the package so it is hot when everything else is ready.",
                     "Slice the rested pork thin against the grain, then combine the rice, sliced pork and blackberry sauce in your big pot."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, keeping the sliced pork evenly counted so the protein lands the same in every one. Every bowl comes in near 650 calories with a standout 55 grams of protein.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, keeping the sliced pork evenly counted so the protein lands the same in every one. Every bowl comes in near {{cal}} calories with a standout {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.mycolombianrecipes.com/lomo-de-cerdo-con-salsa-de-moras-pork-loin-with-blackberry-sauce/\" target=\"_blank\" rel=\"noopener\"\u003emycolombianrecipes.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Restaurant plates rebuilt for about $2.95 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Restaurant plates rebuilt for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  35.78,
     "cost_batch_true":  37.37,
     "cost_per_serving":  2.56,
@@ -159,7 +159,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Colombian roast pork loin with a tart blackberry pan sauce over rice, built for 14 servings. 650 calories, 55g protein, about $2.95 per serving (at everyday cost).",
+                 "description":  "Colombian roast pork loin with a tart blackberry pan sauce over rice, built for 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "colombian pork loin, lomo de cerdo con salsa de moras, blackberry sauce pork, high protein meal prep, roast pork rice bowls",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

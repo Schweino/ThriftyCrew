@@ -30,7 +30,7 @@
                  "fat":  15,
                  "cost_ps":  "4.19"
              },
-    "intro_html":  "Machaca is Sonoran comfort food, beef braised until it shreds into strands and cooked down with onion and green chile until every thread is seasoned. This build keeps it lean and honest at about \u003cstrong\u003e396 calories\u003c/strong\u003e and \u003cstrong\u003e31 grams of protein\u003c/strong\u003e a burrito, in a tortilla that brings 18 grams of fiber for 5 grams of net carb. There is no cheese in this one, and it does not need it. The chile and the shredded chuck do the heavy lifting, and a handful of cold cabbage at the end keeps it fresh straight out of the fridge.",
+    "intro_html":  "Machaca is Sonoran comfort food, beef braised until it shreds into strands and cooked down with onion and green chile until every thread is seasoned. This build keeps it lean and honest at about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e a burrito, in a tortilla that brings 18 grams of fiber for 5 grams of net carb. There is no cheese in this one, and it does not need it. The chile and the shredded chuck do the heavy lifting, and a handful of cold cabbage at the end keeps it fresh straight out of the fridge.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 3.5 lb (1588 g)",
@@ -73,7 +73,7 @@
                     "Shred the cabbage and chop the cilantro and keep them cold and separate; they go on at wrap time so they stay crisp.",
                     "Warm the tortillas, then portion and wrap as below."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total hot filling weight. Divide it by 14, spoon that amount onto each warm tortilla, top with an even share of the cold cabbage and cilantro, and roll. Every burrito lands at about \u003cstrong\u003e396 calories and 31 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total hot filling weight. Divide it by 14, spoon that amount onto each warm tortilla, top with an even share of the cold cabbage and cilantro, and roll. Every burrito lands at about \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.slenderkitchen.com/recipe/machaca-burritos\" target=\"_blank\" rel=\"noopener\"\u003eslenderkitchen.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  44.37,
@@ -168,7 +168,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A Sonoran machaca beef burrito for meal prep: chuck braised and shredded with onion and green chile, no cheese, about 396 calories and 31 grams of protein per serving.",
+                 "description":  "A Sonoran machaca beef burrito for meal prep: chuck braised and shredded with onion and green chile, no cheese, about {{cal}} calories and {{protein}} grams of protein per serving.",
                  "keywords":  "machaca burrito, sonoran shredded beef, chuck roast burrito, budget meal prep, mexican meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

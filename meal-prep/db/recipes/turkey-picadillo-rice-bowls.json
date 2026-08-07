@@ -20,7 +20,7 @@
                  "fat":  17,
                  "cost_ps":  "3.13"
              },
-    "intro_html":  "A savory Cuban-style turkey simmer with a little sweet-and-savory magic in every bite. At about $3.13 a serving (at everyday cost) with 46 grams of protein, this is a hearty, satisfying bowl. One skillet, 14 servings, done.",
+    "intro_html":  "A savory Cuban-style turkey simmer with a little sweet-and-savory magic in every bite. At about ${{cost_ps}} a serving (at everyday cost) with {{protein}} grams of protein, this is a hearty, satisfying bowl. One skillet, 14 servings, done.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3100 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (700 g)",
@@ -49,7 +49,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $41.34 across 14 servings, roughly $2.95 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $2.51 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $43.85. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.13 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e is the smart buy and keeps the cost per serving down.",
                        "Canned \u003cstrong\u003ediced tomatoes and tomato paste\u003c/strong\u003e in the store brand do the heavy lifting for pennies.",
@@ -62,7 +62,7 @@
                     "Let it simmer 10 to 15 minutes so the flavors meld and the sauce thickens, then fish out the bay leaves.",
                     "Serve the picadillo over cooked white rice."
                 ],
-    "portion_html":  "Each of the 14 bowls delivers 46 grams of protein and about 565 calories.",
+    "portion_html":  "Each of the 14 bowls delivers {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.skinnytaste.com/turkey-picadillo/\" target=\"_blank\" rel=\"noopener\"\u003eSkinnytaste\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Big flavor, tiny price, and it might just become a regular on your rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  39.21,
@@ -154,7 +154,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Cuban meal prep. Fourteen servings at about 565 calories and 46 grams of protein for roughly $3.13 each (at everyday cost).",
+                 "description":  "A high-protein Cuban meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, turkey picadillo rice bowls, budget dinner",
                  "costPerServing":  3.13,
                  "recipeIngredient":  [

@@ -28,7 +28,7 @@
                  "fat":  12,
                  "cost_ps":  "3.32"
              },
-    "intro_html":  "\u003cp\u003eSweet, smoky, and honest about its numbers. This one lands at 367 calories with 39 grams of protein, wrapped in a tortilla that brings 18 grams of fiber for about 5 grams of net carb. The trick is a BBQ crema: blended cottage cheese and a little cream cheese carry the sauce so you get the creamy, saucy feel without a cup of mayo behind it. If you like our Lean BBQ Chicken and Rice Bowls, this is the same flavor you can eat with one hand.\u003c/p\u003e",
+    "intro_html":  "\u003cp\u003eSweet, smoky, and honest about its numbers. This one lands at {{cal}} calories with {{protein}} grams of protein, wrapped in a tortilla that brings 18 grams of fiber for about 5 grams of net carb. The trick is a BBQ crema: blended cottage cheese and a little cream cheese carry the sauce so you get the creamy, saucy feel without a cup of mayo behind it. If you like our Lean BBQ Chicken and Rice Bowls, this is the same flavor you can eat with one hand.\u003c/p\u003e",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1582 g)",
@@ -58,7 +58,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $37.03 across 14 servings, roughly $2.64 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $9.43 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $46.46. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e$3.32 a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a BBQ chicken bowl at a fast-casual spot. Catch the breast on sale and it slides lower.\u003c/p\u003e",
+    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a BBQ chicken bowl at a fast-casual spot. Catch the breast on sale and it slides lower.\u003c/p\u003e",
     "shop_smart":  [
                        "\u003cstrong\u003eRegular BBQ sauce is fine, but read the label.\u003c/strong\u003e One bottle sauces the whole batch. If you want to shave carbs, the no-sugar-added versions taste nearly identical once they hit the hot chicken.",
                        "\u003cstrong\u003eA little cream cheese goes a long way.\u003c/strong\u003e You only need part of one 8 ounce brick to make the crema silky, so the rest keeps for bagels or the next batch.",
@@ -72,9 +72,9 @@
                     "Fold the crema into the warm BBQ chicken.",
                     "Warm the tortillas, then fill each with the BBQ chicken, a scatter of shredded cheddar, and the sliced green onions before you wrap."
                 ],
-    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near 367 calories with 39 grams of protein.\u003c/p\u003e",
+    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near {{cal}} calories with {{protein}} grams of protein.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://juicymacros.com/high-protein-chicken-burrito/\" target=\"_blank\" rel=\"noopener\"\u003ejuicymacros.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about $3.32 a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
+    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about ${{cost_ps}} a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
     "cost_batch":  28.29,
     "cost_batch_true":  37.03,
     "cost_per_serving":  2.02,
@@ -175,7 +175,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A sweet and smoky BBQ chicken burrito under 400 calories, built on a lean blended crema. Fourteen servings at about 367 calories and 39 grams of protein for roughly $3.32 each (at everyday cost).",
+                 "description":  "A sweet and smoky BBQ chicken burrito under 400 calories, built on a lean blended crema. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "bbq chicken burrito, high protein meal prep, low calorie burrito, cheap meal prep, budget dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

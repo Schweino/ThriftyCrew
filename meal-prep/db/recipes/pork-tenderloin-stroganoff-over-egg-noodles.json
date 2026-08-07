@@ -18,7 +18,7 @@
                  "fat":  21,
                  "cost_ps":  "4.11"
              },
-    "intro_html":  "Stroganoff is what happens when mushrooms, butter, and sour cream decide to make pork look fancy. This one delivers \u003cstrong\u003e49 grams of protein\u003c/strong\u003e per bowl over wide egg noodles, and it costs about \u003cstrong\u003e$4.11 a serving\u003c/strong\u003e (at everyday cost). Comfort food math that actually works in your favor.",
+    "intro_html":  "Stroganoff is what happens when mushrooms, butter, and sour cream decide to make pork look fancy. This one delivers \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e per bowl over wide egg noodles, and it costs about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost). Comfort food math that actually works in your favor.",
     "ingredients_display": ["\u003cstrong\u003eButter (generic):\u003c/strong\u003e 7 tbsp (98 g)","\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 11.25 cups (794 g)","\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 onions (385 g)","\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)","\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 5.25 lb (2381 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1.25 tbsp (21 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)","\u003cstrong\u003eSmoked Paprika (Great Value):\u003c/strong\u003e 3.5 tbsp (24 g)","\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 3.5 tbsp (15 g)","\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3.5 tbsp (56 g)","\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 7 tbsp (56 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 4.75 lb (2100 g)","\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 1 cup (210 g)","\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1 lemon worth (52 g)","\u003cstrong\u003eEgg Noodles (Great Value wide):\u003c/strong\u003e 28 oz dry (794 g)","\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 3.5 cups (805 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -39,7 +39,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $49.75 across 14 servings, roughly $3.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $13.44 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $63.19. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.11 a bowl\u003c/strong\u003e (at everyday cost) for creamy pork tenderloin stroganoff loaded with mushrooms. A sit-down restaurant charges $16 or more for the same plate, and theirs does not come with 13 more bowls waiting in the fridge.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for creamy pork tenderloin stroganoff loaded with mushrooms. A sit-down restaurant charges $16 or more for the same plate, and theirs does not come with 13 more bowls waiting in the fridge.",
     "shop_smart":  "Pork tenderloin is the big line item of this batch. Whole tenderloins go on sale all the time, so when they dip, buy two and freeze one for the next round.\nBuy whole white mushrooms in 8 oz packs and slice them yourself. Pre-sliced runs more per pound for about three minutes of knife work.\nLight sour cream in the store-brand tub tastes identical once it hits a warm sauce. Two 16 oz tubs cover the batch with a little left for taco night.",
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -50,9 +50,9 @@
                     "Return the pork and any juices to the pot and warm through. Pull the pot off the heat, then stir in the light sour cream. Off the heat matters, boiling sour cream is how you get a grainy sauce.",
                     "Fold the noodles into the sauce until everything is coated and glossy."
                 ],
-    "portion_html":  "Weigh the full pot, subtract the empty pot weight you wrote down, and divide by 14. That is your gram target per container. Scoop, weigh, repeat, and every bowl lands at about 613 calories with 49 grams of protein.",
+    "portion_html":  "Weigh the full pot, subtract the empty pot weight you wrote down, and divide by 14. That is your gram target per container. Scoop, weigh, repeat, and every bowl lands at about {{cal}} calories with {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.eatpork.org/pork-stroganoff/\" target=\"_blank\" rel=\"noopener\"\u003eNational Pork Board (eatpork.org)\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $4.11 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  41.11,
     "cost_batch_true":  49.75,
     "cost_per_serving":  2.94,
@@ -177,7 +177,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Budget pork stroganoff meal prep: 14 bowls, 613 calories and 49g protein each, about $4.11 a serving (at everyday cost). Creamy mushroom sauce over wide egg noodles.",
+                 "description":  "Budget pork stroganoff meal prep: 14 bowls, {{cal}} calories and {{protein}}g protein each, about ${{cost_ps}} a serving (at everyday cost). Creamy mushroom sauce over wide egg noodles.",
                  "keywords":  "pork stroganoff, pork tenderloin recipe, meal prep stroganoff, budget dinner, high protein meal prep, egg noodles",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

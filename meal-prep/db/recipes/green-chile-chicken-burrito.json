@@ -30,7 +30,7 @@
                  "fat":  11,
                  "cost_ps":  "3.19"
              },
-    "intro_html":  "\u003cp\u003eGreen chile and cheese without the guilt trip. This one runs 392 calories with a huge 40 grams of protein, on a tortilla carrying 18 grams of fiber for about 5 grams of net carb. The cheesy pull comes from a blended cottage cheese and green chile sauce doing the work that a pound of cheese usually does. A store rotisserie chicken with the skin removed keeps it fast and lean. If you know our Slow Cooker Chicken Chile Verde Bowls, this is the handheld, cheesier take on that same green-chile comfort.\u003c/p\u003e",
+    "intro_html":  "\u003cp\u003eGreen chile and cheese without the guilt trip. This one runs {{cal}} calories with a huge {{protein}} grams of protein, on a tortilla carrying 18 grams of fiber for about 5 grams of net carb. The cheesy pull comes from a blended cottage cheese and green chile sauce doing the work that a pound of cheese usually does. A store rotisserie chicken with the skin removed keeps it fast and lean. If you know our Slow Cooker Chicken Chile Verde Bowls, this is the handheld, cheesier take on that same green-chile comfort.\u003c/p\u003e",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003eRotisserie Chicken (generic (USDA)):\u003c/strong\u003e 2.62 lb pulled, skin removed (1190 g)",
@@ -59,7 +59,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $44.40 across 14 servings, roughly $3.17 per burrito.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $0.29 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.69. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e$3.19 a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a smothered green-chile burrito out. This one is cheesy, high-protein, and still costs about two bucks.\u003c/p\u003e",
+    "cost_closing_html":  "\u003cp\u003eThat is about \u003cstrong\u003e${{cost_ps}} a burrito\u003c/strong\u003e (at everyday cost) versus \u003cstrong\u003e$10 or more\u003c/strong\u003e for a smothered green-chile burrito out. This one is cheesy, high-protein, and still costs about two bucks.\u003c/p\u003e",
     "shop_smart":  [
                        "\u003cstrong\u003eGrab the rotisserie chicken the day you cook.\u003c/strong\u003e Warm birds pull apart in minutes, and taking the skin off before you shred keeps the fat down while the protein stays high.",
                        "\u003cstrong\u003eCanned green chiles are the flavor for almost nothing.\u003c/strong\u003e A couple of 4 ounce cans carry the whole green-chile note across all 14 burritos. Fire-roasted corn adds a smoky edge if your store carries it, but regular corn works fine.",
@@ -74,9 +74,9 @@
                     "Combine the shredded chicken, sauteed onion and pepper, beans, and corn in your pot, then fold in the green chile sauce and the Mexican cheese blend so it melts in.",
                     "Warm the tortillas so they roll without cracking, then fill and wrap each one."
                 ],
-    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near 392 calories with 40 grams of protein.\u003c/p\u003e",
+    "portion_html":  "\u003cp\u003eSet the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total food weight by 14 and scoop the same amount into each tortilla. Every burrito lands near {{cal}} calories with {{protein}} grams of protein.\u003c/p\u003e",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://masonfit.com/cheesy-rotisserie-chicken-burritos/\" target=\"_blank\" rel=\"noopener\"\u003emasonfit.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about $3.19 a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
+    "upsell_html":  "\u003cp\u003eHigh-protein dinners for about ${{cost_ps}} a burrito (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/p\u003e",
     "cost_batch":  35.21,
     "cost_batch_true":  44.4,
     "cost_per_serving":  2.52,
@@ -169,7 +169,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A cheesy green chile rotisserie chicken burrito under 400 calories. About 392 calories and 40 grams of protein per serving, roughly $3.19 each (at everyday cost).",
+                 "description":  "A cheesy green chile rotisserie chicken burrito under 400 calories. About {{cal}} calories and {{protein}} grams of protein per serving, roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "green chile chicken burrito, rotisserie chicken meal prep, high protein burrito, low calorie meal prep, budget dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

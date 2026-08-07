@@ -28,7 +28,7 @@
                  "fat":  11,
                  "cost_ps":  "3.60"
              },
-    "intro_html":  "When the goal is protein first and filler last, this is the burrito. There is no rice and no cheese hiding the numbers, just lean beef, a heavy pour of black beans, tomatoes, and sweet corn. Each one comes in at about \u003cstrong\u003e393 calories\u003c/strong\u003e and \u003cstrong\u003e34 grams of protein\u003c/strong\u003e, with a tortilla that brings 18 grams of fiber for 5 grams of net carb. It is the same family as our High-Protein Beef Burrito Bowls, but where the bowl leans on rice, this wrap trades the rice for more beans and hands you the protein without the padding.",
+    "intro_html":  "When the goal is protein first and filler last, this is the burrito. There is no rice and no cheese hiding the numbers, just lean beef, a heavy pour of black beans, tomatoes, and sweet corn. Each one comes in at about \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e, with a tortilla that brings 18 grams of fiber for 5 grams of net carb. It is the same family as our High-Protein Beef Burrito Bowls, but where the bowl leans on rice, this wrap trades the rice for more beans and hands you the protein without the padding.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eHigh Fiber Tortilla (La Banderita):\u003c/strong\u003e 14 tortillas (910 g)",
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)",
@@ -63,7 +63,7 @@
                     "Simmer 5 to 8 minutes until the tomato liquid cooks down and the filling holds together on a spoon.",
                     "Warm the tortillas so they roll without cracking, then portion and wrap as below."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total filling weight. Divide it by 14, spoon that exact amount onto each warm tortilla, and roll. Every burrito lands at about \u003cstrong\u003e393 calories and 34 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. That is your total filling weight. Divide it by 14, spoon that exact amount onto each warm tortilla, and roll. Every burrito lands at about \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://skinnyfitalicious.com/healthy-high-protein-burrito/\" target=\"_blank\" rel=\"noopener\"\u003eskinnyfitalicious.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "High-protein dinners like this are one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  42.42,
@@ -126,7 +126,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A rice-free, high-protein beef and bean burrito for meal prep. Fourteen servings at about 393 calories and 34 grams of protein each.",
+                 "description":  "A rice-free, high-protein beef and bean burrito for meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein each.",
                  "keywords":  "high protein burrito, beef and bean burrito, no rice burrito, budget meal prep, ground beef meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",

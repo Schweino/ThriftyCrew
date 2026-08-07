@@ -18,7 +18,7 @@
                  "fat":  26,
                  "cost_ps":  "3.45"
              },
-    "intro_html":  "Jumbo shells stuffed with a three-cheese filling and baked under beefy marinara: it looks like a special-occasion dinner and preps like a Tuesday. Each serving packs \u003cstrong\u003e38 grams of protein\u003c/strong\u003e at 560 calories for about \u003cstrong\u003e$3.45\u003c/strong\u003e (at everyday cost). Nobody at the table needs to know how cheap that was.",
+    "intro_html":  "Jumbo shells stuffed with a three-cheese filling and baked under beefy marinara: it looks like a special-occasion dinner and preps like a Tuesday. Each serving packs \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e at {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). Nobody at the table needs to know how cheap that was.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePasta Shells (Great Value):\u003c/strong\u003e 19.5 oz dry (556 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1.25 tbsp (16 g)",
@@ -54,7 +54,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $37.82 across 14 servings, roughly $2.70 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $9.21 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.03. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.45 a bowl\u003c/strong\u003e (at everyday cost) for stuffed shells that a sit-down Italian place would happily price at seven or eight times that.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for stuffed shells that a sit-down Italian place would happily price at seven or eight times that.",
     "shop_smart":  "This recipe stretches 1.25 lb of ground beef across 14 servings by leaning on the cheese filling for protein. That is the cheapest way to eat beef, using it as a flavor, not a slab.\nRicotta is the big-ticket item, so compare tub sizes; the 15 oz store-brand tubs almost always beat the small ones on price per ounce.\nStore-brand marinara bakes up the same as the premium jars once it is under cheese. Three jars here, so the savings are real.",
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -65,9 +65,9 @@
                     "Pour the remaining meat sauce over the shells and top with the rest of the mozzarella.",
                     "Cover with foil and bake 25 minutes, then uncover and bake 10 more until the cheese is bubbly and starting to brown. Rest 10 minutes before portioning."
                 ],
-    "portion_html":  "Transfer everything to your weighed pot, set it on the scale, subtract the empty-pot number, and divide by 14. That works out to a few stuffed shells plus sauce per container. Each bowl brings \u003cstrong\u003e560 calories and 38 grams of protein\u003c/strong\u003e.",
+    "portion_html":  "Transfer everything to your weighed pot, set it on the scale, subtract the empty-pot number, and divide by 14. That works out to a few stuffed shells plus sauce per container. Each bowl brings \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/stuffed-shells-with-ground-beef/\" target=\"_blank\" rel=\"noopener\"\u003eBudget Bytes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $3.45 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  25.6,
     "cost_batch_true":  37.82,
     "cost_per_serving":  1.83,
@@ -185,7 +185,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Beef stuffed shells meal prep: jumbo pasta shells with three-cheese filling baked in meat sauce. 560 calories, 38g protein, about $3.45 a serving (at everyday cost).",
+                 "description":  "Beef stuffed shells meal prep: jumbo pasta shells with three-cheese filling baked in meat sauce. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} a serving (at everyday cost).",
                  "keywords":  "beef stuffed shells, stuffed pasta shells, ricotta stuffed shells, meal prep casserole, budget meal prep, high protein pasta",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",

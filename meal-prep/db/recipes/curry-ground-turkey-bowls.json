@@ -20,7 +20,7 @@
                  "fat":  22,
                  "cost_ps":  "3.99"
              },
-    "intro_html":  "A warm, cozy curry that fills the kitchen with good smells and your fridge with easy lunches. Each bowl carries 52 grams of protein for about $3.99 a serving (at everyday cost). One skillet, 14 servings, and plenty of flavor.",
+    "intro_html":  "A warm, cozy curry that fills the kitchen with good smells and your fridge with easy lunches. Each bowl carries {{protein}} grams of protein for about ${{cost_ps}} a serving (at everyday cost). One skillet, 14 servings, and plenty of flavor.",
     "ingredients_display":  [
                                 "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 8 lb (3400 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (700 g)",
@@ -50,7 +50,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $44.98 across 14 servings, roughly $3.21 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $10.86 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.84. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.99 a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a high-protein dinner that beats takeout on price and macros.",
     "shop_smart":  [
                        "Grab the \u003cstrong\u003e8 lb ground turkey pack\u003c/strong\u003e for the lowest price on the biggest ingredient.",
                        "A \u003cstrong\u003esingle can of coconut milk\u003c/strong\u003e gives you that rich, creamy sauce for about two bucks, so it is worth the splurge.",
@@ -63,7 +63,7 @@
                     "Simmer 10 to 15 minutes until the sauce thickens and turns rich.",
                     "Serve the curry over cooked white rice."
                 ],
-    "portion_html":  "Each of the 14 bowls delivers 52 grams of protein and about 642 calories.",
+    "portion_html":  "Each of the 14 bowls delivers {{protein}} grams of protein and about {{cal}} calories.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.familyfoodonthetable.com/curry-ground-turkey-with-rice-and-peas/\" target=\"_blank\" rel=\"noopener\"\u003eFamily Food on the Table\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Cozy, filling, and easy on the budget, this is comfort food that loves you back. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
     "cost_batch":  40.67,
@@ -162,7 +162,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A high-protein Indian meal prep. Fourteen servings at about 642 calories and 52 grams of protein for roughly $3.99 each (at everyday cost).",
+                 "description":  "A high-protein Indian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, curry ground turkey bowls, budget dinner",
                  "costPerServing":  3.99,
                  "recipeIngredient":  [

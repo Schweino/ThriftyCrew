@@ -18,7 +18,7 @@
                  "fat":  43,
                  "cost_ps":  "2.88"
              },
-    "intro_html":  "This is the loaded baked potato that grew up and became dinner: crispy seasoned potatoes, juicy chicken, and a topping of cheddar, bacon, and green onion with cool sour cream on the side. A monster \u003cstrong\u003e51 grams of protein\u003c/strong\u003e per serving for about \u003cstrong\u003e$2.88\u003c/strong\u003e (at everyday cost). Big portions, big flavor, small receipt.",
+    "intro_html":  "This is the loaded baked potato that grew up and became dinner: crispy seasoned potatoes, juicy chicken, and a topping of cheddar, bacon, and green onion with cool sour cream on the side. A monster \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e per serving for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost). Big portions, big flavor, small receipt.",
     "ingredients_display": ["\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)","\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 14 potatoes (2982 g)","\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.5 cups (126 g)","\u003cstrong\u003eHot Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 1.75 tbsp (26 g)","\u003cstrong\u003ePaprika:\u003c/strong\u003e 1.25 tbsp (8 g)","\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.75 tbsp (8 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 0.5 tbsp (10 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (2 g)","\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 14 oz (396 g)","\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 1.25 lb (595 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 14.75 tbsp (88 g)","\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1.25 cups (300 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -35,7 +35,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $29.87 across 14 servings, roughly $2.13 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $14.38 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $44.25. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.88 a bowl\u003c/strong\u003e (at everyday cost) for a plate that a casual chain would call a loaded chicken and potato skillet and charge $14 for. You are paying a fraction of the menu price per serving.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a plate that a casual chain would call a loaded chicken and potato skillet and charge $14 for. You are paying a fraction of the menu price per serving.",
     "shop_smart":  ["Chicken breast in the family pack is doing the heavy lifting here. It is one of the cheapest proteins per gram in the whole store.","Buy whole russets in the bag, not loose. Seven pounds runs so little on our board that potatoes are nearly free calories.","Bacon is the luxury line item. If your store runs ends and pieces for less, grab that pack. It gets crumbled anyway and nobody will know."],
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
@@ -46,9 +46,9 @@
                     "Lower the oven to 400 F. Combine potatoes and chicken in a 9x13 pan, top with the cheddar and bacon, and bake about 10 minutes until melted.",
                     "Finish with green onions. Keep the sour cream separate and add a spoonful when you reheat each bowl."
                 ],
-    "portion_html":  "Weigh your pot with the finished chicken and potatoes before topping, subtract the empty pot number from step 1, and divide by 14 for your per-bowl weight. Split the cheese and bacon evenly across the containers. Each serving lands at 777 calories and 51 grams of protein.",
+    "portion_html":  "Weigh your pot with the finished chicken and potatoes before topping, subtract the empty pot number from step 1, and divide by 14 for your per-bowl weight. Split the cheese and bacon evenly across the containers. Each serving lands at {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.lovebakesgoodcakes.com/loaded-potato-and-chicken-casserole/\" target=\"_blank\" rel=\"noopener\"\u003eLove Bakes Good Cakes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $2.88 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Hearty dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  24.51,
     "cost_batch_true":  29.87,
     "cost_per_serving":  1.75,
@@ -145,7 +145,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Loaded chicken and potato casserole: 777 calories and 51g protein at about $2.88 a serving (at everyday cost). Cheddar, bacon, and crispy potatoes in 14 big meal prep bowls.",
+                 "description":  "Loaded chicken and potato casserole: {{cal}} calories and {{protein}}g protein at about ${{cost_ps}} a serving (at everyday cost). Cheddar, bacon, and crispy potatoes in 14 big meal prep bowls.",
                  "keywords":  "loaded chicken potato casserole, cheap high protein dinner, chicken bacon ranch style bake, budget meal prep, potato casserole recipe, family dinner ideas",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",

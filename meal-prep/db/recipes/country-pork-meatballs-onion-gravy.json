@@ -25,7 +25,7 @@
                  "fat":  38,
                  "cost_ps":  "3.55"
              },
-    "intro_html":  "This is the dinner that smells like somebody\u0027s grandmother is still in the kitchen. Seasoned pork meatballs baked on sheet pans, a slow-cooked onion gravy built in one pot, and a pile of real mashed potatoes underneath. Ground pork is one of the cheapest proteins we track on the board, so a plate that eats like a diner special lands at 32 grams of protein for about $3.55 (at everyday cost).",
+    "intro_html":  "This is the dinner that smells like somebody\u0027s grandmother is still in the kitchen. Seasoned pork meatballs baked on sheet pans, a slow-cooked onion gravy built in one pot, and a pile of real mashed potatoes underneath. Ground pork is one of the cheapest proteins we track on the board, so a plate that eats like a diner special lands at {{protein}} grams of protein for about ${{cost_ps}} (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 5.25 tbsp (71 g)",
                                 "\u003cstrong\u003eGround Pork:\u003c/strong\u003e 3.75 lb (1750 g)",
@@ -66,7 +66,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $31.11 across 14 servings, roughly $2.22 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $22.42 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.53. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.55 a bowl\u003c/strong\u003e (at everyday cost) for meatballs, gravy and mashed potatoes. Order that same plate at a diner and you will not see change back.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for meatballs, gravy and mashed potatoes. Order that same plate at a diner and you will not see change back.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy the four pound pack of ground pork.\u003c/strong\u003e The cost line already assumes it. Pork is usually the cheapest ground meat in the case, and what you do not use freezes flat in a bag.",
                        "\u003cstrong\u003eBread crumbs and flour are pennies here.\u003c/strong\u003e Both are pantry items that carry a dozen batches. If you have heels of bread going stale, dry them in the oven and pulse them yourself for free.",
@@ -83,9 +83,9 @@
                     "Sprinkle the flour over the onions and stir for a minute, then pour in the beef broth along with the worcestershire and soy sauce. Whisk until it thickens into a glossy gravy.",
                     "Slide the baked meatballs into the gravy and let them simmer a few minutes so they drink some of it up."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, mashed potatoes first, then meatballs and gravy over the top. Every bowl lands near 663 calories and 32 grams of protein.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container, mashed potatoes first, then meatballs and gravy over the top. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/country-pork-meatballs-with-onion-gravy/\" target=\"_blank\" rel=\"noopener\"\u003erecipetineats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Comfort food dinners for about $3.55 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Comfort food dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  24.47,
     "cost_batch_true":  31.11,
     "cost_per_serving":  1.75,
@@ -250,7 +250,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Baked pork meatballs in slow-cooked onion gravy over mashed potatoes, built for 14 servings. 663 calories, 32g protein, about $3.55 per serving (at everyday cost).",
+                 "description":  "Baked pork meatballs in slow-cooked onion gravy over mashed potatoes, built for 14 servings. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "pork meatballs, onion gravy, mashed potatoes, ground pork meal prep, budget comfort food, cheap dinner recipe",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

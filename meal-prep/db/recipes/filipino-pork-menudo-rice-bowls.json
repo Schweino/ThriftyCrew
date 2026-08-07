@@ -67,7 +67,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $36.76 across 14 servings, roughly $2.63 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $13.25 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.01. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.32 a bowl\u003c/strong\u003e (at everyday cost) for a Filipino party braise that stretches pork across potatoes, carrots, and chickpeas.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a Filipino party braise that stretches pork across potatoes, carrots, and chickpeas.",
     "shop_smart":  [
                        "\u003cstrong\u003ePork shoulder is the right cut and the cheap one at the same time.\u003c/strong\u003e It needs the long braise to break down, which means the budget choice is also the correct choice.",
                        "\u003cstrong\u003ePotatoes, carrots, and canned tomatoes are doing the volume work.\u003c/strong\u003e That is the whole trick of this dish. The meat sets the flavor and the cheap stuff sets the portion size.",
@@ -84,9 +84,9 @@
                     "Fold in the chickpeas, diced green and red bell peppers, and golden raisins, and cook just until the peppers soften but keep some bite.",
                     "Taste and adjust the salt, then cook rice separately to serve underneath."
                 ],
-    "portion_html":  "Weigh the rice and the menudo in separate pots, subtracting the empty-pot weight from Step 1 each time, and divide each by 14. Even rice base first, even ladle of stew second. Every bowl comes in at \u003cstrong\u003e772 calories with 45 grams of protein\u003c/strong\u003e. This one reheats particularly well because the potatoes keep drinking up the sauce.",
+    "portion_html":  "Weigh the rice and the menudo in separate pots, subtracting the empty-pot weight from Step 1 each time, and divide each by 14. Even rice base first, even ladle of stew second. Every bowl comes in at \u003cstrong\u003e{{cal}} calories with {{protein}} grams of protein\u003c/strong\u003e. This one reheats particularly well because the potatoes keep drinking up the sauce.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.kawalingpinoy.com/pork-menudo/\" target=\"_blank\" rel=\"noopener\"\u003ekawalingpinoy.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Braised, party-sized dinners for about $3.32 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Braised, party-sized dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  31.57,
     "cost_batch_true":  36.76,
     "cost_per_serving":  2.26,
@@ -235,7 +235,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Filipino pork menudo rebuilt for 14-serving meal prep: tomato-braised pork with potatoes, carrots, chickpeas, and raisins over rice. 772 calories, 45g protein, about $3.32 per serving (at everyday cost).",
+                 "description":  "Filipino pork menudo rebuilt for 14-serving meal prep: tomato-braised pork with potatoes, carrots, chickpeas, and raisins over rice. {{cal}} calories, {{protein}}g protein, about ${{cost_ps}} per serving (at everyday cost).",
                  "keywords":  "pork menudo, filipino pork stew, tomato braised pork, filipino meal prep, budget high protein dinner, kawaling pinoy style menudo",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",

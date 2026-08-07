@@ -61,7 +61,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $27.81 across 14 servings, roughly $1.99 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $31.06 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $58.87. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.20 a bowl\u003c/strong\u003e (at everyday cost). The dried chiles look expensive on the shelf, but a bag lasts through several batches, so the real per bowl cost of the flavor base is small.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). The dried chiles look expensive on the shelf, but a bag lasts through several batches, so the real per bowl cost of the flavor base is small.",
     "shop_smart":  [
                        "\u003cstrong\u003eBuy dried chiles in the big bag from the Hispanic aisle.\u003c/strong\u003e The branded packets on the spice rack cost several times more per ounce for the exact same dried chile.",
                        "\u003cstrong\u003eCanned hominy saves you a day.\u003c/strong\u003e The dried version needs soaking and hours of cooking. Canned is rinse and go, and the per serving price is about the same.",
@@ -77,9 +77,9 @@
                     "Pour in the chicken broth, add the dried arbol chiles whole if you want heat, and simmer covered for about 2 hours until the pork is fully tender.",
                     "Add the drained hominy and simmer 20 minutes more so it takes on the red broth, then cook the rice per the package to serve alongside."
                 ],
-    "portion_html":  "Spread the cooked rice across your 14 containers, then set the pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and ladle that exact weight over the rice. Every bowl lands near 564 calories with 28 grams of protein. It gets better every day it sits.",
+    "portion_html":  "Spread the cooked rice across your 14 containers, then set the pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and ladle that exact weight over the rice. Every bowl lands near {{cal}} calories with {{protein}} grams of protein. It gets better every day it sits.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.isabeleats.com/red-posole-recipe/\" target=\"_blank\" rel=\"noopener\"\u003eisabeleats.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cem\u003eClassic red pozole for about $3.20 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "upsell_html":  "\u003cem\u003eClassic red pozole for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
     "cost_batch":  25.34,
     "cost_batch_true":  27.81,
     "cost_per_serving":  1.81,

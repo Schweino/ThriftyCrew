@@ -43,7 +43,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $18.26 across 14 servings, roughly $1.30 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $6.36 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $24.62. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$1.76 a bowl\u003c/strong\u003e (at everyday cost) for a from-scratch sausage pasta that beats anything from a box or a drive-thru.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) for a from-scratch sausage pasta that beats anything from a box or a drive-thru.",
     "shop_smart":  [
                        "\u003cstrong\u003eSausage freezes great.\u003c/strong\u003e Buy an extra package when it is on sale and freeze it. It thaws fast and keeps for months.",
                        "\u003cstrong\u003ePeppers in a 3-count bag are cheaper.\u003c/strong\u003e Or use frozen pepper strips, which cost less and skip the slicing.",
@@ -57,9 +57,9 @@
                     "Pour in the pasta sauce and simmer until hot.",
                     "Add the drained penne, stir to coat, then fold in the parmesan off the heat."
                 ],
-    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near 432 calories and 23 grams of protein.",
+    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near {{cal}} calories and {{protein}} grams of protein.",
     "credit_html":  "",
-    "upsell_html":  "Comfort-food dinners for about $1.76 a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "upsell_html":  "Comfort-food dinners for about ${{cost_ps}} a bowl (at everyday cost). This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
     "cost_batch":  13.57,
     "cost_batch_true":  18.26,
     "cost_per_serving":  0.97,
@@ -121,7 +121,7 @@
                            ]
                },
     "head":  {
-                 "description":  "A hearty one-pan sausage, penne, marinara, and pepper meal prep. Fourteen servings at about 432 calories and 23 grams of protein for roughly $1.76 each (at everyday cost).",
+                 "description":  "A hearty one-pan sausage, penne, marinara, and pepper meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "cheap meal prep, sausage pasta, budget dinner, high protein pasta",
                  "costPerServing":  1.76,
                  "recipeIngredient":  [

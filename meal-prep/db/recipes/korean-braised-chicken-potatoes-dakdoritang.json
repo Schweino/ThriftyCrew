@@ -28,7 +28,7 @@
                  "fat":  14,
                  "cost_ps":  "4.03"
              },
-    "intro_html":  "Dakdoritang is the Korean braise where chicken and potatoes cook down in a gochujang sauce until the potatoes are falling apart at the edges and thickening everything around them. It is a one pot dish that gets better the second day, which is exactly what you want from a meal prep recipe. Each bowl carries 581 calories and \u003cstrong\u003e55 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.03 a serving\u003c/strong\u003e (at everyday cost).",
+    "intro_html":  "Dakdoritang is the Korean braise where chicken and potatoes cook down in a gochujang sauce until the potatoes are falling apart at the edges and thickening everything around them. It is a one pot dish that gets better the second day, which is exactly what you want from a meal prep recipe. Each bowl carries {{cal}} calories and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7.75 lb (3500 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 5 onions (560 g)",
@@ -69,7 +69,7 @@
                        "\u003cstrong\u003eTrue shopping cost: about $32.68 across 14 servings, roughly $2.33 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
                        "\u003cstrong\u003eStarting with an empty pantry? Add about $19.58 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.26. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$4.03 a bowl\u003c/strong\u003e (at everyday cost) with that much protein in it. Chicken thighs are the cheapest real protein in the store and gochujang costs pennies per serving, which is how a dish this bold ends up this cheap.",
+    "cost_closing_html":  "About \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost) with that much protein in it. Chicken thighs are the cheapest real protein in the store and gochujang costs pennies per serving, which is how a dish this bold ends up this cheap.",
     "shop_smart":  [
                        "Boneless thighs are the whole reason this number works. They cost a fraction of breast per pound, they do not dry out during a braise, and they carry more flavor. For any stew, thighs beat breast on every measure including price.",
                        "A tub of gochujang costs a few dollars and lasts through many batches. It is the single highest return item you can add to a pantry if you like Korean food, because it turns cheap ingredients into something that tastes engineered.",
@@ -86,9 +86,9 @@
                     "Uncover, add the jalapeno, and simmer another 15 to 20 minutes while the liquid reduces into a thick glossy sauce. Stir gently so the potatoes stay whole.",
                     "Scatter the green onions over the top off the heat."
                 ],
-    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Scoop to that gram target and make sure each container gets both chicken and potato rather than one or the other. Every portion lands at \u003cstrong\u003e581 calories\u003c/strong\u003e, and this reheats beautifully because the sauce keeps everything moist.",
+    "portion_html":  "Set the full pot on the scale, subtract the empty-pot weight you wrote down, and divide by 14. Scoop to that gram target and make sure each container gets both chicken and potato rather than one or the other. Every portion lands at \u003cstrong\u003e{{cal}} calories\u003c/strong\u003e, and this reheats beautifully because the sauce keeps everything moist.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.beyondkimchee.com/spicy-korean-chicken-stew/\" target=\"_blank\" rel=\"noopener\"\u003ebeyondkimchee.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Korean braised chicken for about \u003cstrong\u003e$4.03 a bowl\u003c/strong\u003e (at everyday cost). Members get every recipe in the Meal Prep section plus the whole library of money lessons, calculators, and tools for $1 a month.",
+    "upsell_html":  "Korean braised chicken for about \u003cstrong\u003e${{cost_ps}} a bowl\u003c/strong\u003e (at everyday cost). Members get every recipe in the Meal Prep section plus the whole library of money lessons, calculators, and tools for $1 a month.",
     "cost_batch":  28.35,
     "cost_batch_true":  32.68,
     "cost_per_serving":  2.02,
@@ -237,7 +237,7 @@
                            ]
                },
     "head":  {
-                 "description":  "Dakdoritang, Korean braised chicken and potatoes in a gochujang sauce, rebuilt for 14 meal prep servings at 581 calories and 55g protein for about $4.03 (at everyday cost).",
+                 "description":  "Dakdoritang, Korean braised chicken and potatoes in a gochujang sauce, rebuilt for 14 meal prep servings at {{cal}} calories and {{protein}}g protein for about ${{cost_ps}} (at everyday cost).",
                  "keywords":  "dakdoritang, korean chicken stew, gochujang chicken, braised chicken and potatoes, korean meal prep, budget chicken recipe, high protein meal prep",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
