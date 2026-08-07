@@ -226,7 +226,12 @@ foreach($s in ($profiles.Keys | Sort-Object)){
   }
 }
 foreach($x in $expired){
-  $hard.Add(("AD EXPIRED: {0}'s ad file {1} closed {2} ({3} day(s) ago) and its {4} row(s) are still the newest this store has - the board can still crown a sale price whose sale is over" -f $x.store,$x.file,$x.to,$x.days,$x.rows))
+  # Wording matters here. compare-deals.ps1 now REFUSES to price from an expired ad, so this is no longer
+  # "the board is publishing a dead sale" - that hole is closed. What it means now is that the store's ad
+  # coverage is GONE until a pull lands: its {rows} sale rows are excluded, those cells fall back to
+  # everyday prices or to other stores, and the store looks less competitive than it is. Overstating the
+  # risk would be its own defect, because a guard that cries louder than the facts is one people stop reading.
+  $hard.Add(("AD COVERAGE GONE: {0}'s newest ad file {1} closed {2} ({3} day(s) ago), so its {4} sale row(s) are now excluded from the board (compare-deals refuses expired ads). Its ad cells fall back to everyday prices until a fresh pull lands." -f $x.store,$x.file,$x.to,$x.days,$x.rows))
 }
 Write-Output ("row-age: {0} hard finding(s) across {1} store(s)" -f $hard.Count, $profiles.Count)
 $info | ForEach-Object { Write-Output $_ }
