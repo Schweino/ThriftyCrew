@@ -914,6 +914,12 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           }
         } catch { Log ('close-the-loop threw: ' + $_.Exception.Message) }
       } else { Log 'loop NOT closed: compute-v2 did not succeed, so the manifest is not trustworthy to re-anchor from' }
+      # ---- RETENTION (2026-08-08): cap out\'s dated-family growth. Conservative per-family windows set past
+      # the deepest historical reader (see prune-out.ps1's header); evidence dirs are never listed. Non-fatal.
+      try {
+        $pr = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-out.ps1') -Apply
+        foreach ($l in (@($pr) | Select-Object -Last 1)) { Log ('prune-out: ' + $l) }
+      } catch { Log ('prune-out threw: ' + $_.Exception.Message) }
       # re-cost the recipes from today's board + refresh the hub's Top 5 (only publishes on change). Non-fatal.
       # Brad's final call 2026-07-25: the ORIGINAL SMP-TOP5 hub section stays (he preferred it over the
       # green free-week grid, which was removed same day). The free ROTATION still runs below - it just
