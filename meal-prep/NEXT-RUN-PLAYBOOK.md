@@ -140,11 +140,28 @@ re-copied (and drifting) each run. The next run REFERENCES these; it does not co
 - meal-prep\pipeline\test-guards.ps1 - regression tests for the two guard predicates (13 assertions).
 - meal-prep\pipeline\merge-protein-selections.ps1 - the parallel-dedup merge pass (below).
 
-STAYS RUN-LOCAL (copy the PROVEN r300 versions, NOT r100's - r300 carries every fix): parse-compute.ps1,
-cost-engine.ps1, build-specs.ps1, spec-guards.ps1, update-recipes-db.ps1, publish-r300.ps1, and the run
-data (canon rules, manual-overrides, densities, pantry-packages, labels, board map). These have
-run-specific tuning and are not cleanly parameterized yet - promoting them needs a real second run to
-test against, so it was deliberately deferred (do NOT move them blind).
+NOTHING STAYS RUN-LOCAL ANY MORE. **Do not copy scripts out of archive\r300.** (Corrected 2026-08-07: this
+section still said to, a year of promotions after it stopped being true, and following it would have
+re-created the per-run copies the 2026-07-26 consolidation existed to kill. Verified promoted:)
+
+| the old run-local name | reference this instead |
+|---|---|
+| parse-compute.ps1 | pipeline\parse-compute.ps1 |
+| normalize-ingredients.ps1 | pipeline\normalize-ingredients.ps1 |
+| spec-guards.ps1 | pipeline\spec-guards.ps1 (see the v2 note below) |
+| update-recipes-db.ps1 | pipeline\update-recipes-db.ps1 |
+| build-specs.ps1 | pipeline\build-run-specs.ps1 |
+| cost-engine.ps1 | engine\cost-recipes.ps1 |
+| publish-r300.ps1 | engine\publish.ps1 |
+
+The run DATA (canon rules, manual-overrides, labels, board map) is still per-run by nature; the CODE is not.
+archive\r300\ is history. Read it for provenance, never source from it.
+
+SPEC-GUARDS ON THE v2 PATH: pipeline\spec-guards.ps1 full mode CANNOT run against db\recipes specs - it
+merges prose from specs\prose\prose-<slug>.json files the engine no longer produces, and on pass it
+re-serialises the whole spec, which is the documented \uXXXX corruption trap. Its INVARIANTS are still the
+contract; the v2 equivalents are build-v2-spec's write-time guards, pipeline\audit-spec-contradictions.ps1,
+pipeline\audit-store-integrity.ps1, engine\audit-db-agreement.ps1 and pipeline\test-guards.ps1.
 ENGINES support -Slugs (targeted recompute-and-splice) so a one-off fix does not rewrite all 300.
 update-recipes-db supports -Replace <slugs> (Remove-RecipeRow then re-add) for single-recipe replacement.
 
@@ -159,11 +176,13 @@ update-recipes-db supports -Replace <slugs> (Remove-RecipeRow then re-add) for s
 ## How to start a run
 
 Tell the session: "start a recipe run for N recipes" (optionally: theme/constraints). The session follows
-this playbook. The BACK half (cost -> manifest -> card -> publish) is the promoted run-agnostic engine
-in meal-prep\engine\ + meal-prep\pipeline\ (takes -Slugs, any size; see recipe-engine memory). The
-FRONT-half stage 2.5-4 scripts (normalize-ingredients / build-final / parse-compute / build-specs /
-spec-guards / update-recipes-db) still live in meal-prep\archive\r300\ and are COPIED per run into the
-run dir until promoted (see recipe-r100/r300 memories for engine gotchas: $Matches clobber, rule order).
+this playbook. BOTH halves are now the promoted run-agnostic toolchain in meal-prep\engine\ +
+meal-prep\pipeline\ (all take -Slugs, any size; see recipe-engine memory). Nothing is copied per run.
+For a batch of NEW recipes the intake door is pipeline\build-v2-spec.ps1, ONE recipe per intake JSON -
+that is the path the 29-burrito batch (2026-08-07) actually used end to end; the archive front-half was
+never invoked. build-run-specs.ps1 remains the batch skeleton builder for a run that already has
+recipes-computed + recipes-costed. (See recipe-r100/r300 memories for engine gotchas: $Matches clobber,
+rule order.)
 Start every run by generating pipeline\catalog-digest.json (make-catalog-digest.ps1) for the sourcer +
 dedup-selector to read instead of the 3.9 MB recipes-db.json. Dispatch stages 3/5/6 to the pinned agents by name.
 Stage 6's NO-GO blocks publish, full stop. Stage 8 runs UNCONDITIONALLY after every publish of the run

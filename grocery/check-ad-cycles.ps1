@@ -749,6 +749,20 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           if (-not $NoAlert) { try { Send-Alert -Subject "Ingredient stores disagree: $($siHard.Count) hard finding(s)" -Body ("meal-prep\pipeline\audit-store-integrity.ps1 found cross-store defects. Each of these means a published number is wrong or a cost line is silently missing.`n`n" + (($siHard | Select-Object -First 15) -join "`n")) | Out-Null } catch {} }
         } else { Log ('store-integrity: no hard findings (' + (@($si | Where-Object { $_ -match '^\s*~' }).Count) + ' warn)') }
       } catch { Log ('audit-store-integrity threw: ' + $_.Exception.Message) }
+      # ---- UNFINISHED RECIPE BATCHES (2026-08-07) --------------------------------------------------------
+      # The 29-burrito batch's stage 8 - the independent post-publish review - was interrupted before it
+      # reported and NOTHING NOTICED. 29 pages were live and unverified, and it only surfaced hours later by
+      # accident. A batch now carries a ledger stamped after each stage completes, and an open batch that has
+      # gone quiet is a finding rather than silence.
+      try {
+        $bl = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\batch-ledger.ps1') -Verify 2>&1
+        $blBad = @($bl | Where-Object { $_ -match '^\s*!' })
+        if ($blBad.Count) {
+          Log ('batch-ledger: ' + ($blBad -join ' | '))
+          $summary += "REVIEW    $($blBad.Count) recipe batch(es) stalled part-way - a stage never completed (meal-prep\pipeline\batch-ledger.ps1 -Verify)"
+          if (-not $NoAlert) { try { Send-Alert -Subject "Recipe batch stalled with stages unfinished" -Body ("A recipe batch was opened, ran part-way, and went quiet. Whatever it published is live WITHOUT the stages below having completed - the post-publish review is the one that has silently failed before.`n`n" + ($blBad -join "`n")) | Out-Null } catch {} }
+        } else { Log 'batch-ledger: no stalled batches' }
+      } catch { Log ('batch-ledger threw: ' + $_.Exception.Message) }
       # ---- CLOSE THE LOOP: re-anchor the specs and republish the cards the board just moved ------------
       # THE GAP THIS FILLS (2026-08-07, Brad approved unattended republish). This chain recomputed prices
       # every day and never propagated them: reanchor + build-cards + publish were manual, so every baked

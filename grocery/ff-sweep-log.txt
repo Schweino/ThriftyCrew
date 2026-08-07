@@ -1230,3 +1230,30 @@
 [2026-08-07T07:05:54]   Family Fare: term cursor advanced to #514 (this run bought terms #426..#513, merged catalog landed)
 [2026-08-07T07:05:54]   Family Fare: catalog healthy - 4853 items, 0 expired, 3796 re-verified in 48h (no alert)
 [2026-08-07T07:05:54] sweep done rc=0 - cursor #426 -> #514
+[2026-08-07T10:00:01] sweep start (cursor before = #514, MaxMinutes=9)
+[2026-08-07T10:06:39]   Family Fare: 529 search term(s) across 528 commodit(y/ies) - 1 are ADDITIONAL terms on multi-term commodities and each one spends a budget slot every rotation
+[2026-08-07T10:06:39]   Family Fare: term cursor at #514 of 529 - this run's budget starts there and wraps
+[2026-08-07T10:06:39]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-07T10:06:39]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-07T10:06:39]   WARNING: Family Fare: Freshop rejected the canonical_url field whitelist - fell back to the minimal fields. Rows will
+[2026-08-07T10:06:39]   carry NO product identity this run, so their links cannot be derived and must be searched. Check the Freshop field
+[2026-08-07T10:06:39]   names.
+[2026-08-07T10:06:39]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-07T10:06:39]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-07T10:06:39]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-07T10:06:39]   Family Fare: ABORTING - 60 consecutive empty terms after 642 rows. API said: HTTP 400 x183. Continuing would burn time for nothing and push the limit out further. Carrying forward and writing what we have.
+[2026-08-07T10:06:39]   WARNING: Family Fare: 458 term(s) STILL empty after recovery (not carried, or persistent throttle): pork chops, large
+[2026-08-07T10:06:39]   eggs, milk gallon, butter, cottage cheese, sour cream, cream cheese, shredded cheese, yogurt, bananas, strawberries,
+[2026-08-07T10:06:39]   blueberries, avocado, russet potatoes, yellow onion, canned coconut milk, diced tomatoes canned, fajita seasoning
+[2026-08-07T10:06:39]   packet, fresh garlic, garlic powder, frozen cut green beans, green bell pepper, ground cumin, hot honey, hot italian
+[2026-08-07T10:06:39]   sausage, hot sauce, italian seasoning, fresh limes, olive oil, onion powder, canned tuna, white mushrooms, sweet
+[2026-08-07T10:06:39]   potatoes, flour tortillas, hamburger buns, plain bagels, long grain white rice, spaghetti, pasta sauce marinara,
+[2026-08-07T10:06:39]   macaroni and cheese
+[2026-08-07T10:06:39]   WARNING: Family Fare: throttled - got only 642 items vs 4853 in the last good file. Diagnostic copy:
+[2026-08-07T10:06:39]   C:\Codex\income\grocery\out\throttled\family-fare-2026-08-07.throttled.json. These rows are REAL and are being MERGED
+[2026-08-07T10:06:39]   (today's prices win, everything else carries forward).
+[2026-08-07T10:06:39]   Family Fare everyday prices: 4855 catalog items (635 fresh, 4220 carried forward, 0 expired past 14 d [0 starved, 0 churn, 0 unknown]; 458 terms still empty) -> C:\Codex\income\grocery\out\regular\family-fare-regular-2026-08-07.json
+[2026-08-07T10:06:39]   Family Fare: term cursor advanced to #87 (this run bought terms #514..#86, merged catalog landed)
+[2026-08-07T10:06:39]   Family Fare: catalog healthy - 4855 items, 0 expired, 4092 re-verified in 48h (no alert)
+[2026-08-07T10:06:39] sweep done rc=0 - cursor #514 -> #87
+[2026-08-07T13:00:02] sweep start (cursor before = #87, MaxMinutes=9)

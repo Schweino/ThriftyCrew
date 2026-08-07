@@ -1,0 +1,88 @@
+[
+  {
+      "batch":  "burrito-2026-08-07",
+      "opened":  "2026-08-07T13:03:06",
+      "last_activity":  "2026-08-07T13:03:06",
+      "closed":  true,
+      "closed_at":  "2026-08-07T13:03:06",
+      "close_detail":  "all 29 live and verified",
+      "slugs":  [
+                    "bbq-chicken-burrito",
+                    "beef-birria-burrito",
+                    "beef-burrito-tex-mex",
+                    "buffalo-chicken-burrito",
+                    "carne-asada-burrito",
+                    "chicken-al-pastor-burrito",
+                    "chicken-bacon-ranch-burrito",
+                    "chicken-bean-burrito",
+                    "chicken-refried-bean-burrito",
+                    "chicken-shawarma-burrito",
+                    "chicken-tikka-masala-burrito",
+                    "chili-lime-chicken-burrito",
+                    "chipotle-steak-burrito",
+                    "chipotle-turkey-burrito",
+                    "creamy-chicken-fajita-burrito",
+                    "cuban-picadillo-burrito",
+                    "filipino-adobo-chicken-burrito",
+                    "freezer-beef-burrito-greek-yogurt",
+                    "green-chile-chicken-burrito",
+                    "green-chile-turkey-burrito",
+                    "high-protein-beef-bean-burrito",
+                    "honey-chipotle-chicken-burrito",
+                    "jerk-chicken-mango-burrito",
+                    "korean-bulgogi-beef-burrito",
+                    "machaca-beef-burrito",
+                    "ranch-chicken-burrito",
+                    "ropa-vieja-beef-burrito",
+                    "salsa-verde-chicken-burrito",
+                    "thai-peanut-chicken-burrito"
+                ],
+      "stages":  [
+                     {
+                         "stage":  "select",
+                         "at":  "2026-08-07T13:03:06",
+                         "detail":  "44 candidates culled to 29"
+                     },
+                     {
+                         "stage":  "map",
+                         "at":  "2026-08-07T13:03:06",
+                         "detail":  "19 unmapped resolved"
+                     },
+                     {
+                         "stage":  "write",
+                         "at":  "2026-08-07T13:03:06",
+                         "detail":  "3 writer waves, 29 intakes"
+                     },
+                     {
+                         "stage":  "build-specs",
+                         "at":  "2026-08-07T13:03:06",
+                         "detail":  "29/29 via build-v2-spec -RunCost"
+                     },
+                     {
+                         "stage":  "audit",
+                         "at":  "2026-08-07T13:03:06",
+                         "detail":  "4 rounds, GO on the 4th"
+                     },
+                     {
+                         "stage":  "recipes-db",
+                         "at":  "2026-08-07T13:03:06",
+                         "detail":  "513 -\u003e 542, 0 null item_ids"
+                     },
+                     {
+                         "stage":  "build-cards",
+                         "at":  "2026-08-07T13:03:06",
+                         "detail":  "29/29, 0 errors"
+                     },
+                     {
+                         "stage":  "publish",
+                         "at":  "2026-08-07T13:03:06",
+                         "detail":  "29/29 published and verified live"
+                     },
+                     {
+                         "stage":  "post-publish-review",
+                         "at":  "2026-08-07T13:03:06",
+                         "detail":  "FIXED-AND-CLEAN; 2 fixes shipped"
+                     }
+                 ]
+  }
+]
