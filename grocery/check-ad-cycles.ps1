@@ -733,6 +733,22 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # scaler payloads + live feed (it was a hand-authored file frozen since 07-07, missing 58 items). Runs
       # BEFORE top5 (which reads it for sale badges); dinner/protein tool builders read it on their own runs.
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\regenerate-ingredient-map.ps1') | Out-Null; Log 'ingredient-map regenerated (derived from specs + feed)' } catch { Log ('regenerate-ingredient-map threw: ' + $_.Exception.Message) }
+      # ---- CROSS-STORE INTEGRITY (2026-08-07) ------------------------------------------------------------
+      # audit-db-agreement owns the two RECIPE masters. This owns the INGREDIENT stores, which nothing
+      # compared until now: every defect in the 29-burrito batch was a seam, not a value. 6 items had macros
+      # but no price row and dropped silently out of recipe cost; 1 had a price row but no macros and made
+      # the spec builder throw; Rice was 185 g/cup in densities and 200 in the food DB; Turkey Bacon's bid
+      # pointed at PORK and mispriced a live recipe for weeks. HARD findings mean a wrong number or a dropped
+      # line is already live; WARN means a disagreement worth fixing that is not yet producing one.
+      try {
+        $si = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-store-integrity.ps1') 2>&1
+        $siHard = @($si | Where-Object { $_ -match '^\s*!' })
+        if ($siHard.Count) {
+          Log ('store-integrity HARD: ' + (($siHard | Select-Object -First 4) -join ' | '))
+          $summary += "REVIEW    store-integrity found $($siHard.Count) HARD finding(s) - an ingredient store disagrees with another and a live number is wrong (run meal-prep\pipeline\audit-store-integrity.ps1 -ShowAll)"
+          if (-not $NoAlert) { try { Send-Alert -Subject "Ingredient stores disagree: $($siHard.Count) hard finding(s)" -Body ("meal-prep\pipeline\audit-store-integrity.ps1 found cross-store defects. Each of these means a published number is wrong or a cost line is silently missing.`n`n" + (($siHard | Select-Object -First 15) -join "`n")) | Out-Null } catch {} }
+        } else { Log ('store-integrity: no hard findings (' + (@($si | Where-Object { $_ -match '^\s*~' }).Count) + ' warn)') }
+      } catch { Log ('audit-store-integrity threw: ' + $_.Exception.Message) }
       # ---- CLOSE THE LOOP: re-anchor the specs and republish the cards the board just moved ------------
       # THE GAP THIS FILLS (2026-08-07, Brad approved unattended republish). This chain recomputed prices
       # every day and never propagated them: reanchor + build-cards + publish were manual, so every baked
