@@ -109,7 +109,18 @@ foreach($grp in ($rows | Group-Object protein)){
 # written, and collect real (beyond-rounding) inversions to alert triage.
 $inverted = Resolve-Inversions $rows 0.02 0.03
 . (Join-Path $mp 'lib\json-db-io.ps1')
-Save-JsonArray -Array $rows -Path (Join-Path $here 'v2-perserving.json') -Depth 4 | Out-Null
+# SNAPSHOT THE PRIOR MANIFEST BEFORE OVERWRITING IT (2026-08-07).
+# reanchor-moved-prose.ps1 needs the PRE-recompute manifest to diff against and refuses to run without one,
+# so the estate's documented procedure was "remember to copy v2-perserving.json aside first". A manual step
+# that must happen BEFORE the thing that destroys the evidence is a step that gets skipped, and when it is
+# skipped the recovery is ugly: you cannot reconstruct the old values from anywhere, so the baseline has to
+# be synthesised by scraping each spec's own prose. Worse, the naive recovery (snapshot AFTER the recompute)
+# produces a zero delta and reports "0 moved recipes" - true, and completely misleading.
+# The writer now takes its own before-picture. Nothing to remember.
+$prevPath = Join-Path $here 'v2-perserving.prev.json'
+$curPath  = Join-Path $here 'v2-perserving.json'
+if(Test-Path $curPath){ Copy-Item $curPath $prevPath -Force }
+Save-JsonArray -Array $rows -Path $curPath -Depth 4 | Out-Null
 $evAll = $rows | ForEach-Object { $_.everyday_ps }; $chAll = $rows | ForEach-Object { $_.cheapest_ps }
 Write-Output ("computed {0} recipes -> pipeline\v2-perserving.json" -f $rows.Count)
 Write-Output ("everyday_ps  range `${0}-`${1}  mean `${2}" -f ($evAll|Measure-Object -Minimum).Minimum,($evAll|Measure-Object -Maximum).Maximum,[math]::Round(($evAll|Measure-Object -Average).Average,2))

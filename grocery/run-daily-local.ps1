@@ -205,11 +205,29 @@ Log ("check-ad-cycles exit " + $LASTEXITCODE)
 
 # ---- COMMIT pipeline-owned paths ONLY, as the bot (identity via -c flags: never touches Brad's ----
 # global git config). Stages mods+deletions+untracked under each path; paths filtered to existing.
+# MEAL-PREP BUS FILES (added 2026-08-07). The daily chain's recipe lane writes these every run and this
+# wrapper never staged ANY of them, so they rode as uncommitted edits in Brad's shared tree until some
+# unrelated batch commit swept them - protected only by --autostash, which is exactly why six stashes had
+# piled up by 08-04 "each parking local edits to v2-perserving / free-rotation / costed / recipes-db where
+# no guard looks" (the warning is right above; the cause was here). Worse, on a cloud-backup day the clean
+# clone regenerates these from scratch and add -A's them, so the two runtimes maintained two divergent
+# lineages of the same derived state.
+# These are DERIVED (regenerable from owners) or rotation-owned, which is the same safety argument as
+# grocery/out. Deliberately NOT included: meal-prep/db/recipes (authored specs) and meal-prep/db/built
+# (cards) - those are batch-owned, a human edits them, and the daily chain never writes them.
+# recipes-db.json IS included despite carrying authored rows, because rotate-free-dinners flips visibility
+# in it every day and those flips must persist; update-recipes-db writes it whole, so there is no partial
+# state to catch mid-batch.
 $paths = @('grocery/out', 'public',
            'grocery/ad-cycle-log.txt', 'grocery/alert-log.txt', 'grocery/local-daily-log.txt',
            'grocery/ff-sweep-log.txt',
            'grocery/ad-schedule.json', 'grocery/price-history.json', 'grocery/product-urls.json',
-           'grocery/sale-windows.json') | Where-Object { Test-Path (Join-Path $repo $_) }
+           'grocery/sale-windows.json',
+           'meal-prep/db/costed.json', 'meal-prep/db/cost-flags.txt',
+           'meal-prep/pipeline/v2-perserving.json', 'meal-prep/pipeline/v2-perserving.prev.json',
+           'meal-prep/pipeline/v2-inversions.json',
+           'meal-prep/free-rotation.json', 'meal-prep/ingredient-map.json',
+           'meal-prep/recipes-db.json') | Where-Object { Test-Path (Join-Path $repo $_) }
 # alert-sent-*.txt rotate (created+deleted daily) - stage the pattern only if any exist or were deleted
 git -C $repo add -A -- 'grocery/alert-sent-*.txt' 2>$null
 git -C $repo add -A -- $paths 2>&1 | ForEach-Object { Log ("add: " + $_) }
@@ -235,14 +253,60 @@ if (-not $pushed) {
   try { Send-Alert -Subject "Grocery local pipeline could not push - $today" -Body "run-daily-local.ps1 committed today's refresh locally but could not push to main after 4 rebase attempts. The cloud backup will regenerate at 16:00 UTC, but check for a rebase conflict in C:\Codex\income (see grocery/local-daily-log.txt)." | Out-Null } catch {}
 }
 
+# ---- READ-AFTER-WRITE: prove the EDGE actually serves what we just pushed (added 2026-08-07) --------
+# Cloudflare serves public/smp-feed.json from this repo via a git-connected build. A successful push is NOT
+# a successful deploy: if the CF build fails afterwards the edge keeps serving the OLD feed indefinitely and
+# nothing in the estate notices - the only live-vs-repo comparison ever made was one by hand, in July.
+# The cards fetch this file at view time for every "cheapest" number on 542 recipes, so a silently stalled
+# deploy means the whole site quietly prices last week's board.
+# Cache-busted on purpose: the response carries max-age=1800, and reading through the edge cache would only
+# confirm the cache, not the deploy. 30s of settle, then one read; a miss alerts rather than retries hard,
+# because the cloud backup is the real safety net and this is a watcher, not a gate.
+if ($pushed) {
+  try {
+    $repoFeed = Get-Content (Join-Path $repo 'public\smp-feed.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    Start-Sleep -Seconds 30
+    $liveRaw = (Invoke-WebRequest -Uri ("https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json?deploycheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45).Content
+    $live = $liveRaw | ConvertFrom-Json
+    if ([string]$live.generated -ne [string]$repoFeed.generated) {
+      $m = "The edge is serving a feed generated $($live.generated) but the repo pushed $($repoFeed.generated). The push succeeded, so this is a Cloudflare deploy that has not landed. Live recipe prices are stale until it does. Check the CF dashboard build log for the smp-feed worker."
+      Log ("EDGE STALE: " + $m)
+      try { Send-Alert -Subject "smp-feed edge did not pick up today's push - $today" -Body $m | Out-Null } catch {}
+    } else {
+      Log ("edge verified: serving generated $($live.generated), $($live.recipe_count) recipes")
+    }
+  } catch { Log ("edge verify threw (not fatal): " + $_.Exception.Message) }
+}
+
 # ---- ASSERT the feed refreshed today (the cloud's red-X assert, as a deduped email) ---------------
+# `generated` ALONE CANNOT DETECT THE FAILURE THIS ASSERT EXISTS FOR (fixed 2026-08-07). export-feed stamps
+# that field itself, at the moment it runs. Every recipe-lane stage upstream (cost-recipes,
+# compute-v2-perserving) is non-fatal try/catch, so if one throws, export-feed still runs happily over
+# YESTERDAY's costed.json and manifest and stamps TODAY on the output. The assert goes green while every
+# recipe price in the feed is stale - the dates-written-not-measured class, sitting inside the estate's
+# primary proof of health.
+# So we now also check the INPUTS the feed's recipe numbers are derived from, and the count.
 try {
   $feed = Get-Content (Join-Path $repo 'public\smp-feed.json') -Raw | ConvertFrom-Json
   $gen = ([datetime]$feed.generated).ToString('yyyy-MM-dd')
-  if ($gen -ne $today) {
-    Log "FEED STALE: generated $gen, expected $today"
-    try { Send-Alert -Subject "Grocery local pipeline did NOT refresh the feed - $today" -Body "run-daily-local.ps1 finished but public/smp-feed.json is still dated $gen. A store pull likely failed; nothing bad was published (guards fail closed). See grocery/ad-cycle-log.txt + local-daily-log.txt. The cloud backup will retry at 16:00 UTC." | Out-Null } catch {}
-  } else { Log "feed fresh: week $($feed.week_of), $($feed.recipe_count) recipes, $($feed.ingredient_count) ingredients" }
+  $problems = New-Object System.Collections.Generic.List[string]
+  if ($gen -ne $today) { $problems.Add("smp-feed.generated is $gen, expected $today") }
+  # the two derived inputs the recipe half of the feed rides on - if these did not move, the prices did not
+  foreach ($dep in @('meal-prep\db\costed.json', 'meal-prep\pipeline\v2-perserving.json')) {
+    $p = Join-Path $repo $dep
+    if (-not (Test-Path $p)) { $problems.Add("$dep missing"); continue }
+    $m = (Get-Item $p).LastWriteTime.ToString('yyyy-MM-dd')
+    if ($m -ne $today) { $problems.Add("$dep last written $m, not today - a recipe-lane stage threw and the feed re-exported stale numbers") }
+  }
+  # nothing silently dropped: the feed must carry every spec
+  $specCount = @(Get-ChildItem (Join-Path $repo 'meal-prep\db\recipes\*.json') -ErrorAction SilentlyContinue).Count
+  if ($specCount -gt 0 -and [int]$feed.recipe_count -ne $specCount) {
+    $problems.Add("feed carries $($feed.recipe_count) recipes but $specCount specs exist")
+  }
+  if ($problems.Count) {
+    Log ("FEED ASSERT FAILED: " + ($problems -join ' | '))
+    try { Send-Alert -Subject "Grocery local pipeline: feed did not truly refresh - $today" -Body ("run-daily-local.ps1 finished but the feed is not trustworthy:`n`n" + ($problems -join "`n") + "`n`nNote `generated` alone is self-stamped by export-feed and cannot detect an upstream stage throwing. See grocery/ad-cycle-log.txt + local-daily-log.txt. The cloud backup will retry at 16:00 UTC.") | Out-Null } catch {}
+  } else { Log "feed fresh: week $($feed.week_of), $($feed.recipe_count) recipes, $($feed.ingredient_count) ingredients (inputs verified same-day)" }
 } catch { Log ("feed assert threw: " + $_.Exception.Message) }
 
 Log "done"
