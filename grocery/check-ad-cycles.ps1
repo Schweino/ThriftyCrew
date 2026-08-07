@@ -260,6 +260,39 @@ foreach ($s in $stores) {
   $newStores += ,$rec
 }
 
+# ---- SCHEDULE vs DATA: is the window this file claims is current actually backed by a capture? ----------
+# THE 2026-08-02 FAREWAY MISS. The ad window a store's schedule records and the deals file that prices the
+# board are written by DIFFERENT steps, and nothing ever compared them. On 08-03 the browser refresh
+# advanced Fareway's current window from 2026-07-26..08-01 to 08-02..08-08 and next_pull to 08-09, while
+# no fareway-deals file for that window was ever built - the tell is that history_last stayed 2026-08-01,
+# because a genuinely DETECTED flip appends to history and this advance did not.
+#
+# The damage was not a wrong date, it was a wrong PRICE: the ad supplement overrides the everyday storefront
+# whenever it is cheaper, so the dead 07-26..08-01 ad kept crowning cells. Six days later the live board
+# still sold "All-Natural Iowa Pork Chops" at $1.99/lb against a real Fareway everyday near $4.00, and 15
+# recipes were costed off it.
+#
+# It also could not self-heal: fareway-daily-due.ps1 fires on next_pull, and once next_pull had advanced to
+# 08-09 the missed 08-02 pull became unreachable. A gate that can only arm on a date already behind it is
+# the gates-that-can-never-arm shape, so the check has to be on the DATA, not on the calendar.
+$adSupplement = @{ "Baker's" = 'bakers\bakers-deals-*.json'; 'Fareway' = 'fareway\fareway-deals-*.json' }
+foreach ($rec in $newStores) {
+  $g = $adSupplement[[string]$rec.store]
+  if (-not $g -or -not $rec.current -or -not $rec.current.to) { continue }
+  $newest = Get-ChildItem (Join-Path $OutDir $g) -ErrorAction SilentlyContinue |
+            Where-Object { $_.BaseName -match '\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+  $fileTo = $null
+  if ($newest) { try { $j = Get-Content $newest.FullName -Raw -Encoding UTF8 | ConvertFrom-Json; if ($j.ad_to) { $fileTo = [datetime]$j.ad_to } } catch {} }
+  $schedTo = $null; try { $schedTo = [datetime]$rec.current.to } catch {}
+  if (-not $schedTo) { continue }
+  if ((-not $newest) -or ($fileTo -and $fileTo -lt $schedTo)) {
+    $have = if ($newest) { $newest.Name + ' (window ends ' + $(if($fileTo){$fileTo.ToString('yyyy-MM-dd')}else{'undeclared'}) + ')' } else { 'no deals file at all' }
+    $summary += ("REVIEW    {0}'s schedule says its ad runs to {1}, but the newest ad capture is {2} - the window advanced without the data. Its board prices come from the OLD ad until a pull lands." -f $rec.store, $rec.current.to, $have)
+    Log ("SCHEDULE-AHEAD-OF-DATA $($rec.store): current.to=$($rec.current.to) but capture is $have")
+    if (-not $NoAlert) { try { Send-Alert -Subject ("$($rec.store) ad window advanced with no capture behind it") -Body ("ad-schedule.json records $($rec.store)'s current ad window ending $($rec.current.to), but the newest ad capture on disk is $have.`n`nThese are written by two different steps and only one ran. The ad supplement OVERRIDES the everyday storefront price whenever it is cheaper, so until a pull lands the board keeps pricing cells from the PREVIOUS ad - a sale that is over. That is how Fareway published `$1.99/lb pork chops for six days after the sale ended.`n`nFix: run the browser agent for this store so the ad capture catches up.") | Out-Null } catch {} }
+  }
+}
+
 # ---- persist schedule ----
 ([ordered]@{ updated=$asofS; note=$sched.note; stores=$newStores } | ConvertTo-Json -Depth 8) | Set-Content $ScheduleFile -Encoding UTF8
 

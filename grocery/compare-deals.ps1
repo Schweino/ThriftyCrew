@@ -1003,9 +1003,30 @@ else {
   }
   if ($samsFiles.Count) { Write-Warning ("compare-deals: -SamsFile not passed; auto-using " + $samsFiles.Count + " Sam's capture(s): " + (($samsFiles | ForEach-Object { Split-Path $_ -Leaf }) -join ', ')) }
 }
+# EXPIRED ADS DO NOT PRICE THE BOARD (2026-08-07, Brad's call). A weekly-ad supplement declares its own
+# window in ad_from/ad_to, and these rows OVERRIDE the everyday storefront price whenever they are cheaper.
+# Nothing retired them when the window closed, so a missed ad pull left a dead sale winning cells forever.
+# Measured the day this landed: Fareway's newest ad file covered 2026-07-26..08-01 and its $1.99
+# "All-Natural Iowa Pork Chops" was still the LIVE board's crown on 08-07, six days after the sale ended,
+# against a real Fareway everyday price near $4.00/lb. 15 recipes were costed off it.
+#
+# This is deliberately NOT the carry-forward case guards.ps1 protects. A carried EVERYDAY row is old but
+# still the store's honest price, and dropping it would be a silent cell drop, which is strictly worse.
+# An expired SALE price is not old, it is FALSE - the sale is over and the store will not honour it.
+#
+# Judged against $today (the board date from the ads file), never the wall clock, so a pinned regression
+# run stays reproducible. A file with no ad_to is never expired: absent evidence is not evidence of expiry,
+# and the frozen bakers-deals-2026-07-05 fixture declares no window at all.
 foreach ($extra in (@($BakersFile,$FarewayFile) + $samsFiles)) {
   if ($extra -and (Test-Path $extra)) {
     $ex = Get-Content $extra -Raw | ConvertFrom-Json
+    if ($ex.ad_to) {
+      $adTo = $null; try { $adTo = [datetime]$ex.ad_to } catch {}
+      if ($adTo -and $adTo -lt [datetime]$today) {
+        Write-Warning ("compare-deals: SKIPPING " + (Split-Path $extra -Leaf) + " - its ad window closed " + $ex.ad_to + " (" + [int](([datetime]$today) - $adTo).TotalDays + "d before this board's " + $today + "). " + @($ex.deals).Count + " expired sale row(s) not priced.")
+        continue
+      }
+    }
     $pt = if ($ex.price_type) { [string]$ex.price_type } else { 'sale' }
     $sd = ''
     if ([IO.Path]::GetFileNameWithoutExtension($extra) -match '(\d{4}-\d{2}-\d{2})$') { $sd = $Matches[1] }
