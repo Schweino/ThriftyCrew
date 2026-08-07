@@ -286,6 +286,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "eggs",
+        "store":  "Hy-Vee",
+        "unit":  "dozen",
+        "board":  1.5867,
+        "link":  1.67,
+        "ratio":  1.05,
+        "price":  1.67,
+        "size":  "dozen",
+        "boardItem":  "Hy Vee Grade A Large Eggs 18 Count",
+        "linkItem":  "That\u0027s Smart! Large Eggs",
+        "board_src":  "main"
+    },
+    {
         "id":  "milk",
         "store":  "Fareway",
         "unit":  "gallon",
@@ -1612,13 +1625,26 @@
         "board_src":  "recipe"
     },
     {
+        "id":  "salsa-verde",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.293,
+        "link":  0.3744,
+        "ratio":  1.28,
+        "price":  5.99,
+        "size":  "16 oz",
+        "boardItem":  "Hy-Vee Salsa Verde, Mild",
+        "linkItem":  "Hy-Vee Salsa Verde, Mild",
+        "board_src":  "recipe"
+    },
+    {
         "id":  "turkey-pepperoni",
         "store":  "Hy-Vee",
         "unit":  "oz",
         "board":  0.994,
-        "link":  0.896,
+        "link":  0.892,
         "ratio":  0.9,
-        "price":  4.48,
+        "price":  4.46,
         "size":  "5 oz",
         "boardItem":  "Hormel Turkey Pepperoni",
         "linkItem":  "Hormel Turkey Pepperoni",

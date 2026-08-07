@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-07 06:12",
-    "board":  "comparison-2026-08-06.json",
-    "sidecar_generated":  "2026-08-07 06:12:04",
+    "generated":  "2026-08-07 09:00",
+    "board":  "comparison-2026-08-07.json",
+    "sidecar_generated":  "2026-08-07 09:00:47",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2861,
-                     "corpus":  30985,
-                     "rule_invisible":  4755
+                     "board_pairs":  2860,
+                     "corpus":  30990,
+                     "rule_invisible":  4758
                  },
     "identity_count":  0,
-    "coverage_count":  23,
+    "coverage_count":  27,
     "identity":  [
 
                  ],
@@ -77,6 +77,16 @@
                          "product":  "Great Value Frozen Catfish Skinless Fillets, 2 lb Bag",
                          "cos":  0.658,
                          "score":  0.94556,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-pork",
+                         "commodity":  "Ground Pork",
+                         "store":  "Walmart",
+                         "product":  "Marketside Grass-Fed Ground Beef, 80% Lean/20% Fat, 1 lb",
+                         "cos":  0.6876,
+                         "score":  0.944984,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -161,6 +171,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "ground-pork",
+                         "commodity":  "Ground Pork",
+                         "store":  "Baker\u0027s",
+                         "product":  "Ground Beef And Pork Blend Patties 80% Lean 20% Fat",
+                         "cos":  0.6996,
+                         "score":  0.925672,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "coconut-oil",
                          "commodity":  "Coconut Oil",
                          "store":  "Walmart",
@@ -187,6 +207,26 @@
                          "product":  "Great Value Blueberries, 48 oz (Frozen)",
                          "cos":  0.6795,
                          "score":  0.922386,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-pork",
+                         "commodity":  "Ground Pork",
+                         "store":  "Walmart",
+                         "product":  "Marketside Organic Grass-Fed Ground Beef, 85% Lean/15% Fat, 1 lb, 3 Count",
+                         "cos":  0.6827,
+                         "score":  0.920651,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ground-pork",
+                         "commodity":  "Ground Pork",
+                         "store":  "Walmart",
+                         "product":  "Marketside Organic Grass-Fed Ground Beef, 85% Lean/15% Fat, 1 lb",
+                         "cos":  0.6827,
+                         "score":  0.920651,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

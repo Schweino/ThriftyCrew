@@ -58,3 +58,8 @@
 [2026-08-07T08:30:04] SENT 'Cloud workflow daily.yml failed (failure)' -> schweino68@gmail.com (id 19fdc6a9c281e70a)
 [2026-08-07T08:30:05] SENT 'Cloud workflow heartbeat.yml failed (failure)' -> schweino68@gmail.com (id 19fdc6aa4cf067d3)
 [2026-08-07T08:41:59] SUPPRESSED (already sent this type today) 'Recipe price inversion: 4 clamped' [type: recipe price inversion clamped]
+[2026-08-07T09:00:50] SUPPRESSED (already sent this type today) 'Grocery: semantic sweep found 27 product(s) no rule can see - 2026-08-07' [type: grocery semantic sweep found product s no rule can see]
+[2026-08-07T09:02:17] SUPPRESSED (already sent this type today) 'Grocery matching soundness - review needed' [type: grocery matching soundness review needed]
+[2026-08-07T09:04:43] SUPPRESSED (already sent this type today) 'Recipe spec contradictions got worse' [type: recipe spec contradictions got worse]
+[2026-08-07T09:08:57] SUPPRESSED (already sent this type today) 'Grocery: Walmart full capture aging - 2026-08-07' [type: grocery walmart full capture aging]
+[2026-08-07T09:14:00] SUPPRESSED (already sent this type today) 'Grocery: a GUARD has gone blind (test-auditors failed)' [type: grocery a guard has gone blind test auditors failed]

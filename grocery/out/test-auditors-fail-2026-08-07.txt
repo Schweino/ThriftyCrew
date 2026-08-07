@@ -388,8 +388,8 @@ test-auditors: can each watcher still see the bug it was written for?
   PASS  compare-deals and audit-capture-eviction still state the SAME coverage-depth eligibility rule
   PASS  compare-deals still emits src_date into candidates (the field the per-store ranking turns on)
   PASS  audit-capture-eviction is ROSTERED in check-ad-cycles - the eviction check runs on every board generation, not only when a human remembers it
-  PASS  capture-eviction roster is ARMED: capture-evictions.json (2026-08-07T06:19:56) post-dates the newest board comparison-2026-08-06.json (built_at 2026-08-07T06:10:03)
-  FAIL  prompt-backup drift (rc=2) - run ops\audit-prompt-backup.ps1 -Sync and commit: prompt-backup: checked 15 live prompt(s) against ops\prompt-backup   2 issue(s):     SCOPE DRIFT  recipe-sourcer.md - the user-scope copy differs from the project-scope copy, so which prompt runs depends on the session's working directory     STALE BACKUP  scheduled-tasks\grocery-alert-triage\SKILL.md   Fix: run this with -Sync (live -> repo, and project scope -> user scope), then commit ops\prompt-backup.
+  PASS  capture-eviction roster is ARMED: capture-evictions.json (2026-08-07T09:08:59) post-dates the newest board comparison-2026-08-07.json (built_at 2026-08-07T08:58:46)
+  PASS  prompt-backup: every agent prompt and scheduled-task SKILL is backed up in ops\prompt-backup and identical across scopes
   PASS  fmt-lib: per-unit display still rolls over at a dollar and still shows a real sub-cent price
   PASS  basis-outlier: still catches a pack price on a single-unit size, and still stays silent on an ordinary premium spread
   PASS  board-consistency: a flyer-only ad pill is not a breach, and a priced chip with no link still is
@@ -423,4 +423,4 @@ test-auditors: can each watcher still see the bug it was written for?
   PASS  empty-required gate: an EMPTY source_url no longer passes for a present one (the 113-uncredited-recipes hole)
   PASS  spec-guards ENFORCES both gates, so a new recipe cannot publish with ingredients no step uses or an empty credit
   PASS  identity eval: an EXCLUDE still overrides an include, and a rule-ACCEPTED product still cannot be mined as a clean negative
-test-auditors FAIL  (3 failed, 415 passed) - a watcher has gone blind. Fix it before trusting a quiet board.
+test-auditors FAIL  (2 failed, 416 passed) - a watcher has gone blind. Fix it before trusting a quiet board.
