@@ -26,6 +26,9 @@
     STALE-MONEY  a dollar or cents figure in a NON-shop_smart prose field that is not the current
                  per-serving cost. The 2026-07-26 money strip only covered shop_smart, so cost_closing and
                  upsell still carry frozen figures from a basis that changed underneath them.
+                 The $N.NN half read only cost_closing/upsell until 2026-08-07, which is how 15 slow-cooker
+                 specs kept a portion line saying "$2.00 a bowl" beside a closing line saying "$4.87 a bowl".
+                 It now reads all five fields spec-guards names - see spec-contradiction-lib.ps1.
     ABSURD-UNIT  a tablespoon count over 24 (a cup and a half, in tablespoons). "105 tbsp" of cilantro is
                  arithmetically true at ~1 g/tbsp and useless to a person holding a measuring spoon.
     HEAD-QTY     the head ingredient list and the costed display line state different amounts of the same
@@ -96,7 +99,10 @@ if ($SelfTest) {
     stat = [pscustomobject]@{ cal = 541; protein = 49; cost_ps = '3.52' }
     # fajita-chicken-rice-bowl: portion says 499 on a 541-calorie recipe (and spec-guards PASSES it,
     # because 541 also appears elsewhere in the same paragraph).
-    portion_html = '<p>One container is 499 cal and 49g protein. The whole batch is 541 calories a bowl.</p>'
+    # The trailing money clause is slow-cooker-butter-chicken-rice-bowls as it shipped: a portion line and a
+    # closing line quoting DIFFERENT dollars in the SAME "a bowl" unit, which read as two fields until
+    # 2026-08-07 meant only the closing one was ever checked.
+    portion_html = '<p>One container is 499 cal and 49g protein. The whole batch is 541 calories a bowl, at roughly $2.00 a bowl.</p>'
     intro_html = '<p>541 calories a bowl.</p>'
     # filipino-pork-giniling: a cents figure from a basis that no longer exists.
     cost_closing_html = '<p>About <strong>$3.52 a bowl</strong>, and the fish sauce seasons the batch for 28 cents.</p>'
@@ -120,13 +126,19 @@ if ($SelfTest) {
   Chk 'MUST FIRE  STAT-PROSE  499 cal in a paragraph that also says 541' (($cls -contains 'STAT-PROSE') -and (@($r | Where-Object { $_.why -match '499' }).Count -eq 1)) (($r | ForEach-Object { $_.why }) -join ' | ')
   Chk 'MUST FIRE  UNMEASURABLE-QTY a broth line that reads "0 lb"' (@($r | Where-Object { $_.cls -eq 'UNMEASURABLE-QTY' }).Count -ge 1) (($r | Where-Object { $_.cls -eq 'UNMEASURABLE-QTY' } | ForEach-Object { $_.why }) -join ' | ')
   Chk 'MUST FIRE  STALE-MONEY a "28 cents" claim in cost_closing' (@($r | Where-Object { $_.cls -eq 'STALE-MONEY' -and $_.why -match '28 cents' }).Count -eq 1) (($r | Where-Object { $_.cls -eq 'STALE-MONEY' } | ForEach-Object { $_.why }) -join ' | ')
+  # THE PORTION-MONEY CASE. Live for the whole life of 15 specs because this class read two fields and the
+  # portion line was not one of them. If this assertion ever goes quiet, the scope has been narrowed back.
+  Chk 'MUST FIRE  STALE-MONEY portion_html quotes $2.00 on a $3.52 bowl' (@($r | Where-Object { $_.cls -eq 'STALE-MONEY' -and $_.why -match 'portion_html quotes \$2\.00' }).Count -eq 1) (($r | Where-Object { $_.cls -eq 'STALE-MONEY' } | ForEach-Object { $_.why }) -join ' | ')
   Chk 'MUST FIRE  ABSURD-UNIT 105 tbsp of cilantro' (@($r | Where-Object { $_.cls -eq 'ABSURD-UNIT' }).Count -eq 1) (($r | Where-Object { $_.cls -eq 'ABSURD-UNIT' } | ForEach-Object { $_.why }) -join ' | ')
   Chk 'MUST FIRE  HEAD-QTY    head 5.5 cups rice vs a costed 3.75 cups' (@($r | Where-Object { $_.cls -eq 'HEAD-QTY' }).Count -eq 1) (($r | Where-Object { $_.cls -eq 'HEAD-QTY' } | ForEach-Object { $_.why }) -join ' | ')
   # CLEAN TWIN - a spec that states each fact once and consistently must produce NOTHING but advisories.
   $good = [pscustomobject]@{
     stat = [pscustomobject]@{ cal = 620; protein = 41; cost_ps = '3.06' }
-    portion_html = '<p>620 calories and 41 g of protein a container.</p>'
-    intro_html = '<p>620 calories a bowl.</p>'
+    # The bare "$14" is here twice on purpose: a cents-less comparison price is the ONE dollar figure reader
+    # prose may carry that is not cost_ps, and now that the money read covers all five fields it has to stay
+    # silent in the newly-covered ones too, not just in cost_closing where it was always allowed.
+    portion_html = '<p>620 calories and 41 g of protein a container, for what a restaurant charges $14 for.</p>'
+    intro_html = '<p>620 calories a bowl, and $3.06 beats the $14 takeout.</p>'
     cost_closing_html = '<p>About <strong>$3.06 a bowl</strong> for what a restaurant charges $14 for.</p>'
     upsell_html = '<p>$3.06 a bowl.</p>'
     head = [pscustomobject]@{ description = 'A 620 calorie bowl with 41 g protein.'; recipeIngredient = @('3.75 cups dry rice') }

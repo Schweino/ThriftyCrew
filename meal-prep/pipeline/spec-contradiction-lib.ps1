@@ -333,12 +333,21 @@ function Get-SpecContradictions($spec, $vocab) {
         if ([int]$m.Groups[1].Value -ne $pro) { $f.Add(@{ cls = 'STAT-PROSE'; why = ("$k says " + $m.Groups[1].Value + "g protein, stat says " + $pro) }) }
       }
     }
-    # A bare "$12" is the takeout comparison the sentence is built on; a $N.NN in the two COST fields is a
-    # per-serving claim by construction, because spec-guards requires both to quote the current cost exactly.
-    if ($k -eq 'cost_closing_html' -or $k -eq 'upsell_html') {
-      foreach ($m in [regex]::Matches($t, '\$\d+\.\d{2}')) {
-        if ($m.Value -ne ('$' + $cps)) { $f.Add(@{ cls = 'STALE-MONEY'; why = ("$k quotes " + $m.Value + " but the per-serving cost is `$$cps") }) }
-      }
+    # A bare "$12" is the takeout comparison the sentence is built on, and the cents-less regex below never
+    # sees it. A $N.NN in ANY of these five fields is a per-serving claim by construction: spec-guards'
+    # POST-SYNC NUMERIC VERIFICATION fails a spec whose intro/portion/closing/upsell/head.description quotes
+    # a $N.NN that is not stat.cost_ps, so this reading is that same contract, not a new rule.
+    #   SCOPED TO TWO FIELDS UNTIL 2026-08-07, and portion_html is the field that paid for it. 15 slow-cooker
+    # specs shipped a portion line reading "at roughly $2.00 a bowl" beside a closing line reading "$4.87 a
+    # bowl" - the SAME unit, two numbers, one of them on a live card since the specs were born (git shows
+    # $2.00 never matched cost_ps, cost_per_serving OR cost_per_serving_true at birth: the writer wave
+    # invented it). Nothing caught it for the same reason in three places at once - this class skipped the
+    # field, repair-spec-contradictions skipped it, and the ONE check that did cover it (spec-guards line
+    # 183) lives in full mode, which needs prose-<slug>.json files the engine stopped writing. A number the
+    # contract already forbids must be READ in every field the contract names, or the contract is decoration.
+    # Widening cost 0 false positives across all 513 live specs; the 7 takeout comparisons are all bare $NN.
+    foreach ($m in [regex]::Matches($t, '\$\d+\.\d{2}')) {
+      if ($m.Value -ne ('$' + $cps)) { $f.Add(@{ cls = 'STALE-MONEY'; why = ("$k quotes " + $m.Value + " but the per-serving cost is `$$cps") }) }
     }
     foreach ($m in [regex]::Matches($t, '(?i)\b\d{1,3}\s*cents\b')) {
       $f.Add(@{ cls = 'STALE-MONEY'; why = ("$k quotes '" + $m.Value + "' - a per-line cents figure from a basis the cost redesign removed") })

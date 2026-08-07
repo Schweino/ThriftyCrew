@@ -14,7 +14,14 @@ if(-not (Test-Path $Baseline)){ throw "baseline manifest not found: $Baseline (s
 $new = Get-Content (Join-Path $here 'v2-perserving.json') -Raw | ConvertFrom-Json
 $old = Get-Content $Baseline -Raw | ConvertFrom-Json
 $om=@{}; foreach($r in $old){ $om[$r.slug]=$r }
-$fields = 'intro_html','cost_closing_html','upsell_html','description'
+# portion_html joined this list 2026-08-07. It was omitted because a portion line is USUALLY macros-only
+# (498 of 513 live specs carry no dollar at all there), but "usually" is not "never": 15 slow-cooker specs
+# do quote a price in it, so every re-cost that moved a price silently left those 15 behind while the intro
+# in the same file was updated. The field list of a repair has to be the field list of the CONTRACT
+# (spec-guards' $proseFields), not the list of fields that happened to have money in them the day it was
+# written. Note this script only rewrites the PREVIOUS manifest value, so it prevents future drift and
+# cannot repair a figure that was already wrong - repair-spec-contradictions.ps1 is what re-anchors those.
+$fields = 'intro_html','portion_html','cost_closing_html','upsell_html','description'
 $edited=0
 foreach($run in @('db')){
   foreach($sf in (Get-ChildItem (Join-Path $mp "db\recipes\*.json"))){

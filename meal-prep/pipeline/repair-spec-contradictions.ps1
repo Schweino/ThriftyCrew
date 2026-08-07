@@ -10,11 +10,13 @@
                  fajita-chicken-rice-bowl's portion paragraph says 499 calories on a 541-calorie recipe -
                  and spec-guards PASSES it, because 541 also appears in the same paragraph. "Contains the
                  right number" and "contains no wrong ones" are different questions.
-    STALE-MONEY  a dollar figure in cost_closing/upsell that is not stat.cost_ps, or ANY "N cents" claim.
-                 Both fields are required by spec-guards to quote the current cost exactly, so a different
+    STALE-MONEY  a dollar figure in reader prose that is not stat.cost_ps, or ANY "N cents" claim. All five
+                 prose fields are required by spec-guards to quote the current cost exactly, so a different
                  figure there is a leftover, not a comparison. The cents claims all predate the whole-package
                  basis and cannot be re-derived, so the clause is removed rather than re-stated with a number
                  nothing computes.
+                 Was cost_closing/upsell only until 2026-08-07; portion_html is why it is all five now. See
+                 the note on the repair loop and the matching one in spec-contradiction-lib.ps1.
     HEAD-QTY     head.recipeIngredient disagreeing with the costed display line about the same ingredient in
                  the same unit. The display line is what the cost engine and the serving scaler both read;
                  the head list is schema.org metadata. So the head list is rewritten to the costed amount.
@@ -61,11 +63,18 @@ function Repair-Spec($spec) {
     if ($t -ne $o) { $spec.head.description = $t; $changes.Add('STAT-PROSE  head.description re-anchored to stat') }
   }
 
-  # ---- STALE-MONEY: the two cost fields must quote the current per-serving cost and nothing else.
-  foreach ($k in @('cost_closing_html','upsell_html')) {
-    $t = [string]$spec.$k; if (-not $t) { continue }
+  # ---- STALE-MONEY: reader prose must quote the current per-serving cost and nothing else.
+  # SAME FIVE FIELDS AS STAT-PROSE ABOVE (2026-08-07). This loop used to run over cost_closing/upsell only,
+  # which split the repair down the middle: a stale CALORIE in portion_html was re-anchored, a stale PRICE in
+  # the same sentence was not. 15 slow-cooker specs sat on a portion line quoting "$2.00 a bowl" under a
+  # closing line quoting "$4.87 a bowl" because of that split. The prose is the side that is wrong here for
+  # exactly the STAT-PROSE reason: stat.cost_ps is what the engine priced and what the card's rectangle
+  # shows, and the loose sentence is not what anyone costs from.
+  foreach ($k in @('intro_html','portion_html','cost_closing_html','upsell_html','head.description')) {
+    $t = if ($k -eq 'head.description') { [string]$spec.head.description } else { [string]$spec.$k }
+    if (-not $t) { continue }
     $o = $t
-    # A bare "$12" with no cents is a restaurant/takeout comparison and is left alone; a $N.NN in these two
+    # A bare "$12" with no cents is a restaurant/takeout comparison and is left alone; a $N.NN in these
     # fields is a per-serving claim by construction, because that is what spec-guards requires them to carry.
     $t = [regex]::Replace($t, '\$\d+\.\d{2}', ('$' + $cps))
     # A cents claim cannot be re-stated: it was a per-LINE figure under a basis the redesign removed, and
@@ -73,7 +82,10 @@ function Repair-Spec($spec) {
     $t = [regex]::Replace($t, '(?i),?\s*(?:but|and)?\s*it\s+seasons[^.]*?for\s+\d{1,3}\s*cents', '')
     $t = [regex]::Replace($t, '(?i)\s*for\s+\d{1,3}\s*cents\b', '')
     $t = [regex]::Replace($t, '\s+([.,])', '$1')
-    if ($t -ne $o) { $spec.$k = $t; $changes.Add("STALE-MONEY $k re-anchored to `$$cps") }
+    if ($t -ne $o) {
+      if ($k -eq 'head.description') { $spec.head.description = $t } else { $spec.$k = $t }
+      $changes.Add("STALE-MONEY $k re-anchored to `$$cps")
+    }
   }
 
   # ---- HEAD-QTY: the head ingredient list follows the costed display line. The decision (and its three
