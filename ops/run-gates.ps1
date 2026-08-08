@@ -86,7 +86,7 @@ foreach ($s in $withSelfTest) {
     # '(?i)...x ' matches the "x " inside words - "mutex + atomic swap" scored as a hit. On gates run #2 that
     # spent 3 of the 5 slots on PASSING lines and hid 3 of test-auditors' 4 failures from the log entirely,
     # so the run read as one broken watcher when it was four. Anchored to the FAIL/X markers, and 12 lines.
-    @($out) | Where-Object { $_ -match '^\s*(FAIL|X)\b' -or $_ -match '(?-i)FAIL' } |
+    @($out) | Where-Object { $_ -match '^\s*(FAIL|X)\b' -or $_ -match '(?-i)SELF-TEST FAIL' } |
       Select-Object -First 12 | ForEach-Object { Write-Output ('          ' + $_) }
     if (@($out).Count -gt 0) { Write-Output ('          ...' + (@($out).Count) + ' line(s) of output in total') }
   }

@@ -47,7 +47,10 @@ param(
   # A jolly read is tempo and pitch as much as it is casting: the same voice at -5% reads sober and
   # at +6% with a few Hz of lift reads upbeat. Both are exposed so the delivery can be tuned without
   # changing voice, and -VoiceSamples renders at whatever is set here so a sample is what would ship.
-  [int]    $RatePct      = -5,
+  # -8% matches the demo reel, which is the pacing Brad approved: this voice at +0% measures 168 wpm,
+  # news-anchor fast against the ~150 narration wants, and -8% puts it near 156. Do NOT tune this in
+  # 1% steps, the engine's response is non-monotonic there because the rate hint re-plans pauses.
+  [int]    $RatePct      = -8,
   [int]    $PitchHz      = 0,
   [double] $TakeoutPlate = 12.0,
   [string] $OutDir,
@@ -350,6 +353,23 @@ $speakPs    = Get-MoneySpeech $cheapestPs
 $speakBatch = Get-MoneySpeech $batchCost
 $titleClass = if ($name.Length -gt 30) { 'title long' } else { 'title' }
 
+# WRITE THE -Vo LINES BELOW AS ONE PARAGRAPH, NOT AS SEVEN CAPTIONS.
+#
+# They used to be short punchy fragments, which was right when each scene was spoken as its own
+# utterance with padding between: nobody hears a fragment when a second of silence follows it. Read
+# as a single continuous take, that same writing is exposed as constant stopping, and Brad's verdict
+# on the first reel built that way was "weird pauses throughout, sounds pretty terrible".
+#
+# What the measurement showed. Every sentence buys a ~0.40s stop and every comma a ~0.20s one, so
+# sentence COUNT is the pacing budget. The flagged reel ran 18.5 sentences a minute at 8.1 words
+# each; the demo reel he likes runs 15.0 at 9.8. Worse, a comma placed inside a phrase rather than at
+# a clause boundary puts a pause where nobody breathes: "one batch, for twenty three eighty" stopped
+# for 0.22s before "for", two seconds into the video.
+#
+# So: one idea per sentence, but let the sentence finish. Join clauses with "and" or "which" rather
+# than splicing them with a comma. Never leave a two-word fragment ("Come see." "Screenshot it.")
+# standing alone between two full stops. The facts are unchanged, only the joins.
+
 # 1. hook
 # Leads on the BATCH total, not the per-serving price. "$1.45 a serving" is true but small and
 # abstract; "14 dinners for $20.30" is the same fact in the shape that stops a thumb, because the
@@ -364,7 +384,7 @@ $moneyClass = if ($moneyBatch.Length -gt 5) { 'money sm' } else { 'money' }
 # so "$speakBatch?" parses as a variable called speakBatch?, and fails at runtime rather than at parse
 # time. Any interpolation immediately followed by punctuation needs the braces.
 Add-Scene -Dark -Id 'hook' `
-  -Vo "$(ConvertTo-Words $servings) dinners out of one batch, for ${speakBatch}? Come see." `
+  -Vo "$(ConvertTo-Words $servings) dinners out of one batch for ${speakBatch}? Come and see how." `
   -Caption "$servings dinners for $moneyBatch." `
   -Body ('<div class="eyebrow">Omaha &middot; this week</div>' +
          '<div class="hookline">' + $servings + ' dinners for</div>' +
@@ -374,13 +394,13 @@ Add-Scene -Dark -Id 'hook' `
 # 2. title
 $dek = if ($cuisine) { "$cuisine &middot; $servings servings" } else { "$servings servings" }
 Add-Scene -Id 'title' `
-  -Vo "$name. One batch, $(ConvertTo-Words $servings) dinners." `
+  -Vo "This one is $name, and one batch makes $(ConvertTo-Words $servings) dinners." `
   -Caption (HtmlEnc $name) `
   -Body ('<div class="' + $titleClass + '">' + (HtmlEnc $name) + '</div><div class="dek">' + $dek + '</div>')
 
 # 3. macros
 Add-Scene -Id 'macros' `
-  -Vo "$(ConvertTo-Words $proteinG) grams of protein, $(ConvertTo-Words $calories) calories a bowl." `
+  -Vo "Every bowl carries $(ConvertTo-Words $proteinG) grams of protein and $(ConvertTo-Words $calories) calories." `
   -Caption "${proteinG}g protein &middot; $calories calories" `
   -Body ('<div class="tiles">' +
          '<div class="tile"><b>' + $proteinG + 'g</b><i>protein</i></div>' +
@@ -406,14 +426,17 @@ function Format-List {
 }
 
 # 4. the list: all of it, one frame, screenshot-ready.
+# "Here's", not "Here is": the engine treats a standalone sentence-initial "Here" as a discourse
+# marker and hesitates 0.353s before its own verb, against 0.014s everywhere else in the same line.
+# Brad heard it, the word timings located it, and "Here's", "This is" and "That is" all measure clean.
 Add-Scene -Id 'list' `
-  -Vo "The whole shopping list, priced at this week's cheapest Omaha shelf. Screenshot it." `
+  -Vo "Here's the whole shopping list at this week's cheapest Omaha prices, so screenshot it." `
   -Caption 'The whole list. Screenshot it.' `
   -Body (Format-List -Rows $shown)
 
 # 6. batch math (shown as arithmetic because cheapest_ps IS a whole-package total over 14)
 Add-Scene -Id 'batch' `
-  -Vo "$(ConvertTo-Words $servings) servings at $speakPs. That is $speakBatch for the whole batch." `
+  -Vo "That is $(ConvertTo-Words $servings) servings at $speakPs, which comes to $speakBatch for the whole batch." `
   -Caption "$servings &times; $moneyPs = $moneyBatch" `
   -Body ('<div class="math">' + $servings + ' servings &times; ' + $moneyPs + '<br><b>' + $moneyBatch + ' for the batch</b></div>')
 
@@ -437,7 +460,7 @@ $ratioVo = if ($batchCost -le $TakeoutPlate) {
 $boardSaved = [math]::Round(($everydayPs - $cheapestPs) * $servings, 2)
 
 Add-Scene -Id 'compare' `
-  -Vo "One takeout plate runs about $(Get-MoneySpeech $TakeoutPlate). This whole batch is $speakBatch. $ratioVo" `
+  -Vo "One takeout plate runs about $(Get-MoneySpeech $TakeoutPlate), and this whole batch is $speakBatch. $ratioVo" `
   -Caption "One plate out, or $servings dinners in the fridge." `
   -Body ('<div class="vs">' +
          '<div><span>One takeout plate</span><em>' + (Format-Money $TakeoutPlate) + '</em></div>' +

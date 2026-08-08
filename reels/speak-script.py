@@ -165,6 +165,39 @@ def align(lines, marks):
     return out, drift
 
 
+def find_hesitations(lines, marks, floor=0.25):
+    """Pauses the SCRIPT did not ask for.
+
+    The engine sometimes stops in the middle of a phrase, and when it does it sounds like the
+    narrator losing their place. The one that started this: a sentence-initial "Here is" makes it
+    treat "Here" as a standalone discourse marker and hesitate 0.353s before the verb, against 0.014s
+    between every other word in the same sentence. A listener hears it immediately. Nothing in the
+    build could see it, because the total duration and the loudness were both perfectly fine.
+
+    A pause is expected wherever the text has punctuation, so this reports only the ones with no
+    punctuation to justify them. It WARNS rather than fails: the engine's own phrase breaks are
+    legitimate and vary with wording, so this is a "go and listen to this spot" signal, not a gate.
+    Rephrasing is the fix; contractions ("Here's") and a different opener ("This is") both measured
+    clean on the founding case."""
+    written = " ".join(ln["text"].strip() for ln in lines).split()
+    out, wi = [], 0
+    for i in range(1, len(marks)):
+        gap = (marks[i]["offset"] - (marks[i - 1]["offset"] + marks[i - 1]["duration"])) / TICKS_PER_SECOND
+        if gap <= floor:
+            continue
+        prev = norm(marks[i - 1]["text"])
+        # Walk the written tokens alongside, to see whether THIS word carried punctuation.
+        while wi < len(written) and norm(written[wi]) != prev:
+            wi += 1
+        if wi >= len(written):
+            continue
+        if not any(ch in written[wi] for ch in ".,?!;:"):
+            out.append({"after": marks[i - 1]["text"], "before": marks[i]["text"],
+                        "gap": round(gap, 3),
+                        "at": round(marks[i]["offset"] / TICKS_PER_SECOND, 2)})
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--lines", required=True)
@@ -204,11 +237,16 @@ def main():
 
     marks = asyncio.run(render(text, args.voice, args.rate, args.pitch, args.out))
     timing, drift = align(lines, marks)
+    hes = find_hesitations(lines, marks)
     with open(args.out + ".timing.json", "w", encoding="utf-8") as fh:
-        json.dump({"voice": args.voice, "rate": args.rate, "drift": drift, "lines": timing}, fh, indent=2)
+        json.dump({"voice": args.voice, "rate": args.rate, "drift": drift,
+                   "lines": timing, "hesitations": hes}, fh, indent=2)
 
     if drift:
         print("WARNING: %d word(s) could not be matched during alignment" % drift, file=sys.stderr)
+    for h in hes:
+        print("HESITATION: %.3fs between '%s' and '%s' at %.1fs, with no punctuation asking for it. "
+              "Rephrase that line." % (h["gap"], h["after"], h["before"], h["at"]), file=sys.stderr)
     print(args.out + ".timing.json")
 
 

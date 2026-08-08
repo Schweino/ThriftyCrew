@@ -23,7 +23,7 @@
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $fix  = Join-Path $root 'regression-inputs\guard-fixtures'
-$pass = 0; $failed = 0
+$pass = 0; $failed = 0; $skipped = 0
 
 # FIXTURES RUN COPIES OF DETECTORS OUT OF $env:TEMP, and every detector carrying the completion contract
 # dot-sources lib\guard-contract.ps1 from its PARENT directory. For a fixture copy that parent is $env:TEMP,
@@ -34,8 +34,19 @@ $pass = 0; $failed = 0
 $fxLibDir = Join-Path $env:TEMP 'lib'
 if (-not (Test-Path $fxLibDir)) { New-Item -ItemType Directory -Force $fxLibDir | Out-Null }
 Copy-Item (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1') (Join-Path $fxLibDir 'guard-contract.ps1') -Force
+# THE LIVE-DATA CASES (2026-08-08). Most of this harness drives frozen fixtures, but a handful of cases
+# assert against the REAL board (out\comparison-*.json / out\recipe-board.json) or the REAL .claude prompt
+# tree. Both are gitignored, so on the change-time gate's bare checkout those cases were not failing - they
+# were never able to RUN, and "could not run" printed as FAIL. That is what took gates run #2 red on
+# 2026-08-08 while nothing was broken. They now SKIP when the data is absent, and the SKIP is counted and
+# printed in both summaries, so a machine that HAS the data still fails exactly as loudly as before.
+$HasBoard = (@(Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue).Count -gt 0) -or
+            (Test-Path (Join-Path $root 'out\recipe-board.json'))
 function Ok($m)   { Write-Output ("  PASS  " + $m); $script:pass++ }
 function Bad($m)  { Write-Output ("  FAIL  " + $m); $script:failed++ }
+# A case that could not run is NOT a pass. It gets its own counter and its own line in BOTH summaries, so
+# "every watcher can still see its own bug" can never be printed over a case that never executed.
+function Skip($m) { Write-Output ("  SKIP  " + $m); $script:skipped++ }
 function RunPS($script, $argList) {
   # A DELEGATED CHILD'S STDERR MUST NOT KILL THIS HARNESS (2026-08-08). In PS 5.1, merging with 2>&1 while
   # $ErrorActionPreference is 'Stop' turns the child's FIRST stderr line into a terminating NativeCommandError
@@ -716,9 +727,15 @@ $fxAfc = NewFxDir 'afc-blind'
 $r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxAfc)
 if ($r.rc -eq 3 -and $r.text -match 'FOOD-CLASS AUDIT BLIND') { Ok 'food-category goes BLIND (exit 3) at zero priced cells' }
 else { Bad ('food-category did NOT go blind on an empty OutDir (rc=' + $r.rc + ')') }
-$r = RunPS 'audit-food-category.ps1' @()
-if ($r.rc -eq 0 -and $r.text -match 'priced cells scanned') { Ok 'food-category clean twin: the live board still scans and passes' }
-else { Bad ('food-category clean twin failed (rc=' + $r.rc + ') - either live data is broken (page-worthy) or the edit broke the healthy path') }
+# This case reads the LIVE board (no -OutDir) - see $HasBoard at the top. On a board-less checkout it went
+# BLIND (rc=3) and read as a broken watcher; with a board present the assertion is unchanged, because a
+# blind audit on a machine that HAS a board is exactly the failure this harness exists to catch.
+if (-not $HasBoard) { Skip 'food-category clean twin: NO live board in grocery\out - the healthy-path case proved nothing here' }
+else {
+  $r = RunPS 'audit-food-category.ps1' @()
+  if ($r.rc -eq 0 -and $r.text -match 'priced cells scanned') { Ok 'food-category clean twin: the live board still scans and passes' }
+  else { Bad ('food-category clean twin failed (rc=' + $r.rc + ') - either live data is broken (page-worthy) or the edit broke the healthy path') }
+}
 Remove-Item $fxAfc -Recurse -Force -ErrorAction SilentlyContinue
 
 # (d2) MUST-FIRE for the 2026-07-30 additions to category-excludes.json: the snack_carrier class and the
@@ -2581,9 +2598,12 @@ if ($r.rc -eq 3 -and $r.text -match 'UNEVALUABLE') { Ok 'known-wrong names an en
 else { Bad ('known-wrong counted an unevaluable entry as a pass (rc=' + $r.rc + ') - an entry can be permanently unfirable and look green') }
 # LIVE CLEAN TWIN: the real blocklist against the real board must be GREEN. It is a REGRESSION blocklist -
 # every seeded case is already fixed - so a red here means a fixed defect came back, which is page-worthy.
-$r = RunPS 'audit-known-wrong.ps1' @()
-if ($r.rc -eq 0 -and $r.text -match 'KNOWN-WRONG AUDIT OK') { Ok 'known-wrong live clean twin: the real blocklist is green on the real board' }
-else { Bad ('known-wrong is RED on the live board (rc=' + $r.rc + ') - an adjudicated-wrong product is published again: ' + $r.text) }
+if (-not $HasBoard) { Skip 'known-wrong live clean twin: NO live board in grocery\out - the regression blocklist was not evaluated here' }
+else {
+  $r = RunPS 'audit-known-wrong.ps1' @()
+  if ($r.rc -eq 0 -and $r.text -match 'KNOWN-WRONG AUDIT OK') { Ok 'known-wrong live clean twin: the real blocklist is green on the real board' }
+  else { Bad ('known-wrong is RED on the live board (rc=' + $r.rc + ') - an adjudicated-wrong product is published again: ' + $r.text) }
+}
 Remove-Item $fxKw, $fxKwB, $fxKwS -Recurse -Force -ErrorAction SilentlyContinue
 
 # ---------------------------------------------------------------- (m) the COVERAGE LEDGER
@@ -3090,7 +3110,10 @@ else { Bad 'audit-capture-eviction is not called by check-ad-cycles.ps1 - the ON
 $ceStamp = Join-Path $root 'out\capture-evictions.json'
 $ceCmps = @(Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending)
 if ($ceCmps.Count -eq 0) {
-  Bad 'roster currency UNCHECKABLE: no out\comparison-*.json to compare the capture-eviction stamp against - this check examined nothing, which is not the same as a clean board'
+  # No dated board here at all (a bare checkout). Still not a pass - but not a defect either, so it is a
+  # counted SKIP rather than a FAIL. On a machine with boards, $HasBoard is true and this stays a hard FAIL.
+  if (-not $HasBoard) { Skip 'roster currency: no out\comparison-*.json here - the capture-eviction stamp was not compared against anything' }
+  else { Bad 'roster currency UNCHECKABLE: no DATED out\comparison-YYYY-MM-DD.json to compare the capture-eviction stamp against - this check examined nothing, which is not the same as a clean board' }
 } elseif (-not (Test-Path $ceStamp)) {
   Bad 'a board exists but out\capture-evictions.json does not - the rostered capture-eviction pass has never written its artifact, so the eviction class is going unwatched on the live board'
 } else {
@@ -3120,7 +3143,18 @@ $pb = Join-Path (Split-Path $root -Parent) 'ops\audit-prompt-backup.ps1'
 if (Test-Path $pb) {
   $out = & powershell -NoProfile -ExecutionPolicy Bypass -File $pb 2>&1 | ForEach-Object { [string]$_ }
   $rc = $LASTEXITCODE; $txt = ($out -join "`n")
+  # NOT EVERY MACHINE HOSTS THE PROMPTS (2026-08-08). audit-prompt-backup compares ops\prompt-backup against
+  # hardcoded live roots (C:\Codex\.claude\agents and friends). A CI runner has none of them, so it exits 3
+  # BLIND and this printed FAIL for a check that never ran. The roots are READ OUT OF THE AUDIT'S OWN SOURCE
+  # rather than restated here - two copies of a path is how a rule silently stops matching. BLIND with the
+  # roots present still FAILS: that is the real "the .claude paths moved" case.
+  $pbRoots = @([regex]::Matches((Get-Content $pb -Raw), '(?m)^\$(?:PROJ|USER|TASKS)\s*=\s*''([^'']+)''') |
+                ForEach-Object { $_.Groups[1].Value })
   if ($rc -eq 0) { Ok 'prompt-backup: every agent prompt and scheduled-task SKILL is backed up in ops\prompt-backup and identical across scopes' }
+  elseif ($rc -eq 3 -and $pbRoots.Count -eq 0) { Bad 'prompt-backup: could not read its own live-prompt roots out of the source - the BLIND-vs-not-this-machine split is now guesswork' }
+  elseif ($rc -eq 3 -and -not (@($pbRoots | Where-Object { Test-Path $_ }).Count)) {
+    Skip ('prompt-backup: none of its live-prompt roots exist here (' + ($pbRoots -join '; ') + ') - this machine does not host the prompts, so nothing was compared')
+  }
   elseif ($rc -eq 3) { Bad ('prompt-backup went BLIND (found zero live prompts) - the .claude paths moved: ' + ($txt -replace "`n", ' ')) }
   else { Bad ('prompt-backup drift (rc=' + $rc + ') - run ops\audit-prompt-backup.ps1 -Sync and commit: ' + ($txt -replace "`n", ' ')) }
 } else { Bad 'prompt-backup audit is MISSING from ops\ - the agent prompts have no backup check' }
@@ -3526,12 +3560,13 @@ else {
 # ordinary findings-exit. The exit code carries the VERDICT; this line carries the fact that the run
 # REACHED THE END. check-ad-cycles requires it before believing a quiet result.
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+$skipNote = if ($skipped) { ", $skipped SKIPPED (proved nothing - see the SKIP lines)" } else { '' }
 if ($failed -eq 0) {
-  Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug.")
-  Write-GuardComplete -Name 'test-auditors' -Summary "pass=$pass failed=0"
+  Write-Output ("test-auditors PASS  ($pass check(s)$skipNote) - every watcher that could run can still see its own bug.")
+  Write-GuardComplete -Name 'test-auditors' -Summary "pass=$pass failed=0 skipped=$skipped"
   exit 0
 }
-Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board.")
-Write-GuardComplete -Name 'test-auditors' -Summary "pass=$pass failed=$failed"
+Write-Output ("test-auditors FAIL  ($failed failed, $pass passed$skipNote) - a watcher has gone blind. Fix it before trusting a quiet board.")
+Write-GuardComplete -Name 'test-auditors' -Summary "pass=$pass failed=$failed skipped=$skipped"
 exit 2
 
