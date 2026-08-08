@@ -1,0 +1,100 @@
+# Bonus Lesson — Turn Great Credit Into Free Flights
+
+*Great credit isn't a trophy to admire. It's a tool — and once you've earned it, it can quietly pay for your vacations.*
+
+**The big idea:** If you've built genuinely great credit and you never carry a balance, credit card welcome bonuses can cover your flights year after year. It's a real, repeatable system — not a hack, not a scam — but it only works for people who've already mastered the fundamentals. This lesson is the reward at the end of the credit road.
+
+---
+
+*Nothing here is financial advice. This is a system that has worked for me personally, shared so you can understand how it works and decide for yourself. Credit card terms and bonus offers change constantly. Do your own research before applying for anything, and if you're unsure, talk to a qualified professional.*
+
+---
+
+## The Reward at the End of the Road
+
+Most of what we've covered about credit cards has been about protecting yourself — the minimum-payment trick, the interest trap, the one rule that a card is never for buying what you don't already have the money for. All of that is the defense.
+
+This lesson is the offense.
+
+Because here's the thing nobody tells you when you're learning to be responsible with credit: once you've actually done it — once you have a great score and the ironclad habit of paying every balance in full — the banks start competing for your business. And they compete by handing out real money to get you to open a card. Hundreds of dollars in travel, per card, several times a year.
+
+My wife and I have not paid for our own flights in about five years. Not because we found a loophole, but because we do the boring fundamentals perfectly and then collect the reward that's sitting right there for people who do. That's the whole trick. This lesson shows you exactly how.
+
+## What a Welcome Bonus Actually Is
+
+Strip away the marketing and it's simple.
+
+To get you to open a new card, a bank offers a **welcome bonus** (sometimes called a sign-up bonus): *"Spend a certain amount on the card in the first few months, and we'll give you a big chunk of points or miles."*
+
+A typical offer looks like: *spend $3,000–$4,000 in the first three months, earn 60,000–75,000 points.* Depending on the card and how you redeem them, those points are often worth several hundred dollars in travel — sometimes enough for a round-trip flight or two by themselves.
+
+The bank is betting you'll keep using the card, carry a balance, and pay them interest for years. That's how they make their money. **Your job is to take the bonus and never give them that.** You hit the spending requirement using purchases you were going to make anyway, pay the balance in full the entire time, collect the points, and use them for flights.
+
+Do that, and the bank's bet loses and yours wins.
+
+## The One Rule That Makes This Safe — or Dangerous
+
+Before a single tactic, the non-negotiable:
+
+**This only works if you pay every balance in full, every single month, without exception.**
+
+If you carry a balance, it's over. A 25% interest charge will erase the value of any welcome bonus faster than you can earn it, and you'll have talked yourself into debt while feeling clever. The entire strategy depends on the fundamental you already know cold: a credit card is not a borrowing tool. The money exists first. You pay it all, every time.
+
+If you're not *completely* certain you have that habit locked in, this lesson is not for you yet. Go master the defense first. There's no shame in that — this is an advanced move, and the people who get burned by it are always the ones who skipped the fundamentals. Come back when paying in full is automatic and boring.
+
+Assuming it is — here's the system.
+
+## My System: Six Rules
+
+These are the rules I actually live by. None of them are complicated. All of them matter.
+
+**1. Not before a major purchase.** If you're planning to buy a house or a car in the next year or so, stop here — don't do this. Applying for cards temporarily dings your score and adds new accounts, and mortgage and auto lenders don't like seeing fresh credit activity. The savings on a good mortgage rate dwarf any flight bonus. When a big loan is on the horizon, you leave your credit completely still. This one overrides everything else.
+
+**2. Never more than two hard inquiries open at once.** Every card application triggers a "hard inquiry" on your credit, which nudges your score down a little and fades over time. Keep it disciplined: no more than two active at any point. Use a free site like **Credit Karma** to see exactly how many hard inquiries you currently have before you apply for anything. Free, takes two minutes, and it keeps you honest.
+
+**3. Keep a written log.** Open a notepad or a simple spreadsheet and track every card you've used this on: the **exact card name**, its **welcome bonus**, the date you opened it, the spending requirement, and when the annual fee hits. This is the backbone of the whole system. Without a log you'll lose track of what you opened, miss a deadline, and either forget to hit a bonus or forget to close a card before its fee. The record-keeping *is* the strategy.
+
+**4. Research whether the current bonus is actually good.** Bonuses go up and down throughout the year. A card that normally offers 50,000 points might run a 90,000-point promotion for a few weeks. Before you apply, **Google it** — search the card name plus "welcome bonus" or "sign-up bonus history" and you'll quickly see whether today's offer is average or elevated. Only pull the trigger when it's at or above its normal level. If the bonus is below average, wait. There's always another offer coming.
+
+**5. If you have a partner, rotate.** This is the multiplier. If you have a spouse or partner, take turns on who opens which card. Because you're two separate people with two separate credit profiles, you can each earn the same bonuses — which means at minimum you're capturing these rewards **twice a year** as a household instead of once. Rotating also keeps each person's inquiries and new-account activity spread out and calm (see Rule 2).
+
+**6. Close the card before the year is up.** Many of the best travel cards charge an **annual fee** — often waived the first year, then charged on the anniversary. Once you've collected the bonus and gotten your value, **close the card before that first year is up** so you never pay the fee a second time. Some cards have no annual fee at all; those you can simply keep. Set a reminder in your log (Rule 3) a few weeks before each anniversary so a fee never sneaks up on you.
+
+That's the whole system. Six rules, repeated calmly, year after year.
+
+## Why the Rules Work Together
+
+Notice how they interlock. The log (Rule 3) is what makes closing on time (Rule 6) possible. The inquiry limit (Rule 2) is what keeps your score healthy enough to keep qualifying. The "no major purchase" rule (Rule 1) protects the one situation where a temporarily lower score would genuinely cost you. And the partner rotation (Rule 5) doubles the whole thing without breaking any of the others.
+
+One honest note on closing cards: shutting a card can slightly reduce your total available credit and, over time, your average account age — both small inputs to your score. For someone who carries no balances and isn't about to borrow, the impact is usually minor and temporary. But it's exactly *why* Rule 1 exists. When a big loan is coming, you leave everything alone. The rest of the time, the trade — a small, temporary wiggle in your score in exchange for free flights — is one I'll happily make.
+
+## Be Honest About What This Is
+
+This is sometimes called "churning," and it isn't for everyone. It requires organization, discipline, and a completely clean relationship with debt. If keeping a spreadsheet sounds exhausting, or if you've ever carried a balance you didn't mean to, this probably isn't your move — and that's fine. Nobody *needs* to do this. It's a bonus for people whose fundamentals are so solid that they can safely turn their good habits into a perk.
+
+But if you're that person — and after everything you've learned, you might be — there's real money sitting on the table. My wife and I fly for free because we treat great credit like what it is: an asset that's supposed to work *for* us, not just a number to feel good about.
+
+## If You're Teaching This to Someone Younger
+
+A teenager can't run this system — they can't get these cards, and the spending requirements assume an adult's budget. But it's one of the best *aspirational* lessons you can hand a young person who's building credit: **this is what great credit eventually buys you.** Not bragging rights. Actual freedom. Free flights, earned quietly by being the kind of person who pays in full and stays organized. It's a concrete answer to "why does any of this matter?" — the payoff at the far end of the boring habits.
+
+## Try this
+
+You don't have to apply for anything today. Start by building the foundation:
+
+1. **Check your hard inquiries.** Log into a free service like Credit Karma and find out how many you currently have. Just look. This is the number Rule 2 protects.
+2. **Start your log.** Open a fresh note or spreadsheet with these columns: *Card name · Welcome bonus · Spend requirement · Date opened · Annual fee · Fee/close date.* Even empty, it's now ready.
+3. **Do one research run.** Pick one well-known travel card, Google its welcome bonus and its history, and get a feel for whether today's offer is average or elevated. You're just practicing the eye you'll use in Rule 4 — no application required.
+
+If, and only if, you pay in full every month and have no major purchase on the horizon, you now have everything you need to run your first one.
+
+## Questions to sit with
+
+- Be honest: is paying your balance in full every month truly automatic for you — or is it something you *mostly* do? Your answer decides whether this lesson is for you yet.
+- Is there a major purchase (house, car, big loan) anywhere on your horizon in the next year that should keep your credit still for now?
+- If you captured even one welcome bonus this year, where would you want those flights to take you? Naming the trip makes the boring discipline feel a lot more worth it.
+- If you have a partner, who goes first? Sketching the rotation now is half the work of Rule 5.
+
+---
+
+*Great credit was never the goal. It was the tool. This is one of the ways you finally get to use it.*

@@ -1,0 +1,57 @@
+<div style="font-family: Georgia, serif; max-width: 720px; margin: 24px auto; color: #16263F;">
+  <h2 style="font-weight:500;">Map to Success — logo exporter</h2>
+  <p style="font-family: Arial, sans-serif; font-size:14px; line-height:1.6; color:#444;">
+    Click a button to download a PNG. For Substack: use the <b>square 512</b> as your publication
+    logo (Settings &rarr; Basics &rarr; Publication logo). Use the horizontal one for the website
+    header / About page / social.
+  </p>
+
+  <div style="background:#16263F; border-radius:18px; padding:20px; margin:16px 0;">
+    <div id="prev-h"></div>
+  </div>
+  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:28px; font-family:Arial,sans-serif;">
+    <button data-which="h" data-w="1600" style="cursor:pointer;padding:10px 16px;border:0;border-radius:8px;background:#E2A43C;color:#16263F;font-weight:bold;">Download horizontal (1600px)</button>
+    <button data-which="h" data-w="2400" style="cursor:pointer;padding:10px 16px;border:0;border-radius:8px;background:#16263F;color:#F6F1E7;">Download horizontal (2400px)</button>
+  </div>
+
+  <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+    <div id="prev-s" style="width:140px;height:140px;"></div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; font-family:Arial,sans-serif;">
+      <button data-which="s" data-w="512" style="cursor:pointer;padding:10px 16px;border:0;border-radius:8px;background:#E2A43C;color:#16263F;font-weight:bold;">Download square (512px)</button>
+      <button data-which="s" data-w="1024" style="cursor:pointer;padding:10px 16px;border:0;border-radius:8px;background:#16263F;color:#F6F1E7;">Download square (1024px)</button>
+    </div>
+  </div>
+
+  <script>
+    var SVG = {
+      h: '<svg width="680" height="180" viewBox="0 0 680 180" xmlns="http://www.w3.org/2000/svg"><rect x="60" y="25" width="560" height="130" rx="18" fill="#16263F"/><text x="340" y="81" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="40" font-weight="500" fill="#F6F1E7">Map to Success</text><circle cx="160" cy="105" r="4" fill="#E2A43C"/><path d="M160,105 C245,113 320,93 385,101 C450,109 500,91 530,97" fill="none" stroke="#E2A43C" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 9"/><path d="M538,105 C533,99 530,95 530,89 A8,8 0 1,1 546,89 C546,95 543,99 538,105 Z" fill="#E2A43C"/><circle cx="538" cy="88" r="2.5" fill="#16263F"/><text x="340" y="134" text-anchor="middle" font-family="Georgia, Times New Roman, serif" font-size="14" letter-spacing="2" fill="#E2A43C">The Family Money Playbook</text></svg>',
+      s: '<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="400" height="400" fill="#16263F"/><circle cx="110" cy="300" r="9" fill="#E2A43C"/><path d="M110,300 C160,278 122,232 170,224" fill="none" stroke="#E2A43C" stroke-width="9" stroke-linecap="round" stroke-dasharray="2 22"/><path d="M200,322 C162,264 136,232 136,180 A64,64 0 1,1 264,180 C264,232 238,264 200,322 Z" fill="#E2A43C"/><path d="M200,146 L207.05,166.29 L228.53,166.73 L211.41,179.71 L217.63,200.27 L200,188 L182.37,200.27 L188.59,179.71 L171.47,166.73 L192.95,166.29 Z" fill="#16263F"/></svg>'
+    };
+    var RATIO = { h: 180/680, s: 1 };
+    document.getElementById('prev-h').innerHTML = SVG.h.replace('width="680" height="180"', 'width="100%" height="auto" style="display:block"');
+    document.getElementById('prev-s').innerHTML = SVG.s.replace('width="400" height="400"', 'width="140" height="140"');
+
+    function download(which, w) {
+      var h = Math.round(w * RATIO[which]);
+      var blob = new Blob([SVG[which]], { type: 'image/svg+xml;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var img = new Image();
+      img.onload = function () {
+        var c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        c.toBlob(function (b) {
+          var a = document.createElement('a');
+          a.href = URL.createObjectURL(b);
+          a.download = 'map-to-success-' + (which === 's' ? 'square' : 'horizontal') + '-' + w + '.png';
+          a.click();
+        }, 'image/png');
+      };
+      img.src = url;
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('button[data-which]'), function (btn) {
+      btn.addEventListener('click', function () { download(btn.getAttribute('data-which'), parseInt(btn.getAttribute('data-w'), 10)); });
+    });
+  </script>
+</div>

@@ -67,6 +67,44 @@
 !/wrangler.jsonc
 !/meal-plan-builder-template.html
 !/build-meal-planner.ps1
+# THE 52-WEEK CURRICULUM AND ITS SUPPORTING DOCS (2026-08-08). lessons\ holds the local ORIGINAL of 55
+# pages that are live right now - the sitemap serves every one of them as week-N-<slug>. They were ignored
+# by the /* rule above and therefore existed on exactly one machine's disk, unversioned, while the tracked
+# lesson content on the site depended on them. Same "only copy in existence" hole as lib\ and the
+# interstitial. Worth naming how it hid: an earlier sweep for published-pages-without-a-local-source
+# matched repo BASENAMES (lesson-04-the-gap-is-the-score) against Ghost SLUGS (week-4-the-gap-is-the-score)
+# and scored zero, so 55 pages with a perfectly good local source were classified as Ghost-only. A
+# basename-equality scan cannot answer that question when the publisher renames.
+!/lessons/
+# CURRICULUM.md is the plan those 55 lessons implement and 13 of them cite it by name; STYLE-GUIDE.md is
+# the voice spec CURRICULUM.md and README.md both point at. Ignoring the spec while tracking nothing that
+# explains it is how the WHY gets lost - the same reason design\ is tracked.
+!/CURRICULUM.md
+!/STYLE-GUIDE.md
+# The four downloadable workbooks. Each is READ (not generated) by a build-*.ps1 that is already tracked
+# above, so a fresh clone had the publisher and not the payload - the exact shape of the lib\ hole.
+!/Simple-Money-Playbook-Budget-Tracker.xlsx
+!/Simple-Money-Playbook-Compound-Calculator.xlsx
+!/Simple-Money-Playbook-Debt-Payoff-Calculator.xlsx
+!/Simple-Money-Playbook-Savings-Goal-Tracker.xlsx
+# get-starthere.ps1 reads this for the /start-here/ Ghost post id. 49 bytes of durable state that cannot
+# be recomputed from anything else in the repo.
+!/_starthere.id.txt
+# brand\ is the logo, cover art and social imagery - the visual identity, in one place, with no other copy.
+!/brand/
+# The pre-Ghost Substack archive: 71 posts, the published form of the same content lessons\ now carries
+# (word-for-word overlap on the weeks that exist in both). Superseded, never regenerable, cheap to keep.
+!/substack/
+
+# --- top-level paths left OUT of the allow-list ON PURPOSE. Recorded because the /* rule makes "ignored"
+#     and "nobody thought about it" look identical from the outside, which is how lessons\ and brand\ went
+#     unversioned for two months. check-uncommitted-source.ps1 -Ignored enforces this list. ---
+# facebook\ - both PNGs are byte-identical (SHA-256) to brand\FBCover.png and brand\FBProfile.png, which
+#             are now tracked. A second copy of a tracked file is not a second source.
+# out\      - interstitial-deploy.html, rebuilt by deploy-interstitial.ps1 from the tracked
+#             join-interstitial.html. Derived output, same rule as grocery\out\.
+# seo-backlink-plan.md - a one-off plan doc from 2026-07-10 that nothing in the repo references and no
+#             build step reads. Notes, not source.
 
 # --- regenerable pipeline OUTPUTS: recomputed every run from the raw inputs, so never tracked. This lets
 #     the local browser agents commit their raw store data without derived-file rebase conflicts vs the
