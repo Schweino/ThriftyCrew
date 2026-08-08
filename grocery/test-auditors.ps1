@@ -1435,7 +1435,14 @@ function Get-MisnamedEmitters([string]$scanDir) {
     $points = @{}
     foreach ($t in $toks) {
       $c = ([string]$t.Content).Trim()
-      if ($c -match '\.ps1$' -and $c -notmatch '[\s:]') { $points[([IO.Path]::GetFileNameWithoutExtension($c)).ToLower()] = $true }
+      # A STRING ENDING IN .ps1 IS NOT NECESSARILY A PATH. grocery\cutover-feed-url.ps1 holds a REGEX whose
+      # tail is 'cutover-feed-url\.ps1' - pipes and backslashes and all - and GetFileNameWithoutExtension
+      # throws "Illegal characters in path" on it, which killed this whole auditor mid-run: 176 lines in,
+      # rc=1, and NOT ONE line saying FAIL. A watcher that dies silently is worse than one that reports,
+      # so reject anything carrying a character a path cannot hold before asking .NET to parse it.
+      if ($c -match '\.ps1$' -and $c -notmatch '[\s:]' -and ($c.IndexOfAny([IO.Path]::GetInvalidPathChars()) -lt 0) -and $c -notmatch '[*?|]') {
+        $points[([IO.Path]::GetFileNameWithoutExtension($c)).ToLower()] = $true
+      }
     }
     $me = $p.BaseName.ToLower()
     foreach ($t in $toks) {

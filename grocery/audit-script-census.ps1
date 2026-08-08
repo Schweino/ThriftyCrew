@@ -1,4 +1,4 @@
-﻿<#
+<#
   audit-script-census.ps1 - every .ps1 in this tree is either called by code, or NAMED here as a deliberate
   human entry point. Nothing is allowed to be merely unreachable.
 
@@ -70,6 +70,7 @@ $KNOWN = [ordered]@{
   'stamp-fareway-instore.ps1'        = 'stamps Fareway price_mode after a manual shelf verification'
   'recover-sams-quarantine.ps1'      = "recovers a quarantined Sam's capture"
   'get-tiers.ps1'                    = 'Ghost tier lookup, used while editing the join interstitial'
+  'cutover-feed-url.ps1'             = 'one command to move the public Worker base URL everywhere (source + a rebuild/republish checklist); run by hand on a Cloudflare account move or custom-domain change - last used 2026-08-08 for feed.thriftycrew.com'
   # -- semantic coverage backlog (2026-08-01): the sweep finds gaps, these three work them by hand
   'explain-coverage-gap.ps1'         = 'diagnoses WHY a swept product is invisible (NO-INCLUDE / EXCLUDED / CLAIMED / MATCHES) before any rule is touched'
   'apply-coverage-batch.ps1'         = 'applies + GATES one batch of commodity include widenings; reverts itself on a batch-attributable tile fault'
