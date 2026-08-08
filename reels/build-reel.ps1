@@ -319,6 +319,9 @@ body{font-family:Georgia,'Times New Roman',serif;-webkit-font-smoothing:antialia
 .free{display:inline-block;border:3px solid $TcGold;color:$TcGold;border-radius:999px;
   padding:20px 46px;font:600 40px/1 Georgia,serif;letter-spacing:.14em;text-transform:uppercase}
 .url{font:700 66px/1.2 Georgia,serif;color:$TcCream;margin-top:52px}
+.ask{font:600 44px/1.2 Georgia,serif;letter-spacing:.14em;text-transform:uppercase;
+  color:$TcGold;margin-top:40px}
+.hookline{font:400 62px/1.15 Georgia,serif;color:$TcCream;margin-bottom:10px}
 .stamp{font:400 26px/1.3 Georgia,serif;color:#9a9182;margin-top:38px}
 "@
 
@@ -348,10 +351,25 @@ $speakBatch = Get-MoneySpeech $batchCost
 $titleClass = if ($name.Length -gt 30) { 'title long' } else { 'title' }
 
 # 1. hook
+# Leads on the BATCH total, not the per-serving price. "$1.45 a serving" is true but small and
+# abstract; "14 dinners for $20.30" is the same fact in the shape that stops a thumb, because the
+# viewer can picture both halves of it. Posed as a question on purpose: measured on this voice, a
+# declarative sentence with a question mark rises hard (+81 Hz on the final word), while a rhetorical
+# "guess what this costs?" falls flat and lands like a statement. Brad's instinct, 2026-08-08.
+#
+# 300px type overflows 1080 past five characters, so a longer total steps down a size rather than
+# running off the frame.
+$moneyClass = if ($moneyBatch.Length -gt 5) { 'money sm' } else { 'money' }
+# ${speakBatch} rather than $speakBatch below: "?" is a LEGAL character in a PowerShell variable name,
+# so "$speakBatch?" parses as a variable called speakBatch?, and fails at runtime rather than at parse
+# time. Any interpolation immediately followed by punctuation needs the braces.
 Add-Scene -Dark -Id 'hook' `
-  -Vo "$speakPs a serving. Here is what that buys you." `
-  -Caption "$moneyPs a serving." `
-  -Body ('<div class="eyebrow">Omaha &middot; this week</div><div class="money">' + $moneyPs + '</div><div class="sub">per serving</div>')
+  -Vo "$(ConvertTo-Words $servings) dinners out of one batch, for ${speakBatch}? Come see." `
+  -Caption "$servings dinners for $moneyBatch." `
+  -Body ('<div class="eyebrow">Omaha &middot; this week</div>' +
+         '<div class="hookline">' + $servings + ' dinners for</div>' +
+         '<div class="' + $moneyClass + '">' + $moneyBatch + '</div>' +
+         '<div class="sub">the whole batch</div>')
 
 # 2. title
 $dek = if ($cuisine) { "$cuisine &middot; $servings servings" } else { "$servings servings" }
@@ -429,12 +447,18 @@ Add-Scene -Id 'compare' `
          $(if ($boardSaved -gt 0) { '. Shopping the board beat everyday shelf prices by ' + (Format-Money $boardSaved) + ' on this batch' }) + '.</div>')
 
 # 8. cta
+# The site, then the ask, spoken as well as shown: a viewer watching muted needs it on screen, and a
+# viewer listening needs to be told. The ask is specific rather than "engage with this post" - naming
+# who to send it to gets a share in a way that asking for a share does not.
 $ctaBadge = if ($isFree) { '<div class="free">Free this week</div>' } else { '' }
-$ctaVo    = if ($isFree) { 'Free this week at thrifty crew dot com.' } else { 'Full recipe at thrifty crew dot com.' }
+$ctaSite  = if ($isFree) { 'Free this week at thrifty crew dot com.' } else { 'Full recipe at thrifty crew dot com.' }
+$ctaVo    = ($ctaSite + ' If this saved you money, hit like, send it to someone who feeds a family, ' +
+             "and follow along for tomorrow's dinner.")
 $ctaCap   = if ($isFree) { 'Free this week at thriftycrew.com' } else { 'Full recipe at thriftycrew.com' }
 Add-Scene -Dark -Id 'cta' `
   -Vo $ctaVo -Caption $ctaCap `
   -Body ($ctaBadge + '<div class="url">thriftycrew.com</div>' +
+         '<div class="ask">Like &middot; Share &middot; Follow</div>' +
          '<div class="stamp">Real shelf prices, seven Omaha stores, updated weekly.</div>')
 
 # ---------------------------------------------------------------- render
