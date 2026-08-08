@@ -37,7 +37,9 @@ USAGE
 [CmdletBinding()]
 param(
   [string] $Slug,
-  [string] $Voice        = 'en-US-AndrewNeural',
+  # The house narrator, matched to the demo reel so the two reels on the same Page do not arrive in
+  # two slightly different voices. Names resolve in voices.ps1; full Microsoft ids also work.
+  [string] $Voice        = 'Goku',
   # Set to run the reel as a two-hander: scenes alternate between $Voice and $Voice2. $Voice keeps the
   # hook and the CTA (the brand moments book-end the reel in one voice) and the second voice takes the
   # scenes in between, so a viewer hears a conversation rather than a handover.
@@ -99,48 +101,25 @@ $script:RateStr  = "--rate=$(if ($RatePct -ge 0) { '+' })$RatePct%"
 $script:PitchArg = if ($PitchHz -ne 0) { @("--pitch=$(if ($PitchHz -gt 0) { '+' })${PitchHz}Hz") } else { @() }
 
 # ---------------------------------------------------------------- number to speech
-# Neural TTS reads "$1.63" inconsistently (sometimes "one point six three dollars"). Spell it.
+# Neural TTS reads "$1.63" inconsistently (sometimes "one point six three dollars"), so money is
+# spelled out. Those rules live in speech.ps1 so build-demo-reel.ps1 shares them rather than keeping
+# a second copy. Functions only: dot-sourcing it cannot clobber this script's params.
+. (Join-Path $PSScriptRoot 'speech.ps1')
 
-$script:Ones = @('zero','one','two','three','four','five','six','seven','eight','nine','ten',
-                 'eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen')
-$script:Tens = @('','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety')
-
-function ConvertTo-Words {
-  param([int]$N)
-  if ($N -lt 0)   { return 'minus ' + (ConvertTo-Words ([math]::Abs($N))) }
-  if ($N -lt 20)  { return $script:Ones[$N] }
-  if ($N -lt 100) {
-    $t = $script:Tens[[math]::Floor($N / 10)]
-    $r = $N % 10
-    if ($r -eq 0) { return $t }
-    return "$t $($script:Ones[$r])"
-  }
-  if ($N -lt 1000) {
-    $h = "$($script:Ones[[math]::Floor($N / 100)]) hundred"
-    $r = $N % 100
-    if ($r -eq 0) { return $h }
-    return "$h $(ConvertTo-Words $r)"
-  }
-  $k = "$(ConvertTo-Words ([math]::Floor($N / 1000))) thousand"
-  $r = $N % 1000
-  if ($r -eq 0) { return $k }
-  return "$k $(ConvertTo-Words $r)"
+# ---------------------------------------------------------------- the narrator
+# House names to Microsoft ids, once, up front: a typo fails here with a list of valid names rather
+# than as an opaque refusal from the service after every frame has already rendered.
+. (Join-Path $PSScriptRoot 'voices.ps1')
+$Voice = Resolve-Voice $Voice
+if ($Voice2) {
+  # -Voice2 alternated the narrator scene by scene, which required rendering a scene at a time. That
+  # is exactly the thing that made the voiceover sound synthetic (six gaps of 1.16-1.23s per reel,
+  # one at every boundary), so the narration is now a single continuous read and two voices cannot
+  # share one. Refusing loudly rather than silently ignoring the flag or quietly keeping the old
+  # padded path alive, since a worse code path nobody notices is how the bug comes back.
+  throw ("-Voice2 (two-hander) is not supported since the narration became one continuous take. " +
+         "Reinstating it means rendering per scene again and taking back ~7s of dead air per reel.")
 }
-
-function Get-MoneySpeech {
-  # How a person actually says money out loud: "a dollar sixty three", "twenty two eighty two".
-  param([double]$Amount)
-  $cents   = [int][math]::Round($Amount * 100)
-  $dollars = [math]::Floor($cents / 100)
-  $rem     = $cents % 100
-  if ($rem -eq 0)      { if ($dollars -eq 1) { return 'one dollar' } ; return "$(ConvertTo-Words $dollars) dollars" }
-  if ($dollars -eq 0)  { return "$(ConvertTo-Words $rem) cents" }
-  $centWords = if ($rem -lt 10) { "oh $(ConvertTo-Words $rem)" } else { ConvertTo-Words $rem }
-  if ($dollars -eq 1)  { return "a dollar $centWords" }
-  return "$(ConvertTo-Words $dollars) $centWords"
-}
-
-function Format-Money { param([double]$A) '$' + $A.ToString('0.00') }
 
 # ---------------------------------------------------------------- data
 
@@ -537,47 +516,59 @@ if ($VoiceSamples) {
   return
 }
 
-$LeadIn = 0.20
-$TailPad = 0.45
-$vi = 0   # scene index for the two-hander alternation; StrictMode needs it initialised up here
+# ONE take for the whole reel, then the video is cut to it. Ported from build-demo-reel.ps1 on
+# 2026-08-08 after the same defect was measured here: six gaps of 1.16-1.23s in a 41-second reel, one
+# at every scene boundary, about seven seconds of dead air. The cause is rendering a scene at a time,
+# which gives the voice a closing cadence and a cold start ten times over and then needs the seams
+# padded. Reading the script straight through leaves only the voice's own ~0.44s sentence breaks.
+# See reels\README.md for the measured pause table and the narration guards.
 
-foreach ($s in $scenes) {
-  if ($NoVoice) {
-    Add-Member -InputObject $s -NotePropertyName Mp3 -NotePropertyValue $null
-    Add-Member -InputObject $s -NotePropertyName Dur -NotePropertyValue 3.2
-    continue
+$LeadCut = 0.12
+$EndHold = 0.90
+$VoMp3   = Join-Path $WorkDir 'narration.mp3'
+
+if ($NoVoice) {
+  foreach ($s in $scenes) { Add-Member -InputObject $s -NotePropertyName Dur -NotePropertyValue 3.2 }
+} else {
+  $lineObjs = foreach ($s in $scenes) { [pscustomobject]@{ id = $s.Id; text = $s.Vo } }
+  $linesFile = Join-Path $WorkDir 'lines.json'
+  [System.IO.File]::WriteAllText($linesFile, (ConvertTo-Json @($lineObjs) -Depth 3),
+                                 (New-Object System.Text.UTF8Encoding $false))
+  # argparse eats "-5%" as a flag; "--rate=-5%" is the only form that survives.
+  $ttsArgs = @((Join-Path $ReelRoot 'speak-script.py'), '--lines', $linesFile,
+               '--voice', $Voice, "--rate=$(if ($RatePct -ge 0) { '+' })$RatePct%", '--out', $VoMp3)
+  if ($PitchHz -ne 0) { $ttsArgs += "--pitch=$(if ($PitchHz -gt 0) { '+' })${PitchHz}Hz" }
+  Invoke-Tool -Exe $Python -Tag 'tts' -ArgList $ttsArgs
+  if (-not (Test-Path $VoMp3)) { throw 'speak-script.py produced no audio' }
+
+  $timing = Get-Content "$VoMp3.timing.json" -Raw | ConvertFrom-Json
+  if ($timing.drift -gt 0) {
+    Write-Warning "$($timing.drift) word(s) failed to align; scene cuts may sit slightly off."
   }
-  $mp3 = Join-Path $WorkDir "$($s.Id).mp3"
-  # Two-hander: $Voice book-ends (hook + cta) and the alternation runs through the middle. The hook is
-  # index 0 and the cta is last, so parity alone would hand the cta to whichever voice happened to land
-  # there as the scene count changes with the ingredient list. Pin both ends, alternate the rest.
-  $useVoice = $Voice
-  if ($Voice2) {
-    $isEnd = ($vi -eq 0) -or ($vi -eq ($scenes.Count - 1))
-    if (-not $isEnd -and ($vi % 2 -eq 1)) { $useVoice = $Voice2 }
+  $voLen  = Get-MediaDuration $VoMp3
+  $starts = @($timing.lines | ForEach-Object { [double]$_.start })
+  if ($starts.Count -ne $scenes.Count) { throw 'the narration timing does not cover every scene' }
+
+  # Cut a few frames before each line, the way an editor would: the eye should arrive before the
+  # words. The last scene runs to the end of the narration plus a hold so the CTA is not yanked away.
+  $cuts = New-Object System.Collections.Generic.List[double]
+  foreach ($st in $starts) { $cuts.Add([math]::Max(0.0, $st - $LeadCut)) }
+  $cuts.Add($voLen + $EndHold)
+  for ($k = 0; $k -lt $scenes.Count; $k++) {
+    $d = [math]::Round($cuts[$k + 1] - $cuts[$k], 3)
+    if ($d -le 0.3) { throw "scene '$($scenes[$k].Id)' would be $d s long; the alignment is wrong" }
+    Add-Member -InputObject $scenes[$k] -NotePropertyName Dur -NotePropertyValue $d
   }
-  Invoke-Tool -Exe $Python -Tag "tts-$($s.Id)" -ArgList (@(
-    '-m', 'edge_tts', '--voice', $useVoice, $script:RateStr) + $script:PitchArg + @('--text', $s.Vo, '--write-media', $mp3))
-  Add-Member -InputObject $s -NotePropertyName VoiceUsed -NotePropertyValue $useVoice
-  $vi++
-  if (-not (Test-Path $mp3)) { throw "edge-tts produced no audio for scene '$($s.Id)'." }
-  $d = Get-MediaDuration $mp3
-  Add-Member -InputObject $s -NotePropertyName Mp3 -NotePropertyValue $mp3
-  Add-Member -InputObject $s -NotePropertyName Dur -NotePropertyValue ([math]::Round($LeadIn + $d + $TailPad, 2))
 }
 if (-not $NoVoice) {
   $rateLabel = "$(if ($RatePct -ge 0) { '+' })$RatePct%$(if ($PitchHz -ne 0) { ", $(if ($PitchHz -gt 0) { '+' })${PitchHz}Hz" })"
-  if ($Voice2) {
-    Write-Output "Voiceover: $Voice + $Voice2 (two-hander) at $rateLabel"
-    foreach ($s in $scenes) { Write-Output ("  {0,-10} {1}" -f $s.Id, $s.VoiceUsed) }
-  } else {
-    Write-Output "Voiceover: $Voice at $rateLabel"
-  }
+  Write-Output ("Voiceover: $(Get-VoiceName $Voice) ($Voice) at $rateLabel, " +
+                "one take, $([math]::Round($voLen,1))s")
 }
 
 # ---------------------------------------------------------------- video
-# One self-contained clip per scene, then a stream-copy concat. Encoding each scene to its exact
-# duration keeps audio and video locked together; a single xfade graph would drift them apart.
+# One self-contained clip per scene, then a stream-copy concat. Clips are SILENT: the narration is a
+# single continuous file laid over the finished cut, so no scene change can gap, click or drift.
 
 $fps = 30
 $clipList = New-Object System.Collections.Generic.List[string]
@@ -591,19 +582,12 @@ foreach ($s in $scenes) {
   $vf = "scale=1620:2880,zoompan=z='$zoom':d=$frames" +
         ":x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920:fps=$fps,format=yuv420p"
   $clip = Join-Path $WorkDir ("clip-{0:d2}-{1}.mp4" -f $i, $s.Id)
-  $delayMs = [int]($LeadIn * 1000)
 
-  $ffArgs = @('-y', '-hide_banner', '-loglevel', 'error', '-loop', '1', '-i', $s.Png)
-  if ($s.Mp3) {
-    $ffArgs += @('-i', $s.Mp3, '-filter_complex', "[0:v]$vf[v];[1:a]adelay=$delayMs|$delayMs,apad[a]",
-                 '-map', '[v]', '-map', '[a]')
-  } else {
-    $ffArgs += @('-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo',
-                 '-filter_complex', "[0:v]$vf[v]", '-map', '[v]', '-map', '1:a')
-  }
-  $ffArgs += @('-t', $s.Dur.ToString([System.Globalization.CultureInfo]::InvariantCulture),
-               '-r', $fps, '-c:v', 'libx264', '-preset', 'medium', '-crf', '20',
-               '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-ac', '2', $clip)
+  $ffArgs = @('-y', '-hide_banner', '-loglevel', 'error', '-loop', '1', '-i', $s.Png,
+              '-filter_complex', "[0:v]$vf[v]", '-map', '[v]', '-an',
+              '-t', $s.Dur.ToString([System.Globalization.CultureInfo]::InvariantCulture),
+              '-r', $fps, '-c:v', 'libx264', '-preset', 'medium', '-crf', '20',
+              '-pix_fmt', 'yuv420p', $clip)
 
   Invoke-Tool -Exe $FFmpeg -Tag "clip-$($s.Id)" -ArgList $ffArgs
   $clipList.Add($clip)
@@ -615,10 +599,82 @@ $lines = foreach ($c in $clipList) { "file '" + $c.Replace('\', '/') + "'" }
 [System.IO.File]::WriteAllLines($listFile, $lines, (New-Object System.Text.UTF8Encoding $false))
 
 $stamp = Get-Date -Format 'yyyy-MM-dd'
-$final = Join-Path $OutDir "$stamp-$pick.mp4"
+$final  = Join-Path $OutDir "$stamp-$pick.mp4"
+$joined = Join-Path $WorkDir 'joined.mp4'
 Invoke-Tool -Exe $FFmpeg -Tag 'concat' -ArgList @(
   '-y', '-hide_banner', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', $listFile,
-  '-c', 'copy', '-movflags', '+faststart', $final)
+  '-c', 'copy', $joined)
+if (-not (Test-Path $joined)) { throw 'Concat produced no output file.' }
+
+# ---------------------------------------------------------------- audio finishing
+# Same chain as build-demo-reel.ps1, and it is measured, not taste. Raw edge-tts lands at about
+# -21.5 LUFS, which on a phone speaker in a feed at half volume is close to inaudible; this brings it
+# to -14. It does NOT make the voice less synthetic (that is prosody, and no filter re-times a
+# syllable). reels\README.md carries the full findings, including the steps that failed measurement.
+
+$VoiceChain = @(
+  'aresample=48000'
+  'highpass=f=85'
+  'equalizer=f=170:t=q:w=0.8:g=2.0'
+  'equalizer=f=420:t=q:w=1.1:g=-1.5'
+  'equalizer=f=2800:t=q:w=0.9:g=2.5'
+  'acompressor=threshold=0.03:ratio=4:attack=8:release=160:makeup=3:knee=4:detection=rms'
+  'alimiter=limit=0.7:attack=3:release=50:level=false'
+) -join ','
+
+function Get-LoudnessMeasurement {
+  <# Pass one of two. Single-pass loudnorm targeting -14 measured -15.1, because the filter is
+     guessing at content it has not heard. Measured per file, every run, never cached: a stored
+     loudness figure outliving its audio is the same defect class as a stamped date outliving its
+     data. Pass one costs about 0.07s. #>
+  param([string]$Path, [string]$Filter)
+  $tag = 'loudnorm-measure'
+  $se  = Join-Path $WorkDir "$tag.err.txt"
+  $chain = if ($Filter) { "$Filter," } else { '' }
+  Invoke-Tool -Exe $FFmpeg -Tag $tag -ArgList @(
+    '-hide_banner', '-i', $Path, '-af',
+    ($chain + 'loudnorm=I=-14:TP=-1.5:LRA=7:print_format=json'), '-f', 'null', '-')
+  $txt = Get-Content $se -Raw
+  $m = [regex]::Match($txt, '\{[^{}]*"input_i"[\s\S]*?\}')
+  if (-not $m.Success) { throw "loudnorm printed no measurement for $Path" }
+  return $m.Value | ConvertFrom-Json
+}
+
+$muxArgs = @('-y', '-hide_banner', '-loglevel', 'error', '-i', $joined)
+if ($NoVoice) {
+  $muxArgs += @('-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo')
+} else {
+  $mixWav = Join-Path $WorkDir 'mix.wav'
+  Invoke-Tool -Exe $FFmpeg -Tag 'mix' -ArgList @(
+    '-y', '-hide_banner', '-loglevel', 'error', '-i', $VoMp3, '-af', $VoiceChain,
+    '-ac', '2', '-ar', '48000', $mixWav)
+  $ln = Get-LoudnessMeasurement -Path $mixWav
+  # `offset` is deliberately NOT passed through: loudnorm applies it again in pass two, and the
+  # double application measured -13.5 against the -14.2 you get by leaving it out.
+  $muxArgs += @('-i', $mixWav, '-af',
+    ('loudnorm=I=-14:TP=-1.5:LRA=7' +
+     ":measured_I=$($ln.input_i):measured_TP=$($ln.input_tp)" +
+     ":measured_LRA=$($ln.input_lra):measured_thresh=$($ln.input_thresh):linear=true"))
+}
+
+# 128k AAC and -1.5 dBTP, not 192k and -1.0: lossy encoding RAISES true peak, so a -1.0 target clips
+# on some decoders after encoding.
+$muxArgs += @('-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '128k',
+              '-ar', '48000', '-ac', '2', '-movflags', '+faststart')
+if ($NoVoice) { $muxArgs += '-shortest' }
+$muxArgs += $final
+Invoke-Tool -Exe $FFmpeg -Tag 'mux' -ArgList $muxArgs
+
+# Prove it landed. A loudness chain that silently no-ops looks exactly like one that worked.
+if (-not $NoVoice) {
+  $outLn = Get-LoudnessMeasurement -Path $final
+  $gotLn = [double]$outLn.input_i
+  Write-Output ("Loudness : $([math]::Round($gotLn,1)) LUFS integrated, " +
+                "true peak $([math]::Round([double]$outLn.input_tp,1)) dBTP")
+  if ([math]::Abs($gotLn - (-14.0)) -gt 1.0) {
+    Write-Warning "Target was -14 LUFS but the finished file measures $([math]::Round($gotLn,1)). The audio chain did not do what it claims."
+  }
+}
 
 if (-not (Test-Path $final)) { throw 'Concat produced no output file.' }
 $totalDur = Get-MediaDuration $final
