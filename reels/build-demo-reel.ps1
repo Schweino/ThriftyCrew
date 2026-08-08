@@ -334,7 +334,7 @@ Add-Card -Id 'hook' -Shell 'dark' `
 
 $introCap = "$perServ a serving &middot; $servings servings" + $(if ($protein) { " &middot; ${protein}g protein" })
 Add-Screen -Id 'intro' -ShotId 'intro' -Eyebrow 'The page' -Caption $introCap `
-  -Vo "$name. That's $servWords servings out of one batch, at $speakPer a plate on this week's Omaha prices."
+  -Vo "$name. That's $servWords servings out of one batch, at $speakPer a plate on this week's store prices."
 
 Add-Card -Id 'step1' -Shell 'paper' -Eyebrow 'Step one' `
   -Big 'Make it<br>your size.' `
@@ -350,8 +350,8 @@ Add-Card -Id 'step2' -Shell 'paper' -Eyebrow 'Step two' `
   -Vo 'Second, what the batch really costs.'
 
 Add-Screen -Id 'tabs' -ShotId 'tabs' -Eyebrow 'Step two' `
-  -Caption 'Whole packages. Real Omaha shelf prices.' `
-  -Vo ('These are whole packages, the way you actually buy them, priced at real Omaha stores. ' +
+  -Caption 'Whole packages. Real shelf prices.' `
+  -Vo ('These are whole packages, the way you actually buy them, priced at real stores. ' +
        'Three tabs: everyday cost, this week&#39;s cheapest, and your own.')
 
 Add-Screen -Id 'totals' -ShotId 'totals' -Eyebrow 'Step two' `
@@ -691,13 +691,13 @@ if ($totalDur -gt 90) {
 $captionText = @"
 Every Thrifty Crew recipe is a working page, not a picture of one.
 
-Set your own serving count and the whole recipe rewrites: ingredients, grams, cost. Price the batch three ways, everyday or at this week's cheapest Omaha shelf prices. Then untick what is already in your cupboard and the total becomes what you actually still need to spend.
+Set your own serving count and the whole recipe rewrites: ingredients, grams, cost. Price the batch three ways, everyday or at this week's cheapest shelf prices. Then untick what is already in your cupboard and the total becomes what you actually still need to spend.
 
 $name, $servings servings: $total at this week's cheapest prices, $untickTot once $(if ($kitchen) { "$kitchen of " })pantry staples come off. Board week of $weekOf.
 
 $(if ($isFree) { "This one is free this week at thriftycrew.com" } else { "Full recipe at thriftycrew.com" })
 
-#mealprep #omaha #groceryhaul #budgetmeals #frugalliving #mealprepsunday #thriftycrew
+#mealprep #groceryhaul #budgetmeals #frugalliving #mealprepsunday #thriftycrew
 "@
 $captionFile = Join-Path $OutDir "$stamp-how-it-works-$($facts.slug).txt"
 [System.IO.File]::WriteAllText($captionFile, $captionText, (New-Object System.Text.UTF8Encoding $false))

@@ -16,7 +16,7 @@ THE NUMBER ON SCREEN (this is load-bearing, not taste)
   (see board-basis-ambiguity). The rule, from pipeline/compute-v2-perserving.ps1:
     everyday_ps  = sum(ceil(grams/pkg_g) * pkg_p) / 14      the "at everyday cost" stat
     cheapest_ps  = sum(k * (pkg_g/gpu) * feed.cheapest) / 14 THE HEADLINE BASIS (2026-07-26 redesign)
-  The reel headlines cheapest_ps and labels it "cheapest across the Omaha board this week", which is
+  The reel headlines cheapest_ps and labels it "cheapest across the board this week", which is
   what it is. spec.stat.cost_ps is the EVERYDAY basis and must never be labelled "cheapest".
   Both come from pipeline/v2-perserving.json, never from the spec's loose cost_* fields.
 
@@ -401,7 +401,7 @@ $moneyClass = if ($moneyBatch.Length -gt 5) { 'money sm' } else { 'money' }
 Add-Scene -Dark -Id 'hook' `
   -Vo "Come and see how one batch makes $(ConvertTo-Words $servings) dinners for $speakBatch." `
   -Caption "$servings dinners for $moneyBatch." `
-  -Body ('<div class="eyebrow">Omaha &middot; this week</div>' +
+  -Body ('<div class="eyebrow">Real stores &middot; this week</div>' +
          '<div class="hookline">' + $servings + ' dinners for</div>' +
          '<div class="' + $moneyClass + '">' + $moneyBatch + '</div>' +
          '<div class="sub">the whole batch</div>')
@@ -445,7 +445,7 @@ function Format-List {
 # marker and hesitates 0.353s before its own verb, against 0.014s everywhere else in the same line.
 # Brad heard it, the word timings located it, and "Here's", "This is" and "That is" all measure clean.
 Add-Scene -Id 'list' `
-  -Vo "Here's the whole shopping list at this week's cheapest Omaha prices, so screenshot it." `
+  -Vo "Here's the whole shopping list at this week's cheapest store prices, so screenshot it." `
   -Caption 'The whole list. Screenshot it.' `
   -Body (Format-List -Rows $shown)
 
@@ -481,7 +481,7 @@ Add-Scene -Id 'compare' `
          '<div><span>One takeout plate</span><em>' + (Format-Money $TakeoutPlate) + '</em></div>' +
          '<div><span>This whole batch, ' + $servings + ' dinners</span><em class="gold">' + $moneyBatch + '</em></div>' +
          '</div><div class="save">' + $ratioLine + '</div>' +
-         '<div class="fine">Plate figure assumes ' + (Format-Money $TakeoutPlate) + ', a typical Omaha lunch. Batch cost is the cheapest whole-package price across our seven-store board, week of ' + $weekOf +
+         '<div class="fine">Plate figure assumes ' + (Format-Money $TakeoutPlate) + ', a typical lunch out. Batch cost is the cheapest whole-package price across our seven-store board, week of ' + $weekOf +
          $(if ($boardSaved -gt 0) { '. Shopping the board beat everyday shelf prices by ' + (Format-Money $boardSaved) + ' on this batch' }) + '.</div>')
 
 # 8. cta
@@ -497,7 +497,7 @@ Add-Scene -Dark -Id 'cta' `
   -Vo $ctaVo -Caption $ctaCap `
   -Body ($ctaBadge + '<div class="url">thriftycrew.com</div>' +
          '<div class="ask">Like &middot; Share &middot; Follow</div>' +
-         '<div class="stamp">Real shelf prices, seven Omaha stores, updated weekly.</div>')
+         '<div class="stamp">Real shelf prices, seven real stores, updated weekly.</div>')
 
 # ---------------------------------------------------------------- render
 
@@ -767,11 +767,11 @@ if ($totalDur -gt 90) { Write-Warning "Reel is $([math]::Round($totalDur,1))s. F
 
 # ---------------------------------------------------------------- caption + state
 
-$hashtags = '#omaha #mealprep #groceryhaul #budgetmeals #frugalliving #thriftycrew'
+$hashtags = '#mealprep #groceryhaul #budgetmeals #frugalliving #mealprepsunday #thriftycrew'
 $caption = @"
 $name for $moneyPs a serving.
 
-$servings servings out of one batch, $(Format-Money $batchCost) total, ${proteinG}g of protein a bowl. Priced at the cheapest whole-package price across seven Omaha stores, week of $weekOf.
+$servings servings out of one batch, $(Format-Money $batchCost) total, ${proteinG}g of protein a bowl. Priced at the cheapest whole-package price across seven real stores, week of $weekOf.
 
 $(if ($isFree) { "Full recipe is free this week at thriftycrew.com" } else { "Full recipe at thriftycrew.com" })
 
