@@ -50,7 +50,25 @@ foreach ($f in $files) {
   if ($MODE_SENSITIVE -contains $store) {
     $sensSeen[$store] = $true
     if ($mode -ne 'in-store') {
-      $fail += ("{0}: price_mode='{1}' (expected 'in-store'). {2} is an Instacart storefront whose delivery catalog is MARKED UP. File: {3}" -f $store, $(if($mode){$mode}else{'<missing>'}), $store, $f.Name)
+      $msg = ("{0}: price_mode='{1}' (expected 'in-store'). {2} is an Instacart storefront whose delivery catalog is MARKED UP. File: {3}" -f $store, $(if($mode){$mode}else{'<missing>'}), $store, $f.Name)
+      # WHICH of the two causes is this? (2026-08-08) A failing stamp means either a genuinely bad pull, or a
+      # file REWRITTEN after the fact - on 08-08 test-guards' own price-mode fixture flipped this field to
+      # 'delivery' on the live aldi-regular-2026-08-05.json and a killed run never restored it, which read as
+      # "Aldi is shipping delivery prices" and nearly bought a pointless re-pull.
+      # Deliberately NOT decided from the free-text `source` line: the founding 2026-07-14 bug had `source`
+      # claiming in-store while the pull really was delivery, so that prose is exactly the witness this guard
+      # exists to distrust. The mtime is independent of it - a real pull writes its file on its own week_of
+      # date; a file touched days later was rewritten by something that is not the puller.
+      try {
+        $wk = [datetime]::ParseExact([string]$d.week_of, 'yyyy-MM-dd', $null)
+        $age = [int]([math]::Round(($f.LastWriteTime.Date - $wk).TotalDays))
+        # appended to the SAME entry, not pushed as its own: $fail.Count is the store count in the headline,
+        # and a diagnostic line that inflates it reports two stores shipping bad prices when only one is
+        if ($age -ge 1) {
+          $msg += ("`n          ^ that file was last written {0} day(s) AFTER its own week_of ({1} vs {2}) - it was rewritten by something other than the puller. Check for an abandoned test-guards mutation BEFORE re-pulling the store." -f $age, $f.LastWriteTime.ToString('yyyy-MM-dd'), $d.week_of)
+        }
+      } catch { }
+      $fail += $msg
     } elseif (-not $ver) {
       $fail += ("{0}: price_mode='in-store' but mode_verified is missing. Prove when the session mode was confirmed. File: {1}" -f $store, $f.Name)
     } else {
