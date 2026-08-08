@@ -1535,6 +1535,21 @@
                         "ruled_on":  "2026-08-08",
                         "ruled_by":  "claude",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "jelly|Walmart|sunbutter-jammies-sunflower-butter-grape-jelly-s",
+                        "commodity":  "jelly",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "SunButter Jammies Sunflower Butter \u0026 Grape Jelly Sandwiches"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A frozen SANDWICH, not jelly. It matched butter until the 2026-08-08 sunflower/sunbutter exclude dropped it, and match-soundness reported it MOVED butter -\u003e jelly: out of one wrong commodity into another. It does not hold a jelly cell today (all 7 are real grape jelly or preserves) but it sits in the candidate pool and could win one on a price move.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
