@@ -77,6 +77,27 @@ h2[id]{scroll-margin-top:84px}
 .smp-shop{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;margin:.4rem 0 0;padding:.8rem 1.6rem;background:#16263F;color:#fff !important;border:none;border-radius:10px;font-size:1.36rem;font-weight:800;text-decoration:none !important;cursor:pointer;font-family:inherit;transition:transform 100ms cubic-bezier(0.2,0,0,1)}
 .smp-shop:active{transform:scale(.985)}
 .smp-shop-note{font-size:1.14rem;color:#8a94a6;margin:.5rem 0 0;line-height:1.5}
+/* ---------- STORE PICKER: the interstitial behind "Shop this recipe" ---------- */
+.smp-stov{position:fixed;inset:0;z-index:2147483000;background:rgba(10,18,31,.55);display:flex;align-items:flex-end;justify-content:center;overscroll-behavior:contain}
+.smp-stsheet{width:100%;max-width:620px;max-height:90vh;overflow:auto;background:#fdf8ec;border-radius:16px 16px 0 0;box-shadow:0 -12px 34px rgba(22,38,63,.32);padding:0 0 calc(14px + env(safe-area-inset-bottom))}
+.smp-sthd{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#16263F;color:#fff;padding:12px 16px}
+.smp-sthd b{font-size:1.4rem;font-weight:800}
+.smp-sthd button{min-width:44px;min-height:44px;border:none;background:rgba(255,255,255,.14);color:#fff;border-radius:10px;font-size:1.2rem;font-weight:700;cursor:pointer;font-family:inherit}
+.smp-stbody{padding:16px 18px 0}
+.smp-stsub{font-size:1.26rem;line-height:1.55;color:#4a5568;margin:0 0 1.1rem}
+.smp-strow{display:flex;align-items:center;gap:11px;padding:.7rem .9rem;margin:0 0 8px;background:#fff;border:1.5px solid #e5dcc8;border-radius:12px;cursor:pointer;min-height:52px}
+.smp-strow.on{border-color:#16263F;background:#fffdf6}
+.smp-strow input{width:24px;height:24px;accent-color:#8a6d1f;margin:0;flex:none;cursor:pointer}
+.smp-stnm{display:flex;align-items:center;gap:7px;flex:1;font-size:1.32rem;font-weight:700;color:#16263F}
+.smp-stnm i{width:10px;height:10px;border-radius:999px;display:inline-block;flex:none}
+.smp-stct{font-size:1.08rem;color:#8a94a6;text-align:right;line-height:1.35}
+.smp-stsum{margin:1.1rem 0 0;padding:.9rem 1.05rem;background:#fffdf6;border:1px solid #e9dcc0;border-left:4px solid #E2A43C;border-radius:0 10px 10px 0;font-size:1.26rem;line-height:1.5;color:#3a4658}
+.smp-stsum b{color:#0c5c3b;font-variant-numeric:tabular-nums;font-weight:750}
+.smp-stft{position:sticky;bottom:0;padding:12px 18px 14px;background:#fdf8ec;border-top:1px solid #e5dcc8;box-shadow:0 -6px 14px rgba(22,38,63,.06)}
+.smp-stprint{display:block;width:100%;min-height:52px;padding:.9rem 1.1rem;background:#16263F;color:#fff;border:none;border-radius:12px;font-size:1.34rem;font-weight:800;cursor:pointer;font-family:inherit;line-height:1.25;transition:transform 100ms cubic-bezier(0.2,0,0,1)}
+.smp-stprint:active{transform:scale(.99)}
+.smp-stnote{font-size:1.06rem;color:#8a94a6;margin:1rem 0 0;padding:0;line-height:1.5}
+@media (min-width:640px){.smp-stov{align-items:center}.smp-stsheet{border-radius:16px}}
 /* ---------- STICKY MINI-SCALER ---------- */
 .smp-mini{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:2147481000;display:none;
   align-items:center;gap:6px;background:#16263F;color:#fff;border-radius:999px;padding:6px 8px;box-shadow:0 8px 24px rgba(22,38,63,.28)}
@@ -153,6 +174,11 @@ function tween(el,from,to){ if(window.TC&&window.TC.tween){ window.TC.tween(el,f
 function tap(n){ if(window.TC&&window.TC.tap)window.TC.tap(n); }
 function wake(on){ if(window.TC&&window.TC.wake)window.TC.wake(on); }
 function modeFlag(on){ if(window.TC&&window.TC.mode)window.TC.mode(on); }
+// store hues: the same seven stable hues the board uses, in the registry's own order. Kept here as a tiny
+// literal because a recipe page must not fetch the store registry just to color a dot - and kept as ONE
+// literal because the store picker needs the same seven names in the same order to lay its rows out.
+var SMPHUE={'Hy-Vee':'#c4342c','Aldi':'#1b64b0','Family Fare':'#2e7d43','Fareway':'#7b3fa0',"Baker's":'#c56a1a',"Sam's Club":'#0b6d9e','Walmart':'#0f7a8c'};
+function storeHue(s){ return SMPHUE[s]||'#5a6862'; }
 function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 function init(box){
@@ -260,12 +286,6 @@ function init(box){
     });
     renderComp();
   }
-  // store hue: the same seven stable hues the board uses. Kept here as a tiny literal because a recipe
-  // page must not fetch the store registry just to color a dot.
-  function storeHue(s){
-    var m={'Hy-Vee':'#c4342c','Aldi':'#1b64b0','Family Fare':'#2e7d43','Fareway':'#7b3fa0',"Baker's":'#c56a1a',"Sam's Club":'#0b6d9e','Walmart':'#0f7a8c'};
-    return m[s]||'#5a6862';
-  }
   function updateStats(){
     // The blue stat rectangle follows the scaler: servings shows the chosen count, and per-serving
     // is the current-cheapest whole-package total at that count (everyday fallback pre-feed/untracked).
@@ -351,17 +371,150 @@ function init(box){
     document.addEventListener('tc:mode',function(e){ if(e.detail&&e.detail.open){ mini.classList.remove('is-on'); } });
   }
 
-  // ---------- SHOP THIS RECIPE: hand the still-checked ingredients to the price board ----------
-  var shop=document.querySelector('.smp-shop');
-  if(shop){
-    shop.addEventListener('click',function(e){
-      e.preventDefault();
-      var ids=[],names=[];
-      data.ing.forEach(function(it,i){ if(removed[i])return; if(it.bid){ ids.push(it.bid); } names.push(it.item); });
-      lsSet('tc-shop-list',JSON.stringify({slug:data.slug,title:(document.title||'').replace(/\s*\|.*$/,''),ids:ids,names:names,n:data.ing.length,ts:Date.now()}));
-      window.location.href='/omaha-grocery-prices/';
-    });
+  // ---------- SHOP THIS RECIPE ----------
+  // Pick the stores you will actually walk into, then print the list split by store. Every ingredient is
+  // priced at the cheapest of the PICKED stores, which is a different number from the receipt's cheapest-
+  // in-town and is the honest one for a real trip. An ingredient none of the picked stores carry is never
+  // silently dropped: it prints under "Any store" at the same everyday package price the receipt falls
+  // back to. The basket is whatever is still ticked in Customized pricing, at the chosen serving count.
+  function basket(){ var out=[]; data.ing.forEach(function(it,i){ if(!removed[i]) out.push(it); }); return out; }
+  function feedOf(it){ return (feedData&&feedData.ingredients&&it.bid)?feedData.ingredients[it.bid]:null; }
+  function priceAtStores(it,nn,sel){
+    var k=pkgs(it,nn), e=feedOf(it), best=null, bs=null, s;
+    if(e&&e.stores&&it.gpu>0){
+      for(s in e.stores){ if(sel[s]&&e.stores[s]>0&&(best===null||e.stores[s]<best)){ best=e.stores[s]; bs=s; } }
+    }
+    if(bs){ return {k:k,cost:k*(it.pkg_g/it.gpu)*best,store:bs,up:best,unit:e.unit}; }
+    return {k:k,cost:k*it.pkg_p,store:null};
   }
+  function storeUniverse(items){
+    var seen={},list=[],s;
+    items.forEach(function(it){ var e=feedOf(it); if(e&&e.stores&&it.gpu>0){ for(s in e.stores){ if(e.stores[s]>0) seen[s]=1; } } });
+    Object.keys(SMPHUE).forEach(function(n){ if(seen[n]){ list.push(n); delete seen[n]; } });
+    Object.keys(seen).forEach(function(n){ list.push(n); });
+    return list;
+  }
+  function groupBasket(items,nn,sel){
+    var g={}, order=[], tot=0, idx=Object.keys(SMPHUE);
+    items.forEach(function(it){
+      var p=priceAtStores(it,nn,sel), key=p.store||' any';
+      if(!g[key]){ g[key]=[]; order.push(key); }
+      g[key].push({name:it.item,pkg:pkgLabel(it,p.k),cost:p.cost,up:p.up,unit:p.unit});
+      tot+=p.cost;
+    });
+    order.sort(function(a,b){
+      var ia=(a===' any')?99:idx.indexOf(a), ib=(b===' any')?99:idx.indexOf(b);
+      if(ia<0)ia=90; if(ib<0)ib=90; return ia-ib;
+    });
+    return {groups:g,order:order,total:tot};
+  }
+  function printList(items,nn,sel){
+    var r=groupBasket(items,nn,sel), secs='';
+    r.order.forEach(function(key){
+      var rows=r.groups[key], sub=0, li='';
+      rows.forEach(function(x){ sub+=x.cost; li+='<li><span class="bx"></span><span class="nm">'+esc(x.name)+'</span><span class="pk">'+esc(x.pkg)+'</span><span class="pr">'+money(x.cost)+'</span></li>'; });
+      var head=(key===' any')?'Any store':key;
+      var note=(key===' any')?' <em>(no live price at your stores this week &mdash; everyday shelf price)</em>':'';
+      secs+='<h3>'+esc(head)+' <span>'+rows.length+' item'+(rows.length===1?'':'s')+' &middot; '+money(sub)+'</span></h3>'+note+'<ul class="sl">'+li+'</ul>';
+    });
+    var own=[]; data.ing.forEach(function(it,i){ if(removed[i]) own.push(it.item); });
+    var ownHtml=own.length?'<p class="own"><b>Already in your kitchen (not on the list):</b> '+esc(own.join(', '))+'</p>':'';
+    var ing='';
+    var ul=document.querySelector('.smp-ing');
+    if(ul){ [].slice.call(ul.querySelectorAll('li')).forEach(function(li){ ing+='<li>'+li.innerHTML+'</li>'; }); }
+    var steps='';
+    var ol=document.querySelector('.smp-mi');
+    if(ol){ [].slice.call(ol.querySelectorAll('li')).forEach(function(li){ steps+='<li>'+li.innerHTML+'</li>'; }); }
+    var por=document.querySelector('.smp-portion');
+    var te=document.querySelector('.gh-article-title')||document.querySelector('h1');
+    var title=((te?te.textContent:document.title)||'Recipe').trim();
+    var wk=(feedData&&feedData.week_of)?(' &middot; prices verified week of '+esc(feedData.week_of)):'';
+    var css='@page{margin:14mm}*{box-sizing:border-box}'
+      +'body{font:13px/1.5 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#16263f;max-width:720px;margin:0 auto;padding:8px}'
+      +'h1{font-size:21px;margin:0 0 3px;line-height:1.2}'
+      +'.pm{color:#555;font-size:11.5px;margin:0 0 16px}'
+      +'h2{font-size:15px;margin:20px 0 8px;padding-bottom:3px;border-bottom:2px solid #e2a43c}'
+      +'h3{font-size:13px;margin:14px 0 4px;display:flex;justify-content:space-between;gap:12px;align-items:baseline;border-bottom:1px solid #ccc;padding-bottom:2px}'
+      +'h3 span{font-weight:400;color:#555;font-size:11.5px;white-space:nowrap}'
+      +'em{color:#777;font-size:11px}'
+      +'ul.sl{list-style:none;padding:0;margin:0 0 6px}'
+      +'ul.sl li{display:flex;align-items:baseline;gap:8px;padding:4px 0;border-bottom:1px dotted #ddd}'
+      +'.bx{flex:none;width:11px;height:11px;border:1px solid #888;border-radius:2px;display:inline-block}'
+      +'.nm{flex:1}'
+      +'.pk{color:#666;font-size:11px;white-space:nowrap;font-family:ui-monospace,Consolas,monospace}'
+      +'.pr{font-weight:700;white-space:nowrap;min-width:52px;text-align:right}'
+      +'.tot{display:flex;justify-content:space-between;gap:12px;margin:10px 0 0;padding-top:7px;border-top:2px solid #16263f;font-weight:700;font-size:14px}'
+      +'.own{margin:10px 0 0;font-size:11.5px;color:#555}'
+      +'ol,ul.ing{margin:0;padding-left:20px}li{margin:4px 0}'
+      +'ul.ing{list-style:none;padding:0}'
+      +'ul.ing li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dotted #ddd;padding:4px 0}'
+      +'.bd{margin-top:18px;padding-top:8px;border-top:1px solid #ddd;font-size:10.5px;color:#888}';
+    var doc='<!doctype html><html><head><meta charset="utf-8"><title>'+esc(title)+'</title><style>'+css+'</style></head><body>'
+      +'<h1>'+esc(title)+'</h1>'
+      +'<p class="pm">Shopping list for '+nn+' servings'+wk+'. Whole packages, before tax. Estimates, not quotes.</p>'
+      +'<h2>Shopping list</h2>'+secs
+      +'<p class="tot"><span>Estimated total</span><span>'+money(r.total)+'</span></p>'+ownHtml
+      +(ing?('<h2>Ingredients, '+nn+' servings</h2><ul class="ing">'+ing+'</ul>'):'')
+      +(steps?('<h2>Make It</h2><ol>'+steps+'</ol>'):'')
+      +(por?('<h2>Portion It</h2><p>'+por.innerHTML+'</p>'):'')
+      +'<p class="bd">Thrifty Crew &middot; thriftycrew.com</p></body></html>';
+    var f=document.createElement('iframe');
+    f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;opacity:0';
+    document.body.appendChild(f);
+    var d=f.contentWindow.document; d.open(); d.write(doc); d.close();
+    f.contentWindow.focus();
+    setTimeout(function(){ try{ f.contentWindow.print(); }catch(e){} setTimeout(function(){ try{ f.parentNode.removeChild(f); }catch(e){} },2000); },350);
+  }
+  function openShop(){
+    if(document.querySelector('.smp-stov')) return;
+    var nn=nServ(), items=basket(), stores=storeUniverse(items);
+    if(!items.length) return;
+    var sel={};
+    stores.forEach(function(s){ sel[s]=true; });
+    var ov=document.createElement('div');
+    ov.className='smp-stov'; ov.setAttribute('role','dialog'); ov.setAttribute('aria-modal','true'); ov.setAttribute('aria-label','Choose your stores');
+    var rows='';
+    stores.forEach(function(s){
+      var carries=0, wins=0;
+      items.forEach(function(it){ var e=feedOf(it); if(e&&e.stores&&it.gpu>0&&e.stores[s]>0){ carries++; if(e.store===s) wins++; } });
+      rows+='<label class="smp-strow on"><input type="checkbox" data-s="'+esc(s)+'" checked><span class="smp-stnm"><i style="background:'+storeHue(s)+'"></i>'+esc(s)+'</span><span class="smp-stct">carries '+carries+' of '+items.length+(wins?('<br>cheapest on '+wins):'')+'</span></label>';
+    });
+    var lead=stores.length
+      ? 'Tick the stores you will actually walk into. Every ingredient gets priced at the cheapest of those, and the list prints split by store.'
+      : 'We have no live store prices for this batch right now, so the list prints at everyday shelf prices.';
+    ov.innerHTML='<div class="smp-stsheet"><div class="smp-sthd"><b>Where are you shopping?</b><button type="button" class="smp-stx" aria-label="Close">Close</button></div>'
+      +'<div class="smp-stbody"><p class="smp-stsub">'+lead+'</p>'+rows+'<p class="smp-stsum"></p>'
+      +'<p class="smp-stnote">Prices are this week&rsquo;s verified shelf prices in Omaha, for whole packages, before tax. Estimates, not quotes.</p></div>'
+      +'<div class="smp-stft"><button type="button" class="smp-stprint">Print shopping list and recipe instructions</button></div></div>';
+    document.body.appendChild(ov);
+    function draw(){
+      var r=groupBasket(items,nn,sel), used=0, un=0;
+      r.order.forEach(function(k){ if(k===' any'){ un=r.groups[k].length; } else { used++; } });
+      var txt='Your list: <b>'+money(r.total)+'</b> for '+items.length+' item'+(items.length===1?'':'s')+(used?(' across '+used+' store'+(used===1?'':'s')):'')+'.';
+      if(un){ txt+=' '+un+' item'+(un===1?' is':'s are')+' not carried at the stores you picked, so '+(un===1?'it prints':'they print')+' under &ldquo;Any store&rdquo; at the everyday price.'; }
+      ov.querySelector('.smp-stsum').innerHTML=txt;
+    }
+    function close(){
+      try{ document.body.removeChild(ov); }catch(e){}
+      modeFlag(false); untrap();
+    }
+    ov.querySelectorAll('.smp-strow input').forEach(function(cb){
+      cb.addEventListener('change',function(){
+        var s=cb.getAttribute('data-s');
+        if(cb.checked){ sel[s]=true; } else { delete sel[s]; }
+        var row=cb.closest('label'); if(row){ row.classList.toggle('on',cb.checked); }
+        tap(8); draw();
+      });
+    });
+    ov.addEventListener('click',function(e){ if(e.target===ov) close(); });
+    ov.querySelector('.smp-stx').addEventListener('click',close);
+    ov.querySelector('.smp-stprint').addEventListener('click',function(){ printList(items,nServ(),sel); });
+    modeFlag(true);
+    var untrap=(window.TC&&window.TC.trap)?window.TC.trap(ov,close):function(){};
+    draw();
+  }
+  var shop=document.querySelector('.smp-shop');
+  if(shop){ shop.addEventListener('click',function(e){ e.preventDefault(); openShop(); }); }
 }
 // ---------- COOK MODE: built at tap time from the Make It list, so it costs zero nodes until asked ----------
 function cookMode(){

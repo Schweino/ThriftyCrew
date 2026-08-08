@@ -270,9 +270,12 @@ $L.Add('<div class="smp-rc"><p class="smp-ct-sub"></p><ul class="smp-ct-list"></
 $L.Add('<p class="smp-sc-note">Totals price whole packages, cans, and jars, because that is how the register works. Change the servings in Make It Your Size above and these totals follow.</p>')
 # SHOP THIS RECIPE ships only where the ingredient-to-board match is high enough to be useful. A list that
 # silently drops a third of the basket is worse than no list; the coverage number decides, not optimism.
+# 2026-08-08: the button no longer hands the basket to the price board (it wrote a localStorage payload
+# nothing ever read, and dumped the reader on the board with their basket lost). It now opens the store
+# picker in the widget: choose the stores you will actually walk into, then print the list split by store.
 if($bidCoverage -ge $MinBidCoverage){
   $miss = if(@($bidMiss).Count){ "<p class='smp-shop-note'>We do not track a board price for: " + (Enc2 (($bidMiss | Select-Object -First 4) -join ', ')) + ". <a href='/suggest-an-item/'>Ask us to add them</a>.</p>" } else { '' }
-  $L.Add('<p style="margin:1.4rem 0 0"><button type="button" class="smp-shop">Shop this recipe on the price board &rarr;</button></p>' + $miss)
+  $L.Add('<p style="margin:1.4rem 0 0"><button type="button" class="smp-shop">Shop this recipe</button></p>' + $miss)
 }
 $L.Add('</div>')
 $L.Add('<p>' + $spec.cost_closing_html + '</p>')
