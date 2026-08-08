@@ -1621,12 +1621,26 @@ try {
   if (((Get-Date) - $gdLast).TotalDays -ge 7) {
     $gd = (& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-ghost-drift.ps1') -ShowDiff | ForEach-Object { [string]$_ }) -join "`n"
     $gdRc = $LASTEXITCODE
+    # ...and the 542 recipe cards, against the publish ledger rather than a local file (a rebuilt card carries
+    # today's prices, so build-vs-live is not the question; ledger-vs-live is). Same weekly cadence, same
+    # advisory posture. Appended to the same body so one alert covers both surfaces.
+    $gdR = (& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-ghost-drift.ps1') -Recipes | ForEach-Object { [string]$_ }) -join "`n"
+    $gdRRc = $LASTEXITCODE
+    if ($gdRRc -ne 0) { $gdRc = $gdRRc }
+    $gd = $gd + "`n`n" + $gdR
     (Get-Date -Format 'yyyy-MM-dd') | Set-Content $gdStampF -Encoding ascii   # stamp even on failure: one alert per week
-    # the completion contract: a marker-less run died part way, whatever its exit code said
-    if ($gd -notmatch '(?m)^GHOST-DRIFT-COMPLETE') {
-      Log ('ghost-drift weekly DID NOT RUN TO THE END (rc=' + $gdRc + ') - no completion marker, so its verdict proves nothing')
-      $summary += 'REVIEW    ghost-drift weekly did not finish - live tool pages went unchecked this week'
-    } elseif ($gdRc -eq 0) { Log 'ghost-drift weekly: every live tool page still matches its local source' }
+    # THE COMPLETION CONTRACT, PER SURFACE. Both halves must prove they finished, checked SEPARATELY: the two
+    # outputs are concatenated for the alert body, and a single search over the joined text would accept one
+    # marker as covering both - so a dead tools sweep would be alibied by a healthy recipes sweep. That is the
+    # exact "found nothing and never ran look identical" hole this contract exists to close, reintroduced by
+    # the convenience of one string.
+    $gdToolsDone   = ($gd  -match '(?m)^GHOST-DRIFT-COMPLETE')
+    $gdRecipesDone = ($gdR -match '(?m)^GHOST-DRIFT-COMPLETE')
+    if (-not ($gdToolsDone -and $gdRecipesDone)) {
+      $which = if (-not $gdToolsDone -and -not $gdRecipesDone) { 'neither sweep' } elseif (-not $gdToolsDone) { 'the TOOLS sweep' } else { 'the RECIPE-CARD sweep' }
+      Log ('ghost-drift weekly DID NOT RUN TO THE END (rc=' + $gdRc + ') - no completion marker from ' + $which + ', so its verdict proves nothing')
+      $summary += ('REVIEW    ghost-drift weekly did not finish (' + $which + ') - those live pages went unchecked this week')
+    } elseif ($gdRc -eq 0) { Log 'ghost-drift weekly: every live tool page and recipe card still matches what we published' }
     else {
       Log ('ghost-drift weekly rc=' + $gdRc)
       $summary += 'REVIEW    a live tool page no longer matches its local source - republishing it would delete the difference'

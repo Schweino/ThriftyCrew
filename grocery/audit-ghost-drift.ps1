@@ -33,7 +33,7 @@
   Usage: .\audit-ghost-drift.ps1 [-ShowDiff] [-Discover] [-Accept <slug>] | -SelfTest
   Exit:  0 = every mapped tool matches (or is allowlisted), 1 = drift found, 3 = could not evaluate
 #>
-param([switch]$ShowDiff, [switch]$Discover, [string]$Accept = '', [switch]$SelfTest)
+param([switch]$ShowDiff, [switch]$Discover, [string]$Accept = '', [switch]$Recipes, [int]$Limit = 0, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
@@ -87,6 +87,87 @@ if (-not $key) {
 }
 
 # card fetching is Get-GhostCardBody in lib\ghost-drift-lib.ps1 - same reason as the comparison itself
+
+# ---- RECIPE CARDS (2026-08-08): 542 more pages, using the ledger the publisher already keeps ------------
+# The tools sweep above compares live bytes to a local FILE. Recipe cards have no such file to compare to -
+# the built html is regenerated with today's prices, so a fresh build never equals a card published last
+# week, and that difference is by design rather than drift. What IS comparable is db\published-hashes.json:
+# publish.ps1 records one SHA1 per slug of exactly what it verified as published. Recomputing that hash from
+# what the Admin API returns answers the real question - does live still hold what we published?
+if ($Recipes) {
+  $mpRoot = Join-Path $repo 'meal-prep'
+  $hashPath = Join-Path $mpRoot 'db\published-hashes.json'
+  if (-not (Test-Path $hashPath)) {
+    Write-Output "ghost-drift/recipes: COULD NOT EVALUATE - no publish ledger at $hashPath"
+    Write-GuardComplete -Name 'ghost-drift' -Summary 'recipes blind=no-ledger'
+    exit 3
+  }
+  $ledger = @{}
+  foreach ($p in ((Get-Content $hashPath -Raw | ConvertFrom-Json).PSObject.Properties)) { $ledger[$p.Name] = [string]$p.Value }
+  if (-not $ledger.Count) {
+    Write-Output 'ghost-drift/recipes: COULD NOT EVALUATE - the publish ledger records zero slugs, so a clean result would prove nothing'
+    Write-GuardComplete -Name 'ghost-drift' -Summary 'recipes blind=empty-ledger'
+    exit 3
+  }
+
+  $slugs = @($ledger.Keys | Sort-Object)
+  if ($Limit -gt 0 -and $slugs.Count -gt $Limit) { $slugs = @($slugs | Select-Object -First $Limit) }
+  Write-Output ("ghost-drift/recipes: checking {0} of {1} slug(s) in the publish ledger" -f $slugs.Count, $ledger.Count)
+
+  $rMatch = @(); $rDrift = @(); $rBlind = @(); $rRoundTrip = @()
+  foreach ($slug in $slugs) {
+    try {
+      $jwt = Get-GhostJWT -Key $key
+      $p = (Invoke-RestMethod -Uri "$API/ghost/api/admin/posts/slug/$slug/?formats=lexical&fields=id,slug,title,custom_excerpt,codeinjection_head,lexical" `
+            -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' } -TimeoutSec 45).posts[0]
+    } catch { $rBlind += ("{0}: {1}" -f $slug, $_.Exception.Message); continue }
+    if (-not $p) { $rBlind += ("{0}: no live post" -f $slug); continue }
+    if (-not $p.lexical) { $rBlind += ("{0}: live post has no lexical body" -f $slug); continue }
+    try { $lex = $p.lexical | ConvertFrom-Json } catch { $rBlind += ("{0}: lexical did not parse" -f $slug); continue }
+    $liveBody = ''
+    foreach ($c in $lex.root.children) { if ($c.type -eq 'html' -and $c.html) { $liveBody += [string]$c.html } }
+    if (-not $liveBody) { $rBlind += ("{0}: no html card on the live post" -f $slug); continue }
+    # same four fields, same order, same separator as publish.ps1
+    $liveHash = Get-PublishedContentHash -Body $liveBody -Head ([string]$p.codeinjection_head) -Name ([string]$p.title) -Desc ([string]$p.custom_excerpt)
+    if ($liveHash -eq $ledger[$slug]) { $rMatch += $slug; continue }
+
+    # A MISMATCH IS NOT YET DRIFT. The ledger hash was taken over the LOCAL built bytes, which carry
+    # site-relative hrefs, while the Admin API expands those to the absolute site URL on read (see
+    # Get-CanonicalBody). So a card containing an internal link can never hash equal no matter how faithfully
+    # it was published - measured here on the first full sweep: 4 of 542 mismatched, every one of them by
+    # exactly 27 bytes, which is the length of the host. The hash cannot be canonicalised retroactively, so
+    # fall back to the one comparison that can be: canonicalise BOTH sides of the body and see if the
+    # difference survives. This runs only on mismatches, so it costs nothing on a clean sweep.
+    $builtPath = Join-Path $mpRoot ("db\built\{0}.body.html" -f $slug)
+    $roundTrip = $false
+    if (Test-Path $builtPath) {
+      $builtBody = [IO.File]::ReadAllText($builtPath, [Text.Encoding]::UTF8)
+      if ((Get-CanonicalBody $builtBody) -eq (Get-CanonicalBody $liveBody)) { $roundTrip = $true }
+    }
+    if ($roundTrip) { $rRoundTrip += $slug; continue }
+    $rDrift += [pscustomobject]@{ slug = $slug; ledger = $ledger[$slug]; live = $liveHash; bytes = $liveBody.Length }
+  }
+
+  Write-Output ("  {0} match the publish ledger, {1} differ only by the platform URL round-trip, {2} genuinely drifted, {3} could not be read" -f $rMatch.Count, $rRoundTrip.Count, $rDrift.Count, $rBlind.Count)
+  foreach ($b in ($rBlind | Select-Object -First 10)) { Write-Output ("  BLIND  " + $b) }
+  if ($rBlind.Count -gt 10) { Write-Output ("  ... and {0} more unreadable" -f ($rBlind.Count - 10)) }
+  foreach ($d in ($rDrift | Select-Object -First 25)) {
+    Write-Output ("  DRIFT  {0,-46} live {1} vs published {2}" -f $d.slug, $d.live.Substring(0,10), $d.ledger.Substring(0,10))
+  }
+  if ($rDrift.Count -gt 25) { Write-Output ("  ... and {0} more drifted" -f ($rDrift.Count - 25)) }
+  if ($rDrift.Count) {
+    Write-Output ''
+    Write-Output '  A drifted card means LIVE no longer holds what publish.ps1 last verified - edited in Ghost admin,'
+    Write-Output '  or a PUT that only partly landed. Republishing that slug overwrites whatever the difference is,'
+    Write-Output '  so look before you rebuild: meal-prep\engine\publish.ps1 -Slugs <slug> -Force'
+  }
+  ($rDrift | ConvertTo-Json -Depth 4) | Out-File (Join-Path $root 'out\ghost-drift-recipes.json') -Encoding utf8
+  Write-GuardComplete -Name 'ghost-drift' -Summary ("recipes match={0} roundtrip={1} drift={2} blind={3}" -f $rMatch.Count, $rRoundTrip.Count, $rDrift.Count, $rBlind.Count)
+  # blind anywhere means the sweep cannot claim a clean result, even for the slugs it did reach
+  if ($rBlind.Count) { exit 3 }
+  exit $(if ($rDrift.Count) { 1 } else { 0 })
+}
+
 if ($Discover) {
   # Rebuild the manifest by CONTENT, because the slug is not derivable from the filename (leak-finder-tool
   # publishes to money-leak-finder). Fingerprints on slices spread through the file, so a partially drifted

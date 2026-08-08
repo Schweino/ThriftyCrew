@@ -78,6 +78,27 @@ function Test-Allowlisted { param($Allow, [string]$Slug, [string]$LiveHash)
   return $false
 }
 
+# ---- RECIPE CARDS: the ledger already exists, it just never pointed at LIVE ---------------------------
+# meal-prep\engine\publish.ps1 writes db\published-hashes.json, one SHA1 per slug over exactly
+#   body + \0 + head + \0 + name + \0 + desc
+# and uses it as a CHANGE GATE - "skip republishing this slug, the bytes are unchanged". That answers "did we
+# publish this?", never "does live still hold it". So an edit made in Ghost admin, or a partial PUT, moves
+# live away from the ledger and nothing in the estate can see it. Recomputing the same hash from what the
+# Admin API returns turns that existing ledger into a drift check over all 542 cards for free.
+#
+# It is stable BETWEEN republishes, which is what makes it usable: a card's prices are baked at build time,
+# so live bytes do not drift on their own as the board moves. The hash only advances when publish.ps1
+# verifies a successful publish, so a mismatch means live changed WITHOUT us.
+#
+# Duplicated deliberately rather than imported: publish.ps1 is the estate's publisher and is not worth
+# editing for an audit's convenience. The self-test extracts publish.ps1's own Get-ContentHash and asserts
+# the two agree on the same input, so the copy cannot silently drift from the original.
+function Get-PublishedContentHash { param([string]$Body, [string]$Head, [string]$Name, [string]$Desc)
+  $s = $Body + "`0" + $Head + "`0" + $Name + "`0" + $Desc
+  $sha = [System.Security.Cryptography.SHA1]::Create()
+  return ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($s))) -replace '-', '')
+}
+
 function Get-GhostCardBody { param([string]$Api, [string]$Key, [string]$Slug)
   <# The live html card body, concatenated in document order. A tool post is one card, but do not assume it -
      returns $null when there is no card at all, which callers must treat as BLIND, never as clean. #>
@@ -128,6 +149,29 @@ if ($__gdSelfTest) {
     (-not (Test-Allowlisted $allow 'my-staples' 'AAAA1111BBBB2222')) 'hash matched across pages'
   T 'a body hash is stable and 16 chars' ((Get-BodyHash 'abc') -eq (Get-BodyHash 'abc') -and (Get-BodyHash 'abc').Length -eq 16) (Get-BodyHash 'abc')
   T 'different bodies hash differently' ((Get-BodyHash 'abc') -ne (Get-BodyHash 'abd')) 'collision'
+
+  # ---- the recipe-card hash must agree with the PUBLISHER's own definition ----
+  # This is the "two copies of a rule" guard: Get-PublishedContentHash restates publish.ps1's recipe rather
+  # than importing it, so the only thing keeping them honest is this case. It reads publish.ps1's actual
+  # function text, runs it, and asserts both produce the same digest for the same four fields. Change the
+  # hash in either place and this goes red instead of the audit quietly reporting 542 false drifts.
+  $pub = 'C:\Codex\income\meal-prep\engine\publish.ps1'
+  if (Test-Path $pub) {
+    $src = [IO.File]::ReadAllText($pub)
+    $m = [regex]::Match($src, '(?m)^function Get-ContentHash.*$')
+    if (-not $m.Success) {
+      Write-Output 'FAIL  could not find Get-ContentHash in publish.ps1 - the agreement fixture is now blind'; $f++
+    } else {
+      Invoke-Expression $m.Value    # defines Get-ContentHash exactly as the publisher has it
+      $b = '<div>body</div>'; $h = '<script>head</script>'; $n = 'Some Recipe'; $d = '610 calories, $3.58 each'
+      $mine = Get-PublishedContentHash -Body $b -Head $h -Name $n -Desc $d
+      $theirs = Get-ContentHash ($b + "`0" + $h + "`0" + $n + "`0" + $d)
+      T 'the card hash matches publish.ps1''s own Get-ContentHash on the same input' ($mine -eq $theirs) "$mine vs $theirs"
+      T 'that digest is a 40-char SHA1' ($mine.Length -eq 40) $mine
+      T 'MUST FIRE  a changed field changes the digest' `
+        ($mine -ne (Get-PublishedContentHash -Body $b -Head $h -Name $n -Desc ($d + ' '))) 'digest ignored a field change'
+    }
+  } else { Write-Output 'FAIL  publish.ps1 not found - cannot prove the card hash still matches the publisher'; $f++ }
 
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
