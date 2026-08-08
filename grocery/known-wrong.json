@@ -1505,6 +1505,36 @@
                         "ruled_on":  "2026-08-08",
                         "ruled_by":  "claude",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cocktail-sauce|SamsClub|members-mark-shrimp-tray-with-cocktail-sauce-pri",
+                        "commodity":  "cocktail-sauce",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Member\u0027s Mark Shrimp Tray with Cocktail Sauce, priced per pound"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A SHRIMP TRAY sold by the pound, not cocktail sauce. Its per-unit ($0.6338/oz) is 4x the row floor ($0.165), so it would never win, but heal-missing-products or a future Sam\u0027s pull could put it on the row as the Sam\u0027s cell. Adjudicated 2026-08-08 while measuring the ~200-unused-Sam\u0027s-prices item, which had already closed itself to 4 residual entries.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "lime-juice|SamsClub|mccormick-mayonesa-mayonnaise-with-lime-juice-28",
+                        "commodity":  "lime-juice",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "McCormick Mayonesa Mayonnaise with Lime Juice, 28 fl. oz., 2 pk."
+                                  ],
+                        "product_id":  "juice. Per-unit $0.2086/floz against a $0.06 floor. Same adjudication pass as the cocktail-sauce shrimp tray.",
+                        "verdict":  "wrong-product",
+                        "evidence":  "MAYONNAISE flavoured with lime juice, not lime juice. Matched the commodity on the words lime",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
