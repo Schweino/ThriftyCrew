@@ -380,17 +380,25 @@ $titleClass = if ($name.Length -gt 30) { 'title long' } else { 'title' }
 # 300px type overflows 1080 past five characters, so a longer total steps down a size rather than
 # running off the frame.
 $moneyClass = if ($moneyBatch.Length -gt 5) { 'money sm' } else { 'money' }
-# ${speakBatch} rather than $speakBatch below: "?" is a LEGAL character in a PowerShell variable name,
-# so "$speakBatch?" parses as a variable called speakBatch?, and fails at runtime rather than at parse
-# time. Any interpolation immediately followed by punctuation needs the braces.
+# EVERY WORD OF THIS LINE IS LOAD-BEARING, and it took three of Brad's ears-on passes to settle. The
+# engine mis-times a word at either extreme of a phrase, in opposite directions, and this one sentence
+# was hitting both:
 #
-# WORD ORDER IN THIS LINE IS LOAD-BEARING. "...dinners out of one batch for X?" left "batch" at a
-# phrase edge, and this engine lengthens the word before a break: it stretched to 0.598s, near enough
-# the 0.611s it spends on a SENTENCE-FINAL "batch", against 0.326s for a typical one-syllable word.
-# Brad heard that as "one baaaatch". Followed by "makes" instead, the same word measures 0.408s and
-# the drag is gone. Word duration tracks the gap that follows it, so the phrasing fixes both at once.
+#   STRETCHED at a phrase edge. "...dinners out of one batch for X?" left "batch" before a break, and
+#   the engine lengthens the word before one: 0.598s, near enough the 0.611s it spends on a
+#   SENTENCE-FINAL "batch", against 0.326s for a typical one-syllable word here. Brad heard
+#   "one baaaatch". Followed by "makes" instead, the same word measures 0.408s.
+#
+#   RUSHED at the start of a short sentence after a question. "...eighty? Come and see how" squeezed
+#   "Come" to 0.136s against a 0.340s median, which he heard as "cump". It is the POSITION, not the
+#   word: "Let" and "Watch" in the same slot compressed to 0.068s and 0.149s.
+#
+# Both are fixed by making it ONE sentence with the invitation on a comma. Keeping the question mark
+# was tried and always costs one or the other: "? So come" still rushes to 0.136s, and moving "batch"
+# to the question's end stretches it again. The rise the question buys is worth less than the two
+# defects it drags in, and the number on the card is doing the hook's work visually anyway.
 Add-Scene -Dark -Id 'hook' `
-  -Vo "One batch makes $(ConvertTo-Words $servings) dinners for ${speakBatch}? Come and see how." `
+  -Vo "One batch makes $(ConvertTo-Words $servings) dinners for $speakBatch, so come and see how." `
   -Caption "$servings dinners for $moneyBatch." `
   -Body ('<div class="eyebrow">Omaha &middot; this week</div>' +
          '<div class="hookline">' + $servings + ' dinners for</div>' +
