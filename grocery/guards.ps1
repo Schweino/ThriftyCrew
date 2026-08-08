@@ -287,6 +287,17 @@ foreach ($g in @(
     # tablets and the Member's Mark hummus 16 ct / 2.5 oz singles do NOT produce that identity and stay
     # advisory, so this cannot condemn a correct pack. Both cases are frozen fixtures in test-auditors.ps1.
     @{ f='audit-pack-basis.ps1';        n='no cell is cheapest because a pack TOTAL was multiplied by its own count (peer-size fingerprint)' },
+    # measure-kind mismatch (2026-08-08) - "no cell may win a row while being measured in a different KIND of
+    # quantity than the row it wins". audit-unit-basis-outlier existed since 07-31 and was invoked by NOTHING;
+    # worse, it only ever looked UPWARD, flagging rows at 4x+ the median. An expensive outlier takes no crown
+    # and reaches no reader. The damaging direction is the cheap one, and it was structurally invisible.
+    # Found on the live board the day it was wired: baby-formula's crown was a 15.991 FL OZ ready-to-feed
+    # LIQUID priced per weight oz against five powder canisters (powder makes ~7x its weight prepared, so the
+    # cheapest-formula verdict was backwards), and butter's crown was Pearl Milling Butter Rich SYRUP - with
+    # sunflower-seed butter and a Birds Eye sauced CORN in the same row. Both fixed at the commodity rule.
+    # Only the UNREVIEWED crown case is hard; the ratio findings stay advisory. Reviewed exceptions live in
+    # basis-kind-allowlist.json keyed on commodity+store+size, so a changed size re-arms the check.
+    @{ f='audit-unit-basis-outlier.ps1'; n='no cell wins a row while measured in a different KIND of quantity than the row (volume among weights)' },
     # as_of evidence (2026-08-02) - "no published price may claim a date newer than the capture it came
     # from". build-fareway-regular merged every extract on disk and stamped them all with the BUILD date, so
     # 431 of 577 live rows wore a date newer than the capture that produced them. That is worse than a

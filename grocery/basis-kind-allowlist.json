@@ -1,0 +1,54 @@
+{
+  "readme": "Reviewed measure-kind mismatches for audit-unit-basis-outlier.ps1. A cell lands here when its size names a different KIND of quantity than its shelf-mates (a volume among weights, or the reverse) but the NUMBER is still right, so the published per-unit is correct. That is the ordinary case for products whose density is near water, and for pack sizes a store states in one unit and the capture converts to the other. Keyed on commodity + store + the exact SIZE STRING that was reviewed: change the size and the review is void and the guard speaks up again, which is what stops a blanket per-store silence. NEVER add an entry to make the guard green - the entry has to say why the NUMBER is right, not why the flag is annoying. A cell whose number is wrong is fixed with a commodity exclude or add-known-wrong.ps1, not here (butter's pancake syrup and baby-formula's ready-to-feed liquid were both fixed that way on 2026-08-08, not allowlisted).",
+  "schema": 1,
+  "allow": [
+    {
+      "id": "clam-chowder",
+      "store": "Aldi",
+      "size": "18.8 fl oz",
+      "reviewed": "2026-08-08",
+      "reviewed_by": "claude",
+      "reason": "The can is 18.8 oz by WEIGHT - the product name says '18.8 OZ' - and the size field labelled the same number as fl oz. Same number either way, so the per-oz figure is correct."
+    },
+    {
+      "id": "disinfectant-spray",
+      "store": "Baker's",
+      "size": "1 pk 32 fl oz",
+      "reviewed": "2026-08-08",
+      "reviewed_by": "claude",
+      "reason": "A 32 fl oz water-based spray on a commodity priced per oz. Density is within a few percent of water, so fl oz and oz are interchangeable here at the precision the board publishes."
+    },
+    {
+      "id": "horseradish-sauce",
+      "store": "Walmart",
+      "size": "12 fl oz",
+      "reviewed": "2026-08-08",
+      "reviewed_by": "claude",
+      "reason": "The product name states '12 oz' and the size field states '12 fl oz'. Same number, opposite label, so the per-unit is unaffected."
+    },
+    {
+      "id": "laundry-detergent",
+      "store": "Walmart",
+      "size": "200.303 oz",
+      "reviewed": "2026-08-08",
+      "reviewed_by": "claude",
+      "reason": "The product name states '200.2 Fl Oz' and the size field states '200.303 oz'. The row is priced per fl oz; the two numbers agree to within 0.05%, so the label is the only thing that differs."
+    },
+    {
+      "id": "pickles",
+      "store": "Sam's Club",
+      "size": "126.8 oz",
+      "reviewed": "2026-08-08",
+      "reviewed_by": "claude",
+      "reason": "Mt. Olive 1 gal. One gallon is 128 fl oz and pickle brine is near water, so 126.8 oz is a faithful weight conversion of the stated gallon rather than a basis error."
+    },
+    {
+      "id": "ranch-dressing",
+      "store": "Sam's Club",
+      "size": "135.25 oz",
+      "reviewed": "2026-08-08",
+      "reviewed_by": "claude",
+      "reason": "Member's Mark 1 gal. Ranch dressing runs about 1.06 g/ml, so 128 fl oz is roughly 135.7 oz by weight - 135.25 is a faithful conversion of the stated gallon, not a mismeasure."
+    }
+  ]
+}

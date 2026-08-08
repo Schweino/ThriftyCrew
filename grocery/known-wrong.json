@@ -1445,6 +1445,66 @@
                         "ruled_on":  "2026-08-08",
                         "ruled_by":  "claude",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "butter|Walmart|pearl-milling-company-butter-rich-syrup-24-oz-pa",
+                        "commodity":  "butter",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Pearl Milling Company Butter Rich Syrup, 24 oz (Packaging May Vary)"
+                                  ],
+                        "product_id":  "146086143",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pearl Milling Company Butter Rich SYRUP - pancake syrup, not butter. It held the CHEAPEST-BUTTER crown at $2.56/lb; the cheapest real butter on this board is Aldi Countryside Creamery at $2.89/lb.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "butter|FamilyFare|birds-eye-sauced-butter-super-sweet-corn-10-8-oz",
+                        "commodity":  "butter",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Birds Eye Sauced Butter Super Sweet Corn 10.8 Oz"
+                                  ],
+                        "product_id":  "5993888",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Birds Eye Sauced Butter Super Sweet CORN - frozen corn in a butter sauce, not butter. Matched the include on the word butter.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "butter|SamsClub|sunbutter-original-sunflower-seed-butter-28-oz",
+                        "commodity":  "butter",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Sunbutter Original Sunflower Seed Butter, 28 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "SunButter Original SUNFLOWER SEED Butter - a seed spread, not dairy butter.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "baby-formula|Walmart|similac-360-total-care-gentle-comfort-ready-to-f",
+                        "commodity":  "baby-formula",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Similac 360 Total Care Gentle Comfort Ready-to-Feed Baby Formula, 2-fl-oz Bottle"
+                                  ],
+                        "product_id":  "19416216094",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Similac 360 READY-TO-FEED liquid, sized 15.991 fl oz, holding the crown on a commodity the other five stores price as POWDER by weight (48, 34, 33.2, 12.5, 12.4 oz canisters). Powder makes roughly seven times its weight in prepared formula, so pricing a prepared liquid per ounce against powder per ounce makes the cheapest-formula verdict backwards. Ready-to-feed belongs in its own commodity, not this one.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

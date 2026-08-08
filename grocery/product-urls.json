@@ -1305,20 +1305,20 @@
                                                                "size":  "48 oz",
                                                                "verified":  "2026-08-06 DERIVED from the price row (same record the board priced)"
                                                            },
-                                       "Walmart":  {
-                                                       "url":  "https://www.walmart.com/ip/19416216094",
-                                                       "name":  "Similac 360 Total Care Gentle Comfort Ready-to-Feed Baby Formula, 2-fl-oz Bottle",
-                                                       "price":  "$10.97",
-                                                       "size":  "15.991 fl oz",
-                                                       "verified":  "2026-08-07 DERIVED from the price row (same record the board priced)"
-                                                   },
                                        "Baker\u0027s":  {
                                                             "url":  "https://www.bakersplus.com/p/comforts-infant-premium-immune-blend-6-non-gmo-baby-formula-with-iron-big-deal-/0004126001792",
                                                             "name":  "Comforts Infant Premium Immune Blend 6 Non GMO Baby Formula with Iron BIG DEAL!",
                                                             "price":  31.99,
                                                             "size":  "34 oz",
                                                             "verified":  "2026-08-08"
-                                                        }
+                                                        },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/1231795077",
+                                                       "name":  "Parent\u0027s Choice Advantage Infant Formula Powder with Iron; DHA, Lutein, Vit E, 33.2 oz",
+                                                       "price":  "$24.28",
+                                                       "size":  "33.2 oz",
+                                                       "verified":  "2026-08-08 DERIVED from the price row (same record the board priced)"
+                                                   }
                                    },
                   "baby-wipes":  {
                                      "commodity":  "baby-wipes",
@@ -3465,27 +3465,27 @@
                                                 "size":  "lb",
                                                 "verified":  "2026-07-27 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
-                                 "Sam\u0027s Club":  {
-                                                         "url":  "https://www.samsclub.com/ip/19239858413",
-                                                         "name":  "Sunbutter Original Sunflower Seed Butter, 28 oz",
-                                                         "price":  "$7.48",
-                                                         "size":  "28 oz",
-                                                         "verified":  "2026-08-06 DERIVED from the price row (same record the board priced)"
-                                                     },
                                  "Walmart":  {
-                                                 "url":  "https://www.walmart.com/ip/146086143",
-                                                 "name":  "Pearl Milling Company Butter Rich Syrup, 24 oz (Packaging May Vary)",
-                                                 "price":  "$3.84",
-                                                 "size":  "24 fl oz",
-                                                 "verified":  "2026-08-07 DERIVED from the price row (same record the board priced)"
+                                                 "url":  "https://www.walmart.com/ip/879148225",
+                                                 "name":  "Great Value Sweet Cream Salted Butter Twin Pack, 16 oz Box, 8 Sticks, Slow Churned, Refrigerated",
+                                                 "price":  "$5.96",
+                                                 "size":  "32.043 oz",
+                                                 "verified":  "2026-08-08 DERIVED from the price row (same record the board priced)"
                                              },
                                  "Family Fare":  {
-                                                     "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/mixed/birds_eye_sauced_butter_super_sweet_corn_10_8_oz/p/5993888",
-                                                     "name":  "Birds Eye Sauced Butter Super Sweet Corn 10.8 Oz",
-                                                     "price":  "$2.59",
-                                                     "size":  "10.8 oz",
+                                                     "url":  "https://www.shopfamilyfare.com/shop/dairy/butter_margarine/butter/land_o_lakes_butter_unsalted_4_ea/p/8136",
+                                                     "name":  "Land O Lakes Butter, Unsalted 4 Ea",
+                                                     "price":  "$5.39",
+                                                     "size":  "1 lb",
                                                      "verified":  "2026-08-08 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                 },
+                                 "Sam\u0027s Club":  {
+                                                         "url":  "https://www.samsclub.com/ip/13902755772",
+                                                         "name":  "Carrington Farms Ghee, Clarified Butter, 54 oz.",
+                                                         "price":  "$20.98",
+                                                         "size":  "54 oz",
+                                                         "verified":  "2026-08-08 DERIVED from the price row (same record the board priced)"
+                                                     }
                              },
                   "buttermilk":  {
                                      "commodity":  "buttermilk",
@@ -17639,14 +17639,6 @@
                                                            "verified":  "2026-08-08",
                                                            "board_pu":  0.0684
                                                        },
-                                      "Family Fare":  {
-                                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/breakfast/hotcakes_waffles/our_family_complete_pancake_waffle_mix_original_32_oz/p/527250",
-                                                          "name":  "Our Family Complete Pancake \u0026 Waffle Mix, Original 32 Oz",
-                                                          "price":  "$2.69",
-                                                          "size":  "32 oz",
-                                                          "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
-                                                          "board_pu":  0.0841
-                                                      },
                                       "Fareway":  {
                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20594930-fareway-pancake-waffle-mix-complete-32-oz",
                                                       "name":  "Fareway Complete Pancake \u0026 Waffle Mix",
@@ -17676,7 +17668,14 @@
                                                       "price":  "$1.98",
                                                       "size":  "32 oz",
                                                       "verified":  "2026-08-07 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                      "Family Fare":  {
+                                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/breakfast/hotcakes_waffles/our_family_buttermilk_complete_pancake_waffle_mix_32_oz/p/2493",
+                                                          "name":  "Our Family Buttermilk Complete Pancake \u0026 Waffle Mix 32 Oz",
+                                                          "price":  "$2.69",
+                                                          "size":  "32 oz",
+                                                          "verified":  "2026-08-08 DERIVED from the price row (same record the board priced)"
+                                                      }
                                   },
                   "paper-napkins":  {
                                         "commodity":  "paper-napkins",
@@ -21869,8 +21868,8 @@
                                                        "verified":  "2026-08-08"
                                                    },
                                   "Family Fare":  {
-                                                      "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/shampoo_conditioner/alberto_vo5_shampoo_revitalizing_ocean_refresh_bonus_size_15_fl_oz/p/1564405684713381359",
-                                                      "name":  "Alberto Vo5 Shampoo, Revitalizing, Ocean Refresh, Bonus Size 15 Fl Oz",
+                                                      "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/shampoo_conditioner/vo5_royal_honey_shampoo/p/1764405684715766590",
+                                                      "name":  "Vo5 Royal Honey Shampoo",
                                                       "price":  "$1.49",
                                                       "size":  "15 oz",
                                                       "verified":  "2026-08-08 DERIVED from the price row (same record the board priced)"
@@ -22635,8 +22634,8 @@
                                                                "verified":  "2026-08-08 DERIVED from the price row (same record the board priced)"
                                                            },
                                           "Family Fare":  {
-                                                              "url":  "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/water/sparkling_ice_zero_sugar_fruit_punch_sparkling_water_17_fl_oz/p/1564405684704625421",
-                                                              "name":  "Sparkling Ice Zero Sugar Fruit Punch Sparkling Water 17 Fl Oz",
+                                                              "url":  "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/water/sparkling_ice_zero_sugar_lemon_lime_sparkling_water_17_fl_oz/p/16403",
+                                                              "name":  "Sparkling Ice Zero Sugar Lemon Lime Sparkling Water 17 Fl Oz",
                                                               "price":  "$1.39",
                                                               "size":  "17 fl oz",
                                                               "verified":  "2026-08-08 DERIVED from the price row (same record the board priced)"
@@ -25828,20 +25827,20 @@
                                                  "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
                                                  "board_pu":  0.0825
                                              },
-                                 "Family Fare":  {
-                                                     "url":  "https://www.shopfamilyfare.com/shop/dairy/yogurt/individual_size/yoplait_low_fat_cherry_orchard_yogurt_6_oz/p/37027",
-                                                     "name":  "Yoplait Low Fat Cherry Orchard Yogurt 6 Oz",
-                                                     "price":  "$0.89",
-                                                     "size":  "6 oz",
-                                                     "verified":  "2026-08-06 DERIVED from the price row (same record the board priced)"
-                                                 },
                                  "Baker\u0027s":  {
                                                       "url":  "https://www.bakersplus.com/p/yoplait-original-low-fat-strawberry-banana-yogurt-cup/0007047000313",
                                                       "name":  "Yoplait Original Low Fat Strawberry Banana Yogurt Cup",
                                                       "price":  0.6,
                                                       "size":  "6 oz",
                                                       "verified":  "2026-08-08"
-                                                  }
+                                                  },
+                                 "Family Fare":  {
+                                                     "url":  "https://www.shopfamilyfare.com/shop/dairy/yogurt/individual_size/yoplait_low_fat_mountain_blueberry_yogurt_6_oz/p/95939",
+                                                     "name":  "Yoplait Low Fat Mountain Blueberry Yogurt 6 Oz",
+                                                     "price":  "$0.89",
+                                                     "size":  "6 oz",
+                                                     "verified":  "2026-08-08 DERIVED from the price row (same record the board priced)"
+                                                 }
                              },
                   "yukon-gold-potatoes":  {
                                               "commodity":  "Yellow / Yukon Gold Potatoes",

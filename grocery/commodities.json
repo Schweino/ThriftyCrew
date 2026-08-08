@@ -1098,7 +1098,11 @@
                         "tampons?",
                         "lip\\s+balm",
                         "hand\\s*wash",
-                        "\\bshea\\b"
+                        "\\bshea\\b",
+                        "\\bsyrup\\b",
+                        "sunflower",
+                        "sunbutter",
+                        "\\bsauced\\b"
                     ]
     },
     {
@@ -30369,7 +30373,8 @@
         "exclude":  [
                         "toddler\\s+drink",
                         "\\bdispenser\\b",
-                        "\\bwater\\b"
+                        "\\bwater\\b",
+                        "ready[\\s-]?to[\\s-]?feed"
                     ],
         "relax_global":  [
                              "little\\s+journey"
