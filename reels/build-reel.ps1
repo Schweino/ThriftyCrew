@@ -37,9 +37,10 @@ USAGE
 [CmdletBinding()]
 param(
   [string] $Slug,
-  # The house narrator, matched to the demo reel so the two reels on the same Page do not arrive in
-  # two slightly different voices. Names resolve in voices.ps1; full Microsoft ids also work.
-  [string] $Voice        = 'Goku',
+  # The house narrator. Brad picked goku-podcast (Azure Dragon HD, Andrew3, tuned for podcast
+  # narration) on 2026-08-08 after hearing three HD voices read a whole recipe reel. Note it IGNORES
+  # -RatePct: HD voices do not support <prosody> and set their own pace. Names resolve in voices.ps1.
+  [string] $Voice        = 'goku-podcast',
   # Set to run the reel as a two-hander: scenes alternate between $Voice and $Voice2. $Voice keeps the
   # hook and the CTA (the brand moments book-end the reel in one voice) and the second voice takes the
   # scenes in between, so a viewer hears a conversation rather than a handover.
@@ -595,12 +596,43 @@ if ($NoVoice) {
   $linesFile = Join-Path $WorkDir 'lines.json'
   [System.IO.File]::WriteAllText($linesFile, (ConvertTo-Json @($lineObjs) -Depth 3),
                                  (New-Object System.Text.UTF8Encoding $false))
+
+  # Two engines, one interface. Dragon HD voices come from Azure, everything else from the free
+  # edge-tts endpoint; both scripts take the same arguments and emit the same timing file, because
+  # the alignment and the guards live in narration.py rather than in either of them.
+  $speaker = if (Test-AzureVoice $Voice) { 'azure-speak.py' } else { 'speak-script.py' }
+  if (Test-AzureVoice $Voice) {
+    # setx does not reach a running shell, so read the persisted values and hand them to the child.
+    # Never echoed: the key only ever moves from the user environment into the child process.
+    foreach ($v in 'AZURE_SPEECH_KEY', 'AZURE_SPEECH_REGION') {
+      $val = [System.Environment]::GetEnvironmentVariable($v, 'User')
+      if (-not $val) { throw "$Voice needs $v set. See reels\README.md for the Azure setup." }
+      Set-Item -Path "Env:$v" -Value $val
+    }
+  }
   # argparse eats "-5%" as a flag; "--rate=-5%" is the only form that survives.
-  $ttsArgs = @((Join-Path $ReelRoot 'speak-script.py'), '--lines', $linesFile,
-               '--voice', $Voice, "--rate=$(if ($RatePct -ge 0) { '+' })$RatePct%", '--out', $VoMp3)
+  $rateArg = "--rate=$(if ($RatePct -ge 0) { '+' })$RatePct%"
+  $ttsArgs = @((Join-Path $ReelRoot $speaker), '--lines', $linesFile,
+               '--voice', $Voice, $rateArg, '--out', $VoMp3)
   if ($PitchHz -ne 0) { $ttsArgs += "--pitch=$(if ($PitchHz -gt 0) { '+' })${PitchHz}Hz" }
-  Invoke-Tool -Exe $Python -Tag 'tts' -ArgList $ttsArgs
-  if (-not (Test-Path $VoMp3)) { throw 'speak-script.py produced no audio' }
+
+  # This job runs unattended at 10:00 every morning, and it now depends on a cloud service it did not
+  # depend on yesterday. A missed day of content is a worse outcome than a reel in the previous
+  # voice, so an Azure failure falls back to the free endpoint rather than producing nothing. It says
+  # so loudly, because the one thing worse than the wrong voice is not knowing which voice shipped.
+  try {
+    Invoke-Tool -Exe $Python -Tag 'tts' -ArgList $ttsArgs
+  } catch {
+    if (-not (Test-AzureVoice $Voice)) { throw }
+    Write-Warning "AZURE SYNTHESIS FAILED, falling back to the free endpoint. THIS REEL IS NOT IN THE USUAL VOICE."
+    Write-Warning "  $($_.Exception.Message -split "`n" | Select-Object -First 1)"
+    $Voice = Resolve-Voice 'goku'
+    $speaker = 'speak-script.py'
+    Invoke-Tool -Exe $Python -Tag 'tts-fallback' -ArgList @(
+      (Join-Path $ReelRoot $speaker), '--lines', $linesFile, '--voice', $Voice, $rateArg,
+      '--out', $VoMp3)
+  }
+  if (-not (Test-Path $VoMp3)) { throw "$speaker produced no audio" }
 
   $timing = Get-Content "$VoMp3.timing.json" -Raw | ConvertFrom-Json
   if ($timing.drift -gt 0) {

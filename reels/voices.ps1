@@ -24,6 +24,20 @@ $script:TcVoiceAliases = @{
   'guy'         = 'en-US-GuyNeural'                 # passion
   'emma'        = 'en-US-EmmaMultilingualNeural'    # cheerful, clear, conversational
   'ava'         = 'en-US-AvaMultilingualNeural'     # expressive, caring, friendly
+
+  # Azure Dragon HD, same Andrew persona, a newer model that phrases in longer groups instead of
+  # chopping sentences into short chunks. Needs AZURE_SPEECH_KEY/REGION; runs on the free F0 tier.
+  # These IGNORE rate: the model sets its own pace, so -RatePct does nothing for them.
+  'goku-hd'      = 'en-US-Andrew:DragonHDLatestNeural'
+  'goku-podcast' = 'en-US-Andrew3:DragonHDLatestNeural'      # tuned for podcast narration
+  'goku-omni'    = 'en-US-Andrew:DragonHDOmniLatestNeural'   # fewest pauses per minute measured
+}
+
+function Test-AzureVoice {
+  <# Dragon HD voices live on Azure Speech, everything else on the free edge-tts endpoint. The colon
+     in the id is the marker Microsoft themselves use for a base-model voice. #>
+  param([Parameter(Mandatory)][string]$Id)
+  return $Id -like '*:Dragon*'
 }
 
 function Resolve-Voice {
@@ -31,8 +45,9 @@ function Resolve-Voice {
   param([Parameter(Mandatory)][string]$Name)
   $key = $Name.Trim().ToLower()
   if ($script:TcVoiceAliases.ContainsKey($key)) { return $script:TcVoiceAliases[$key] }
-  # Anything shaped like a real voice id is none of our business, pass it on.
-  if ($Name -match '^[a-z]{2}-[A-Z]{2}-\w+Neural$') { return $Name }
+  # Anything shaped like a real voice id is none of our business, pass it on. The optional
+  # ":BaseModel" half is how Azure names its HD voices (en-US-Andrew3:DragonHDLatestNeural).
+  if ($Name -match '^[a-z]{2}-[A-Z]{2}-\w+(:\w+)?Neural$') { return $Name }
   $known = ($script:TcVoiceAliases.Keys | Sort-Object) -join ', '
   throw "Unknown voice '$Name'. Use one of: $known, or a full Microsoft voice id like en-US-AndrewMultilingualNeural."
 }

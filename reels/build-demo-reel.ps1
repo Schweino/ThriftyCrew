@@ -42,8 +42,10 @@ USAGE
 [CmdletBinding()]
 param(
   [string] $Slug,
-  # The house narrator. Names resolve in voices.ps1; full Microsoft ids also work.
-  [string] $Voice     = 'Goku',
+  # The house narrator, matched to the daily reel so both videos on the Page sound like one person.
+  # Brad picked goku-podcast (Azure Dragon HD, Andrew3) on 2026-08-08. It IGNORES -RatePct: HD voices
+  # do not support <prosody> and set their own pace. Names resolve in voices.ps1.
+  [string] $Voice     = 'goku-podcast',
   # Measured: this voice at +0% runs 168 words per minute, which is news-anchor fast (audiobook and
   # podcast narration sits nearer 150). -8% puts it at about 156 wpm, conversational.
   # Do NOT fine-tune this in 1% steps. The engine's response is genuinely non-monotonic at that
@@ -451,8 +453,21 @@ if ($NoVoice) {
   $linesFile = Join-Path $WorkDir 'lines.json'
   [System.IO.File]::WriteAllText($linesFile, (ConvertTo-Json @($lineObjs) -Depth 3),
                                  (New-Object System.Text.UTF8Encoding $false))
+  # Two engines, one interface: Dragon HD voices come from Azure, everything else from the free
+  # edge-tts endpoint. Both take the same arguments and emit the same timing file, because the
+  # alignment and the guards live in narration.py rather than in either of them.
+  $speaker = if (Test-AzureVoice $Voice) { 'azure-speak.py' } else { 'speak-script.py' }
+  if (Test-AzureVoice $Voice) {
+    # setx does not reach a running shell, so read the persisted values and pass them to the child.
+    # The key only ever moves from the user environment into the child process; never echoed.
+    foreach ($v in 'AZURE_SPEECH_KEY', 'AZURE_SPEECH_REGION') {
+      $val = [System.Environment]::GetEnvironmentVariable($v, 'User')
+      if (-not $val) { throw "$Voice needs $v set. See reels\README.md for the Azure setup." }
+      Set-Item -Path "Env:$v" -Value $val
+    }
+  }
   # argparse eats "-3%" as a flag; "--rate=-3%" is the only form that survives.
-  $ttsArgs = @((Join-Path $ReelRoot 'speak-script.py'), '--lines', $linesFile,
+  $ttsArgs = @((Join-Path $ReelRoot $speaker), '--lines', $linesFile,
                '--voice', $Voice, "--rate=$(if ($RatePct -ge 0) { '+' })$RatePct%", '--out', $VoMp3)
   if ($PitchHz -ne 0) { $ttsArgs += "--pitch=$(if ($PitchHz -gt 0) { '+' })${PitchHz}Hz" }
   Invoke-Tool -Exe $Python -Tag 'tts' -ArgList $ttsArgs
