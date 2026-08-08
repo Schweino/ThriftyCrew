@@ -211,22 +211,29 @@ def _is_suspicious(prev, nxt, gap):
     return gap > 0.30
 
 
-def join_lines(lines):
+BEAT = "\x00BEAT\x00"
+
+
+def join_lines(lines, beat=" ."):
     """The script as one continuous paragraph, which is the whole point.
 
-    Measured pause vocabulary for these engines, and it is the ENTIRE pacing toolkit available:
-        space               0.01s   no pause
-        comma               0.20s   a beat
-        period or newline   0.40s   a sentence break
-        ". "                0.61s   the longest a text-only pause can buy
-    Lines already end in sentence punctuation, so a plain space between them yields the 0.40s break.
-    A line marked "beat" gets the extra " ." for the one or two moments that should land before the
-    next thing starts."""
+    A line marked "beat" gets a deliberate hold after it, for the one or two moments that should land
+    before the next thing starts. HOW that hold is spelled depends on the engine, which is why the
+    caller passes it:
+
+      edge-tts   ". "  buys 0.61s, and that is the hard ceiling. There is no SSML on that endpoint,
+                 so a longer pause has to be built in the video edit instead.
+      Azure HD   <break time="..."/> works and has no practical ceiling: measured 500ms -> 0.551s,
+                 900ms -> 1.087s, 1500ms -> 1.724s. Pass narration.BEAT and substitute after the
+                 text has been XML-escaped, or the tag gets escaped into spoken words.
+
+    The trick is engine-specific and NOT interchangeable: '. ' on an HD voice measures 0.040s, which
+    is identical to a plain full stop, i.e. a silent no-op. It shipped that way for one build."""
     parts = []
     for i, ln in enumerate(lines):
         t = ln["text"].strip()
         if i < len(lines) - 1 and ln.get("beat"):
-            t += " ."
+            t += beat
         parts.append(t)
     return " ".join(parts)
 

@@ -35,6 +35,13 @@ import narration
 import azure.cognitiveservices.speech as speechsdk
 
 
+# What a -Beat is worth on this engine. edge-tts caps out at 0.61s; here it is exact, so this is a
+# taste decision rather than a limit. 700ms reads as a deliberate hold without stalling the reel.
+# Note HD voices put only ~0.04s between ordinary sentences, so a beat stands out far more than it
+# did on edge-tts, where every sentence already bought 0.40s.
+BEAT_MS = 700
+
+
 def is_hd(voice):
     return ":Dragon" in voice
 
@@ -63,7 +70,11 @@ def synthesize(text, voice, rate, out_path):
         "duration": int(e.duration.total_seconds() * narration.TICKS_PER_SECOND),
         "text": e.text}))
 
+    # Escape FIRST, then substitute the break tags in. The other order escapes our own markup into
+    # words the narrator reads out loud, which is the exact failure mode edge-tts has with SSML.
     esc = (text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"))
+    esc = esc.replace(narration.BEAT, "<break time='%dms'/>" % BEAT_MS)
+
     if rate and rate != "+0%" and not is_hd(voice):
         body = "<prosody rate='%s'>%s</prosody>" % (rate, esc)
     else:
@@ -103,7 +114,7 @@ def main():
         raise SystemExit("no lines to speak")
 
     narration.check_speakable(lines)
-    text = narration.join_lines(lines)
+    text = narration.join_lines(lines, beat=narration.BEAT)
 
     marks = synthesize(text, args.voice, args.rate, args.out)
     timing, drift = narration.align(lines, marks)
