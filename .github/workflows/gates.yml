@@ -1,0 +1,43 @@
+# gates.yml - the CHANGE-TIME gate.
+#
+# WHY (2026-08-08). Until this existed, nothing in this repo ran when the code changed: daily.yml and
+# heartbeat.yml are both `schedule:` only and there are no git hooks, so 60 detectors and 62,000 lines of
+# PowerShell were policed entirely by a clock. A bad commit shipped and was caught the next morning at best.
+# That matters more under the standing rule to push every commit immediately - the day this was written, 12
+# commits reached main in a single push through no automated gate at all.
+#
+# Windows runner on purpose, same reason daily.yml uses one: the engine is Windows PowerShell 5.1 and spawns
+# child `powershell` processes. Running the gates under pwsh would test a different interpreter than the one
+# production uses, which is worse than not testing them.
+#
+# NO SECRETS AND NO DATA. ops\run-gates.ps1 runs only what is hermetic - every -SelfTest in the tree (each
+# driving frozen must-fire fixtures of a founding bug plus its clean twin) and the static-analysis detectors
+# that read source rather than a board. grocery\out\comparison-*.json is gitignored, so the data audits would
+# be BLIND here, and a blind check reporting success is the exact failure this estate keeps writing guards
+# about. Those stay in the daily chain against a real board.
+name: gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# A second push while one is running should cancel the first: the answer that matters is about the tip.
+concurrency:
+  group: gates-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gates:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run the hermetic gates
+        shell: powershell
+        run: |
+          powershell -ExecutionPolicy Bypass -File ops\run-gates.ps1
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
