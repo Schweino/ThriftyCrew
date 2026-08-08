@@ -66,11 +66,43 @@ $newestCmp = Get-ChildItem (Join-Path $out 'comparison-*.json') -ErrorAction Sil
 if ($newestCmp) {
   try { foreach ($sr in @((Get-Content $newestCmp.FullName -Raw | ConvertFrom-Json).comparison)) { $stapleIds[[string]$sr.id] = $true } } catch {}
 }
+# THE SAME COMMODITY UNDER TWO ID SPELLINGS IS STILL THE SAME COMMODITY (2026-08-08). The filter above
+# compares RAW ids, and it works: exactly 0 recipe rows collide with the weekly board by literal id. But
+# the recipe and weekly namespaces spell 33 shared commodities differently - 93-7-ground-beef against
+# ground-beef-93-7, beef-chuck-roast against chuck-roast - and recipe-floor-id-map.json exists precisely
+# because those pairs ARE the same thing (each one passed an evidence gate: label match, unit
+# reconciliation, multi-store price agreement). Comparing raw ids can never match them, so 33 of the 80
+# recipe rows survived as stale duplicates of a fresher weekly row and the page published BOTH numbers.
+# Measured on the 2026-08-08 board: 9 cells where an identical product string carried two live prices
+# (beef chuck roast at Family Fare, $8.49 on the weekly board and $10.99 here; diced green chiles at
+# Hy-Vee, 39% apart) plus 6 more that were the same price in a different unit. That is the exact symptom
+# the 2026-07-30 filter was written to kill - it just could not see through the id spelling.
+$idMap = @{}
+$mapFile = Join-Path $root 'recipe-floor-id-map.json'
+if (Test-Path $mapFile) {
+  try {
+    foreach ($p in ((Get-Content $mapFile -Raw | ConvertFrom-Json).map.PSObject.Properties)) { $idMap[[string]$p.Name] = [string]$p.Value }
+  } catch { Write-Output 'recipe-overlay: WARNING - recipe-floor-id-map.json unreadable; falling back to raw-id matching only' }
+} else {
+  Write-Output 'recipe-overlay: WARNING - no recipe-floor-id-map.json, so shared commodities spelled differently on the two boards will NOT be de-duplicated'
+}
 if ($stapleIds.Count -gt 0) {
   $beforeN = @($base.comparison).Count
-  $base.comparison = @($base.comparison | Where-Object { -not $stapleIds.ContainsKey([string]$_.id) })
+  # Counted BEFORE the filter, deliberately. A `$byMap++` inside the Where-Object block would depend on
+  # whether that block shares the caller's scope, and this estate has lost enough hours to PowerShell
+  # scoping surprises that a count worth printing should not rest on one.
+  $byMap = @($base.comparison | Where-Object {
+    $rid = [string]$_.id
+    (-not $stapleIds.ContainsKey($rid)) -and $idMap.ContainsKey($rid) -and $stapleIds.ContainsKey($idMap[$rid])
+  }).Count
+  $base.comparison = @($base.comparison | Where-Object {
+    $rid = [string]$_.id
+    if ($stapleIds.ContainsKey($rid)) { return $false }              # same id on the weekly board
+    if ($idMap.ContainsKey($rid) -and $stapleIds.ContainsKey($idMap[$rid])) { return $false }  # same COMMODITY, other spelling
+    $true
+  })
   $droppedN = $beforeN - @($base.comparison).Count
-  Write-Output ("recipe-overlay: dropped $droppedN row(s) whose id lives on the weekly staples board (the fresh row owns the id); $(@($base.comparison).Count) recipe-only row(s) remain")
+  Write-Output ("recipe-overlay: dropped $droppedN row(s) whose commodity lives on the weekly staples board ($byMap of them via recipe-floor-id-map, the rest by literal id; the fresh row owns the commodity); $(@($base.comparison).Count) recipe-only row(s) remain")
 } else {
   Write-Output 'recipe-overlay: WARNING - no staples comparison found, so the overlap filter examined NOTHING and every recipe row is kept; duplicate-price rows are possible this run'
 }
