@@ -1,0 +1,86 @@
+﻿{
+    "tools":  [
+                  {
+                      "slug":  "budget-tracker",
+                      "file":  "budget-tracker-tool.html",
+                      "matched_slices":  "7/7"
+                  },
+                  {
+                      "slug":  "cheap-dinners-right-now",
+                      "file":  "cheap-dinners-tool.html",
+                      "matched_slices":  "7/7"
+                  },
+                  {
+                      "slug":  "compound-interest-calculator",
+                      "file":  "compound-interest-tool.html",
+                      "matched_slices":  "7/7"
+                  },
+                  {
+                      "slug":  "debt-payoff-date-calculator",
+                      "file":  "debt-payoff-tool.html",
+                      "matched_slices":  "7/7"
+                  },
+                  {
+                      "slug":  "whats-for-dinner-tonight",
+                      "file":  "dinner-tonight-tool.html",
+                      "matched_slices":  "7/7"
+                  },
+                  {
+                      "slug":  "freezer-math",
+                      "file":  "freezer-math-tool.html",
+                      "matched_slices":  "7/7"
+                  },
+                  {
+                      "slug":  "money-leak-finder",
+                      "file":  "leak-finder-tool.html",
+                      "matched_slices":  "7/7"
+                  },
+                  {
+                      "slug":  "meal-plan-builder",
+                      "file":  "meal-plan-builder-tool.html",
+                      "matched_slices":  "7/7"
+                  },
+                  {
+                      "slug":  "my-crew",
+                      "file":  "my-crew-tool.html",
+                      "matched_slices":  "7/7"
+                  },
+                  {
+                      "slug":  "my-staples",
+                      "file":  "my-staples-tool.html",
+                      "matched_slices":  "7/7"
+                  },
+                  {
+                      "slug":  "payday-stretcher",
+                      "file":  "payday-stretcher-tool.html",
+                      "matched_slices":  "7/7"
+                  },
+                  {
+                      "slug":  "free-price-widget",
+                      "file":  "price-widget-tool.html",
+                      "matched_slices":  "7/7"
+                  },
+                  {
+                      "slug":  "cheapest-protein",
+                      "file":  "protein-leaderboard-tool.html",
+                      "matched_slices":  "7/7"
+                  },
+                  {
+                      "slug":  "sams-club-worth-it",
+                      "file":  "sams-worth-it-tool.html",
+                      "matched_slices":  "7/7"
+                  },
+                  {
+                      "slug":  "savings-goal-tracker",
+                      "file":  "savings-goal-tool.html",
+                      "matched_slices":  "7/7"
+                  },
+                  {
+                      "slug":  "subscription-tracker",
+                      "file":  "subscription-tracker-tool.html",
+                      "matched_slices":  "7/7"
+                  }
+              ],
+    "generated":  "2026-08-08",
+    "note":  "slug\u003c-\u003elocal source for the tool posts; rebuild with -Discover"
+}
