@@ -147,7 +147,11 @@ if($SelfTest){
   $out = Set-JsonStringArray $sample 'cost_lines' @('alpha','beta','gamma')
   $p = $out | ConvertFrom-Json
   Chk 'array replaced'            (@($p.cost_lines).Count -eq 3 -and $p.cost_lines[2] -eq 'gamma') (@($p.cost_lines) -join '|')
-  Chk 'element indent preserved'  ($out -match '(?m)^                       "alpha",$')            $out
+  # \r?$ NOT $ (2026-08-08). In .NET multiline mode `$` matches before the \n but AFTER any \r, so this
+  # assertion passed on LF text and failed on CRLF - and Set-JsonStringArray emits CRLF. The function was
+  # preserving the indent correctly all along (measured: 23 spaces in, 23 out); only the anchor was wrong.
+  # A test that depends on the line ending of the machine it runs on is not testing what it claims to.
+  Chk 'element indent preserved'  ($out -match '(?m)^                       "alpha",\r?$')          $out
   Chk 'sibling array untouched'   ($p.other_lines[0] -eq 'untouched' -and $out -match '"untouched"') $out
   Chk 'number field scoped'       ((Set-JsonNumberField $sample 'cost_batch' 2.25) -match '"cost_batch":  2\.25') 'n/a'
 

@@ -1,0 +1,32 @@
+# Line-ending normalization, added 2026-08-08.
+#
+# WHY: without this, a two-line change produced a WHOLE-FILE diff. audit-spec-contradictions.ps1 showed 709
+# changed lines for a 2-line edit; `git diff --ignore-cr-at-eol` reduced it to 9. core.autocrlf is true, but
+# with no .gitattributes the repo had a mixed CR state, so any tool writing CRLF into an LF-stored file
+# rewrote every line as far as git was concerned. A diff nobody can read is a review nobody performs, and
+# this estate reviews by reading diffs.
+#
+# `text=auto` normalizes to LF IN THE REPOSITORY while letting core.autocrlf decide the working copy, so
+# nothing about how these files appear on Brad's Windows box changes.
+#
+# DELIBERATELY NOT RENORMALIZED IN BULK. `git add --renormalize .` would fix the whole history-facing state
+# in one commit touching hundreds of files - and would collide with the daily pipeline bot, which commits and
+# rebases onto main on its own schedule. Files normalize as they are touched instead. The big diff never
+# needs to happen; it just stops getting worse.
+* text=auto
+
+# Binary: never touch these, and never try to diff them as text.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.webp binary
+*.mp3  binary
+*.mp4  binary
+*.wav  binary
+*.zip  binary
+*.db   binary
+*.sqlite binary
+*.woff  binary
+*.woff2 binary

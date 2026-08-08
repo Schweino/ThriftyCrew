@@ -6,8 +6,14 @@
   42 / Fareway In-Store) - Pickup/Delivery are marked up. Usage:
     .\import-instacart-batch.ps1 -Store Fareway -Raw out\staples500\fareway-batch1-raw.txt -SourceLabel "Fareway Omaha In-Store shelf price (batch capture)"
 #>
-param([Parameter(Mandatory=$true)][string]$Store, [Parameter(Mandatory=$true)][string]$Raw, [string]$SourceLabel = "", [string]$ModeVerified = "", [switch]$SelfTest)
+param([string]$Store, [string]$Raw, [string]$SourceLabel = "", [string]$ModeVerified = "", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+# -Store is REQUIRED for a real run but must NOT be declared Mandatory (2026-08-08). PowerShell prompts for a
+# missing mandatory parameter, so `-SelfTest` alone could never be invoked: it died with
+# MissingMandatoryParameter on any non-interactive runner. This file's self-test therefore existed and had
+# never once run - the "a fix needs a reachable self-test" class, found the day a change-time gate was added
+# and 4 of 80 self-tests turned out to be unreachable for exactly this reason. Enforced explicitly instead.
+if (-not $SelfTest -and -not $Store) { throw '-Store is required (Store and -Raw)' }
 $root = $PSScriptRoot
 $today = (Get-Date).ToString('yyyy-MM-dd')
 $regDir = Join-Path $root 'out\regular'

@@ -2,6 +2,9 @@
 # Allow-list: track ONLY the daily-engine directories; ignore everything else under income/.
 /*
 !/.gitignore
+# Line-ending normalization. Root files are ignored by default by the /* rule above, so this needs an
+# explicit allow or a fresh clone silently loses it and the whole-file-diff problem comes straight back.
+!/.gitattributes
 !/README.md
 !/grocery/
 !/meal-prep/

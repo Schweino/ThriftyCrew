@@ -20,7 +20,15 @@ if (Test-Path $mmFile) {
   $seen = @{}
   $mm = @(@($rep.mismatch) + @($rep.no_link) | Where-Object { $_ -and ([string]$_.store) -eq 'Family Fare' } | Where-Object { $k = [string]$_.id; if ($seen.ContainsKey($k)) { $false } else { $seen[$k] = $true; $true } })
 }
-else { $mm = @(Get-Content (Join-Path $OutDir 'link-price-mismatch.json') -Raw | ConvertFrom-Json) | Where-Object { $_.store -eq 'Family Fare' } }
+else {
+  # ASSIGN BEFORE WRAPPING (2026-08-08). link-price-mismatch.json is a TOP-LEVEL ARRAY, and @( <pipeline> )
+  # around one wraps the WHOLE array as a single element - measured on the live file: 1 instead of 36. The
+  # Where-Object then tested .store on an ARRAY, which member-enumerates, so `-eq 'Family Fare'` was true
+  # whenever ANY row was Family Fare and the entire 36-row array sailed through as one item. Assigning first
+  # unrolls it. The branch above gets this right because $rep is assigned before its properties are read.
+  $mmRaw = Get-Content (Join-Path $OutDir 'link-price-mismatch.json') -Raw | ConvertFrom-Json
+  $mm = @(@($mmRaw) | Where-Object { $_ -and ([string]$_.store) -eq 'Family Fare' })
+}
 # commodity label + include/exclude for the fallback search (a flyer-only board name like "Tree Ripened Yellow
 # Flesh Peaches, Small" won't exist verbatim in Freshop; the commodity LABEL - "Peaches" - will)
 $cmeta = @{}

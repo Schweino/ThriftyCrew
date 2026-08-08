@@ -113,8 +113,25 @@ if ($SelfTest) {
     Chk 'REFUSES when the spec moved'      ($null -eq (Resolve-BasisRelabel -Canon 'Salsa' -Grams 280 -Buy '2 cups' -Pre $stale)) 'a moved row was rewritten off a stale pre-image'
     Chk 'REFUSES a row with no pre-image'  ($null -eq (Resolve-BasisRelabel -Canon 'Salsa' -Grams 280 -Buy '1 cup' -Pre $null)) 'a row outside the pre-image was swept'
     # An item whose basis did NOT move must produce no edit at all.
-    $noMove = [pscustomobject]@{ Stored = '3.75 cups dry'; DerivedOld = '3.75 cups dry' }
-    Chk 'no edit when the basis did not move' ($null -eq (Resolve-BasisRelabel -Canon 'Rice' -Grams 700 -Buy '3.75 cups dry' -Pre $noMove)) 'rewrote a row whose basis is unchanged'
+    #
+    # DERIVED FROM THE LIVE BASIS, NOT HARD-CODED (2026-08-08). This case used to assert that Rice at 700 g
+    # renders as "3.75 cups dry", which silently encodes 186.67 g/cup. densities.json now says 180, so the
+    # row DID move, the relabel was CORRECT, and the fixture failed while the code was right. Rice has been
+    # an unstable constant here before - 185 in four files against 200 in the food DB - so pinning any
+    # number for it makes this case expire the next time someone touches the entry.
+    # What is actually being tested is the LOGIC: when the freshly derived label equals the stored label,
+    # return no edit. So derive the label from whatever the basis currently is and feed that back in. The
+    # case can then never expire, and it still fails loudly if the no-op path starts rewriting rows.
+    # positional: Get-FriendlyAmt takes ($item, $g), NOT the -Canon/-Grams that Resolve-BasisRelabel uses.
+    # Named-binding them silently yields item='' g=0 and a label of "0 oz", which fails the case for the
+    # wrong reason - it did exactly that on the first attempt at this fix.
+    $noMoveLabel = Get-FriendlyAmt 'Rice' 700
+    if (-not $noMoveLabel) {
+        Chk 'no edit when the basis did not move' $false 'could not derive a label for Rice at 700 g - the fixture cannot run'
+    } else {
+        $noMove = [pscustomobject]@{ Stored = $noMoveLabel; DerivedOld = $noMoveLabel }
+        Chk 'no edit when the basis did not move' ($null -eq (Resolve-BasisRelabel -Canon 'Rice' -Grams 700 -Buy $noMoveLabel -Pre $noMove)) ("rewrote a row whose basis is unchanged (label '$noMoveLabel')")
+    }
 
     # FROZEN FIXTURE: one generator row that must move, one hand-written twin that must not.
     $fx = @'

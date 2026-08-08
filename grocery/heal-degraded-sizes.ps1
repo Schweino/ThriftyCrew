@@ -19,12 +19,18 @@
   Run AFTER carry-forward, BEFORE compare-deals. Idempotent (healed rows no longer qualify).
 #>
 param(
-  [Parameter(Mandatory=$true)][ValidateSet('bakers','aldi','fareway')][string]$Store,
+  [ValidateSet('bakers','aldi','fareway')][string]$Store,
   [int]$MaxDays = 14,
   [string]$RegularDir = "",
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+# -Store is REQUIRED for a real run but must NOT be declared Mandatory (2026-08-08). PowerShell prompts for a
+# missing mandatory parameter, so `-SelfTest` alone could never be invoked: it died with
+# MissingMandatoryParameter on any non-interactive runner. This file's self-test therefore existed and had
+# never once run - the "a fix needs a reachable self-test" class, found the day a change-time gate was added
+# and 4 of 80 self-tests turned out to be unreachable for exactly this reason. Enforced explicitly instead.
+if (-not $SelfTest -and -not $Store) { throw '-Store is required (bakers|aldi|fareway)' }
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $regDir = if ($RegularDir) { $RegularDir } else { Join-Path $root 'out\regular' }
 
