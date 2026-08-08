@@ -257,6 +257,15 @@ function Compress-TcJs {
 # left byte-identical (attribute quoting and whitespace inside tags are load-bearing for the audits' regexes).
 function Compress-TcAsset {
   param([Parameter(Mandatory=$true)][string]$Html)
+  # CRLF -> LF across the WHOLE fragment, first (2026-08-08). The two passes below each normalize line
+  # endings inside their own tag - Compress-TcCss splits on \n and trims, Compress-TcJs does TrimEnd("`r") -
+  # but the markup BETWEEN the tags is deliberately left byte-identical, and these templates are CRLF files.
+  # So exactly the newlines outside a <style>/<script> kept their \r: one of them, the </style>\r\n<script>
+  # boundary, rode into all 542 recipe cards. Ghost normalizes CRLF to LF on the round-trip, so a body
+  # containing one can never read back equal, and publish.ps1's pre-flight then reports every card as
+  # drifted the moment its content genuinely changes. Same class as the __GHOST_URL__ expansion, except
+  # this one we are doing to ourselves - so fix it at the source rather than folding it in the comparison.
+  $Html = $Html -replace "`r`n", "`n" -replace "`r", "`n"
   $h = [regex]::Replace($Html, '(?s)(<style[^>]*>)(.*?)(</style>)', { param($m) $m.Groups[1].Value + (Compress-TcCss $m.Groups[2].Value) + $m.Groups[3].Value })
   $h = [regex]::Replace($h, '(?s)(<script(?![^>]*type=["'']application/(?:json|ld\+json)["''])[^>]*>)(.*?)(</script>)', { param($m) $m.Groups[1].Value + (Compress-TcJs $m.Groups[2].Value) + $m.Groups[3].Value })
   return $h
