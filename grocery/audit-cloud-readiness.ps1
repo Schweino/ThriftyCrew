@@ -27,6 +27,7 @@
 #>
 param([switch]$ShowAll, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\income\grocery' }
 $repo = Split-Path $root -Parent
 $mp   = Join-Path $repo 'meal-prep'
@@ -97,4 +98,5 @@ if ($unsafe.Count -gt $blocking.Count) {
   Write-Output ''
   Write-Output ("off-chain tools that are still local-only (diagnostics/one-offs, not run by the pipeline): {0}" -f (($off | ForEach-Object { $_.name }) -join ', '))
 }
+Write-GuardComplete -Name 'cloud-readiness' -Summary ("safe={0} blocking={1}" -f $safe, $blocking.Count)
 exit $(if ($blocking.Count) { 1 } else { 0 })

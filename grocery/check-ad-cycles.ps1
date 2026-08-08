@@ -801,6 +801,20 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           if (-not $NoAlert) { try { Send-Alert -Subject "Ingredient stores disagree: $($siHard.Count) hard finding(s)" -Body ("meal-prep\pipeline\audit-store-integrity.ps1 found cross-store defects. Each of these means a published number is wrong or a cost line is silently missing.`n`n" + (($siHard | Select-Object -First 15) -join "`n")) | Out-Null } catch {} }
         } else { Log ('store-integrity: no hard findings (' + (@($si | Where-Object { $_ -match '^\s*~' }).Count) + ' warn)') }
       } catch { Log ('audit-store-integrity threw: ' + $_.Exception.Message) }
+      # ---- GUARD CONTRACT (2026-08-08) -------------------------------------------------------------------
+      # Can each DETECTOR in this chain prove it ran to the END? test-auditors once threw 242 checks early,
+      # printed 176 lines of PASS and exited 1 - indistinguishable from an ordinary findings-exit, and the
+      # zero-output rule could not see it because it had produced plenty of output. Detectors now end with a
+      # NAME-COMPLETE line (lib\guard-contract.ps1); this reports the retrofit backlog and hard-fails when a
+      # detector LOSES its marker or a new one joins the chain without one.
+      try {
+        $gc = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-guard-contract.ps1')
+        $gcBad = @($gc | Where-Object { $_ -match '^\s*!' })
+        if ($gcBad.Count) {
+          Log ('guard-contract: ' + ($gcBad -join ' | '))
+          $summary += "REVIEW    $($gcBad.Count) detector(s) can no longer prove they ran to the end (grocery\audit-guard-contract.ps1)"
+        } else { Log ('guard-contract: ' + (@($gc | Where-Object { $_ -match 'chain detector' }) -join '')) }
+      } catch { Log ('audit-guard-contract threw: ' + $_.Exception.Message) }
       # ---- CLOUD READINESS (2026-08-08) ------------------------------------------------------------------
       # Static check that no script in this chain can ONLY read a gitignored key file. Key files do not exist
       # on a runner, so such a script is a cloud failure waiting for its first real run - and the cloud

@@ -18,6 +18,7 @@
 # Usage: audit-db-agreement.ps1 [-SelfTest] [-ShowAll]
 param([switch]$SelfTest,[switch]$ShowAll)
 $ErrorActionPreference='Stop'
+. (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\guard-contract.ps1')
 # CATEGORY CAPS (2026-08-07): each check stops ADDING issues after N and appends a "plus X more" line, so
 # raising only the print cap produced output that showed everything AND still claimed lines were withheld.
 # -ShowAll now lifts the collection caps too, which is what the flag promised.
@@ -249,7 +250,11 @@ if($fallback.Count){
   if($fallback.Count -gt $CAP8){ $issues.Add("... plus $($fallback.Count-8) more cheapest-fallback lines (unmapped bid -> add to no-board-price-ok.json if intentional, else fix the bid)") }
 }
 
-if($issues.Count -eq 0){ Write-Output ("db-agreement: CLEAN ({0} recipes, index==specs)" -f $specSlugs.Count); exit 0 }
+if($issues.Count -eq 0){
+  Write-Output ("db-agreement: CLEAN ({0} recipes, index==specs)" -f $specSlugs.Count)
+  Write-GuardComplete -Name 'db-agreement' -Summary ("recipes={0} issues=0" -f $specSlugs.Count)
+  exit 0
+}
 # The headline used to count only what SURVIVED the category caps, so a default run reported 44 when the
 # real total was 48. The caps are a display convenience; the count must not inherit them.
 $suppressed = 0; $summaryLines = 0
@@ -267,4 +272,5 @@ Write-Output ("db-agreement: {0} drift issue(s){1}" -f ($issues.Count + $suppres
 $cap = if($ShowAll){ $issues.Count } else { 25 }
 $issues | Select-Object -First $cap | ForEach-Object { Write-Output ("  ! " + $_) }
 if($issues.Count -gt $cap){ Write-Output ("  ... {0} more not shown - rerun with -ShowAll" -f ($issues.Count - $cap)) }
+Write-GuardComplete -Name 'db-agreement' -Summary ("issues=" + $issues.Count)
 exit 1

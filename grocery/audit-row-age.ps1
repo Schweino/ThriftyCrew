@@ -27,6 +27,7 @@
 #       .\audit-row-age.ps1 -SelfTest
 param([switch]$SelfTest,[switch]$Baseline,[int]$MaxDays=14,[double]$Tolerance=2.0,[string]$OutDir)
 $ErrorActionPreference='Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if($PSScriptRoot){ $PSScriptRoot } else { 'C:\Codex\income\grocery' }
 if(-not $OutDir){ $OutDir = Join-Path $root 'out' }
 $baselinePath = Join-Path $OutDir 'row-age-baseline.json'
@@ -237,4 +238,5 @@ Write-Output ("row-age: {0} hard finding(s) across {1} store(s)" -f $hard.Count,
 $info | ForEach-Object { Write-Output $_ }
 $hard | ForEach-Object { Write-Output ("  ! " + $_) }
 if(-not $base){ Write-Output '  (no baseline recorded yet - run -Baseline once to arm the ratchet)' }
+Write-GuardComplete -Name 'row-age' -Summary ("stores={0} hard={1}" -f $profiles.Count, $hard.Count)
 exit $(if($hard.Count){ 1 } else { 0 })

@@ -20,6 +20,7 @@
 #       .\audit-store-integrity.ps1 -ShowAll   no per-category cap
 param([switch]$SelfTest,[switch]$ShowAll)
 $ErrorActionPreference='Stop'
+. (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\guard-contract.ps1')
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp   = Split-Path -Parent $here
 
@@ -165,4 +166,5 @@ if($hard.Count -gt $cap){ Write-Output ("  ... {0} more HARD not shown - rerun w
 $warn | Select-Object -First $cap | ForEach-Object { Write-Output ("  ~ " + $_) }
 if($warn.Count -gt $cap){ Write-Output ("  ... {0} more WARN not shown - rerun with -ShowAll" -f ($warn.Count-$cap)) }
 if($hard.Count -eq 0 -and $warn.Count -eq 0){ Write-Output 'store-integrity: CLEAN (ingredient stores agree, cards match their specs)' }
+Write-GuardComplete -Name 'store-integrity' -Summary ("hard={0} warn={1}" -f $hard.Count, $warn.Count)
 exit $(if($hard.Count){ 1 } else { 0 })

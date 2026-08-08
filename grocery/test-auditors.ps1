@@ -3497,6 +3497,17 @@ else {
   if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'identity eval: an EXCLUDE still overrides an include, and a rule-ACCEPTED product still cannot be mined as a clean negative' }
   else { Bad ('export-identity-eval -SelfTest failed (rc=' + $r.rc + ') - the hard-negative labelling rule is broken, so any AUC measured with it is meaningless: ' + ($r.text -replace "`n", ' ')) }
 }
-if ($failed -eq 0) { Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug."); exit 0 }
-Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board."); exit 2
+# COMPLETION MARKER (2026-08-08). This file is the founding case for the whole contract: on 2026-08-08 it
+# threw 242 checks before this point, printed 176 lines of PASS, and exited 1 - indistinguishable from an
+# ordinary findings-exit. The exit code carries the VERDICT; this line carries the fact that the run
+# REACHED THE END. check-ad-cycles requires it before believing a quiet result.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+if ($failed -eq 0) {
+  Write-Output ("test-auditors PASS  ($pass check(s)) - every watcher can still see its own bug.")
+  Write-GuardComplete -Name 'test-auditors' -Summary "pass=$pass failed=0"
+  exit 0
+}
+Write-Output ("test-auditors FAIL  ($failed failed, $pass passed) - a watcher has gone blind. Fix it before trusting a quiet board.")
+Write-GuardComplete -Name 'test-auditors' -Summary "pass=$pass failed=$failed"
+exit 2
 

@@ -34,6 +34,7 @@
 #>
 param([switch]$Quiet)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')   # Write-GuardComplete: proves this run reached the end
 $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')   # THE per-unit math - the same one build-deals-page publishes with
 . (Join-Path $root 'multipack-lib.ps1')   # THE multipack math - the same one build-walmart-deals pre-filters with
@@ -1091,7 +1092,11 @@ if ($fail.Count -gt 0) {
   foreach ($f in $fail) { Write-Output ("  " + $f) }
   Write-Output ''
   Write-Output ("GUARDS FAILED: " + $fail.Count + " hard invariant(s) violated. Board NOT safe to publish.")
+  Write-GuardComplete -Name 'guards' -Summary ("hard=" + $fail.Count + " warn=" + $warn.Count)
   exit 2
 }
 Write-Output 'GUARDS OK: every hard invariant holds. Safe to publish.'
+# COMPLETION MARKER: the exit code says whether the board may publish; this line says the guard reached the
+# end. A crash partway through 40+ invariants would otherwise exit 1 and read like an ordinary verdict.
+Write-GuardComplete -Name 'guards' -Summary ("hard=0 warn=" + $warn.Count)
 exit 0
