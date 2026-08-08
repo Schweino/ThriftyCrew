@@ -1,0 +1,30 @@
+{
+  "readme": "Detectors with NO production caller that are meant to have none. audit-guard-contract.ps1 fails on any detector nothing in production calls, because a guard nobody runs is not a guard - audit-unit-basis-outlier.ps1 sat dead from 2026-07-31 to 2026-08-08 while the board published butter priced from a bottle of pancake syrup, and audit-script-census stayed green the whole time because the one executable naming it was its own test. Reachability now distinguishes a PRODUCTION caller from a TEST caller, and this file is the written statement of which detectors are unwired on purpose. Keyed by NAME alone, unlike the drift allowlists: what is blessed here is a permanent property of the script (it is a manual diagnostic), not a transient state a content hash should re-arm on. Adding a line is a decision someone defends in a diff. If the honest answer is 'this should run', wire it into the chain instead - that is what audit-count-gpu.ps1 and audit-prompt-backup.ps1 got on 2026-08-08.",
+  "schema": 1,
+  "manual": [
+    {
+      "name": "audit-full.ps1",
+      "recorded": "2026-08-08",
+      "recorded_by": "claude",
+      "reason": "A deep read-only exploration of the whole board that prints findings by section for a human to read. It asserts nothing and exits 0 regardless, so wiring it into the chain would add runtime and produce no verdict. Diagnostic, run by hand when investigating."
+    },
+    {
+      "name": "test-unitprice.ps1",
+      "recorded": "2026-08-08",
+      "recorded_by": "claude",
+      "reason": "A debugging tool: runs the engine's own Get-ItemPrice / Get-UnitPrice against SPECIFIC rows named on the command line and shows which branch fired. It has no default work list, so an unattended run would examine nothing. Manual by construction."
+    },
+    {
+      "name": "audit-ff-missing-products.ps1",
+      "recorded": "2026-08-08",
+      "recorded_by": "claude",
+      "reason": "Written 2026-07-14 for one incident: a partial Family Fare pull overwrote the full catalogue and 104 held products vanished. The recurring protection for that class now lives in audit-ff-carry.ps1 and the everyday-file PARTIAL-OVERWRITE rule, both of which DO run. Kept as a forensic tool for the same shape, not a standing check."
+    },
+    {
+      "name": "verify-starthere.ps1",
+      "recorded": "2026-08-08",
+      "recorded_by": "claude",
+      "reason": "A one-shot that verified the /start-here/ page published correctly on 2026-07-26. It checks a single page that has since been stable, and the general case is now covered by audit-ghost-drift. Finished; kept because re-verifying that page by hand is occasionally useful."
+    }
+  ]
+}

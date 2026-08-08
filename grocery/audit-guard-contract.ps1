@@ -68,6 +68,27 @@ function Get-BareVerdictExits { param([string]$Text)
 # usage, and store-coverage SKIPs when there is no built board to examine. A marker on any of these would
 # vouch for a run that examined nothing - the same lie from the other direction. Counted, not blanket-allowed,
 # so a NEW bare exit in one of these files still surfaces.
+# ---- A GUARD WHOSE ONLY CALLER IS ITS OWN TEST IS DEAD (2026-08-08) --------------------------------------
+# audit-script-census already enforces "every script is called by code, or is recorded as a deliberate manual
+# entry point". audit-unit-basis-outlier.ps1 was in NEITHER list and the census was still green, because the
+# one executable naming it was test-auditors.ps1 - its own test. Naming a guard in a test satisfies
+# reachability and runs it exactly never, so the guard sat dead from 07-31 while the board published butter
+# priced from a bottle of pancake syrup.
+#
+# So reachability has to distinguish a PRODUCTION caller from a TEST caller. These files only test or
+# describe other scripts; a reference from one of them proves the guard is TESTED, not that it RUNS.
+$script:TESTER_FILES = @(
+  'test-auditors.ps1', 'test-guards.ps1', 'test-scale-hardening.ps1', 'regression-test.ps1',
+  'audit-script-census.ps1',      # asks who calls what; naming a script is its whole job
+  'audit-guard-contract.ps1'      # this file
+)
+function Test-IsTesterFile { param([string]$Name) return ($script:TESTER_FILES -contains $Name) }
+
+# Detectors that legitimately have no production caller, each with the reason. Keyed by NAME alone, unlike
+# the drift allowlists: what is being blessed here is a permanent property of the script ("this is a manual
+# diagnostic"), not a transient state that a content hash should re-arm on.
+$script:MANUAL_OK = Join-Path $root 'detector-manual-allowlist.json'
+
 $script:BARE_ALLOWED = @{
   'aisle-test.ps1'               = 1   # no -Candidates/-Id/-LiveBoard: "nothing to judge"
   'audit-guard-contract.ps1'     = 1   # -Baseline
@@ -93,6 +114,15 @@ if ($SelfTest) {
   # FROZEN FIXTURE, the half-covered shape: audit-everyday-mismatch exactly as the first retrofit left it.
   # The marker sat BELOW the findings exit, so it proved completion only when it found nothing.
   $half = "if (`$bugs.Count -gt 0) { exit 1 }`nWrite-GuardComplete -Name 'x'`nexit 0"
+  # ---- tested is not the same as run ----
+  # FROZEN from the audit-unit-basis-outlier incident: before 2026-08-08 the ONLY executable naming it was
+  # test-auditors.ps1, it was absent from the census's KNOWN list, and the census was green. It ran never.
+  T 'MUST FIRE  test-auditors is a TESTER, so naming a guard there is not a production call' (Test-IsTesterFile 'test-auditors.ps1') 'counted as production'
+  T 'MUST FIRE  test-guards is a TESTER too' (Test-IsTesterFile 'test-guards.ps1') 'counted as production'
+  T 'the census is a TESTER - naming scripts is its whole job' (Test-IsTesterFile 'audit-script-census.ps1') 'counted as production'
+  T 'CLEAN TWIN the daily chain is NOT a tester - a call from it is a real one' (-not (Test-IsTesterFile 'check-ad-cycles.ps1')) 'chain treated as a test'
+  T 'CLEAN TWIN guards.ps1 is NOT a tester - it delegates for real' (-not (Test-IsTesterFile 'guards.ps1')) 'guards treated as a test'
+
   T 'MUST FIRE  a marker below a conditional verdict exit leaves that exit bare' `
     ((Get-BareVerdictExits $half).Count -eq 1) ("bare=" + (Get-BareVerdictExits $half).Count)
   # CLEAN TWIN: the same file with the marker moved above the verdict block - both paths covered
@@ -128,6 +158,29 @@ foreach ($n in $invoked) {
   $bare  = @(Get-BareVerdictExits $txt)
   $allow = if ($script:BARE_ALLOWED.ContainsKey($n)) { $script:BARE_ALLOWED[$n] } else { 0 }
   if ($bare.Count -gt $allow) { $halfCovered += [pscustomobject]@{ name = $n; lines = $bare; allow = $allow } }
+}
+
+# ---- which detectors on disk have no PRODUCTION caller at all? -------------------------------------------
+$execFiles = @(Get-ChildItem $repo -Recurse -File -Include *.ps1,*.psm1,*.js,*.yml,*.yaml,*.vbs,*.bat,*.cmd -ErrorAction SilentlyContinue |
+               Where-Object { $_.FullName -notmatch '\\worktrees\\|\\archive\\|node_modules|\.venv' })
+$execText = @{}
+foreach ($f in $execFiles) { try { $execText[$f.FullName] = [IO.File]::ReadAllText($f.FullName) } catch { } }
+
+$manualOk = @{}
+if (Test-Path $script:MANUAL_OK) {
+  try { foreach ($m in (Get-Content $script:MANUAL_OK -Raw | ConvertFrom-Json).manual) { $manualOk[[string]$m.name] = [string]$m.reason } } catch { }
+}
+
+$onDisk = @($execFiles | Where-Object { $_.Extension -eq '.ps1' -and (Test-IsDetector $_.Name) -and -not (Test-IsTesterFile $_.Name) })
+$dead = @()
+foreach ($d in $onDisk) {
+  $prod = @()
+  foreach ($f in $execFiles) {
+    if ($f.FullName -eq $d.FullName) { continue }
+    if (Test-IsTesterFile $f.Name) { continue }              # tested is not the same as run
+    if ($execText[$f.FullName] -and $execText[$f.FullName].Contains($d.Name)) { $prod += $f.Name }
+  }
+  if (-not $prod.Count -and -not $manualOk.ContainsKey($d.Name)) { $dead += $d.Name }
 }
 
 $basePath = Join-Path $root 'out\guard-contract-baseline.json'
@@ -169,9 +222,16 @@ foreach ($h in $halfCovered) {
   Write-Output ("  ! HALF-COVERED: {0} has the marker but leaves by {1} unmarked verdict exit(s) at line(s) {2}{3}" -f `
     $h.name, $h.lines.Count, ($h.lines -join ', '), $(if ($h.allow) { " (allowed $($h.allow))" } else { '' }))
 }
+foreach ($d in $dead) {
+  Write-Output ("  ! DEAD: {0} is a detector that NOTHING in production calls - only its own tests, or nothing at all" -f $d)
+}
+if ($dead.Count) {
+  Write-Output '  A guard nobody runs is not a guard. Wire it into the chain, or record it in'
+  Write-Output ("  {0} with the reason it is a manual tool." -f (Split-Path $script:MANUAL_OK -Leaf))
+}
 if (-not (Test-Path $basePath)) { Write-Output '  (no baseline yet - run -Baseline once to arm the ratchet)' }
 
 . (Join-Path $repo 'lib\guard-contract.ps1')
-Write-GuardComplete -Name 'guard-contract' -Summary ("covered={0} backlog={1} regressed={2} half={3}" -f `
-  $covered.Count, $uncovered.Count, ($regressed.Count + $newBare.Count), $halfCovered.Count)
-exit $(if ($regressed.Count -or $newBare.Count -or $halfCovered.Count) { 1 } else { 0 })
+Write-GuardComplete -Name 'guard-contract' -Summary ("covered={0} backlog={1} regressed={2} half={3} dead={4}" -f `
+  $covered.Count, $uncovered.Count, ($regressed.Count + $newBare.Count), $halfCovered.Count, $dead.Count)
+exit $(if ($regressed.Count -or $newBare.Count -or $halfCovered.Count -or $dead.Count) { 1 } else { 0 })

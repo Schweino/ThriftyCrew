@@ -895,6 +895,22 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           if (-not $NoAlert) { try { Send-Alert -Subject "Recipe batch stalled with stages unfinished" -Body ("A recipe batch was opened, ran part-way, and went quiet. Whatever it published is live WITHOUT the stages below having completed - the post-publish review is the one that has silently failed before.`n`n" + ($blBad -join "`n")) | Out-Null } catch {} }
         } else { Log 'batch-ledger: no stalled batches' }
       } catch { Log ('batch-ledger threw: ' + $_.Exception.Message) }
+
+      # ---- COUNT-UNIT gpu guard (2026-08-08). Existed since 08-06 and NOTHING called it: the shared
+      # "Tortilla" row carried gpu 45 with unit 'each' against a 300 g 10ct pack, and "each == each" passes
+      # the gpu reconciler unconditionally, so count-priced gpu was never checked by anything that runs.
+      try {
+        $cg = (& powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-count-gpu.ps1') | ForEach-Object { [string]$_ }) -join "`n"
+        $cgRc = $LASTEXITCODE
+        if ($cg -notmatch '(?m)^COUNT-GPU-COMPLETE') {
+          Log ('count-gpu DID NOT RUN TO THE END (rc=' + $cgRc + ') - no completion marker, so its verdict proves nothing')
+          $summary += 'REVIEW    count-gpu did not finish - count-unit gpu rows went unchecked'
+        } elseif ($cgRc -eq 0) { Log 'count-gpu: every count-unit row agrees with its package' }
+        else {
+          Log ('count-gpu rc=' + $cgRc)
+          $summary += 'REVIEW    a count-unit ingredient row disagrees with its own package size'
+        }
+      } catch { Log ('count-gpu threw: ' + $_.Exception.Message) }
       # ---- PER-ROW STALENESS (2026-08-07) ----------------------------------------------------------------
       # guards.ps1 guard 9 tests the AGE OF THE FILE, and every puller rewrites its file daily, so that check
       # passes every run while the rows INSIDE age independently - each store carries forward whatever it could
@@ -1651,6 +1667,30 @@ try {
     }
   }
 } catch { Log ('ghost-drift weekly threw: ' + $_.Exception.Message) }
+
+# ---- WEEKLY: are the agent prompts and scheduled-task SKILLs still backed up and current? ----
+# ops\audit-prompt-backup.ps1 existed since 2026-07-31 and NOTHING called it. The prompts the triage agents
+# run on are code, they live outside this repo in ~\.claude\, and the only thing proving they are backed up
+# was a script nobody invoked. Weekly, because prompts change on the scale of someone editing one.
+try {
+  $pbStampF = Join-Path $root 'prompt-backup-weekly-stamp.txt'
+  $pbLast = [datetime]'2000-01-01'
+  if (Test-Path $pbStampF) { try { $pbLast = [datetime](Get-Content $pbStampF -TotalCount 1) } catch {} }
+  if (((Get-Date) - $pbLast).TotalDays -ge 7) {
+    $pb = (& powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'ops\audit-prompt-backup.ps1') | ForEach-Object { [string]$_ }) -join "`n"
+    $pbRc = $LASTEXITCODE
+    (Get-Date -Format 'yyyy-MM-dd') | Set-Content $pbStampF -Encoding ascii
+    if ($pb -notmatch '(?m)^PROMPT-BACKUP-COMPLETE') {
+      Log ('prompt-backup weekly DID NOT RUN TO THE END (rc=' + $pbRc + ') - no completion marker')
+      $summary += 'REVIEW    prompt-backup weekly did not finish - agent prompt backups went unverified'
+    } elseif ($pbRc -eq 0) { Log 'prompt-backup weekly: every live agent prompt and scheduled-task SKILL is backed up and current' }
+    else {
+      Log ('prompt-backup weekly rc=' + $pbRc)
+      $summary += 'REVIEW    an agent prompt or scheduled-task SKILL is not backed up (or the backup is stale)'
+      if (-not $NoAlert) { Send-Alert -Subject 'Ops: an agent prompt is not backed up' -Body ("ops\audit-prompt-backup.ps1 proves the agent prompts and scheduled-task SKILLs - which are CODE and live outside this repo - are backed up to ops\prompt-backup and identical across scopes. Exit " + $pbRc + ": 2 = drift or missing, 3 = BLIND (found nothing to check, which is a pass that proves nothing).`n`n" + $pb) | Out-Null }
+    }
+  }
+} catch { Log ('prompt-backup weekly threw: ' + $_.Exception.Message) }
 
 # ---- WEEKLY: do the store SEARCH templates still resolve? ----
 # The all-3 rule guarantees every priced chip carries a link; nothing guaranteed the link WORKED. Family

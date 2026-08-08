@@ -18,7 +18,8 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $root = Split-Path $here -Parent
 $apiUrl = 'https://map-to-success.ghost.io'
 $pubBase = 'https://www.thriftycrew.com'
-. (Join-Path $PSScriptRoot '..\..\lib\ghost-lib.ps1')   # Get-GhostJWT + Invoke-GhostApi (timeout/retry)
+. (Join-Path $PSScriptRoot '..\..\lib\ghost-lib.ps1')
+. (Join-Path $PSScriptRoot '..\..\lib\ghost-drift-lib.ps1')   # Get-PublishedContentHash / Get-CanonicalBody for the pre-flight
 # THE KEY COMES FROM Get-GhostKey, WHICH CHECKS $env:GHOST_ADMIN_KEY FIRST (2026-08-08). This line used to
 # read meal-prep\.ghostkey directly, one line ABOVE the dot-source that provides the env-aware helper - so
 # every other publisher in the daily chain (publish-deals-page, send-price-alerts, top5-weekly,
@@ -66,6 +67,41 @@ foreach($slug in $Slugs){
     # CHANGE GATE: an existing post whose content bytes match the last verified publish is skipped
     # (visibility is deliberately NOT in the hash - the rotation owns it and its flip is not a content change).
     if($existing -and (-not $Force) -and ($pubHashes[$slug] -eq $contentHash)){ $skipped++; Write-Output ("UNCHANGED  $slug"); continue }
+
+    # ---- PRE-FLIGHT: never overwrite a live body that no longer matches what we published (2026-08-08) ----
+    # This PUT replaces the whole card. The change gate above compares LOCAL to the ledger; it says nothing
+    # about whether LIVE still holds what the ledger records. So a card fixed by hand in Ghost admin, or one
+    # left half-written by a PUT that failed after the body, gets silently overwritten by the next ordinary
+    # republish - and the fix disappears with no trace. publish-tool-post.ps1 grew the same guard for the 16
+    # tool pages; this is the same guard for the 542 recipe cards.
+    # It costs one extra GET, and ONLY on slugs that are actually about to be written: the unchanged path
+    # above has already returned, so a routine run that republishes nothing pays nothing.
+    if($existing -and -not $Force -and $pubHashes.ContainsKey($slug) -and $pubHashes[$slug]){
+      try {
+        $jwt = New-GhostJWT
+        $liveP = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/$($existing.id)/?formats=lexical&fields=id,title,custom_excerpt,codeinjection_head,lexical" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).posts[0]
+        if($liveP -and $liveP.lexical){
+          $liveLex = $liveP.lexical | ConvertFrom-Json
+          $liveBody = ''
+          foreach($c in $liveLex.root.children){ if($c.type -eq 'html' -and $c.html){ $liveBody += [string]$c.html } }
+          if($liveBody){
+            $liveHash = Get-PublishedContentHash -Body $liveBody -Head ([string]$liveP.codeinjection_head) -Name ([string]$liveP.title) -Desc ([string]$liveP.custom_excerpt)
+            if($liveHash -ne $pubHashes[$slug]){
+              # Ghost expands stored site-relative hrefs to absolute on read, so a card containing an internal
+              # link can never hash equal however faithfully it was published. Fold that one transformation
+              # before calling it drift - measured 4 of 542 on the first sweep, every one exactly the host.
+              $lastBody = [IO.File]::ReadAllText((Join-Path $root "db\built\$slug.body.html"), [Text.Encoding]::UTF8)
+              if((Get-CanonicalBody $lastBody) -ne (Get-CanonicalBody $liveBody)){
+                $failed += $slug
+                Write-Output ("REFUSING  $slug  - the LIVE card no longer matches what we last published, so this PUT would DELETE whatever changed it.")
+                Write-Output ("          live body {0} bytes vs built {1}. Look first (grocery\audit-ghost-drift.ps1 -Recipes), then re-run with -Force if you mean to overwrite it." -f $liveBody.Length, $lastBody.Length)
+                continue
+              }
+            }
+          }
+        }
+      } catch { Write-Output ("  pre-flight check could not read $slug live ($($_.Exception.Message)) - publishing anyway") }
+    }
 
     $lexObj = @{ root = [ordered]@{ children=@([ordered]@{ type='html'; version=1; html=[string]$body }); direction=$null; format=''; indent=0; type='root'; version=1 } }
     $lex = ConvertTo-Json $lexObj -Depth 12 -Compress

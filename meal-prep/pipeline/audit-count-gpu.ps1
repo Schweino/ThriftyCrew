@@ -51,6 +51,7 @@ param(
   [switch]$Quiet
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\guard-contract.ps1')
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp   = Split-Path -Parent $here
 if(-not $IngredientsFile){ $IngredientsFile = Join-Path $mp 'db\ingredients.json' }
@@ -253,5 +254,5 @@ if(-not $Quiet){
   foreach($f in $warn){ Write-Output ("  WARN [{0}] {1}: {2}" -f $f.check, $f.item, $f.msg) }
   if($hard.Count -eq 0 -and $warn.Count -eq 0){ Write-Output '  clean' }
 }
-if($hard.Count -gt 0){ exit 1 }
-exit 0
+if($hard.Count -gt 0){ Write-GuardComplete -Name 'count-gpu'; exit 1 }
+Write-GuardComplete -Name 'count-gpu'; exit 0

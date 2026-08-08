@@ -21,6 +21,7 @@
 #>
 param([switch]$Sync, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root   = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $backup = Join-Path $root 'prompt-backup'
 $PROJ   = 'C:\Codex\.claude\agents'
@@ -142,8 +143,8 @@ if ($res.checked -eq 0) {
   Write-Output 'PROMPT-BACKUP BLIND: found ZERO live prompts to check. Either the .claude paths moved or this ran somewhere without them - a clean result here would mean nothing.'
   exit 3
 }
-if ($res.issues.Count -eq 0) { Write-Output '  ok - every live agent prompt and scheduled-task SKILL is backed up, current, and identical across scopes'; exit 0 }
+if ($res.issues.Count -eq 0) { Write-Output '  ok - every live agent prompt and scheduled-task SKILL is backed up, current, and identical across scopes'; Write-GuardComplete -Name 'prompt-backup'; exit 0 }
 Write-Output ("  " + $res.issues.Count + " issue(s):")
 foreach ($i in $res.issues) { Write-Output ("    " + $i) }
 Write-Output '  Fix: run this with -Sync (live -> repo, and project scope -> user scope), then commit ops\prompt-backup.'
-exit 2
+Write-GuardComplete -Name 'prompt-backup'; exit 2
