@@ -165,7 +165,7 @@ def align(lines, marks):
     return out, drift
 
 
-def find_hesitations(lines, marks, floor=0.25):
+def find_hesitations(lines, marks, floor=0.12):
     """Pauses the SCRIPT did not ask for.
 
     The engine sometimes stops in the middle of a phrase, and when it does it sounds like the
@@ -178,7 +178,14 @@ def find_hesitations(lines, marks, floor=0.25):
     punctuation to justify them. It WARNS rather than fails: the engine's own phrase breaks are
     legitimate and vary with wording, so this is a "go and listen to this spot" signal, not a gate.
     Rephrasing is the fix; contractions ("Here's") and a different opener ("This is") both measured
-    clean on the founding case."""
+    clean on the founding case.
+
+    THE FLOOR IS 0.12s, AND IT WAS 0.25s FOR ONE BUILD TOO LONG. At 0.25 this reported a clean sheet
+    on a take where Brad heard two defects: a 0.149s break inside "twenty three eighty", which split
+    the number into "twenty-three" and "eighty", and a 0.149s one isolating "so" before "come". Both
+    were real, both were audible, both sat under the threshold. The ordinary gap between words in
+    these renders is 0.000-0.014s, so anything past ~0.12s is already an order of magnitude out and
+    worth a human ear. Setting the floor where nothing fires is not the same as nothing being wrong."""
     written = " ".join(ln["text"].strip() for ln in lines).split()
     out, wi = [], 0
     for i in range(1, len(marks)):
@@ -192,10 +199,39 @@ def find_hesitations(lines, marks, floor=0.25):
         if wi >= len(written):
             continue
         if not any(ch in written[wi] for ch in ".,?!;:"):
+            nxt = norm(marks[i]["text"])
             out.append({"after": marks[i - 1]["text"], "before": marks[i]["text"],
                         "gap": round(gap, 3),
-                        "at": round(marks[i]["offset"] / TICKS_PER_SECOND, 2)})
+                        "at": round(marks[i]["offset"] / TICKS_PER_SECOND, 2),
+                        "suspicious": _is_suspicious(prev, nxt, gap)})
     return out
+
+
+# Words that carry no stress: a pause straight after one is the engine stranding it, never a breath.
+FUNCTION_WORDS = {"so", "and", "but", "or", "the", "a", "an", "to", "of", "is", "it", "in", "on",
+                  "at", "for", "that", "this", "here", "there", "with", "from", "as", "if"}
+NUMBER_WORDS = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+                "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen",
+                "seventeen", "eighteen", "nineteen", "twenty", "thirty", "forty", "fifty",
+                "sixty", "seventy", "eighty", "ninety", "hundred", "thousand"}
+
+
+def _is_suspicious(prev, nxt, gap):
+    """Which unjustified pauses are actually WRONG, as opposed to the engine breathing.
+
+    Learned from the two Brad caught that a plain size threshold missed, both at 0.149s:
+      - a break INSIDE a spelled number ("twenty three | eighty") splits one figure into two, and on
+        a channel that reads prices aloud that is the worst place a pause can land;
+      - a break straight after an unstressed function word ("so | come") strands it, which is what
+        made "Here | is" sound like a hesitation too.
+    Everything else at this size lands at a constituent edge, before a proper noun or a long number
+    or a prepositional phrase, which is where a person breathes. Those are recorded but not warned
+    about, because a warning that fires six times a build is one nobody reads."""
+    if prev in NUMBER_WORDS and nxt in NUMBER_WORDS:
+        return True
+    if prev in FUNCTION_WORDS:
+        return True
+    return gap > 0.30
 
 
 def main():
@@ -245,8 +281,10 @@ def main():
     if drift:
         print("WARNING: %d word(s) could not be matched during alignment" % drift, file=sys.stderr)
     for h in hes:
-        print("HESITATION: %.3fs between '%s' and '%s' at %.1fs, with no punctuation asking for it. "
-              "Rephrase that line." % (h["gap"], h["after"], h["before"], h["at"]), file=sys.stderr)
+        if h["suspicious"]:
+            print("HESITATION: %.3fs between '%s' and '%s' at %.1fs, with no punctuation asking for "
+                  "it, and in a place a person would not breathe. Rephrase that line."
+                  % (h["gap"], h["after"], h["before"], h["at"]), file=sys.stderr)
     print(args.out + ".timing.json")
 
 

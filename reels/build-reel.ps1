@@ -398,7 +398,7 @@ $moneyClass = if ($moneyBatch.Length -gt 5) { 'money sm' } else { 'money' }
 # to the question's end stretches it again. The rise the question buys is worth less than the two
 # defects it drags in, and the number on the card is doing the hook's work visually anyway.
 Add-Scene -Dark -Id 'hook' `
-  -Vo "One batch makes $(ConvertTo-Words $servings) dinners for $speakBatch, so come and see how." `
+  -Vo "Come and see how one batch makes $(ConvertTo-Words $servings) dinners for $speakBatch." `
   -Caption "$servings dinners for $moneyBatch." `
   -Body ('<div class="eyebrow">Omaha &middot; this week</div>' +
          '<div class="hookline">' + $servings + ' dinners for</div>' +
