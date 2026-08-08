@@ -73,7 +73,7 @@
     "Yellow Onion": { "each": 110, "cup": 115, "small": 70, "large": 150 },
     "Red Onion": { "each": 110, "cup": 115, "small": 70, "large": 150 },
     "Green Onions": { "each": 15, "bunch": 90, "cup": 50, "tbsp": 6, "stalk": 15 },
-    "Garlic": { "clove": 5, "tbsp": 8.5, "tsp": 2.8, "each": 5, "head": 40, "cup": 136 },
+    "Garlic": { "clove": 3, "tbsp": 8.5, "tsp": 2.8, "each": 3, "head": 40, "cup": 136, "note": "clove 5 -> 3 g on 2026-08-08. USDA FoodData Central gives garlic raw as 3 g per clove and 136 g per cup; this entry's cup/tbsp/tsp were ALREADY the USDA set (136, 136/16=8.5, 8.5/3=2.8) and only the clove disagreed. It was also internally inconsistent: head 40 over clove 5 implies 8 cloves per head, where a head has 10-12 (40/3 = 13). No note ever recorded a basis for 5. Affects 68 ingredient lines; the 362 tbsp lines were already right. 'each' moved with it because nothing uses it and it plainly meant a clove." },
     "Ginger": { "tbsp": 6, "tsp": 2, "each": 15, "inch": 6, "slice": 3 },
     "Green Bell Peppers": { "each": 120, "cup": 92 },
     "Red Bell Pepper": { "each": 120, "cup": 92 },

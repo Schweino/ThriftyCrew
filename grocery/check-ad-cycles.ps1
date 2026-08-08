@@ -38,8 +38,17 @@ function DT([string]$s) { try { return ([datetime]$s).Date } catch { return $nul
 # Proved the hard way twice in one afternoon by a `tail -f` on this file; an editor with the log open, a
 # backup, or an antivirus scan does exactly the same. Retry briefly, then carry on WITHOUT the line: a lost
 # log line is a small loss, an abandoned board pull halfway through publishing is a real one.
+# ON A RUNNER, ALSO SAY IT OUT LOUD (2026-08-08). Every Log line goes to a FILE, which is the right default
+# on Brad's machine and useless in the cloud: the GitHub Actions run is 68 minutes of blank console followed
+# by a green tick, and the log file it wrote is inside a container that is then destroyed. There is no way to
+# see where a slow run is, and no way to read the trail of one that failed. Mirroring to the console when
+# GITHUB_ACTIONS is set makes the cloud run legible without changing a single line of local behaviour.
+# Write-Host, not Write-Output: this script's stdout is captured by callers in places, and a narration line
+# leaking into a captured result is how a parser starts reading log text as data.
+$script:EchoLog = ($env:GITHUB_ACTIONS -eq 'true' -or $env:CI -eq 'true')
 function Log([string]$m) {
   $line = ("[" + (Get-Date).ToString('s') + "] ") + $m
+  if ($script:EchoLog) { try { Write-Host $line } catch {} }
   for ($i = 0; $i -lt 5; $i++) {
     try { Add-Content -Path $LogFile -Value $line -ErrorAction Stop; return } catch { Start-Sleep -Milliseconds 120 }
   }
