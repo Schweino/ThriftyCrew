@@ -383,8 +383,14 @@ $moneyClass = if ($moneyBatch.Length -gt 5) { 'money sm' } else { 'money' }
 # ${speakBatch} rather than $speakBatch below: "?" is a LEGAL character in a PowerShell variable name,
 # so "$speakBatch?" parses as a variable called speakBatch?, and fails at runtime rather than at parse
 # time. Any interpolation immediately followed by punctuation needs the braces.
+#
+# WORD ORDER IN THIS LINE IS LOAD-BEARING. "...dinners out of one batch for X?" left "batch" at a
+# phrase edge, and this engine lengthens the word before a break: it stretched to 0.598s, near enough
+# the 0.611s it spends on a SENTENCE-FINAL "batch", against 0.326s for a typical one-syllable word.
+# Brad heard that as "one baaaatch". Followed by "makes" instead, the same word measures 0.408s and
+# the drag is gone. Word duration tracks the gap that follows it, so the phrasing fixes both at once.
 Add-Scene -Dark -Id 'hook' `
-  -Vo "$(ConvertTo-Words $servings) dinners out of one batch for ${speakBatch}? Come and see how." `
+  -Vo "One batch makes $(ConvertTo-Words $servings) dinners for ${speakBatch}? Come and see how." `
   -Caption "$servings dinners for $moneyBatch." `
   -Body ('<div class="eyebrow">Omaha &middot; this week</div>' +
          '<div class="hookline">' + $servings + ' dinners for</div>' +
@@ -394,7 +400,7 @@ Add-Scene -Dark -Id 'hook' `
 # 2. title
 $dek = if ($cuisine) { "$cuisine &middot; $servings servings" } else { "$servings servings" }
 Add-Scene -Id 'title' `
-  -Vo "This one is $name, and one batch makes $(ConvertTo-Words $servings) dinners." `
+  -Vo "This one is called $name." `
   -Caption (HtmlEnc $name) `
   -Body ('<div class="' + $titleClass + '">' + (HtmlEnc $name) + '</div><div class="dek">' + $dek + '</div>')
 
