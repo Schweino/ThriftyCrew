@@ -1755,6 +1755,45 @@ try {
   }
 } catch { Log ('everyday-mismatch threw: ' + $_.Exception.Message) }
 
+# ---- THE SAME COMMODITY MUST NOT BE PUBLISHED ON BOTH BOARDS ----
+# recipe-overlay (line ~699) drops any recipe row whose commodity also lives on the weekly board, and since
+# 2026-08-08 it resolves the two id spellings through recipe-floor-id-map.json. This is the independent
+# second opinion on that, and it exists because the de-dup was silently half-blind for 9 days: it compared
+# raw ids, the namespaces spell 33 shared commodities differently, and the site served two prices for the
+# same product (beef chuck roast at Family Fare, $8.49 against $10.99). Re-deriving the collision set from
+# the data every run means the next mapping added without teaching the de-dup about it fires HERE instead
+# of reaching a shopper.
+# ADVISORY IN THE CHAIN, on purpose and against my instinct. The condition is a genuine correctness defect
+# and the script exits 2 for it, but this gate is one day old and runs inside the unattended 6:30am job; a
+# brand-new check that can halt that run is the failure this estate has already had once. It reports loudly
+# now, and can be promoted to a hold once it has a clean history behind it.
+# Placed after everyday-mismatch so the comparison is final, and before the coverage ratchet so its row is
+# on the ledger when the ratchet reads it. No 2>&1 (EAP=Stop turns a child's first stderr line into a throw).
+try {
+  $brPath = Join-Path $root 'audit-board-reconciliation.ps1'
+  if (Test-Path $brPath) {
+    $brOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $brPath -OutDir $OutDir
+    $brRc  = $LASTEXITCODE
+    foreach ($l in @($brOut)) { Log ('board-reconciliation: ' + $l) }
+    if ($brRc -eq 2) {
+      # [regex]::Match, NOT -match + $Matches: $Matches is GLOBAL and this file reads it elsewhere.
+      $brM = [regex]::Match((@($brOut) -join "`n"), 'PUBLISHED ON BOTH BOARDS:\s*(\d+)')
+      $brN = if ($brM.Success) { $brM.Groups[1].Value } else { 'some' }
+      $summary += ('REVIEW    board-reconciliation: ' + $brN + ' commodity(ies) are published on BOTH boards - the site is showing two prices for the same product; see out\board-reconciliation.json')
+    }
+    elseif ($brRc -eq 1) {
+      $summary += 'REVIEW    board-reconciliation: the boards are de-duplicated but a price or basis contradiction remains; see out\board-reconciliation.json'
+    }
+    elseif ($brRc -eq 3) {
+      $summary += 'REVIEW    board-reconciliation could not evaluate - nothing proved this cycle about the same fact being published twice'
+    }
+    elseif ($brRc -ne 0) {
+      Log ("board-reconciliation: DID NOT RUN - exit $brRc with " + @($brOut).Count + ' output line(s)')
+      $summary += 'REVIEW    board-reconciliation did not complete - duplicate-commodity publishing went unchecked this cycle'
+    }
+  }
+} catch { Log ('board-reconciliation threw: ' + $_.Exception.Message) }
+
 # ---- RESCUE WORKLIST FOR THE WALLED STORES (Walmart, Sam's, Aldi, Fareway) ----
 # The four walled stores are captured by hand through a browser, and compare-deals hands each commodity to
 # the FRESHEST capture in a 14-day window OUTRIGHT. Two things fall out of that and nothing used to turn
