@@ -3,7 +3,7 @@
   purpose, assert guards.ps1 exits 2, then restore and assert it exits 0 again.
   Every mutation is made on a COPY-then-restore basis; nothing is left changed.
 #>
-param([switch]$SelfTest)
+param([switch]$SelfTest, [switch]$AllowLiveTree)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = $PSScriptRoot
@@ -137,6 +137,27 @@ $null = Register-EngineEvent PowerShell.Exiting -Action { RestoreAll } -ErrorAct
 # make the damage permanent at the next restore.
 $recovered = JournalRecover
 if ($recovered -gt 0) { Write-Output ("test-guards: recovered $recovered abandoned mutation(s) before starting - run ``git status`` and confirm the tree is clean") }
+
+# ---- REFUSE TO MUTATE THE LIVE TREE (2026-08-08) --------------------------------------------------------
+# This suite tests by BREAKING production files and putting them back, so run-test-guards-weekly.ps1 exists
+# to robocopy the tree into %TEMP% and run it there - a crash then costs a temp directory instead of a
+# mutated repo. That runner has been right since 2026-07-30. The hole was that NOTHING stopped anyone from
+# invoking this file directly against the real tree, which is exactly what happened on 2026-08-08: a direct
+# run was killed by a 10-minute timeout and left guard 19's price_mode='delivery' fixture on the LIVE
+# out\regular\aldi-regular-2026-08-05.json. out\ is gitignored, so no `git status` showed it; the next
+# guards run read it and hard-failed "Aldi is shipping delivery prices - Board NOT safe to publish", which
+# reads as a bad pull and nearly bought a pointless browser re-pull of the store.
+# The hermetic copy lives under %TEMP%, so "am I under %TEMP%?" is the whole test.
+$underTemp = $PSScriptRoot.TrimEnd('\').ToLower().StartsWith(([IO.Path]::GetTempPath()).TrimEnd('\').ToLower())
+if (-not $underTemp -and -not $AllowLiveTree) {
+  Write-Output 'test-guards: REFUSING to run against the live tree.'
+  Write-Output ("  This suite mutates production files and restores them, and a killed run leaves the mutation behind - " +
+                "including under out\, which is gitignored and so shows in no git status.")
+  Write-Output '  Use the hermetic runner instead:   .\run-test-guards-weekly.ps1'
+  Write-Output '  (It robocopies the tree to %TEMP% and runs the suite in the copy; a crash costs a temp directory.)'
+  Write-Output '  To override deliberately, re-run with -AllowLiveTree.'
+  exit 3
+}
 
 function RunGuardsOut {
   # -Quiet still prints every HARD FAIL line (guards.ps1's report loop emits fail lines with bare

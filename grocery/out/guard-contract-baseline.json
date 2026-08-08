@@ -1,40 +1,42 @@
 ﻿{
     "covered":  [
-                    "audit-cloud-readiness.ps1",
-                    "audit-db-agreement.ps1",
-                    "audit-row-age.ps1",
-                    "audit-schema-constraints.ps1",
-                    "audit-store-integrity.ps1",
-                    "guards.ps1",
-                    "test-auditors.ps1"
-                ],
-    "recorded":  "2026-08-08",
-    "backlog":  [
                     "aisle-test.ps1",
                     "audit-basis-reconcile.ps1",
                     "audit-board-consistency.ps1",
                     "audit-capture-eviction.ps1",
                     "audit-category-coverage.ps1",
+                    "audit-cloud-readiness.ps1",
                     "audit-coverage-gaps.ps1",
                     "audit-coverage-ledger.ps1",
+                    "audit-db-agreement.ps1",
                     "audit-everyday-mismatch.ps1",
                     "audit-ff-carry.ps1",
+                    "audit-ghost-drift.ps1",
                     "audit-match-soundness.ps1",
                     "audit-name-drift.ps1",
                     "audit-pack-basis.ps1",
+                    "audit-row-age.ps1",
                     "audit-sale-fallback.ps1",
+                    "audit-schema-constraints.ps1",
                     "audit-search-links.ps1",
                     "audit-semantic-identity.ps1",
                     "audit-spec-contradictions.ps1",
                     "audit-store-coverage.ps1",
+                    "audit-store-integrity.ps1",
                     "audit-store-registry.ps1",
                     "audit-store-taxonomy.ps1",
                     "audit-tile-integrity.ps1",
                     "audit-walmart-fullpull.ps1",
                     "batch-ledger.ps1",
                     "golden-test.ps1",
+                    "guards.ps1",
                     "sanity-check.ps1",
+                    "test-auditors.ps1",
                     "test-guards.ps1",
                     "verify-apply.ps1"
+                ],
+    "recorded":  "2026-08-08",
+    "backlog":  [
+
                 ]
 }

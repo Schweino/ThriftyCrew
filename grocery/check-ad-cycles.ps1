@@ -1596,6 +1596,39 @@ try {
   }
 } catch { Log ('test-guards weekly threw: ' + $_.Exception.Message) }
 
+# ---- WEEKLY: does each live tool page still match the local source it was published from? ----
+# The 16 tool posts are a single lexical html card whose body is a local *-tool.html. publish-tool-post.ps1
+# now refuses to overwrite a live body that differs from local, which covers the dangerous path - but only
+# the path that goes THROUGH the publisher. A hand-edit in Ghost admin never touches it, so that edit would
+# sit unnoticed until someone republished and silently deleted it. This is the sweep for that second path.
+# WEEKLY, not daily: it is 16 admin-API round trips, and a tool page changes on the scale of someone editing
+# it, not a day. Stamp-gated on >=7 days like test-guards above, so a missed week self-heals on the next
+# daily run. ADVISORY - drift on a tool page is never a reason to hold the grocery board.
+# NO 2>&1, for the reason spelled out at the test-guards call above.
+try {
+  $gdStampF = Join-Path $root 'ghost-drift-weekly-stamp.txt'
+  $gdLast = [datetime]'2000-01-01'
+  if (Test-Path $gdStampF) { try { $gdLast = [datetime](Get-Content $gdStampF -TotalCount 1) } catch {} }
+  if (((Get-Date) - $gdLast).TotalDays -ge 7) {
+    $gd = (& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-ghost-drift.ps1') -ShowDiff | ForEach-Object { [string]$_ }) -join "`n"
+    $gdRc = $LASTEXITCODE
+    (Get-Date -Format 'yyyy-MM-dd') | Set-Content $gdStampF -Encoding ascii   # stamp even on failure: one alert per week
+    # the completion contract: a marker-less run died part way, whatever its exit code said
+    if ($gd -notmatch '(?m)^GHOST-DRIFT-COMPLETE') {
+      Log ('ghost-drift weekly DID NOT RUN TO THE END (rc=' + $gdRc + ') - no completion marker, so its verdict proves nothing')
+      $summary += 'REVIEW    ghost-drift weekly did not finish - live tool pages went unchecked this week'
+    } elseif ($gdRc -eq 0) { Log 'ghost-drift weekly: every live tool page still matches its local source' }
+    else {
+      Log ('ghost-drift weekly rc=' + $gdRc)
+      $summary += 'REVIEW    a live tool page no longer matches its local source - republishing it would delete the difference'
+      if (-not $NoAlert) {
+        $gdSubject = if ($gdRc -eq 3) { 'Tools: ghost-drift could not evaluate (no key, or a page could not be read)' } else { 'Tools: a live page has drifted from its local source' }
+        Send-Alert -Subject $gdSubject -Body ("audit-ghost-drift.ps1 compares each live Ghost html card against the local *-tool.html it was published from. Exit " + $gdRc + ": 1 = at least one page differs, so republishing it from local would DELETE the live-only content (fold the change into the local source, or record it with -Accept <slug> and a reason); 3 = could not evaluate, nothing was proven. publish-tool-post.ps1 already refuses to overwrite an unreviewed difference, so this is the sweep for edits made directly in Ghost admin.`n`n" + $gd) | Out-Null
+      }
+    }
+  }
+} catch { Log ('ghost-drift weekly threw: ' + $_.Exception.Message) }
+
 # ---- WEEKLY: do the store SEARCH templates still resolve? ----
 # The all-3 rule guarantees every priced chip carries a link; nothing guaranteed the link WORKED. Family
 # Fare's search template 404'd on 20 live chips in public/board.json (2026-08-02) and no guard could see it,

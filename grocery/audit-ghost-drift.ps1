@@ -3,19 +3,24 @@
 
   WHY THIS EXISTS (2026-08-08). Sixteen tools are published as a single lexical html card whose body is a
   local file (publish-tool-post.ps1 -Slug <slug> -File <name>-tool.html). Nothing ever checked afterwards
-  that the live card still equals that file. Two of the sixteen had already drifted: my-crew and
-  cheapest-protein carry absolute https://www.thriftycrew.com/... links in their "All the tools" nav where
-  the local sources carry relative /... links (19 links x 27 chars = 513 bytes, and 1 x 27 = 27 bytes -
-  the deltas reconcile exactly, so nothing else differs).
+  that the live card still equals that file, so a hand-edit in Ghost admin - or any live-only fix - would sit
+  there until someone republished from local and silently deleted it. That is the class this sweeps for.
 
-  Neither is broken for a reader, and that is the point: this class is SILENT. The damage is directional and
-  arrives later - the next person to republish my-crew from local, for any unrelated reason, silently reverts
-  19 live links, and nothing would have said so. Once local and live disagree, "which copy is right?" becomes
-  archaeology, and the estate has already paid for that lesson with the recipe cards.
+  IT FOUND NO DRIFT ON ITS FIRST RUN, AND THE FIRST VERSION WAS WRONG TO SAY OTHERWISE. It reported my-crew
+  (+513 bytes) and cheapest-protein (+27) as drifted, on absolute https://www.thriftycrew.com/... links where
+  the local sources have relative /... ones. That was the PLATFORM, not the pages: Ghost stores a
+  site-relative URL as an internal __GHOST_URL__ placeholder and expands it to the absolute site URL when the
+  Admin API reads the post back, so a local file with href="/x/" can never read back equal. Proved by
+  republishing both from local and watching the identical +513 and +27 come straight back with a fresh
+  updated_at. It also explains why only those two looked drifted: they are the only two of the sixteen that
+  contain relative internal hrefs at all (20 and 1 - the other fourteen have none).
+  lib\ghost-drift-lib.ps1 folds that one transformation on both sides. All 16 now match.
 
-  WHAT IT COMPARES. The bytes of the html card, because bytes are what the publisher writes. Not rendered
-  text, not a normalized form - a normalizer would have hidden this exact finding, since both link styles
-  render identically.
+  WHAT IT COMPARES. The bytes of the html card, because bytes are what the publisher writes, after undoing
+  Ghost's own URL rewrite and nothing else. No rendered-text or whitespace-insensitive comparison: those
+  would hide the edits actually worth catching. Fixtures in the lib hold that line in both directions - the
+  URL round-trip must stay clean, and a copy edit, a foreign host, a changed path and an extra space must
+  each still fire.
 
   BLIND IS NOT CLEAN. No key, an unreachable API, or a post whose card cannot be read exits 3. A run that
   examined nothing must never print "no drift", which is the zero-rows collapse this estate keeps re-learning.
@@ -37,75 +42,35 @@ $API  = 'https://map-to-success.ghost.io'
 $manifestPath  = Join-Path $root 'ghost-tool-manifest.json'
 $allowPath     = Join-Path $root 'ghost-drift-allowlist.json'
 
-function Get-BodyHash { param([string]$Text)
-  if ($null -eq $Text) { return '' }
-  return [BitConverter]::ToString((New-Object Security.Cryptography.SHA256Managed).ComputeHash(
-    [Text.Encoding]::UTF8.GetBytes($Text))).Replace('-', '').Substring(0, 16)
-}
-
-function Compare-ToolBody { param($Local, $Live)
-  <# Pure: no files, no network, so the self-test can drive it with frozen fixtures. Returns the verdict plus
-     the first differing region, found by trimming the common prefix and suffix - that is what makes the
-     output actionable ("19 links gained a host") instead of just "512 bytes different".
-
-     The params are UNTYPED on purpose. Declared as [string], PS 5.1 coerces a $null argument to '' before
-     the body runs, so the "$null -eq $Live" blind check below could never fire and an absent live body
-     read as an empty one - a difference, but reported as ordinary drift instead of could-not-evaluate.
-     Caught by the must-fire fixture, which is the only reason it is not still in here. #>
-  if ([string]::IsNullOrEmpty($Local) -or [string]::IsNullOrEmpty($Live)) { return [pscustomobject]@{ same = $false; blind = $true } }
-  if ($Local -eq $Live) { return [pscustomobject]@{ same = $true; blind = $false; delta = 0 } }
-  $pre = 0
-  while ($pre -lt $Local.Length -and $pre -lt $Live.Length -and $Local[$pre] -eq $Live[$pre]) { $pre++ }
-  $suf = 0
-  while ($suf -lt ($Local.Length - $pre) -and $suf -lt ($Live.Length - $pre) -and
-         $Local[$Local.Length - 1 - $suf] -eq $Live[$Live.Length - 1 - $suf]) { $suf++ }
-  return [pscustomobject]@{
-    same     = $false
-    blind    = $false
-    delta    = ($Live.Length - $Local.Length)
-    prefix   = $pre
-    localMid = $Local.Substring($pre, $Local.Length - $pre - $suf)
-    liveMid  = $Live.Substring($pre, $Live.Length - $pre - $suf)
-  }
-}
-
-function Test-Allowlisted { param($Allow, [string]$Slug, [string]$LiveHash)
-  foreach ($a in @($Allow)) { if ($a.slug -eq $Slug -and $a.live_hash -eq $LiveHash) { return $true } }
-  return $false
-}
+# The comparison itself lives in lib\ghost-drift-lib.ps1, because publish-tool-post.ps1 needs the SAME answer
+# to refuse a blind overwrite. One definition, two dot-sources: a shared-lib fix that ships nothing because
+# callers kept inline copies is a failure this estate has already paid for.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ghost-drift-lib.ps1')
 
 # ---------------------------------------------------------------- self-test: frozen fixtures, no network
+# The comparison fixtures live WITH the comparison, in lib\ghost-drift-lib.ps1, and this delegates to them
+# rather than keeping a second copy. Two sets would drift apart, and the one that mattered would be whichever
+# nobody ran - the same duplication trap the lib itself exists to avoid.
 if ($SelfTest) {
   $f = 0
   function T($m, $c, $g) { if ($c) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $g); $script:f++ } }
 
-  T 'identical bodies are clean' (Compare-ToolBody 'abc' 'abc').same 'reported drift'
+  $libPath = Join-Path $repo 'lib\ghost-drift-lib.ps1'
+  $libOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $libPath -SelfTest 2>&1 | ForEach-Object { [string]$_ }
+  $libRc = $LASTEXITCODE
+  foreach ($l in $libOut) { Write-Output ('  [lib] ' + $l) }
+  T 'the shared comparison lib passes its own fixtures' ($libRc -eq 0) "lib self-test exit $libRc"
 
-  # FROZEN FIXTURE, the founding case: the cheapest-protein nav link, relative locally and absolute live.
-  $lo = '<p>Want dinners? <a href="/whats-for-dinner-tonight/">tonight</a></p>'
-  $lv = '<p>Want dinners? <a href="https://www.thriftycrew.com/whats-for-dinner-tonight/">tonight</a></p>'
-  $r  = Compare-ToolBody $lo $lv
-  T 'MUST FIRE  an absolute-vs-relative link difference is drift' (-not $r.same) 'called it clean'
-  T 'the delta is the host that live gained (27 chars)' ($r.delta -eq 27) $r.delta
-  T 'the differing region is isolated, not the whole file' ($r.liveMid -eq 'https://www.thriftycrew.com') $r.liveMid
-  T 'local side of that region is empty (live only ADDED)' ($r.localMid -eq '') "[$($r.localMid)]"
-
-  # a normalizer would have hidden the founding finding - assert we did NOT write one
-  T 'MUST FIRE  bytes are compared, not rendered text (both links render the same)' `
-    (-not (Compare-ToolBody '<a href="/x/">x</a>' '<a href="https://www.thriftycrew.com/x/">x</a>').same) 'normalized the difference away'
-
-  T 'MUST FIRE  a missing live body is BLIND, never clean' (Compare-ToolBody 'abc' $null).blind 'treated absent as clean'
-
-  # the allowlist must be keyed to the DRIFT, not the page
-  $allow = @([pscustomobject]@{ slug = 'my-crew'; live_hash = 'AAAA1111BBBB2222' })
-  T 'a reviewed drift is silenced'                (Test-Allowlisted $allow 'my-crew' 'AAAA1111BBBB2222') 'still cried'
-  T 'MUST FIRE  a DIFFERENT drift on the same slug still fires' `
-    (-not (Test-Allowlisted $allow 'my-crew' 'CCCC3333DDDD4444')) 'slug-wide silence: the next drift would be invisible'
-  T 'MUST FIRE  the same hash on another slug is not silenced' `
-    (-not (Test-Allowlisted $allow 'my-staples' 'AAAA1111BBBB2222')) 'hash matched across pages'
-
-  T 'a body hash is stable and 16 chars' ((Get-BodyHash 'abc') -eq (Get-BodyHash 'abc') -and (Get-BodyHash 'abc').Length -eq 16) (Get-BodyHash 'abc')
-  T 'different bodies hash differently' ((Get-BodyHash 'abc') -ne (Get-BodyHash 'abd')) 'collision'
+  # this script's own contract, on top of the lib's. Only assertions that can actually FAIL go here - a case
+  # that cannot fail is worthless, which is the whole premise of test-guards next door.
+  T 'the manifest path is under grocery\, next to the other detectors' `
+    ((Split-Path $manifestPath -Leaf) -eq 'ghost-tool-manifest.json') $manifestPath
+  T 'the shipped manifest parses and maps every local *-tool.html' `
+    ($(if (Test-Path $manifestPath) {
+        $m = @((Get-Content $manifestPath -Raw | ConvertFrom-Json).tools)
+        $localCount = @(Get-ChildItem (Join-Path $repo '*-tool.html') -File).Count
+        ($m.Count -gt 0 -and $m.Count -eq $localCount)
+      } else { $false })) 'manifest missing, unparseable, or out of step with the local sources'
 
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
@@ -121,18 +86,7 @@ if (-not $key) {
   exit 3
 }
 
-function Get-CardBody { param([string]$Slug)
-  $jwt = Get-GhostJWT -Key $key
-  $p = (Invoke-RestMethod -Uri "$API/ghost/api/admin/posts/slug/$Slug/?formats=lexical&fields=id,slug,lexical" `
-        -Headers @{ Authorization = "Ghost $jwt"; 'Accept-Version' = 'v5.0' } -TimeoutSec 45).posts[0]
-  if (-not $p -or -not $p.lexical) { return $null }
-  $lex = $p.lexical | ConvertFrom-Json
-  $html = ''
-  foreach ($c in $lex.root.children) { if ($c.type -eq 'html' -and $c.html) { $html += [string]$c.html } }
-  if (-not $html) { return $null }
-  return $html
-}
-
+# card fetching is Get-GhostCardBody in lib\ghost-drift-lib.ps1 - same reason as the comparison itself
 if ($Discover) {
   # Rebuild the manifest by CONTENT, because the slug is not derivable from the filename (leak-finder-tool
   # publishes to money-leak-finder). Fingerprints on slices spread through the file, so a partially drifted
@@ -200,7 +154,7 @@ foreach ($t in $manifest) {
   if (-not (Test-Path $lf)) { $blind += ("{0}: local source {1} is gone" -f $t.slug, $t.file); continue }
   $local = [IO.File]::ReadAllText($lf)
   $live = $null
-  try { $live = Get-CardBody $t.slug } catch { $blind += ("{0}: {1}" -f $t.slug, $_.Exception.Message); continue }
+  try { $live = Get-GhostCardBody -Api $API -Key $key -Slug $t.slug } catch { $blind += ("{0}: {1}" -f $t.slug, $_.Exception.Message); continue }
   if ($null -eq $live) { $blind += ("{0}: no html card on the live post" -f $t.slug); continue }
 
   $r = Compare-ToolBody $local $live
@@ -213,7 +167,8 @@ foreach ($t in $manifest) {
 
 if ($Accept) {
   $hit = @($drift | Where-Object { $_.slug -eq $Accept })
-  if (-not $hit.Count) { Write-Output ("nothing to accept: {0} is not currently drifted" -f $Accept); exit 1 }
+  # the full sweep already ran above, so this is a completed run with a "nothing to do" verdict, not an abort
+  if (-not $hit.Count) { Write-Output ("nothing to accept: {0} is not currently drifted" -f $Accept); Write-GuardComplete -Name 'ghost-drift'; exit 1 }
   $new = @($allow) + @([pscustomobject]@{ slug = $Accept; live_hash = $hit[0].hash
                                           reviewed = (Get-Date -Format 'yyyy-MM-dd')
                                           reason = 'REPLACE ME: why the live body is allowed to differ' })
