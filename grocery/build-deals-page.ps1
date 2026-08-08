@@ -1,4 +1,4 @@
-﻿<#
+<#
   build-deals-page.ps1 - Renders the weekly Omaha cross-store price board into a self-contained,
   filterable HTML page (embeddable in a Ghost page). Data-driven: re-run it whenever the board
   refreshes. Groups commodities by food category (categories.json), one ROW per commodity, and
@@ -2011,7 +2011,7 @@ if ($histDoc) {
     tcChart(ov.querySelector('.pg-hx-chart'), d);
     ov.addEventListener('click', function(e){ if (e.target === ov || e.target.closest('.pg-hx-x')) close(); });
   }
-  var ALERT_URL = 'https://smp-feed.ancient-snow-93df.workers.dev/alert';
+  var ALERT_URL = 'https://feed.thriftycrew.com/alert';
   // Price alerts are a PAID-member perk. Non-paid clicks get the join interstitial (paid tier only, no free option).
   var PAID_TIER = '6a43628ae02523000897528f';
   var PAID_MO = '#/portal/signup/' + PAID_TIER + '/monthly';
@@ -2114,7 +2114,7 @@ if ($histDoc) {
     # content-hash cache-bust (same reason as board.json: the feed is cached 30 min, the post can be newer)
     $hsha = New-Object System.Security.Cryptography.SHA1Managed
     $hhash = ([BitConverter]::ToString($hsha.ComputeHash([Text.Encoding]::UTF8.GetBytes($histJson))) -replace '-','').Substring(0,10).ToLower()
-    $histUrl = 'https://smp-feed.ancient-snow-93df.workers.dev/price-history.json?v=' + $hhash
+    $histUrl = 'https://feed.thriftycrew.com/price-history.json?v=' + $hhash
     $histBlock = $histBlock.Replace('__TCH_IDS__', $idIndex).Replace('__TCH_URL__', $histUrl).Replace('__TCB_JSON__', $tcbJson).Replace('__TCCHART__', $tcChartJs)
   }
 }
@@ -2137,7 +2137,7 @@ $boardJson = ($boardChips | ConvertTo-Json -Depth 3 -Compress)
 # whenever the content does.
 $sha = New-Object System.Security.Cryptography.SHA1Managed
 $bhash = ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($boardJson))) -replace '-','').Substring(0,10).ToLower()
-$boardUrl = 'https://smp-feed.ancient-snow-93df.workers.dev/board.json?v=' + $bhash
+$boardUrl = 'https://feed.thriftycrew.com/board.json?v=' + $bhash
 $js = $js.Replace('__BOARD_URL__', $boardUrl)
 $js = $js.Replace('__WEEK__', $week)
 $js = $js.Replace('__STORE_HUES__', (($storeAccent | ConvertTo-Json -Compress)))

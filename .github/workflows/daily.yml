@@ -199,6 +199,6 @@ jobs:
             $sha = [System.Security.Cryptography.SHA256]::Create()
             $hash = ($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($env:GHOST_ADMIN_KEY)) | ForEach-Object { $_.ToString('x2') }) -join ''
             $body = @{ subject = "Grocery CLOUD BACKUP run failed - $(Get-Date -Format 'yyyy-MM-dd')"; body = "The 16:00 UTC cloud backup pipeline run failed (the local 8:30am run must have been missed too, or this was a manual run). Nothing bad was published - the guards fail closed and the board holds its last good state. Check the Actions tab for 'Daily grocery pipeline' and grocery/ad-cycle-log.txt in the repo for how far it got." } | ConvertTo-Json
-            Invoke-RestMethod -Uri "https://smp-feed.ancient-snow-93df.workers.dev/ops-alert" -Method Post -ContentType "application/json" -Headers @{ "X-Notify-Auth" = $hash } -Body $body | Out-Null
+            Invoke-RestMethod -Uri "https://feed.thriftycrew.com/ops-alert" -Method Post -ContentType "application/json" -Headers @{ "X-Notify-Auth" = $hash } -Body $body | Out-Null
             Write-Host "failure relayed to Gmail via the Worker"
           } catch { Write-Host "ops-alert relay failed ($($_.Exception.Message)) - GitHub's own failure email still covers this" }

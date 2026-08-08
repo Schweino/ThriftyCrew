@@ -20,7 +20,7 @@
 param([switch]$SelfTest)
 
 # The Worker's public base. Change this ONE value on a Cloudflare account move or a custom-domain cutover.
-$script:TC_FEED_BASE = 'https://smp-feed.ancient-snow-93df.workers.dev'
+$script:TC_FEED_BASE = 'https://feed.thriftycrew.com'
 
 function Get-FeedBase { return $script:TC_FEED_BASE }
 function Get-FeedUrl  { return ($script:TC_FEED_BASE + '/smp-feed.json') }

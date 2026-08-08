@@ -266,7 +266,7 @@ if ($pushed) {
   try {
     $repoFeed = Get-Content (Join-Path $repo 'public\smp-feed.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     Start-Sleep -Seconds 30
-    $liveRaw = (Invoke-WebRequest -Uri ("https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json?deploycheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45).Content
+    $liveRaw = (Invoke-WebRequest -Uri ("https://feed.thriftycrew.com/smp-feed.json?deploycheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45).Content
     $live = $liveRaw | ConvertFrom-Json
     if ([string]$live.generated -ne [string]$repoFeed.generated) {
       $m = "The edge is serving a feed generated $($live.generated) but the repo pushed $($repoFeed.generated). The push succeeded, so this is a Cloudflare deploy that has not landed. Live recipe prices are stale until it does. Check the CF dashboard build log for the smp-feed worker."

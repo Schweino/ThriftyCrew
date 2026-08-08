@@ -140,8 +140,8 @@ if(window.__mpp)return; window.__mpp=1;
 // Ghost Pro 503s processing a lexical card near ~1.6 MB. Now the post stays template-size and the data
 // rides the same Worker+edge-cache path as the price feed. See gen-planner-data.ps1 (writes public/planner-data.json).
 var MPP=[];
-var PDATA='https://smp-feed.ancient-snow-93df.workers.dev/planner-data.json?v=2';
-var FEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json?s=2';   // ?s=2: new cache key since the feed gained per-store prices
+var PDATA='https://feed.thriftycrew.com/planner-data.json?v=2';
+var FEED='https://feed.thriftycrew.com/smp-feed.json?s=2';   // ?s=2: new cache key since the feed gained per-store prices
 var $=function(id){return document.getElementById(id);};
 var sd=$('mpp-sd'),ed=$('mpp-ed'),hh=$('mpp-hh'),rc=$('mpp-rc'),q=$('mpp-q');
 var byslug={};   // populated in boot() once MPP is fetched

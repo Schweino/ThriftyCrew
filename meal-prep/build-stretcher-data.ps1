@@ -13,7 +13,7 @@ try { (Get-Content (Join-Path $dir 'pipeline\v2-perserving.json') -Raw | Convert
 # live feed check (BOM gotcha: TrimStart the FEFF before ConvertFrom-Json)
 $feedRec = @{}
 try {
-  $raw = (Invoke-WebRequest -Uri "https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json" -UseBasicParsing -TimeoutSec 30).Content.TrimStart([char]0xFEFF)
+  $raw = (Invoke-WebRequest -Uri "https://feed.thriftycrew.com/smp-feed.json" -UseBasicParsing -TimeoutSec 30).Content.TrimStart([char]0xFEFF)
   $feed = $raw | ConvertFrom-Json
   foreach($k in $feed.recipes.PSObject.Properties.Name){ $feedRec[$k] = $true }
   "live feed OK: week_of=$($feed.week_of), $($feedRec.Count) recipes"

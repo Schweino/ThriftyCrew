@@ -59,8 +59,18 @@ $canonical = Get-CanonicalBase -RepoRoot $repo
 # any workers.dev / feed origin that appears in the tree - so a STALE one is visible, not just the current
 $rxAny = 'https://(?:smp-feed\.[a-z0-9-]+\.workers\.dev|feed\.thriftycrew\.com)'
 
-$scan = @(Get-ChildItem $repo -Recurse -File -Include *.ps1, *.js, *.yml, *.json, *.md -ErrorAction SilentlyContinue |
-          Where-Object { $_.FullName -notmatch '\\worktrees\\|node_modules|\\out\\|\\db\\built\\|\\archive\\|cutover-feed-url\.ps1' })
+# .html IS IN THIS LIST, and leaving it out is the mistake this comment exists to prevent. The first run
+# scanned only .ps1/.js/.yml/.json/.md, reported "15 references in 12 files", rewrote them - and the 542
+# rebuilt recipe cards came out BYTE-IDENTICAL, still carrying the old URL. The reason: build-card2 reads
+# pipeline\tpl2-scaler-prefix.html, an HTML TEMPLATE holding the scaler widget's `var SMPFEED=...`. Widening
+# the scan then found the same URL in every member-tool template too (meal plan builder, my-crew, staples,
+# payday stretcher, protein leaderboard, price widget, dinner tools, the join interstitial and a
+# code-injection head). A cutover that misses those leaves the tools fetching a Worker that is gone.
+#
+# site-backups\ and archive\ are EXCLUDED ON PURPOSE: they are dated snapshots of what was deployed at a
+# past moment. Rewriting a historical record to say something it never said destroys its only value.
+$scan = @(Get-ChildItem $repo -Recurse -File -Include *.ps1, *.js, *.yml, *.json, *.md, *.html, *.htm -ErrorAction SilentlyContinue |
+          Where-Object { $_.FullName -notmatch '\\worktrees\\|node_modules|\\out\\|\\db\\built\\|\\archive\\|\\site-backups\\|cutover-feed-url\.ps1' })
 
 $refs = @()
 foreach ($f in $scan) {

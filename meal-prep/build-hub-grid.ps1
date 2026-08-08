@@ -522,7 +522,7 @@ $hubJs = Compress-TcAsset ((Get-TcMotionJs) + @'
   // wording to "checked this morning", and only when that timestamp is actually today.
   var fresh=document.getElementById("mpr-fresh");
   if(fresh){
-    fetch("https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json").then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}).then(function(f){
+    fetch("https://feed.thriftycrew.com/smp-feed.json").then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}).then(function(f){
       if(!f||!f.generated) return;
       var g=new Date(f.generated), now=new Date();
       if(g.getFullYear()===now.getFullYear()&&g.getMonth()===now.getMonth()&&g.getDate()===now.getDate()){
@@ -539,7 +539,7 @@ $hubJs = Compress-TcAsset ((Get-TcMotionJs) + @'
   // feed add badges would put the unverified source back in charge of the promise. A recipe freed since
   // the last build waits for the next one to get its ribbon, which costs nothing; a gold "Free this week"
   // ribbon on a paywall costs the trust the free shelf exists to build.
-  fetch("https://smp-feed.ancient-snow-93df.workers.dev/free-dinners.json").then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}).then(function(fd){
+  fetch("https://feed.thriftycrew.com/free-dinners.json").then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}).then(function(fd){
     if(!fd||!fd.free||!fd.free.length) return;
     var live={}; fd.free.forEach(function(x){ live[x.slug]=1; });
     cards.forEach(function(c){

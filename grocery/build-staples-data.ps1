@@ -8,7 +8,7 @@ $root = 'C:\Codex\income\grocery'
 # prefer the freshly-exported local feed (has the newest schema, e.g. sale_end) over the edge-cached worker copy
 $localFeed = "$root\out\smp-feed.json"
 if (Test-Path $localFeed) { $raw = (Get-Content $localFeed -Raw).TrimStart([char]0xFEFF) }
-else { $raw = (Invoke-WebRequest -Uri "https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json" -UseBasicParsing -TimeoutSec 30).Content.TrimStart([char]0xFEFF) }
+else { $raw = (Invoke-WebRequest -Uri "https://feed.thriftycrew.com/smp-feed.json" -UseBasicParsing -TimeoutSec 30).Content.TrimStart([char]0xFEFF) }
 $feed = $raw | ConvertFrom-Json
 $feedIng = @{}
 foreach ($p in $feed.ingredients.PSObject.Properties) { $feedIng[[string]$p.Name] = $p.Value }

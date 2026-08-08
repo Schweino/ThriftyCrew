@@ -44,7 +44,7 @@ if($SelfTest){
 }
 
 if(-not (Test-Path $FeedPath)){
-  Invoke-WebRequest -Uri 'https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json' -OutFile $FeedPath -TimeoutSec 40 -UseBasicParsing
+  Invoke-WebRequest -Uri 'https://feed.thriftycrew.com/smp-feed.json' -OutFile $FeedPath -TimeoutSec 40 -UseBasicParsing
 }
 $feed = (Get-Content $FeedPath -Raw -Encoding utf8 | ConvertFrom-Json).ingredients
 $feedMap = @{}; foreach($p in $feed.PSObject.Properties){ $feedMap[$p.Name] = $p.Value }

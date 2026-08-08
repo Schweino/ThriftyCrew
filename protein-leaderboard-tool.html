@@ -59,7 +59,7 @@ var PL={week:"2026-07-26",rows:[{"n":"Peanut butter","b":"peanut-butter","gpu":2
 (function(){
   var root = document.getElementById('tcpl');
   if (!root || typeof PL === 'undefined' || !PL.rows || !PL.rows.length) return;
-  var FEED_URL = 'https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json';
+  var FEED_URL = 'https://feed.thriftycrew.com/smp-feed.json';
   var liveIng = null;
 
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }

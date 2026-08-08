@@ -21,7 +21,7 @@ $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $stateFile = Join-Path $root 'notify-known-ids.json'
-$workerBase = 'https://smp-feed.ancient-snow-93df.workers.dev'
+$workerBase = 'https://feed.thriftycrew.com'
 
 # ---- Ghost admin key (env var in the cloud, .ghostkey locally) + JWT ----
 $adminKey = $env:GHOST_ADMIN_KEY

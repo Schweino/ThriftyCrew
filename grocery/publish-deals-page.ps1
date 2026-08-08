@@ -260,7 +260,7 @@ if (-not (Test-UpsertNeeded -Sig $sig -SigFile $sigFile -LiveSeen ([bool]$ex) -F
 try {
   $ogPng = Join-Path (Split-Path $root -Parent) 'public\share\omaha-drops.png'
   if (Test-Path $ogPng) {
-    $ogUrl = 'https://smp-feed.ancient-snow-93df.workers.dev/share/omaha-drops.png?w=' + [string]$doc.week_of
+    $ogUrl = 'https://feed.thriftycrew.com/share/omaha-drops.png?w=' + [string]$doc.week_of
     $jwt2 = New-GhostJWT $adminKey
     $cur = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,updated_at,og_image" -Headers @{Authorization="Ghost $jwt2";'Accept-Version'='v5.0'} -TimeoutSec 30).posts[0]
     if ($cur -and ([string]$cur.og_image) -ne $ogUrl) {

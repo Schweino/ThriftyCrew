@@ -79,7 +79,7 @@
   if (!root || typeof ST === 'undefined' || typeof DIN === 'undefined') return;
   // dinner means dinner: 550+ calories per serving, never the lunch-sized bowls (matches /whats-for-dinner-tonight/)
   var RECIPES = DIN.rec.filter(function(r){ return r.cal >= 550; });
-  var FEED_URL = 'https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json';
+  var FEED_URL = 'https://feed.thriftycrew.com/smp-feed.json';
   var weekOf = ST.week;
   var feedIng = null, feedRec = null;
 

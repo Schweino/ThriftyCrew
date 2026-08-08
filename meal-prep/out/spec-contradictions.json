@@ -3,12 +3,6 @@
     "findings":  [
                      {
                          "run":  "live",
-                         "slug":  "baked-ziti-with-ground-turkey-and-ricotta",
-                         "cls":  "PHANTOM",
-                         "why":  "a step says \u0027tomato\u0027 but Tomato is in no ingredient line - it cannot be made as shopped"
-                     },
-                     {
-                         "run":  "live",
                          "slug":  "chicken-biryani-rice-bowls",
                          "cls":  "UNMEASURABLE-QTY",
                          "why":  "a line asks for \u00270 tbsp\u0027, which no kitchen measure shows: Milk (Fairlife): 0 tbsp (1 g)"
@@ -143,7 +137,6 @@
     "generated":  "see git",
     "by_class":  {
                      "UNMEASURABLE-QTY":  21,
-                     "UNUSED":  1,
-                     "PHANTOM":  1
+                     "UNUSED":  1
                  }
 }

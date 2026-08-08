@@ -124,7 +124,7 @@
   function start(){
     // Is this one of THIS WEEK's free rotation recipes? (list ships from the price worker; tiny + cached)
     var path=location.pathname;
-    fetch('https://smp-feed.ancient-snow-93df.workers.dev/free-dinners.json').then(function(r){return r.ok?r.json():null}).then(function(d){
+    fetch('https://feed.thriftycrew.com/free-dinners.json').then(function(r){return r.ok?r.json():null}).then(function(d){
       var free=false;
       if(d && d.free){ for(var i=0;i<d.free.length;i++){ if(path==='/'+d.free[i].slug+'/'){ free=true; break; } } }
       begin(free);

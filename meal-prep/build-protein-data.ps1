@@ -19,7 +19,7 @@ $here    = Split-Path -Parent $MyInvocation.MyCommand.Path
 $dbPath  = Join-Path $here 'food-macros-db.json'
 $mapPath = Join-Path $here 'ingredient-map.json'
 $outPath = Join-Path $here 'protein-data.generated.js'
-$feedUrl = 'https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json'
+$feedUrl = 'https://feed.thriftycrew.com/smp-feed.json'
 
 $db  = (Get-Content -Raw $dbPath)  | ConvertFrom-Json
 $map = (Get-Content -Raw $mapPath) | ConvertFrom-Json
