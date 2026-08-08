@@ -93,6 +93,9 @@ h2[id]{scroll-margin-top:84px}
 .smp-stct{font-size:1.08rem;color:#8a94a6;text-align:right;line-height:1.35}
 .smp-stsum{margin:1.1rem 0 0;padding:.9rem 1.05rem;background:#fffdf6;border:1px solid #e9dcc0;border-left:4px solid #E2A43C;border-radius:0 10px 10px 0;font-size:1.26rem;line-height:1.5;color:#3a4658}
 .smp-stsum b{color:#0c5c3b;font-variant-numeric:tabular-nums;font-weight:750}
+.smp-stmiss{margin:.6rem 0 0;padding:0;list-style:none}
+.smp-stmiss li{display:flex;justify-content:space-between;align-items:baseline;gap:4px 10px;flex-wrap:wrap;padding:.3rem 0;font-size:1.2rem;border-top:1px dotted #e2d9c2}
+.smp-stmiss li span{color:#8a6d1f;font-weight:700;min-width:0;text-align:right}
 .smp-stft{position:sticky;bottom:0;padding:12px 18px 14px;background:#fdf8ec;border-top:1px solid #e5dcc8;box-shadow:0 -6px 14px rgba(22,38,63,.06)}
 .smp-stprint{display:block;width:100%;min-height:52px;padding:.9rem 1.1rem;background:#16263F;color:#fff;border:none;border-radius:12px;font-size:1.34rem;font-weight:800;cursor:pointer;font-family:inherit;line-height:1.25;transition:transform 100ms cubic-bezier(0.2,0,0,1)}
 .smp-stprint:active{transform:scale(.99)}
@@ -394,16 +397,31 @@ function init(box){
     Object.keys(seen).forEach(function(n){ list.push(n); });
     return list;
   }
+  // Which stores carry this ingredient AT ALL, in registry order. "Not at your stores" is only half an
+  // answer - the useful half is WHICH store you would have to add, and whether one exists at all. Those are
+  // two different situations (a store we did not pick vs an item nothing we track carries) and the copy
+  // must not blur them: one is a decision the reader can make, the other is a gap on our side.
+  function carriedAt(it){
+    var e=feedOf(it), at=[], s, idx=Object.keys(SMPHUE);
+    if(e&&e.stores&&it.gpu>0){ for(s in e.stores){ if(e.stores[s]>0) at.push(s); } }
+    at.sort(function(a,b){ var ia=idx.indexOf(a), ib=idx.indexOf(b); if(ia<0)ia=90; if(ib<0)ib=90; return ia-ib; });
+    return at;
+  }
+  function nameList(a){
+    if(a.length===1) return a[0];
+    if(a.length===2) return a[0]+' or '+a[1];
+    return a.slice(0,-1).join(', ')+' or '+a[a.length-1];
+  }
   function groupBasket(items,nn,sel){
     var g={}, order=[], tot=0, idx=Object.keys(SMPHUE);
     items.forEach(function(it){
-      var p=priceAtStores(it,nn,sel), key=p.store||' any';
+      var p=priceAtStores(it,nn,sel), key=p.store||'|any';
       if(!g[key]){ g[key]=[]; order.push(key); }
-      g[key].push({name:it.item,pkg:pkgLabel(it,p.k),cost:p.cost,up:p.up,unit:p.unit});
+      g[key].push({name:it.item,pkg:pkgLabel(it,p.k),cost:p.cost,up:p.up,unit:p.unit,at:(p.store?null:carriedAt(it))});
       tot+=p.cost;
     });
     order.sort(function(a,b){
-      var ia=(a===' any')?99:idx.indexOf(a), ib=(b===' any')?99:idx.indexOf(b);
+      var ia=(a==='|any')?99:idx.indexOf(a), ib=(b==='|any')?99:idx.indexOf(b);
       if(ia<0)ia=90; if(ib<0)ib=90; return ia-ib;
     });
     return {groups:g,order:order,total:tot};
@@ -412,9 +430,15 @@ function init(box){
     var r=groupBasket(items,nn,sel), secs='';
     r.order.forEach(function(key){
       var rows=r.groups[key], sub=0, li='';
-      rows.forEach(function(x){ sub+=x.cost; li+='<li><span class="bx"></span><span class="nm">'+esc(x.name)+'</span><span class="pk">'+esc(x.pkg)+'</span><span class="pr">'+money(x.cost)+'</span></li>'; });
-      var head=(key===' any')?'Any store':key;
-      var note=(key===' any')?' <em>(no live price at your stores this week &mdash; everyday shelf price)</em>':'';
+      rows.forEach(function(x){
+        sub+=x.cost;
+        // On the Any-store rows, print WHO has it. This is the line the reader is holding in the aisle, so
+        // "we could not price this at your stores" is worth less than "Hy-Vee or Baker's has it".
+        var at=(x.at&&x.at.length)?(' <em>at '+esc(nameList(x.at))+'</em>'):(x.at?' <em>not price-tracked</em>':'');
+        li+='<li><span class="bx"></span><span class="nm">'+esc(x.name)+at+'</span><span class="pk">'+esc(x.pkg)+'</span><span class="pr">'+money(x.cost)+'</span></li>';
+      });
+      var head=(key==='|any')?'Any store':key;
+      var note=(key==='|any')?' <em>(not at the stores you picked &mdash; priced at the everyday shelf price)</em>':'';
       secs+='<h3>'+esc(head)+' <span>'+rows.length+' item'+(rows.length===1?'':'s')+' &middot; '+money(sub)+'</span></h3>'+note+'<ul class="sl">'+li+'</ul>';
     });
     var own=[]; data.ing.forEach(function(it,i){ if(removed[i]) own.push(it.item); });
@@ -491,10 +515,21 @@ function init(box){
     document.body.appendChild(ov);
     function draw(){
       if(!items.length){ ov.querySelector('.smp-stsum').innerHTML='Nothing to buy right now. The printout will still carry the ingredients and the method.'; return; }
-      var r=groupBasket(items,nn,sel), used=0, un=0;
-      r.order.forEach(function(k){ if(k===' any'){ un=r.groups[k].length; } else { used++; } });
+      var r=groupBasket(items,nn,sel), used=0, miss=[];
+      r.order.forEach(function(k){ if(k==='|any'){ miss=r.groups[k]; } else { used++; } });
+      var un=miss.length;
       var txt='Your list: <b>'+money(r.total)+'</b> for '+items.length+' item'+(items.length===1?'':'s')+(used?(' across '+used+' store'+(used===1?'':'s')):'')+'.';
-      if(un){ txt+=' '+un+' item'+(un===1?' is':'s are')+' not carried at the stores you picked, so '+(un===1?'it prints':'they print')+' under &ldquo;Any store&rdquo; at the everyday price.'; }
+      if(un){
+        // NAME them. "1 item is not carried" tells the reader nothing they can act on; the item and the
+        // store that has it turns it into a decision - tick one more store, or accept the everyday price.
+        txt+=' '+un+' item'+(un===1?'':'s')+' below '+(un===1?'is':'are')+' not at those stores, so '+(un===1?'it prints':'they print')+' under &ldquo;Any store&rdquo; at the everyday price:';
+        txt+='<ul class="smp-stmiss">';
+        miss.slice(0,8).forEach(function(m){
+          txt+='<li>'+esc(m.name)+' <span>'+(m.at&&m.at.length?('at '+esc(nameList(m.at))):'no store price tracked yet')+'</span></li>';
+        });
+        if(un>8){ txt+='<li><span>and '+(un-8)+' more</span></li>'; }
+        txt+='</ul>';
+      }
       ov.querySelector('.smp-stsum').innerHTML=txt;
     }
     function close(){
