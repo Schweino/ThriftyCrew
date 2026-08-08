@@ -13,7 +13,8 @@
   passes are the primary defense). -Alert emails once per NEW victim-set.
 #>
 param([switch]$Alert, [switch]$SelfTest, [string]$OutDir = "")
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
 # Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
@@ -203,7 +204,7 @@ if ($attempted -gt 0 -and $probed -eq 0) {
   Write-Output ("ff-carry: BLIND  Freshop answered NONE of the " + $attempted + " term(s) this run needed to probe, so nothing was checked - this is not an OK" + $probeStat)
   exit 3
 }
-if ($victims.Count -eq 0) { Write-Output ("ff-carry: OK  no term is missing from the feed AND carried by FF" + $probeStat); exit 0 }
+if ($victims.Count -eq 0) { Write-Output ("ff-carry: OK  no term is missing from the feed AND carried by FF" + $probeStat); Write-GuardComplete -Name 'ff-carry'; exit 0 }
 Write-Output ("ff-carry: FOUND " + $victims.Count + " uncovered term(s) - FF carries these and this pull has no priced row for them" + $probeStat + ":")
 foreach ($v in $victims) { Write-Output ("  " + $v.commodity.PadRight(20) + " <- '" + $v.product + "' " + $v.size + " " + $v.price) }
 if ($Alert) {
@@ -216,4 +217,4 @@ if ($Alert) {
     try { Send-Alert -Subject "Grocery: Family Fare pull dropped a carried item - review" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
   }
 }
-exit 0
+Write-GuardComplete -Name 'ff-carry'; exit 0

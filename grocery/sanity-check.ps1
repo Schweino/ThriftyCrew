@@ -10,6 +10,7 @@
 #>
 param([string]$CompareFile = "", [string]$OutDir = "", [double]$OutlierFrac = 0.35, [double]$WowFrac = 0.40)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $CompareFile) { $CompareFile = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName }
@@ -63,9 +64,9 @@ foreach ($r in $doc.comparison) {
 (ConvertTo-Json -InputObject $flags.ToArray() -Depth 5) | Set-Content (Join-Path $OutDir ("guards-"+$week+".json")) -Encoding UTF8
 if ($flags.Count -eq 0) {
   Write-Output ("SANITY OK  -  week ${week}: no outliers, no big week-over-week moves.")
-  exit 0
+  Write-GuardComplete -Name 'sanity-check'; exit 0
 } else {
   Write-Output ("SANITY: " + $flags.Count + " item(s) to review before publishing (week $week):")
   foreach ($f in $flags.ToArray()) { Write-Output ("  [" + $f.type + "] " + $f.commodity + " - " + $f.detail) }
-  exit 1
+  Write-GuardComplete -Name 'sanity-check'; exit 1
 }

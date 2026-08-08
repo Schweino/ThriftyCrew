@@ -5,6 +5,7 @@
 #>
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = $PSScriptRoot
 $pass = 0; $failed = 0
 
@@ -35,7 +36,51 @@ function Backup([string]$path) {
   $content = Get-Content $path -Raw
   foreach ($r in $script:Restores) { if ($r.path -eq $path) { return $content } }
   $script:Restores.Add([pscustomobject]@{ path = $path; content = $content; bytes = $bytes })
+  JournalSnapshot $path $bytes
   return $content
+}
+
+# DURABLE RESTORE JOURNAL (2026-08-08). Everything above lives in MEMORY: $script:Restores holds the only
+# copy of the original bytes, so the finally block and the PowerShell.Exiting handler are the ONLY things
+# that can put a mutated production file back - and neither survives a HARD kill (a timeout that taskkills
+# the process, a closed window, a reboot). Measured twice on 2026-08-08: a killed run left guard 19's stderr
+# probe injected into the LIVE audit-price-mode.ps1, and push-data.ps1 runs `git add -A`, so the next refresh
+# would have committed a production guard with a debug write in it. The comment above says the finally block
+# covers "any exit path"; a killed process has no exit path. So persist each snapshot to disk the moment it
+# is taken, and replay whatever a previous run abandoned before this one touches anything.
+$script:JournalDir = Join-Path $env:TEMP 'tg-restore-journal'
+function JournalKey([string]$path) {
+  return [BitConverter]::ToString((New-Object Security.Cryptography.SHA256Managed).ComputeHash(
+    [Text.Encoding]::UTF8.GetBytes($path.ToLower()))).Replace('-', '').Substring(0, 16)
+}
+function JournalSnapshot([string]$path, $bytes) {
+  # never let journalling break the suite: it is a safety net, not a dependency
+  try {
+    if (-not (Test-Path $script:JournalDir)) { New-Item -ItemType Directory -Force $script:JournalDir | Out-Null }
+    $k = JournalKey $path
+    [IO.File]::WriteAllBytes((Join-Path $script:JournalDir ($k + '.bak')), $bytes)
+    [IO.File]::WriteAllText((Join-Path $script:JournalDir ($k + '.path')), $path)
+  } catch { }
+}
+function JournalClear { try { if (Test-Path $script:JournalDir) { Remove-Item $script:JournalDir -Recurse -Force -ErrorAction SilentlyContinue } } catch { } }
+function JournalRecover {
+  if (-not (Test-Path $script:JournalDir)) { return 0 }
+  $n = 0
+  foreach ($pf in (Get-ChildItem (Join-Path $script:JournalDir '*.path') -ErrorAction SilentlyContinue)) {
+    try {
+      $target = [IO.File]::ReadAllText($pf.FullName)
+      $bak = Join-Path $script:JournalDir ($pf.BaseName + '.bak')
+      if (-not (Test-Path $bak) -or -not (Test-Path $target)) { continue }
+      $orig = [IO.File]::ReadAllBytes($bak)
+      if (@(Compare-Object ([IO.File]::ReadAllBytes($target)) $orig -SyncWindow 0).Count -ne 0) {
+        [IO.File]::WriteAllBytes($target, $orig)
+        $n++
+        Write-Output ("  RECOVERED an abandoned mutation from a killed run: " + $target)
+      }
+    } catch { }
+  }
+  JournalClear
+  return $n
 }
 $script:Created = New-Object System.Collections.Generic.List[string]
 function MarkCreated([string]$path) { $script:Created.Add($path) }
@@ -44,6 +89,7 @@ function RestoreAll {
   foreach ($r in $script:Restores) {
     try { [IO.File]::WriteAllBytes($r.path, $r.bytes) } catch { Write-Warning ("RESTORE FAILED for " + $r.path + " - fix this by hand before committing: " + $_.Exception.Message) }
   }
+  JournalClear   # the on-disk net is only needed while mutations are outstanding
 }
 
 if ($SelfTest) {
@@ -60,12 +106,37 @@ if ($SelfTest) {
   $f2 = Join-Path $td 'stray.tmp'; MarkCreated $f2; 'x' | Set-Content $f2
   try { throw 'simulated mid-run crash' } catch {} finally { RestoreAll }
   $ok = (@(Compare-Object ([IO.File]::ReadAllBytes($f1)) $orig -SyncWindow 0).Count -eq 0) -and (-not (Test-Path $f2))
+
+  # MUST FIRE, frozen from the 2026-08-08 incident: a run that is KILLED never reaches finally, so the
+  # in-memory snapshot dies with the process and the mutation stays on disk. Simulate exactly that - take a
+  # snapshot, mutate, then throw the snapshot away without restoring - and assert the next run's startup
+  # recovery puts the file back from the on-disk journal.
+  $f3 = Join-Path $td 'killed.ps1'
+  New-Item -ItemType Directory -Force $td | Out-Null
+  [IO.File]::WriteAllBytes($f3, [Text.Encoding]::ASCII.GetBytes("# clean production file`r`n"))
+  $clean = [IO.File]::ReadAllBytes($f3)
+  $null = Backup $f3                                              # journals to disk
+  [IO.File]::WriteAllText($f3, "# clean production file`r`n[Console]::Error.WriteLine('probe')")
+  $script:Restores.Clear()                                        # <- the kill: memory is gone, disk is not
+  $null = JournalRecover
+  $okKill = (@(Compare-Object ([IO.File]::ReadAllBytes($f3)) $clean -SyncWindow 0).Count -eq 0)
+  $okClear = -not (Test-Path $script:JournalDir)                  # recovery must not leave the journal armed
+
   Remove-Item $td -Recurse -Force
-  if ($ok) { Write-Output 'SELFTEST PASS: byte-identical restore + created-file cleanup'; exit 0 }
-  Write-Output 'SELFTEST FAIL: restore is not byte-faithful or a created file survived'; exit 1
+  if ($ok -and $okKill -and $okClear) { Write-Output 'SELFTEST PASS: byte-identical restore + created-file cleanup + killed-run recovery from the on-disk journal'; exit 0 }
+  if (-not $ok)      { Write-Output 'SELFTEST FAIL: restore is not byte-faithful or a created file survived' }
+  if (-not $okKill)  { Write-Output 'SELFTEST FAIL: a killed run''s mutation was NOT recovered from the journal - a taskkill can still leave a mutated production file staged by git add -A' }
+  if (-not $okClear) { Write-Output 'SELFTEST FAIL: the journal survived recovery - the next run would replay stale bytes over current work' }
+  exit 1
 }
 # Ctrl-C does not run finally in every host, so also arm an engine-exit handler.
 $null = Register-EngineEvent PowerShell.Exiting -Action { RestoreAll } -ErrorAction SilentlyContinue
+
+# BEFORE anything is mutated: put back whatever a previously killed run abandoned. This runs first on purpose
+# - a leftover mutation would otherwise become THIS run's "original", and the snapshot taken over it would
+# make the damage permanent at the next restore.
+$recovered = JournalRecover
+if ($recovered -gt 0) { Write-Output ("test-guards: recovered $recovered abandoned mutation(s) before starting - run ``git status`` and confirm the tree is clean") }
 
 function RunGuardsOut {
   # -Quiet still prints every HARD FAIL line (guards.ps1's report loop emits fail lines with bare
@@ -681,5 +752,5 @@ Check 'restored: guards pass again after every mutation is reverted' 0
 
 Write-Output ''
 Write-Output ("negative tests: $pass passed, $failed failed")
-if ($failed -gt 0) { exit 1 }
-exit 0
+if ($failed -gt 0) { Write-GuardComplete -Name 'guards'; exit 1 }
+Write-GuardComplete -Name 'guards'; exit 0

@@ -24,7 +24,8 @@ param([switch]$Accept, [switch]$Alert, [string]$OutDir = "",
   # made them permanently invisible to this audit - and they published as crowns. Forcing must be a loud,
   # deliberate act, never the default.
   [switch]$ForceAccept)
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
 # Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
@@ -226,7 +227,7 @@ if ($Accept -or $ForceAccept) {
     Write-Output ("match-soundness: ACCEPT REFUSED - $($blocked.Count) mapping(s) an outstanding DROP verdict already judged WRONG would be blessed into the baseline and become invisible to this audit:")
     foreach ($b in ($blocked | Sort-Object commodity)) { Write-Output ("  [{0}] '{1}'  (dropped {2}, {3})" -f $b.commodity, $b.item, $b.week, $b.store) }
     Write-Output 'Fix the rules so these products stop matching (add an exclude), or re-review the verdict. If the VERDICT is the thing that is wrong, -ForceAccept overrides - loudly and on your judgment.'
-    exit 2
+    Write-GuardComplete -Name 'match-soundness'; exit 2
   }
   if ($blocked.Count -gt 0) {
     Write-Output ("match-soundness: FORCE-ACCEPT overriding $($blocked.Count) outstanding DROP verdict(s):")
@@ -235,10 +236,10 @@ if ($Accept -or $ForceAccept) {
   $obj = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); names = $names; contested = @($contest.Keys | Sort-Object) }
   Set-Content $baseF -Value ($obj | ConvertTo-Json -Depth 4) -Encoding UTF8
   Write-Output ("match-soundness: baseline ACCEPTED ($($names.Count) product names, $($contest.Count) contested). drift-vs-engine=$drift")
-  exit 0
+  Write-GuardComplete -Name 'match-soundness'; exit 0
 }
 
-if (-not (Test-Path $baseF)) { Write-Output 'match-soundness: NO baseline yet - run with -Accept to establish one. (skipping gate)'; exit 0 }
+if (-not (Test-Path $baseF)) { Write-Output 'match-soundness: NO baseline yet - run with -Accept to establish one. (skipping gate)'; Write-GuardComplete -Name 'match-soundness'; exit 0 }
 $base = ConvertFrom-Json ([IO.File]::ReadAllText($baseF))
 $baseNames = @{}; foreach ($p in $base.names.PSObject.Properties) { $baseNames[$p.Name] = [string]$p.Value }
 $baseContest = @{}; foreach ($x in @($base.contested)) { $baseContest[[string]$x] = $true }
@@ -275,4 +276,4 @@ if ($Alert -and ($regr -gt 0 -or $newContest.Count -gt 0 -or $drift -gt 0)) {
   }
 }
 # regressions (moved/dropped of an existing product) HOLD the publish until reviewed+accepted
-if ($regr -gt 0) { exit 2 } else { exit 0 }
+if ($regr -gt 0) { Write-GuardComplete -Name 'match-soundness'; exit 2 } else { Write-GuardComplete -Name 'match-soundness'; exit 0 }

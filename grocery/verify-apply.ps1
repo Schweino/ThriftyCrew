@@ -34,6 +34,7 @@ param([string]$CompareFile = "", [string]$VerdictFile = "", [string]$OutDir = ""
       [string]$OutFile = "",
       [string]$SuppressionsFile = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $CompareFile) { $CompareFile = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName }
@@ -146,3 +147,5 @@ Write-Output ("=" * 70)
 if ($changes.Count -gt 0) { foreach ($c in $changes.ToArray()) { Write-Output $c } } else { Write-Output "no changes - every published winner passed semantic verification" }
 Write-Output ""
 Write-Output ("Saved: " + $file)
+# No exit statement anywhere in this script - it falls off the end on its only path, so the marker goes here.
+Write-GuardComplete -Name 'verify-apply'

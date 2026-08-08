@@ -51,7 +51,8 @@
   Usage: .\audit-spec-contradictions.ps1 [-Baseline] [-Quiet] [-SelfTest]
 #>
 param([switch]$Baseline, [switch]$Quiet, [switch]$SelfTest, [switch]$IncludeArchive, [string]$Root = "")
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\guard-contract.ps1')
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = if ($Root) { $Root } else { Split-Path -Parent $here }
 
@@ -334,7 +335,7 @@ if ($Baseline) {
   foreach ($k in ($byClass.Keys | Sort-Object)) { $nb[$k] = [int]$byClass[$k] }
   $nb | ConvertTo-Json -Depth 3 | Set-Content $basePath -Encoding UTF8
   Write-Output ('baseline written: ' + (($byClass.Keys | Sort-Object | ForEach-Object { "$_=$($byClass[$_])" }) -join ' '))
-  exit 0
+  Write-GuardComplete -Name 'spec-contradictions'; exit 0
 }
 $base = @{}
 if (Test-Path $basePath) { try { $bd = Get-Content $basePath -Raw | ConvertFrom-Json; foreach ($p in $bd.PSObject.Properties) { $base[$p.Name] = [int]$p.Value } } catch {} }
@@ -347,8 +348,8 @@ foreach ($k in @('STAT-PROSE','UNMEASURABLE-QTY','STALE-MONEY','ABSURD-UNIT','HE
 if ($worse.Count -gt 0) {
   Write-Output ('spec-contradictions FAIL - a class got WORSE than out\spec-contradictions-baseline.json: ' + ($worse -join ' | '))
   Write-Output '  A spec that states the same fact twice and disagrees with itself is wrong no matter what the source recipe says - one of the two numbers is on a live card.'
-  exit 1
+  Write-GuardComplete -Name 'spec-contradictions'; exit 1
 }
-exit 0
+Write-GuardComplete -Name 'spec-contradictions'; exit 0
 
 

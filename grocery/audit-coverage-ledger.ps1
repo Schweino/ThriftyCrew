@@ -61,7 +61,8 @@ param(
   [switch]$Gate,
   [switch]$Quiet
 )
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $BaselineFile) { $BaselineFile = Join-Path $root 'coverage-baseline.json' }
@@ -267,7 +268,7 @@ if ($Accept) {
   [IO.File]::WriteAllText($BaselineFile, ($doc | ConvertTo-Json -Depth 6), (New-Object Text.UTF8Encoding($false)))
   Write-Output ''
   Write-Output ("coverage-ledger: baseline written to " + $BaselineFile + " (" + $merged.Count + " check(s)). From here each check's examined count may only go DOWN by its tolerance.")
-  exit 0
+  Write-GuardComplete -Name 'coverage-ledger'; exit 0
 }
 
 # ---- HISTORY: the evidence a future narrowing needs (F4, 2026-08-01) ----------------------------------
@@ -299,12 +300,12 @@ if ($findings.Count -gt 0) {
   Write-Output ''
   Write-Output ("coverage-ledger: " + $findings.Count + " coverage finding(s) across " + $blRows.Count + " rostered check(s); " + $evaluated + " row(s) evaluated.")
   if ($Gate) { exit 2 }
-  exit 1
+  Write-GuardComplete -Name 'coverage-ledger'; exit 1
 }
 if ($evaluated -eq 0) {
   Write-Output ("coverage-ledger: COULD NOT EVALUATE - " + $blRows.Count + " check(s) are rostered but NONE of them was evaluated in phase '" + $Phase + "'. Reporting ok here would be the exact failure this file watches for.")
   exit 3
 }
 Write-Output ("coverage-ledger: ok - " + $evaluated + " check(s) still examine at least their baseline coverage (phase '" + $Phase + "', tolerance " + [math]::Round($Tolerance * 100) + "% unless overridden).")
-exit 0
+Write-GuardComplete -Name 'coverage-ledger'; exit 0
 

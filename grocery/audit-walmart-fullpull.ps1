@@ -28,7 +28,8 @@
   freshness watcher is not.
 #>
 param([int]$WindowDays = 14, [int]$WarnAgeDays = 10, [string]$GroceryRoot = "", [int]$CellWarnDays = 5, [int]$CellWarnPct = 5)
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($GroceryRoot) { $GroceryRoot } elseif ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $today = [datetime]::Today
 
@@ -187,4 +188,4 @@ if ($null -eq $cellCmp -or -not @($cellCmp.comparison).Count) {
   }
 }
 
-if ($blind) { exit 3 } elseif ($advisory) { exit 1 } else { exit 0 }
+if ($blind) { exit 3 } elseif ($advisory) { Write-GuardComplete -Name 'walmart-fullpull'; exit 1 } else { Write-GuardComplete -Name 'walmart-fullpull'; exit 0 }

@@ -42,6 +42,7 @@ param(
   [string]$CostedFile      # structural lane: check a file other than db\costed.json
 )
 $ErrorActionPreference='Stop'
+. (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\guard-contract.ps1')
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp   = Split-Path -Parent $here
 $db   = Join-Path $mp 'db'
@@ -290,7 +291,7 @@ if($Provenance){
 }
 
 Write-Output ''
-if($Rebaseline -and $failed -eq 0){ Write-Output 'GOLDEN: baseline accepted.'; exit 0 }
+if($Rebaseline -and $failed -eq 0){ Write-Output 'GOLDEN: baseline accepted.'; Write-GuardComplete -Name 'golden-test'; exit 0 }
 Write-Output ("GOLDEN: {0} passed, {1} failed" -f $pass, $failed)
-if($failed -gt 0){ exit 2 }
-exit 0
+if($failed -gt 0){ Write-GuardComplete -Name 'golden-test'; exit 2 }
+Write-GuardComplete -Name 'golden-test'; exit 0

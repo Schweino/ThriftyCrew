@@ -159,7 +159,7 @@ $rep = Join-Path $(if ($ReportDir) { $ReportDir } else { $OutDir }) 'pack-basis-
 ([pscustomobject]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); compare_file = (Split-Path $CompareFile -Leaf); finding_count = $findings.Count; confirmed_count = $confirmedCount; findings = $findings } |
   ConvertTo-Json -Depth 5) | Set-Content $rep -Encoding UTF8
 
-if ($findings.Count -eq 0) { Write-Output 'pack-basis: ok - no multipack cell owes its cheapest-in-Omaha rank to the count multiply'; exit 0 }
+if ($findings.Count -eq 0) { Write-Output 'pack-basis: ok - no multipack cell owes its cheapest-in-Omaha rank to the count multiply'; Write-GuardComplete -Name 'pack-basis'; exit 0 }
 Write-Output ("pack-basis: " + $findings.Count + " cell(s) are cheapest ONLY because a pack count was multiplied into the size - verify the size is per-item, not the pack total:")
 foreach ($f in $findings) {
   Write-Output ("  {0,-24} {1,-12} published {2}/{3} vs {4} as a pack total (peer {5}) | size '{6}' | {7}" -f `
@@ -172,8 +172,10 @@ foreach ($f in $findings) {
 Write-Output ("  report: " + $rep)
 if ($confirmedCount -gt 0) {
   Write-Output ("PACK-BASIS BLOCKED: " + $confirmedCount + " cell(s) carry the arithmetic fingerprint of a pack TOTAL read as an each-size. That is not a judgement call, it is stated-size/count reproducing a size other stores sell, so the published per-unit is wrong by a factor of the count. Correct the size at capture, or rule the row wrong with add-known-wrong.ps1, then rebuild. Do NOT publish over this.")
+  Write-GuardComplete -Name 'pack-basis'
   exit 2
 }
-if ($Strict) { exit 2 }
+# above the -Strict branch, not below it: all three of these are completed runs and only differ in verdict
 Write-GuardComplete -Name 'pack-basis' -Summary ''
+if ($Strict) { exit 2 }
 exit 0

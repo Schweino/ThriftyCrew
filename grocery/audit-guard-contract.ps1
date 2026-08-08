@@ -36,6 +36,47 @@ function Test-EmitsMarker { param([string]$Text)
   return ([regex]::IsMatch($Text, 'Write-GuardComplete') -or [regex]::IsMatch($Text, "['`"][A-Z0-9-]+-COMPLETE"))
 }
 
+# CONTAINING the helper is not the same as EMITTING it. The 2026-08-08 retrofit patched 6 files that all
+# passed Test-EmitsMarker and 3 of them printed nothing on the path they actually take - they finish on a
+# conditional exit above the one that got the marker. Presence is the right RATCHET question; this is the
+# COMPLETENESS one. AST, not regex, so the word "exit" in a comment or a string cannot fool it.
+function Get-BareVerdictExits { param([string]$Text)
+  $e2 = $null; $t2 = $null
+  $a = [System.Management.Automation.Language.Parser]::ParseInput($Text, [ref]$t2, [ref]$e2)
+  if ($e2 -and $e2.Count) { return @() }
+  $lines = $Text -split "`r?`n"
+  $skip = @()   # a -SelfTest branch has its own PASS/FAIL line and must not carry a completion marker
+  foreach ($n in $a.FindAll({ $args[0] -is [System.Management.Automation.Language.IfStatementAst] }, $true)) {
+    foreach ($cl in $n.Clauses) { if ($cl.Item1.Extent.Text -match '\$SelfTest') { $skip += ,@($n.Extent.StartOffset, $n.Extent.EndOffset) } }
+  }
+  $bare = @()
+  foreach ($x in $a.FindAll({ $args[0] -is [System.Management.Automation.Language.ExitStatementAst] }, $true)) {
+    $code = if ($x.Pipeline) { $x.Pipeline.Extent.Text.Trim() } else { '0' }
+    if ($code -ne '0' -and $code -ne '1' -and $code -ne '2') { continue }   # 3 = could-not-evaluate, never marked
+    $off = $x.Extent.StartOffset
+    $inST = $false; foreach ($r in $skip) { if ($off -ge $r[0] -and $off -lt $r[1]) { $inST = $true } }
+    if ($inST) { continue }
+    $ln = $x.Extent.StartLineNumber
+    if (($lines[[Math]::Max(0, $ln - 4)..($ln - 1)] -join "`n") -match 'Write-GuardComplete') { continue }
+    $bare += $ln
+  }
+  return @($bare)
+}
+
+# Branches that legitimately leave WITHOUT a marker, and how many each file is allowed. All of them are modes
+# that run no detection: -Baseline records a baseline, -PrepareOnly builds inputs, a no-mode invocation prints
+# usage, and store-coverage SKIPs when there is no built board to examine. A marker on any of these would
+# vouch for a run that examined nothing - the same lie from the other direction. Counted, not blanket-allowed,
+# so a NEW bare exit in one of these files still surfaces.
+$script:BARE_ALLOWED = @{
+  'aisle-test.ps1'               = 1   # no -Candidates/-Id/-LiveBoard: "nothing to judge"
+  'audit-guard-contract.ps1'     = 1   # -Baseline
+  'audit-row-age.ps1'            = 1   # -Baseline
+  'audit-schema-constraints.ps1' = 1   # -Baseline
+  'audit-semantic-identity.ps1'  = 1   # -PrepareOnly
+  'audit-store-coverage.ps1'     = 1   # SKIP: no built board to examine
+}
+
 if ($SelfTest) {
   $f = 0
   function T($m, $c, $g) { if ($c) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $g); $script:f++ } }
@@ -48,6 +89,25 @@ if ($SelfTest) {
   T 'a script calling the helper counts as covered'                          (Test-EmitsMarker 'Write-GuardComplete -Name x') 'missed'
   T 'a literal marker also counts (reanchor-all predates the helper)'        (Test-EmitsMarker '"REANCHOR-COMPLETE stale={0}"') 'missed'
   T 'MUST FIRE  a detector with neither is uncovered'                        (-not (Test-EmitsMarker 'Write-Output "all clear"')) 'false cover'
+
+  # FROZEN FIXTURE, the half-covered shape: audit-everyday-mismatch exactly as the first retrofit left it.
+  # The marker sat BELOW the findings exit, so it proved completion only when it found nothing.
+  $half = "if (`$bugs.Count -gt 0) { exit 1 }`nWrite-GuardComplete -Name 'x'`nexit 0"
+  T 'MUST FIRE  a marker below a conditional verdict exit leaves that exit bare' `
+    ((Get-BareVerdictExits $half).Count -eq 1) ("bare=" + (Get-BareVerdictExits $half).Count)
+  # CLEAN TWIN: the same file with the marker moved above the verdict block - both paths covered
+  $whole = "Write-GuardComplete -Name 'x'`nif (`$bugs.Count -gt 0) { exit 1 }`nexit 0"
+  T 'CLEAN TWIN a marker above the verdict block covers every exit' `
+    ((Get-BareVerdictExits $whole).Count -eq 0) ("bare=" + (Get-BareVerdictExits $whole).Count)
+  # exit 3 is could-not-evaluate: it must NEVER be asked to carry a completion marker
+  T 'an exit 3 is not a bare verdict exit (could-not-evaluate is not completion)' `
+    ((Get-BareVerdictExits "Write-Output 'blind'`nexit 3").Count -eq 0) 'demanded a marker on exit 3'
+  # the word "exit" inside a comment or a string must not be mistaken for a real one
+  T 'comments and strings are not exits (AST, not regex)' `
+    ((Get-BareVerdictExits "# exit 0 here`nWrite-Output 'exit 0'").Count -eq 0) 'regex-fooled'
+  # a -SelfTest branch has its own PASS/FAIL line and is not part of the contract
+  T 'exits inside an if ($SelfTest) block are not counted' `
+    ((Get-BareVerdictExits "if (`$SelfTest) {`n  exit 0`n}").Count -eq 0) 'counted a self-test exit'
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
 
@@ -57,12 +117,17 @@ $invoked = @()
 foreach ($m in [regex]::Matches($chainText, '([a-z0-9][a-z0-9-]*\.ps1)')) { $invoked += $m.Groups[1].Value }
 $invoked = @($invoked | Sort-Object -Unique | Where-Object { Test-IsDetector $_ })
 
-$covered = @(); $uncovered = @(); $missing = @()
+$covered = @(); $uncovered = @(); $missing = @(); $halfCovered = @()
 foreach ($n in $invoked) {
   $p = @(Get-ChildItem $repo -Recurse -Filter $n -File -ErrorAction SilentlyContinue |
          Where-Object { $_.FullName -notmatch '\\worktrees\\|\\archive\\' } | Select-Object -First 1)
   if (-not $p.Count) { $missing += $n; continue }
-  if (Test-EmitsMarker ([IO.File]::ReadAllText($p[0].FullName))) { $covered += $n } else { $uncovered += $n }
+  $txt = [IO.File]::ReadAllText($p[0].FullName)
+  if (-not (Test-EmitsMarker $txt)) { $uncovered += $n; continue }
+  $covered += $n
+  $bare  = @(Get-BareVerdictExits $txt)
+  $allow = if ($script:BARE_ALLOWED.ContainsKey($n)) { $script:BARE_ALLOWED[$n] } else { 0 }
+  if ($bare.Count -gt $allow) { $halfCovered += [pscustomobject]@{ name = $n; lines = $bare; allow = $allow } }
 }
 
 $basePath = Join-Path $root 'out\guard-contract-baseline.json'
@@ -98,8 +163,15 @@ if ($uncovered.Count) {
 }
 foreach ($r in $regressed) { Write-Output ("  ! REGRESSED: {0} had a completion marker and lost it" -f $r) }
 foreach ($n in $newBare)   { Write-Output ("  ! NEW: {0} joined the chain with no completion marker" -f $n) }
+# HALF-COVERED is a hard finding, not a backlog item: the file passes the presence check, so nothing else in
+# the estate can see that it stays silent on the exact path it takes when it finds something.
+foreach ($h in $halfCovered) {
+  Write-Output ("  ! HALF-COVERED: {0} has the marker but leaves by {1} unmarked verdict exit(s) at line(s) {2}{3}" -f `
+    $h.name, $h.lines.Count, ($h.lines -join ', '), $(if ($h.allow) { " (allowed $($h.allow))" } else { '' }))
+}
 if (-not (Test-Path $basePath)) { Write-Output '  (no baseline yet - run -Baseline once to arm the ratchet)' }
 
 . (Join-Path $repo 'lib\guard-contract.ps1')
-Write-GuardComplete -Name 'guard-contract' -Summary ("covered={0} backlog={1} regressed={2}" -f $covered.Count, $uncovered.Count, ($regressed.Count + $newBare.Count))
-exit $(if ($regressed.Count -or $newBare.Count) { 1 } else { 0 })
+Write-GuardComplete -Name 'guard-contract' -Summary ("covered={0} backlog={1} regressed={2} half={3}" -f `
+  $covered.Count, $uncovered.Count, ($regressed.Count + $newBare.Count), $halfCovered.Count)
+exit $(if ($regressed.Count -or $newBare.Count -or $halfCovered.Count) { 1 } else { 0 })

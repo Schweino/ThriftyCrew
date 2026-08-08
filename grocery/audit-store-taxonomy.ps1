@@ -61,6 +61,7 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 if (-not $Root) { $Root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path } }
 if (-not $OutDir) { $OutDir = Join-Path $Root 'out' }
 if (-not $ReportDir) { $ReportDir = $OutDir }
@@ -371,6 +372,6 @@ if ($judged -eq 0) {
   Write-Output 'taxonomy BLIND: judged ZERO rows. No store feed carried a department this audit could classify, so its silence proves nothing about the board.'
   exit 3
 }
-if ($FailOnFlag -and (($cellFlags.Count + $candFlags.Count) -gt 0)) { exit 2 }
-exit 0
+if ($FailOnFlag -and (($cellFlags.Count + $candFlags.Count) -gt 0)) { Write-GuardComplete -Name 'store-taxonomy'; exit 2 }
+Write-GuardComplete -Name 'store-taxonomy'; exit 0
 

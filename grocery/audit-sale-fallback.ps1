@@ -13,6 +13,7 @@
 #>
 param([string]$OutDir = "", [string]$CompareFile = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $commods = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
@@ -67,5 +68,5 @@ $rep | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $OutDir 'sale-fallback-g
 if ($gaps.Count) {
   Write-Output ("sale-fallback: $($gaps.Count) on-sale cell(s) have NO everyday fallback (would vanish when the sale ends):")
   foreach ($gp in $gaps) { Write-Output ("  {0,-18} {1}" -f $gp.commodity, $gp.store) }
-  exit 2
-} else { Write-Output 'sale-fallback: none - every on-sale cell has an everyday item to revert to'; exit 0 }
+  Write-GuardComplete -Name 'sale-fallback'; exit 2
+} else { Write-Output 'sale-fallback: none - every on-sale cell has an everyday item to revert to'; Write-GuardComplete -Name 'sale-fallback'; exit 0 }

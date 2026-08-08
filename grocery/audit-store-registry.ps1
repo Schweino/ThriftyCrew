@@ -20,7 +20,8 @@
   Params: -Alert (send-alert on drift, de-duped by signature)
 #>
 param([switch]$Alert)
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
 # Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
@@ -95,7 +96,7 @@ foreach ($f in $scanFiles) {
 }
 
 # ---- report ----
-if ($issues.Count -eq 0) { Write-Output ("store-registry: OK  " + $names.Count + " stores; board, files, schedule and live scripts all agree"); exit 0 }
+if ($issues.Count -eq 0) { Write-Output ("store-registry: OK  " + $names.Count + " stores; board, files, schedule and live scripts all agree"); Write-GuardComplete -Name 'store-registry'; exit 0 }
 Write-Output ("store-registry: " + $issues.Count + " drift issue(s):")
 $issues | ForEach-Object { Write-Output ("  " + $_) }
 if ($Alert) {
@@ -110,4 +111,4 @@ if ($Alert) {
     } catch {}
   }
 }
-exit 2
+Write-GuardComplete -Name 'store-registry'; exit 2

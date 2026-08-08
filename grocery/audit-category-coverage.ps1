@@ -14,6 +14,7 @@
 #>
 param([switch]$Alert, [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
 # Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
@@ -45,7 +46,7 @@ Set-Content (Join-Path $OutDir 'category-coverage-report.json') -Value ($report 
 $bad = $uncategorized.Count + $multi.Count + $orphanRefs.Count
 if ($bad -eq 0) {
   Write-Output ("category-coverage: OK  all " + $ids.Count + " commodities are in exactly one of " + @($cats).Count + " categories")
-  exit 0
+  Write-GuardComplete -Name 'category-coverage'; exit 0
 }
 Write-Output ("category-coverage: FAIL  uncategorized=" + $uncategorized.Count + "  multi-category=" + $multi.Count + "  orphan-refs=" + $orphanRefs.Count)
 if ($uncategorized.Count) { Write-Output ("  NOT IN ANY CATEGORY (would be invisible / in no filter): " + ($uncategorized -join ', ')) }
@@ -66,4 +67,5 @@ if ($Alert) {
     try { Send-Alert -Subject "Grocery: a commodity is in no category (no filter) - review" -Body $body | Out-Null; Set-Content $sigF -Value $sigHash -Encoding UTF8 } catch {}
   }
 }
+Write-GuardComplete -Name 'category-coverage'
 exit 2

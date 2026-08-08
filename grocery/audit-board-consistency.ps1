@@ -21,7 +21,8 @@
 # per distinct set (sig-deduped) for browser stores until their next re-pull fixes the stored price. The
 # temporary 45 headroom for the Fareway launch is obsolete (all Fareway links resolved same-day).
 param([double]$Tol = 0.30, [int]$MaxNoLink = 0, [string]$OutDir = "", [string]$Embed = "", [switch]$SelfTest)
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $Embed)  { $Embed  = Join-Path $OutDir 'deals-page-embed.html' }
@@ -189,6 +190,6 @@ if ($chipsSeen -eq 0) {
 $breach = ($noLink -gt $MaxNoLink)
 $sev = if ($breach) { 'BREACH' } else { 'OK' }
 Write-Output ("consistency: $sev  no-link=$noLink (max $MaxNoLink)  ad-pill=$($adPillList.Count) (flyer-only, linked to the weekly ad by design)  mismatch-backlog=$($mismatch.Count)  chips-examined=$chipsSeen")
-if ($breach) { exit 2 } else { exit 0 }
+if ($breach) { exit 2 } else { Write-GuardComplete -Name 'board-consistency'; exit 0 }
 
 

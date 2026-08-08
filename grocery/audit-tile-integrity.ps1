@@ -40,6 +40,7 @@ param(
   [switch]$Quiet
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path $root 'pu-lib.ps1')   # the SAME per-unit math the page publishes with
@@ -172,7 +173,7 @@ if ($Baseline) {
   (@{ set = (Get-Date -Format 'yyyy-MM-dd HH:mm'); by_store = $report.by_store } | ConvertTo-Json -Depth 5) | Set-Content $blF -Encoding UTF8
   Write-Output ''
   Write-Output ("baseline written: " + $rows.Count + " violation(s). From here the number may only go DOWN.")
-  exit 0
+  Write-GuardComplete -Name 'tile-integrity'; exit 0
 }
 # ---- ACCURACY: a hard gate, always. Not baselined, not ratcheted, not -Strict-gated. -----------------------
 # A shipped link that opens the wrong product/price is never acceptable and never needs a browser to fix:
@@ -198,13 +199,13 @@ else {
 
 # ---- COVERAGE: ratchets down. Closing these needs paced per-store browser passes. --------------------------
 if ($Strict) {
-  if ($covRows.Count -gt 0) { Write-Output ("tile-integrity: STRICT - " + $covRows.Count + " priced tile(s) still have no link."); exit 2 }
+  if ($covRows.Count -gt 0) { Write-Output ("tile-integrity: STRICT - " + $covRows.Count + " priced tile(s) still have no link."); Write-GuardComplete -Name 'tile-integrity'; exit 2 }
   # a real violation still wins with 2; otherwise a blind run must not read as the STRICT end-state
   # (an empty board/product-urls satisfies "every priced tile has a link" vacuously - zero of anything)
-  if ($fail2) { Write-Output 'tile-integrity: STRICT - accuracy violations above.'; exit 2 }
+  if ($fail2) { Write-Output 'tile-integrity: STRICT - accuracy violations above.'; Write-GuardComplete -Name 'tile-integrity'; exit 2 }
   if ($linked -le 0 -or $graded -le 0) { Write-Output ('tile-integrity: STRICT - BLIND (' + $linked + ' linked tiles, ' + $graded + ' graded); the every-tile-linked claim is vacuous, not achieved.'); exit 3 }
   Write-Output 'tile-integrity: STRICT - every priced tile also has a verified link.'
-  exit 0
+  Write-GuardComplete -Name 'tile-integrity'; exit 0
 }
 if (Test-Path $blF) {
   $bl = (Get-Content $blF -Raw | ConvertFrom-Json).by_store
@@ -233,4 +234,8 @@ if (Test-Path $blF) {
   }
   else { Write-Output 'tile-integrity: COVERAGE OK - no store regressed against the baseline.' }
 }
-exit $(if ($fail2) { 2 } elseif ($linked -le 0 -or $graded -le 0) { 3 } else { 0 })
+# The verdict is computed, so the marker has to be too: emit it for the 2 and 0 verdicts (both are completed
+# runs) and never for 3, which is this estate's could-not-evaluate code and the opposite of completion.
+$__tiCode = if ($fail2) { 2 } elseif ($linked -le 0 -or $graded -le 0) { 3 } else { 0 }
+if ($__tiCode -ne 3) { Write-GuardComplete -Name 'tile-integrity' }
+exit $__tiCode

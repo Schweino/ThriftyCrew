@@ -24,10 +24,30 @@ $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $fix  = Join-Path $root 'regression-inputs\guard-fixtures'
 $pass = 0; $failed = 0
+
+# FIXTURES RUN COPIES OF DETECTORS OUT OF $env:TEMP, and every detector carrying the completion contract
+# dot-sources lib\guard-contract.ps1 from its PARENT directory. For a fixture copy that parent is $env:TEMP,
+# which has no lib\ - so the copy died on its second line and every tile-integrity, name-drift,
+# coverage-ledger and match-soundness assertion failed with "the term ...\Temp\lib\guard-contract.ps1 is not
+# recognized". The harness already ships SIBLING libs into fixture dirs (verdict-lib, alert-lib,
+# coverage-lib); this is the same convention one level up, done once for all 50 fixture directories.
+$fxLibDir = Join-Path $env:TEMP 'lib'
+if (-not (Test-Path $fxLibDir)) { New-Item -ItemType Directory -Force $fxLibDir | Out-Null }
+Copy-Item (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1') (Join-Path $fxLibDir 'guard-contract.ps1') -Force
 function Ok($m)   { Write-Output ("  PASS  " + $m); $script:pass++ }
 function Bad($m)  { Write-Output ("  FAIL  " + $m); $script:failed++ }
 function RunPS($script, $argList) {
-  $out = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root $script) @argList 2>&1 | ForEach-Object { [string]$_ }
+  # A DELEGATED CHILD'S STDERR MUST NOT KILL THIS HARNESS (2026-08-08). In PS 5.1, merging with 2>&1 while
+  # $ErrorActionPreference is 'Stop' turns the child's FIRST stderr line into a terminating NativeCommandError
+  # in THIS script. test-guards deliberately writes one (guard 19's "a delegated audit is allowed to write to
+  # stderr" fixture), so this harness died at that call on every run: 9 checks in, exit 1, last line a
+  # cheerful PASS and no FAIL anywhere. That is the exact founding shape test-auditors exists to catch,
+  # happening inside test-auditors - and it was invisible until the completion marker went missing.
+  # The merge is deliberate (assertions read the child's stderr); only the throw is unwanted.
+  $prev = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try { $out = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root $script) @argList 2>&1 | ForEach-Object { [string]$_ } }
+  finally { $ErrorActionPreference = $prev }
   return [pscustomobject]@{ rc = $LASTEXITCODE; text = ($out -join "`n") }
 }
 
@@ -593,7 +613,11 @@ function NewFxDir([string]$tag) {
   return $d
 }
 function RunPSAt([string]$dir, [string]$script, $argList) {
-  $out = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dir $script) @argList 2>&1 | ForEach-Object { [string]$_ }
+  # same stderr-throw guard as RunPS above - see the long note there
+  $prev = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try { $out = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dir $script) @argList 2>&1 | ForEach-Object { [string]$_ } }
+  finally { $ErrorActionPreference = $prev }
   return [pscustomobject]@{ rc = $LASTEXITCODE; text = ($out -join "`n") }
 }
 

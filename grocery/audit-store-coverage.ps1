@@ -18,12 +18,15 @@
 #>
 param([string]$OutDir = "", [string]$Embed = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $Embed)  { $Embed  = Join-Path $OutDir 'deals-page-embed.html' }
 # the 7 stores that MUST appear on every staple row - keep in lockstep with $storeOrder in build-deals-page.ps1
 $stores = @('Hy-Vee','Aldi','Family Fare','Fareway',"Baker's","Sam's Club",'Walmart')
 
+# NO completion marker on this branch, deliberately: it is an early SKIP that examined nothing, and a marker
+# here would vouch for a run that never started - the exact lie the contract exists to prevent.
 if (-not (Test-Path $Embed)) { Write-Output "store-coverage: SKIP (no built board at $Embed)"; exit 0 }
 $html = Get-Content $Embed -Raw
 $ids = @((Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json) | ForEach-Object { [string]$_.id })
@@ -81,8 +84,8 @@ $warn = if ($absent.Count) { "  (WARN " + $absent.Count + " staple not on board:
 if ($violations.Count) {
   Write-Output ("store-coverage: FAIL  " + $violations.Count + " staple commodity(ies) with a store missing from the row:" )
   foreach ($v in $violations) { Write-Output ("  {0,-20} missing=[{1}] dupes=[{2}]" -f $v.commodity, $v.missing, $v.dupes) }
-  exit 2
+  Write-GuardComplete -Name 'store-coverage'; exit 2
 } else {
   Write-Output ("store-coverage: OK  all " + $ok + " on-board staples show every one of the " + $stores.Count + " stores" + $warn)
-  exit 0
+  Write-GuardComplete -Name 'store-coverage'; exit 0
 }

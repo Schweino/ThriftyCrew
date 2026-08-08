@@ -27,6 +27,7 @@
 param([string]$OutDir = "", [string]$CompareFile = "", [string]$CandidatesFile = "", [string]$ReportDir = "",
       [string]$CommoditiesFile = "", [string]$AllowFile = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 if (-not $ReportDir) { $ReportDir = $OutDir }
@@ -267,10 +268,10 @@ if ($gaps.Count) {
       }
     }
   }
-  if ($actionable.Count) { exit 2 }
+  if ($actionable.Count) { Write-GuardComplete -Name 'coverage-gaps'; exit 2 }
   Write-Output ''
   Write-Output 'coverage-gaps: no ACTIONABLE gap - every absent store above is absent for a reason the engine states itself (basis it cannot express, or a sanity band). Not paging.'
-  exit 0
+  Write-GuardComplete -Name 'coverage-gaps'; exit 0
 } else {
   if ($noRaw.Count -eq $stores.Count) {
     Write-Output 'coverage-gaps: BLIND - ZERO raw products parsed for EVERY store (no ads/regular/deals source yielded a name). Nothing was checked; a no-gaps verdict would be an empty claim.'
@@ -281,5 +282,5 @@ if ($gaps.Count) {
   } else {
     Write-Output 'coverage-gaps: none - every store that carries a tracked item is on the board'
   }
-  exit 0
+  Write-GuardComplete -Name 'coverage-gaps'; exit 0
 }

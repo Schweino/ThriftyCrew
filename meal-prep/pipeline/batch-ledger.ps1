@@ -25,6 +25,7 @@ param(
   [string]$LedgerPath
 )
 $ErrorActionPreference='Stop'
+. (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\guard-contract.ps1')
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp   = Split-Path -Parent $here
 if(-not $LedgerPath){ $LedgerPath = Join-Path $mp 'db\batch-ledger.json' }
@@ -115,7 +116,7 @@ if($Start){
   $ledger += [pscustomobject]@{ batch=$Batch; opened=$now; last_activity=$now; closed=$false
                                 closed_at=$null; close_detail=$null; slugs=@($Slugs); stages=@() }
   Save-Ledger $ledger
-  Write-Output ("ledger opened: {0} ({1} slug(s))" -f $Batch, @($Slugs).Count); exit 0
+  Write-Output ("ledger opened: {0} ({1} slug(s))" -f $Batch, @($Slugs).Count); Write-GuardComplete -Name 'batch-ledger'; exit 0
 }
 if($Stamp -or $Close){
   if(-not $Batch){ throw '-Batch required' }
@@ -139,9 +140,9 @@ if($Stamp -or $Close){
   if($Close -and $miss.Count){
     Write-Output ("  WARNING closed with unstamped stage(s): " + ($miss -join ', '))
     Write-Output '  (recorded, but this is NOT a clean close - -Verify will keep reporting it)'
-    exit 1
+    Write-GuardComplete -Name 'batch-ledger'; exit 1
   }
-  exit 0
+  Write-GuardComplete -Name 'batch-ledger'; exit 0
 }
 if($Verify){
   $now2 = Get-Date; $findings = @()
@@ -162,7 +163,7 @@ if($Verify){
       Write-Output ("  in flight: '{0}' still owes {1}" -f $b.batch, ($miss -join ', '))
     }
   }
-  if($findings.Count){ Write-Output ("batch-ledger: {0} unfinished batch(es)" -f $findings.Count); $findings | ForEach-Object { Write-Output ("  ! " + $_) }; exit 1 }
-  Write-Output 'batch-ledger: no stalled batches'; exit 0
+  if($findings.Count){ Write-Output ("batch-ledger: {0} unfinished batch(es)" -f $findings.Count); $findings | ForEach-Object { Write-Output ("  ! " + $_) }; Write-GuardComplete -Name 'batch-ledger'; exit 1 }
+  Write-Output 'batch-ledger: no stalled batches'; Write-GuardComplete -Name 'batch-ledger'; exit 0
 }
 Write-Output 'nothing to do - pass -Start, -Stamp, -Close, -Verify or -SelfTest'

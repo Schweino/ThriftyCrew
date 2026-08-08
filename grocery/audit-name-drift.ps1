@@ -8,6 +8,7 @@
   an auto-fix: eyeball each, and for a genuinely wrong product re-resolve it by the board item name.
 #>
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $out  = Join-Path $root 'out'
 $cmp  = (Get-ChildItem (Join-Path $out 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
@@ -85,3 +86,6 @@ if ($examined -eq 0) {
   Write-Output 'name-drift: BLIND - examined ZERO cells (product-urls.json has no id/store matching this board; check .items). The count=0 name-drift.json just written is blind, not clean: build-deals-page link suppression, guard 3, and tile-integrity WRONG-PRODUCT all read it as clean.'
   exit 3
 }
+# This script has no exit 0 - it falls off the end on its normal path, so the marker goes here. The BLIND
+# branch above keeps exit 3 and no marker: could-not-evaluate is not completion.
+Write-GuardComplete -Name 'name-drift'

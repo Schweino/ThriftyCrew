@@ -76,7 +76,8 @@ param(
   [string]$ResponsesFile,
   [string]$BaselineFile
 )
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
 # Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
@@ -295,7 +296,7 @@ if ($provable.Count -eq 0) {
 }
 if ($issues.Count -eq 0) {
   Write-Output ("search-links: OK  " + $provable.Count + " of " + $rows.Count + " template(s) resolve for '" + $Query + "'" + $(if ($unprov.Count -gt 0) { "; " + $unprov.Count + " unprovable (listed above)" } else { '' }))
-  exit 0
+  Write-GuardComplete -Name 'search-links'; exit 0
 }
 
 Write-Output ("search-links: " + $issues.Count + " finding(s):")
@@ -315,4 +316,4 @@ if ($Alert) {
     } catch {}
   }
 }
-exit 2
+Write-GuardComplete -Name 'search-links'; exit 2
