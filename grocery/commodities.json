@@ -39546,6 +39546,7 @@
         "id":  "taco-seasoning",
         "label":  "Taco Seasoning (packet)",
         "unit":  "oz",
+        "max_pack_oz":  4,
         "include":  [
                         "taco\\s+seasoning"
                     ],
@@ -39641,6 +39642,7 @@
         "id":  "ranch-seasoning-mix",
         "label":  "Ranch Seasoning Mix (packet)",
         "unit":  "oz",
+        "max_pack_oz":  5,
         "include":  [
                         "\\branch\\b[^,]*\\bmix\\b",
                         "ranch\\s+seasoning"

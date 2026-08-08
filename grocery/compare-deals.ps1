@@ -67,6 +67,32 @@ function Test-Band($id, $up) { if (-not $BANDS.ContainsKey($id)) { return $true 
 # from this table are simply not floored (no false blocks on exotic units).
 $FLOOR = @{ oz=0.008; floz=0.006; lb=0.07; gallon=0.75; dozen=0.35 }
 function Test-Floor($unit, $up) { $u=[string]$unit; if (-not $FLOOR.ContainsKey($u)) { return $true }; return ([double]$up -ge [double]$FLOOR[$u]) }
+# PACK-FORM CAP (2026-08-08, Brad's "packet means packet" ruling from the accuracy sample).
+# Some commodities are defined by their PACK FORM, not just their contents: "Taco Seasoning (packet)" and
+# "Ranch Seasoning Mix (packet)" are the single-use packet a shopper actually buys. The board was filling both
+# with the BULK CANISTER - McCormick 8.5 oz on taco seasoning, Great Value 8 oz Canister on ranch - which is a
+# different product at a different per-oz rate, so the published number is not what a packet buyer pays.
+# A price band cannot express this (both forms sit inside the same per-oz band) and neither can a name regex,
+# because the size is not reliably in the name. So the constraint is declared where it belongs: on the
+# commodity, in the same shape as pack_is_package. A commodity without the field is completely unaffected.
+$MAXPACK = @{}
+foreach ($c in $commodities) { if ($c.PSObject.Properties['max_pack_oz']) { $MAXPACK[[string]$c.id] = [double]$c.max_pack_oz } }
+function Get-PackOz([string]$size, [string]$name) {
+  # Total package weight in ounces, ONLY when the size string states one plainly. Returns $null otherwise -
+  # an unknown size must never be treated as a violation, or every store that omits sizes loses the cell.
+  $t = (("" + $size + " " + $name)).ToLower()
+  $m = [regex]::Match($t, '(\d+(?:\.\d+)?)\s*(?:fl\s*)?oz\b')
+  if ($m.Success) { return [double]$m.Groups[1].Value }
+  $m = [regex]::Match($t, '(\d+(?:\.\d+)?)\s*(?:lbs?|pounds?)\b')
+  if ($m.Success) { return ([double]$m.Groups[1].Value * 16) }
+  return $null
+}
+function Test-PackSize($id, $size, $name) {
+  if (-not $MAXPACK.ContainsKey([string]$id)) { return $true }
+  $oz = Get-PackOz $size $name
+  if ($null -eq $oz -or $oz -le 0) { return $true }
+  return ($oz -le $MAXPACK[[string]$id])
+}
 # bulk / non-single-unit heuristic on a size string (so the winner line can flag "10 lb pack" etc.)
 function Test-Bulk([string]$size, [string]$name) {
   $t = (("" + $size + " " + $name)).ToLower()
@@ -606,6 +632,21 @@ if ($SelfTest) {
   _Near 'undeclared commodity still divides'      (Get-UnitPrice (_D '$6.99' 'New York Bakery Texas Toast with Real Garlic' $null '6 ct') (_C  'each')).unit_price 1.165 0.001
   # the declaration must not invent a basis where there is no count at all - a bare loaf is still per-each
   _Near 'pack_is_package: no count -> per-each'   (Get-UnitPrice (_D '$3.99' 'Fareway Garlic Bread' $null 'each') (_CP 'each')).unit_price 3.99 0.001
+
+  # --- 11f: max_pack_oz - the PACK FORM cap (2026-08-08 packet-vs-canister ruling) -------------------------
+  # The live rows: "Taco Seasoning (packet)" was filled with McCormick Mild Taco Seasoning Mix 8.5 Oz, and
+  # "Ranch Seasoning Mix (packet)" with Great Value Classic Ranch 8 oz Canister. Both are the bulk form of the
+  # right contents, at a per-oz rate a packet buyer never pays. MUST-FIRE: the canister is rejected. CLEAN
+  # TWINS: the real packet passes, an undeclared commodity is untouched, and an item whose size cannot be read
+  # passes (an unknown size is not a violation - treating it as one would empty every store that omits sizes).
+  $MAXPACK['_selftest-packet'] = 4
+  if (-not (Test-PackSize '_selftest-packet' '8.5 oz' 'Mc Cormick Mild Taco Seasoning Mix 8.5 Oz')) { Write-Output 'ok    max_pack_oz rejects the 8.5 oz canister' } else { Write-Output 'FAIL  max_pack_oz let the bulk canister through'; $script:fail++ }
+  if (-not (Test-PackSize '_selftest-packet' '8 oz' 'Great Value Classic Ranch Salad Dressing & Recipe Mix, 8 oz Canister')) { Write-Output 'ok    max_pack_oz rejects the 8 oz canister' } else { Write-Output 'FAIL  max_pack_oz let the ranch canister through'; $script:fail++ }
+  if (Test-PackSize '_selftest-packet' '1.25 oz' 'Our Family Seasoning Mix, Taco 1.25 Oz') { Write-Output 'ok    max_pack_oz keeps the real 1.25 oz packet' } else { Write-Output 'FAIL  max_pack_oz rejected a real packet'; $script:fail++ }
+  if (Test-PackSize '_selftest-packet' '4 oz' 'Great Value Classic Ranch Mix, 1 oz Packets, 4 Count') { Write-Output 'ok    max_pack_oz keeps a 4-count of packets' } else { Write-Output 'FAIL  max_pack_oz rejected a multi-packet box'; $script:fail++ }
+  if (Test-PackSize '_selftest-packet' '' 'Taco Seasoning Mix') { Write-Output 'ok    max_pack_oz: unreadable size is NOT a violation' } else { Write-Output 'FAIL  max_pack_oz rejected an item whose size it could not read'; $script:fail++ }
+  if (Test-PackSize 'undeclared-commodity' '8.5 oz' 'Mc Cormick Mild Taco Seasoning Mix 8.5 Oz') { Write-Output 'ok    max_pack_oz: undeclared commodity untouched' } else { Write-Output 'FAIL  max_pack_oz fired on a commodity that never declared it'; $script:fail++ }
+  $MAXPACK.Remove('_selftest-packet')
 
   # the 'snax' GLOBAL_EXCLUDE token (blocks snack TRAYS from winning real-commodity cells). $GLOBAL_EXCLUDE
   # is defined AFTER this block exits, so read the token from this script's own source (the extraction regex
@@ -1251,6 +1292,13 @@ foreach ($d in $deals) {
       # in-band (or band-less) but below the universal per-unit floor -> a dropped-decimal / unit error.
       $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("floor>=$($FLOOR[[string]$c.unit])"); price_text=$d.price_text; size_text=$d.size_text })
       $uprice = $null; $basis = 'IMPLAUSIBLE-LOW'   # drop from ranking; board still ships via runner-up
+    }
+    elseif (-not (Test-PackSize $c.id $d.size_text $d.name)) {
+      # right contents, WRONG PACK FORM for a commodity that is defined by its form (see Test-PackSize).
+      # Flagged rather than silently dropped, so a cap set too tight shows up as findings instead of as a
+      # quietly emptier board.
+      $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("max_pack_oz<=$($MAXPACK[[string]$c.id])"); price_text=$d.price_text; size_text=$d.size_text })
+      $uprice = $null; $basis = 'WRONG-PACK-FORM'   # drop from ranking; board still ships via runner-up
     }
   }
   # SAFETY NET: a recognized multibuy that came back UNPRICED means the capture is incomplete
