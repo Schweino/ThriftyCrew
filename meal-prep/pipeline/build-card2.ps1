@@ -274,7 +274,13 @@ $L.Add('<p class="smp-sc-note">Totals price whole packages, cans, and jars, beca
 # nothing ever read, and dumped the reader on the board with their basket lost). It now opens the store
 # picker in the widget: choose the stores you will actually walk into, then print the list split by store.
 if($bidCoverage -ge $MinBidCoverage){
-  $miss = if(@($bidMiss).Count){ "<p class='smp-shop-note'>We do not track a board price for: " + (Enc2 (($bidMiss | Select-Object -First 4) -join ', ')) + ". <a href='/suggest-an-item/'>Ask us to add them</a>.</p>" } else { '' }
+  # ABSOLUTE, like every other link on the card (the related-recipe cards already use $SiteBase). A RELATIVE
+  # internal href is stored by Ghost as a placeholder and expanded to the absolute URL when the Admin API
+  # reads it back, so the published bytes can never equal the local bytes - and publish.ps1's pre-flight
+  # hashes the RAW body, so those slugs failed its live-vs-ledger check on every single run and had to be
+  # -Force'd through. This was the only relative href in the whole card; it made exactly the 4 recipes that
+  # render this note (the ones with an untracked ingredient) permanently un-republishable. [[ghost-url-roundtrip]]
+  $miss = if(@($bidMiss).Count){ "<p class='smp-shop-note'>We do not track a board price for: " + (Enc2 (($bidMiss | Select-Object -First 4) -join ', ')) + ". <a href='" + $SiteBase + "/suggest-an-item/'>Ask us to add them</a>.</p>" } else { '' }
   $L.Add('<p style="margin:1.4rem 0 0"><button type="button" class="smp-shop">Shop this recipe</button></p>' + $miss)
 }
 $L.Add('</div>')
