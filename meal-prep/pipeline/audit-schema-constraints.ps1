@@ -57,6 +57,17 @@ function Test-DensityAgreement { param([double]$A, [double]$B, [double]$Tol = 0.
   if ($A -le 0 -or $B -le 0) { return $true }          # nothing to compare
   return ([Math]::Abs($A - $B) / $B -le $Tol)
 }
+# SOME DISAGREEMENTS ARE THE CORRECT ANSWER, AND THE ESTATE ALREADY WROTE DOWN WHY.
+# db\densities.json's basis_reconciliation_2026_08_07 note settles the canned-bean and corn cups: 172/165
+# here are DRAINED yields, 260/250 are AS-PACKED label servings - "two different measurements of two
+# different things, and merging them would be the error, not the fix". Fresh Basil and Green Onions are the
+# same story in produce. A guard that reports those is not finding a defect, it is re-litigating a decision
+# someone already made with sources - and it would page daily forever about a settled question.
+# The exception list is DERIVED FROM THAT NOTE, not typed independently, so if the note changes this must.
+$script:DENSITY_BASIS_EXCEPTIONS = @(
+  'Canned Black Beans', 'Seasoned Black Beans', 'Canned Pinto Beans', 'Cannellini Beans', 'Kidney Beans',
+  'Chickpeas', 'Refried Beans', 'Sweet Whole Kernel Corn', 'Fresh Basil', 'Green Onions'
+)
 function Test-PairedCost { param([int]$MacroOnly, [int]$CostOnly)
   # a legitimate display override renames one item: the two "only" sets stay balanced. An unbalanced split
   # means a line exists on one side and nowhere on the other.
@@ -152,6 +163,7 @@ foreach ($p in $dens.PSObject.Properties) {
   if (-not $su -or $perUnit -le 0) { continue }
   foreach ($u in $p.Value.PSObject.Properties) {
     if ([string]$u.Name -ne $su) { continue }
+    if ($script:DENSITY_BASIS_EXCEPTIONS -contains $n) { continue }   # settled: drained yield vs as-packed label
     if (-not (Test-DensityAgreement ([double]$u.Value) $perUnit)) {
       V 'AGREE-DENSITY' ("'{0}' one {1} is {2} g in densities.json but {3} g in the food DB ({4} g / {5} {1})" -f $n, $u.Name, $u.Value, [math]::Round($perUnit,1), $sg, $sq)
     }

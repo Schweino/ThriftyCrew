@@ -1,30 +1,39 @@
 ﻿# Density vs food-DB disagreements (audit-schema-constraints, 2026-08-08)
 
-Twelve items where `db\densities.json` and `food-macros-db.json` state different grams for the SAME
+Eight items where `db\densities.json` and `food-macros-db.json` state different grams for the SAME
 household unit, after normalising the food DB by `serving_qty`. densities.json drives LABEL derivation;
 food-macros-db drives MACRO computation - so a gap means the shopping line says one amount and the macros
 were computed from another.
 
-These are NOT sweepable. The estate's rule (repair-measure-vs-grams) is that deciding a gram figure needs
-the SOURCE, not arithmetic. Each row below needs one adjudication, cheapest-blast-radius last.
+## Corrected 2026-08-08 - four "findings" were the correct answer
 
-| item | densities | food DB | gap | live recipes |
-|---|---|---|---|---|
-| Garlic | 5 g/clove | 3 g/clove | 67% | **377** |
-| Seasoned Black Beans | 172 g/cup | 260 g/cup | 34% | 34 |
-| Sweet Whole Kernel Corn | 165 g/cup | 250 g/cup | 34% | 32 |
-| Ranch Seasoning Mix | 7 g/tbsp | 9 g/tbsp | 22% | 8 |
-| Canned Black Beans | 172 g/cup | 260 g/cup | 34% | 5 |
-| Canned Pinto Beans | 172 g/cup | 260 g/cup | 34% | 1 |
-| 1/3 Fat Cream Cheese, Fresh Mint, Sugar, BBQ Sauce (Sugar Free), Italian Seasoning, Taco Seasoning | small | small | 7-30% | few |
+The first version of this list had 12 rows. `db\densities.json` already settles four of them in its own
+`basis_reconciliation_2026_08_07` note, with sources: the canned-bean and corn cups (172/165 here vs
+260/250 implied by the labels) are **DRAINED yields against AS-PACKED label servings** - two different
+measurements of two different things, "and merging them would be the error, not the fix". Fresh Basil and
+Green Onions are the same story in produce. Rice was checked and is settled at 180 g/cup on BOTH sides.
 
-Notes toward adjudication:
-- **Garlic** is the open `garlic gpu` item already tracked from the burrito batch. A USDA clove is ~3 g;
-  the board's own Kroger netWeight work put the priced clove at 42.6 g per head. Whichever wins must be
-  applied to BOTH files at once.
-- The **canned bean / corn** cluster is almost certainly the drained-vs-undrained split (172 g drained vs
-  260 g including liquid) - the r300 run hit this as "drained-can pricing". If so, the fix is to state
-  which basis each file means, not to average them.
+Those are now an explicit exception list in the auditor, derived from that note rather than typed
+independently. A guard that reports a settled adjudication is not finding a defect, it is re-litigating a
+decision someone already made with sources - and it would page daily forever.
 
-Ratcheted in `db\schema-constraint-baseline.json`, so these stay visible daily without paging, and any
-THIRTEENTH disagreement fires immediately.
+## The eight that remain
+
+| item | densities | food DB | gap | live recipes | note |
+|---|---|---|---|---|---|
+| **Garlic** | 5 g/clove | 3 g/clove | 67% | **377** | the open `garlic gpu` item; USDA clove ~3 g, board's Kroger netWeight put the priced head at 42.6 g |
+| Ranch Seasoning Mix | 7 g/tbsp | 9 g/tbsp | 22% | 8 | |
+| Taco Seasoning | 2.7 g/tsp | 2.5 g/tsp | 8% | few | near tolerance |
+| 1/3 Fat Cream Cheese | 15 g/tbsp | 14 g/tbsp | 7% | few | near tolerance |
+| Italian Seasoning | 1.4 g/tsp | 1 g/tsp | 40% | few | both near-zero macro |
+| BBQ Sauce (Sugar Free) | 17 g/tbsp | 16 g/tbsp | 6% | few | near tolerance |
+| Sugar | 4.2 g/tsp | 4 g/tsp | 5% | few | near tolerance |
+| Fresh Mint | 1.6 g/tbsp | 1.5 g/tbsp | 7% | few | near tolerance |
+
+**Only Garlic is worth a decision.** Six of the eight are within a gram on near-zero-macro items, which
+densities.json's own readme already calls macro- and cost-irrelevant; the honest fix for those is probably
+to widen the tolerance for spice-class items rather than to edit numbers. Ranch Seasoning Mix is the only
+other one above rounding.
+
+Ratcheted in `db\schema-constraint-baseline.json`: these stay visible daily without paging, and a NINTH
+disagreement fires immediately.

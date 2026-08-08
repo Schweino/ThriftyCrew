@@ -801,6 +801,23 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           if (-not $NoAlert) { try { Send-Alert -Subject "Ingredient stores disagree: $($siHard.Count) hard finding(s)" -Body ("meal-prep\pipeline\audit-store-integrity.ps1 found cross-store defects. Each of these means a published number is wrong or a cost line is silently missing.`n`n" + (($siHard | Select-Object -First 15) -join "`n")) | Out-Null } catch {} }
         } else { Log ('store-integrity: no hard findings (' + (@($si | Where-Object { $_ -match '^\s*~' }).Count) + ' warn)') }
       } catch { Log ('audit-store-integrity threw: ' + $_.Exception.Message) }
+      # ---- DATABASE REBUILD (2026-08-08) -----------------------------------------------------------------
+      # db\thriftycrew.db is rebuilt from the JSON stores with PRAGMA foreign_keys=ON. A reference that does
+      # not resolve does not "produce a finding" here - it REFUSES the write and names the row, which is the
+      # difference between detecting the Turkey Bacon bid class and preventing it. Exit 3 is the estate's
+      # could-not-evaluate code (no interpreter) and must not read as clean.
+      try {
+        $dbOut = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\db-build.ps1')
+        $dbRc  = $LASTEXITCODE
+        if ($dbRc -eq 1) {
+          $bad = @($dbOut | Where-Object { $_ -match 'CONSTRAINT REFUSED|!' })
+          Log ('db-build REFUSED: ' + (($bad | Select-Object -First 3) -join ' | '))
+          $summary += 'REVIEW    the recipe/ingredient database REFUSED a write - a reference does not resolve (meal-prep\pipeline\db-build.ps1)'
+          if (-not $NoAlert) { try { Send-Alert -Subject 'Database constraint refused a write' -Body ("db\thriftycrew.db could not be rebuilt: a foreign key does not resolve. Some JSON store now points at something that does not exist - the class that pointed Turkey Bacon at PORK and dropped Garlic Powder from a recipe total.`n`n" + (@($dbOut) -join "`n")) | Out-Null } catch {} }
+        }
+        elseif ($dbRc -eq 3) { Log 'db-build: SKIPPED - no interpreter (proves nothing this cycle)'; $summary += 'REVIEW    db-build could not run (no Python) - cross-store constraints were not enforced this cycle' }
+        else { Log ('db-build: ' + (@($dbOut | Where-Object { $_ -match 'OK:' }) -join '')) }
+      } catch { Log ('db-build threw: ' + $_.Exception.Message) }
       # ---- SCHEMA CONSTRAINTS (2026-08-08) ---------------------------------------------------------------
       # What a relational engine would refuse to store, checked against the eight JSON stores that must agree
       # about the same nouns. The structural classes (broken bid, orphan macro/density row, duplicate key,

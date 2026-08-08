@@ -198,3 +198,10 @@ site-backups/*
 
 # Claude worktree metadata; the repo root's own .claude is already covered by the /* allow-list rule.
 /grocery/.claude/
+
+# SQLite build artifact - rebuilt from the JSON masters by pipeline\db-build.ps1 every run.
+# The JSON stores remain the authored masters and stay in git; committing a 1.5MB binary that
+# changes on every build would bloat the lineage without adding recoverable information.
+meal-prep/db/thriftycrew.db
+meal-prep/db/thriftycrew.db.building
+meal-prep/db/*.db-journal

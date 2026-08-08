@@ -1,4 +1,4 @@
-﻿{
+{
   "readme": "Grams per household unit per canonical item, for qty->grams conversion (R100). Weight units are universal (lb=453.592, oz=28.3495, kg=1000, g=1). Volume/each units below. Precision matters for macro-dense items; near-zero-macro items (spices, herbs, vinegars) use coarse standards - gram error there is macro- and cost-irrelevant. 'can' = default whole-can grams when no size given (parser prefers explicit parenthetical sizes). cooked_to_dry: factor applied when source says 'cooked' for rice/pasta (we list dry).",
   "defaults": { "sauce_tbsp": 16, "sauce_tsp": 5.3, "sauce_cup": 250, "spice_tsp": 2, "spice_tbsp": 6, "herb_cup": 16, "floz": 29.57 },
   "cooked_to_dry": { "Rice": 0.36, "Penne Pasta": 0.44, "Spaghetti": 0.44, "Ziti Pasta": 0.44, "Rotini Pasta": 0.44, "Egg Noodles": 0.44, "Orzo Pasta": 0.44 },
@@ -105,7 +105,6 @@
     "Canned Pinto Beans": { "can": 255, "cup": 172, "note": "drained grams per 15.5oz can" },
     "Refried Beans": { "can": 454, "cup": 260, "note": "whole 16oz can used, nothing drained; cup from the label 1/2 cup = 130 g" },
     "Hominy": { "can": 340, "cup": 165 },
-    "Potato Gnocchi_dup": {},
     "Olives": { "cup": 135, "tbsp": 8.5 },
     "Sun-Dried Tomatoes": { "cup": 54, "tbsp": 3.5 },
     "Roasted Red Peppers": { "cup": 140, "each": 45 },
@@ -113,7 +112,6 @@
     "Golden Raisins": { "cup": 145, "tbsp": 9, "each": 0.5 },
     "Dill Pickles": { "each": 65, "cup": 143, "chip": 6 },
     "Tomatillos": { "each": 34 },
-    "Sweet Potatoes_dup": {},
     "Fresh Cilantro": { "cup": 16, "tbsp": 1, "bunch": 57, "handful": 10 },
     "Fresh Basil": { "cup": 24, "tbsp": 1.5, "bunch": 60, "handful": 10, "leaf": 0.5, "each": 0.5, "large": 0.75 },
     "Fresh Mint": { "cup": 25, "tbsp": 1.6, "bunch": 50, "handful": 8, "leaf": 0.5 },
@@ -171,7 +169,6 @@
     "Cream of Mushroom Soup": { "can": 298 },
     "Cream of Chicken Soup": { "can": 298 },
     "Red Wine": { "cup": 235, "floz": 29.4 },
-    "Greek Yogurt_dup": {},
 
     "Peanuts": { "cup": 146, "tbsp": 9 },
     "Walnuts": { "cup": 117, "tbsp": 7.3, "each": 4 },
@@ -211,7 +208,6 @@
     "Taco Seasoning": { "tbsp": 8, "packet": 28, "tsp": 2.7 },
     "Fajita Seasoning": { "packet": 35, "tbsp": 8 },
     "Ranch Seasoning Mix": { "packet": 28, "tbsp": 7 },
-    "Golden Raisins_dup": {},
 
     "_r300_additions_note": "R300 stage-4 tuning additions (2026-07-25): densities for the 50 new r300 DB items plus unit gaps the r300 sources exposed (cup-of-cooked-meat lines, bratwurst counts, bread slices, dried-chile counts). Values are standard household-measure weights; cited per item where non-obvious.",
     "Turkey Breast": { "cup": 140 },
