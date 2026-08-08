@@ -238,6 +238,10 @@ $startT = Get-Date
 $MAXMIN = 14
 $deals = New-Object System.Collections.ArrayList
 $fresh = 0; $fail = 0; $markdown = 0; $stale = 0; $newProd = 0; $mismatch = 0
+# rows whose priceMultiple did not reconcile against basePrice - refused, never published (see the divisor
+# note at the price calculation below). Counted separately from $fail so a rise in it is visible as its own
+# signal rather than blending into ordinary lookup failures.
+$multRefused = 0; $multDescriptive = 0
 # CAP-SKIPPED IS ITS OWN NUMBER. $stale counts a carry-forward row for THREE unrelated reasons - the
 # wall-clock cap stopped us asking, the size-mismatch check refused the answer, or the product has no
 # productId to ask with - so a run truncated at $MAXMIN minutes and a healthy run produce the same $stale
@@ -269,11 +273,36 @@ foreach ($w in $work) {
   if ($got) {
     $sp = $got.sp
     $mult = if ($sp.priceMultiple -and ([double]$sp.priceMultiple) -gt 0) { [double]$sp.priceMultiple } else { 1 }
+    $bmult = if ($sp.basePriceMultiple -and ([double]$sp.basePriceMultiple) -gt 0) { [double]$sp.basePriceMultiple } else { 1 }
+    $base  = if ($sp.basePrice) { [math]::Round(([double]$sp.basePrice) / $bmult, 4) } else { $null }
+
+    # PRICEMULTIPLE IS NOT ALWAYS A DIVISOR (2026-08-08 accuracy sample, crushed red pepper 3225646).
+    # The contract this code was written against is "3 for $4" -> price=4, priceMultiple=3, so price/mult is
+    # the per-item number. Hy-Vee also returns rows where `price` is ALREADY the per-item price and the
+    # multiple is just describing the promo: crushed red pepper came back price=1.25, priceMultiple=3 while
+    # its siblings came back price=3, priceMultiple=3. Dividing that row published $0.4167 a jar - a number
+    # that matches NEITHER the $1.25 regular NOR the $1.00 shelf tag, i.e. a price no shopper can ever pay.
+    # It reached the board as red-pepper-flakes @ Hy-Vee = $0.2050/oz and the out-of-band sample caught it.
+    #
+    # THE TELL IS basePrice. A multibuy TOTAL cannot equal the single-unit regular price, so price == basePrice
+    # means the multiple is descriptive, not a divisor. Anchoring on the store's own second number keeps this
+    # from being a guess about which rows "look wrong".
+    $descriptiveMult = $false
+    if ($mult -gt 1 -and $null -ne $base -and $base -gt 0) {
+      if ([math]::Abs(([double]$sp.price) - $base) -le 0.005) { $descriptiveMult = $true }
+    }
+    if ($descriptiveMult) { $mult = 1; $multDescriptive++ }
     $price = [math]::Round(([double]$sp.price) / $mult, 4)
-    if ($price -le 0) { $fail++; $got = $null }
-    else {
-      $bmult = if ($sp.basePriceMultiple -and ([double]$sp.basePriceMultiple) -gt 0) { [double]$sp.basePriceMultiple } else { 1 }
-      $base  = if ($sp.basePrice) { [math]::Round(([double]$sp.basePrice) / $bmult, 4) } else { $null }
+    # A DEEP DIVISION IS NOT SILENTLY PUBLISHED. If the divided price still lands implausibly far under the
+    # regular price, the divisor is more likely wrong than the promo is deep. Refuse the row rather than ship
+    # an unpayable number - a gap is recoverable, a wrong price on the board is what this whole program exists
+    # to stop. 0.40 is below every real Hy-Vee multibuy observed (the deepest, 4-for, lands at 0.50 of base).
+    if ($mult -gt 1 -and $null -ne $base -and $base -gt 0 -and $price -lt ($base * 0.40)) {
+      $multRefused++
+      $fail++; $got = $null
+    }
+    if ($got -and $price -le 0) { $fail++; $got = $null }
+    if ($got) {
 
       # KEEP the verified size. Only a product we have never priced falls back to Hy-Vee's own size field.
       $size = [string]$w.size
@@ -384,6 +413,12 @@ foreach ($w in $work) {
 }
 
 Write-Output ("Hy-Vee: " + $fresh + " refreshed today (" + $markdown + " marked down), " + $newProd + " newly priced, " + $stale + " not re-verified, " + $mismatch + " REFUSED (productId is a different size than our row), " + $capSkipped + " never asked (wall-clock cap), " + $fail + " failed")
+# Reported on its own line, and only when non-zero, so the divisor class stays VISIBLE. The bug it guards
+# against published a price no shopper could pay and survived every internal check for as long as nobody
+# looked; a silent counter would recreate exactly that.
+if ($multDescriptive -gt 0 -or $multRefused -gt 0) {
+  Write-Output ("Hy-Vee: priceMultiple reconciliation - " + $multDescriptive + " row(s) treated the multiple as DESCRIPTIVE (price already per-item, price == basePrice), " + $multRefused + " row(s) REFUSED (divided price landed under 40% of the regular price, so the divisor is more likely wrong than the promo is deep)")
+}
 
 # COVERAGE, SO THE EXISTING RATCHET CATCHES TRUNCATION - no new threshold invented here. $refreshable is
 # every product we hold a productId for, $fresh is how many of them Hy-Vee actually answered for. If the cap
@@ -439,6 +474,7 @@ $out = [ordered]@{
   # in the FILE and not just on the console because the console is exactly where this information kept going
   # to die.
   deal_count=$deals.Count; refreshed_today=$fresh; marked_down=$markdown; newly_priced=$newProd; not_reverified=$stale; cap_skipped=$capSkipped; failed=$fail
+  multiple_descriptive=$multDescriptive; multiple_refused=$multRefused
   deals=$deals.ToArray()
 }
 ($out | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8

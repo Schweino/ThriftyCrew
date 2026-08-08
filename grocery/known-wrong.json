@@ -1595,6 +1595,51 @@
                         "ruled_on":  "2026-08-08",
                         "ruled_by":  "weekly accuracy sample 2026-08-08",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "italian-dressing|SamsClub|members-mark-food-service-italian-dressing-128-o",
+                        "commodity":  "italian-dressing",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Member\u0027s Mark Food Service Italian Dressing, 128 oz."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "not-purchasable-in-club",
+                        "evidence":  "Member\u0027s Mark Food Service Italian Dressing 128 fl oz at 0.0741/floz is SHIPPING-ONLY at the Omaha club (rendered PDP reads Pickup: Not available). The board publishes club prices, so this is a number no member can pay in the building. Cheapest genuinely in-club Italian dressing is Olive Garden 2x24oz at 0.1663 - a 2.2x gap, and this cell held the CROWN. Sam\u0027s SSR JSON also advertises a phantom 9.24 pickup price on that unavailable channel.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "weekly accuracy sample 2026-08-08",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "stain-remover|SamsClub|clorox-2-for-colors-max-performance-stain-remove",
+                        "commodity":  "stain-remover",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Clorox 2 for Colors Max Performance Stain Remover, 4 in 1, 112.75 fl. oz."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "not-purchasable-in-club",
+                        "evidence":  "Clorox 2 for Colors Max Performance 112.75 fl oz at 0.1169/floz is SHIPPING-ONLY at the Omaha club (Pickup: Not available on the rendered PDP). Cheapest genuinely in-club stain remover is Shout Advanced 22oz+60oz refill at 0.1401/floz.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "weekly accuracy sample 2026-08-08",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "beef-jerky|SamsClub|old-trapper-hot-spicy-beef-jerky-18-oz",
+                        "commodity":  "beef-jerky",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Old trapper Hot \u0026 Spicy Beef Jerky, 18 oz."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "not-purchasable-in-club",
+                        "evidence":  "Old Trapper Hot \u0026 Spicy Beef Jerky 18 oz at 1.1100/oz is SHIPPING-ONLY at the Omaha club. The price itself is right (19.98/18oz) but no member can pay it in the building. Cheapest in-club jerky is Jack Link\u0027s Original 16 oz at 1.1800/oz regular (1.0550 on instant savings to Sep 06).",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "weekly accuracy sample 2026-08-08",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
