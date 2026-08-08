@@ -24,8 +24,14 @@ def load_json(path):
 def _fk_msg(table, detail, err):
     """A refusal has to read like a finding, not a stack trace. The daily chain logs this line verbatim."""
     return ('CONSTRAINT REFUSED [%s]: %s -- %s\n'
-            '  A reference does not resolve. This is the class that pointed Turkey Bacon at PORK and\n'
-            '  dropped Garlic Powder from a recipe total. Fix the source JSON, then re-run.' % (table, detail, err))
+            '  A reference does not resolve: it names something that does not exist. Fix the source JSON,\n'
+            '  then re-run.\n'
+            '  NOTE ON SCOPE, because the first version of this message overclaimed: a foreign key catches\n'
+            '  a DANGLING reference, not a WRONG-BUT-VALID one. It would NOT have caught the Turkey Bacon\n'
+            '  bug - that row pointed at "bacon" (PORK by the lb) instead of "turkey-bacon", and BOTH are\n'
+            '  real commodities, so the key would have passed. That class needs semantic review\n'
+            '  (audit-store-integrity, the mapper agent\'s evidence rules), not a constraint.'
+            % (table, detail, err))
 
 
 def main():
