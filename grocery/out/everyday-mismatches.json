@@ -52,6 +52,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "baby-formula",
+        "store":  "Walmart",
+        "unit":  "oz",
+        "board":  0.7313,
+        "link":  0.686,
+        "ratio":  0.94,
+        "price":  10.97,
+        "size":  "15.991 fl oz",
+        "boardItem":  "Parent\u0027s Choice Advantage Infant Formula Powder with Iron; DHA, Lutein, Vit E, 33.2 oz",
+        "linkItem":  "Similac 360 Total Care Gentle Comfort Ready-to-Feed Baby Formula, 2-fl-oz Bottle",
+        "board_src":  "main"
+    },
+    {
         "id":  "bell-peppers",
         "store":  "Aldi",
         "unit":  "each",
@@ -88,6 +101,45 @@
         "size":  "12 oz",
         "boardItem":  "Farmland Original Pork Sausage",
         "linkItem":  "Farmland Original Pork Sausage",
+        "board_src":  "main"
+    },
+    {
+        "id":  "butter",
+        "store":  "Walmart",
+        "unit":  "lb",
+        "board":  2.976,
+        "link":  2.56,
+        "ratio":  0.86,
+        "price":  3.84,
+        "size":  "24 fl oz",
+        "boardItem":  "Great Value Sweet Cream Salted Butter Twin Pack, 16 oz Box, 8 Sticks, Slow Churned, Refrigerated",
+        "linkItem":  "Pearl Milling Company Butter Rich Syrup, 24 oz (Packaging May Vary)",
+        "board_src":  "main"
+    },
+    {
+        "id":  "butter",
+        "store":  "Family Fare",
+        "unit":  "lb",
+        "board":  5.39,
+        "link":  3.837,
+        "ratio":  0.71,
+        "price":  2.59,
+        "size":  "10.8 oz",
+        "boardItem":  "Land O Lakes Butter, Unsalted 4 Ea",
+        "linkItem":  "Birds Eye Sauced Butter Super Sweet Corn 10.8 Oz",
+        "board_src":  "main"
+    },
+    {
+        "id":  "butter",
+        "store":  "Sam\u0027s Club",
+        "unit":  "lb",
+        "board":  6.2163,
+        "link":  4.2743,
+        "ratio":  0.69,
+        "price":  7.48,
+        "size":  "28 oz",
+        "boardItem":  "Carrington Farms Ghee, Clarified Butter, 54 oz.",
+        "linkItem":  "Sunbutter Original Sunflower Seed Butter, 28 oz",
         "board_src":  "main"
     },
     {
