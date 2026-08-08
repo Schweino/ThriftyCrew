@@ -75,6 +75,7 @@ $ShotDir  = Join-Path $WorkDir 'shots'
 . (Join-Path $Income 'lib\design-tokens.ps1')
 . (Join-Path $ReelRoot 'speech.ps1')
 . (Join-Path $ReelRoot 'voices.ps1')
+. (Join-Path $ReelRoot 'copy-rules.ps1')
 
 # Resolve the narrator's name to a Microsoft id once, up front, so a typo fails here with a list of
 # valid names rather than three minutes later as an opaque refusal from the TTS service.
@@ -292,6 +293,7 @@ function Add-Card {
 <body class="$Shell"><div class="mast">Thrifty Crew</div><div class="stage">$body</div>
 <div class="pad"></div></body></html>
 "@
+  Assert-CopyRules -Text @($Vo, $Eyebrow, $Big, $Sub) -Context "card '$Id'"
   $scenes.Add([pscustomobject]@{ Id = $Id; Kind = 'card'; Vo = $Vo; Html = $html; Beat = [bool]$Beat })
 }
 
@@ -307,6 +309,7 @@ function Add-Screen {
 <div class="cap"><div class="eyebrow">$Eyebrow</div><div class="$cls">$Caption</div></div>
 <div class="pad"></div></body></html>
 "@
+  Assert-CopyRules -Text @($Vo, $Eyebrow, $Caption) -Context "screen '$Id'"
   $scenes.Add([pscustomobject]@{ Id = $Id; Kind = 'screen'; Vo = $Vo; Html = $html
                                  Shot = $shots[$ShotId]; Beat = [bool]$Beat })
 }
@@ -700,6 +703,9 @@ $(if ($isFree) { "This one is free this week at thriftycrew.com" } else { "Full 
 #mealprep #groceryhaul #budgetmeals #frugalliving #mealprepsunday #thriftycrew
 "@
 $captionFile = Join-Path $OutDir "$stamp-how-it-works-$($facts.slug).txt"
+# The post text is the one surface the per-scene check cannot see, and it is the one a
+# reader is most likely to read closely.
+Assert-CopyRules -Text @($captionText) -Context 'the Facebook caption'
 [System.IO.File]::WriteAllText($captionFile, $captionText, (New-Object System.Text.UTF8Encoding $false))
 
 # The narration, in one readable file. Watching a 73-second video to check a wording change is a

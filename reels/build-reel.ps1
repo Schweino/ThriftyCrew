@@ -1,4 +1,4 @@
-<#
+﻿<#
 build-reel.ps1 - one vertical Facebook Reel a day, generated from live recipe data.
 
 WHY THIS EXISTS
@@ -114,6 +114,7 @@ $script:PitchArg = if ($PitchHz -ne 0) { @("--pitch=$(if ($PitchHz -gt 0) { '+' 
 # House names to Microsoft ids, once, up front: a typo fails here with a list of valid names rather
 # than as an opaque refusal from the service after every frame has already rendered.
 . (Join-Path $PSScriptRoot 'voices.ps1')
+. (Join-Path $PSScriptRoot 'copy-rules.ps1')
 $Voice = Resolve-Voice $Voice
 if ($Voice2) {
   # -Voice2 alternated the narrator scene by scene, which required rendering a scene at a time. That
@@ -343,6 +344,9 @@ function Add-Scene {
 <div class="pad"></div>
 </div></body></html>
 "@
+  # Standing content rules, checked at the moment a scene is authored so no surface is exempt and
+  # a violation costs a second rather than a finished video.
+  Assert-CopyRules -Text @($Vo, $Caption, $Body) -Context "scene '$Id'"
   $scenes.Add([pscustomobject]@{ Id = $Id; Vo = $Vo; Html = $html })
 }
 
@@ -778,6 +782,9 @@ $(if ($isFree) { "Full recipe is free this week at thriftycrew.com" } else { "Fu
 $hashtags
 "@
 $captionFile = Join-Path $OutDir "$stamp-$pick.txt"
+# The post text is the one surface the per-scene check cannot see, and it is the one a
+# reader is most likely to read closely.
+Assert-CopyRules -Text @($caption) -Context 'the Facebook caption'
 [System.IO.File]::WriteAllText($captionFile, $caption, (New-Object System.Text.UTF8Encoding $false))
 
 $used = @($state.used) + @([pscustomobject]@{ slug = $pick; date = $stamp; per_serving = $cheapestPs; week_of = $weekOf })

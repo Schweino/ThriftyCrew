@@ -145,6 +145,26 @@ Two more measured writing rules worth keeping in mind, not enforceable by a guar
 `-VoiceSamples` renders the whole narration in each voice on the roster into
 `out\demo-voice-samples\`. Judge a voice over the full script, never over one stock line.
 
+### Standing content rules
+
+`copy-rules.ps1` holds rules about what the videos may **say**, and it fails the build rather than
+relying on anyone remembering them. Both builders check every scene as it is authored plus the
+finished post text, before any synthesis or rendering, so a violation costs a second instead of a
+video nobody notices is wrong until it is live.
+
+Currently one rule: **never name Omaha.** Say "real stores" or "store prices". The prices are
+Omaha's, but naming the city tells everyone outside it that the page is not for them, and the goal is
+enough traffic that requests to expand become the signal for where to go next. Applies to narration,
+cards, captions, post text and hashtags. It does **not** apply to the site, the board or the recipe
+pages, where the specificity is what earns trust.
+
+Each banned term carries its reason in the error, so whoever trips it can judge whether the rule
+still applies rather than just deleting the check. Add a rule by adding one entry to
+`$script:TcBannedCopy`; nothing else needs changing.
+
+This lives in code and not in a note because **the daily reel runs unattended from a scheduled task
+with no human and no model in the loop.** There is no agent to instruct.
+
 ### Audio finishing
 
 The narration is mastered before it goes on the cut: high-pass, three small EQ moves, compression,
