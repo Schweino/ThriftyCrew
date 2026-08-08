@@ -308,15 +308,27 @@ TC.barUp=function(){ try{ return !!document.querySelector('.tc-bar:not([hidden])
 // Focus trap + Escape + return-focus, shared by every sheet and full-screen mode.
 TC.trap=function(el,onClose){
   var prev=document.activeElement;
+  function foc(){ return el.querySelectorAll('a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])'); }
   function keys(e){
     if(e.key==='Escape'){ e.preventDefault(); onClose(); return; }
     if(e.key!=='Tab')return;
-    var f=el.querySelectorAll('a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])');
+    var f=foc();
     if(!f.length)return; var a=f[0],b=f[f.length-1];
     if(e.shiftKey&&document.activeElement===a){e.preventDefault();b.focus();}
     else if(!e.shiftKey&&document.activeElement===b){e.preventDefault();a.focus();}
   }
   el.addEventListener('keydown',keys);
+  // Pull focus INTO the sheet, here, so no caller can forget it. The handler is bound to the element, but
+  // opening a sheet leaves focus on the button that opened it - outside el - so Escape reaches nothing and
+  // the sheet is keyboard-inescapable until the user happens to Tab in. Sheets with nothing focusable take
+  // focus on the container itself.
+  try{
+    if(!el.contains(document.activeElement)){
+      var first=foc()[0];
+      if(first){ first.focus({preventScroll:true}); }
+      else { el.setAttribute('tabindex','-1'); el.focus({preventScroll:true}); }
+    }
+  }catch(e){ try{ var f0=foc()[0]; if(f0) f0.focus(); }catch(e2){} }
   return function(){ el.removeEventListener('keydown',keys); try{ if(prev&&prev.focus)prev.focus(); }catch(e){} };
 };
 TC.money=function(v){ return '$'+(Math.round(v*100)/100).toFixed(2); };
