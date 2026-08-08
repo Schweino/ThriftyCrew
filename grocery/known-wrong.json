@@ -1550,6 +1550,51 @@
                         "ruled_on":  "2026-08-08",
                         "ruled_by":  "claude",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "asparagus|Walmart|great-value-asparagus-cut-spears-14-5-oz",
+                        "commodity":  "asparagus",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value Asparagus Cut Spears, 14.5 oz"
+                                  ],
+                        "product_id":  "10315618",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Great Value Asparagus Cut Spears 14.5 oz is CANNED asparagus holding a fresh per-lb produce cell at 2.8248/lb of can weight (drained weight unknown). The Hy-Vee asparagus cell in the same sample is fresh bulk at 4.99/lb, so the commodity is fresh produce. Cheapest fresh at Walmart with a stated weight is Marketside 10 oz = 6.3520/lb; the canned row undercuts real fresh by 2.2x.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "weekly accuracy sample 2026-08-08",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "baked-beans|HyVee|hy-vee-pork-beans-in-tomato-sauce",
+                        "commodity":  "baked-beans",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Hy-Vee Pork \u0026 Beans in Tomato Sauce"
+                                  ],
+                        "product_id":  "58076",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Hy-Vee Pork \u0026 Beans in Tomato Sauce 16 oz holds the BAKED BEANS cell at 0.0556/oz. Pork and beans in tomato sauce is a distinct product from baked beans; this is the commodity-hijack shape where the cheaper adjacent product captures the cell. The real store-brand baked bean floor at Omaha #1 is 0.0757/oz - five Hy-Vee 28 oz baked bean variants (Original, Country Style, Homestyle, Maple Cured Bacon, Brown Sugar Hickory) all price at 2.12.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "weekly accuracy sample 2026-08-08",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "brussels-sprouts|Walmart|green-giant-season-brussel-sprout-intro",
+                        "commodity":  "brussels-sprouts",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Green Giant Season Brussel Sprout Intro"
+                                  ],
+                        "product_id":  "190387223",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Green Giant Season Brussel Sprout Intro holds the BRUSSELS SPROUTS per-lb cell at 2.2080/lb. It is a seasoned prepared frozen side dish, not plain brussels sprouts. Plain Great Value frozen brussels sprouts 12 oz are 1.52 = 2.0267/lb (verified STORE_ONLY IN_STOCK) and fresh 1 lb bag is 3.02/lb, so the cell is both the wrong product class and not the cheapest plain item.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "weekly accuracy sample 2026-08-08",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
