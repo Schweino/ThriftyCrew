@@ -85,12 +85,27 @@ jobs:
           # seconds on a job that only reaches this step when it is genuinely going to do the day's work.
           fetch-depth: 0
 
+      # CREDENTIALS. Key files (.ghostkey, .krogerkey) are gitignored, so on a runner they do not exist and
+      # every consumer must fall back to an env var. Until 2026-08-08 only GHOST_ADMIN_KEY was passed, so
+      # Baker's pull (Kroger's sanctioned API) could never authenticate here - it would throw, the board
+      # would lose a store, and nobody would learn that until the backup actually fired for the first time.
+      # grocery\audit-cloud-readiness.ps1 is the standing check that no chain script can ONLY read a file.
       - name: Run the daily pipeline
         if: steps.gate.outputs.skip != 'true'
         env:
-          GHOST_ADMIN_KEY: ${{ secrets.GHOST_ADMIN_KEY }}
+          GHOST_ADMIN_KEY:      ${{ secrets.GHOST_ADMIN_KEY }}
+          KROGER_CLIENT_ID:     ${{ secrets.KROGER_CLIENT_ID }}
+          KROGER_CLIENT_SECRET: ${{ secrets.KROGER_CLIENT_SECRET }}
         shell: powershell
         run: |
+          # fail fast and LOUDLY on a missing secret, rather than discovering it as a mangled store pull
+          # three quarters of the way through a 39-minute run
+          foreach ($k in 'GHOST_ADMIN_KEY','KROGER_CLIENT_ID','KROGER_CLIENT_SECRET') {
+            if (-not (Get-Item "Env:$k" -ErrorAction SilentlyContinue).Value) {
+              Write-Host "::warning::secret $k is not set - the part of the pipeline that needs it will degrade (see grocery/audit-cloud-readiness.ps1)"
+            }
+          }
+          powershell -ExecutionPolicy Bypass -File grocery/audit-cloud-readiness.ps1
           powershell -ExecutionPolicy Bypass -File grocery/check-ad-cycles.ps1 -NoAlert
           Write-Host "--- ad-cycle log tail ---"
           if (Test-Path grocery/ad-cycle-log.txt) { Get-Content grocery/ad-cycle-log.txt -Tail 25 }

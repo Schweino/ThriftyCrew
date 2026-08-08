@@ -18,8 +18,14 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $root = Split-Path $here -Parent
 $apiUrl = 'https://map-to-success.ghost.io'
 $pubBase = 'https://www.thriftycrew.com'
-$adminKey = (Get-Content (Join-Path $here '..\.ghostkey') -Raw).Trim()
 . (Join-Path $PSScriptRoot '..\..\lib\ghost-lib.ps1')   # Get-GhostJWT + Invoke-GhostApi (timeout/retry)
+# THE KEY COMES FROM Get-GhostKey, WHICH CHECKS $env:GHOST_ADMIN_KEY FIRST (2026-08-08). This line used to
+# read meal-prep\.ghostkey directly, one line ABOVE the dot-source that provides the env-aware helper - so
+# every other publisher in the daily chain (publish-deals-page, send-price-alerts, top5-weekly,
+# rotate-free-dinners) could run from a CI runner and this one, the recipe card publisher, could not: the
+# gitignored key file does not exist there, so it threw on line 21 before doing anything. The cloud backup
+# has never completed a full run, and this is one of the reasons it would not have.
+$adminKey = Get-GhostKey
 . (Join-Path $PSScriptRoot '..\lib\render-tokens.ps1')  # Expand-SpecProse: {{stat}} tokens -> this spec's numbers
 function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 function Get-ContentHash([string]$s){ $sha=[System.Security.Cryptography.SHA1]::Create(); return ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($s))) -replace '-','') }

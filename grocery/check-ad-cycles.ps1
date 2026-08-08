@@ -801,6 +801,19 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           if (-not $NoAlert) { try { Send-Alert -Subject "Ingredient stores disagree: $($siHard.Count) hard finding(s)" -Body ("meal-prep\pipeline\audit-store-integrity.ps1 found cross-store defects. Each of these means a published number is wrong or a cost line is silently missing.`n`n" + (($siHard | Select-Object -First 15) -join "`n")) | Out-Null } catch {} }
         } else { Log ('store-integrity: no hard findings (' + (@($si | Where-Object { $_ -match '^\s*~' }).Count) + ' warn)') }
       } catch { Log ('audit-store-integrity threw: ' + $_.Exception.Message) }
+      # ---- CLOUD READINESS (2026-08-08) ------------------------------------------------------------------
+      # Static check that no script in this chain can ONLY read a gitignored key file. Key files do not exist
+      # on a runner, so such a script is a cloud failure waiting for its first real run - and the cloud
+      # backup has never had one (13 straight stand-downs from a PS 5.1 array bug, all reported SUCCESS).
+      # meal-prep\engine\publish.ps1 was exactly that until today. Cheap, and it holds the fix in place.
+      try {
+        $cr = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-cloud-readiness.ps1')
+        if ($LASTEXITCODE -ne 0) {
+          $crBad = @($cr | Where-Object { $_ -match '^\s*!' })
+          Log ('cloud-readiness: ' + ($crBad -join ' | '))
+          $summary += 'REVIEW    a daily-chain script can only read a local key file - it would fail on the cloud runner (grocery\audit-cloud-readiness.ps1)'
+        }
+      } catch { Log ('audit-cloud-readiness threw: ' + $_.Exception.Message) }
       # ---- DATABASE REBUILD (2026-08-08) -----------------------------------------------------------------
       # db\thriftycrew.db is rebuilt from the JSON stores with PRAGMA foreign_keys=ON. A reference that does
       # not resolve does not "produce a finding" here - it REFUSES the write and names the row, which is the
