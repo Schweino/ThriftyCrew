@@ -77,7 +77,11 @@ $today = (Get-Date).ToString('yyyy-MM-dd')
 
 # ---------------------------------------------------------------- credentials
 $cid = $env:KROGER_CLIENT_ID; $csec = $env:KROGER_CLIENT_SECRET
-if (-not $cid -or -not $csec) {
+# NOT UNDER -SelfTest (2026-08-08). The self-test below is deliberately credential-free and network-free -
+# it only exercises Resolve-KrogerSize / Clean-Name against frozen rows - but this throw sat ABOVE it, so
+# -SelfTest died here on any machine without .krogerkey. That made the script unreachable on the change-time
+# gate, which carries no secrets by design: gates run #2 failed on it while nothing was actually broken.
+if (-not $SelfTest -and (-not $cid -or -not $csec)) {
   $kf = Join-Path $root '.krogerkey'
   if (-not (Test-Path $kf)) { throw "Kroger credentials missing: create grocery\.krogerkey (gitignored) or set KROGER_CLIENT_ID / KROGER_CLIENT_SECRET." }
   $k = Get-Content $kf -Raw | ConvertFrom-Json

@@ -35,6 +35,13 @@ $repo = Split-Path $here -Parent
 # allowlist here: a line is a decision someone defends in a diff, not a way to make the gate quiet.
 $SKIP = @{
   'check-ad-cycles.ps1' = 'the daily chain itself - running it would execute the whole pipeline, not test it'
+  # test-auditors is NOT hermetic and cannot be made so cheaply: it drives the real audits against the real
+  # board, and grocery\out\comparison-*.json is gitignored. On gates run #2 it failed with
+  # "food-category clean twin failed (rc=3)" - rc=3 is could-not-evaluate, i.e. it went BLIND for want of a
+  # board, not because anything was broken. Gating pushes on that would train everyone to ignore a red gate,
+  # which is worse than not having one. It runs every day in check-ad-cycles against a real board, where its
+  # 418 checks mean something. Excluded here on purpose, not overlooked.
+  'test-auditors.ps1'   = 'data-dependent: needs a real board, which a clean checkout does not have (out\comparison-*.json is gitignored). Runs daily in the chain instead.'
 }
 
 $scripts = @(Get-ChildItem $repo -Recurse -File -Filter *.ps1 -ErrorAction SilentlyContinue |
@@ -75,7 +82,13 @@ foreach ($s in $withSelfTest) {
   else {
     $fail += $rel
     Write-Output ("  FAIL  {0}  (exit {1})" -f $rel, $rc)
-    @($out) | Where-Object { $_ -match '(?i)fail|X ' } | Select-Object -First 5 | ForEach-Object { Write-Output ('          ' + $_) }
+    # THE EXCERPT MUST SHOW THE FAILURES (2026-08-08). This was `-match '(?i)fail|X '` capped at 5 lines, and
+    # '(?i)...x ' matches the "x " inside words - "mutex + atomic swap" scored as a hit. On gates run #2 that
+    # spent 3 of the 5 slots on PASSING lines and hid 3 of test-auditors' 4 failures from the log entirely,
+    # so the run read as one broken watcher when it was four. Anchored to the FAIL/X markers, and 12 lines.
+    @($out) | Where-Object { $_ -match '^\s*(FAIL|X)\b' -or $_ -match '(?-i)FAIL' } |
+      Select-Object -First 12 | ForEach-Object { Write-Output ('          ' + $_) }
+    if (@($out).Count -gt 0) { Write-Output ('          ...' + (@($out).Count) + ' line(s) of output in total') }
   }
 }
 
@@ -94,7 +107,7 @@ foreach ($g in $static) {
   else {
     $fail += $g.f
     Write-Output ("  FAIL  {0}  (exit {1}) - {2}" -f $g.f, $rc, $g.n)
-    @($out) | Where-Object { $_ -match '!|FAIL' } | Select-Object -First 6 | ForEach-Object { Write-Output ('          ' + $_) }
+    @($out) | Where-Object { $_ -match '!|FAIL' } | Select-Object -First 12 | ForEach-Object { Write-Output ('          ' + $_) }
   }
 }
 
