@@ -1,2 +1,7 @@
 __pycache__/
 *.pyc
+
+# Never let a credential into the repo, even by accident.
+.azure-key
+*.key
+*secret*
