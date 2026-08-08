@@ -21,7 +21,14 @@
 #
 # Dot-source:  . (Join-Path $repoRoot 'lib\guard-contract.ps1')
 # Self-test:   powershell -File lib\guard-contract.ps1 -SelfTest
-param([switch]$SelfTest)
+#
+# THIS FILE DECLARES NO param() BLOCK, DELIBERATELY. It shipped with param([switch]$SelfTest), and in PS 5.1
+# dot-sourcing a script runs its param() block in the CALLER's scope - so every guard that dot-sourced this
+# had its OWN -SelfTest switch reset to $false on the line after it bound. The retrofit that exists to make
+# guards provable was silently disarming their self-tests instead: aisle-test -SelfTest fell straight past
+# its 14-case branch to "nothing to judge" and exited 0, which reads as a pass. Measured, not theorised
+# (True before the dot-source, False after). Read it off $args and only when RUN, never when dot-sourced.
+$__gcSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 function Write-GuardComplete {
   <# Call ONCE, as the last thing a guard does on its normal path. Never inside a -SelfTest branch (those
@@ -41,7 +48,7 @@ function Test-GuardComplete {
   return ($lines[-1].Trim() -match ('^' + [regex]::Escape($Name.ToUpper()) + '-COMPLETE(\s|$)'))
 }
 
-if ($SelfTest) {
+if ($__gcSelfTest) {
   $f = 0
   function T($m, $c, $g) { if ($c) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $g); $script:f++ } }
 
@@ -70,6 +77,18 @@ if ($SelfTest) {
   T 'Write-GuardComplete emits NAME-COMPLETE <summary>, upper-cased' ($out -eq 'ROW-AGE-COMPLETE stores=7') $out
   $bare = & { Write-GuardComplete -Name 'x' }
   T 'a summary is optional and leaves no trailing space' ($bare -eq 'X-COMPLETE') "[$bare]"
+
+  # MUST FIRE, frozen from the 2026-08-08 regression above. A caller declaring its own [switch]$SelfTest
+  # dot-sources this file; if this file ever regrows a colliding param() block, the caller's switch comes
+  # back $false and this case goes red. It has to run out-of-process because the bug IS scope behaviour.
+  $probe = Join-Path $env:TEMP 'gc-clobber-probe.ps1'
+  ("param([switch]`$SelfTest)`r`n. '" + $PSCommandPath + "'`r`nWrite-Output ('SelfTest=' + `$SelfTest)") |
+    Set-Content $probe -Encoding UTF8
+  $probeOut = ((& powershell -NoProfile -ExecutionPolicy Bypass -File $probe -SelfTest 2>&1 |
+                 ForEach-Object { [string]$_ }) -join ' ').Trim()
+  Remove-Item $probe -Force -ErrorAction SilentlyContinue
+  T 'MUST FIRE  dot-sourcing this must not clobber a caller''s own -SelfTest switch' `
+    ($probeOut -match 'SelfTest=True') $probeOut
 
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }

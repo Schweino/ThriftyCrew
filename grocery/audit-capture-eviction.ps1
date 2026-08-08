@@ -1,4 +1,4 @@
-﻿# audit-capture-eviction.ps1 - is any board cell dearer than the row the engine's OWN rule says should win?
+# audit-capture-eviction.ps1 - is any board cell dearer than the row the engine's OWN rule says should win?
 #
 # WHY THIS EXISTS (2026-08-06 Sam's baby-formula finding, measured live):
 #   Select-FreshestCaptureRows decides which capture prices a commodity at a store. Until 2026-08-06 the
@@ -37,6 +37,7 @@
 # Exit 0 = clean or advisory findings. Exit 2 = self-test regression. Exit 3 = BLIND (cannot see src_date).
 param([string]$CandidatesFile = '', [string]$CompareFile = '', [double]$Ratio = 1.25, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # ONE implementation of the ruling matcher, two callers (compare-deals enforces it, this audits against it).
 . (Join-Path $root 'known-wrong-lib.ps1')
@@ -242,5 +243,6 @@ $outFile = Join-Path $OutDir 'capture-evictions.json'
 @{ generated = (Get-Date).ToString('s'); candidates_file = (Split-Path $CandidatesFile -Leaf); compare_file = (Split-Path $CompareFile -Leaf); ratio = $Ratio; findings = $ranked } |
   ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
 Write-Output ("  -> $outFile")
+Write-GuardComplete -Name 'capture-eviction' -Summary ''
 exit 0
 

@@ -1,4 +1,4 @@
-﻿<#
+<#
   aisle-test.ps1 - would this candidate crown flip put a product from the WRONG AISLE on the board?
 
   WHY THIS EXISTS
@@ -82,6 +82,7 @@ param(
   [string]$OutFile = ''
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 
 # ---- the shelf path, reduced to what we compare on -------------------------------------------------
@@ -395,5 +396,6 @@ foreach ($r in ($out | Sort-Object verdict, id)) {
 if (-not $OutFile) { $OutFile = Join-Path $root 'out\aisle-test.json' }
 ($out.ToArray() | ConvertTo-Json -Depth 4) | Set-Content $OutFile -Encoding UTF8
 Write-Output "-> $OutFile"
+Write-GuardComplete -Name 'aisle-test' -Summary ''
 exit 0
 

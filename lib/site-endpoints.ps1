@@ -17,7 +17,11 @@
 #
 # Dot-source:  . (Join-Path $repoRoot 'lib\site-endpoints.ps1')
 # Self-test:   powershell -File lib\site-endpoints.ps1 -SelfTest
-param([switch]$SelfTest)
+# NO param() BLOCK - this is a dot-sourced lib. In PS 5.1 a dot-sourced script's param() block runs in the
+# CALLER's scope, so a [switch]$SelfTest here would silently reset a caller's own -SelfTest to $false. That
+# exact bug shipped in lib\guard-contract.ps1 and disarmed the self-tests of six guards; see the note there.
+# No caller dot-sources this one yet, which is precisely why it gets fixed now rather than after it bites.
+$__seSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 # The Worker's public base. Change this ONE value on a Cloudflare account move or a custom-domain cutover.
 $script:TC_FEED_BASE = 'https://feed.thriftycrew.com'
@@ -29,7 +33,7 @@ function Get-WorkerUrl { param([string]$Path)
   return ($script:TC_FEED_BASE + $Path)
 }
 
-if ($SelfTest) {
+if ($__seSelfTest) {
   $f = 0
   function T($m, $c, $g) { if ($c) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $g); $script:f++ } }
   T 'the base carries no trailing slash (callers concatenate a rooted path)' (-not (Get-FeedBase).EndsWith('/')) (Get-FeedBase)

@@ -38,6 +38,7 @@
 # a fixture's clean result sitting exactly where a human (or the next audit) looks for the real board's.
 param([string]$CompareFile = "", [switch]$Strict, [string]$ReportDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
 if (-not $CompareFile) {
@@ -174,4 +175,5 @@ if ($confirmedCount -gt 0) {
   exit 2
 }
 if ($Strict) { exit 2 }
+Write-GuardComplete -Name 'pack-basis' -Summary ''
 exit 0

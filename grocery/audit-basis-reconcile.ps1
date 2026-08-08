@@ -57,6 +57,7 @@
 # harness run replaced the real board's reconciliation with a fixture's.
 param([string]$CompareFile = "", [string]$RawDir = "", [double]$Factor = 1.5, [switch]$Strict, [string]$ReportDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
 if (-not $CompareFile) {
@@ -268,7 +269,11 @@ $rep = Join-Path $(if ($ReportDir) { $ReportDir } else { $OutDir }) 'basis-recon
   ConvertTo-Json -Depth 5) | Set-Content $rep -Encoding UTF8
 
 Write-Output ("basis-reconcile: checked $checked cell(s) against the store's own unit price ($scanned indexed, $allowed allowlisted)")
-if ($findings.Count -eq 0) { Write-Output '  ok - every checkable cell agrees with the store within the factor rail'; exit 0 }
+if ($findings.Count -eq 0) {
+  Write-Output '  ok - every checkable cell agrees with the store within the factor rail'
+  Write-GuardComplete -Name 'basis-reconcile' -Summary ("checked={0} findings=0" -f $checked)
+  exit 0
+}
 Write-Output ("  " + $findings.Count + " cell(s) disagree with the STORE'S OWN unit price by a factor - one of the two is wrong:")
 foreach ($f in ($findings | Sort-Object { -[math]::Abs([math]::Log($_.factor)) })) {
   Write-Output ("  {0,-24} {1,-11} ours {2}/{3}  vs store {4}  (x{5}) | basis '{6}' | {7}" -f `
@@ -277,5 +282,6 @@ foreach ($f in ($findings | Sort-Object { -[math]::Abs([math]::Log($_.factor)) }
 }
 Write-Output ("  report: " + $rep)
 Write-Output '  Decide per cell: fix the data/parse, or record the store''s own number as wrong in basis-reconcile-allowlist.json with the reason.'
+Write-GuardComplete -Name 'basis-reconcile' -Summary ("checked={0} findings={1}" -f $checked, $findings.Count)
 if ($Strict) { exit 2 }
 exit 0

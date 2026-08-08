@@ -1,4 +1,4 @@
-﻿<#
+<#
   audit-everyday-mismatch.ps1 - the REAL price-accuracy audit.
 
   audit-links reports 118 "mismatches", but most are not errors: a Hy-Vee cell showing the weekly-ad
@@ -20,6 +20,7 @@
 #        nothing must never report ok.
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = $PSScriptRoot
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
@@ -159,6 +160,9 @@ Write-Output ''
 Write-Output ('saved -> ' + $outF)
 
 # ADVISORY. Exit 1 says "I found disagreements", NOT "hold the board" - see the exit-code note at the top.
+# The marker goes ABOVE the verdict exit, not below it: the exit CODE carries the verdict, the marker carries
+# completion, and a detector that only proves it finished when it found nothing proves it on the wrong half.
+Write-GuardComplete -Name 'everyday-mismatch' -Summary ("checked={0} mismatches={1}" -f $checked, $bugs.Count)
 if ($bugs.Count -gt 0) { exit 1 }
 exit 0
 

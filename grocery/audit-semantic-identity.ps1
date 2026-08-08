@@ -45,6 +45,7 @@
 # software to believe and never check.
 param([switch]$PrepareOnly, [switch]$SelfTest, [int]$MaxReport = 25, [string]$Python = '', [switch]$IncludeIdentity)
 $ErrorActionPreference = 'Stop'
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir  = Join-Path $root 'out'
 $sidecar = Join-Path (Split-Path $root -Parent) 'sidecar'
@@ -290,4 +291,5 @@ $rp = Join-Path $OutDir 'semantic-findings.json'
 ($report | ConvertTo-Json -Depth 6) | Set-Content $rp -Encoding UTF8
 Write-Output ''
 Write-Output ("  -> $rp   ADVISORY ONLY: nothing here changes a price, a crown, a rule or a link.")
+Write-GuardComplete -Name 'semantic-identity' -Summary ''
 exit 0
