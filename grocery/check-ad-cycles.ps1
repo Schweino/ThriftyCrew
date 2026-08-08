@@ -801,6 +801,27 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           if (-not $NoAlert) { try { Send-Alert -Subject "Ingredient stores disagree: $($siHard.Count) hard finding(s)" -Body ("meal-prep\pipeline\audit-store-integrity.ps1 found cross-store defects. Each of these means a published number is wrong or a cost line is silently missing.`n`n" + (($siHard | Select-Object -First 15) -join "`n")) | Out-Null } catch {} }
         } else { Log ('store-integrity: no hard findings (' + (@($si | Where-Object { $_ -match '^\s*~' }).Count) + ' warn)') }
       } catch { Log ('audit-store-integrity threw: ' + $_.Exception.Message) }
+      # ---- SCHEMA CONSTRAINTS (2026-08-08) ---------------------------------------------------------------
+      # What a relational engine would refuse to store, checked against the eight JSON stores that must agree
+      # about the same nouns. The structural classes (broken bid, orphan macro/density row, duplicate key,
+      # a macro line with no cost line) all stand at ZERO, so their baseline is zero and one new one is hard
+      # immediately - the same verdict a foreign key would give, without the migration. Value disagreements
+      # (two files holding different grams for one unit) ratchet against db\schema-constraint-baseline.json:
+      # deciding a gram figure needs the SOURCE, not a sweep, so the known dozen stay visible without paging.
+      try {
+        $sc   = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\audit-schema-constraints.ps1')
+        $scRc = $LASTEXITCODE
+        $scBad = @($sc | Where-Object { $_ -match '^\s*!' })
+        if (@($sc).Count -eq 0) {
+          Log ("schema-constraints DID NOT RUN - exit $scRc with no output")
+          $summary += 'REVIEW    audit-schema-constraints produced no output - the cross-store integrity check did not run'
+        }
+        elseif ($scBad.Count) {
+          Log ('schema-constraints HARD: ' + (($scBad | Select-Object -First 4) -join ' | '))
+          $summary += "REVIEW    $($scBad.Count) NEW cross-store constraint violation(s) - a write landed that a real database would have rejected (meal-prep\pipeline\audit-schema-constraints.ps1 -ShowAll)"
+          if (-not $NoAlert) { try { Send-Alert -Subject "A write broke cross-store integrity" -Body ("audit-schema-constraints found violation(s) beyond the recorded baseline. These are references that do not resolve, rows with no partner, or duplicate keys - the classes that mispriced Turkey Bacon against PORK and dropped Garlic Powder's cost line.`n`n" + ($scBad -join "`n")) | Out-Null } catch {} }
+        } else { Log 'schema-constraints: no new violations (structural classes at zero)' }
+      } catch { Log ('audit-schema-constraints threw: ' + $_.Exception.Message) }
       # ---- UNFINISHED RECIPE BATCHES (2026-08-07) --------------------------------------------------------
       # The 29-burrito batch's stage 8 - the independent post-publish review - was interrupted before it
       # reported and NOTHING NOTICED. 29 pages were live and unverified, and it only surfaced hours later by
