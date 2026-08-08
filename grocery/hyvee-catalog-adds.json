@@ -1,4 +1,131 @@
 {
-  "readme": "REVIEWED ADDITIONS to the Hy-Vee catalogue - the third work-list source for pull-regular-hyvee.ps1. That puller is a REFRESH, not a pull: its work list is yesterday's own hyvee-regular file plus the Hy-Vee entries in product-urls.json, so a product that is in neither can never enter (1,538 rows is a fixed point, and 89.3% of the catalogue is absent). This file is the only way a NEW product joins that list, and the only writer is adjudicate-discovery.ps1 -Accept, which demands a named reviewer and written evidence. Every entry carries the productId Hy-Vee publishes, so the price is fetched from the store's own API exactly like every other row - nothing here supplies a price, a size or a board cell. Sizes are deliberately NOT stored: the puller's own header records that Hy-Vee's size field reports one unit of a multipack ('12 fl oz Cans' for a 12-pack) and mislabels ounces as counts, so an added product takes the same never-priced-before path every other new product takes, and the multipack and basis guards police it there.",
-  "items": []
+    "readme":  "REVIEWED ADDITIONS to the Hy-Vee catalogue - the third work-list source for pull-regular-hyvee.ps1. That puller is a REFRESH, not a pull: its work list is yesterday\u0027s own hyvee-regular file plus the Hy-Vee entries in product-urls.json, so a product that is in neither can never enter (1,538 rows is a fixed point, and 89.3% of the catalogue is absent). This file is the only way a NEW product joins that list, and the only writer is adjudicate-discovery.ps1 -Accept, which demands a named reviewer and written evidence. Every entry carries the productId Hy-Vee publishes, so the price is fetched from the store\u0027s own API exactly like every other row - nothing here supplies a price, a size or a board cell. Sizes are deliberately NOT stored: the puller\u0027s own header records that Hy-Vee\u0027s size field reports one unit of a multipack (\u002712 fl oz Cans\u0027 for a 12-pack) and mislabels ounces as counts, so an added product takes the same never-priced-before path every other new product takes, and the multipack and basis guards police it there.",
+    "items":  [
+                  {
+                      "product_id":  "2967041",
+                      "name":  "That\u0027s Smart! Fold \u0026 Close Sandwich Bags",
+                      "commodity":  "sandwich-bags",
+                      "added_on":  "2026-08-08",
+                      "added_by":  "claude",
+                      "evidence":  "That\u0027s Smart! Fold and Close Sandwich Bags, 150 ct $1.29. Hy-Vee\u0027s value label, same per-bag basis as the Kroger 150 ct it beats, and cheaper than the Hy-Vee brand row already held at $2.29.",
+                      "seen_at_discovery":  "$1.29 / 150 ct = $0.0086/each against a held $0.0153 - EVIDENCE ONLY, the puller re-derives both"
+                  },
+                  {
+                      "product_id":  "23531",
+                      "name":  "Hy-Vee Fun Miniature Marshmallows",
+                      "commodity":  "marshmallows",
+                      "added_on":  "2026-08-08",
+                      "added_by":  "claude",
+                      "evidence":  "Hy-Vee Fun Miniature Marshmallows 10.5 oz $1.01. Same product and size as the Hy-Vee marshmallow row already held at $1.48, priced per oz against a Great Value bag. Real saving on the same item.",
+                      "seen_at_discovery":  "$1.01 / 10.5 oz = $0.0962/oz against a held $0.1410 - EVIDENCE ONLY, the puller re-derives both"
+                  },
+                  {
+                      "product_id":  "3221000",
+                      "name":  "That\u0027s Smart Paprika",
+                      "commodity":  "paprika",
+                      "added_on":  "2026-08-08",
+                      "added_by":  "claude",
+                      "evidence":  "That\u0027s Smart Paprika 2.75 oz $1.00. This is the SAME product Hy-Vee already holds for this commodity, at a refreshed size and price; beats Great Value paprika 2.5 oz on a like-for-like per-oz basis.",
+                      "seen_at_discovery":  "$1.00 / 2.75 oz = $0.3636/oz against a held $0.6250 - EVIDENCE ONLY, the puller re-derives both"
+                  },
+                  {
+                      "product_id":  "2967942",
+                      "name":  "That\u0027s Smart Chicken Noodle Condensed Soup",
+                      "commodity":  "chicken-noodle-soup",
+                      "added_on":  "2026-08-08",
+                      "added_by":  "claude",
+                      "evidence":  "That\u0027s Smart Chicken Noodle Condensed Soup 10.5 oz $0.70. Identical form and size to the Great Value 10.5 oz condensed can it beats. Value-label equivalent of the Hy-Vee brand can already held.",
+                      "seen_at_discovery":  "$0.70 / 10.5 oz = $0.0667/oz against a held $0.1133 - EVIDENCE ONLY, the puller re-derives both"
+                  },
+                  {
+                      "product_id":  "2964874",
+                      "name":  "That\u0027s Smart! Tomato Condensed Soup",
+                      "commodity":  "tomato-soup",
+                      "added_on":  "2026-08-08",
+                      "added_by":  "claude",
+                      "evidence":  "That\u0027s Smart! Tomato Condensed Soup 10.75 oz $0.70. Identical form and size to the Great Value 10.75 oz condensed can it beats.",
+                      "seen_at_discovery":  "$0.70 / 10.75 oz = $0.0651/oz against a held $0.1133 - EVIDENCE ONLY, the puller re-derives both"
+                  },
+                  {
+                      "product_id":  "2916136",
+                      "name":  "That\u0027s Smart! Pure Vegetable Oil",
+                      "commodity":  "vegetable-oil",
+                      "added_on":  "2026-08-08",
+                      "added_by":  "claude",
+                      "evidence":  "That\u0027s Smart! Pure Vegetable Oil, 1 gal $8.52. Same product Hy-Vee already holds for this commodity, per fl oz against Great Value vegetable oil. Plain vegetable oil both sides.",
+                      "seen_at_discovery":  "$8.52 / 1 gal = $0.0666/floz against a held $0.0781 - EVIDENCE ONLY, the puller re-derives both"
+                  },
+                  {
+                      "product_id":  "66372",
+                      "name":  "Green Giant Red Potatoes",
+                      "commodity":  "red-potatoes",
+                      "added_on":  "2026-08-08",
+                      "added_by":  "claude",
+                      "evidence":  "Green Giant Red Potatoes 5 lb $3.99, against Paragon red potatoes 5 lb at Aldi. Same product, same pack size, same per-lb basis.",
+                      "seen_at_discovery":  "$3.99 / 5 lb = $0.7980/lb against a held $1.2900 - EVIDENCE ONLY, the puller re-derives both"
+                  },
+                  {
+                      "product_id":  "2969859",
+                      "name":  "That\u0027s Smart! Brussels Sprouts",
+                      "commodity":  "brussels-sprouts",
+                      "added_on":  "2026-08-08",
+                      "added_by":  "claude",
+                      "evidence":  "That\u0027s Smart! Brussels Sprouts 12 oz $1.39 = $1.85/lb. Real brussels sprouts. The floor it beats is Green Giant, so this commodity already prices packaged sprouts rather than fresh-only.",
+                      "seen_at_discovery":  "$1.39 / 12 oz = $1.8533/lb against a held $3.4900 - EVIDENCE ONLY, the puller re-derives both"
+                  },
+                  {
+                      "product_id":  "90791",
+                      "name":  "Pink Grapefruit",
+                      "commodity":  "grapefruit",
+                      "added_on":  "2026-08-08",
+                      "added_by":  "claude",
+                      "evidence":  "Pink Grapefruit, 1 ct $1.29 against Baker\u0027s ruby red grapefruit each at $1.50. Real produce, each-for-each, and Hy-Vee currently has no cell in this commodity at all.",
+                      "seen_at_discovery":  "$1.29 / 1 ct = $1.2900/each against a held $0.0000 - EVIDENCE ONLY, the puller re-derives both"
+                  },
+                  {
+                      "product_id":  "24205",
+                      "name":  "Old Orchard Healthy Balance Diet Cranberry Juice Cocktail",
+                      "commodity":  "cranberry-juice",
+                      "added_on":  "2026-08-08",
+                      "added_by":  "claude",
+                      "evidence":  "Old Orchard Healthy Balance Diet Cranberry Juice Cocktail 64 fl oz $1.99. Plain cranberry cocktail, same 64 fl oz bottle and same reduced-sugar form as the Nature\u0027s Nectar zero sugar cocktail it beats.",
+                      "seen_at_discovery":  "$1.99 / 64 fl oz = $0.0311/floz against a held $0.0545 - EVIDENCE ONLY, the puller re-derives both"
+                  },
+                  {
+                      "product_id":  "4140384",
+                      "name":  "Hy-Vee Cranberry Juice Drink Zero Sugar",
+                      "commodity":  "cranberry-juice",
+                      "added_on":  "2026-08-08",
+                      "added_by":  "claude",
+                      "evidence":  "Hy-Vee Cranberry Juice Drink Zero Sugar 64 fl oz $2.49. Plain cranberry, store brand, like-for-like against the Aldi zero sugar 64 oz cocktail.",
+                      "seen_at_discovery":  "$2.49 / 64 fl oz = $0.0389/floz against a held $0.0545 - EVIDENCE ONLY, the puller re-derives both"
+                  },
+                  {
+                      "product_id":  "4141454",
+                      "name":  "Hy-Vee Italian Seasoning",
+                      "commodity":  "italian-seasoning",
+                      "added_on":  "2026-08-08",
+                      "added_by":  "claude",
+                      "evidence":  "Hy-Vee Italian Seasoning 5 oz $3.99 = $0.798/oz. Plain italian seasoning in a larger jar, beating Hy-Vee\u0027s own That\u0027s Smart 1 oz at $1.00/oz. Same commodity, better basis.",
+                      "seen_at_discovery":  "$3.99 / 5 oz = $0.7980/oz against a held $1.0900 - EVIDENCE ONLY, the puller re-derives both"
+                  },
+                  {
+                      "product_id":  "4135775",
+                      "name":  "McCormick Perfect Pinch Spicy Italian Seasoning",
+                      "commodity":  "italian-seasoning",
+                      "added_on":  "2026-08-08",
+                      "added_by":  "claude",
+                      "evidence":  "McCormick Perfect Pinch Spicy Italian Seasoning 3.88 oz $3.61. A spicy variant but genuinely an italian seasoning blend, per oz against the 1 oz That\u0027s Smart jar. Margin is modest and the basis is sound.",
+                      "seen_at_discovery":  "$3.61 / 3.88 oz = $0.9304/oz against a held $1.0900 - EVIDENCE ONLY, the puller re-derives both"
+                  },
+                  {
+                      "product_id":  "53194",
+                      "name":  "JENNIE-O Turkey Bacon, 12 OZ",
+                      "commodity":  "turkey-bacon",
+                      "added_on":  "2026-08-08",
+                      "added_by":  "claude",
+                      "evidence":  "JENNIE-O Turkey Bacon against Butterball turkey bacon already held and Appleton Farms at Aldi. Right product. NOTE: the product name says 12 OZ while the size field says 16 oz - at 12 oz it would NOT take the crown. Accept adds it to the pull work list where the size is re-derived from the store, so the size is proven before it can price anything.",
+                      "seen_at_discovery":  "$4.39 / 16 oz = $0.2744/oz against a held $0.3325 - EVIDENCE ONLY, the puller re-derives both"
+                  }
+              ]
 }

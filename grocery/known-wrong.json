@@ -1175,6 +1175,276 @@
                         "ruled_on":  "2026-08-06",
                         "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "almonds|HyVee|post-honey-bunches-of-oats-with-almonds-cereal-f",
+                        "commodity":  "almonds",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Post Honey Bunches of Oats with Almonds Cereal, Family Size"
+                                  ],
+                        "product_id":  "2519444",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Post Honey Bunches of Oats with Almonds Cereal - a breakfast cereal, not almonds. Matched the include on the word almonds.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "almonds|HyVee|malt-o-meal-honey-and-oat-blenders-with-almonds",
+                        "commodity":  "almonds",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Malt-O-Meal Honey and Oat Blenders with Almonds Breakfast Cereal, 30 oz Resealable"
+                                  ],
+                        "product_id":  "3746199",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Malt-O-Meal Honey and Oat Blenders with Almonds - a breakfast cereal, not almonds. Same include collision as the Honey Bunches row.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cherries|HyVee|simply-limeade-with-cherry-bottle-52-fl-oz",
+                        "commodity":  "cherries",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Simply Limeade with Cherry Bottle, 52 fl oz"
+                                  ],
+                        "product_id":  "4198057",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Simply Limeade with Cherry - a bottled limeade drink, not cherries. Priced 52 fl oz against a per-lb produce commodity.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cucumbers|HyVee|burts-bees-refreshing-pre-moistened-with-cucumbe",
+                        "commodity":  "cucumbers",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Burt\u0027s Bees Refreshing Pre-moistened with Cucumber \u0026 Mint Scent Facial Cleanser Towelettes"
+                                  ],
+                        "product_id":  "772345",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Burt\u0027s Bees Cucumber and Mint facial cleanser TOWELETTES - personal care, not produce.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "honey|HyVee|hy-vee-honey-vanilla-greek-yogurt",
+                        "commodity":  "honey",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Hy-Vee Honey Vanilla Greek Yogurt"
+                                  ],
+                        "product_id":  "2935726",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Hy-Vee Honey Vanilla Greek YOGURT - dairy, not honey. Matched the include on honey.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "italian-sausage|HyVee|prego-italian-sausage-and-garlic-meat-sauce-23-5",
+                        "commodity":  "italian-sausage",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Prego Italian Sausage and Garlic Meat Sauce, 23.5 oz Jar"
+                                  ],
+                        "product_id":  "50463",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Prego Italian Sausage and Garlic Meat SAUCE, 23.5 oz jar - a pasta sauce, not sausage. Would price a meat commodity from a jar of sauce.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "italian-sausage|HyVee|prego-italian-sausage-and-garlic-meat-sauce-44-o",
+                        "commodity":  "italian-sausage",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Prego Italian Sausage and Garlic Meat Sauce, 44 oz Jar"
+                                  ],
+                        "product_id":  "2887170",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Prego Italian Sausage and Garlic Meat SAUCE, 44 oz jar - same pasta sauce as the 23.5 oz row, not sausage.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "peaches|HyVee|dole-orange-peach-mango-52oz",
+                        "commodity":  "peaches",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Dole Orange Peach Mango 52oz"
+                                  ],
+                        "product_id":  "4107477",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Dole Orange Peach Mango - a bottled juice blend, not peaches. Also 52 fl oz read against a per-lb produce commodity, so the saving is partly arithmetic.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "strawberries|HyVee|hy-vee-light-strawberry-flavor-apple-sauce-6-4-o",
+                        "commodity":  "strawberries",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Hy-Vee Light Strawberry Flavor Apple Sauce 6-4 oz Cups"
+                                  ],
+                        "product_id":  "24242",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Hy-Vee Light Strawberry Flavor APPLE SAUCE cups - apple sauce, not strawberries.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "watermelon|HyVee|extra-watermelon-sugar-free-chewing-gum-15-ct-3",
+                        "commodity":  "watermelon",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "EXTRA Watermelon Sugar Free Chewing Gum, 15 ct (3 Pack)"
+                                  ],
+                        "product_id":  "43018",
+                        "verdict":  "wrong-product",
+                        "evidence":  "EXTRA Watermelon Sugar Free Chewing GUM, 3 ct - confectionery, not produce.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "watermelon|HyVee|extra-sweet-watermelon-sugar-free-chewing-gum-me",
+                        "commodity":  "watermelon",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "EXTRA Sweet Watermelon Sugar Free Chewing Gum Mega Pack - 35 sticks"
+                                  ],
+                        "product_id":  "3730594",
+                        "verdict":  "wrong-product",
+                        "evidence":  "EXTRA Sweet Watermelon Sugar Free Chewing GUM mega pack - confectionery, not produce. 35 sticks read as 35 watermelons.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "vanilla-extract|HyVee|hy-vee-imitation-vanilla-extract",
+                        "commodity":  "vanilla-extract",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Hy-Vee Imitation Vanilla Extract"
+                                  ],
+                        "product_id":  "22596",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Hy-Vee IMITATION Vanilla Extract. A real product, but artificial vanillin is not vanilla extract - every other cell in this commodity is PURE extract (Hy-Vee Pure, McCormick Pure). Letting imitation set the price makes Hy-Vee look 3.3x cheaper on a different product.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "instant-coffee|HyVee|maxwell-house-international-vanilla-caramel-latt",
+                        "commodity":  "instant-coffee",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Maxwell House International Vanilla Caramel Latte Instant Flavored Coffee Drink 8.7 oz"
+                                  ],
+                        "product_id":  "53359",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Maxwell House International Vanilla Caramel LATTE instant flavored coffee DRINK mix - mostly sugar and creamer, not instant coffee. The floor it beats is Folgers Classic Roast instant coffee, and the margin is under 5%.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "instant-coffee|HyVee|maxwell-house-international-french-vanilla-caf-i",
+                        "commodity":  "instant-coffee",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Maxwell House International French Vanilla Café Instant Flavored Coffee Drink 8.4 oz"
+                                  ],
+                        "product_id":  "53350",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Maxwell House International French Vanilla Cafe instant flavored coffee DRINK mix - a sweetened cappuccino-style mix, not instant coffee.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "instant-coffee|HyVee|maxwell-house-international-hazelnut-caf-instant",
+                        "commodity":  "instant-coffee",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Maxwell House International Hazelnut Café Instant Flavored Coffee Drink 9 oz"
+                                  ],
+                        "product_id":  "14912",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Maxwell House International Hazelnut Cafe instant flavored coffee DRINK mix - a sweetened cappuccino-style mix, not instant coffee.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "instant-coffee|HyVee|maxwell-house-international-caf-vienna-instant-f",
+                        "commodity":  "instant-coffee",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Maxwell House International Café Vienna Instant Flavored Coffee Drink 9 oz"
+                                  ],
+                        "product_id":  "53358",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Maxwell House International Cafe Vienna instant flavored coffee DRINK mix - a sweetened cappuccino-style mix, not instant coffee.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cranberry-juice|HyVee|old-orchard-healthy-balance-pomegranate-cranberr",
+                        "commodity":  "cranberry-juice",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Old Orchard Healthy Balance Pomegranate Cranberry Juice Cocktail"
+                                  ],
+                        "product_id":  "24182",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Old Orchard Healthy Balance POMEGRANATE Cranberry Juice Cocktail - a pomegranate blend, not cranberry juice. The plain diet cranberry row from the same brand is accepted separately.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "aluminum-foil|HyVee|hy-vee-pre-cut-aluminum-foil-sheets",
+                        "commodity":  "aluminum-foil",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Hy-Vee Pre-Cut Aluminum Foil Sheets"
+                                  ],
+                        "product_id":  "4211789",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Hy-Vee Pre-Cut Aluminum Foil SHEETS, 50 ct at $0.0858 per SHEET, against a floor of $1.99 for a 25 sq ft ROLL. Both say each, but a sheet is not a roll - this is the unit-magnitude trap, and it would publish foil as roughly 23x cheaper than it is.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
