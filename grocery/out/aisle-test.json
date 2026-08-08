@@ -83,7 +83,7 @@
     {
         "id":  "almonds",
         "store":  "Family Fare",
-        "product":  "Our Family Almonds, Roasted \u0026 Lightly Salted, Whole 12 Oz",
+        "product":  "Our Family Almonds, Roasted \u0026 Salted, Whole 12 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/snacks",
         "verdict":  "ALLOW",
@@ -182,7 +182,7 @@
     {
         "id":  "baby-food",
         "store":  "Family Fare",
-        "product":  "Gerber Sitter 2nd Foods (6+ Months) Veggie Blends Carrot Sweet Potato Pea 2 Ea",
+        "product":  "Gerber Sitter 2nd Foods Nourishing Blends Sweet Potato Turkey With Oats 2 Ea",
         "dept":  "health_beauty",
         "aisle":  "health_beauty/baby_child",
         "verdict":  "ALLOW",
@@ -218,7 +218,7 @@
     {
         "id":  "bagels",
         "store":  "Family Fare",
-        "product":  "Lender\u0027s Pre Sliced Plain Bagels 6 Ea",
+        "product":  "Lender\u0027s Pre Sliced Cinnamon Raisin Swirl Bagels 6 Ea",
         "dept":  "dairy",
         "aisle":  "dairy/breads_rolls_bagels",
         "verdict":  "ALLOW",
@@ -506,11 +506,11 @@
     {
         "id":  "butter",
         "store":  "Family Fare",
-        "product":  "Land O Lakes Butter, Unsalted, Half Sticks 8 Ea",
-        "dept":  "dairy",
-        "aisle":  "dairy/butter_margarine",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027dairy\u0027 is an allowed department for category \u0027dairy\u0027"
+        "product":  "Birds Eye Sauced Butter Super Sweet Corn 10.8 Oz",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_vegetables",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027freezer\u0027; category \u0027dairy\u0027 allows only: dairy, deli"
     },
     {
         "id":  "buttermilk",
@@ -596,7 +596,7 @@
     {
         "id":  "canned-corn",
         "store":  "Family Fare",
-        "product":  "Our Family No Salt Added Super Sweet Whole Kernel Corn 15.25 Oz",
+        "product":  "Our Family Super Sweet Whole Kernel Corn 15.25 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -623,7 +623,7 @@
     {
         "id":  "canned-green-beans",
         "store":  "Family Fare",
-        "product":  "Our Family No Salt Added Cut Green Beans 14.5 Oz",
+        "product":  "Our Family Cut Green Beans 14.5 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -855,6 +855,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "chicken-wings",
+        "store":  "Family Fare",
+        "product":  "Chicken Party Wings",
+        "dept":  "meat",
+        "aisle":  "meat/chicken",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
         "id":  "chickpeas",
         "store":  "Family Fare",
         "product":  "Our Family Beans, Garbanzo 15.5 Oz",
@@ -983,7 +992,7 @@
     {
         "id":  "coffee-creamer",
         "store":  "Family Fare",
-        "product":  "International Delight Caramel Macchiato Liquid Coffee Creamer 64 Fl Oz",
+        "product":  "International Delight French Vanilla Liquid Coffee Creamer 64 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/coffee",
         "verdict":  "ALLOW",
@@ -1271,7 +1280,7 @@
     {
         "id":  "disinfecting-wipes",
         "store":  "Family Fare",
-        "product":  "Clorox 3 In 1 Crisp Lemon Disinfecting Wipes 75 Ea",
+        "product":  "Clorox Grapefruit \u0026 Orange Blossom Disinfecting Wipes 75 Ea",
         "dept":  "household",
         "aisle":  "household/cleaners_air_fresheners",
         "verdict":  "ALLOW",
@@ -1379,7 +1388,7 @@
     {
         "id":  "english-muffins",
         "store":  "Family Fare",
-        "product":  "Country Hearth English Muffins, Light, Valu Pack 12 Ea",
+        "product":  "Country Hearth Sourdough English Muffins",
         "dept":  "bakery",
         "aisle":  "bakery/english_muffins_biscuits_croissants",
         "verdict":  "ALLOW",
@@ -1505,7 +1514,7 @@
     {
         "id":  "breakfast-sandwiches",
         "store":  "Family Fare",
-        "product":  "Jimmy Dean Biscuit Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen, 8 Ct",
+        "product":  "Jimmy Dean Croissant Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen 8 Ct",
         "dept":  "freezer",
         "aisle":  "freezer/frozen_meals_more",
         "verdict":  "ALLOW",
@@ -1672,6 +1681,15 @@
         "aisle":  "seasonal_special_occasion/trial_sizes_store",
         "verdict":  "ALLOW",
         "reason":  "\u0027seasonal_special_occasion\u0027 is a reviewed exception department for \u0027gingersnaps\u0027"
+    },
+    {
+        "id":  "glass-cleaner",
+        "store":  "Family Fare",
+        "product":  "Our Family Glass Cleaner Refill With Ammonia 67.6 Fl Oz",
+        "dept":  "household",
+        "aisle":  "household/cleaners_air_fresheners",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
         "id":  "graham-crackers",
@@ -1946,7 +1964,7 @@
     {
         "id":  "hummus",
         "store":  "Family Fare",
-        "product":  "Fresh \u0026 Finest By Our Family Garlic Hummus 10 Oz",
+        "product":  "Fresh \u0026 Finest By Our Family Original Hummus 10 Oz",
         "dept":  "deli",
         "aisle":  "deli/party_trays_dips",
         "verdict":  "ALLOW",
@@ -2108,7 +2126,7 @@
     {
         "id":  "lemonade",
         "store":  "Family Fare",
-        "product":  "Minute Maid Lemonade 59 Oz",
+        "product":  "Minute Maid Strawberry Lemonade Carton 59 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/fruit_vegetable_beverages",
         "verdict":  "ALLOW",
@@ -2540,7 +2558,7 @@
     {
         "id":  "pickles",
         "store":  "Family Fare",
-        "product":  "Our Family Spears Kosher Dill Pickles 24 Fl Oz",
+        "product":  "Our Family Reduced Sodium Kosher Dill Pickle Spears 24 Fl Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -2630,7 +2648,7 @@
     {
         "id":  "potato-chips",
         "store":  "Family Fare",
-        "product":  "Our Family Potato Chips, Cheddar \u0026 Sour Cream Flavored 7.75 Oz",
+        "product":  "Our Family Sweet Heat Barbecue Potato Chips 7.75 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/chips_other_salty_snacks",
         "verdict":  "ALLOW",
@@ -2675,7 +2693,7 @@
     {
         "id":  "pretzels",
         "store":  "Family Fare",
-        "product":  "Our Family Pretzels, Classic, Mini Twists 16 Oz",
+        "product":  "Our Family Pretzels, Classic, Thin Twists 16 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/snacks",
         "verdict":  "ALLOW",
@@ -2738,7 +2756,7 @@
     {
         "id":  "ranch-dressing",
         "store":  "Family Fare",
-        "product":  "Our Family Ranch Dressing 16 Fl Oz",
+        "product":  "Our Family Light Ranch Dressing 16 Fl Oz",
         "dept":  "pantry",
         "aisle":  "pantry/condiments_dressing",
         "verdict":  "ALLOW",
@@ -2990,7 +3008,7 @@
     {
         "id":  "shampoo",
         "store":  "Family Fare",
-        "product":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
+        "product":  "Alberto Vo5 Shampoo, Revitalizing, Ocean Refresh, Bonus Size 15 Fl Oz",
         "dept":  "health_beauty",
         "aisle":  "health_beauty/grooming_hygiene",
         "verdict":  "ALLOW",
@@ -3098,7 +3116,7 @@
     {
         "id":  "sparkling-water",
         "store":  "Family Fare",
-        "product":  "Sparkling Ice Zero Sugar Pink Grapefruit Flavored Sparkling Water 17 Fl Oz",
+        "product":  "Sparkling Ice Zero Sugar Fruit Punch Sparkling Water 17 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/soda_other_carbonated_beverages",
         "verdict":  "ALLOW",
@@ -3161,7 +3179,7 @@
     {
         "id":  "stuffing-mix",
         "store":  "Family Fare",
-        "product":  "Our Family Stuffing Mix, Cornbread 6 Oz",
+        "product":  "Our Family Stuffing Mix, Pork Flavor 6 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/dry_goods",
         "verdict":  "ALLOW",
@@ -3571,392 +3589,5 @@
         "aisle":  "fresh_fruits_vegetables/squashes",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
-    },
-    {
-        "id":  "93-7-ground-turkey",
-        "store":  "Family Fare",
-        "product":  "Jennie O 99%/1% Fresh Ground Turkey Breast 16 Oz",
-        "dept":  "meat",
-        "aisle":  "meat/turkey",
-        "verdict":  "BLIND",
-        "reason":  "\u002793-7-ground-turkey\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "cannellini-beans",
-        "store":  "Family Fare",
-        "product":  "Delallo Cannellini Beans, White Kidney 15.5 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/canned_goods",
-        "verdict":  "BLIND",
-        "reason":  "\u0027cannellini-beans\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "cheddar-cheese-shredded",
-        "store":  "Family Fare",
-        "product":  "Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz",
-        "dept":  "deli",
-        "aisle":  "deli/cheese",
-        "verdict":  "BLIND",
-        "reason":  "\u0027cheddar-cheese-shredded\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "frozen-green-peas",
-        "store":  "Family Fare",
-        "product":  "Our Family Green Peas, Sweet, Fresh Frozen 24 Oz",
-        "dept":  "freezer",
-        "aisle":  "freezer/frozen_vegetables",
-        "verdict":  "BLIND",
-        "reason":  "\u0027frozen-green-peas\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "ginger",
-        "store":  "Family Fare",
-        "product":  "Ginger Root",
-        "dept":  "fresh_fruits_vegetables",
-        "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
-        "verdict":  "BLIND",
-        "reason":  "\u0027ginger\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "greek-yogurt",
-        "store":  "Family Fare",
-        "product":  "Chobani Strawberry Banana On The Bottom Reduced Fat Greek Yogurt 5.3 Oz",
-        "dept":  "dairy",
-        "aisle":  "dairy/yogurt",
-        "verdict":  "BLIND",
-        "reason":  "\u0027greek-yogurt\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "green-cabbage",
-        "store":  "Family Fare",
-        "product":  "Green Cabbage",
-        "dept":  "fresh_fruits_vegetables",
-        "aisle":  "fresh_fruits_vegetables/lettuce_cabbage_greens",
-        "verdict":  "BLIND",
-        "reason":  "\u0027green-cabbage\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "hickory-smoked-bacon",
-        "store":  "Family Fare",
-        "product":  "Chuck Wagon Bacon, Smoked, Ends \u0026 Pieces 32 Oz",
-        "dept":  "meat",
-        "aisle":  "meat/bacon",
-        "verdict":  "BLIND",
-        "reason":  "\u0027hickory-smoked-bacon\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "honey-dijon-mustard",
-        "store":  "Family Fare",
-        "product":  "Inglehoffer The Original Sweet Honey Mustard 10.25 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/condiments_dressing",
-        "verdict":  "BLIND",
-        "reason":  "\u0027honey-dijon-mustard\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "marinara-sauce",
-        "store":  "Family Fare",
-        "product":  "Our Family Pasta Sauce, Tomato, Basil \u0026 Garlic 24 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/pasta_sauces",
-        "verdict":  "BLIND",
-        "reason":  "\u0027marinara-sauce\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "potato",
-        "store":  "Family Fare",
-        "product":  "Our Family Potatoes Russet Idaho",
-        "dept":  "fresh_fruits_vegetables",
-        "aisle":  "fresh_fruits_vegetables/potatoes",
-        "verdict":  "BLIND",
-        "reason":  "\u0027potato\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "rotini-pasta",
-        "store":  "Family Fare",
-        "product":  "Dried Spaghetti Pasta, Thin Our Family",
-        "dept":  "pantry",
-        "aisle":  "pantry/pasta_sauces",
-        "verdict":  "BLIND",
-        "reason":  "\u0027rotini-pasta\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "traditional-pasta-sauce",
-        "store":  "Family Fare",
-        "product":  "Our Family Pasta Sauce, Tomato, Basil \u0026 Garlic 24 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/pasta_sauces",
-        "verdict":  "BLIND",
-        "reason":  "\u0027traditional-pasta-sauce\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "white-mushrooms",
-        "store":  "Family Fare",
-        "product":  "Our Family Mushrooms, White 12 Oz",
-        "dept":  "fresh_fruits_vegetables",
-        "aisle":  "fresh_fruits_vegetables/mushrooms",
-        "verdict":  "BLIND",
-        "reason":  "\u0027white-mushrooms\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "zero-sugar-soda",
-        "store":  "Family Fare",
-        "product":  "Welch\u0027s Zero Sugar Concord Grape Drink 6 Ea",
-        "dept":  "beverages",
-        "aisle":  "beverages/fruit_vegetable_beverages",
-        "verdict":  "BLIND",
-        "reason":  "\u0027zero-sugar-soda\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "93-7-ground-beef",
-        "store":  "Family Fare",
-        "product":  "Our Certified 93% Lean / 7% Fat, Lean Ground Beef Roll, 1 Lb. 16 Oz",
-        "dept":  "meat",
-        "aisle":  "meat/beef",
-        "verdict":  "BLIND",
-        "reason":  "\u002793-7-ground-beef\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "sugar-free-bbq-sauce",
-        "store":  "Family Fare",
-        "product":  "G Hughes Sugar Free Original Bbq Sauce 18 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/condiments_dressing",
-        "verdict":  "BLIND",
-        "reason":  "\u0027sugar-free-bbq-sauce\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "beef-chuck-roast",
-        "store":  "Family Fare",
-        "product":  "Fresh Beef Chuck Roast, Boneless",
-        "dept":  "meat",
-        "aisle":  "meat/beef",
-        "verdict":  "BLIND",
-        "reason":  "\u0027beef-chuck-roast\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "frozen-broccoli-florets",
-        "store":  "Family Fare",
-        "product":  "Frozen Broccoli Florets Our Family Steamable",
-        "dept":  "freezer",
-        "aisle":  "freezer/frozen_vegetables",
-        "verdict":  "BLIND",
-        "reason":  "\u0027frozen-broccoli-florets\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "buffalo-wing-sauce",
-        "store":  "Family Fare",
-        "product":  "Sweet Baby Ray\u0027s Buffalo Wing Wing Sauce 16 Fl Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/mixes_spices_seasoning",
-        "verdict":  "BLIND",
-        "reason":  "\u0027buffalo-wing-sauce\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "chipotle-in-adobo",
-        "store":  "Family Fare",
-        "product":  "San Marcos Original Recipe Chipotles Peppers In Adobo Sauce 7.5 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/canned_goods",
-        "verdict":  "BLIND",
-        "reason":  "\u0027chipotle-in-adobo\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "diced-green-chiles",
-        "store":  "Family Fare",
-        "product":  "Our Family Green Chiles, Mild, Diced 4 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/canned_goods",
-        "verdict":  "BLIND",
-        "reason":  "\u0027diced-green-chiles\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "frozen-green-beans",
-        "store":  "Family Fare",
-        "product":  "Our Family Green Beans, Cut, Fresh Frozen 24 Oz",
-        "dept":  "freezer",
-        "aisle":  "freezer/frozen_vegetables",
-        "verdict":  "BLIND",
-        "reason":  "\u0027frozen-green-beans\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "hot-honey",
-        "store":  "Family Fare",
-        "product":  "Nate\u0027s 100% Pure Hot Honey 16 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/condiments_dressing",
-        "verdict":  "BLIND",
-        "reason":  "\u0027hot-honey\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "hot-italian-sausage",
-        "store":  "Family Fare",
-        "product":  "Johnsonville Sausage, Italian, Hot 19 Oz",
-        "dept":  "meat",
-        "aisle":  "meat/sausage",
-        "verdict":  "BLIND",
-        "reason":  "\u0027hot-italian-sausage\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "parmesan-cheese",
-        "store":  "Family Fare",
-        "product":  "Our Family Grated Cheese, Parmesan 16 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/crackers",
-        "verdict":  "BLIND",
-        "reason":  "\u0027parmesan-cheese\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "penne-pasta",
-        "store":  "Family Fare",
-        "product":  "Dried Spaghetti Pasta, Thin Our Family",
-        "dept":  "pantry",
-        "aisle":  "pantry/pasta_sauces",
-        "verdict":  "BLIND",
-        "reason":  "\u0027penne-pasta\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "pepperoncini",
-        "store":  "Family Fare",
-        "product":  "Our Family Hot Banana Pepper Rings 16 Fl Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/canned_goods",
-        "verdict":  "BLIND",
-        "reason":  "\u0027pepperoncini\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "reduced-fat-mozzarella",
-        "store":  "Family Fare",
-        "product":  "Our Family Part Skim Mozzarella Shredded Cheese 16 Oz",
-        "dept":  "deli",
-        "aisle":  "deli/cheese",
-        "verdict":  "BLIND",
-        "reason":  "\u0027reduced-fat-mozzarella\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "salsa-verde",
-        "store":  "Family Fare",
-        "product":  "Our Family Salsa Verde, Mild 16 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/condiments_dressing",
-        "verdict":  "BLIND",
-        "reason":  "\u0027salsa-verde\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "seasoned-black-beans",
-        "store":  "Family Fare",
-        "product":  "Bush\u0027s Best Seasoned Recipe Black Beans 15 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/canned_goods",
-        "verdict":  "BLIND",
-        "reason":  "\u0027seasoned-black-beans\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "shredded-carrots",
-        "store":  "Family Fare",
-        "product":  "Dole Shredded Carrot",
-        "dept":  "fresh_fruits_vegetables",
-        "aisle":  "fresh_fruits_vegetables/fresh_prepared_fruits_vegetables",
-        "verdict":  "BLIND",
-        "reason":  "\u0027shredded-carrots\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "canned-sweet-corn",
-        "store":  "Family Fare",
-        "product":  "Our Family Sweet Whole Kernel Corn 15.25 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/canned_goods",
-        "verdict":  "BLIND",
-        "reason":  "\u0027canned-sweet-corn\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "zero-sugar-soda-2l",
-        "store":  "Family Fare",
-        "product":  "Dr Pepper Soda, Zero Sugar 2 L",
-        "dept":  "beverages",
-        "aisle":  "beverages/soda_other_carbonated_beverages",
-        "verdict":  "BLIND",
-        "reason":  "\u0027zero-sugar-soda-2l\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "fresh-cilantro",
-        "store":  "Family Fare",
-        "product":  "Cilantro (Chinese Parsley/Coriander)",
-        "dept":  "fresh_fruits_vegetables",
-        "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
-        "verdict":  "BLIND",
-        "reason":  "\u0027fresh-cilantro\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "jalapeno",
-        "store":  "Family Fare",
-        "product":  "Jalapeno Peppers",
-        "dept":  "fresh_fruits_vegetables",
-        "aisle":  "fresh_fruits_vegetables/peppers",
-        "verdict":  "BLIND",
-        "reason":  "\u0027jalapeno\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "worcestershire-sauce",
-        "store":  "Family Fare",
-        "product":  "Our Family Worcestershire Sauce 10 Fl Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/condiments_dressing",
-        "verdict":  "BLIND",
-        "reason":  "\u0027worcestershire-sauce\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "mozzarella-cheese",
-        "store":  "Family Fare",
-        "product":  "Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz",
-        "dept":  "deli",
-        "aisle":  "deli/cheese",
-        "verdict":  "BLIND",
-        "reason":  "\u0027mozzarella-cheese\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "cucumber",
-        "store":  "Family Fare",
-        "product":  "Fresh Cucumbers",
-        "dept":  "fresh_fruits_vegetables",
-        "aisle":  "fresh_fruits_vegetables/other_vegetables",
-        "verdict":  "BLIND",
-        "reason":  "\u0027cucumber\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "apple-cider",
-        "store":  "Family Fare",
-        "product":  "Our Family Apple Cider Juice 64 Fl Oz",
-        "dept":  "beverages",
-        "aisle":  "beverages/fruit_vegetable_beverages",
-        "verdict":  "BLIND",
-        "reason":  "\u0027apple-cider\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "cheddar-cheese",
-        "store":  "Family Fare",
-        "product":  "Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz",
-        "dept":  "deli",
-        "aisle":  "deli/cheese",
-        "verdict":  "BLIND",
-        "reason":  "\u0027cheddar-cheese\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "all-purpose-flour",
-        "store":  "Family Fare",
-        "product":  "All Purpose Flour Our Family",
-        "dept":  "pantry",
-        "aisle":  "pantry/baking",
-        "verdict":  "BLIND",
-        "reason":  "\u0027all-purpose-flour\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "breadcrumbs",
-        "store":  "Family Fare",
-        "product":  "Our Family Bread Crumbs, Panko, Plain 8 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/baking",
-        "verdict":  "BLIND",
-        "reason":  "\u0027breadcrumbs\u0027 is in no estate category - refused rather than guessed"
     }
 ]

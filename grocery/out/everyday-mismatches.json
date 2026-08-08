@@ -91,19 +91,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "butter",
-        "store":  "Family Fare",
-        "unit":  "lb",
-        "board":  3.837,
-        "link":  5.39,
-        "ratio":  1.4,
-        "price":  5.39,
-        "size":  "1 lb",
-        "boardItem":  "Birds Eye Sauced Butter Super Sweet Corn 10.8 Oz",
-        "linkItem":  "Land O Lakes Butter, Unsalted, Half Sticks 8 Ea",
-        "board_src":  "main"
-    },
-    {
         "id":  "caesar-salad-kit",
         "store":  "Aldi",
         "unit":  "oz",
@@ -309,6 +296,32 @@
         "size":  "dozen",
         "boardItem":  "Hy Vee Grade A Large Eggs 18 Count",
         "linkItem":  "That\u0027s Smart! Large Eggs",
+        "board_src":  "main"
+    },
+    {
+        "id":  "eggs",
+        "store":  "Family Fare",
+        "unit":  "dozen",
+        "board":  2.356,
+        "link":  2.156,
+        "ratio":  0.92,
+        "price":  5.39,
+        "size":  "30 ct",
+        "boardItem":  "Large Grade A Eggs Our Family (30 Ct)",
+        "linkItem":  "Large Grade A Eggs Our Family (30 Ct)",
+        "board_src":  "main"
+    },
+    {
+        "id":  "milk",
+        "store":  "Family Fare",
+        "unit":  "gallon",
+        "board":  3.49,
+        "link":  3.59,
+        "ratio":  1.03,
+        "price":  3.59,
+        "size":  "1 gal",
+        "boardItem":  "Our Family Skim Milk 1 Gal",
+        "linkItem":  "Our Family Skim Milk 1 Gal",
         "board_src":  "main"
     },
     {

@@ -5,42 +5,50 @@
     "refused":  [
                     {
                         "id":  "caesar-salad-kit",
-                        "why":  "match found but its size \"1 bag\" gives no per-unit in oz"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "cherry-tomatoes",
-                        "why":  "match found but its size \"1 pt\" gives no per-unit in oz"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "croissants",
-                        "why":  "match found but its size \"10 oz\" gives no per-unit in each"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "dinner-rolls",
-                        "why":  "match found but its size \"15 oz\" gives no per-unit in each"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "donuts",
-                        "why":  "match found but its size \"10 oz\" gives no per-unit in each"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "hamburger-buns",
-                        "why":  "match found but its size \"16 oz\" gives no per-unit in each"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "jarred-gravy",
-                        "why":  "match found but per-unit disagrees: board $0.1302 vs link $0.1448 (10.1%)"
+                        "why":  "not attempted - circuit breaker tripped"
+                    },
+                    {
+                        "id":  "eggs",
+                        "why":  "not attempted - circuit breaker tripped"
+                    },
+                    {
+                        "id":  "milk",
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "orange-juice",
-                        "why":  "match found but its size \"0.5 gll\" gives no per-unit in floz"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "queso",
-                        "why":  "match found but per-unit disagrees: board $0.1993 vs link $0.3993 (50.1%)"
+                        "why":  "not attempted - circuit breaker tripped"
                     }
                 ],
-    "worked":  9,
-    "generated":  "2026-08-07 09:07",
-    "board":  "comparison-2026-08-07.json"
+    "worked":  11,
+    "generated":  "2026-08-08 09:37",
+    "board":  "comparison-2026-08-08.json"
 }

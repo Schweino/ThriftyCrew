@@ -1,6 +1,6 @@
 {
-    "week_of":  "2026-08-07",
-    "updated":  "2026-08-07T09:05:15",
+    "week_of":  "2026-08-08",
+    "updated":  "2026-08-08T09:35:08",
     "note":  "This week free because they are the cheapest dinners per protein on the live Omaha board. They revert to members-only when prices re-rank.",
     "free":  [
                  {
@@ -116,32 +116,32 @@
                      "per_serving":  1.27
                  },
                  {
-                     "slug":  "orecchiette-italian-sausage-broccoli",
+                     "slug":  "pork-egg-roll-in-a-bowl",
                      "protein":  "pork",
                      "rank":  2,
+                     "name":  "Pork Egg Roll in a Bowl",
+                     "per_serving":  1.45
+                 },
+                 {
+                     "slug":  "orecchiette-italian-sausage-broccoli",
+                     "protein":  "pork",
+                     "rank":  3,
                      "name":  "Orecchiette with Italian Sausage and Broccoli",
                      "per_serving":  1.57
                  },
                  {
                      "slug":  "slow-cooker-kalua-pork-bowls",
                      "protein":  "pork",
-                     "rank":  3,
+                     "rank":  4,
                      "name":  "Slow Cooker Kalua Pork Bowls",
                      "per_serving":  1.63
                  },
                  {
                      "slug":  "slow-cooker-filipino-pork-adobo-bowls",
                      "protein":  "pork",
-                     "rank":  4,
+                     "rank":  5,
                      "name":  "Slow Cooker Filipino Pork Adobo Bowls",
                      "per_serving":  1.7
-                 },
-                 {
-                     "slug":  "pork-egg-roll-in-a-bowl",
-                     "protein":  "pork",
-                     "rank":  5,
-                     "name":  "Pork Egg Roll in a Bowl",
-                     "per_serving":  1.73
                  }
              ]
 }
