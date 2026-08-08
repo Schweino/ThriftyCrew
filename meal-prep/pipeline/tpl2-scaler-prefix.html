@@ -452,8 +452,9 @@ function init(box){
     var doc='<!doctype html><html><head><meta charset="utf-8"><title>'+esc(title)+'</title><style>'+css+'</style></head><body>'
       +'<h1>'+esc(title)+'</h1>'
       +'<p class="pm">Shopping list for '+nn+' servings'+wk+'. Whole packages, before tax. Estimates, not quotes.</p>'
-      +'<h2>Shopping list</h2>'+secs
-      +'<p class="tot"><span>Estimated total</span><span>'+money(r.total)+'</span></p>'+ownHtml
+      +'<h2>Shopping list</h2>'
+      +(r.order.length?(secs+'<p class="tot"><span>Estimated total</span><span>'+money(r.total)+'</span></p>'):'<p class="own">Nothing to buy: every ingredient is ticked off as already in your kitchen.</p>')
+      +ownHtml
       +(ing?('<h2>Ingredients, '+nn+' servings</h2><ul class="ing">'+ing+'</ul>'):'')
       +(steps?('<h2>Make It</h2><ol>'+steps+'</ol>'):'')
       +(por?('<h2>Portion It</h2><p>'+por.innerHTML+'</p>'):'')
@@ -468,7 +469,6 @@ function init(box){
   function openShop(){
     if(document.querySelector('.smp-stov')) return;
     var nn=nServ(), items=basket(), stores=storeUniverse(items);
-    if(!items.length) return;
     var sel={};
     stores.forEach(function(s){ sel[s]=true; });
     var ov=document.createElement('div');
@@ -479,15 +479,18 @@ function init(box){
       items.forEach(function(it){ var e=feedOf(it); if(e&&e.stores&&it.gpu>0&&e.stores[s]>0){ carries++; if(e.store===s) wins++; } });
       rows+='<label class="smp-strow on"><input type="checkbox" data-s="'+esc(s)+'" checked><span class="smp-stnm"><i style="background:'+storeHue(s)+'"></i>'+esc(s)+'</span><span class="smp-stct">carries '+carries+' of '+items.length+(wins?('<br>cheapest on '+wins):'')+'</span></label>';
     });
-    var lead=stores.length
-      ? 'Tick the stores you will actually walk into. Every ingredient gets priced at the cheapest of those, and the list prints split by store.'
-      : 'We have no live store prices for this batch right now, so the list prints at everyday shelf prices.';
+    var lead=(!items.length)
+      ? 'Every ingredient above is unticked, so there is nothing to buy. Tick something back on in Customized pricing and the list fills in. You can still print the recipe.'
+      : (stores.length
+        ? 'Tick the stores you will actually walk into. Every ingredient gets priced at the cheapest of those, and the list prints split by store.'
+        : 'We have no live store prices for this batch right now, so the list prints at everyday shelf prices.');
     ov.innerHTML='<div class="smp-stsheet"><div class="smp-sthd"><b>Where are you shopping?</b><button type="button" class="smp-stx" aria-label="Close">Close</button></div>'
       +'<div class="smp-stbody"><p class="smp-stsub">'+lead+'</p>'+rows+'<p class="smp-stsum"></p>'
       +'<p class="smp-stnote">Prices are this week&rsquo;s verified shelf prices in Omaha, for whole packages, before tax. Estimates, not quotes.</p></div>'
       +'<div class="smp-stft"><button type="button" class="smp-stprint">Print shopping list and recipe instructions</button></div></div>';
     document.body.appendChild(ov);
     function draw(){
+      if(!items.length){ ov.querySelector('.smp-stsum').innerHTML='Nothing to buy right now. The printout will still carry the ingredients and the method.'; return; }
       var r=groupBasket(items,nn,sel), used=0, un=0;
       r.order.forEach(function(k){ if(k===' any'){ un=r.groups[k].length; } else { used++; } });
       var txt='Your list: <b>'+money(r.total)+'</b> for '+items.length+' item'+(items.length===1?'':'s')+(used?(' across '+used+' store'+(used===1?'':'s')):'')+'.';
@@ -497,6 +500,7 @@ function init(box){
     function close(){
       try{ document.body.removeChild(ov); }catch(e){}
       modeFlag(false); untrap();
+      try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
     }
     ov.querySelectorAll('.smp-strow input').forEach(function(cb){
       cb.addEventListener('change',function(){
@@ -511,6 +515,11 @@ function init(box){
     ov.querySelector('.smp-stprint').addEventListener('click',function(){ printList(items,nServ(),sel); });
     modeFlag(true);
     var untrap=(window.TC&&window.TC.trap)?window.TC.trap(ov,close):function(){};
+    // Move focus INTO the dialog. TC.trap binds keydown to the element, so Escape does nothing at all while
+    // focus is still sitting on the button that opened it - which is exactly where the browser leaves it.
+    try{ ov.querySelector('.smp-stx').focus({preventScroll:true}); }catch(e){ try{ ov.querySelector('.smp-stx').focus(); }catch(e2){} }
+    try{ history.pushState({tcShop:1},'',location.pathname+location.search+'#shop'); }catch(e){}
+    window.addEventListener('popstate',function h(){ window.removeEventListener('popstate',h); if(document.body.contains(ov)) close(); });
     draw();
   }
   var shop=document.querySelector('.smp-shop');
