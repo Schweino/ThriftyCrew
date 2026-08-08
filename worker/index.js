@@ -1,10 +1,10 @@
-﻿// smp-feed Worker
+// smp-feed Worker
 // - GET /smp-feed.json and all other paths: served from static ./public assets (ASSETS binding)
-// - POST /submit: item-request form handler -> emails contact@thriftycrew.com via Gmail API
+// - POST /submit: item-request form handler -> emails admin@thriftycrew.com via Gmail API
 //   Reuses the Work Google OAuth (same refresh-token flow as send-alert.ps1).
 //   Secrets (set in Cloudflare dashboard, NOT in this repo):
 //     GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN
-//   Optional var: NOTIFY_TO (defaults to contact@thriftycrew.com)
+//   Optional var: NOTIFY_TO (defaults to admin@thriftycrew.com)
 //   Optional field: email (requester wants to be notified when the item is added; included in
 //   the notification body + set as Reply-To so Brad can just hit Reply when it goes live)
 // - POST /alert: price-alert signup {email, item, weekly} -> EXISTING PAID/comped Ghost member gets
@@ -65,7 +65,7 @@ async function getAccessToken(env) {
 }
 
 async function sendEmail(env, { store, item, url, notifyEmail, queued }) {
-  const to = env.NOTIFY_TO || "contact@thriftycrew.com";
+  const to = env.NOTIFY_TO || "admin@thriftycrew.com";
   const token = await getAccessToken(env);
   const text =
     "A visitor submitted an item for the grocery list:\r\n\r\n" +
@@ -182,7 +182,7 @@ async function notifyAuthOk(env, request) {
 }
 
 async function sendRecipeEmail(env, { recipe, url, memberEmail, notifyEmail }) {
-  const to = env.NOTIFY_TO || "contact@thriftycrew.com";
+  const to = env.NOTIFY_TO || "admin@thriftycrew.com";
   const token = await getAccessToken(env);
   const replyTo = notifyEmail || memberEmail;
   const text =
