@@ -40,6 +40,25 @@ function Test-AzureVoice {
   return $Id -like '*:Dragon*'
 }
 
+function Get-SpeakerScript {
+  <# Which synthesis script speaks this voice, and the credentials it needs if it is an Azure one.
+
+     Lives here because THREE call sites need it (both builders plus -VoiceSamples), and a routing
+     rule copied three times is a rule that will eventually disagree with itself. Both scripts take
+     identical arguments and emit identical timing files, so the caller only needs the path.
+
+     Azure credentials are read from the USER environment and set on this process, because `setx`
+     does not reach an already-running shell. The value is never echoed or written to disk. #>
+  param([Parameter(Mandatory)][string]$VoiceId, [Parameter(Mandatory)][string]$ReelRoot)
+  if (-not (Test-AzureVoice $VoiceId)) { return (Join-Path $ReelRoot 'speak-script.py') }
+  foreach ($v in 'AZURE_SPEECH_KEY', 'AZURE_SPEECH_REGION') {
+    $val = [System.Environment]::GetEnvironmentVariable($v, 'User')
+    if (-not $val) { throw "$VoiceId is an Azure voice and needs $v set. See reels\README.md." }
+    Set-Item -Path "Env:$v" -Value $val
+  }
+  return (Join-Path $ReelRoot 'azure-speak.py')
+}
+
 function Resolve-Voice {
   <# A house name, or any Microsoft voice id passed straight through. #>
   param([Parameter(Mandatory)][string]$Name)

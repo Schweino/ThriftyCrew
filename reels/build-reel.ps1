@@ -554,24 +554,26 @@ function Get-MediaDuration {
 }
 
 if ($VoiceSamples) {
+  # The WHOLE narration in each voice on the roster, not a stock line. A voice that reads one
+  # sentence well can still be wrong over forty seconds, and forty seconds is what ships. That is
+  # how the house voice was picked twice, and both times the full-script version changed the answer.
+  #
+  # Routed per voice: the roster spans two engines now, and the HD voices are the ones most worth
+  # auditioning, so hardcoding either script here would break exactly the useful cases.
   $sampleDir = Join-Path $OutDir 'voice-samples'
   New-Item -ItemType Directory -Force -Path $sampleDir | Out-Null
-  $line = "$speakPs a serving. $name. $(ConvertTo-Words $proteinG) grams of protein a bowl. Free this week at thrifty crew dot com."
-  # Microsoft publishes a personality tag per voice; these are the ones tagged for warmth and energy
-  # rather than authority. Lively / Cheerful / Passion / Friendly, both genders, so the pick is not
-  # narrowed by an assumption about who should read it.
-  $candidates = @(
-    'en-US-RogerNeural',        # Lively
-    'en-US-GuyNeural',          # Passion
-    'en-US-BrianNeural',        # Approachable, Casual, Sincere
-    'en-US-EmmaNeural',         # Cheerful, Clear, Conversational
-    'en-US-AvaNeural',          # Expressive, Caring, Pleasant, Friendly
-    'en-US-AriaNeural'          # Positive, Confident
-  )
-  foreach ($v in $candidates) {
-    $mp3 = Join-Path $sampleDir "$v.mp3"
-    Invoke-Tool -Exe $Python -Tag "tts-$v" -ArgList (@('-m', 'edge_tts', '--voice', $v, $script:RateStr) + $script:PitchArg + @('--text', $line, '--write-media', $mp3))
-    Write-Output "  $v"
+  $lineObjs = foreach ($s in $scenes) { [pscustomobject]@{ id = $s.Id; text = $s.Vo } }
+  $linesFile = Join-Path $WorkDir 'lines.json'
+  [System.IO.File]::WriteAllText($linesFile, (ConvertTo-Json @($lineObjs) -Depth 3),
+                                 (New-Object System.Text.UTF8Encoding $false))
+  foreach ($nm in ($script:TcVoiceAliases.Keys | Sort-Object)) {
+    $v   = Resolve-Voice $nm
+    $mp3 = Join-Path $sampleDir ((Get-Culture).TextInfo.ToTitleCase($nm) + '.mp3')
+    Invoke-Tool -Exe $Python -Tag "sample-$nm" -ArgList @(
+      (Get-SpeakerScript -VoiceId $v -ReelRoot $ReelRoot), '--lines', $linesFile, '--voice', $v,
+      "--rate=$(if ($RatePct -ge 0) { '+' })$RatePct%", '--out', $mp3)
+    Write-Output ("  {0,-14} {1,-40} {2,5}s" -f (Get-VoiceName $v), $v,
+                  [math]::Round((Get-MediaDuration $mp3), 1))
   }
   Write-Output ''
   Write-Output "Voice samples: $sampleDir"
@@ -600,19 +602,10 @@ if ($NoVoice) {
   # Two engines, one interface. Dragon HD voices come from Azure, everything else from the free
   # edge-tts endpoint; both scripts take the same arguments and emit the same timing file, because
   # the alignment and the guards live in narration.py rather than in either of them.
-  $speaker = if (Test-AzureVoice $Voice) { 'azure-speak.py' } else { 'speak-script.py' }
-  if (Test-AzureVoice $Voice) {
-    # setx does not reach a running shell, so read the persisted values and hand them to the child.
-    # Never echoed: the key only ever moves from the user environment into the child process.
-    foreach ($v in 'AZURE_SPEECH_KEY', 'AZURE_SPEECH_REGION') {
-      $val = [System.Environment]::GetEnvironmentVariable($v, 'User')
-      if (-not $val) { throw "$Voice needs $v set. See reels\README.md for the Azure setup." }
-      Set-Item -Path "Env:$v" -Value $val
-    }
-  }
+  $speaker = Get-SpeakerScript -VoiceId $Voice -ReelRoot $ReelRoot
   # argparse eats "-5%" as a flag; "--rate=-5%" is the only form that survives.
   $rateArg = "--rate=$(if ($RatePct -ge 0) { '+' })$RatePct%"
-  $ttsArgs = @((Join-Path $ReelRoot $speaker), '--lines', $linesFile,
+  $ttsArgs = @($speaker, '--lines', $linesFile,
                '--voice', $Voice, $rateArg, '--out', $VoMp3)
   if ($PitchHz -ne 0) { $ttsArgs += "--pitch=$(if ($PitchHz -gt 0) { '+' })${PitchHz}Hz" }
 
@@ -626,11 +619,10 @@ if ($NoVoice) {
     if (-not (Test-AzureVoice $Voice)) { throw }
     Write-Warning "AZURE SYNTHESIS FAILED, falling back to the free endpoint. THIS REEL IS NOT IN THE USUAL VOICE."
     Write-Warning "  $($_.Exception.Message -split "`n" | Select-Object -First 1)"
-    $Voice = Resolve-Voice 'goku'
-    $speaker = 'speak-script.py'
+    $Voice   = Resolve-Voice 'goku'
+    $speaker = Get-SpeakerScript -VoiceId $Voice -ReelRoot $ReelRoot
     Invoke-Tool -Exe $Python -Tag 'tts-fallback' -ArgList @(
-      (Join-Path $ReelRoot $speaker), '--lines', $linesFile, '--voice', $Voice, $rateArg,
-      '--out', $VoMp3)
+      $speaker, '--lines', $linesFile, '--voice', $Voice, $rateArg, '--out', $VoMp3)
   }
   if (-not (Test-Path $VoMp3)) { throw "$speaker produced no audio" }
 

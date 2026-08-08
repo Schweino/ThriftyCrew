@@ -401,8 +401,10 @@ if ($VoiceSamples) {
   foreach ($nm in ($script:TcVoiceAliases.Keys | Sort-Object)) {
     $v   = Resolve-Voice $nm
     $mp3 = Join-Path $sampleDir ((Get-Culture).TextInfo.ToTitleCase($nm) + '.mp3')
+    # Routed per voice: the roster now spans two engines, and hardcoding one of them here would
+    # fail on exactly the voices most worth auditioning.
     Invoke-Tool -Exe $Python -Tag "sample-$nm" -ArgList @(
-      (Join-Path $ReelRoot 'speak-script.py'), '--lines', $linesFile, '--voice', $v,
+      (Get-SpeakerScript -VoiceId $v -ReelRoot $ReelRoot), '--lines', $linesFile, '--voice', $v,
       "--rate=$(if ($RatePct -ge 0) { '+' })$RatePct%", '--out', $mp3)
     Write-Output ("  {0,-14} {1,-32} {2,5}s" -f (Get-VoiceName $v), $v, [math]::Round((Get-MediaDuration $mp3), 1))
   }
@@ -456,22 +458,13 @@ if ($NoVoice) {
   # Two engines, one interface: Dragon HD voices come from Azure, everything else from the free
   # edge-tts endpoint. Both take the same arguments and emit the same timing file, because the
   # alignment and the guards live in narration.py rather than in either of them.
-  $speaker = if (Test-AzureVoice $Voice) { 'azure-speak.py' } else { 'speak-script.py' }
-  if (Test-AzureVoice $Voice) {
-    # setx does not reach a running shell, so read the persisted values and pass them to the child.
-    # The key only ever moves from the user environment into the child process; never echoed.
-    foreach ($v in 'AZURE_SPEECH_KEY', 'AZURE_SPEECH_REGION') {
-      $val = [System.Environment]::GetEnvironmentVariable($v, 'User')
-      if (-not $val) { throw "$Voice needs $v set. See reels\README.md for the Azure setup." }
-      Set-Item -Path "Env:$v" -Value $val
-    }
-  }
+  $speaker = Get-SpeakerScript -VoiceId $Voice -ReelRoot $ReelRoot
   # argparse eats "-3%" as a flag; "--rate=-3%" is the only form that survives.
-  $ttsArgs = @((Join-Path $ReelRoot $speaker), '--lines', $linesFile,
+  $ttsArgs = @($speaker, '--lines', $linesFile,
                '--voice', $Voice, "--rate=$(if ($RatePct -ge 0) { '+' })$RatePct%", '--out', $VoMp3)
   if ($PitchHz -ne 0) { $ttsArgs += "--pitch=$(if ($PitchHz -gt 0) { '+' })${PitchHz}Hz" }
   Invoke-Tool -Exe $Python -Tag 'tts' -ArgList $ttsArgs
-  if (-not (Test-Path $VoMp3)) { throw 'speak-script.py produced no audio' }
+  if (-not (Test-Path $VoMp3)) { throw "$(Split-Path $speaker -Leaf) produced no audio" }
 
   $timing = Get-Content "$VoMp3.timing.json" -Raw | ConvertFrom-Json
   if ($timing.drift -gt 0) {

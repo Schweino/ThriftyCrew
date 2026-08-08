@@ -38,12 +38,24 @@ the closing card drops the "free this week" badge.
 ```
 capture-demo.py   drives the LIVE page over CDP (cdp.py) and photographs each beat
                     -> shots\*.png + demo-manifest.json
-speak-script.py   reads the whole narration as ONE take and reports where each line lands
+narration.py      the engine-agnostic core: landmine guards, word alignment, paragraph join,
+                  hesitation detector. Shared, never copied.
+  speak-script.py   edge-tts   (free, no account)
+  azure-speak.py    Azure      (Dragon HD voices, needs a key)
                     -> narration.mp3 + word-level timing
 build-demo-reel.ps1 writes the narration FROM the manifest, renders cards and frame furniture,
                     and cuts the video TO the narration
                     -> out\*.mp4
 ```
+
+**Two engines, one interface.** Both synthesis scripts take identical arguments and emit identical
+timing files, because everything that isn't the synthesis call lives in `narration.py`. Which one
+runs is decided by the voice name alone (`Get-SpeakerScript` in `voices.ps1`); nothing else in either
+builder knows or cares. If you add a third engine, put it beside those two and change nothing else.
+
+One trap the shared core hides: edge-tts reports word offset **and** duration in 100ns ticks, while
+the Azure SDK reports offset in ticks and duration as a `datetime.timedelta`. Same field, different
+units, normalised at the boundary. Getting that wrong produces a subtly mistimed video, not an error.
 
 **The video is cut to the voice, not the other way round.** The first version spoke each scene
 separately and padded the seams, which is the single biggest reason AI voiceover sounds like AI: ten
@@ -176,14 +188,21 @@ Voices are referred to by name. `voices.ps1` maps names to Microsoft ids and is 
 builders, so the two reels on the Page always speak in the same voice and there is one place to
 change it. A full Microsoft id works anywhere a name does.
 
-| name | Microsoft id | notes |
-|---|---|---|
-| **Goku** | `en-US-AndrewMultilingualNeural` | **the house voice.** Warm, confident. Brad's pick, 2026-08-08 |
-| Andrew | `en-US-AndrewNeural` | same persona, older generation, slightly clipped |
-| Brian | `en-US-BrianMultilingualNeural` | approachable, casual, sincere |
-| Christopher | `en-US-ChristopherNeural` | deep authority. Rejected: reads as documentary narration |
-| Guy | `en-US-GuyNeural` | passion |
-| Emma / Ava | `en-US-Emma…` / `en-US-Ava…` | female, untested on this script |
+| name | id | engine | notes |
+|---|---|---|---|
+| **goku-podcast** | `en-US-Andrew3:DragonHDLatestNeural` | Azure | **the house voice.** Brad's pick, 2026-08-08, after hearing three HD voices read a whole reel |
+| goku-omni | `en-US-Andrew:DragonHDOmniLatestNeural` | Azure | fewest pauses per minute measured (19.4 vs Goku's 30.0) |
+| goku-hd | `en-US-Andrew:DragonHDLatestNeural` | Azure | same persona, base HD model |
+| goku | `en-US-AndrewMultilingualNeural` | edge-tts | the free fallback, and what shipped before HD |
+| andrew | `en-US-AndrewNeural` | edge-tts | older generation, slightly clipped |
+| brian | `en-US-BrianMultilingualNeural` | edge-tts | approachable, casual, sincere |
+| christopher | `en-US-ChristopherNeural` | edge-tts | deep authority. Rejected: reads as documentary narration |
+| guy | `en-US-GuyNeural` | edge-tts | passion |
+| emma / ava | `en-US-Emma…` / `en-US-Ava…` | edge-tts | female, untested on this script |
+
+**HD voices ignore `-RatePct`.** They don't support `<prosody>` and set their own pace, which is why
+the daily reel runs ~40s on words that took Goku 46s. If an HD voice reads rushed, that is not
+tunable; the only lever is writing longer sentences.
 
 ```bash
 powershell -File C:\Codex\income\reels\build-demo-reel.ps1 -SkipCapture -Voice Brian
@@ -191,6 +210,34 @@ powershell -File C:\Codex\income\reels\build-demo-reel.ps1 -SkipCapture -Voice B
 
 An unknown name fails immediately with the list of valid ones, rather than three minutes later as an
 opaque refusal from the TTS service after every frame has already rendered.
+
+### Azure credentials
+
+The HD voices need an Azure Speech resource. It runs on the **free F0 tier** at our volume (about
+40,000 characters a month against a 500,000 allowance), so there is nothing to pay.
+
+The key lives in **user environment variables**, never in this repo:
+
+```bash
+setx AZURE_SPEECH_KEY "your-key"
+```
+
+```bash
+setx AZURE_SPEECH_REGION "eastus"
+```
+
+`Get-SpeakerScript` reads them per run and passes them to the child process. They are never echoed,
+and `.gitignore` refuses `*.key` and `*secret*` in case anyone tries a file instead.
+
+**The region is the one setting you cannot get wrong.** HD voices exist in nine regions only:
+`eastus`, `eastus2`, `westus2`, `canadacentral`, `westeurope`, `swedencentral`, `francecentral`,
+`centralindia`, `southeastasia`. Notably **not** `centralus`, `westus`, `southcentralus`,
+`northcentralus` or `uksouth`, several of which look like the obvious pick from the Midwest and would
+silently offer no HD voices at all.
+
+**If Azure fails, the daily reel falls back to `goku` on the free endpoint and warns loudly.** That
+is deliberate: this job runs unattended at 10:00, and a missed day of content is worse than a reel in
+the previous voice. Not knowing which voice shipped would be worse than either, hence the warning.
 
 The single rule that makes this trustworthy: **every number spoken or captioned is read out of the
 manifest, and the manifest is read off the page.** Nothing is typed by hand and nothing is
