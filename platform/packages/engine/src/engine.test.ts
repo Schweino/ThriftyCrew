@@ -29,12 +29,14 @@ describe("matching", () => {
   it("does not classify parsley-flavored mashed potatoes as dried parsley", () => {
     const parsley = [{
       commodityId: "dried-parsley",
-      includes: ["parsley"],
+      includes: ["(?:dried\\s+parsley|parsley\\s+(?:flakes?|leaves?))"],
       excludes: ["\\bpotato(?:es)?\\b"],
       priority: 1,
     }];
     expect(matchProductName("Chef's Cupboard Mashed Potatoes With Roasted Garlic Parsley 4 OZ", parsley).status).toBe("unmatched");
+    expect(matchProductName("Lawry's Coarse Ground Garlic Salt with Parsley, 33 oz.", parsley).status).toBe("unmatched");
     expect(matchProductName("Smart Way Parsley Flakes 0.5 OZ", parsley)).toMatchObject({ status: "matched", commodityId: "dried-parsley" });
+    expect(matchProductName("Badia Dried Parsley 3 OZ", parsley)).toMatchObject({ status: "matched", commodityId: "dried-parsley" });
   });
 
   it("rejects a food match when the store shelves it as cat litter", () => {

@@ -31284,7 +31284,7 @@
         "band_min":  0.4,
         "band_max":  14,
         "include":  [
-                        "parsley"
+                        "(?:dried\\s+parsley|parsley\\s+(?:flakes?|leaves?))"
                     ],
         "exclude":  [
                         "^parsley\\s+[\\d.]+\\s*oz$",
