@@ -3,6 +3,7 @@ import { entitlementVerificationRecordSchema, evidenceGateRecordSchema, restoreD
 import { createAccuracyDraw, wilsonInterval } from "./accuracy";
 import { mayShowFreeBadge } from "./ghost-reconciliation";
 import { storeCoverageFloor } from "./release-guards";
+import { memberStatusHtml } from "./member-status";
 
 describe("out-of-band accuracy reporting", () => {
   it("computes the standard 95% Wilson interval without treating cannot-tell as a verdict", () => {
@@ -40,6 +41,16 @@ describe("Ghost rotation badge truth", () => {
     expect(mayShowFreeBadge("public", "public")).toBe(true);
     expect(mayShowFreeBadge("public", "paid")).toBe(false);
     expect(mayShowFreeBadge("paid", "public")).toBe(false);
+  });
+});
+
+describe("browser-visible member status", () => {
+  it("renders only the entitlement decision and is usable on a narrow screen", () => {
+    const html = memberStatusHtml({ state: "cookie_expired", authenticated: false, tier: "anonymous", mayUseProtectedTools: false });
+    expect(html).toContain("cookie expired");
+    expect(html).toContain("Paid tools are locked.");
+    expect(html).toContain('name="viewport"');
+    expect(html).not.toContain("email");
   });
 });
 

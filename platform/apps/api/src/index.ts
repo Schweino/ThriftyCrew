@@ -41,6 +41,7 @@ import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, re
 import { reconcileGhostRotation, runGhostClobberDrill } from "./ghost-reconciliation";
 import { dispatchGithubJob, recordAudit, runScheduledOperations } from "./operations";
 import { readEngineSnapshot, type EngineSourceMode } from "./engine-snapshot";
+import { memberStatusHtml } from "./member-status";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 
@@ -161,6 +162,19 @@ app.get("/api/v2/entitlement", async (context) => {
     return context.json({ ok: true, entitlement });
   } catch (error) {
     return context.json({ ok: false, error: error instanceof Error ? error.message : "Entitlement provider failed" }, 503);
+  }
+});
+
+app.get("/member-status", async (context) => {
+  try {
+    const entitlement = await resolveEntitlement(context.req.raw, context.env);
+    context.header("cache-control", "private, no-store");
+    context.header("vary", "cookie");
+    context.header("x-robots-tag", "noindex, nofollow");
+    if (entitlement.authenticated) context.header("set-cookie", "tc_member_signed_out=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0");
+    return context.html(memberStatusHtml(entitlement));
+  } catch (error) {
+    return context.html(memberStatusHtml({ state: "anonymous", authenticated: false, tier: "anonymous", mayUseProtectedTools: false }), 503);
   }
 });
 
