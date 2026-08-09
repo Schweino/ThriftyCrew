@@ -216,6 +216,19 @@ if (command === "status") {
   result = await (await mutationClient()).request("/internal/restore-drills", { json: JSON.parse(await readFile(path.resolve(file), "utf8")) });
 } else if (command === "restore" && subcommand === "show") {
   result = await (await mutationClient()).request("/internal/restore-drills");
+} else if (command === "evidence" && subcommand === "record") {
+  const file = arguments_[0];
+  if (!file) throw new Error("tc evidence record requires a JSON evidence file");
+  result = await (await mutationClient()).request("/internal/evidence-gates", { json: JSON.parse(await readFile(path.resolve(file), "utf8")) });
+} else if (command === "evidence" && subcommand === "show") {
+  const gate = arguments_[0];
+  result = await (await mutationClient()).request(`/internal/evidence-gates${gate ? `?gate=${encodeURIComponent(gate)}` : ""}`);
+} else if (command === "entitlement" && subcommand === "record") {
+  const file = arguments_[0];
+  if (!file) throw new Error("tc entitlement record requires a JSON evidence file");
+  result = await (await mutationClient()).request("/internal/entitlement-verifications", { json: JSON.parse(await readFile(path.resolve(file), "utf8")) });
+} else if (command === "entitlement" && subcommand === "show") {
+  result = await (await mutationClient()).request("/internal/entitlement-verifications");
 } else if (command === "job" && subcommand === "start") {
   const job = arguments_[0];
   if (!job) throw new Error("tc job start requires a job id");
@@ -346,7 +359,7 @@ if (command === "status") {
     ok: true,
     usage: [
       "tc status", "tc doctor", "tc triage [status|run]", "tc config generate|check",
-      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc restore record <file>|show", "tc job start|finish|dispatch <job> [status|reason]",
+      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc restore record <file>|show", "tc evidence record <file>|show [gate]", "tc entitlement record <file>|show", "tc job start|finish|dispatch <job> [status|reason]",
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id]", "tc accuracy verdict <file>",

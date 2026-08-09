@@ -11,6 +11,8 @@ import {
   configurationKnownWrongChunkSchema,
   evidenceMetadataSchema,
   engineParityReportSchema,
+  entitlementVerificationRecordSchema,
+  evidenceGateRecordSchema,
   jobDispatchSchema,
   jobRunCreateSchema,
   jobRunUpdateSchema,
@@ -100,6 +102,10 @@ app.use("/internal/schedules/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/backups/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/restore-drills", requireIdentityRole(["operator"]));
 app.use("/internal/restore-drills/*", requireIdentityRole(["operator"]));
+app.use("/internal/evidence-gates", requireIdentityRole(["operator"]));
+app.use("/internal/evidence-gates/*", requireIdentityRole(["operator"]));
+app.use("/internal/entitlement-verifications", requireIdentityRole(["operator"]));
+app.use("/internal/entitlement-verifications/*", requireIdentityRole(["operator"]));
 app.use("/internal/releases", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/releases/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/accuracy/*", requireIdentityRole(["engine", "operator"]));
@@ -682,6 +688,59 @@ app.post("/internal/restore-drills", zValidator("json", restoreDrillRecordSchema
   }
   await recordAudit(context.env, context.get("identity"), "restore_drill.record", "restore_drill", body.id, body.status === "passed" ? "accepted" : body.status === "failed" ? "failed" : "accepted", body.evidence);
   return context.json({ ok: body.status !== "failed", drillId: body.id, status: body.status, idempotent: false }, body.status === "failed" ? 422 : 201);
+});
+
+app.get("/internal/evidence-gates", async (context) => {
+  const gate = context.req.query("gate");
+  const rows = gate
+    ? await context.env.DB.prepare("SELECT * FROM evidence_gate_events WHERE gate = ?1 ORDER BY observed_at DESC LIMIT 500").bind(gate).all<Record<string, unknown>>()
+    : await context.env.DB.prepare("SELECT * FROM evidence_gate_events ORDER BY observed_at DESC LIMIT 500").all<Record<string, unknown>>();
+  return context.json({ ok: true, events: rows.results.map((row) => ({ ...row, evidence: JSON.parse(String(row.evidence_json ?? "{}")), evidence_json: undefined })) });
+});
+
+app.post("/internal/evidence-gates", zValidator("json", evidenceGateRecordSchema), async (context) => {
+  const body = context.req.valid("json");
+  const existing = await context.env.DB.prepare(
+    "SELECT gate, period_key, source_ref, status FROM evidence_gate_events WHERE id = ?1",
+  ).bind(body.id).first<{ gate: string; period_key: string; source_ref: string; status: string }>();
+  if (existing) {
+    const identical = existing.gate === body.gate && existing.period_key === body.periodKey && existing.source_ref === body.sourceRef && existing.status === body.status;
+    if (!identical) return jsonError("evidence event id already belongs to different evidence", 409);
+    return context.json({ ok: body.status === "pass", eventId: body.id, status: body.status, idempotent: true });
+  }
+  try {
+    await context.env.DB.prepare(
+      `INSERT INTO evidence_gate_events (id, gate, period_key, source_ref, status, evidence_json, observed_at)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)`,
+    ).bind(body.id, body.gate, body.periodKey, body.sourceRef, body.status, stableJson(body.evidence), body.observedAt).run();
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "evidence gate insert failed", 409);
+  }
+  await recordAudit(context.env, context.get("identity"), "evidence_gate.record", "evidence_gate_event", body.id, body.status === "pass" ? "accepted" : "failed", body.evidence);
+  return context.json({ ok: body.status === "pass", eventId: body.id, status: body.status, idempotent: false }, body.status === "pass" ? 201 : 422);
+});
+
+app.get("/internal/entitlement-verifications", async (context) => {
+  const rows = await context.env.DB.prepare("SELECT * FROM entitlement_verifications ORDER BY verified_at DESC LIMIT 500").all<Record<string, unknown>>();
+  return context.json({ ok: true, verifications: rows.results.map((row) => ({ ...row, evidence: JSON.parse(String(row.evidence_json ?? "{}")), evidence_json: undefined })) });
+});
+
+app.post("/internal/entitlement-verifications", zValidator("json", entitlementVerificationRecordSchema), async (context) => {
+  const body = context.req.valid("json");
+  const existing = await context.env.DB.prepare("SELECT state, client_kind, status FROM entitlement_verifications WHERE id = ?1")
+    .bind(body.id).first<{ state: string; client_kind: string; status: string }>();
+  if (existing) {
+    const identical = existing.state === body.state && existing.client_kind === body.clientKind && existing.status === body.status;
+    if (!identical) return jsonError("entitlement verification id already belongs to different evidence", 409);
+    return context.json({ ok: body.status === "pass", verificationId: body.id, status: body.status, idempotent: true });
+  }
+  await context.env.DB.prepare(
+    `INSERT INTO entitlement_verifications
+       (id, adapter_version, state, client_kind, status, evidence_json, verified_at, verified_by)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)`,
+  ).bind(body.id, body.adapterVersion, body.state, body.clientKind, body.status, stableJson(body.evidence), body.verifiedAt, context.get("identity").agentId).run();
+  await recordAudit(context.env, context.get("identity"), "entitlement.verify", "entitlement_verification", body.id, body.status === "pass" ? "accepted" : "failed", body.evidence);
+  return context.json({ ok: body.status === "pass", verificationId: body.id, status: body.status, idempotent: false }, body.status === "pass" ? 201 : 422);
 });
 
 app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (context) => {

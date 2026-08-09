@@ -427,6 +427,38 @@ export const restoreDrillRecordSchema = z.object({
   }
 });
 
+export const evidenceGate = z.enum([
+  "shadow-ingest-day",
+  "semantic-parity-day",
+  "direct-chrome-week",
+  "beta-release-day",
+  "beta-week",
+  "entitlement-state",
+  "accuracy-week",
+  "chaos-drill",
+  "route-rollback",
+]);
+
+export const evidenceGateRecordSchema = z.object({
+  id: nonEmptyId,
+  gate: evidenceGate,
+  periodKey: z.string().min(1).max(160),
+  sourceRef: z.string().min(1).max(500),
+  status: z.enum(["pass", "fail"]),
+  observedAt: isoDateTime,
+  evidence: z.record(z.string(), z.unknown()).default({}),
+});
+
+export const entitlementVerificationRecordSchema = z.object({
+  id: nonEmptyId,
+  adapterVersion: z.string().min(1).max(160),
+  state: z.enum(["anonymous", "free", "paid", "expired", "cancelled", "signed_out", "cookie_expired"]),
+  clientKind: z.string().min(1).max(160),
+  status: z.enum(["pass", "fail"]),
+  evidence: z.record(z.string(), z.unknown()).default({}),
+  verifiedAt: isoDateTime,
+});
+
 export const releaseGuardResultSchema = z.object({
   guardId: nonEmptyId,
   status: z.enum(["pass", "fail", "warn", "blind", "error"]),
@@ -454,3 +486,5 @@ export type AccuracyVerdicts = z.infer<typeof accuracyVerdictsSchema>;
 export type DirectCaptureArtifact = z.infer<typeof directCaptureArtifactSchema>;
 export type EngineParityReport = z.infer<typeof engineParityReportSchema>;
 export type RestoreDrillRecord = z.infer<typeof restoreDrillRecordSchema>;
+export type EvidenceGateRecord = z.infer<typeof evidenceGateRecordSchema>;
+export type EntitlementVerificationRecord = z.infer<typeof entitlementVerificationRecordSchema>;

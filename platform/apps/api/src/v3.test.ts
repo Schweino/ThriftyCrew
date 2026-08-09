@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { restoreDrillRecordSchema } from "@thriftycrew/contracts";
+import { entitlementVerificationRecordSchema, evidenceGateRecordSchema, restoreDrillRecordSchema } from "@thriftycrew/contracts";
 import { createAccuracyDraw, wilsonInterval } from "./accuracy";
 import { mayShowFreeBadge } from "./ghost-reconciliation";
 import { storeCoverageFloor } from "./release-guards";
@@ -68,5 +68,33 @@ describe("restore drill evidence contract", () => {
 
   it("rejects a finish timestamp before the drill started", () => {
     expect(restoreDrillRecordSchema.safeParse({ ...base, status: "failed", finishedAt: "2026-08-09T20:59:00.000Z" }).success).toBe(false);
+  });
+});
+
+describe("live evidence contracts", () => {
+  it("rejects unknown completion gates", () => {
+    expect(evidenceGateRecordSchema.safeParse({
+      id: "evidence_1",
+      gate: "made-up-gate",
+      periodKey: "2026-08-09",
+      sourceRef: "release_1",
+      status: "pass",
+      observedAt: "2026-08-09T21:00:00.000Z",
+      evidence: {},
+    }).success).toBe(false);
+  });
+
+  it("accepts every entitlement state named by the V3 adapter", () => {
+    for (const state of ["anonymous", "free", "paid", "expired", "cancelled", "signed_out", "cookie_expired"]) {
+      expect(entitlementVerificationRecordSchema.safeParse({
+        id: `entitlement_${state}`,
+        adapterVersion: "ghost-v1",
+        state,
+        clientKind: "desktop-chrome",
+        status: "pass",
+        verifiedAt: "2026-08-09T21:00:00.000Z",
+        evidence: {},
+      }).success).toBe(true);
+    }
   });
 });
