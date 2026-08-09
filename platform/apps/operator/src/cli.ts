@@ -146,8 +146,8 @@ if (command === "status") {
   } });
 } else if (command === "ghost" && subcommand === "reconcile") {
   const requestedRelease = arguments_[0];
-  const status = requestedRelease ? null : await publicGet("/api/v2/status") as { release?: { id?: string } };
-  const releaseId = requestedRelease ?? status?.release?.id;
+    const status = requestedRelease ? null : await publicGet("/api/v2/status") as { currentRelease?: { id?: string } };
+    const releaseId = requestedRelease ?? status?.currentRelease?.id;
   if (!releaseId) throw new Error("no published release is available for Ghost reconciliation");
   result = await (await mutationClient()).request(`/internal/releases/${releaseId}/reconcile-ghost`, { method: "POST" });
 } else if (command === "run" && subcommand === "daily" && arguments_.includes("--dry")) {
