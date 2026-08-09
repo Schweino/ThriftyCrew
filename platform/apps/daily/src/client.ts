@@ -120,9 +120,9 @@ export async function ingestDirectCapture(client: MutationClient, artifact: Dire
   return { ok: true, batchId, status, evidenceId, evidenceIds, observations: artifact.observations.length, terms: artifact.terms.length, audit: artifact.audit };
 }
 
-function ruleCount(artifact: CurrentBridgeArtifact): number {
+function configurationRuleCount(config: CurrentBridgeArtifact["configuration"]): number {
   const unique = new Set<string>();
-  for (const commodity of artifact.configuration.commodities) {
+  for (const commodity of config.commodities) {
     for (const pattern of commodity.include) unique.add(`${commodity.id}\u001finclude\u001f${pattern}`);
     for (const pattern of commodity.exclude) unique.add(`${commodity.id}\u001fexclude\u001f${pattern}`);
   }
@@ -133,16 +133,15 @@ function apiBasisUnit(unit: string): string {
   return unit === "floz" ? "fl_oz" : unit === "gallon" ? "gal" : unit;
 }
 
-export async function replayCurrentArtifact(client: MutationClient, artifact: CurrentBridgeArtifact): Promise<Record<string, unknown>> {
-  const config = artifact.configuration;
+export async function deployConfiguration(client: MutationClient, config: CurrentBridgeArtifact["configuration"]): Promise<Record<string, unknown>> {
   const configuration = await client.request("/internal/configurations", { json: {
     id: config.id,
     sourceCommit: config.sourceCommit,
     contentHash: config.contentHash,
     expectedCategories: config.categories.length,
     expectedCommodities: config.commodities.length,
-    expectedRules: ruleCount(artifact),
-    expectedKnownWrong: artifact.configuration.knownWrong.length,
+    expectedRules: configurationRuleCount(config),
+    expectedKnownWrong: config.knownWrong.length,
   } });
   if (configuration.active !== true) {
     await client.request(`/internal/configurations/${config.id}/categories`, { method: "PUT", json: { categories: config.categories } });
@@ -163,6 +162,12 @@ export async function replayCurrentArtifact(client: MutationClient, artifact: Cu
     }
     await client.request(`/internal/configurations/${config.id}/activate`, { method: "POST" });
   }
+  return client.request("/internal/doctor", { acceptStatuses: [422] });
+}
+
+export async function replayCurrentArtifact(client: MutationClient, artifact: CurrentBridgeArtifact): Promise<Record<string, unknown>> {
+  const config = artifact.configuration;
+  await deployConfiguration(client, config);
 
   const actualObservationByCell = new Map<string, string>();
   const inputBatchIds: string[] = [];

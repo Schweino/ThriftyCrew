@@ -1640,6 +1640,21 @@
                         "ruled_on":  "2026-08-08",
                         "ruled_by":  "weekly accuracy sample 2026-08-08",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "bacon|FamilyFare|hatfield-hardwood-smoked-classic-cut-bacon-12-lb",
+                        "commodity":  "bacon",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Hatfield Hardwood Smoked Classic Cut Bacon 12 Lb"
+                                  ],
+                        "product_id":  "00070919069887",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Family Fare's live Omaha product page exposes UPC 00070919069887 as Hatfield Hardwood Smoked Classic Cut Bacon '12 Lb' for $6.99. That catalog size would imply $0.5825/lb and an impossible 12-pound retail bacon package. The source page itself is internally wrong, so the platform must not silently reinterpret it as 12 oz; this exact observation is blocked until the retailer corrects the catalog or an independently size-verified recapture is available. Evidence URL: https://www.shopfamilyfare.com/sm/planning/rsid/103/products/hatfield-hardwood-smoked-classic-cut-bacon-12-lb-id-00070919069887",
+                        "seen_on_board":  "2026-08-09 (crown)",
+                        "ruled_on":  "2026-08-09",
+                        "ruled_by":  "V3 live Chrome accuracy QA",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

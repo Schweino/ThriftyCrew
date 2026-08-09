@@ -14,6 +14,18 @@ describe("matching", () => {
     expect(result.commodityId).toBeNull();
   });
 
+  it("rejects bacon-flavoured soup and pasta sauce without rejecting bacon", () => {
+    const bacon = [{
+      commodityId: "bacon",
+      includes: ["\\bbacon\\b"],
+      excludes: ["\\bsoups?\\b", "\\bsauces?\\b", "\\balfredo\\b", "\\bcarbonara\\b", "\\bpasta\\b"],
+      priority: 1,
+    }];
+    expect(matchProductName("Campbell's Chunky Creamy Chicken Bacon Carbonara Soup", bacon).status).toBe("unmatched");
+    expect(matchProductName("(3 pack) RAGU Bacon Alfredo White Pasta Sauce", bacon).status).toBe("unmatched");
+    expect(matchProductName("Applewood Smoked Classic Cut Bacon", bacon)).toMatchObject({ status: "matched", commodityId: "bacon" });
+  });
+
   it("rejects a food match when the store shelves it as cat litter", () => {
     expect(evaluateAisleEvidence("Pets/Cats/Cat Litter", ["baking"], ["cat litter", "pets"]).status).toBe("rejected");
   });

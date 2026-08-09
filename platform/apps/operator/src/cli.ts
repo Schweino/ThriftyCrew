@@ -1,7 +1,7 @@
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { directCaptureArtifactSchema, observationChunkSchema } from "@thriftycrew/contracts";
-import { ingestDirectCapture, MutationClient, publishNativeRelease, replayCurrentArtifact, type CaptureEvidenceInput } from "@thriftycrew/daily/client";
+import { deployConfiguration, ingestDirectCapture, MutationClient, publishNativeRelease, replayCurrentArtifact, type CaptureEvidenceInput } from "@thriftycrew/daily/client";
 import { buildCurrentBridge } from "@thriftycrew/daily/legacy";
 import { buildRegularCapture, type CaptureAttestation } from "@thriftycrew/daily/direct";
 import { buildNativeRelease } from "@thriftycrew/daily/native";
@@ -269,6 +269,10 @@ if (command === "status") {
     : await (await mutationClient()).request(`/internal/triage?status=${encodeURIComponent(subcommand ?? "open")}`);
 } else if (command === "config" && (subcommand === "generate" || subcommand === "check")) {
   result = await generateLegacyConfiguration(incomeRoot, subcommand === "check");
+} else if (command === "config" && subcommand === "deploy") {
+  await generateLegacyConfiguration(incomeRoot, true);
+  const artifact = await buildCurrentBridge(incomeRoot);
+  result = await deployConfiguration(await mutationClient(), artifact.configuration);
 } else if (command === "schedules" && subcommand === "check") {
   result = await checkScheduleAuthority(platformRoot);
 } else if (command === "schedules" && subcommand === "deploy") {
@@ -432,7 +436,7 @@ if (command === "status") {
   result = {
     ok: true,
     usage: [
-      "tc status", "tc doctor", "tc triage [status|run]", "tc config generate|check",
+      "tc status", "tc doctor", "tc triage [status|run]", "tc config generate|check|deploy",
       "tc schedules check|deploy", "tc backup trigger [--replica]", "tc restore record <file>|show", "tc evidence record <file>|show [gate]", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]", "tc job start|finish|dispatch <job> [status|reason]",
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output>",
