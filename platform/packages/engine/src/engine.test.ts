@@ -26,6 +26,17 @@ describe("matching", () => {
     expect(matchProductName("Applewood Smoked Classic Cut Bacon", bacon)).toMatchObject({ status: "matched", commodityId: "bacon" });
   });
 
+  it("does not classify parsley-flavored mashed potatoes as dried parsley", () => {
+    const parsley = [{
+      commodityId: "dried-parsley",
+      includes: ["parsley"],
+      excludes: ["\\bpotato(?:es)?\\b"],
+      priority: 1,
+    }];
+    expect(matchProductName("Chef's Cupboard Mashed Potatoes With Roasted Garlic Parsley 4 OZ", parsley).status).toBe("unmatched");
+    expect(matchProductName("Smart Way Parsley Flakes 0.5 OZ", parsley)).toMatchObject({ status: "matched", commodityId: "dried-parsley" });
+  });
+
   it("rejects a food match when the store shelves it as cat litter", () => {
     expect(evaluateAisleEvidence("Pets/Cats/Cat Litter", ["baking"], ["cat litter", "pets"]).status).toBe("rejected");
   });
