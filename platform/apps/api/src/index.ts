@@ -165,7 +165,7 @@ app.get("/api/v2/entitlement", async (context) => {
   }
 });
 
-app.get("/member-status", async (context) => {
+const renderMemberStatus: MiddlewareHandler<Bindings> = async (context) => {
   try {
     const entitlement = await resolveEntitlement(context.req.raw, context.env);
     context.header("cache-control", "private, no-store");
@@ -176,7 +176,10 @@ app.get("/member-status", async (context) => {
   } catch (error) {
     return context.html(memberStatusHtml({ state: "anonymous", authenticated: false, tier: "anonymous", mayUseProtectedTools: false }), 503);
   }
-});
+};
+
+app.get("/member-status", renderMemberStatus);
+app.get("/member-status/", renderMemberStatus);
 
 app.post("/api/v2/session/signout", (context) => {
   context.header("cache-control", "private, no-store");

@@ -6,7 +6,8 @@
   "routes": [
     { "pattern": "www.thriftycrew.com/api/v2/*", "zone_name": "thriftycrew.com" },
     { "pattern": "www.thriftycrew.com/v2/*", "zone_name": "thriftycrew.com" },
-    { "pattern": "www.thriftycrew.com/member-status*", "zone_name": "thriftycrew.com" }
+    { "pattern": "www.thriftycrew.com/member-status*", "zone_name": "thriftycrew.com" },
+    { "pattern": "www.thriftycrew.com/member-status/*", "zone_name": "thriftycrew.com" }
   ],
   "compatibility_date": "2026-08-08",
   "compatibility_flags": ["nodejs_compat"],
