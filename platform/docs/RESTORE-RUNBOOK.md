@@ -7,7 +7,7 @@ Quarterly restore drill:
 1. Select a `completed` backup from `backup_exports` and download its exact R2 object.
 2. Record byte length and SHA-256 before importing.
 3. Create an isolated D1 named `tc-grocery-v3-restore-drill-YYYYMMDD`.
-4. Run `pnpm restore:prepare <dump.sql> <sanitized.sql> <recovery.json>`. D1 exports can contain a single SQL literal above the import API's statement limit; the command removes only those INSERT statements and converts their values to a parameterized recovery document.
+4. Run `pnpm restore:prepare <dump.sql> <sanitized.sql> <recovery.json>`. D1 exports can contain a single SQL literal above the import API's statement limit; the command removes only those INSERT statements and converts their values to a parameterized recovery document. It also temporarily clears forward `capture_batches.superseded_by` references because D1 imports large files in independent batches; those edges are restored from the same recovery document after all parent rows exist.
 5. Import `sanitized.sql` with `wrangler d1 execute <scratch-name> --remote --file <sanitized.sql>`.
 6. Set `CLOUDFLARE_ACCOUNT_ID`, the scratch `D1_DATABASE_ID`, and `D1_REST_API_TOKEN`, then run `pnpm restore:rows <recovery.json>`.
 7. Compare all core table counts and the current release ID/input hash between production and scratch. Record the result in `restore_drills`.

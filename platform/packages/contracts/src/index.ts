@@ -409,6 +409,24 @@ export const triageResolveSchema = z.object({
   resolution: z.record(z.string(), z.unknown()).default({}),
 });
 
+export const restoreDrillRecordSchema = z.object({
+  id: nonEmptyId,
+  backupId: nonEmptyId,
+  scratchDatabaseId: nonEmptyId,
+  dumpSha256: sha256Hex,
+  status: z.enum(["started", "passed", "failed"]),
+  startedAt: isoDateTime,
+  finishedAt: isoDateTime.optional(),
+  evidence: z.record(z.string(), z.unknown()).default({}),
+}).superRefine((value, context) => {
+  if (value.status !== "started" && !value.finishedAt) {
+    context.addIssue({ code: "custom", path: ["finishedAt"], message: "terminal restore drill states require finishedAt" });
+  }
+  if (value.finishedAt && value.finishedAt < value.startedAt) {
+    context.addIssue({ code: "custom", path: ["finishedAt"], message: "must not precede startedAt" });
+  }
+});
+
 export const releaseGuardResultSchema = z.object({
   guardId: nonEmptyId,
   status: z.enum(["pass", "fail", "warn", "blind", "error"]),
@@ -435,3 +453,4 @@ export type AccuracyDrawCreate = z.infer<typeof accuracyDrawCreateSchema>;
 export type AccuracyVerdicts = z.infer<typeof accuracyVerdictsSchema>;
 export type DirectCaptureArtifact = z.infer<typeof directCaptureArtifactSchema>;
 export type EngineParityReport = z.infer<typeof engineParityReportSchema>;
+export type RestoreDrillRecord = z.infer<typeof restoreDrillRecordSchema>;

@@ -25,6 +25,7 @@ import {
   releaseTop5ChunkSchema,
   releaseGuardResultSchema,
   releasePayloadSchema,
+  restoreDrillRecordSchema,
   scheduleDocumentSchema,
   telemetryEventSchema,
   triageResolveSchema,
@@ -97,6 +98,8 @@ app.use("/internal/job-runs/*", requireIdentityRole(["capture", "engine", "opera
 app.use("/internal/jobs/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/schedules/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/backups/*", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/restore-drills", requireIdentityRole(["operator"]));
+app.use("/internal/restore-drills/*", requireIdentityRole(["operator"]));
 app.use("/internal/releases", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/releases/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/accuracy/*", requireIdentityRole(["engine", "operator"]));
@@ -640,6 +643,45 @@ app.post("/internal/backups/trigger", async (context) => {
   await context.env.BACKUP_WORKFLOW.create({ id: instanceId, params: { trigger: "operator", forceReplica } });
   await recordAudit(context.env, context.get("identity"), "backup.trigger", "workflow", instanceId, "accepted");
   return context.json({ ok: true, instanceId, forceReplica }, 202);
+});
+
+app.get("/internal/restore-drills", async (context) => {
+  const rows = await context.env.DB.prepare(
+    "SELECT * FROM restore_drills ORDER BY started_at DESC LIMIT 100",
+  ).all<Record<string, unknown>>();
+  return context.json({ ok: true, drills: rows.results.map((row) => ({
+    ...row,
+    evidence: JSON.parse(String(row.evidence_json ?? "{}")),
+    evidence_json: undefined,
+  })) });
+});
+
+app.post("/internal/restore-drills", zValidator("json", restoreDrillRecordSchema), async (context) => {
+  const body = context.req.valid("json");
+  const backup = await context.env.DB.prepare("SELECT id FROM backup_exports WHERE id = ?1").bind(body.backupId).first();
+  if (!backup) return jsonError("backup export not found", 404);
+  const existing = await context.env.DB.prepare(
+    "SELECT backup_id, scratch_database_id, dump_sha256, status FROM restore_drills WHERE id = ?1",
+  ).bind(body.id).first<{ backup_id: string; scratch_database_id: string; dump_sha256: string; status: string }>();
+  if (existing) {
+    const sameIdentity = existing.backup_id === body.backupId
+      && existing.scratch_database_id === body.scratchDatabaseId
+      && existing.dump_sha256 === body.dumpSha256;
+    if (!sameIdentity) return jsonError("restore drill id already belongs to different evidence", 409);
+    if (existing.status === body.status) return context.json({ ok: true, drillId: body.id, status: existing.status, idempotent: true });
+    if (existing.status !== "started") return jsonError(`restore drill is immutable in ${existing.status} state`, 409);
+    await context.env.DB.prepare(
+      "UPDATE restore_drills SET status = ?2, finished_at = ?3, evidence_json = ?4 WHERE id = ?1",
+    ).bind(body.id, body.status, body.finishedAt ?? null, stableJson(body.evidence)).run();
+  } else {
+    await context.env.DB.prepare(
+      `INSERT INTO restore_drills
+         (id, backup_id, scratch_database_id, dump_sha256, status, started_at, finished_at, evidence_json)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)`,
+    ).bind(body.id, body.backupId, body.scratchDatabaseId, body.dumpSha256, body.status, body.startedAt, body.finishedAt ?? null, stableJson(body.evidence)).run();
+  }
+  await recordAudit(context.env, context.get("identity"), "restore_drill.record", "restore_drill", body.id, body.status === "passed" ? "accepted" : body.status === "failed" ? "failed" : "accepted", body.evidence);
+  return context.json({ ok: body.status !== "failed", drillId: body.id, status: body.status, idempotent: false }, body.status === "failed" ? 422 : 201);
 });
 
 app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (context) => {

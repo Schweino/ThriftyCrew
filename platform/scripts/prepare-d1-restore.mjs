@@ -12,6 +12,7 @@ const sql = await readFile(inputFile, "utf8");
 const lines = sql.split(/(?<=\n)/);
 const skippedTables = new Set();
 const skippedByTable = new Map();
+const deferredUpdates = [];
 let skippedStatements = 0;
 const sanitized = lines.map((line) => {
   if (Buffer.byteLength(line, "utf8") <= limit) return line;
@@ -22,7 +23,40 @@ const sanitized = lines.map((line) => {
   skippedStatements += 1;
   return `-- oversized INSERT for ${match[1]} restored through parameter binding\n`;
 }).join("");
-await writeFile(sanitizedFile, sanitized, "utf8");
+
+// D1 imports large files in independent API batches. The export-level
+// defer_foreign_keys pragma therefore cannot defer a forward self-reference
+// across the entire import. Capture batches legitimately point to a newer
+// superseding batch, so load the row without that edge and restore the edge
+// after every batch exists.
+const normalized = sanitized.split(/(?<=\n)/).map((line) => {
+  if (!line.startsWith('INSERT INTO "capture_batches"') || !line.includes('"superseded_by"')) return line;
+  const columnsMatch = line.match(/^INSERT INTO "capture_batches" \((.*?)\) VALUES/s);
+  if (!columnsMatch) throw new Error("could not parse capture_batches INSERT columns");
+  const quotedTable = '"capture_batches"';
+  const database = new DatabaseSync(":memory:");
+  try {
+    database.exec(`CREATE TABLE ${quotedTable} (${columnsMatch[1]})`);
+    database.exec(line);
+    const names = database.prepare(`PRAGMA table_info(${quotedTable})`).all().map((column) => String(column.name));
+    const row = database.prepare(`SELECT * FROM ${quotedTable}`).get();
+    if (row?.superseded_by == null) return line;
+    deferredUpdates.push({
+      table: "capture_batches",
+      keyColumns: ["id"],
+      keyValues: [row.id],
+      setColumns: ["superseded_by"],
+      setValues: [row.superseded_by],
+    });
+    const quoteStatement = database.prepare("SELECT quote(?1) AS value");
+    const values = names.map((name) => name === "superseded_by" ? null : row[name]);
+    const literals = values.map((value) => String(quoteStatement.get(value).value));
+    return `INSERT INTO ${quotedTable} (${names.map((name) => `"${name.replaceAll('"', '""')}"`).join(",")}) VALUES(${literals.join(",")});\n`;
+  } finally {
+    database.close();
+  }
+}).join("");
+await writeFile(sanitizedFile, normalized, "utf8");
 
 const recovery = [];
 for (const table of [...skippedTables].sort()) {
@@ -49,5 +83,12 @@ for (const table of [...skippedTables].sort()) {
     database.close();
   }
 }
-await writeFile(recoveryFile, `${JSON.stringify({ version: 1, statementLimit: limit, skippedStatements, rows: recovery }, null, 2)}\n`, "utf8");
-console.log(JSON.stringify({ ok: true, statementLimit: limit, skippedStatements, recoveryRows: recovery.length, tables: [...skippedTables].sort() }));
+await writeFile(recoveryFile, `${JSON.stringify({ version: 2, statementLimit: limit, skippedStatements, rows: recovery, updates: deferredUpdates }, null, 2)}\n`, "utf8");
+console.log(JSON.stringify({
+  ok: true,
+  statementLimit: limit,
+  skippedStatements,
+  recoveryRows: recovery.length,
+  deferredUpdates: deferredUpdates.length,
+  tables: [...skippedTables].sort(),
+}));

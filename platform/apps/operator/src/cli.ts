@@ -210,6 +210,12 @@ if (command === "status") {
   result = await (await mutationClient()).request("/internal/schedules/sync", { method: "PUT", json: document });
 } else if (command === "backup" && subcommand === "trigger") {
   result = await (await mutationClient()).request(`/internal/backups/trigger${arguments_.includes("--replica") ? "?replica=1" : ""}`, { method: "POST" });
+} else if (command === "restore" && subcommand === "record") {
+  const file = arguments_[0];
+  if (!file) throw new Error("tc restore record requires a JSON evidence file");
+  result = await (await mutationClient()).request("/internal/restore-drills", { json: JSON.parse(await readFile(path.resolve(file), "utf8")) });
+} else if (command === "restore" && subcommand === "show") {
+  result = await (await mutationClient()).request("/internal/restore-drills");
 } else if (command === "job" && subcommand === "start") {
   const job = arguments_[0];
   if (!job) throw new Error("tc job start requires a job id");
@@ -340,7 +346,7 @@ if (command === "status") {
     ok: true,
     usage: [
       "tc status", "tc doctor", "tc triage [status|run]", "tc config generate|check",
-      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc job start|finish|dispatch <job> [status|reason]",
+      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc restore record <file>|show", "tc job start|finish|dispatch <job> [status|reason]",
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id]", "tc accuracy verdict <file>",
