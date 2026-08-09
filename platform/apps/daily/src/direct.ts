@@ -3,6 +3,17 @@ import { digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 
 type StoreKey = "aldi" | "bakers" | "family-fare" | "fareway" | "hy-vee" | "sams" | "walmart";
 interface RegularDocument { store?: string; price_mode?: string; mode_verified?: boolean | string; source?: string; generated?: string; deals?: Array<Record<string, unknown>> }
+export interface CaptureAttestation {
+  store: string;
+  market: string;
+  priceMode: string;
+  verifiedAt: string;
+  evidenceUrl: string;
+  statement: string;
+  marketVerified: boolean;
+  locationVerified: boolean;
+  priceModeVerified: boolean;
+}
 
 const STORE_ALIASES: Record<string, StoreKey> = {
   aldi: "aldi", bakers: "bakers", "baker's": "bakers", "family-fare": "family-fare", "family fare": "family-fare",
@@ -75,13 +86,24 @@ function termKey(value: string): string {
 }
 
 async function externalKey(row: Record<string, unknown>, index: number): Promise<string> {
-  const direct = stringValue(row.product_id) ?? safeUrl(row.canonical_url) ?? safeUrl(row.link_url);
-  return direct?.slice(0, 300) ?? `row-${index}-${(await digestHex(stableJson(row))).slice(0, 24)}`;
+  const direct = stringValue(row.product_id) ?? stringValue(row.item_id) ?? stringValue(row.upc) ?? stringValue(row.sku) ?? safeUrl(row.canonical_url) ?? safeUrl(row.link_url);
+  if (direct) return direct.slice(0, 300);
+  const identity = {
+    name: normalizeName(stringValue(row.item) ?? stringValue(row.name) ?? ""),
+    size: normalizeName(stringValue(row.size_raw) ?? stringValue(row.size) ?? ""),
+  };
+  return `catalog-${(await digestHex(stableJson(identity))).slice(0, 32)}${identity.name ? "" : `-${index}`}`;
 }
 
-export async function buildRegularCapture(storeInput: string, document: RegularDocument): Promise<DirectCaptureArtifact> {
+export async function buildRegularCapture(storeInput: string, document: RegularDocument, attestation?: CaptureAttestation): Promise<DirectCaptureArtifact> {
   const store = STORE_ALIASES[storeInput.toLowerCase()] ?? STORE_ALIASES[(document.store ?? "").toLowerCase()];
   if (!store) throw new Error(`unsupported store ${storeInput}`);
+  if (attestation) {
+    const attestedStore = STORE_ALIASES[attestation.store.toLowerCase()];
+    if (attestedStore !== store) throw new Error(`capture attestation is for ${attestation.store}, not ${store}`);
+    if (!/^omaha(?:,? nebraska)?$/i.test(attestation.market.trim())) throw new Error("capture attestation must verify the Omaha market");
+    if (!/^\d{4}-\d{2}-\d{2}T/.test(attestation.verifiedAt) || !safeUrl(attestation.evidenceUrl) || !attestation.statement.trim()) throw new Error("capture attestation needs an ISO instant, HTTPS evidence URL, and statement");
+  }
   const deals = Array.isArray(document.deals) ? document.deals : [];
   if (deals.length === 0) throw new Error("regular capture document has no deals");
   const observations: ObservationInput[] = [];
@@ -128,12 +150,15 @@ export async function buildRegularCapture(storeInput: string, document: RegularD
     termKey: key, ordinal, outcome: value.accepted > 0 ? "success" as const : "rejected" as const, rowCount: value.accepted,
     ...(value.rejected > 0 ? { reason: `${value.rejected} source rows rejected during normalization` } : {}),
   }));
-  const priceModeVerified = document.mode_verified === true || /^\d{4}-\d{2}-\d{2}/.test(stringValue(document.mode_verified) ?? "");
-  const manifestHash = await digestHex(stableJson({ store, source: document.source, priceMode: document.price_mode, priceModeVerified, observations: observations.map((item) => [item.externalProductKey, item.capturedAt, item.perUnitMicros]) }));
+  const priceModeVerified = attestation?.priceModeVerified === true || document.mode_verified === true || /^\d{4}-\d{2}-\d{2}/.test(stringValue(document.mode_verified) ?? "");
+  const marketVerified = attestation?.marketVerified ?? true;
+  const locationVerified = attestation?.locationVerified ?? true;
+  const attestationHash = attestation ? await digestHex(stableJson(attestation)) : null;
+  const manifestHash = await digestHex(stableJson({ store, source: document.source, priceMode: attestation?.priceMode ?? document.price_mode, priceModeVerified, marketVerified, locationVerified, attestationHash, observations: observations.map((item) => [item.externalProductKey, item.capturedAt, item.perUnitMicros]) }));
   return {
     version: 1, sourceId: `direct-${store}-headless`, coverageMode: "partial", capturedFrom: captured[0]!, capturedTo: captured.at(-1)!,
-    expectedTerms: terms.length, marketVerified: true, locationVerified: true, priceModeVerified,
+    expectedTerms: terms.length, marketVerified, locationVerified, priceModeVerified,
     idempotencyKey: `regular-${store}-${captured.at(-1)!.slice(0, 10)}-${manifestHash.slice(0, 16)}`, terms, observations,
-    audit: { inputRows: deals.length, acceptedRows: observations.length, rejectedRows: rejected.length, rejectionReasons: Object.fromEntries([...new Set(rejected.map((item) => item.reason))].sort().map((reason) => [reason, rejected.filter((item) => item.reason === reason).length])), taxonomyRows: observations.filter((item) => item.taxonomyPath).length },
+    audit: { inputRows: deals.length, acceptedRows: observations.length, rejectedRows: rejected.length, rejectionReasons: Object.fromEntries([...new Set(rejected.map((item) => item.reason))].sort().map((reason) => [reason, rejected.filter((item) => item.reason === reason).length])), taxonomyRows: observations.filter((item) => item.taxonomyPath).length, ...(attestation ? { attestation, attestationHash } : {}) },
   };
 }

@@ -66,7 +66,9 @@ export class MutationClient {
   }
 }
 
-export async function ingestDirectCapture(client: MutationClient, artifact: DirectCaptureArtifact, evidenceBody: Uint8Array): Promise<Record<string, unknown>> {
+export interface CaptureEvidenceInput { body: Uint8Array; kind: "screenshot" | "flyer_page" | "raw_payload" | "manifest"; contentType: string }
+
+export async function ingestDirectCapture(client: MutationClient, artifact: DirectCaptureArtifact, evidenceBody: Uint8Array, additionalEvidence: readonly CaptureEvidenceInput[] = []): Promise<Record<string, unknown>> {
   const created = await client.request("/internal/capture-batches", { json: {
     sourceId: artifact.sourceId,
     coverageMode: artifact.coverageMode,
@@ -83,19 +85,25 @@ export async function ingestDirectCapture(client: MutationClient, artifact: Dire
   } });
   const batchId = String(created.batchId);
   let status = String(created.status);
-  const evidenceHash = await digestHex(evidenceBody);
-  const evidenceId = `evidence-${batchId}-${evidenceHash.slice(0, 16)}`;
+  const primary: CaptureEvidenceInput = { body: evidenceBody, kind: artifact.evidence?.kind ?? "raw_payload", contentType: artifact.evidence?.contentType ?? "application/json" };
+  const evidenceInputs = [primary, ...additionalEvidence];
+  const evidenceIds: string[] = [];
+  for (const evidence of evidenceInputs) evidenceIds.push(`evidence-${batchId}-${(await digestHex(evidence.body)).slice(0, 16)}`);
+  const evidenceId = evidenceIds[0]!;
   if (status === "open") {
-    await client.request(`/internal/capture-batches/${batchId}/evidence`, {
-      method: "PUT",
-      body: evidenceBody,
-      headers: {
-        "content-type": artifact.evidence?.contentType ?? "application/json",
-        "x-evidence-id": evidenceId,
-        "x-evidence-kind": artifact.evidence?.kind ?? "raw_payload",
-        "x-content-sha256": evidenceHash,
-      },
-    });
+    for (let index = 0; index < evidenceInputs.length; index += 1) {
+      const evidence = evidenceInputs[index]!;
+      await client.request(`/internal/capture-batches/${batchId}/evidence`, {
+        method: "PUT",
+        body: evidence.body,
+        headers: {
+          "content-type": evidence.contentType,
+          "x-evidence-id": evidenceIds[index]!,
+          "x-evidence-kind": evidence.kind,
+          "x-content-sha256": await digestHex(evidence.body),
+        },
+      });
+    }
     for (const observationChunk of chunks(artifact.observations, 50)) {
       await client.request(`/internal/capture-batches/${batchId}/observations`, { json: { observations: observationChunk.map((observation) => ({ ...observation, evidenceObjectId: observation.evidenceObjectId ?? evidenceId })) } });
     }
@@ -108,7 +116,7 @@ export async function ingestDirectCapture(client: MutationClient, artifact: Dire
     status = String(promoted.status);
   }
   if (status !== "promoted") throw new Error(`direct capture ${batchId} is in unexpected state ${status}`);
-  return { ok: true, batchId, status, evidenceId, observations: artifact.observations.length, terms: artifact.terms.length, audit: artifact.audit };
+  return { ok: true, batchId, status, evidenceId, evidenceIds, observations: artifact.observations.length, terms: artifact.terms.length, audit: artifact.audit };
 }
 
 function ruleCount(artifact: CurrentBridgeArtifact): number {

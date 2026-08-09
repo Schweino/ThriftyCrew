@@ -20,6 +20,21 @@ describe("direct regular capture", () => {
     expect(artifact.audit).toMatchObject({ inputRows: 3, acceptedRows: 2, rejectedRows: 1 });
   });
 
+  it("binds an external verification attestation and stable name identity", async () => {
+    const artifact = await buildRegularCapture("hy-vee", {
+      store: "Hy-Vee", price_mode: "in-store", source: "fixture", deals: [
+        { item: "Hy Vee Grade A Large Eggs", size: "dozen", ad_price: "$1.59", as_of: "2026-08-09" },
+      ],
+    }, {
+      store: "Hy-Vee", market: "Omaha", priceMode: "in_store", verifiedAt: "2026-08-09T15:00:00.000Z",
+      evidenceUrl: "https://www.hy-vee.com/", statement: "Store and shelf-price mode inspected",
+      marketVerified: true, locationVerified: true, priceModeVerified: true,
+    });
+    expect(artifact.priceModeVerified).toBe(true);
+    expect(artifact.observations[0]?.externalProductKey).toMatch(/^catalog-/);
+    expect(artifact.audit.attestationHash).toMatch(/^[a-f0-9]{64}$/);
+  });
+
   it("refuses to claim verified price mode when the source did not prove it", async () => {
     const artifact = await buildRegularCapture("fareway", { deals: [{ item: "Eggs", current_price: 1.99, size: "dozen", as_of: "2026-08-09" }] });
     expect(artifact.priceModeVerified).toBe(false);

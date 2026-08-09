@@ -1,9 +1,9 @@
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { directCaptureArtifactSchema, observationChunkSchema } from "@thriftycrew/contracts";
-import { ingestDirectCapture, MutationClient, replayCurrentArtifact } from "@thriftycrew/daily/client";
+import { ingestDirectCapture, MutationClient, replayCurrentArtifact, type CaptureEvidenceInput } from "@thriftycrew/daily/client";
 import { buildCurrentBridge } from "@thriftycrew/daily/legacy";
-import { buildRegularCapture } from "@thriftycrew/daily/direct";
+import { buildRegularCapture, type CaptureAttestation } from "@thriftycrew/daily/direct";
 import { digestHex, stableJson } from "@thriftycrew/domain";
 import { generateLegacyConfiguration } from "./config";
 import { buildNativeParityReport, compileProductMatcher, evaluateAisleEvidence, type NativeEngineSnapshot } from "@thriftycrew/engine";
@@ -257,20 +257,30 @@ if (command === "status") {
   const artifact = await buildCurrentBridge(incomeRoot);
   result = await replayCurrentArtifact(await mutationClient(), artifact);
 } else if (command === "capture" && subcommand === "build-regular") {
-  const [store, inputFile, outputFile] = arguments_;
+  const [store, inputFile, outputFile, attestationFile] = arguments_;
   if (!store || !inputFile || !outputFile) throw new Error("tc capture build-regular requires store, input file, and output file");
   const source = JSON.parse(await readFile(path.resolve(inputFile), "utf8").then((value) => value.replace(/^\uFEFF/, "")));
-  const artifact = await buildRegularCapture(store, source);
+  const attestation = attestationFile ? JSON.parse(await readFile(path.resolve(attestationFile), "utf8")) as CaptureAttestation : undefined;
+  const artifact = await buildRegularCapture(store, source, attestation);
   await writeJson(path.resolve(outputFile), artifact);
   result = { ok: true, outputFile: path.resolve(outputFile), sourceId: artifact.sourceId, observations: artifact.observations.length, terms: artifact.terms.length, audit: artifact.audit };
 } else if (command === "capture" && subcommand === "ingest") {
-  const [artifactFile, evidenceFile] = arguments_;
+  const [artifactFile, ...evidenceFiles] = arguments_;
   if (!artifactFile) throw new Error("tc capture ingest requires an artifact file");
   const artifactBytes = await readFile(path.resolve(artifactFile));
   const artifact = directCaptureArtifactSchema.parse(JSON.parse(new TextDecoder().decode(artifactBytes).replace(/^\uFEFF/, "")));
-  const evidenceBytes = evidenceFile ? await readFile(path.resolve(evidenceFile)) : artifactBytes;
+  const selectedEvidenceFiles = evidenceFiles.length > 0 ? evidenceFiles : [artifactFile];
+  const evidenceInputs: CaptureEvidenceInput[] = await Promise.all(selectedEvidenceFiles.map(async (file: string, index: number) => {
+    const extension = path.extname(file).toLowerCase();
+    const screenshot = [".png", ".jpg", ".jpeg", ".webp"].includes(extension);
+    return {
+      body: new Uint8Array(await readFile(path.resolve(file))),
+      kind: screenshot ? "screenshot" : index === 0 ? artifact.evidence?.kind ?? "raw_payload" : "manifest",
+      contentType: extension === ".png" ? "image/png" : extension === ".jpg" || extension === ".jpeg" ? "image/jpeg" : extension === ".webp" ? "image/webp" : "application/json",
+    };
+  }));
   const client = await mutationClient();
-  const ingestion = await ingestDirectCapture(client, artifact, evidenceBytes);
+  const ingestion = await ingestDirectCapture(client, artifact, evidenceInputs[0]!.body, evidenceInputs.slice(1));
   const matching = ingestion.ok ? await matchBatch(client, String(ingestion.batchId)) : null;
   result = { ...ingestion, matching };
 } else if (command === "match" && subcommand === "batch") {
