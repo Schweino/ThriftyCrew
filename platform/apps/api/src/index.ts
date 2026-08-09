@@ -1422,7 +1422,11 @@ app.get("/internal/doctor", async (context) => {
   const overdueAccuracyDraws = await markOverdueAccuracyDraws(context.env.DB);
   const [configuration, release, hardGuards, triage, batches] = await Promise.all([
     context.env.DB.prepare("SELECT id, deployed_at FROM configuration_versions WHERE active = 1").first(),
-    context.env.DB.prepare("SELECT release_id, updated_at FROM current_releases WHERE market_id = 'omaha'").first(),
+    context.env.DB.prepare(
+      `SELECT current.release_id, current.updated_at, release.configuration_id
+         FROM current_releases current JOIN releases release ON release.id = current.release_id
+        WHERE current.market_id = 'omaha'`,
+    ).first(),
     context.env.DB.prepare(
       `SELECT r.status, COUNT(*) AS count FROM guard_results r
         JOIN current_releases c ON c.release_id = r.release_id
@@ -1432,6 +1436,7 @@ app.get("/internal/doctor", async (context) => {
     context.env.DB.prepare("SELECT status, COUNT(*) AS count FROM capture_batches GROUP BY status").all(),
   ]);
   const healthy = Boolean(configuration && release)
+    && (configuration as { id?: string } | null)?.id === (release as { configuration_id?: string } | null)?.configuration_id
     && hardGuards.results.every((row) => (row as { status: string }).status === "pass")
     && !triage.results.some((row) => (row as { status: string; count: number }).status === "open" && (row as { count: number }).count > 0);
   return context.json({ ok: healthy, configuration, release, hardGuards: hardGuards.results, triage: triage.results, batches: batches.results, overdueAccuracyDraws }, healthy ? 200 : 422);
