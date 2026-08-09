@@ -61,7 +61,7 @@ export type AisleFamily = "food" | "household" | "personal" | "baby" | "pet";
 
 const AISLE_FAMILY_PATTERNS: Readonly<Record<AisleFamily, readonly string[]>> = {
   food: ["\\bproduce\\b", "\\bmeat\\b", "\\bdairy\\b", "\\bbakery\\b", "\\bpantry\\b", "\\bfrozen\\b", "\\bbeverages?\\b", "\\bsnacks?\\b", "\\bgrocery\\b"],
-  household: ["\\bhousehold\\b", "cleaners? air fresheners?", "\\blaundry\\b", "\\bdishes\\b", "home maintenance"],
+  household: ["\\bhousehold\\b", "cleaners? air fresheners?", "\\blaundry\\b", "home maintenance"],
   personal: ["\\bhealth beauty\\b", "grooming hygiene", "oral care", "skin care", "feminine products"],
   baby: ["baby child", "infant meals?", "toddler meals?"],
   pet: ["pets wildlife", "pet supplies", "cat litter", "dog food", "cat food", "dog treats?"],

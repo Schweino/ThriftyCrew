@@ -29,6 +29,7 @@ describe("matching", () => {
     expect(evaluateAisleFamilyEvidence("health_beauty/sports_nutrition/protein_bars", "food", ["personal"]).status).toBe("confirmed");
     expect(evaluateAisleFamilyEvidence("health_beauty/baby_child/infant_meals", "baby").status).toBe("confirmed");
     expect(evaluateAisleFamilyEvidence("health_beauty/grooming_hygiene/bar_liquid_soap", "household", ["personal"]).status).toBe("confirmed");
+    expect(evaluateAisleFamilyEvidence("freezer/frozen_meals_more/appetizers_snacks_side_dishes", "food").status).not.toBe("rejected");
   });
 });
 

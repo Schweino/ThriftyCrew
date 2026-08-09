@@ -106,6 +106,7 @@ async function matchBatch(client: MutationClient, batchId: string): Promise<Reco
     const expectedFamily: AisleFamily = nonFoodFamilies.has(category) ? category as AisleFamily : "food";
     const additionalAllowedFamilies: AisleFamily[] = [];
     if (outcome.commodityId === "protein-bars" || outcome.commodityId === "hand-soap") additionalAllowedFamilies.push("personal");
+    if (outcome.commodityId === "facial-tissues") additionalAllowedFamilies.push("household");
     const aisle = evaluateAisleFamilyEvidence(product.taxonomy_path ?? undefined, expectedFamily, additionalAllowedFamilies);
     if (aisle.status === "rejected") {
       aisleRejected.push({ productId: product.product_id, name: product.name, commodityId: outcome.commodityId, taxonomyPath: product.taxonomy_path, reason: aisle.reason });
