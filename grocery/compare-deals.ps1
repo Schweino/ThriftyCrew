@@ -1056,6 +1056,29 @@ foreach ($d in $ads.deals) {                                                    
 if (-not $BakersFile)  { $f = Get-ChildItem (Join-Path $OutDir 'bakers\bakers-deals-*.json')   -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1; if ($f) { $BakersFile  = $f.FullName; Write-Warning ("compare-deals: -BakersFile not passed; auto-using "  + $f.Name) } }
 if (-not $FarewayFile) { $f = Get-ChildItem (Join-Path $OutDir 'fareway\fareway-deals-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1; if ($f) { $FarewayFile = $f.FullName; Write-Warning ("compare-deals: -FarewayFile not passed; auto-using " + $f.Name) } }
 
+# FAREWAY RUNS TWO ADS AT ONCE (2026-08-09). A weekly Sun-Sat flyer AND a ~4-week monthly one, with
+# overlapping windows - on 08-09 the monthly covered 08-03..08-29 while the weekly covered 08-10..08-15.
+# Both are real sale prices, and "newest fareway-deals-*.json by name" can only ever see one of them, so the
+# monthly ad had NEVER reached a board: every deals file this estate produced read the weekly only. Picking
+# the newest is also actively wrong the moment the next weekly is captured early, because that file shadows a
+# monthly that is still live for another three weeks.
+# Safe to load them all now only because each file self-gates on its own ad_from/ad_to (Test-AdWindowClosed) -
+# an out-of-window file refuses itself rather than leaking into the board. Explicit -FarewayFile still wins,
+# and the sibling pick-up is skipped entirely when the caller pinned one, so a regression run stays pinned.
+# SCOPED TO THE PINNED FILE'S OWN FOLDER, not to $OutDir. A regression harness that pins a fixture pulls in
+# only that fixture's siblings and stays hermetic; production pins out\fareway\... and picks up the real ones.
+# Pinning one file must never mean silently ignoring a second ad that is live at the same time.
+$farewayExtra = @()
+if ($FarewayFile -and (Test-Path $FarewayFile)) {
+  $fwDir = Split-Path $FarewayFile -Parent
+  $pinned = Split-Path $FarewayFile -Leaf
+  foreach ($f in (Get-ChildItem (Join-Path $fwDir 'fareway-deals-*.json') -EA SilentlyContinue | Sort-Object Name -Descending)) {
+    if ($f.Name -eq $pinned) { continue }
+    $farewayExtra += $f.FullName
+  }
+  if ($farewayExtra.Count) { Write-Warning ("compare-deals: Fareway runs concurrent ad windows; also loading " + $farewayExtra.Count + " sibling deals file(s): " + (($farewayExtra | ForEach-Object { Split-Path $_ -Leaf }) -join ', ') + " (each self-gates on its own window)") }
+}
+
 # Sam's is captured in PARTIAL SLICES - the club catalog is CAPTCHA-walled, so each run only gets the categories
 # it got through before the wall. "Newest file wins" is right for a store we pull whole every week and WRONG for
 # Sam's: the 2026-07-15 Omaha-club capture (428 rows) covers ~118 commodities where the 2026-07-08 national
@@ -1089,7 +1112,7 @@ else {
 # Judged against $today (the board date from the ads file), never the wall clock, so a pinned regression
 # run stays reproducible. A file with no ad_to is never expired: absent evidence is not evidence of expiry,
 # and the frozen bakers-deals-2026-07-05 fixture declares no window at all.
-foreach ($extra in (@($BakersFile,$FarewayFile) + $samsFiles)) {
+foreach ($extra in (@($BakersFile,$FarewayFile) + $farewayExtra + $samsFiles)) {
   if ($extra -and (Test-Path $extra)) {
     $ex = Get-Content $extra -Raw | ConvertFrom-Json
     # A WINDOW HAS TWO ENDS (2026-08-09). The ad_to half retires a sale after it closes; nothing stopped one
