@@ -43,6 +43,14 @@ async function publicGet(pathname: string): Promise<unknown> {
   return body;
 }
 
+function githubRunId(job: string): string {
+  const explicit = process.env.TC_JOB_RUN_ID;
+  if (explicit) return explicit;
+  const run = process.env.GITHUB_RUN_ID ?? `local-${Date.now()}`;
+  const attempt = process.env.GITHUB_RUN_ATTEMPT ?? "1";
+  return `run_${job}_${run}_${attempt}`;
+}
+
 async function writeJson(file: string, value: unknown): Promise<void> {
   await mkdir(path.dirname(file), { recursive: true });
   await writeFile(file, `${JSON.stringify(value, null, 2)}\n`, "utf8");
@@ -86,7 +94,9 @@ if (command === "status") {
 } else if (command === "doctor") {
   result = await (await mutationClient()).request("/internal/doctor", { acceptStatuses: [422] });
 } else if (command === "triage") {
-  result = await (await mutationClient()).request(`/internal/triage?status=${encodeURIComponent(subcommand ?? "open")}`);
+  result = subcommand === "run"
+    ? await (await mutationClient()).request("/internal/triage/run", { method: "POST" })
+    : await (await mutationClient()).request(`/internal/triage?status=${encodeURIComponent(subcommand ?? "open")}`);
 } else if (command === "config" && (subcommand === "generate" || subcommand === "check")) {
   result = await generateLegacyConfiguration(incomeRoot, subcommand === "check");
 } else if (command === "schedules" && subcommand === "check") {
@@ -96,6 +106,41 @@ if (command === "status") {
   result = await (await mutationClient()).request("/internal/schedules/sync", { method: "PUT", json: document });
 } else if (command === "backup" && subcommand === "trigger") {
   result = await (await mutationClient()).request(`/internal/backups/trigger${arguments_.includes("--replica") ? "?replica=1" : ""}`, { method: "POST" });
+} else if (command === "job" && subcommand === "start") {
+  const job = arguments_[0];
+  if (!job) throw new Error("tc job start requires a job id");
+  const runId = githubRunId(job);
+  const now = new Date().toISOString();
+  result = await (await mutationClient()).request("/internal/job-runs", { json: {
+    id: runId,
+    job,
+    triggerKind: process.env.GITHUB_RUN_ID ? "schedule" : "operator",
+    scheduledFor: process.env.TC_SCHEDULED_FOR ?? now,
+    startedAt: now,
+    executorRunId: process.env.GITHUB_SERVER_URL && process.env.GITHUB_REPOSITORY && process.env.GITHUB_RUN_ID
+      ? `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
+      : runId,
+    input: { reason: process.env.TC_RECOVERY_REASON ?? "scheduled operation" },
+  } });
+} else if (command === "job" && subcommand === "finish") {
+  const job = arguments_[0];
+  if (!job) throw new Error("tc job finish requires a job id");
+  const requested = arguments_[1] ?? "completed";
+  const status = requested === "success" ? "completed" : requested === "completed" ? "completed" : "failed";
+  const now = new Date().toISOString();
+  result = await (await mutationClient()).request(`/internal/job-runs/${githubRunId(job)}`, { method: "PATCH", json: {
+    status,
+    heartbeatAt: now,
+    finishedAt: now,
+    stats: { githubJobStatus: requested },
+    ...(status === "failed" ? { error: `GitHub recovery job ended with ${requested}` } : {}),
+  } });
+} else if (command === "ghost" && subcommand === "reconcile") {
+  const requestedRelease = arguments_[0];
+  const status = requestedRelease ? null : await publicGet("/api/v2/status") as { release?: { id?: string } };
+  const releaseId = requestedRelease ?? status?.release?.id;
+  if (!releaseId) throw new Error("no published release is available for Ghost reconciliation");
+  result = await (await mutationClient()).request(`/internal/releases/${releaseId}/reconcile-ghost`, { method: "POST" });
 } else if (command === "run" && subcommand === "daily" && arguments_.includes("--dry")) {
   const artifact = await buildCurrentBridge(incomeRoot);
   result = { ok: true, dryRun: true, audit: artifact.audit, releaseInputs: artifact.stores.length };
@@ -128,8 +173,9 @@ if (command === "status") {
   result = {
     ok: true,
     usage: [
-      "tc status", "tc doctor", "tc triage [status]", "tc config generate|check",
-      "tc schedules check|deploy", "tc backup trigger [--replica]",
+      "tc status", "tc doctor", "tc triage [status|run]", "tc config generate|check",
+      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc job start|finish <job> [status]",
+      "tc ghost reconcile [release-id]",
       "tc run daily --dry", "tc parity", "tc replay", "tc capture validate <file>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id]", "tc accuracy verdict <file>",
       "tc commodity add <file>", "tc recipe add <file>",

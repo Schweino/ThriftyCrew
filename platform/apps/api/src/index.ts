@@ -917,6 +917,19 @@ app.get("/internal/triage", async (context) => {
   return context.json({ ok: true, items: rows.results });
 });
 
+app.post("/internal/triage/run", async (context) => {
+  const overdueAccuracyDraws = await markOverdueAccuracyDraws(context.env.DB);
+  const queue = await context.env.DB.prepare(
+    `SELECT status, severity, COUNT(*) AS count FROM triage_items
+      WHERE status <> 'resolved' GROUP BY status, severity ORDER BY status, severity`,
+  ).all();
+  await recordAudit(context.env, context.get("identity"), "triage.run", "triage_queue", null, "accepted", {
+    overdueAccuracyDraws,
+    queue: queue.results,
+  });
+  return context.json({ ok: true, overdueAccuracyDraws, queue: queue.results });
+});
+
 app.post("/internal/triage/:id/resolve", zValidator("json", triageResolveSchema), async (context) => {
   const body = context.req.valid("json");
   const existing = await context.env.DB.prepare("SELECT id FROM triage_items WHERE id = ?1").bind(context.req.param("id")).first();

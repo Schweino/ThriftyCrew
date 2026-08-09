@@ -7,6 +7,15 @@ on:
   pull_request:
     branches: [main]
     paths: ["platform/**", ".github/workflows/platform-v3.yml"]
+  schedule:
+    - cron: "0 12 * * *"
+      timezone: "America/Chicago"
+    - cron: "0 15 * * 1"
+      timezone: "America/Chicago"
+    - cron: "30 13 * * *"
+      timezone: "America/Chicago"
+    - cron: "0 16 * * *"
+      timezone: "America/Chicago"
   workflow_dispatch:
     inputs:
       shadow_replay:
@@ -14,9 +23,19 @@ on:
         required: false
         default: false
         type: boolean
+      recovery_job:
+        description: "Scheduled job to recover (set by the Worker watchdog)"
+        required: false
+        default: ""
+        type: string
+      recovery_reason:
+        description: "Why this recovery dispatch was requested"
+        required: false
+        default: "manual recovery"
+        type: string
 
 concurrency:
-  group: grocery-platform-v3-${{ github.ref }}
+  group: grocery-platform-v3-${{ github.ref }}-${{ inputs.recovery_job || github.event.schedule || 'verify' }}
   cancel-in-progress: true
 
 jobs:
@@ -85,3 +104,56 @@ jobs:
           TC_API_ORIGIN: ${{ vars.TC_V3_API_ORIGIN }}
           TC_OIDC_AUDIENCE: tc-grocery-v3
         run: pnpm tc replay
+
+  scheduled-operation:
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.recovery_job != '')
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: platform
+    env:
+      TC_API_ORIGIN: ${{ vars.TC_V3_API_ORIGIN }}
+      TC_OIDC_AUDIENCE: tc-grocery-v3
+      TC_RECOVERY_REASON: ${{ inputs.recovery_reason || format('primary schedule {0}', github.event.schedule) }}
+      RECOVERY_JOB: ${{ inputs.recovery_job || (github.event.schedule == '0 12 * * *' && 'daily-engine') || (github.event.schedule == '0 15 * * 1' && 'accuracy-weekly') || (github.event.schedule == '30 13 * * *' && 'triage-daily') || (github.event.schedule == '0 16 * * *' && 'ghost-rotation-reconcile') }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.16.0
+          run_install: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: platform/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Start durable job ledger
+        run: pnpm tc job start "$RECOVERY_JOB"
+
+      - name: Run scheduled operation
+        shell: bash
+        run: |
+          case "$RECOVERY_JOB" in
+            daily-engine) pnpm tc replay ;;
+            accuracy-weekly) pnpm tc accuracy draw ;;
+            triage-daily) pnpm tc triage run ;;
+            ghost-rotation-reconcile) pnpm tc ghost reconcile ;;
+            *) echo "Unknown recovery job: $RECOVERY_JOB" >&2; exit 2 ;;
+          esac
+
+      - name: Finish durable job ledger
+        if: always()
+        env:
+          TC_GITHUB_JOB_STATUS: ${{ job.status }}
+        run: pnpm tc job finish "$RECOVERY_JOB" "$TC_GITHUB_JOB_STATUS"
