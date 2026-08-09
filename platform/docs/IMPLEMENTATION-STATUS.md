@@ -21,8 +21,11 @@
 
 ## External and time-based gates still open
 
-- Wrangler authentication, production D1/R2/Analytics Engine provisioning, private Ghost credentials, and an
-  immutable GitHub repository ID must be configured before a remote deployment.
+- The isolated production Worker is deployed at `https://tc-grocery-v3.curly-unit-51a6.workers.dev` with its
+  dedicated D1 database, R2 evidence bucket, Analytics Engine funnel dataset, scoped operator secret, and
+  immutable GitHub repository ID. Release `rel_555c2c6eb2730017e4ae796b` is published there. No existing route
+  or legacy publisher was changed.
+- Private Ghost credentials still need to be configured before live visibility reconciliation can run.
 - The entitlement adapter still needs its seven live Ghost/member states, including mobile Safari.
 - A real remote restore drill, beta Workers Route, route rollback rehearsal, and alert delivery integration remain.
 - Milestone evidence still requires 14 clean shadow-ingest days, four direct Chrome weekly cycles, 30 daily
