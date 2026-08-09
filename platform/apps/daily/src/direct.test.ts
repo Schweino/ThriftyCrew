@@ -24,4 +24,9 @@ describe("direct regular capture", () => {
     const artifact = await buildRegularCapture("fareway", { deals: [{ item: "Eggs", current_price: 1.99, size: "dozen", as_of: "2026-08-09" }] });
     expect(artifact.priceModeVerified).toBe(false);
   });
+
+  it("accepts the legacy capture-date proof used by verified store pulls", async () => {
+    const artifact = await buildRegularCapture("fareway", { mode_verified: "2026-08-09", price_mode: "in-store", deals: [{ item: "Eggs", current_price: 1.99, size: "dozen", as_of: "2026-08-09" }] });
+    expect(artifact.priceModeVerified).toBe(true);
+  });
 });

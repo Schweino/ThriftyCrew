@@ -2,7 +2,7 @@ import type { DirectCaptureArtifact, ObservationInput } from "@thriftycrew/contr
 import { digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 
 type StoreKey = "aldi" | "bakers" | "family-fare" | "fareway" | "hy-vee" | "sams" | "walmart";
-interface RegularDocument { store?: string; price_mode?: string; mode_verified?: boolean; source?: string; generated?: string; deals?: Array<Record<string, unknown>> }
+interface RegularDocument { store?: string; price_mode?: string; mode_verified?: boolean | string; source?: string; generated?: string; deals?: Array<Record<string, unknown>> }
 
 const STORE_ALIASES: Record<string, StoreKey> = {
   aldi: "aldi", bakers: "bakers", "baker's": "bakers", "family-fare": "family-fare", "family fare": "family-fare",
@@ -128,10 +128,11 @@ export async function buildRegularCapture(storeInput: string, document: RegularD
     termKey: key, ordinal, outcome: value.accepted > 0 ? "success" as const : "rejected" as const, rowCount: value.accepted,
     ...(value.rejected > 0 ? { reason: `${value.rejected} source rows rejected during normalization` } : {}),
   }));
-  const manifestHash = await digestHex(stableJson({ store, source: document.source, observations: observations.map((item) => [item.externalProductKey, item.capturedAt, item.perUnitMicros]) }));
+  const priceModeVerified = document.mode_verified === true || /^\d{4}-\d{2}-\d{2}/.test(stringValue(document.mode_verified) ?? "");
+  const manifestHash = await digestHex(stableJson({ store, source: document.source, priceMode: document.price_mode, priceModeVerified, observations: observations.map((item) => [item.externalProductKey, item.capturedAt, item.perUnitMicros]) }));
   return {
     version: 1, sourceId: `direct-${store}-headless`, coverageMode: "partial", capturedFrom: captured[0]!, capturedTo: captured.at(-1)!,
-    expectedTerms: terms.length, marketVerified: true, locationVerified: true, priceModeVerified: document.mode_verified === true,
+    expectedTerms: terms.length, marketVerified: true, locationVerified: true, priceModeVerified,
     idempotencyKey: `regular-${store}-${captured.at(-1)!.slice(0, 10)}-${manifestHash.slice(0, 16)}`, terms, observations,
     audit: { inputRows: deals.length, acceptedRows: observations.length, rejectedRows: rejected.length, rejectionReasons: Object.fromEntries([...new Set(rejected.map((item) => item.reason))].sort().map((reason) => [reason, rejected.filter((item) => item.reason === reason).length])), taxonomyRows: observations.filter((item) => item.taxonomyPath).length },
   };
