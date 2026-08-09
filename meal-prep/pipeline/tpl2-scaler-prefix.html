@@ -443,45 +443,68 @@ function init(box){
     });
     var own=[]; data.ing.forEach(function(it,i){ if(removed[i]) own.push(it.item); });
     var ownHtml=own.length?'<p class="own"><b>Already in your kitchen (not on the list):</b> '+esc(own.join(', '))+'</p>':'';
+    // Ingredients in the SAME shape the site-wide "Print this recipe" card uses: name left, amount right,
+    // dotted leader between. The live li is "<strong>Name:</strong> amt (g)", so split it at the strong
+    // rather than dumping innerHTML, or this section reads nothing like the other print flow.
     var ing='';
     var ul=document.querySelector('.smp-ing');
-    if(ul){ [].slice.call(ul.querySelectorAll('li')).forEach(function(li){ ing+='<li>'+li.innerHTML+'</li>'; }); }
+    if(ul){
+      [].slice.call(ul.querySelectorAll('li')).forEach(function(li){
+        var st=li.querySelector('strong');
+        if(st){
+          var nm=st.textContent.trim(); if(nm.slice(-1)===':'){ nm=nm.slice(0,-1); }
+          var amt=(li.textContent||'').replace(st.textContent,'').trim();
+          ing+='<li><span>'+esc(nm)+'</span><span>'+esc(amt)+'</span></li>';
+        } else { ing+='<li><span>'+esc(li.textContent.trim())+'</span><span></span></li>'; }
+      });
+    }
     var steps='';
     var ol=document.querySelector('.smp-mi');
     if(ol){ [].slice.call(ol.querySelectorAll('li')).forEach(function(li){ steps+='<li>'+li.innerHTML+'</li>'; }); }
     var por=document.querySelector('.smp-portion');
     var te=document.querySelector('.gh-article-title')||document.querySelector('h1');
     var title=((te?te.textContent:document.title)||'Recipe').trim();
-    var wk=(feedData&&feedData.week_of)?(' &middot; prices verified week of '+esc(feedData.week_of)):'';
+    // the macros line and the source credit, same two pieces the site-wide print card carries
+    var statEl=document.querySelector('.smp-stat');
+    var macros=statEl?statEl.textContent.trim():'';
+    var crEl=document.querySelector('.smp-credit');
+    var credit=crEl?crEl.textContent.replace(/^\s*Source\s*/i,'').trim():'';
+    var wk=(feedData&&feedData.week_of)?('Prices verified week of '+esc(feedData.week_of)+'. '):'';
+    // THE SAME PRINT CARD AS "Print this recipe" - identical type scale, gold-ruled h2, dotted-leader
+    // lists, credit and footer. The shopping list is a new section in that language, not a new design.
     var css='@page{margin:14mm}*{box-sizing:border-box}'
       +'body{font:13px/1.5 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#16263f;max-width:720px;margin:0 auto;padding:8px}'
-      +'h1{font-size:21px;margin:0 0 3px;line-height:1.2}'
-      +'.pm{color:#555;font-size:11.5px;margin:0 0 16px}'
-      +'h2{font-size:15px;margin:20px 0 8px;padding-bottom:3px;border-bottom:2px solid #e2a43c}'
-      +'h3{font-size:13px;margin:14px 0 4px;display:flex;justify-content:space-between;gap:12px;align-items:baseline;border-bottom:1px solid #ccc;padding-bottom:2px}'
-      +'h3 span{font-weight:400;color:#555;font-size:11.5px;white-space:nowrap}'
-      +'em{color:#777;font-size:11px}'
-      +'ul.sl{list-style:none;padding:0;margin:0 0 6px}'
-      +'ul.sl li{display:flex;align-items:baseline;gap:8px;padding:4px 0;border-bottom:1px dotted #ddd}'
-      +'.bx{flex:none;width:11px;height:11px;border:1px solid #888;border-radius:2px;display:inline-block}'
-      +'.nm{flex:1}'
-      +'.pk{color:#666;font-size:11px;white-space:nowrap;font-family:ui-monospace,Consolas,monospace}'
-      +'.pr{font-weight:700;white-space:nowrap;min-width:52px;text-align:right}'
-      +'.tot{display:flex;justify-content:space-between;gap:12px;margin:10px 0 0;padding-top:7px;border-top:2px solid #16263f;font-weight:700;font-size:14px}'
+      +'h1{font-size:22px;margin:0 0 4px;line-height:1.2}'
+      +'.pm{color:#555;font-size:12px;margin:0 0 4px}'
+      +'.pn{color:#777;font-size:11px;margin:0 0 14px}'
+      +'h2{font-size:15px;color:#16263f;border-bottom:2px solid #e2a43c;padding-bottom:3px;margin:18px 0 8px;break-after:avoid;page-break-after:avoid}'
+      +'h3{font-size:12.5px;margin:12px 0 4px;display:flex;justify-content:space-between;gap:12px;align-items:baseline;border-bottom:1px solid #ccc;padding-bottom:2px;break-after:avoid;page-break-after:avoid}'
+      +'h3 span{font-weight:400;color:#555;font-size:11px;white-space:nowrap}'
+      +'em{color:#777;font-size:11px;font-style:italic}'
+      +'ol,ul{margin:0;padding-left:20px}'
+      +'li{margin:4px 0;break-inside:avoid;page-break-inside:avoid}'
+      +'ul.sl,ul.ing{list-style:none;padding:0;margin:0}'
+      +'ul.sl li,ul.ing li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dotted #ccc;padding:4px 0}'
+      +'ul.ing li span:last-child{font-weight:600;white-space:nowrap}'
+      +'ul.sl li .bx{flex:none;width:11px;height:11px;border:1px solid #888;border-radius:2px;display:inline-block;position:relative;top:1px}'
+      +'ul.sl li .nm{flex:1}'
+      +'ul.sl li .pk{color:#666;font-size:11px;white-space:nowrap}'
+      +'ul.sl li .pr{font-weight:600;white-space:nowrap;min-width:50px;text-align:right}'
+      +'.tot{display:flex;justify-content:space-between;gap:12px;margin:10px 0 0;padding-top:6px;border-top:2px solid #16263f;font-weight:700;font-size:14px}'
       +'.own{margin:10px 0 0;font-size:11.5px;color:#555}'
-      +'ol,ul.ing{margin:0;padding-left:20px}li{margin:4px 0}'
-      +'ul.ing{list-style:none;padding:0}'
-      +'ul.ing li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dotted #ddd;padding:4px 0}'
-      +'.bd{margin-top:18px;padding-top:8px;border-top:1px solid #ddd;font-size:10.5px;color:#888}';
+      +'.cr{margin-top:18px;padding-top:8px;border-top:1px solid #ddd;font-size:11px;color:#777;font-style:italic}'
+      +'.bd{margin-top:6px;font-size:10px;color:#999}';
     var doc='<!doctype html><html><head><meta charset="utf-8"><title>'+esc(title)+'</title><style>'+css+'</style></head><body>'
       +'<h1>'+esc(title)+'</h1>'
-      +'<p class="pm">Shopping list for '+nn+' servings'+wk+'. Whole packages, before tax. Estimates, not quotes.</p>'
+      +(macros?('<p class="pm">'+esc(macros)+'</p>'):'')
+      +'<p class="pn">'+wk+'Whole packages, before tax. Estimates, not quotes.</p>'
       +'<h2>Shopping list</h2>'
       +(r.order.length?(secs+'<p class="tot"><span>Estimated total</span><span>'+money(r.total)+'</span></p>'):'<p class="own">Nothing to buy: every ingredient is ticked off as already in your kitchen.</p>')
       +ownHtml
       +(ing?('<h2>Ingredients, '+nn+' servings</h2><ul class="ing">'+ing+'</ul>'):'')
       +(steps?('<h2>Make It</h2><ol>'+steps+'</ol>'):'')
       +(por?('<h2>Portion It</h2><p>'+por.innerHTML+'</p>'):'')
+      +(credit?('<p class="cr">'+esc(credit)+'</p>'):'')
       +'<p class="bd">Thrifty Crew &middot; thriftycrew.com</p></body></html>';
     // Printing has to focus the iframe, which takes focus OUT of the sheet - and TC.trap listens on the
     // sheet, so Escape silently stops working the moment you print. Hand focus back when the frame goes
@@ -489,7 +512,12 @@ function init(box){
     // focus back to a detached button would jump the reader to the top of the page.
     var back=document.activeElement;
     var f=document.createElement('iframe');
-    f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;opacity:0';
+    // A REAL LAYOUT WIDTH, parked off-screen - NOT the 0x0 frame this started as. Chrome lays the print
+    // document out against the iframe's own viewport, so at width:0 the body collapsed to its min-content
+    // width (measured: 284px) and every row wrapped: 8,859px of content, about EIGHT pages of a two-page
+    // card. Same content at 820px is 1,823px. Off-screen keeps it invisible without lying about the width.
+    f.setAttribute('aria-hidden','true');
+    f.style.cssText='position:fixed;left:-10000px;top:0;width:820px;height:1160px;border:0;opacity:0;pointer-events:none';
     document.body.appendChild(f);
     var d=f.contentWindow.document; d.open(); d.write(doc); d.close();
     f.contentWindow.focus();
