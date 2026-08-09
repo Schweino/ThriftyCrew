@@ -51,7 +51,13 @@ export class MutationClient {
     const requestInit: RequestInit = { method, headers };
     if (body.byteLength > 0) requestInit.body = new Blob([Uint8Array.from(body)]);
     const response = await fetch(url, requestInit);
-    const result = await response.json() as ApiResult;
+    const responseText = await response.text();
+    let result: ApiResult;
+    try {
+      result = responseText ? JSON.parse(responseText) as ApiResult : { ok: false, error: `empty response from ${url.hostname}` };
+    } catch {
+      result = { ok: false, error: `non-JSON response from ${url.hostname}: ${responseText.slice(0, 500)}` };
+    }
     if (!response.ok && !init.acceptStatuses?.includes(response.status)) {
       const detail = typeof result.error === "string" ? result.error : stableJson(result);
       throw new Error(`${method} ${pathname} returned ${response.status}: ${detail}`);

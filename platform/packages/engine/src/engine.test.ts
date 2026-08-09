@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 import { buildNativeParityReport, convertUnitPriceMicros, evaluateAisleEvidence, guardResult, matchProductName, selectWinner } from "./index";
 
 describe("matching", () => {
+  it("ports the authored .NET inline case-insensitive prefix", () => {
+    expect(matchProductName("Del Monte Sliced Pears", [{ commodityId: "pears", includes: ["pears"], excludes: ["(?i)^.*sliced.*pears"], priority: 1 }]).status).toBe("unmatched");
+  });
   it("refuses a same-priority collision instead of first-match-wins", () => {
     const result = matchProductName("Kroger chicken breast", [
       { commodityId: "chicken", includes: ["chicken"], excludes: [], priority: 10 },

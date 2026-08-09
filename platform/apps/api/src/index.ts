@@ -453,14 +453,19 @@ app.get("/internal/capture-batches/:id/products", async (context) => {
   ).first<{ id: string; content_hash: string }>();
   if (!configuration) return jsonError("active configuration not found", 422);
   const products = await context.env.DB.prepare(
-    `SELECT DISTINCT p.id AS product_id, p.external_key, p.store_location_id,
-            pv.name, pv.normalized_name, pv.taxonomy_path,
-            o.normalized_basis_unit, o.normalized_basis_qty_micros
-       FROM observations o
-       JOIN product_versions pv ON pv.id = o.product_version_id
-       JOIN products p ON p.id = pv.product_id
-      WHERE o.batch_id = ?1
-      ORDER BY p.id`,
+    `WITH ranked AS (
+       SELECT p.id AS product_id, p.external_key, p.store_location_id,
+              pv.name, pv.normalized_name, pv.taxonomy_path,
+              o.normalized_basis_unit, o.normalized_basis_qty_micros,
+              ROW_NUMBER() OVER (PARTITION BY p.id ORDER BY o.captured_at DESC, o.id DESC) AS ordinal
+         FROM observations o
+         JOIN product_versions pv ON pv.id = o.product_version_id
+         JOIN products p ON p.id = pv.product_id
+        WHERE o.batch_id = ?1
+     )
+     SELECT product_id, external_key, store_location_id, name, normalized_name,
+            taxonomy_path, normalized_basis_unit, normalized_basis_qty_micros
+       FROM ranked WHERE ordinal = 1 ORDER BY product_id`,
   ).bind(batch.id).all();
   return context.json({
     ok: true,

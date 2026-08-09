@@ -22,11 +22,18 @@ interface CompiledRuleSet {
   priority: number;
 }
 
+function compileAuthoredPattern(pattern: string): RegExp {
+  // The authority file originated in .NET regex. A few rules carry the
+  // redundant leading inline case-insensitive flag; JavaScript receives the
+  // equivalent `i` flag separately.
+  return new RegExp(pattern.replace(/^\(\?i\)/, ""), "i");
+}
+
 export function compileProductMatcher(ruleSets: readonly MatchRuleSet[]): (productName: string) => MatchOutcome {
   const compiled: CompiledRuleSet[] = ruleSets.map((rules) => ({
     commodityId: rules.commodityId,
-    includes: rules.includes.map((pattern) => new RegExp(pattern, "i")),
-    excludes: rules.excludes.map((pattern) => new RegExp(pattern, "i")),
+    includes: rules.includes.map(compileAuthoredPattern),
+    excludes: rules.excludes.map(compileAuthoredPattern),
     priority: rules.priority ?? 0,
   }));
   return (productName: string): MatchOutcome => {
