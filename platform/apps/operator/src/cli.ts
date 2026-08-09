@@ -104,7 +104,9 @@ async function matchBatch(client: MutationClient, batchId: string): Promise<Reco
     }
     const category = categoryByCommodity.get(outcome.commodityId) ?? "food";
     const expectedFamily: AisleFamily = nonFoodFamilies.has(category) ? category as AisleFamily : "food";
-    const aisle = evaluateAisleFamilyEvidence(product.taxonomy_path ?? undefined, expectedFamily, outcome.commodityId === "protein-bars" ? ["personal"] : []);
+    const additionalAllowedFamilies: AisleFamily[] = [];
+    if (outcome.commodityId === "protein-bars" || outcome.commodityId === "hand-soap") additionalAllowedFamilies.push("personal");
+    const aisle = evaluateAisleFamilyEvidence(product.taxonomy_path ?? undefined, expectedFamily, additionalAllowedFamilies);
     if (aisle.status === "rejected") {
       aisleRejected.push({ productId: product.product_id, name: product.name, commodityId: outcome.commodityId, taxonomyPath: product.taxonomy_path, reason: aisle.reason });
       continue;

@@ -27,6 +27,8 @@ describe("matching", () => {
     expect(evaluateAisleFamilyEvidence("household/cleaners_air_fresheners/tile_wood", "household").status).toBe("confirmed");
     expect(evaluateAisleFamilyEvidence("pets_wildlife/cat/litter_boxes", "food").status).toBe("rejected");
     expect(evaluateAisleFamilyEvidence("health_beauty/sports_nutrition/protein_bars", "food", ["personal"]).status).toBe("confirmed");
+    expect(evaluateAisleFamilyEvidence("health_beauty/baby_child/infant_meals", "baby").status).toBe("confirmed");
+    expect(evaluateAisleFamilyEvidence("health_beauty/grooming_hygiene/bar_liquid_soap", "household", ["personal"]).status).toBe("confirmed");
   });
 });
 

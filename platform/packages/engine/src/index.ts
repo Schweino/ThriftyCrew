@@ -72,12 +72,16 @@ export function evaluateAisleFamilyEvidence(
   expectedFamily: AisleFamily,
   additionalAllowedFamilies: readonly AisleFamily[] = [],
 ): AisleVerdict {
+  if (!taxonomyPath) return { status: "unavailable", examined: false, taxonomyPath: null, reason: "source supplied no shelf taxonomy; name decision is unchanged" };
+  const normalized = normalizeName(taxonomyPath);
   const allowedFamilies = new Set<AisleFamily>([expectedFamily, ...additionalAllowedFamilies]);
-  const allowedPatterns = [...allowedFamilies].flatMap((family) => AISLE_FAMILY_PATTERNS[family]);
-  const blockedPatterns = (Object.keys(AISLE_FAMILY_PATTERNS) as AisleFamily[])
-    .filter((family) => !allowedFamilies.has(family))
-    .flatMap((family) => AISLE_FAMILY_PATTERNS[family]);
-  return evaluateAisleEvidence(taxonomyPath, allowedPatterns, blockedPatterns);
+  // Specific nested taxonomies must win over broad parents. For example,
+  // `health_beauty/baby_child` is baby, not generic personal care.
+  const detectionOrder: readonly AisleFamily[] = ["baby", "pet", "household", "personal", "food"];
+  const observedFamily = detectionOrder.find((family) => AISLE_FAMILY_PATTERNS[family].some((pattern) => new RegExp(pattern, "i").test(normalized)));
+  if (!observedFamily) return { status: "unavailable", examined: true, taxonomyPath, reason: "shelf taxonomy is present but does not justify an authoritative flip" };
+  if (allowedFamilies.has(observedFamily)) return { status: "confirmed", examined: true, taxonomyPath, reason: `store shelf taxonomy confirms the ${observedFamily} commodity family` };
+  return { status: "rejected", examined: true, taxonomyPath, reason: `store shelf taxonomy identifies ${observedFamily}, contradicting the ${expectedFamily} commodity family` };
 }
 
 export function evaluateAisleEvidence(
