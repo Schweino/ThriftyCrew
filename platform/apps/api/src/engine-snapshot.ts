@@ -34,6 +34,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode)
             o.purchase_quantity, o.package_count, pv.size_text,
             o.membership_required, o.loyalty_required, o.raw_price_text, pv.name, pv.product_url,
             pv.taxonomy_path, p.external_key,
+            CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days,
             EXISTS (
               SELECT 1 FROM known_wrong_rules k
                WHERE k.configuration_id = ?1 AND k.commodity_id = m.commodity_id
@@ -42,6 +43,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode)
             ) AS known_wrong
        FROM observations o
        JOIN capture_batches b ON b.id = o.batch_id
+       JOIN capture_sources s ON s.id = b.source_id
        JOIN product_versions pv ON pv.id = o.product_version_id
        JOIN products p ON p.id = pv.product_id
        JOIN match_decisions m ON m.product_id = p.id AND m.configuration_id = ?1 AND m.superseded_at IS NULL
@@ -54,8 +56,10 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode)
             o.normalized_basis_qty_micros, o.purchase_price_minor, o.purchase_quantity, o.package_count,
             o.membership_required, o.loyalty_required, o.raw_price_text, pv.name, pv.normalized_name,
             pv.size_text, pv.product_url, pv.taxonomy_path, p.external_key
+            , CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days
        FROM observations o
        JOIN capture_batches b ON b.id = o.batch_id
+       JOIN capture_sources s ON s.id = b.source_id
        JOIN product_versions pv ON pv.id = o.product_version_id
        JOIN products p ON p.id = pv.product_id
       WHERE o.batch_id IN (${rawPlaceholders})

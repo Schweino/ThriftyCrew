@@ -229,6 +229,7 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
         batchCoverageMode: candidate.raw.coverage_mode,
         batchCapturedTo: candidate.raw.captured_to,
         ...(candidate.raw.valid_to ? { validTo: candidate.raw.valid_to } : {}),
+        ...(candidate.raw.max_age_days !== undefined ? { maxAgeDays: candidate.raw.max_age_days } : {}),
         knownWrong: activeKnownWrong.some((wrong) => wrong.commodity === rule.id
           && (!wrong.store || normalizeName(wrong.store) === normalizeName(storeName))
           && ((wrong.product_id && wrong.product_id === candidate.raw.external_key)

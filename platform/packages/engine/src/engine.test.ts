@@ -54,6 +54,15 @@ describe("winner selection", () => {
     ], "2026-08-09T12:00:00.000Z");
     expect(result.winner?.observationId).toBe("good");
   });
+
+  it("removes observations outside the source freshness policy before ranking", () => {
+    const result = selectWinner([
+      { observationId: "stale", commodityId: "x", storeLocationId: "s", perUnitMicros: 1, capturedAt: "2026-07-01T12:00:00.000Z", batchCapturedTo: "2026-07-01T12:00:00.000Z", batchCoverageMode: "full", maxAgeDays: 7 },
+      { observationId: "fresh", commodityId: "x", storeLocationId: "s", perUnitMicros: 2, capturedAt: "2026-08-08T12:00:00.000Z", batchCapturedTo: "2026-08-08T12:00:00.000Z", batchCoverageMode: "full", maxAgeDays: 7 },
+    ], "2026-08-09T12:00:00.000Z");
+    expect(result.winner?.observationId).toBe("fresh");
+    expect(result.rejected).toContainEqual({ observationId: "stale", reason: "stale" });
+  });
 });
 
 describe("guard coverage", () => {

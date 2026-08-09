@@ -86,13 +86,24 @@ function termKey(value: string): string {
 }
 
 async function externalKey(row: Record<string, unknown>, index: number): Promise<string> {
-  const direct = stringValue(row.product_id) ?? stringValue(row.item_id) ?? stringValue(row.upc) ?? stringValue(row.sku) ?? safeUrl(row.canonical_url) ?? safeUrl(row.link_url);
+  const direct = stringValue(row.product_id) ?? stringValue(row.item_id) ?? stringValue(row.sams_item_id) ?? stringValue(row.upc) ?? stringValue(row.sku) ?? safeUrl(row.canonical_url) ?? safeUrl(row.link_url);
   if (direct) return direct.slice(0, 300);
   const identity = {
     name: normalizeName(stringValue(row.item) ?? stringValue(row.name) ?? ""),
     size: normalizeName(stringValue(row.size_raw) ?? stringValue(row.size) ?? ""),
   };
   return `catalog-${(await digestHex(stableJson(identity))).slice(0, 32)}${identity.name ? "" : `-${index}`}`;
+}
+
+function verifiedUnitPrice(value: unknown): { unit: ObservationInput["normalizedBasisUnit"]; perUnitMicros: number } | undefined {
+  const text = stringValue(value)?.toLowerCase().replace(/,/g, "");
+  const match = text?.match(/^\$?([0-9]+(?:\.[0-9]+)?)\s*\/\s*(lb|oz|fl\s*oz|ea|each|ct|dozen|gal|gallon|qt|pt)\b/);
+  if (!match) return undefined;
+  const unit = match[2]!.replace(/\s/g, "") === "floz" ? "fl_oz"
+    : match[2] === "ea" || match[2] === "ct" ? "each"
+    : match[2] === "gallon" ? "gal"
+    : match[2] as ObservationInput["normalizedBasisUnit"];
+  return { unit, perUnitMicros: Math.round(Number(match[1]) * 1_000_000) };
 }
 
 export async function buildRegularCapture(storeInput: string, document: RegularDocument, attestation?: CaptureAttestation): Promise<DirectCaptureArtifact> {
@@ -129,17 +140,26 @@ export async function buildRegularCapture(storeInput: string, document: RegularD
     const capturedAt = omahaNoon(asOf.slice(0, 10));
     const productUrl = safeUrl(row.canonical_url) ?? safeUrl(row.link_url);
     const kind: ObservationInput["kind"] = row.marked_down === true ? "markdown" : regularPrice !== undefined && regularPrice > price ? "sale" : "everyday";
+    const storeUnitPrice = store === "sams" ? verifiedUnitPrice(row.sams_unit_price) : undefined;
+    const normalizedBasisQtyMicros = storeUnitPrice
+      ? Math.max(1, Math.round((purchasePriceMinor * 10_000 * 1_000_000) / storeUnitPrice.perUnitMicros))
+      : parsedBasis.quantityMicros;
     observations.push({
       externalProductKey: await externalKey(row, index), name, sizeText,
       ...(productUrl ? { productUrl } : {}),
       ...(taxonomy(row, store) ? { taxonomyPath: taxonomy(row, store)! } : {}),
-      package: { source: document.source ?? "regular-catalog", store, rawIndex: index }, termKey: bucket, kind, currency: "USD",
+      package: {
+        source: document.source ?? "regular-catalog",
+        store,
+        rawIndex: index,
+        ...(storeUnitPrice ? { normalizedUnitPriceSource: "sams_unit_price" } : {}),
+      }, termKey: bucket, kind, currency: "USD",
       purchasePriceMinor, ...(regularPrice !== undefined && regularPrice >= price ? { regularPriceMinor: Math.round(regularPrice * 100) } : {}),
       purchaseQuantity: 1, packageCount: parsedBasis.packageCount, capturedBasisUnit: parsedBasis.unit,
-      capturedBasisQtyMicros: parsedBasis.quantityMicros, normalizedBasisUnit: parsedBasis.unit,
-      normalizedBasisQtyMicros: parsedBasis.quantityMicros,
-      perUnitMicros: Math.round((purchasePriceMinor * 10_000 * 1_000_000) / parsedBasis.quantityMicros),
-      loyaltyRequired: false, membershipRequired: false, rawPriceText: stringValue(row.ad_price) ?? String(price), rawSizeText: sizeText,
+      capturedBasisQtyMicros: parsedBasis.quantityMicros, normalizedBasisUnit: storeUnitPrice?.unit ?? parsedBasis.unit,
+      normalizedBasisQtyMicros,
+      perUnitMicros: Math.round((purchasePriceMinor * 10_000 * 1_000_000) / normalizedBasisQtyMicros),
+      loyaltyRequired: false, membershipRequired: store === "sams", rawPriceText: stringValue(row.ad_price) ?? String(price), rawSizeText: sizeText,
       capturedAt, sourcePayloadKey: `regular:${store}:${index}`,
     });
     count.accepted += 1;

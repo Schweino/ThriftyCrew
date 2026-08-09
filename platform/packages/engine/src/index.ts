@@ -114,6 +114,7 @@ export interface WinnerCandidate {
   batchCapturedTo: string;
   validTo?: string;
   knownWrong?: boolean;
+  maxAgeDays?: number;
 }
 
 const UNIT_TO_BASE: Readonly<Record<string, { family: "mass" | "volume" | "count"; unitsPerBase: number }>> = {
@@ -154,6 +155,10 @@ export function selectWinner(candidates: readonly WinnerCandidate[], nowIso: str
     }
     if (candidate.validTo && candidate.validTo < nowIso) {
       rejected.push({ observationId: candidate.observationId, reason: "expired" });
+      return false;
+    }
+    if (candidate.maxAgeDays !== undefined && Date.parse(candidate.capturedAt) < Date.parse(nowIso) - candidate.maxAgeDays * 86_400_000) {
+      rejected.push({ observationId: candidate.observationId, reason: "stale" });
       return false;
     }
     return true;
@@ -197,6 +202,7 @@ export interface NativeEngineSnapshot {
     normalized_basis_qty_micros?: number; membership_required?: number; loyalty_required?: number;
     raw_price_text?: string | null; name?: string; product_url?: string | null; taxonomy_path?: string | null;
     external_key?: string; size_text?: string | null; batch_id?: string;
+    max_age_days?: number;
   }>;
   rawCandidates?: Array<{
     observation_id: string; store_location_id: string; per_unit_micros: number; captured_at: string;
@@ -206,6 +212,7 @@ export interface NativeEngineSnapshot {
     loyalty_required?: number; raw_price_text?: string | null; name: string; normalized_name?: string;
     product_url?: string | null; taxonomy_path?: string | null; external_key?: string; size_text?: string | null;
     batch_id?: string;
+    max_age_days?: number;
   }>;
   currentCells: Array<{
     commodity_id: string; store_location_id: string; observation_id: string | null; status: string;
@@ -267,6 +274,7 @@ export function buildNativeCells(snapshot: NativeEngineSnapshot): NativeReleaseC
         batchCapturedTo: candidate.captured_to,
         ...(candidate.valid_to ? { validTo: candidate.valid_to } : {}),
         knownWrong: candidate.known_wrong === 1,
+        ...(candidate.max_age_days !== undefined ? { maxAgeDays: candidate.max_age_days } : {}),
       }]; }), snapshot.observedAt);
       cells.push({
         commodityId: commodity.id,
