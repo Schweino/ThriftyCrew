@@ -516,6 +516,24 @@ function Select-FreshestCaptureRows($rows) {
   return @($rows | Where-Object { -not $_.src_date -or $keepDates -contains [string]$_.src_date })
 }
 
+# IS THIS AD FILE LIVE ON THE BOARD'S OWN DATE? Pure, so the self-test below can reach the real code instead
+# of a copy of it - the inline version of this check had no test at all, and an inline copy is how a guard
+# ends up proven against something the pipeline does not run. Returns $null when the file is live, or the
+# reason string when it is not. Judged against the BOARD's date, never the wall clock, so a pinned regression
+# run stays reproducible. Absent evidence is not evidence: no ad_to is never expired, no ad_from never early.
+function Test-AdWindowClosed {
+  param($Doc, [datetime]$BoardDate)
+  if ($Doc.ad_to) {
+    $adTo = $null; try { $adTo = [datetime]$Doc.ad_to } catch {}
+    if ($adTo -and $adTo -lt $BoardDate) { return ("its ad window closed " + $Doc.ad_to + " (" + [int](($BoardDate - $adTo).TotalDays) + "d before this board's " + $BoardDate.ToString('yyyy-MM-dd') + ")") }
+  }
+  if ($Doc.ad_from) {
+    $adFrom = $null; try { $adFrom = [datetime]$Doc.ad_from } catch {}
+    if ($adFrom -and $adFrom -gt $BoardDate) { return ("its ad window does not open until " + $Doc.ad_from + " (" + [int](($adFrom - $BoardDate).TotalDays) + "d after this board's " + $BoardDate.ToString('yyyy-MM-dd') + ")") }
+  }
+  return $null
+}
+
 # ---------------------------------------------------------------- SELF-TEST (provable multibuy math; -SelfTest exits here)
 # Which everyday-price files (out\regular\<store>-regular-<date>.json) to load per store. EVERYDAY-ONLY stores
 # (Walmart) run no weekly ad cycle, so a partial daily refresh (a throttled ~50-item pull) must UNION with the
@@ -712,6 +730,19 @@ if ($SelfTest) {
     # 18. an ad-cycling store is still newest-only whatever the as-of (unioning one would guard expired sales)
     if ($g1 -notcontains 'hyvee-regular-2026-07-15') { Write-Output 'ok    ad-cycling store stays newest-only under the board as-of' }
     else { Write-Output 'FAIL  a non-everyday store started unioning - expired sale prices would be guarded as live'; $script:fail++ }
+    # 20. MUST FIRE: the founding bug. Fareway's 08-09 flyer prints "prices good August 10-15", so priced
+    #     against an 08-09 board it is tomorrow's sale and must not reach a cell.
+    $early = Test-AdWindowClosed ([pscustomobject]@{ ad_from='2026-08-10'; ad_to='2026-08-15' }) ([datetime]'2026-08-09')
+    if ($early) { Write-Output 'ok    an ad whose window has not opened yet is refused (not-yet-live sale)' }
+    else { Write-Output 'FAIL  a future-dated ad was priced onto the board - tomorrow''s sale prices publish today'; $script:fail++ }
+    # 21. CLEAN TWIN: the same window on its OPENING day is live. Proves 20 is a date test, not a blanket refusal.
+    if (-not (Test-AdWindowClosed ([pscustomobject]@{ ad_from='2026-08-10'; ad_to='2026-08-15' }) ([datetime]'2026-08-10'))) { Write-Output 'ok    that same ad goes live on the day its window opens' }
+    else { Write-Output 'FAIL  the ad-window gate refuses a LIVE ad - every sale row would drop off the board'; $script:fail++ }
+    # 22. the ad_to half still fires, and absent evidence is still not evidence (no window = never refused)
+    if (Test-AdWindowClosed ([pscustomobject]@{ ad_from='2026-07-26'; ad_to='2026-08-01' }) ([datetime]'2026-08-09')) { Write-Output 'ok    an expired ad is still refused' }
+    else { Write-Output 'FAIL  the expired-ad half of the window gate stopped firing'; $script:fail++ }
+    if (-not (Test-AdWindowClosed ([pscustomobject]@{ deals=@() }) ([datetime]'2026-08-09'))) { Write-Output 'ok    an ad file declaring no window is never refused' }
+    else { Write-Output 'FAIL  a file with no ad window was refused - the frozen bakers fixture would drop out'; $script:fail++ }
     # 19. no board on disk -> the wall clock (guard 12 hard-fails that state on its own)
     Remove-Item (Join-Path $sd 'comparison-*.json') -Force
     $g3 = @(Select-EngineRegularFiles $sd ([datetime]'2026-07-30') | ForEach-Object { $_.BaseName })
@@ -1061,12 +1092,15 @@ else {
 foreach ($extra in (@($BakersFile,$FarewayFile) + $samsFiles)) {
   if ($extra -and (Test-Path $extra)) {
     $ex = Get-Content $extra -Raw | ConvertFrom-Json
-    if ($ex.ad_to) {
-      $adTo = $null; try { $adTo = [datetime]$ex.ad_to } catch {}
-      if ($adTo -and $adTo -lt [datetime]$today) {
-        Write-Warning ("compare-deals: SKIPPING " + (Split-Path $extra -Leaf) + " - its ad window closed " + $ex.ad_to + " (" + [int](([datetime]$today) - $adTo).TotalDays + "d before this board's " + $today + "). " + @($ex.deals).Count + " expired sale row(s) not priced.")
-        continue
-      }
+    # A WINDOW HAS TWO ENDS (2026-08-09). The ad_to half retires a sale after it closes; nothing stopped one
+    # from going live BEFORE it opened, and a price the store will not honour yet is exactly as false as one
+    # it will not honour any more. Found the day Fareway's flyer was downloaded on 08-09 and printed "Prices
+    # good August 10-15" - capturing it that morning would have published tomorrow's sale prices today, and
+    # ad-schedule.json's own current.from said 08-09, so nothing else would have caught it either.
+    $why = Test-AdWindowClosed $ex ([datetime]$today)
+    if ($why) {
+      Write-Warning ("compare-deals: SKIPPING " + (Split-Path $extra -Leaf) + " - " + $why + ". " + @($ex.deals).Count + " sale row(s) not priced.")
+      continue
     }
     $pt = if ($ex.price_type) { [string]$ex.price_type } else { 'sale' }
     $sd = ''
