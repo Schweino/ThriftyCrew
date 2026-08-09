@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { restoreDrillRecordSchema } from "@thriftycrew/contracts";
-import { wilsonInterval } from "./accuracy";
+import { createAccuracyDraw, wilsonInterval } from "./accuracy";
 import { mayShowFreeBadge } from "./ghost-reconciliation";
 import { storeCoverageFloor } from "./release-guards";
 
@@ -10,6 +10,28 @@ describe("out-of-band accuracy reporting", () => {
     expect(interval?.low).toBeCloseTo(0.8256, 3);
     expect(interval?.high).toBeCloseTo(0.9448, 3);
     expect(wilsonInterval(0, 0)).toBeNull();
+  });
+
+  it("returns the existing market/seed/protocol draw after a release cutover", async () => {
+    let statements = 0;
+    const db = {
+      prepare(sql: string) {
+        statements += 1;
+        expect(sql).toContain("market_id = ?1 AND seed = ?2 AND protocol_version = ?3");
+        return {
+          bind() { return this; },
+          async first() { return { id: "accuracy_existing", sampled_count: 100 }; },
+        };
+      },
+    } as unknown as D1Database;
+    await expect(createAccuracyDraw(db, {
+      marketId: "omaha",
+      seed: "week-2026-08-09",
+      protocolVersion: "blind-cell-v1",
+      sampleSize: 100,
+      dueAt: "2026-08-16T21:00:00.000Z",
+    })).resolves.toEqual({ drawId: "accuracy_existing", sampled: 100, idempotent: true });
+    expect(statements).toBe(1);
   });
 });
 

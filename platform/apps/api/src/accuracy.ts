@@ -36,6 +36,11 @@ export function wilsonInterval(successes: number, total: number, z = 1.959963984
 }
 
 export async function createAccuracyDraw(db: D1Database, input: AccuracyDrawCreate): Promise<{ drawId: string; sampled: number; idempotent: boolean }> {
+  const sameProtocolDraw = await db.prepare(
+    `SELECT id, sampled_count FROM accuracy_draws
+      WHERE market_id = ?1 AND seed = ?2 AND protocol_version = ?3`,
+  ).bind(input.marketId, input.seed, input.protocolVersion).first<{ id: string; sampled_count: number }>();
+  if (sameProtocolDraw) return { drawId: sameProtocolDraw.id, sampled: sameProtocolDraw.sampled_count, idempotent: true };
   const current = await db.prepare(
     "SELECT release_id FROM current_releases WHERE market_id = ?1",
   ).bind(input.marketId).first<{ release_id: string }>();
