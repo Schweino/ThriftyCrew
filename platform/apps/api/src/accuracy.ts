@@ -90,7 +90,7 @@ export async function readAccuracyDraw(db: D1Database, drawId?: string): Promise
   const cells = await db.prepare(
     `SELECT c.ordinal, c.commodity_id, x.label AS commodity_label,
             c.store_location_id, l.display_name AS store_name,
-            pv.name AS product_name, pv.raw_size_text, pv.product_url, pv.taxonomy_path,
+            pv.name AS product_name, pv.size_text AS raw_size_text, pv.product_url, pv.taxonomy_path,
             o.purchase_price_minor, o.purchase_quantity, o.normalized_basis_unit,
             o.normalized_basis_qty_micros, o.per_unit_micros, o.raw_price_text, o.captured_at,
             v.verdict, v.verified_by, v.verified_at
