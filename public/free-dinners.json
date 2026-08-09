@@ -1,42 +1,42 @@
 {
     "week_of":  "2026-08-08",
-    "updated":  "2026-08-09T06:15:13",
+    "updated":  "2026-08-09T07:08:24",
     "note":  "This week free because they are the cheapest dinners per protein on the live Omaha board. They revert to members-only when prices re-rank.",
     "free":  [
                  {
-                     "slug":  "jamaican-brown-stew-chicken",
-                     "protein":  "chicken",
-                     "rank":  1,
-                     "name":  "Jamaican Brown Stew Chicken",
-                     "per_serving":  1.42
-                 },
-                 {
                      "slug":  "chicken-bulgogi-rice-bowls",
                      "protein":  "chicken",
-                     "rank":  2,
+                     "rank":  1,
                      "name":  "Chicken Bulgogi Rice Bowls",
                      "per_serving":  1.58
                  },
                  {
-                     "slug":  "slow-cooker-italian-chicken-penne",
-                     "protein":  "chicken",
-                     "rank":  3,
-                     "name":  "Slow Cooker Italian Chicken Penne",
-                     "per_serving":  1.62
-                 },
-                 {
-                     "slug":  "chicken-normandy-apple-cider",
-                     "protein":  "chicken",
-                     "rank":  4,
-                     "name":  "Chicken Normandy (Apple Cider Braised Chicken)",
-                     "per_serving":  1.64
-                 },
-                 {
                      "slug":  "chicken-fried-rice-skillet",
                      "protein":  "chicken",
-                     "rank":  5,
+                     "rank":  2,
                      "name":  "Chicken Fried Rice",
                      "per_serving":  1.68
+                 },
+                 {
+                     "slug":  "claypot-chicken-mushroom-rice",
+                     "protein":  "chicken",
+                     "rank":  3,
+                     "name":  "Claypot Chicken and Mushroom Rice",
+                     "per_serving":  1.79
+                 },
+                 {
+                     "slug":  "chicken-pot-pie-biscuit-casserole",
+                     "protein":  "chicken",
+                     "rank":  4,
+                     "name":  "Chicken Pot Pie Casserole with Biscuits",
+                     "per_serving":  1.85
+                 },
+                 {
+                     "slug":  "poppy-seed-chicken-and-rice-casserole",
+                     "protein":  "chicken",
+                     "rank":  5,
+                     "name":  "Poppy Seed Chicken and Rice Casserole",
+                     "per_serving":  1.91
                  },
                  {
                      "slug":  "haluski-and-kielbasa-cabbage-noodles",
@@ -53,60 +53,60 @@
                      "per_serving":  1.81
                  },
                  {
-                     "slug":  "fasolka-po-bretonsku-polish-beans-kielbasa",
-                     "protein":  "turkey",
-                     "rank":  3,
-                     "name":  "Fasolka po Bretonsku (Polish Baked Beans with Kielbasa)",
-                     "per_serving":  1.88
-                 },
-                 {
                      "slug":  "turkey-huevos-rancheros-rice-bowls",
                      "protein":  "turkey",
-                     "rank":  4,
+                     "rank":  3,
                      "name":  "Turkey Huevos Rancheros Rice Bowls",
                      "per_serving":  1.89
                  },
                  {
                      "slug":  "red-beans-turkey-sausage-and-rice",
                      "protein":  "turkey",
-                     "rank":  5,
+                     "rank":  4,
                      "name":  "Red Beans, Turkey Sausage and Rice",
-                     "per_serving":  1.95
+                     "per_serving":  2
                  },
                  {
-                     "slug":  "loobia-polo-persian-beef-green-bean-rice",
+                     "slug":  "scalloped-potato-turkey-casserole",
+                     "protein":  "turkey",
+                     "rank":  5,
+                     "name":  "Scalloped Potato Turkey Casserole",
+                     "per_serving":  2
+                 },
+                 {
+                     "slug":  "beef-potato-au-gratin-casserole",
                      "protein":  "beef",
                      "rank":  1,
-                     "name":  "Loobia Polo (Persian Beef and Green Bean Rice)",
-                     "per_serving":  2
+                     "name":  "Slow Cooker Beef and Potato Au Gratin Casserole",
+                     "per_serving":  2.37
                  },
                  {
                      "slug":  "lebanese-hashweh",
                      "protein":  "beef",
                      "rank":  2,
                      "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
-                     "per_serving":  2.21
+                     "per_serving":  2.42
                  },
                  {
-                     "slug":  "beef-potato-au-gratin-casserole",
+                     "slug":  "slow-cooker-beef-and-noodles",
                      "protein":  "beef",
                      "rank":  3,
-                     "name":  "Slow Cooker Beef and Potato Au Gratin Casserole",
-                     "per_serving":  2.4
+                     "name":  "Slow Cooker Beef and Noodles",
+                     "per_serving":  2.42
                  },
                  {
-                     "slug":  "youvarlakia-avgolemono-greek-meatball-bowls",
+                     "slug":  "bistek-tagalog-filipino-beef-onion-rice",
                      "protein":  "beef",
                      "rank":  4,
-                     "name":  "Youvarlakia Avgolemono (Greek Beef and Rice Meatballs in Lemon Sauce)",
-                     "per_serving":  2.43
+                     "name":  "Bistek Tagalog (Filipino Beef and Onions over Rice)",
+                     "per_serving":  2.46
                  },
                  {
                      "slug":  "million-dollar-baked-spaghetti",
                      "protein":  "beef",
                      "rank":  5,
                      "name":  "Million Dollar Baked Spaghetti",
-                     "per_serving":  2.44
+                     "per_serving":  2.48
                  },
                  {
                      "slug":  "bratwurst-sauerkraut-potatoes-bake",
@@ -123,25 +123,25 @@
                      "per_serving":  1.45
                  },
                  {
-                     "slug":  "slow-cooker-pork-sauerkraut-apples",
-                     "protein":  "pork",
-                     "rank":  3,
-                     "name":  "Slow Cooker Pork and Sauerkraut with Apples and Potatoes",
-                     "per_serving":  1.56
-                 },
-                 {
                      "slug":  "orecchiette-italian-sausage-broccoli",
                      "protein":  "pork",
-                     "rank":  4,
+                     "rank":  3,
                      "name":  "Orecchiette with Italian Sausage and Broccoli",
                      "per_serving":  1.59
                  },
                  {
                      "slug":  "slow-cooker-kalua-pork-bowls",
                      "protein":  "pork",
-                     "rank":  5,
+                     "rank":  4,
                      "name":  "Slow Cooker Kalua Pork Bowls",
                      "per_serving":  1.63
+                 },
+                 {
+                     "slug":  "slow-cooker-filipino-pork-adobo-bowls",
+                     "protein":  "pork",
+                     "rank":  5,
+                     "name":  "Slow Cooker Filipino Pork Adobo Bowls",
+                     "per_serving":  1.7
                  }
              ]
 }

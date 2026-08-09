@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-09 06:11",
+    "generated":  "2026-08-09 07:04",
     "board":  "comparison-2026-08-08.json",
-    "sidecar_generated":  "2026-08-09 06:11:11",
+    "sidecar_generated":  "2026-08-09 07:04:24",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,8 +9,8 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2859,
-                     "corpus":  31111,
+                     "board_pairs":  2860,
+                     "corpus":  31133,
                      "rule_invisible":  4799
                  },
     "identity_count":  0,
@@ -171,6 +171,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "frozen-fruit",
+                         "commodity":  "Frozen Fruit / Berries",
+                         "store":  "Walmart",
+                         "product":  "Great Value Blueberries, 48 oz (Frozen)",
+                         "cos":  0.6838,
+                         "score":  0.926411,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "ground-pork",
                          "commodity":  "Ground Pork",
                          "store":  "Baker\u0027s",
@@ -197,16 +207,6 @@
                          "product":  "Frigo Cheese Heads Light String Mozzarella Cheese, 20 oz, 24 Count",
                          "cos":  0.7402,
                          "score":  0.924552,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "frozen-fruit",
-                         "commodity":  "Frozen Fruit / Berries",
-                         "store":  "Walmart",
-                         "product":  "Great Value Blueberries, 48 oz (Frozen)",
-                         "cos":  0.6795,
-                         "score":  0.922386,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

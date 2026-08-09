@@ -1,5 +1,5 @@
 ﻿{
-    "built_at":  "2026-08-09T06:09:08",
+    "built_at":  "2026-08-09T07:02:21",
     "week_of":  "2026-08-08",
     "source":  "C:\\Codex\\income\\grocery\\out\\ads-2026-08-08.json",
     "commodities_compared":  495,
@@ -26,8 +26,8 @@
                            "cheapest_store":  "Sam\u0027s Club",
                            "cheapest_price":  4.77,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Fareway",
-                           "nomem_price":  4.88,
+                           "nomem_store":  "Walmart",
+                           "nomem_price":  4.943,
                            "nomem_type":  "everyday",
                            "stores":  [
                                           {
@@ -44,21 +44,6 @@
                                               "basis":  "per-lb marker",
                                               "note":  "",
                                               "source_ad":  "everyday club price (Omaha 68137)"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  4.88,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  true,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "80% Lean 20% Fat Ground Beef Bulk",
-                                              "ad":  "$4.88",
-                                              "size":  "lb",
-                                              "basis":  "size 1 lb",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -89,6 +74,21 @@
                                               "basis":  "size 1 lb",
                                               "note":  "",
                                               "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  5.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  true,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "80% Lean 20% Fat Ground Beef Bulk",
+                                              "ad":  "$5.99",
+                                              "size":  "lb",
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -1776,7 +1776,7 @@
                                               "bulk":  true,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "Fareway Original Applesauce",
+                                              "item":  "Fareway Cinnamon Applesauce",
                                               "ad":  "$3.88",
                                               "size":  "48 oz",
                                               "basis":  "size 48 oz",
@@ -2252,21 +2252,6 @@
                                               "source_ad":  "everyday shelf price"
                                           },
                                           {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.99,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Hass Avocado",
-                                              "ad":  "$0.99",
-                                              "size":  "each",
-                                              "basis":  "per-each",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
-                                          },
-                                          {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  0.9975,
                                               "unit":  "each",
@@ -2310,6 +2295,21 @@
                                               "basis":  "per-each",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  1.5,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Hass Avocado",
+                                              "ad":  "$1.50",
+                                              "size":  "each",
+                                              "basis":  "per-each",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -2386,14 +2386,14 @@
                                           },
                                           {
                                               "store":  "Fareway",
-                                              "per_unit":  3.88,
+                                              "per_unit":  3.99,
                                               "unit":  "lb",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "Baby Back Pork Ribs",
-                                              "ad":  "$3.88",
+                                              "item":  "Hand-Cut Extra Meaty Baby Back Pork Ribs",
+                                              "ad":  "$3.99",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
                                               "note":  "",
@@ -2879,7 +2879,7 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "Hormel Black Label Black Label Original Bacon",
+                                              "item":  "Farmland Thick Cut Naturally Hickory Smoked Bacon",
                                               "ad":  "$4.99",
                                               "size":  "16 oz",
                                               "basis":  "size 1 lb",
@@ -2907,13 +2907,28 @@
                            "commodity":  "Bagels",
                            "id":  "bagels",
                            "unit":  "each",
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  0.3567,
+                           "cheapest_store":  "Fareway",
+                           "cheapest_price":  0.3333,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Walmart",
-                           "nomem_price":  0.3567,
+                           "nomem_store":  "Fareway",
+                           "nomem_price":  0.3333,
                            "nomem_type":  "everyday",
                            "stores":  [
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.3333,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Fareway Pre-Sliced Wheat Bagels",
+                                              "ad":  "$2.00",
+                                              "size":  "6 ct",
+                                              "basis":  "per-6-pack",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
+                                          },
                                           {
                                               "store":  "Walmart",
                                               "per_unit":  0.3567,
@@ -2988,21 +3003,6 @@
                                               "basis":  "per-6-pack",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.665,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Fareway Plain Unsliced Bagels",
-                                              "ad":  "$3.99",
-                                              "size":  "6 ct",
-                                              "basis":  "per-6-pack",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -3555,13 +3555,28 @@
                            "commodity":  "Bananas",
                            "id":  "bananas",
                            "unit":  "lb",
-                           "cheapest_store":  "Aldi",
+                           "cheapest_store":  "Fareway",
                            "cheapest_price":  0.49,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Aldi",
+                           "nomem_store":  "Fareway",
                            "nomem_price":  0.49,
                            "nomem_type":  "everyday",
                            "stores":  [
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.49,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Banana",
+                                              "ad":  "$0.49",
+                                              "size":  "lb",
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
+                                          },
                                           {
                                               "store":  "Aldi",
                                               "per_unit":  0.49,
@@ -3636,21 +3651,6 @@
                                               "basis":  "size 1 lb",
                                               "note":  "",
                                               "source_ad":  "kroger-api"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.57,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Banana",
-                                              "ad":  "$0.57",
-                                              "size":  "lb",
-                                              "basis":  "size 1 lb",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -4570,13 +4570,28 @@
                            "commodity":  "Bell Peppers",
                            "id":  "bell-peppers",
                            "unit":  "each",
-                           "cheapest_store":  "Sam\u0027s Club",
-                           "cheapest_price":  0.8283,
+                           "cheapest_store":  "Fareway",
+                           "cheapest_price":  0.77,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Aldi",
-                           "nomem_price":  0.8967,
+                           "nomem_store":  "Fareway",
+                           "nomem_price":  0.77,
                            "nomem_type":  "everyday",
                            "stores":  [
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.77,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Green Bell Pepper",
+                                              "ad":  "$0.77",
+                                              "size":  "each",
+                                              "basis":  "per-each",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
+                                          },
                                           {
                                               "store":  "Sam\u0027s Club",
                                               "per_unit":  0.8283,
@@ -4636,21 +4651,6 @@
                                               "basis":  "per-each",
                                               "note":  "",
                                               "source_ad":  "kroger-api"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  1.17,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Green Bell Pepper",
-                                              "ad":  "$1.17",
-                                              "size":  "1 ct",
-                                              "basis":  "per-each",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -4767,6 +4767,21 @@
                                               "basis":  "size 6 oz",
                                               "note":  "",
                                               "source_ad":  "kroger-api"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.8844,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Mario Sliced Black Olives",
+                                              "ad":  "$1.99",
+                                              "size":  "2.25 oz",
+                                              "basis":  "size 2.25 oz",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -4960,6 +4975,21 @@
                                               "source_ad":  "kroger-api"
                                           },
                                           {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.48,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Blackberries",
+                                              "ad":  "$2.88",
+                                              "size":  "6 oz",
+                                              "basis":  "size 6 oz",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
+                                          },
+                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  0.4983,
                                               "unit":  "oz",
@@ -4988,21 +5018,6 @@
                                               "basis":  "size 6 oz",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.6467,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Blackberries",
-                                              "ad":  "$3.88",
-                                              "size":  "6 oz",
-                                              "basis":  "size 6 oz",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -5769,6 +5784,21 @@
                                               "source_ad":  "everyday shelf price"
                                           },
                                           {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.1612,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  true,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Fareway 24 Pack Natural Spring Water",
+                                              "ad":  "$3.87",
+                                              "size":  "24 ct",
+                                              "basis":  "per-24-pack",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
+                                          },
+                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.1662,
                                               "unit":  "each",
@@ -5782,21 +5812,6 @@
                                               "basis":  "per-24-pack",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.1662,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  true,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Fareway Purified Drinking Water",
-                                              "ad":  "$3.99",
-                                              "size":  "24 ct",
-                                              "basis":  "per-24-pack",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -5960,21 +5975,6 @@
                                               "source_ad":  "kroger-api"
                                           },
                                           {
-                                              "store":  "Fareway",
-                                              "per_unit":  4.6232,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Johnsonville Cheddar Brats",
-                                              "ad":  "$5.49",
-                                              "size":  "19 oz",
-                                              "basis":  "size 1.188 lb",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
-                                          },
-                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  4.9853,
                                               "unit":  "lb",
@@ -5988,6 +5988,21 @@
                                               "basis":  "size 1.188 lb",
                                               "note":  "",
                                               "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  5.0442,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Johnsonville Cheddar Brats",
+                                              "ad":  "$5.99",
+                                              "size":  "19 oz",
+                                              "basis":  "size 1.188 lb",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -7091,21 +7106,6 @@
                                               "source_ad":  "everyday shelf price"
                                           },
                                           {
-                                              "store":  "Fareway",
-                                              "per_unit":  2.98,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Fareway Solid Butter",
-                                              "ad":  "$2.98",
-                                              "size":  "16 oz",
-                                              "basis":  "size 1 lb",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
-                                          },
-                                          {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  2.99,
                                               "unit":  "lb",
@@ -7119,6 +7119,21 @@
                                               "basis":  "size 1 lb",
                                               "note":  "",
                                               "source_ad":  "Baker\u0027s Weekly Ad 2026-08-05 to 2026-08-11"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  3.48,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Fareway Solid Butter",
+                                              "ad":  "$3.48",
+                                              "size":  "16 oz",
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -7362,13 +7377,28 @@
                            "commodity":  "Cabbage (green)",
                            "id":  "cabbage",
                            "unit":  "lb",
-                           "cheapest_store":  "Aldi",
-                           "cheapest_price":  0.79,
+                           "cheapest_store":  "Fareway",
+                           "cheapest_price":  0.77,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Aldi",
-                           "nomem_price":  0.79,
+                           "nomem_store":  "Fareway",
+                           "nomem_price":  0.77,
                            "nomem_type":  "everyday",
                            "stores":  [
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.77,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Green Cabbage",
+                                              "ad":  "$0.77",
+                                              "size":  "lb",
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
+                                          },
                                           {
                                               "store":  "Aldi",
                                               "per_unit":  0.79,
@@ -7443,21 +7473,6 @@
                                               "basis":  "size 1 lb",
                                               "note":  "",
                                               "source_ad":  "kroger-api"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.99,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Green Cabbage",
-                                              "ad":  "$0.99",
-                                              "size":  "lb",
-                                              "basis":  "size 1 lb",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -7606,6 +7621,21 @@
                                               "source_ad":  "everyday shelf price"
                                           },
                                           {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.299,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Dole Classic Caesar Salad Kit",
+                                              "ad":  "$2.99",
+                                              "size":  "10 oz",
+                                              "basis":  "size 10 oz",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
+                                          },
+                                          {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  0.3169,
                                               "unit":  "oz",
@@ -7634,21 +7664,6 @@
                                               "basis":  "size 11.3 oz",
                                               "note":  "",
                                               "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.3973,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Dole Ultimate Caesar Salad Kit",
-                                              "ad":  "$4.49",
-                                              "size":  "11.3 oz",
-                                              "basis":  "size 11.3 oz",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -7974,16 +7989,16 @@
                                           },
                                           {
                                               "store":  "Fareway",
-                                              "per_unit":  0.198,
+                                              "per_unit":  0.1995,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "DINTY MOORE Beef Stew With Potatoes \u0026 Carrots, 15 Oz Can",
-                                              "ad":  "$2.97",
-                                              "size":  "15 oz",
-                                              "basis":  "size 15 oz",
+                                              "item":  "DINTY MOORE Beef Stew With Potatoes \u0026 Carrots, 20 Oz Can",
+                                              "ad":  "$3.99",
+                                              "size":  "20 oz",
+                                              "basis":  "size 20 oz",
                                               "note":  "",
                                               "source_ad":  "shop.fareway.com"
                                           }
@@ -12829,21 +12844,6 @@
                                               "source_ad":  "kroger-api"
                                           },
                                           {
-                                              "store":  "Fareway",
-                                              "per_unit":  1.0891,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Dynasty Hot Chili Oil, Spicy",
-                                              "ad":  "$5.99",
-                                              "size":  "5.5 oz",
-                                              "basis":  "size 5.5 oz",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
-                                          },
-                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  1.1862,
                                               "unit":  "oz",
@@ -12857,6 +12857,21 @@
                                               "basis":  "size 8 oz",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  1.3482,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "WUJU Chili Crisp Sweet Heat",
+                                              "ad":  "$9.99",
+                                              "size":  "7.41 oz",
+                                              "basis":  "size 7.41 oz",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -13433,14 +13448,14 @@
                                           },
                                           {
                                               "store":  "Fareway",
-                                              "per_unit":  8.99,
+                                              "per_unit":  8.88,
                                               "unit":  "lb",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
                                               "item":  "USDA Choice Boneless Chuck Roast",
-                                              "ad":  "$8.99",
+                                              "ad":  "$8.88",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
                                               "note":  "",
@@ -13709,6 +13724,21 @@
                                               "basis":  "size 3 lb",
                                               "note":  "",
                                               "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  1.9233,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Mandarin Clementine",
+                                              "ad":  "$5.77",
+                                              "size":  "3 lb",
+                                              "basis":  "size 3 lb",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -14557,7 +14587,7 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "Caribou Coffee Caribou Blend Medium Roast Coffee K-Cup Pods",
+                                              "item":  "Green Mountain Coffee Roasters French Vanilla K-Cup Pods",
                                               "ad":  "$9.99",
                                               "size":  "10 ct",
                                               "basis":  "per-10-pack",
@@ -15467,7 +15497,7 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "MARY KITCHEN Mary Kitchen Homestyle Corned Beef Hash",
+                                              "item":  "MARY KITCHEN Homestyle Corned Beef Hash",
                                               "ad":  "$3.99",
                                               "size":  "14 oz",
                                               "basis":  "size 14 oz",
@@ -17171,16 +17201,16 @@
                                           },
                                           {
                                               "store":  "Fareway",
-                                              "per_unit":  0.3258,
+                                              "per_unit":  0.3112,
                                               "unit":  "each",
                                               "type":  "everyday",
                                               "bulk":  true,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "Pampers Baby Dry Ultra Cushiony Diapers, Size 4",
-                                              "ad":  "$29.97",
-                                              "size":  "92 ct",
-                                              "basis":  "per-92-pack",
+                                              "item":  "Luvs Platinum Protection Baby Diapers, Size 5",
+                                              "ad":  "$7.47",
+                                              "size":  "24 ct",
+                                              "basis":  "per-24-pack",
                                               "note":  "",
                                               "source_ad":  "shop.fareway.com"
                                           }
@@ -18334,16 +18364,16 @@
                                           },
                                           {
                                               "store":  "Fareway",
-                                              "per_unit":  1.5377,
+                                              "per_unit":  2.198,
                                               "unit":  "lb",
                                               "type":  "everyday",
                                               "bulk":  true,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "Rachael Ray Nutrish Adult Dry Dog Food Real Beef, Pea \u0026 Brown Rice Recipe, 13 lb. Bag",
-                                              "ad":  "$19.99",
-                                              "size":  "208 oz",
-                                              "basis":  "size 13 lb",
+                                              "item":  "Rachael Ray Nutrish Rachael Ray Nutrish Adult Dry Dog Food Real Chicken \u0026 Veggies Recipe, 5 lb. Bag",
+                                              "ad":  "$10.99",
+                                              "size":  "80 oz",
+                                              "basis":  "size 5 lb",
                                               "note":  "",
                                               "source_ad":  "shop.fareway.com"
                                           }
@@ -18619,7 +18649,7 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "Drano® Liquid Drain Cleaner",
+                                              "item":  "Drano Liquid Drain Cleaner",
                                               "ad":  "$3.99",
                                               "size":  "32 fl oz",
                                               "basis":  "size 32 floz",
@@ -20565,6 +20595,21 @@
                                               "basis":  "per-50-pack",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.1995,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  true,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Hefty Quart Storage Slider Bags",
+                                              "ad":  "$3.99",
+                                              "size":  "20 ct",
+                                              "basis":  "per-20-pack",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -20617,7 +20662,7 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "Fareway Sliced French Bread",
+                                              "item":  "Bakery Fresh French Bread",
                                               "ad":  "$2.49",
                                               "size":  "each",
                                               "basis":  "per-each",
@@ -21074,6 +21119,21 @@
                                               "source_ad":  "kroger-api"
                                           },
                                           {
+                                              "store":  "Fareway",
+                                              "per_unit":  1.7475,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Jimmy Dean Croissant Breakfast Sandwiches with Sausage, Egg, and Cheese, Frozen, 4 Count",
+                                              "ad":  "$6.99",
+                                              "size":  "each",
+                                              "basis":  "per-4-pack",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
+                                          },
+                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  1.7488,
                                               "unit":  "each",
@@ -21087,21 +21147,6 @@
                                               "basis":  "per-8-pack",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  1.8225,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Jimmy Dean Croissant Breakfast Sandwiches with Sausage, Egg, and Cheese, Frozen, 4 Count",
-                                              "ad":  "$7.29",
-                                              "size":  "4 ct",
-                                              "basis":  "per-4-pack",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -21757,7 +21802,7 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "Fareway Unsweetened Sliced Strawberries",
+                                              "item":  "Fareway Unsweetened Whole Strawberries",
                                               "ad":  "$4.49",
                                               "size":  "16 oz",
                                               "basis":  "size 16 oz",
@@ -23190,21 +23235,6 @@
                                               "basis":  "per-each",
                                               "note":  "",
                                               "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.99,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Garlic",
-                                              "ad":  "$0.99",
-                                              "size":  "each",
-                                              "basis":  "per-each",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -24588,14 +24618,14 @@
                                           },
                                           {
                                               "store":  "Fareway",
-                                              "per_unit":  2.88,
+                                              "per_unit":  1.99,
                                               "unit":  "lb",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "Combo Red \u0026 Green Seedless Grapes",
-                                              "ad":  "$2.88",
+                                              "item":  "Red Seedless Grapes",
+                                              "ad":  "$1.99",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
                                               "note":  "",
@@ -24866,6 +24896,21 @@
                                               "source_ad":  "Weekly Ad"
                                           },
                                           {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.99,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Green Onions (Scallions)",
+                                              "ad":  "$0.99",
+                                              "size":  "each",
+                                              "basis":  "per-each",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
+                                          },
+                                          {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  1.19,
                                               "unit":  "each",
@@ -24894,21 +24939,6 @@
                                               "basis":  "per-each",
                                               "note":  "",
                                               "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  1.5,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Green Onions (Scallions)",
-                                              "ad":  "$1.50",
-                                              "size":  "each",
-                                              "basis":  "per-each",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -26016,21 +26046,6 @@
                                               "source_ad":  "everyday club price (Omaha 68137)"
                                           },
                                           {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.3738,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Pepperidge Farm Onion with Poppy Seeds Hamburger Buns",
-                                              "ad":  "$2.99",
-                                              "size":  "8 ct",
-                                              "basis":  "per-8-pack",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
-                                          },
-                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.5988,
                                               "unit":  "each",
@@ -26484,6 +26499,21 @@
                                               "basis":  "per-6-pack",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.8317,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Mission Carb Balance Flour Tortillas, Burrito Size, 6 Count",
+                                              "ad":  "$4.99",
+                                              "size":  "6 ct",
+                                              "basis":  "per-6-pack",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -26748,21 +26778,6 @@
                                               "basis":  "size 12 oz",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.1567,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Fareway Honey Mustard",
-                                              "ad":  "$1.88",
-                                              "size":  "12 oz",
-                                              "basis":  "size 12 oz",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -27875,7 +27890,7 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "Folgers Classic Roast Instant Coffee",
+                                              "item":  "Folgers Classic Decaf Instant Coffee",
                                               "ad":  "$9.99",
                                               "size":  "8 oz",
                                               "basis":  "size 8 oz",
@@ -27986,6 +28001,21 @@
                                               "source_ad":  "everyday shelf price"
                                           },
                                           {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.361,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Idahoan Baby Reds w/Roasted Garlic \u0026 Parm Mashed Potatoes",
+                                              "ad":  "$1.48",
+                                              "size":  "4.1 oz",
+                                              "basis":  "size 4.1 oz",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
+                                          },
+                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.3646,
                                               "unit":  "oz",
@@ -27999,21 +28029,6 @@
                                               "basis":  "size 8.2 oz",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.37,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Idahoan® Roasted Garlic Mashed Potatoes",
-                                              "ad":  "$1.48",
-                                              "size":  "4 oz",
-                                              "basis":  "size 4 oz",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -28207,21 +28222,6 @@
                                               "source_ad":  "everyday shelf price"
                                           },
                                           {
-                                              "store":  "Fareway",
-                                              "per_unit":  4.6232,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Johnsonville Italian Sausage, Mild",
-                                              "ad":  "$5.49",
-                                              "size":  "19 oz",
-                                              "basis":  "size 1.188 lb",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
-                                          },
-                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  4.88,
                                               "unit":  "lb",
@@ -28235,6 +28235,21 @@
                                               "basis":  "size 1 lb",
                                               "note":  "",
                                               "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  4.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Purnells Italian Sausage",
+                                              "ad":  "$4.99",
+                                              "size":  "16 oz",
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -29268,28 +29283,13 @@
                            "commodity":  "Large Eggs (dozen)",
                            "id":  "eggs",
                            "unit":  "dozen",
-                           "cheapest_store":  "Fareway",
-                           "cheapest_price":  1.45,
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  1.46,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Fareway",
-                           "nomem_price":  1.45,
+                           "nomem_store":  "Aldi",
+                           "nomem_price":  1.46,
                            "nomem_type":  "everyday",
                            "stores":  [
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  1.45,
-                                              "unit":  "dozen",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Dutch Farms 18 Grade A Large Eggs",
-                                              "ad":  "$1.45",
-                                              "size":  "dozen",
-                                              "basis":  "size 1 dozen",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
-                                          },
                                           {
                                               "store":  "Aldi",
                                               "per_unit":  1.46,
@@ -29334,6 +29334,21 @@
                                               "basis":  "size 5 dozen",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  1.65,
+                                              "unit":  "dozen",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Dutch Farms 18 Grade A Large Eggs",
+                                              "ad":  "$1.65",
+                                              "size":  "dozen",
+                                              "basis":  "size 1 dozen",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -29631,16 +29646,16 @@
                                           },
                                           {
                                               "store":  "Fareway",
-                                              "per_unit":  0.4983,
+                                              "per_unit":  0.3738,
                                               "unit":  "each",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "Tide PODS Liquid Laundry Detergent Pacs, 4-in-1 Ultra Oxi",
+                                              "item":  "Tide PODS Laundry Detergent Soap Pacs, Original Scent",
                                               "ad":  "$5.98",
-                                              "size":  "12 ct",
-                                              "basis":  "per-12-pack",
+                                              "size":  "16 ct",
+                                              "basis":  "per-16-pack",
                                               "note":  "",
                                               "source_ad":  "shop.fareway.com"
                                           }
@@ -31586,14 +31601,14 @@
                                           },
                                           {
                                               "store":  "Fareway",
-                                              "per_unit":  0.2425,
+                                              "per_unit":  0.2494,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
                                               "item":  "Mini Peppers",
-                                              "ad":  "$3.88",
+                                              "ad":  "$3.99",
                                               "size":  "16 oz",
                                               "basis":  "size 16 oz",
                                               "note":  "",
@@ -32246,6 +32261,21 @@
                                               "source_ad":  "everyday shelf price"
                                           },
                                           {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.2488,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Highline Whole White Mushrooms",
+                                              "ad":  "$1.99",
+                                              "size":  "8 oz",
+                                              "basis":  "size 8 oz",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
+                                          },
+                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.2492,
                                               "unit":  "oz",
@@ -32289,21 +32319,6 @@
                                               "basis":  "size 8 oz",
                                               "note":  "",
                                               "source_ad":  "Weekly Ad"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.3113,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Highline Whole White Mushrooms",
-                                              "ad":  "$2.49",
-                                              "size":  "8 oz",
-                                              "basis":  "size 8 oz",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -34746,6 +34761,21 @@
                                               "source_ad":  "everyday shelf price"
                                           },
                                           {
+                                              "store":  "Fareway",
+                                              "per_unit":  1.88,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Yellow Flesh Colorado Peaches",
+                                              "ad":  "$1.88",
+                                              "size":  "lb",
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
+                                          },
+                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  1.99,
                                               "unit":  "lb",
@@ -34789,21 +34819,6 @@
                                               "basis":  "size 1 lb",
                                               "note":  "",
                                               "source_ad":  "Weekly Ad"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  2.99,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Yellow Flesh Georgia Peaches",
-                                              "ad":  "$2.99",
-                                              "size":  "lb",
-                                              "basis":  "size 1 lb",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -35098,6 +35113,21 @@
                                               "basis":  "size 1 lb",
                                               "note":  "",
                                               "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  1.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "D\u0027anjou Pears",
+                                              "ad":  "$1.99",
+                                              "size":  "lb",
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -35849,6 +35879,21 @@
                                               "source_ad":  "everyday shelf price"
                                           },
                                           {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.0893,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Fareway Pizza Sauce",
+                                              "ad":  "$1.34",
+                                              "size":  "15 oz",
+                                              "basis":  "size 15 oz",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
+                                          },
+                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.0993,
                                               "unit":  "oz",
@@ -35862,21 +35907,6 @@
                                               "basis":  "size 14 oz",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.0993,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Fareway Pizza Sauce",
-                                              "ad":  "$1.49",
-                                              "size":  "15 oz",
-                                              "basis":  "size 15 oz",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -35972,7 +36002,7 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "Saran™ Premium Wrap Plastic Film",
+                                              "item":  "Saran Premium Wrap Plastic Film",
                                               "ad":  "$2.68",
                                               "size":  "each",
                                               "basis":  "per-each",
@@ -36433,21 +36463,6 @@
                                               "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)"
                                           },
                                           {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.2492,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Bomb Pop Original Ice Pops",
-                                              "ad":  "$2.99",
-                                              "size":  "12 ct",
-                                              "basis":  "per-12-pack",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
-                                          },
-                                          {
                                               "store":  "Sam\u0027s Club",
                                               "per_unit":  0.2772,
                                               "unit":  "each",
@@ -36589,7 +36604,7 @@
                            "cheapest_store":  "Sam\u0027s Club",
                            "cheapest_price":  1.98,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Baker\u0027s",
+                           "nomem_store":  "Fareway",
                            "nomem_price":  1.99,
                            "nomem_type":  "everyday",
                            "stores":  [
@@ -36607,6 +36622,21 @@
                                               "basis":  "per-lb marker",
                                               "note":  "",
                                               "source_ad":  "everyday club price (Omaha 68137)"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  1.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Whole Bone-In Pork Butt",
+                                              "ad":  "$1.99",
+                                              "size":  "lb",
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -36667,21 +36697,6 @@
                                               "basis":  "per-lb marker",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  2.99,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Whole Bone-In Pork Butt",
-                                              "ad":  "$2.99",
-                                              "size":  "lb",
-                                              "basis":  "size 1 lb",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -37000,7 +37015,7 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "DeLallo Mini Gnocchi",
+                                              "item":  "DeLallo Gnocchi, Potato",
                                               "ad":  "$3.79",
                                               "size":  "16 oz",
                                               "basis":  "size 16 oz",
@@ -37787,21 +37802,6 @@
                                               "source_ad":  "everyday shelf price"
                                           },
                                           {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.1952,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Tostitos Medium Con Queso Salsa Dip",
-                                              "ad":  "$4.49",
-                                              "size":  "23 oz",
-                                              "basis":  "size 23 oz",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
-                                          },
-                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.1993,
                                               "unit":  "oz",
@@ -37815,6 +37815,21 @@
                                               "basis":  "size 15 oz",
                                               "note":  "",
                                               "source_ad":  "Weekly Ad"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.1993,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Tostitos Salsa Con Queso, Medium",
+                                              "ad":  "$2.99",
+                                              "size":  "15 oz",
+                                              "basis":  "size 15 oz",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -38126,21 +38141,6 @@
                                               "source_ad":  "everyday shelf price"
                                           },
                                           {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.37,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Maruchan Ramen Noodle Soup, Beef",
-                                              "ad":  "$0.37",
-                                              "size":  "each",
-                                              "basis":  "per-each",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
-                                          },
-                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.3742,
                                               "unit":  "each",
@@ -38184,6 +38184,21 @@
                                               "basis":  "per-6-pack",
                                               "note":  "",
                                               "source_ad":  "kroger-api"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.5,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Maruchan Ramen Noodle Soup, Beef",
+                                              "ad":  "$0.50",
+                                              "size":  "each",
+                                              "basis":  "per-each",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -38480,6 +38495,21 @@
                                               "source_ad":  "everyday shelf price"
                                           },
                                           {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.48,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Raspberries",
+                                              "ad":  "$2.88",
+                                              "size":  "6 oz",
+                                              "basis":  "size 6 oz",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
+                                          },
+                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.4994,
                                               "unit":  "oz",
@@ -38493,21 +38523,6 @@
                                               "basis":  "size 16 oz",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.5733,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Raspberries",
-                                              "ad":  "$6.88",
-                                              "size":  "12 oz",
-                                              "basis":  "size 12 oz",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -38907,6 +38922,21 @@
                                               "source_ad":  "everyday club price (Omaha 68137)"
                                           },
                                           {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.9967,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Summertime Farms Baby Red Potatoes",
+                                              "ad":  "$2.99",
+                                              "size":  "3 lb",
+                                              "basis":  "size 3 lb",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
+                                          },
+                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  1.29,
                                               "unit":  "lb",
@@ -38920,21 +38950,6 @@
                                               "basis":  "size 1 lb",
                                               "note":  "",
                                               "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)"
-                                          },
-                                          {
-                                              "store":  "Fareway",
-                                              "per_unit":  1.2933,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Summertime Farms Baby Red Potatoes",
-                                              "ad":  "$3.88",
-                                              "size":  "3 lb",
-                                              "basis":  "size 3 lb",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -41628,21 +41643,6 @@
                                               "source_ad":  "kroger-api"
                                           },
                                           {
-                                              "store":  "Fareway",
-                                              "per_unit":  8.6533,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  true,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Supreme Choice Raw Shrimp Shell-On 51-60 ct",
-                                              "ad":  "$6.49",
-                                              "size":  "12 oz",
-                                              "basis":  "size 0.75 lb",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
-                                          },
-                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  9.99,
                                               "unit":  "lb",
@@ -41656,6 +41656,21 @@
                                               "basis":  "size 1 lb",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  11.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  true,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Supreme Choice Raw Shrimp 16-20ct",
+                                              "ad":  "$11.99",
+                                              "size":  "16 oz",
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -41834,21 +41849,6 @@
                                               "source_ad":  "everyday shelf price"
                                           },
                                           {
-                                              "store":  "Fareway",
-                                              "per_unit":  0.1567,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "member_label":  "",
-                                              "item":  "Fareway American Cheese Slices",
-                                              "ad":  "$1.88",
-                                              "size":  "12 oz",
-                                              "basis":  "size 12 oz",
-                                              "note":  "",
-                                              "source_ad":  "shop.fareway.com"
-                                          },
-                                          {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  0.1967,
                                               "unit":  "oz",
@@ -41862,6 +41862,21 @@
                                               "basis":  "size 48.24 oz",
                                               "note":  "",
                                               "source_ad":  "kroger-api"
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.2067,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "member_label":  "",
+                                              "item":  "Fareway American Cheese Slices",
+                                              "ad":  "$2.48",
+                                              "size":  "12 oz",
+                                              "basis":  "size 12 oz",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -42792,14 +42807,14 @@
                                           },
                                           {
                                               "store":  "Fareway",
-                                              "per_unit":  0.3462,
+                                              "per_unit":  0.4362,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
                                               "member_label":  "",
                                               "item":  "Dole Spinach",
-                                              "ad":  "$2.77",
+                                              "ad":  "$3.49",
                                               "size":  "8 oz",
                                               "basis":  "size 8 oz",
                                               "note":  "",
@@ -47594,7 +47609,7 @@
                                               "bulk":  true,
                                               "membership":  false,
                                               "member_label":  "",
-                                              "item":  "Fareway Canola Oil",
+                                              "item":  "Fareway Vegetable Oil",
                                               "ad":  "$9.48",
                                               "size":  "128 oz",
                                               "basis":  "size 128 floz",

@@ -87,3 +87,11 @@
 [2026-08-09T06:18:42] QUEUE ABSORBED into open item 2026-08-07-fb1fee (day 2 of this condition, count now 3) - no new id minted
 [2026-08-09T06:18:43] SENT 'Grocery: Walmart full capture aging - 2026-08-09' -> schweino68@gmail.com (id 19fe63f12c32f763)
 [2026-08-09T06:24:59] SENT 'Grocery: a GUARD has gone blind (test-auditors failed)' -> schweino68@gmail.com (id 19fe644d181ad8b0)
+[2026-08-09T07:01:03] SUPPRESSED (already sent this type today) 'Fareway ad window advanced with no capture behind it' [type: fareway ad window advanced with no capture behind it]
+[2026-08-09T07:07:20] SUPPRESSED (already sent this type today) 'Recipe pricing: 16 unpriced ingredient line(s)' [type: recipe pricing unpriced ingredient line s]
+[2026-08-09T07:07:26] SUPPRESSED (already sent this type today) 'Recipe db drift (index vs specs)' [type: recipe db drift index vs specs]
+[2026-08-09T07:07:37] SUPPRESSED (already sent this type today) 'Recipe per-serving manifest: skipped recipe(s)' [type: recipe per serving manifest skipped recipe s]
+[2026-08-09T07:07:41] SENT 'Ingredient stores disagree: 12 hard finding(s)' -> schweino68@gmail.com (id 19fe66be8edf08f0)
+[2026-08-09T07:07:50] SUPPRESSED (already sent this type today) 'Board prices aging inside a fresh file' [type: board prices aging inside a fresh file]
+[2026-08-09T07:13:50] QUEUE ABSORBED into open item 2026-08-07-fb1fee (day 2 of this condition, count now 4) - no new id minted
+[2026-08-09T07:13:50] SUPPRESSED (already sent this type today) 'Grocery: Walmart full capture aging - 2026-08-09' [type: grocery walmart full capture aging]

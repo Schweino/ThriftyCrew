@@ -990,7 +990,7 @@
                     {
                         "name":  "Slow Cooker Italian Chicken Penne",
                         "slug":  "slow-cooker-italian-chicken-penne",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "Italian",
                         "method":  "slow cooker",
                         "servings":  14,
@@ -7286,7 +7286,7 @@
                     {
                         "name":  "Slow Cooker Filipino Pork Adobo Bowls",
                         "slug":  "slow-cooker-filipino-pork-adobo-bowls",
-                        "visibility":"paid",
+                        "visibility":"public",
                         "cuisine":  "Filipino",
                         "method":  "slow cooker",
                         "servings":  14,
@@ -20572,7 +20572,7 @@
                     {
                         "name":  "Poppy Seed Chicken and Rice Casserole",
                         "slug":  "poppy-seed-chicken-and-rice-casserole",
-                        "visibility":"paid",
+                        "visibility":"public",
                         "cuisine":  "American Southern",
                         "servings":  14,
                         "ingredients":  [
@@ -25646,7 +25646,7 @@
                     {
                         "name":  "Bistek Tagalog (Filipino Beef and Onions over Rice)",
                         "slug":  "bistek-tagalog-filipino-beef-onion-rice",
-                        "visibility":"paid",
+                        "visibility":"public",
                         "cuisine":  "Filipino",
                         "servings":  14,
                         "ingredients":  [
@@ -28528,7 +28528,7 @@
                     {
                         "name":  "Chicken Normandy (Apple Cider Braised Chicken)",
                         "slug":  "chicken-normandy-apple-cider",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "French",
                         "servings":  14,
                         "ingredients":  [
@@ -28644,7 +28644,7 @@
                     {
                         "name":  "Chicken Pot Pie Casserole with Biscuits",
                         "slug":  "chicken-pot-pie-biscuit-casserole",
-                        "visibility":"paid",
+                        "visibility":"public",
                         "cuisine":  "American",
                         "servings":  14,
                         "ingredients":  [
@@ -30114,7 +30114,7 @@
                     {
                         "name":  "Claypot Chicken and Mushroom Rice",
                         "slug":  "claypot-chicken-mushroom-rice",
-                        "visibility":"paid",
+                        "visibility":"public",
                         "cuisine":  "Chinese",
                         "servings":  14,
                         "ingredients":  [
@@ -32544,7 +32544,7 @@
                     {
                         "name":  "Fasolka po Bretonsku (Polish Baked Beans with Kielbasa)",
                         "slug":  "fasolka-po-bretonsku-polish-beans-kielbasa",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "polish",
                         "servings":  14,
                         "ingredients":  [
@@ -36978,7 +36978,7 @@
                     {
                         "name":  "Jamaican Brown Stew Chicken",
                         "slug":  "jamaican-brown-stew-chicken",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "Caribbean / Jamaican",
                         "servings":  14,
                         "ingredients":  [
@@ -39010,7 +39010,7 @@
                     {
                         "name":  "Loobia Polo (Persian Beef and Green Bean Rice)",
                         "slug":  "loobia-polo-persian-beef-green-bean-rice",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "Persian",
                         "servings":  14,
                         "ingredients":  [
@@ -45428,7 +45428,7 @@
                     {
                         "name":  "Scalloped Potato Turkey Casserole",
                         "slug":  "scalloped-potato-turkey-casserole",
-                        "visibility":"paid",
+                        "visibility":"public",
                         "cuisine":  "American",
                         "servings":  14,
                         "ingredients":  [
@@ -46528,7 +46528,7 @@
                     {
                         "name":  "Slow Cooker Beef and Noodles",
                         "slug":  "slow-cooker-beef-and-noodles",
-                        "visibility":"paid",
+                        "visibility":"public",
                         "cuisine":  "American",
                         "servings":  14,
                         "ingredients":  [
@@ -46986,7 +46986,7 @@
                     {
                         "name":  "Slow Cooker Pork and Sauerkraut with Apples and Potatoes",
                         "slug":  "slow-cooker-pork-sauerkraut-apples",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "American (Midwest)",
                         "servings":  14,
                         "ingredients":  [
@@ -57742,7 +57742,7 @@
                     {
                         "name":  "Youvarlakia Avgolemono (Greek Beef and Rice Meatballs in Lemon Sauce)",
                         "slug":  "youvarlakia-avgolemono-greek-meatball-bowls",
-                        "visibility":"public",
+                        "visibility":"paid",
                         "cuisine":  "Greek",
                         "servings":  14,
                         "ingredients":  [

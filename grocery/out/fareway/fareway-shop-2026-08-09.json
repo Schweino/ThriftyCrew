@@ -1,0 +1,4542 @@
+﻿[
+    {
+        "id":  "chicken-breast",
+        "name":  "Tyson Tyson Frozen Oven Roasted Diced Chicken Breast, 22 oz",
+        "price":  "7.76",
+        "per":  "",
+        "orig":  "12.99",
+        "unit":  "",
+        "size":  "22 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/92522-tyson-grilled-and-ready-diced-oven-roasted-frozen-chicken-breast-22-oz"
+    },
+    {
+        "id":  "chicken-thighs",
+        "name":  "Bone-In Chicken Thighs",
+        "price":  "1.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$1.99/lb",
+        "size":  "About 0.75 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388971-bonein-chicken-thighs"
+    },
+    {
+        "id":  "ground-beef-8020",
+        "name":  "80% Lean 20% Fat Ground Beef Bulk",
+        "price":  "59.90",
+        "per":  "package (estimated)",
+        "orig":  "",
+        "unit":  "$5.99/lb",
+        "size":  "About 10.0 lb / package",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389124-80-lean-20-fat-ground-beef-10lb-tube"
+    },
+    {
+        "id":  "ground-turkey",
+        "name":  "Fareway Ground Turkey",
+        "price":  "5.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24278214-fareway-turkey-ground-16-oz"
+    },
+    {
+        "id":  "bacon",
+        "name":  "Farmland Hickory Smoked Classic Cut Bacon",
+        "price":  "4.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2693854-farmland-bacon-rtc-16-oz"
+    },
+    {
+        "id":  "pork-chops",
+        "name":  "Boneless Pork Chop",
+        "price":  "2.50",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389055-boneless-pork-chop"
+    },
+    {
+        "id":  "eggs",
+        "name":  "Dutch Farms 18 Grade A Large Eggs",
+        "price":  "2.47",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "36 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2915637-dutch-farms-18-grade-a-large-eggs-18-ct"
+    },
+    {
+        "id":  "milk",
+        "name":  "Fareway 2% Reduced Fat Milk",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "0.5 gal",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25586562-fareway-2-reduced-fat-milk-05-gal"
+    },
+    {
+        "id":  "butter",
+        "name":  "Fareway Solid Butter",
+        "price":  "3.48",
+        "per":  "",
+        "orig":  "3.98",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24451441-fareway-butter-salted-16-oz"
+    },
+    {
+        "id":  "cottage-cheese",
+        "name":  "Fareway 4% Min Small Curd Cottage Cheese",
+        "price":  "7.88",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "48 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26544540-fareway-small-curd-4-milkfat-min-cottage-cheese-48-oz"
+    },
+    {
+        "id":  "sour-cream",
+        "name":  "Daisy Sour Cream",
+        "price":  "2.68",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2692623-daisy-sour-cream-16-oz"
+    },
+    {
+        "id":  "cream-cheese",
+        "name":  "Fareway Cream Cheese Spread",
+        "price":  "1.88",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24443550-fareway-cream-cheese-spread-8-oz"
+    },
+    {
+        "id":  "shredded-cheese",
+        "name":  "Fareway Colby Jack Fancy Shredded Cheese",
+        "price":  "7.48",
+        "per":  "",
+        "orig":  "9.88",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24712403-fareway-cheese-colby-jack-fancy-shredded-32-oz"
+    },
+    {
+        "id":  "yogurt",
+        "name":  "Fareway Nonfat Plain Greek Yogurt",
+        "price":  "5.00",
+        "per":  "",
+        "orig":  "5.98",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386666-fareway-nonfat-plain-greek-yogurt-32-oz"
+    },
+    {
+        "id":  "bananas",
+        "name":  "Banana",
+        "price":  "0.20",
+        "per":  "",
+        "orig":  "0.23",
+        "unit":  "$0.49/lb",
+        "size":  "About 0.4 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17533153-banana-1-lb"
+    },
+    {
+        "id":  "strawberries",
+        "name":  "Strawberries",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17328769-strawberries-16-oz"
+    },
+    {
+        "id":  "blueberries",
+        "name":  "Fareway Unsweetened Blueberries",
+        "price":  "14.99",
+        "per":  "",
+        "orig":  "15.99",
+        "unit":  "",
+        "size":  "48 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20555547-fareway-blueberries-48-oz"
+    },
+    {
+        "id":  "avocados",
+        "name":  "Hass Avocado",
+        "price":  "1.50",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3251376-hass-avocado-each"
+    },
+    {
+        "id":  "russet-potatoes",
+        "name":  "Russet Potato",
+        "price":  "0.74",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$1.49/lb",
+        "size":  "About 0.5 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17602498-russet-potato-1-lb"
+    },
+    {
+        "id":  "onions",
+        "name":  "Sweet Onion",
+        "price":  "1.12",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$1.49/lb",
+        "size":  "About 0.75 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16516452-sweet-onion-1-lb"
+    },
+    {
+        "id":  "apples",
+        "name":  "Granny Smith Apple",
+        "price":  "0.84",
+        "per":  "",
+        "orig":  "1.00",
+        "unit":  "$1.68/lb",
+        "size":  "About 0.5 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16516401-granny-smith-apple-1-lb"
+    },
+    {
+        "id":  "grapes",
+        "name":  "Red Seedless Grapes",
+        "price":  "3.98",
+        "per":  "package (estimated)",
+        "orig":  "7.98",
+        "unit":  "$1.99/lb",
+        "size":  "About 2.0 lb / package",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17610485-red-seedless-grapes-1-lb"
+    },
+    {
+        "id":  "sweet-corn",
+        "name":  "Yellow Sweet Corn",
+        "price":  "0.75",
+        "per":  "",
+        "orig":  "1.00",
+        "unit":  "",
+        "size":  "1 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16345812-yellow-sweet-corn-crate-each"
+    },
+    {
+        "id":  "watermelon",
+        "name":  "Seedless Watermelon Quarter",
+        "price":  "5.22",
+        "per":  "",
+        "orig":  "6.96",
+        "unit":  "$1.49/lb",
+        "size":  "About 3.5 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389319-watermelon-seedless-quarter"
+    },
+    {
+        "id":  "peaches",
+        "name":  "Yellow Flesh Colorado Peaches",
+        "price":  "0.76",
+        "per":  "",
+        "orig":  "1.42",
+        "unit":  "$1.88/lb",
+        "size":  "About 0.41 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3401221-yellow-peach-each"
+    },
+    {
+        "id":  "bread",
+        "name":  "Corner Store Bread, Original, White",
+        "price":  "1.69",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "20 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/70454139-corner-store-bread-original-white-20-oz"
+    },
+    {
+        "id":  "peanut-butter",
+        "name":  "SKIPPY Creamy Peanut Butter",
+        "price":  "1.94",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "16.3 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/285601-skippy-creamy-peanut-butter-16-3-oz"
+    },
+    {
+        "id":  "orange-juice",
+        "name":  "Fareway 100% Juice, Orange",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "5.49",
+        "unit":  "",
+        "size":  "64 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25937154-fareway-100-juice-orange-64-oz"
+    },
+    {
+        "id":  "coffee",
+        "name":  "Fareway Coffee, Ground, Medium Roast Style, Classic Roast",
+        "price":  "17.78",
+        "per":  "",
+        "orig":  "19.99",
+        "unit":  "",
+        "size":  "42.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24353958-fareway-coffee-ground-medium-roast-style-classic-roast-425-oz"
+    },
+    {
+        "id":  "beef-broth",
+        "name":  "Fareway Fat Free Beef Broth",
+        "price":  "1.84",
+        "per":  "",
+        "orig":  "2.68",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389354-fareway-beef-broth-32-fl-oz"
+    },
+    {
+        "id":  "chicken-broth",
+        "name":  "Fareway Fat Free Chicken Broth",
+        "price":  "1.84",
+        "per":  "",
+        "orig":  "2.68",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387716-chicken-broth"
+    },
+    {
+        "id":  "chili-powder",
+        "name":  "Badia Spices Chili Powder",
+        "price":  "7.99",
+        "per":  "",
+        "orig":  "9.99",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/253183-badia-spices-chili-powder-16-oz"
+    },
+    {
+        "id":  "diced-tomatoes",
+        "name":  "Fareway Diced Tomatoes in Tomato Juice",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "28 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20627399-fareway-tomatoes-in-tomato-juice-diced-28-oz"
+    },
+    {
+        "id":  "garlic",
+        "name":  "Spice World Fresh \u0026 Peeled Garlic",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "6 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16975814-spice-world-garlic-fresh-peeled-6-oz"
+    },
+    {
+        "id":  "garlic-powder",
+        "name":  "Badia Spices Garlic Powder",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "10.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72627-badia-spices-garlic-powder-10-5-oz"
+    },
+    {
+        "id":  "ground-cumin",
+        "name":  "Badia Spices Cumin, Ground",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "7 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/258052-badia-spices-cumin-ground-7-oz"
+    },
+    {
+        "id":  "hot-sauce",
+        "name":  "Valentina Hot Sauce, Mexican",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "12.5 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/78533-valentina-mexican-hot-sauce-salsa-picante-12-5-oz"
+    },
+    {
+        "id":  "italian-seasoning",
+        "name":  "Papa Rico\u0027s Mild Italian Seasoning",
+        "price":  "7.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "6 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/116472224-papa-rico-s-mild-italian-seasoning-6-oz"
+    },
+    {
+        "id":  "limes",
+        "name":  "Lime",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23000972-lime-1-ct"
+    },
+    {
+        "id":  "olive-oil",
+        "name":  "Fareway Extra Virgin Olive Oil",
+        "price":  "19.98",
+        "per":  "",
+        "orig":  "20.99",
+        "unit":  "",
+        "size":  "67.6 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24228128-fareway-olive-oil-extra-virgin-676-oz"
+    },
+    {
+        "id":  "onion-powder",
+        "name":  "Badia Spices Onion Powder",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "9.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/258006-badia-spices-onion-powder-9-5-oz"
+    },
+    {
+        "id":  "pork-tenderloin",
+        "name":  "Whole Pork Tenderloin",
+        "price":  "9.98",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$3.99/lb",
+        "size":  "About 2.5 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389061-whole-pork-tenderloin"
+    },
+    {
+        "id":  "salsa",
+        "name":  "Fareway Chunky Mild Salsa",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "24 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/104557563-chunky-salsa-mild"
+    },
+    {
+        "id":  "zucchini",
+        "name":  "Zucchini Squash",
+        "price":  "1.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$1.99/lb",
+        "size":  "About 0.75 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/193785-zucchini-squash-1-lb"
+    },
+    {
+        "id":  "laundry-detergent",
+        "name":  "Arm \u0026 Hammer Plus Oxiclean Fresh Scent",
+        "price":  "11.98",
+        "per":  "",
+        "orig":  "14.99",
+        "unit":  "",
+        "size":  "138 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/29399587-arm-hammer-fresh-scent-oxiclean-liquid-detergent-138-fl-oz"
+    },
+    {
+        "id":  "whole-chicken",
+        "name":  "Whole Chicken",
+        "price":  "8.72",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$2.49/lb",
+        "size":  "About 3.5 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386703-whole-chicken-1-each"
+    },
+    {
+        "id":  "breakfast-sausage",
+        "name":  "Farmland Original Pork Sausage",
+        "price":  "2.50",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2663295-farmland-sausage-roll-12-oz"
+    },
+    {
+        "id":  "hot-dogs",
+        "name":  "Bar-S Classic Franks Hot Dogs",
+        "price":  "1.44",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16376939-bar-s-classic-franks-340-0-g"
+    },
+    {
+        "id":  "deli-ham",
+        "name":  "Frick\u0027s Sliced Quarter Applewood Ham",
+        "price":  "10.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "24 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17616704-fricks-smoked-ham-applewood-sliced-24-oz"
+    },
+    {
+        "id":  "salmon",
+        "name":  "Trident Seafoods Fillet, Alaska Salmon",
+        "price":  "9.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "20 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/47378993-trident-wild-salmon-fillet-1-25-lb"
+    },
+    {
+        "id":  "canned-tuna",
+        "name":  "Fareway Chunk Light Tuna in Oil",
+        "price":  "0.97",
+        "per":  "",
+        "orig":  "1.18",
+        "unit":  "",
+        "size":  "5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24072220-fareway-tuna-in-oil-chunk-light-5-oz"
+    },
+    {
+        "id":  "shrimp",
+        "name":  "Supreme Choice Raw Shrimp 16-20ct",
+        "price":  "11.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/317735-supreme-choice-16-20-count-easy-peel-raw-shrimp-16-oz"
+    },
+    {
+        "id":  "sirloin-steak",
+        "name":  "Gary\u0027s Quick Steak Thinly Sliced Sirloin Beef",
+        "price":  "8.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "10.8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/74010426-qs-thin-slcd-sirloin-beef"
+    },
+    {
+        "id":  "sliced-cheese",
+        "name":  "Fareway American Cheese Slices",
+        "price":  "2.48",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24721930-fareway-cheese-slices-american-16-ea"
+    },
+    {
+        "id":  "oranges",
+        "name":  "Navel Orange",
+        "price":  "0.67",
+        "per":  "",
+        "orig":  "0.90",
+        "unit":  "$1.48/lb",
+        "size":  "About 0.45 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18809441-navel-orange-1-lb"
+    },
+    {
+        "id":  "lemons",
+        "name":  "Whole Lemons",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1366070-whole-lemons-16-oz"
+    },
+    {
+        "id":  "tomatoes",
+        "name":  "Roma Tomato",
+        "price":  "0.50",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$1.99/lb",
+        "size":  "About 0.25 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17330187-roma-tomato-1-lb"
+    },
+    {
+        "id":  "lettuce",
+        "name":  "Dole Hearts of Romaine",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "9 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41760-dole-hearts-of-romaine-9-oz"
+    },
+    {
+        "id":  "carrots",
+        "name":  "Dole Carrots, Mini Cut",
+        "price":  "2.77",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1880274-dole-carrots-mini-cut-32-oz"
+    },
+    {
+        "id":  "broccoli",
+        "name":  "Fareway Broccoli Florets",
+        "price":  "1.98",
+        "per":  "",
+        "orig":  "2.69",
+        "unit":  "",
+        "size":  "14 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20635158-fareway-broccoli-florets-14-oz"
+    },
+    {
+        "id":  "bell-peppers",
+        "name":  "Green Bell Pepper",
+        "price":  "0.77",
+        "per":  "",
+        "orig":  "1.17",
+        "unit":  "",
+        "size":  "1 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3256531-green-bell-pepper-each"
+    },
+    {
+        "id":  "celery",
+        "name":  "Dole Celery Hearts",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3078796-dole-organic-celery-16-0-oz"
+    },
+    {
+        "id":  "cucumbers",
+        "name":  "Mucci Farms Cucumbers, Snack-Sized, CuteCumber Poppers",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "9 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20219256-cutecumber-poppers-snack-sized-cucumber-9-oz"
+    },
+    {
+        "id":  "spinach",
+        "name":  "Dole Spinach",
+        "price":  "3.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17314695-dole-spinach-8-oz"
+    },
+    {
+        "id":  "mushrooms",
+        "name":  "Highline Whole White Mushrooms",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18737949-produce-mushroom-broiler-8-oz"
+    },
+    {
+        "id":  "sweet-potatoes",
+        "name":  "Sweet Potato (Yam)",
+        "price":  "1.12",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$1.49/lb",
+        "size":  "About 0.75 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17626656-sweet-potato-yam-1-lb"
+    },
+    {
+        "id":  "tortillas",
+        "name":  "Mission Super Soft Fajita Flour Tortillas",
+        "price":  "3.49",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "23 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/128790-mission-super-soft-fajita-flour-tortillas-23-0-oz"
+    },
+    {
+        "id":  "hamburger-buns",
+        "name":  "Fareway Yellow Sesame Hamburger Buns",
+        "price":  "3.88",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "30.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386545-sesame-yellow-hamburger-buns"
+    },
+    {
+        "id":  "bagels",
+        "name":  "Fareway Pre-Sliced Wheat Bagels",
+        "price":  "2.00",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "6 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/34359829-fareway-wheat-presliced-bagels-24-oz"
+    },
+    {
+        "id":  "rice",
+        "name":  "Mahatma Extra Long Grain Enriched Rice",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/36376-mahatma-extra-long-grain-enriched-rice-16-oz"
+    },
+    {
+        "id":  "pasta",
+        "name":  "Fareway Whole Wheat Long Spaghetti",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "1.79",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25096769-fareway-whole-wheat-macaroni-product-long-spaghetti-16-oz"
+    },
+    {
+        "id":  "pasta-sauce",
+        "name":  "Fareway Meat Flavored Pasta Sauce",
+        "price":  "3.48",
+        "per":  "",
+        "orig":  "4.49",
+        "unit":  "",
+        "size":  "45 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20629096-fareway-pasta-sauce-meat-flavored-45-oz"
+    },
+    {
+        "id":  "mac-and-cheese",
+        "name":  "Corner Store Dinner, Macaroni \u0026 Cheese",
+        "price":  "0.54",
+        "per":  "",
+        "orig":  "0.99",
+        "unit":  "",
+        "size":  "6.25 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22159772-corner-store-dinner-macaroni-cheese-625-oz"
+    },
+    {
+        "id":  "ramen",
+        "name":  "Maruchan Ramen Noodle Soup, Beef",
+        "price":  "0.50",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "3 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16697906-maruchan-beef-flavor-ramen-noodle-soup-85-0-g"
+    },
+    {
+        "id":  "flour",
+        "name":  "Fareway Flour, Unbleached",
+        "price":  "2.64",
+        "per":  "",
+        "orig":  "3.48",
+        "unit":  "",
+        "size":  "5 lb",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24215312-fareway-flour-unbleached-5-lb"
+    },
+    {
+        "id":  "sugar",
+        "name":  "Corner Store Sugar, Granulated",
+        "price":  "3.24",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "64 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20679513-corner-store-sugar-granulated-64-oz"
+    },
+    {
+        "id":  "brown-sugar",
+        "name":  "Corner Store Sugar, Brown",
+        "price":  "2.39",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24215500-corner-store-sugar-brown-32-oz"
+    },
+    {
+        "id":  "vegetable-oil",
+        "name":  "Fareway Vegetable Oil",
+        "price":  "9.48",
+        "per":  "",
+        "orig":  "10.99",
+        "unit":  "",
+        "size":  "128 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23966592-fareway-vegetable-oil-128-oz"
+    },
+    {
+        "id":  "cereal",
+        "name":  "Fareway Bran Flakes Cereal",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "18 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/89314391-bran-flakes"
+    },
+    {
+        "id":  "oatmeal",
+        "name":  "Ralston Foods Oats, Quick",
+        "price":  "5.59",
+        "per":  "",
+        "orig":  "6.59",
+        "unit":  "",
+        "size":  "42 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21871106-ralston-quick-oats-42-oz"
+    },
+    {
+        "id":  "jelly",
+        "name":  "Fareway Concord Grape Jelly",
+        "price":  "2.98",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24229193-fareway-jelly-concord-grape-32-oz"
+    },
+    {
+        "id":  "honey",
+        "name":  "Golden Ridge Honey",
+        "price":  "9.99",
+        "per":  "",
+        "orig":  "11.99",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387975-honey"
+    },
+    {
+        "id":  "canned-black-beans",
+        "name":  "Fareway Black Beans",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "1.34",
+        "unit":  "",
+        "size":  "15.25 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25806571-fareway-black-beans-1525-oz"
+    },
+    {
+        "id":  "canned-corn",
+        "name":  "Corner Store Corn, Kernel, Whole",
+        "price":  "0.77",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "15.25 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20628216-corner-store-corn-kernel-whole-1525-oz"
+    },
+    {
+        "id":  "ketchup",
+        "name":  "Fareway Thick \u0026 Flavorful Tomato Ketchup",
+        "price":  "3.98",
+        "per":  "",
+        "orig":  "4.18",
+        "unit":  "",
+        "size":  "64 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20551988-fareway-tomato-ketchup-thick-flavorful-64-oz"
+    },
+    {
+        "id":  "mustard",
+        "name":  "Fareway Yellow Mustard",
+        "price":  "1.97",
+        "per":  "",
+        "orig":  "2.29",
+        "unit":  "",
+        "size":  "20 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/28423626-fareway-yellow-mustard-20-oz"
+    },
+    {
+        "id":  "mayonnaise",
+        "name":  "Fareway Light Mayonnaise",
+        "price":  "3.79",
+        "per":  "",
+        "orig":  "4.19",
+        "unit":  "",
+        "size":  "30 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24453283-fareway-mayonnaise-light-30-oz"
+    },
+    {
+        "id":  "ranch-dressing",
+        "name":  "Fareway Ranch Dressing",
+        "price":  "2.48",
+        "per":  "",
+        "orig":  "2.88",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068057-fareway-dressing-ranch-16-oz"
+    },
+    {
+        "id":  "salt",
+        "name":  "Morton Iodized Salt",
+        "price":  "1.88",
+        "per":  "",
+        "orig":  "2.19",
+        "unit":  "",
+        "size":  "26 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2691028-morton-iodized-salt-26-ounce-26-oz"
+    },
+    {
+        "id":  "black-pepper",
+        "name":  "Badia Spices Ground Black Pepper",
+        "price":  "7.99",
+        "per":  "",
+        "orig":  "9.99",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1469136-badia-spices-black-pepper-ground-16-oz"
+    },
+    {
+        "id":  "tortilla-chips",
+        "name":  "Fareway Authentic Round Yellow Corn Tortilla Chips",
+        "price":  "2.98",
+        "per":  "",
+        "orig":  "3.98",
+        "unit":  "",
+        "size":  "14 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20647701-fareway-yellow-corn-tortilla-chips-14-oz"
+    },
+    {
+        "id":  "potato-chips",
+        "name":  "Fareway Wavy Potato Chips",
+        "price":  "3.98",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25570908-fareway-potato-chips-wavy-16-oz"
+    },
+    {
+        "id":  "soda",
+        "name":  "Shasta Soda",
+        "price":  "4.97",
+        "per":  "",
+        "orig":  "5.98",
+        "unit":  "",
+        "size":  "",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1939858-dr-shasta-soda-12-oz"
+    },
+    {
+        "id":  "bottled-water",
+        "name":  "Fareway 24 Pack Natural Spring Water",
+        "price":  "3.87",
+        "per":  "",
+        "orig":  "4.49",
+        "unit":  "",
+        "size":  "",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22156909-fareway-water-natural-spring-24-pack-24-each"
+    },
+    {
+        "id":  "frozen-pizza",
+        "name":  "Jack\u0027s Original Thin Supreme Pizza Pepperoni Sausage Onion Pizza Frozen",
+        "price":  "3.33",
+        "per":  "",
+        "orig":  "4.49",
+        "unit":  "",
+        "size":  "16.9 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/205454-jack-s-original-thin-crust-supreme-frozen-pizza-16-9-oz"
+    },
+    {
+        "id":  "ice-cream",
+        "name":  "Fareway Vintage Vanilla Ice Cream",
+        "price":  "3.94",
+        "per":  "",
+        "orig":  "5.48",
+        "unit":  "",
+        "size":  "48 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388009-fareway-vintage-vanilla-premium-ice-cream-48-fl-oz"
+    },
+    {
+        "id":  "frozen-vegetables",
+        "name":  "Fareway Mixed Vegetables",
+        "price":  "2.94",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20665194-fareway-mixed-vegetables-32-oz"
+    },
+    {
+        "id":  "frozen-fries",
+        "name":  "Fareway Crinkle Fries",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "4.98",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389279-crinkle-fries"
+    },
+    {
+        "id":  "chicken-nuggets",
+        "name":  "Perdue Panko Chicken Nuggets",
+        "price":  "6.99",
+        "per":  "",
+        "orig":  "7.99",
+        "unit":  "",
+        "size":  "29 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/76972-perdue-chicken-breast-nuggets-1-81-lb"
+    },
+    {
+        "id":  "paper-towels",
+        "name":  "Viva 1-Ply Choose-A-Sheet Double Rolls Paper Towels",
+        "price":  "6.98",
+        "per":  "",
+        "orig":  "8.49",
+        "unit":  "",
+        "size":  "3 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69979917-viva-towels-double-rolls-1-ply"
+    },
+    {
+        "id":  "toilet-paper",
+        "name":  "Scott ComfortPlus Toilet Paper, 1-Ply",
+        "price":  "5.97",
+        "per":  "",
+        "orig":  "8.98",
+        "unit":  "",
+        "size":  "12 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18481761-scott-comfortplus-toilet-paper-12-ea"
+    },
+    {
+        "id":  "dish-soap",
+        "name":  "Bright Essentials Original Scent Dish Soap",
+        "price":  "5.94",
+        "per":  "",
+        "orig":  "8.94",
+        "unit":  "",
+        "size":  "58 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387746-bright-essentials-original-scent-dish-soap-58-fl-oz"
+    },
+    {
+        "id":  "dishwasher-detergent",
+        "name":  "Bright Essentials Dishwasher Pacs, Fresh Scent, Triple Action",
+        "price":  "9.96",
+        "per":  "",
+        "orig":  "10.99",
+        "unit":  "",
+        "size":  "43 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/63362548-bright-essentials-dishwasher-pacs-fresh-scent-triple-action-43-each"
+    },
+    {
+        "id":  "trash-bags",
+        "name":  "Bright Essentials Trash Bags, Black, Drawstring, Unscented, Large",
+        "price":  "8.48",
+        "per":  "",
+        "orig":  "8.99",
+        "unit":  "",
+        "size":  "28 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39667951-bright-essentials-trash-bags-black-drawstring-unscented-large-28-each"
+    },
+    {
+        "id":  "aluminum-foil",
+        "name":  "Reynolds Everyday Aluminum Foil",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3313655-reynolds-wrap-everyday-aluminum-foil-30-sq-ft"
+    },
+    {
+        "id":  "storage-bags",
+        "name":  "Bright Essentials Storage Bags, Double Zipper, 20 Gallon",
+        "price":  "2.48",
+        "per":  "",
+        "orig":  "2.98",
+        "unit":  "",
+        "size":  "20 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39736208-bright-essentials-storage-bags-double-zipper-20-gallon-20-each"
+    },
+    {
+        "id":  "quart-storage-bags",
+        "name":  "Hefty Quart Storage Slider Bags",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "20 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16756902-hefty-quart-storage-slider-bags-20-0-ct"
+    },
+    {
+        "id":  "all-purpose-cleaner",
+        "name":  "Bright Essentials All Purpose Cleaner, Citrus Scent",
+        "price":  "2.94",
+        "per":  "",
+        "orig":  "3.98",
+        "unit":  "",
+        "size":  "32 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/27083529-bright-essentials-all-purpose-cleaner-citrus-scent-32-fl-oz"
+    },
+    {
+        "id":  "bleach",
+        "name":  "Sun Brite Ultra Bleach",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "128 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21286519-sun-brite-ultra-bleach-128-fl-oz"
+    },
+    {
+        "id":  "hand-soap",
+        "name":  "Softsoap Liquid Hand Soap Pump, Fresh Breeze",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "221 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17105464-softsoap-hand-soap-fresh-breeze-7-5-oz"
+    },
+    {
+        "id":  "pears",
+        "name":  "D\u0027anjou Pears",
+        "price":  "0.66",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$1.99/lb",
+        "size":  "About 0.33 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2669816-d-anjou-pears-3-oz"
+    },
+    {
+        "id":  "mangoes",
+        "name":  "Crazy Fresh Sliced Mango",
+        "price":  "4.99",
+        "per":  "",
+        "orig":  "5.99",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19376323-quick-easy-mango-sliced-12-oz"
+    },
+    {
+        "id":  "kiwi",
+        "name":  "Kiwi Fruit",
+        "price":  "0.79",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19179710-kiwifruit-each"
+    },
+    {
+        "id":  "cantaloupe",
+        "name":  "Cantaloupe Melon",
+        "price":  "3.46",
+        "per":  "",
+        "orig":  "5.21",
+        "unit":  "$0.99/lb",
+        "size":  "About 3.5 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16606119-cantaloupe-melon-1-lb"
+    },
+    {
+        "id":  "honeydew",
+        "name":  "Honeydew Melon",
+        "price":  "3.96",
+        "per":  "package (estimated)",
+        "orig":  "5.96",
+        "unit":  "$0.99/lb",
+        "size":  "About 4.0 lb / package",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17668522-honeydew-melon-1-lb"
+    },
+    {
+        "id":  "pineapple",
+        "name":  "Fareway Sliced Pineapple",
+        "price":  "1.68",
+        "per":  "",
+        "orig":  "2.12",
+        "unit":  "",
+        "size":  "20 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23958875-fareway-pineapple-sliced-20-oz"
+    },
+    {
+        "id":  "raspberries",
+        "name":  "Raspberries",
+        "price":  "2.88",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "6 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/58863-raspberries-6-oz"
+    },
+    {
+        "id":  "blackberries",
+        "name":  "Blackberries",
+        "price":  "2.88",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "6 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17327025-blackberries-6-oz"
+    },
+    {
+        "id":  "cherries",
+        "name":  "Fareway Unsweetened \u0026 Pitted Dark Sweet Cherries",
+        "price":  "4.49",
+        "per":  "",
+        "orig":  "5.49",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25841971-fareway-cherries-dark-sweet-unsweetened-pitted-12-oz"
+    },
+    {
+        "id":  "grapefruit",
+        "name":  "Grapefruit",
+        "price":  "1.94",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$1.69/lb",
+        "size":  "About 1.15 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2641099-grapefruit-1-lb"
+    },
+    {
+        "id":  "clementines",
+        "name":  "Mandarin Clementine",
+        "price":  "5.77",
+        "per":  "",
+        "orig":  "5.99",
+        "unit":  "",
+        "size":  "3 lb",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16527122-mandarin-clementine-3-lbs"
+    },
+    {
+        "id":  "cauliflower",
+        "name":  "Fareway Cauliflower",
+        "price":  "1.98",
+        "per":  "",
+        "orig":  "2.69",
+        "unit":  "",
+        "size":  "14 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20562021-fareway-grade-a-fancy-cauliflower-14-oz"
+    },
+    {
+        "id":  "asparagus",
+        "name":  "Tillen Farms Asparagus, Classic, Mild, Pickled",
+        "price":  "10.49",
+        "per":  "",
+        "orig":  "10.99",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/80779-tillen-farms-asparagus-classic-mild-pickled-12-oz"
+    },
+    {
+        "id":  "brussels-sprouts",
+        "name":  "Fareway Brussels Sprouts",
+        "price":  "1.98",
+        "per":  "",
+        "orig":  "2.69",
+        "unit":  "",
+        "size":  "14 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388147-brussels-sprouts"
+    },
+    {
+        "id":  "cabbage",
+        "name":  "Green Cabbage",
+        "price":  "1.92",
+        "per":  "",
+        "orig":  "2.48",
+        "unit":  "$0.77/lb",
+        "size":  "About 2.5 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/304904-green-cabbage-1-lb"
+    },
+    {
+        "id":  "kale",
+        "name":  "Organic Girl Baby Kale",
+        "price":  "3.48",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "4 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16865351-organic-baby-kale-salad-4-oz"
+    },
+    {
+        "id":  "green-onions",
+        "name":  "Green Onions (Scallions)",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "1.50",
+        "unit":  "",
+        "size":  "",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16614371-green-onions-scallions-each"
+    },
+    {
+        "id":  "jalapenos",
+        "name":  "Jalapeno Pepper",
+        "price":  "0.30",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$2.99/lb",
+        "size":  "About 0.1 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/232739-jalapeno-pepper-1-lb"
+    },
+    {
+        "id":  "cilantro",
+        "name":  "Cilantro",
+        "price":  "1.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3177720-cilantro-each"
+    },
+    {
+        "id":  "fresh-ginger",
+        "name":  "Ginger Root",
+        "price":  "1.00",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$3.99/lb",
+        "size":  "About 0.25 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17545172-ginger-root-1-lb"
+    },
+    {
+        "id":  "radishes",
+        "name":  "Radishes Fresh, Bag",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/43373-for-you-radishes-fresh-bag-16-oz"
+    },
+    {
+        "id":  "red-potatoes",
+        "name":  "Summertime Farms Baby Red Potatoes",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "3 lb",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386881-baby-red-potatoes"
+    },
+    {
+        "id":  "fresh-green-beans",
+        "name":  "Pero Family Farms Snipped Green Beans",
+        "price":  "5.88",
+        "per":  "",
+        "orig":  "6.99",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1449395-pero-family-farms-snipped-green-beans-32-0-oz"
+    },
+    {
+        "id":  "ribeye-steak",
+        "name":  "USDA Choice Boneless Ribeye Steak",
+        "price":  "14.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386676-usda-choice-boneless-ribeye-steak"
+    },
+    {
+        "id":  "chuck-roast",
+        "name":  "USDA Choice Boneless Chuck Roast",
+        "price":  "26.64",
+        "per":  "package (estimated)",
+        "orig":  "26.97",
+        "unit":  "$8.88/lb",
+        "size":  "About 3.0 lb / package",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386797-usda-choice-boneless-chuck-roast-1-each"
+    },
+    {
+        "id":  "pork-shoulder",
+        "name":  "Whole Bone-In Pork Butt",
+        "price":  "17.91",
+        "per":  "",
+        "orig":  "26.91",
+        "unit":  "$1.99/lb",
+        "size":  "About 9.0 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388665-whole-boston-butt-1-each"
+    },
+    {
+        "id":  "baby-back-ribs",
+        "name":  "Baby Back Pork Ribs",
+        "price":  "14.97",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$4.99/lb",
+        "size":  "About 3.0 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387478-baby-back-pork-ribs"
+    },
+    {
+        "id":  "ground-pork",
+        "name":  "80% Lean 20% Fat Ground Pork",
+        "price":  "19.95",
+        "per":  "package (estimated)",
+        "orig":  "",
+        "unit":  "$3.99/lb",
+        "size":  "About 5.0 lb / package",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/109597993-80-lean-20-fat-ground-pork-5-lb"
+    },
+    {
+        "id":  "italian-sausage",
+        "name":  "Johnsonville Italian Sausage, Mild",
+        "price":  "5.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "19 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3396397-johnsonville-sausage-italian-sausage-mild-5-ct"
+    },
+    {
+        "id":  "bratwurst",
+        "name":  "Johnsonville Cheddar Brats",
+        "price":  "5.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "19 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/90856-johnsonville-cheddar-brats-5-count-82-grm"
+    },
+    {
+        "id":  "kielbasa",
+        "name":  "Johnsonville Polish Kielbasa Smoked Sausage",
+        "price":  "4.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "14 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/170669-johnsonville-sausage-polish-kielbasa-smoked-sausage-66-grm"
+    },
+    {
+        "id":  "chicken-wings",
+        "name":  "Perdue Roasted Crispy Chicken Wings",
+        "price":  "9.99",
+        "per":  "",
+        "orig":  "12.99",
+        "unit":  "",
+        "size":  "22 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/34114045-perdue-air-fryer-ready-roasted-crispy-chicken-wings"
+    },
+    {
+        "id":  "rotisserie-chicken",
+        "name":  "Roasted Whole Chicken",
+        "price":  "8.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386572-rotisserie-whole-chicken-1-each"
+    },
+    {
+        "id":  "tilapia",
+        "name":  "Supreme Choice Tilapia, Boneless, Fillets",
+        "price":  "7.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/207316-supreme-choice-tilapia-fillets-16-oz"
+    },
+    {
+        "id":  "cod",
+        "name":  "Supreme Choice Cod, Boneless, Fillets",
+        "price":  "11.49",
+        "per":  "",
+        "orig":  "11.99",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/207326-supreme-choice-cod-fillets-16-oz"
+    },
+    {
+        "id":  "canned-chicken",
+        "name":  "Fareway Premium Chunk Chicken Breast in Water",
+        "price":  "3.34",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "12.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22158769-fareway-chicken-breast-125-oz"
+    },
+    {
+        "id":  "canned-salmon",
+        "name":  "Demings Salmon, Pink, Wild Caught Alaskan",
+        "price":  "4.99",
+        "per":  "",
+        "orig":  "6.99",
+        "unit":  "",
+        "size":  "14.75 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/514611-deming-s-pink-wild-caught-alaskan-salmon-14-75-oz"
+    },
+    {
+        "id":  "pepperoni",
+        "name":  "HORMEL Pepperoni Original Pepperoni Value Pack",
+        "price":  "12.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "21 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17748469-hormel-original-pepperoni-1-31-lb"
+    },
+    {
+        "id":  "turkey-lunchmeat",
+        "name":  "Oscar Mayer Deli Fresh Oven Roasted Turkey Breast Sliced Sandwich Lunch Meat Family Size",
+        "price":  "6.99",
+        "per":  "",
+        "orig":  "7.99",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/42744-oscar-mayer-deli-fresh-shaved-oven-roasted-turkey-breast-1-lb"
+    },
+    {
+        "id":  "turkey-bacon",
+        "name":  "Oscar Mayer Gluten Free Fully Cooked Turkey Bacon with 55% Less Fat \u0026 44% Less Sodium",
+        "price":  "4.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/75042-oscar-mayer-turkey-bacon-12-oz"
+    },
+    {
+        "id":  "heavy-cream",
+        "name":  "Kemps Heavy Whipping Cream",
+        "price":  "7.98",
+        "per":  "",
+        "orig":  "10.29",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17455801-kemps-pasteurized-whip-cream-32-oz"
+    },
+    {
+        "id":  "half-and-half",
+        "name":  "Kemps Fresh Half \u0026 Half",
+        "price":  "3.35",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "32 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2573100-kemps-select-half-half-1-0-qt"
+    },
+    {
+        "id":  "whipped-cream",
+        "name":  "Fareway Light Whipped Topping",
+        "price":  "1.77",
+        "per":  "",
+        "orig":  "2.19",
+        "unit":  "",
+        "size":  "8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24226312-fareway-whipped-topping-light-8-oz"
+    },
+    {
+        "id":  "almond-milk",
+        "name":  "Almond Breeze Unsweetened Vanilla Almondmilk",
+        "price":  "4.88",
+        "per":  "",
+        "orig":  "5.49",
+        "unit":  "",
+        "size":  "96 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1377250-almond-breeze-unsweetened-vanilla-almondmilk-96-fl-oz"
+    },
+    {
+        "id":  "oat-milk",
+        "name":  "Planet Oat Oatmilk",
+        "price":  "3.48",
+        "per":  "",
+        "orig":  "4.49",
+        "unit":  "",
+        "size":  "52 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/35622673-planet-oat-oatmilk-barista-lovers-52-fl-oz"
+    },
+    {
+        "id":  "string-cheese",
+        "name":  "Fareway Low-Moisture Part-Skim Sticks Mozzarella String Cheese",
+        "price":  "3.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/103051939-fareway-string-cheese-10-oz"
+    },
+    {
+        "id":  "parmesan",
+        "name":  "Fareway Grated Parmesan Cheese",
+        "price":  "5.88",
+        "per":  "",
+        "orig":  "7.49",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25577817-fareway-grated-cheese-parmesan-16-oz"
+    },
+    {
+        "id":  "feta",
+        "name":  "Crystal Farms Cheese, Feta, Crumbled",
+        "price":  "2.98",
+        "per":  "",
+        "orig":  "3.48",
+        "unit":  "",
+        "size":  "4 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1658850-crystal-farms-feta-cheese-113-0-g"
+    },
+    {
+        "id":  "egg-whites",
+        "name":  "Bob Evans Farms 100% Liquid Egg Whites",
+        "price":  "6.88",
+        "per":  "",
+        "orig":  "7.99",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20846854-bob-evans-farms-100-liquid-egg-whites-32-0-oz"
+    },
+    {
+        "id":  "buttermilk",
+        "name":  "Kemps Buttermilk",
+        "price":  "1.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2798593-kemps-buttermilk-16-fl-oz"
+    },
+    {
+        "id":  "coffee-creamer",
+        "name":  "Coffee mate French Vanilla Flavored Coffee Creamer",
+        "price":  "6.88",
+        "per":  "",
+        "orig":  "7.99",
+        "unit":  "",
+        "size":  "64 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16408135-coffee-mate-french-vanilla-liquid-coffee-creamer-64-fl-oz"
+    },
+    {
+        "id":  "chocolate-milk",
+        "name":  "Hiland Dairy Chocolate Milk",
+        "price":  "1.89",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17399855-hiland-dairy-milk-chocolate-vitamin-d-16-oz"
+    },
+    {
+        "id":  "hot-dog-buns",
+        "name":  "Rotella\u0027s Italian Bakery Hot Dog Buns",
+        "price":  "2.50",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18529104-rotella-s-hot-dog-buns-12-4-oz"
+    },
+    {
+        "id":  "dinner-rolls",
+        "name":  "King\u0027s Hawaiian Original Hawaiian Sweet Rolls",
+        "price":  "4.99",
+        "per":  "",
+        "orig":  "5.49",
+        "unit":  "",
+        "size":  "12 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/68872-king-s-hawaiian-original-hawaiian-sweet-rolls-12pk-12-ct"
+    },
+    {
+        "id":  "english-muffins",
+        "name":  "Bays 6 ct, Original, English Muffins, Kosher, 12 oz",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "4.49",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/121682-bays-original-english-muffins-12-oz"
+    },
+    {
+        "id":  "croissants",
+        "name":  "Fareway All Butter Croissants",
+        "price":  "5.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "8.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386686-fareway-all-butter-croissants-3-ct"
+    },
+    {
+        "id":  "muffins",
+        "name":  "Otis Spunkmeyer Muffin, Wild Blueberry",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "4 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2732988-otis-spunkmeyer-muffin-wild-blueberry-4-oz"
+    },
+    {
+        "id":  "donuts",
+        "name":  "Clyde\u0027s Donuts, Glazed Cherry Lil\u0027 Smiles",
+        "price":  "2.88",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2627444-clyde-s-donuts-glazed-cherry-lil-smiles-donuts-12-ct"
+    },
+    {
+        "id":  "french-bread",
+        "name":  "Fareway Sliced French Bread",
+        "price":  "2.49",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22243430-fareway-french-bread-sliced-16-oz"
+    },
+    {
+        "id":  "pita-bread",
+        "name":  "Kronos Multigrain Pita Bread",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "5 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/91051-kronos-pita-bread-multigrain-5-ea"
+    },
+    {
+        "id":  "pancake-mix",
+        "name":  "Fareway Complete Buttermilk Pancake \u0026 Waffle Mix",
+        "price":  "2.69",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20601338-fareway-pancake-waffle-mix-buttermilk-complete-32-oz"
+    },
+    {
+        "id":  "maple-syrup",
+        "name":  "Fareway Pancake Syrup",
+        "price":  "2.98",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "24 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068566-fareway-pancake-syrup-24-oz"
+    },
+    {
+        "id":  "baking-powder",
+        "name":  "Clabber Girl Hearth Club Baking Powder",
+        "price":  "2.49",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "8.1 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16951403-hearth-club-baking-powder-8-1-oz"
+    },
+    {
+        "id":  "baking-soda",
+        "name":  "Fareway Baking Soda",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "1.19",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24227952-fareway-baking-soda-16-oz"
+    },
+    {
+        "id":  "yeast",
+        "name":  "Red Star Active Dry Yeast",
+        "price":  "5.99",
+        "per":  "",
+        "orig":  "7.19",
+        "unit":  "",
+        "size":  "4 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/53782-red-star-active-dry-yeast-4-0-oz"
+    },
+    {
+        "id":  "vanilla-extract",
+        "name":  "McCormick All Natural Pure Vanilla Extract",
+        "price":  "12.99",
+        "per":  "",
+        "orig":  "16.99",
+        "unit":  "",
+        "size":  "4 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/79518-mccormick-all-natural-pure-vanilla-extract-4-fl-oz"
+    },
+    {
+        "id":  "chocolate-chips",
+        "name":  "Fareway Family Size Semi-Sweet Real Chocolate Chips",
+        "price":  "6.68",
+        "per":  "",
+        "orig":  "7.99",
+        "unit":  "",
+        "size":  "24 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25799385-fareway-chocolate-chips-real-semisweet-family-size-24-oz"
+    },
+    {
+        "id":  "cocoa-powder",
+        "name":  "Toll House Baking Cocoa",
+        "price":  "5.48",
+        "per":  "",
+        "orig":  "6.99",
+        "unit":  "",
+        "size":  "8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16409339-toll-house-baking-cocoa-8-onz"
+    },
+    {
+        "id":  "powdered-sugar",
+        "name":  "C\u0026H Premium Cane Powdered Sugar",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24000-c-h-premium-cane-powdered-sugar-16-oz"
+    },
+    {
+        "id":  "cake-mix",
+        "name":  "Pillsbury Moist Supreme Yellow Cake Mix, 15.25 oz Box",
+        "price":  "1.49",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "15.25 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21855744-pillsbury-cake-mix-premium-yellow-15-25-oz"
+    },
+    {
+        "id":  "brownie-mix",
+        "name":  "Duncan Hines Family Size Chewy Fudge Brownie Mix",
+        "price":  "1.79",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "18.3 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39077-duncan-hines-chewy-fudge-brownie-mix-18-3-oz"
+    },
+    {
+        "id":  "frosting",
+        "name":  "Pillsbury Creamy Supreme Vanilla Frosting, 16 Oz Tub",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21855740-pillsbury-frosting-vanilla-16-oz"
+    },
+    {
+        "id":  "evaporated-milk",
+        "name":  "California Farms Evaporated Milk",
+        "price":  "1.68",
+        "per":  "",
+        "orig":  "1.99",
+        "unit":  "",
+        "size":  "12 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23984-santini-evaporated-milk-12-oz"
+    },
+    {
+        "id":  "condensed-milk",
+        "name":  "Fareway Sweetened Condensed Milk",
+        "price":  "2.69",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "14 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/64484535-fareway-sweetened-condensed-milk-14-oz"
+    },
+    {
+        "id":  "cooking-spray",
+        "name":  "Fareway Non-Stick Canola Oil Cooking Spray",
+        "price":  "3.49",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24455829-fareway-cooking-spray-canola-oil-nonstick-8-oz"
+    },
+    {
+        "id":  "coconut-oil",
+        "name":  "Fareway Organic Coconut Oil",
+        "price":  "7.99",
+        "per":  "",
+        "orig":  "8.99",
+        "unit":  "",
+        "size":  "15 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24189509-fareway-coconut-oil-organic-15-oz"
+    },
+    {
+        "id":  "apple-cider-vinegar",
+        "name":  "Fareway Apple Cider Vinegar",
+        "price":  "6.49",
+        "per":  "",
+        "orig":  "6.99",
+        "unit":  "",
+        "size":  "128 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/55441263-fareway-apple-cider-vinegar-128-fl-oz"
+    },
+    {
+        "id":  "worcestershire",
+        "name":  "Heinz Worcestershire Sauce",
+        "price":  "2.78",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "18 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16482899-heinz-worcestershire-sauce-18-fl-oz"
+    },
+    {
+        "id":  "bbq-sauce",
+        "name":  "Sweet Baby Ray\u0027s Honey Barbecue Sauce",
+        "price":  "3.48",
+        "per":  "",
+        "orig":  "3.97",
+        "unit":  "",
+        "size":  "28 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71519-sweet-baby-ray-s-barbecue-sauce-honey-28-oz"
+    },
+    {
+        "id":  "italian-dressing",
+        "name":  "Fareway Italian Dressing",
+        "price":  "2.48",
+        "per":  "",
+        "orig":  "2.88",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24070074-fareway-dressing-italian-16-oz"
+    },
+    {
+        "id":  "pickles",
+        "name":  "Fareway Zesty Pickle Spears",
+        "price":  "2.77",
+        "per":  "",
+        "orig":  "3.69",
+        "unit":  "",
+        "size":  "24 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25807192-fareway-pickle-spears-zesty-24-fl-oz"
+    },
+    {
+        "id":  "relish",
+        "name":  "Vlasic Sweet Relish",
+        "price":  "2.98",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "16 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2770882-vlasic-sweet-relish-16-oza"
+    },
+    {
+        "id":  "canned-pinto-beans",
+        "name":  "Fareway Pinto Beans",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "1.34",
+        "unit":  "",
+        "size":  "15.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068984-fareway-pinto-beans-155-oz"
+    },
+    {
+        "id":  "refried-beans",
+        "name":  "Fareway Fat Free Refried Beans",
+        "price":  "1.18",
+        "per":  "",
+        "orig":  "1.49",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20551178-fareway-refried-beans-fat-free-16-oz"
+    },
+    {
+        "id":  "baked-beans",
+        "name":  "Saucy Spoon Applewood Smoked Bacon Baked Beans",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "2.48",
+        "unit":  "",
+        "size":  "28 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/29529506-saucy-spoon-baked-beans-applewood-smoked-bacon-28-oz"
+    },
+    {
+        "id":  "canned-chili",
+        "name":  "Hormel Chili with Beans",
+        "price":  "2.64",
+        "per":  "",
+        "orig":  "3.19",
+        "unit":  "",
+        "size":  "15 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16409704-hormel-chili-with-beans-15-oz"
+    },
+    {
+        "id":  "canned-green-beans",
+        "name":  "Corner Store Green Beans, Cut",
+        "price":  "0.77",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "14.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20669968-corner-store-green-beans-cut-145-oz"
+    },
+    {
+        "id":  "canned-peas",
+        "name":  "Sweet Peas",
+        "price":  "0.78",
+        "per":  "",
+        "orig":  "1.12",
+        "unit":  "",
+        "size":  "15 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388013-peas"
+    },
+    {
+        "id":  "canned-mushrooms",
+        "name":  "Fareway Pieces \u0026 Stems Mushrooms",
+        "price":  "2.58",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "13.25 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20543846-fareway-mushrooms-pieces-stems-1325-oz"
+    },
+    {
+        "id":  "chicken-noodle-soup",
+        "name":  "Fareway Condensed Chicken Noodle Soup",
+        "price":  "0.98",
+        "per":  "",
+        "orig":  "1.48",
+        "unit":  "",
+        "size":  "10.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068081-fareway-soup-chicken-noodle-condensed-105-oz"
+    },
+    {
+        "id":  "tomato-soup",
+        "name":  "Fareway Condensed Tomato Soup",
+        "price":  "0.98",
+        "per":  "",
+        "orig":  "1.48",
+        "unit":  "",
+        "size":  "10.75 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24072624-fareway-soup-tomato-condensed-1075-oz"
+    },
+    {
+        "id":  "cream-of-mushroom-soup",
+        "name":  "Fareway Condensed Cream of Mushroom Soup",
+        "price":  "0.98",
+        "per":  "",
+        "orig":  "1.48",
+        "unit":  "",
+        "size":  "10.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068308-fareway-soup-cream-of-mushroom-condensed-105-oz"
+    },
+    {
+        "id":  "cream-of-chicken-soup",
+        "name":  "Fareway Condensed Cream of Chicken Soup",
+        "price":  "0.98",
+        "per":  "",
+        "orig":  "1.48",
+        "unit":  "",
+        "size":  "10.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24072206-fareway-soup-cream-of-chicken-condensed-105-oz"
+    },
+    {
+        "id":  "instant-mashed-potatoes",
+        "name":  "Idahoan Baby Reds w/Roasted Garlic \u0026 Parm Mashed Potatoes",
+        "price":  "1.48",
+        "per":  "",
+        "orig":  "1.99",
+        "unit":  "",
+        "size":  "4.1 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/36902-idahoan-baby-reds-w-roasted-garlic-parm-mashed-potatoes-4-1-oz"
+    },
+    {
+        "id":  "stuffing-mix",
+        "name":  "Pepperidge Farm Herb Seasoned Classic Stuffing",
+        "price":  "3.79",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20128745-pepperidge-farm-herb-seasoned-classic-stuffing-12-oz"
+    },
+    {
+        "id":  "egg-noodles",
+        "name":  "Fareway Wide Egg Noodles",
+        "price":  "2.79",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25446742-fareway-enriched-egg-noodle-product-wide-12-oz"
+    },
+    {
+        "id":  "lasagna-noodles",
+        "name":  "Fareway Oven Ready Lasagna",
+        "price":  "3.19",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20556041-fareway-oven-ready-enriched-macaroni-product-lasagna-12-oz"
+    },
+    {
+        "id":  "alfredo-sauce",
+        "name":  "Ragu Classic Alfredo Sauce, 16 oz, White Pasta Sauce",
+        "price":  "2.47",
+        "per":  "",
+        "orig":  "3.19",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39340-ragu-classic-alfredo-sauce-16-oz"
+    },
+    {
+        "id":  "pizza-sauce",
+        "name":  "Fareway Pizza Sauce",
+        "price":  "1.34",
+        "per":  "",
+        "orig":  "1.49",
+        "unit":  "",
+        "size":  "15 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068209-fareway-pizza-sauce-15-oz"
+    },
+    {
+        "id":  "queso",
+        "name":  "Tostitos Medium Con Queso Salsa Dip",
+        "price":  "4.69",
+        "per":  "",
+        "orig":  "6.29",
+        "unit":  "",
+        "size":  "23 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/40413-tostitos-salsa-con-queso-medium-23-oz"
+    },
+    {
+        "id":  "hummus",
+        "name":  "Sabra Hummus Garlic",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/95781358-sabra-garlic-hummus-8-oz"
+    },
+    {
+        "id":  "marshmallows",
+        "name":  "Fireside Marshmallows",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "2.69",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389222-fireside-marshmallows-16-oz"
+    },
+    {
+        "id":  "graham-crackers",
+        "name":  "Fareway Honey Graham Crackers",
+        "price":  "3.48",
+        "per":  "",
+        "orig":  "3.98",
+        "unit":  "",
+        "size":  "14.4 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26834389-fareway-honey-graham-crackers-14-4-oz"
+    },
+    {
+        "id":  "canned-peaches",
+        "name":  "Del Monte Yellow Cling Sliced Peaches in Heavy Syrup, Canned Fruit",
+        "price":  "2.88",
+        "per":  "",
+        "orig":  "3.48",
+        "unit":  "",
+        "size":  "15.25 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/34719-del-monte-peaches-sliced-15-25-oz"
+    },
+    {
+        "id":  "canned-pineapple",
+        "name":  "Dole Pineapple Chunks",
+        "price":  "2.67",
+        "per":  "",
+        "orig":  "2.88",
+        "unit":  "",
+        "size":  "20 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69917-dole-pineapple-chunks-20-oz"
+    },
+    {
+        "id":  "applesauce",
+        "name":  "Fareway Original Applesauce",
+        "price":  "3.88",
+        "per":  "",
+        "orig":  "4.48",
+        "unit":  "",
+        "size":  "48 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24300825-fareway-applesauce-original-48-oz"
+    },
+    {
+        "id":  "peanuts",
+        "name":  "Fareway Dry Roasted Salted Peanuts",
+        "price":  "6.49",
+        "per":  "",
+        "orig":  "8.99",
+        "unit":  "",
+        "size":  "35 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22183576-fareway-peanuts-salted-dry-roasted-35-oz"
+    },
+    {
+        "id":  "almonds",
+        "name":  "Fareway Whole Natural Almonds",
+        "price":  "8.98",
+        "per":  "",
+        "orig":  "9.99",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23422857-fareway-almonds-natural-whole-16-oz"
+    },
+    {
+        "id":  "raisins",
+        "name":  "Sun-Maid California Sun-Dried Raisins",
+        "price":  "4.99",
+        "per":  "",
+        "orig":  "5.49",
+        "unit":  "",
+        "size":  "20 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/102971-sun-maid-raisins-natural-california-20-oz"
+    },
+    {
+        "id":  "mixed-nuts",
+        "name":  "Fareway Roasted and Salted Select Mixed Nuts",
+        "price":  "12.99",
+        "per":  "",
+        "orig":  "15.99",
+        "unit":  "",
+        "size":  "28 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22152068-fareway-select-mixed-nuts-roasted-and-salted-28-oz"
+    },
+    {
+        "id":  "crackers",
+        "name":  "Fareway Saltines Crackers",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "2.98",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20673277-fareway-crackers-saltines-16-oz"
+    },
+    {
+        "id":  "cheese-crackers",
+        "name":  "Stauffers Whales Baked Cheddar Cheese Crackers",
+        "price":  "1.78",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "7 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/220757-stauffer-s-baked-snack-crackers-whales-7-00-oz"
+    },
+    {
+        "id":  "pretzels",
+        "name":  "ROLD GOLD Pretzels, Tiny Twists, Original Flavored",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/6605-rold-gold-tiny-twists-original-pretzels-1-lb"
+    },
+    {
+        "id":  "microwave-popcorn",
+        "name":  "Orville Redenbacher Movie Theater Butter Popcorn, Microwave Popcorn",
+        "price":  "5.49",
+        "per":  "",
+        "orig":  "5.99",
+        "unit":  "",
+        "size":  "19.74 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2714689-orville-redenbacher-s-movie-theater-butter-classic-bag-19-74-oz"
+    },
+    {
+        "id":  "cookies",
+        "name":  "Fareway Chocolate Chip Cookies",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22152890-fareway-cookies-chocolate-chip-12-oz"
+    },
+    {
+        "id":  "sandwich-cookies",
+        "name":  "Fareway Lemon Cremes Sandwich Cookies",
+        "price":  "2.98",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "25 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22160452-fareway-sandwich-cookies-lemon-cremes-25-oz"
+    },
+    {
+        "id":  "granola-bars",
+        "name":  "Sunbelt Bakery Chewy Peanut Butter Chocolate Chip Granola Bars",
+        "price":  "3.00",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "10.21 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2647647-sunbelt-bakery-chewy-granola-bars-peanut-butter-chocolate-chip-10-91-oz"
+    },
+    {
+        "id":  "protein-bars",
+        "name":  "Nature Valley Chewy Protein Peanut Butter Dark Chocolate Granola Bars",
+        "price":  "9.98",
+        "per":  "",
+        "orig":  "11.99",
+        "unit":  "",
+        "size":  "14.2 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/89887-nature-valley-chewy-granola-bars-protein-peanut-butter-dark-chocolate-10-bars-14-200-oz"
+    },
+    {
+        "id":  "fruit-snacks",
+        "name":  "Mottâ€™s Gluten Free Assorted Fruit Flavored Snacks",
+        "price":  "8.77",
+        "per":  "",
+        "orig":  "10.99",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1418472-mott-s-medleys-assorted-fruit-snacks-gluten-free-32-000-oz"
+    },
+    {
+        "id":  "toaster-pastries",
+        "name":  "Toast\u0027em Pop-ups Toaster Pastries, Cherry",
+        "price":  "1.50",
+        "per":  "",
+        "orig":  "1.99",
+        "unit":  "",
+        "size":  "6 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2626014-toast-em-pop-ups-real-fruit-pastries-frosted-cherry-11-oz"
+    },
+    {
+        "id":  "granola",
+        "name":  "Fareway Classic Granola",
+        "price":  "2.98",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "14 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/66830121-fareway-classic-granola-sweetened-cereal-clusters-with-whole-grain-rolled-oats-14-oz"
+    },
+    {
+        "id":  "rice-cakes",
+        "name":  "Quaker Rice Cakes, Chocolate",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "4.49",
+        "unit":  "",
+        "size":  "7.23 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/76592-quaker-rice-cakes-chocolate-crunch-7-23-oz"
+    },
+    {
+        "id":  "beef-jerky",
+        "name":  "Old Trapper Teriyaki Jerky",
+        "price":  "14.99",
+        "per":  "",
+        "orig":  "15.99",
+        "unit":  "",
+        "size":  "10 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3302949-old-trapper-beef-jerky-teriyaki-naturally-smoked-10-oz"
+    },
+    {
+        "id":  "fruit-cups",
+        "name":  "Dole Mandarin Oranges, in 100% Fruit Juice",
+        "price":  "3.48",
+        "per":  "",
+        "orig":  "3.68",
+        "unit":  "",
+        "size":  "4 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/35309-dole-mandarin-oranges-in-100-fruit-juice-4-oz"
+    },
+    {
+        "id":  "pudding-cups",
+        "name":  "Snack Pack Chocolate Vanilla Flavored Pudding",
+        "price":  "1.44",
+        "per":  "",
+        "orig":  "1.99",
+        "unit":  "",
+        "size":  "3.25 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71979-snack-pack-pudding-triples-chocolate-vanilla-3-25-oz"
+    },
+    {
+        "id":  "gelatin",
+        "name":  "Jell-O Orange Refrigerated Gelatin",
+        "price":  "2.47",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/43202-jell-o-original-orange-ready-to-eat-jello-cups-gelatin-snack-3-375-oz"
+    },
+    {
+        "id":  "apple-juice",
+        "name":  "Fareway Apple 100% Juice",
+        "price":  "2.98",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "64 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24227901-fareway-100-juice-apple-64-oz"
+    },
+    {
+        "id":  "grape-juice",
+        "name":  "Old Orchard 100% Juice, Grape",
+        "price":  "3.98",
+        "per":  "",
+        "orig":  "4.49",
+        "unit":  "",
+        "size":  "64 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69573-old-orchard-grape-100-juice-64-oz"
+    },
+    {
+        "id":  "cranberry-juice",
+        "name":  "Fareway Cranberry Juice Cocktail",
+        "price":  "2.98",
+        "per":  "",
+        "orig":  "3.29",
+        "unit":  "",
+        "size":  "64 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24225600-fareway-juice-cocktail-cranberry-64-oz"
+    },
+    {
+        "id":  "lemonade",
+        "name":  "Milo\u0027s Lemonade",
+        "price":  "3.98",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "128 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16469141-milo-100-natural-lemonade-128-0-fl-oz"
+    },
+    {
+        "id":  "fruit-punch",
+        "name":  "Hawaiian Punch Multi-serve Lemon Berry Squeeze Juice Drink",
+        "price":  "3.48",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "512 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/38779-hawaiian-punch-lemon-berry-squeeze-juice-drink-1-gal"
+    },
+    {
+        "id":  "sports-drinks",
+        "name":  "Gatorade Frost, Glacier Cherry - Pack",
+        "price":  "8.48",
+        "per":  "",
+        "orig":  "8.99",
+        "unit":  "",
+        "size":  "",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/34852-gatorade-glacier-cherry-flavored-thirst-quencher-sports-drink-20-fl-oz"
+    },
+    {
+        "id":  "energy-drinks",
+        "name":  "GHOST Zero Sugar Energy Drink, Welch\u0027s Grape",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/54935042-ghost-canned-welch-s-grape-pre-workout-energy-powder-16-oz"
+    },
+    {
+        "id":  "sparkling-water",
+        "name":  "Clear Frost Sparkling Water, Black Cherry",
+        "price":  "1.00",
+        "per":  "",
+        "orig":  "1.49",
+        "unit":  "",
+        "size":  "33.8 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17358183-clear-frost-sparkling-water-black-cherry-33-8-fl-oz"
+    },
+    {
+        "id":  "iced-tea",
+        "name":  "Milo\u0027s Zero Calorie Sweet Iced Tea",
+        "price":  "3.98",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "128 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3153977-milo-zero-calorie-sweet-tea-128-0-fl-oz"
+    },
+    {
+        "id":  "tea-bags",
+        "name":  "Lipton Yellow Label Black Tea",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.69",
+        "unit":  "",
+        "size":  "50 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69166387-lipton-tea-bags-cup-size"
+    },
+    {
+        "id":  "hot-cocoa",
+        "name":  "Nestle Hot Cocoa Rich Milk Chocolate Flavored Mix Powder Canister",
+        "price":  "8.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "27.7 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/88197-nestle-hot-cocoa-rich-milk-chocolate-hot-cocoa-mix-27-7-oz"
+    },
+    {
+        "id":  "coffee-pods",
+        "name":  "Caribou Coffee Caribou Blend Medium Roast Coffee K-Cup Pods",
+        "price":  "9.99",
+        "per":  "",
+        "orig":  "10.99",
+        "unit":  "",
+        "size":  "10 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/31545498-caribou-coffee-caribou-blend-medium-roast-coffee-keurig-k-cup-pod-10-pack"
+    },
+    {
+        "id":  "instant-coffee",
+        "name":  "Folgers Classic Roast Instant Coffee",
+        "price":  "9.99",
+        "per":  "",
+        "orig":  "10.99",
+        "unit":  "",
+        "size":  "8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3347251-folgers-coffee-8-oz"
+    },
+    {
+        "id":  "frozen-waffles",
+        "name":  "Fareway 10 Pack Blueberry Waffles",
+        "price":  "2.77",
+        "per":  "",
+        "orig":  "2.98",
+        "unit":  "",
+        "size":  "10 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24281070-fareway-waffles-blueberry-10-pack-10-ea"
+    },
+    {
+        "id":  "frozen-broccoli",
+        "name":  "Fareway Broccoli Cuts",
+        "price":  "1.98",
+        "per":  "",
+        "orig":  "2.69",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20585402-fareway-broccoli-cuts-16-oz"
+    },
+    {
+        "id":  "frozen-corn",
+        "name":  "Fareway Steamables Cut Corn",
+        "price":  "1.44",
+        "per":  "",
+        "orig":  "2.19",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24479815-fareway-corn-cut-steamables-12-oz"
+    },
+    {
+        "id":  "frozen-peas",
+        "name":  "Fareway Green Peas",
+        "price":  "2.94",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20543579-fareway-green-beans-32-oz"
+    },
+    {
+        "id":  "breakfast-sandwiches",
+        "name":  "Jimmy Dean Croissant Breakfast Sandwiches with Sausage, Egg, and Cheese, Frozen, 4 Count",
+        "price":  "6.99",
+        "per":  "",
+        "orig":  "7.29",
+        "unit":  "",
+        "size":  "18 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/42274-jimmy-dean-sausage-egg-cheese-croissant-breakfast-sandwiches-4-5-oz"
+    },
+    {
+        "id":  "frozen-burritos",
+        "name":  "Tina\u0027s Big Burrito Beef \u0026 Bean Green Chili, Quick Meal",
+        "price":  "1.67",
+        "per":  "",
+        "orig":  "1.99",
+        "unit":  "",
+        "size":  "9 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2133850-tina-s-burrito-beef-bean-green-chili-big-10-oz"
+    },
+    {
+        "id":  "frozen-meatballs",
+        "name":  "Armour Italian Meatballs",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "14 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72225-armour-italian-style-meatballs-14-oz"
+    },
+    {
+        "id":  "frozen-lasagna",
+        "name":  "Stouffer\u0027s Classic Lasagna With Meat \u0026 Sauce Party Size Frozen Dinners",
+        "price":  "16.48",
+        "per":  "",
+        "orig":  "17.99",
+        "unit":  "",
+        "size":  "90 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/36100-stouffer-s-party-size-lasagna-with-meat-sauce-frozen-meal-90-oz"
+    },
+    {
+        "id":  "hash-browns",
+        "name":  "Fareway Southern Style Hash Browns",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "4.98",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24454427-fareway-hash-browns-diced-southern-style-32-oz"
+    },
+    {
+        "id":  "tater-tots",
+        "name":  "Ore-Ida Crispy Tater Tots",
+        "price":  "4.97",
+        "per":  "",
+        "orig":  "5.98",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2609243-ore-ida-golden-tater-tots-seasoned-shredded-frozen-potatoes-32-oz"
+    },
+    {
+        "id":  "corn-dogs",
+        "name":  "State Fair Fully Cooked Classic Corn Dogs, Frozen, 6 Count",
+        "price":  "4.77",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "6 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/73335-state-fair-classic-corn-dogs-frozen-16-onz"
+    },
+    {
+        "id":  "fish-sticks",
+        "name":  "Van de Kamp\u0027s Crunchy Fish Sticks",
+        "price":  "5.98",
+        "per":  "",
+        "orig":  "7.99",
+        "unit":  "",
+        "size":  "24.6 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3284135-van-de-kamp-s-crunchy-fish-sticks-24-6-oz"
+    },
+    {
+        "id":  "garlic-bread",
+        "name":  "Fareway Garlic Bread",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "4.49",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24303544-fareway-garlic-bread-16-oz"
+    },
+    {
+        "id":  "popsicles",
+        "name":  "Popsicle Ice Pops Orange Cherry Grape",
+        "price":  "5.48",
+        "per":  "",
+        "orig":  "5.98",
+        "unit":  "",
+        "size":  "29.7 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20677434-popsicle-ice-pops-orange-cherry-grape-29-7-oz"
+    },
+    {
+        "id":  "dryer-sheets",
+        "name":  "Bright Essentials Dryer Sheets, Wrinkle Reducing, Unscented",
+        "price":  "3.94",
+        "per":  "",
+        "orig":  "5.94",
+        "unit":  "",
+        "size":  "120 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26952710-bright-essentials-dryer-sheets-wrinkle-reducing-unscented-120-each"
+    },
+    {
+        "id":  "fabric-softener",
+        "name":  "Downy Soft, 2 in 1 Soft and Fresh Liquid Fabric Softener, Cool Cotton",
+        "price":  "12.98",
+        "per":  "",
+        "orig":  "13.99",
+        "unit":  "",
+        "size":  "100 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/57594055-downy-2-in-1-soft-fresh-fabric-softener-100-fl-oz"
+    },
+    {
+        "id":  "laundry-pods",
+        "name":  "Tide PODS Laundry Detergent Soap Pacs, Original Scent",
+        "price":  "5.98",
+        "per":  "",
+        "orig":  "8.99",
+        "unit":  "",
+        "size":  "16 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2622922-tide-pods-liquid-laundry-detergent-pacs-original-16-0-ct"
+    },
+    {
+        "id":  "stain-remover",
+        "name":  "Shout Active Enzyme Laundry Stain Remover Spray Refill",
+        "price":  "6.99",
+        "per":  "",
+        "orig":  "7.99",
+        "unit":  "",
+        "size":  "60 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/70757-shout-stain-remover-60-fl-oz"
+    },
+    {
+        "id":  "sponges",
+        "name":  "Scotch-Brite Ocelo Handy Sponge, Assorted Colors",
+        "price":  "2.68",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "4 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/70627-scotch-brite-scotch-brite-ocelo-handy-sponge-assorted-colors-4-ct"
+    },
+    {
+        "id":  "paper-plates",
+        "name":  "Bright Essentials Heavy-Duty Designer 7 Inch Paper Plates",
+        "price":  "2.98",
+        "per":  "",
+        "orig":  "4.98",
+        "unit":  "",
+        "size":  "48 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387953-designer-7-paper-plates"
+    },
+    {
+        "id":  "paper-napkins",
+        "name":  "Bright Essentials 2-Ply Everyday Napkins",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "100 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387419-everyday-napkins"
+    },
+    {
+        "id":  "sandwich-bags",
+        "name":  "Bright Essentials Sandwich Bags, Double Zipper, Sandwich Size",
+        "price":  "2.48",
+        "per":  "",
+        "orig":  "2.98",
+        "unit":  "",
+        "size":  "50 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/34288284-bright-essentials-sandwich-bags-double-zipper-sandwich-size-50-each"
+    },
+    {
+        "id":  "plastic-wrap",
+        "name":  "Saran Premium Wrap Plastic Film",
+        "price":  "2.68",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72573-saran-premium-100-sq-ft"
+    },
+    {
+        "id":  "parchment-paper",
+        "name":  "Bright Essentials Parchment Paper",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "1 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41458026-bright-essentials-parchment-paper-1-each"
+    },
+    {
+        "id":  "toilet-bowl-cleaner",
+        "name":  "Clorox Toilet Bowl Cleaner, Clinging Bleach Gel, Ocean Mist",
+        "price":  "2.97",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "24 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/70609-clorox-toilet-bowl-cleaner-clinging-bleach-gel-ocean-mist-24-oz"
+    },
+    {
+        "id":  "glass-cleaner",
+        "name":  "Bright Essentials Glass Cleaner, Streak Free, Scent Free",
+        "price":  "2.94",
+        "per":  "",
+        "orig":  "3.98",
+        "unit":  "",
+        "size":  "32 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/27081908-bright-essentials-glass-cleaner-streak-free-scent-free-32-fl-oz"
+    },
+    {
+        "id":  "disinfecting-wipes",
+        "name":  "Clorox Disinfecting Wipes, Bleach Free Cleaning Wipes, Fresh Scent",
+        "price":  "2.97",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "35 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/34166-clorox-disinfecting-wipes-bleach-free-cleaning-wipes-fresh-scent-35-ct"
+    },
+    {
+        "id":  "disinfectant-spray",
+        "name":  "SC Johnson fantastik Disinfectant Multi-Purpose Cleaner Spray Bottle, Fresh Scent",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "32 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39674-fantastik-all-purpose-cleaner-trigger-bottle-32-fl-oz"
+    },
+    {
+        "id":  "air-freshener",
+        "name":  "Glade Sea Waves Air Freshener",
+        "price":  "1.48",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "7.3 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69847878-glade-air-freshener-sea-waves-73-oz"
+    },
+    {
+        "id":  "batteries",
+        "name":  "Fareway 8 Pack 1.5 V AA Alkaline Batteries",
+        "price":  "4.99",
+        "per":  "",
+        "orig":  "6.99",
+        "unit":  "",
+        "size":  "8 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24721072-fareway-batteries-alkaline-aa-15-v-8-pack-8-each"
+    },
+    {
+        "id":  "charcoal",
+        "name":  "Kingsford Instant Charcoal Briquettes, BBQ Charcoal for Grilling",
+        "price":  "7.94",
+        "per":  "",
+        "orig":  "10.99",
+        "unit":  "",
+        "size":  "8 lb",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19541770-kingsford-match-light-instant-charcoal-briquettes-bbq-charcoal-for-grilling-8-lb"
+    },
+    {
+        "id":  "toothpaste",
+        "name":  "Crest Cavity Protection Toothpaste, Regular Paste",
+        "price":  "2.47",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "5.7 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20139351-crest-cavity-protection-toothpaste-regular-paste-5-7-oz"
+    },
+    {
+        "id":  "toothbrushes",
+        "name":  "GoodSense Complete Clean With Tongue Cleaner Medium Toothbrush",
+        "price":  "2.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "2 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/27547587-goodsense-complete-clean-with-tongue-cleaner-medium-toothbrush-2-ct"
+    },
+    {
+        "id":  "mouthwash",
+        "name":  "GoodSense Mouth Rinse, Antiseptic, Spring Mint",
+        "price":  "3.97",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "33.8 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19256326-goodsense-mouth-rinse-antiseptic-spring-mint-33-8-oz"
+    },
+    {
+        "id":  "shampoo",
+        "name":  "Suave Ocean Breeze Refreshing Shampoo with Sea Algae Extract \u0026 Vitamin E, Cleanses, Softens \u0026 Shines For All Hair Types, 22.5 FL OZ",
+        "price":  "1.97",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "22.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/82401404-ocean-breeze-shampoo"
+    },
+    {
+        "id":  "conditioner",
+        "name":  "Suave Ocean Breeze Refreshing Conditioner with Sea Algae Extract \u0026 Vitamin E, Deep Hydration \u0026 Moisturization For All Hair Types, 22.5 FL OZ",
+        "price":  "1.97",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "22.5 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/91212795-suave-ess-refrsh-cond-ocean-br"
+    },
+    {
+        "id":  "body-wash",
+        "name":  "Suave Ocean Breeze Moisturizing Body Wash with Glycerin \u0026 Vitamin E, Hydrating Formula For Soft, Smooth Skin, Long Lasting Fragrance, 18 FL OZ",
+        "price":  "2.97",
+        "per":  "",
+        "orig":  "3.97",
+        "unit":  "",
+        "size":  "18 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/91726334-suave-essentials-body-wash-ocean-breeze-18-oz"
+    },
+    {
+        "id":  "bar-soap",
+        "name":  "Irish Spring Men\u0027s Bar Soap, Original Clean",
+        "price":  "3.69",
+        "per":  "",
+        "orig":  "4.49",
+        "unit":  "",
+        "size":  "",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41206-irish-spring-deodorant-soap-original-bath-size-11-25-oz"
+    },
+    {
+        "id":  "deodorant",
+        "name":  "Suave Invisible Solid Powder Antiperspirant Deodorant",
+        "price":  "3.49",
+        "per":  "",
+        "orig":  "4.49",
+        "unit":  "",
+        "size":  "2.6 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/63124305-suave-powder-inv-solid-deodorant"
+    },
+    {
+        "id":  "razors",
+        "name":  "Venus Tropical Women\u0027s Disposable Razor",
+        "price":  "6.97",
+        "per":  "",
+        "orig":  "7.99",
+        "unit":  "",
+        "size":  "3 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/94980-gillette-gillette-tropical-women-s-disposable-razor-3-ct"
+    },
+    {
+        "id":  "shaving-cream",
+        "name":  "Gillette Foamy Classic Shave Foam for Men Original Scent",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "11 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16410324-gillette-foamy-regular-shave-cream-11-oz"
+    },
+    {
+        "id":  "lotion",
+        "name":  "Jergens Ultra Healing Hand and Body Dry Skin Lotion",
+        "price":  "7.99",
+        "per":  "",
+        "orig":  "8.99",
+        "unit":  "",
+        "size":  "21 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16853220-jergens-ultra-healing-hand-and-body-lotion-dry-skin-moisturizer-with-vitamins-c-e-and-b5-26-5-fl-oz"
+    },
+    {
+        "id":  "hand-sanitizer",
+        "name":  "PURELL Advanced Hand Sanitizer, Refreshing Gel",
+        "price":  "3.97",
+        "per":  "",
+        "orig":  "4.97",
+        "unit":  "",
+        "size":  "8 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16696721-purell-advanced-hand-sanitizer-refreshing-gel-8-0-oz"
+    },
+    {
+        "id":  "facial-tissues",
+        "name":  "Puffs Facial Tissues Ultra Soft",
+        "price":  "6.97",
+        "per":  "",
+        "orig":  "8.99",
+        "unit":  "",
+        "size":  "288 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20312106-puffs-non-lotion-facial-tissue-288-0-ct"
+    },
+    {
+        "id":  "cotton-swabs",
+        "name":  "Q-tips Cotton Swabs",
+        "price":  "2.49",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "170 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39363-q-tips-cotton-swabs-170-ct"
+    },
+    {
+        "id":  "feminine-pads",
+        "name":  "Always Ultra Thin Pads with Wings",
+        "price":  "6.99",
+        "per":  "",
+        "orig":  "7.49",
+        "unit":  "",
+        "size":  "36 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/34669-always-ultra-thin-pads-size-1-regular-with-wings-36-ct"
+    },
+    {
+        "id":  "tampons",
+        "name":  "Playtex Plastic Tampons Unscented Super Absorbency",
+        "price":  "5.49",
+        "per":  "",
+        "orig":  "6.49",
+        "unit":  "",
+        "size":  "18 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/91935-playtex-tampons-plastic-super-absorbency-unscented-18-ea"
+    },
+    {
+        "id":  "diapers",
+        "name":  "Luvs Platinum Protection Baby Diapers, Size 5",
+        "price":  "7.47",
+        "per":  "",
+        "orig":  "7.99",
+        "unit":  "",
+        "size":  "24 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/49863420-luvs-plt-prtct-bby-dpr-sz5"
+    },
+    {
+        "id":  "baby-wipes",
+        "name":  "Huggies Simply Clean Unscented Baby Wipes",
+        "price":  "2.29",
+        "per":  "",
+        "orig":  "2.98",
+        "unit":  "",
+        "size":  "64 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18311864-huggies-simply-clean-unscented-baby-wipes-1-flip-top-pack-64-ea"
+    },
+    {
+        "id":  "baby-formula",
+        "name":  "Similac Advance Infant Formula with Iron Powder Canister",
+        "price":  "21.99",
+        "per":  "",
+        "orig":  "23.99",
+        "unit":  "",
+        "size":  "12.4 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/68773-similac-advance-infant-formula-with-iron-powder-canister-12-4-oz"
+    },
+    {
+        "id":  "baby-food",
+        "name":  "Plum Organics Pear, Purple Carrot \u0026 Blueberry Baby Food",
+        "price":  "1.49",
+        "per":  "",
+        "orig":  "2.29",
+        "unit":  "",
+        "size":  "4 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/43571-plum-organics-pear-purple-carrot-blueberry-baby-food-4-oz"
+    },
+    {
+        "id":  "dog-food",
+        "name":  "Rachael Ray Nutrish Rachael RayÂ NutrishÂ Adult Dry Dog Food RealÂ Chicken \u0026Â Veggies Recipe, 5 lb. Bag",
+        "price":  "10.99",
+        "per":  "",
+        "orig":  "13.99",
+        "unit":  "",
+        "size":  "80 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/97755105-rachael-ray-nutrish-chicken-veggies-recipe-dry-dog-food-5-lb"
+    },
+    {
+        "id":  "cat-food",
+        "name":  "9Lives Daily Essentials Dry Cat Food for Adult Cats with Chicken, Beef \u0026 Salmon Flavors, 12 lb. Bag",
+        "price":  "12.99",
+        "per":  "",
+        "orig":  "13.99",
+        "unit":  "",
+        "size":  "192 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/86814344-9lives-chicken-beef-salmon-cat-food"
+    },
+    {
+        "id":  "cat-litter",
+        "name":  "Purina Tidy Cats Instant Action Non Clumping, Low Tracking Cat Litter",
+        "price":  "3.98",
+        "per":  "",
+        "orig":  "4.48",
+        "unit":  "",
+        "size":  "10 lb",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/77387-purina-tidy-cats-non-clumping-cat-litter-instant-action-low-tracking-cat-litter-10-lb"
+    },
+    {
+        "id":  "dog-treats",
+        "name":  "Canine Carry Outs Dog Treat",
+        "price":  "1.25",
+        "per":  "",
+        "orig":  "1.69",
+        "unit":  "",
+        "size":  "4.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25022567-canine-carry-outs-beef-flavor-steak-bites-dog-snacks-4-5-oz"
+    },
+    {
+        "id":  "floor-cleaner",
+        "name":  "Swiffer WetJet Liquid Floor Cleaner, Lavender",
+        "price":  "6.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "42.2 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/94670-swiffer-wetjet-multi-purpose-and-hardwood-liquid-floor-cleaner-solution-refill-42-3-fl-oz"
+    },
+    {
+        "id":  "drain-cleaner",
+        "name":  "Drano Liquid Drain Cleaner",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "4.49",
+        "unit":  "",
+        "size":  "32 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/81898-drano-drain-cleaner-32-oz"
+    },
+    {
+        "id":  "oven-cleaner",
+        "name":  "EASY-OFF Fume Free Oven Cleaner Spray Lemon",
+        "price":  "5.48",
+        "per":  "",
+        "orig":  "5.99",
+        "unit":  "",
+        "size":  "14.5 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16754757-easy-off-oven-cleaner-lemon-scent-fume-free-14-5-oz"
+    },
+    {
+        "id":  "shower-cleaner",
+        "name":  "Bright Essentials Bathroom Cleaner, Lime Scent",
+        "price":  "2.94",
+        "per":  "",
+        "orig":  "3.98",
+        "unit":  "",
+        "size":  "32 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/27081909-bright-essentials-bathroom-cleaner-lime-scent-32-fl-oz"
+    },
+    {
+        "id":  "furniture-polish",
+        "name":  "Pledge Expert Careâ„¢ Wood Polish Shines and Protects Aerosol, Lemon Enhancing",
+        "price":  "7.99",
+        "per":  "",
+        "orig":  "9.99",
+        "unit":  "",
+        "size":  "14.2 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20030029-pledge-furniture-spray-lemon-enhancing-polish-beautify-it-14-2-oz"
+    },
+    {
+        "id":  "insect-spray",
+        "name":  "Raid Ant Killer Insecticide Aerosol Spray, Pine Forest FreshÂ® Scent",
+        "price":  "6.99",
+        "per":  "",
+        "orig":  "7.98",
+        "unit":  "",
+        "size":  "17.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39164-raid-ant-killer-26-pine-forest-fresh-17-5-oz"
+    },
+    {
+        "id":  "cornstarch",
+        "name":  "Fareway 100% Pure Corn Starch",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20642488-fareway-corn-starch-100-pure-16-oz"
+    },
+    {
+        "id":  "bread-crumbs",
+        "name":  "Progresso Quality Foods Plain Breadcrumbs",
+        "price":  "3.98",
+        "per":  "",
+        "orig":  "4.49",
+        "unit":  "",
+        "size":  "24 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/191981-progresso-breadcrumbs-24-000-oz"
+    },
+    {
+        "id":  "paprika",
+        "name":  "Badia Spices Paprika",
+        "price":  "1.68",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "2 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/314326-badia-spices-paprika-2-0-oz"
+    },
+    {
+        "id":  "dried-oregano",
+        "name":  "Badia Spices Whole Oregano",
+        "price":  "7.99",
+        "per":  "",
+        "orig":  "9.99",
+        "unit":  "",
+        "size":  "5.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2722903-badia-spices-oregano-5-5-oz"
+    },
+    {
+        "id":  "dried-parsley",
+        "name":  "Badia Spices Parsley Flakes",
+        "price":  "7.99",
+        "per":  "",
+        "orig":  "9.99",
+        "unit":  "",
+        "size":  "3 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/74379214-badia-parsley-flakes"
+    },
+    {
+        "id":  "ground-cinnamon",
+        "name":  "McCormick Ground Cinnamon",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "4.12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72896-mccormick-ground-cinnamon-4-12-oz"
+    },
+    {
+        "id":  "ground-turmeric",
+        "name":  "Simply Organic Turmeric",
+        "price":  "6.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "2.38 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/56516-simply-organic-turmeric-2-38-oz"
+    },
+    {
+        "id":  "red-pepper-flakes",
+        "name":  "Badia Spices Crushed Red Pepper",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "4.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1458676-badia-spices-red-pepper-crushed-4-5-oz"
+    },
+    {
+        "id":  "chickpeas",
+        "name":  "Bush\u0027s Best Chick Peas",
+        "price":  "1.69",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16413124-bush-s-best-garbanzo-beans-16-onz"
+    },
+    {
+        "id":  "kidney-beans",
+        "name":  "Fareway Dark Red Kidney Beans",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "1.34",
+        "unit":  "",
+        "size":  "15.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068311-fareway-kidney-beans-dark-red-155-oz"
+    },
+    {
+        "id":  "crushed-tomatoes",
+        "name":  "Fareway Crushed Tomatoes in Puree",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "28 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20633319-fareway-tomatoes-in-puree-crushed-28-oz"
+    },
+    {
+        "id":  "tomato-paste",
+        "name":  "Fareway Tomato Paste",
+        "price":  "1.69",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20586804-fareway-tomato-paste-12-oz"
+    },
+    {
+        "id":  "tomato-sauce",
+        "name":  "Fareway Tomato Sauce",
+        "price":  "1.19",
+        "per":  "",
+        "orig":  "1.28",
+        "unit":  "",
+        "size":  "15 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20546770-fareway-tomato-sauce-15-oz"
+    },
+    {
+        "id":  "soy-sauce",
+        "name":  "Fareway Soy Sauce",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "10 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24226315-fareway-soy-sauce-10-oz"
+    },
+    {
+        "id":  "white-vinegar",
+        "name":  "Fareway White Distilled Vinegar",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "128 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/48388856-fareway-white-distilled-vinegar-128-fl-oz"
+    },
+    {
+        "id":  "lemon-juice",
+        "name":  "ReaLemon 100% Lemon Juice",
+        "price":  "3.64",
+        "per":  "",
+        "orig":  "4.29",
+        "unit":  "",
+        "size":  "32 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69608-realemon-100-lemon-juice-32-fl-oz"
+    },
+    {
+        "id":  "beef-stew",
+        "name":  "DINTY MOORE Beef Stew with Potatoes and Carrots",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "5.19",
+        "unit":  "",
+        "size":  "20 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/35226-dinty-moore-beef-stew-20-oz"
+    },
+    {
+        "id":  "canned-pasta",
+        "name":  "Chef Boyardee Beef Ravioli in Pasta Sauce, Ready-to-Eat Meal",
+        "price":  "4.99",
+        "per":  "",
+        "orig":  "5.84",
+        "unit":  "",
+        "size":  "60 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/89855-chef-boyardee-beef-ravioli-60-oz"
+    },
+    {
+        "id":  "corned-beef-hash",
+        "name":  "MARY KITCHEN Homestyle Corned Beef Hash",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "4.49",
+        "unit":  "",
+        "size":  "14 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18083759-hormel-homestyle-corned-beef-hash-14-0-oz"
+    },
+    {
+        "id":  "vegetable-soup",
+        "name":  "Campbell\u0027s Vegetable Beef Soup",
+        "price":  "1.92",
+        "per":  "",
+        "orig":  "2.28",
+        "unit":  "",
+        "size":  "10.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16411081-campbell-s-vegetable-beef-soup-10-5-oz"
+    },
+    {
+        "id":  "clam-chowder",
+        "name":  "Fareway New England Style Chunky-Style Clam Chowder Soup",
+        "price":  "1.88",
+        "per":  "",
+        "orig":  "2.88",
+        "unit":  "",
+        "size":  "18.8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25806503-fareway-soup-clam-chowder-new-england-style-188-oz"
+    },
+    {
+        "id":  "chili-beans",
+        "name":  "Fareway Chili Beans",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "1.34",
+        "unit":  "",
+        "size":  "15.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24083182-fareway-chili-beans-155-oz"
+    },
+    {
+        "id":  "canned-white-beans",
+        "name":  "Fareway Great Northern Beans",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "1.34",
+        "unit":  "",
+        "size":  "15.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25806653-fareway-great-northern-beans-155-oz"
+    },
+    {
+        "id":  "canned-mixed-vegetables",
+        "name":  "Fareway Diced Mixed Vegetables",
+        "price":  "1.44",
+        "per":  "",
+        "orig":  "1.59",
+        "unit":  "",
+        "size":  "15 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24637002-fareway-mixed-vegetables-diced-15-oz"
+    },
+    {
+        "id":  "canned-beets",
+        "name":  "Fareway Diced Beets",
+        "price":  "1.44",
+        "per":  "",
+        "orig":  "1.88",
+        "unit":  "",
+        "size":  "15 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24226630-fareway-beets-diced-15-oz"
+    },
+    {
+        "id":  "sauerkraut",
+        "name":  "Fareway Sauerkraut",
+        "price":  "1.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "14.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20661998-fareway-sauerkraut-145-oz"
+    },
+    {
+        "id":  "canned-yams",
+        "name":  "Princella Cut Sweet Potatoes",
+        "price":  "4.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "40 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/36666-princella-cut-sweet-potatoes-40-oz"
+    },
+    {
+        "id":  "cranberry-sauce",
+        "name":  "Ocean Spray Whole Cranberry Sauce, Canned Side Dish",
+        "price":  "2.48",
+        "per":  "",
+        "orig":  "2.68",
+        "unit":  "",
+        "size":  "14 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/35605-ocean-spray-whole-berry-cranberry-sauce-14-oz"
+    },
+    {
+        "id":  "canned-pumpkin",
+        "name":  "Libby\u0027s Pumpkin 100% Pure Pumpkin",
+        "price":  "3.98",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "29 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/38030-libby-s-pumpkin-100-pure-pumpkin-29-oz"
+    },
+    {
+        "id":  "mandarin-oranges",
+        "name":  "Fareway Mandarin Oranges",
+        "price":  "1.94",
+        "per":  "",
+        "orig":  "2.29",
+        "unit":  "",
+        "size":  "15 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25858077-fareway-mandarin-oranges-15-oz"
+    },
+    {
+        "id":  "fruit-cocktail",
+        "name":  "Fareway In Heavy Syrup Fruit Cocktail",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.79",
+        "unit":  "",
+        "size":  "30 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24084456-fareway-fruit-cocktail-in-heavy-syrup-30-oz"
+    },
+    {
+        "id":  "canned-pears",
+        "name":  "Fareway Sliced Pears",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.79",
+        "unit":  "",
+        "size":  "28 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23966595-fareway-pears-sliced-28-oz"
+    },
+    {
+        "id":  "tomatoes-green-chilies",
+        "name":  "RO*TEL Original Diced Tomatoes and Green Chilies",
+        "price":  "3.48",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "28 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17445613-ro-tel-original-diced-tomatoes-28-oz"
+    },
+    {
+        "id":  "canned-green-chilies",
+        "name":  "Chi-Chi\u0027s Diced Green Chiles",
+        "price":  "1.48",
+        "per":  "",
+        "orig":  "1.79",
+        "unit":  "",
+        "size":  "4 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/189310-chi-chi-s-foods-diced-fiesta-green-chilies-4-25-oz"
+    },
+    {
+        "id":  "black-olives",
+        "name":  "Mario Sliced Black Olives",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "2.25 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16310334-mario-sliced-black-olives-2-25-oz"
+    },
+    {
+        "id":  "artichoke-hearts",
+        "name":  "Fareway Quartered in Brine Artichoke Hearts",
+        "price":  "2.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "14 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24220417-fareway-artichoke-hearts-in-brine-quartered-14-oz"
+    },
+    {
+        "id":  "vegetable-broth",
+        "name":  "Swanson\u0027s Vegetable broth",
+        "price":  "2.48",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "32 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69757-swanson-vegetable-broth-32-fl-oz"
+    },
+    {
+        "id":  "bouillon",
+        "name":  "Knorr Granulated Bouillon Chicken Flavor",
+        "price":  "3.29",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "7.9 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/35576-knorr-chicken-flavor-bouillon-granulated-7-9-oz"
+    },
+    {
+        "id":  "coconut-milk-canned",
+        "name":  "A Taste of Thai Coconut Milk",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "13.5 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25106-a-taste-of-thai-unsweetened-coconut-milk-13-5-fl-oz"
+    },
+    {
+        "id":  "hominy",
+        "name":  "Bush\u0027s Best White Hominy",
+        "price":  "1.50",
+        "per":  "",
+        "orig":  "1.69",
+        "unit":  "",
+        "size":  "15.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/70208-bush-s-best-white-hominy-15-5-onz"
+    },
+    {
+        "id":  "onion-soup-mix",
+        "name":  "Fareway Onion Soup Mix",
+        "price":  "1.28",
+        "per":  "",
+        "orig":  "1.79",
+        "unit":  "",
+        "size":  "2 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20539657-fareway-recipe-soup-dip-mix-onion-2-each"
+    },
+    {
+        "id":  "jarred-gravy",
+        "name":  "Fareway Turkey Gravy",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/23820964-fareway-turkey-gravy-12-oz"
+    },
+    {
+        "id":  "dijon-mustard",
+        "name":  "Fareway Dijon Mustard",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22999164-fareway-mustard-dijon-12-oz"
+    },
+    {
+        "id":  "honey-mustard",
+        "name":  "Sweet Baby Ray\u0027s Dipping Sauce, Honey Mustard",
+        "price":  "2.48",
+        "per":  "",
+        "orig":  "3.19",
+        "unit":  "",
+        "size":  "14 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1663547-sweet-baby-ray-s-dipping-sauce-honey-mustard-14-oz"
+    },
+    {
+        "id":  "miracle-whip",
+        "name":  "Miracle Whip Miracle Whip",
+        "price":  "5.98",
+        "per":  "",
+        "orig":  "6.98",
+        "unit":  "",
+        "size":  "30 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16408651-miracle-whip-dressing-30-fl-oz"
+    },
+    {
+        "id":  "caesar-dressing",
+        "name":  "Wish-Bone Creamy Caesar Salad Dressing",
+        "price":  "2.74",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "15 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16759678-wish-bone-creamy-caesar-dressing-15-oza"
+    },
+    {
+        "id":  "blue-cheese-dressing",
+        "name":  "Wish-Bone Chunky Blue Cheese Dressing",
+        "price":  "2.74",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "15 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16752065-wish-bone-chunky-blue-cheese-dressing-15-oza"
+    },
+    {
+        "id":  "balsamic-vinegar",
+        "name":  "Fareway Balsamic Vinegar",
+        "price":  "2.88",
+        "per":  "",
+        "orig":  "3.98",
+        "unit":  "",
+        "size":  "16.9 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24462017-fareway-vinegar-balsamic-of-modena-169-oz"
+    },
+    {
+        "id":  "rice-vinegar",
+        "name":  "Marukan Seasoned Gourmet Rice Vinegar",
+        "price":  "3.69",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "12 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16884141-marukan-seasoned-gourmet-rice-vinegar-12-0-fl-oz"
+    },
+    {
+        "id":  "red-wine-vinegar",
+        "name":  "Fareway Red Wine Vinegar",
+        "price":  "2.88",
+        "per":  "",
+        "orig":  "3.98",
+        "unit":  "",
+        "size":  "16.9 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24244042-fareway-vinegar-red-wine-169-oz"
+    },
+    {
+        "id":  "teriyaki-sauce",
+        "name":  "Kikkoman Teriyaki Original BBQ Sauce",
+        "price":  "4.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "20.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16879399-kikkoman-original-teriyaki-sauce-20-5-oz"
+    },
+    {
+        "id":  "steak-sauce",
+        "name":  "Fareway Classic Steak Sauce",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "10 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20591484-fareway-steak-sauce-classic-10-oz"
+    },
+    {
+        "id":  "cocktail-sauce",
+        "name":  "Fareway Cocktail Sauce",
+        "price":  "2.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21026929-fareway-cocktail-sauce-12-oz"
+    },
+    {
+        "id":  "tartar-sauce",
+        "name":  "Kraft Tartar Sauce",
+        "price":  "2.78",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "12 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71549-kraft-tartar-sauce-12-oz"
+    },
+    {
+        "id":  "horseradish",
+        "name":  "Woeber\u0027s Horseradish Sauce",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.69",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71192-woeber-s-horseradish-sauce-16-oz"
+    },
+    {
+        "id":  "enchilada-sauce",
+        "name":  "Fareway Enchilada Sauce, Red, Mild",
+        "price":  "1.58",
+        "per":  "",
+        "orig":  "1.79",
+        "unit":  "",
+        "size":  "10 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20547451-fareway-enchilada-sauce-red-mild-10-oz"
+    },
+    {
+        "id":  "taco-sauce",
+        "name":  "Ortega Taco Sauce, Original, Mild",
+        "price":  "3.48",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2682248-ortega-original-mild-taco-sauce-16-0-oz"
+    },
+    {
+        "id":  "sloppy-joe-sauce",
+        "name":  "Manwich Sloppy Joe Sauce, Thick and Chunky, Canned Sauce",
+        "price":  "1.58",
+        "per":  "",
+        "orig":  "1.89",
+        "unit":  "",
+        "size":  "15.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72692-manwich-thick-n-chunky-sloppy-joe-sauce-15-5-oz"
+    },
+    {
+        "id":  "bottled-marinade",
+        "name":  "A.1. Chicago Steakhouse Marinade",
+        "price":  "2.77",
+        "per":  "",
+        "orig":  "2.98",
+        "unit":  "",
+        "size":  "16 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71465-a1-chicago-steakhouse-marinade-16-fl-oz"
+    },
+    {
+        "id":  "pesto",
+        "name":  "Prego Creamy Basil Pesto Pasta Sauce",
+        "price":  "2.78",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "14.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/42631747-prego-italian-sauce-creamy-basil-pesto-14-5-oz"
+    },
+    {
+        "id":  "minced-garlic",
+        "name":  "Spice World Garlic, Minced",
+        "price":  "7.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/147050-spice-world-garlic-minced-32-oz"
+    },
+    {
+        "id":  "pickled-jalapenos",
+        "name":  "Mt. Olive Jalapeno Slices",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "12 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/74842-mt-olive-fresh-pack-jalapeno-slices-12-fl-oz"
+    },
+    {
+        "id":  "green-olives",
+        "name":  "Fareway Olives, Manzanilla, Stuffed with Minced Pimiento",
+        "price":  "6.49",
+        "per":  "",
+        "orig":  "7.99",
+        "unit":  "",
+        "size":  "21 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387226-fareway-manzanilla-olives-stuffed-with-pimiento-21-oz"
+    },
+    {
+        "id":  "banana-peppers",
+        "name":  "Fareway Mild Banana Pepper Rings",
+        "price":  "2.88",
+        "per":  "",
+        "orig":  "3.29",
+        "unit":  "",
+        "size":  "16 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20639609-fareway-banana-pepper-rings-16-fl-oz"
+    },
+    {
+        "id":  "lime-juice",
+        "name":  "ReaLime 100% Lime Juice",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.29",
+        "unit":  "",
+        "size":  "15 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2722879-realime-100-lime-juice-15-fl-oz"
+    },
+    {
+        "id":  "fish-sauce",
+        "name":  "A Taste of Thai Fish Sauce",
+        "price":  "3.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "7 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/99971-a-taste-of-thai-fish-sauce-7-oz"
+    },
+    {
+        "id":  "oyster-sauce",
+        "name":  "Kikkoman Oyster Sauce Red",
+        "price":  "2.48",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "12.6 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/82690-kikkoman-oyster-flavored-sauce-12-6-oz"
+    },
+    {
+        "id":  "hoisin-sauce",
+        "name":  "House of Tsang Hoisin Sauce",
+        "price":  "4.48",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "12.7 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17445773-house-of-tsang-hoisin-stir-fry-sauce-12-7-oz"
+    },
+    {
+        "id":  "tahini",
+        "name":  "Krinos Tahini Ground Sesame Seeds",
+        "price":  "8.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72777-krinos-tahini-imported-1-lb"
+    },
+    {
+        "id":  "sesame-oil",
+        "name":  "Ty Ling Pure Sesame Oil",
+        "price":  "4.89",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "6.2 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/99855-ty-ling-sesame-oil-pure-6-2-oz"
+    },
+    {
+        "id":  "toasted-sesame-seeds",
+        "name":  "Krinos Tahini Ground Sesame Seeds",
+        "price":  "8.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72777-krinos-tahini-imported-1-lb"
+    },
+    {
+        "id":  "chili-crisp",
+        "name":  "WUJU Chili Crisp Sweet Heat",
+        "price":  "9.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "7.41 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/29802118-wuju-chili-crisp-sweet-heat-spicy-crunchy-8-oz"
+    },
+    {
+        "id":  "red-curry-paste",
+        "name":  "Thai Kitchen Gluten Free Red Curry Paste",
+        "price":  "5.79",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "4 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16408914-thai-kitchen-gluten-free-red-curry-paste-4-oz"
+    },
+    {
+        "id":  "cajun-seasoning",
+        "name":  "Louisiana Fish Fry Products Original Cajun Seasoning",
+        "price":  "2.49",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41184-louisiana-fish-fry-products-seasoning-cajun-8-oz"
+    },
+    {
+        "id":  "taco-seasoning",
+        "name":  "Old El Paso Taco Seasoning, Original, Large Size",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "4.49",
+        "unit":  "",
+        "size":  "6.25 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/130147-old-el-paso-original-taco-seasoning-mix-6-250-oz"
+    },
+    {
+        "id":  "ranch-seasoning-mix",
+        "name":  "Fareway Ranch Dip Mix",
+        "price":  "0.98",
+        "per":  "",
+        "orig":  "1.49",
+        "unit":  "",
+        "size":  "1 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24083373-fareway-dip-mix-ranch-1-oz"
+    },
+    {
+        "id":  "curry-powder",
+        "name":  "McCormick Curry Powder",
+        "price":  "4.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1.75 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17529145-mccormick-curry-powder-1-75-oz"
+    },
+    {
+        "id":  "garam-masala",
+        "name":  "Simply Organic Garam Masala",
+        "price":  "6.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "3 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16367802-simply-organic-garam-masala-3-oz"
+    },
+    {
+        "id":  "cayenne-pepper",
+        "name":  "Badia Spices Cayenne Pepper",
+        "price":  "1.68",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "1.75 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/314328-badia-spices-cayenne-pepper-1-75-oz"
+    },
+    {
+        "id":  "dried-thyme",
+        "name":  "McCormick Ground Thyme",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "0.7 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/87649-mccormick-ground-thyme-0-7-oz"
+    },
+    {
+        "id":  "dried-basil",
+        "name":  "Badia Spices Basil Leaves",
+        "price":  "1.68",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "0.75 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/258007-badia-spices-basil-0-75-oz"
+    },
+    {
+        "id":  "dried-dill",
+        "name":  "Tone\u0027s Dill Weed",
+        "price":  "3.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "0.58 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16981639-tone-s-dill-weed-0-58-oz"
+    },
+    {
+        "id":  "bay-leaves",
+        "name":  "Badia Spices Bay Leaves",
+        "price":  "1.68",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "0.17 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1458678-badia-spices-bay-leaves-0-17-oz"
+    },
+    {
+        "id":  "ground-cloves",
+        "name":  "McCormick Ground Cloves",
+        "price":  "6.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "0.9 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/35950-mccormick-ground-cloves-0-9-oz"
+    },
+    {
+        "id":  "ground-coriander",
+        "name":  "Badia Spices Coriander, Ground",
+        "price":  "1.68",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "1.75 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/257999-badia-spices-coriander-ground-1-75-oz"
+    },
+    {
+        "id":  "ground-allspice",
+        "name":  "McCormick Ground Allspice",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "0.9 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72757-mccormick-ground-allspice-0-9-oz"
+    },
+    {
+        "id":  "ground-nutmeg",
+        "name":  "Badia Spices Nutmeg, Ground",
+        "price":  "1.68",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "2 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/258047-badia-spices-nutmeg-ground-2-oz"
+    },
+    {
+        "id":  "ground-ginger",
+        "name":  "McCormick Ground Ginger",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "0.7 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16982301-mccormick-ground-ginger-0-7-oz"
+    },
+    {
+        "id":  "poppy-seeds",
+        "name":  "McCormick Poppy Seed",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1.25 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72782-mccormick-poppy-seed-1-25-oz"
+    },
+    {
+        "id":  "walnuts",
+        "name":  "Fareway Walnut Halves",
+        "price":  "10.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24337079-fareway-walnut-halves-16-oz"
+    },
+    {
+        "id":  "grits",
+        "name":  "Quaker Grits, Quick 5-Minute",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "24 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41100-quaker-grits-quick-5-minute-24-0-oz"
+    },
+    {
+        "id":  "corn-muffin-mix",
+        "name":  "JiffyÂ® Corn Muffin Mix",
+        "price":  "0.72",
+        "per":  "",
+        "orig":  "1.29",
+        "unit":  "",
+        "size":  "8.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/38638-jiffy-corn-muffin-mix-8-5-oz"
+    },
+    {
+        "id":  "refrigerated-biscuits",
+        "name":  "Pillsbury Grands! Southern Homestyle Original Biscuits",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "16.3 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/142397-pillsbury-grands-southern-homestyle-original-biscuits-8-count-16-300-oz"
+    },
+    {
+        "id":  "cheese-tortellini",
+        "name":  "Louisa Four Cheese Tortellini",
+        "price":  "4.98",
+        "per":  "",
+        "orig":  "5.99",
+        "unit":  "",
+        "size":  "19 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3153709-louisa-tortellini-four-cheese-19-oz"
+    },
+    {
+        "id":  "potato-gnocchi",
+        "name":  "DeLallo Mini Gnocchi",
+        "price":  "3.79",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2703598-delallo-mini-potato-gnocchi-16-oz"
+    },
+    {
+        "id":  "rice-noodles",
+        "name":  "A Taste of Thai Rice Noodles, Linguine",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25093-a-taste-of-thai-rice-noodles-linguine-gluten-free-perfect-for-pad-thai-16-0-oz"
+    },
+    {
+        "id":  "sun-dried-tomatoes",
+        "name":  "Mezzetta Sun-Dried Tomatoes",
+        "price":  "4.97",
+        "per":  "",
+        "orig":  "5.69",
+        "unit":  "",
+        "size":  "8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24845-mezzetta-tomatoes-8-oz"
+    },
+    {
+        "id":  "chipotle-adobo",
+        "name":  "San Marcos Original Recipe Traditional Mexican Flavor Chipotle Peppers in Adobo Sauce",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "7.5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/40707-san-marcos-chipotle-peppers-in-adobo-sauce-7-5-oz"
+    },
+    {
+        "id":  "tomatillos",
+        "name":  "Tomatillo",
+        "price":  "0.31",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$2.49/lb",
+        "size":  "About 0.13 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16382470-tomatillo-1-lb"
+    },
+    {
+        "id":  "poblano-peppers",
+        "name":  "Poblano Pepper",
+        "price":  "1.00",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$4.99/lb",
+        "size":  "About 0.2 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16345708-poblano-pepper-1-lb"
+    },
+    {
+        "id":  "fresh-basil",
+        "name":  "Crazy Fresh Organic Basil",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "0.75 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26483122-crazy-fresh-organic-basil-0-75-oz"
+    },
+    {
+        "id":  "fresh-mint",
+        "name":  "Crazy Fresh Mint",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "0.75 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26483251-crazy-fresh-mint-0-75-oz"
+    },
+    {
+        "id":  "turkey-breast",
+        "name":  "Fareway Bone-In Turkey Breast",
+        "price":  "14.95",
+        "per":  "package (estimated)",
+        "orig":  "",
+        "unit":  "$2.99/lb",
+        "size":  "About 5.0 lb / package",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387369-fareway-bonein-turkey-breast-1-each"
+    },
+    {
+        "id":  "diced-ham",
+        "name":  "Farmland Diced Ham",
+        "price":  "5.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/233565-farmland-ham-16-oz"
+    },
+    {
+        "id":  "eggplant",
+        "name":  "Eggplant",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$1.99/lb",
+        "size":  "About 1.0 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16865798-eggplant-1-lb"
+    },
+    {
+        "id":  "brown-gravy-mix",
+        "name":  "Southeastern Mills Gravy Mix, Classic, Brown",
+        "price":  "1.28",
+        "per":  "",
+        "orig":  "1.49",
+        "unit":  "",
+        "size":  "1.76 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/206606-southeastern-mills-gravy-mix-classic-brown-1-76-oz"
+    },
+    {
+        "id":  "chicken-livers",
+        "name":  "Chicken Liver",
+        "price":  "1.99",
+        "per":  "pound",
+        "orig":  "",
+        "unit":  "$1.99/lb",
+        "size":  "",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388295-chicken-liver"
+    },
+    {
+        "id":  "ground-fennel",
+        "name":  "McCormick Fennel Seed",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "0.85 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/97839-mccormick-fennel-seed-0-85-oz"
+    },
+    {
+        "id":  "snow-peas",
+        "name":  "Pero Family Farms Snow Peas",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "6 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17253593-pero-family-farms-snow-peas-6-oz"
+    },
+    {
+        "id":  "horseradish-sauce",
+        "name":  "Woeber\u0027s Horseradish Sauce",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.69",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71192-woeber-s-horseradish-sauce-16-oz"
+    },
+    {
+        "id":  "rye-bread",
+        "name":  "Beefsteak No Seeds Soft Rye Bread",
+        "price":  "4.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "18 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/152352-beefsteak-soft-rye-bread-18-oz"
+    },
+    {
+        "id":  "ricotta",
+        "name":  "Frigo Ricotta Cheese, Whole Milk",
+        "price":  "5.99",
+        "per":  "",
+        "orig":  "6.99",
+        "unit":  "",
+        "size":  "32 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3235856-frigo-whole-milk-ricotta-cheese-32-0-oz"
+    },
+    {
+        "id":  "red-onion",
+        "name":  "Red Onion",
+        "price":  "1.27",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$1.69/lb",
+        "size":  "About 0.75 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/304773-red-onion-1-lb"
+    },
+    {
+        "id":  "cherry-tomatoes",
+        "name":  "NatureSweet Cherubs Fresh Heavenly Salad Grape Tomatoes",
+        "price":  "6.88",
+        "per":  "",
+        "orig":  "7.99",
+        "unit":  "",
+        "size":  "24 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2720020-naturesweet-cherubs-salad-tomatoes-24-oz"
+    },
+    {
+        "id":  "gingersnaps",
+        "name":  "Mi-Del Cookies, Ginger Snaps, Swedish Style",
+        "price":  "5.39",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17153-mi-del-ginger-snaps-gluten-free-swedish-style-8-oz"
+    },
+    {
+        "id":  "corn-chips",
+        "name":  "Fareway Corn Chips",
+        "price":  "2.98",
+        "per":  "",
+        "orig":  "3.98",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387445-corn-chips"
+    },
+    {
+        "id":  "ground-beef-93-7",
+        "name":  "93% Lean 7% Fat Ground Beef Bulk",
+        "price":  "74.90",
+        "per":  "package (estimated)",
+        "orig":  "",
+        "unit":  "$7.49/lb",
+        "size":  "About 10.0 lb / package",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386242-93-lean-7-fat-ground-beef-10-lb"
+    },
+    {
+        "id":  "jumbo-pasta-shells",
+        "name":  "Barilla Jumbo Shells - Non-GMO Pasta Made with Durum Wheat Semolina \u0026 Kosher Certified",
+        "price":  "2.98",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24750-barilla-classic-blue-box-oven-pasta-jumbo-shells-12-oz"
+    },
+    {
+        "id":  "nectarines",
+        "name":  "White Nectarine",
+        "price":  "1.58",
+        "per":  "",
+        "orig":  "1.62",
+        "unit":  "$3.88/lb",
+        "size":  "About 0.41 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16383355-white-nectarine-1-lb"
+    },
+    {
+        "id":  "apricots",
+        "name":  "Apricot",
+        "price":  "0.67",
+        "per":  "",
+        "orig":  "0.83",
+        "unit":  "$3.99/lb",
+        "size":  "About 0.17 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16614366-apricot-each"
+    },
+    {
+        "id":  "coconut",
+        "name":  "FOCO Coconut Juice",
+        "price":  "2.19",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "17.6 fl oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/198041-foco-coconut-juice-17-6-oz"
+    },
+    {
+        "id":  "medjool-dates",
+        "name":  "Natural Delights Pitted Fresh Medjool Dates",
+        "price":  "6.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2219749-natural-delights-pitted-fresh-medjool-dates-12-oz"
+    },
+    {
+        "id":  "dried-cranberries",
+        "name":  "Ocean Spray Dried Cranberries",
+        "price":  "6.99",
+        "per":  "",
+        "orig":  "7.49",
+        "unit":  "",
+        "size":  "24 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2483231-ocean-spray-dried-cranberries-24-oz"
+    },
+    {
+        "id":  "prunes",
+        "name":  "Sunsweet Prunes, Pitted, Value Pack",
+        "price":  "9.99",
+        "per":  "",
+        "orig":  "10.99",
+        "unit":  "",
+        "size":  "24 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24121102-sunsweet-prunes-pitted-value-pack-24-oz"
+    },
+    {
+        "id":  "shallots",
+        "name":  "Spice World Fresh Shallots",
+        "price":  "2.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "3 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/27173330-spice-world-shallots-fresh-3-oz"
+    },
+    {
+        "id":  "mini-sweet-peppers",
+        "name":  "Mini Peppers",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16703600-mini-peppers-1-lb"
+    },
+    {
+        "id":  "serrano-peppers",
+        "name":  "Green Serrano Pepper",
+        "price":  "0.21",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$4.99/lb",
+        "size":  "About 0.04 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17433969-green-serrano-pepper-1-lb"
+    },
+    {
+        "id":  "anaheim-peppers",
+        "name":  "Anaheim Pepper",
+        "price":  "1.00",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$4.99/lb",
+        "size":  "About 0.2 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19141625-anaheim-pepper-1-lb"
+    },
+    {
+        "id":  "parsnips",
+        "name":  "Parsnip",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "20 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17329253-parsnip-20-oz"
+    },
+    {
+        "id":  "mustard-greens",
+        "name":  "Glory Foods Seasoned Southern Style Mustard Greens",
+        "price":  "3.69",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "27 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/36617-glory-foods-seasoned-southern-style-mustard-greens-27-oz"
+    },
+    {
+        "id":  "butternut-squash",
+        "name":  "Butternut Squash",
+        "price":  "3.72",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$1.49/lb",
+        "size":  "About 2.5 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/102102-butternut-squash-1-lb"
+    },
+    {
+        "id":  "acorn-squash",
+        "name":  "Green Acorn Squash",
+        "price":  "2.24",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$1.49/lb",
+        "size":  "About 1.5 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26392622-pexco-produce-sales-green-acorn-squash-per-lb"
+    },
+    {
+        "id":  "spaghetti-squash",
+        "name":  "Spaghetti Squash",
+        "price":  "4.47",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$1.49/lb",
+        "size":  "About 3.0 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2686118-spaghetti-squash-1-lb"
+    },
+    {
+        "id":  "sugar-snap-peas",
+        "name":  "Pero Family Farms Sugar Snap Peas",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "8 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16398417-snap-peas-sugar-15-oz"
+    },
+    {
+        "id":  "spring-mix",
+        "name":  "Organic Girl Essential Salads Baby Spring Mix",
+        "price":  "5.44",
+        "per":  "",
+        "orig":  "5.99",
+        "unit":  "",
+        "size":  "10 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/74510-organic-girl-baby-spring-mix-10-oz"
+    },
+    {
+        "id":  "arugula",
+        "name":  "Organic Girl Organic Baby Arugula",
+        "price":  "3.48",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "5 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/74505-organic-girl-organic-baby-arugula-5-oz"
+    },
+    {
+        "id":  "garden-salad",
+        "name":  "Dole Garden Salad",
+        "price":  "2.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "12 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17915540-dole-garden-salad-12-oz"
+    },
+    {
+        "id":  "caesar-salad-kit",
+        "name":  "Dole Classic Caesar Salad Kit",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "10 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2656775-dole-classic-kit-caesar-7-6-oz"
+    },
+    {
+        "id":  "artichokes",
+        "name":  "Artichoke",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3258106-artichoke-each"
+    },
+    {
+        "id":  "rhubarb",
+        "name":  "Rhubarb",
+        "price":  "0.44",
+        "per":  "",
+        "orig":  "",
+        "unit":  "$3.99/lb",
+        "size":  "About 0.11 lb each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/345497-rhubarb-1-lb"
+    },
+    {
+        "id":  "fresh-parsley",
+        "name":  "Curly Parsley",
+        "price":  "1.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1 ct",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16345780-curly-parsley-each"
+    },
+    {
+        "id":  "fresh-rosemary",
+        "name":  "Crazy Fresh Rosemary",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "0.75 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1169673-crazy-fresh-rosemary-0-75-oz"
+    },
+    {
+        "id":  "fresh-thyme",
+        "name":  "Crazy Fresh Thyme",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1 each",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26482900-crazy-fresh-thyme-0-75-oz"
+    },
+    {
+        "id":  "high-fiber-tortillas",
+        "name":  "Mission Carb Balance Flour Tortillas, Burrito Size, 6 Count",
+        "price":  "4.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "15 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/32943123-mission-tortilla-wraps-flour-super-soft-6-ea"
+    }
+]

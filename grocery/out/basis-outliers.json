@@ -122,7 +122,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-09T06:18:00",
+    "generated":  "2026-08-09T07:11:27",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -693,18 +693,6 @@
                               "id":  "honey-mustard",
                               "commodity":  "Honey Mustard",
                               "unit":  "oz",
-                              "store":  "Fareway",
-                              "per_unit":  0.1567,
-                              "size":  "12 oz",
-                              "item":  "Fareway Honey Mustard",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "honey-mustard",
-                              "commodity":  "Honey Mustard",
-                              "unit":  "oz",
                               "store":  "Baker\u0027s",
                               "per_unit":  0.1575,
                               "size":  "12 oz",
@@ -1176,7 +1164,7 @@
                               "store":  "Fareway",
                               "per_unit":  0.0741,
                               "size":  "128 oz",
-                              "item":  "Fareway Canola Oil",
+                              "item":  "Fareway Vegetable Oil",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
