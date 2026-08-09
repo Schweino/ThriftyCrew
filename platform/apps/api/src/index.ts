@@ -15,6 +15,7 @@ import {
   jobRunCreateSchema,
   jobRunUpdateSchema,
   matchDecisionsChunkSchema,
+  matchRunSchema,
   observationChunkSchema,
   recipeCostsChunkSchema,
   releaseCellsChunkSchema,
@@ -89,6 +90,7 @@ app.use("/internal/capture-batches/*", requireIdentityRole(["capture", "engine",
 app.use("/internal/configurations", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/configurations/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/match-decisions", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/match-runs", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/job-runs", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/job-runs/*", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/jobs/*", requireIdentityRole(["engine", "operator"]));
@@ -421,15 +423,98 @@ app.put("/internal/match-decisions", zValidator("json", matchDecisionsChunkSchem
   for (const decision of decisions) {
     const decisionId = await deterministicId("match", decision.configurationId, decision.productId, decision.commodityId);
     statements.push(context.env.DB.prepare(
-      `INSERT OR IGNORE INTO match_decisions
+      `UPDATE match_decisions
+          SET superseded_at = CURRENT_TIMESTAMP
+        WHERE product_id = ?1 AND superseded_at IS NULL
+          AND (configuration_id <> ?2 OR commodity_id <> ?3)`,
+    ).bind(decision.productId, decision.configurationId, decision.commodityId));
+    statements.push(context.env.DB.prepare(
+      `INSERT INTO match_decisions
          (id, product_id, commodity_id, configuration_id, decided_by, reason)
-       VALUES (?1, ?2, ?3, ?4, ?5, ?6)`,
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6)
+       ON CONFLICT(id) DO UPDATE SET
+         decided_by = excluded.decided_by,
+         reason = excluded.reason,
+         decided_at = CURRENT_TIMESTAMP,
+         superseded_at = NULL`,
     ).bind(decisionId, decision.productId, decision.commodityId, decision.configurationId, decision.decidedBy, decision.reason));
   }
   for (let offset = 0; offset < statements.length; offset += 90) {
     await context.env.DB.batch(statements.slice(offset, offset + 90));
   }
   return context.json({ ok: true, accepted: decisions.length });
+});
+
+app.get("/internal/capture-batches/:id/products", async (context) => {
+  const batch = await findBatch(context.env.DB, context.req.param("id"));
+  if (!batch) return jsonError("capture batch not found", 404);
+  const configuration = await context.env.DB.prepare(
+    "SELECT id, content_hash FROM configuration_versions WHERE active = 1",
+  ).first<{ id: string; content_hash: string }>();
+  if (!configuration) return jsonError("active configuration not found", 422);
+  const products = await context.env.DB.prepare(
+    `SELECT DISTINCT p.id AS product_id, p.external_key, p.store_location_id,
+            pv.name, pv.normalized_name, pv.taxonomy_path,
+            o.normalized_basis_unit, o.normalized_basis_qty_micros
+       FROM observations o
+       JOIN product_versions pv ON pv.id = o.product_version_id
+       JOIN products p ON p.id = pv.product_id
+      WHERE o.batch_id = ?1
+      ORDER BY p.id`,
+  ).bind(batch.id).all();
+  return context.json({
+    ok: true,
+    batchId: batch.id,
+    sourceId: batch.source_id,
+    status: batch.status,
+    configurationId: configuration.id,
+    configurationHash: configuration.content_hash,
+    products: products.results,
+  });
+});
+
+app.post("/internal/match-runs", zValidator("json", matchRunSchema), async (context) => {
+  const body = context.req.valid("json");
+  const batch = await findBatch(context.env.DB, body.batchId);
+  if (!batch) return jsonError("capture batch not found", 404);
+  const configuration = await context.env.DB.prepare(
+    "SELECT id, content_hash FROM configuration_versions WHERE id = ?1 AND active = 1",
+  ).bind(body.configurationId).first<{ id: string; content_hash: string }>();
+  if (!configuration) return jsonError("match run must use the active configuration", 422);
+  const actual = await context.env.DB.prepare(
+    `SELECT COUNT(DISTINCT p.id) AS products,
+            COUNT(DISTINCT CASE WHEN m.product_id IS NOT NULL THEN p.id END) AS matched
+       FROM observations o
+       JOIN product_versions pv ON pv.id = o.product_version_id
+       JOIN products p ON p.id = pv.product_id
+       LEFT JOIN match_decisions m ON m.product_id = p.id
+         AND m.configuration_id = ?2 AND m.superseded_at IS NULL
+      WHERE o.batch_id = ?1`,
+  ).bind(body.batchId, body.configurationId).first<{ products: number; matched: number }>();
+  if (!actual || actual.products !== body.productCount || actual.matched !== body.matchedCount) {
+    return jsonError(`match report does not match persisted decisions: ${stableJson({ actual, reported: { products: body.productCount, matched: body.matchedCount } })}`, 409);
+  }
+  const status = body.collisionCount === 0 ? "passed" : "failed";
+  const existing = await context.env.DB.prepare("SELECT status FROM match_runs WHERE id = ?1").bind(body.id).first<{ status: string }>();
+  if (existing) return context.json({ ok: existing.status === "passed", runId: body.id, status: existing.status, idempotent: true });
+  await context.env.DB.prepare(
+    `INSERT INTO match_runs
+       (id, batch_id, configuration_id, input_hash, status, product_count, matched_count,
+        unmatched_count, collision_count, aisle_rejected_count, detail_json)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)`,
+  ).bind(body.id, body.batchId, body.configurationId, body.inputHash, status, body.productCount, body.matchedCount,
+    body.unmatchedCount, body.collisionCount, body.aisleRejectedCount, stableJson(body.detail)).run();
+  if (body.collisionCount > 0) {
+    const triageId = await deterministicId("triage", "match-run", body.id);
+    await context.env.DB.prepare(
+      `INSERT OR IGNORE INTO triage_items
+         (id, source_kind, source_ref, severity, status, title, evidence_json)
+       VALUES (?1, 'operational_alert', ?2, 'hard', 'open', ?3, ?4)`,
+    ).bind(triageId, body.id, `Native matching found ${body.collisionCount} unresolved collisions`, stableJson(body.detail)).run();
+  }
+  await recordAudit(context.env, context.get("identity"), "matching.complete", "capture_batch", body.batchId,
+    status === "passed" ? "accepted" : "failed", { runId: body.id, ...body });
+  return context.json({ ok: status === "passed", runId: body.id, status, idempotent: false }, status === "passed" ? 201 : 422);
 });
 
 app.put("/internal/schedules/sync", zValidator("json", scheduleDocumentSchema), async (context) => {

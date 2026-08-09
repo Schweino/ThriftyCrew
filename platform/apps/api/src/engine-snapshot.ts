@@ -29,6 +29,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode)
   const candidates = await env.DB.prepare(
     `SELECT o.id AS observation_id, m.commodity_id, p.store_location_id, o.per_unit_micros,
             o.captured_at, o.valid_to, b.coverage_mode, b.captured_to, b.id AS batch_id,
+            o.normalized_basis_unit,
             o.membership_required, o.loyalty_required, o.raw_price_text, pv.name, pv.product_url,
             pv.taxonomy_path, p.external_key,
             EXISTS (

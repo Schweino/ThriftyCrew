@@ -15,6 +15,34 @@ export interface MatchOutcome {
   candidates: string[];
 }
 
+interface CompiledRuleSet {
+  commodityId: string;
+  includes: RegExp[];
+  excludes: RegExp[];
+  priority: number;
+}
+
+export function compileProductMatcher(ruleSets: readonly MatchRuleSet[]): (productName: string) => MatchOutcome {
+  const compiled: CompiledRuleSet[] = ruleSets.map((rules) => ({
+    commodityId: rules.commodityId,
+    includes: rules.includes.map((pattern) => new RegExp(pattern, "i")),
+    excludes: rules.excludes.map((pattern) => new RegExp(pattern, "i")),
+    priority: rules.priority ?? 0,
+  }));
+  return (productName: string): MatchOutcome => {
+    const normalized = normalizeName(productName);
+    const matches = compiled
+      .filter((rules) => rules.includes.some((pattern) => pattern.test(normalized)))
+      .filter((rules) => !rules.excludes.some((pattern) => pattern.test(normalized)))
+      .sort((left, right) => right.priority - left.priority || left.commodityId.localeCompare(right.commodityId));
+    if (matches.length === 0) return { commodityId: null, status: "unmatched", candidates: [] };
+    const highest = matches[0]!.priority;
+    const tied = matches.filter((candidate) => candidate.priority === highest);
+    if (tied.length > 1) return { commodityId: null, status: "collision", candidates: tied.map((item) => item.commodityId) };
+    return { commodityId: tied[0]!.commodityId, status: "matched", candidates: [tied[0]!.commodityId] };
+  };
+}
+
 export interface AisleVerdict {
   status: "confirmed" | "rejected" | "unavailable";
   examined: boolean;
@@ -39,17 +67,7 @@ export function evaluateAisleEvidence(
 }
 
 export function matchProductName(productName: string, ruleSets: readonly MatchRuleSet[]): MatchOutcome {
-  const normalized = normalizeName(productName);
-  const matches = ruleSets
-    .filter((rules) => rules.includes.some((pattern) => new RegExp(pattern, "i").test(normalized)))
-    .filter((rules) => !rules.excludes.some((pattern) => new RegExp(pattern, "i").test(normalized)))
-    .sort((left, right) => (right.priority ?? 0) - (left.priority ?? 0) || left.commodityId.localeCompare(right.commodityId));
-
-  if (matches.length === 0) return { commodityId: null, status: "unmatched", candidates: [] };
-  const highest = matches[0]?.priority ?? 0;
-  const tied = matches.filter((candidate) => (candidate.priority ?? 0) === highest);
-  if (tied.length > 1) return { commodityId: null, status: "collision", candidates: tied.map((item) => item.commodityId) };
-  return { commodityId: tied[0]!.commodityId, status: "matched", candidates: [tied[0]!.commodityId] };
+  return compileProductMatcher(ruleSets)(productName);
 }
 
 export interface WinnerCandidate {
@@ -62,6 +80,29 @@ export interface WinnerCandidate {
   batchCapturedTo: string;
   validTo?: string;
   knownWrong?: boolean;
+}
+
+const UNIT_TO_BASE: Readonly<Record<string, { family: "mass" | "volume" | "count"; unitsPerBase: number }>> = {
+  gram: { family: "mass", unitsPerBase: 1 },
+  kg: { family: "mass", unitsPerBase: 1000 },
+  oz: { family: "mass", unitsPerBase: 28.349523125 },
+  lb: { family: "mass", unitsPerBase: 453.59237 },
+  ml: { family: "volume", unitsPerBase: 1 },
+  liter: { family: "volume", unitsPerBase: 1000 },
+  fl_oz: { family: "volume", unitsPerBase: 29.5735295625 },
+  pt: { family: "volume", unitsPerBase: 473.176473 },
+  qt: { family: "volume", unitsPerBase: 946.352946 },
+  gal: { family: "volume", unitsPerBase: 3785.411784 },
+  each: { family: "count", unitsPerBase: 1 },
+  dozen: { family: "count", unitsPerBase: 12 },
+};
+
+export function convertUnitPriceMicros(perUnitMicros: number, fromUnit: string, toUnit: string): number | null {
+  const from = UNIT_TO_BASE[fromUnit];
+  const to = UNIT_TO_BASE[toUnit];
+  if (!from || !to || from.family !== to.family) return null;
+  const result = Math.round(perUnitMicros * to.unitsPerBase / from.unitsPerBase);
+  return Number.isSafeInteger(result) && result >= 0 ? result : null;
 }
 
 export interface WinnerSelection {
@@ -117,7 +158,7 @@ export interface NativeEngineSnapshot {
   candidates: Array<{
     observation_id: string; commodity_id: string; store_location_id: string; per_unit_micros: number;
     captured_at: string; valid_to: string | null; coverage_mode: WinnerCandidate["batchCoverageMode"];
-    captured_to: string; known_wrong: number;
+    captured_to: string; normalized_basis_unit: string; known_wrong: number;
   }>;
   currentCells: Array<{
     commodity_id: string; store_location_id: string; observation_id: string | null; status: string;
@@ -164,17 +205,20 @@ export function buildNativeParityReport(snapshot: NativeEngineSnapshot): EngineP
   for (const commodity of snapshot.commodities) {
     for (const store of snapshot.stores) {
       const key = `${commodity.id}\u001f${store.id}`;
-      const selection = selectWinner((groups.get(key) ?? []).map((candidate) => ({
+      const selection = selectWinner((groups.get(key) ?? []).flatMap((candidate) => {
+        const converted = convertUnitPriceMicros(candidate.per_unit_micros, candidate.normalized_basis_unit, commodity.basis_unit);
+        if (converted === null) return [];
+        return [{
         observationId: candidate.observation_id,
         commodityId: candidate.commodity_id,
         storeLocationId: candidate.store_location_id,
-        perUnitMicros: candidate.per_unit_micros,
+        perUnitMicros: converted,
         capturedAt: candidate.captured_at,
         batchCoverageMode: candidate.coverage_mode,
         batchCapturedTo: candidate.captured_to,
         ...(candidate.valid_to ? { validTo: candidate.valid_to } : {}),
         knownWrong: candidate.known_wrong === 1,
-      })), snapshot.observedAt);
+      }]; }), snapshot.observedAt);
       cells.push({
         commodityId: commodity.id,
         storeLocationId: store.id,

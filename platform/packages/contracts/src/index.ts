@@ -194,6 +194,22 @@ export const matchDecisionsChunkSchema = z.object({
   })).min(1).max(100),
 });
 
+export const matchRunSchema = z.object({
+  id: nonEmptyId,
+  batchId: nonEmptyId,
+  configurationId: nonEmptyId,
+  inputHash: sha256Hex,
+  productCount: z.number().int().nonnegative(),
+  matchedCount: z.number().int().nonnegative(),
+  unmatchedCount: z.number().int().nonnegative(),
+  collisionCount: z.number().int().nonnegative(),
+  aisleRejectedCount: z.number().int().nonnegative(),
+  detail: z.record(z.string(), z.unknown()).default({}),
+}).superRefine((value, context) => {
+  const classified = value.matchedCount + value.unmatchedCount + value.collisionCount + value.aisleRejectedCount;
+  if (classified !== value.productCount) context.addIssue({ code: "custom", path: ["productCount"], message: "match classifications must account for every product" });
+});
+
 export const jobRunCreateSchema = z.object({
   id: nonEmptyId,
   job: nonEmptyId,

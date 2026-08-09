@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildNativeParityReport, evaluateAisleEvidence, guardResult, matchProductName, selectWinner } from "./index";
+import { buildNativeParityReport, convertUnitPriceMicros, evaluateAisleEvidence, guardResult, matchProductName, selectWinner } from "./index";
 
 describe("matching", () => {
   it("refuses a same-priority collision instead of first-match-wins", () => {
@@ -21,6 +21,11 @@ describe("matching", () => {
 });
 
 describe("winner selection", () => {
+  it("converts captured unit prices to the commodity basis", () => {
+    expect(convertUnitPriceMicros(250_000, "oz", "lb")).toBe(4_000_000);
+    expect(convertUnitPriceMicros(1_000_000, "each", "dozen")).toBe(12_000_000);
+    expect(convertUnitPriceMicros(1_000_000, "oz", "each")).toBeNull();
+  });
   it("does not let a thin partial batch evict the complete capture", () => {
     const result = selectWinner([
       { observationId: "partial", commodityId: "formula", storeLocationId: "sams", perUnitMicros: 1_444_500, capturedAt: "2026-08-06T12:00:00.000Z", batchCapturedTo: "2026-08-06T12:00:00.000Z", batchCoverageMode: "partial" },
@@ -50,7 +55,7 @@ describe("native engine parity", () => {
       mode: "legacy", observedAt: "2026-08-09T12:00:00.000Z", configurationId: "config", currentReleaseId: "release", inputHash: "a".repeat(64), inputBatchIds: ["batch"],
       commodities: [{ id: "eggs", label: "Eggs", basis_unit: "dozen", category_id: "dairy" }],
       stores: [{ id: "store", store_name: "Store" }],
-      candidates: [{ observation_id: "obs", commodity_id: "eggs", store_location_id: "store", per_unit_micros: 1_990_000, captured_at: "2026-08-09T11:00:00.000Z", valid_to: null, coverage_mode: "full", captured_to: "2026-08-09T11:00:00.000Z", known_wrong: 0 }],
+      candidates: [{ observation_id: "obs", commodity_id: "eggs", store_location_id: "store", per_unit_micros: 1_990_000, normalized_basis_unit: "dozen", captured_at: "2026-08-09T11:00:00.000Z", valid_to: null, coverage_mode: "full", captured_to: "2026-08-09T11:00:00.000Z", known_wrong: 0 }],
       currentCells: [{ commodity_id: "eggs", store_location_id: "store", observation_id: "obs", status: "priced", is_crown: 1, display_per_unit_micros: 1_990_000, display_unit: "dozen" }],
     });
     expect(report).toMatchObject({ comparedCells: 1, diffCount: 0, diffs: [] });
@@ -61,7 +66,7 @@ describe("native engine parity", () => {
       mode: "legacy" as const, observedAt: "2026-08-09T12:00:00.000Z", configurationId: "config", currentReleaseId: "release", inputHash: "b".repeat(64), inputBatchIds: ["batch"],
       commodities: [{ id: "eggs", label: "Eggs", basis_unit: "dozen", category_id: "dairy" }],
       stores: [{ id: "aldi", store_name: "Aldi" }, { id: "walmart", store_name: "Walmart" }],
-      candidates: ["aldi", "walmart"].map((store) => ({ observation_id: `obs-${store}`, commodity_id: "eggs", store_location_id: store, per_unit_micros: 1_990_000, captured_at: "2026-08-09T11:00:00.000Z", valid_to: null, coverage_mode: "full" as const, captured_to: "2026-08-09T11:00:00.000Z", known_wrong: 0 })),
+      candidates: ["aldi", "walmart"].map((store) => ({ observation_id: `obs-${store}`, commodity_id: "eggs", store_location_id: store, per_unit_micros: 1_990_000, normalized_basis_unit: "dozen", captured_at: "2026-08-09T11:00:00.000Z", valid_to: null, coverage_mode: "full" as const, captured_to: "2026-08-09T11:00:00.000Z", known_wrong: 0 })),
       currentCells: [
         { commodity_id: "eggs", store_location_id: "aldi", observation_id: "obs-aldi", status: "priced", is_crown: 1, display_per_unit_micros: 1_990_000, display_unit: "dozen" },
         { commodity_id: "eggs", store_location_id: "walmart", observation_id: "obs-walmart", status: "priced", is_crown: 0, display_per_unit_micros: 1_990_000, display_unit: "dozen" },

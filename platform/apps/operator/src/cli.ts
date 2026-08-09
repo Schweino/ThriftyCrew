@@ -4,8 +4,9 @@ import { directCaptureArtifactSchema, observationChunkSchema } from "@thriftycre
 import { ingestDirectCapture, MutationClient, replayCurrentArtifact } from "@thriftycrew/daily/client";
 import { buildCurrentBridge } from "@thriftycrew/daily/legacy";
 import { buildRegularCapture } from "@thriftycrew/daily/direct";
+import { digestHex, stableJson } from "@thriftycrew/domain";
 import { generateLegacyConfiguration } from "./config";
-import { buildNativeParityReport, type NativeEngineSnapshot } from "@thriftycrew/engine";
+import { buildNativeParityReport, compileProductMatcher, evaluateAisleEvidence, type NativeEngineSnapshot } from "@thriftycrew/engine";
 import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
@@ -56,6 +57,93 @@ function githubRunId(job: string): string {
 async function writeJson(file: string, value: unknown): Promise<void> {
   await mkdir(path.dirname(file), { recursive: true });
   await writeFile(file, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+}
+
+interface MatchProductRow {
+  product_id: string;
+  external_key: string;
+  store_location_id: string;
+  name: string;
+  normalized_name: string;
+  taxonomy_path: string | null;
+  normalized_basis_unit: string;
+  normalized_basis_qty_micros: number;
+}
+
+async function matchBatch(client: MutationClient, batchId: string): Promise<Record<string, unknown>> {
+  const snapshot = await client.request(`/internal/capture-batches/${encodeURIComponent(batchId)}/products`) as unknown as Record<string, unknown> & {
+    sourceId: string; status: string; configurationId: string; configurationHash: string; products: MatchProductRow[];
+  };
+  if (!Array.isArray(snapshot.products)) throw new Error("matching snapshot omitted products");
+  if (!(snapshot.status === "promoted" || snapshot.status === "validated")) throw new Error(`batch ${batchId} cannot be matched from ${snapshot.status}`);
+  const commodities = JSON.parse(await readFile(path.join(platformRoot, "config", "commodities.json"), "utf8")) as Array<{ id: string; include?: string[]; exclude?: string[] }>;
+  const matcher = compileProductMatcher(commodities.map((commodity, index) => ({
+    commodityId: commodity.id,
+    includes: commodity.include ?? [],
+    excludes: commodity.exclude ?? [],
+    // Preserve the production engine's documented first-match-wins semantics
+    // while making the precedence explicit and collision-testable.
+    priority: commodities.length - index,
+  })));
+  const decisions: Array<{ productId: string; commodityId: string; configurationId: string; decidedBy: "rule" | "aisle"; reason: string }> = [];
+  const unmatched: Array<Record<string, unknown>> = [];
+  const collisions: Array<Record<string, unknown>> = [];
+  const aisleRejected: Array<Record<string, unknown>> = [];
+  for (const product of snapshot.products) {
+    const outcome = matcher(product.name);
+    if (outcome.status === "collision") {
+      collisions.push({ productId: product.product_id, name: product.name, candidates: outcome.candidates });
+      continue;
+    }
+    if (outcome.status === "unmatched" || !outcome.commodityId) {
+      unmatched.push({ productId: product.product_id, name: product.name });
+      continue;
+    }
+    const aisle = evaluateAisleEvidence(product.taxonomy_path ?? undefined, [], ["health beauty", "household", "pets wildlife", "cat litter", "pet supplies"]);
+    if (aisle.status === "rejected" && !(outcome.commodityId === "protein-bars" && /health[ _-]?beauty/i.test(product.taxonomy_path ?? ""))) {
+      aisleRejected.push({ productId: product.product_id, name: product.name, commodityId: outcome.commodityId, taxonomyPath: product.taxonomy_path, reason: aisle.reason });
+      continue;
+    }
+    decisions.push({
+      productId: product.product_id,
+      commodityId: outcome.commodityId,
+      configurationId: snapshot.configurationId,
+      decidedBy: aisle.status === "confirmed" ? "aisle" : "rule",
+      reason: `Authored first-match rule precedence${product.taxonomy_path ? `; shelf taxonomy examined: ${aisle.reason}` : "; no shelf taxonomy supplied"}`,
+    });
+  }
+  for (let offset = 0; offset < decisions.length; offset += 100) {
+    await client.request("/internal/match-decisions", { method: "PUT", json: { decisions: decisions.slice(offset, offset + 100) } });
+  }
+  const inputMaterial = {
+    batchId,
+    sourceId: snapshot.sourceId,
+    configurationId: snapshot.configurationId,
+    configurationHash: snapshot.configurationHash,
+    products: snapshot.products.map((product) => [product.product_id, product.normalized_name, product.taxonomy_path]),
+    decisions: decisions.map((decision) => [decision.productId, decision.commodityId, decision.decidedBy]),
+  };
+  const inputHash = await digestHex(stableJson(inputMaterial));
+  const report = {
+    id: `match_${inputHash.slice(0, 32)}`,
+    batchId,
+    configurationId: snapshot.configurationId,
+    inputHash,
+    productCount: snapshot.products.length,
+    matchedCount: decisions.length,
+    unmatchedCount: unmatched.length,
+    collisionCount: collisions.length,
+    aisleRejectedCount: aisleRejected.length,
+    detail: {
+      sourceId: snapshot.sourceId,
+      precedence: "authored commodity order",
+      unmatchedExamples: unmatched.slice(0, 100),
+      collisionExamples: collisions.slice(0, 100),
+      aisleRejectedExamples: aisleRejected.slice(0, 100),
+    },
+  };
+  const persisted = await client.request("/internal/match-runs", { method: "POST", json: report, acceptStatuses: [422] });
+  return { ...persisted, ...report };
 }
 
 async function commodityAdd(inputFile: string | undefined): Promise<unknown> {
@@ -181,7 +269,14 @@ if (command === "status") {
   const artifactBytes = await readFile(path.resolve(artifactFile));
   const artifact = directCaptureArtifactSchema.parse(JSON.parse(new TextDecoder().decode(artifactBytes).replace(/^\uFEFF/, "")));
   const evidenceBytes = evidenceFile ? await readFile(path.resolve(evidenceFile)) : artifactBytes;
-  result = await ingestDirectCapture(await mutationClient(), artifact, evidenceBytes);
+  const client = await mutationClient();
+  const ingestion = await ingestDirectCapture(client, artifact, evidenceBytes);
+  const matching = ingestion.ok ? await matchBatch(client, String(ingestion.batchId)) : null;
+  result = { ...ingestion, matching };
+} else if (command === "match" && subcommand === "batch") {
+  const batchId = arguments_[0];
+  if (!batchId) throw new Error("tc match batch requires a capture batch id");
+  result = await matchBatch(await mutationClient(), batchId);
 } else if (command === "capture" && subcommand === "validate") {
   const file = arguments_[0];
   if (!file) throw new Error("tc capture validate requires a JSON file");
@@ -213,7 +308,7 @@ if (command === "status") {
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id]", "tc accuracy verdict <file>",
-      "tc commodity add <file>", "tc recipe add <file>",
+      "tc match batch <batch-id>", "tc commodity add <file>", "tc recipe add <file>",
     ],
   };
 }
