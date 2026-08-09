@@ -353,11 +353,8 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
   return (SearchLink $store $q)
 }
 
-# store scoreboard: how many commodities each store is the outright cheapest on (the summary a shopper wants first)
+# canonical store order - drives the per-row grid, the store-status strip and the masthead counts
 $storeOrder = @('Hy-Vee','Aldi','Family Fare','Fareway',"Baker's","Sam's Club",'Walmart')
-$wins = [ordered]@{}; foreach ($s in $storeOrder) { $wins[$s] = 0 }
-foreach ($r in $doc.comparison) { $cs = [string]$r.cheapest_store; if ($wins.Contains($cs)) { $wins[$cs]++ } }
-if ($riDoc) { foreach ($r in $riDoc.comparison) { $cs = [string]$r.cheapest_store; if ($wins.Contains($cs)) { $wins[$cs]++ } } }
 
 # short store display names + stable column color accents
 $shortName = @{ 'Hy-Vee'='Hy-Vee'; 'Aldi'='Aldi'; 'Family Fare'='Family Fare'; 'Fareway'='Fareway'; "Baker's"="Baker's"; "Sam's Club"="Sam's Club"; 'Walmart'='Walmart' }
@@ -445,7 +442,7 @@ $sb = New-Object System.Text.StringBuilder
 [void]$sb.Append("<header class='pg-head'>")
 if (-not $Embed) { [void]$sb.Append("<h1>Omaha's Cheapest Groceries This Week</h1>") }   # Embed: Ghost post title is the H1
 [void]$sb.Append("<p class='pg-sub'>The cheapest place to buy every grocery staple in Omaha this week. Seven stores, checked every morning, ranked cheapest first.</p>")
-# THE MASTHEAD. Filled in at the very end of the build, because two of its three lines are counts of things
+# THE MASTHEAD. Filled in at the very end of the build, because both of its lines are counts of things
 # that do not exist until the sections are rendered. ONE band, not five: the five separate top-of-page
 # modules the design review proposed (live tally, stat band, freshness receipt, wrong-store headline,
 # ledger banner) would have rebuilt exactly the pileup the top-of-page diet just cleared.
@@ -500,40 +497,14 @@ $statusHtml = $statusSb.ToString()
 $weeklyLabelKey = @{}; foreach ($c in $cats) { $weeklyLabelKey[[string]$c.label] = [string]$c.key }
 function RiCatKey([string]$label) { if ($weeklyLabelKey.ContainsKey($label)) { return $weeklyLabelKey[$label] } else { return 'ri:' + $label } }
 
-# ---- scoreboard: who wins this week (the shopper's headline stat) ----
-$maxWins = 0; foreach ($k in $wins.Keys) { if ($wins[$k] -gt $maxWins) { $maxWins = $wins[$k] } }
-$trackedCount = @($doc.comparison).Count
-[void]$sb.Append("<div class='pg-board'><span class='pg-board-h'>Cheapest-store scoreboard &middot; items each store wins this week</span><div class='pg-board-sub'><b>" + $trackedCount + " items</b> tracked across " + $storeOrder.Count + " Omaha stores, updated daily</div><div class='pg-board-row'>")
-foreach ($s in $storeOrder) {
-  $n = $wins[$s]
-  $cls = 'pg-score'; if ($n -eq $maxWins -and $n -gt 0) { $cls += ' is-lead' }
-  [void]$sb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc $s) + "`"><span class='pg-score-n'>" + $n + "</span><span class='pg-score-s'>" + (HtmlEnc $shortName[$s]) + "</span></div>")
-}
-[void]$sb.Append("</div></div>")
-# ---- price-records band: this week's record lows / ties / dips, from the badge pass up top ----
-if ($recBadge.Count -gt 0) {
-  $recList = @()
-  foreach ($k in $recBadge.Keys) { $rr = $byId[$k]; if ($rr) { $recList += ,@{ b = $recBadge[$k]; r = $rr } } }
-  $recList = @($recList | Sort-Object { $_.b.rank }, { [double]$_.r.cheapest_price })
-  # one row of chips, not two (P2-7 tightening). The tail line below already says how many more are marked
-  # in the list, and the new gold record flags make those findable while scrolling.
-  $shown = @($recList | Select-Object -First 4)
-  [void]$sb.Append("<div class='pg-recband'><span class='pg-recband-h'>Price records this week</span><div class='pg-recband-row'>")
-  foreach ($e in $shown) {
-    $rr = $e.r; $bb = $e.b
-    $suTag = if ($bb.su) { " &middot; stock up" } else { "" }
-    [void]$sb.Append("<div class='pg-recchip' title=`"" + (HtmlEnc $bb.title) + "`"><b>" + (Fmt-Price ([double]$rr.cheapest_price) ([string]$rr.unit)) + "</b><span>" + (HtmlEnc $rr.commodity) + "</span><em>" + $bb.label + " &middot; " + (HtmlEnc $shortName[[string]$rr.cheapest_store]) + $suTag + "</em></div>")
-  }
-  [void]$sb.Append("</div>")
-  $more = $recList.Count - $shown.Count
-  $tail = if ($more -gt 0) { "+" + $more + " more marked in the list below. " } else { "" }
-  [void]$sb.Append("<span class='pg-recband-sub'>" + $tail + "From " + $weeksOnRecord + " weeks of Omaha price tracking, and counting.</span></div>")
-}
-# ---- trip planner home: ALWAYS visible right under the scoreboard so shoppers know it exists ----
+# The cheapest-store scoreboard and the price-records band both used to render here (2026-08-09: removed at
+# Brad's request). The per-row gold record flags still mark every record low/tie/dip in the list itself, and
+# the masthead chip still headlines one of them, so nothing the badge pass computes is orphaned.
+# ---- trip planner home: ALWAYS visible up top so shoppers know it exists ----
 [void]$sb.Append("<div class='pg-tripbox' id='pg-tripbox'><h3>Plan your shopping trip</h3>")
 [void]$sb.Append("<p class='pg-tripbox-sub' id='pg-tripbox-sub'>Tick the box next to each item you want to buy, then come back here. Tell us how many stores you are willing to visit and we will split your list for the cheapest trip. <button type='button' class='pg-demo' id='pg-demo'>Try it: the family staples basket</button></p>")
 [void]$sb.Append("<div id='pg-tripbox-body' hidden><p class='pg-tripbox-n'><b id='pg-tripbox-count'>0 items</b> selected. How many stores are you willing to visit?</p><div class='pg-plan-kbtns' id='pg-plan-kbtns'></div><div class='pg-plan-out' id='pg-plan-out'></div><p class='pg-plan-note'>Based on this week's verified per-unit prices. Register totals vary by package size.</p></div></div>")
-# hide-Sam's toggle: recomputes the cheapest flags + scoreboard for shoppers without a membership
+# hide-Sam's toggle: recomputes the cheapest flags for shoppers without a membership
 [void]$sb.Append("<label class='pg-toggle'><input type='checkbox' id='pg-hidesams'><span>Hide Sam's Club</span><span class='pg-toggle-note'>membership required: toggle to see the best price without one</span></label>")
 # show-all toggle: opens every row's full 7-store grid at once (default is the compact one-line view)
 [void]$sb.Append("<label class='pg-toggle'><input type='checkbox' id='pg-expandall'><span>Show all prices</span><span class='pg-toggle-note'>expand every item to compare all stores at once</span></label>")
@@ -769,34 +740,25 @@ if ($riDoc) {
 [void]$sb.Append("</div>")
 
 # =====================================================================================================
-# THE MASTHEAD (elite layer, binding conflict ruling: ONE band, three lines, no more)
+# THE MASTHEAD (elite layer, binding conflict ruling: ONE band, no more than three lines)
 # =====================================================================================================
-# Built here rather than in the header because two of its three lines count things that do not exist
+# Built here rather than in the header because both of its lines count things that do not exist
 # until every section has rendered. Every figure below is computed from the same data the rows are
 # rendered from, ROUNDED DOWN, and a line that cannot be computed honestly is DROPPED, never softened.
 
-# line 1 - freshness. The stamp is the newest pull across all seven stores; a not-today stamp is left
-# reading as its real date (and that same staleness is what the ops alerts watch).
-$newestAll = $null
-foreach ($s in $storeOrder) { $u = NewestUpd $storeFiles[$s]; if ($u -and (($null -eq $newestAll) -or ($u -gt $newestAll))) { $newestAll = $u } }
-$freshTxt = if ($newestAll -and $newestAll.Date -eq $pgToday) { 'Checked this morning' } elseif ($newestAll) { 'Last checked ' + (Fmt-Date $newestAll) } else { 'Prices verified against each store' }
-# ad flip: the schedule already knows when the current windows end, so the countdown is read, not guessed
-$nextFlip = $null
-foreach ($k in $adWin.Keys) { try { $t = [datetime]$adWin[$k].to; if ($t.Date -ge $pgToday -and (($null -eq $nextFlip) -or ($t -lt $nextFlip))) { $nextFlip = $t } } catch {} }
-$flipTxt = ''
-if ($nextFlip) {
-  $dLeft = [int]([math]::Round(($nextFlip.Date - $pgToday).TotalDays))
-  $flipTxt = if ($dLeft -le 0) { ' &middot; new ads drop tomorrow' } elseif ($dLeft -eq 1) { ' &middot; new ads in 1 day' } else { ' &middot; new ads in ' + $dLeft + ' days' }
-}
-$mast = "<div class='pg-mast'><p class='pg-mast-fresh'>" + $freshTxt + " &middot; " + $storeOrder.Count + " stores" + $flipTxt + "</p>"
+# The freshness line ("Checked this morning / Last checked <date> - N stores - new ads in N days") used to
+# open the masthead; removed 2026-08-09 at Brad's request. Per-store pull dates and ad windows still ship in
+# the store-status strip at the foot of the page, so the transparency claim is unchanged - only the headline
+# repeat of it is gone. The ops alerts read staleness from the store files, never from this page.
+$mast = "<div class='pg-mast'>"
 
-# line 2 - the tally, round-down only
+# line 1 - the tally, round-down only
 $pricesRounded = [int]([math]::Floor($totalPrices / 100) * 100)
 $mast += "<p class='pg-mast-tally'><span>" + $totalCommodities + " items</span><span>" + $pricesRounded + "+ prices verified</span>"
 if ($weeksOnRecord -ge 2) { $mast += "<span>" + $weeksOnRecord + " weeks tracked</span>" }
 $mast += "</p>"
 
-# line 3 - the wrong-store tax. Median within-row spread over rows priced at 4+ NON-MEMBERSHIP stores
+# line 2 - the wrong-store tax. Median within-row spread over rows priced at 4+ NON-MEMBERSHIP stores
 # (a Sam's-only low would otherwise inflate a number most shoppers cannot act on). Under 15% the line is
 # DROPPED rather than massaged: an 11% spread is not a headline, and rewriting it into one is how a real
 # number turns into a slogan.
@@ -937,15 +899,7 @@ html.tc-member .pg-bar,html.tc-member .pg-capture{display:none !important}
 .pg-head h1{font-size:2em;line-height:1.12;margin:.1em 0 .12em;color:var(--ink);text-wrap:balance;letter-spacing:-.01em}
 .pg-sub{font-size:1.08em;line-height:1.4;color:var(--mut);margin:.2em 0 .5em;max-width:60ch}
 .pg-note{font-size:.83em;color:var(--mut);opacity:.85;margin:.2em 0 0;max-width:66ch}
-/* price records */
-.pg-recband{margin:12px 0 6px;padding:14px 16px 12px;border:1px solid #ecd9ae;border-radius:14px;background:#fdf8ec}
-.pg-recband-h{display:block;font-size:.7em;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#8a6d1f;margin-bottom:11px}
-.pg-recband-row{display:flex;flex-wrap:wrap;gap:9px}
-.pg-recchip{display:flex;flex-direction:column;gap:2px;min-width:112px;padding:9px 12px 8px;border-radius:10px;background:#fff;border:1px solid #eee3c8}
-.pg-recchip b{font-size:1.12em;font-weight:800;line-height:1.1;color:var(--green-d)}
-.pg-recchip span{font-size:.82em;font-weight:700;color:var(--ink)}
-.pg-recchip em{font-style:normal;font-size:.7em;font-weight:700;letter-spacing:.03em;color:#8a6d1f}
-.pg-recband-sub{display:block;margin-top:9px;font-size:.74em;color:var(--mut)}
+/* record flags - the per-row badges (the top-of-page records band was removed 2026-08-09) */
 .pg-rec{display:inline-block;margin-left:0;padding:2px 9px 2px;border-radius:999px;font-size:.6em;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;vertical-align:2px}
 .pg-rec-low{background:var(--green);color:#fff}
 .pg-rec-tie{background:var(--green-t);color:var(--green-d);border:1px solid var(--green)}
@@ -953,19 +907,6 @@ html.tc-member .pg-bar,html.tc-member .pg-capture{display:none !important}
 .pg-stockup{background:#e2a43c;color:#16263f}
 .pg-verd-buy{background:#fff;color:var(--green-d);border:1px solid var(--green)}
 .pg-verd-wait{background:#f4f6f9;color:#68748a;border:1px solid #d5dbe4}
-@media(max-width:560px){.pg-recchip{min-width:calc(50% - 5px);flex:1 1 calc(50% - 5px)}}
-/* scoreboard */
-.pg-board{margin:20px 0 6px;padding:15px 16px 14px;border:1px solid var(--bd);border-radius:14px;background:var(--green-t)}
-.pg-board-h{display:block;font-size:.7em;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--green-d);margin-bottom:6px}
-.pg-board-sub{font-size:.85em;line-height:1.4;color:var(--mut);margin:0 0 12px}
-.pg-board-sub b{color:var(--green-d);font-weight:800}
-.pg-board-row{display:flex;flex-wrap:wrap;gap:10px}
-.pg-score{flex:1 1 auto;min-width:96px;display:flex;flex-direction:column;align-items:center;gap:1px;padding:9px 8px;border-radius:10px;background:#fff;border:1px solid var(--bd)}
-.pg-score.is-lead{background:var(--green);border-color:var(--green)}
-.pg-score-n{font-size:1.55em;font-weight:800;line-height:1;color:var(--ink)}
-.pg-score.is-lead .pg-score-n{color:#fff}
-.pg-score-s{font-size:.74em;font-weight:600;color:var(--mut)}
-.pg-score.is-lead .pg-score-s{color:#d9f2e5}
 /* store status strip */
 .pg-status{margin:12px 0 6px;padding:13px 15px 14px;border:1px solid var(--bd);border-radius:12px;background:#fbfcfb}
 .pg-status-h{display:block;font-size:.7em;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin-bottom:11px}
@@ -1048,7 +989,7 @@ a.pg-adonly:hover,a.pg-adonly:focus{opacity:1;border-color:var(--mut)}
 .pg-ri-intro{margin:36px 0 2px;padding:0}
 .pg-ri-h2{font-size:1.5em;margin:0 0 3px;color:var(--ink);border:none;padding:0;letter-spacing:-.01em}
 .pg-ri-sub2{font-size:.9em;color:var(--mut);margin:0;max-width:66ch;line-height:1.4}
-@media(max-width:560px){.pg-wrap{font-size:1.4rem}.pg-head h1{font-size:1.55em}.pg-chip{min-width:calc(50% - 4px);flex:1 1 calc(50% - 4px);max-width:none}.pg-score{min-width:calc(33% - 7px)}
+@media(max-width:560px){.pg-wrap{font-size:1.4rem}.pg-head h1{font-size:1.55em}.pg-chip{min-width:calc(50% - 4px);flex:1 1 calc(50% - 4px);max-width:none}
 /* phone: pills become one horizontally-scrollable row instead of a 3-row wall.
    contain:inline-size is LOAD-BEARING: without it the row's intrinsic width (~526px of pills) propagates
    up through the flex/grid chain and inflates the whole board past the phone viewport (min-width:0 alone
@@ -1105,12 +1046,11 @@ $eliteCss = '<style>' + (Compress-TcCss ((Get-TcTokenCss -Scope '.pg-wrap' -Part
    it does: .pg-hide is display:none, and a visible section is always laid out when it enters view. ---- */
 .pg-wrap .pg-cat{content-visibility:auto;contain-intrinsic-size:auto 3000px}
 .pg-wrap .pg-row,.pg-wrap .pg-cat{scroll-margin-top:96px}
-/* ---- THE MASTHEAD: one navy band, three lines, nothing else ---- */
+/* ---- THE MASTHEAD: one navy band, the tally + the stat line, nothing else ---- */
 .pg-wrap .pg-mast{margin:12px 0 10px;padding:14px 16px 13px;border-radius:14px;color:#F6F1E7;
   background:radial-gradient(120% 160% at 50% 0%,#1E3A5F 0%,#16263F 62%);box-shadow:inset 0 1px 0 rgba(226,164,60,.35)}
 .pg-wrap .pg-mast p{margin:0}
-.pg-wrap .pg-mast-fresh{font-size:.86em;font-weight:600;color:#d9e2ee}
-.pg-wrap .pg-mast-tally{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:7px !important;font-size:.78em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#E2A43C;font-variant-numeric:tabular-nums}
+.pg-wrap .pg-mast-tally{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:0 !important;font-size:.78em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#E2A43C;font-variant-numeric:tabular-nums}
 .pg-wrap .pg-mast-stat{margin-top:9px !important;font-size:.88em;line-height:1.5;color:#F6F1E7}
 .pg-wrap .pg-mast-stat b{color:#E2A43C;font-variant-numeric:tabular-nums}
 .pg-wrap .pg-mast-chip{display:inline-block;margin-left:4px;background:#E2A43C;color:#16263F;border:none;border-radius:999px;padding:4px 12px;min-height:32px;font-size:.92em;font-weight:800;cursor:pointer;font-family:inherit}
@@ -1155,14 +1095,8 @@ $eliteCss = '<style>' + (Compress-TcCss ((Get-TcTokenCss -Scope '.pg-wrap' -Part
 .pg-wrap .pg-fbtn{white-space:nowrap;flex:0 0 auto;min-height:40px}
 .pg-wrap .pg-fbtn.is-here{border-color:#E2A43C;color:#8a6d1f}
 .pg-wrap .pg-search{max-width:none;flex:1}
-/* ---- THE CHALKBOARD: the ONE dark panel on this page. No texture images, no handwriting fonts. ---- */
-.pg-wrap .pg-recband{background:#101B2E;border-color:#101B2E}
-.pg-wrap .pg-recband-h{color:#E2A43C}
-.pg-wrap .pg-recchip{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
-.pg-wrap .pg-recchip b{color:#E2A43C}
-.pg-wrap .pg-recchip span{color:#F6F1E7}
-.pg-wrap .pg-recchip em{color:#b9c4d4}
-.pg-wrap .pg-recband-sub{color:#b9c4d4}
+/* The chalkboard skin dressed the price-records band; the band was removed 2026-08-09, and the masthead is
+   now the ONE dark panel on this page. */
 /* ---- SPARKLINE ---- */
 .pg-wrap .pg-spark{display:inline-flex;align-items:center;gap:9px;flex-wrap:wrap;width:100%;margin-top:6px}
 .pg-wrap .pg-spark svg{flex:none}
@@ -1433,11 +1367,12 @@ $js = @'
   // fill everything once the page is idle, so chip-dependent features are ready before a human can reach them
   if(window.requestIdleCallback){ requestIdleCallback(function(){ pgFillAll(); },{timeout:3000}); } else { setTimeout(function(){ pgFillAll(); },1200); }
   pgSummaries();
-  // hide Sam's Club: drop its chips, then re-flag the cheapest per row + recount the scoreboard
+  // hide Sam's Club: drop its chips, then re-flag the cheapest per row. (It used to recount the scoreboard
+  // too; that band was removed 2026-08-09, so the per-row re-flag plus pgSummaries is the whole job.)
   var SAMS="Sam's Club";
   var tg=document.getElementById('pg-hidesams');
   function recompute(){
-    var hide=tg.checked, wins={};
+    var hide=tg.checked;
     document.querySelectorAll('.pg-row').forEach(function(row){
       var chips=[].slice.call(row.querySelectorAll('.pg-chip')), first=null;
       chips.forEach(function(c){
@@ -1451,16 +1386,7 @@ $js = @'
         first.classList.add('is-best');
         var b=document.createElement('span'); b.className='pg-best'; b.textContent='Cheapest';
         first.insertBefore(b, first.firstChild);
-        var st=first.getAttribute('data-store'); wins[st]=(wins[st]||0)+1;
       }
-    });
-    var maxw=0; for(var k in wins){ if(wins[k]>maxw){maxw=wins[k];} }
-    document.querySelectorAll('.pg-score').forEach(function(cell){
-      var st=cell.getAttribute('data-store'), n=wins[st]||0, sams=st===SAMS;
-      cell.style.display=(hide&&sams)?'none':'';
-      cell.querySelector('.pg-score-n').textContent=n;
-      cell.classList.toggle('is-lead', !(hide&&sams) && n===maxw && n>0);
-      cell.style.order=String(100-n);
     });
     pgSummaries();
   }
