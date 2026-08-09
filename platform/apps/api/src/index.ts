@@ -1303,6 +1303,47 @@ app.post("/internal/triage/run", async (context) => {
   return context.json({ ok: true, overdueAccuracyDraws, queue: queue.results });
 });
 
+app.post("/internal/triage/reconcile", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may reconcile triage", 403);
+  const recoverable = await context.env.DB.prepare(
+    `SELECT t.id, failed.release_id AS failed_release_id, failed.guard_id,
+            current.release_id AS recovery_release_id
+       FROM triage_items t
+       JOIN guard_findings finding ON finding.id = t.source_ref
+       JOIN guard_results failed ON failed.id = finding.result_id
+       JOIN releases rejected ON rejected.id = failed.release_id AND rejected.state = 'rejected'
+       JOIN current_releases current ON current.market_id = rejected.market_id
+      WHERE t.source_kind = 'guard_finding' AND t.status <> 'resolved'
+        AND EXISTS (
+          SELECT 1 FROM guard_results recovered
+           WHERE recovered.release_id = current.release_id
+             AND recovered.guard_id = failed.guard_id
+             AND recovered.status = 'pass'
+        )
+      ORDER BY t.id`,
+  ).all<{ id: string; failed_release_id: string; guard_id: string; recovery_release_id: string }>();
+  const observedAt = new Date().toISOString();
+  for (let offset = 0; offset < recoverable.results.length; offset += 90) {
+    await context.env.DB.batch(recoverable.results.slice(offset, offset + 90).map((row) => context.env.DB.prepare(
+      `UPDATE triage_items
+          SET status = 'resolved', plan_ref = 'auto-plan://rejected-candidate-superseded',
+              resolution_json = ?2, updated_at = CURRENT_TIMESTAMP, resolved_at = CURRENT_TIMESTAMP
+        WHERE id = ?1 AND status <> 'resolved'`,
+    ).bind(row.id, stableJson({
+      resolution: "The failing candidate was rejected before publication; the current release passes the same hard guard.",
+      failedReleaseId: row.failed_release_id,
+      recoveryReleaseId: row.recovery_release_id,
+      guardId: row.guard_id,
+      observedAt,
+    }))));
+  }
+  await recordAudit(context.env, context.get("identity"), "triage.reconcile", "triage_queue", null, "accepted", {
+    resolved: recoverable.results.length,
+    observedAt,
+  });
+  return context.json({ ok: true, resolved: recoverable.results.length, observedAt });
+});
+
 app.post("/internal/triage/:id/resolve", zValidator("json", triageResolveSchema), async (context) => {
   const body = context.req.valid("json");
   const existing = await context.env.DB.prepare("SELECT id FROM triage_items WHERE id = ?1").bind(context.req.param("id")).first();

@@ -264,8 +264,8 @@ if (command === "status") {
 } else if (command === "doctor") {
   result = await (await mutationClient()).request("/internal/doctor", { acceptStatuses: [422] });
 } else if (command === "triage") {
-  result = subcommand === "run"
-    ? await (await mutationClient()).request("/internal/triage/run", { method: "POST" })
+  result = subcommand === "run" || subcommand === "reconcile"
+    ? await (await mutationClient()).request(`/internal/triage/${subcommand}`, { method: "POST" })
     : await (await mutationClient()).request(`/internal/triage?status=${encodeURIComponent(subcommand ?? "open")}`);
 } else if (command === "config" && (subcommand === "generate" || subcommand === "check")) {
   result = await generateLegacyConfiguration(incomeRoot, subcommand === "check");
@@ -436,7 +436,7 @@ if (command === "status") {
   result = {
     ok: true,
     usage: [
-      "tc status", "tc doctor", "tc triage [status|run]", "tc config generate|check|deploy",
+      "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc config generate|check|deploy",
       "tc schedules check|deploy", "tc backup trigger [--replica]", "tc restore record <file>|show", "tc evidence record <file>|show [gate]", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]", "tc job start|finish|dispatch <job> [status|reason]",
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output>",
