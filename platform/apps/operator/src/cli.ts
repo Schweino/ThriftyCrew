@@ -94,6 +94,8 @@ if (command === "status") {
 } else if (command === "schedules" && subcommand === "deploy") {
   const document = await readScheduleAuthority(platformRoot);
   result = await (await mutationClient()).request("/internal/schedules/sync", { method: "PUT", json: document });
+} else if (command === "backup" && subcommand === "trigger") {
+  result = await (await mutationClient()).request("/internal/backups/trigger", { method: "POST" });
 } else if (command === "run" && subcommand === "daily" && arguments_.includes("--dry")) {
   const artifact = await buildCurrentBridge(incomeRoot);
   result = { ok: true, dryRun: true, audit: artifact.audit, releaseInputs: artifact.stores.length };
@@ -127,7 +129,7 @@ if (command === "status") {
     ok: true,
     usage: [
       "tc status", "tc doctor", "tc triage [status]", "tc config generate|check",
-      "tc schedules check|deploy",
+      "tc schedules check|deploy", "tc backup trigger",
       "tc run daily --dry", "tc parity", "tc replay", "tc capture validate <file>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id]", "tc accuracy verdict <file>",
       "tc commodity add <file>", "tc recipe add <file>",
