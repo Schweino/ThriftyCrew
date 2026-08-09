@@ -1,1 +1,1 @@
-﻿baked-beans|Hy-Vee;chicken-breast|Fareway;cilantro|Walmart;french-bread|Walmart;frozen-pizza|Walmart;gelatin|Walmart;green-onions|Walmart;pomegranates|Walmart
+﻿baked-beans|Hy-Vee;canned-pasta|Fareway;cilantro|Walmart;cucumbers|Fareway;french-bread|Walmart;frozen-pizza|Walmart;gelatin|Walmart;green-onions|Walmart;microwave-popcorn|Fareway;pomegranates|Walmart;watermelon|Fareway

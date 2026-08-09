@@ -82,19 +82,6 @@
                          "size_shape_mismatch":  false
                      },
                      {
-                         "id":  "dried-basil",
-                         "commodity":  "Basil (dried)",
-                         "unit":  "oz",
-                         "store":  "Baker\u0027s",
-                         "per_unit":  4.6279,
-                         "median":  1.0624,
-                         "mult":  4.36,
-                         "size":  "0.43 oz",
-                         "item":  "Kroger Basil Leaves Shaker",
-                         "peers_packed":  "0 of 4",
-                         "size_shape_mismatch":  false
-                     },
-                     {
                          "id":  "shampoo",
                          "commodity":  "Shampoo",
                          "unit":  "floz",
@@ -106,23 +93,10 @@
                          "item":  "Dove Nutritive Solutions Intensive Repair Shampoo",
                          "peers_packed":  "0 of 6",
                          "size_shape_mismatch":  false
-                     },
-                     {
-                         "id":  "dog-treats",
-                         "commodity":  "Dog Treats",
-                         "unit":  "oz",
-                         "store":  "Hy-Vee",
-                         "per_unit":  0.8,
-                         "median":  0.1965,
-                         "mult":  4.07,
-                         "size":  "5.6 oz",
-                         "item":  "Milk-Bone Soft \u0026 Chewy Chicken Recipe Dog Treats",
-                         "peers_packed":  "0 of 6",
-                         "size_shape_mismatch":  false
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-09T07:11:27",
+    "generated":  "2026-08-09T09:04:32",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -996,7 +970,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0993,
                               "size":  "15 oz",
-                              "item":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
+                              "item":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1170,18 +1144,6 @@
                               "holds_crown":  false
                           },
                           {
-                              "id":  "vegetable-oil",
-                              "commodity":  "Vegetable / Canola Oil",
-                              "unit":  "floz",
-                              "store":  "Hy-Vee",
-                              "per_unit":  0.0781,
-                              "size":  "48 oz",
-                              "item":  "Thats Smart Vegetable Oil",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
                               "id":  "vegetable-broth",
                               "commodity":  "Vegetable Broth / Stock",
                               "unit":  "floz",
@@ -1218,5 +1180,5 @@
                               "holds_crown":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-08-08.json"
+    "compare_file":  "comparison-2026-08-09.json"
 }
