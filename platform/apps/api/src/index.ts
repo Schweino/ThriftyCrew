@@ -591,7 +591,8 @@ app.post("/internal/capture-batches/:id/observations", zValidator("json", observ
   const batch = await findBatch(context.env.DB, context.req.param("id"));
   if (!batch) return jsonError("capture batch not found", 404);
   const identity = context.get("identity");
-  if (identity.role !== "capture" && identity.role !== "operator") return jsonError("mutation role is not authorized for capture content", 403);
+  const migrationBridge = identity.role === "engine" && batch.capture_method === "legacy_bridge";
+  if (identity.role !== "capture" && identity.role !== "operator" && !migrationBridge) return jsonError("mutation role is not authorized for capture content", 403);
   if (batch.agent_id !== identity.agentId && identity.role !== "operator") return jsonError("batch belongs to another agent", 403);
   if (identity.sourceIds && !identity.sourceIds.includes(batch.source_id)) return jsonError("agent is not authorized for this capture source", 403);
   try {
@@ -606,7 +607,8 @@ app.put("/internal/capture-batches/:id/evidence", async (context) => {
   const batch = await findBatch(context.env.DB, context.req.param("id"));
   if (!batch) return jsonError("capture batch not found", 404);
   const identity = context.get("identity");
-  if (identity.role !== "capture" && identity.role !== "operator") return jsonError("mutation role is not authorized for capture evidence", 403);
+  const migrationBridge = identity.role === "engine" && batch.capture_method === "legacy_bridge";
+  if (identity.role !== "capture" && identity.role !== "operator" && !migrationBridge) return jsonError("mutation role is not authorized for capture evidence", 403);
   if (batch.agent_id !== identity.agentId && identity.role !== "operator") return jsonError("batch belongs to another agent", 403);
   if (batch.status !== "open") return jsonError("evidence can only be added to an open batch", 409);
   const metadataResult = evidenceMetadataSchema.safeParse({
@@ -622,6 +624,13 @@ app.put("/internal/capture-batches/:id/evidence", async (context) => {
   if (actualHash !== metadataResult.data.sha256) return jsonError("evidence hash does not match content", 422);
   const contentType = context.req.header("content-type") || "application/octet-stream";
   const objectKey = `batches/${batch.id}/${metadataResult.data.id}`;
+  const existingEvidence = await context.env.DB.prepare(
+    "SELECT object_key, sha256 FROM evidence_objects WHERE id = ?1 AND batch_id = ?2",
+  ).bind(metadataResult.data.id, batch.id).first<{ object_key: string; sha256: string }>();
+  if (existingEvidence) {
+    if (existingEvidence.sha256 !== actualHash) return jsonError("evidence id already exists with different content", 409);
+    return context.json({ ok: true, evidenceId: metadataResult.data.id, objectKey: existingEvidence.object_key, idempotent: true });
+  }
   await context.env.EVIDENCE.put(objectKey, bytes, { httpMetadata: { contentType }, customMetadata: { sha256: actualHash, kind: metadataResult.data.kind } });
   await context.env.DB.prepare(
     `INSERT INTO evidence_objects (id, batch_id, object_key, kind, content_type, byte_length, sha256, expires_at)
@@ -634,7 +643,8 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   const batch = await findBatch(context.env.DB, context.req.param("id"));
   if (!batch) return jsonError("capture batch not found", 404);
   const identity = context.get("identity");
-  if (identity.role !== "capture" && identity.role !== "operator") return jsonError("mutation role is not authorized to seal captures", 403);
+  const migrationBridge = identity.role === "engine" && batch.capture_method === "legacy_bridge";
+  if (identity.role !== "capture" && identity.role !== "operator" && !migrationBridge) return jsonError("mutation role is not authorized to seal captures", 403);
   if (batch.agent_id !== identity.agentId && identity.role !== "operator") return jsonError("batch belongs to another agent", 403);
   if (batch.status !== "open") return jsonError("batch is already sealed", 409);
   const body = context.req.valid("json");

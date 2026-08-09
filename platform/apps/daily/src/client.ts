@@ -1,5 +1,6 @@
 import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
 import type { CurrentBridgeArtifact } from "./legacy";
+import type { DirectCaptureArtifact } from "@thriftycrew/contracts";
 
 const encoder = new TextEncoder();
 
@@ -57,6 +58,46 @@ export class MutationClient {
     }
     return { ...result, httpStatus: response.status };
   }
+}
+
+export async function ingestDirectCapture(client: MutationClient, artifact: DirectCaptureArtifact, evidenceBody: Uint8Array): Promise<Record<string, unknown>> {
+  const created = await client.request("/internal/capture-batches", { json: {
+    sourceId: artifact.sourceId,
+    coverageMode: artifact.coverageMode,
+    capturedFrom: artifact.capturedFrom,
+    capturedTo: artifact.capturedTo,
+    ...(artifact.validFrom ? { validFrom: artifact.validFrom } : {}),
+    ...(artifact.validTo ? { validTo: artifact.validTo } : {}),
+    ...(artifact.expectedTerms !== undefined ? { expectedTerms: artifact.expectedTerms } : {}),
+    ...(artifact.expectedPages !== undefined ? { expectedPages: artifact.expectedPages } : {}),
+    marketVerified: artifact.marketVerified,
+    locationVerified: artifact.locationVerified,
+    priceModeVerified: artifact.priceModeVerified,
+    idempotencyKey: artifact.idempotencyKey,
+  } });
+  const batchId = String(created.batchId);
+  let status = String(created.status);
+  const evidenceHash = await digestHex(evidenceBody);
+  const evidenceId = `evidence-${batchId}-${evidenceHash.slice(0, 16)}`;
+  if (status === "open") {
+    for (const observationChunk of chunks(artifact.observations, 50)) {
+      await client.request(`/internal/capture-batches/${batchId}/observations`, { json: { observations: observationChunk } });
+    }
+    await client.request(`/internal/capture-batches/${batchId}/evidence`, {
+      method: "PUT",
+      body: evidenceBody,
+      headers: { "content-type": "application/json", "x-evidence-id": evidenceId, "x-evidence-kind": "raw_payload", "x-content-sha256": evidenceHash },
+    });
+    const sealed = await client.request(`/internal/capture-batches/${batchId}/seal`, { json: { terms: artifact.terms, evidenceManifestKey: evidenceId }, acceptStatuses: [422] });
+    status = String(sealed.status);
+    if (status === "rejected") return { ok: false, batchId, status, audit: artifact.audit, seal: sealed };
+  }
+  if (status === "validated") {
+    const promoted = await client.request(`/internal/capture-batches/${batchId}/promote`, { method: "POST" });
+    status = String(promoted.status);
+  }
+  if (status !== "promoted") throw new Error(`direct capture ${batchId} is in unexpected state ${status}`);
+  return { ok: true, batchId, status, evidenceId, observations: artifact.observations.length, terms: artifact.terms.length, audit: artifact.audit };
 }
 
 function ruleCount(artifact: CurrentBridgeArtifact): number {

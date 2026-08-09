@@ -106,6 +106,30 @@ export const captureBatchSealSchema = z.object({
   evidenceManifestKey: z.string().min(1).max(1000).optional(),
 });
 
+export const directCaptureArtifactSchema = z.object({
+  version: z.literal(1),
+  sourceId: nonEmptyId,
+  coverageMode,
+  capturedFrom: isoDateTime,
+  capturedTo: isoDateTime,
+  validFrom: isoDateTime.optional(),
+  validTo: isoDateTime.optional(),
+  expectedTerms: z.number().int().nonnegative().optional(),
+  expectedPages: z.number().int().nonnegative().optional(),
+  marketVerified: z.boolean(),
+  locationVerified: z.boolean(),
+  priceModeVerified: z.boolean(),
+  idempotencyKey: nonEmptyId,
+  terms: z.array(captureTermSchema).max(2000),
+  observations: z.array(observationInputSchema).min(1).max(100_000),
+  audit: z.record(z.string(), z.unknown()).default({}),
+}).superRefine((value, context) => {
+  if (value.capturedTo < value.capturedFrom) context.addIssue({ code: "custom", path: ["capturedTo"], message: "must not precede capturedFrom" });
+  if (value.expectedTerms !== undefined && value.terms.length !== value.expectedTerms) context.addIssue({ code: "custom", path: ["terms"], message: "term ledger does not match expectedTerms" });
+  const ordinals = new Set(value.terms.map((term) => term.ordinal));
+  if (ordinals.size !== value.terms.length) context.addIssue({ code: "custom", path: ["terms"], message: "term ordinals must be unique" });
+});
+
 export const evidenceMetadataSchema = z.object({
   id: nonEmptyId,
   kind: z.enum(["screenshot", "flyer_page", "raw_payload", "manifest"]),
@@ -359,3 +383,4 @@ export type ReleaseGuardResult = z.infer<typeof releaseGuardResultSchema>;
 export type TelemetryEvent = z.infer<typeof telemetryEventSchema>;
 export type AccuracyDrawCreate = z.infer<typeof accuracyDrawCreateSchema>;
 export type AccuracyVerdicts = z.infer<typeof accuracyVerdictsSchema>;
+export type DirectCaptureArtifact = z.infer<typeof directCaptureArtifactSchema>;

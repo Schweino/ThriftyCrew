@@ -1,8 +1,9 @@
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { observationChunkSchema } from "@thriftycrew/contracts";
-import { MutationClient, replayCurrentArtifact } from "@thriftycrew/daily/client";
+import { directCaptureArtifactSchema, observationChunkSchema } from "@thriftycrew/contracts";
+import { ingestDirectCapture, MutationClient, replayCurrentArtifact } from "@thriftycrew/daily/client";
 import { buildCurrentBridge } from "@thriftycrew/daily/legacy";
+import { buildRegularCapture } from "@thriftycrew/daily/direct";
 import { generateLegacyConfiguration } from "./config";
 import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
 
@@ -159,11 +160,28 @@ if (command === "status") {
 } else if (command === "replay") {
   const artifact = await buildCurrentBridge(incomeRoot);
   result = await replayCurrentArtifact(await mutationClient(), artifact);
+} else if (command === "capture" && subcommand === "build-regular") {
+  const [store, inputFile, outputFile] = arguments_;
+  if (!store || !inputFile || !outputFile) throw new Error("tc capture build-regular requires store, input file, and output file");
+  const source = JSON.parse(await readFile(path.resolve(inputFile), "utf8").then((value) => value.replace(/^\uFEFF/, "")));
+  const artifact = await buildRegularCapture(store, source);
+  await writeJson(path.resolve(outputFile), artifact);
+  result = { ok: true, outputFile: path.resolve(outputFile), sourceId: artifact.sourceId, observations: artifact.observations.length, terms: artifact.terms.length, audit: artifact.audit };
+} else if (command === "capture" && subcommand === "ingest") {
+  const [artifactFile, evidenceFile] = arguments_;
+  if (!artifactFile) throw new Error("tc capture ingest requires an artifact file");
+  const artifactBytes = await readFile(path.resolve(artifactFile));
+  const artifact = directCaptureArtifactSchema.parse(JSON.parse(new TextDecoder().decode(artifactBytes).replace(/^\uFEFF/, "")));
+  const evidenceBytes = evidenceFile ? await readFile(path.resolve(evidenceFile)) : artifactBytes;
+  result = await ingestDirectCapture(await mutationClient(), artifact, evidenceBytes);
 } else if (command === "capture" && subcommand === "validate") {
   const file = arguments_[0];
   if (!file) throw new Error("tc capture validate requires a JSON file");
   const parsed = JSON.parse(await readFile(path.resolve(file), "utf8"));
-  result = { ok: true, observations: observationChunkSchema.parse(Array.isArray(parsed) ? { observations: parsed } : parsed).observations.length };
+  const direct = directCaptureArtifactSchema.safeParse(parsed);
+  result = direct.success
+    ? { ok: true, kind: "direct-capture", sourceId: direct.data.sourceId, observations: direct.data.observations.length, terms: direct.data.terms.length, audit: direct.data.audit }
+    : { ok: true, kind: "observation-chunk", observations: observationChunkSchema.parse(Array.isArray(parsed) ? { observations: parsed } : parsed).observations.length };
 } else if (command === "accuracy" && subcommand === "draw") {
   const now = new Date();
   const due = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -185,7 +203,7 @@ if (command === "status") {
       "tc status", "tc doctor", "tc triage [status|run]", "tc config generate|check",
       "tc schedules check|deploy", "tc backup trigger [--replica]", "tc job start|finish|dispatch <job> [status|reason]",
       "tc ghost reconcile [release-id]",
-      "tc run daily --dry", "tc parity", "tc replay", "tc capture validate <file>",
+        "tc run daily --dry", "tc parity", "tc replay", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id]", "tc accuracy verdict <file>",
       "tc commodity add <file>", "tc recipe add <file>",
     ],
