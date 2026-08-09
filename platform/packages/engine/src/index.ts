@@ -188,7 +188,7 @@ export interface NativeEngineSnapshot {
   inputHash: string;
   inputBatchIds: string[];
   commodities: Array<{ id: string; label: string; basis_unit: WinnerCandidate["commodityId"] extends string ? string : never; category_id: string; category_label?: string; sort_order?: number }>;
-  stores: Array<{ id: string; store_name: string; display_name?: string; membership_program?: string | null }>;
+  stores: Array<{ id: string; store_name: string; display_name?: string; membership_required?: number }>;
   candidates: Array<{
     observation_id: string; commodity_id: string; store_location_id: string; per_unit_micros: number;
     captured_at: string; valid_to: string | null; coverage_mode: WinnerCandidate["batchCoverageMode"];

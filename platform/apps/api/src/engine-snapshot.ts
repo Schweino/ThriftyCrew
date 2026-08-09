@@ -68,7 +68,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode)
         WHERE c.configuration_id = ?1 AND c.active = 1 ORDER BY cat.sort_order, c.id`,
     ).bind(configuration.id).all(),
     env.DB.prepare(
-      `SELECT l.id, b.name AS store_name, l.display_name, b.membership_program
+      `SELECT l.id, b.name AS store_name, l.display_name, b.membership_required
          FROM store_locations l JOIN store_brands b ON b.id = l.brand_id
         WHERE l.market_id = 'omaha' AND l.active = 1 ORDER BY l.id`,
     ).all(),

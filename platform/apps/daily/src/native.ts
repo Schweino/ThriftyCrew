@@ -375,7 +375,7 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
     market: { id: "omaha", name: "Omaha, Nebraska" },
     generatedAt,
     weekOf,
-    stores: snapshot.stores.map((store) => ({ id: store.id, name: store.store_name, displayName: store.display_name ?? store.store_name, membershipProgram: store.membership_program ?? null })),
+    stores: snapshot.stores.map((store) => ({ id: store.id, name: store.store_name, displayName: store.display_name ?? store.store_name, membershipRequired: store.membership_required === 1 })),
     categories,
     commodities: boardCommodities,
   };
