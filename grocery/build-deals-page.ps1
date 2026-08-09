@@ -26,7 +26,9 @@ if (-not $Out) { $Out = Join-Path $OutDir 'deals-page.html' }
 # survived inside a title attribute after the visible chip had been fixed.
 . (Join-Path $root 'fmt-lib.ps1')
 . (Join-Path $root '..\lib\trend-keep.ps1')   # 2026-08-04: single source for which commodities get a standalone trend page
-. (Join-Path $root '..\lib\board-drops.ps1')  # 2026-08-04: single source for the week's price-drop ranking (chip + Friday email)
+# lib\board-drops.ps1 was dot-sourced here for the masthead's biggest-drop chip. The chip went with the
+# masthead on 2026-08-09; the Friday email is now the ranking's only caller, so the lib stays and this
+# dot-source goes.
 $doc  = Get-Content $CompareFile -Raw | ConvertFrom-Json
 $cats = (Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json).categories | Sort-Object order
 $week = [string]$doc.week_of
@@ -76,7 +78,6 @@ $byId = @{}; foreach ($r in $doc.comparison) { $byId[[string]$r.id] = $r }
 # willing to call anything a record in public.
 $recBadge = @{}   # id -> @{cls; label; title; rank}
 $verdict  = @{}   # id -> @{cls; label; title}   Buy-or-Wait layer (only when no record badge is showing)
-$weeksOnRecord = 0
 # stock-up set: commodities that keep (freezer/pantry) - a record price on one of these earns a "Stock up" tag
 $stockup = @{}
 $suFile = Join-Path $root 'stockup-items.json'
@@ -85,7 +86,6 @@ $histFile = Join-Path $root 'price-history.json'
 if (Test-Path $histFile) {
   try {
     $histDoc = Get-Content $histFile -Raw | ConvertFrom-Json
-    $weeksOnRecord = [int]$histDoc.weeks_on_record
     $histById = @{}; foreach ($h in $histDoc.commodities) { $histById[[string]$h.id] = $h }
     foreach ($r in $doc.comparison) {
       $h = $histById[[string]$r.id]; if (-not $h) { continue }
@@ -442,11 +442,8 @@ $sb = New-Object System.Text.StringBuilder
 [void]$sb.Append("<header class='pg-head'>")
 if (-not $Embed) { [void]$sb.Append("<h1>Omaha's Cheapest Groceries This Week</h1>") }   # Embed: Ghost post title is the H1
 [void]$sb.Append("<p class='pg-sub'>The cheapest place to buy every grocery staple in Omaha this week. Seven stores, checked every morning, ranked cheapest first.</p>")
-# THE MASTHEAD. Filled in at the very end of the build, because both of its lines are counts of things
-# that do not exist until the sections are rendered. ONE band, not five: the five separate top-of-page
-# modules the design review proposed (live tally, stat band, freshness receipt, wrong-store headline,
-# ledger banner) would have rebuilt exactly the pileup the top-of-page diet just cleared.
-[void]$sb.Append('<!--PG-MASTHEAD-->')
+# The masthead band was injected here (a <!--PG-MASTHEAD--> placeholder filled at the end of the build).
+# Removed 2026-08-09; see the note where it used to be built.
 # THE RETURN RHYTHM: ads flip Wednesdays, so today's sale prices have a real deadline. Saying so gives every
 # visit urgency and every visitor a reason to come back on a schedule - the habit is the product.
 [void]$sb.Append("<p class='pg-cycle'>Sale prices end when the new ads drop <strong>Wednesday morning</strong>. This board is re-checked every morning by 7am.</p>")
@@ -740,86 +737,18 @@ if ($riDoc) {
 [void]$sb.Append("</div>")
 
 # =====================================================================================================
-# THE MASTHEAD (elite layer, binding conflict ruling: ONE band, no more than three lines)
+# THE MASTHEAD - REMOVED 2026-08-09 (Brad's call), and with it the whole navy band
 # =====================================================================================================
-# Built here rather than in the header because both of its lines count things that do not exist
-# until every section has rendered. Every figure below is computed from the same data the rows are
-# rendered from, ROUNDED DOWN, and a line that cannot be computed honestly is DROPPED, never softened.
-
-# The freshness line ("Checked this morning / Last checked <date> - N stores - new ads in N days") used to
-# open the masthead; removed 2026-08-09 at Brad's request. Per-store pull dates and ad windows still ship in
-# the store-status strip at the foot of the page, so the transparency claim is unchanged - only the headline
-# repeat of it is gone. The ops alerts read staleness from the store files, never from this page.
-$mast = "<div class='pg-mast'>"
-
-# line 1 - the tally, round-down only
-$pricesRounded = [int]([math]::Floor($totalPrices / 100) * 100)
-$mast += "<p class='pg-mast-tally'><span>" + $totalCommodities + " items</span><span>" + $pricesRounded + "+ prices verified</span>"
-if ($weeksOnRecord -ge 2) { $mast += "<span>" + $weeksOnRecord + " weeks tracked</span>" }
-$mast += "</p>"
-
-# line 2 - the wrong-store tax. Median within-row spread over rows priced at 4+ NON-MEMBERSHIP stores
-# (a Sam's-only low would otherwise inflate a number most shoppers cannot act on). Under 15% the line is
-# DROPPED rather than massaged: an 11% spread is not a headline, and rewriting it into one is how a real
-# number turns into a slogan.
-# THE STATISTIC IS THE MEDIAN STORE, NOT THE WORST STORE, and that is a deliberate choice. Best-vs-worst
-# on this data computes to a median 94%, which is arithmetically true and reads as marketing: it is driven
-# by whichever store happens to stock a tiny package, and per-unit prices across pack bases are exactly
-# where this estate's worst bugs live (see the board-basis-ambiguity notes). Cheapest-vs-typical answers
-# the question a shopper is actually asking - "what do I pay by not checking?" - and it is robust to one
-# outlier store. The line is DROPPED, never softened, when it falls under 15%, and it is dropped WITH A
-# LOG LINE when it computes above 75%, because an unbelievable true number costs more trust than silence
-# and deserves a human look before it headlines the most public page on the site.
-$spreads = @()
-foreach ($r in $doc.comparison) {
-  $ps = @($r.stores | Where-Object { -not $_.membership -and [double]$_.per_unit -gt 0 } | Sort-Object per_unit)
-  if (@($ps).Count -lt 4) { continue }
-  $mn = [double]$ps[0].per_unit
-  $mid = [double]$ps[[int]([math]::Floor(@($ps).Count / 2))].per_unit
-  if ($mn -gt 0) { $spreads += (($mid - $mn) / $mn) }
-}
-$statLine = ''
-if (@($spreads).Count -ge 20) {
-  $sorted = @($spreads | Sort-Object)
-  $med = $sorted[[int]([math]::Floor($sorted.Count / 2))]
-  $medPct = [int]([math]::Floor($med * 100))
-  if ($medPct -ge 15 -and $medPct -le 75) {
-    $statLine = "The same item costs a median <b>" + $medPct + "% more</b> at a typical store. We check so you never pay it."
-  } elseif ($medPct -gt 75) {
-    Write-Output ("MASTHEAD STAT SUPPRESSED: median cheapest-vs-typical spread computed to " + $medPct + "% over " + @($spreads).Count + " rows. That is above the believability ceiling, which usually means a pack-basis problem rather than a pricing one. Line dropped; check audit-pack-basis before publishing a number this size.")
-  }
-}
-
-# the week's biggest drop, as a tappable chip that scrolls to and opens that row. Same joins and the same
-# 30%-outlier guard the record badges use, 2+ prior weeks required. Under 10% it is not news, so a record
-# low takes the slot instead; a genuinely flat week says so rather than inventing motion.
-$dropChip = ''
-if ($histById -and $histById.Count) {
-  # 2026-08-04: the ranking moved to lib\board-drops.ps1 so the Friday email can publish the SAME ten
-  # drops this chip picks its one from. Guards (4+ priced stores, 30% outlier, 2+ prior weeks, 60%
-  # ceiling) all live there now; this caller only decides what is newsworthy enough to headline.
-  $bestDrop = @(Get-BoardDrops -Comparison $doc.comparison -HistById $histById -Week $week -Top 1)[0]
-  if ($bestDrop -and $bestDrop.pct -ge 0.10) {
-    $dropChip = "<button type='button' class='pg-mast-chip' data-goto='" + (HtmlEnc ([string]$bestDrop.id)) + "'>" + (HtmlEnc $bestDrop.commodity) + " down " + [int]([math]::Floor($bestDrop.pct * 100)) + "%</button>"
-  } elseif ($recBadge.Count -gt 0) {
-    # same broadly-priced floor as the drop itself: the masthead chip is the one thing on this page a
-    # first-time visitor is guaranteed to read, so it names something they buy, not the cheapest oddity
-    # in the pantry aisle. Among qualifying records, the cheapest one wins the slot.
-    $lowCand = @()
-    foreach ($k in $recBadge.Keys) {
-      if ($recBadge[$k].cls -ne 'pg-rec-low') { continue }
-      $rr = $byId[$k]; if (-not $rr) { continue }
-      if (@($rr.stores | Where-Object { [double]$_.per_unit -gt 0 }).Count -lt 4) { continue }
-      $lowCand += [pscustomobject]@{ id = $k; row = $rr; p = [double]$rr.cheapest_price }
-    }
-    $pick = @($lowCand | Sort-Object p) | Select-Object -First 1
-    if ($pick) { $dropChip = "<button type='button' class='pg-mast-chip' data-goto='" + (HtmlEnc $pick.id) + "'>" + (HtmlEnc $pick.row.commodity) + " at a record low</button>" }
-  }
-  if (-not $dropChip) { $dropChip = "<span class='pg-mast-flat'>Prices held steady this week.</span>" }
-}
-if ($statLine -or $dropChip) { $mast += "<p class='pg-mast-stat'>" + $statLine + " " + $dropChip + "</p>" }
-$mast += "</div>"
-$body = $sb.ToString().Replace('<!--PG-MASTHEAD-->', $mast)
+# What used to be built here: the freshness line, the tally (items / prices verified / weeks tracked), the
+# wrong-store stat ("a median N% more at a typical store"), and the biggest-drop chip. All gone.
+#
+# The three counts are NOT lost - the page footer still states commodities, live prices and the week. The
+# drop ranking is NOT orphaned either: lib\board-drops.ps1 is the shared source and the Friday email is its
+# other caller, so it stays put with one caller instead of two.
+#
+# Anything re-adding a top-of-page band should read design\design-elite-layer-2026-07-31.md, which still
+# specs this masthead. That doc is a shipped-then-cut record, not an unbuilt requirement.
+$body = $sb.ToString()
 # a category-2 page (or a board with one section) never reached the capture insert point; place it before
 # the membership CTA rather than dropping it, so the ask can never silently disappear from the page
 if ($captureHtml) { $body = $body.Replace("<div class='pg-cta'>", $captureHtml + "<div class='pg-cta'>") }
@@ -1046,15 +975,7 @@ $eliteCss = '<style>' + (Compress-TcCss ((Get-TcTokenCss -Scope '.pg-wrap' -Part
    it does: .pg-hide is display:none, and a visible section is always laid out when it enters view. ---- */
 .pg-wrap .pg-cat{content-visibility:auto;contain-intrinsic-size:auto 3000px}
 .pg-wrap .pg-row,.pg-wrap .pg-cat{scroll-margin-top:96px}
-/* ---- THE MASTHEAD: one navy band, the tally + the stat line, nothing else ---- */
-.pg-wrap .pg-mast{margin:12px 0 10px;padding:14px 16px 13px;border-radius:14px;color:#F6F1E7;
-  background:radial-gradient(120% 160% at 50% 0%,#1E3A5F 0%,#16263F 62%);box-shadow:inset 0 1px 0 rgba(226,164,60,.35)}
-.pg-wrap .pg-mast p{margin:0}
-.pg-wrap .pg-mast-tally{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:0 !important;font-size:.78em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#E2A43C;font-variant-numeric:tabular-nums}
-.pg-wrap .pg-mast-stat{margin-top:9px !important;font-size:.88em;line-height:1.5;color:#F6F1E7}
-.pg-wrap .pg-mast-stat b{color:#E2A43C;font-variant-numeric:tabular-nums}
-.pg-wrap .pg-mast-chip{display:inline-block;margin-left:4px;background:#E2A43C;color:#16263F;border:none;border-radius:999px;padding:4px 12px;min-height:32px;font-size:.92em;font-weight:800;cursor:pointer;font-family:inherit}
-.pg-wrap .pg-mast-flat{color:#b9c4d4}
+/* The masthead's navy band, tally, stat line and drop chip were styled here; band removed 2026-08-09. */
 .pg-wrap .pg-how{margin:.7em 0 0;font-size:.88em}
 .pg-wrap .pg-how summary{cursor:pointer;font-weight:700;color:#1E3A5F;padding:6px 0;min-height:36px}
 .pg-wrap .pg-how p{margin:.4em 0 0}
@@ -1726,14 +1647,7 @@ $js = @'
     document.querySelectorAll('.pg-cat').forEach(function(s){ io.observe(s); });
   })();
 
-  // masthead drop chip: scroll to the row it names and open it
-  document.querySelectorAll('.pg-mast-chip').forEach(function(b){
-    b.addEventListener('click',function(){
-      var row=document.querySelector('.pg-row[data-id="'+b.getAttribute('data-goto')+'"]'); if(!row) return;
-      row.scrollIntoView({behavior:'smooth',block:'center'});
-      if(!row.classList.contains('pg-open')){ var h=row.querySelector('.pg-rowhead'); if(h) pgToggle(h); }
-    });
-  });
+  // (the masthead drop chip's scroll-to-row handler lived here; band removed 2026-08-09)
 
   tripRestore();
 })();
