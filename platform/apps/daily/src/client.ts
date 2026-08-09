@@ -157,8 +157,8 @@ export async function deployConfiguration(client: MutationClient, config: Curren
         })),
       } });
     }
-    for (const ruleChunk of chunks(config.knownWrong, 75)) {
-      await client.request(`/internal/configurations/${config.id}/known-wrong`, { method: "PUT", json: { rules: ruleChunk } });
+    for (const [index, ruleChunk] of chunks(config.knownWrong, 75).entries()) {
+      await client.request(`/internal/configurations/${config.id}/known-wrong${index === 0 ? "?replace=1" : ""}`, { method: "PUT", json: { rules: ruleChunk } });
     }
     await client.request(`/internal/configurations/${config.id}/activate`, { method: "POST" });
   }

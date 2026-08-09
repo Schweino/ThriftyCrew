@@ -388,7 +388,14 @@ app.put("/internal/configurations/:id/known-wrong", zValidator("json", configura
   const config = await context.env.DB.prepare("SELECT active FROM configuration_versions WHERE id = ?1").bind(configurationId).first<{ active: number }>();
   if (!config) return jsonError("configuration not found", 404);
   if (config.active === 1) return jsonError("active configuration is immutable", 409);
-  const statements = context.req.valid("json").rules.map((rule) => context.env.DB.prepare(
+  if (context.req.query("replace") === "1") {
+    await context.env.DB.prepare("DELETE FROM known_wrong_rules WHERE configuration_id = ?1").bind(configurationId).run();
+  }
+  const rules = await Promise.all(context.req.valid("json").rules.map(async (rule) => ({
+    ...rule,
+    id: await deterministicId("known-wrong", configurationId, rule.id),
+  })));
+  const statements = rules.map((rule) => context.env.DB.prepare(
     `INSERT INTO known_wrong_rules
        (id, configuration_id, commodity_id, store_location_id, external_product_key, normalized_name, ruling, evidence)
      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
@@ -398,7 +405,7 @@ app.put("/internal/configurations/:id/known-wrong", zValidator("json", configura
        ruling = excluded.ruling, evidence = excluded.evidence`,
   ).bind(rule.id, configurationId, rule.commodityId, rule.storeLocationId ?? null, rule.externalProductKey ?? null, rule.normalizedName ?? null, rule.ruling, rule.evidence));
   for (let offset = 0; offset < statements.length; offset += 90) await context.env.DB.batch(statements.slice(offset, offset + 90));
-  return context.json({ ok: true, accepted: statements.length });
+  return context.json({ ok: true, accepted: statements.length, replaced: context.req.query("replace") === "1" });
 });
 
 app.post("/internal/configurations/:id/activate", async (context) => {
