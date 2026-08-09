@@ -4,12 +4,16 @@
   "outputs": [
     "grocery/commodities.json",
     "grocery/categories.json",
-    "grocery/known-wrong.json"
+    "grocery/known-wrong.json",
+    "grocery/recipe-commodities.json"
   ],
   "hashes": {
     "commodities.json": "6f2d360bdaf8392546d8eed056821f657454b9d30c895557d1f0e823f1cd0fdc",
     "categories.json": "65a61ae9f8ded8532fba9b3bd7b7e1ec62ad82fa93ae14c5b1e3fca340f2d492",
-    "known-wrong.json": "51d54c52267e22667d0fafa584addb740a9f7c59ec4285eb9ca5ff9e2c5706ad"
+    "known-wrong.json": "51d54c52267e22667d0fafa584addb740a9f7c59ec4285eb9ca5ff9e2c5706ad",
+    "recipe-commodities.json": "f4ce878d6f585b0656ffbc912e8838c57664485d2cf4f0d96d00148f31f864f5",
+    "recipe-commodity-aliases.json": "b5730daa3af46ccae4b9b42de319e8ef57638aa2ccf54c8b7cbc5833ec231022",
+    "recipe-commodity-extensions.json": "de2f0b386f2e293e17ca54f34135b897283d477bccfd122872e976e54f56071a"
   },
   "counts": {
     "commodities": 507,

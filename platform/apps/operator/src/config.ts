@@ -5,7 +5,8 @@ import path from "node:path";
 interface Commodity { id: string; include?: string[]; exclude?: string[] }
 interface KnownWrong { entries?: Array<{ reversed_on?: string; reversed_by?: string; names?: string[] }> }
 
-const CONFIG_FILES = ["commodities.json", "categories.json", "known-wrong.json"] as const;
+const LEGACY_OUTPUTS = ["commodities.json", "categories.json", "known-wrong.json", "recipe-commodities.json"] as const;
+const AUTHORITY_FILES = [...LEGACY_OUTPUTS, "recipe-commodity-aliases.json", "recipe-commodity-extensions.json"] as const;
 
 function sha256(bytes: Uint8Array): string {
   return createHash("sha256").update(bytes).digest("hex");
@@ -32,17 +33,19 @@ export async function generateLegacyConfiguration(incomeRoot: string, checkOnly:
   const legacyRoot = path.join(incomeRoot, "grocery");
   const changed: string[] = [];
   const hashes: Record<string, string> = {};
-  for (const name of CONFIG_FILES) {
+  for (const name of AUTHORITY_FILES) {
     const source = new Uint8Array(await readFile(path.join(configRoot, name)));
-    const destination = path.join(legacyRoot, name);
-    const current = await readFile(destination).catch(() => undefined);
     // Git may check text files out with CRLF on Windows and LF on Linux. The
     // manifest is an authority hash, so it must describe JSON content rather
     // than a workstation's line-ending policy.
     hashes[name] = canonicalJsonHash(source);
-    if (!current || !source.every((byte, index) => current[index] === byte) || current.length !== source.length) {
-      changed.push(name);
-      if (!checkOnly) await atomicWrite(destination, source);
+    if ((LEGACY_OUTPUTS as readonly string[]).includes(name)) {
+      const destination = path.join(legacyRoot, name);
+      const current = await readFile(destination).catch(() => undefined);
+      if (!current || !source.every((byte, index) => current[index] === byte) || current.length !== source.length) {
+        changed.push(name);
+        if (!checkOnly) await atomicWrite(destination, source);
+      }
     }
   }
   const commodities = JSON.parse(await readFile(path.join(configRoot, "commodities.json"), "utf8")) as Commodity[];
@@ -56,7 +59,7 @@ export async function generateLegacyConfiguration(incomeRoot: string, checkOnly:
   const manifest = {
     schema: 1,
     authority: "platform/config",
-    outputs: CONFIG_FILES.map((name) => `grocery/${name}`),
+    outputs: LEGACY_OUTPUTS.map((name) => `grocery/${name}`),
     hashes,
     counts: {
       commodities: commodities.length,

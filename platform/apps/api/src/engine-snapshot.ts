@@ -26,6 +26,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode)
   ).all<{ id: string; source_id: string; coverage_mode: string; captured_to: string; capture_method: string }>();
   if (batches.results.length === 0) throw new Error(`No promoted ${mode} capture batches`);
   const placeholders = batches.results.map((_, index) => `?${index + 2}`).join(",");
+  const rawPlaceholders = batches.results.map((_, index) => `?${index + 1}`).join(",");
   const candidates = await env.DB.prepare(
     `SELECT o.id AS observation_id, m.commodity_id, p.store_location_id, o.per_unit_micros,
             o.captured_at, o.valid_to, b.coverage_mode, b.captured_to, b.id AS batch_id,
@@ -47,6 +48,19 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode)
       WHERE o.batch_id IN (${placeholders})
       ORDER BY m.commodity_id, p.store_location_id, o.per_unit_micros, o.id`,
   ).bind(configuration.id, ...batches.results.map((batch) => batch.id)).all();
+  const rawCandidates = await env.DB.prepare(
+    `SELECT o.id AS observation_id, p.store_location_id, o.per_unit_micros, o.captured_at, o.valid_to,
+            b.coverage_mode, b.captured_to, b.id AS batch_id, o.normalized_basis_unit,
+            o.normalized_basis_qty_micros, o.purchase_price_minor, o.purchase_quantity, o.package_count,
+            o.membership_required, o.loyalty_required, o.raw_price_text, pv.name, pv.normalized_name,
+            pv.size_text, pv.product_url, pv.taxonomy_path, p.external_key
+       FROM observations o
+       JOIN capture_batches b ON b.id = o.batch_id
+       JOIN product_versions pv ON pv.id = o.product_version_id
+       JOIN products p ON p.id = pv.product_id
+      WHERE o.batch_id IN (${rawPlaceholders})
+      ORDER BY p.store_location_id, o.per_unit_micros, o.id`,
+  ).bind(...batches.results.map((batch) => batch.id)).all();
   const [commodities, stores, currentCells] = await Promise.all([
     env.DB.prepare(
       `SELECT c.id, c.label, c.basis_unit, c.category_id, cat.label AS category_label, cat.sort_order
@@ -78,6 +92,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode)
     commodities: commodities.results,
     stores: stores.results,
     candidates: candidates.results,
+    rawCandidates: rawCandidates.results,
     currentCells: currentCells.results,
   };
 }

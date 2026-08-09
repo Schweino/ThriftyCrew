@@ -198,6 +198,15 @@ export interface NativeEngineSnapshot {
     raw_price_text?: string | null; name?: string; product_url?: string | null; taxonomy_path?: string | null;
     external_key?: string; size_text?: string | null; batch_id?: string;
   }>;
+  rawCandidates?: Array<{
+    observation_id: string; store_location_id: string; per_unit_micros: number; captured_at: string;
+    valid_to: string | null; coverage_mode: WinnerCandidate["batchCoverageMode"]; captured_to: string;
+    normalized_basis_unit: string; purchase_price_minor?: number; purchase_quantity?: number;
+    package_count?: number; normalized_basis_qty_micros?: number; membership_required?: number;
+    loyalty_required?: number; raw_price_text?: string | null; name: string; normalized_name?: string;
+    product_url?: string | null; taxonomy_path?: string | null; external_key?: string; size_text?: string | null;
+    batch_id?: string;
+  }>;
   currentCells: Array<{
     commodity_id: string; store_location_id: string; observation_id: string | null; status: string;
     is_crown: number; display_per_unit_micros: number | null; display_unit: string | null;

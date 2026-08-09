@@ -1,8 +1,8 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import type { RecipeCost } from "@thriftycrew/contracts";
-import { digestHex, stableJson } from "@thriftycrew/domain";
-import { buildNativeCells, type NativeEngineSnapshot, type NativeReleaseCell } from "@thriftycrew/engine";
+import { digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
+import { buildNativeCells, convertUnitPriceMicros, selectWinner, type NativeEngineSnapshot, type NativeReleaseCell } from "@thriftycrew/engine";
 
 interface IngredientDefinition {
   item: string;
@@ -27,6 +27,15 @@ interface RecipeSpecification {
   stat?: { cal?: number; protein?: number; carbs?: number; fat?: number };
   ingredients_grams?: RecipeIngredient[];
   scaler?: { ing?: RecipeScalerIngredient[] };
+}
+
+interface RecipeCommodityRule {
+  id: string; label: string; unit: string; include: string[]; exclude: string[];
+  relax_global?: string[]; band_min?: number; band_max?: number;
+}
+
+interface KnownWrongDocument {
+  entries?: Array<{ commodity?: string; store?: string; names?: string[]; product_id?: string; reversed_on?: string; reversed_by?: string }>;
 }
 
 export interface NativeReleaseArtifact {
@@ -63,6 +72,14 @@ function asNumber(value: unknown): number | undefined {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
 }
 
+function compilePattern(value: string): RegExp {
+  return new RegExp(value.replace(/^\(\?i\)/, ""), "i");
+}
+
+function apiUnit(value: string): string {
+  return value === "floz" ? "fl_oz" : value === "gallon" ? "gal" : value;
+}
+
 function publicCell(cell: NativeReleaseCell): NativeReleaseArtifact["cells"][number] {
   if (cell.status === "priced" && cell.observationId && cell.displayPerUnitMicros !== null && cell.displayUnit) {
     return {
@@ -82,16 +99,27 @@ function publicCell(cell: NativeReleaseCell): NativeReleaseArtifact["cells"][num
 export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEngineSnapshot): Promise<NativeReleaseArtifact> {
   if (snapshot.mode !== "direct") throw new Error("native publication requires a direct-only immutable engine snapshot");
   const recipeDirectory = path.join(incomeRoot, "meal-prep", "db", "recipes");
-  const [ingredientBytes, recipeNames] = await Promise.all([
+  const configRoot = path.join(incomeRoot, "platform", "config");
+  const [ingredientBytes, recipeNames, recipeRuleBytes, recipeExtensionBytes, aliasBytes, knownWrongBytes] = await Promise.all([
     readFile(path.join(incomeRoot, "meal-prep", "db", "ingredients.json"), "utf8"),
     readdir(recipeDirectory),
+    readFile(path.join(configRoot, "recipe-commodities.json"), "utf8"),
+    readFile(path.join(configRoot, "recipe-commodity-extensions.json"), "utf8"),
+    readFile(path.join(configRoot, "recipe-commodity-aliases.json"), "utf8"),
+    readFile(path.join(configRoot, "known-wrong.json"), "utf8"),
   ]);
   const ingredientDefinitions = JSON.parse(ingredientBytes.replace(/^\uFEFF/, "")) as IngredientDefinition[];
   const recipes = (await Promise.all(recipeNames.filter((name) => name.endsWith(".json")).sort().map(async (name) =>
     JSON.parse((await readFile(path.join(recipeDirectory, name), "utf8")).replace(/^\uFEFF/, "")) as RecipeSpecification,
   ))).sort((left, right) => left.slug.localeCompare(right.slug));
+  const recipeRuleDocument = JSON.parse(recipeRuleBytes.replace(/^\uFEFF/, "")) as { global_exclude?: string[]; commodities: RecipeCommodityRule[] };
+  const recipeExtensions = JSON.parse(recipeExtensionBytes.replace(/^\uFEFF/, "")) as { commodities: RecipeCommodityRule[] };
+  const recipeAliases = JSON.parse(aliasBytes.replace(/^\uFEFF/, "")) as Record<string, string>;
+  const knownWrong = JSON.parse(knownWrongBytes.replace(/^\uFEFF/, "")) as KnownWrongDocument;
+  const recipeRules = [...recipeRuleDocument.commodities, ...recipeExtensions.commodities];
   const recipeCatalogHash = await digestHex(stableJson(recipes));
   const ingredientCatalogHash = await digestHex(stableJson(ingredientDefinitions));
+  const recipePricingConfigurationHash = await digestHex(stableJson({ recipeRuleDocument, recipeExtensions, recipeAliases }));
   const generatedAt = snapshot.observedAt;
   const weekOf = generatedAt.slice(0, 10);
   const inputBatchIds = [...snapshot.inputBatchIds].sort();
@@ -105,6 +133,7 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
     engineSnapshotHash: snapshot.inputHash,
     recipeCatalogHash,
     ingredientCatalogHash,
+    recipePricingConfigurationHash,
   };
   const inputHash = await digestHex(stableJson({ inputManifest, inputBatchIds }));
   const releaseId = `rel_native_${inputHash.slice(0, 20)}`;
@@ -116,6 +145,83 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
   const storeById = new Map(snapshot.stores.map((store) => [store.id, store]));
   const ingredientByName = new Map(ingredientDefinitions.filter((item) => item.item).map((item) => [key(item.item), item]));
   const commodityByLabel = new Map(snapshot.commodities.map((commodity) => [key(commodity.label), commodity.id]));
+
+  const compiledGlobal = (recipeRuleDocument.global_exclude ?? []).map((source) => ({ source, expression: compilePattern(source) }));
+  const compiledRules = recipeRules.map((rule) => ({
+    rule,
+    includes: rule.include.map(compilePattern),
+    excludes: rule.exclude.map(compilePattern),
+    relaxed: new Set(rule.relax_global ?? []),
+  }));
+  const rawByObservation = new Map((snapshot.rawCandidates ?? []).map((candidate) => [candidate.observation_id, candidate]));
+  type RawCandidate = NonNullable<NativeEngineSnapshot["rawCandidates"]>[number];
+  const recipeCandidates = new Map<string, Array<{ raw: RawCandidate; convertedMicros: number }>>();
+  const recipeMatchingAudit = { rawProducts: snapshot.rawCandidates?.length ?? 0, matched: 0, outOfBand: 0, incompatibleUnits: 0, globallyBlocked: 0 };
+  for (const raw of snapshot.rawCandidates ?? []) {
+    const rawText = raw.name.toLocaleLowerCase("en-US");
+    const includeVariant = rawText.replace(/,?\s*priced per\s+\w+/g, "").replace(/\band\b/g, " ").replace(/\s{2,}/g, " ").trim();
+    const globalHits = compiledGlobal.filter((pattern) => pattern.expression.test(rawText));
+    let selected: typeof compiledRules[number] | undefined;
+    for (const rule of compiledRules) {
+      if (!rule.includes.some((pattern) => pattern.test(rawText) || pattern.test(includeVariant))) continue;
+      if (globalHits.some((pattern) => !rule.relaxed.has(pattern.source))) continue;
+      if (rule.excludes.some((pattern) => pattern.test(rawText))) continue;
+      selected = rule;
+      break;
+    }
+    if (!selected) {
+      if (globalHits.length > 0) recipeMatchingAudit.globallyBlocked += 1;
+      continue;
+    }
+    const convertedMicros = convertUnitPriceMicros(raw.per_unit_micros, raw.normalized_basis_unit, apiUnit(selected.rule.unit));
+    if (convertedMicros === null) {
+      recipeMatchingAudit.incompatibleUnits += 1;
+      continue;
+    }
+    const dollars = convertedMicros / 1_000_000;
+    if ((selected.rule.band_min !== undefined && dollars < selected.rule.band_min) || (selected.rule.band_max !== undefined && dollars > selected.rule.band_max)) {
+      recipeMatchingAudit.outOfBand += 1;
+      continue;
+    }
+    const list = recipeCandidates.get(selected.rule.id) ?? [];
+    list.push({ raw, convertedMicros });
+    recipeCandidates.set(selected.rule.id, list);
+    recipeMatchingAudit.matched += 1;
+  }
+  const activeKnownWrong = (knownWrong.entries ?? []).filter((entry) => !(entry.reversed_on && entry.reversed_by));
+  const recipeCrownByCommodity = new Map<string, { commodityId: string; storeLocationId: string; observationId: string; displayPerUnitMicros: number; displayUnit: string; raw: RawCandidate }>();
+  for (const rule of recipeRules) {
+    const storeWinners: Array<{ commodityId: string; storeLocationId: string; observationId: string; displayPerUnitMicros: number; displayUnit: string; raw: RawCandidate }> = [];
+    const candidatesByStore = new Map<string, Array<{ raw: RawCandidate; convertedMicros: number }>>();
+    for (const candidate of recipeCandidates.get(rule.id) ?? []) {
+      const list = candidatesByStore.get(candidate.raw.store_location_id) ?? [];
+      list.push(candidate);
+      candidatesByStore.set(candidate.raw.store_location_id, list);
+    }
+    for (const [storeLocationId, candidates] of candidatesByStore) {
+      const storeName = storeById.get(storeLocationId)?.store_name ?? storeLocationId;
+      const selected = selectWinner(candidates.map((candidate) => ({
+        observationId: candidate.raw.observation_id,
+        commodityId: rule.id,
+        storeLocationId,
+        perUnitMicros: candidate.convertedMicros,
+        capturedAt: candidate.raw.captured_at,
+        batchCoverageMode: candidate.raw.coverage_mode,
+        batchCapturedTo: candidate.raw.captured_to,
+        ...(candidate.raw.valid_to ? { validTo: candidate.raw.valid_to } : {}),
+        knownWrong: activeKnownWrong.some((wrong) => wrong.commodity === rule.id
+          && (!wrong.store || normalizeName(wrong.store) === normalizeName(storeName))
+          && ((wrong.product_id && wrong.product_id === candidate.raw.external_key)
+            || (wrong.names ?? []).some((name) => normalizeName(name) === normalizeName(candidate.raw.name)))),
+      })), generatedAt).winner;
+      if (!selected) continue;
+      const raw = rawByObservation.get(selected.observationId);
+      if (!raw) throw new Error(`recipe winner ${selected.observationId} is absent from its immutable raw snapshot`);
+      storeWinners.push({ commodityId: rule.id, storeLocationId, observationId: selected.observationId, displayPerUnitMicros: selected.perUnitMicros, displayUnit: apiUnit(rule.unit), raw });
+    }
+    const crown = storeWinners.sort((left, right) => left.displayPerUnitMicros - right.displayPerUnitMicros || left.storeLocationId.localeCompare(right.storeLocationId))[0];
+    if (crown) recipeCrownByCommodity.set(rule.id, crown);
+  }
 
   const recipeCosts: RecipeCost[] = [];
   const recipePayload: Array<Record<string, unknown>> = [];
@@ -130,13 +236,22 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
     for (const ingredient of recipe.ingredients_grams ?? []) {
       const scaler = scalerByName.get(key(ingredient.item));
       const definition = ingredientByName.get(key(scaler?.canon ?? ingredient.item)) ?? ingredientByName.get(key(ingredient.item));
-      const requestedBid = scaler?.bid ?? definition?.bid;
-      const commodityId = requestedBid && commodityById.has(requestedBid)
-        ? requestedBid
-        : commodityByLabel.get(key(scaler?.canon ?? ingredient.item));
+      const requestedBids = [...new Set([scaler?.bid, definition?.bid].filter((value): value is string => Boolean(value)))];
+      const aliasedBids = requestedBids.map((bid) => recipeAliases[bid]).filter((bid): bid is string => Boolean(bid));
+      const resolvedBid = requestedBids.find((bid) => commodityById.has(bid) || recipeCrownByCommodity.has(bid))
+        ?? aliasedBids.find((bid) => commodityById.has(bid) || recipeCrownByCommodity.has(bid));
+      const commodityId = resolvedBid ?? commodityByLabel.get(key(scaler?.canon ?? ingredient.item));
       const gpu = asNumber(scaler?.gpu) ?? asNumber(definition?.gpu);
       const grams = asNumber(ingredient.grams);
-      const crown = commodityId ? crownByCommodity.get(commodityId) : undefined;
+      const boardCrown = commodityId ? crownByCommodity.get(commodityId) : undefined;
+      const recipeCrown = commodityId ? recipeCrownByCommodity.get(commodityId) : undefined;
+      const crown = boardCrown ?? (recipeCrown ? {
+        observationId: recipeCrown.observationId,
+        storeLocationId: recipeCrown.storeLocationId,
+        displayPerUnitMicros: recipeCrown.displayPerUnitMicros,
+        displayUnit: recipeCrown.displayUnit,
+        winner: recipeCrown.raw,
+      } : undefined);
       const packageGrams = definition?.bulk ? asNumber(definition.pantry_pkg_g) : asNumber(definition?.buy_pkg_g);
       const missing: string[] = [];
       if (!commodityId) missing.push("commodity-mapping");
@@ -328,6 +443,9 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
       authoredRecipes: recipes.length,
       completeRecipes: recipeCosts.length - incomplete.length,
       incompleteRecipes: incomplete.length,
+      recipePricingCommodities: recipeRules.length,
+      pricedRecipeCommodities: recipeCrownByCommodity.size,
+      recipeMatching: recipeMatchingAudit,
       top5Entries: top5.length,
       rotationEntries: freeRotation.length,
       missingIngredientFrequency: [...missingFrequency.entries()].sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0])).slice(0, 100),
