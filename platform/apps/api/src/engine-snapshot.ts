@@ -29,7 +29,8 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode)
   const candidates = await env.DB.prepare(
     `SELECT o.id AS observation_id, m.commodity_id, p.store_location_id, o.per_unit_micros,
             o.captured_at, o.valid_to, b.coverage_mode, b.captured_to, b.id AS batch_id,
-            o.normalized_basis_unit,
+            o.normalized_basis_unit, o.normalized_basis_qty_micros, o.purchase_price_minor,
+            o.purchase_quantity, o.package_count, pv.size_text,
             o.membership_required, o.loyalty_required, o.raw_price_text, pv.name, pv.product_url,
             pv.taxonomy_path, p.external_key,
             EXISTS (
@@ -53,7 +54,8 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode)
         WHERE c.configuration_id = ?1 AND c.active = 1 ORDER BY cat.sort_order, c.id`,
     ).bind(configuration.id).all(),
     env.DB.prepare(
-      `SELECT l.id, b.name AS store_name FROM store_locations l JOIN store_brands b ON b.id = l.brand_id
+      `SELECT l.id, b.name AS store_name, l.display_name, b.membership_program
+         FROM store_locations l JOIN store_brands b ON b.id = l.brand_id
         WHERE l.market_id = 'omaha' AND l.active = 1 ORDER BY l.id`,
     ).all(),
     env.DB.prepare(

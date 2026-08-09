@@ -26,6 +26,16 @@ TC_LOCAL_MUTATION_SECRET=... pnpm tc replay
 The new Worker uses its own name (`tc-grocery-v3`) and isolated D1/R2/Analytics Engine bindings. It cannot overwrite the current
 `smp-feed` Worker unless a later, explicit production cutover changes the routing configuration.
 
+Build and publish the direct-only native release with the operator CLI. The command first selects the
+currently promoted direct batch IDs, computes every board cell and recipe cost from that immutable
+snapshot, excludes incomplete recipes from Top 5/free rotation, runs server-side hard guards, and only
+then swaps the Omaha release pointer:
+
+```powershell
+pnpm tc engine build-native native-release.json
+pnpm tc engine publish-native
+```
+
 `tc replay` reads the newest ignored local comparison artifact and the tracked upstream recipe-basis
 snapshot. `replay:current` signs every mutation, writes evidence and large payloads to local R2, validates all
 server-owned hard guards, and publishes only when the release is complete. The bridge keeps single-store

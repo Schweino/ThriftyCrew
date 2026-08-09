@@ -1007,7 +1007,7 @@ app.post("/internal/releases/:id/validate", async (context) => {
     "SELECT configuration_id, market_id FROM releases WHERE id = ?1",
   ).bind(releaseId).first<{ configuration_id: string; market_id: string }>();
   if (!releaseIdentity) return jsonError("release not found", 404);
-  const [cellStats, recipeStats, payloadStats, invalidCellStats, rotationStats, top5Stats] = await Promise.all([
+  const [cellStats, recipeStats, payloadStats, invalidCellStats, rotationStats, top5Stats, invalidRankedRecipes] = await Promise.all([
     context.env.DB.prepare("SELECT COUNT(*) AS rows, COUNT(DISTINCT commodity_id) AS commodities, COUNT(DISTINCT store_location_id) AS stores FROM release_cells WHERE release_id = ?1").bind(releaseId).first<{ rows: number; commodities: number; stores: number }>(),
     context.env.DB.prepare("SELECT COUNT(*) AS rows, SUM(CASE WHEN status = 'incomplete' THEN 1 ELSE 0 END) AS incomplete FROM release_recipe_costs WHERE release_id = ?1").bind(releaseId).first<{ rows: number; incomplete: number | null }>(),
     context.env.DB.prepare("SELECT COUNT(*) AS rows FROM release_payloads WHERE release_id = ?1 AND kind IN ('board','feed','top5','free_rotation','recipes')").bind(releaseId).first<{ rows: number }>(),
@@ -1021,6 +1021,17 @@ app.post("/internal/releases/:id/validate", async (context) => {
     ).bind(releaseId, releaseIdentity.configuration_id, releaseIdentity.market_id).first<{ invalid: number }>(),
     context.env.DB.prepare("SELECT COUNT(*) AS rows FROM release_free_rotation WHERE release_id = ?1 AND intended_visibility = 'public'").bind(releaseId).first<{ rows: number }>(),
     context.env.DB.prepare("SELECT COUNT(*) AS rows FROM release_top5 WHERE release_id = ?1").bind(releaseId).first<{ rows: number }>(),
+    context.env.DB.prepare(
+      `SELECT ranked.recipe_slug, ranked.surface
+         FROM (
+           SELECT recipe_slug, 'top5' AS surface FROM release_top5 WHERE release_id = ?1
+           UNION ALL
+           SELECT recipe_slug, 'free_rotation' AS surface FROM release_free_rotation WHERE release_id = ?1 AND intended_visibility = 'public'
+         ) ranked
+         LEFT JOIN release_recipe_costs costs ON costs.release_id = ?1 AND costs.recipe_slug = ranked.recipe_slug
+        WHERE costs.recipe_slug IS NULL OR costs.status <> 'complete'
+        ORDER BY ranked.surface, ranked.recipe_slug`,
+    ).bind(releaseId).all<{ recipe_slug: string; surface: string }>(),
   ]);
   const expectedCellRows = summary.expectedCommodities * summary.expectedStores;
   const surfacePass = cellStats?.rows === expectedCellRows
@@ -1031,7 +1042,7 @@ app.post("/internal/releases/:id/validate", async (context) => {
     && rotationStats?.rows === expectedFreeRotation
     && top5Stats?.rows === expectedFreeRotation
     && (invalidCellStats?.invalid ?? 0) === 0;
-  const recipePass = (recipeStats?.incomplete ?? 0) === 0;
+  const recipePass = invalidRankedRecipes.results.length === 0;
   await upsertGuardResult(context.env.DB, releaseId, {
     guardId: "release-surface-counts",
     status: surfacePass ? "pass" : "fail",
@@ -1051,10 +1062,10 @@ app.post("/internal/releases/:id/validate", async (context) => {
   await upsertGuardResult(context.env.DB, releaseId, {
     guardId: "release-recipe-completeness",
     status: recipePass ? "pass" : "fail",
-    eligibleCount: recipeStats?.rows ?? 0,
-    examinedCount: recipeStats?.rows ?? 0,
-    findings: recipePass ? [] : [{ key: "incomplete-recipes", message: `${recipeStats?.incomplete ?? 0} recipes have missing required ingredient prices`, evidence: {} }],
-    detail: {},
+    eligibleCount: (top5Stats?.rows ?? 0) + (rotationStats?.rows ?? 0),
+    examinedCount: (top5Stats?.rows ?? 0) + (rotationStats?.rows ?? 0),
+    findings: invalidRankedRecipes.results.map((row) => ({ key: `${row.surface}:${row.recipe_slug}`, message: "Incomplete or missing recipe entered a price-ranked public surface", evidence: { recipeSlug: row.recipe_slug, surface: row.surface } })),
+    detail: { incompleteRecipes: recipeStats?.incomplete ?? 0, policy: "incomplete recipes remain auditable and are excluded from ranked/public surfaces" },
   });
   await evaluateNotBlindGuard(context.env.DB, releaseId);
   const missingHard = await context.env.DB.prepare(

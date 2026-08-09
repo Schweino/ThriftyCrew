@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildNativeParityReport, convertUnitPriceMicros, evaluateAisleEvidence, evaluateAisleFamilyEvidence, guardResult, matchProductName, selectWinner } from "./index";
+import { buildNativeCells, buildNativeParityReport, convertUnitPriceMicros, evaluateAisleEvidence, evaluateAisleFamilyEvidence, guardResult, matchProductName, selectWinner } from "./index";
 
 describe("matching", () => {
   it("ports the authored .NET inline case-insensitive prefix", () => {
@@ -63,6 +63,17 @@ describe("guard coverage", () => {
 });
 
 describe("native engine parity", () => {
+  it("keeps the selected candidate provenance on native release cells", () => {
+    const snapshot = {
+      mode: "direct" as const, observedAt: "2026-08-09T12:00:00.000Z", configurationId: "config", currentReleaseId: "release", inputHash: "c".repeat(64), inputBatchIds: ["batch"],
+      commodities: [{ id: "eggs", label: "Eggs", basis_unit: "dozen", category_id: "dairy" }],
+      stores: [{ id: "store", store_name: "Store" }],
+      candidates: [{ observation_id: "obs", commodity_id: "eggs", store_location_id: "store", per_unit_micros: 1_990_000, normalized_basis_unit: "dozen", captured_at: "2026-08-09T11:00:00.000Z", valid_to: null, coverage_mode: "full" as const, captured_to: "2026-08-09T11:00:00.000Z", known_wrong: 0, name: "Large Eggs" }],
+      currentCells: [],
+    };
+    expect(buildNativeCells(snapshot)[0]).toMatchObject({ observationId: "obs", isCrown: true, winner: { name: "Large Eggs" }, reason: { code: "native-winner" } });
+  });
+
   it("rebuilds winners from the immutable snapshot", () => {
     const report = buildNativeParityReport({
       mode: "legacy", observedAt: "2026-08-09T12:00:00.000Z", configurationId: "config", currentReleaseId: "release", inputHash: "a".repeat(64), inputBatchIds: ["batch"],

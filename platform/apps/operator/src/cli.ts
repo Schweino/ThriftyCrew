@@ -1,9 +1,10 @@
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { directCaptureArtifactSchema, observationChunkSchema } from "@thriftycrew/contracts";
-import { ingestDirectCapture, MutationClient, replayCurrentArtifact, type CaptureEvidenceInput } from "@thriftycrew/daily/client";
+import { ingestDirectCapture, MutationClient, publishNativeRelease, replayCurrentArtifact, type CaptureEvidenceInput } from "@thriftycrew/daily/client";
 import { buildCurrentBridge } from "@thriftycrew/daily/legacy";
 import { buildRegularCapture, type CaptureAttestation } from "@thriftycrew/daily/direct";
+import { buildNativeRelease } from "@thriftycrew/daily/native";
 import { digestHex, stableJson } from "@thriftycrew/domain";
 import { generateLegacyConfiguration } from "./config";
 import { buildNativeParityReport, compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot } from "@thriftycrew/engine";
@@ -266,6 +267,18 @@ if (command === "status") {
   const snapshot = await client.request(`/internal/engine/snapshot?mode=${requestedMode}`) as unknown as NativeEngineSnapshot;
   const report = buildNativeParityReport(snapshot);
   result = await client.request("/internal/engine/parity", { json: report, acceptStatuses: [422] });
+} else if (command === "engine" && (subcommand === "build-native" || subcommand === "publish-native")) {
+  const client = await mutationClient();
+  const snapshot = await client.request("/internal/engine/snapshot?mode=direct") as unknown as NativeEngineSnapshot;
+  const artifact = await buildNativeRelease(incomeRoot, snapshot);
+  const outputArgument = arguments_.find((value: string) => value.endsWith(".json"));
+  if (outputArgument) await writeJson(path.resolve(outputArgument), artifact);
+  if (Number(artifact.audit.top5Entries) !== 20 || Number(artifact.audit.rotationEntries) !== 20) {
+    throw new Error(`native release preflight requires exactly 20 complete ranked recipes; got ${String(artifact.audit.top5Entries)}`);
+  }
+  result = subcommand === "build-native"
+    ? { ok: true, releaseId: artifact.releaseId, inputHash: artifact.inputHash, outputFile: outputArgument ? path.resolve(outputArgument) : null, audit: artifact.audit }
+    : await publishNativeRelease(client, artifact);
 } else if (command === "replay") {
   const artifact = await buildCurrentBridge(incomeRoot);
   result = await replayCurrentArtifact(await mutationClient(), artifact);

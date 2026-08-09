@@ -187,12 +187,16 @@ export interface NativeEngineSnapshot {
   currentReleaseId: string;
   inputHash: string;
   inputBatchIds: string[];
-  commodities: Array<{ id: string; label: string; basis_unit: WinnerCandidate["commodityId"] extends string ? string : never; category_id: string }>;
-  stores: Array<{ id: string; store_name: string }>;
+  commodities: Array<{ id: string; label: string; basis_unit: WinnerCandidate["commodityId"] extends string ? string : never; category_id: string; category_label?: string; sort_order?: number }>;
+  stores: Array<{ id: string; store_name: string; display_name?: string; membership_program?: string | null }>;
   candidates: Array<{
     observation_id: string; commodity_id: string; store_location_id: string; per_unit_micros: number;
     captured_at: string; valid_to: string | null; coverage_mode: WinnerCandidate["batchCoverageMode"];
     captured_to: string; normalized_basis_unit: string; known_wrong: number;
+    purchase_price_minor?: number; purchase_quantity?: number; package_count?: number;
+    normalized_basis_qty_micros?: number; membership_required?: number; loyalty_required?: number;
+    raw_price_text?: string | null; name?: string; product_url?: string | null; taxonomy_path?: string | null;
+    external_key?: string; size_text?: string | null; batch_id?: string;
   }>;
   currentCells: Array<{
     commodity_id: string; store_location_id: string; observation_id: string | null; status: string;
@@ -200,7 +204,7 @@ export interface NativeEngineSnapshot {
   }>;
 }
 
-interface ComparableCell {
+export interface NativeReleaseCell {
   commodityId: string;
   storeLocationId: string;
   observationId: string | null;
@@ -208,9 +212,11 @@ interface ComparableCell {
   isCrown: boolean;
   displayPerUnitMicros: number | null;
   displayUnit: string | null;
+  winner: NativeEngineSnapshot["candidates"][number] | null;
+  reason: Record<string, unknown>;
 }
 
-function comparableRecord(cell: ComparableCell): Record<string, unknown> {
+function comparableRecord(cell: NativeReleaseCell): Record<string, unknown> {
   return {
     commodityId: cell.commodityId,
     storeLocationId: cell.storeLocationId,
@@ -222,12 +228,12 @@ function comparableRecord(cell: ComparableCell): Record<string, unknown> {
   };
 }
 
-function parityRecord(cell: ComparableCell): Record<string, unknown> {
+function parityRecord(cell: NativeReleaseCell): Record<string, unknown> {
   const { isCrown: _tiePresentation, ...semantic } = comparableRecord(cell);
   return semantic;
 }
 
-export function buildNativeParityReport(snapshot: NativeEngineSnapshot): EngineParityReport {
+export function buildNativeCells(snapshot: NativeEngineSnapshot): NativeReleaseCell[] {
   const groups = new Map<string, NativeEngineSnapshot["candidates"]>();
   for (const candidate of snapshot.candidates) {
     const key = `${candidate.commodity_id}\u001f${candidate.store_location_id}`;
@@ -235,7 +241,7 @@ export function buildNativeParityReport(snapshot: NativeEngineSnapshot): EngineP
     items.push(candidate);
     groups.set(key, items);
   }
-  const cells: ComparableCell[] = [];
+  const cells: NativeReleaseCell[] = [];
   for (const commodity of snapshot.commodities) {
     for (const store of snapshot.stores) {
       const key = `${commodity.id}\u001f${store.id}`;
@@ -261,6 +267,12 @@ export function buildNativeParityReport(snapshot: NativeEngineSnapshot): EngineP
         isCrown: false,
         displayPerUnitMicros: selection.winner?.perUnitMicros ?? null,
         displayUnit: selection.winner ? commodity.basis_unit : null,
+        winner: selection.winner
+          ? (groups.get(key) ?? []).find((candidate) => candidate.observation_id === selection.winner!.observationId) ?? null
+          : null,
+        reason: selection.winner
+          ? { code: "native-winner", eligibleCandidates: selection.eligible.length, rejectedCandidates: selection.rejected }
+          : { code: "no-eligible-observation", rejectedCandidates: selection.rejected },
       });
     }
   }
@@ -269,6 +281,11 @@ export function buildNativeParityReport(snapshot: NativeEngineSnapshot): EngineP
     const crown = [...priced].sort((left, right) => left.displayPerUnitMicros! - right.displayPerUnitMicros! || left.storeLocationId.localeCompare(right.storeLocationId))[0];
     if (crown) crown.isCrown = true;
   }
+  return cells;
+}
+
+export function buildNativeParityReport(snapshot: NativeEngineSnapshot): EngineParityReport {
+  const cells = buildNativeCells(snapshot);
   const current = new Map(snapshot.currentCells.map((cell) => [`${cell.commodity_id}\u001f${cell.store_location_id}`, {
     commodityId: cell.commodity_id,
     storeLocationId: cell.store_location_id,
@@ -277,7 +294,9 @@ export function buildNativeParityReport(snapshot: NativeEngineSnapshot): EngineP
     isCrown: cell.is_crown === 1,
     displayPerUnitMicros: cell.display_per_unit_micros,
     displayUnit: cell.display_unit,
-  } satisfies ComparableCell]));
+    winner: null,
+    reason: {},
+  } satisfies NativeReleaseCell]));
   const diffs: EngineParityReport["diffs"] = [];
   for (const cell of cells) {
     const key = `${cell.commodityId}\u001f${cell.storeLocationId}`;

@@ -56,6 +56,9 @@ importers:
       '@thriftycrew/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@thriftycrew/engine':
+        specifier: workspace:*
+        version: link:../../packages/engine
 
   apps/operator:
     dependencies:

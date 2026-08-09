@@ -6,7 +6,8 @@
   "exports": {
     "./client": "./src/client.ts",
     "./direct": "./src/direct.ts",
-    "./legacy": "./src/legacy.ts"
+    "./legacy": "./src/legacy.ts",
+    "./native": "./src/native.ts"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json --noEmit",
@@ -16,6 +17,7 @@
   },
   "dependencies": {
     "@thriftycrew/contracts": "workspace:*",
-    "@thriftycrew/domain": "workspace:*"
+    "@thriftycrew/domain": "workspace:*",
+    "@thriftycrew/engine": "workspace:*"
   }
 }

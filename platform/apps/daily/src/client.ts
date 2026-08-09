@@ -1,5 +1,6 @@
 import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
 import type { CurrentBridgeArtifact } from "./legacy";
+import type { NativeReleaseArtifact } from "./native";
 import type { DirectCaptureArtifact } from "@thriftycrew/contracts";
 
 const encoder = new TextEncoder();
@@ -294,4 +295,40 @@ export async function replayCurrentArtifact(client: MutationClient, artifact: Cu
     ? await client.request(`/internal/releases/${releaseId}/publish`, { method: "POST" })
     : null;
   return { releaseId, inputHash, actualObservationCount: actualObservationByCell.size, validation, publication };
+}
+
+export async function publishNativeRelease(client: MutationClient, artifact: NativeReleaseArtifact): Promise<Record<string, unknown>> {
+  const created = await client.request("/internal/releases", { json: {
+    id: artifact.releaseId,
+    marketId: artifact.marketId,
+    configurationId: artifact.configurationId,
+    inputManifest: artifact.inputManifest,
+    inputBatchIds: artifact.inputBatchIds,
+    inputHash: artifact.inputHash,
+    summary: {
+      expectedCommodities: Number(artifact.audit.commodities),
+      expectedStores: Number(artifact.audit.stores),
+      expectedRecipes: artifact.recipeCosts.length,
+      expectedFreeRotation: artifact.freeRotation.length,
+    },
+  } });
+  const state = String(created.state);
+  if (state === "published") return { ok: true, releaseId: artifact.releaseId, state, idempotent: true, audit: artifact.audit };
+  if (state === "rejected") return { ok: false, releaseId: artifact.releaseId, state, idempotent: true, audit: artifact.audit };
+  if (state === "validated") {
+    const publication = await client.request(`/internal/releases/${artifact.releaseId}/publish`, { method: "POST" });
+    return { ok: true, releaseId: artifact.releaseId, state: "published", validation: { ok: true, idempotent: true }, publication, audit: artifact.audit };
+  }
+  if (state !== "draft") throw new Error(`native release ${artifact.releaseId} is in unexpected state ${state}`);
+  for (const cellChunk of chunks(artifact.cells, 200)) await client.request(`/internal/releases/${artifact.releaseId}/cells`, { method: "PUT", json: { cells: cellChunk } });
+  for (const costChunk of chunks(artifact.recipeCosts, 200)) await client.request(`/internal/releases/${artifact.releaseId}/recipe-costs`, { method: "PUT", json: { costs: costChunk } });
+  await client.request(`/internal/releases/${artifact.releaseId}/free-rotation`, { method: "PUT", json: { entries: artifact.freeRotation } });
+  await client.request(`/internal/releases/${artifact.releaseId}/top5`, { method: "PUT", json: { entries: artifact.top5 } });
+  for (const [kind, payload] of Object.entries(artifact.payloads)) {
+    const wirePayload: unknown = JSON.parse(JSON.stringify(payload));
+    await client.request(`/internal/releases/${artifact.releaseId}/payload`, { method: "PUT", json: { kind, payload: wirePayload, contentHash: await digestHex(stableJson(wirePayload)) } });
+  }
+  const validation = await client.request(`/internal/releases/${artifact.releaseId}/validate`, { method: "POST", acceptStatuses: [422] });
+  const publication = validation.ok ? await client.request(`/internal/releases/${artifact.releaseId}/publish`, { method: "POST" }) : null;
+  return { ok: Boolean(validation.ok && publication?.ok), releaseId: artifact.releaseId, inputHash: artifact.inputHash, validation, publication, audit: artifact.audit };
 }
