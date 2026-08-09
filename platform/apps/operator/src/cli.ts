@@ -192,6 +192,72 @@ async function recipeAdd(inputFile: string | undefined): Promise<unknown> {
   return { ok: true, target };
 }
 
+async function releaseFreezeDrill(): Promise<Record<string, unknown>> {
+  const client = await mutationClient();
+  const before = await publicGet("/api/v2/status") as { currentRelease?: { id?: string; summary?: { expectedCommodities?: number; expectedStores?: number; expectedRecipes?: number; expectedFreeRotation?: number } } };
+  const currentReleaseId = before.currentRelease?.id;
+  if (!currentReleaseId) throw new Error("release-freeze drill requires a published release");
+  const snapshot = await client.request("/internal/engine/snapshot?mode=direct") as unknown as NativeEngineSnapshot;
+  const observedAt = new Date().toISOString();
+  const inputBatchIds = [...snapshot.inputBatchIds].sort();
+  const inputManifest = {
+    kind: "release-surface-freeze-drill",
+    observedAt,
+    currentReleaseId,
+    snapshotInputHash: snapshot.inputHash,
+  };
+  const inputHash = await digestHex(stableJson({ inputManifest, inputBatchIds }));
+  const releaseId = `rel_drill_${inputHash.slice(0, 20)}`;
+  const summary = before.currentRelease?.summary ?? {};
+  await client.request("/internal/releases", { json: {
+    id: releaseId,
+    marketId: "omaha",
+    configurationId: snapshot.configurationId,
+    inputManifest,
+    inputBatchIds,
+    inputHash,
+    summary: {
+      expectedCommodities: summary.expectedCommodities ?? snapshot.commodities.length,
+      expectedStores: summary.expectedStores ?? snapshot.stores.length,
+      expectedRecipes: summary.expectedRecipes ?? 542,
+      expectedFreeRotation: summary.expectedFreeRotation ?? 20,
+    },
+  } });
+  const validation = await client.request(`/internal/releases/${releaseId}/validate`, { method: "POST", acceptStatuses: [422] });
+  if (validation.state !== "rejected") await client.request(`/internal/releases/${releaseId}/reject`, { method: "POST" });
+  const publication = await client.request(`/internal/releases/${releaseId}/publish`, { method: "POST", acceptStatuses: [409, 422] });
+  const after = await publicGet("/api/v2/status") as { currentRelease?: { id?: string } };
+  const passed = validation.state === "rejected"
+    && publication.ok === false
+    && publication.httpStatus !== undefined
+    && [409, 422].includes(Number(publication.httpStatus))
+    && after.currentRelease?.id === currentReleaseId;
+  const evidence = {
+    drill: "release-surface-freeze",
+    candidateReleaseId: releaseId,
+    publishedReleaseBefore: currentReleaseId,
+    publishedReleaseAfter: after.currentRelease?.id ?? null,
+    validationState: validation.state,
+    blockingGuards: validation.blockingGuards ?? [],
+    publishHttpStatus: publication.httpStatus,
+    pointerUnchanged: after.currentRelease?.id === currentReleaseId,
+  };
+  const date = observedAt.slice(0, 10);
+  const recorded = await client.request("/internal/evidence-gates", {
+    json: {
+      id: `evidence_release-freeze_${inputHash.slice(0, 20)}`,
+      gate: "chaos-drill",
+      periodKey: `release-freeze-${date}`,
+      sourceRef: releaseId,
+      status: passed ? "pass" : "fail",
+      observedAt,
+      evidence,
+    },
+    acceptStatuses: [422],
+  });
+  return { ok: passed, ...evidence, evidenceEventId: recorded.eventId };
+}
+
 let result: unknown;
 if (command === "status") {
   result = await publicGet("/api/v2/status");
@@ -229,6 +295,8 @@ if (command === "status") {
   result = await (await mutationClient()).request("/internal/entitlement-verifications", { json: JSON.parse(await readFile(path.resolve(file), "utf8")) });
 } else if (command === "entitlement" && subcommand === "show") {
   result = await (await mutationClient()).request("/internal/entitlement-verifications");
+} else if (command === "drill" && subcommand === "release-freeze") {
+  result = await releaseFreezeDrill();
 } else if (command === "job" && subcommand === "start") {
   const job = arguments_[0];
   if (!job) throw new Error("tc job start requires a job id");
@@ -359,7 +427,7 @@ if (command === "status") {
     ok: true,
     usage: [
       "tc status", "tc doctor", "tc triage [status|run]", "tc config generate|check",
-      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc restore record <file>|show", "tc evidence record <file>|show [gate]", "tc entitlement record <file>|show", "tc job start|finish|dispatch <job> [status|reason]",
+      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc restore record <file>|show", "tc evidence record <file>|show [gate]", "tc entitlement record <file>|show", "tc drill release-freeze", "tc job start|finish|dispatch <job> [status|reason]",
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id]", "tc accuracy verdict <file>",
