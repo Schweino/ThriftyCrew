@@ -120,6 +120,11 @@ async function matchBatch(client: MutationClient, batchId: string): Promise<Reco
   for (let offset = 0; offset < decisions.length; offset += 100) {
     await client.request("/internal/match-decisions", { method: "PUT", json: { decisions: decisions.slice(offset, offset + 100) } });
   }
+  await client.request("/internal/match-decisions/reconcile", { json: {
+    batchId,
+    configurationId: snapshot.configurationId,
+    retainedProductIds: decisions.map((decision) => decision.productId),
+  } });
   const inputMaterial = {
     batchId,
     sourceId: snapshot.sourceId,

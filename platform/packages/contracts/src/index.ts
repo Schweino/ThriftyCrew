@@ -194,6 +194,12 @@ export const matchDecisionsChunkSchema = z.object({
   })).min(1).max(100),
 });
 
+export const matchDecisionReconcileSchema = z.object({
+  batchId: nonEmptyId,
+  configurationId: nonEmptyId,
+  retainedProductIds: z.array(nonEmptyId).max(50_000),
+});
+
 export const matchRunSchema = z.object({
   id: nonEmptyId,
   batchId: nonEmptyId,

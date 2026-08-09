@@ -14,6 +14,7 @@ import {
   jobDispatchSchema,
   jobRunCreateSchema,
   jobRunUpdateSchema,
+  matchDecisionReconcileSchema,
   matchDecisionsChunkSchema,
   matchRunSchema,
   observationChunkSchema,
@@ -443,6 +444,35 @@ app.put("/internal/match-decisions", zValidator("json", matchDecisionsChunkSchem
     await context.env.DB.batch(statements.slice(offset, offset + 90));
   }
   return context.json({ ok: true, accepted: decisions.length });
+});
+
+app.post("/internal/match-decisions/reconcile", zValidator("json", matchDecisionReconcileSchema), async (context) => {
+  const body = context.req.valid("json");
+  const batch = await findBatch(context.env.DB, body.batchId);
+  if (!batch) return jsonError("capture batch not found", 404);
+  const configuration = await context.env.DB.prepare(
+    "SELECT id FROM configuration_versions WHERE id = ?1 AND active = 1",
+  ).bind(body.configurationId).first<{ id: string }>();
+  if (!configuration) return jsonError("match reconciliation must use the active configuration", 422);
+  const updated = await context.env.DB.prepare(
+    `UPDATE match_decisions
+        SET superseded_at = CURRENT_TIMESTAMP
+      WHERE configuration_id = ?2 AND superseded_at IS NULL
+        AND product_id IN (
+          SELECT DISTINCT p.id
+            FROM observations o
+            JOIN product_versions pv ON pv.id = o.product_version_id
+            JOIN products p ON p.id = pv.product_id
+           WHERE o.batch_id = ?1
+        )
+        AND product_id NOT IN (SELECT value FROM json_each(?3))`,
+  ).bind(body.batchId, body.configurationId, stableJson(body.retainedProductIds)).run();
+  await recordAudit(context.env, context.get("identity"), "matching.reconcile", "capture_batch", body.batchId, "accepted", {
+    configurationId: body.configurationId,
+    retained: body.retainedProductIds.length,
+    superseded: updated.meta.changes,
+  });
+  return context.json({ ok: true, batchId: body.batchId, retained: body.retainedProductIds.length, superseded: updated.meta.changes });
 });
 
 app.get("/internal/capture-batches/:id/products", async (context) => {
