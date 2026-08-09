@@ -28,7 +28,7 @@
                  "protein":  26,
                  "carbs":  66,
                  "fat":  21,
-                 "cost_ps":  "3.03"
+                 "cost_ps":  "2.87"
              },
     "intro_html":  "Normandy is apple country, and their cooking shows it. Chicken braises in apple cider with onions, mustard, and cream until the sauce goes silky and the apple slices soften into it. It tastes like a restaurant dish and costs less than most weeknight chicken. Each bowl carries {{cal}} calories and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
@@ -155,8 +155,8 @@
                                    "canon":  "Apple",
                                    "grams":  1260,
                                    "buy":  "7 apples",
-                                   "bid":  "apple",
-                                   "gpu":  "175.000"
+                                   "bid":  "apples",
+                                   "gpu":  "453.592"
                                },
                                {
                                    "item":  "Apple Juice",
@@ -215,7 +215,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT1H5M",
-                 "costPerServing":  3.03,
+                 "costPerServing":  2.87,
                  "recipeIngredient":  [
                                           "Boneless Skinless Chicken Thigh, 3.25 lb (1470 g)",
                                           "Salt, 1.25 tbsp (21 g)",

@@ -18,7 +18,7 @@
                  "protein":  52,
                  "carbs":  57,
                  "fat":  13,
-                 "cost_ps":  "3.58"
+                 "cost_ps":  "3.62"
              },
     "intro_html":  "Mississippi pork is that tangy, buttery, ranch-and-pepperoncini magic, and it works just as well on pork as it does on the classic pot roast. Piled over potatoes with carrots, each bowl brings {{protein}} grams of protein for about ${{cost_ps}} (at everyday cost). Fourteen servings out of one pot keeps the whole week covered.",
     "ingredients_display":  [
@@ -97,8 +97,8 @@
                                    "item":  "Pepperoncini",
                                    "grams":  150,
                                    "buy":  "1 1/2 cups",
-                                   "bid":  "pepperoncini",
-                                   "gpu":  "29.570"
+                                   "bid":  "banana-peppers",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "Butter",
@@ -133,7 +133,7 @@
     "head":  {
                  "description":  "A high-protein American meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, slow cooker mississippi pork bowls, budget dinner",
-                 "costPerServing":  3.58,
+                 "costPerServing":  3.62,
                  "recipeIngredient":  [
                                           "Pork Tenderloin, 7 lb (3120 g)",
                                           "Potato, 8 lb (3606 g)",

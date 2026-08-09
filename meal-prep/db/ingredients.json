@@ -80,12 +80,12 @@
   },
   {
       "item":  "Apple",
-      "bid":  "apple",
-      "gpu":  175,
-      "unit":  "each",
-      "board":  "recipe",
-      "buy_pkg_g":  175,
-      "buy_pkg_label":  "each"
+      "bid":  "apples",
+      "gpu":  453.592,
+      "unit":  "lb",
+      "board":  "weekly",
+      "buy_pkg_g":  453.592,
+      "buy_pkg_label":  "lb"
   },
   {
       "item":  "Apple Cider",
@@ -1753,10 +1753,10 @@
   },
   {
       "item":  "Pepperoncini",
-      "bid":  "pepperoncini",
-      "gpu":  29.57,
-      "unit":  "floz",
-      "board":  "recipe",
+      "bid":  "banana-peppers",
+      "gpu":  28.3495,
+      "unit":  "oz",
+      "board":  "weekly",
       "pantry_pkg_g":  355,
       "pantry_pkg_label":  "12floz jar",
       "bulk":  true

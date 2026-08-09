@@ -18,7 +18,7 @@
                  "protein":  55,
                  "carbs":  65,
                  "fat":  18,
-                 "cost_ps":  "4.52"
+                 "cost_ps":  "4.32"
              },
     "intro_html":  "A good beef ragu is the kind of meal that tastes expensive and cooks for almost nothing. Lean ground beef simmers with carrots, onion, and crushed tomatoes into a rich sauce, then tosses with penne and a little parmesan. It runs around ${{cost_ps}} a serving (at everyday cost) with {{protein}} grams of protein and makes 14 bowls.",
     "ingredients_display":  [
@@ -183,7 +183,7 @@
     "head":  {
                  "description":  "A high-protein Italian meal prep. Fourteen servings at about {{cal}} calories and {{protein}} grams of protein for roughly ${{cost_ps}} each (at everyday cost).",
                  "keywords":  "high protein meal prep, cheap meal prep, simple beef ragu pasta, budget dinner",
-                 "costPerServing":  4.52,
+                 "costPerServing":  4.32,
                  "recipeIngredient":  [
                                           "93/7 Ground Beef, 6 lb (2450 g)",
                                           "Penne Pasta, 11 cups (1080 g)",

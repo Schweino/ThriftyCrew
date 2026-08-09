@@ -24,7 +24,7 @@
                  "protein":  43,
                  "carbs":  67,
                  "fat":  16,
-                 "cost_ps":  "2.56"
+                 "cost_ps":  "2.55"
              },
     "intro_html":  "Five ingredients, one pan, and a cheese crust on top. Rotini, ground turkey, mushrooms, a jar of alfredo, and mozzarella, baked until the edges go brown and crispy, which everyone knows is the best part of any pasta bake. It comes in at about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost), and it still delivers \u003cstrong\u003e{{cal}} calories and {{protein}} grams of protein\u003c/strong\u003e a serving.",
     "ingredients_display":  [
@@ -142,7 +142,7 @@
                  "prepTime":  "PT15M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT55M",
-                 "costPerServing":  2.56,
+                 "costPerServing":  2.55,
                  "recipeIngredient":  [
                                           "Rotini Pasta, 43.5 oz dry (1232 g)",
                                           "93/7 Ground Turkey, 2.25 lb (1058 g)",

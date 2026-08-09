@@ -24,7 +24,7 @@
                  "protein":  40,
                  "carbs":  43,
                  "fat":  30,
-                 "cost_ps":  "4.18"
+                 "cost_ps":  "3.65"
              },
     "intro_html":  "Mississippi pot roast is the most searched chuck roast recipe in America, and there is a reason: you put five things in a slow cooker, add no liquid at all, walk away, and come back to beef that falls apart under a fork. Ranch, gravy mix, butter, and pepperoncini do all of it. Each bowl carries \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e and {{cal}} calories for about \u003cstrong\u003e${{cost_ps}}\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
@@ -116,8 +116,8 @@
                                    "canon":  "Pepperoncini",
                                    "grams":  145,
                                    "buy":  "1.5 cups",
-                                   "bid":  "pepperoncini",
-                                   "gpu":  "29.570"
+                                   "bid":  "banana-peppers",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "Salt",
@@ -152,7 +152,7 @@
                  "prepTime":  "PT10M",
                  "cookTime":  "PT8H",
                  "totalTime":  "PT8H10M",
-                 "costPerServing":  4.18,
+                 "costPerServing":  3.65,
                  "recipeIngredient":  [
                                           "Beef Chuck Roast, 5.5 lb (2540 g)",
                                           "Ranch Seasoning Mix, 5.75 tbsp (40 g)",

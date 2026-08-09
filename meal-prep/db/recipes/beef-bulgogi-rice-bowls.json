@@ -25,7 +25,7 @@
                  "protein":  30,
                  "carbs":  72,
                  "fat":  16,
-                 "cost_ps":  "4.47"
+                 "cost_ps":  "4.50"
              },
     "intro_html":  "Bulgogi is defined by its marinade, not its cut. Soy sauce, sesame oil, garlic, and grated fruit, which is the part most people skip and the part that actually matters, because the enzymes in the apple tenderize the beef while the sugars help it caramelize in the pan. This build uses thin-sliced sirloin, the cut that gives bulgogi its real chew, and slicing a budget cut like sirloin or flank keeps the price honest without ever turning it into ground meat. Each bowl lands at {{cal}} calories and \u003cstrong\u003e{{protein}} grams of protein\u003c/strong\u003e for about \u003cstrong\u003e${{cost_ps}} a serving\u003c/strong\u003e (at everyday cost).",
     "ingredients_display":  [
@@ -129,8 +129,8 @@
                                    "canon":  "Apple",
                                    "grams":  134,
                                    "buy":  "0.7 apples",
-                                   "bid":  "apple",
-                                   "gpu":  "175.000"
+                                   "bid":  "apples",
+                                   "gpu":  "453.592"
                                },
                                {
                                    "item":  "Garlic",
@@ -253,7 +253,7 @@
                  "prepTime":  "PT25M",
                  "cookTime":  "PT30M",
                  "totalTime":  "PT55M",
-                 "costPerServing":  4.47,
+                 "costPerServing":  4.50,
                  "recipeIngredient":  [
                                           "Beef Flank/Sirloin Steak, 3 lb (1400 g)",
                                           "Vegetable Oil, 2.75 tbsp (39 g)",

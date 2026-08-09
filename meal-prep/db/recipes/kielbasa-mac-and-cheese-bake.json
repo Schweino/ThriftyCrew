@@ -23,7 +23,7 @@
                  "protein":  30,
                  "carbs":  58,
                  "fat":  48,
-                 "cost_ps":  "2.88"
+                 "cost_ps":  "2.76"
              },
     "intro_html":  "Real macaroni and cheese, made from a butter and flour roux with milk, cream and a mountain of sharp cheddar, with browned smoked sausage folded through it and the whole thing baked until the top goes golden. Dijon and Worcestershire are the two things most people leave out, and they are what keep it from tasting flat. It carries {{protein}} grams of protein for about ${{cost_ps}} (at everyday cost).",
     "ingredients_display":  [
@@ -191,7 +191,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT1H",
-                 "costPerServing":  2.88,
+                 "costPerServing":  2.76,
                  "recipeIngredient":  [
                                           "Pasta Shells, 28 oz dry (794 g)",
                                           "Smoked Turkey Sausage, 1.75 lb (794 g)",

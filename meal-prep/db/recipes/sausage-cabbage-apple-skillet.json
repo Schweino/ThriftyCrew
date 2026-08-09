@@ -28,7 +28,7 @@
                  "protein":  26,
                  "carbs":  89,
                  "fat":  19,
-                 "cost_ps":  "3.87"
+                 "cost_ps":  "3.67"
              },
     "intro_html":  "Smoked sausage, cabbage and apple is one of those old pairings that works because the sweet and the salty need each other. A splash of cider vinegar and a spoon of dijon keep it from tipping into dessert territory. Served over rice it lands at {{protein}} grams of protein for about ${{cost_ps}} a serving (at everyday cost), and apples are one of the cheapest fruits on the board most of the year.",
     "ingredients_display":  [
@@ -129,8 +129,8 @@
                                    "canon":  "Apple",
                                    "grams":  1260,
                                    "buy":  "7 apples",
-                                   "bid":  "apple",
-                                   "gpu":  "175.000"
+                                   "bid":  "apples",
+                                   "gpu":  "453.592"
                                },
                                {
                                    "item":  "Chicken Broth",
@@ -205,7 +205,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT30M",
                  "totalTime":  "PT50M",
-                 "costPerServing":  3.87,
+                 "costPerServing":  3.67,
                  "recipeIngredient":  [
                                           "Olive Oil, 3.5 tbsp (47 g)",
                                           "Smoked Turkey Sausage, 4.5 lb (2026 g)",

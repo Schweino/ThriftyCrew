@@ -29,7 +29,7 @@
                  "protein":  25,
                  "carbs":  70,
                  "fat":  26,
-                 "cost_ps":  "2.30"
+                 "cost_ps":  "2.33"
              },
     "intro_html":  "Haluski is Polish home cooking in its purest form: cabbage cooked down in butter until it goes sweet and golden, tossed with wide egg noodles. Add sliced smoked sausage and it stops being a side dish and becomes dinner. Five ingredients, one skillet, {{protein}} grams of protein, and about ${{cost_ps}} a bowl (at everyday cost).",
     "ingredients_display":  [
@@ -147,7 +147,7 @@
                  "prepTime":  "PT15M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT50M",
-                 "costPerServing":  2.30,
+                 "costPerServing":  2.33,
                  "recipeIngredient":  [
                                           "Egg Noodles, 36.25 oz dry (1026 g)",
                                           "Butter, 0.75 cups (191 g)",
