@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { entitlementVerificationRecordSchema, evidenceGateRecordSchema, restoreDrillRecordSchema } from "@thriftycrew/contracts";
-import { createAccuracyDraw, wilsonInterval } from "./accuracy";
+import { createAccuracyDraw, readAccuracyDraw, wilsonInterval } from "./accuracy";
 import { mayShowFreeBadge } from "./ghost-reconciliation";
 import { storeCoverageFloor } from "./release-guards";
 import { memberStatusHtml } from "./member-status";
@@ -33,6 +33,24 @@ describe("out-of-band accuracy reporting", () => {
       dueAt: "2026-08-16T21:00:00.000Z",
     })).resolves.toEqual({ drawId: "accuracy_existing", sampled: 100, idempotent: true });
     expect(statements).toBe(1);
+  });
+
+  it("keeps the reviewer contract independent of mutable public board formatting", async () => {
+    const sql: string[] = [];
+    const db = {
+      prepare(statement: string) {
+        sql.push(statement);
+        return {
+          bind() { return this; },
+          async first() { return { id: "draw" }; },
+          async all() { return { results: [] }; },
+        };
+      },
+    } as unknown as D1Database;
+    await readAccuracyDraw(db, "draw");
+    expect(sql[1]).toContain("pv.name AS product_name");
+    expect(sql[1]).toContain("o.purchase_price_minor");
+    expect(sql[1]).toContain("o.captured_at");
   });
 });
 
