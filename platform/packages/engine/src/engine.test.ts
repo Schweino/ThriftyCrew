@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildNativeParityReport, convertUnitPriceMicros, evaluateAisleEvidence, guardResult, matchProductName, selectWinner } from "./index";
+import { buildNativeParityReport, convertUnitPriceMicros, evaluateAisleEvidence, evaluateAisleFamilyEvidence, guardResult, matchProductName, selectWinner } from "./index";
 
 describe("matching", () => {
   it("ports the authored .NET inline case-insensitive prefix", () => {
@@ -20,6 +20,13 @@ describe("matching", () => {
 
   it("never invents an aisle flip when shelf taxonomy is unavailable", () => {
     expect(evaluateAisleEvidence(undefined, ["baking"], ["pets"])).toMatchObject({ status: "unavailable", examined: false });
+  });
+
+  it("uses taxonomy as a commodity-family second opinion instead of banning non-food aisles", () => {
+    expect(evaluateAisleFamilyEvidence("pets_wildlife/cat/litter_boxes", "pet").status).toBe("confirmed");
+    expect(evaluateAisleFamilyEvidence("household/cleaners_air_fresheners/tile_wood", "household").status).toBe("confirmed");
+    expect(evaluateAisleFamilyEvidence("pets_wildlife/cat/litter_boxes", "food").status).toBe("rejected");
+    expect(evaluateAisleFamilyEvidence("health_beauty/sports_nutrition/protein_bars", "food", ["personal"]).status).toBe("confirmed");
   });
 });
 

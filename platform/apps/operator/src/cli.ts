@@ -6,7 +6,7 @@ import { buildCurrentBridge } from "@thriftycrew/daily/legacy";
 import { buildRegularCapture, type CaptureAttestation } from "@thriftycrew/daily/direct";
 import { digestHex, stableJson } from "@thriftycrew/domain";
 import { generateLegacyConfiguration } from "./config";
-import { buildNativeParityReport, compileProductMatcher, evaluateAisleEvidence, type NativeEngineSnapshot } from "@thriftycrew/engine";
+import { buildNativeParityReport, compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot } from "@thriftycrew/engine";
 import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
@@ -77,6 +77,9 @@ async function matchBatch(client: MutationClient, batchId: string): Promise<Reco
   if (!Array.isArray(snapshot.products)) throw new Error("matching snapshot omitted products");
   if (!(snapshot.status === "promoted" || snapshot.status === "validated")) throw new Error(`batch ${batchId} cannot be matched from ${snapshot.status}`);
   const commodities = JSON.parse(await readFile(path.join(platformRoot, "config", "commodities.json"), "utf8")) as Array<{ id: string; include?: string[]; exclude?: string[] }>;
+  const categoryDocument = JSON.parse(await readFile(path.join(platformRoot, "config", "categories.json"), "utf8")) as { categories: Array<{ key: string; commodities: string[] }> };
+  const categoryByCommodity = new Map(categoryDocument.categories.flatMap((category) => category.commodities.map((commodityId) => [commodityId, category.key] as const)));
+  const nonFoodFamilies = new Set(["household", "personal", "baby", "pet"]);
   const matcher = compileProductMatcher(commodities.map((commodity, index) => ({
     commodityId: commodity.id,
     includes: commodity.include ?? [],
@@ -99,8 +102,10 @@ async function matchBatch(client: MutationClient, batchId: string): Promise<Reco
       unmatched.push({ productId: product.product_id, name: product.name });
       continue;
     }
-    const aisle = evaluateAisleEvidence(product.taxonomy_path ?? undefined, [], ["health beauty", "household", "pets wildlife", "cat litter", "pet supplies"]);
-    if (aisle.status === "rejected" && !(outcome.commodityId === "protein-bars" && /health[ _-]?beauty/i.test(product.taxonomy_path ?? ""))) {
+    const category = categoryByCommodity.get(outcome.commodityId) ?? "food";
+    const expectedFamily: AisleFamily = nonFoodFamilies.has(category) ? category as AisleFamily : "food";
+    const aisle = evaluateAisleFamilyEvidence(product.taxonomy_path ?? undefined, expectedFamily, outcome.commodityId === "protein-bars" ? ["personal"] : []);
+    if (aisle.status === "rejected") {
       aisleRejected.push({ productId: product.product_id, name: product.name, commodityId: outcome.commodityId, taxonomyPath: product.taxonomy_path, reason: aisle.reason });
       continue;
     }
