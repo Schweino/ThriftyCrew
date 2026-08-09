@@ -80,14 +80,19 @@ export async function ingestDirectCapture(client: MutationClient, artifact: Dire
   const evidenceHash = await digestHex(evidenceBody);
   const evidenceId = `evidence-${batchId}-${evidenceHash.slice(0, 16)}`;
   if (status === "open") {
-    for (const observationChunk of chunks(artifact.observations, 50)) {
-      await client.request(`/internal/capture-batches/${batchId}/observations`, { json: { observations: observationChunk } });
-    }
     await client.request(`/internal/capture-batches/${batchId}/evidence`, {
       method: "PUT",
       body: evidenceBody,
-      headers: { "content-type": "application/json", "x-evidence-id": evidenceId, "x-evidence-kind": "raw_payload", "x-content-sha256": evidenceHash },
+      headers: {
+        "content-type": artifact.evidence?.contentType ?? "application/json",
+        "x-evidence-id": evidenceId,
+        "x-evidence-kind": artifact.evidence?.kind ?? "raw_payload",
+        "x-content-sha256": evidenceHash,
+      },
     });
+    for (const observationChunk of chunks(artifact.observations, 50)) {
+      await client.request(`/internal/capture-batches/${batchId}/observations`, { json: { observations: observationChunk.map((observation) => ({ ...observation, evidenceObjectId: observation.evidenceObjectId ?? evidenceId })) } });
+    }
     const sealed = await client.request(`/internal/capture-batches/${batchId}/seal`, { json: { terms: artifact.terms, evidenceManifestKey: evidenceId }, acceptStatuses: [422] });
     status = String(sealed.status);
     if (status === "rejected") return { ok: false, batchId, status, audit: artifact.audit, seal: sealed };

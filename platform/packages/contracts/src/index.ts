@@ -122,6 +122,10 @@ export const directCaptureArtifactSchema = z.object({
   idempotencyKey: nonEmptyId,
   terms: z.array(captureTermSchema).max(2000),
   observations: z.array(observationInputSchema).min(1).max(100_000),
+  evidence: z.object({
+    kind: z.enum(["screenshot", "flyer_page", "raw_payload", "manifest"]),
+    contentType: z.string().min(1).max(200),
+  }).optional(),
   audit: z.record(z.string(), z.unknown()).default({}),
 }).superRefine((value, context) => {
   if (value.capturedTo < value.capturedFrom) context.addIssue({ code: "custom", path: ["capturedTo"], message: "must not precede capturedFrom" });
