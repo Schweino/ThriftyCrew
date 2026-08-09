@@ -25,6 +25,7 @@ function environment(): WorkerEnv {
     DB: nonceDatabase(),
     EVIDENCE: {} as R2Bucket,
     BACKUPS: {} as R2Bucket,
+    BACKUPS_SECONDARY: {} as R2Bucket,
     BACKUP_WORKFLOW: {} as Workflow,
     ASSETS: {} as Fetcher,
     APP_ENV: "test",

@@ -18,6 +18,8 @@
     "config:generate": "pnpm tc config generate",
     "config:check": "pnpm tc config check",
     "schedules:check": "pnpm tc schedules check",
+    "restore:prepare": "node scripts/prepare-d1-restore.mjs",
+    "restore:rows": "node scripts/restore-d1-recovery-rows.mjs",
     "db:migrate:local": "wrangler d1 migrations apply tc-grocery-v3 --local",
     "db:reset:local": "wrangler d1 migrations apply tc-grocery-v3 --local --persist-to .wrangler/state",
     "db:migrate:remote": "wrangler d1 migrations apply tc-grocery-v3 --remote",

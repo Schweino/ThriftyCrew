@@ -3,6 +3,8 @@ import { stableJson } from "@thriftycrew/domain";
 import { raiseOperationalAlert } from "./operations";
 import type { WorkerEnv } from "./env";
 
+interface BackupWorkflowPayload { trigger?: string; localDate?: string; forceReplica?: boolean }
+
 interface ExportResult {
   at_bookmark?: string;
   error?: string;
@@ -31,8 +33,8 @@ async function exportRequest<T>(env: WorkerEnv, payload: Record<string, unknown>
   return body.result;
 }
 
-export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, unknown> {
-  override async run(event: WorkflowEvent<unknown>, step: WorkflowStep): Promise<void> {
+export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkflowPayload> {
+  override async run(event: WorkflowEvent<BackupWorkflowPayload>, step: WorkflowStep): Promise<void> {
     const backupId = `backup_${event.instanceId}`;
     const runId = `run_${event.instanceId}`;
     const startedAt = new Date().toISOString();
@@ -75,6 +77,31 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, unknown> {
         if (!object) throw new Error("R2 backup object was not readable after write");
         return { objectKey, byteLength: object.size, etag: object.etag };
       });
+      let replica: { objectKey: string; byteLength: number; etag: string } | null = null;
+      const weekday = new Intl.DateTimeFormat("en-US", { timeZone: "America/Chicago", weekday: "short" }).format(event.timestamp);
+      if (event.payload.forceReplica === true || weekday === "Sun") {
+        const replicaId = `replica_${event.instanceId}`;
+        await this.env.DB.prepare(
+          `INSERT INTO backup_replicas (id, backup_id, bucket, object_key, byte_length, status)
+           VALUES (?1, ?2, 'tc-grocery-v3-backups-secondary', ?3, 0, 'started')
+           ON CONFLICT(backup_id, bucket) DO NOTHING`,
+        ).bind(replicaId, backupId, stored.objectKey).run();
+        replica = await step.do("store weekly backup replica", async () => {
+          const primary = await this.env.BACKUPS.get(stored.objectKey);
+          if (!primary?.body) throw new Error("primary backup was unavailable for replication");
+          await this.env.BACKUPS_SECONDARY.put(stored.objectKey, primary.body, {
+            ...(primary.httpMetadata ? { httpMetadata: primary.httpMetadata } : {}),
+            customMetadata: { ...(primary.customMetadata ?? {}), replicatedFrom: "tc-grocery-v3-backups" },
+          });
+          const copy = await this.env.BACKUPS_SECONDARY.head(stored.objectKey);
+          if (!copy || copy.size !== stored.byteLength) throw new Error("secondary backup failed size verification");
+          return { objectKey: stored.objectKey, byteLength: copy.size, etag: copy.etag };
+        });
+        await this.env.DB.prepare(
+          `UPDATE backup_replicas SET status = 'completed', byte_length = ?2, etag = ?3,
+             finished_at = ?4 WHERE id = ?1`,
+        ).bind(replicaId, replica.byteLength, replica.etag, new Date().toISOString()).run();
+      }
       const finishedAt = new Date().toISOString();
       await this.env.DB.batch([
         this.env.DB.prepare(
@@ -88,7 +115,7 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, unknown> {
               SET status = 'completed', heartbeat_at = ?2, finished_at = ?2,
                   stats_json = ?3, output_hash = NULL
             WHERE id = ?1`,
-        ).bind(runId, finishedAt, stableJson({ backupId, bookmark, ...stored })),
+        ).bind(runId, finishedAt, stableJson({ backupId, bookmark, ...stored, replica })),
       ]);
     } catch (error) {
       const finishedAt = new Date().toISOString();
@@ -100,6 +127,10 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, unknown> {
         this.env.DB.prepare(
           "UPDATE job_runs SET status = 'failed', heartbeat_at = ?2, finished_at = ?2, error = ?3 WHERE id = ?1",
         ).bind(runId, finishedAt, message),
+        this.env.DB.prepare(
+          `UPDATE backup_replicas SET status = 'failed', finished_at = ?2, detail_json = ?3
+            WHERE backup_id = ?1 AND status = 'started'`,
+        ).bind(backupId, finishedAt, stableJson({ error: message })),
       ]);
       await raiseOperationalAlert(this.env, `d1-backup:${event.instanceId}`, "Nightly D1 backup failed", { backupId, error: message });
       throw error;

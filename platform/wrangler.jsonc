@@ -26,6 +26,10 @@
     {
       "binding": "BACKUPS",
       "bucket_name": "tc-grocery-v3-backups"
+    },
+    {
+      "binding": "BACKUPS_SECONDARY",
+      "bucket_name": "tc-grocery-v3-backups-secondary"
     }
   ],
   "workflows": [

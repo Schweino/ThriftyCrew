@@ -414,9 +414,10 @@ app.post("/internal/jobs/:job/dispatch", zValidator("json", jobDispatchSchema), 
 
 app.post("/internal/backups/trigger", async (context) => {
   const instanceId = `d1-backup-manual-${crypto.randomUUID()}`;
-  await context.env.BACKUP_WORKFLOW.create({ id: instanceId, params: { trigger: "operator" } });
+  const forceReplica = context.req.query("replica") === "1";
+  await context.env.BACKUP_WORKFLOW.create({ id: instanceId, params: { trigger: "operator", forceReplica } });
   await recordAudit(context.env, context.get("identity"), "backup.trigger", "workflow", instanceId, "accepted");
-  return context.json({ ok: true, instanceId }, 202);
+  return context.json({ ok: true, instanceId, forceReplica }, 202);
 });
 
 app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (context) => {
