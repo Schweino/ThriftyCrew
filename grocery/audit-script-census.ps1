@@ -59,6 +59,8 @@ $KNOWN = [ordered]@{
   'send-friday-email.ps1'            = 'scheduled task "SMP Friday Email (draft)", weekly via run-hidden.vbs; drafts unless -Send, and a week_of stamp stops a double-mail'
   # -- human entry points, run when a specific failure or a specific job shows up
   'promote-verdicts.ps1'             = 'weekly by hand after audit-match-soundness; writes exclude-provenance.json'
+  'adjudicate-blind-findings.ps1'    = 'weekly by hand inside the accuracy sample - opens the sealed key AFTER the blind findings are frozen, which is the whole point (a caller could run it early)'
+  'new-commodity.ps1'                = 'by hand per commodity added - clones a sibling exclude and asks for the band, so it is an operator prompt, not a batch step'
   'audit-ff-missing-products.ps1'    = 'report half of the FF partial-pull pair; the -Apply half is heal-ff-missing-products.ps1'
   'triage-outofband.ps1'             = 'sub-diagnoses the OUT-OF-BAND bucket of triage-coverage-gaps.ps1'
   'triage-unpriced.ps1'              = 'sub-diagnoses the UNPRICED bucket of triage-coverage-gaps.ps1'
