@@ -61,4 +61,25 @@ describe("direct regular capture", () => {
       expect.objectContaining({ unit: "each", quantityMicros: 32_000_000 }),
     ]));
   });
+
+  it("does not multiply a total package weight by an item count", async () => {
+    const artifact = await buildRegularCapture("sams", { mode_verified: true, deals: [
+      {
+        item: "Hormel Fully Cooked Bacon (10.5 oz., 72 ct.)", current_price: "$15.76", size: "10.5 oz", as_of: "2026-08-05",
+        sams_unit_price: "$1.50/oz", sams_item_id: "bacon",
+      },
+      {
+        item: "Pedigree Dentastix, 3.45 lbs., 65 ct.", current_price: "$22.88", size: "65 ct 3.45 lb", as_of: "2026-08-05",
+        sams_unit_price: "$0.35/ea", sams_item_id: "treats",
+      },
+    ] });
+    expect(artifact.observations[0]!.basisOptions).toEqual(expect.arrayContaining([
+      expect.objectContaining({ unit: "oz", quantityMicros: 10_500_000, source: "stated-measure" }),
+    ]));
+    expect(artifact.observations[0]!.basisOptions).not.toContainEqual(expect.objectContaining({ unit: "oz", quantityMicros: 756_000_000 }));
+    expect(artifact.observations[1]!.basisOptions).toEqual(expect.arrayContaining([
+      expect.objectContaining({ unit: "lb", quantityMicros: 3_450_000, source: "stated-measure" }),
+    ]));
+    expect(artifact.observations[1]!.basisOptions).not.toContainEqual(expect.objectContaining({ unit: "lb", quantityMicros: 224_250_000 }));
+  });
 });

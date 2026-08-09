@@ -164,8 +164,8 @@ const { canonicalPath, beta = false } = Astro.props;
         });
       }
 
-      function storeCard(item: Commodity, store: StoreRow): HTMLElement {
-        const winner = store.store === item.cheapest?.store;
+      function storeCard(store: StoreRow, bestStore: string | null): HTMLElement {
+        const winner = store.store === bestStore;
         const card = el("article", `store-card${winner ? " winner" : ""}${store.membership ? " membership" : ""}`);
         const top = el("div", "store-card-top");
         top.append(el("span", "store-name", store.store));
@@ -187,6 +187,8 @@ const { canonicalPath, beta = false } = Astro.props;
       }
 
       function commodityCard(item: Commodity): HTMLElement {
+        const visibleStores = item.stores.filter((store) => !state.hideMembership || !store.membership);
+        const visibleBest = visibleStores.reduce<StoreRow | null>((best, store) => !best || store.perUnitMicros < best.perUnitMicros ? store : best, null);
         const card = el("section", "commodity-card");
         const heading = el("header", "commodity-heading");
         const titleWrap = el("div");
@@ -194,16 +196,15 @@ const { canonicalPath, beta = false } = Astro.props;
         titleWrap.append(title, el("span", "comparison-unit", `Compared per ${unitLabel(item.unit)}`));
         heading.append(titleWrap);
         const best = el("div", "best-summary");
-        if (item.cheapest) {
-          best.append(el("span", "best-label", "Best today"), el("strong", "", priceLabel(item.cheapest.perUnitMicros, item.unit)), el("span", "", item.cheapest.store));
+        if (visibleBest) {
+          best.append(el("span", "best-label", "Best today"), el("strong", "", priceLabel(visibleBest.perUnitMicros, item.unit)), el("span", "", visibleBest.store));
         } else {
           best.append(el("span", "best-label", "Current coverage"), el("strong", "", "No verified price"), el("span", "", "Check back after the next capture"));
         }
         heading.append(best);
         card.append(heading);
         const stores = el("div", "store-grid");
-        const visibleStores = item.stores.filter((store) => !state.hideMembership || !store.membership);
-        for (const store of visibleStores) stores.append(storeCard(item, store));
+        for (const store of visibleStores) stores.append(storeCard(store, visibleBest?.store ?? null));
         if (visibleStores.length === 0) stores.append(el("p", "empty-store-row", "No eligible current observations are available for this item."));
         card.append(stores);
         return card;

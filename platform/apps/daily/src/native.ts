@@ -129,7 +129,7 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
   const inputBatchIds = [...snapshot.inputBatchIds].sort();
   const inputManifest = {
     kind: "native-v3-release",
-    engineVersion: "native-v3.1.0",
+    engineVersion: "native-v3.1.1",
     marketId: "omaha",
     mode: "direct",
     releaseDate: weekOf,
@@ -372,8 +372,8 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
       storeLocationId: cell.storeLocationId,
       perUnitMicros: cell.displayPerUnitMicros,
       unit: cell.displayUnit,
-      membership: cell.winner!.membership_required === 1,
-      member_label: cell.winner!.loyalty_required === 1 ? "Loyalty price" : cell.winner!.membership_required === 1 ? "Membership required" : "",
+      membership: cell.winner!.membership_required === 1 || storeById.get(cell.storeLocationId)?.membership_required === 1,
+      member_label: cell.winner!.loyalty_required === 1 ? "Loyalty price" : cell.winner!.membership_required === 1 || storeById.get(cell.storeLocationId)?.membership_required === 1 ? "Membership required" : "",
       item: cell.winner!.name ?? "",
       size: cell.winner!.size_text ?? "",
       ad: cell.winner!.raw_price_text ?? "",

@@ -41,7 +41,7 @@ describe("native release construction", () => {
     const snapshot: NativeEngineSnapshot = {
       mode: "direct", observedAt: "2026-08-09T12:00:00.000Z", configurationId: "config", currentReleaseId: "old", inputHash: "a".repeat(64), inputBatchIds: ["batch"],
       commodities: [{ id: "eggs", label: "Eggs", basis_unit: "dozen", category_id: "dairy", category_label: "Dairy", sort_order: 1 }],
-      stores: [{ id: "store", store_name: "Store" }],
+      stores: [{ id: "store", store_name: "Store", membership_required: 1 }],
       candidates: [{ observation_id: "obs", commodity_id: "eggs", store_location_id: "store", per_unit_micros: 2_000_000, normalized_basis_unit: "dozen", normalized_basis_qty_micros: 1_000_000, purchase_price_minor: 200, purchase_quantity: 1, package_count: 1, captured_at: "2026-08-09T11:00:00.000Z", valid_to: null, coverage_mode: "full", captured_to: "2026-08-09T11:00:00.000Z", known_wrong: 0, batch_id: "batch", name: "Eggs" }],
       rawCandidates: [{ observation_id: "raw-spice", store_location_id: "store", per_unit_micros: 1_000_000, normalized_basis_unit: "oz", captured_at: "2026-08-09T11:00:00.000Z", valid_to: null, coverage_mode: "full", captured_to: "2026-08-09T11:00:00.000Z", batch_id: "batch", name: "Special Spice 1 oz" }],
       currentCells: [],
@@ -56,5 +56,7 @@ describe("native release construction", () => {
     expect(artifact.freeRotation.map((entry) => entry.recipeSlug)).toEqual(["complete", "recipe-rule"]);
     expect((artifact.payloads.feed as { recipes: Record<string, unknown> }).recipes).toHaveProperty("complete");
     expect((artifact.payloads.feed as { recipes: Record<string, unknown> }).recipes).not.toHaveProperty("incomplete");
+    const board = artifact.payloads.board as { commodities: Array<{ stores: Array<{ membership: boolean; member_label: string }> }> };
+    expect(board.commodities[0]?.stores[0]).toMatchObject({ membership: true, member_label: "Membership required" });
   });
 });

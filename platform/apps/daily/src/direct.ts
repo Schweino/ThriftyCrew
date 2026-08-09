@@ -112,13 +112,21 @@ function packageBasisOptions(sizeText: string, name: string, purchasePriceMinor:
   const measure = "(fl\\.?\\s*oz|ounces?|oz|pounds?|lbs?|lb|ml|liters?|liter|l|grams?|gram|g|kg)";
 
   for (const text of [normalizedSize, normalizedName]) {
-    for (const match of text.matchAll(new RegExp(`(\\d+(?:\\.\\d+)?)\\s*(?:ct|count|pk|pack)s?\\s*(?:x|of)?\\s*(\\d+(?:\\.\\d+)?)\\s*${measure}\\b`, "g"))) {
-      const unit = optionUnit(match[3]!);
-      if (unit) add(unit, Number(match[1]) * Number(match[2]), "count-times-measure");
+    for (const match of text.matchAll(new RegExp(`(\\d+(?:\\.\\d+)?)\\s*(?:ct|count|pk|pack)s?\\s*(x|of)?\\s*(\\d+(?:\\.\\d+)?)\\s*${measure}\\b`, "g"))) {
+      const unit = optionUnit(match[4]!);
+      // A large count followed by a package weight ("65 ct 3.45 lb")
+      // describes total package weight, not 65 packages weighing 3.45 lb
+      // apiece. Explicit x/of notation remains authoritative.
+      const explicitMultiplier = Boolean(match[2]);
+      if (unit && (explicitMultiplier || !["lb", "kg"].includes(unit))) add(unit, Number(match[1]) * Number(match[3]), "count-times-measure");
     }
-    for (const match of text.matchAll(new RegExp(`(\\d+(?:\\.\\d+)?)\\s*${measure}\\s*(?:each|ea|cans?|bottles?|pouches?|cups?)?[\\s,.-]+(\\d+(?:\\.\\d+)?)\\s*(?:ct|count|pk|pack)s?\\b`, "g"))) {
+    for (const match of text.matchAll(new RegExp(`(\\d+(?:\\.\\d+)?)\\s*${measure}\\s*(?:each|ea|cans?|bottles?|pouches?|cups?)[\\s,.-]+(\\d+(?:\\.\\d+)?)\\s*(?:ct|count|pk|pack)s?\\b`, "g"))) {
       const unit = optionUnit(match[2]!);
       if (unit) add(unit, Number(match[1]) * Number(match[3]), "measure-times-count");
+    }
+    for (const match of text.matchAll(new RegExp(`(\\d+(?:\\.\\d+)?)\\s*${measure}\\b`, "g"))) {
+      const unit = optionUnit(match[2]!);
+      if (unit) add(unit, Number(match[1]), "stated-measure");
     }
   }
 
