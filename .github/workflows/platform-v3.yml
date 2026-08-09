@@ -145,7 +145,7 @@ jobs:
         shell: bash
         run: |
           case "$RECOVERY_JOB" in
-            daily-engine) pnpm tc replay && pnpm tc engine parity legacy ;;
+            daily-engine) pnpm tc engine publish-native ;;
             accuracy-weekly) pnpm tc accuracy draw ;;
             triage-daily) pnpm tc triage run ;;
             ghost-rotation-reconcile) pnpm tc ghost reconcile ;;
