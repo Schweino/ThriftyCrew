@@ -2,7 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import type { RecipeCost } from "@thriftycrew/contracts";
 import { digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
-import { buildNativeCells, convertUnitPriceMicros, selectWinner, type NativeEngineSnapshot, type NativeReleaseCell } from "@thriftycrew/engine";
+import { buildNativeCells, candidatePriceForUnit, convertUnitPriceMicros, selectWinner, type NativeEngineSnapshot, type NativeReleaseCell } from "@thriftycrew/engine";
 
 interface IngredientDefinition {
   item: string;
@@ -183,7 +183,7 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
       continue;
     }
     const targetUnit = apiUnit(selected.rule.unit);
-    let convertedMicros = convertUnitPriceMicros(raw.per_unit_micros, raw.normalized_basis_unit, targetUnit);
+    let convertedMicros = candidatePriceForUnit(raw, targetUnit)?.perUnitMicros ?? null;
     if (convertedMicros === null && ((raw.normalized_basis_unit === "oz" && targetUnit === "fl_oz") || (raw.normalized_basis_unit === "fl_oz" && targetUnit === "oz"))) {
       convertedMicros = raw.per_unit_micros;
     }

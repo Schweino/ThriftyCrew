@@ -65,6 +65,24 @@ describe("winner selection", () => {
   });
 });
 
+describe("alternative package bases", () => {
+  it("prices a matched weight commodity from an audited multipack basis", () => {
+    const snapshot = {
+      mode: "direct" as const, observedAt: "2026-08-09T12:00:00.000Z", configurationId: "config", currentReleaseId: "release", inputHash: "d".repeat(64), inputBatchIds: ["batch"],
+      commodities: [{ id: "beans", label: "Beans", basis_unit: "oz", category_id: "pantry" }],
+      stores: [{ id: "sams", store_name: "Sam's Club" }],
+      candidates: [{
+        observation_id: "obs", commodity_id: "beans", store_location_id: "sams", per_unit_micros: 1_110_000,
+        normalized_basis_unit: "each", captured_at: "2026-08-09T11:00:00.000Z", valid_to: null,
+        coverage_mode: "full" as const, captured_to: "2026-08-09T11:00:00.000Z", known_wrong: 0,
+        basis_options_json: JSON.stringify([{ unit: "oz", quantityMicros: 90_000_000, perUnitMicros: 74_000, source: "count-times-measure" }]),
+      }],
+      currentCells: [],
+    };
+    expect(buildNativeCells(snapshot)[0]).toMatchObject({ status: "priced", displayPerUnitMicros: 74_000 });
+  });
+});
+
 describe("guard coverage", () => {
   it("refuses a blind pass", () => {
     expect(() => guardResult({ guardId: "x", status: "pass", eligibleCount: 10, examinedCount: 0, detail: {} })).toThrow(/blind/);

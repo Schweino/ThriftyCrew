@@ -86,9 +86,9 @@ export async function insertObservations(
       `INSERT OR IGNORE INTO observations
          (id, batch_id, product_version_id, term_key, kind, currency, purchase_price_minor, regular_price_minor,
           purchase_quantity, package_count, captured_basis_unit, captured_basis_qty_micros, normalized_basis_unit,
-          normalized_basis_qty_micros, per_unit_micros, loyalty_required, membership_required, raw_price_text,
+          normalized_basis_qty_micros, per_unit_micros, basis_options_json, loyalty_required, membership_required, raw_price_text,
           raw_size_text, captured_at, valid_from, valid_to, evidence_object_id, source_payload_key)
-       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24)`,
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24, ?25)`,
     ).bind(
       observationId,
       batch.id,
@@ -105,6 +105,7 @@ export async function insertObservations(
       observation.normalizedBasisUnit,
       observation.normalizedBasisQtyMicros,
       observation.perUnitMicros,
+      stableJson(observation.basisOptions ?? []),
       observation.loyaltyRequired ? 1 : 0,
       observation.membershipRequired ? 1 : 0,
       observation.rawPriceText,

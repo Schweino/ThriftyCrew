@@ -34,6 +34,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode)
             o.purchase_quantity, o.package_count, pv.size_text,
             o.membership_required, o.loyalty_required, o.raw_price_text, pv.name, pv.product_url,
             pv.taxonomy_path, p.external_key,
+            o.basis_options_json,
             CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days,
             EXISTS (
               SELECT 1 FROM known_wrong_rules k
@@ -56,6 +57,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode)
             o.normalized_basis_qty_micros, o.purchase_price_minor, o.purchase_quantity, o.package_count,
             o.membership_required, o.loyalty_required, o.raw_price_text, pv.name, pv.normalized_name,
             pv.size_text, pv.product_url, pv.taxonomy_path, p.external_key
+            , o.basis_options_json
             , CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days
        FROM observations o
        JOIN capture_batches b ON b.id = o.batch_id

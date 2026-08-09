@@ -28,6 +28,12 @@ export function assertObservationArithmetic(observation: ObservationInput, toler
   if (Math.abs(expected - observation.perUnitMicros) > toleranceMicros) {
     throw new Error(`per-unit mismatch: received ${observation.perUnitMicros}, expected ${expected}`);
   }
+  for (const option of observation.basisOptions ?? []) {
+    const optionExpected = expectedPerUnitMicros(observation.purchasePriceMinor, option.quantityMicros);
+    if (Math.abs(optionExpected - option.perUnitMicros) > toleranceMicros) {
+      throw new Error(`basis-option mismatch (${option.source}): received ${option.perUnitMicros}, expected ${optionExpected}`);
+    }
+  }
 }
 
 export function stableJson(value: unknown): string {

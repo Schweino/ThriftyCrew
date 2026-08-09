@@ -78,6 +78,12 @@ export const observationInputSchema = z
     normalizedBasisUnit: basisUnit,
     normalizedBasisQtyMicros: z.number().int().positive(),
     perUnitMicros: z.number().int().nonnegative(),
+    basisOptions: z.array(z.object({
+      unit: basisUnit,
+      quantityMicros: z.number().int().positive(),
+      perUnitMicros: z.number().int().nonnegative(),
+      source: z.string().min(1).max(100),
+    })).max(12).optional(),
     loyaltyRequired: z.boolean().default(false),
     membershipRequired: z.boolean().default(false),
     rawPriceText: z.string().min(1).max(500),

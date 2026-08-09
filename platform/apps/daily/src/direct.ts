@@ -71,6 +71,67 @@ function basis(sizeText: string): { unit: ObservationInput["normalizedBasisUnit"
   return { unit, quantityMicros: Math.max(1, Math.round(quantity * 1_000_000)), packageCount };
 }
 
+type BasisOption = NonNullable<ObservationInput["basisOptions"]>[number];
+
+function optionUnit(raw: string): ObservationInput["normalizedBasisUnit"] | undefined {
+  const unit = raw.toLowerCase().replace(/\./g, "").replace(/\s/g, "");
+  if (unit === "floz" || unit === "fluidounce" || unit === "fluidounces") return "fl_oz";
+  if (unit === "oz" || unit === "ounce" || unit === "ounces") return "oz";
+  if (unit === "lb" || unit === "lbs" || unit === "pound" || unit === "pounds") return "lb";
+  if (unit === "ml") return "ml";
+  if (unit === "l" || unit === "liter" || unit === "liters") return "liter";
+  if (unit === "g" || unit === "gram" || unit === "grams") return "gram";
+  if (unit === "kg") return "kg";
+  if (unit === "gal" || unit === "gallon" || unit === "gallons") return "gal";
+  if (unit === "qt") return "qt";
+  if (unit === "pt") return "pt";
+  return undefined;
+}
+
+function packageBasisOptions(sizeText: string, name: string, purchasePriceMinor: number): BasisOption[] {
+  const options: BasisOption[] = [];
+  const seen = new Set<string>();
+  const add = (unit: ObservationInput["normalizedBasisUnit"], quantity: number, source: string) => {
+    const quantityMicros = Math.round(quantity * 1_000_000);
+    if (!Number.isSafeInteger(quantityMicros) || quantityMicros <= 0) return;
+    const key = `${unit}:${quantityMicros}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    options.push({
+      unit,
+      quantityMicros,
+      perUnitMicros: Math.round((purchasePriceMinor * 10_000 * 1_000_000) / quantityMicros),
+      source,
+    });
+  };
+  const normalizedSize = sizeText.toLowerCase().replace(/fluid ounces?/g, "fl oz");
+  const normalizedName = name.toLowerCase().replace(/fluid ounces?/g, "fl oz");
+  // Package names often state container capacity ("13 gallon, 110 ct.") rather than contents.
+  // Limit name-derived multiplication to mass and small-volume contents units; standalone captured
+  // sizes still retain gallons/quarts/pints through basis().
+  const measure = "(fl\\.?\\s*oz|ounces?|oz|pounds?|lbs?|lb|ml|liters?|liter|l|grams?|gram|g|kg)";
+
+  for (const text of [normalizedSize, normalizedName]) {
+    for (const match of text.matchAll(new RegExp(`(\\d+(?:\\.\\d+)?)\\s*(?:ct|count|pk|pack)s?\\s*(?:x|of)?\\s*(\\d+(?:\\.\\d+)?)\\s*${measure}\\b`, "g"))) {
+      const unit = optionUnit(match[3]!);
+      if (unit) add(unit, Number(match[1]) * Number(match[2]), "count-times-measure");
+    }
+    for (const match of text.matchAll(new RegExp(`(\\d+(?:\\.\\d+)?)\\s*${measure}\\s*(?:each|ea|cans?|bottles?|pouches?|cups?)?[\\s,.-]+(\\d+(?:\\.\\d+)?)\\s*(?:ct|count|pk|pack)s?\\b`, "g"))) {
+      const unit = optionUnit(match[2]!);
+      if (unit) add(unit, Number(match[1]) * Number(match[3]), "measure-times-count");
+    }
+  }
+
+  const parsed = basis(sizeText);
+  if (parsed) add(parsed.unit, parsed.quantityMicros / 1_000_000, "captured-size");
+  for (const text of [normalizedSize, normalizedName]) {
+    for (const match of text.matchAll(/(\d+(?:\.\d+)?)\s*(?:ct|count|pk|pack)s?\b/g)) {
+      add("each", Number(match[1]), "stated-package-count");
+    }
+  }
+  return options.slice(0, 12);
+}
+
 function omahaNoon(date: string): string {
   const [year, month, day] = date.split("-").map(Number);
   if (!year || !month || !day) return new Date(date).toISOString();
@@ -159,6 +220,7 @@ export async function buildRegularCapture(storeInput: string, document: RegularD
       capturedBasisQtyMicros: parsedBasis.quantityMicros, normalizedBasisUnit: storeUnitPrice?.unit ?? parsedBasis.unit,
       normalizedBasisQtyMicros,
       perUnitMicros: Math.round((purchasePriceMinor * 10_000 * 1_000_000) / normalizedBasisQtyMicros),
+      basisOptions: packageBasisOptions(sizeText, name, purchasePriceMinor),
       loyaltyRequired: false, membershipRequired: store === "sams", rawPriceText: stringValue(row.ad_price) ?? String(price), rawSizeText: sizeText,
       capturedAt, sourcePayloadKey: `regular:${store}:${index}`,
     });
@@ -174,7 +236,7 @@ export async function buildRegularCapture(storeInput: string, document: RegularD
   const marketVerified = attestation?.marketVerified ?? true;
   const locationVerified = attestation?.locationVerified ?? true;
   const attestationHash = attestation ? await digestHex(stableJson(attestation)) : null;
-  const manifestHash = await digestHex(stableJson({ store, source: document.source, priceMode: attestation?.priceMode ?? document.price_mode, priceModeVerified, marketVerified, locationVerified, attestationHash, observations: observations.map((item) => [item.externalProductKey, item.capturedAt, item.perUnitMicros]) }));
+  const manifestHash = await digestHex(stableJson({ store, source: document.source, priceMode: attestation?.priceMode ?? document.price_mode, priceModeVerified, marketVerified, locationVerified, attestationHash, observations: observations.map((item) => [item.externalProductKey, item.capturedAt, item.perUnitMicros, item.basisOptions ?? []]) }));
   return {
     version: 1, sourceId: `direct-${store}-headless`, coverageMode: "partial", capturedFrom: captured[0]!, capturedTo: captured.at(-1)!,
     expectedTerms: terms.length, marketVerified, locationVerified, priceModeVerified,

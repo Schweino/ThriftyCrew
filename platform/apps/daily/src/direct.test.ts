@@ -56,5 +56,9 @@ describe("direct regular capture", () => {
       normalizedBasisUnit: "each",
       perUnitMicros: 440_000,
     });
+    expect(artifact.observations[0]!.basisOptions).toEqual(expect.arrayContaining([
+      expect.objectContaining({ unit: "oz", quantityMicros: 102_400_000, source: "count-times-measure" }),
+      expect.objectContaining({ unit: "each", quantityMicros: 32_000_000 }),
+    ]));
   });
 });

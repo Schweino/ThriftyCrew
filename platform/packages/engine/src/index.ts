@@ -203,6 +203,7 @@ export interface NativeEngineSnapshot {
     raw_price_text?: string | null; name?: string; product_url?: string | null; taxonomy_path?: string | null;
     external_key?: string; size_text?: string | null; batch_id?: string;
     max_age_days?: number;
+    basis_options_json?: string;
   }>;
   rawCandidates?: Array<{
     observation_id: string; store_location_id: string; per_unit_micros: number; captured_at: string;
@@ -213,6 +214,7 @@ export interface NativeEngineSnapshot {
     product_url?: string | null; taxonomy_path?: string | null; external_key?: string; size_text?: string | null;
     batch_id?: string;
     max_age_days?: number;
+    basis_options_json?: string;
   }>;
   currentCells: Array<{
     commodity_id: string; store_location_id: string; observation_id: string | null; status: string;
@@ -230,6 +232,39 @@ export interface NativeReleaseCell {
   displayUnit: string | null;
   winner: NativeEngineSnapshot["candidates"][number] | null;
   reason: Record<string, unknown>;
+}
+
+interface CandidateBasisOption { unit: string; perUnitMicros: number; source: string }
+
+export function candidateBasisOptions(candidate: {
+  normalized_basis_unit: string;
+  per_unit_micros: number;
+  basis_options_json?: string;
+}): CandidateBasisOption[] {
+  const options: CandidateBasisOption[] = [{ unit: candidate.normalized_basis_unit, perUnitMicros: candidate.per_unit_micros, source: "normalized" }];
+  if (!candidate.basis_options_json) return options;
+  try {
+    const parsed = JSON.parse(candidate.basis_options_json) as Array<{ unit?: unknown; perUnitMicros?: unknown; source?: unknown }>;
+    if (!Array.isArray(parsed)) return options;
+    for (const option of parsed) {
+      if (typeof option.unit !== "string" || typeof option.perUnitMicros !== "number" || !Number.isSafeInteger(option.perUnitMicros) || option.perUnitMicros < 0) continue;
+      if (options.some((existing) => existing.unit === option.unit && existing.perUnitMicros === option.perUnitMicros)) continue;
+      options.push({ unit: option.unit, perUnitMicros: option.perUnitMicros, source: typeof option.source === "string" ? option.source : "basis-option" });
+    }
+  } catch { /* malformed stored options are ignored; ingestion validates new rows */ }
+  return options;
+}
+
+export function candidatePriceForUnit(candidate: {
+  normalized_basis_unit: string;
+  per_unit_micros: number;
+  basis_options_json?: string;
+}, targetUnit: string): { perUnitMicros: number; source: string; unit: string } | null {
+  const compatible = candidateBasisOptions(candidate).flatMap((option) => {
+    const converted = convertUnitPriceMicros(option.perUnitMicros, option.unit, targetUnit);
+    return converted === null ? [] : [{ perUnitMicros: converted, source: option.source, unit: option.unit }];
+  });
+  return compatible.sort((left, right) => left.perUnitMicros - right.perUnitMicros || left.source.localeCompare(right.source))[0] ?? null;
 }
 
 function comparableRecord(cell: NativeReleaseCell): Record<string, unknown> {
@@ -262,13 +297,13 @@ export function buildNativeCells(snapshot: NativeEngineSnapshot): NativeReleaseC
     for (const store of snapshot.stores) {
       const key = `${commodity.id}\u001f${store.id}`;
       const selection = selectWinner((groups.get(key) ?? []).flatMap((candidate) => {
-        const converted = convertUnitPriceMicros(candidate.per_unit_micros, candidate.normalized_basis_unit, commodity.basis_unit);
+        const converted = candidatePriceForUnit(candidate, commodity.basis_unit);
         if (converted === null) return [];
         return [{
         observationId: candidate.observation_id,
         commodityId: candidate.commodity_id,
         storeLocationId: candidate.store_location_id,
-        perUnitMicros: converted,
+        perUnitMicros: converted.perUnitMicros,
         capturedAt: candidate.captured_at,
         batchCoverageMode: candidate.coverage_mode,
         batchCapturedTo: candidate.captured_to,
