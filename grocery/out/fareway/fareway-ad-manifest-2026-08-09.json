@@ -8,7 +8,15 @@
                    "pages":  22,
                    "dir":  "C:\\Codex\\income\\grocery\\out\\fareway\\weekly",
                    "blocked":  false,
-                   "reason":  "OK (22 pages)"
+                   "reason":  "OK (22 pages)",
+                   "ad_pages":  22,
+                   "page_gaps":  [
+
+                                 ],
+                   "on_disk":  22,
+                   "on_disk_from":  "2026-08-09",
+                   "on_disk_to":  "2026-08-15",
+                   "install_failed":  false
                },
     "monthly":  {
                     "from":  "2026-08-02",
@@ -16,6 +24,14 @@
                     "pages":  40,
                     "dir":  "C:\\Codex\\income\\grocery\\out\\fareway\\monthly",
                     "blocked":  false,
-                    "reason":  "OK (40 pages)"
+                    "reason":  "OK (40 pages)",
+                    "ad_pages":  40,
+                    "page_gaps":  [
+
+                                  ],
+                    "on_disk":  40,
+                    "on_disk_from":  "2026-08-02",
+                    "on_disk_to":  "2026-08-29",
+                    "install_failed":  false
                 }
 }

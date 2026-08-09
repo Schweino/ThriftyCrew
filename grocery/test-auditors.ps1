@@ -3555,6 +3555,55 @@ else {
   if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'identity eval: an EXCLUDE still overrides an include, and a rule-ACCEPTED product still cannot be mined as a clean negative' }
   else { Bad ('export-identity-eval -SelfTest failed (rc=' + $r.rc + ') - the hard-negative labelling rule is broken, so any AUC measured with it is meaningless: ' + ($r.text -replace "`n", ' ')) }
 }
+# ---------------------------------------------------------------- ad-page install contract (2026-08-09)
+# FOUNDING BUG: pull-fareway-ads.ps1 downloaded flyer pages straight into out\fareway\weekly\ and never
+# cleared it. The 2026-08-02..08 ad had 24 pages, the 2026-08-09..15 ad has 22, so weekly-23.jpg and
+# weekly-24.jpg from the EXPIRED ad stayed on disk - and the documented vision-read step globs
+# out\fareway\weekly\*.jpg, so a closed ad's prices could be read as current. weekly-23.jpg was
+# vision-confirmed as page 23 of the old ad. It is the expired-ad-supplement class ruled on 2026-08-07,
+# except it bypasses that guard entirely: the stale data arrives as an IMAGE, before any ad_to exists.
+# The self-test drives regression-inputs\guard-fixtures\adpages-shrink.json (frozen at 24 -> 22).
+# MUTATION-PROVEN 2026-08-09: deleting the clear step took 3 cases red, blinding the orphan check took the
+# must-fire case red, and restoring the library went green again.
+$r = RunPS 'pull-fareway-ads.ps1' @('-SelfTest')
+if ($r.rc -eq 0 -and $r.text -match 'SELFTEST PASS') {
+  Ok 'ad-page install: a 22-page ad over a 24-page one leaves NO orphan pages, and a partial download refuses to half-swap'
+} else { Bad ('pull-fareway-ads -SelfTest failed (rc=' + $r.rc + ') - a shrinking flyer can strand an expired ad''s pages where the vision read will treat them as current: ' + ($r.text -replace "`n", ' ')) }
+
+# SOURCE ASSERTION - a guard cannot detect its own unsealing (the [[guard-fixture-rule]] lesson). The
+# self-test above exercises adpages-lib directly, so it stays green even if a puller stops CALLING the lib
+# and goes back to downloading in place. Assert the callers instead: both image pullers must dot-source the
+# library, and neither may point -OutFile at anything but a staging path.
+foreach ($p in @('pull-fareway-ads.ps1', 'pull-bakers.ps1')) {
+  $ps = Join-Path $root $p
+  if (-not (Test-Path $ps)) { Bad ($p + ' is missing - the ad-page install contract has no caller to enforce'); continue }
+  $src = Get-Content $ps -Raw
+  # \b on each call, not a bare substring: a renamed-out stub (Install-AdPagesDISABLED) satisfies a
+  # substring match while calling nothing, which is exactly how an unsealing would look in a diff.
+  $callsLib = ($src -match 'adpages-lib\.ps1') -and ($src -match 'Install-AdPages\b') -and ($src -match 'New-AdStagingDir\b')
+  # Every download in these scripts must land in staging, never in the live page dir. The target is often
+  # an indirection (-OutFile $o), so a bare variable is resolved back to its own assignment before it is
+  # judged - otherwise this check fails the very scripts it is meant to protect.
+  $badOut = @()
+  foreach ($m in @([regex]::Matches($src, '-OutFile\s+(\([^)]*\)|\$\w+|\S+)'))) {
+    $arg = $m.Groups[1].Value
+    if ($arg -match '(?i)staging') { continue }
+    if ($arg -match '^\$(\w+)$') {
+      $vn = $Matches[1]
+      if ($src -match ('\$' + [regex]::Escape($vn) + '\s*=[^\r\n]*(?i)staging')) { continue }
+    }
+    $badOut += $arg
+  }
+  if ($callsLib -and $badOut.Count -eq 0) {
+    Ok ($p + ' still stages its downloads and installs through adpages-lib (clear-then-swap intact)')
+  } else {
+    $why = @()
+    if (-not $callsLib) { $why += 'no longer installs via adpages-lib' }
+    if ($badOut.Count)  { $why += ('downloads outside staging: -OutFile ' + ($badOut -join ', -OutFile ')) }
+    Bad ($p + ' has been unsealed - ' + ($why -join '; ') + ' - the shrinking-ad orphan bug is reachable again')
+  }
+}
+
 # COMPLETION MARKER (2026-08-08). This file is the founding case for the whole contract: on 2026-08-08 it
 # threw 242 checks before this point, printed 176 lines of PASS, and exited 1 - indistinguishable from an
 # ordinary findings-exit. The exit code carries the VERDICT; this line carries the fact that the run

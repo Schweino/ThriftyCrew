@@ -1,0 +1,14 @@
+{
+  "_what": "FROZEN founding-bug fixture for the ad-page install contract (adpages-lib.ps1). Drives the -SelfTest in pull-fareway-ads.ps1 and pull-bakers.ps1.",
+  "_why": "2026-08-09: pull-fareway-ads.ps1 downloaded straight into out\\fareway\\weekly\\ without clearing it. The previous ad had 24 pages, the new one has 22, so weekly-23.jpg and weekly-24.jpg from the EXPIRED ad stayed on disk and were indistinguishable from current pages to the vision-read step, which globs out\\fareway\\weekly\\*.jpg. weekly-23.jpg was vision-confirmed as page 23 of the 2026-08-02..08 ad (Personal Care / Pets section).",
+  "_class": "Same as the expired-ad-supplement bug ruled on 2026-08-07 (compare-deals skips a fareway-deals file whose ad_to has passed) - except stale data enters as an IMAGE, before any ad_to header exists, so that guard cannot see it.",
+  "_frozen": "NEVER regenerate these numbers from a live pull. 24 -> 22 IS the bug; a run where the counts happen to match proves nothing.",
+
+  "prefix": "weekly",
+  "prior":   { "from": "2026-08-02", "to": "2026-08-08", "pulled": "2026-08-05", "pages": 24 },
+  "current": { "from": "2026-08-09", "to": "2026-08-15", "pulled": "2026-08-09", "pages": 22 },
+  "orphans_left_by_the_bug": [23, 24],
+  "partial_download_pages": 20,
+
+  "sibling_files_that_must_survive_the_clear": ["bakers-deals-2026-08-09.json", "urls.txt", "meta.json"]
+}

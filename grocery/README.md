@@ -42,7 +42,9 @@ powershell -ExecutionPolicy Bypass -File "C:\Codex\income\grocery\pull-bakers.ps
   -UrlsFile "C:\Codex\income\grocery\out\bakers\urls.txt"
 ```
 
-It re-checks both gates, then downloads the pages to `out\bakers\page-NN.jpg`. The agent vision-reads those JPGs to extract deals (the front page prints the sale dates, which independently confirm the week).
+It re-checks both gates, stages the pages, then installs them to `out\bakers\page-NN.jpg`, clearing the folder's old page files first. The agent vision-reads **the pages `meta.json` lists**, not a bare `page-*.jpg` glob, to extract deals (the front page prints the sale dates, which independently confirm the week).
+
+> **Why not the glob** (2026-08-09): neither image puller used to clear its target folder, so an ad with FEWER pages than the previous one left the expired ad's extra pages on disk, indistinguishable from current ones. Fareway's 24-page 2026-08-02..08 ad left `weekly-23.jpg`/`weekly-24.jpg` sitting under the 22-page 2026-08-09..15 ad; `weekly-23.jpg` was vision-confirmed as the OLD ad's Personal Care page. That is the expired-ad-supplement class ruled on 2026-08-07, except it **bypasses** that guard: the stale data arrives as an IMAGE, before any `ad_to` exists to check. Both pullers now stage and swap through `adpages-lib.ps1`: nothing installs unless every page arrived, the folder is cleared first, the page count is re-asserted after the swap, and `ad-window.json` in the folder stamps which window the images actually belong to. An incomplete download refuses the swap and leaves the previous ad intact (`installed:false`, exit 2) rather than half-publishing. Fixture: `regression-inputs\guard-fixtures\adpages-shrink.json`, run by `pull-fareway-ads.ps1 -SelfTest` and asserted daily by `test-auditors.ps1`.
 
 ## Notes / gotchas
 
@@ -150,7 +152,7 @@ session silently defaulted to Des Moines). Canonical identities + where each is 
 | Walmart | "Omaha L St Supercenter", 12850 L St, 68137 | weekly SKILL step E verify |
 | Sam's Club | "Omaha Sam's Club", 13130 L St, 68137 | weekly SKILL step B verify |
 | Fareway (storefront) | shopId **16668805** / postalCode **68136** = 17070 Audrey St, Omaha | daily + weekly SKILLs: graphql network-param check (label alone is NOT proof) |
-| Fareway (ads) | OmahaGroup_*.jpg filenames | pull-fareway-ads.ps1 Omaha+current gates |
+| Fareway (ads) | OmahaGroup_*.jpg filenames | pull-fareway-ads.ps1 Omaha+current gates, then the complete+clean install gate (adpages-lib.ps1) |
 
 If a store moves/renames, update this table AND the enforcing script/SKILL together.
 
