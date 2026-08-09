@@ -77,7 +77,7 @@ async function matchBatch(client: MutationClient, batchId: string): Promise<Reco
   if (!Array.isArray(snapshot.products)) throw new Error("matching snapshot omitted products");
   if (!(snapshot.status === "promoted" || snapshot.status === "validated")) throw new Error(`batch ${batchId} cannot be matched from ${snapshot.status}`);
   const commodities = JSON.parse(await readFile(path.join(platformRoot, "config", "commodities.json"), "utf8")) as Array<{ id: string; include?: string[]; exclude?: string[] }>;
-  const categoryDocument = JSON.parse(await readFile(path.join(platformRoot, "config", "categories.json"), "utf8")) as { categories: Array<{ key: string; commodities: string[] }> };
+  const categoryDocument = JSON.parse((await readFile(path.join(platformRoot, "config", "categories.json"), "utf8")).replace(/^\uFEFF/, "")) as { categories: Array<{ key: string; commodities: string[] }> };
   const categoryByCommodity = new Map(categoryDocument.categories.flatMap((category) => category.commodities.map((commodityId) => [commodityId, category.key] as const)));
   const nonFoodFamilies = new Set(["household", "personal", "baby", "pet"]);
   const matcher = compileProductMatcher(commodities.map((commodity, index) => ({
