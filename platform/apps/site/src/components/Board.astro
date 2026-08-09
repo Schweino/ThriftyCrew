@@ -82,7 +82,7 @@ const { canonicalPath, beta = false } = Astro.props;
     <script>
       interface Category { id: string; label: string; sortOrder?: number }
       interface StoreRow { store: string; perUnitMicros: number; unit: string; membership: boolean; member_label: string; item: string; ad: string; productUrl?: string }
-      interface Commodity { id: string; label: string; unit: string; categoryId: string; cheapest: { store: string; perUnitMicros: number }; stores: StoreRow[] }
+      interface Commodity { id: string; label: string; unit: string; categoryId: string; cheapest: { store: string; perUnitMicros: number } | null; stores: StoreRow[] }
       interface BoardData { generatedAt: string; categories: Category[]; commodities: Commodity[] }
       interface BoardState { board: BoardData | null; category: string; query: string; sort: string; hideMembership: boolean }
       interface BoardResponse { ok: boolean; error?: string; releaseId?: string; publishedAt?: string; board: BoardData }
@@ -154,13 +154,18 @@ const { canonicalPath, beta = false } = Astro.props;
         );
         return rows.sort((left, right) => {
           if (state.sort === "alphabetical") return left.label.localeCompare(right.label);
-          if (state.sort === "price") return left.cheapest.perUnitMicros - right.cheapest.perUnitMicros || left.label.localeCompare(right.label);
+          if (state.sort === "price") {
+            if (!left.cheapest && !right.cheapest) return left.label.localeCompare(right.label);
+            if (!left.cheapest) return 1;
+            if (!right.cheapest) return -1;
+            return left.cheapest.perUnitMicros - right.cheapest.perUnitMicros || left.label.localeCompare(right.label);
+          }
           return (categoryOrder.get(left.categoryId) ?? 999) - (categoryOrder.get(right.categoryId) ?? 999) || left.label.localeCompare(right.label);
         });
       }
 
       function storeCard(item: Commodity, store: StoreRow): HTMLElement {
-        const winner = store.store === item.cheapest.store;
+        const winner = store.store === item.cheapest?.store;
         const card = el("article", `store-card${winner ? " winner" : ""}${store.membership ? " membership" : ""}`);
         const top = el("div", "store-card-top");
         top.append(el("span", "store-name", store.store));
@@ -189,12 +194,17 @@ const { canonicalPath, beta = false } = Astro.props;
         titleWrap.append(title, el("span", "comparison-unit", `Compared per ${unitLabel(item.unit)}`));
         heading.append(titleWrap);
         const best = el("div", "best-summary");
-        best.append(el("span", "best-label", "Best today"), el("strong", "", priceLabel(item.cheapest.perUnitMicros, item.unit)), el("span", "", item.cheapest.store));
+        if (item.cheapest) {
+          best.append(el("span", "best-label", "Best today"), el("strong", "", priceLabel(item.cheapest.perUnitMicros, item.unit)), el("span", "", item.cheapest.store));
+        } else {
+          best.append(el("span", "best-label", "Current coverage"), el("strong", "", "No verified price"), el("span", "", "Check back after the next capture"));
+        }
         heading.append(best);
         card.append(heading);
         const stores = el("div", "store-grid");
         const visibleStores = item.stores.filter((store) => !state.hideMembership || !store.membership);
         for (const store of visibleStores) stores.append(storeCard(item, store));
+        if (visibleStores.length === 0) stores.append(el("p", "empty-store-row", "No eligible current observations are available for this item."));
         card.append(stores);
         return card;
       }
@@ -302,6 +312,7 @@ const { canonicalPath, beta = false } = Astro.props;
   .best-summary strong { font-size:20px; }
   .best-label { color:var(--ink-soft); font-size:10px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; }
   .store-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); }
+  .empty-store-row { grid-column:1/-1; margin:0; padding:20px; color:var(--ink-soft); background:#f7f3ea; }
   .store-card { min-height:204px; padding:18px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); position:relative; display:flex; flex-direction:column; align-items:flex-start; }
   .store-card.winner { background:linear-gradient(150deg,var(--lime),#eef7bd); }
   .store-card.membership:not(.winner) { background:linear-gradient(150deg,#edf7f8,var(--blue)); }
