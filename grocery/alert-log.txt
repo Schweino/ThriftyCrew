@@ -68,3 +68,22 @@
 [2026-08-08T09:33:33] SEND FAILED 'Cost engine: golden test failed': The term 'C:\Codex\.claude\skills\lesson\google-token.ps1' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
 [2026-08-08T09:33:41] SEND FAILED 'Recipe db drift (index vs specs)': The term 'C:\Codex\.claude\skills\lesson\google-token.ps1' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
 [2026-08-08T09:41:52] SEND FAILED 'Grocery: Walmart full capture aging - 2026-08-08': The term 'C:\Codex\.claude\skills\lesson\google-token.ps1' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+[2026-08-09T06:07:48] SENT 'Fareway ad window advanced with no capture behind it' -> schweino68@gmail.com (id 19fe635173eb7759)
+[2026-08-09T06:09:34] QUEUE ABSORBED into open item 2026-08-07-9d0317 (day 2 of this condition, count now 2) - no new id minted
+[2026-08-09T06:09:35] SENT 'Grocery: 8 store(s) dropped from a commodity they carry - 2026-08-09' -> schweino68@gmail.com (id 19fe636b7ae39be1)
+[2026-08-09T06:11:13] QUEUE ABSORBED into open item 2026-08-07-cac5f3 (day 2 of this condition, count now 3) - no new id minted
+[2026-08-09T06:11:14] SENT 'Grocery: semantic sweep found 26 product(s) no rule can see - 2026-08-09' -> schweino68@gmail.com (id 19fe6383ae6af4bb)
+[2026-08-09T06:12:42] QUEUE ABSORBED into open item 2026-08-07-79b768 (day 2 of this condition, count now 3) - no new id minted
+[2026-08-09T06:12:43] SENT 'Grocery matching soundness - review needed' -> schweino68@gmail.com (id 19fe6399411f2909)
+[2026-08-09T06:14:05] SENT 'Recipe pricing: 594 unpriced ingredient line(s)' -> schweino68@gmail.com (id 19fe63ad43c3120d)
+[2026-08-09T06:14:11] SENT 'Recipe db drift (index vs specs)' -> schweino68@gmail.com (id 19fe63aeffad710f)
+[2026-08-09T06:14:23] SENT 'Recipe per-serving manifest: skipped recipe(s)' -> schweino68@gmail.com (id 19fe63b1ea00d187)
+[2026-08-09T06:14:30] BODY THIN on 'Database constraint refused a write' - the queue entry carries no store, commodity or number, so it cannot be classified without hunting the data. Fix the caller to include the identifying rows.
+[2026-08-09T06:14:31] SENT 'Database constraint refused a write' -> schweino68@gmail.com (id 19fe63b3d120c729)
+[2026-08-09T06:14:34] SENT 'A write broke cross-store integrity' -> schweino68@gmail.com (id 19fe63b4604754d2)
+[2026-08-09T06:14:37] SENT 'Board prices aging inside a fresh file' -> schweino68@gmail.com (id 19fe63b5524223d1)
+[2026-08-09T06:17:39] QUEUE ABSORBED into open item 2026-08-07-058ac6 (day 2 of this condition, count now 2) - no new id minted
+[2026-08-09T06:17:40] SENT 'Grocery: 3 NEW price flag(s) - 2026-08-09' -> schweino68@gmail.com (id 19fe63e1ce4fc845)
+[2026-08-09T06:18:42] QUEUE ABSORBED into open item 2026-08-07-fb1fee (day 2 of this condition, count now 3) - no new id minted
+[2026-08-09T06:18:43] SENT 'Grocery: Walmart full capture aging - 2026-08-09' -> schweino68@gmail.com (id 19fe63f12c32f763)
+[2026-08-09T06:24:59] SENT 'Grocery: a GUARD has gone blind (test-auditors failed)' -> schweino68@gmail.com (id 19fe644d181ad8b0)

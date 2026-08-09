@@ -1,49 +1,49 @@
 ﻿{
     "readme":  "State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.",
     "week_of":  "2026-08-08",
-    "rotated_at":  "2026-08-08T09:35:07",
+    "rotated_at":  "2026-08-09T06:15:13",
     "free":  [
+                 {
+                     "slug":  "jamaican-brown-stew-chicken",
+                     "protein":  "chicken",
+                     "rank":  1,
+                     "name":  "Jamaican Brown Stew Chicken",
+                     "per_serving":  1.42
+                 },
                  {
                      "slug":  "chicken-bulgogi-rice-bowls",
                      "protein":  "chicken",
-                     "rank":  1,
+                     "rank":  2,
                      "name":  "Chicken Bulgogi Rice Bowls",
                      "per_serving":  1.58
                  },
                  {
-                     "slug":  "chicken-fried-rice-skillet",
-                     "protein":  "chicken",
-                     "rank":  2,
-                     "name":  "Chicken Fried Rice",
-                     "per_serving":  1.68
-                 },
-                 {
-                     "slug":  "claypot-chicken-mushroom-rice",
+                     "slug":  "slow-cooker-italian-chicken-penne",
                      "protein":  "chicken",
                      "rank":  3,
-                     "name":  "Claypot Chicken and Mushroom Rice",
-                     "per_serving":  1.79
+                     "name":  "Slow Cooker Italian Chicken Penne",
+                     "per_serving":  1.62
                  },
                  {
-                     "slug":  "chicken-pot-pie-biscuit-casserole",
+                     "slug":  "chicken-normandy-apple-cider",
                      "protein":  "chicken",
                      "rank":  4,
-                     "name":  "Chicken Pot Pie Casserole with Biscuits",
-                     "per_serving":  1.83
+                     "name":  "Chicken Normandy (Apple Cider Braised Chicken)",
+                     "per_serving":  1.64
                  },
                  {
-                     "slug":  "poppy-seed-chicken-and-rice-casserole",
+                     "slug":  "chicken-fried-rice-skillet",
                      "protein":  "chicken",
                      "rank":  5,
-                     "name":  "Poppy Seed Chicken and Rice Casserole",
-                     "per_serving":  1.88
+                     "name":  "Chicken Fried Rice",
+                     "per_serving":  1.68
                  },
                  {
                      "slug":  "haluski-and-kielbasa-cabbage-noodles",
                      "protein":  "turkey",
                      "rank":  1,
                      "name":  "Haluski and Kielbasa (Cabbage and Egg Noodles)",
-                     "per_serving":  1.78
+                     "per_serving":  1.8
                  },
                  {
                      "slug":  "turkey-biscuit-pot-pie-casserole",
@@ -53,60 +53,60 @@
                      "per_serving":  1.81
                  },
                  {
-                     "slug":  "turkey-huevos-rancheros-rice-bowls",
+                     "slug":  "fasolka-po-bretonsku-polish-beans-kielbasa",
                      "protein":  "turkey",
                      "rank":  3,
-                     "name":  "Turkey Huevos Rancheros Rice Bowls",
-                     "per_serving":  1.89
+                     "name":  "Fasolka po Bretonsku (Polish Baked Beans with Kielbasa)",
+                     "per_serving":  1.88
                  },
                  {
-                     "slug":  "scalloped-potato-turkey-casserole",
+                     "slug":  "turkey-huevos-rancheros-rice-bowls",
                      "protein":  "turkey",
                      "rank":  4,
-                     "name":  "Scalloped Potato Turkey Casserole",
-                     "per_serving":  1.97
+                     "name":  "Turkey Huevos Rancheros Rice Bowls",
+                     "per_serving":  1.89
                  },
                  {
                      "slug":  "red-beans-turkey-sausage-and-rice",
                      "protein":  "turkey",
                      "rank":  5,
                      "name":  "Red Beans, Turkey Sausage and Rice",
-                     "per_serving":  2
+                     "per_serving":  1.95
                  },
                  {
-                     "slug":  "beef-potato-au-gratin-casserole",
+                     "slug":  "loobia-polo-persian-beef-green-bean-rice",
                      "protein":  "beef",
                      "rank":  1,
-                     "name":  "Slow Cooker Beef and Potato Au Gratin Casserole",
-                     "per_serving":  2.37
+                     "name":  "Loobia Polo (Persian Beef and Green Bean Rice)",
+                     "per_serving":  2
                  },
                  {
                      "slug":  "lebanese-hashweh",
                      "protein":  "beef",
                      "rank":  2,
                      "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
-                     "per_serving":  2.39
+                     "per_serving":  2.21
                  },
                  {
-                     "slug":  "slow-cooker-beef-and-noodles",
+                     "slug":  "beef-potato-au-gratin-casserole",
                      "protein":  "beef",
                      "rank":  3,
-                     "name":  "Slow Cooker Beef and Noodles",
-                     "per_serving":  2.42
+                     "name":  "Slow Cooker Beef and Potato Au Gratin Casserole",
+                     "per_serving":  2.4
                  },
                  {
-                     "slug":  "bistek-tagalog-filipino-beef-onion-rice",
+                     "slug":  "youvarlakia-avgolemono-greek-meatball-bowls",
                      "protein":  "beef",
                      "rank":  4,
-                     "name":  "Bistek Tagalog (Filipino Beef and Onions over Rice)",
-                     "per_serving":  2.46
+                     "name":  "Youvarlakia Avgolemono (Greek Beef and Rice Meatballs in Lemon Sauce)",
+                     "per_serving":  2.43
                  },
                  {
-                     "slug":  "mediterranean-beef-hummus-bowls",
+                     "slug":  "million-dollar-baked-spaghetti",
                      "protein":  "beef",
                      "rank":  5,
-                     "name":  "Mediterranean Beef Hummus Bowls",
-                     "per_serving":  2.5
+                     "name":  "Million Dollar Baked Spaghetti",
+                     "per_serving":  2.44
                  },
                  {
                      "slug":  "bratwurst-sauerkraut-potatoes-bake",
@@ -123,25 +123,25 @@
                      "per_serving":  1.45
                  },
                  {
-                     "slug":  "orecchiette-italian-sausage-broccoli",
+                     "slug":  "slow-cooker-pork-sauerkraut-apples",
                      "protein":  "pork",
                      "rank":  3,
+                     "name":  "Slow Cooker Pork and Sauerkraut with Apples and Potatoes",
+                     "per_serving":  1.56
+                 },
+                 {
+                     "slug":  "orecchiette-italian-sausage-broccoli",
+                     "protein":  "pork",
+                     "rank":  4,
                      "name":  "Orecchiette with Italian Sausage and Broccoli",
-                     "per_serving":  1.57
+                     "per_serving":  1.59
                  },
                  {
                      "slug":  "slow-cooker-kalua-pork-bowls",
                      "protein":  "pork",
-                     "rank":  4,
+                     "rank":  5,
                      "name":  "Slow Cooker Kalua Pork Bowls",
                      "per_serving":  1.63
-                 },
-                 {
-                     "slug":  "slow-cooker-filipino-pork-adobo-bowls",
-                     "protein":  "pork",
-                     "rank":  5,
-                     "name":  "Slow Cooker Filipino Pork Adobo Bowls",
-                     "per_serving":  1.7
                  }
              ]
 }

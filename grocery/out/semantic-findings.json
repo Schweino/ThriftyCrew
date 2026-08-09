@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-08 06:02",
+    "generated":  "2026-08-09 06:11",
     "board":  "comparison-2026-08-08.json",
-    "sidecar_generated":  "2026-08-08 06:02:42",
+    "sidecar_generated":  "2026-08-09 06:11:11",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -10,11 +10,11 @@
                    },
     "examined":  {
                      "board_pairs":  2859,
-                     "corpus":  31053,
-                     "rule_invisible":  4769
+                     "corpus":  31111,
+                     "rule_invisible":  4799
                  },
     "identity_count":  0,
-    "coverage_count":  27,
+    "coverage_count":  26,
     "identity":  [
 
                  ],
@@ -81,6 +81,26 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "ranch-seasoning-mix",
+                         "commodity":  "Ranch Seasoning Mix (packet)",
+                         "store":  "Walmart",
+                         "product":  "Great Value Classic Ranch Dressing \u0026 Dip, 36 fl oz",
+                         "cos":  0.6515,
+                         "score":  0.94523,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ranch-seasoning-mix",
+                         "commodity":  "Ranch Seasoning Mix (packet)",
+                         "store":  "Walmart",
+                         "product":  "Great Value Classic Ranch Dressing \u0026 Dip, 8 oz",
+                         "cos":  0.6515,
+                         "score":  0.94523,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "ground-pork",
                          "commodity":  "Ground Pork",
                          "store":  "Walmart",
@@ -111,6 +131,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "ranch-seasoning-mix",
+                         "commodity":  "Ranch Seasoning Mix (packet)",
+                         "store":  "Walmart",
+                         "product":  "Great Value Classic Ranch Salad Dressing \u0026 Dip, 16 fl oz",
+                         "cos":  0.7126,
+                         "score":  0.940791,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "apricots",
                          "commodity":  "Apricots",
                          "store":  "Walmart",
@@ -137,36 +167,6 @@
                          "product":  "Mt. Olive Hot Banana Fresh Pack Pepper Rings, 12 oz",
                          "cos":  0.745,
                          "score":  0.934789,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ranch-seasoning-mix",
-                         "commodity":  "Ranch Seasoning Mix (packet)",
-                         "store":  "Walmart",
-                         "product":  "Great Value Classic Ranch Dressing \u0026 Dip, 36 fl oz",
-                         "cos":  0.6453,
-                         "score":  0.930702,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ranch-seasoning-mix",
-                         "commodity":  "Ranch Seasoning Mix (packet)",
-                         "store":  "Walmart",
-                         "product":  "Great Value Classic Ranch Dressing \u0026 Dip, 8 oz",
-                         "cos":  0.6453,
-                         "score":  0.930702,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ranch-seasoning-mix",
-                         "commodity":  "Ranch Seasoning Mix (packet)",
-                         "store":  "Walmart",
-                         "product":  "Great Value Classic Ranch Salad Dressing \u0026 Dip, 16 fl oz",
-                         "cos":  0.7054,
-                         "score":  0.928545,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -231,32 +231,22 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "shredded-cheese",
+                         "commodity":  "Shredded / Block Cheese",
+                         "store":  "Aldi",
+                         "product":  "Happy Farms Shredded Mexican Cheese 12 OZ",
+                         "cos":  0.6292,
+                         "score":  0.917926,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "tea-bags",
                          "commodity":  "Tea Bags",
                          "store":  "Walmart",
                          "product":  "Taylors of Harrogate Assam, Black Tea, Individually Wrapped Bags, 20 Count (Pack of 1), Full-bodied, Satisfying \u0026 Malty, Caffeinated, Enjoy Hot or Iced, 20 Teabags",
                          "cos":  0.664,
                          "score":  0.915624,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "sandwich-cookies",
-                         "commodity":  "Sandwich Cookies",
-                         "store":  "Walmart",
-                         "product":  "Great Value Duplex Sandwich Crème Cookies, 25 oz",
-                         "cos":  0.6729,
-                         "score":  0.914655,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "sandwich-cookies",
-                         "commodity":  "Sandwich Cookies",
-                         "store":  "Walmart",
-                         "product":  "Great Value Duplex Sandwich CrÃ¨me Cookies, 25 oz",
-                         "cos":  0.69,
-                         "score":  0.913223,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

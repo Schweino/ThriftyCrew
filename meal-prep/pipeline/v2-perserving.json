@@ -8,31 +8,7 @@
       "old_ps":  3.65,
       "everyday_ps":  3.65,
       "cheapest_ps":  3.02,
-      "protein_rank":  31,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "albondigas-en-chipotle-rice-bowls",
-      "name":  "Albondigas en Chipotle (Mexican Meatballs in Chipotle Sauce)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  28,
-      "old_ps":  3.11,
-      "everyday_ps":  3.11,
-      "cheapest_ps":  2.82,
-      "protein_rank":  108,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "american-goulash-pasta",
-      "name":  "American Goulash Pasta",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  55,
-      "old_ps":  4.99,
-      "everyday_ps":  4.99,
-      "cheapest_ps":  4.4,
-      "protein_rank":  5,
+      "protein_rank":  26,
       "is_protein_rank1":  false
   },
   {
@@ -44,7 +20,7 @@
       "old_ps":  3.83,
       "everyday_ps":  3.83,
       "cheapest_ps":  3.01,
-      "protein_rank":  67,
+      "protein_rank":  45,
       "is_protein_rank1":  false
   },
   {
@@ -56,43 +32,7 @@
       "old_ps":  3.99,
       "everyday_ps":  3.99,
       "cheapest_ps":  3.04,
-      "protein_rank":  113,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "apple-cider-beef-pot-roast-bowls",
-      "name":  "Apple Cider Beef Pot Roast Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  48,
-      "old_ps":  5.43,
-      "everyday_ps":  5.43,
-      "cheapest_ps":  4.52,
-      "protein_rank":  26,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "arroz-con-carne-molida",
-      "name":  "Arroz con Carne Molida (Mexican Beef and Rice Skillet)",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  43,
-      "old_ps":  3.35,
-      "everyday_ps":  3.35,
-      "cheapest_ps":  2.93,
-      "protein_rank":  6,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "arroz-con-pollo-bowls",
-      "name":  "Arroz con Pollo (Chicken and Rice) Bowls",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  53,
-      "old_ps":  3.68,
-      "everyday_ps":  3.68,
-      "cheapest_ps":  2.94,
-      "protein_rank":  47,
+      "protein_rank":  93,
       "is_protein_rank1":  false
   },
   {
@@ -104,7 +44,7 @@
       "old_ps":  2.21,
       "everyday_ps":  2.21,
       "cheapest_ps":  1.79,
-      "protein_rank":  89,
+      "protein_rank":  72,
       "is_protein_rank1":  false
   },
   {
@@ -116,7 +56,7 @@
       "old_ps":  3.52,
       "everyday_ps":  3.52,
       "cheapest_ps":  2.6,
-      "protein_rank":  79,
+      "protein_rank":  65,
       "is_protein_rank1":  false
   },
   {
@@ -128,7 +68,7 @@
       "old_ps":  3.42,
       "everyday_ps":  3.42,
       "cheapest_ps":  2.43,
-      "protein_rank":  57,
+      "protein_rank":  47,
       "is_protein_rank1":  false
   },
   {
@@ -140,7 +80,7 @@
       "old_ps":  2.26,
       "everyday_ps":  2.26,
       "cheapest_ps":  2.03,
-      "protein_rank":  106,
+      "protein_rank":  74,
       "is_protein_rank1":  false
   },
   {
@@ -152,43 +92,7 @@
       "old_ps":  4.08,
       "everyday_ps":  4.08,
       "cheapest_ps":  3.49,
-      "protein_rank":  35,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "baked-ziti-with-ground-beef",
-      "name":  "Baked Ziti with Ground Beef",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  41,
-      "old_ps":  4.11,
-      "everyday_ps":  4.11,
-      "cheapest_ps":  3.54,
-      "protein_rank":  9,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "baked-ziti-with-ground-turkey-and-ricotta",
-      "name":  "Baked Ziti with Ground Turkey and Ricotta",
-      "run":  "db",
-      "protein":  "ground turkey",
-      "protein_g":  41,
-      "old_ps":  3.36,
-      "everyday_ps":  3.36,
-      "cheapest_ps":  2.83,
-      "protein_rank":  4,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "balsamic-beef-pot-roast-bowls",
-      "name":  "Slow Cooker Balsamic Beef Pot Roast Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  38,
-      "old_ps":  4.92,
-      "everyday_ps":  4.92,
-      "cheapest_ps":  3.97,
-      "protein_rank":  66,
+      "protein_rank":  15,
       "is_protein_rank1":  false
   },
   {
@@ -198,21 +102,9 @@
       "protein":  "pork",
       "protein_g":  39,
       "old_ps":  2.83,
-      "everyday_ps":  2.83,
-      "cheapest_ps":  2.53,
-      "protein_rank":  67,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "bbq-chicken-burrito",
-      "name":  "BBQ Chicken Burrito",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  39,
-      "old_ps":  3.32,
-      "everyday_ps":  3.32,
-      "cheapest_ps":  2.91,
-      "protein_rank":  92,
+      "everyday_ps":  2.86,
+      "cheapest_ps":  2.56,
+      "protein_rank":  55,
       "is_protein_rank1":  false
   },
   {
@@ -224,7 +116,7 @@
       "old_ps":  1.95,
       "everyday_ps":  1.95,
       "cheapest_ps":  1.71,
-      "protein_rank":  122,
+      "protein_rank":  87,
       "is_protein_rank1":  false
   },
   {
@@ -236,127 +128,7 @@
       "old_ps":  2.76,
       "everyday_ps":  2.76,
       "cheapest_ps":  2.33,
-      "protein_rank":  45,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-birria-burrito",
-      "name":  "Beef Birria Burrito",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  32,
-      "old_ps":  5.22,
-      "everyday_ps":  5.22,
-      "cheapest_ps":  4.44,
-      "protein_rank":  94,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-birria-rice-bowls",
-      "name":  "Beef Birria Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  58,
-      "old_ps":  7.32,
-      "everyday_ps":  7.32,
-      "cheapest_ps":  6.16,
-      "protein_rank":  4,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-bourguignon-bowls",
-      "name":  "Beef Bourguignon Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  47,
-      "old_ps":  5.21,
-      "everyday_ps":  5.21,
-      "cheapest_ps":  4.31,
-      "protein_rank":  30,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-bulgogi-rice-bowls",
-      "name":  "Beef Bulgogi Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  30,
-      "old_ps":  4.47,
-      "everyday_ps":  4.47,
-      "cheapest_ps":  3.3,
-      "protein_rank":  103,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-burrito-bowls",
-      "name":  "High-Protein Beef Burrito Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  37,
-      "old_ps":  2.78,
-      "everyday_ps":  2.78,
-      "cheapest_ps":  2.43,
-      "protein_rank":  70,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-burrito-tex-mex",
-      "name":  "Classic Tex-Mex Beef Burrito",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  34,
-      "old_ps":  3.46,
-      "everyday_ps":  3.46,
-      "cheapest_ps":  2.94,
-      "protein_rank":  86,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-chili-mac",
-      "name":  "Beef Chili Mac",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  53,
-      "old_ps":  4.16,
-      "everyday_ps":  4.16,
-      "cheapest_ps":  3.58,
-      "protein_rank":  12,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-chili-rice-bowls",
-      "name":  "Beef Chili Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  37,
-      "old_ps":  2.93,
-      "everyday_ps":  2.93,
-      "cheapest_ps":  2.57,
-      "protein_rank":  68,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-chow-mein-noodles",
-      "name":  "Beef Chow Mein Noodles",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  38,
-      "old_ps":  4.05,
-      "everyday_ps":  4.05,
-      "cheapest_ps":  3.64,
-      "protein_rank":  12,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-enchilada-skillet-bowls",
-      "name":  "Beef Enchilada Skillet Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  54,
-      "old_ps":  6.22,
-      "everyday_ps":  6.22,
-      "cheapest_ps":  4.94,
-      "protein_rank":  9,
+      "protein_rank":  36,
       "is_protein_rank1":  false
   },
   {
@@ -368,31 +140,7 @@
       "old_ps":  3.82,
       "everyday_ps":  3.82,
       "cheapest_ps":  2.6,
-      "protein_rank":  80,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-keema-curry-rice-bowls",
-      "name":  "Beef Keema Curry Rice Bowls",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  34,
-      "old_ps":  3.48,
-      "everyday_ps":  3.48,
-      "cheapest_ps":  2.94,
-      "protein_rank":  21,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-manhattan-bowls",
-      "name":  "Beef Manhattan Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  48,
-      "old_ps":  5.26,
-      "everyday_ps":  5.26,
-      "cheapest_ps":  4.3,
-      "protein_rank":  27,
+      "protein_rank":  10,
       "is_protein_rank1":  false
   },
   {
@@ -402,93 +150,9 @@
       "protein":  "beef",
       "protein_g":  30,
       "old_ps":  4.77,
-      "everyday_ps":  4.77,
-      "cheapest_ps":  3.59,
-      "protein_rank":  102,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-picadillo-rice-bowls",
-      "name":  "Cuban Beef Picadillo Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  42,
-      "old_ps":  4.56,
-      "everyday_ps":  4.56,
-      "cheapest_ps":  4.01,
-      "protein_rank":  49,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-potato-au-gratin-casserole",
-      "name":  "Slow Cooker Beef and Potato Au Gratin Casserole",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  34,
-      "old_ps":  2.84,
-      "everyday_ps":  2.84,
-      "cheapest_ps":  2.37,
-      "protein_rank":  88,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-ragu-pasta",
-      "name":  "Simple Beef Ragu Pasta",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  55,
-      "old_ps":  4.52,
-      "everyday_ps":  4.52,
-      "cheapest_ps":  4.09,
-      "protein_rank":  7,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-rendang-rice-bowls",
-      "name":  "Beef Rendang Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  38,
-      "old_ps":  5.31,
-      "everyday_ps":  5.31,
-      "cheapest_ps":  4.49,
-      "protein_rank":  61,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-spinach-chickpea-stew-rice-bowls",
-      "name":  "Middle Eastern Beef, Spinach and Chickpea Stew",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  32,
-      "old_ps":  3.46,
-      "everyday_ps":  3.46,
-      "cheapest_ps":  2.92,
-      "protein_rank":  97,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-stuffed-shells",
-      "name":  "Beef Stuffed Shells",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  38,
-      "old_ps":  3.45,
-      "everyday_ps":  3.45,
-      "cheapest_ps":  3.09,
-      "protein_rank":  13,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "beef-tips-and-gravy-mashed-potatoes",
-      "name":  "Slow Cooker Beef Tips and Gravy over Rice",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  39,
-      "old_ps":  4.95,
-      "everyday_ps":  4.95,
-      "cheapest_ps":  4.03,
-      "protein_rank":  60,
+      "everyday_ps":  4.8,
+      "cheapest_ps":  3.61,
+      "protein_rank":  15,
       "is_protein_rank1":  false
   },
   {
@@ -500,7 +164,7 @@
       "old_ps":  2.45,
       "everyday_ps":  2.45,
       "cheapest_ps":  2.13,
-      "protein_rank":  114,
+      "protein_rank":  94,
       "is_protein_rank1":  false
   },
   {
@@ -512,7 +176,7 @@
       "old_ps":  3.42,
       "everyday_ps":  3.42,
       "cheapest_ps":  2.5,
-      "protein_rank":  112,
+      "protein_rank":  61,
       "is_protein_rank1":  false
   },
   {
@@ -524,7 +188,7 @@
       "old_ps":  3.59,
       "everyday_ps":  3.59,
       "cheapest_ps":  2.46,
-      "protein_rank":  91,
+      "protein_rank":  12,
       "is_protein_rank1":  false
   },
   {
@@ -536,7 +200,7 @@
       "old_ps":  2.08,
       "everyday_ps":  2.08,
       "cheapest_ps":  1.85,
-      "protein_rank":  76,
+      "protein_rank":  63,
       "is_protein_rank1":  false
   },
   {
@@ -548,31 +212,7 @@
       "old_ps":  1.48,
       "everyday_ps":  1.48,
       "cheapest_ps":  1.27,
-      "protein_rank":  115,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "brazilian-feijoada-pork-black-bean-bowls",
-      "name":  "Brazilian Feijoada Pork and Black Bean Stew Bowls",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  48,
-      "old_ps":  3.67,
-      "everyday_ps":  3.67,
-      "cheapest_ps":  2.94,
-      "protein_rank":  35,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "brazilian-galinhada",
-      "name":  "Brazilian Galinhada (Chicken and Saffron Rice)",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  50,
-      "old_ps":  3.26,
-      "everyday_ps":  3.26,
-      "cheapest_ps":  2.74,
-      "protein_rank":  63,
+      "protein_rank":  95,
       "is_protein_rank1":  false
   },
   {
@@ -584,19 +224,7 @@
       "old_ps":  2.25,
       "everyday_ps":  2.25,
       "cheapest_ps":  1.84,
-      "protein_rank":  50,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "buffalo-chicken-burrito",
-      "name":  "Buffalo Chicken Burrito",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  40,
-      "old_ps":  3.39,
-      "everyday_ps":  3.39,
-      "cheapest_ps":  2.65,
-      "protein_rank":  87,
+      "protein_rank":  40,
       "is_protein_rank1":  false
   },
   {
@@ -606,21 +234,9 @@
       "protein":  "chicken",
       "protein_g":  41,
       "old_ps":  2.29,
-      "everyday_ps":  2.29,
-      "cheapest_ps":  1.98,
-      "protein_rank":  83,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "buffalo-turkey-potato-bowls",
-      "name":  "Buffalo Turkey and Potato Bowls",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  44,
-      "old_ps":  3.87,
-      "everyday_ps":  3.87,
-      "cheapest_ps":  3.19,
-      "protein_rank":  22,
+      "everyday_ps":  2.33,
+      "cheapest_ps":  2,
+      "protein_rank":  57,
       "is_protein_rank1":  false
   },
   {
@@ -632,19 +248,7 @@
       "old_ps":  3.11,
       "everyday_ps":  3.11,
       "cheapest_ps":  2.28,
-      "protein_rank":  130,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "cajun-chicken-etouffee-rice-bowls",
-      "name":  "Cajun Chicken Etouffee Rice Bowls",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  51,
-      "old_ps":  3.95,
-      "everyday_ps":  3.95,
-      "cheapest_ps":  3.25,
-      "protein_rank":  56,
+      "protein_rank":  92,
       "is_protein_rank1":  false
   },
   {
@@ -656,19 +260,7 @@
       "old_ps":  5.15,
       "everyday_ps":  5.15,
       "cheapest_ps":  3.92,
-      "protein_rank":  73,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "cantonese-beef-tomato-egg-rice",
-      "name":  "Cantonese Beef, Tomato and Egg over Rice",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  50,
-      "old_ps":  4.68,
-      "everyday_ps":  4.68,
-      "cheapest_ps":  4.29,
-      "protein_rank":  19,
+      "protein_rank":  7,
       "is_protein_rank1":  false
   },
   {
@@ -680,7 +272,7 @@
       "old_ps":  3.06,
       "everyday_ps":  3.06,
       "cheapest_ps":  2.62,
-      "protein_rank":  81,
+      "protein_rank":  45,
       "is_protein_rank1":  false
   },
   {
@@ -692,7 +284,7 @@
       "old_ps":  3.16,
       "everyday_ps":  3.16,
       "cheapest_ps":  2.55,
-      "protein_rank":  88,
+      "protein_rank":  61,
       "is_protein_rank1":  false
   },
   {
@@ -704,19 +296,7 @@
       "old_ps":  4.28,
       "everyday_ps":  4.28,
       "cheapest_ps":  3.02,
-      "protein_rank":  95,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "caribbean-curry-beef-potatoes",
-      "name":  "Caribbean Curry Beef with Potatoes",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  30,
-      "old_ps":  3.95,
-      "everyday_ps":  3.95,
-      "cheapest_ps":  3.28,
-      "protein_rank":  104,
+      "protein_rank":  13,
       "is_protein_rank1":  false
   },
   {
@@ -728,7 +308,7 @@
       "old_ps":  5.01,
       "everyday_ps":  5.01,
       "cheapest_ps":  3.6,
-      "protein_rank":  79,
+      "protein_rank":  9,
       "is_protein_rank1":  false
   },
   {
@@ -752,127 +332,7 @@
       "old_ps":  5.94,
       "everyday_ps":  5.94,
       "cheapest_ps":  4.03,
-      "protein_rank":  35,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "cheeseburger-pasta",
-      "name":  "High-Protein Cheeseburger Pasta",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  38,
-      "old_ps":  2.49,
-      "everyday_ps":  2.49,
-      "cheapest_ps":  2.29,
-      "protein_rank":  64,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "cheeseburger-rice-bowls",
-      "name":  "Cheeseburger Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  46,
-      "old_ps":  4.39,
-      "everyday_ps":  4.39,
-      "cheapest_ps":  3.91,
-      "protein_rank":  32,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "cheesy-beef-and-shells-casserole",
-      "name":  "Cheesy Beef and Shells Casserole",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  41,
-      "old_ps":  2.99,
-      "everyday_ps":  2.99,
-      "cheapest_ps":  2.57,
-      "protein_rank":  10,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "cheesy-beef-broccoli-bowls",
-      "name":  "Cheesy Beef and Broccoli Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  34,
-      "old_ps":  2.77,
-      "everyday_ps":  2.77,
-      "cheapest_ps":  2.58,
-      "protein_rank":  85,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "cheesy-ground-beef-tortellini",
-      "name":  "Cheesy Ground Beef Tortellini",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  42,
-      "old_ps":  3.88,
-      "everyday_ps":  3.88,
-      "cheapest_ps":  3.44,
-      "protein_rank":  8,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "cheesy-pork-chop-and-hash-brown-casserole",
-      "name":  "Cheesy Pork Chop and Hash Brown Casserole",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  47,
-      "old_ps":  3.56,
-      "everyday_ps":  3.56,
-      "cheapest_ps":  2.81,
-      "protein_rank":  37,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "cheesy-smoked-sausage-rice-skillet",
-      "name":  "Cheesy Smoked Sausage and Rice Skillet",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  29,
-      "old_ps":  3.3,
-      "everyday_ps":  3.3,
-      "cheapest_ps":  2.6,
-      "protein_rank":  90,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "cheesy-taco-spaghetti",
-      "name":  "Cheesy Taco Spaghetti",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  43,
-      "old_ps":  3.62,
-      "everyday_ps":  3.62,
-      "cheapest_ps":  3.18,
-      "protein_rank":  7,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "cheesy-turkey-sausage-vegetable-rice-casserole",
-      "name":  "Cheesy Turkey Sausage and Vegetable Rice Casserole",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  25,
-      "old_ps":  3.08,
-      "everyday_ps":  3.08,
-      "cheapest_ps":  2.4,
-      "protein_rank":  113,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "cheesy-zucchini-beef-rice-skillet",
-      "name":  "Cheesy Zucchini Beef and Rice Skillet",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  39,
-      "old_ps":  3.52,
-      "everyday_ps":  3.52,
-      "cheapest_ps":  3.26,
-      "protein_rank":  56,
+      "protein_rank":  4,
       "is_protein_rank1":  false
   },
   {
@@ -884,7 +344,7 @@
       "old_ps":  2.78,
       "everyday_ps":  2.78,
       "cheapest_ps":  2.12,
-      "protein_rank":  95,
+      "protein_rank":  67,
       "is_protein_rank1":  false
   },
   {
@@ -896,7 +356,7 @@
       "old_ps":  3.87,
       "everyday_ps":  3.87,
       "cheapest_ps":  3.24,
-      "protein_rank":  132,
+      "protein_rank":  94,
       "is_protein_rank1":  false
   },
   {
@@ -906,9 +366,9 @@
       "protein":  "chicken",
       "protein_g":  38,
       "old_ps":  2.89,
-      "everyday_ps":  2.89,
-      "cheapest_ps":  2.35,
-      "protein_rank":  105,
+      "everyday_ps":  2.92,
+      "cheapest_ps":  2.38,
+      "protein_rank":  73,
       "is_protein_rank1":  false
   },
   {
@@ -918,9 +378,9 @@
       "protein":  "chicken",
       "protein_g":  44,
       "old_ps":  3.51,
-      "everyday_ps":  3.51,
+      "everyday_ps":  3.52,
       "cheapest_ps":  3.08,
-      "protein_rank":  76,
+      "protein_rank":  52,
       "is_protein_rank1":  false
   },
   {
@@ -932,7 +392,7 @@
       "old_ps":  2.59,
       "everyday_ps":  2.59,
       "cheapest_ps":  2.01,
-      "protein_rank":  110,
+      "protein_rank":  77,
       "is_protein_rank1":  false
   },
   {
@@ -942,9 +402,9 @@
       "protein":  "chicken",
       "protein_g":  39,
       "old_ps":  2.95,
-      "everyday_ps":  2.95,
-      "cheapest_ps":  2.67,
-      "protein_rank":  93,
+      "everyday_ps":  2.98,
+      "cheapest_ps":  2.69,
+      "protein_rank":  65,
       "is_protein_rank1":  false
   },
   {
@@ -956,7 +416,7 @@
       "old_ps":  1.96,
       "everyday_ps":  1.96,
       "cheapest_ps":  1.58,
-      "protein_rank":  117,
+      "protein_rank":  84,
       "is_protein_rank1":  false
   },
   {
@@ -966,21 +426,9 @@
       "protein":  "chicken",
       "protein_g":  43,
       "old_ps":  2.7,
-      "everyday_ps":  2.7,
-      "cheapest_ps":  2.55,
-      "protein_rank":  79,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "chicken-divan-broccoli-bake",
-      "name":  "Chicken Divan (Broccoli Cheese Bake)",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  34,
-      "old_ps":  2.47,
-      "everyday_ps":  2.47,
-      "cheapest_ps":  2.24,
-      "protein_rank":  119,
+      "everyday_ps":  2.72,
+      "cheapest_ps":  2.57,
+      "protein_rank":  53,
       "is_protein_rank1":  false
   },
   {
@@ -992,7 +440,7 @@
       "old_ps":  1.63,
       "everyday_ps":  1.63,
       "cheapest_ps":  1.4,
-      "protein_rank":  101,
+      "protein_rank":  70,
       "is_protein_rank1":  false
   },
   {
@@ -1004,19 +452,7 @@
       "old_ps":  1.91,
       "everyday_ps":  1.91,
       "cheapest_ps":  1.68,
-      "protein_rank":  143,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "chicken-jalfrezi",
-      "name":  "Chicken Jalfrezi",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  38,
-      "old_ps":  3.16,
-      "everyday_ps":  3.16,
-      "cheapest_ps":  2.61,
-      "protein_rank":  102,
+      "protein_rank":  104,
       "is_protein_rank1":  false
   },
   {
@@ -1028,7 +464,7 @@
       "old_ps":  4.24,
       "everyday_ps":  4.24,
       "cheapest_ps":  3.26,
-      "protein_rank":  128,
+      "protein_rank":  91,
       "is_protein_rank1":  false
   },
   {
@@ -1038,9 +474,9 @@
       "protein":  "chicken",
       "protein_g":  65,
       "old_ps":  3.56,
-      "everyday_ps":  3.56,
-      "cheapest_ps":  3.1,
-      "protein_rank":  4,
+      "everyday_ps":  3.59,
+      "cheapest_ps":  3.13,
+      "protein_rank":  2,
       "is_protein_rank1":  false
   },
   {
@@ -1052,7 +488,7 @@
       "old_ps":  3.48,
       "everyday_ps":  3.48,
       "cheapest_ps":  3.24,
-      "protein_rank":  29,
+      "protein_rank":  18,
       "is_protein_rank1":  false
   },
   {
@@ -1062,9 +498,9 @@
       "protein":  "chicken",
       "protein_g":  36,
       "old_ps":  3,
-      "everyday_ps":  3,
-      "cheapest_ps":  2.71,
-      "protein_rank":  111,
+      "everyday_ps":  3.03,
+      "cheapest_ps":  2.74,
+      "protein_rank":  78,
       "is_protein_rank1":  false
   },
   {
@@ -1076,7 +512,7 @@
       "old_ps":  3.24,
       "everyday_ps":  3.24,
       "cheapest_ps":  2.56,
-      "protein_rank":  127,
+      "protein_rank":  90,
       "is_protein_rank1":  false
   },
   {
@@ -1088,7 +524,7 @@
       "old_ps":  2.87,
       "everyday_ps":  2.87,
       "cheapest_ps":  2.28,
-      "protein_rank":  84,
+      "protein_rank":  58,
       "is_protein_rank1":  false
   },
   {
@@ -1100,19 +536,7 @@
       "old_ps":  3.17,
       "everyday_ps":  3.17,
       "cheapest_ps":  2.59,
-      "protein_rank":  52,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "chicken-normandy-apple-cider",
-      "name":  "Chicken Normandy (Apple Cider Braised Chicken)",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  26,
-      "old_ps":  3.03,
-      "everyday_ps":  3.03,
-      "cheapest_ps":  2.36,
-      "protein_rank":  140,
+      "protein_rank":  34,
       "is_protein_rank1":  false
   },
   {
@@ -1124,19 +548,7 @@
       "old_ps":  3.78,
       "everyday_ps":  3.78,
       "cheapest_ps":  3.19,
-      "protein_rank":  112,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "chicken-parmesan-pasta",
-      "name":  "Chicken Parmesan Pasta",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  44,
-      "old_ps":  2.55,
-      "everyday_ps":  2.55,
-      "cheapest_ps":  2.22,
-      "protein_rank":  77,
+      "protein_rank":  79,
       "is_protein_rank1":  false
   },
   {
@@ -1146,9 +558,9 @@
       "protein":  "chicken",
       "protein_g":  25,
       "old_ps":  2.03,
-      "everyday_ps":  2.03,
-      "cheapest_ps":  1.83,
-      "protein_rank":  144,
+      "everyday_ps":  2.06,
+      "cheapest_ps":  1.85,
+      "protein_rank":  105,
       "is_protein_rank1":  false
   },
   {
@@ -1160,19 +572,7 @@
       "old_ps":  4.08,
       "everyday_ps":  4.08,
       "cheapest_ps":  3.27,
-      "protein_rank":  72,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "chicken-refried-bean-burrito",
-      "name":  "Chicken and Refried Bean Burrito",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  38,
-      "old_ps":  2.73,
-      "everyday_ps":  2.73,
-      "cheapest_ps":  2.34,
-      "protein_rank":  100,
+      "protein_rank":  48,
       "is_protein_rank1":  false
   },
   {
@@ -1182,33 +582,9 @@
       "protein":  "chicken",
       "protein_g":  54,
       "old_ps":  3.97,
-      "everyday_ps":  3.97,
-      "cheapest_ps":  3.45,
-      "protein_rank":  44,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "chicken-sausage-gumbo",
-      "name":  "Chicken and Sausage Gumbo",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  46,
-      "old_ps":  3.22,
-      "everyday_ps":  3.22,
-      "cheapest_ps":  2.77,
-      "protein_rank":  71,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "chicken-scampi",
-      "name":  "Chicken Scampi",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  60,
-      "old_ps":  3.41,
-      "everyday_ps":  3.41,
-      "cheapest_ps":  3.11,
-      "protein_rank":  19,
+      "everyday_ps":  4,
+      "cheapest_ps":  3.48,
+      "protein_rank":  29,
       "is_protein_rank1":  false
   },
   {
@@ -1220,7 +596,7 @@
       "old_ps":  3.57,
       "everyday_ps":  3.57,
       "cheapest_ps":  2.86,
-      "protein_rank":  120,
+      "protein_rank":  85,
       "is_protein_rank1":  false
   },
   {
@@ -1232,7 +608,7 @@
       "old_ps":  3.34,
       "everyday_ps":  3.34,
       "cheapest_ps":  2.84,
-      "protein_rank":  94,
+      "protein_rank":  66,
       "is_protein_rank1":  false
   },
   {
@@ -1242,9 +618,9 @@
       "protein":  "chicken",
       "protein_g":  28,
       "old_ps":  3.12,
-      "everyday_ps":  3.12,
-      "cheapest_ps":  2.49,
-      "protein_rank":  137,
+      "everyday_ps":  3.15,
+      "cheapest_ps":  2.51,
+      "protein_rank":  99,
       "is_protein_rank1":  false
   },
   {
@@ -1254,9 +630,9 @@
       "protein":  "chicken",
       "protein_g":  36,
       "old_ps":  2.99,
-      "everyday_ps":  2.99,
-      "cheapest_ps":  2.53,
-      "protein_rank":  113,
+      "everyday_ps":  3.02,
+      "cheapest_ps":  2.55,
+      "protein_rank":  80,
       "is_protein_rank1":  false
   },
   {
@@ -1266,9 +642,9 @@
       "protein":  "chicken",
       "protein_g":  52,
       "old_ps":  3.59,
-      "everyday_ps":  3.59,
-      "cheapest_ps":  2.78,
-      "protein_rank":  53,
+      "everyday_ps":  3.62,
+      "cheapest_ps":  2.8,
+      "protein_rank":  35,
       "is_protein_rank1":  false
   },
   {
@@ -1280,43 +656,7 @@
       "old_ps":  4.12,
       "everyday_ps":  4.12,
       "cheapest_ps":  3.39,
-      "protein_rank":  54,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "chile-colorado-bowls",
-      "name":  "Slow Cooker Chile Colorado Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  36,
-      "old_ps":  5.3,
-      "everyday_ps":  5.3,
-      "cheapest_ps":  4.45,
-      "protein_rank":  77,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "chile-relleno-casserole-ground-beef",
-      "name":  "Chile Relleno Casserole with Ground Beef",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  36,
-      "old_ps":  3.18,
-      "everyday_ps":  3.18,
-      "cheapest_ps":  2.8,
-      "protein_rank":  74,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "chili-cornbread-casserole",
-      "name":  "Chili Cornbread Casserole",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  38,
-      "old_ps":  5,
-      "everyday_ps":  5,
-      "cheapest_ps":  4.31,
-      "protein_rank":  14,
+      "protein_rank":  36,
       "is_protein_rank1":  false
   },
   {
@@ -1328,7 +668,7 @@
       "old_ps":  3.64,
       "everyday_ps":  3.64,
       "cheapest_ps":  3.08,
-      "protein_rank":  103,
+      "protein_rank":  71,
       "is_protein_rank1":  false
   },
   {
@@ -1340,7 +680,7 @@
       "old_ps":  5.39,
       "everyday_ps":  5.39,
       "cheapest_ps":  3.97,
-      "protein_rank":  69,
+      "protein_rank":  6,
       "is_protein_rank1":  false
   },
   {
@@ -1352,7 +692,7 @@
       "old_ps":  4.02,
       "everyday_ps":  4.02,
       "cheapest_ps":  3.4,
-      "protein_rank":  58,
+      "protein_rank":  48,
       "is_protein_rank1":  false
   },
   {
@@ -1364,7 +704,7 @@
       "old_ps":  4.17,
       "everyday_ps":  4.17,
       "cheapest_ps":  3.42,
-      "protein_rank":  73,
+      "protein_rank":  39,
       "is_protein_rank1":  false
   },
   {
@@ -1376,31 +716,7 @@
       "old_ps":  4.27,
       "everyday_ps":  4.27,
       "cheapest_ps":  3.15,
-      "protein_rank":  116,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "chuletas-guisadas-stewed-pork-chops-and-rice",
-      "name":  "Chuletas Guisadas Stewed Pork Chops and Rice",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  53,
-      "old_ps":  3.71,
-      "everyday_ps":  3.71,
-      "cheapest_ps":  2.88,
-      "protein_rank":  24,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "classic-beef-stew-potatoes-carrots",
-      "name":  "Classic Beef Stew with Potatoes and Carrots",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  44,
-      "old_ps":  5.92,
-      "everyday_ps":  5.92,
-      "cheapest_ps":  4.82,
-      "protein_rank":  38,
+      "protein_rank":  96,
       "is_protein_rank1":  false
   },
   {
@@ -1412,7 +728,7 @@
       "old_ps":  2.24,
       "everyday_ps":  2.24,
       "cheapest_ps":  1.79,
-      "protein_rank":  121,
+      "protein_rank":  86,
       "is_protein_rank1":  false
   },
   {
@@ -1424,7 +740,7 @@
       "old_ps":  2.37,
       "everyday_ps":  2.37,
       "cheapest_ps":  2.1,
-      "protein_rank":  100,
+      "protein_rank":  82,
       "is_protein_rank1":  false
   },
   {
@@ -1436,7 +752,7 @@
       "old_ps":  2.95,
       "everyday_ps":  2.95,
       "cheapest_ps":  2.62,
-      "protein_rank":  15,
+      "protein_rank":  13,
       "is_protein_rank1":  false
   },
   {
@@ -1446,33 +762,9 @@
       "protein":  "chicken",
       "protein_g":  51,
       "old_ps":  3.78,
-      "everyday_ps":  3.78,
-      "cheapest_ps":  2.91,
-      "protein_rank":  57,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "cornbread-topped-turkey-casserole",
-      "name":  "Cornbread-Topped Turkey Casserole",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  44,
-      "old_ps":  3.53,
-      "everyday_ps":  3.53,
-      "cheapest_ps":  2.45,
-      "protein_rank":  23,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "cottage-pie",
-      "name":  "Cottage Pie",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  35,
-      "old_ps":  4.46,
-      "everyday_ps":  4.46,
-      "cheapest_ps":  3.82,
-      "protein_rank":  81,
+      "everyday_ps":  3.81,
+      "cheapest_ps":  2.93,
+      "protein_rank":  38,
       "is_protein_rank1":  false
   },
   {
@@ -1482,9 +774,9 @@
       "protein":  "pork",
       "protein_g":  32,
       "old_ps":  3.55,
-      "everyday_ps":  3.55,
-      "cheapest_ps":  2.53,
-      "protein_rank":  90,
+      "everyday_ps":  3.58,
+      "cheapest_ps":  2.55,
+      "protein_rank":  73,
       "is_protein_rank1":  false
   },
   {
@@ -1496,7 +788,7 @@
       "old_ps":  3.38,
       "everyday_ps":  3.38,
       "cheapest_ps":  2.68,
-      "protein_rank":  32,
+      "protein_rank":  27,
       "is_protein_rank1":  false
   },
   {
@@ -1508,19 +800,7 @@
       "old_ps":  2.39,
       "everyday_ps":  2.39,
       "cheapest_ps":  1.76,
-      "protein_rank":  55,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "creamy-cajun-chicken-penne-skillet-bowls",
-      "name":  "Creamy Cajun Chicken Penne Skillet Bowls",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  44,
-      "old_ps":  2.94,
-      "everyday_ps":  2.94,
-      "cheapest_ps":  2.47,
-      "protein_rank":  78,
+      "protein_rank":  45,
       "is_protein_rank1":  false
   },
   {
@@ -1530,21 +810,9 @@
       "protein":  "chicken",
       "protein_g":  36,
       "old_ps":  3.33,
-      "everyday_ps":  3.33,
-      "cheapest_ps":  2.82,
-      "protein_rank":  114,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "creamy-chicken-fajita-burrito",
-      "name":  "Creamy Chicken Fajita Burrito",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  37,
-      "old_ps":  3.24,
-      "everyday_ps":  3.24,
-      "cheapest_ps":  2.77,
-      "protein_rank":  107,
+      "everyday_ps":  3.36,
+      "cheapest_ps":  2.84,
+      "protein_rank":  81,
       "is_protein_rank1":  false
   },
   {
@@ -1568,7 +836,7 @@
       "old_ps":  3.5,
       "everyday_ps":  3.5,
       "cheapest_ps":  2.82,
-      "protein_rank":  20,
+      "protein_rank":  16,
       "is_protein_rank1":  false
   },
   {
@@ -1580,7 +848,7 @@
       "old_ps":  3.73,
       "everyday_ps":  3.73,
       "cheapest_ps":  3.13,
-      "protein_rank":  15,
+      "protein_rank":  11,
       "is_protein_rank1":  false
   },
   {
@@ -1590,9 +858,9 @@
       "protein":  "turkey",
       "protein_g":  26,
       "old_ps":  4.36,
-      "everyday_ps":  4.36,
-      "cheapest_ps":  3.31,
-      "protein_rank":  104,
+      "everyday_ps":  4.39,
+      "cheapest_ps":  3.34,
+      "protein_rank":  55,
       "is_protein_rank1":  false
   },
   {
@@ -1602,9 +870,9 @@
       "protein":  "pork",
       "protein_g":  40,
       "old_ps":  3.59,
-      "everyday_ps":  3.59,
-      "cheapest_ps":  2.72,
-      "protein_rank":  65,
+      "everyday_ps":  3.62,
+      "cheapest_ps":  2.74,
+      "protein_rank":  53,
       "is_protein_rank1":  false
   },
   {
@@ -1614,9 +882,9 @@
       "protein":  "pork",
       "protein_g":  38,
       "old_ps":  3.65,
-      "everyday_ps":  3.65,
-      "cheapest_ps":  3,
-      "protein_rank":  72,
+      "everyday_ps":  3.68,
+      "cheapest_ps":  3.02,
+      "protein_rank":  59,
       "is_protein_rank1":  false
   },
   {
@@ -1626,9 +894,9 @@
       "protein":  "pork",
       "protein_g":  28,
       "old_ps":  2.43,
-      "everyday_ps":  2.43,
-      "cheapest_ps":  1.94,
-      "protein_rank":  103,
+      "everyday_ps":  2.46,
+      "cheapest_ps":  1.97,
+      "protein_rank":  84,
       "is_protein_rank1":  false
   },
   {
@@ -1652,7 +920,7 @@
       "old_ps":  4.02,
       "everyday_ps":  4.02,
       "cheapest_ps":  3.1,
-      "protein_rank":  102,
+      "protein_rank":  54,
       "is_protein_rank1":  false
   },
   {
@@ -1662,33 +930,9 @@
       "protein":  "turkey",
       "protein_g":  36,
       "old_ps":  4.23,
-      "everyday_ps":  4.23,
-      "cheapest_ps":  3.15,
-      "protein_rank":  56,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "crockpot-mexican-turkey-casserole",
-      "name":  "Crockpot Mexican Turkey Casserole",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  29,
-      "old_ps":  3.67,
-      "everyday_ps":  3.67,
-      "cheapest_ps":  2.97,
-      "protein_rank":  91,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "cuban-picadillo-burrito",
-      "name":  "Cuban Picadillo Burrito",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  31,
-      "old_ps":  4.39,
-      "everyday_ps":  4.39,
-      "cheapest_ps":  3.62,
-      "protein_rank":  99,
+      "everyday_ps":  4.26,
+      "cheapest_ps":  3.17,
+      "protein_rank":  27,
       "is_protein_rank1":  false
   },
   {
@@ -1700,7 +944,7 @@
       "old_ps":  2.32,
       "everyday_ps":  2.32,
       "cheapest_ps":  2.02,
-      "protein_rank":  84,
+      "protein_rank":  70,
       "is_protein_rank1":  false
   },
   {
@@ -1712,7 +956,7 @@
       "old_ps":  3.99,
       "everyday_ps":  3.99,
       "cheapest_ps":  3.4,
-      "protein_rank":  9,
+      "protein_rank":  3,
       "is_protein_rank1":  false
   },
   {
@@ -1724,7 +968,7 @@
       "old_ps":  5.48,
       "everyday_ps":  5.48,
       "cheapest_ps":  5.12,
-      "protein_rank":  74,
+      "protein_rank":  50,
       "is_protein_rank1":  false
   },
   {
@@ -1734,9 +978,9 @@
       "protein":  "pork",
       "protein_g":  54,
       "old_ps":  3.52,
-      "everyday_ps":  3.52,
-      "cheapest_ps":  2.95,
-      "protein_rank":  19,
+      "everyday_ps":  3.55,
+      "cheapest_ps":  2.97,
+      "protein_rank":  17,
       "is_protein_rank1":  false
   },
   {
@@ -1746,33 +990,9 @@
       "protein":  "pork",
       "protein_g":  46,
       "old_ps":  2.85,
-      "everyday_ps":  2.85,
-      "cheapest_ps":  2.5,
-      "protein_rank":  43,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ecuadorian-seco-de-pollo",
-      "name":  "Ecuadorian Seco de Pollo",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  56,
-      "old_ps":  3.62,
-      "everyday_ps":  3.62,
-      "cheapest_ps":  2.96,
-      "protein_rank":  38,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "escondidinho-de-carne-brazilian-beef-bake",
-      "name":  "Escondidinho de Carne (Brazilian Beef and Potato Bake)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  38,
-      "old_ps":  4.04,
-      "everyday_ps":  4.04,
-      "cheapest_ps":  3.42,
-      "protein_rank":  62,
+      "everyday_ps":  2.88,
+      "cheapest_ps":  2.52,
+      "protein_rank":  34,
       "is_protein_rank1":  false
   },
   {
@@ -1782,33 +1002,9 @@
       "protein":  "chicken",
       "protein_g":  54,
       "old_ps":  3.89,
-      "everyday_ps":  3.89,
-      "cheapest_ps":  3.29,
-      "protein_rank":  45,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ethiopian-minchet-abish-berbere-beef-bowls",
-      "name":  "Ethiopian Berbere Ground Beef (Minchet Abish)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  32,
-      "old_ps":  3.3,
-      "everyday_ps":  3.3,
-      "cheapest_ps":  3,
-      "protein_rank":  96,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "fajita-chicken-rice-bowl",
-      "name":  "Fajita Chicken Rice Bowl",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  48,
-      "old_ps":  2.78,
-      "everyday_ps":  2.78,
-      "cheapest_ps":  2.37,
-      "protein_rank":  68,
+      "everyday_ps":  3.92,
+      "cheapest_ps":  3.32,
+      "protein_rank":  30,
       "is_protein_rank1":  false
   },
   {
@@ -1818,21 +1014,9 @@
       "protein":  "pork",
       "protein_g":  40,
       "old_ps":  2.67,
-      "everyday_ps":  2.67,
-      "cheapest_ps":  2.25,
-      "protein_rank":  66,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "fasolka-po-bretonsku-polish-beans-kielbasa",
-      "name":  "Fasolka po Bretonsku (Polish Baked Beans with Kielbasa)",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  27,
-      "old_ps":  2.63,
-      "everyday_ps":  2.63,
-      "cheapest_ps":  2.18,
-      "protein_rank":  103,
+      "everyday_ps":  2.7,
+      "cheapest_ps":  2.27,
+      "protein_rank":  54,
       "is_protein_rank1":  false
   },
   {
@@ -1844,43 +1028,7 @@
       "old_ps":  3.65,
       "everyday_ps":  3.65,
       "cheapest_ps":  3,
-      "protein_rank":  108,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "filipino-beef-caldereta",
-      "name":  "Filipino Beef Caldereta",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  61,
-      "old_ps":  7.36,
-      "everyday_ps":  7.36,
-      "cheapest_ps":  6.18,
-      "protein_rank":  3,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "filipino-beef-pares-rice-bowls",
-      "name":  "Filipino Beef Pares Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  52,
-      "old_ps":  5.36,
-      "everyday_ps":  5.36,
-      "cheapest_ps":  4.47,
-      "protein_rank":  15,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "filipino-chicken-afritada-bowls",
-      "name":  "Filipino Chicken Afritada Bowls",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  57,
-      "old_ps":  4.45,
-      "everyday_ps":  4.45,
-      "cheapest_ps":  3.75,
-      "protein_rank":  30,
+      "protein_rank":  75,
       "is_protein_rank1":  false
   },
   {
@@ -1890,9 +1038,9 @@
       "protein":  "chicken",
       "protein_g":  49,
       "old_ps":  3.23,
-      "everyday_ps":  3.23,
-      "cheapest_ps":  2.67,
-      "protein_rank":  65,
+      "everyday_ps":  3.26,
+      "cheapest_ps":  2.69,
+      "protein_rank":  43,
       "is_protein_rank1":  false
   },
   {
@@ -1904,19 +1052,7 @@
       "old_ps":  3.31,
       "everyday_ps":  3.31,
       "cheapest_ps":  2.3,
-      "protein_rank":  91,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "filipino-pork-menudo-rice-bowls",
-      "name":  "Filipino Pork Menudo Rice Bowls",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  45,
-      "old_ps":  3.32,
-      "everyday_ps":  3.32,
-      "cheapest_ps":  2.68,
-      "protein_rank":  46,
+      "protein_rank":  74,
       "is_protein_rank1":  false
   },
   {
@@ -1928,43 +1064,7 @@
       "old_ps":  3.67,
       "everyday_ps":  3.67,
       "cheapest_ps":  3,
-      "protein_rank":  67,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "freezer-beef-burrito-greek-yogurt",
-      "name":  "Greek-Yogurt Freezer Beef Burrito",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  38,
-      "old_ps":  4.09,
-      "everyday_ps":  4.09,
-      "cheapest_ps":  3.57,
-      "protein_rank":  63,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "french-onion-pot-roast-bowls",
-      "name":  "Slow Cooker French Onion Pot Roast Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  53,
-      "old_ps":  5.42,
-      "everyday_ps":  5.42,
-      "cheapest_ps":  4.46,
-      "protein_rank":  14,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "frito-pie-walking-taco-casserole",
-      "name":  "Frito Pie Walking Taco Casserole",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  37,
-      "old_ps":  3.67,
-      "everyday_ps":  3.67,
-      "cheapest_ps":  3,
-      "protein_rank":  18,
+      "protein_rank":  35,
       "is_protein_rank1":  false
   },
   {
@@ -1976,31 +1076,7 @@
       "old_ps":  3.53,
       "everyday_ps":  3.53,
       "cheapest_ps":  2.79,
-      "protein_rank":  39,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ghanaian-shoko-beef-spinach-stew",
-      "name":  "Ghanaian Shoko (Beef and Spinach Stew)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  52,
-      "old_ps":  6.03,
-      "everyday_ps":  6.03,
-      "cheapest_ps":  5.12,
-      "protein_rank":  16,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "giouvetsi-greek-beef-orzo-bake",
-      "name":  "Giouvetsi (Greek Beef and Orzo Bake)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  39,
-      "old_ps":  4.19,
-      "everyday_ps":  4.19,
-      "cheapest_ps":  3.42,
-      "protein_rank":  57,
+      "protein_rank":  25,
       "is_protein_rank1":  false
   },
   {
@@ -2012,19 +1088,7 @@
       "old_ps":  3.81,
       "everyday_ps":  3.81,
       "cheapest_ps":  3.44,
-      "protein_rank":  80,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "greek-beef-and-chickpea-bowls",
-      "name":  "Greek Beef and Chickpea Bowls",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  44,
-      "old_ps":  4.89,
-      "everyday_ps":  4.89,
-      "cheapest_ps":  3.78,
-      "protein_rank":  5,
+      "protein_rank":  66,
       "is_protein_rank1":  false
   },
   {
@@ -2036,7 +1100,7 @@
       "old_ps":  3.35,
       "everyday_ps":  3.35,
       "cheapest_ps":  2.54,
-      "protein_rank":  17,
+      "protein_rank":  13,
       "is_protein_rank1":  false
   },
   {
@@ -2048,19 +1112,7 @@
       "old_ps":  3.49,
       "everyday_ps":  3.49,
       "cheapest_ps":  2.7,
-      "protein_rank":  63,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "greek-stifado-beef-onion-stew",
-      "name":  "Greek Stifado (Beef and Onion Stew)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  44,
-      "old_ps":  6.38,
-      "everyday_ps":  6.38,
-      "cheapest_ps":  5.07,
-      "protein_rank":  39,
+      "protein_rank":  51,
       "is_protein_rank1":  false
   },
   {
@@ -2072,7 +1124,7 @@
       "old_ps":  3.16,
       "everyday_ps":  3.16,
       "cheapest_ps":  2.62,
-      "protein_rank":  86,
+      "protein_rank":  48,
       "is_protein_rank1":  false
   },
   {
@@ -2084,8 +1136,8 @@
       "old_ps":  5.69,
       "everyday_ps":  5.69,
       "cheapest_ps":  3.86,
-      "protein_rank":  2,
-      "is_protein_rank1":  false
+      "protein_rank":  1,
+      "is_protein_rank1":  true
   },
   {
       "slug":  "greek-turkey-meatballs-with-lemon-orzo",
@@ -2094,9 +1146,9 @@
       "protein":  "ground turkey",
       "protein_g":  38,
       "old_ps":  4.73,
-      "everyday_ps":  4.73,
-      "cheapest_ps":  3.9,
-      "protein_rank":  6,
+      "everyday_ps":  4.76,
+      "cheapest_ps":  3.92,
+      "protein_rank":  5,
       "is_protein_rank1":  false
   },
   {
@@ -2106,9 +1158,9 @@
       "protein":  "turkey",
       "protein_g":  29,
       "old_ps":  4.52,
-      "everyday_ps":  4.52,
-      "cheapest_ps":  3.77,
-      "protein_rank":  92,
+      "everyday_ps":  4.55,
+      "cheapest_ps":  3.79,
+      "protein_rank":  49,
       "is_protein_rank1":  false
   },
   {
@@ -2120,7 +1172,7 @@
       "old_ps":  3.63,
       "everyday_ps":  3.63,
       "cheapest_ps":  2.92,
-      "protein_rank":  68,
+      "protein_rank":  36,
       "is_protein_rank1":  false
   },
   {
@@ -2132,7 +1184,7 @@
       "old_ps":  3.54,
       "everyday_ps":  3.54,
       "cheapest_ps":  2.88,
-      "protein_rank":  29,
+      "protein_rank":  10,
       "is_protein_rank1":  false
   },
   {
@@ -2142,9 +1194,9 @@
       "protein":  "chicken",
       "protein_g":  40,
       "old_ps":  3.19,
-      "everyday_ps":  3.19,
+      "everyday_ps":  3.22,
       "cheapest_ps":  2.53,
-      "protein_rank":  89,
+      "protein_rank":  62,
       "is_protein_rank1":  false
   },
   {
@@ -2156,139 +1208,7 @@
       "old_ps":  4.95,
       "everyday_ps":  4.95,
       "cheapest_ps":  4.1,
-      "protein_rank":  5,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "green-chile-turkey-burrito",
-      "name":  "Green Chile Turkey Burrito",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  30,
-      "old_ps":  3.75,
-      "everyday_ps":  3.75,
-      "cheapest_ps":  2.97,
-      "protein_rank":  87,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "grilled-pork-tenderloin-burrito-bowl",
-      "name":  "Grilled Pork Tenderloin Burrito Bowl",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  39,
-      "old_ps":  3.01,
-      "everyday_ps":  3.01,
-      "cheapest_ps":  2.47,
-      "protein_rank":  68,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ground-beef-and-broccoli-bowls",
-      "name":  "Ground Beef and Broccoli Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  45,
-      "old_ps":  3.97,
-      "everyday_ps":  3.97,
-      "cheapest_ps":  3.72,
-      "protein_rank":  36,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ground-beef-baked-gnocchi",
-      "name":  "Ground Beef Baked Gnocchi",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  37,
-      "old_ps":  3.69,
-      "everyday_ps":  3.69,
-      "cheapest_ps":  3.35,
-      "protein_rank":  19,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ground-beef-fried-rice-bowls",
-      "name":  "Ground Beef Fried Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  49,
-      "old_ps":  4.16,
-      "everyday_ps":  4.16,
-      "cheapest_ps":  3.88,
-      "protein_rank":  25,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ground-beef-gyro-bowls",
-      "name":  "Ground Beef Gyro Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  46,
-      "old_ps":  4.42,
-      "everyday_ps":  4.42,
-      "cheapest_ps":  3.91,
-      "protein_rank":  33,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ground-beef-shawarma-bowls",
-      "name":  "Ground Beef Shawarma Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  48,
-      "old_ps":  3.76,
-      "everyday_ps":  3.76,
-      "cheapest_ps":  3.54,
-      "protein_rank":  28,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ground-beef-stroganoff-pasta",
-      "name":  "Ground Beef Stroganoff Pasta",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  53,
-      "old_ps":  4.22,
-      "everyday_ps":  4.22,
-      "cheapest_ps":  3.7,
-      "protein_rank":  13,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ground-beef-teriyaki-bowls",
-      "name":  "Ground Beef Teriyaki Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  43,
-      "old_ps":  5.08,
-      "everyday_ps":  5.08,
-      "cheapest_ps":  4.59,
-      "protein_rank":  46,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ground-turkey-broccoli-cheddar-rice-skillet",
-      "name":  "Ground Turkey Broccoli Cheddar Rice Skillet",
-      "run":  "db",
-      "protein":  "ground turkey",
-      "protein_g":  35,
-      "old_ps":  3.66,
-      "everyday_ps":  3.66,
-      "cheapest_ps":  3.03,
-      "protein_rank":  11,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ground-turkey-burrito-bowl",
-      "name":  "Ground Turkey Burrito Bowl",
-      "run":  "db",
-      "protein":  "ground turkey",
-      "protein_g":  33,
-      "old_ps":  3.54,
-      "everyday_ps":  3.54,
-      "cheapest_ps":  2.79,
-      "protein_rank":  13,
+      "protein_rank":  4,
       "is_protein_rank1":  false
   },
   {
@@ -2300,31 +1220,7 @@
       "old_ps":  3,
       "everyday_ps":  3,
       "cheapest_ps":  2.43,
-      "protein_rank":  78,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ground-turkey-enchilada-skillet-bowls",
-      "name":  "Ground Turkey Enchilada Skillet Bowls",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  51,
-      "old_ps":  3.94,
-      "everyday_ps":  3.94,
-      "cheapest_ps":  3.21,
-      "protein_rank":  11,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ground-turkey-lasagna-casserole",
-      "name":  "Ground Turkey Lasagna Casserole",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  37,
-      "old_ps":  4.06,
-      "everyday_ps":  4.06,
-      "cheapest_ps":  3.43,
-      "protein_rank":  48,
+      "protein_rank":  43,
       "is_protein_rank1":  false
   },
   {
@@ -2348,19 +1244,7 @@
       "old_ps":  3.36,
       "everyday_ps":  3.36,
       "cheapest_ps":  2.67,
-      "protein_rank":  59,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ground-turkey-stir-fry-bowls",
-      "name":  "Ground Turkey Stir Fry Bowls",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  51,
-      "old_ps":  4.66,
-      "everyday_ps":  4.66,
-      "cheapest_ps":  4.03,
-      "protein_rank":  12,
+      "protein_rank":  30,
       "is_protein_rank1":  false
   },
   {
@@ -2370,9 +1254,9 @@
       "protein":  "ground turkey",
       "protein_g":  33,
       "old_ps":  4.15,
-      "everyday_ps":  4.15,
+      "everyday_ps":  4.16,
       "cheapest_ps":  3.24,
-      "protein_rank":  14,
+      "protein_rank":  10,
       "is_protein_rank1":  false
   },
   {
@@ -2384,7 +1268,7 @@
       "old_ps":  3.82,
       "everyday_ps":  3.82,
       "cheapest_ps":  2.65,
-      "protein_rank":  82,
+      "protein_rank":  11,
       "is_protein_rank1":  false
   },
   {
@@ -2394,21 +1278,9 @@
       "protein":  "chicken",
       "protein_g":  40,
       "old_ps":  3.31,
-      "everyday_ps":  3.31,
-      "cheapest_ps":  3.08,
-      "protein_rank":  90,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "haitian-poulet-en-sauce",
-      "name":  "Haitian Poulet en Sauce",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  57,
-      "old_ps":  3.2,
-      "everyday_ps":  3.2,
-      "cheapest_ps":  2.54,
-      "protein_rank":  31,
+      "everyday_ps":  3.34,
+      "cheapest_ps":  3.1,
+      "protein_rank":  63,
       "is_protein_rank1":  false
   },
   {
@@ -2420,7 +1292,7 @@
       "old_ps":  4.43,
       "everyday_ps":  4.43,
       "cheapest_ps":  3.44,
-      "protein_rank":  81,
+      "protein_rank":  55,
       "is_protein_rank1":  false
   },
   {
@@ -2430,33 +1302,9 @@
       "protein":  "turkey",
       "protein_g":  25,
       "old_ps":  2.3,
-      "everyday_ps":  2.3,
-      "cheapest_ps":  1.78,
-      "protein_rank":  114,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ham-and-potato-cheddar-casserole",
-      "name":  "Ham and Potato Cheddar Casserole",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  33,
-      "old_ps":  2.9,
-      "everyday_ps":  2.9,
-      "cheapest_ps":  2.51,
-      "protein_rank":  85,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ham-and-white-bean-soup",
-      "name":  "Ham and White Bean Soup",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  32,
-      "old_ps":  2.85,
-      "everyday_ps":  2.85,
-      "cheapest_ps":  2.46,
-      "protein_rank":  92,
+      "everyday_ps":  2.33,
+      "cheapest_ps":  1.8,
+      "protein_rank":  62,
       "is_protein_rank1":  false
   },
   {
@@ -2468,7 +1316,7 @@
       "old_ps":  2.42,
       "everyday_ps":  2.42,
       "cheapest_ps":  2.23,
-      "protein_rank":  104,
+      "protein_rank":  85,
       "is_protein_rank1":  false
   },
   {
@@ -2480,43 +1328,7 @@
       "old_ps":  3.65,
       "everyday_ps":  3.65,
       "cheapest_ps":  3.07,
-      "protein_rank":  80,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "hawaiian-loco-moco-rice-bowls",
-      "name":  "Hawaiian Loco Moco Rice Bowls",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  39,
-      "old_ps":  3.78,
-      "everyday_ps":  3.78,
-      "cheapest_ps":  3.28,
-      "protein_rank":  11,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "high-protein-beef-bean-burrito",
-      "name":  "High-Protein Beef and Bean Burrito",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  34,
-      "old_ps":  3.6,
-      "everyday_ps":  3.6,
-      "cheapest_ps":  3.04,
-      "protein_rank":  87,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "highprotein-turkey-burger-bowl",
-      "name":  "High-Protein Turkey Burger Bowl",
-      "run":  "db",
-      "protein":  "ground turkey",
-      "protein_g":  38,
-      "old_ps":  3.9,
-      "everyday_ps":  3.9,
-      "cheapest_ps":  3.29,
-      "protein_rank":  7,
+      "protein_rank":  54,
       "is_protein_rank1":  false
   },
   {
@@ -2528,7 +1340,7 @@
       "old_ps":  3.32,
       "everyday_ps":  3.32,
       "cheapest_ps":  2.82,
-      "protein_rank":  85,
+      "protein_rank":  59,
       "is_protein_rank1":  false
   },
   {
@@ -2538,9 +1350,9 @@
       "protein":  "beef",
       "protein_g":  54,
       "old_ps":  5.86,
-      "everyday_ps":  5.86,
-      "cheapest_ps":  3.93,
-      "protein_rank":  11,
+      "everyday_ps":  5.89,
+      "cheapest_ps":  3.96,
+      "protein_rank":  3,
       "is_protein_rank1":  false
   },
   {
@@ -2550,21 +1362,9 @@
       "protein":  "pork",
       "protein_g":  42,
       "old_ps":  2.86,
-      "everyday_ps":  2.86,
-      "cheapest_ps":  2.32,
-      "protein_rank":  59,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "horseradish-pot-roast-bowls",
-      "name":  "Horseradish Pot Roast Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  50,
-      "old_ps":  5.23,
-      "everyday_ps":  5.23,
-      "cheapest_ps":  4.34,
-      "protein_rank":  20,
+      "everyday_ps":  2.89,
+      "cheapest_ps":  2.34,
+      "protein_rank":  49,
       "is_protein_rank1":  false
   },
   {
@@ -2576,19 +1376,7 @@
       "old_ps":  2.13,
       "everyday_ps":  2.13,
       "cheapest_ps":  1.88,
-      "protein_rank":  131,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "hungarian-beef-goulash",
-      "name":  "Hungarian Beef Goulash",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  45,
-      "old_ps":  6.87,
-      "everyday_ps":  6.87,
-      "cheapest_ps":  5.75,
-      "protein_rank":  37,
+      "protein_rank":  93,
       "is_protein_rank1":  false
   },
   {
@@ -2598,9 +1386,9 @@
       "protein":  "chicken",
       "protein_g":  61,
       "old_ps":  3.89,
-      "everyday_ps":  3.89,
-      "cheapest_ps":  3.13,
-      "protein_rank":  16,
+      "everyday_ps":  3.92,
+      "cheapest_ps":  3.15,
+      "protein_rank":  10,
       "is_protein_rank1":  false
   },
   {
@@ -2612,31 +1400,7 @@
       "old_ps":  3.19,
       "everyday_ps":  3.19,
       "cheapest_ps":  2.69,
-      "protein_rank":  97,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "hunters-chicken-bbq-bacon-bake",
-      "name":  "Hunter\u0027s Chicken (BBQ Bacon Cheese Bake)",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  63,
-      "old_ps":  2.5,
-      "everyday_ps":  2.5,
-      "cheapest_ps":  2.26,
-      "protein_rank":  10,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "indian-keema-matar-bowls",
-      "name":  "Indian Keema Matar (Ground Beef \u0026 Peas Curry) Bowls",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  33,
-      "old_ps":  3.88,
-      "everyday_ps":  3.88,
-      "cheapest_ps":  3.47,
-      "protein_rank":  22,
+      "protein_rank":  79,
       "is_protein_rank1":  false
   },
   {
@@ -2648,7 +1412,7 @@
       "old_ps":  3.69,
       "everyday_ps":  3.69,
       "cheapest_ps":  3.06,
-      "protein_rank":  82,
+      "protein_rank":  46,
       "is_protein_rank1":  false
   },
   {
@@ -2660,19 +1424,7 @@
       "old_ps":  2.52,
       "everyday_ps":  2.52,
       "cheapest_ps":  2.29,
-      "protein_rank":  106,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "irish-beef-and-guinness-stew",
-      "name":  "Irish Beef and Guinness Stew",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  50,
-      "old_ps":  5.49,
-      "everyday_ps":  5.49,
-      "cheapest_ps":  4.47,
-      "protein_rank":  21,
+      "protein_rank":  87,
       "is_protein_rank1":  false
   },
   {
@@ -2684,7 +1436,7 @@
       "old_ps":  2.16,
       "everyday_ps":  2.16,
       "cheapest_ps":  1.87,
-      "protein_rank":  73,
+      "protein_rank":  60,
       "is_protein_rank1":  false
   },
   {
@@ -2696,43 +1448,7 @@
       "old_ps":  3.98,
       "everyday_ps":  3.98,
       "cheapest_ps":  3.49,
-      "protein_rank":  86,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "italian-sausage-penne",
-      "name":  "Italian Sausage Penne with Peppers",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  23,
-      "old_ps":  1.76,
-      "everyday_ps":  1.76,
-      "cheapest_ps":  1.52,
-      "protein_rank":  118,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "izmir-kofte-turkey-meatball-potato-bake",
-      "name":  "Izmir Kofte Turkey Meatball and Potato Bake",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  34,
-      "old_ps":  3.73,
-      "everyday_ps":  3.73,
-      "cheapest_ps":  3.13,
-      "protein_rank":  69,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "jamaican-brown-stew-chicken",
-      "name":  "Jamaican Brown Stew Chicken",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  35,
-      "old_ps":  2.82,
-      "everyday_ps":  2.82,
-      "cheapest_ps":  2.33,
-      "protein_rank":  118,
+      "protein_rank":  71,
       "is_protein_rank1":  false
   },
   {
@@ -2744,19 +1460,7 @@
       "old_ps":  2.33,
       "everyday_ps":  2.33,
       "cheapest_ps":  2.04,
-      "protein_rank":  64,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "japanese-ground-beef-curry",
-      "name":  "Japanese Ground Beef Curry",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  49,
-      "old_ps":  4.67,
-      "everyday_ps":  4.67,
-      "cheapest_ps":  4.18,
-      "protein_rank":  3,
+      "protein_rank":  52,
       "is_protein_rank1":  false
   },
   {
@@ -2768,7 +1472,7 @@
       "old_ps":  3.87,
       "everyday_ps":  3.87,
       "cheapest_ps":  3.38,
-      "protein_rank":  29,
+      "protein_rank":  24,
       "is_protein_rank1":  false
   },
   {
@@ -2780,19 +1484,7 @@
       "old_ps":  2.78,
       "everyday_ps":  2.78,
       "cheapest_ps":  2.38,
-      "protein_rank":  69,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "japanese-soboro-don-beef-egg-rice-bowls",
-      "name":  "Japanese Soboro Don (Sweet Soy Beef and Egg Rice Bowls)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  39,
-      "old_ps":  3.44,
-      "everyday_ps":  3.44,
-      "cheapest_ps":  3.1,
-      "protein_rank":  58,
+      "protein_rank":  56,
       "is_protein_rank1":  false
   },
   {
@@ -2804,7 +1496,7 @@
       "old_ps":  4.04,
       "everyday_ps":  4.04,
       "cheapest_ps":  2.8,
-      "protein_rank":  38,
+      "protein_rank":  18,
       "is_protein_rank1":  false
   },
   {
@@ -2816,55 +1508,7 @@
       "old_ps":  4.43,
       "everyday_ps":  4.43,
       "cheapest_ps":  3.67,
-      "protein_rank":  115,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "john-wayne-casserole",
-      "name":  "John Wayne Casserole",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  27,
-      "old_ps":  3.05,
-      "everyday_ps":  3.05,
-      "cheapest_ps":  2.67,
-      "protein_rank":  24,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "johnny-marzetti-casserole",
-      "name":  "Johnny Marzetti Casserole",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  38,
-      "old_ps":  3.6,
-      "everyday_ps":  3.6,
-      "cheapest_ps":  3.04,
-      "protein_rank":  15,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "kadai-chicken-karahi",
-      "name":  "Kadai Chicken (Chicken Karahi)",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  32,
-      "old_ps":  2.79,
-      "everyday_ps":  2.79,
-      "cheapest_ps":  2.33,
-      "protein_rank":  129,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "kafta-bil-sanieh-beef-potato-bake",
-      "name":  "Lebanese Baked Kafta and Potatoes (Kafta bil Sanieh)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  42,
-      "old_ps":  4.25,
-      "everyday_ps":  4.25,
-      "cheapest_ps":  3.79,
-      "protein_rank":  50,
+      "protein_rank":  82,
       "is_protein_rank1":  false
   },
   {
@@ -2876,31 +1520,7 @@
       "old_ps":  4.25,
       "everyday_ps":  4.25,
       "cheapest_ps":  3.25,
-      "protein_rank":  109,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "kerala-beef-ularthiyathu-rice-bowls",
-      "name":  "Kerala Beef Ularthiyathu (South Indian Beef Fry) Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  35,
-      "old_ps":  4.6,
-      "everyday_ps":  4.6,
-      "cheapest_ps":  3.9,
-      "protein_rank":  83,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "kharcho-georgian-beef-walnut-soup",
-      "name":  "Kharcho (Georgian Beef and Walnut Rice Soup)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  38,
-      "old_ps":  5.31,
-      "everyday_ps":  5.31,
-      "cheapest_ps":  4.27,
-      "protein_rank":  65,
+      "protein_rank":  16,
       "is_protein_rank1":  false
   },
   {
@@ -2912,31 +1532,7 @@
       "old_ps":  3.32,
       "everyday_ps":  3.32,
       "cheapest_ps":  2.44,
-      "protein_rank":  105,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "kielbasa-mac-and-cheese-bake",
-      "name":  "Kielbasa Mac and Cheese Bake",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  30,
-      "old_ps":  2.88,
-      "everyday_ps":  2.88,
-      "cheapest_ps":  2.26,
-      "protein_rank":  88,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "korean-beef-bibimbap-bowls",
-      "name":  "Korean Beef Bibimbap Bowls",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  38,
-      "old_ps":  4.33,
-      "everyday_ps":  4.33,
-      "cheapest_ps":  3.77,
-      "protein_rank":  16,
+      "protein_rank":  56,
       "is_protein_rank1":  false
   },
   {
@@ -2948,7 +1544,7 @@
       "old_ps":  6.15,
       "everyday_ps":  6.15,
       "cheapest_ps":  4.42,
-      "protein_rank":  75,
+      "protein_rank":  8,
       "is_protein_rank1":  false
   },
   {
@@ -2960,19 +1556,7 @@
       "old_ps":  4.03,
       "everyday_ps":  4.03,
       "cheapest_ps":  3.16,
-      "protein_rank":  42,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "korean-bulgogi-beef-burrito",
-      "name":  "Korean Bulgogi Beef Burrito",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  36,
-      "old_ps":  4.63,
-      "everyday_ps":  4.63,
-      "cheapest_ps":  3.29,
-      "protein_rank":  76,
+      "protein_rank":  28,
       "is_protein_rank1":  false
   },
   {
@@ -2984,19 +1568,7 @@
       "old_ps":  2.89,
       "everyday_ps":  2.89,
       "cheapest_ps":  2.12,
-      "protein_rank":  108,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "korean-ground-beef-rice-bowls",
-      "name":  "Korean Ground Beef Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  50,
-      "old_ps":  4.16,
-      "everyday_ps":  4.16,
-      "cheapest_ps":  3.94,
-      "protein_rank":  22,
+      "protein_rank":  89,
       "is_protein_rank1":  false
   },
   {
@@ -3008,7 +1580,7 @@
       "old_ps":  4.1,
       "everyday_ps":  4.1,
       "cheapest_ps":  3.51,
-      "protein_rank":  13,
+      "protein_rank":  5,
       "is_protein_rank1":  false
   },
   {
@@ -3020,7 +1592,7 @@
       "old_ps":  4.19,
       "everyday_ps":  4.19,
       "cheapest_ps":  3.54,
-      "protein_rank":  93,
+      "protein_rank":  50,
       "is_protein_rank1":  false
   },
   {
@@ -3032,91 +1604,7 @@
       "old_ps":  3.07,
       "everyday_ps":  3.07,
       "cheapest_ps":  2.49,
-      "protein_rank":  104,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "lebanese-hashweh",
-      "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  25,
-      "old_ps":  2.69,
-      "everyday_ps":  2.69,
-      "cheapest_ps":  2.39,
-      "protein_rank":  26,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "loaded-beef-taco-skillet-bowls",
-      "name":  "Loaded Beef Taco Skillet Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  52,
-      "old_ps":  5.41,
-      "everyday_ps":  5.41,
-      "cheapest_ps":  4.44,
-      "protein_rank":  17,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "loaded-chicken-and-potato-casserole",
-      "name":  "Loaded Chicken and Potato Casserole",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  51,
-      "old_ps":  2.88,
-      "everyday_ps":  2.88,
-      "cheapest_ps":  2.44,
-      "protein_rank":  58,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "loaded-ground-turkey-nacho-bake",
-      "name":  "Loaded Ground Turkey Nacho Bake",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  37,
-      "old_ps":  3.75,
-      "everyday_ps":  3.75,
-      "cheapest_ps":  3.08,
-      "protein_rank":  49,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "loobia-polo-persian-beef-green-bean-rice",
-      "name":  "Loobia Polo (Persian Beef and Green Bean Rice)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  26,
-      "old_ps":  3.21,
-      "everyday_ps":  3.21,
-      "cheapest_ps":  2.73,
-      "protein_rank":  111,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "louisiana-red-beans-and-rice-with-sausage",
-      "name":  "Louisiana Red Beans and Rice with Sausage",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  25,
-      "old_ps":  3.07,
-      "everyday_ps":  3.07,
-      "cheapest_ps":  2.41,
-      "protein_rank":  115,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "machaca-beef-burrito",
-      "name":  "Machaca Beef Burrito",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  31,
-      "old_ps":  4.19,
-      "everyday_ps":  4.19,
-      "cheapest_ps":  3.32,
-      "protein_rank":  100,
+      "protein_rank":  72,
       "is_protein_rank1":  false
   },
   {
@@ -3128,7 +1616,7 @@
       "old_ps":  3.63,
       "everyday_ps":  3.63,
       "cheapest_ps":  3.24,
-      "protein_rank":  86,
+      "protein_rank":  60,
       "is_protein_rank1":  false
   },
   {
@@ -3138,21 +1626,9 @@
       "protein":  "pork",
       "protein_g":  45,
       "old_ps":  3.51,
-      "everyday_ps":  3.51,
-      "cheapest_ps":  2.72,
-      "protein_rank":  47,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "massaman-beef-curry-potatoes",
-      "name":  "Massaman Beef Curry with Potatoes",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  46,
-      "old_ps":  7.34,
-      "everyday_ps":  7.34,
-      "cheapest_ps":  6.32,
-      "protein_rank":  34,
+      "everyday_ps":  3.54,
+      "cheapest_ps":  2.75,
+      "protein_rank":  37,
       "is_protein_rank1":  false
   },
   {
@@ -3164,19 +1640,7 @@
       "old_ps":  3.71,
       "everyday_ps":  3.71,
       "cheapest_ps":  3.32,
-      "protein_rank":  133,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "mediterranean-beef-hummus-bowls",
-      "name":  "Mediterranean Beef Hummus Bowls",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  27,
-      "old_ps":  3.44,
-      "everyday_ps":  3.44,
-      "cheapest_ps":  2.5,
-      "protein_rank":  25,
+      "protein_rank":  95,
       "is_protein_rank1":  false
   },
   {
@@ -3188,42 +1652,6 @@
       "old_ps":  4.5,
       "everyday_ps":  4.5,
       "cheapest_ps":  3.66,
-      "protein_rank":  10,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "mediterranean-turkey-white-bean-stew-bowls",
-      "name":  "Mediterranean Turkey and White Bean Stew Bowls",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  29,
-      "old_ps":  3.39,
-      "everyday_ps":  3.39,
-      "cheapest_ps":  2.72,
-      "protein_rank":  94,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "mexican-chipotle-pork-and-beans",
-      "name":  "Mexican Chipotle Pork and Beans",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  47,
-      "old_ps":  3.5,
-      "everyday_ps":  3.5,
-      "cheapest_ps":  2.88,
-      "protein_rank":  38,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "middle-eastern-beef-kofta-bowls-with-tzatziki",
-      "name":  "Middle Eastern Beef Kofta Bowls with Tzatziki",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  47,
-      "old_ps":  5.84,
-      "everyday_ps":  5.84,
-      "cheapest_ps":  4.84,
       "protein_rank":  4,
       "is_protein_rank1":  false
   },
@@ -3236,43 +1664,7 @@
       "old_ps":  4.27,
       "everyday_ps":  4.27,
       "cheapest_ps":  2.99,
-      "protein_rank":  24,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "million-dollar-baked-spaghetti",
-      "name":  "Million Dollar Baked Spaghetti",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  35,
-      "old_ps":  2.79,
-      "everyday_ps":  2.79,
-      "cheapest_ps":  2.53,
-      "protein_rank":  20,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "mississippi-pot-roast-bowls",
-      "name":  "Mississippi Pot Roast Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  40,
-      "old_ps":  4.18,
-      "everyday_ps":  4.18,
-      "cheapest_ps":  3.5,
-      "protein_rank":  53,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "mongolian-ground-beef-bowls",
-      "name":  "Mongolian Ground Beef Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  43,
-      "old_ps":  5.53,
-      "everyday_ps":  5.53,
-      "cheapest_ps":  5.02,
-      "protein_rank":  47,
+      "protein_rank":  8,
       "is_protein_rank1":  false
   },
   {
@@ -3284,7 +1676,7 @@
       "old_ps":  2.65,
       "everyday_ps":  2.65,
       "cheapest_ps":  2.29,
-      "protein_rank":  117,
+      "protein_rank":  97,
       "is_protein_rank1":  false
   },
   {
@@ -3296,19 +1688,7 @@
       "old_ps":  3.26,
       "everyday_ps":  3.26,
       "cheapest_ps":  2.62,
-      "protein_rank":  36,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "moroccan-beef-tagine-chickpeas",
-      "name":  "Moroccan Beef Tagine with Chickpeas",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  55,
-      "old_ps":  6.49,
-      "everyday_ps":  6.49,
-      "cheapest_ps":  5.16,
-      "protein_rank":  6,
+      "protein_rank":  30,
       "is_protein_rank1":  false
   },
   {
@@ -3320,19 +1700,7 @@
       "old_ps":  3.38,
       "everyday_ps":  3.38,
       "cheapest_ps":  2.79,
-      "protein_rank":  60,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "moussaka-greek-beef-eggplant-bake",
-      "name":  "Moussaka (Greek Beef and Eggplant Bake)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  42,
-      "old_ps":  5.53,
-      "everyday_ps":  5.53,
-      "cheapest_ps":  4.8,
-      "protein_rank":  51,
+      "protein_rank":  31,
       "is_protein_rank1":  false
   },
   {
@@ -3344,7 +1712,7 @@
       "old_ps":  3.71,
       "everyday_ps":  3.71,
       "cheapest_ps":  2.99,
-      "protein_rank":  123,
+      "protein_rank":  88,
       "is_protein_rank1":  false
   },
   {
@@ -3356,19 +1724,7 @@
       "old_ps":  3.17,
       "everyday_ps":  3.17,
       "cheapest_ps":  2.8,
-      "protein_rank":  74,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "nigerian-beef-stew-rice-bowls",
-      "name":  "Nigerian Beef Stew over Rice",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  29,
-      "old_ps":  4.66,
-      "everyday_ps":  4.66,
-      "cheapest_ps":  3.88,
-      "protein_rank":  106,
+      "protein_rank":  61,
       "is_protein_rank1":  false
   },
   {
@@ -3380,7 +1736,7 @@
       "old_ps":  2.79,
       "everyday_ps":  2.79,
       "cheapest_ps":  2.17,
-      "protein_rank":  55,
+      "protein_rank":  37,
       "is_protein_rank1":  false
   },
   {
@@ -3392,7 +1748,7 @@
       "old_ps":  2.45,
       "everyday_ps":  2.45,
       "cheapest_ps":  1.98,
-      "protein_rank":  56,
+      "protein_rank":  46,
       "is_protein_rank1":  false
   },
   {
@@ -3402,9 +1758,9 @@
       "protein":  "pork",
       "protein_g":  35,
       "old_ps":  2.98,
-      "everyday_ps":  2.98,
-      "cheapest_ps":  2.5,
-      "protein_rank":  82,
+      "everyday_ps":  3.01,
+      "cheapest_ps":  2.52,
+      "protein_rank":  68,
       "is_protein_rank1":  false
   },
   {
@@ -3416,7 +1772,7 @@
       "old_ps":  3.47,
       "everyday_ps":  3.47,
       "cheapest_ps":  2.75,
-      "protein_rank":  116,
+      "protein_rank":  63,
       "is_protein_rank1":  false
   },
   {
@@ -3428,19 +1784,7 @@
       "old_ps":  3.82,
       "everyday_ps":  3.82,
       "cheapest_ps":  3.12,
-      "protein_rank":  59,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "one-pot-turkey-mexican-pasta",
-      "name":  "One-Pot Turkey Mexican Pasta",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  31,
-      "old_ps":  3.33,
-      "everyday_ps":  3.33,
-      "cheapest_ps":  2.74,
-      "protein_rank":  83,
+      "protein_rank":  39,
       "is_protein_rank1":  false
   },
   {
@@ -3450,9 +1794,9 @@
       "protein":  "ground turkey",
       "protein_g":  38,
       "old_ps":  4.01,
-      "everyday_ps":  4.01,
-      "cheapest_ps":  3.31,
-      "protein_rank":  8,
+      "everyday_ps":  4.04,
+      "cheapest_ps":  3.34,
+      "protein_rank":  6,
       "is_protein_rank1":  false
   },
   {
@@ -3464,7 +1808,7 @@
       "old_ps":  3.47,
       "everyday_ps":  3.47,
       "cheapest_ps":  3,
-      "protein_rank":  16,
+      "protein_rank":  12,
       "is_protein_rank1":  false
   },
   {
@@ -3474,9 +1818,9 @@
       "protein":  "pork",
       "protein_g":  30,
       "old_ps":  1.74,
-      "everyday_ps":  1.74,
-      "cheapest_ps":  1.57,
-      "protein_rank":  98,
+      "everyday_ps":  1.77,
+      "cheapest_ps":  1.59,
+      "protein_rank":  80,
       "is_protein_rank1":  false
   },
   {
@@ -3488,7 +1832,7 @@
       "old_ps":  2.98,
       "everyday_ps":  2.98,
       "cheapest_ps":  2.3,
-      "protein_rank":  51,
+      "protein_rank":  41,
       "is_protein_rank1":  false
   },
   {
@@ -3500,31 +1844,7 @@
       "old_ps":  3.05,
       "everyday_ps":  3.05,
       "cheapest_ps":  2.48,
-      "protein_rank":  69,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "pakistani-beef-kofta-curry",
-      "name":  "Pakistani Beef Kofta Curry",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  40,
-      "old_ps":  4.02,
-      "everyday_ps":  4.02,
-      "cheapest_ps":  3.54,
-      "protein_rank":  54,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "pakistani-chapli-kebab-rice-bowls",
-      "name":  "Pakistani Chapli Kebab Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  26,
-      "old_ps":  3.48,
-      "everyday_ps":  3.48,
-      "cheapest_ps":  3.13,
-      "protein_rank":  112,
+      "protein_rank":  46,
       "is_protein_rank1":  false
   },
   {
@@ -3536,7 +1856,7 @@
       "old_ps":  3.51,
       "everyday_ps":  3.51,
       "cheapest_ps":  3.08,
-      "protein_rank":  141,
+      "protein_rank":  102,
       "is_protein_rank1":  false
   },
   {
@@ -3548,7 +1868,7 @@
       "old_ps":  3.56,
       "everyday_ps":  3.56,
       "cheapest_ps":  2.67,
-      "protein_rank":  52,
+      "protein_rank":  42,
       "is_protein_rank1":  false
   },
   {
@@ -3558,69 +1878,9 @@
       "protein":  "chicken",
       "protein_g":  28,
       "old_ps":  3.07,
-      "everyday_ps":  3.07,
-      "cheapest_ps":  2.47,
-      "protein_rank":  138,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "pasta-alla-norcina-creamy-sausage-pasta",
-      "name":  "Pasta alla Norcina Creamy Sausage Pasta",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  33,
-      "old_ps":  2.35,
-      "everyday_ps":  2.35,
-      "cheapest_ps":  1.91,
-      "protein_rank":  87,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "pastel-de-choclo-chilean-beef-corn-bake",
-      "name":  "Pastel de Choclo (Chilean Beef and Corn Casserole)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  44,
-      "old_ps":  5.99,
-      "everyday_ps":  5.99,
-      "cheapest_ps":  5.05,
-      "protein_rank":  40,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "pastitsio",
-      "name":  "Pastitsio (Greek Beef Pasta Bake)",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  56,
-      "old_ps":  5.42,
-      "everyday_ps":  5.42,
-      "cheapest_ps":  4.56,
-      "protein_rank":  1,
-      "is_protein_rank1":  true
-  },
-  {
-      "slug":  "pepper-steak-with-rice",
-      "name":  "Pepper Steak with Rice",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  44,
-      "old_ps":  6.03,
-      "everyday_ps":  6.03,
-      "cheapest_ps":  4.4,
-      "protein_rank":  41,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "peri-peri-chicken-and-rice",
-      "name":  "Peri Peri Chicken and Rice",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  34,
-      "old_ps":  3.18,
-      "everyday_ps":  3.18,
-      "cheapest_ps":  2.48,
-      "protein_rank":  124,
+      "everyday_ps":  3.1,
+      "cheapest_ps":  2.49,
+      "protein_rank":  100,
       "is_protein_rank1":  false
   },
   {
@@ -3632,19 +1892,7 @@
       "old_ps":  3.97,
       "everyday_ps":  3.97,
       "cheapest_ps":  2.83,
-      "protein_rank":  136,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "persian-kabob-koobideh-rice-bowls",
-      "name":  "Persian Kabob Koobideh Rice Bowls",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  53,
-      "old_ps":  4.11,
-      "everyday_ps":  4.11,
-      "cheapest_ps":  3.7,
-      "protein_rank":  2,
+      "protein_rank":  98,
       "is_protein_rank1":  false
   },
   {
@@ -3656,19 +1904,7 @@
       "old_ps":  2.77,
       "everyday_ps":  2.77,
       "cheapest_ps":  2.25,
-      "protein_rank":  106,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "peruvian-pollo-saltado",
-      "name":  "Peruvian Pollo Saltado",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  39,
-      "old_ps":  3.64,
-      "everyday_ps":  3.64,
-      "cheapest_ps":  3.3,
-      "protein_rank":  96,
+      "protein_rank":  57,
       "is_protein_rank1":  false
   },
   {
@@ -3680,7 +1916,7 @@
       "old_ps":  3.4,
       "everyday_ps":  3.4,
       "cheapest_ps":  2.75,
-      "protein_rank":  125,
+      "protein_rank":  89,
       "is_protein_rank1":  false
   },
   {
@@ -3696,63 +1932,15 @@
       "is_protein_rank1":  false
   },
   {
-      "slug":  "philly-cheesesteak-skillet-bowls",
-      "name":  "Ground Beef Philly Cheesesteak Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  40,
-      "old_ps":  4.05,
-      "everyday_ps":  4.05,
-      "cheapest_ps":  3.56,
-      "protein_rank":  52,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "picadinho-de-carne-brazilian-beef-stew",
-      "name":  "Picadinho de Carne (Brazilian Beef and Vegetable Stew)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  44,
-      "old_ps":  5.86,
-      "everyday_ps":  5.86,
-      "cheapest_ps":  4.73,
-      "protein_rank":  42,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "pizza-pasta-bowls",
-      "name":  "Pizza Pasta Bowls",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  28,
-      "old_ps":  1.12,
-      "everyday_ps":  1.12,
-      "cheapest_ps":  1.07,
-      "protein_rank":  97,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "polish-leczo-kielbasa-peppers-stew",
-      "name":  "Polish Leczo (Kielbasa and Peppers Stew)",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  26,
-      "old_ps":  3.54,
-      "everyday_ps":  3.54,
-      "cheapest_ps":  2.89,
-      "protein_rank":  107,
-      "is_protein_rank1":  false
-  },
-  {
       "slug":  "poppy-seed-chicken-and-rice-casserole",
       "name":  "Poppy Seed Chicken and Rice Casserole",
       "run":  "db",
       "protein":  "chicken",
       "protein_g":  25,
       "old_ps":  2.2,
-      "everyday_ps":  2.2,
-      "cheapest_ps":  1.88,
-      "protein_rank":  145,
+      "everyday_ps":  2.23,
+      "cheapest_ps":  1.91,
+      "protein_rank":  106,
       "is_protein_rank1":  false
   },
   {
@@ -3762,9 +1950,9 @@
       "protein":  "pork",
       "protein_g":  49,
       "old_ps":  2.78,
-      "everyday_ps":  2.78,
-      "cheapest_ps":  2.2,
-      "protein_rank":  33,
+      "everyday_ps":  2.81,
+      "cheapest_ps":  2.22,
+      "protein_rank":  28,
       "is_protein_rank1":  false
   },
   {
@@ -3776,7 +1964,7 @@
       "old_ps":  2.18,
       "everyday_ps":  2.18,
       "cheapest_ps":  1.45,
-      "protein_rank":  107,
+      "protein_rank":  88,
       "is_protein_rank1":  false
   },
   {
@@ -3788,7 +1976,7 @@
       "old_ps":  2.25,
       "everyday_ps":  2.25,
       "cheapest_ps":  1.82,
-      "protein_rank":  93,
+      "protein_rank":  75,
       "is_protein_rank1":  false
   },
   {
@@ -3800,7 +1988,7 @@
       "old_ps":  2.49,
       "everyday_ps":  2.49,
       "cheapest_ps":  1.71,
-      "protein_rank":  109,
+      "protein_rank":  90,
       "is_protein_rank1":  false
   },
   {
@@ -3812,7 +2000,7 @@
       "old_ps":  2.41,
       "everyday_ps":  2.41,
       "cheapest_ps":  1.93,
-      "protein_rank":  83,
+      "protein_rank":  69,
       "is_protein_rank1":  false
   },
   {
@@ -3822,9 +2010,9 @@
       "protein":  "pork",
       "protein_g":  49,
       "old_ps":  4.11,
-      "everyday_ps":  4.11,
-      "cheapest_ps":  3.31,
-      "protein_rank":  34,
+      "everyday_ps":  4.14,
+      "cheapest_ps":  3.33,
+      "protein_rank":  29,
       "is_protein_rank1":  false
   },
   {
@@ -3836,7 +2024,7 @@
       "old_ps":  3.2,
       "everyday_ps":  3.2,
       "cheapest_ps":  2.9,
-      "protein_rank":  105,
+      "protein_rank":  86,
       "is_protein_rank1":  false
   },
   {
@@ -3848,7 +2036,7 @@
       "old_ps":  3.05,
       "everyday_ps":  3.05,
       "cheapest_ps":  2.56,
-      "protein_rank":  53,
+      "protein_rank":  43,
       "is_protein_rank1":  false
   },
   {
@@ -3860,30 +2048,6 @@
       "old_ps":  4.01,
       "everyday_ps":  4.01,
       "cheapest_ps":  3.14,
-      "protein_rank":  60,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "pulled-pork-baked-mac-and-cheese",
-      "name":  "Pulled Pork Baked Mac and Cheese",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  33,
-      "old_ps":  3.47,
-      "everyday_ps":  3.47,
-      "cheapest_ps":  2.81,
-      "protein_rank":  88,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "pulled-pork-enchilada-bake",
-      "name":  "Pulled Pork Enchilada Bake",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  47,
-      "old_ps":  3.82,
-      "everyday_ps":  3.82,
-      "cheapest_ps":  3,
       "protein_rank":  40,
       "is_protein_rank1":  false
   },
@@ -3894,81 +2058,9 @@
       "protein":  "pork",
       "protein_g":  36,
       "old_ps":  3.32,
-      "everyday_ps":  3.32,
-      "cheapest_ps":  2.68,
-      "protein_rank":  81,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "pulled-pork-tamale-pie-cornbread",
-      "name":  "Pulled Pork Tamale Pie with Cornbread Topping",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  26,
-      "old_ps":  2.72,
-      "everyday_ps":  2.72,
-      "cheapest_ps":  2.37,
-      "protein_rank":  110,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ranch-chicken-burrito",
-      "name":  "Ranch Chicken Burrito",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  39,
-      "old_ps":  3.82,
-      "everyday_ps":  3.82,
-      "cheapest_ps":  2.93,
-      "protein_rank":  97,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "red-beans-turkey-sausage-and-rice",
-      "name":  "Red Beans, Turkey Sausage and Rice",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  31,
-      "old_ps":  2.39,
-      "everyday_ps":  2.39,
-      "cheapest_ps":  2,
-      "protein_rank":  84,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ropa-vieja-beef-burrito",
-      "name":  "Cuban Ropa Vieja Burrito",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  33,
-      "old_ps":  5.39,
-      "everyday_ps":  5.39,
-      "cheapest_ps":  3.74,
-      "protein_rank":  92,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "ropa-vieja-rice-bowls",
-      "name":  "Ropa Vieja Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  44,
-      "old_ps":  5.38,
-      "everyday_ps":  5.38,
-      "cheapest_ps":  3.66,
-      "protein_rank":  43,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "salisbury-steak-potato-bowls",
-      "name":  "Salisbury Steak and Potato Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  43,
-      "old_ps":  4.03,
-      "everyday_ps":  4.03,
-      "cheapest_ps":  3.51,
-      "protein_rank":  48,
+      "everyday_ps":  3.35,
+      "cheapest_ps":  2.7,
+      "protein_rank":  67,
       "is_protein_rank1":  false
   },
   {
@@ -3980,43 +2072,7 @@
       "old_ps":  4.23,
       "everyday_ps":  4.23,
       "cheapest_ps":  3.51,
-      "protein_rank":  91,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "sausage-cabbage-apple-skillet",
-      "name":  "Sausage, Cabbage and Apple Skillet",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  26,
-      "old_ps":  3.87,
-      "everyday_ps":  3.87,
-      "cheapest_ps":  2.95,
-      "protein_rank":  108,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "sausage-hash-brown-egg-casserole",
-      "name":  "Sausage Hash Brown and Egg Casserole",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  37,
-      "old_ps":  2.78,
-      "everyday_ps":  2.78,
-      "cheapest_ps":  1.96,
-      "protein_rank":  77,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "scalloped-potato-turkey-casserole",
-      "name":  "Scalloped Potato Turkey Casserole",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  38,
-      "old_ps":  2.76,
-      "everyday_ps":  2.76,
-      "cheapest_ps":  1.97,
-      "protein_rank":  44,
+      "protein_rank":  64,
       "is_protein_rank1":  false
   },
   {
@@ -4028,7 +2084,7 @@
       "old_ps":  2.82,
       "everyday_ps":  2.82,
       "cheapest_ps":  2.33,
-      "protein_rank":  116,
+      "protein_rank":  83,
       "is_protein_rank1":  false
   },
   {
@@ -4040,7 +2096,7 @@
       "old_ps":  3.19,
       "everyday_ps":  3.19,
       "cheapest_ps":  2.52,
-      "protein_rank":  70,
+      "protein_rank":  47,
       "is_protein_rank1":  false
   },
   {
@@ -4050,9 +2106,9 @@
       "protein":  "pork",
       "protein_g":  53,
       "old_ps":  2.65,
-      "everyday_ps":  2.65,
-      "cheapest_ps":  2.3,
-      "protein_rank":  25,
+      "everyday_ps":  2.68,
+      "cheapest_ps":  2.32,
+      "protein_rank":  21,
       "is_protein_rank1":  false
   },
   {
@@ -4064,7 +2120,7 @@
       "old_ps":  3.23,
       "everyday_ps":  3.23,
       "cheapest_ps":  2.89,
-      "protein_rank":  95,
+      "protein_rank":  51,
       "is_protein_rank1":  false
   },
   {
@@ -4076,19 +2132,7 @@
       "old_ps":  4.09,
       "everyday_ps":  4.09,
       "cheapest_ps":  3.38,
-      "protein_rank":  70,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "sheet-pan-chicken-sweet-potato-brussels",
-      "name":  "Harvest Sheet-Pan Chicken with Sweet Potatoes and Brussels Sprouts",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  53,
-      "old_ps":  4.17,
-      "everyday_ps":  4.17,
-      "cheapest_ps":  3.26,
-      "protein_rank":  48,
+      "protein_rank":  57,
       "is_protein_rank1":  false
   },
   {
@@ -4100,7 +2144,7 @@
       "old_ps":  3.41,
       "everyday_ps":  3.41,
       "cheapest_ps":  2.61,
-      "protein_rank":  44,
+      "protein_rank":  35,
       "is_protein_rank1":  false
   },
   {
@@ -4112,7 +2156,7 @@
       "old_ps":  4.09,
       "everyday_ps":  4.09,
       "cheapest_ps":  3.7,
-      "protein_rank":  94,
+      "protein_rank":  76,
       "is_protein_rank1":  false
   },
   {
@@ -4124,31 +2168,7 @@
       "old_ps":  4.97,
       "everyday_ps":  4.97,
       "cheapest_ps":  3.62,
-      "protein_rank":  99,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "sloppy-joe-rice-bowls",
-      "name":  "Sloppy Joe Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  44,
-      "old_ps":  4.64,
-      "everyday_ps":  4.64,
-      "cheapest_ps":  4.19,
-      "protein_rank":  44,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-apple-cider-pork-bowls",
-      "name":  "Slow Cooker Apple Cider Pork Bowls",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  59,
-      "old_ps":  2.8,
-      "everyday_ps":  2.8,
-      "cheapest_ps":  2.45,
-      "protein_rank":  4,
+      "protein_rank":  81,
       "is_protein_rank1":  false
   },
   {
@@ -4160,19 +2180,7 @@
       "old_ps":  4.35,
       "everyday_ps":  4.35,
       "cheapest_ps":  3.34,
-      "protein_rank":  7,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-barbacoa-bowl",
-      "name":  "Slow Cooker Barbacoa Burrito Bowl",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  39,
-      "old_ps":  4.24,
-      "everyday_ps":  4.24,
-      "cheapest_ps":  3.52,
-      "protein_rank":  59,
+      "protein_rank":  5,
       "is_protein_rank1":  false
   },
   {
@@ -4184,31 +2192,7 @@
       "old_ps":  2.16,
       "everyday_ps":  2.16,
       "cheapest_ps":  2.11,
-      "protein_rank":  20,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-bbq-shredded-beef-bowls",
-      "name":  "Slow Cooker BBQ Shredded Beef Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  35,
-      "old_ps":  4.88,
-      "everyday_ps":  4.88,
-      "cheapest_ps":  4.08,
-      "protein_rank":  84,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-beef-and-noodles",
-      "name":  "Slow Cooker Beef and Noodles",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  37,
-      "old_ps":  2.92,
-      "everyday_ps":  2.92,
-      "cheapest_ps":  2.42,
-      "protein_rank":  71,
+      "protein_rank":  13,
       "is_protein_rank1":  false
   },
   {
@@ -4220,7 +2204,7 @@
       "old_ps":  2.95,
       "everyday_ps":  2.95,
       "cheapest_ps":  2.62,
-      "protein_rank":  16,
+      "protein_rank":  14,
       "is_protein_rank1":  false
   },
   {
@@ -4230,9 +2214,9 @@
       "protein":  "chicken",
       "protein_g":  51,
       "old_ps":  2.41,
-      "everyday_ps":  2.41,
-      "cheapest_ps":  2.23,
-      "protein_rank":  61,
+      "everyday_ps":  2.45,
+      "cheapest_ps":  2.26,
+      "protein_rank":  41,
       "is_protein_rank1":  false
   },
   {
@@ -4242,21 +2226,9 @@
       "protein":  "chicken",
       "protein_g":  57,
       "old_ps":  3.58,
-      "everyday_ps":  3.58,
-      "cheapest_ps":  3.17,
-      "protein_rank":  32,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-carne-asada-rice-bowls",
-      "name":  "Slow Cooker Carne Asada Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  34,
-      "old_ps":  5.75,
-      "everyday_ps":  5.75,
-      "cheapest_ps":  4.45,
-      "protein_rank":  89,
+      "everyday_ps":  3.61,
+      "cheapest_ps":  3.2,
+      "protein_rank":  19,
       "is_protein_rank1":  false
   },
   {
@@ -4268,7 +2240,7 @@
       "old_ps":  2.62,
       "everyday_ps":  2.62,
       "cheapest_ps":  2.46,
-      "protein_rank":  17,
+      "protein_rank":  15,
       "is_protein_rank1":  false
   },
   {
@@ -4280,19 +2252,7 @@
       "old_ps":  2.25,
       "everyday_ps":  2.25,
       "cheapest_ps":  2.09,
-      "protein_rank":  9,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-chicken-cacciatore-pasta",
-      "name":  "Slow Cooker Chicken Cacciatore Pasta",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  68,
-      "old_ps":  3.31,
-      "everyday_ps":  3.31,
-      "cheapest_ps":  2.82,
-      "protein_rank":  2,
+      "protein_rank":  5,
       "is_protein_rank1":  false
   },
   {
@@ -4304,7 +2264,7 @@
       "old_ps":  4.19,
       "everyday_ps":  4.19,
       "cheapest_ps":  3.41,
-      "protein_rank":  62,
+      "protein_rank":  42,
       "is_protein_rank1":  false
   },
   {
@@ -4316,7 +2276,7 @@
       "old_ps":  2.28,
       "everyday_ps":  2.28,
       "cheapest_ps":  2.09,
-      "protein_rank":  21,
+      "protein_rank":  14,
       "is_protein_rank1":  false
   },
   {
@@ -4328,7 +2288,7 @@
       "old_ps":  3.21,
       "everyday_ps":  3.21,
       "cheapest_ps":  2.89,
-      "protein_rank":  5,
+      "protein_rank":  3,
       "is_protein_rank1":  false
   },
   {
@@ -4340,7 +2300,7 @@
       "old_ps":  2.7,
       "everyday_ps":  2.7,
       "cheapest_ps":  2.35,
-      "protein_rank":  33,
+      "protein_rank":  20,
       "is_protein_rank1":  false
   },
   {
@@ -4352,7 +2312,7 @@
       "old_ps":  2.9,
       "everyday_ps":  2.9,
       "cheapest_ps":  2.56,
-      "protein_rank":  40,
+      "protein_rank":  26,
       "is_protein_rank1":  false
   },
   {
@@ -4364,7 +2324,7 @@
       "old_ps":  2.52,
       "everyday_ps":  2.52,
       "cheapest_ps":  2.44,
-      "protein_rank":  22,
+      "protein_rank":  15,
       "is_protein_rank1":  false
   },
   {
@@ -4376,19 +2336,7 @@
       "old_ps":  3.95,
       "everyday_ps":  3.95,
       "cheapest_ps":  3.6,
-      "protein_rank":  6,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-chicken-tacos-rice-bowls",
-      "name":  "Slow Cooker Chicken Taco Rice Bowls",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  58,
-      "old_ps":  2.84,
-      "everyday_ps":  2.84,
-      "cheapest_ps":  2.62,
-      "protein_rank":  23,
+      "protein_rank":  4,
       "is_protein_rank1":  false
   },
   {
@@ -4400,7 +2348,7 @@
       "old_ps":  3.46,
       "everyday_ps":  3.46,
       "cheapest_ps":  3.04,
-      "protein_rank":  14,
+      "protein_rank":  8,
       "is_protein_rank1":  false
   },
   {
@@ -4412,31 +2360,7 @@
       "old_ps":  3.01,
       "everyday_ps":  3.01,
       "cheapest_ps":  2.86,
-      "protein_rank":  41,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-chicken-tinga-bowls",
-      "name":  "Slow Cooker Chicken Tinga Bowls",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  58,
-      "old_ps":  2.2,
-      "everyday_ps":  2.2,
-      "cheapest_ps":  2.08,
-      "protein_rank":  24,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
-      "name":  "Slow Cooker Chicken Tortilla Soup Bowls",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  58,
-      "old_ps":  3.24,
-      "everyday_ps":  3.24,
-      "cheapest_ps":  2.87,
-      "protein_rank":  25,
+      "protein_rank":  27,
       "is_protein_rank1":  false
   },
   {
@@ -4448,7 +2372,7 @@
       "old_ps":  2.99,
       "everyday_ps":  2.99,
       "cheapest_ps":  2.77,
-      "protein_rank":  34,
+      "protein_rank":  21,
       "is_protein_rank1":  false
   },
   {
@@ -4460,19 +2384,7 @@
       "old_ps":  2.22,
       "everyday_ps":  2.22,
       "cheapest_ps":  1.91,
-      "protein_rank":  41,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-crack-chicken-bowls",
-      "name":  "Slow Cooker Crack Chicken Bowls",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  65,
-      "old_ps":  2.3,
-      "everyday_ps":  2.3,
-      "cheapest_ps":  2.1,
-      "protein_rank":  7,
+      "protein_rank":  32,
       "is_protein_rank1":  false
   },
   {
@@ -4484,7 +2396,7 @@
       "old_ps":  2.78,
       "everyday_ps":  2.78,
       "cheapest_ps":  2.46,
-      "protein_rank":  11,
+      "protein_rank":  6,
       "is_protein_rank1":  false
   },
   {
@@ -4496,7 +2408,7 @@
       "old_ps":  4.33,
       "everyday_ps":  4.33,
       "cheapest_ps":  3.38,
-      "protein_rank":  3,
+      "protein_rank":  2,
       "is_protein_rank1":  false
   },
   {
@@ -4508,7 +2420,7 @@
       "old_ps":  2.28,
       "everyday_ps":  2.28,
       "cheapest_ps":  1.96,
-      "protein_rank":  10,
+      "protein_rank":  8,
       "is_protein_rank1":  false
   },
   {
@@ -4520,7 +2432,7 @@
       "old_ps":  1.91,
       "everyday_ps":  1.91,
       "cheapest_ps":  1.7,
-      "protein_rank":  20,
+      "protein_rank":  18,
       "is_protein_rank1":  false
   },
   {
@@ -4544,7 +2456,7 @@
       "old_ps":  2.66,
       "everyday_ps":  2.66,
       "cheapest_ps":  2.5,
-      "protein_rank":  35,
+      "protein_rank":  22,
       "is_protein_rank1":  false
   },
   {
@@ -4556,7 +2468,7 @@
       "old_ps":  3.06,
       "everyday_ps":  3.06,
       "cheapest_ps":  2.66,
-      "protein_rank":  17,
+      "protein_rank":  11,
       "is_protein_rank1":  false
   },
   {
@@ -4568,7 +2480,7 @@
       "old_ps":  2.33,
       "everyday_ps":  2.33,
       "cheapest_ps":  2.17,
-      "protein_rank":  26,
+      "protein_rank":  22,
       "is_protein_rank1":  false
   },
   {
@@ -4580,44 +2492,8 @@
       "old_ps":  2.32,
       "everyday_ps":  2.32,
       "cheapest_ps":  2.23,
-      "protein_rank":  36,
+      "protein_rank":  23,
       "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-italian-beef-bowl",
-      "name":  "Slow Cooker Italian Beef Rice Bowl",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  36,
-      "old_ps":  3.44,
-      "everyday_ps":  3.44,
-      "cheapest_ps":  2.89,
-      "protein_rank":  78,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-italian-chicken-penne",
-      "name":  "Slow Cooker Italian Chicken Penne",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  55,
-      "old_ps":  2.36,
-      "everyday_ps":  2.36,
-      "cheapest_ps":  2.1,
-      "protein_rank":  43,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-italian-pork-loin-bowls",
-      "name":  "Slow Cooker Italian Pork and White Bean Bowls",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  66,
-      "old_ps":  2.89,
-      "everyday_ps":  2.89,
-      "cheapest_ps":  2.33,
-      "protein_rank":  1,
-      "is_protein_rank1":  true
   },
   {
       "slug":  "slow-cooker-jerk-pork-bowls",
@@ -4628,7 +2504,7 @@
       "old_ps":  2.25,
       "everyday_ps":  2.25,
       "cheapest_ps":  2.19,
-      "protein_rank":  11,
+      "protein_rank":  9,
       "is_protein_rank1":  false
   },
   {
@@ -4640,19 +2516,7 @@
       "old_ps":  1.72,
       "everyday_ps":  1.72,
       "cheapest_ps":  1.63,
-      "protein_rank":  12,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-king-ranch-chicken-bowls",
-      "name":  "Slow Cooker King Ranch Chicken Bowls",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  63,
-      "old_ps":  3.16,
-      "everyday_ps":  3.16,
-      "cheapest_ps":  2.94,
-      "protein_rank":  12,
+      "protein_rank":  10,
       "is_protein_rank1":  false
   },
   {
@@ -4664,7 +2528,7 @@
       "old_ps":  2.29,
       "everyday_ps":  2.29,
       "cheapest_ps":  2.17,
-      "protein_rank":  13,
+      "protein_rank":  11,
       "is_protein_rank1":  false
   },
   {
@@ -4676,19 +2540,7 @@
       "old_ps":  3.43,
       "everyday_ps":  3.43,
       "cheapest_ps":  2.89,
-      "protein_rank":  21,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-kung-pao-chicken-bowls",
-      "name":  "Slow Cooker Kung Pao Chicken Bowls",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  58,
-      "old_ps":  3.37,
-      "everyday_ps":  3.37,
-      "cheapest_ps":  3,
-      "protein_rank":  26,
+      "protein_rank":  19,
       "is_protein_rank1":  false
   },
   {
@@ -4700,7 +2552,7 @@
       "old_ps":  3.31,
       "everyday_ps":  3.31,
       "cheapest_ps":  2.53,
-      "protein_rank":  5,
+      "protein_rank":  3,
       "is_protein_rank1":  false
   },
   {
@@ -4712,19 +2564,7 @@
       "old_ps":  3.22,
       "everyday_ps":  3.22,
       "cheapest_ps":  2.93,
-      "protein_rank":  18,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-mississippi-pork-bowls",
-      "name":  "Slow Cooker Mississippi Pork Bowls",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  52,
-      "old_ps":  3.58,
-      "everyday_ps":  3.58,
-      "cheapest_ps":  2.99,
-      "protein_rank":  27,
+      "protein_rank":  12,
       "is_protein_rank1":  false
   },
   {
@@ -4736,7 +2576,7 @@
       "old_ps":  3.08,
       "everyday_ps":  3.08,
       "cheapest_ps":  3.04,
-      "protein_rank":  15,
+      "protein_rank":  9,
       "is_protein_rank1":  false
   },
   {
@@ -4748,7 +2588,7 @@
       "old_ps":  2.8,
       "everyday_ps":  2.8,
       "cheapest_ps":  2.68,
-      "protein_rank":  37,
+      "protein_rank":  24,
       "is_protein_rank1":  false
   },
   {
@@ -4760,7 +2600,7 @@
       "old_ps":  3.41,
       "everyday_ps":  3.41,
       "cheapest_ps":  3.09,
-      "protein_rank":  54,
+      "protein_rank":  44,
       "is_protein_rank1":  false
   },
   {
@@ -4772,7 +2612,7 @@
       "old_ps":  2.82,
       "everyday_ps":  2.82,
       "cheapest_ps":  2.42,
-      "protein_rank":  39,
+      "protein_rank":  31,
       "is_protein_rank1":  false
   },
   {
@@ -4782,9 +2622,9 @@
       "protein":  "pork",
       "protein_g":  56,
       "old_ps":  4.06,
-      "everyday_ps":  4.06,
-      "cheapest_ps":  3.61,
-      "protein_rank":  14,
+      "everyday_ps":  4.09,
+      "cheapest_ps":  3.64,
+      "protein_rank":  12,
       "is_protein_rank1":  false
   },
   {
@@ -4796,19 +2636,7 @@
       "old_ps":  3.57,
       "everyday_ps":  3.57,
       "cheapest_ps":  3.08,
-      "protein_rank":  8,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-pork-sauerkraut-apples",
-      "name":  "Slow Cooker Pork and Sauerkraut with Apples and Potatoes",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  42,
-      "old_ps":  2.02,
-      "everyday_ps":  2.02,
-      "cheapest_ps":  1.78,
-      "protein_rank":  60,
+      "protein_rank":  6,
       "is_protein_rank1":  false
   },
   {
@@ -4820,19 +2648,7 @@
       "old_ps":  2.14,
       "everyday_ps":  2.14,
       "cheapest_ps":  1.96,
-      "protein_rank":  30,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-pot-roast-potatoes-carrots",
-      "name":  "Classic Slow Cooker Pot Roast with Potatoes and Carrots",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  54,
-      "old_ps":  6.29,
-      "everyday_ps":  6.29,
-      "cheapest_ps":  5.08,
-      "protein_rank":  10,
+      "protein_rank":  25,
       "is_protein_rank1":  false
   },
   {
@@ -4844,7 +2660,7 @@
       "old_ps":  2.47,
       "everyday_ps":  2.47,
       "cheapest_ps":  2.07,
-      "protein_rank":  62,
+      "protein_rank":  50,
       "is_protein_rank1":  false
   },
   {
@@ -4854,9 +2670,9 @@
       "protein":  "pork",
       "protein_g":  52,
       "old_ps":  2.96,
-      "everyday_ps":  2.96,
-      "cheapest_ps":  2.55,
-      "protein_rank":  28,
+      "everyday_ps":  2.99,
+      "cheapest_ps":  2.57,
+      "protein_rank":  23,
       "is_protein_rank1":  false
   },
   {
@@ -4868,7 +2684,7 @@
       "old_ps":  3.74,
       "everyday_ps":  3.74,
       "cheapest_ps":  2.82,
-      "protein_rank":  6,
+      "protein_rank":  4,
       "is_protein_rank1":  false
   },
   {
@@ -4878,21 +2694,9 @@
       "protein":  "chicken",
       "protein_g":  53,
       "old_ps":  2.24,
-      "everyday_ps":  2.24,
+      "everyday_ps":  2.27,
       "cheapest_ps":  1.93,
-      "protein_rank":  50,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-salsa-verde-chicken-bowl",
-      "name":  "Salsa Verde Chicken Burrito Bowl",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  53,
-      "old_ps":  3.17,
-      "everyday_ps":  3.17,
-      "cheapest_ps":  2.83,
-      "protein_rank":  49,
+      "protein_rank":  32,
       "is_protein_rank1":  false
   },
   {
@@ -4904,19 +2708,7 @@
       "old_ps":  3.63,
       "everyday_ps":  3.63,
       "cheapest_ps":  3.05,
-      "protein_rank":  18,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-sauerbraten-bowls",
-      "name":  "Slow Cooker Sauerbraten Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  29,
-      "old_ps":  3.83,
-      "everyday_ps":  3.83,
-      "cheapest_ps":  3.24,
-      "protein_rank":  107,
+      "protein_rank":  16,
       "is_protein_rank1":  false
   },
   {
@@ -4928,31 +2720,7 @@
       "old_ps":  4.16,
       "everyday_ps":  4.16,
       "cheapest_ps":  2.77,
-      "protein_rank":  55,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-sweet-and-sour-pork-bowls",
-      "name":  "Slow Cooker Sweet and Sour Pork Bowls",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  54,
-      "old_ps":  4.05,
-      "everyday_ps":  4.05,
-      "cheapest_ps":  3.37,
-      "protein_rank":  22,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-swiss-steak-rice",
-      "name":  "Slow Cooker Swiss Steak with Rice",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  34,
-      "old_ps":  4.2,
-      "everyday_ps":  4.2,
-      "cheapest_ps":  3.52,
-      "protein_rank":  90,
+      "protein_rank":  5,
       "is_protein_rank1":  false
   },
   {
@@ -4964,7 +2732,7 @@
       "old_ps":  3.59,
       "everyday_ps":  3.59,
       "cheapest_ps":  2.84,
-      "protein_rank":  9,
+      "protein_rank":  7,
       "is_protein_rank1":  false
   },
   {
@@ -4976,7 +2744,7 @@
       "old_ps":  2.59,
       "everyday_ps":  2.59,
       "cheapest_ps":  2.52,
-      "protein_rank":  13,
+      "protein_rank":  7,
       "is_protein_rank1":  false
   },
   {
@@ -4986,33 +2754,9 @@
       "protein":  "turkey",
       "protein_g":  57,
       "old_ps":  4.32,
-      "everyday_ps":  4.32,
-      "cheapest_ps":  3.09,
-      "protein_rank":  4,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-turkey-chili-bowls",
-      "name":  "Slow Cooker Turkey Chili Bowls",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  55,
-      "old_ps":  4.99,
-      "everyday_ps":  4.99,
-      "cheapest_ps":  3.96,
-      "protein_rank":  6,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-turkey-pasta-e-fagioli",
-      "name":  "Slow Cooker Turkey Pasta e Fagioli",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  47,
-      "old_ps":  4.11,
-      "everyday_ps":  4.11,
-      "cheapest_ps":  3.34,
-      "protein_rank":  16,
+      "everyday_ps":  4.35,
+      "cheapest_ps":  3.12,
+      "protein_rank":  2,
       "is_protein_rank1":  false
   },
   {
@@ -5024,31 +2768,7 @@
       "old_ps":  4.02,
       "everyday_ps":  4.02,
       "cheapest_ps":  2.92,
-      "protein_rank":  117,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-tuscan-chicken-pasta",
-      "name":  "Slow Cooker Tuscan Chicken Pasta",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  68,
-      "old_ps":  3.23,
-      "everyday_ps":  3.23,
-      "cheapest_ps":  2.81,
-      "protein_rank":  3,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "slow-cooker-white-chicken-chili-bowls",
-      "name":  "Slow Cooker White Chicken Chili Bowls",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  65,
-      "old_ps":  3.46,
-      "everyday_ps":  3.46,
-      "cheapest_ps":  3.02,
-      "protein_rank":  8,
+      "protein_rank":  64,
       "is_protein_rank1":  false
   },
   {
@@ -5058,45 +2778,9 @@
       "protein":  "chicken",
       "protein_g":  53,
       "old_ps":  3.49,
-      "everyday_ps":  3.49,
-      "cheapest_ps":  2.73,
-      "protein_rank":  51,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "sopa-de-fideo-con-carne-molida",
-      "name":  "Sopa de Fideo con Carne Molida (Mexican Beef and Noodle Skillet)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  37,
-      "old_ps":  3.24,
-      "everyday_ps":  3.24,
-      "cheapest_ps":  2.97,
-      "protein_rank":  72,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "soto-betawi-indonesian-beef-coconut-soup",
-      "name":  "Soto Betawi (Indonesian Beef and Coconut Soup)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  55,
-      "old_ps":  7.84,
-      "everyday_ps":  7.84,
-      "cheapest_ps":  6.67,
-      "protein_rank":  8,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "south-african-bobotie-beef-bake",
-      "name":  "South African Bobotie (Curried Beef Custard Bake)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  44,
-      "old_ps":  5.31,
-      "everyday_ps":  5.31,
-      "cheapest_ps":  4.46,
-      "protein_rank":  45,
+      "everyday_ps":  3.52,
+      "cheapest_ps":  2.76,
+      "protein_rank":  33,
       "is_protein_rank1":  false
   },
   {
@@ -5108,7 +2792,7 @@
       "old_ps":  3.09,
       "everyday_ps":  3.09,
       "cheapest_ps":  2.38,
-      "protein_rank":  73,
+      "protein_rank":  49,
       "is_protein_rank1":  false
   },
   {
@@ -5120,7 +2804,7 @@
       "old_ps":  2.88,
       "everyday_ps":  2.88,
       "cheapest_ps":  2.23,
-      "protein_rank":  48,
+      "protein_rank":  38,
       "is_protein_rank1":  false
   },
   {
@@ -5130,9 +2814,9 @@
       "protein":  "turkey",
       "protein_g":  36,
       "old_ps":  3.39,
-      "everyday_ps":  3.39,
-      "cheapest_ps":  2.63,
-      "protein_rank":  57,
+      "everyday_ps":  3.42,
+      "cheapest_ps":  2.66,
+      "protein_rank":  28,
       "is_protein_rank1":  false
   },
   {
@@ -5144,7 +2828,7 @@
       "old_ps":  3.93,
       "everyday_ps":  3.93,
       "cheapest_ps":  3.2,
-      "protein_rank":  61,
+      "protein_rank":  32,
       "is_protein_rank1":  false
   },
   {
@@ -5156,7 +2840,7 @@
       "old_ps":  2.1,
       "everyday_ps":  2.1,
       "cheapest_ps":  1.83,
-      "protein_rank":  111,
+      "protein_rank":  91,
       "is_protein_rank1":  false
   },
   {
@@ -5168,7 +2852,7 @@
       "old_ps":  3.22,
       "everyday_ps":  3.22,
       "cheapest_ps":  2.33,
-      "protein_rank":  71,
+      "protein_rank":  58,
       "is_protein_rank1":  false
   },
   {
@@ -5180,19 +2864,7 @@
       "old_ps":  2.63,
       "everyday_ps":  2.63,
       "cheapest_ps":  2.2,
-      "protein_rank":  95,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "steak-fajita-rice-bowls",
-      "name":  "Steak Fajita Rice Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  32,
-      "old_ps":  5.38,
-      "everyday_ps":  5.38,
-      "cheapest_ps":  4.07,
-      "protein_rank":  98,
+      "protein_rank":  77,
       "is_protein_rank1":  false
   },
   {
@@ -5204,43 +2876,7 @@
       "old_ps":  3.25,
       "everyday_ps":  3.25,
       "cheapest_ps":  2.58,
-      "protein_rank":  23,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "swedish-meatball-potato-bowls",
-      "name":  "Swedish Meatball and Potato Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  50,
-      "old_ps":  5.62,
-      "everyday_ps":  5.62,
-      "cheapest_ps":  4.9,
-      "protein_rank":  23,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "szegedin-goulash-pork-sauerkraut",
-      "name":  "Szegedin Goulash (Pork and Sauerkraut Paprika Stew)",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  42,
-      "old_ps":  3.15,
-      "everyday_ps":  3.15,
-      "cheapest_ps":  2.81,
-      "protein_rank":  61,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "taiwanese-braised-beef-noodle-bowls",
-      "name":  "Taiwanese Braised Beef Noodle Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  38,
-      "old_ps":  5.59,
-      "everyday_ps":  5.59,
-      "cheapest_ps":  4.93,
-      "protein_rank":  67,
+      "protein_rank":  20,
       "is_protein_rank1":  false
   },
   {
@@ -5252,7 +2888,7 @@
       "old_ps":  2.93,
       "everyday_ps":  2.93,
       "cheapest_ps":  2.5,
-      "protein_rank":  75,
+      "protein_rank":  62,
       "is_protein_rank1":  false
   },
   {
@@ -5264,7 +2900,7 @@
       "old_ps":  4.6,
       "everyday_ps":  4.6,
       "cheapest_ps":  3.96,
-      "protein_rank":  46,
+      "protein_rank":  31,
       "is_protein_rank1":  false
   },
   {
@@ -5276,31 +2912,7 @@
       "old_ps":  2.11,
       "everyday_ps":  2.11,
       "cheapest_ps":  1.97,
-      "protein_rank":  66,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "tex-mex-beef-rice-skillet-bowls",
-      "name":  "Tex-Mex Beef and Rice Skillet Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  52,
-      "old_ps":  4.25,
-      "everyday_ps":  4.25,
-      "cheapest_ps":  3.72,
-      "protein_rank":  18,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "thai-basil-beef-bowls-with-coconut-rice",
-      "name":  "Thai Basil Beef Bowls with Coconut Rice",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  31,
-      "old_ps":  5.11,
-      "everyday_ps":  5.11,
-      "cheapest_ps":  4.58,
-      "protein_rank":  23,
+      "protein_rank":  44,
       "is_protein_rank1":  false
   },
   {
@@ -5312,7 +2924,7 @@
       "old_ps":  3.38,
       "everyday_ps":  3.38,
       "cheapest_ps":  2.94,
-      "protein_rank":  134,
+      "protein_rank":  96,
       "is_protein_rank1":  false
   },
   {
@@ -5324,19 +2936,7 @@
       "old_ps":  3.72,
       "everyday_ps":  3.72,
       "cheapest_ps":  2.66,
-      "protein_rank":  78,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "thai-cashew-chicken",
-      "name":  "Thai Cashew Chicken",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  34,
-      "old_ps":  3.38,
-      "everyday_ps":  3.38,
-      "cheapest_ps":  2.6,
-      "protein_rank":  126,
+      "protein_rank":  64,
       "is_protein_rank1":  false
   },
   {
@@ -5348,7 +2948,7 @@
       "old_ps":  4.11,
       "everyday_ps":  4.11,
       "cheapest_ps":  3.67,
-      "protein_rank":  9,
+      "protein_rank":  7,
       "is_protein_rank1":  false
   },
   {
@@ -5360,7 +2960,7 @@
       "old_ps":  4.27,
       "everyday_ps":  4.27,
       "cheapest_ps":  3.47,
-      "protein_rank":  142,
+      "protein_rank":  103,
       "is_protein_rank1":  false
   },
   {
@@ -5372,7 +2972,7 @@
       "old_ps":  5.18,
       "everyday_ps":  5.18,
       "cheapest_ps":  4.62,
-      "protein_rank":  82,
+      "protein_rank":  56,
       "is_protein_rank1":  false
   },
   {
@@ -5384,7 +2984,7 @@
       "old_ps":  3.3,
       "everyday_ps":  3.3,
       "cheapest_ps":  2.86,
-      "protein_rank":  109,
+      "protein_rank":  76,
       "is_protein_rank1":  false
   },
   {
@@ -5396,7 +2996,7 @@
       "old_ps":  2.82,
       "everyday_ps":  2.82,
       "cheapest_ps":  2.32,
-      "protein_rank":  101,
+      "protein_rank":  83,
       "is_protein_rank1":  false
   },
   {
@@ -5408,7 +3008,7 @@
       "old_ps":  4.55,
       "everyday_ps":  4.55,
       "cheapest_ps":  3.53,
-      "protein_rank":  96,
+      "protein_rank":  78,
       "is_protein_rank1":  false
   },
   {
@@ -5420,19 +3020,7 @@
       "old_ps":  3.19,
       "everyday_ps":  3.19,
       "cheapest_ps":  3.05,
-      "protein_rank":  75,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "thai-turkey-larb-bowls",
-      "name":  "Thai Turkey Larb Bowls",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  50,
-      "old_ps":  4.72,
-      "everyday_ps":  4.72,
-      "cheapest_ps":  4.17,
-      "protein_rank":  14,
+      "protein_rank":  51,
       "is_protein_rank1":  false
   },
   {
@@ -5444,7 +3032,7 @@
       "old_ps":  3.54,
       "everyday_ps":  3.54,
       "cheapest_ps":  3.01,
-      "protein_rank":  135,
+      "protein_rank":  97,
       "is_protein_rank1":  false
   },
   {
@@ -5456,19 +3044,7 @@
       "old_ps":  3.65,
       "everyday_ps":  3.65,
       "cheapest_ps":  2.83,
-      "protein_rank":  27,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "tunisian-harissa-coconut-beef-meatballs",
-      "name":  "Tunisian Harissa Coconut Beef Meatballs",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  30,
-      "old_ps":  4.08,
-      "everyday_ps":  4.08,
-      "cheapest_ps":  3.78,
-      "protein_rank":  105,
+      "protein_rank":  16,
       "is_protein_rank1":  false
   },
   {
@@ -5478,9 +3054,9 @@
       "protein":  "turkey",
       "protein_g":  40,
       "old_ps":  4.3,
-      "everyday_ps":  4.3,
-      "cheapest_ps":  2.96,
-      "protein_rank":  39,
+      "everyday_ps":  4.32,
+      "cheapest_ps":  2.99,
+      "protein_rank":  19,
       "is_protein_rank1":  false
   },
   {
@@ -5492,30 +3068,6 @@
       "old_ps":  4.08,
       "everyday_ps":  4.08,
       "cheapest_ps":  3.43,
-      "protein_rank":  74,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-alfredo-rotini-bake",
-      "name":  "Turkey Alfredo Rotini Bake",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  43,
-      "old_ps":  2.56,
-      "everyday_ps":  2.56,
-      "cheapest_ps":  2.13,
-      "protein_rank":  26,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-and-stuffing-casserole",
-      "name":  "Turkey and Stuffing Casserole",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  39,
-      "old_ps":  3.74,
-      "everyday_ps":  3.74,
-      "cheapest_ps":  2.92,
       "protein_rank":  40,
       "is_protein_rank1":  false
   },
@@ -5528,7 +3080,7 @@
       "old_ps":  4.84,
       "everyday_ps":  4.84,
       "cheapest_ps":  4.05,
-      "protein_rank":  96,
+      "protein_rank":  52,
       "is_protein_rank1":  false
   },
   {
@@ -5540,19 +3092,7 @@
       "old_ps":  2.39,
       "everyday_ps":  2.39,
       "cheapest_ps":  1.81,
-      "protein_rank":  75,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-bolognese-penne",
-      "name":  "Turkey Bolognese Penne",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  35,
-      "old_ps":  2.94,
-      "everyday_ps":  2.94,
-      "cheapest_ps":  2.41,
-      "protein_rank":  62,
+      "protein_rank":  41,
       "is_protein_rank1":  false
   },
   {
@@ -5564,19 +3104,7 @@
       "old_ps":  3.14,
       "everyday_ps":  3.14,
       "cheapest_ps":  2.58,
-      "protein_rank":  109,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-cajun-dirty-rice-skillet",
-      "name":  "Turkey Cajun Dirty Rice Skillet",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  43,
-      "old_ps":  3.27,
-      "everyday_ps":  3.27,
-      "cheapest_ps":  2.81,
-      "protein_rank":  27,
+      "protein_rank":  58,
       "is_protein_rank1":  false
   },
   {
@@ -5586,45 +3114,9 @@
       "protein":  "turkey",
       "protein_g":  34,
       "old_ps":  3.7,
-      "everyday_ps":  3.7,
-      "cheapest_ps":  3.25,
-      "protein_rank":  70,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-chile-relleno-casserole-skillet",
-      "name":  "Turkey Chile Relleno Casserole Skillet",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  53,
-      "old_ps":  3.74,
-      "everyday_ps":  3.74,
-      "cheapest_ps":  3.18,
-      "protein_rank":  8,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-chili-mac",
-      "name":  "High-Protein Turkey Chili Mac",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  57,
-      "old_ps":  4.56,
-      "everyday_ps":  4.56,
-      "cheapest_ps":  3.73,
-      "protein_rank":  3,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-chili-verde-white-beans",
-      "name":  "Turkey Chili Verde with White Beans",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  37,
-      "old_ps":  3.72,
-      "everyday_ps":  3.72,
-      "cheapest_ps":  2.91,
-      "protein_rank":  50,
+      "everyday_ps":  3.73,
+      "cheapest_ps":  3.27,
+      "protein_rank":  37,
       "is_protein_rank1":  false
   },
   {
@@ -5634,9 +3126,9 @@
       "protein":  "turkey",
       "protein_g":  42,
       "old_ps":  3.4,
-      "everyday_ps":  3.4,
-      "cheapest_ps":  2.71,
-      "protein_rank":  31,
+      "everyday_ps":  3.43,
+      "cheapest_ps":  2.74,
+      "protein_rank":  11,
       "is_protein_rank1":  false
   },
   {
@@ -5646,21 +3138,9 @@
       "protein":  "turkey",
       "protein_g":  36,
       "old_ps":  4.94,
-      "everyday_ps":  4.94,
-      "cheapest_ps":  3.52,
-      "protein_rank":  58,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-divan-broccoli-rice-bake",
-      "name":  "Turkey Divan Broccoli Rice Bake",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  35,
-      "old_ps":  3.5,
-      "everyday_ps":  3.5,
-      "cheapest_ps":  2.7,
-      "protein_rank":  63,
+      "everyday_ps":  4.97,
+      "cheapest_ps":  3.54,
+      "protein_rank":  29,
       "is_protein_rank1":  false
   },
   {
@@ -5672,7 +3152,7 @@
       "old_ps":  4.44,
       "everyday_ps":  4.44,
       "cheapest_ps":  3.68,
-      "protein_rank":  18,
+      "protein_rank":  14,
       "is_protein_rank1":  false
   },
   {
@@ -5684,19 +3164,7 @@
       "old_ps":  2.48,
       "everyday_ps":  2.48,
       "cheapest_ps":  2.15,
-      "protein_rank":  118,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-fajita-rice-bowls",
-      "name":  "Ground Turkey Fajita Rice Bowls",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  42,
-      "old_ps":  3.62,
-      "everyday_ps":  3.62,
-      "cheapest_ps":  3.19,
-      "protein_rank":  30,
+      "protein_rank":  65,
       "is_protein_rank1":  false
   },
   {
@@ -5706,9 +3174,9 @@
       "protein":  "turkey",
       "protein_g":  35,
       "old_ps":  3.25,
-      "everyday_ps":  3.25,
-      "cheapest_ps":  2.43,
-      "protein_rank":  64,
+      "everyday_ps":  3.28,
+      "cheapest_ps":  2.46,
+      "protein_rank":  33,
       "is_protein_rank1":  false
   },
   {
@@ -5720,7 +3188,7 @@
       "old_ps":  2.64,
       "everyday_ps":  2.64,
       "cheapest_ps":  1.89,
-      "protein_rank":  76,
+      "protein_rank":  42,
       "is_protein_rank1":  false
   },
   {
@@ -5730,9 +3198,9 @@
       "protein":  "turkey",
       "protein_g":  42,
       "old_ps":  5.81,
-      "everyday_ps":  5.81,
-      "cheapest_ps":  4.2,
-      "protein_rank":  32,
+      "everyday_ps":  5.84,
+      "cheapest_ps":  4.22,
+      "protein_rank":  12,
       "is_protein_rank1":  false
   },
   {
@@ -5744,7 +3212,7 @@
       "old_ps":  3.16,
       "everyday_ps":  3.16,
       "cheapest_ps":  2.73,
-      "protein_rank":  10,
+      "protein_rank":  8,
       "is_protein_rank1":  false
   },
   {
@@ -5756,7 +3224,7 @@
       "old_ps":  3.64,
       "everyday_ps":  3.64,
       "cheapest_ps":  3.22,
-      "protein_rank":  12,
+      "protein_rank":  9,
       "is_protein_rank1":  false
   },
   {
@@ -5768,31 +3236,7 @@
       "old_ps":  4.02,
       "everyday_ps":  4.02,
       "cheapest_ps":  3.32,
-      "protein_rank":  36,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-mac-and-cheese-bake",
-      "name":  "Turkey Mac and Cheese Bake",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  44,
-      "old_ps":  3.02,
-      "everyday_ps":  3.02,
-      "cheapest_ps":  2.21,
-      "protein_rank":  25,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-manicotti-ricotta",
-      "name":  "Turkey Manicotti with Ricotta",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  38,
-      "old_ps":  3.58,
-      "everyday_ps":  3.58,
-      "cheapest_ps":  3.03,
-      "protein_rank":  45,
+      "protein_rank":  16,
       "is_protein_rank1":  false
   },
   {
@@ -5802,9 +3246,9 @@
       "protein":  "turkey",
       "protein_g":  24,
       "old_ps":  2.34,
-      "everyday_ps":  2.34,
-      "cheapest_ps":  2.01,
-      "protein_rank":  120,
+      "everyday_ps":  2.37,
+      "cheapest_ps":  2.04,
+      "protein_rank":  67,
       "is_protein_rank1":  false
   },
   {
@@ -5816,43 +3260,7 @@
       "old_ps":  4.12,
       "everyday_ps":  4.12,
       "cheapest_ps":  3.53,
-      "protein_rank":  51,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-meatball-marinara-pasta",
-      "name":  "Turkey Meatball Marinara Pasta",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  67,
-      "old_ps":  4.59,
-      "everyday_ps":  4.59,
-      "cheapest_ps":  3.81,
-      "protein_rank":  1,
-      "is_protein_rank1":  true
-  },
-  {
-      "slug":  "turkey-meatball-sub-bake",
-      "name":  "Turkey Meatball Sub Bake",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  55,
-      "old_ps":  4.84,
-      "everyday_ps":  4.84,
-      "cheapest_ps":  4.18,
-      "protein_rank":  7,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-meatloaf-with-mashed-potatoes",
-      "name":  "Turkey Meatloaf with Mashed Potatoes",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  32,
-      "old_ps":  2.84,
-      "everyday_ps":  2.84,
-      "cheapest_ps":  2.39,
-      "protein_rank":  79,
+      "protein_rank":  24,
       "is_protein_rank1":  false
   },
   {
@@ -5864,19 +3272,7 @@
       "old_ps":  3.03,
       "everyday_ps":  3.03,
       "cheapest_ps":  2.67,
-      "protein_rank":  41,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-minestrone",
-      "name":  "Turkey Minestrone",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  39,
-      "old_ps":  3.97,
-      "everyday_ps":  3.97,
-      "cheapest_ps":  2.95,
-      "protein_rank":  42,
+      "protein_rank":  20,
       "is_protein_rank1":  false
   },
   {
@@ -5888,43 +3284,7 @@
       "old_ps":  3.9,
       "everyday_ps":  3.9,
       "cheapest_ps":  2.79,
-      "protein_rank":  43,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-noodle-casserole",
-      "name":  "Turkey Noodle Casserole",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  37,
-      "old_ps":  2.81,
-      "everyday_ps":  2.81,
-      "cheapest_ps":  2.07,
-      "protein_rank":  52,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-pesto-pasta-kale",
-      "name":  "Turkey Pesto Pasta with Kale",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  37,
-      "old_ps":  4.01,
-      "everyday_ps":  4.01,
-      "cheapest_ps":  3.38,
-      "protein_rank":  53,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-picadillo-rice-bowls",
-      "name":  "Turkey Picadillo Rice Bowls",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  46,
-      "old_ps":  3.13,
-      "everyday_ps":  3.13,
-      "cheapest_ps":  2.75,
-      "protein_rank":  20,
+      "protein_rank":  21,
       "is_protein_rank1":  false
   },
   {
@@ -5936,31 +3296,7 @@
       "old_ps":  5.76,
       "everyday_ps":  5.76,
       "cheapest_ps":  4.4,
-      "protein_rank":  46,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-pumpkin-chili",
-      "name":  "Turkey Pumpkin Chili",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  33,
-      "old_ps":  4.14,
-      "everyday_ps":  4.14,
-      "cheapest_ps":  3.37,
-      "protein_rank":  77,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-ragu-pasta",
-      "name":  "Turkey Ragu Pasta",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  57,
-      "old_ps":  4.51,
-      "everyday_ps":  4.51,
-      "cheapest_ps":  3.87,
-      "protein_rank":  5,
+      "protein_rank":  22,
       "is_protein_rank1":  false
   },
   {
@@ -5970,9 +3306,9 @@
       "protein":  "turkey",
       "protein_g":  42,
       "old_ps":  4.23,
-      "everyday_ps":  4.23,
-      "cheapest_ps":  3.19,
-      "protein_rank":  33,
+      "everyday_ps":  4.26,
+      "cheapest_ps":  3.21,
+      "protein_rank":  13,
       "is_protein_rank1":  false
   },
   {
@@ -5984,7 +3320,7 @@
       "old_ps":  3.17,
       "everyday_ps":  3.17,
       "cheapest_ps":  2.67,
-      "protein_rank":  80,
+      "protein_rank":  44,
       "is_protein_rank1":  false
   },
   {
@@ -5996,7 +3332,7 @@
       "old_ps":  2.95,
       "everyday_ps":  2.95,
       "cheapest_ps":  2.2,
-      "protein_rank":  21,
+      "protein_rank":  17,
       "is_protein_rank1":  false
   },
   {
@@ -6008,7 +3344,7 @@
       "old_ps":  4.15,
       "everyday_ps":  4.15,
       "cheapest_ps":  3.3,
-      "protein_rank":  110,
+      "protein_rank":  59,
       "is_protein_rank1":  false
   },
   {
@@ -6018,45 +3354,9 @@
       "protein":  "turkey",
       "protein_g":  28,
       "old_ps":  3.78,
-      "everyday_ps":  3.78,
+      "everyday_ps":  4.01,
       "cheapest_ps":  2.94,
-      "protein_rank":  98,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-sausage-gravy-biscuit-bake",
-      "name":  "Turkey Sausage Gravy Biscuit Bake",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  35,
-      "old_ps":  2.96,
-      "everyday_ps":  2.96,
-      "cheapest_ps":  2.59,
-      "protein_rank":  65,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-sausage-hash-brown-breakfast-bake",
-      "name":  "Turkey Sausage Hash Brown Breakfast Bake",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  28,
-      "old_ps":  3.58,
-      "everyday_ps":  3.58,
-      "cheapest_ps":  2.81,
-      "protein_rank":  99,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-sausage-kale-white-bean-soup",
-      "name":  "Turkey Sausage, Kale and White Bean Soup",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  28,
-      "old_ps":  3.47,
-      "everyday_ps":  3.47,
-      "cheapest_ps":  2.56,
-      "protein_rank":  100,
+      "protein_rank":  53,
       "is_protein_rank1":  false
   },
   {
@@ -6068,19 +3368,7 @@
       "old_ps":  3.8,
       "everyday_ps":  3.8,
       "cheapest_ps":  3.02,
-      "protein_rank":  111,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-sloppy-joe-bowls",
-      "name":  "Turkey Sloppy Joe Bowls",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  47,
-      "old_ps":  5.13,
-      "everyday_ps":  5.13,
-      "cheapest_ps":  4.21,
-      "protein_rank":  17,
+      "protein_rank":  60,
       "is_protein_rank1":  false
   },
   {
@@ -6092,7 +3380,7 @@
       "old_ps":  3.15,
       "everyday_ps":  3.15,
       "cheapest_ps":  2.61,
-      "protein_rank":  47,
+      "protein_rank":  23,
       "is_protein_rank1":  false
   },
   {
@@ -6104,7 +3392,7 @@
       "old_ps":  3.07,
       "everyday_ps":  3.07,
       "cheapest_ps":  2.27,
-      "protein_rank":  54,
+      "protein_rank":  25,
       "is_protein_rank1":  false
   },
   {
@@ -6116,31 +3404,7 @@
       "old_ps":  2.98,
       "everyday_ps":  2.98,
       "cheapest_ps":  2.61,
-      "protein_rank":  21,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-stuffed-pepper-soup",
-      "name":  "Turkey Stuffed Pepper Soup",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  34,
-      "old_ps":  3.51,
-      "everyday_ps":  3.51,
-      "cheapest_ps":  2.9,
-      "protein_rank":  71,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-taco-casserole",
-      "name":  "Turkey Taco Casserole",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  47,
-      "old_ps":  4.77,
-      "everyday_ps":  4.77,
-      "cheapest_ps":  3.89,
-      "protein_rank":  18,
+      "protein_rank":  7,
       "is_protein_rank1":  false
   },
   {
@@ -6150,9 +3414,9 @@
       "protein":  "turkey",
       "protein_g":  34,
       "old_ps":  3.24,
-      "everyday_ps":  3.24,
+      "everyday_ps":  3.27,
       "cheapest_ps":  2.61,
-      "protein_rank":  72,
+      "protein_rank":  38,
       "is_protein_rank1":  false
   },
   {
@@ -6162,9 +3426,9 @@
       "protein":  "turkey",
       "protein_g":  35,
       "old_ps":  3.05,
-      "everyday_ps":  3.05,
+      "everyday_ps":  3.07,
       "cheapest_ps":  2.59,
-      "protein_rank":  66,
+      "protein_rank":  34,
       "is_protein_rank1":  false
   },
   {
@@ -6174,21 +3438,9 @@
       "protein":  "turkey",
       "protein_g":  31,
       "old_ps":  3.68,
-      "everyday_ps":  3.68,
-      "cheapest_ps":  2.82,
-      "protein_rank":  85,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-tater-tot-hotdish",
-      "name":  "Turkey Tater Tot Hotdish",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  28,
-      "old_ps":  2.83,
-      "everyday_ps":  2.83,
-      "cheapest_ps":  2.22,
-      "protein_rank":  101,
+      "everyday_ps":  3.71,
+      "cheapest_ps":  2.84,
+      "protein_rank":  47,
       "is_protein_rank1":  false
   },
   {
@@ -6198,9 +3450,9 @@
       "protein":  "turkey",
       "protein_g":  42,
       "old_ps":  4.7,
-      "everyday_ps":  4.7,
-      "cheapest_ps":  3.31,
-      "protein_rank":  34,
+      "everyday_ps":  4.73,
+      "cheapest_ps":  3.34,
+      "protein_rank":  14,
       "is_protein_rank1":  false
   },
   {
@@ -6212,19 +3464,7 @@
       "old_ps":  4.08,
       "everyday_ps":  4.08,
       "cheapest_ps":  3.6,
-      "protein_rank":  28,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkey-white-bean-cassoulet",
-      "name":  "Turkey and White Bean Cassoulet",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  30,
-      "old_ps":  3.9,
-      "everyday_ps":  3.9,
-      "cheapest_ps":  2.71,
-      "protein_rank":  89,
+      "protein_rank":  9,
       "is_protein_rank1":  false
   },
   {
@@ -6234,9 +3474,9 @@
       "protein":  "turkey",
       "protein_g":  49,
       "old_ps":  6.14,
-      "everyday_ps":  6.14,
-      "cheapest_ps":  4.85,
-      "protein_rank":  15,
+      "everyday_ps":  6.17,
+      "cheapest_ps":  4.87,
+      "protein_rank":  6,
       "is_protein_rank1":  false
   },
   {
@@ -6248,91 +3488,7 @@
       "old_ps":  2.95,
       "everyday_ps":  2.95,
       "cheapest_ps":  2.54,
-      "protein_rank":  119,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkish-iskender-turkey-bowls",
-      "name":  "Turkish Iskender Turkey Bowls",
-      "run":  "db",
-      "protein":  "turkey",
-      "protein_g":  47,
-      "old_ps":  4.59,
-      "everyday_ps":  4.59,
-      "cheapest_ps":  3.29,
-      "protein_rank":  19,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "turkish-pasta-garlic-yogurt-beef",
-      "name":  "Turkish Pasta with Garlic Yogurt and Spiced Butter",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  50,
-      "old_ps":  5.12,
-      "everyday_ps":  5.12,
-      "cheapest_ps":  4.55,
-      "protein_rank":  24,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "tuscan-white-bean-sausage-soup",
-      "name":  "Tuscan White Bean and Sausage Soup",
-      "run":  "db",
-      "protein":  "pork",
-      "protein_g":  29,
-      "old_ps":  3.7,
-      "everyday_ps":  3.7,
-      "cheapest_ps":  3.11,
-      "protein_rank":  102,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "unstuffed-cabbage-roll-bowls",
-      "name":  "Unstuffed Cabbage Roll Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  48,
-      "old_ps":  4.42,
-      "everyday_ps":  4.42,
-      "cheapest_ps":  3.91,
-      "protein_rank":  29,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "unstuffed-pepper-skillet-bowls",
-      "name":  "Unstuffed Pepper Skillet Bowls",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  47,
-      "old_ps":  4.58,
-      "everyday_ps":  4.58,
-      "cheapest_ps":  4.09,
-      "protein_rank":  31,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "vietnamese-bo-kho-lemongrass-beef-stew",
-      "name":  "Vietnamese Bo Kho (Lemongrass Beef Stew)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  33,
-      "old_ps":  5.62,
-      "everyday_ps":  5.62,
-      "cheapest_ps":  4.64,
-      "protein_rank":  93,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "vietnamese-caramelized-ground-beef-rice-bowls",
-      "name":  "Vietnamese Caramelized Ground Beef Rice Bowls",
-      "run":  "db",
-      "protein":  "ground beef",
-      "protein_g":  38,
-      "old_ps":  5.93,
-      "everyday_ps":  5.93,
-      "cheapest_ps":  4.93,
-      "protein_rank":  17,
+      "protein_rank":  66,
       "is_protein_rank1":  false
   },
   {
@@ -6344,7 +3500,7 @@
       "old_ps":  4.72,
       "everyday_ps":  4.72,
       "cheapest_ps":  4.05,
-      "protein_rank":  139,
+      "protein_rank":  101,
       "is_protein_rank1":  false
   },
   {
@@ -6356,7 +3512,7 @@
       "old_ps":  2.72,
       "everyday_ps":  2.72,
       "cheapest_ps":  2.15,
-      "protein_rank":  98,
+      "protein_rank":  68,
       "is_protein_rank1":  false
   },
   {
@@ -6368,7 +3524,7 @@
       "old_ps":  4.91,
       "everyday_ps":  4.91,
       "cheapest_ps":  4.09,
-      "protein_rank":  28,
+      "protein_rank":  17,
       "is_protein_rank1":  false
   },
   {
@@ -6380,8 +3536,8 @@
       "old_ps":  5.61,
       "everyday_ps":  5.61,
       "cheapest_ps":  4.61,
-      "protein_rank":  2,
-      "is_protein_rank1":  false
+      "protein_rank":  1,
+      "is_protein_rank1":  true
   },
   {
       "slug":  "vietnamese-lemongrass-pork-noodle-bowls",
@@ -6392,7 +3548,7 @@
       "old_ps":  3.97,
       "everyday_ps":  3.97,
       "cheapest_ps":  3.22,
-      "protein_rank":  49,
+      "protein_rank":  39,
       "is_protein_rank1":  false
   },
   {
@@ -6404,7 +3560,7 @@
       "old_ps":  2.05,
       "everyday_ps":  2.05,
       "cheapest_ps":  1.74,
-      "protein_rank":  42,
+      "protein_rank":  33,
       "is_protein_rank1":  false
   },
   {
@@ -6416,7 +3572,7 @@
       "old_ps":  5.52,
       "everyday_ps":  5.52,
       "cheapest_ps":  4.67,
-      "protein_rank":  19,
+      "protein_rank":  15,
       "is_protein_rank1":  false
   },
   {
@@ -6428,19 +3584,7 @@
       "old_ps":  4.44,
       "everyday_ps":  4.44,
       "cheapest_ps":  3.71,
-      "protein_rank":  37,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "west-african-jollof-rice-and-chicken",
-      "name":  "West African Jollof Rice and Chicken",
-      "run":  "db",
-      "protein":  "chicken",
-      "protein_g":  50,
-      "old_ps":  3.59,
-      "everyday_ps":  3.59,
-      "cheapest_ps":  2.86,
-      "protein_rank":  64,
+      "protein_rank":  17,
       "is_protein_rank1":  false
   },
   {
@@ -6452,7 +3596,7 @@
       "old_ps":  4.15,
       "everyday_ps":  4.15,
       "cheapest_ps":  3.01,
-      "protein_rank":  101,
+      "protein_rank":  14,
       "is_protein_rank1":  false
   },
   {
@@ -6464,19 +3608,7 @@
       "old_ps":  4.12,
       "everyday_ps":  4.12,
       "cheapest_ps":  2.94,
-      "protein_rank":  55,
-      "is_protein_rank1":  false
-  },
-  {
-      "slug":  "youvarlakia-avgolemono-greek-meatball-bowls",
-      "name":  "Youvarlakia Avgolemono (Greek Beef and Rice Meatballs in Lemon Sauce)",
-      "run":  "db",
-      "protein":  "beef",
-      "protein_g":  28,
-      "old_ps":  3.04,
-      "everyday_ps":  3.04,
-      "cheapest_ps":  2.61,
-      "protein_rank":  110,
+      "protein_rank":  26,
       "is_protein_rank1":  false
   },
   {
@@ -6486,9 +3618,9 @@
       "protein":  "chicken",
       "protein_g":  39,
       "old_ps":  2.86,
-      "everyday_ps":  2.86,
-      "cheapest_ps":  2.35,
-      "protein_rank":  99,
+      "everyday_ps":  2.89,
+      "cheapest_ps":  2.38,
+      "protein_rank":  69,
       "is_protein_rank1":  false
   },
   {
@@ -6500,7 +3632,7 @@
       "old_ps":  2.34,
       "everyday_ps":  2.34,
       "cheapest_ps":  2.02,
-      "protein_rank":  112,
+      "protein_rank":  92,
       "is_protein_rank1":  false
   }
 ]

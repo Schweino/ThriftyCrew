@@ -122,7 +122,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-08T16:54:36",
+    "generated":  "2026-08-09T06:18:00",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -810,18 +810,6 @@
                               "holds_crown":  false
                           },
                           {
-                              "id":  "lemonade",
-                              "commodity":  "Lemonade",
-                              "unit":  "floz",
-                              "store":  "Family Fare",
-                              "per_unit":  0.0422,
-                              "size":  "59 oz",
-                              "item":  "Minute Maid Lemonade 59 Oz",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
                               "id":  "egg-whites",
                               "commodity":  "Liquid Egg Whites",
                               "unit":  "floz",
@@ -1020,7 +1008,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0993,
                               "size":  "15 oz",
-                              "item":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
+                              "item":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false

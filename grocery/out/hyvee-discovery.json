@@ -1,5 +1,31 @@
 ﻿[
     {
+        "id":  "gochujang",
+        "store":  "Hy-Vee",
+        "product":  "O\u0027Food Gochujang Medium Hot Brown Rice Red Pepper Paste 17.6 oz",
+        "size":  "17.6 oz",
+        "price":  5.99,
+        "per_unit":  0.3403,
+        "unit":  "oz",
+        "held_per_unit":  0.4229,
+        "beats_by_pct":  19.5,
+        "product_id":  "3681583",
+        "why":  "beats the held price"
+    },
+    {
+        "id":  "mirin",
+        "store":  "Hy-Vee",
+        "product":  "Mizkan Mirin Sweet Cooking Seasoning",
+        "size":  "12 fl oz",
+        "price":  4.99,
+        "per_unit":  0.4158,
+        "unit":  "floz",
+        "held_per_unit":  0.699,
+        "beats_by_pct":  40.5,
+        "product_id":  "2913910",
+        "why":  "beats the held price"
+    },
+    {
         "id":  "dried-parsley",
         "store":  "Hy-Vee",
         "product":  "That\u0027s Smart Parsley Flakes",
@@ -3458,19 +3484,6 @@
         "why":  "beats the held price"
     },
     {
-        "id":  "paprika",
-        "store":  "Hy-Vee",
-        "product":  "That\u0027s Smart Paprika",
-        "size":  "2.75 oz",
-        "price":  1,
-        "per_unit":  0.3636,
-        "unit":  "oz",
-        "held_per_unit":  0.625,
-        "beats_by_pct":  41.8,
-        "product_id":  "3221000",
-        "why":  "beats the held price"
-    },
-    {
         "id":  "grape-juice",
         "store":  "Hy-Vee",
         "product":  "Mott\u0027s 100% Apple White Grape Juice, 64 fl oz bottle",
@@ -3525,19 +3538,6 @@
     {
         "id":  "cranberry-juice",
         "store":  "Hy-Vee",
-        "product":  "Old Orchard Healthy Balance Diet Cranberry Juice Cocktail",
-        "size":  "64 fl oz",
-        "price":  1.99,
-        "per_unit":  0.0311,
-        "unit":  "floz",
-        "held_per_unit":  0.0545,
-        "beats_by_pct":  42.9,
-        "product_id":  "24205",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "cranberry-juice",
-        "store":  "Hy-Vee",
         "product":  "Hy-Vee Cranberry Juice Cocktail",
         "size":  "64 fl oz",
         "price":  2.99,
@@ -3546,32 +3546,6 @@
         "held_per_unit":  0.0545,
         "beats_by_pct":  14.3,
         "product_id":  "57684",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "cranberry-juice",
-        "store":  "Hy-Vee",
-        "product":  "Old Orchard Healthy Balance Pomegranate Cranberry Juice Cocktail",
-        "size":  "64 fl oz",
-        "price":  1.99,
-        "per_unit":  0.0311,
-        "unit":  "floz",
-        "held_per_unit":  0.0545,
-        "beats_by_pct":  42.9,
-        "product_id":  "24182",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "cranberry-juice",
-        "store":  "Hy-Vee",
-        "product":  "Hy-Vee Cranberry Juice Drink Zero Sugar",
-        "size":  "64 fl oz",
-        "price":  2.49,
-        "per_unit":  0.0389,
-        "unit":  "floz",
-        "held_per_unit":  0.0545,
-        "beats_by_pct":  28.6,
-        "product_id":  "4140384",
         "why":  "beats the held price"
     },
     {
@@ -4058,19 +4032,6 @@
     {
         "id":  "instant-coffee",
         "store":  "Hy-Vee",
-        "product":  "Maxwell House International French Vanilla Café Instant Flavored Coffee Drink 8.4 oz",
-        "size":  "8.4 oz",
-        "price":  5.49,
-        "per_unit":  0.6536,
-        "unit":  "oz",
-        "held_per_unit":  0,
-        "beats_by_pct":  null,
-        "product_id":  "53350",
-        "why":  "we hold nothing here"
-    },
-    {
-        "id":  "instant-coffee",
-        "store":  "Hy-Vee",
         "product":  "Hy-Vee Instant Decaf Coffee Medium",
         "size":  "4 oz",
         "price":  6.99,
@@ -4110,32 +4071,6 @@
     {
         "id":  "instant-coffee",
         "store":  "Hy-Vee",
-        "product":  "Maxwell House International Vanilla Caramel Latte Instant Flavored Coffee Drink 8.7 oz",
-        "size":  "8.7 oz",
-        "price":  5.49,
-        "per_unit":  0.631,
-        "unit":  "oz",
-        "held_per_unit":  0,
-        "beats_by_pct":  null,
-        "product_id":  "53359",
-        "why":  "we hold nothing here"
-    },
-    {
-        "id":  "instant-coffee",
-        "store":  "Hy-Vee",
-        "product":  "Maxwell House International Café Vienna Instant Flavored Coffee Drink 9 oz",
-        "size":  "9 oz",
-        "price":  5.49,
-        "per_unit":  0.61,
-        "unit":  "oz",
-        "held_per_unit":  0,
-        "beats_by_pct":  null,
-        "product_id":  "53358",
-        "why":  "we hold nothing here"
-    },
-    {
-        "id":  "instant-coffee",
-        "store":  "Hy-Vee",
         "product":  "Folgers Classic Decaf Instant Coffee",
         "size":  "8 oz",
         "price":  10.99,
@@ -4144,19 +4079,6 @@
         "held_per_unit":  0,
         "beats_by_pct":  null,
         "product_id":  "41667",
-        "why":  "we hold nothing here"
-    },
-    {
-        "id":  "instant-coffee",
-        "store":  "Hy-Vee",
-        "product":  "Maxwell House International Hazelnut Café Instant Flavored Coffee Drink 9 oz",
-        "size":  "9 oz",
-        "price":  5.49,
-        "per_unit":  0.61,
-        "unit":  "oz",
-        "held_per_unit":  0,
-        "beats_by_pct":  null,
-        "product_id":  "14912",
         "why":  "we hold nothing here"
     },
     {
@@ -4927,19 +4849,6 @@
         "why":  "beats the held price"
     },
     {
-        "id":  "sandwich-bags",
-        "store":  "Hy-Vee",
-        "product":  "That\u0027s Smart! Fold \u0026 Close Sandwich Bags",
-        "size":  "150 ct",
-        "price":  1.29,
-        "per_unit":  0.0086,
-        "unit":  "each",
-        "held_per_unit":  0.0153,
-        "beats_by_pct":  43.8,
-        "product_id":  "2967041",
-        "why":  "beats the held price"
-    },
-    {
         "id":  "toilet-bowl-cleaner",
         "store":  "Hy-Vee",
         "product":  "Works Toilet Bowl Cleaner 1 qt",
@@ -4968,19 +4877,6 @@
     {
         "id":  "chicken-noodle-soup",
         "store":  "Hy-Vee",
-        "product":  "That\u0027s Smart Chicken Noodle Condensed Soup",
-        "size":  "10.5 oz",
-        "price":  0.7,
-        "per_unit":  0.0667,
-        "unit":  "oz",
-        "held_per_unit":  0.1133,
-        "beats_by_pct":  41.2,
-        "product_id":  "2967942",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "chicken-noodle-soup",
-        "store":  "Hy-Vee",
         "product":  "Hy-Vee Chicken Noodle Condensed Soup",
         "size":  "26 oz",
         "price":  2.48,
@@ -4989,19 +4885,6 @@
         "held_per_unit":  0.1133,
         "beats_by_pct":  15.8,
         "product_id":  "58463",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "tomato-soup",
-        "store":  "Hy-Vee",
-        "product":  "That\u0027s Smart! Tomato Condensed Soup",
-        "size":  "10.75 oz",
-        "price":  0.7,
-        "per_unit":  0.0651,
-        "unit":  "oz",
-        "held_per_unit":  0.1133,
-        "beats_by_pct":  42.5,
-        "product_id":  "2964874",
         "why":  "beats the held price"
     },
     {
@@ -5132,19 +5015,6 @@
         "held_per_unit":  0.3738,
         "beats_by_pct":  9.3,
         "product_id":  "1579764",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "marshmallows",
-        "store":  "Hy-Vee",
-        "product":  "Hy-Vee Fun Miniature Marshmallows",
-        "size":  "10.5 oz",
-        "price":  1.01,
-        "per_unit":  0.0962,
-        "unit":  "oz",
-        "held_per_unit":  0.141,
-        "beats_by_pct":  31.8,
-        "product_id":  "23531",
         "why":  "beats the held price"
     },
     {
@@ -5353,32 +5223,6 @@
         "held_per_unit":  0.7483,
         "beats_by_pct":  61.1,
         "product_id":  "3470736",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "almonds",
-        "store":  "Hy-Vee",
-        "product":  "Post Honey Bunches of Oats with Almonds Cereal, Family Size",
-        "size":  "23 oz",
-        "price":  6.49,
-        "per_unit":  0.2822,
-        "unit":  "oz",
-        "held_per_unit":  0.7483,
-        "beats_by_pct":  62.3,
-        "product_id":  "2519444",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "almonds",
-        "store":  "Hy-Vee",
-        "product":  "Malt-O-Meal Honey and Oat Blenders with Almonds Breakfast Cereal, 30 oz Resealable",
-        "size":  "30 oz",
-        "price":  5.86,
-        "per_unit":  0.1953,
-        "unit":  "oz",
-        "held_per_unit":  0.7483,
-        "beats_by_pct":  73.9,
-        "product_id":  "3746199",
         "why":  "beats the held price"
     },
     {
@@ -6034,19 +5878,6 @@
     {
         "id":  "vanilla-extract",
         "store":  "Hy-Vee",
-        "product":  "Hy-Vee Imitation Vanilla Extract",
-        "size":  "6 fl oz",
-        "price":  2.39,
-        "per_unit":  0.3983,
-        "unit":  "floz",
-        "held_per_unit":  3.395,
-        "beats_by_pct":  88.3,
-        "product_id":  "22596",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "vanilla-extract",
-        "store":  "Hy-Vee",
         "product":  "Hy-Vee Pure Vanilla Extract",
         "size":  "4 fl oz",
         "price":  11.49,
@@ -6526,19 +6357,6 @@
         "why":  "beats the held price"
     },
     {
-        "id":  "cherries",
-        "store":  "Hy-Vee",
-        "product":  "Simply Limeade with Cherry Bottle, 52 fl oz",
-        "size":  "52 fl oz",
-        "price":  3.99,
-        "per_unit":  1.2277,
-        "unit":  "lb",
-        "held_per_unit":  5.99,
-        "beats_by_pct":  79.5,
-        "product_id":  "4198057",
-        "why":  "beats the held price"
-    },
-    {
         "id":  "plums",
         "store":  "Hy-Vee",
         "product":  "Hy-Vee Purple Plums",
@@ -6567,19 +6385,6 @@
     {
         "id":  "grapefruit",
         "store":  "Hy-Vee",
-        "product":  "Pink Grapefruit",
-        "size":  "1 ct",
-        "price":  1.29,
-        "per_unit":  1.29,
-        "unit":  "each",
-        "held_per_unit":  0,
-        "beats_by_pct":  null,
-        "product_id":  "90791",
-        "why":  "we hold nothing here"
-    },
-    {
-        "id":  "grapefruit",
-        "store":  "Hy-Vee",
         "product":  "Fresh Organic Red Grapefruit",
         "size":  "1 ct",
         "price":  1.99,
@@ -6589,32 +6394,6 @@
         "beats_by_pct":  null,
         "product_id":  "266255",
         "why":  "we hold nothing here"
-    },
-    {
-        "id":  "brussels-sprouts",
-        "store":  "Hy-Vee",
-        "product":  "That\u0027s Smart! Brussels Sprouts",
-        "size":  "12 oz",
-        "price":  1.39,
-        "per_unit":  1.8533,
-        "unit":  "lb",
-        "held_per_unit":  3.49,
-        "beats_by_pct":  46.9,
-        "product_id":  "2969859",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "red-potatoes",
-        "store":  "Hy-Vee",
-        "product":  "Green Giant Red Potatoes",
-        "size":  "5 lb",
-        "price":  3.99,
-        "per_unit":  0.798,
-        "unit":  "lb",
-        "held_per_unit":  1.29,
-        "beats_by_pct":  38.1,
-        "product_id":  "66372",
-        "why":  "beats the held price"
     },
     {
         "id":  "ribeye-steak",
@@ -6640,32 +6419,6 @@
         "held_per_unit":  14.99,
         "beats_by_pct":  28.9,
         "product_id":  "3174488",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "italian-sausage",
-        "store":  "Hy-Vee",
-        "product":  "Prego Italian Sausage and Garlic Meat Sauce, 23.5 oz Jar",
-        "size":  "23.5 oz",
-        "price":  2.68,
-        "per_unit":  1.8247,
-        "unit":  "lb",
-        "held_per_unit":  4.88,
-        "beats_by_pct":  62.6,
-        "product_id":  "50463",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "italian-sausage",
-        "store":  "Hy-Vee",
-        "product":  "Prego Italian Sausage and Garlic Meat Sauce, 44 oz Jar",
-        "size":  "44 oz",
-        "price":  4.99,
-        "per_unit":  1.8145,
-        "unit":  "lb",
-        "held_per_unit":  4.88,
-        "beats_by_pct":  62.8,
-        "product_id":  "2887170",
         "why":  "beats the held price"
     },
     {
@@ -6822,19 +6575,6 @@
         "held_per_unit":  0.4311,
         "beats_by_pct":  8.8,
         "product_id":  "4081780",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "turkey-bacon",
-        "store":  "Hy-Vee",
-        "product":  "JENNIE-O Turkey Bacon, 12 OZ",
-        "size":  "16 oz",
-        "price":  4.39,
-        "per_unit":  0.2744,
-        "unit":  "oz",
-        "held_per_unit":  0.3325,
-        "beats_by_pct":  17.5,
-        "product_id":  "53194",
         "why":  "beats the held price"
     },
     {
@@ -7124,19 +6864,6 @@
         "why":  "beats the held price"
     },
     {
-        "id":  "vegetable-oil",
-        "store":  "Hy-Vee",
-        "product":  "That\u0027s Smart! Pure Vegetable Oil",
-        "size":  "1 gal",
-        "price":  8.52,
-        "per_unit":  0.0666,
-        "unit":  "floz",
-        "held_per_unit":  0.0781,
-        "beats_by_pct":  14.8,
-        "product_id":  "2916136",
-        "why":  "beats the held price"
-    },
-    {
         "id":  "oatmeal",
         "store":  "Hy-Vee",
         "product":  "100% Whole Grain Quick Oats",
@@ -7199,19 +6926,6 @@
         "held_per_unit":  0.3325,
         "beats_by_pct":  43.3,
         "product_id":  "2610349",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "honey",
-        "store":  "Hy-Vee",
-        "product":  "Hy-Vee Honey Vanilla Greek Yogurt",
-        "size":  "32 oz",
-        "price":  4.49,
-        "per_unit":  0.1403,
-        "unit":  "oz",
-        "held_per_unit":  0.3325,
-        "beats_by_pct":  57.8,
-        "product_id":  "2935726",
         "why":  "beats the held price"
     },
     {
@@ -7826,19 +7540,6 @@
         "why":  "we hold nothing here"
     },
     {
-        "id":  "aluminum-foil",
-        "store":  "Hy-Vee",
-        "product":  "Hy-Vee Pre-Cut Aluminum Foil Sheets",
-        "size":  "50 ct",
-        "price":  4.29,
-        "per_unit":  0.0858,
-        "unit":  "each",
-        "held_per_unit":  0,
-        "beats_by_pct":  null,
-        "product_id":  "4211789",
-        "why":  "we hold nothing here"
-    },
-    {
         "id":  "all-purpose-cleaner",
         "store":  "Hy-Vee",
         "product":  "Clorox All Purpose Cleaner, Bleach Free, Fresh Mountain Air",
@@ -8190,19 +7891,6 @@
         "why":  "we hold nothing here"
     },
     {
-        "id":  "cucumbers",
-        "store":  "Hy-Vee",
-        "product":  "Burt\u0027s Bees Refreshing Pre-moistened with Cucumber \u0026 Mint Scent Facial Cleanser Towelettes",
-        "size":  "30 ct",
-        "price":  6.49,
-        "per_unit":  0.2163,
-        "unit":  "each",
-        "held_per_unit":  0.99,
-        "beats_by_pct":  78.1,
-        "product_id":  "772345",
-        "why":  "beats the held price"
-    },
-    {
         "id":  "spinach",
         "store":  "Hy-Vee",
         "product":  "Toufayan Bakeries Hearth Baked Savory Spinach Wraps 6 Each",
@@ -8385,32 +8073,6 @@
         "why":  "beats the held price"
     },
     {
-        "id":  "watermelon",
-        "store":  "Hy-Vee",
-        "product":  "EXTRA Watermelon Sugar Free Chewing Gum, 15 ct (3 Pack)",
-        "size":  "3 ct",
-        "price":  4.79,
-        "per_unit":  1.5967,
-        "unit":  "each",
-        "held_per_unit":  4.67,
-        "beats_by_pct":  65.8,
-        "product_id":  "43018",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "watermelon",
-        "store":  "Hy-Vee",
-        "product":  "EXTRA Sweet Watermelon Sugar Free Chewing Gum Mega Pack - 35 sticks",
-        "size":  "35 ct",
-        "price":  4.99,
-        "per_unit":  0.1426,
-        "unit":  "each",
-        "held_per_unit":  4.67,
-        "beats_by_pct":  96.9,
-        "product_id":  "3730594",
-        "why":  "beats the held price"
-    },
-    {
         "id":  "peaches",
         "store":  "Hy-Vee",
         "product":  "Hy-Vee Light Peach Halves",
@@ -8434,19 +8096,6 @@
         "held_per_unit":  2.99,
         "beats_by_pct":  16.6,
         "product_id":  "24308",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "peaches",
-        "store":  "Hy-Vee",
-        "product":  "Dole Orange Peach Mango 52oz",
-        "size":  "52 fl oz",
-        "price":  3.98,
-        "per_unit":  1.2246,
-        "unit":  "lb",
-        "held_per_unit":  2.99,
-        "beats_by_pct":  59,
-        "product_id":  "4107477",
         "why":  "beats the held price"
     },
     {
@@ -8671,32 +8320,6 @@
         "why":  "beats the held price"
     },
     {
-        "id":  "italian-seasoning",
-        "store":  "Hy-Vee",
-        "product":  "Hy-Vee Italian Seasoning",
-        "size":  "5 oz",
-        "price":  3.99,
-        "per_unit":  0.798,
-        "unit":  "oz",
-        "held_per_unit":  1.09,
-        "beats_by_pct":  26.8,
-        "product_id":  "4141454",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "italian-seasoning",
-        "store":  "Hy-Vee",
-        "product":  "McCormick Perfect Pinch Spicy Italian Seasoning",
-        "size":  "3.88 oz",
-        "price":  3.61,
-        "per_unit":  0.9304,
-        "unit":  "oz",
-        "held_per_unit":  1.09,
-        "beats_by_pct":  14.6,
-        "product_id":  "4135775",
-        "why":  "beats the held price"
-    },
-    {
         "id":  "olive-oil",
         "store":  "Hy-Vee",
         "product":  "Pompeian Imported Extra Virgin Olive Oil Robust",
@@ -8850,19 +8473,6 @@
         "held_per_unit":  0.2494,
         "beats_by_pct":  23.2,
         "product_id":  "5339",
-        "why":  "beats the held price"
-    },
-    {
-        "id":  "strawberries",
-        "store":  "Hy-Vee",
-        "product":  "Hy-Vee Light Strawberry Flavor Apple Sauce 6-4 oz Cups",
-        "size":  "24 oz",
-        "price":  1.99,
-        "per_unit":  0.0829,
-        "unit":  "oz",
-        "held_per_unit":  0.2494,
-        "beats_by_pct":  66.8,
-        "product_id":  "24242",
         "why":  "beats the held price"
     },
     {

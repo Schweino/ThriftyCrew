@@ -84,6 +84,48 @@ if ($cmpF) { $cdoc = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json; $weekOf
 $rbF = Join-Path $out 'recipe-board.json'
 if (Test-Path $rbF) { AddBoard (Get-Content $rbF -Raw | ConvertFrom-Json).comparison }
 
+# ---- recipe-namespace aliases: a de-duped commodity must still RESOLVE, even though its row is gone ----
+# THE PAGE DE-DUPS, THE FEED MUST NOT (2026-08-09). recipe-overlay drops a recipe row whose commodity also
+# lives on the weekly board (f8c997f4, via recipe-floor-id-map.json) - correct for the page, which was
+# publishing two prices for one product. But this file is not a page, it is the priceable NAMESPACE, and
+# db\ingredients.json bids, the spec scaler bids and the widget keys are all written in the RECIPE spelling
+# ('93-7-ground-beef', not 'ground-beef-93-7'). When the rows went, the keys went with them: the first
+# pipeline run after the de-dup could not price 297 ingredient lines across 239 recipes, took the bid FK
+# down with them and left the db rebuild refused by its own constraint. The commodity did not go anywhere -
+# it is on the weekly board under its other spelling at a FRESHER price, which is exactly why the recipe row
+# lost the tie. So re-point the key instead of dropping it.
+# UNIT IDENTITY IS THE GATE, NOT A CONVERSION. grams_per_unit downstream is expressed in the served row's
+# unit; a row served per lb under a key whose consumers convert grams with an 'each' factor is a wrong
+# PRICE, which is worse than the missing one. Pairs that do not share a unit are reported and stay
+# unresolved until their db\ingredients.json row is re-anchored (unit AND gpu together).
+$aliased = 0
+$aliasSkipped = New-Object System.Collections.Generic.List[string]
+$idMapFile = Join-Path $root 'recipe-floor-id-map.json'
+if (Test-Path $idMapFile) {
+  # the recipe row's OWN unit, read from the everyday baseline - it predates the drop, so it survives it
+  $baseUnit = @{}
+  $rbeF = Join-Path $out 'recipe-board-everyday.json'
+  if (Test-Path $rbeF) { try { foreach ($r in (Get-Content $rbeF -Raw | ConvertFrom-Json).comparison) { $baseUnit[[string]$r.id] = [string]$r.unit } } catch {} }
+  try {
+    foreach ($p in ((Get-Content $idMapFile -Raw | ConvertFrom-Json).map.PSObject.Properties)) {
+      $rid = [string]$p.Name; $wid = [string]$p.Value
+      if ($ing.Contains($rid)) { continue }                                                    # recipe row survived
+      if (-not $ing.Contains($wid)) { $aliasSkipped.Add("$rid -> $wid (twin not priced either)"); continue }
+      $ru = if ($baseUnit.ContainsKey($rid)) { $baseUnit[$rid] } else { '' }
+      $wu = [string]$ing[$wid].unit
+      if ($ru -and $ru -ne $wu) { $aliasSkipped.Add("$rid -> $wid (unit $ru vs $wu)"); continue }
+      $clone = [ordered]@{}
+      foreach ($f in @($ing[$wid].Keys)) { $clone[$f] = $ing[$wid][$f] }
+      $clone['alias_of'] = $wid
+      $ing[$rid] = $clone
+      $aliased++
+    }
+  } catch { Write-Output 'export-feed: WARNING - recipe-floor-id-map.json unreadable; recipe-spelling bids will NOT resolve' }
+} else {
+  Write-Output 'export-feed: WARNING - no recipe-floor-id-map.json, so a de-duped commodity leaves its recipe-spelling bid unpriceable'
+}
+Write-Output ("export-feed: {0} recipe-spelling key(s) re-pointed at their weekly twin{1}" -f $aliased, $(if ($aliasSkipped.Count) { "; " + $aliasSkipped.Count + " NOT aliased: " + ($aliasSkipped -join '; ') } else { '' }))
+
 # ---- recipes: this week's cost per slug (+ base servings for the scaler) ----
 $servings = @{}
 try { foreach ($r in (Get-Content (Join-Path $mp 'recipes-db.json') -Raw | ConvertFrom-Json).recipes) { $servings[[string]$r.slug] = [int]$r.servings } } catch {}
