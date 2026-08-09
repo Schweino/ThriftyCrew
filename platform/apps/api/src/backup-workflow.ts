@@ -55,7 +55,7 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, unknown> {
         return result.at_bookmark;
       });
       const stored = await step.do("download and store D1 export", async () => {
-        const result = await exportRequest<ExportResult>(this.env, { current_bookmark: bookmark });
+        const result = await exportRequest<ExportResult>(this.env, { output_format: "polling", current_bookmark: bookmark });
         if (result.status === "error") throw new Error(result.error || "D1 export failed");
         const signedUrl = result.signed_url ?? result.result?.signed_url;
         const filename = result.filename ?? result.result?.filename;
