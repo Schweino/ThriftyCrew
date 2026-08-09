@@ -38,7 +38,7 @@ import { authenticateMutation } from "./auth";
 import { createRelease, findBatch, insertObservations, insertRecipeCosts, insertReleaseCells, upsertGuardResult } from "./database";
 import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
-import { reconcileGhostRotation } from "./ghost-reconciliation";
+import { reconcileGhostRotation, runGhostClobberDrill } from "./ghost-reconciliation";
 import { dispatchGithubJob, recordAudit, runScheduledOperations } from "./operations";
 import { readEngineSnapshot, type EngineSourceMode } from "./engine-snapshot";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
@@ -1227,6 +1227,27 @@ app.post("/internal/releases/:id/reconcile-ghost", async (context) => {
   } catch (error) {
     return jsonError(error instanceof Error ? error.message : "Ghost reconciliation failed", 422);
   }
+});
+
+app.post("/internal/releases/:id/drill-ghost-clobber", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may run a Ghost clobber drill", 403);
+  const releaseId = context.req.param("id");
+  const observedAt = new Date().toISOString();
+  let result: Awaited<ReturnType<typeof runGhostClobberDrill>>;
+  try {
+    result = await runGhostClobberDrill(context.env, releaseId);
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "Ghost clobber drill failed", 422);
+  }
+  const eventId = await deterministicId("evidence", "ghost-clobber", releaseId, observedAt.slice(0, 10));
+  await context.env.DB.prepare(
+    `INSERT INTO evidence_gate_events (id, gate, period_key, source_ref, status, evidence_json, observed_at)
+     VALUES (?1, 'chaos-drill', ?2, ?3, ?4, ?5, ?6)
+     ON CONFLICT(gate, period_key, source_ref) DO UPDATE SET
+       status = excluded.status, evidence_json = excluded.evidence_json, observed_at = excluded.observed_at`,
+  ).bind(eventId, `ghost-clobber-${observedAt.slice(0, 10)}`, releaseId, result.passed ? "pass" : "fail", stableJson(result), observedAt).run();
+  await recordAudit(context.env, context.get("identity"), "ghost.clobber_drill", "release", releaseId, result.passed ? "accepted" : "failed", result);
+  return context.json({ ok: result.passed, eventId, ...result }, result.passed ? 200 : 422);
 });
 
 app.post("/internal/accuracy/draws", zValidator("json", accuracyDrawCreateSchema), async (context) => {

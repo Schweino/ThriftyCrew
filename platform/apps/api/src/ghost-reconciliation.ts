@@ -109,3 +109,50 @@ export async function reconcileGhostRotation(env: WorkerEnv, releaseId: string):
   }
   return { reconciliationId, status, safePublicSlugs, mismatches };
 }
+
+export async function runGhostClobberDrill(env: WorkerEnv, releaseId: string): Promise<{
+  passed: boolean;
+  slug: string;
+  before: string;
+  clobbered: string;
+  after: string;
+  reconciliationId: string;
+  mismatches: Array<{ slug: string; intended: string; actual: string | null; error?: string }>;
+}> {
+  const intent = await env.DB.prepare(
+    `SELECT recipe_slug FROM release_free_rotation
+      WHERE release_id = ?1 AND intended_visibility = 'public'
+      ORDER BY recipe_slug LIMIT 1`,
+  ).bind(releaseId).first<{ recipe_slug: string }>();
+  if (!intent) throw new Error("release has no public rotation entry for the Ghost clobber drill");
+  const original = await readPost(env, intent.recipe_slug);
+  if (original.visibility !== "public") throw new Error(`Ghost post ${intent.recipe_slug} must be public before the clobber drill`);
+  let reconciliationId = "not-started";
+  let mismatches: Array<{ slug: string; intended: string; actual: string | null; error?: string }> = [];
+  let clobbered = original.visibility;
+  let after = original.visibility;
+  try {
+    await setVisibility(env, original, "paid");
+    clobbered = (await readPost(env, intent.recipe_slug)).visibility;
+    if (clobbered !== "paid") throw new Error(`Ghost clobber was not observable for ${intent.recipe_slug}`);
+    const reconciliation = await reconcileGhostRotation(env, releaseId);
+    reconciliationId = reconciliation.reconciliationId;
+    mismatches = reconciliation.mismatches;
+    after = (await readPost(env, intent.recipe_slug)).visibility;
+    return {
+      passed: reconciliation.status === "verified" && after === "public",
+      slug: intent.recipe_slug,
+      before: original.visibility,
+      clobbered,
+      after,
+      reconciliationId,
+      mismatches,
+    };
+  } catch (error) {
+    // A chaos drill must never strand customer visibility in the injected
+    // fault state. Re-read for Ghost's optimistic-lock timestamp and restore.
+    const current = await readPost(env, intent.recipe_slug);
+    if (current.visibility !== original.visibility) await setVisibility(env, current, original.visibility);
+    throw error;
+  }
+}

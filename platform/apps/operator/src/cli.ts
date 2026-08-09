@@ -297,6 +297,12 @@ if (command === "status") {
   result = await (await mutationClient()).request("/internal/entitlement-verifications");
 } else if (command === "drill" && subcommand === "release-freeze") {
   result = await releaseFreezeDrill();
+} else if (command === "drill" && subcommand === "ghost-clobber") {
+  const requestedRelease = arguments_[0];
+  const status = requestedRelease ? null : await publicGet("/api/v2/status") as { currentRelease?: { id?: string } };
+  const releaseId = requestedRelease ?? status?.currentRelease?.id;
+  if (!releaseId) throw new Error("no published release is available for the Ghost clobber drill");
+  result = await (await mutationClient()).request(`/internal/releases/${releaseId}/drill-ghost-clobber`, { method: "POST", acceptStatuses: [422] });
 } else if (command === "job" && subcommand === "start") {
   const job = arguments_[0];
   if (!job) throw new Error("tc job start requires a job id");
@@ -427,7 +433,7 @@ if (command === "status") {
     ok: true,
     usage: [
       "tc status", "tc doctor", "tc triage [status|run]", "tc config generate|check",
-      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc restore record <file>|show", "tc evidence record <file>|show [gate]", "tc entitlement record <file>|show", "tc drill release-freeze", "tc job start|finish|dispatch <job> [status|reason]",
+      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc restore record <file>|show", "tc evidence record <file>|show [gate]", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]", "tc job start|finish|dispatch <job> [status|reason]",
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id]", "tc accuracy verdict <file>",
