@@ -147,6 +147,11 @@ function comparableRecord(cell: ComparableCell): Record<string, unknown> {
   };
 }
 
+function parityRecord(cell: ComparableCell): Record<string, unknown> {
+  const { isCrown: _tiePresentation, ...semantic } = comparableRecord(cell);
+  return semantic;
+}
+
 export function buildNativeParityReport(snapshot: NativeEngineSnapshot): EngineParityReport {
   const groups = new Map<string, NativeEngineSnapshot["candidates"]>();
   for (const candidate of snapshot.candidates) {
@@ -199,7 +204,7 @@ export function buildNativeParityReport(snapshot: NativeEngineSnapshot): EngineP
   for (const cell of cells) {
     const key = `${cell.commodityId}\u001f${cell.storeLocationId}`;
     const expected = current.get(key) ?? null;
-    if (!expected || JSON.stringify(comparableRecord(expected)) !== JSON.stringify(comparableRecord(cell))) {
+    if (!expected || JSON.stringify(parityRecord(expected)) !== JSON.stringify(parityRecord(cell))) {
       if (diffs.length < 500) diffs.push({ key: key.replace("\u001f", ":"), current: expected ? comparableRecord(expected) : null, native: comparableRecord(cell), reason: !expected ? "cell is absent from current release" : "native winner semantics differ from current release" });
     }
   }
@@ -207,10 +212,10 @@ export function buildNativeParityReport(snapshot: NativeEngineSnapshot): EngineP
   for (const key of currentOnly) if (diffs.length < 500) diffs.push({ key: key.replace("\u001f", ":"), current: comparableRecord(current.get(key)!), native: null, reason: "current release cell is absent from native output" });
   const diffCount = cells.filter((cell) => {
     const expected = current.get(`${cell.commodityId}\u001f${cell.storeLocationId}`);
-    return !expected || JSON.stringify(comparableRecord(expected)) !== JSON.stringify(comparableRecord(cell));
+    return !expected || JSON.stringify(parityRecord(expected)) !== JSON.stringify(parityRecord(cell));
   }).length + currentOnly.length;
   return {
-    runId: `parity-v2-${snapshot.mode}-${snapshot.observedAt.slice(0, 10)}-${snapshot.inputHash.slice(0, 16)}`,
+    runId: `parity-v3-${snapshot.mode}-${snapshot.observedAt.slice(0, 10)}-${snapshot.inputHash.slice(0, 16)}`,
     mode: snapshot.mode,
     observedAt: snapshot.observedAt,
     currentReleaseId: snapshot.currentReleaseId,
