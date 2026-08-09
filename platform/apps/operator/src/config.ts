@@ -11,6 +11,11 @@ function sha256(bytes: Uint8Array): string {
   return createHash("sha256").update(bytes).digest("hex");
 }
 
+function canonicalJsonHash(bytes: Uint8Array): string {
+  const normalized = new TextDecoder().decode(bytes).replace(/\r\n/g, "\n");
+  return sha256(new TextEncoder().encode(normalized));
+}
+
 async function atomicWrite(file: string, bytes: Uint8Array): Promise<void> {
   await mkdir(path.dirname(file), { recursive: true });
   const temporary = `${file}.tmp-${process.pid}`;
@@ -31,7 +36,10 @@ export async function generateLegacyConfiguration(incomeRoot: string, checkOnly:
     const source = new Uint8Array(await readFile(path.join(configRoot, name)));
     const destination = path.join(legacyRoot, name);
     const current = await readFile(destination).catch(() => undefined);
-    hashes[name] = sha256(source);
+    // Git may check text files out with CRLF on Windows and LF on Linux. The
+    // manifest is an authority hash, so it must describe JSON content rather
+    // than a workstation's line-ending policy.
+    hashes[name] = canonicalJsonHash(source);
     if (!current || !source.every((byte, index) => current[index] === byte) || current.length !== source.length) {
       changed.push(name);
       if (!checkOnly) await atomicWrite(destination, source);
