@@ -122,6 +122,15 @@ if (command === "status") {
       : runId,
     input: { reason: process.env.TC_RECOVERY_REASON ?? "scheduled operation" },
   } });
+} else if (command === "job" && subcommand === "dispatch") {
+  const job = arguments_[0];
+  if (!job) throw new Error("tc job dispatch requires a job id");
+  const reason = arguments_.slice(1).join(" ") || "operator recovery drill";
+  result = await (await mutationClient()).request(`/internal/jobs/${encodeURIComponent(job)}/dispatch`, { json: {
+    idempotencyKey: `operator-${job}-${new Date().toISOString().replaceAll(/[^0-9]/g, "").slice(0, 14)}`,
+    reason,
+    ref: "main",
+  } });
 } else if (command === "job" && subcommand === "finish") {
   const job = arguments_[0];
   if (!job) throw new Error("tc job finish requires a job id");
@@ -174,7 +183,7 @@ if (command === "status") {
     ok: true,
     usage: [
       "tc status", "tc doctor", "tc triage [status|run]", "tc config generate|check",
-      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc job start|finish <job> [status]",
+      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc job start|finish|dispatch <job> [status|reason]",
       "tc ghost reconcile [release-id]",
       "tc run daily --dry", "tc parity", "tc replay", "tc capture validate <file>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id]", "tc accuracy verdict <file>",
