@@ -11,6 +11,7 @@
   "dependencies": {
     "@thriftycrew/contracts": "workspace:*",
     "@thriftycrew/domain": "workspace:*",
+    "@thriftycrew/entitlements": "workspace:*",
     "@hono/zod-validator": "0.9.0",
     "hono": "4.13.1",
     "zod": "4.4.3"

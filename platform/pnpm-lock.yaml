@@ -38,6 +38,9 @@ importers:
       '@thriftycrew/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@thriftycrew/entitlements':
+        specifier: workspace:*
+        version: link:../../packages/entitlements
       hono:
         specifier: 4.13.1
         version: 4.13.1

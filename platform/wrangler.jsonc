@@ -52,6 +52,7 @@
     "APP_ENV": "production",
     "PUBLIC_ORIGIN": "https://tc-grocery-v3.curly-unit-51a6.workers.dev",
     "GHOST_ADMIN_ORIGIN": "https://map-to-success.ghost.io",
+    "GHOST_PUBLIC_ORIGIN": "https://www.thriftycrew.com",
     "GITHUB_OIDC_AUDIENCE": "tc-grocery-v3",
     "GITHUB_OIDC_REPOSITORY": "Schweino/SimpleMoneyPlaybook",
     "GITHUB_OIDC_REPOSITORY_ID": "1293567395",

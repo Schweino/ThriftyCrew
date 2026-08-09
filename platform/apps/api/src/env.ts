@@ -23,6 +23,7 @@ export interface WorkerEnv {
   D1_DATABASE_ID?: string;
   GHOST_ADMIN_ORIGIN?: string;
   GHOST_ADMIN_KEY?: string;
+  GHOST_PUBLIC_ORIGIN?: string;
 }
 
 export type MutationRole = "capture" | "engine" | "operator";

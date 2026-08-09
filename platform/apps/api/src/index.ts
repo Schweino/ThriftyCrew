@@ -27,6 +27,7 @@ import {
   triageResolveSchema,
 } from "@thriftycrew/contracts";
 import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
+import { GhostEntitlementProvider, type Entitlement } from "@thriftycrew/entitlements";
 import { authenticateMutation } from "./auth";
 import { createRelease, findBatch, insertObservations, insertRecipeCosts, insertReleaseCells, upsertGuardResult } from "./database";
 import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
@@ -41,6 +42,15 @@ const app = new Hono<Bindings>();
 
 function jsonError(message: string, status: 400 | 401 | 403 | 404 | 409 | 422 | 500 = 400): Response {
   return Response.json({ ok: false, error: message }, { status });
+}
+
+function entitlementProvider(env: WorkerEnv): GhostEntitlementProvider {
+  if (!env.GHOST_PUBLIC_ORIGIN) throw new Error("Ghost public origin is not configured");
+  return new GhostEntitlementProvider(env.GHOST_PUBLIC_ORIGIN);
+}
+
+async function resolveEntitlement(request: Request, env: WorkerEnv): Promise<Entitlement> {
+  return entitlementProvider(env).resolve(request);
 }
 
 function requireMutation(roles: readonly MutationRole[]): MiddlewareHandler<Bindings> {
@@ -72,7 +82,7 @@ async function requireDraftRelease(db: D1Database, releaseId: string): Promise<R
 }
 
 app.use("/internal/*", requireMutation(["capture", "engine", "operator"]));
-app.use("/internal/capture-batches", requireIdentityRole(["capture", "operator"]));
+app.use("/internal/capture-batches", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/capture-batches/*", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/configurations", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/configurations/*", requireIdentityRole(["engine", "operator"]));
@@ -126,6 +136,26 @@ app.get("/api/v2/status", async (context) => {
 });
 
 app.get("/v2/status", (context) => context.redirect("/api/v2/status", 307));
+
+app.get("/api/v2/entitlement", async (context) => {
+  try {
+    const entitlement = await resolveEntitlement(context.req.raw, context.env);
+    context.header("cache-control", "private, no-store");
+    context.header("vary", "cookie");
+    if (entitlement.authenticated) context.header("set-cookie", "tc_member_signed_out=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0");
+    return context.json({ ok: true, entitlement });
+  } catch (error) {
+    return context.json({ ok: false, error: error instanceof Error ? error.message : "Entitlement provider failed" }, 503);
+  }
+});
+
+app.post("/api/v2/session/signout", (context) => {
+  context.header("cache-control", "private, no-store");
+  context.header("set-cookie", "tc_member_signed_out=1; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=300");
+  return context.json({ ok: true, state: "signed_out" });
+});
+
+app.get("/v2/entitlement", (context) => context.redirect("/api/v2/entitlement", 307));
 
 app.post("/api/v2/events", zValidator("json", telemetryEventSchema), (context) => {
   if (!context.env.FUNNEL_ANALYTICS) return context.json({ ok: false, error: "Funnel telemetry is unavailable" }, 503);
@@ -217,6 +247,38 @@ app.get("/api/v2/recipes/:slug", async (context) => {
   const recipe = payload.recipes?.find((item) => item.slug === context.req.param("slug"));
   if (!recipe) return context.json({ ok: false, error: "Recipe not found" }, 404);
   return context.json({ ok: true, releaseId: current.releaseId, publishedAt: current.publishedAt, recipe });
+});
+
+app.get("/api/v2/member/recipes/:slug", async (context) => {
+  const slug = context.req.param("slug");
+  const release = await context.env.DB.prepare(
+    `SELECT r.id AS release_id, r.published_at, f.intended_visibility
+       FROM current_releases c
+       JOIN releases r ON r.id = c.release_id
+       LEFT JOIN release_free_rotation f ON f.release_id = r.id AND f.recipe_slug = ?1
+      WHERE c.market_id = 'omaha'`,
+  ).bind(slug).first<{ release_id: string; published_at: string; intended_visibility: string | null }>();
+  if (!release) return context.json({ ok: false, error: "No published recipe release" }, 404);
+  let entitlement: Entitlement = { state: "anonymous", authenticated: false, tier: "anonymous", mayUseProtectedTools: false };
+  if (release.intended_visibility !== "public") {
+    try {
+      entitlement = await resolveEntitlement(context.req.raw, context.env);
+    } catch (error) {
+      return context.json({ ok: false, error: error instanceof Error ? error.message : "Entitlement provider failed" }, 503);
+    }
+    if (!entitlement.mayUseProtectedTools) {
+      context.header("cache-control", "private, no-store");
+      context.header("vary", "cookie");
+      return context.json({ ok: false, error: "Paid membership is required", entitlement }, entitlement.authenticated ? 403 : 401);
+    }
+  }
+  const current = await currentPayload(context.env, "recipes");
+  const payload = current?.payload as { recipes?: Array<{ slug?: string }> } | undefined;
+  const recipe = payload?.recipes?.find((item) => item.slug === slug);
+  if (!recipe) return context.json({ ok: false, error: "Recipe not found" }, 404);
+  context.header("cache-control", "private, no-store");
+  context.header("vary", "cookie");
+  return context.json({ ok: true, releaseId: release.release_id, publishedAt: release.published_at, entitlement, recipe });
 });
 
 app.get("/v2/releases/current", (context) => context.redirect("/api/v2/releases/current", 307));
@@ -492,6 +554,7 @@ app.patch("/internal/job-runs/:id", zValidator("json", jobRunUpdateSchema), asyn
 app.post("/internal/capture-batches", zValidator("json", captureBatchCreateSchema), async (context) => {
   const body = context.req.valid("json");
   const identity = context.get("identity");
+  if (identity.role === "engine" && !body.sourceId.startsWith("legacy-")) return jsonError("engine identities may only create migration-bridge batches", 403);
   if (identity.sourceIds && !identity.sourceIds.includes(body.sourceId)) return jsonError("agent is not authorized for this capture source", 403);
   const source = await context.env.DB.prepare("SELECT id FROM capture_sources WHERE id = ?1 AND active = 1").bind(body.sourceId).first();
   if (!source) return jsonError("unknown or inactive capture source", 404);
