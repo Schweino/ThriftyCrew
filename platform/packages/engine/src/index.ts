@@ -1,4 +1,5 @@
 import type { ReleaseGuardResult } from "@thriftycrew/contracts";
+import type { EngineParityReport } from "@thriftycrew/contracts";
 import { normalizeName } from "@thriftycrew/domain";
 
 export interface MatchRuleSet {
@@ -102,4 +103,122 @@ export function guardResult(input: Omit<ReleaseGuardResult, "findings"> & { find
     throw new Error("blind guard cannot pass");
   }
   return result;
+}
+
+export interface NativeEngineSnapshot {
+  mode: "legacy" | "direct" | "all";
+  observedAt: string;
+  configurationId: string;
+  currentReleaseId: string;
+  inputHash: string;
+  inputBatchIds: string[];
+  commodities: Array<{ id: string; label: string; basis_unit: WinnerCandidate["commodityId"] extends string ? string : never; category_id: string }>;
+  stores: Array<{ id: string; store_name: string }>;
+  candidates: Array<{
+    observation_id: string; commodity_id: string; store_location_id: string; per_unit_micros: number;
+    captured_at: string; valid_to: string | null; coverage_mode: WinnerCandidate["batchCoverageMode"];
+    captured_to: string; known_wrong: number;
+  }>;
+  currentCells: Array<{
+    commodity_id: string; store_location_id: string; observation_id: string | null; status: string;
+    is_crown: number; display_per_unit_micros: number | null; display_unit: string | null;
+  }>;
+}
+
+interface ComparableCell {
+  commodityId: string;
+  storeLocationId: string;
+  observationId: string | null;
+  status: "priced" | "missing";
+  isCrown: boolean;
+  displayPerUnitMicros: number | null;
+  displayUnit: string | null;
+}
+
+function comparableRecord(cell: ComparableCell): Record<string, unknown> {
+  return {
+    commodityId: cell.commodityId,
+    storeLocationId: cell.storeLocationId,
+    observationId: cell.observationId,
+    status: cell.status,
+    isCrown: cell.isCrown,
+    displayPerUnitMicros: cell.displayPerUnitMicros,
+    displayUnit: cell.displayUnit,
+  };
+}
+
+export function buildNativeParityReport(snapshot: NativeEngineSnapshot): EngineParityReport {
+  const groups = new Map<string, NativeEngineSnapshot["candidates"]>();
+  for (const candidate of snapshot.candidates) {
+    const key = `${candidate.commodity_id}\u001f${candidate.store_location_id}`;
+    const items = groups.get(key) ?? [];
+    items.push(candidate);
+    groups.set(key, items);
+  }
+  const cells: ComparableCell[] = [];
+  for (const commodity of snapshot.commodities) {
+    for (const store of snapshot.stores) {
+      const key = `${commodity.id}\u001f${store.id}`;
+      const selection = selectWinner((groups.get(key) ?? []).map((candidate) => ({
+        observationId: candidate.observation_id,
+        commodityId: candidate.commodity_id,
+        storeLocationId: candidate.store_location_id,
+        perUnitMicros: candidate.per_unit_micros,
+        capturedAt: candidate.captured_at,
+        batchCoverageMode: candidate.coverage_mode,
+        batchCapturedTo: candidate.captured_to,
+        ...(candidate.valid_to ? { validTo: candidate.valid_to } : {}),
+        knownWrong: candidate.known_wrong === 1,
+      })), snapshot.observedAt);
+      cells.push({
+        commodityId: commodity.id,
+        storeLocationId: store.id,
+        observationId: selection.winner?.observationId ?? null,
+        status: selection.winner ? "priced" : "missing",
+        isCrown: false,
+        displayPerUnitMicros: selection.winner?.perUnitMicros ?? null,
+        displayUnit: selection.winner ? commodity.basis_unit : null,
+      });
+    }
+  }
+  for (const commodity of snapshot.commodities) {
+    const priced = cells.filter((cell) => cell.commodityId === commodity.id && cell.status === "priced");
+    const minimum = priced.reduce<number | null>((value, cell) => value === null ? cell.displayPerUnitMicros : Math.min(value, cell.displayPerUnitMicros!), null);
+    if (minimum !== null) for (const cell of priced) cell.isCrown = cell.displayPerUnitMicros === minimum;
+  }
+  const current = new Map(snapshot.currentCells.map((cell) => [`${cell.commodity_id}\u001f${cell.store_location_id}`, {
+    commodityId: cell.commodity_id,
+    storeLocationId: cell.store_location_id,
+    observationId: cell.observation_id,
+    status: cell.status === "priced" ? "priced" as const : "missing" as const,
+    isCrown: cell.is_crown === 1,
+    displayPerUnitMicros: cell.display_per_unit_micros,
+    displayUnit: cell.display_unit,
+  } satisfies ComparableCell]));
+  const diffs: EngineParityReport["diffs"] = [];
+  for (const cell of cells) {
+    const key = `${cell.commodityId}\u001f${cell.storeLocationId}`;
+    const expected = current.get(key) ?? null;
+    if (!expected || JSON.stringify(comparableRecord(expected)) !== JSON.stringify(comparableRecord(cell))) {
+      if (diffs.length < 500) diffs.push({ key: key.replace("\u001f", ":"), current: expected ? comparableRecord(expected) : null, native: comparableRecord(cell), reason: !expected ? "cell is absent from current release" : "native winner semantics differ from current release" });
+    }
+  }
+  const currentOnly = [...current.keys()].filter((key) => !cells.some((cell) => `${cell.commodityId}\u001f${cell.storeLocationId}` === key));
+  for (const key of currentOnly) if (diffs.length < 500) diffs.push({ key: key.replace("\u001f", ":"), current: comparableRecord(current.get(key)!), native: null, reason: "current release cell is absent from native output" });
+  const diffCount = cells.filter((cell) => {
+    const expected = current.get(`${cell.commodityId}\u001f${cell.storeLocationId}`);
+    return !expected || JSON.stringify(comparableRecord(expected)) !== JSON.stringify(comparableRecord(cell));
+  }).length + currentOnly.length;
+  return {
+    runId: `parity-${snapshot.mode}-${snapshot.observedAt.slice(0, 10)}-${snapshot.inputHash.slice(0, 16)}`,
+    mode: snapshot.mode,
+    observedAt: snapshot.observedAt,
+    currentReleaseId: snapshot.currentReleaseId,
+    configurationId: snapshot.configurationId,
+    inputHash: snapshot.inputHash,
+    inputBatchIds: [...snapshot.inputBatchIds].sort(),
+    comparedCells: cells.length,
+    diffCount,
+    diffs,
+  };
 }

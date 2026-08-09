@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { evaluateAisleEvidence, guardResult, matchProductName, selectWinner } from "./index";
+import { buildNativeParityReport, evaluateAisleEvidence, guardResult, matchProductName, selectWinner } from "./index";
 
 describe("matching", () => {
   it("refuses a same-priority collision instead of first-match-wins", () => {
@@ -41,5 +41,18 @@ describe("winner selection", () => {
 describe("guard coverage", () => {
   it("refuses a blind pass", () => {
     expect(() => guardResult({ guardId: "x", status: "pass", eligibleCount: 10, examinedCount: 0, detail: {} })).toThrow(/blind/);
+  });
+});
+
+describe("native engine parity", () => {
+  it("rebuilds winners from the immutable snapshot", () => {
+    const report = buildNativeParityReport({
+      mode: "legacy", observedAt: "2026-08-09T12:00:00.000Z", configurationId: "config", currentReleaseId: "release", inputHash: "a".repeat(64), inputBatchIds: ["batch"],
+      commodities: [{ id: "eggs", label: "Eggs", basis_unit: "dozen", category_id: "dairy" }],
+      stores: [{ id: "store", store_name: "Store" }],
+      candidates: [{ observation_id: "obs", commodity_id: "eggs", store_location_id: "store", per_unit_micros: 1_990_000, captured_at: "2026-08-09T11:00:00.000Z", valid_to: null, coverage_mode: "full", captured_to: "2026-08-09T11:00:00.000Z", known_wrong: 0 }],
+      currentCells: [{ commodity_id: "eggs", store_location_id: "store", observation_id: "obs", status: "priced", is_crown: 1, display_per_unit_micros: 1_990_000, display_unit: "dozen" }],
+    });
+    expect(report).toMatchObject({ comparedCells: 1, diffCount: 0, diffs: [] });
   });
 });

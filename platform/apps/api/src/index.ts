@@ -10,6 +10,7 @@ import {
   configurationCreateSchema,
   configurationKnownWrongChunkSchema,
   evidenceMetadataSchema,
+  engineParityReportSchema,
   jobDispatchSchema,
   jobRunCreateSchema,
   jobRunUpdateSchema,
@@ -34,6 +35,7 @@ import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation } from "./ghost-reconciliation";
 import { dispatchGithubJob, recordAudit, runScheduledOperations } from "./operations";
+import { readEngineSnapshot, type EngineSourceMode } from "./engine-snapshot";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 
@@ -98,6 +100,7 @@ app.use("/internal/accuracy/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/triage", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/triage/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/doctor", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/engine/*", requireIdentityRole(["engine", "operator"]));
 
 app.get("/api/v2/status", async (context) => {
   const [release, schedules, accuracy, triage] = await Promise.all([
@@ -472,6 +475,43 @@ app.post("/internal/jobs/:job/dispatch", zValidator("json", jobDispatchSchema), 
   const result = await dispatchGithubJob(context.env, job, body.reason, body.idempotencyKey, body.ref);
   await recordAudit(context.env, context.get("identity"), "job.dispatch", "job_schedule", job, result.status === "dispatched" ? "accepted" : "failed", result);
   return context.json({ ok: result.status === "dispatched", ...result }, result.status === "dispatched" ? 202 : 500);
+});
+
+app.get("/internal/engine/snapshot", async (context) => {
+  const requested = context.req.query("mode") ?? "legacy";
+  if (!(["legacy", "direct", "all"] as const).includes(requested as EngineSourceMode)) return jsonError("engine mode must be legacy, direct, or all", 422);
+  try {
+    return context.json(await readEngineSnapshot(context.env, requested as EngineSourceMode));
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "engine snapshot failed", 422);
+  }
+});
+
+app.post("/internal/engine/parity", zValidator("json", engineParityReportSchema), async (context) => {
+  const body = context.req.valid("json");
+  const existing = await context.env.DB.prepare("SELECT status, diff_count FROM engine_parity_runs WHERE id = ?1").bind(body.runId).first<{ status: string; diff_count: number }>();
+  if (existing) return context.json({ ok: existing.status === "passed", runId: body.runId, status: existing.status, diffCount: existing.diff_count, idempotent: true });
+  const snapshot = await readEngineSnapshot(context.env, body.mode);
+  if (snapshot.currentReleaseId !== body.currentReleaseId || snapshot.configurationId !== body.configurationId || snapshot.inputHash !== body.inputHash || stableJson(snapshot.inputBatchIds) !== stableJson([...body.inputBatchIds].sort())) {
+    return jsonError("parity report does not match the current immutable engine snapshot", 409);
+  }
+  const status = body.diffCount === 0 ? "passed" : "failed";
+  await context.env.DB.prepare(
+    `INSERT INTO engine_parity_runs
+       (id, mode, current_release_id, configuration_id, input_hash, input_batch_ids_json,
+        compared_cells, diff_count, status, detail_json, observed_at)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)`,
+  ).bind(body.runId, body.mode, body.currentReleaseId, body.configurationId, body.inputHash, stableJson([...body.inputBatchIds].sort()), body.comparedCells, body.diffCount, status, stableJson({ diffs: body.diffs }), body.observedAt).run();
+  if (body.diffCount > 0) {
+    const triageId = await deterministicId("triage", "engine-parity", body.runId);
+    await context.env.DB.prepare(
+      `INSERT OR IGNORE INTO triage_items
+         (id, source_kind, source_ref, severity, status, title, evidence_json)
+       VALUES (?1, 'operational_alert', ?2, 'warning', 'open', ?3, ?4)`,
+    ).bind(triageId, body.runId, `Native ${body.mode} engine has ${body.diffCount} parity differences`, stableJson({ runId: body.runId, inputHash: body.inputHash, diffs: body.diffs })).run();
+  }
+  await recordAudit(context.env, context.get("identity"), "engine.parity", "engine_parity_run", body.runId, status === "passed" ? "accepted" : "failed", { mode: body.mode, comparedCells: body.comparedCells, diffCount: body.diffCount });
+  return context.json({ ok: status === "passed", runId: body.runId, status, diffCount: body.diffCount, idempotent: false }, status === "passed" ? 201 : 422);
 });
 
 app.post("/internal/backups/trigger", async (context) => {

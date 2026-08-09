@@ -5,6 +5,7 @@ import { ingestDirectCapture, MutationClient, replayCurrentArtifact } from "@thr
 import { buildCurrentBridge } from "@thriftycrew/daily/legacy";
 import { buildRegularCapture } from "@thriftycrew/daily/direct";
 import { generateLegacyConfiguration } from "./config";
+import { buildNativeParityReport, type NativeEngineSnapshot } from "@thriftycrew/engine";
 import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
@@ -157,6 +158,13 @@ if (command === "status") {
 } else if (command === "parity") {
   const artifact = await buildCurrentBridge(incomeRoot);
   result = { ok: artifact.audit.incompleteRecipes === 0 && artifact.audit.uncategorized.length === 0 && artifact.audit.multiplyCategorized.length === 0, audit: artifact.audit };
+} else if (command === "engine" && subcommand === "parity") {
+  const requestedMode = arguments_[0] ?? "legacy";
+  if (!(["legacy", "direct", "all"] as const).includes(requestedMode as "legacy" | "direct" | "all")) throw new Error("tc engine parity mode must be legacy, direct, or all");
+  const client = await mutationClient();
+  const snapshot = await client.request(`/internal/engine/snapshot?mode=${requestedMode}`) as unknown as NativeEngineSnapshot;
+  const report = buildNativeParityReport(snapshot);
+  result = await client.request("/internal/engine/parity", { json: report, acceptStatuses: [422] });
 } else if (command === "replay") {
   const artifact = await buildCurrentBridge(incomeRoot);
   result = await replayCurrentArtifact(await mutationClient(), artifact);
@@ -203,7 +211,7 @@ if (command === "status") {
       "tc status", "tc doctor", "tc triage [status|run]", "tc config generate|check",
       "tc schedules check|deploy", "tc backup trigger [--replica]", "tc job start|finish|dispatch <job> [status|reason]",
       "tc ghost reconcile [release-id]",
-        "tc run daily --dry", "tc parity", "tc replay", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output>",
+        "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id]", "tc accuracy verdict <file>",
       "tc commodity add <file>", "tc recipe add <file>",
     ],

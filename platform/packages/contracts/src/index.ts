@@ -256,6 +256,24 @@ export const jobDispatchSchema = z.object({
   ref: z.string().min(1).max(300).default("main"),
 });
 
+export const engineParityReportSchema = z.object({
+  runId: nonEmptyId,
+  mode: z.enum(["legacy", "direct", "all"]),
+  observedAt: isoDateTime,
+  currentReleaseId: nonEmptyId,
+  configurationId: nonEmptyId,
+  inputHash: sha256Hex,
+  inputBatchIds: z.array(nonEmptyId).min(1).max(100),
+  comparedCells: z.number().int().nonnegative(),
+  diffCount: z.number().int().nonnegative(),
+  diffs: z.array(z.object({
+    key: z.string().min(1).max(500),
+    current: z.record(z.string(), z.unknown()).nullable(),
+    native: z.record(z.string(), z.unknown()).nullable(),
+    reason: z.string().min(1).max(1000),
+  })).max(500),
+});
+
 export const releaseCreateSchema = z.object({
   id: nonEmptyId,
   marketId: nonEmptyId,
@@ -388,3 +406,4 @@ export type TelemetryEvent = z.infer<typeof telemetryEventSchema>;
 export type AccuracyDrawCreate = z.infer<typeof accuracyDrawCreateSchema>;
 export type AccuracyVerdicts = z.infer<typeof accuracyVerdictsSchema>;
 export type DirectCaptureArtifact = z.infer<typeof directCaptureArtifactSchema>;
+export type EngineParityReport = z.infer<typeof engineParityReportSchema>;

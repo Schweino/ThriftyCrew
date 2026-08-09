@@ -12,6 +12,7 @@
     "@thriftycrew/contracts": "workspace:*",
     "@thriftycrew/daily": "workspace:*",
     "@thriftycrew/domain": "workspace:*",
+    "@thriftycrew/engine": "workspace:*",
     "zod": "4.4.3"
   }
 }
