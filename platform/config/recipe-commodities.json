@@ -1155,6 +1155,7 @@
                                         ],
                             "band_min":  0.25,
                             "band_max":  3,
+                            "grams_per_unit":  120,
                             "note":  "Fresh red bell pepper, priced each. Requires the word \u0027bell\u0027 (word-anchored \u0027red\u0027) so it never matches red-pepper spice/flakes. Excludes \u0027roasted\u0027 and \u0027jar\u0027 so jarred roasted red peppers fall through to the roasted-red-peppers commodity - keep this rule BEFORE roasted-red-peppers in the array."
                         },
                         {

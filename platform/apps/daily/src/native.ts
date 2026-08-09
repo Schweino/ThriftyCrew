@@ -31,7 +31,7 @@ interface RecipeSpecification {
 
 interface RecipeCommodityRule {
   id: string; label: string; unit: string; include: string[]; exclude: string[];
-  relax_global?: string[]; band_min?: number; band_max?: number;
+  relax_global?: string[]; band_min?: number; band_max?: number; grams_per_unit?: number;
 }
 
 interface KnownWrongDocument {
@@ -116,7 +116,11 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
   const recipeExtensions = JSON.parse(recipeExtensionBytes.replace(/^\uFEFF/, "")) as { commodities: RecipeCommodityRule[] };
   const recipeAliases = JSON.parse(aliasBytes.replace(/^\uFEFF/, "")) as Record<string, string>;
   const knownWrong = JSON.parse(knownWrongBytes.replace(/^\uFEFF/, "")) as KnownWrongDocument;
-  const recipeRules = [...recipeRuleDocument.commodities, ...recipeExtensions.commodities];
+  // Narrow recipe extensions precede broad legacy rules and carry their own
+  // explicit exclusions, so they do not inherit the legacy global filter.
+  const extensionIds = new Set(recipeExtensions.commodities.map((rule) => rule.id));
+  const recipeRules = [...recipeExtensions.commodities, ...recipeRuleDocument.commodities];
+  const recipeRuleIds = new Set(recipeRules.map((rule) => rule.id));
   const recipeCatalogHash = await digestHex(stableJson(recipes));
   const ingredientCatalogHash = await digestHex(stableJson(ingredientDefinitions));
   const recipePricingConfigurationHash = await digestHex(stableJson({ recipeRuleDocument, recipeExtensions, recipeAliases }));
@@ -152,10 +156,12 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
     includes: rule.include.map(compilePattern),
     excludes: rule.exclude.map(compilePattern),
     relaxed: new Set(rule.relax_global ?? []),
+    applyGlobal: !extensionIds.has(rule.id),
   }));
   const rawByObservation = new Map((snapshot.rawCandidates ?? []).map((candidate) => [candidate.observation_id, candidate]));
   type RawCandidate = NonNullable<NativeEngineSnapshot["rawCandidates"]>[number];
   const recipeCandidates = new Map<string, Array<{ raw: RawCandidate; convertedMicros: number }>>();
+  const recipeRuleStats = new Map(recipeRules.map((rule) => [rule.id, { includeHits: 0, globalBlocked: 0, excluded: 0, incompatibleUnits: 0, outOfBand: 0, accepted: 0, samples: [] as Array<Record<string, unknown>> }]));
   const recipeMatchingAudit = { rawProducts: snapshot.rawCandidates?.length ?? 0, matched: 0, outOfBand: 0, incompatibleUnits: 0, globallyBlocked: 0 };
   for (const raw of snapshot.rawCandidates ?? []) {
     const rawText = raw.name.toLocaleLowerCase("en-US");
@@ -164,8 +170,11 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
     let selected: typeof compiledRules[number] | undefined;
     for (const rule of compiledRules) {
       if (!rule.includes.some((pattern) => pattern.test(rawText) || pattern.test(includeVariant))) continue;
-      if (globalHits.some((pattern) => !rule.relaxed.has(pattern.source))) continue;
-      if (rule.excludes.some((pattern) => pattern.test(rawText))) continue;
+      const stats = recipeRuleStats.get(rule.rule.id)!;
+      stats.includeHits += 1;
+      if (stats.samples.length < 5) stats.samples.push({ name: raw.name, capturedUnit: raw.normalized_basis_unit, perUnitMicros: raw.per_unit_micros, size: raw.size_text ?? null });
+      if (rule.applyGlobal && globalHits.some((pattern) => !rule.relaxed.has(pattern.source))) { stats.globalBlocked += 1; continue; }
+      if (rule.excludes.some((pattern) => pattern.test(rawText))) { stats.excluded += 1; continue; }
       selected = rule;
       break;
     }
@@ -173,20 +182,31 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
       if (globalHits.length > 0) recipeMatchingAudit.globallyBlocked += 1;
       continue;
     }
-    const convertedMicros = convertUnitPriceMicros(raw.per_unit_micros, raw.normalized_basis_unit, apiUnit(selected.rule.unit));
+    const targetUnit = apiUnit(selected.rule.unit);
+    let convertedMicros = convertUnitPriceMicros(raw.per_unit_micros, raw.normalized_basis_unit, targetUnit);
+    if (convertedMicros === null && ((raw.normalized_basis_unit === "oz" && targetUnit === "fl_oz") || (raw.normalized_basis_unit === "fl_oz" && targetUnit === "oz"))) {
+      convertedMicros = raw.per_unit_micros;
+    }
+    if (convertedMicros === null && targetUnit === "each" && selected.rule.grams_per_unit && (raw.normalized_basis_unit === "lb" || raw.normalized_basis_unit === "oz")) {
+      const gramsInCapturedUnit = raw.normalized_basis_unit === "lb" ? 453.59237 : 28.349523125;
+      convertedMicros = Math.round(raw.per_unit_micros * selected.rule.grams_per_unit / gramsInCapturedUnit);
+    }
     if (convertedMicros === null) {
       recipeMatchingAudit.incompatibleUnits += 1;
+      recipeRuleStats.get(selected.rule.id)!.incompatibleUnits += 1;
       continue;
     }
     const dollars = convertedMicros / 1_000_000;
     if ((selected.rule.band_min !== undefined && dollars < selected.rule.band_min) || (selected.rule.band_max !== undefined && dollars > selected.rule.band_max)) {
       recipeMatchingAudit.outOfBand += 1;
+      recipeRuleStats.get(selected.rule.id)!.outOfBand += 1;
       continue;
     }
     const list = recipeCandidates.get(selected.rule.id) ?? [];
     list.push({ raw, convertedMicros });
     recipeCandidates.set(selected.rule.id, list);
     recipeMatchingAudit.matched += 1;
+    recipeRuleStats.get(selected.rule.id)!.accepted += 1;
   }
   const activeKnownWrong = (knownWrong.entries ?? []).filter((entry) => !(entry.reversed_on && entry.reversed_by));
   const recipeCrownByCommodity = new Map<string, { commodityId: string; storeLocationId: string; observationId: string; displayPerUnitMicros: number; displayUnit: string; raw: RawCandidate }>();
@@ -238,8 +258,8 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
       const definition = ingredientByName.get(key(scaler?.canon ?? ingredient.item)) ?? ingredientByName.get(key(ingredient.item));
       const requestedBids = [...new Set([scaler?.bid, definition?.bid].filter((value): value is string => Boolean(value)))];
       const aliasedBids = requestedBids.map((bid) => recipeAliases[bid]).filter((bid): bid is string => Boolean(bid));
-      const resolvedBid = requestedBids.find((bid) => commodityById.has(bid) || recipeCrownByCommodity.has(bid))
-        ?? aliasedBids.find((bid) => commodityById.has(bid) || recipeCrownByCommodity.has(bid));
+      const resolvedBid = requestedBids.find((bid) => commodityById.has(bid) || recipeRuleIds.has(bid))
+        ?? aliasedBids.find((bid) => commodityById.has(bid) || recipeRuleIds.has(bid));
       const commodityId = resolvedBid ?? commodityByLabel.get(key(scaler?.canon ?? ingredient.item));
       const gpu = asNumber(scaler?.gpu) ?? asNumber(definition?.gpu);
       const grams = asNumber(ingredient.grams);
@@ -445,6 +465,7 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
       incompleteRecipes: incomplete.length,
       recipePricingCommodities: recipeRules.length,
       pricedRecipeCommodities: recipeCrownByCommodity.size,
+      unpricedRecipeCommodities: recipeRules.filter((rule) => !recipeCrownByCommodity.has(rule.id)).map((rule) => ({ id: rule.id, ...recipeRuleStats.get(rule.id)! })),
       recipeMatching: recipeMatchingAudit,
       top5Entries: top5.length,
       rotationEntries: freeRotation.length,
