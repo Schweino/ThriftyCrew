@@ -12,6 +12,11 @@ interface ReleaseContext {
 
 interface CountRow { count: number }
 
+export function storeCoverageFloor(priorPriced: number | undefined, firstNativeMinimum: number | undefined, firstNativeCutover: boolean): number {
+  if (firstNativeCutover && firstNativeMinimum !== undefined) return firstNativeMinimum;
+  return priorPriced === undefined ? 1 : Math.floor(priorPriced * 0.9);
+}
+
 function result(
   guardId: string,
   pass: boolean,
@@ -118,15 +123,38 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
     ).bind(previous.release_id).all<{ store_location_id: string; priced: number }>();
     for (const row of priorRows.results) previousCoverage.set(row.store_location_id, row.priced);
   }
+  const releaseKinds = previous && previous.release_id !== context.releaseId
+    ? await db.prepare(
+      `SELECT id, json_extract(input_manifest_json, '$.kind') AS kind
+         FROM releases WHERE id IN (?1, ?2)`,
+    ).bind(context.releaseId, previous.release_id).all<{ id: string; kind: string | null }>()
+    : { results: [], success: true, meta: {} } as unknown as D1Result<{ id: string; kind: string | null }>;
+  const kindByRelease = new Map(releaseKinds.results.map((row) => [row.id, row.kind]));
+  const firstNativeCutover = kindByRelease.get(context.releaseId) === "native-v3-release"
+    && kindByRelease.get(previous?.release_id ?? "") !== "native-v3-release";
+  const cutoverRows = firstNativeCutover
+    ? await db.prepare(
+      `SELECT s.store_location_id,
+              MAX(CAST(json_extract(s.coverage_policy_json, '$.first_native_min_priced') AS INTEGER)) AS minimum
+         FROM release_input_batches i
+         JOIN capture_batches b ON b.id = i.batch_id
+         JOIN capture_sources s ON s.id = b.source_id
+        WHERE i.release_id = ?1
+          AND json_extract(s.coverage_policy_json, '$.first_native_min_priced') IS NOT NULL
+        GROUP BY s.store_location_id`,
+    ).bind(context.releaseId).all<{ store_location_id: string; minimum: number }>()
+    : { results: [], success: true, meta: {} } as unknown as D1Result<{ store_location_id: string; minimum: number }>;
+  const cutoverMinimum = new Map(cutoverRows.results.map((row) => [row.store_location_id, row.minimum]));
   const storeFindings: ReleaseGuardResult["findings"] = [];
   for (const row of storeRows.results) {
     const prior = previousCoverage.get(row.id);
-    const floor = prior === undefined ? 1 : Math.floor(prior * 0.9);
+    const authoredCutoverMinimum = cutoverMinimum.get(row.id);
+    const floor = storeCoverageFloor(prior, authoredCutoverMinimum, firstNativeCutover);
     if (row.cells !== context.expectedCommodities || row.priced < floor) {
       storeFindings.push({
         key: row.id,
         message: `${row.display_name} coverage is below its accepted release floor`,
-        evidence: { cells: row.cells, priced: row.priced, floor, expectedCells: context.expectedCommodities },
+        evidence: { cells: row.cells, priced: row.priced, floor, expectedCells: context.expectedCommodities, baseline: authoredCutoverMinimum !== undefined && firstNativeCutover ? "first-native-authored" : "previous-release-90pct" },
       });
     }
   }
@@ -136,7 +164,7 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
     context.expectedStores,
     storeRows.results.length,
     storeFindings,
-    { previousReleaseId: previous?.release_id ?? null },
+    { previousReleaseId: previous?.release_id ?? null, firstNativeCutover, authoredCutoverStores: cutoverRows.results.length },
   ));
 
   const priorPriced = previous && previous.release_id !== context.releaseId
