@@ -3,9 +3,10 @@ import type { Entitlement } from "@thriftycrew/entitlements";
 export function memberStatusHtml(entitlement: Entitlement): string {
   const label = entitlement.state.replace("_", " ");
   const access = entitlement.mayUseProtectedTools ? "Paid tools are available." : "Paid tools are locked.";
+  const hasMemberSession = ["free", "paid", "expired", "cancelled"].includes(entitlement.state);
   const sessionAction = entitlement.state === "signed_out"
     ? '<form method="post" action="/api/v2/session/resume"><button type="submit">Resume member session</button></form>'
-    : entitlement.authenticated
+    : hasMemberSession
       ? '<form method="post" action="/api/v2/session/signout"><button type="submit">Sign out of V3 tools</button></form>'
       : "";
   return `<!doctype html>
