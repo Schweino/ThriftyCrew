@@ -183,8 +183,8 @@ export function buildNativeParityReport(snapshot: NativeEngineSnapshot): EngineP
   }
   for (const commodity of snapshot.commodities) {
     const priced = cells.filter((cell) => cell.commodityId === commodity.id && cell.status === "priced");
-    const minimum = priced.reduce<number | null>((value, cell) => value === null ? cell.displayPerUnitMicros : Math.min(value, cell.displayPerUnitMicros!), null);
-    if (minimum !== null) for (const cell of priced) cell.isCrown = cell.displayPerUnitMicros === minimum;
+    const crown = [...priced].sort((left, right) => left.displayPerUnitMicros! - right.displayPerUnitMicros! || left.storeLocationId.localeCompare(right.storeLocationId))[0];
+    if (crown) crown.isCrown = true;
   }
   const current = new Map(snapshot.currentCells.map((cell) => [`${cell.commodity_id}\u001f${cell.store_location_id}`, {
     commodityId: cell.commodity_id,
@@ -210,7 +210,7 @@ export function buildNativeParityReport(snapshot: NativeEngineSnapshot): EngineP
     return !expected || JSON.stringify(comparableRecord(expected)) !== JSON.stringify(comparableRecord(cell));
   }).length + currentOnly.length;
   return {
-    runId: `parity-${snapshot.mode}-${snapshot.observedAt.slice(0, 10)}-${snapshot.inputHash.slice(0, 16)}`,
+    runId: `parity-v2-${snapshot.mode}-${snapshot.observedAt.slice(0, 10)}-${snapshot.inputHash.slice(0, 16)}`,
     mode: snapshot.mode,
     observedAt: snapshot.observedAt,
     currentReleaseId: snapshot.currentReleaseId,
