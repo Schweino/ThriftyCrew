@@ -180,6 +180,7 @@ const renderMemberStatus: MiddlewareHandler<Bindings> = async (context) => {
 
 app.get("/member-status", renderMemberStatus);
 app.get("/member-status/", renderMemberStatus);
+app.get("/v3-member-status", renderMemberStatus);
 
 app.post("/api/v2/session/signout", (context) => {
   context.header("cache-control", "private, no-store");
