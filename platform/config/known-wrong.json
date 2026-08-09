@@ -1,0 +1,1645 @@
+{
+    "readme":  "THE KNOWN-WRONG BLOCKLIST. One row per (commodity, store, product) that a reasoner has ADJUDICATED wrong - the product is not the commodity, so no price for it may ever appear in that commodity\u0027s row again. audit-known-wrong.ps1 exits 2 if any listed product is priced on the board, and guards.ps1 delegates to it, so a defect that was already found and fixed cannot come back silently. This file exists because audit findings used to live as PROSE in .md files: honeydew was written up on 2026-07-29 with the store\u0027s own arithmetic and was still the published crown the next morning. Add a finding with add-known-wrong.ps1 (one command). NEVER hand-edit a name to make the gate go green - if a ruling was wrong, reverse it with add-known-wrong.ps1 -Reverse, which records who reversed it and why.",
+    "schema":  1,
+    "matching_key":  "Normalized product name, scoped to (commodity, store). The name is lower-cased, apostrophes are deleted, every other non-alphanumeric byte becomes a space, and a stranded possessive \u0027s\u0027 is re-joined. That folds the pipeline\u0027s own corruptions together (measured over 35,362 board cells: 69 groups where several raw spellings collapse to one normal form, and all 69 were the SAME product re-encoded - Jiffy(R) three ways, \u0027Hy Vee\u0027 vs \u0027Hy-Vee\u0027, \u0027Clancy S\u0027 vs \"Clancy\u0027s\", smart quote vs mojibake pair; zero merged two different products). product_id is a SECOND, optional key used only to re-derive today\u0027s spelling of a listed product from its own store feed - it is absent at Aldi, Sam\u0027s Club and Fareway, so it can never be the primary key. Scoping to (commodity, store) is required, not cosmetic: \u0027Lysol Toilet Bowl Cleaner Clinging Gel\u0027 is BLOCKED as stain-remover and CORRECT as toilet-bowl-cleaner, where it is priced today; a product-global blocklist would delete a right answer.",
+    "retire_when_vocabulary":  {
+                                   "ruling-reversed":  "Fires when the entry carries a non-empty reversed_on AND reversed_by. This is the normal trigger for a wrong-product ruling: the product does not stop being the wrong product on its own, so the only honest way out is a named human or agent reversing the ruling on the record. add-known-wrong.ps1 -Reverse sets both fields in one command, and audit-known-wrong.ps1 stops enforcing the entry the moment they are set.",
+                                   "commodity-retired":  "Fires when the entry\u0027s commodity id is no longer in commodities.json. Evaluated every run.",
+                                   "store-retired":  "Fires when the entry\u0027s store name is no longer in stores.json. Evaluated every run.",
+                                   "note":  "audit-known-wrong.ps1 evaluates ALL THREE predicates for EVERY entry each run and prints the ones that have fired, and it exits 2 if an entry declares a retire_when outside this list. That is deliberate: the allowlist bug found 2026-07-30 shipped two entries justified by \u0027the store does not carry the item\u0027 while the store carried it - a justification no machine could check, so it could never be retired and never be shown wrong."
+                               },
+    "entries":  [
+                    {
+                        "key":  "coconut-oil|Bakers|dr-teals-foaming-bath",
+                        "commodity":  "coconut-oil",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Dr Teal\u0027s Foaming Bath with Pure Epsom Salt, Nourish \u0026 Protect with Coconut Oil"
+                                  ],
+                        "product_id":  "0081106801501",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Epsom-salt bath soap, not an edible oil. Held the coconut-oil CROWN on comparison-2026-07-28 at $5.99 / 34 fl oz = $0.1762/oz, 46% under the real cheapest. Top-of-ladder verified the whole way: real Kroger product_id, real price, working link - identity proved the price belonged to the product and said nothing about whether the product belonged to the commodity. The include rule matched on the generic word \u0027pure\u0027, shared with LouAna 100% Pure Coconut Oil.",
+                        "seen_on_board":  "2026-07-28",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coffee|Walmart|onyx-coffee-lab-salted-mocha-latte",
+                        "commodity":  "coffee",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Onyx Coffee Lab Salted Mocha Oat Milk Latte , 11 fl oz Can",
+                                      "Onyx Coffee Lab Salted Mocha Oat Milk Latte, 11 fl oz Can"
+                                  ],
+                        "product_id":  "19034168881",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A single-serve ready-to-drink oat milk latte in a can, not ground or whole-bean coffee. Live in walmart-regular-2026-07-30 at $4.97 / 11 fl oz; a per-serving RTD beverage priced per ounce against a commodity whose real unit is dry coffee makes the coffee row unreadable. Caught before it reached a board.",
+                        "seen_on_board":  "never (blocked in the feed, walmart-regular-2026-07-30)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coffee|Walmart|onyx-coffee-lab-matcha-latte-2pk",
+                        "commodity":  "coffee",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "(2 pack) Onyx Coffee Lab Matcha Oat Milk Latte, 11 fl oz Can"
+                                  ],
+                        "product_id":  "20454610214",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Matcha - green tea - in a 2-pack of RTD cans. Not coffee at all, in the coffee commodity. Live in walmart-regular-2026-07-30 at $9.94 / 22 fl oz.",
+                        "seen_on_board":  "never (blocked in the feed, walmart-regular-2026-07-30)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "frosting|Walmart|freshness-guaranteed-choc-chip-sandwich-cookies",
+                        "commodity":  "frosting",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Freshness Guaranteed Shelf Stable Chocolate Chip Sandwich Cookies with Butter Cream Icing, 12 Count"
+                                  ],
+                        "product_id":  "17762904277",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A packet of sandwich cookies, matched into frosting on the words \u0027Butter Cream Icing\u0027. Priced on comparison-2026-07-29 at $5.76 / 15 oz = $0.384/oz in the frosting row. The whole product is not frosting; the frosting is a filling inside it.",
+                        "seen_on_board":  "2026-07-29",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "parmesan|Aldi|clancys-parmesan-garlic-pita-chips",
+                        "commodity":  "parmesan",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Clancy S Parmesan Garlic Pita Chips 7.33 OZ",
+                                      "Clancy\u0027s Parmesan Garlic Pita Chips"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pita chips with a parmesan-garlic seasoning, not parmesan cheese. Live in aldi-regular-2026-07-29 at $2.29 / 7.33 oz - about a quarter of real grated parmesan per ounce, so it wins the cheapest slot whenever it is admitted. Aldi publishes no product id, and its feed also strips the apostrophe (\"Clancy S\"), which is why the blocklist carries BOTH observed spellings and the normalizer re-joins the stranded possessive.",
+                        "seen_on_board":  "never (blocked in the feed, aldi-regular-2026-07-29)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "parmesan|Bakers|idahoan-baby-reds-garlic-parmesan",
+                        "commodity":  "parmesan",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Idahoan Baby Reds with Roasted Garlic \u0026 Parmesan Mashed Potatoes"
+                                  ],
+                        "product_id":  "0002970000139",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Instant mashed potatoes with a garlic-parmesan flavour, not parmesan cheese. Held the parmesan CROWN on SIX consecutive boards, comparison-2026-07-23 through 2026-07-28, at $1.25 / 4.1 oz = $0.3049/oz. Six days of a wrong crown that nothing in the publish path could see, while Idahoan sits correctly in instant-mashed-potatoes on the same boards.",
+                        "seen_on_board":  "2026-07-23 .. 2026-07-28 (crown all six days)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "salmon|Walmart|blue-buffalo-wilderness-cat-food-salmon",
+                        "commodity":  "salmon",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Blue Buffalo Wilderness Natural High Protein Dry Food for Adult Cats, Salmon, 9.5-lb Bag"
+                                  ],
+                        "product_id":  "634625434",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Dry cat food. Held the salmon CROWN on comparison-2026-07-29 at $38.98 / 9.5 lb = $4.10/lb, 20.8% under the runner-up - a near-miss with no magnitude signal, so no price band could ever have caught it. The salmon commodity already carried TEN pet-food exclude patterns and the phrase \u0027Dry Food for Adult Cats\u0027 walked through all ten. This entry is the reason the blocklist exists: the rule library is 43,416 excludes against 1,079 includes and still loses.",
+                        "seen_on_board":  "2026-07-29 (crown)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-cinnamon|Walmart|teddy-grahams-cinnamon",
+                        "commodity":  "ground-cinnamon",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "TEDDY GRAHAMS Cinnamon Graham Snacks, Kids Snacks, 10 oz"
+                                  ],
+                        "product_id":  "10292091",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A box of cinnamon-flavoured kids\u0027 cookies, not ground cinnamon. Live in walmart-regular-2026-07-30 at $3.98 / 10 oz. Adjudicated at 4.7% under the runner-up, so the miss is invisible to any per-unit sanity band - the near-miss class that makes magnitude detectors useless here.",
+                        "seen_on_board":  "never (blocked in the feed, walmart-regular-2026-07-30)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "stain-remover|Walmart|lysol-toilet-bowl-cleaner-clinging-gel-2pk",
+                        "commodity":  "stain-remover",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Lysol Toilet Bowl Cleaner Clinging Gel, Power, Disinfecting Bathroom Cleaner and Toilet Bowl Stain Remover, 24 oz (2 Pack)"
+                                  ],
+                        "product_id":  "14711873",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A toilet bowl cleaner, matched into stain-remover (laundry) on the words \u0027Stain Remover\u0027 in its own marketing copy. Adjudicated at 2.8% under the runner-up. NOTE THE SCOPE: this exact product is priced CORRECTLY on comparison-2026-07-30 in the toilet-bowl-cleaner row at $4.97 / 48 fl oz - the ruling is about (product, commodity), never about the product alone, and a product-global blocklist would have deleted a right answer.",
+                        "seen_on_board":  "never in stain-remover (correct today in toilet-bowl-cleaner)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "butter|Walmart|natures-own-butter-buns-hot-dog",
+                        "commodity":  "butter",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Nature\u0027s Own Butter Buns Hot Dog Buns, Non-GMO Hot Dog Buns, 8 Count"
+                                  ],
+                        "product_id":  "21094641",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Hot dog buns whose brand line is literally \u0027Butter Buns\u0027. Priced on comparison-2026-07-29 in the butter row at $2.78 / 15.027 oz. Bakery carriers named after the dairy commodity are a standing class here (butter buns, cream cheese frosting, garlic bread).",
+                        "seen_on_board":  "2026-07-29",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "tomatoes|FamilyFare|contadina-roma-tomatoes-puree",
+                        "commodity":  "tomatoes",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Contadina Roma Tomatoes Puree 29 Oz",
+                                      "Contadina Roma Tomatoes Puree"
+                                  ],
+                        "product_id":  "6931",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Canned tomato PUREE in the FRESH tomatoes commodity - a form flip, not a brand difference. Live in family-fare-regular-2026-07-30 at $2.99 / 29 oz, which is far under fresh Roma at $1.29-$1.49/lb and therefore wins the cheapest slot whenever admitted. Contadina Crushed Tomatoes from the same feed sits correctly in crushed-tomatoes on comparison-2026-07-30, so the brand cannot be excluded wholesale.",
+                        "seen_on_board":  "never in tomatoes (Contadina is correct today in crushed-tomatoes)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "raspberries|FamilyFare|kens-raspberry-walnut-vinaigrette",
+                        "commodity":  "raspberries",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Ken\u0027s Steak House Salad Dressing \u0026 Marinade, Raspberry Walnut Vinaigrette, Lite 16 Fl Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Salad dressing in the fresh raspberries commodity. Held the raspberries CROWN on comparison-2026-07-14 at $3.69 / 16 fl oz = $0.2306/oz. Ken\u0027s dressings are correctly matched elsewhere on today\u0027s board (italian-dressing, caesar-dressing, honey-mustard), so the brand is legitimate and only this flavour-name collision is not.",
+                        "seen_on_board":  "2026-07-14 (crown)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "raspberries|Bakers|pure-silk-raspberry-mist-shave-cream",
+                        "commodity":  "raspberries",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Pure Silk Raspberry Mist Moisturizing Shave Cream"
+                                  ],
+                        "product_id":  "0005100930991",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Shave cream in the fresh raspberries commodity, matched on a SCENT name. Held the raspberries CROWN on comparison-2026-07-23 and 2026-07-25 through 2026-07-28 at $2.29 / 7.25 oz = $0.3159/oz. Pure Silk Spa Therapy from the same feed is priced correctly in shaving-cream on today\u0027s board, which is why the ruling is scoped to (raspberries, Baker\u0027s) and not to the brand.",
+                        "seen_on_board":  "2026-07-23, 2026-07-25 .. 2026-07-28 (crown)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "strawberries|SamsClub|monster-energy-strawberry-shot-24pk",
+                        "commodity":  "strawberries",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Monster Energy Zero Sugar, Strawberry Shot, 16 fl. oz., 24 pk."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A 24-pack of energy drinks in the fresh strawberries commodity. Held the strawberries CROWN on comparison-2026-07-17, 2026-07-18 and 2026-07-22 at $42.48 / 384 fl oz = $0.1106/oz, then stayed priced in the row through 2026-07-28. Sam\u0027s Club publishes no product id in its captures, so the name is the only available key.",
+                        "seen_on_board":  "2026-07-17 .. 2026-07-28 (crown on 07-17, 07-18, 07-22)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "strawberries|FamilyFare|jumex-strawberry-banana-nectar",
+                        "commodity":  "strawberries",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Jumex Strawberry Banana Nectar From Concentrate 11.3 Fl Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Fruit nectar from concentrate in the fresh strawberries commodity. Held the strawberries CROWN on comparison-2026-07-12 at $1.19 / 11.3 fl oz = $0.1053/oz.",
+                        "seen_on_board":  "2026-07-12 (crown)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "strawberries|Bakers|kroger-strawberry-applesauce",
+                        "commodity":  "strawberries",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Kroger Strawberry Applesauce"
+                                  ],
+                        "product_id":  "0001111015511",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Applesauce cups in the fresh strawberries commodity. Held the strawberries CROWN on SIX consecutive boards, comparison-2026-07-23 through 2026-07-28, at $2.00 / 6 pk 4 oz = $0.0833/oz - roughly a tenth of real fresh strawberries per ounce, and still nothing in the publish path could see it.",
+                        "seen_on_board":  "2026-07-23 .. 2026-07-28 (crown all six days)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "tortillas|SamsClub|quest-tortilla-style-protein-chips",
+                        "commodity":  "tortillas",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Quest Tortilla Style 10-20g Protein Chip Variety Pack, Salsa Verde and Chili Lime, 14 ct."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Protein CHIPS described as \u0027Tortilla Style\u0027 in the tortillas commodity. Held the tortillas CROWN on comparison-2026-07-14 at $1.56, priced against a bare \u0027oz\u0027 basis. A chip is not a tortilla and the pack basis is not comparable either.",
+                        "seen_on_board":  "2026-07-14 (crown)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cucumbers|SamsClub|members-mark-fujisan-cucumber-avocado-roll",
+                        "commodity":  "cucumbers",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Member\u0027s Mark by FujiSan Cucumber Avocado Roll, 15 pcs."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A prepared sushi roll in the fresh cucumbers commodity. Held the cucumbers CROWN on FIVE consecutive boards, comparison-2026-07-17 through 2026-07-24, at $5.74 / 15 ct = $0.3827 per piece - a per-PIECE basis silently compared against per-cucumber.",
+                        "seen_on_board":  "2026-07-17 .. 2026-07-24 (crown all five days)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "black-pepper|Bakers|simple-truth-black-pepper-lentil-rice-blend",
+                        "commodity":  "black-pepper",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Simple Truth Protein Black Pepper Lentils Brown Rice and Ancient Grains Whole Grain Blend"
+                                  ],
+                        "product_id":  "0001111002281",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A lentil / brown rice / ancient grain side dish flavoured with black pepper, in the black-pepper SPICE commodity. Held the black-pepper CROWN on SIX consecutive boards, comparison-2026-07-23 through 2026-07-28, at $2.99 / 8.8 oz = $0.3398/oz. Ground black pepper runs many times that per ounce, so the wrong product owned the row\u0027s headline number for six days.",
+                        "seen_on_board":  "2026-07-23 .. 2026-07-28 (crown all six days)",
+                        "ruled_on":  "2026-07-30",
+                        "ruled_by":  "accuracy-audit-2026-07-30",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "spinach|Walmart|pictsweet-family-size-chopped-spinach",
+                        "commodity":  "spinach",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Pictsweet Family Size Chopped Spinach"
+                                  ],
+                        "product_id":  "10805106",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Wrong FORM. Pictsweet is a frozen-vegetable brand and this 32 oz chopped spinach is frozen, but the name carries no \u0027frozen\u0027 token so neither the global frozen exclude nor spinach\u0027s own \u0027birds eye\u0027 brand exclude could see it. It held the CROWN on fresh spinach at 0.115/oz, roughly half the real fresh crown (Aldi Little Salad Bar 8 oz 1.89 = 0.2362/oz), so the board advertised a frozen block as the cheapest fresh spinach. Brand excluded on spinach and sweet-potatoes; Pictsweet keeps its access to the frozen commodities.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-07-31",
+                        "ruled_by":  "triage-developer 2026-07-31 (plan-2026-07-31 fa3102)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "jalapenos|FamilyFare|san-marcos-traditional-recipe-crunchy-whole-jala",
+                        "commodity":  "jalapenos",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "San Marcos Traditional Recipe Crunchy Whole Jalapenos Peppers 26 Oz"
+                                  ],
+                        "product_id":  "2392976",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Wrong FORM. San Marcos is a canned escabeche brand and this 26 oz jar is canned whole jalapenos in brine, but the name carries no \u0027canned\u0027 or \u0027pickled\u0027 token so jalapenos\u0027 own form excludes could not see it. It held the CROWN on fresh jalapenos at 1.3477/lb, beating six rows of actual fresh peppers (Aldi 1.70, Walmart 1.76, Baker\u0027s 1.99, Hy-Vee and Fareway 2.99). Brand excluded on the fresh jalapenos commodity only; San Marcos keeps its access to the chipotle and pickled commodities.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-07-31",
+                        "ruled_by":  "triage-developer 2026-07-31 (plan-2026-07-31 fa3102)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-cloves|FamilyFare|spice-supreme-spice-ground-cloves",
+                        "commodity":  "ground-cloves",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Spice Supreme Spice Ground Cloves"
+                                  ],
+                        "product_id":  "2400974",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Captured at current_price=45 for a 1.25 oz Spice Supreme jar, i.e. $36.00/oz, 13.6x the row median and 33x Walmart. Spice Supreme is a discount brand; a $45 spice jar is not a shelf price. Surfaced by audit-unit-basis-outlier on its first live run. The row is also STALE (as_of 2026-07-30 while its shelf-mates are 07-31), and Family Fare stocks Our Family Cloves Ground 2 Oz at $2.99 ($1.50/oz) in the same file, so the bad row was additionally hiding the store real best price.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "accuracy pass 2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "corned-beef-hash|Walmart|mary-kitchen-roast-beef-hash-canned-roast-beef-h",
+                        "commodity":  "corned-beef-hash",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "MARY KITCHEN Roast Beef Hash, Canned Roast Beef Hash, 14 oz Can"
+                                  ],
+                        "product_id":  "206684852",
+                        "verdict":  "wrong-product",
+                        "evidence":  "ROAST beef hash, not CORNED beef hash. Different cure and different product; the semantic sweep matched on \"beef hash\" alone.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coconut-milk-canned|Walmart|thai-kitchen-gluten-free-unsweetened-coconut-cre",
+                        "commodity":  "coconut-milk-canned",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Thai Kitchen Gluten Free Unsweetened Coconut Cream, 13.66 fl oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Coconut CREAM, not coconut milk. Higher fat, different concentration, different per-unit basis.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed",
+                        "reversed_on":  "2026-08-01",
+                        "reversed_by":  "coverage-backlog-2026-08-01",
+                        "reversal_reason":  "Reversing my own entry: the stored name was a TRUNCATED copy read off a 60-char display, so it can never match the real product row - an unfirable ruling that looks like coverage. Re-added with the exact catalogue name."
+                    },
+                    {
+                        "key":  "ground-pork|Bakers|ground-beef-and-pork-blend-80-lean-20-fat",
+                        "commodity":  "ground-pork",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Ground Beef and Pork Blend, 80% Lean/20% Fat"
+                                  ],
+                        "product_id":  "0002718256550",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A beef-and-pork BLEND, not ground pork. Pricing it as ground pork misstates what the shopper buys.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pork-tenderloin|Walmart|prairie-fresh-natural-fresh-pork-half-loin-bonel",
+                        "commodity":  "pork-tenderloin",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Prairie Fresh Natural Fresh Pork Half Loin, Boneless, 3.5-6 lb"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pork LOIN, a different cut from tenderloin, and materially cheaper per lb. Would undercut the real tenderloin crown with the wrong cut.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed",
+                        "reversed_on":  "2026-08-01",
+                        "reversed_by":  "coverage-backlog-2026-08-01",
+                        "reversal_reason":  "Reversing my own entry: the stored name was a TRUNCATED copy read off a 60-char display, so it can never match the real product row - an unfirable ruling that looks like coverage. Re-added with the exact catalogue name."
+                    },
+                    {
+                        "key":  "pork-tenderloin|Walmart|smithfield-all-natural-boneless-pork-loin-filet",
+                        "commodity":  "pork-tenderloin",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Smithfield All-Natural Boneless Pork Loin Filet, 1.0 - 2.87 lb"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pork loin filet, not tenderloin. Same cut confusion as the half loin.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed",
+                        "reversed_on":  "2026-08-01",
+                        "reversed_by":  "coverage-backlog-2026-08-01",
+                        "reversal_reason":  "Reversing my own entry: the stored name was a TRUNCATED copy read off a 60-char display, so it can never match the real product row - an unfirable ruling that looks like coverage. Re-added with the exact catalogue name."
+                    },
+                    {
+                        "key":  "pie-pumpkins|Bakers|bakery-fresh-pumpkin-pie",
+                        "commodity":  "pie-pumpkins",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Bakery Fresh Pumpkin Pie"
+                                  ],
+                        "product_id":  "0001111027021",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A baked pumpkin PIE (dessert), not a pie pumpkin (the squash). The commodity exclude for \\bpie\\b is correct; this is the sweep guessing on the word pumpkin.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pie-pumpkins|FamilyFare|marie-callenders-pumpkin-pie-36-oz",
+                        "commodity":  "pie-pumpkins",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Marie Callender\u0027s Pumpkin Pie 36 Oz"
+                                  ],
+                        "product_id":  "391146",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Frozen pumpkin pie dessert, not a pie pumpkin.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Walmart|all-natural-extra-lean-ground-beef-96-lean-4-fat",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "All Natural Extra Lean Ground Beef 96% Lean/4% Fat, 1 lb"
+                                  ],
+                        "product_id":  "16322759490",
+                        "verdict":  "wrong-product",
+                        "evidence":  "96/4, not 93/7. Leaner grade, priced higher; the board tracks the ratios separately on purpose.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Aldi|96-lean-ground-beef-per-lb",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "96 Lean Ground Beef Per LB"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "96% lean, not 93/7. Same reason as the Walmart 96/4.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pork-tenderloin|Walmart|prairie-fresh-pork-half-loin-v2",
+                        "commodity":  "pork-tenderloin",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Prairie Fresh Natural Fresh Pork Half Loin, Boneless, 3.5- 5.5 lb, 22g of Protein per 4oz Serving"
+                                  ],
+                        "product_id":  "301957080",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pork LOIN, a different cut from tenderloin and materially cheaper per lb; pricing it as tenderloin would undercut the real crown with the wrong cut. Re-keyed with the exact catalogue name after the first entry was reversed for carrying a truncated one.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pork-tenderloin|Walmart|smithfield-pork-loin-filet-v2",
+                        "commodity":  "pork-tenderloin",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Smithfield All-Natural Boneless Pork Loin Filet, 1.0 - 2.8 lb, 24 G of Protein per 4 oz Serving"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pork loin filet, not tenderloin. Same cut confusion as the half loin. Re-keyed with the exact catalogue name.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coconut-milk-canned|Walmart|thai-kitchen-coconut-cream-v2",
+                        "commodity":  "coconut-milk-canned",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Thai Kitchen Gluten Free Unsweetened Coconut Cream, 13.66 fl oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Coconut CREAM, not coconut milk: higher fat, different concentration, different per-unit basis. Re-keyed after an unnecessary reversal.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "frozen-vegetables|Bakers|birds-eye-steamfresh-cut-green-beans-frozen-vege",
+                        "commodity":  "frozen-vegetables",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Birds Eye Steamfresh Cut Green Beans, Frozen Vegetables"
+                                  ],
+                        "product_id":  "0001450002101",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A single-vegetable bag (cut green beans). \"Frozen Vegetables\" here is Kroger\u0027s AISLE suffix appended to every frozen SKU, not a product descriptor - the same suffix appears on asparagus spears and corn on the cob. This commodity tracks MIXED vegetable blends, so a single-veg bag winning the cell would misrepresent it.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "coverage-backlog-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "baking-soda|FamilyFare|arm-hammer-baking-soda-clumping-litter-fresh-sce",
+                        "commodity":  "baking-soda",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Arm \u0026 Hammer Baking Soda Clumping Litter, Fresh Scent"
+                                  ],
+                        "product_id":  "2340662",
+                        "verdict":  "wrong-product",
+                        "evidence":  "CAT LITTER, not baking soda. Held the baking-soda CROWN at $0.0375/oz on the live 2026-08-01 board - the cheapest-price verdict shoppers see. Found by aisle-test: the store files it under pets_wildlife while every real baking-soda product is pantry.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "aisle-test-live-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pineapple|FamilyFare|pineapple-teriyaki-brats-4-ct",
+                        "commodity":  "pineapple",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Pineapple Teriyaki Brats 4 Ct."
+                                  ],
+                        "product_id":  "1564405684716779911",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Bratwurst sausages, not pineapple. Held the pineapple CROWN at $1.3725/each on the live board. Found by aisle-test: shelved under meat, while pineapple is produce.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "aisle-test-live-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "sun-dried-tomatoes|FamilyFare|gilberts-sausage-chicken-caprese-with-basil-mozz",
+                        "commodity":  "sun-dried-tomatoes",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Gilbert\u0027s Sausage, Chicken, Caprese, With Basil, Mozzarella \u0026 Sun Dried Tomatoes 10 Oz"
+                                  ],
+                        "product_id":  "5588160",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Chicken sausage, not sun-dried tomatoes. Reached the FF cell through the sun.?dried.{0,40}tomato include I added the same morning in coverage batch 3 - the widening was correct for its target and also matched a sausage that merely lists them as an ingredient. Found by aisle-test: shelved under meat.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "aisle-test-live-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "dried-thyme|FamilyFare|local-roots-organic-thyme",
+                        "commodity":  "dried-thyme",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Local Roots Organic Thyme"
+                                  ],
+                        "product_id":  "1764405684715974017",
+                        "verdict":  "wrong-product",
+                        "evidence":  "FRESH thyme priced as the DRIED commodity. The store\u0027s own shelf path says so: canonical_url is fresh_fruits_vegetables/fresh_spices_herbs/local_roots_organic_thyme. It held the Family Fare dried-thyme cell at 5.98/oz, the most expensive on the row, and dried-thyme\u0027s excludes (fresh, bunch, sprigs, clamshell) share no word with the name. Fixed by an exclude on the Local Roots brand, which is correct for fresh-basil and fresh-mint and wrong only here.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "plan-run-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "olive-oil|FamilyFare|violi-mediterranean-blend-italian-sunflower-extr",
+                        "commodity":  "olive-oil",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Violi Mediterranean Blend, Italian Sunflower \u0026 Extra Virgin Olive Oil 33.8 Oz"
+                                  ],
+                        "product_id":  "2510964",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A SUNFLOWER/olive BLEND priced as olive oil, second-cheapest on the live main board at 0.2068/oz - it is cheaper precisely because it is not olive oil. The aisle test cannot catch it: the store shelves it under pantry/baking/oils_sprays, which is the correct department. Same permissive-include class as the Hendrickson\u0027s dressing on the Hy-Vee discovery docket. Fixed with a sunflower/canola/soybean/grapeseed exclude; a plain \u0027blend\u0027 exclude was measured first and REFUSED because it also killed three genuine California Olive Ranch Global Blend olive oils.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "plan-run-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "olive-oil|HyVee|pasta-roni-garlic-olive-oil-vermicelli",
+                        "commodity":  "olive-oil",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Pasta Roni Garlic \u0026 Olive Oil Vermicelli"
+                                  ],
+                        "product_id":  "39221",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pasta Roni Garlic \u0026 Olive Oil VERMICELLI - a boxed pasta side dish, not olive oil. It matched the include on the words olive oil in a flavour name, and its 21.8% saving is also an artefact: 4.6 WEIGHT ounces divided as fluid ounces.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "plan-run-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "olive-oil|HyVee|hendricksons-sweet-vinegar-olive-oil",
+                        "commodity":  "olive-oil",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Hendrickson\u0027s Sweet Vinegar \u0026 Olive Oil"
+                                  ],
+                        "product_id":  "65514",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Hendrickson\u0027s Sweet Vinegar \u0026 Olive Oil is a salad DRESSING, not olive oil. Same permissive-include class as the Violi sunflower blend already ruled wrong for olive-oil at Family Fare.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-01",
+                        "ruled_by":  "plan-run-2026-08-01",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "furniture-polish|SamsClub|pledge-furniture-enhancing-polish-spray-lemon-3c",
+                        "commodity":  "furniture-polish",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Pledge Furniture Enhancing Polish Spray, Lemon, 3ct., 29 oz."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real price, WRONG BASIS. Sam\u0027s own unit price on this row is $4.17/ea, i.e. 12.52/3 - the pack holds 3 EACHES and the \u002729 oz\u0027 is the pack TOTAL, so 29/3 = 9.67 oz per can, matching the 9.7 oz single cans at Family Fare, Hy-Vee, Baker\u0027s and Walmart (9.689) to within 0.4 percent. The engine\u0027s count-first branch multiplied 3 x 29 = 87 oz and published 0.1439/oz instead of the true 0.4317/oz. Blocked until a size-verified recapture exists; true furniture-polish crown is Fareway Behold $2.99 / 12.5 oz = 0.2392/oz.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "all-purpose-cleaner|SamsClub|pledge-multisurface-cleaner-rainshower-3-ct-29-o",
+                        "commodity":  "all-purpose-cleaner",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Pledge Multisurface Cleaner, Rainshower, 3 ct., 29 oz."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-basis",
+                        "evidence":  "Real price, WRONG BASIS. Sam\u0027s own unit price on this row is $4.17/ea, i.e. 12.52/3 - the pack holds 3 EACHES and the \u002729 oz\u0027 is the pack TOTAL, so 29/3 = 9.67 oz per can, matching the 9.7 oz single cans at Family Fare, Hy-Vee, Baker\u0027s and Walmart (9.689) to within 0.4 percent. The engine\u0027s count-first branch multiplied 3 x 29 = 87 oz and published 0.1439/oz instead of the true 0.4317/oz. Blocked until a size-verified recapture exists; true furniture-polish crown is Fareway Behold $2.99 / 12.5 oz = 0.2392/oz.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|FamilyFare|arm-hammer-stain-fighters-fresh-scent-detergent",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Arm \u0026 Hammer Stain Fighters Fresh Scent Detergent 32.5 Fl Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Arm \u0026 Hammer STAIN FIGHTERS is A\u0026H\u0027s budget line, not the Plus OxiClean product this commodity is defined as. Admitting it would compare two different products under one cell. Verified against the laundry-detergent definition (A\u0026H Plus OxiClean).",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Bakers|arm-hammer-clean-burst-scent-liquid-laundry-dete",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Clean Burst Scent Liquid Laundry Detergent"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. A\u0026H CLEAN BURST liquid is a non-OxiClean A\u0026H line. The commodity is A\u0026H Plus OxiClean; a different formula at a different price point is not the same shelf item.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Bakers|arm-hammer-sensitive-skin-plus-fresh-scent-liqui",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Sensitive Skin Plus Fresh Scent Liquid Laundry Detergent"
+                                  ],
+                        "product_id":  "0003320000281",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. A\u0026H SENSITIVE SKIN PLUS is a non-OxiClean A\u0026H line. The commodity is A\u0026H Plus OxiClean; a different formula is not the same shelf item.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Bakers|arm-hammer-baking-soda-fresh-sparkling-fresh-sce",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Baking Soda Fresh Sparkling Fresh Scent Liquid Laundry Detergent"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. A\u0026H BAKING SODA FRESH / Sparkling Fresh liquid is a non-OxiClean A\u0026H line. The commodity is A\u0026H Plus OxiClean.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|FamilyFare|arm-hammer-liquid-laundry-clean-burst",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Arm \u0026 Hammer Liquid Laundry Clean Burst"
+                                  ],
+                        "product_id":  "1764405684716097530",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. A\u0026H Liquid Laundry CLEAN BURST is a non-OxiClean A\u0026H line. The commodity is A\u0026H Plus OxiClean.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Bakers|arm-hammer-plus-oxiclean-fresh-scent-powder-laun",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Plus OxiClean Fresh Scent Powder Laundry Detergent"
+                                  ],
+                        "product_id":  "0003320006510",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. This is the Plus OxiClean POWDER. The commodity\u0027s form exclude keeps powder out on purpose so a per-oz powder price is never compared against a per-floz liquid. Exclude verified doing its intended job on this finding.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Walmart|arm-hammer-plus-oxiclean-5-in-1-laundry-detergen",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Plus OxiClean 5-in-1 Laundry Detergent Paks, Fresh Scent, 42 Count"
+                                  ],
+                        "product_id":  "147545592",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Plus OxiClean 5-in-1 laundry PAKS. A separate laundry-pods commodity already exists; pods and liquid are not price-comparable per unit. Routing it here would double-count the product.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Walmart|marketside-organic-grass-fed-ground-beef-93-lean",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Marketside Organic Grass-Fed Ground Beef, 93% Lean/7% Fat, 1 lb"
+                                  ],
+                        "product_id":  "133893542",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Marketside ORGANIC grass-fed 93/7. The \u0027organic\u0027 exclude is the board\u0027s price-comparability policy: organic carries a structural premium and would make the conventional-vs-conventional comparison dishonest. Exclude verified doing its intended job.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Aldi|simply-nature-93-07-lean-organic-grass-fed-groun",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Simply Nature 93 07 Lean Organic Grass Fed Ground Beef 1 LB"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Simply Nature ORGANIC grass-fed 93/7. Same price-comparability policy as the Marketside organic row: the \u0027organic\u0027 exclude is deliberate, not a defect.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-8020|Bakers|kroger-80-20-ground-beef-patties",
+                        "commodity":  "ground-beef-8020",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Kroger 80/20 Ground Beef Patties"
+                                  ],
+                        "product_id":  "0001111063987",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Kroger 80/20 PATTIES are a formed product, not bulk ground beef. The \u0027patties\u0027 exclude is deliberate: a formed patty carries a processing premium over the same lean bulk chub.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pork-tenderloin|Walmart|smithfield-steakhouse-fresh-seasoned-pork-tender",
+                        "commodity":  "pork-tenderloin",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.5Ã¢â‚¬â€œ1.9 lb, 20 Grams of Protein per 4 oz Serving"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Smithfield Steakhouse SEASONED pork tenderloin (two name spellings of one product; one is the mojibake twin of the en-dash form). The \u0027seasoned\u0027 exclude is deliberate: a marinated tenderloin carries added weight and a premium over plain. Both spellings ruled so the sweep stops re-finding the pair.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "frozen-fries|Bakers|kroger-seasoned-crispy-frozen-french-fries",
+                        "commodity":  "frozen-fries",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Kroger Seasoned Crispy Frozen French Fries"
+                                  ],
+                        "product_id":  "0001111005578",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Kroger SEASONED crispy fries. The plain-fries policy exclude is deliberate, and Baker\u0027s frozen-fries cell is already covered by a plain product, so nothing is lost by ruling this variant.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "almond-milk|Bakers|simple-truth-dairy-free-chocolate-almond-milk-ha",
+                        "commodity":  "almond-milk",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Simple Truth Dairy Free Chocolate Almond Milk Half Gallon"
+                                  ],
+                        "product_id":  "0001111013266",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Simple Truth CHOCOLATE almond milk is a flavor variant, not the plain almond milk this commodity prices. Flavored dairy alternatives carry a premium and are not price-comparable.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cranberry-juice|FamilyFare|ocean-spray-juice-drink-cranberry-zero-sugar-64",
+                        "commodity":  "cranberry-juice",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Ocean Spray Juice Drink, Cranberry, Zero Sugar 64 Fl Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Ocean Spray Zero Sugar and Mixed Berry Zero Sugar JUICE DRINKS, not 100 percent cranberry juice. The cranberry-juice cell already carries all 7 stores, so nothing is lost; admitting a sweetened juice drink would compare a different product.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "iced-tea|Bakers|kroger-unsweetened-tea",
+                        "commodity":  "iced-tea",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Kroger Unsweetened Tea"
+                                  ],
+                        "product_id":  "0001111015525",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Kroger Unsweetened Tea 1 gal $3.29 is a real bottled tea, but the only token that would admit it is a bare \u0027unsweetened tea\u0027, which risks colliding with tea-bag products. Baker\u0027s already holds the iced-tea crown, so a ruling is the right trade rather than a risky widen. Revisit if Baker\u0027s loses that cell.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Bakers|arm-hammer-clean-burst-liquid-laundry-detergent",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Clean Burst Liquid Laundry Detergent"
+                                  ],
+                        "product_id":  "0003320000427",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. A\u0026H CLEAN BURST liquid is a non-OxiClean A\u0026H line. Sibling ruling covers the \u0027Clean Burst Scent\u0027 title; Baker\u0027s also lists it without \u0027Scent\u0027, which normalizes to a different core.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|Bakers|arm-hammer-baking-soda-fresh-liquid-laundry-dete",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "ARM \u0026 HAMMER Baking Soda Fresh Liquid Laundry Detergent Sparkling Fresh Scent"
+                                  ],
+                        "product_id":  "0003320097734",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. A\u0026H BAKING SODA FRESH liquid is a non-OxiClean A\u0026H line. Baker\u0027s lists the same product with the scent words in two different orders, which normalize to two different cores, so both titles need a ruling.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cranberry-juice|FamilyFare|ocean-spray-juice-drink-cranberry-mixed-berry-ze",
+                        "commodity":  "cranberry-juice",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Ocean Spray Juice Drink, Cranberry Mixed Berry, Zero Sugar 64 Fl Oz"
+                                  ],
+                        "product_id":  "1564405684714861529",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Ocean Spray Cranberry MIXED BERRY Zero Sugar is a sweetened juice DRINK, not 100 percent cranberry juice. The cranberry-juice cell already carries all 7 stores. Sibling ruling covers the plain Zero Sugar title.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "laundry-detergent|FamilyFare|arm-hammer-stain-fighters-fresh-scent-detergent-100-5",
+                        "commodity":  "laundry-detergent",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Arm \u0026 Hammer Stain Fighters Fresh Scent Detergent 100.5 Fl Oz"
+                                  ],
+                        "product_id":  "1564405684713746267",
+                        "verdict":  "out-of-scope-variant",
+                        "evidence":  "By-policy variant, not a rule defect. Arm \u0026 Hammer STAIN FIGHTERS is A\u0026H\u0027s budget line, not the Plus OxiClean product this commodity is defined as. Sibling ruling covers the 32.5 fl oz size; this is the 100.5 fl oz size, a separate title whose 48-char key slug collides with it.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-02",
+                        "ruled_by":  "triage-developer plan-2026-08-02-2",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "fruit-snacks|SamsClub|members-mark-cheese-fruit-and-nut-snacks-12-pk",
+                        "commodity":  "fruit-snacks",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Member\u0027s Mark Cheese, Fruit and Nut Snacks, 12 pk."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different product: a Balanced-Breaks-style cheese + fruit + nut snack tray, not fruit snacks. Sam\u0027s Club $9.12 / 12 pk. Surfaced by audit-coverage-gaps as RULE-INVISIBLE (only the loosened probe matched); it needs a ruling, not a widened include - admitting it would put a cheese tray on the fruit-snacks commodity. Ruled from plan-2026-08-06 item 2026-08-03-f4fb91.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "pork-tenderloin|Walmart|prairie-fresh-natural-fresh-pork-ribeye-roast-bo",
+                        "commodity":  "pork-tenderloin",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Prairie Fresh Natural Fresh Pork Ribeye Roast, Boneless, 1.3- 2.5 lb, 25g of protein per 4oz serving"
+                                  ],
+                        "product_id":  "273035820",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different cut: a boneless pork RIBEYE ROAST, not a tenderloin. Walmart $7.54 / 1.899 lb. The Walmart board row is already the real \u0027Prairie Fresh Pork Tenderloin 2 Pieces\u0027 $8.93 / 2.249 lb = $3.9707 per lb, so this is a ruling that keeps a roast from ever taking the cell, not a fix to a wrong cell. Semantic sweep 2026-08-05; plan-2026-08-06 item 2026-08-03-0d3bb1.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "vegetable-soup|Walmart|progresso-tomato-basil-soup-vegetable-classics-c",
+                        "commodity":  "vegetable-soup",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Progresso Tomato Basil Soup, Vegetable Classics Canned Soup, Gluten Free, 19 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different product: a TOMATO BASIL soup wearing the \u0027Vegetable Classics\u0027 line branding, not a vegetable soup. Walmart $2.48 / 19 oz. The Walmart board row is already the real \u0027Progresso Vegetable Soup, Vegetable Classics 19 oz\u0027 at the same $2.48, so this ruling only stops the line-branding name from taking the cell. Semantic sweep 2026-08-05; plan-2026-08-06 item 2026-08-03-0d3bb1.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "breakfast-sandwiches|FamilyFare|jimmy-dean-biscuit-roll-ups-sausage-frozen-break",
+                        "commodity":  "breakfast-sandwiches",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct,Jimmy Dean Maple Biscuit Roll Ups, Sausage, Frozen Breakfast 2 Ct"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different product: Jimmy Dean BISCUIT ROLL UPS, a rolled sausage-in-biscuit, not a breakfast sandwich. Family Fare $7.99 each. This ruling is what stands between the finding and a wrong CROWN: at 8 Ct the roll-up prices to $0.999/each and would take the breakfast-sandwiches crown from Sam\u0027s Club at $1.165/each. Semantic sweep 2026-08-05; plan-2026-08-06 item 2026-08-03-0d3bb1.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "storage-bags|Aldi|boulder-quart-storage-twin-lock-bags-50-ct",
+                        "commodity":  "storage-bags",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Boulder Quart Storage Twin Lock Bags 50 CT"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Wrong size class: QUART bags on a commodity labelled \u0027Food Storage Bags (gallon)\u0027. Aldi $2.19 / 50 CT. Belt to the suspenders of the quart/pint exclude added to the commodity the same day, so the semantic lane goes quiet too. The Aldi crown row \u0027Boulder Twin Lock Storage Bags 40 CT\u0027 carries no size word and is NOT ruled. plan-2026-08-06 item 2026-08-03-0d3bb1.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "mangoes|Walmart|aidells-refrigerated-spicy-mango-with-jalape-o-s",
+                        "commodity":  "mangoes",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Aidells Refrigerated Spicy Mango with Jalapeño Smoked Chicken Sausage Links, 12 oz, 4 Count"
+                                  ],
+                        "product_id":  "10811030",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Different product, LIVE CELL: a mango-flavoured smoked CHICKEN SAUSAGE holding the Walmart mangoes cell at $5.54 / 4 links = $1.385 each on comparison-2026-08-06. It arrived with the resumed Walmart pull (walmart-regular-2026-08-06) after plan-2026-08-06 was measured, and it is why the mangoes@Walmart coverage gap the plan expected had vanished: a wrong product had filled the cell. mangoes\u0027 include is \u0027mango(?:es|s)?\u0027 and no exclude covers sausage. Deviation recorded on item 2026-08-03-f4fb91.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-93-7|Walmart|73-lean-27-fat-ground-beef-3-lb-roll-fresh-all-n",
+                        "commodity":  "ground-beef-93-7",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "73% Lean / 27% Fat Ground Beef, 3 lb Roll, Fresh, All Natural*"
+                                  ],
+                        "product_id":  "15136793",
+                        "verdict":  "wrong-product",
+                        "evidence":  "73/27 is a genuinely different product from 93/7; the semantic sidecar scores it similar on name shape alone. Six sibling 73/27 SKUs sit in the Walmart capture (cheapest 10 lb roll at 4.444/lb) against the real 93/7 cell at 6.99/lb, so admitting the class would wreck the cell. Correct refusal, blocklisted so the coverage sweep stops re-paging it.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "soy-sauce|Aldi|fusia-asian-inspirations-traditional-81-oz",
+                        "commodity":  "soy-sauce",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Fusia Asian Inspirations Traditional 81 OZ"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "The name carries neither soy nor sauce, so the product cannot be identified from its own name. The capture resolves it to 8.1 oz at 3.49 = 0.4309/floz, nowhere near a win, and Aldi\u0027s soy cell is already the real \u0027Fusia Asian Inspirations All Purpose Soy Sauce 15 FL OZ\u0027 at 0.11/floz. Unverifiable name, zero upside. Correct refusal.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "quart-storage-bags|Aldi|boulder-storage-twin-lock-bags-40-ct",
+                        "commodity":  "quart-storage-bags",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Boulder Storage Twin Lock Bags 40 CT"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "The name carries no size word, so admitting it to the QUART commodity would fabricate a size claim (hard rule: never fabricate a size); 40 CT is consistent with the gallon sibling. The quart cell is already covered by the explicit \u0027Boulder Quart Storage Twin Lock Bags 50 CT\u0027 at 0.0438/each. Correct refusal.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "fruit-cups|Bakers|dole-diced-mango-in-juice",
+                        "commodity":  "fruit-cups",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Dole Diced Mango In Juice"
+                                  ],
+                        "product_id":  "0003890002968",
+                        "verdict":  "wrong-product",
+                        "evidence":  "fruit-cups is an EACH-priced commodity and this name expresses no pack count (the garlic-bread lesson), so no per-each price can be derived without inventing one. Baker\u0027s is already covered by the 24 pk mandarin cups at 0.6662/each. Correct refusal.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-beef-8020|Walmart|80-lean-20-fat-ground-beef-chuck-patties-12-coun",
+                        "commodity":  "ground-beef-8020",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "80% Lean / 20% Fat Ground Beef Chuck Patties, 12 Count, 1/3 lb patties, 4 lb Tray, Fresh, All Natural*"
+                                  ],
+                        "product_id":  "887705275",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pre-formed PATTIES, a different product from bulk 80/20 ground beef and priced as such; the standing \u0027patties\u0027 exclude is correct and plan-2026-08-06-3 lists it under do_not_touch. Correct refusal, blocklisted so the coverage sweep stops re-paging it.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "chicken-thighs|Aldi|fresh-fresh-chicken-drumsticks-family-pack-per-l",
+                        "commodity":  "chicken-thighs",
+                        "store":  "Aldi",
+                        "names":  [
+                                      "Fresh Fresh Chicken Drumsticks Family Pack Per LB"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Drumstick, correctly held out of chicken-thighs by the standing \\bdrumsticks?\\b exclude from commit 75cf58d7 (2026-07-17 drumsticks-as-thighs soundness ruling over 1,296 new Sam\u0027s rows). The commodity DISPLAYS as \u0027Chicken Thighs / Drumsticks\u0027, which is a genuine contradiction: admitting drumsticks would move the crown from Sam\u0027s 1.28 to Aldi 1.09/lb and two cells by 25-30%. That is a commodity-MEANING call, escalated to Brad in plan-2026-08-06-3 open_questions_for_brad. Status quo shipped; retire_when ruling-reversed.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "chicken-thighs|Bakers|tyson-all-natural-fresh-chicken-drumsticks",
+                        "commodity":  "chicken-thighs",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Tyson All Natural Fresh Chicken Drumsticks"
+                                  ],
+                        "product_id":  "0026080800000",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Drumstick, correctly held out of chicken-thighs by the standing \\bdrumsticks?\\b exclude from commit 75cf58d7 (2026-07-17 drumsticks-as-thighs soundness ruling over 1,296 new Sam\u0027s rows). The commodity DISPLAYS as \u0027Chicken Thighs / Drumsticks\u0027, which is a genuine contradiction: admitting drumsticks would move the crown from Sam\u0027s 1.28 to Aldi 1.09/lb and two cells by 25-30%. That is a commodity-MEANING call, escalated to Brad in plan-2026-08-06-3 open_questions_for_brad. Status quo shipped; retire_when ruling-reversed.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "chicken-thighs|Bakers|heritage-farm-bone-in-skin-on-chicken-drumsticks",
+                        "commodity":  "chicken-thighs",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Heritage Farm Bone In Skin On Chicken Drumsticks"
+                                  ],
+                        "product_id":  "0028334800000",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Drumstick, correctly held out of chicken-thighs by the standing \\bdrumsticks?\\b exclude from commit 75cf58d7 (2026-07-17 drumsticks-as-thighs soundness ruling over 1,296 new Sam\u0027s rows). The commodity DISPLAYS as \u0027Chicken Thighs / Drumsticks\u0027, which is a genuine contradiction: admitting drumsticks would move the crown from Sam\u0027s 1.28 to Aldi 1.09/lb and two cells by 25-30%. That is a commodity-MEANING call, escalated to Brad in plan-2026-08-06-3 open_questions_for_brad. Status quo shipped; retire_when ruling-reversed.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-06",
+                        "ruled_by":  "triage-developer (plan-2026-08-06-3 item 2026-08-06-6960df)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "almonds|HyVee|post-honey-bunches-of-oats-with-almonds-cereal-f",
+                        "commodity":  "almonds",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Post Honey Bunches of Oats with Almonds Cereal, Family Size"
+                                  ],
+                        "product_id":  "2519444",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Post Honey Bunches of Oats with Almonds Cereal - a breakfast cereal, not almonds. Matched the include on the word almonds.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "almonds|HyVee|malt-o-meal-honey-and-oat-blenders-with-almonds",
+                        "commodity":  "almonds",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Malt-O-Meal Honey and Oat Blenders with Almonds Breakfast Cereal, 30 oz Resealable"
+                                  ],
+                        "product_id":  "3746199",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Malt-O-Meal Honey and Oat Blenders with Almonds - a breakfast cereal, not almonds. Same include collision as the Honey Bunches row.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cherries|HyVee|simply-limeade-with-cherry-bottle-52-fl-oz",
+                        "commodity":  "cherries",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Simply Limeade with Cherry Bottle, 52 fl oz"
+                                  ],
+                        "product_id":  "4198057",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Simply Limeade with Cherry - a bottled limeade drink, not cherries. Priced 52 fl oz against a per-lb produce commodity.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cucumbers|HyVee|burts-bees-refreshing-pre-moistened-with-cucumbe",
+                        "commodity":  "cucumbers",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Burt\u0027s Bees Refreshing Pre-moistened with Cucumber \u0026 Mint Scent Facial Cleanser Towelettes"
+                                  ],
+                        "product_id":  "772345",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Burt\u0027s Bees Cucumber and Mint facial cleanser TOWELETTES - personal care, not produce.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "honey|HyVee|hy-vee-honey-vanilla-greek-yogurt",
+                        "commodity":  "honey",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Hy-Vee Honey Vanilla Greek Yogurt"
+                                  ],
+                        "product_id":  "2935726",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Hy-Vee Honey Vanilla Greek YOGURT - dairy, not honey. Matched the include on honey.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "italian-sausage|HyVee|prego-italian-sausage-and-garlic-meat-sauce-23-5",
+                        "commodity":  "italian-sausage",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Prego Italian Sausage and Garlic Meat Sauce, 23.5 oz Jar"
+                                  ],
+                        "product_id":  "50463",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Prego Italian Sausage and Garlic Meat SAUCE, 23.5 oz jar - a pasta sauce, not sausage. Would price a meat commodity from a jar of sauce.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "italian-sausage|HyVee|prego-italian-sausage-and-garlic-meat-sauce-44-o",
+                        "commodity":  "italian-sausage",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Prego Italian Sausage and Garlic Meat Sauce, 44 oz Jar"
+                                  ],
+                        "product_id":  "2887170",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Prego Italian Sausage and Garlic Meat SAUCE, 44 oz jar - same pasta sauce as the 23.5 oz row, not sausage.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "peaches|HyVee|dole-orange-peach-mango-52oz",
+                        "commodity":  "peaches",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Dole Orange Peach Mango 52oz"
+                                  ],
+                        "product_id":  "4107477",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Dole Orange Peach Mango - a bottled juice blend, not peaches. Also 52 fl oz read against a per-lb produce commodity, so the saving is partly arithmetic.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "strawberries|HyVee|hy-vee-light-strawberry-flavor-apple-sauce-6-4-o",
+                        "commodity":  "strawberries",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Hy-Vee Light Strawberry Flavor Apple Sauce 6-4 oz Cups"
+                                  ],
+                        "product_id":  "24242",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Hy-Vee Light Strawberry Flavor APPLE SAUCE cups - apple sauce, not strawberries.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "watermelon|HyVee|extra-watermelon-sugar-free-chewing-gum-15-ct-3",
+                        "commodity":  "watermelon",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "EXTRA Watermelon Sugar Free Chewing Gum, 15 ct (3 Pack)"
+                                  ],
+                        "product_id":  "43018",
+                        "verdict":  "wrong-product",
+                        "evidence":  "EXTRA Watermelon Sugar Free Chewing GUM, 3 ct - confectionery, not produce.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "watermelon|HyVee|extra-sweet-watermelon-sugar-free-chewing-gum-me",
+                        "commodity":  "watermelon",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "EXTRA Sweet Watermelon Sugar Free Chewing Gum Mega Pack - 35 sticks"
+                                  ],
+                        "product_id":  "3730594",
+                        "verdict":  "wrong-product",
+                        "evidence":  "EXTRA Sweet Watermelon Sugar Free Chewing GUM mega pack - confectionery, not produce. 35 sticks read as 35 watermelons.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "vanilla-extract|HyVee|hy-vee-imitation-vanilla-extract",
+                        "commodity":  "vanilla-extract",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Hy-Vee Imitation Vanilla Extract"
+                                  ],
+                        "product_id":  "22596",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Hy-Vee IMITATION Vanilla Extract. A real product, but artificial vanillin is not vanilla extract - every other cell in this commodity is PURE extract (Hy-Vee Pure, McCormick Pure). Letting imitation set the price makes Hy-Vee look 3.3x cheaper on a different product.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "instant-coffee|HyVee|maxwell-house-international-vanilla-caramel-latt",
+                        "commodity":  "instant-coffee",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Maxwell House International Vanilla Caramel Latte Instant Flavored Coffee Drink 8.7 oz"
+                                  ],
+                        "product_id":  "53359",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Maxwell House International Vanilla Caramel LATTE instant flavored coffee DRINK mix - mostly sugar and creamer, not instant coffee. The floor it beats is Folgers Classic Roast instant coffee, and the margin is under 5%.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "instant-coffee|HyVee|maxwell-house-international-french-vanilla-caf-i",
+                        "commodity":  "instant-coffee",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Maxwell House International French Vanilla Café Instant Flavored Coffee Drink 8.4 oz"
+                                  ],
+                        "product_id":  "53350",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Maxwell House International French Vanilla Cafe instant flavored coffee DRINK mix - a sweetened cappuccino-style mix, not instant coffee.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "instant-coffee|HyVee|maxwell-house-international-hazelnut-caf-instant",
+                        "commodity":  "instant-coffee",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Maxwell House International Hazelnut Café Instant Flavored Coffee Drink 9 oz"
+                                  ],
+                        "product_id":  "14912",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Maxwell House International Hazelnut Cafe instant flavored coffee DRINK mix - a sweetened cappuccino-style mix, not instant coffee.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "instant-coffee|HyVee|maxwell-house-international-caf-vienna-instant-f",
+                        "commodity":  "instant-coffee",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Maxwell House International Café Vienna Instant Flavored Coffee Drink 9 oz"
+                                  ],
+                        "product_id":  "53358",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Maxwell House International Cafe Vienna instant flavored coffee DRINK mix - a sweetened cappuccino-style mix, not instant coffee.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cranberry-juice|HyVee|old-orchard-healthy-balance-pomegranate-cranberr",
+                        "commodity":  "cranberry-juice",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Old Orchard Healthy Balance Pomegranate Cranberry Juice Cocktail"
+                                  ],
+                        "product_id":  "24182",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Old Orchard Healthy Balance POMEGRANATE Cranberry Juice Cocktail - a pomegranate blend, not cranberry juice. The plain diet cranberry row from the same brand is accepted separately.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "aluminum-foil|HyVee|hy-vee-pre-cut-aluminum-foil-sheets",
+                        "commodity":  "aluminum-foil",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Hy-Vee Pre-Cut Aluminum Foil Sheets"
+                                  ],
+                        "product_id":  "4211789",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Hy-Vee Pre-Cut Aluminum Foil SHEETS, 50 ct at $0.0858 per SHEET, against a floor of $1.99 for a 25 sq ft ROLL. Both say each, but a sheet is not a roll - this is the unit-magnitude trap, and it would publish foil as roughly 23x cheaper than it is.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "butter|Walmart|pearl-milling-company-butter-rich-syrup-24-oz-pa",
+                        "commodity":  "butter",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Pearl Milling Company Butter Rich Syrup, 24 oz (Packaging May Vary)"
+                                  ],
+                        "product_id":  "146086143",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Pearl Milling Company Butter Rich SYRUP - pancake syrup, not butter. It held the CHEAPEST-BUTTER crown at $2.56/lb; the cheapest real butter on this board is Aldi Countryside Creamery at $2.89/lb.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "butter|FamilyFare|birds-eye-sauced-butter-super-sweet-corn-10-8-oz",
+                        "commodity":  "butter",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Birds Eye Sauced Butter Super Sweet Corn 10.8 Oz"
+                                  ],
+                        "product_id":  "5993888",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Birds Eye Sauced Butter Super Sweet CORN - frozen corn in a butter sauce, not butter. Matched the include on the word butter.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "butter|SamsClub|sunbutter-original-sunflower-seed-butter-28-oz",
+                        "commodity":  "butter",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Sunbutter Original Sunflower Seed Butter, 28 oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "SunButter Original SUNFLOWER SEED Butter - a seed spread, not dairy butter.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "baby-formula|Walmart|similac-360-total-care-gentle-comfort-ready-to-f",
+                        "commodity":  "baby-formula",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Similac 360 Total Care Gentle Comfort Ready-to-Feed Baby Formula, 2-fl-oz Bottle"
+                                  ],
+                        "product_id":  "19416216094",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Similac 360 READY-TO-FEED liquid, sized 15.991 fl oz, holding the crown on a commodity the other five stores price as POWDER by weight (48, 34, 33.2, 12.5, 12.4 oz canisters). Powder makes roughly seven times its weight in prepared formula, so pricing a prepared liquid per ounce against powder per ounce makes the cheapest-formula verdict backwards. Ready-to-feed belongs in its own commodity, not this one.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cocktail-sauce|SamsClub|members-mark-shrimp-tray-with-cocktail-sauce-pri",
+                        "commodity":  "cocktail-sauce",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Member\u0027s Mark Shrimp Tray with Cocktail Sauce, priced per pound"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A SHRIMP TRAY sold by the pound, not cocktail sauce. Its per-unit ($0.6338/oz) is 4x the row floor ($0.165), so it would never win, but heal-missing-products or a future Sam\u0027s pull could put it on the row as the Sam\u0027s cell. Adjudicated 2026-08-08 while measuring the ~200-unused-Sam\u0027s-prices item, which had already closed itself to 4 residual entries.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "lime-juice|SamsClub|mccormick-mayonesa-mayonnaise-with-lime-juice-28",
+                        "commodity":  "lime-juice",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "McCormick Mayonesa Mayonnaise with Lime Juice, 28 fl. oz., 2 pk."
+                                  ],
+                        "product_id":  "juice. Per-unit $0.2086/floz against a $0.06 floor. Same adjudication pass as the cocktail-sauce shrimp tray.",
+                        "verdict":  "wrong-product",
+                        "evidence":  "MAYONNAISE flavoured with lime juice, not lime juice. Matched the commodity on the words lime",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "jelly|Walmart|sunbutter-jammies-sunflower-butter-grape-jelly-s",
+                        "commodity":  "jelly",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "SunButter Jammies Sunflower Butter \u0026 Grape Jelly Sandwiches"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A frozen SANDWICH, not jelly. It matched butter until the 2026-08-08 sunflower/sunbutter exclude dropped it, and match-soundness reported it MOVED butter -\u003e jelly: out of one wrong commodity into another. It does not hold a jelly cell today (all 7 are real grape jelly or preserves) but it sits in the candidate pool and could win one on a price move.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "claude",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "asparagus|Walmart|great-value-asparagus-cut-spears-14-5-oz",
+                        "commodity":  "asparagus",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Great Value Asparagus Cut Spears, 14.5 oz"
+                                  ],
+                        "product_id":  "10315618",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Great Value Asparagus Cut Spears 14.5 oz is CANNED asparagus holding a fresh per-lb produce cell at 2.8248/lb of can weight (drained weight unknown). The Hy-Vee asparagus cell in the same sample is fresh bulk at 4.99/lb, so the commodity is fresh produce. Cheapest fresh at Walmart with a stated weight is Marketside 10 oz = 6.3520/lb; the canned row undercuts real fresh by 2.2x.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "weekly accuracy sample 2026-08-08",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "baked-beans|HyVee|hy-vee-pork-beans-in-tomato-sauce",
+                        "commodity":  "baked-beans",
+                        "store":  "Hy-Vee",
+                        "names":  [
+                                      "Hy-Vee Pork \u0026 Beans in Tomato Sauce"
+                                  ],
+                        "product_id":  "58076",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Hy-Vee Pork \u0026 Beans in Tomato Sauce 16 oz holds the BAKED BEANS cell at 0.0556/oz. Pork and beans in tomato sauce is a distinct product from baked beans; this is the commodity-hijack shape where the cheaper adjacent product captures the cell. The real store-brand baked bean floor at Omaha #1 is 0.0757/oz - five Hy-Vee 28 oz baked bean variants (Original, Country Style, Homestyle, Maple Cured Bacon, Brown Sugar Hickory) all price at 2.12.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "weekly accuracy sample 2026-08-08",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "brussels-sprouts|Walmart|green-giant-season-brussel-sprout-intro",
+                        "commodity":  "brussels-sprouts",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Green Giant Season Brussel Sprout Intro"
+                                  ],
+                        "product_id":  "190387223",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Green Giant Season Brussel Sprout Intro holds the BRUSSELS SPROUTS per-lb cell at 2.2080/lb. It is a seasoned prepared frozen side dish, not plain brussels sprouts. Plain Great Value frozen brussels sprouts 12 oz are 1.52 = 2.0267/lb (verified STORE_ONLY IN_STOCK) and fresh 1 lb bag is 3.02/lb, so the cell is both the wrong product class and not the cheapest plain item.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "weekly accuracy sample 2026-08-08",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "italian-dressing|SamsClub|members-mark-food-service-italian-dressing-128-o",
+                        "commodity":  "italian-dressing",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Member\u0027s Mark Food Service Italian Dressing, 128 oz."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "not-purchasable-in-club",
+                        "evidence":  "Member\u0027s Mark Food Service Italian Dressing 128 fl oz at 0.0741/floz is SHIPPING-ONLY at the Omaha club (rendered PDP reads Pickup: Not available). The board publishes club prices, so this is a number no member can pay in the building. Cheapest genuinely in-club Italian dressing is Olive Garden 2x24oz at 0.1663 - a 2.2x gap, and this cell held the CROWN. Sam\u0027s SSR JSON also advertises a phantom 9.24 pickup price on that unavailable channel.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "weekly accuracy sample 2026-08-08",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "stain-remover|SamsClub|clorox-2-for-colors-max-performance-stain-remove",
+                        "commodity":  "stain-remover",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Clorox 2 for Colors Max Performance Stain Remover, 4 in 1, 112.75 fl. oz."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "not-purchasable-in-club",
+                        "evidence":  "Clorox 2 for Colors Max Performance 112.75 fl oz at 0.1169/floz is SHIPPING-ONLY at the Omaha club (Pickup: Not available on the rendered PDP). Cheapest genuinely in-club stain remover is Shout Advanced 22oz+60oz refill at 0.1401/floz.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "weekly accuracy sample 2026-08-08",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "beef-jerky|SamsClub|old-trapper-hot-spicy-beef-jerky-18-oz",
+                        "commodity":  "beef-jerky",
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Old trapper Hot \u0026 Spicy Beef Jerky, 18 oz."
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "not-purchasable-in-club",
+                        "evidence":  "Old Trapper Hot \u0026 Spicy Beef Jerky 18 oz at 1.1100/oz is SHIPPING-ONLY at the Omaha club. The price itself is right (19.98/18oz) but no member can pay it in the building. Cheapest in-club jerky is Jack Link\u0027s Original 16 oz at 1.1800/oz regular (1.0550 on instant savings to Sep 06).",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-08",
+                        "ruled_by":  "weekly accuracy sample 2026-08-08",
+                        "retire_when":  "ruling-reversed"
+                    }
+                ]
+}

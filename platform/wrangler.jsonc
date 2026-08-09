@@ -1,0 +1,40 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tc-grocery-v3",
+  "main": "apps/api/src/index.ts",
+  "workers_dev": true,
+  "compatibility_date": "2026-08-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./apps/site/dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*", "/internal/*", "/v2/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "tc-grocery-v3",
+      "database_id": "a567ae53-a582-498f-b4c2-2d8843096b75",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "EVIDENCE",
+      "bucket_name": "tc-grocery-v3-evidence"
+    }
+  ],
+  "analytics_engine_datasets": [
+    {
+      "binding": "FUNNEL_ANALYTICS",
+      "dataset": "tc_grocery_funnel"
+    }
+  ],
+  "vars": {
+    "APP_ENV": "production",
+    "PUBLIC_ORIGIN": "https://tc-grocery-v3.curly-unit-51a6.workers.dev",
+    "GITHUB_OIDC_AUDIENCE": "tc-grocery-v3",
+    "GITHUB_OIDC_REPOSITORY": "Schweino/SimpleMoneyPlaybook",
+    "GITHUB_OIDC_WORKFLOW_REF": "Schweino/SimpleMoneyPlaybook/.github/workflows/platform-v3.yml@refs/heads/main"
+  }
+}

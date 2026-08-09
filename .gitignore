@@ -65,6 +65,7 @@
 !/public/
 !/worker/
 !/wrangler.jsonc
+!/platform/
 !/meal-plan-builder-template.html
 !/build-meal-planner.ps1
 # THE 52-WEEK CURRICULUM AND ITS SUPPORTING DOCS (2026-08-08). lessons\ holds the local ORIGINAL of 55
@@ -242,6 +243,19 @@ site-backups/*
 # MP4s and voice samples, reproducible from the specs and the board.
 !/reels/
 /reels/out/
+
+# Grocery platform v3: source is tracked; generated dependencies, builds, local
+# D1 state, coverage and evidence are machine-local.
+/platform/node_modules/
+/platform/**/node_modules/
+/platform/**/dist/
+/platform/**/.astro/
+/platform/.wrangler/
+/platform/.dev.vars
+/platform/.env*
+/platform/coverage/
+/platform/tmp/
+/platform/evidence-local/
 
 # Claude worktree metadata; the repo root's own .claude is already covered by the /* allow-list rule.
 /grocery/.claude/

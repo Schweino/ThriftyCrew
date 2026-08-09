@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "authority": "platform/config",
+  "outputs": [
+    "grocery/commodities.json",
+    "grocery/categories.json",
+    "grocery/known-wrong.json"
+  ],
+  "hashes": {
+    "commodities.json": "b7dd0f0c8f973cec860e02011cbc310ff06216ad6ea1e4b38799b0face4ddeab",
+    "categories.json": "36b4ff107ddf1ad1bb4fe164616c26c6d623bdffe26331ad644470d694a272e0",
+    "known-wrong.json": "c6d8b06ec438dc385df7a78e5b476842ed85c0f8ec2e3640f585c7a6da861e75"
+  },
+  "counts": {
+    "commodities": 507,
+    "uniqueMatchRules": 48975,
+    "knownWrongRulings": 105,
+    "expandedKnownWrongNames": 108
+  }
+}

@@ -1,0 +1,83 @@
+name: Grocery platform v3
+
+on:
+  push:
+    branches: [main]
+    paths: ["platform/**", ".github/workflows/platform-v3.yml"]
+  pull_request:
+    branches: [main]
+    paths: ["platform/**", ".github/workflows/platform-v3.yml"]
+  workflow_dispatch:
+    inputs:
+      shadow_replay:
+        description: "Replay current legacy state through the authenticated shadow API"
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: grocery-platform-v3-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: platform
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: platform/pnpm-lock.yaml
+
+      - name: Install pinned pnpm
+        run: npm install --global pnpm@11.16.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Apply isolated local D1 migrations
+        run: pnpm db:migrate:local
+
+      - name: Typecheck, test, and build
+        env:
+          ASTRO_TELEMETRY_DISABLED: "1"
+          WRANGLER_SEND_METRICS: "false"
+        run: pnpm check
+
+  shadow-replay:
+    if: github.event_name == 'workflow_dispatch' && inputs.shadow_replay
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: platform
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: platform/pnpm-lock.yaml
+
+      - name: Install pinned pnpm
+        run: npm install --global pnpm@11.16.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Replay through Worker using GitHub OIDC
+        env:
+          TC_API_ORIGIN: ${{ vars.TC_V3_API_ORIGIN }}
+          TC_OIDC_AUDIENCE: tc-grocery-v3
+        run: pnpm tc replay
