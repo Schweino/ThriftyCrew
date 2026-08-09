@@ -51,6 +51,9 @@ describe("browser-visible member status", () => {
     expect(html).toContain("Paid tools are locked.");
     expect(html).toContain('name="viewport"');
     expect(html).not.toContain("email");
+    expect(html).not.toContain("session/signout");
+    expect(memberStatusHtml({ state: "free", authenticated: true, tier: "free", mayUseProtectedTools: false })).toContain("session/signout");
+    expect(memberStatusHtml({ state: "signed_out", authenticated: false, tier: "anonymous", mayUseProtectedTools: false })).toContain("session/resume");
   });
 });
 

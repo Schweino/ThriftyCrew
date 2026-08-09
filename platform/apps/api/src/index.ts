@@ -186,7 +186,15 @@ app.get("/api/v2/member-status-page", renderMemberStatus);
 app.post("/api/v2/session/signout", (context) => {
   context.header("cache-control", "private, no-store");
   context.header("set-cookie", "tc_member_signed_out=1; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=300");
+  if (context.req.header("accept")?.includes("text/html")) return context.redirect("/api/v2/member-status-page", 303);
   return context.json({ ok: true, state: "signed_out" });
+});
+
+app.post("/api/v2/session/resume", (context) => {
+  context.header("cache-control", "private, no-store");
+  context.header("set-cookie", "tc_member_signed_out=; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=0");
+  if (context.req.header("accept")?.includes("text/html")) return context.redirect("/api/v2/member-status-page", 303);
+  return context.json({ ok: true, state: "resumed" });
 });
 
 app.get("/v2/entitlement", (context) => context.redirect("/api/v2/entitlement", 307));
