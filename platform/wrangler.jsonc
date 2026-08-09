@@ -32,8 +32,7 @@
     {
       "name": "tc-grocery-v3-d1-backup",
       "binding": "BACKUP_WORKFLOW",
-      "class_name": "D1BackupWorkflow",
-      "schedules": ["30 4 * * *"]
+      "class_name": "D1BackupWorkflow"
     }
   ],
   "triggers": {

@@ -2,6 +2,7 @@ export interface WorkerEnv {
   DB: D1Database;
   EVIDENCE: R2Bucket;
   BACKUPS: R2Bucket;
+  BACKUP_WORKFLOW: Workflow;
   ASSETS: Fetcher;
   FUNNEL_ANALYTICS?: AnalyticsEngineDataset;
   APP_ENV: string;

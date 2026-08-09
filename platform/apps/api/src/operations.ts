@@ -163,3 +163,35 @@ export async function runLedgerWatchdog(env: WorkerEnv, scheduledTime: number): 
       WHERE id = ?1 AND status = 'started'`,
   ).bind(runId, new Date().toISOString(), stableJson({ checked: schedules.results.length, stale })).run();
 }
+
+function localScheduleParts(scheduledTime: number): Record<string, string> {
+  return Object.fromEntries(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/Chicago",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).formatToParts(new Date(scheduledTime)).map((part) => [part.type, part.value]),
+  );
+}
+
+export async function runScheduledOperations(env: WorkerEnv, scheduledTime: number): Promise<void> {
+  await runLedgerWatchdog(env, scheduledTime);
+  const parts = localScheduleParts(scheduledTime);
+  if (parts.hour !== "04" || parts.minute !== "30") return;
+  const localDate = `${parts.year}-${parts.month}-${parts.day}`;
+  const instanceId = `d1-backup-${localDate}`;
+  const recorded = await env.DB.prepare("SELECT id FROM backup_exports WHERE id = ?1")
+    .bind(`backup_${instanceId}`).first();
+  if (recorded) return;
+  try {
+    await env.BACKUP_WORKFLOW.create({ id: instanceId, params: { trigger: "worker-cron", localDate } });
+  } catch (error) {
+    // A deterministic Workflow ID makes concurrent/retried cron delivery safe.
+    const message = error instanceof Error ? error.message : "unknown workflow create failure";
+    if (!message.toLowerCase().includes("already")) throw error;
+  }
+}

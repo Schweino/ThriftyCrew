@@ -32,7 +32,7 @@ import { createRelease, findBatch, insertObservations, insertRecipeCosts, insert
 import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation } from "./ghost-reconciliation";
-import { dispatchGithubJob, recordAudit, runLedgerWatchdog } from "./operations";
+import { dispatchGithubJob, recordAudit, runScheduledOperations } from "./operations";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 
@@ -81,6 +81,7 @@ app.use("/internal/job-runs", requireIdentityRole(["capture", "engine", "operato
 app.use("/internal/job-runs/*", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/jobs/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/schedules/*", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/backups/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/releases", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/releases/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/accuracy/*", requireIdentityRole(["engine", "operator"]));
@@ -409,6 +410,13 @@ app.post("/internal/jobs/:job/dispatch", zValidator("json", jobDispatchSchema), 
   const result = await dispatchGithubJob(context.env, job, body.reason, body.idempotencyKey, body.ref);
   await recordAudit(context.env, context.get("identity"), "job.dispatch", "job_schedule", job, result.status === "dispatched" ? "accepted" : "failed", result);
   return context.json({ ok: result.status === "dispatched", ...result }, result.status === "dispatched" ? 202 : 500);
+});
+
+app.post("/internal/backups/trigger", async (context) => {
+  const instanceId = `d1-backup-manual-${crypto.randomUUID()}`;
+  await context.env.BACKUP_WORKFLOW.create({ id: instanceId, params: { trigger: "operator" } });
+  await recordAudit(context.env, context.get("identity"), "backup.trigger", "workflow", instanceId, "accepted");
+  return context.json({ ok: true, instanceId }, 202);
 });
 
 app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (context) => {
@@ -955,6 +963,6 @@ export default {
     return await app.fetch(request, env, executionContext);
   },
   scheduled(controller: ScheduledController, env: WorkerEnv, executionContext: ExecutionContext): void {
-    executionContext.waitUntil(runLedgerWatchdog(env, controller.scheduledTime));
+    executionContext.waitUntil(runScheduledOperations(env, controller.scheduledTime));
   },
 };
