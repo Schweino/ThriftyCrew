@@ -4,6 +4,7 @@ import { observationChunkSchema } from "@thriftycrew/contracts";
 import { MutationClient, replayCurrentArtifact } from "@thriftycrew/daily/client";
 import { buildCurrentBridge } from "@thriftycrew/daily/legacy";
 import { generateLegacyConfiguration } from "./config";
+import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
@@ -88,6 +89,11 @@ if (command === "status") {
   result = await (await mutationClient()).request(`/internal/triage?status=${encodeURIComponent(subcommand ?? "open")}`);
 } else if (command === "config" && (subcommand === "generate" || subcommand === "check")) {
   result = await generateLegacyConfiguration(incomeRoot, subcommand === "check");
+} else if (command === "schedules" && subcommand === "check") {
+  result = await checkScheduleAuthority(platformRoot);
+} else if (command === "schedules" && subcommand === "deploy") {
+  const document = await readScheduleAuthority(platformRoot);
+  result = await (await mutationClient()).request("/internal/schedules/sync", { method: "PUT", json: document });
 } else if (command === "run" && subcommand === "daily" && arguments_.includes("--dry")) {
   const artifact = await buildCurrentBridge(incomeRoot);
   result = { ok: true, dryRun: true, audit: artifact.audit, releaseInputs: artifact.stores.length };
@@ -121,6 +127,7 @@ if (command === "status") {
     ok: true,
     usage: [
       "tc status", "tc doctor", "tc triage [status]", "tc config generate|check",
+      "tc schedules check|deploy",
       "tc run daily --dry", "tc parity", "tc replay", "tc capture validate <file>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id]", "tc accuracy verdict <file>",
       "tc commodity add <file>", "tc recipe add <file>",

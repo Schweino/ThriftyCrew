@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "timezone": "America/Chicago",
+  "schedules": [
+    {
+      "id": "ledger-watchdog",
+      "cron": "*/15 * * * *",
+      "executor": "worker-cron",
+      "maxGapMinutes": 30,
+      "owner": "platform",
+      "proof": "job_runs:ledger-watchdog",
+      "dispatchOnGap": false
+    },
+    {
+      "id": "d1-backup",
+      "cron": "30 4 * * *",
+      "executor": "cloudflare-workflow",
+      "maxGapMinutes": 1560,
+      "owner": "platform",
+      "proof": "backup_exports:completed",
+      "dispatchOnGap": false
+    },
+    {
+      "id": "daily-engine",
+      "cron": "0 12 * * *",
+      "executor": "github-actions",
+      "maxGapMinutes": 1560,
+      "owner": "pricing",
+      "proof": "releases:published",
+      "dispatchOnGap": true
+    },
+    {
+      "id": "accuracy-weekly",
+      "cron": "0 15 * * 1",
+      "executor": "github-actions",
+      "maxGapMinutes": 11520,
+      "owner": "accuracy",
+      "proof": "accuracy_draws:open-or-completed",
+      "dispatchOnGap": true
+    },
+    {
+      "id": "triage-daily",
+      "cron": "30 13 * * *",
+      "executor": "github-actions",
+      "maxGapMinutes": 1560,
+      "owner": "operations",
+      "proof": "job_runs:triage-daily",
+      "dispatchOnGap": true
+    },
+    {
+      "id": "ghost-rotation-reconcile",
+      "cron": "0 16 * * *",
+      "executor": "github-actions",
+      "maxGapMinutes": 1560,
+      "owner": "publication",
+      "proof": "ghost_rotation_reconciliations:verified",
+      "dispatchOnGap": true
+    }
+  ]
+}

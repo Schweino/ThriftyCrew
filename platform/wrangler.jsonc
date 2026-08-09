@@ -22,8 +22,23 @@
     {
       "binding": "EVIDENCE",
       "bucket_name": "tc-grocery-v3-evidence"
+    },
+    {
+      "binding": "BACKUPS",
+      "bucket_name": "tc-grocery-v3-backups"
     }
   ],
+  "workflows": [
+    {
+      "name": "tc-grocery-v3-d1-backup",
+      "binding": "BACKUP_WORKFLOW",
+      "class_name": "D1BackupWorkflow",
+      "schedules": ["30 4 * * *"]
+    }
+  ],
+  "triggers": {
+    "crons": ["*/15 * * * *"]
+  },
   "analytics_engine_datasets": [
     {
       "binding": "FUNNEL_ANALYTICS",
@@ -36,6 +51,11 @@
     "GITHUB_OIDC_AUDIENCE": "tc-grocery-v3",
     "GITHUB_OIDC_REPOSITORY": "Schweino/SimpleMoneyPlaybook",
     "GITHUB_OIDC_REPOSITORY_ID": "1293567395",
-    "GITHUB_OIDC_WORKFLOW_REF": "Schweino/SimpleMoneyPlaybook/.github/workflows/platform-v3.yml@refs/heads/main"
+    "GITHUB_OIDC_WORKFLOW_REF": "Schweino/SimpleMoneyPlaybook/.github/workflows/platform-v3.yml@refs/heads/main",
+    "GITHUB_REPOSITORY": "Schweino/SimpleMoneyPlaybook",
+    "GITHUB_WORKFLOW_FILE": "platform-v3.yml",
+    "OPS_ALERT_URL": "https://feed.thriftycrew.com/ops-alert",
+    "CLOUDFLARE_ACCOUNT_ID": "bdf84c0d4146b198e8a14a59d08701ed",
+    "D1_DATABASE_ID": "a567ae53-a582-498f-b4c2-2d8843096b75"
   }
 }

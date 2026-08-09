@@ -172,19 +172,60 @@ export const jobRunCreateSchema = z.object({
   triggerKind: z.enum(["schedule", "dispatch", "watchdog", "operator", "test"]),
   scheduledFor: isoDateTime.optional(),
   startedAt: isoDateTime.optional(),
+  executorRunId: z.string().min(1).max(300).optional(),
+  promptHash: sha256Hex.optional(),
+  inputHash: sha256Hex.optional(),
+  modelId: z.string().min(1).max(200).optional(),
   input: z.record(z.string(), z.unknown()).default({}),
 });
 
 export const jobRunUpdateSchema = z.object({
   status: z.enum(["started", "completed", "failed", "missed", "timed_out", "cancelled"]),
   startedAt: isoDateTime.optional(),
+  heartbeatAt: isoDateTime.optional(),
   finishedAt: isoDateTime.optional(),
+  outputHash: sha256Hex.optional(),
+  usage: z.object({
+    inputTokens: z.number().int().nonnegative().default(0),
+    outputTokens: z.number().int().nonnegative().default(0),
+    cacheReadTokens: z.number().int().nonnegative().default(0),
+    cacheWriteTokens: z.number().int().nonnegative().default(0),
+    costMicrousd: z.number().int().nonnegative().default(0),
+  }).default({ inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, cacheWriteTokens: 0, costMicrousd: 0 }),
   stats: z.record(z.string(), z.unknown()).default({}),
   error: z.string().max(10_000).optional(),
 }).superRefine((value, context) => {
   if (["completed", "failed", "missed", "timed_out", "cancelled"].includes(value.status) && !value.finishedAt) {
     context.addIssue({ code: "custom", path: ["finishedAt"], message: "terminal job states require finishedAt" });
   }
+});
+
+export const scheduleEntrySchema = z.object({
+  id: nonEmptyId,
+  cron: z.string().min(5).max(256),
+  executor: z.enum(["github-actions", "worker-cron", "cloudflare-workflow", "pc"]),
+  maxGapMinutes: z.number().int().positive(),
+  owner: z.string().min(1).max(160),
+  proof: z.string().min(1).max(500),
+  dispatchOnGap: z.boolean().default(false),
+});
+
+export const scheduleDocumentSchema = z.object({
+  version: z.number().int().positive(),
+  timezone: z.string().min(1).max(100),
+  schedules: z.array(scheduleEntrySchema).min(1).max(100),
+}).superRefine((value, context) => {
+  const ids = new Set<string>();
+  value.schedules.forEach((schedule, index) => {
+    if (ids.has(schedule.id)) context.addIssue({ code: "custom", path: ["schedules", index, "id"], message: "schedule ids must be unique" });
+    ids.add(schedule.id);
+  });
+});
+
+export const jobDispatchSchema = z.object({
+  idempotencyKey: nonEmptyId,
+  reason: z.string().min(1).max(2000),
+  ref: z.string().min(1).max(300).default("main"),
 });
 
 export const releaseCreateSchema = z.object({

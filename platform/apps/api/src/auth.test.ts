@@ -24,6 +24,7 @@ function environment(): WorkerEnv {
   return {
     DB: nonceDatabase(),
     EVIDENCE: {} as R2Bucket,
+    BACKUPS: {} as R2Bucket,
     ASSETS: {} as Fetcher,
     APP_ENV: "test",
     PUBLIC_ORIGIN: "https://example.test",

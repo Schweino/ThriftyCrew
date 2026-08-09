@@ -10,6 +10,7 @@ import {
   configurationCreateSchema,
   configurationKnownWrongChunkSchema,
   evidenceMetadataSchema,
+  jobDispatchSchema,
   jobRunCreateSchema,
   jobRunUpdateSchema,
   matchDecisionsChunkSchema,
@@ -21,6 +22,7 @@ import {
   releaseTop5ChunkSchema,
   releaseGuardResultSchema,
   releasePayloadSchema,
+  scheduleDocumentSchema,
   telemetryEventSchema,
   triageResolveSchema,
 } from "@thriftycrew/contracts";
@@ -30,7 +32,9 @@ import { createRelease, findBatch, insertObservations, insertRecipeCosts, insert
 import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation } from "./ghost-reconciliation";
+import { dispatchGithubJob, recordAudit, runLedgerWatchdog } from "./operations";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
+export { D1BackupWorkflow } from "./backup-workflow";
 
 type Bindings = { Bindings: WorkerEnv; Variables: { identity: MutationIdentity } };
 const app = new Hono<Bindings>();
@@ -75,6 +79,8 @@ app.use("/internal/configurations/*", requireIdentityRole(["engine", "operator"]
 app.use("/internal/match-decisions", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/job-runs", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/job-runs/*", requireIdentityRole(["capture", "engine", "operator"]));
+app.use("/internal/jobs/*", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/schedules/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/releases", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/releases/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/accuracy/*", requireIdentityRole(["engine", "operator"]));
@@ -90,9 +96,9 @@ app.get("/api/v2/status", async (context) => {
         WHERE c.market_id = 'omaha'`,
     ).first<{ id: string; published_at: string; summary_json: string }>(),
     context.env.DB.prepare(
-      `SELECT s.job, s.max_gap_minutes,
+      `SELECT s.job, s.cron, s.executor, s.timezone, s.owner, s.proof, s.max_gap_minutes,
               (SELECT status FROM job_runs r WHERE r.job = s.job ORDER BY COALESCE(r.started_at, r.scheduled_for) DESC LIMIT 1) AS status,
-              (SELECT started_at FROM job_runs r WHERE r.job = s.job ORDER BY COALESCE(r.started_at, r.scheduled_for) DESC LIMIT 1) AS started_at
+              (SELECT COALESCE(heartbeat_at, finished_at, started_at, scheduled_for) FROM job_runs r WHERE r.job = s.job ORDER BY COALESCE(heartbeat_at, finished_at, started_at, scheduled_for) DESC LIMIT 1) AS latest_at
          FROM job_schedules s WHERE s.active = 1 ORDER BY s.job`,
     ).all(),
     latestAccuracySummary(context.env.DB),
@@ -103,9 +109,9 @@ app.get("/api/v2/status", async (context) => {
   const checkedAt = new Date();
   const jobs = schedules.results.map((row) => {
     const item = row as Record<string, unknown>;
-    const startedAt = typeof item.started_at === "string" ? Date.parse(item.started_at) : Number.NaN;
+    const latestAt = typeof item.latest_at === "string" ? Date.parse(item.latest_at) : Number.NaN;
     const maxGap = typeof item.max_gap_minutes === "number" ? item.max_gap_minutes : 0;
-    return { ...item, stale: !Number.isFinite(startedAt) || checkedAt.getTime() - startedAt > maxGap * 60_000 };
+    return { ...item, stale: !Number.isFinite(latestAt) || checkedAt.getTime() - latestAt > maxGap * 60_000 };
   });
   return context.json({
     ok: true,
@@ -360,6 +366,51 @@ app.put("/internal/match-decisions", zValidator("json", matchDecisionsChunkSchem
   return context.json({ ok: true, accepted: decisions.length });
 });
 
+app.put("/internal/schedules/sync", zValidator("json", scheduleDocumentSchema), async (context) => {
+  const document = context.req.valid("json");
+  const identity = context.get("identity");
+  const statements = document.schedules.map((schedule) => context.env.DB.prepare(
+    `INSERT INTO job_schedules
+       (job, cron, max_gap_minutes, active, executor, timezone, owner, proof, dispatch_on_gap)
+     VALUES (?1, ?2, ?3, 1, ?4, ?5, ?6, ?7, ?8)
+     ON CONFLICT(job) DO UPDATE SET
+       cron = excluded.cron, max_gap_minutes = excluded.max_gap_minutes, active = 1,
+       executor = excluded.executor, timezone = excluded.timezone, owner = excluded.owner,
+       proof = excluded.proof, dispatch_on_gap = excluded.dispatch_on_gap`,
+  ).bind(
+    schedule.id,
+    schedule.cron,
+    schedule.maxGapMinutes,
+    schedule.executor,
+    document.timezone,
+    schedule.owner,
+    schedule.proof,
+    schedule.dispatchOnGap ? 1 : 0,
+  ));
+  const placeholders = document.schedules.map((_, index) => `?${index + 1}`).join(", ");
+  statements.push(context.env.DB.prepare(
+    `UPDATE job_schedules SET active = 0 WHERE job NOT IN (${placeholders})`,
+  ).bind(...document.schedules.map((schedule) => schedule.id)));
+  await context.env.DB.batch(statements);
+  await recordAudit(context.env, identity, "schedules.sync", "schedule_authority", `v${document.version}`, "accepted", {
+    count: document.schedules.length,
+    timezone: document.timezone,
+  });
+  return context.json({ ok: true, version: document.version, schedules: document.schedules.length });
+});
+
+app.post("/internal/jobs/:job/dispatch", zValidator("json", jobDispatchSchema), async (context) => {
+  const job = context.req.param("job");
+  const schedule = await context.env.DB.prepare(
+    "SELECT job FROM job_schedules WHERE job = ?1 AND active = 1",
+  ).bind(job).first();
+  if (!schedule) return jsonError("unknown or inactive job", 404);
+  const body = context.req.valid("json");
+  const result = await dispatchGithubJob(context.env, job, body.reason, body.idempotencyKey, body.ref);
+  await recordAudit(context.env, context.get("identity"), "job.dispatch", "job_schedule", job, result.status === "dispatched" ? "accepted" : "failed", result);
+  return context.json({ ok: result.status === "dispatched", ...result }, result.status === "dispatched" ? 202 : 500);
+});
+
 app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (context) => {
   const body = context.req.valid("json");
   const schedule = await context.env.DB.prepare("SELECT job FROM job_schedules WHERE job = ?1 AND active = 1").bind(body.job).first();
@@ -371,9 +422,24 @@ app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (co
   }
   const status = body.startedAt ? "started" : "scheduled";
   await context.env.DB.prepare(
-    `INSERT INTO job_runs (id, job, trigger_kind, scheduled_for, started_at, status, input_json)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)`,
-  ).bind(body.id, body.job, body.triggerKind, body.scheduledFor ?? null, body.startedAt ?? null, status, stableJson(body.input)).run();
+    `INSERT INTO job_runs
+       (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, input_json,
+        executor_run_id, actor_id, prompt_hash, input_hash, model_id)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)`,
+  ).bind(
+    body.id,
+    body.job,
+    body.triggerKind,
+    body.scheduledFor ?? null,
+    body.startedAt ?? null,
+    status,
+    stableJson(body.input),
+    body.executorRunId ?? null,
+    context.get("identity").agentId,
+    body.promptHash ?? null,
+    body.inputHash ?? null,
+    body.modelId ?? null,
+  ).run();
   return context.json({ ok: true, runId: body.id, status, idempotent: false }, 201);
 });
 
@@ -392,9 +458,25 @@ app.patch("/internal/job-runs/:id", zValidator("json", jobRunUpdateSchema), asyn
   const startedAt = body.startedAt ?? current.started_at;
   if (body.status !== "missed" && !startedAt) return jsonError("startedAt is required once a job starts", 422);
   await context.env.DB.prepare(
-    `UPDATE job_runs SET status = ?2, started_at = ?3, finished_at = ?4, stats_json = ?5, error = ?6
+    `UPDATE job_runs SET status = ?2, started_at = ?3, heartbeat_at = ?4, finished_at = ?5,
+       output_hash = ?6, input_tokens = ?7, output_tokens = ?8, cache_read_tokens = ?9,
+       cache_write_tokens = ?10, cost_microusd = ?11, stats_json = ?12, error = ?13
       WHERE id = ?1`,
-  ).bind(context.req.param("id"), body.status, startedAt, body.finishedAt ?? null, stableJson(body.stats), body.error ?? null).run();
+  ).bind(
+    context.req.param("id"),
+    body.status,
+    startedAt,
+    body.heartbeatAt ?? body.finishedAt ?? startedAt,
+    body.finishedAt ?? null,
+    body.outputHash ?? null,
+    body.usage.inputTokens,
+    body.usage.outputTokens,
+    body.usage.cacheReadTokens,
+    body.usage.cacheWriteTokens,
+    body.usage.costMicrousd,
+    stableJson(body.stats),
+    body.error ?? null,
+  ).run();
   return context.json({ ok: true, runId: context.req.param("id"), status: body.status, idempotent: false });
 });
 
@@ -868,4 +950,11 @@ app.onError((error, context) => {
   return context.json({ ok: false, error: context.env.APP_ENV === "production" ? "Internal error" : error.message }, 500);
 });
 
-export default app;
+export default {
+  async fetch(request: Request, env: WorkerEnv, executionContext: ExecutionContext): Promise<Response> {
+    return await app.fetch(request, env, executionContext);
+  },
+  scheduled(controller: ScheduledController, env: WorkerEnv, executionContext: ExecutionContext): void {
+    executionContext.waitUntil(runLedgerWatchdog(env, controller.scheduledTime));
+  },
+};
