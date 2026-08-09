@@ -1322,6 +1322,35 @@ app.post("/internal/triage/reconcile", async (context) => {
         )
       ORDER BY t.id`,
   ).all<{ id: string; failed_release_id: string; guard_id: string; recovery_release_id: string }>();
+  const recoveredBackups = await context.env.DB.prepare(
+    `SELECT t.id, backup.id AS backup_id, replica.id AS replica_id, restore.id AS restore_id
+       FROM triage_items t
+       JOIN backup_exports backup ON backup.id = (
+         SELECT candidate.id FROM backup_exports candidate
+          WHERE candidate.status = 'completed'
+            AND julianday(candidate.finished_at) > julianday(t.created_at)
+            AND EXISTS (SELECT 1 FROM backup_replicas r WHERE r.backup_id = candidate.id AND r.status = 'completed')
+            AND EXISTS (SELECT 1 FROM restore_drills d WHERE d.backup_id = candidate.id AND d.status = 'passed')
+          ORDER BY candidate.finished_at DESC LIMIT 1
+       )
+       JOIN backup_replicas replica ON replica.backup_id = backup.id AND replica.status = 'completed'
+       JOIN restore_drills restore ON restore.backup_id = backup.id AND restore.status = 'passed'
+      WHERE t.source_kind = 'operational_alert' AND t.title = 'Nightly D1 backup failed'
+        AND t.status <> 'resolved'
+      GROUP BY t.id`,
+  ).all<{ id: string; backup_id: string; replica_id: string; restore_id: string }>();
+  const recoveredParity = await context.env.DB.prepare(
+    `SELECT t.id, parity.id AS parity_id, parity.diff_count
+       FROM triage_items t
+       JOIN engine_parity_runs parity ON parity.id = (
+         SELECT candidate.id FROM engine_parity_runs candidate
+          WHERE candidate.mode = 'legacy' AND candidate.status = 'passed' AND candidate.diff_count = 0
+            AND julianday(candidate.observed_at) > julianday(t.created_at)
+          ORDER BY candidate.observed_at DESC LIMIT 1
+       )
+      WHERE t.source_kind = 'operational_alert' AND t.title LIKE 'Native legacy engine has % parity differences'
+        AND t.status <> 'resolved'`,
+  ).all<{ id: string; parity_id: string; diff_count: number }>();
   const observedAt = new Date().toISOString();
   for (let offset = 0; offset < recoverable.results.length; offset += 90) {
     await context.env.DB.batch(recoverable.results.slice(offset, offset + 90).map((row) => context.env.DB.prepare(
@@ -1337,11 +1366,43 @@ app.post("/internal/triage/reconcile", async (context) => {
       observedAt,
     }))));
   }
+  const operationalRecoveries = [
+    ...recoveredBackups.results.map((row) => ({
+      id: row.id,
+      planRef: "auto-plan://backup-replicated-and-restore-proven",
+      resolution: {
+        resolution: "A later backup completed, replicated to the secondary bucket, and passed a full scratch restore.",
+        backupId: row.backup_id,
+        replicaId: row.replica_id,
+        restoreId: row.restore_id,
+        observedAt,
+      },
+    })),
+    ...recoveredParity.results.map((row) => ({
+      id: row.id,
+      planRef: "auto-plan://parity-regression-cleared",
+      resolution: {
+        resolution: "A later legacy parity run compared the full surface with zero differences.",
+        parityRunId: row.parity_id,
+        diffCount: row.diff_count,
+        observedAt,
+      },
+    })),
+  ];
+  for (let offset = 0; offset < operationalRecoveries.length; offset += 90) {
+    await context.env.DB.batch(operationalRecoveries.slice(offset, offset + 90).map((row) => context.env.DB.prepare(
+      `UPDATE triage_items
+          SET status = 'resolved', plan_ref = ?2, resolution_json = ?3,
+              updated_at = CURRENT_TIMESTAMP, resolved_at = CURRENT_TIMESTAMP
+        WHERE id = ?1 AND status <> 'resolved'`,
+    ).bind(row.id, row.planRef, stableJson(row.resolution))));
+  }
+  const resolved = recoverable.results.length + operationalRecoveries.length;
   await recordAudit(context.env, context.get("identity"), "triage.reconcile", "triage_queue", null, "accepted", {
-    resolved: recoverable.results.length,
+    resolved,
     observedAt,
   });
-  return context.json({ ok: true, resolved: recoverable.results.length, observedAt });
+  return context.json({ ok: true, resolved, observedAt });
 });
 
 app.post("/internal/triage/:id/resolve", zValidator("json", triageResolveSchema), async (context) => {
