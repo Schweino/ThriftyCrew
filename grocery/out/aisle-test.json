@@ -623,7 +623,7 @@
     {
         "id":  "canned-green-beans",
         "store":  "Family Fare",
-        "product":  "Our Family Cut Green Beans 14.5 Oz",
+        "product":  "Our Family No Salt Added Cut Green Beans 14.5 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -1485,6 +1485,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
+        "id":  "frozen-broccoli",
+        "store":  "Family Fare",
+        "product":  "Frozen Broccoli Florets Our Family Steamable",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_vegetables",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
+    },
+    {
         "id":  "frozen-brussels-sprouts",
         "store":  "Family Fare",
         "product":  "Birds Eye Brussels Sprouts 10.8 Oz",
@@ -1919,7 +1928,7 @@
     {
         "id":  "hummus",
         "store":  "Family Fare",
-        "product":  "Fresh \u0026 Finest By Our Family Garlic Hummus 10 Oz",
+        "product":  "Fresh \u0026 Finest By Our Family Original Hummus 10 Oz",
         "dept":  "deli",
         "aisle":  "deli/party_trays_dips",
         "verdict":  "ALLOW",
@@ -2585,7 +2594,7 @@
     {
         "id":  "potato-chips",
         "store":  "Family Fare",
-        "product":  "Our Family Potato Chips, Sour Cream \u0026 Onion Flavored 7.75 Oz",
+        "product":  "Our Family Potato Chips, Cheddar \u0026 Sour Cream Flavored 7.75 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/chips_other_salty_snacks",
         "verdict":  "ALLOW",
@@ -2954,7 +2963,7 @@
     {
         "id":  "shampoo",
         "store":  "Family Fare",
-        "product":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
+        "product":  "Alberto Vo5 Shampoo, Revitalizing, Ocean Refresh, Bonus Size 15 Fl Oz",
         "dept":  "health_beauty",
         "aisle":  "health_beauty/grooming_hygiene",
         "verdict":  "ALLOW",
@@ -3062,7 +3071,7 @@
     {
         "id":  "sparkling-water",
         "store":  "Family Fare",
-        "product":  "Sparkling Ice Sparkling Water, Zero Sugar, Peach Nectarine 17 Fl Oz",
+        "product":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/soda_other_carbonated_beverages",
         "verdict":  "ALLOW",
@@ -3571,6 +3580,15 @@
         "aisle":  "pantry/condiments_dressing",
         "verdict":  "BLIND",
         "reason":  "\u0027sugar-free-bbq-sauce\u0027 is in no estate category - refused rather than guessed"
+    },
+    {
+        "id":  "frozen-broccoli-florets",
+        "store":  "Family Fare",
+        "product":  "Frozen Broccoli Florets Our Family Steamable",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_vegetables",
+        "verdict":  "BLIND",
+        "reason":  "\u0027frozen-broccoli-florets\u0027 is in no estate category - refused rather than guessed"
     },
     {
         "id":  "buffalo-wing-sauce",

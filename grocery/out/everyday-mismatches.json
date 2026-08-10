@@ -39,19 +39,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "baby-food",
-        "store":  "Hy-Vee",
-        "unit":  "oz",
-        "board":  0.435,
-        "link":  0.5114,
-        "ratio":  1.18,
-        "price":  1.79,
-        "size":  "3.5 oz",
-        "boardItem":  "Happy Tot Stage 4 Organic Pears, Raspberries, Carrots \u0026 Butternut Squash Pouch, 4 oz.",
-        "linkItem":  "Gerber Stage 4 Toddler Food, Cherry Banana Vanilla Puree Pouch",
-        "board_src":  "main"
-    },
-    {
         "id":  "bell-peppers",
         "store":  "Aldi",
         "unit":  "each",
@@ -195,6 +182,32 @@
         "board_src":  "main"
     },
     {
+        "id":  "chicken-nuggets",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.2584,
+        "link":  0.2852,
+        "ratio":  1.1,
+        "price":  8.27,
+        "size":  "29 oz",
+        "boardItem":  "Hy Vee Chicken Nuggets",
+        "linkItem":  "Hy-Vee Chicken Nuggets",
+        "board_src":  "main"
+    },
+    {
+        "id":  "garlic-powder",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.4167,
+        "link":  0.5,
+        "ratio":  1.2,
+        "price":  1.25,
+        "size":  "2.5 oz",
+        "boardItem":  "Thats Smart Garlic Powder",
+        "linkItem":  "That\u0027s Smart Garlic Powder",
+        "board_src":  "main"
+    },
+    {
         "id":  "ground-cinnamon",
         "store":  "Hy-Vee",
         "unit":  "oz",
@@ -303,9 +316,9 @@
         "store":  "Hy-Vee",
         "unit":  "lb",
         "board":  14.99,
-        "link":  15.49,
-        "ratio":  1.03,
-        "price":  15.49,
+        "link":  15.69,
+        "ratio":  1.05,
+        "price":  15.69,
         "size":  "lb",
         "boardItem":  "Beef Ribeye Steak Thin",
         "linkItem":  "Beef Ribeye Steak - Thin",
@@ -689,19 +702,6 @@
         "board_src":  "recipe"
     },
     {
-        "id":  "provolone-cheese",
-        "store":  "Hy-Vee",
-        "unit":  "oz",
-        "board":  0.4112,
-        "link":  0.3125,
-        "ratio":  0.76,
-        "price":  2.5,
-        "size":  "8 oz",
-        "boardItem":  "Hy-Vee Sliced Provolone Cheese 10Ct",
-        "linkItem":  "Hy-Vee Sliced Provolone Cheese 10Ct",
-        "board_src":  "recipe"
-    },
-    {
         "id":  "red-bell-pepper",
         "store":  "Sam\u0027s Club",
         "unit":  "each",
@@ -725,19 +725,6 @@
         "size":  "3 ct",
         "boardItem":  "",
         "linkItem":  "Multi-Colored Peppers, Package",
-        "board_src":  "recipe"
-    },
-    {
-        "id":  "red-bell-pepper",
-        "store":  "Hy-Vee",
-        "unit":  "each",
-        "board":  1.69,
-        "link":  1.48,
-        "ratio":  0.88,
-        "price":  1.48,
-        "size":  "1 ct",
-        "boardItem":  "",
-        "linkItem":  "Red Pepper",
         "board_src":  "recipe"
     },
     {
@@ -803,6 +790,19 @@
         "size":  "18.5 oz",
         "boardItem":  "Ray\u0027s No Sugar Added Original BBQ Sauce",
         "linkItem":  "Ray\u0027s No Sugar Added Original BBQ Sauce",
+        "board_src":  "recipe"
+    },
+    {
+        "id":  "frozen-broccoli-florets",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.1579,
+        "link":  0.1492,
+        "ratio":  0.94,
+        "price":  1.88,
+        "size":  "12.6 oz",
+        "boardItem":  "Birds Eye Baby Broccoli Florets, 3g of Fiber per Serving, Frozen Vegetables",
+        "linkItem":  "Birds Eye Baby Broccoli Florets, 3g of Fiber per Serving, Frozen Vegetables",
         "board_src":  "recipe"
     },
     {
@@ -936,6 +936,19 @@
         "board_src":  "recipe"
     },
     {
+        "id":  "dried-rosemary",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  3.9867,
+        "link":  2.2223,
+        "ratio":  0.56,
+        "price":  1.6667,
+        "size":  "0.75 oz",
+        "boardItem":  "Hy-Vee Rosemary Leaves",
+        "linkItem":  "Hy-Vee Rosemary Leaves",
+        "board_src":  "recipe"
+    },
+    {
         "id":  "swiss-cheese",
         "store":  "Aldi",
         "unit":  "oz",
@@ -953,9 +966,9 @@
         "store":  "Hy-Vee",
         "unit":  "oz",
         "board":  0.3125,
-        "link":  0.5,
-        "ratio":  1.6,
-        "price":  2.5,
+        "link":  0.658,
+        "ratio":  2.11,
+        "price":  3.29,
         "size":  "5 oz",
         "boardItem":  "Hy-Vee Sliced Swiss Cheese 10Ct",
         "linkItem":  "Hy-Vee Sliced Swiss Cheese 10Ct",
@@ -966,9 +979,9 @@
         "store":  "Hy-Vee",
         "unit":  "floz",
         "board":  0.1473,
-        "link":  0.27,
-        "ratio":  1.83,
-        "price":  4.59,
+        "link":  0.1171,
+        "ratio":  0.79,
+        "price":  1.99,
         "size":  "17 fl oz",
         "boardItem":  "Gustare Vita White Wine Vinegar",
         "linkItem":  "Gustare Vita White Wine Vinegar",

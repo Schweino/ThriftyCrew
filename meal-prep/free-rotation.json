@@ -1,7 +1,7 @@
 ﻿{
     "readme":  "State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.",
-    "week_of":  "2026-08-09",
-    "rotated_at":  "2026-08-09T09:01:48",
+    "week_of":  "2026-08-10",
+    "rotated_at":  "2026-08-10T09:03:24",
     "free":  [
                  {
                      "slug":  "chicken-bulgogi-rice-bowls",
@@ -57,7 +57,7 @@
                      "protein":  "turkey",
                      "rank":  3,
                      "name":  "Turkey Huevos Rancheros Rice Bowls",
-                     "per_serving":  1.89
+                     "per_serving":  1.88
                  },
                  {
                      "slug":  "red-beans-turkey-sausage-and-rice",
@@ -106,7 +106,7 @@
                      "protein":  "beef",
                      "rank":  5,
                      "name":  "Million Dollar Baked Spaghetti",
-                     "per_serving":  2.48
+                     "per_serving":  2.46
                  },
                  {
                      "slug":  "bratwurst-sauerkraut-potatoes-bake",
@@ -116,32 +116,32 @@
                      "per_serving":  1.27
                  },
                  {
-                     "slug":  "pork-egg-roll-in-a-bowl",
-                     "protein":  "pork",
-                     "rank":  2,
-                     "name":  "Pork Egg Roll in a Bowl",
-                     "per_serving":  1.44
-                 },
-                 {
                      "slug":  "orecchiette-italian-sausage-broccoli",
                      "protein":  "pork",
-                     "rank":  3,
+                     "rank":  2,
                      "name":  "Orecchiette with Italian Sausage and Broccoli",
-                     "per_serving":  1.59
+                     "per_serving":  1.62
                  },
                  {
                      "slug":  "slow-cooker-kalua-pork-bowls",
                      "protein":  "pork",
-                     "rank":  4,
+                     "rank":  3,
                      "name":  "Slow Cooker Kalua Pork Bowls",
                      "per_serving":  1.63
                  },
                  {
                      "slug":  "slow-cooker-filipino-pork-adobo-bowls",
                      "protein":  "pork",
-                     "rank":  5,
+                     "rank":  4,
                      "name":  "Slow Cooker Filipino Pork Adobo Bowls",
                      "per_serving":  1.7
+                 },
+                 {
+                     "slug":  "pork-egg-roll-in-a-bowl",
+                     "protein":  "pork",
+                     "rank":  5,
+                     "name":  "Pork Egg Roll in a Bowl",
+                     "per_serving":  1.72
                  }
              ]
 }

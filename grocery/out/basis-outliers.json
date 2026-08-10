@@ -11,6 +11,18 @@
                                     "kind":  "volume",
                                     "row_kind":  "weight",
                                     "holds_crown":  true
+                                },
+                                {
+                                    "id":  "oven-cleaner",
+                                    "commodity":  "Oven Cleaner",
+                                    "unit":  "oz",
+                                    "store":  "Walmart",
+                                    "per_unit":  0.1713,
+                                    "size":  "96 fl oz",
+                                    "item":  "(3 pack) Easy-Off Heavy Duty Degreaser, Removes Grease \u0026 Grime, For Kitchen, Garage, Outdoor \u0026 More 32oz",
+                                    "kind":  "volume",
+                                    "row_kind":  "weight",
+                                    "holds_crown":  true
                                 }
                             ],
     "findings":  [
@@ -107,7 +119,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-10T06:19:47",
+    "generated":  "2026-08-10T09:05:58",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -151,7 +163,7 @@
                               "commodity":  "Almond Milk",
                               "unit":  "floz",
                               "store":  "Hy-Vee",
-                              "per_unit":  0.0467,
+                              "per_unit":  0.0389,
                               "size":  "64 oz",
                               "item":  "Hy Vee Almondmilk Original Unsweetened",
                               "kind":  "weight",
@@ -631,7 +643,7 @@
                               "commodity":  "Half \u0026 Half",
                               "unit":  "floz",
                               "store":  "Hy-Vee",
-                              "per_unit":  0.0934,
+                              "per_unit":  0.1091,
                               "size":  "32 oz",
                               "item":  "Hy Vee Half And Half",
                               "kind":  "weight",
@@ -888,7 +900,7 @@
                               "item":  "(3 pack) Easy-Off Heavy Duty Degreaser, Removes Grease \u0026 Grime, For Kitchen, Garage, Outdoor \u0026 More 32oz",
                               "kind":  "volume",
                               "row_kind":  "weight",
-                              "holds_crown":  false
+                              "holds_crown":  true
                           },
                           {
                               "id":  "oven-cleaner",
@@ -993,7 +1005,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0993,
                               "size":  "15 oz",
-                              "item":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
+                              "item":  "Alberto Vo5 Shampoo, Revitalizing, Ocean Refresh, Bonus Size 15 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1041,7 +1053,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0818,
                               "size":  "17 oz",
-                              "item":  "Sparkling Ice Sparkling Water, Zero Sugar, Peach Nectarine 17 Fl Oz",
+                              "item":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1215,5 +1227,5 @@
                               "holds_crown":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-08-09.json"
+    "compare_file":  "comparison-2026-08-10.json"
 }

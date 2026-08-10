@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-10 06:13",
-    "board":  "comparison-2026-08-09.json",
-    "sidecar_generated":  "2026-08-10 06:13:28",
+    "generated":  "2026-08-10 08:58",
+    "board":  "comparison-2026-08-10.json",
+    "sidecar_generated":  "2026-08-10 08:58:50",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,12 +9,12 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2861,
-                     "corpus":  31192,
-                     "rule_invisible":  4820
+                     "board_pairs":  2866,
+                     "corpus":  31196,
+                     "rule_invisible":  4822
                  },
     "identity_count":  0,
-    "coverage_count":  27,
+    "coverage_count":  34,
     "identity":  [
 
                  ],
@@ -91,6 +91,26 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "frozen-burritos",
+                         "commodity":  "Frozen Burritos",
+                         "store":  "Walmart",
+                         "product":  "El Monterey Beef, Bean \u0026 Cheese Flavor Chimichangas, 30.4 oz, 8 Count (Frozen)",
+                         "cos":  0.718,
+                         "score":  0.948516,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "ice-cream",
+                         "commodity":  "Ice Cream",
+                         "store":  "Hy-Vee",
+                         "product":  "Hy Vee We All Scream Vanilla",
+                         "cos":  0.5968,
+                         "score":  0.947653,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "cod",
                          "commodity":  "Cod Fillets",
                          "store":  "Walmart",
@@ -121,22 +141,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "tilapia",
-                         "commodity":  "Tilapia Fillets",
-                         "store":  "Walmart",
-                         "product":  "Great Value Frozen Skinless \u0026 Boneless Swai Fish Fillets Value Bag, 4 lb",
-                         "cos":  0.6606,
-                         "score":  0.944107,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "pork-tenderloin",
                          "commodity":  "Pork Tenderloin",
                          "store":  "Walmart",
                          "product":  "Smithfield Steakhouse Fresh Seasoned Pork Tenderloin, 0.51.9 lb, 20 Grams of Protein per 4 oz Serving",
-                         "cos":  0.746,
-                         "score":  0.941829,
+                         "cos":  0.7452,
+                         "score":  0.941752,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -181,6 +191,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "tilapia",
+                         "commodity":  "Tilapia Fillets",
+                         "store":  "Walmart",
+                         "product":  "Great Value Frozen Skinless \u0026 Boneless Swai Fish Fillets Value Bag, 4 lb",
+                         "cos":  0.6578,
+                         "score":  0.933751,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "string-cheese",
                          "commodity":  "String Cheese",
                          "store":  "Walmart",
@@ -191,12 +211,32 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "sandwich-bags",
+                         "commodity":  "Sandwich Bags",
+                         "store":  "Walmart",
+                         "product":  "Ziploc® Brand Snack Bags with EasyGuide™ Texture, Grip \u0027n Seal Technology™, Food Storage, Zipper, 100 Count",
+                         "cos":  0.654,
+                         "score":  0.92869,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "frozen-fruit",
                          "commodity":  "Frozen Fruit / Berries",
                          "store":  "Walmart",
                          "product":  "Great Value Blueberries, 48 oz (Frozen)",
                          "cos":  0.6838,
                          "score":  0.926411,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "breakfast-sandwiches",
+                         "commodity":  "Frozen Breakfast Sandwiches",
+                         "store":  "Family Fare",
+                         "product":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
+                         "cos":  0.7343,
+                         "score":  0.926271,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -221,12 +261,12 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "breakfast-sandwiches",
-                         "commodity":  "Frozen Breakfast Sandwiches",
-                         "store":  "Family Fare",
-                         "product":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
-                         "cos":  0.7193,
-                         "score":  0.921061,
+                         "id":  "garden-salad",
+                         "commodity":  "Garden Salad Blend (bagged)",
+                         "store":  "Baker\u0027s",
+                         "product":  "Kroger Iceberg Shredded Lettuce Bagged Salad BIG DEAL!",
+                         "cos":  0.6779,
+                         "score":  0.922294,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -237,6 +277,26 @@
                          "product":  "Soeos Parsley Flakes, 2.1 oz (60g), Dried Parsley Leaves, Fresh Flavor and Aroma, Perfect for Seasoning, Garnishing, and Cooking",
                          "cos":  0.6634,
                          "score":  0.920791,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "turkey-lunchmeat",
+                         "commodity":  "Turkey (deli / sliced)",
+                         "store":  "Aldi",
+                         "product":  "Lunch Mate Honey Smoked Turkey Breast 16 OZ",
+                         "cos":  0.6989,
+                         "score":  0.915638,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "turkey-lunchmeat",
+                         "commodity":  "Turkey (deli / sliced)",
+                         "store":  "Aldi",
+                         "product":  "Deli Sliced Honey Turkey 8 OZ",
+                         "cos":  0.6661,
+                         "score":  0.915636,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -287,6 +347,16 @@
                          "product":  "Jimmy Dean Premium Pork Regular Sausage Roll, 32 oz",
                          "cos":  0.66,
                          "score":  0.900416,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "pork-tenderloin",
+                         "commodity":  "Pork Tenderloin",
+                         "store":  "Walmart",
+                         "product":  "Prairie Fresh Natural Fresh Pork St. Louis Style Spareribs, Bone-in, 3.0- 4.4 lb, 19g of protein per 4oz serving",
+                         "cos":  0.6641,
+                         "score":  0.90036,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]
