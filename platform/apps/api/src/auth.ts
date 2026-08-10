@@ -17,6 +17,7 @@ interface GithubOidcClaims {
   repository?: string;
   repository_id?: string;
   workflow_ref?: string;
+  job_workflow_ref?: string;
   run_id?: string;
   run_attempt?: string;
 }
@@ -88,7 +89,14 @@ export function validateGithubOidcClaims(claims: GithubOidcClaims, env: WorkerEn
   const trustedWorkflowRefs = env.GITHUB_OIDC_WORKFLOW_REFS
     ? JSON.parse(env.GITHUB_OIDC_WORKFLOW_REFS) as string[]
     : env.GITHUB_OIDC_WORKFLOW_REF ? [env.GITHUB_OIDC_WORKFLOW_REF] : [];
-  if (trustedWorkflowRefs.length > 0 && (!claims.workflow_ref || !trustedWorkflowRefs.includes(claims.workflow_ref))) throw new Error("GitHub OIDC workflow is not trusted");
+  const isStaticWorkflow = Boolean(claims.workflow_ref && trustedWorkflowRefs.includes(claims.workflow_ref));
+  const isRegisteredAgentCaller = Boolean(
+    claims.workflow_ref
+    && claims.job_workflow_ref
+    && env.GITHUB_OIDC_AGENT_RUNNER_REF
+    && claims.job_workflow_ref === env.GITHUB_OIDC_AGENT_RUNNER_REF,
+  );
+  if (trustedWorkflowRefs.length > 0 && !isStaticWorkflow && !isRegisteredAgentCaller) throw new Error("GitHub OIDC workflow is not trusted");
   if (!claims.sub || !claims.run_id) throw new Error("GitHub OIDC identity claims are incomplete");
 }
 
@@ -101,8 +109,6 @@ async function authenticateGithubOidc(request: Request, env: WorkerEnv, allowedR
   const claims = decodeJwtJson<GithubOidcClaims>(segments[1]!);
   if (header.alg !== "RS256" || !header.kid || (header.typ && header.typ !== "JWT")) throw new Error("unsupported GitHub OIDC token header");
   validateGithubOidcClaims(claims, env);
-  const role = githubWorkflowRole(claims.workflow_ref);
-  if (!allowedRoles.includes(role)) throw new Error("GitHub Actions is not authorized for this operation");
   const keys = await githubKeys();
   const jwk = keys.keys.find((candidate) => candidate.kid === header.kid && candidate.kty === "RSA");
   if (!jwk) throw new Error("GitHub OIDC signing key is unknown");
@@ -111,12 +117,26 @@ async function authenticateGithubOidc(request: Request, env: WorkerEnv, allowedR
   const signature = Uint8Array.from(decodeBase64Url(segments[2]!)).buffer;
   const verified = await crypto.subtle.verify("RSASSA-PKCS1-v1_5", key, signature, signed);
   if (!verified) throw new Error("invalid GitHub OIDC signature");
+  let registeredAgent: { id: string; capabilities_json: string; workflow_ref: string; reusable_workflow_ref: string } | null = null;
+  if (claims.job_workflow_ref) {
+    registeredAgent = await env.DB.prepare(
+      `SELECT id, capabilities_json, workflow_ref, reusable_workflow_ref
+         FROM agent_registry
+        WHERE active = 1 AND enabled = 1 AND workflow_ref = ?1`,
+    ).bind(claims.workflow_ref ?? "").first<{ id: string; capabilities_json: string; workflow_ref: string; reusable_workflow_ref: string }>();
+    if (!registeredAgent) throw new Error("GitHub caller workflow is not assigned to an enabled agent");
+    if (registeredAgent.reusable_workflow_ref !== claims.job_workflow_ref) throw new Error("GitHub reusable workflow does not match the agent registry");
+    if (!env.GITHUB_OIDC_AGENT_RUNNER_REF || claims.job_workflow_ref !== env.GITHUB_OIDC_AGENT_RUNNER_REF) throw new Error("GitHub reusable workflow is not approved");
+  }
+  const role = registeredAgent ? "engine" : githubWorkflowRole(claims.workflow_ref);
+  if (!allowedRoles.includes(role)) throw new Error("GitHub Actions is not authorized for this operation");
   const timestamp = request.headers.get("x-tc-timestamp") ?? "";
   const nonce = request.headers.get("x-tc-nonce") ?? "";
   if (!/^[a-zA-Z0-9._:-]{8,160}$/.test(nonce)) throw new Error("invalid request nonce");
   const instant = Date.parse(timestamp);
   if (!Number.isFinite(instant) || Math.abs(Date.now() - instant) > MAX_CLOCK_SKEW_MS) throw new Error("request timestamp is outside the allowed window");
-  const agentId = `github:${claims.repository_id ?? claims.repository}:${claims.run_id}:${claims.run_attempt ?? "1"}`;
+  const runIdentity = `github:${claims.repository_id ?? claims.repository}:${claims.run_id}:${claims.run_attempt ?? "1"}`;
+  const agentId = registeredAgent?.id ?? runIdentity;
   try {
     await env.DB.prepare(
       "INSERT INTO request_nonces (agent_id, nonce, expires_at) VALUES (?1, ?2, datetime(?3, '+10 minutes'))",
@@ -124,7 +144,16 @@ async function authenticateGithubOidc(request: Request, env: WorkerEnv, allowedR
   } catch {
     throw new Error("request nonce has already been used");
   }
-  return { agentId, secret: "", role, authMethod: "github_oidc", ...(claims.workflow_ref ? { workflowRef: claims.workflow_ref } : {}) };
+  return {
+    agentId,
+    secret: "",
+    role,
+    authMethod: "github_oidc",
+    githubRunId: runIdentity,
+    ...(claims.workflow_ref ? { workflowRef: claims.workflow_ref } : {}),
+    ...(claims.job_workflow_ref ? { jobWorkflowRef: claims.job_workflow_ref } : {}),
+    ...(registeredAgent ? { registeredAgentId: registeredAgent.id, capabilities: JSON.parse(registeredAgent.capabilities_json) as string[] } : {}),
+  };
 }
 
 export async function authenticateMutation(

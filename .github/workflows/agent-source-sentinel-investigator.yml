@@ -1,0 +1,12 @@
+name: Agent - source sentinel investigator
+on:
+  schedule:
+    - cron: "47 14 * * *"
+      timezone: "America/Chicago"
+  workflow_dispatch:
+permissions: { contents: read, id-token: write, actions: write }
+jobs:
+  call:
+    uses: ./.github/workflows/platform-agent-runner.yml
+    with: { agent_id: source-sentinel-investigator, job_name: source-sentinel-daily }
+    secrets: inherit

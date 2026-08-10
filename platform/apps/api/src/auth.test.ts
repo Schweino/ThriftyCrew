@@ -87,7 +87,7 @@ describe("GitHub OIDC trust policy", () => {
   it("grants operator role only to the restore workflow", () => {
     expect(githubWorkflowRole("Schweino/SimpleMoneyPlaybook/.github/workflows/platform-restore.yml@refs/heads/main")).toBe("operator");
     expect(githubWorkflowRole("Schweino/SimpleMoneyPlaybook/.github/workflows/platform-v3.yml@refs/heads/main")).toBe("engine");
-    expect(githubWorkflowRole("Schweino/SimpleMoneyPlaybook/.github/workflows/platform-agents.yml@refs/heads/main")).toBe("engine");
+    expect(githubWorkflowRole("Schweino/SimpleMoneyPlaybook/.github/workflows/agent-triage-reviewer.yml@refs/heads/main")).toBe("engine");
   });
 
   it("binds issuer, audience, repository, and workflow", () => {
@@ -147,5 +147,23 @@ describe("GitHub OIDC trust policy", () => {
     };
     expect(() => validateGithubOidcClaims({ ...base, workflow_ref: "Schweino/SimpleMoneyPlaybook/.github/workflows/platform-agents.yml@refs/heads/main" }, env, now)).not.toThrow();
     expect(() => validateGithubOidcClaims({ ...base, workflow_ref: "Schweino/SimpleMoneyPlaybook/.github/workflows/rogue.yml@refs/heads/main" }, env, now)).toThrow(/workflow is not trusted/);
+  });
+
+  it("requires the approved reusable runner for thin agent callers", () => {
+    const now = Math.floor(Date.now() / 1000);
+    const claims = {
+      iss: "https://token.actions.githubusercontent.com", aud: "tc-grocery-v3",
+      sub: "repo:Schweino/SimpleMoneyPlaybook:ref:refs/heads/main", exp: now + 300, iat: now,
+      repository: "Schweino/SimpleMoneyPlaybook", run_id: "1234",
+      workflow_ref: "Schweino/SimpleMoneyPlaybook/.github/workflows/agent-triage-reviewer.yml@refs/heads/main",
+      job_workflow_ref: "Schweino/SimpleMoneyPlaybook/.github/workflows/platform-agent-runner.yml@refs/heads/main",
+    };
+    const env = {
+      ...environment(), GITHUB_OIDC_AUDIENCE: "tc-grocery-v3", GITHUB_OIDC_REPOSITORY: "Schweino/SimpleMoneyPlaybook",
+      GITHUB_OIDC_WORKFLOW_REFS: JSON.stringify(["Schweino/SimpleMoneyPlaybook/.github/workflows/platform-v3.yml@refs/heads/main"]),
+      GITHUB_OIDC_AGENT_RUNNER_REF: "Schweino/SimpleMoneyPlaybook/.github/workflows/platform-agent-runner.yml@refs/heads/main",
+    };
+    expect(() => validateGithubOidcClaims(claims, env, now)).not.toThrow();
+    expect(() => validateGithubOidcClaims({ ...claims, job_workflow_ref: "Schweino/SimpleMoneyPlaybook/.github/workflows/rogue.yml@refs/heads/main" }, env, now)).toThrow(/workflow is not trusted/);
   });
 });

@@ -21,17 +21,23 @@ evidence and verified archive objects.
   cron triggers and `grocery/expected-automations.json`. A rogue or missing executor entry fails CI.
 - GitHub schedules use `America/Chicago` and avoid top-of-hour execution for V3 workloads.
 - The Family Fare paced sweep has a cloud three-hour replacement before the Windows task may retire.
-- GitHub OIDC trusts three exact workflows. The agent workflow can access only ledger, registry authorization,
-  source-sentinel and content-batch routes. The restore workflow can only trigger the deterministic drill.
+- GitHub OIDC trusts exact infrastructure workflows plus ten registered thin agent callers. Agent callers must
+  invoke the one approved reusable runner, and both the caller `workflow_ref` and reusable `job_workflow_ref`
+  are verified before any capability is granted. The restore workflow can only trigger the deterministic drill.
 
 ## H3 - agents as code and plane split
 
-- Ten judgment agents have hashed prompts, input/output contracts, fixtures, model/fallback choices,
-  effective-dated token pricing, capabilities, criticality and monthly budgets.
-- Normal agent ledger start rejects prompt/model drift and optional-budget exhaustion. A missing ledger permits
-  only read-only diagnostic output retained as a GitHub artifact; it never authorizes mutation.
+- Ten judgment agents have hashed prompts, semantic execution hashes, agent-specific adversarial evaluation
+  corpora, structured input/output contracts, model/fallback/reasoning choices, effective-dated token pricing,
+  capabilities, criticality and split routine/reserve budgets.
+- An exact execution-hash evaluation must pass before a work item can be claimed. The server owns work-item
+  idempotency, leases, fencing, retries, dead letters, severity and chained dispatch; late completions are
+  retained as evidence but cannot mutate current state.
+- The triage reviewer-to-developer and recipe sourcer-to-auditor chains dispatch immediately, with a Worker
+  retry sweep for queued work. Registered agents cannot select their own input contract or workflow identity.
 - PC has no judgment agent in the registry. Browser capture and accuracy remain deterministic clients.
-- The triage developer capability is pull-request-only and has no production mutation route.
+- The triage developer and source-sentinel investigator are pull-request-only, restricted by server and staging
+  path allowlists, and run the full repository gate before a GitHub App opens a PR. They cannot deploy.
 
 ## H4 - immutable content batches
 
@@ -40,6 +46,10 @@ evidence and verified archive objects.
 - The deterministic gate validates duplicate identities, commodity mappings, ingredient coherence and
   provenance. An LLM audit cannot promote content by itself.
 - Rejected or promoted batch items cannot be changed or deleted; a correction requires a new batch.
+- Recipe publication waves record an immutable pre-wave release snapshot. A failed wave is corrected by
+  cloning that snapshot into a new validated release; a superseded release pointer is never reused.
+- Login-canary evidence stores only Ghost member IDs/tags and probe timing, rejects email-shaped fields, and
+  requires two same-profile probes 9-30 minutes apart.
 
 ## H5 - database hardening and recovery
 

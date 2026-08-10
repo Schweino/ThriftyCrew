@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import path from "node:path";
 import { agentRegistryEntrySchema } from "@thriftycrew/contracts";
-import { checkAgentRegistry } from "./agents";
+import { checkAgentRegistry, executionConfigHash } from "./agents";
 
 describe("agent registry", () => {
   it("matches every deployed prompt hash and fixture", async () => {
@@ -12,9 +12,21 @@ describe("agent registry", () => {
   it("rejects a PC judgment agent with content mutation", () => {
     expect(() => agentRegistryEntrySchema.parse({
       id: "bad-pc-agent", enabled: true, plane: "pc", promptFile: "agents/bad/prompt.md",
-      promptSha256: "a".repeat(64), model: "fixture", monthlyBudgetMicrousd: 1,
-      criticality: "optional", capabilities: ["write:content-stage"], inputContracts: ["input"],
-      outputContract: "output", fixtureFiles: ["fixture.json"],
+      promptSha256: "a".repeat(64), provider: "openai", model: "fixture", reasoningEffort: "medium", monthlyBudgetMicrousd: 1,
+      reserveBudgetPercent: 0, criticality: "optional", workflowFile: ".github/workflows/a.yml",
+      reusableWorkflowFile: ".github/workflows/runner.yml", executionConfigHash: "b".repeat(64),
+      capabilities: ["write:content-stage"], inputContracts: ["input"], outputContract: "output", fixtureFiles: ["fixture.json"],
     })).toThrow(/PC agents may only write/);
+  });
+
+  it("hashes execution semantics but not schedule or budget plumbing", () => {
+    const semantic = {
+      provider: "openai", model: "gpt-5.6-terra", fallbackModel: "gpt-5.6-luna", reasoningEffort: "medium",
+      promptSha256: "a".repeat(64), inputContracts: ["input-v1"], outputContract: "output-v1",
+      capabilities: ["write:ledger"],
+    };
+    const first = executionConfigHash(semantic);
+    expect(executionConfigHash({ ...semantic, monthlyBudgetMicrousd: 1, scheduleId: "one" } as typeof semantic)).toBe(first);
+    expect(executionConfigHash({ ...semantic, promptSha256: "b".repeat(64) })).not.toBe(first);
   });
 });

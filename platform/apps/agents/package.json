@@ -7,7 +7,9 @@
     "build": "tsc -p tsconfig.json --noEmit",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "run": "tsx src/runner.ts",
-    "fixture": "tsx src/runner.ts --fixture"
+    "fixture": "tsx src/runner.ts --fixture",
+    "eval": "tsx src/eval.ts",
+    "eval:fixtures": "tsx src/eval.ts --fixtures-only"
   },
   "dependencies": {
     "@openai/agents": "0.14.3",

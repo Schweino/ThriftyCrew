@@ -68,6 +68,20 @@ export async function checkScheduleAuthority(platformRoot: string): Promise<Reco
   const inventoryScheduleIds = new Set(inventory.executors.map((entry) => entry.scheduleId).filter(Boolean));
   const unknownInventorySchedules = [...inventoryScheduleIds].filter((id) => !document.schedules.some((entry) => entry.id === id));
   if (unknownInventorySchedules.length) throw new Error(`transition inventory has unknown schedules: ${unknownInventorySchedules.join(", ")}`);
+  const transitionSchedules = document.schedules.filter((entry) => entry.lifecycle === "transition");
+  const transitionByInventoryId = new Map(transitionSchedules.map((entry) => [entry.inventoryId, entry]));
+  const inventoryIds = new Set(inventory.executors.map((entry) => entry.id));
+  const missingInventory = transitionSchedules.filter((entry) => !entry.inventoryId || !inventoryIds.has(entry.inventoryId)).map((entry) => entry.id);
+  const rogueInventory = inventory.executors.filter((entry) => entry.lifecycle === "transition" && !transitionByInventoryId.has(entry.id)).map((entry) => entry.id);
+  if (missingInventory.length || rogueInventory.length) throw new Error(`transition inventory drift: ${JSON.stringify({ missingInventory, rogueInventory })}`);
+  const gateIds = new Set(inventory.evidenceGates.map((gate) => gate.id));
+  for (const schedule of transitionSchedules) {
+    const inventoryEntry = inventory.executors.find((entry) => entry.id === schedule.inventoryId);
+    if (!inventoryEntry || inventoryEntry.scheduleId !== schedule.id || inventoryEntry.scope !== schedule.inventoryScope || inventoryEntry.retirementGate !== schedule.retirementGate) {
+      throw new Error(`transition inventory identity drift for ${schedule.id}`);
+    }
+    if (!gateIds.has(schedule.retirementGate!)) throw new Error(`transition schedule ${schedule.id} references unknown evidence gate ${schedule.retirementGate}`);
+  }
   const [github, workerCrons, windowsTasks] = await Promise.all([
     verifyGithubSchedules(platformRoot, document),
     verifyWorkerSchedules(platformRoot, document),

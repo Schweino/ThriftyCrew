@@ -1,0 +1,12 @@
+name: Agent - post publish reviewer
+on:
+  schedule:
+    - cron: "47 12 * * *"
+      timezone: "America/Chicago"
+  workflow_dispatch:
+permissions: { contents: read, id-token: write, actions: write }
+jobs:
+  call:
+    uses: ./.github/workflows/platform-agent-runner.yml
+    with: { agent_id: post-publish-reviewer, job_name: post-publish-review }
+    secrets: inherit

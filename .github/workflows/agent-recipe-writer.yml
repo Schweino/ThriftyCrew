@@ -1,0 +1,8 @@
+name: Agent - recipe writer
+on: { workflow_dispatch: {} }
+permissions: { contents: read, id-token: write, actions: write }
+jobs:
+  call:
+    uses: ./.github/workflows/platform-agent-runner.yml
+    with: { agent_id: recipe-writer }
+    secrets: inherit

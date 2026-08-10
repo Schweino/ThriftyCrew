@@ -1,0 +1,12 @@
+name: Agent - recipe sourcer
+on:
+  schedule:
+    - cron: "27 10 * * 2"
+      timezone: "America/Chicago"
+  workflow_dispatch:
+permissions: { contents: read, id-token: write, actions: write }
+jobs:
+  call:
+    uses: ./.github/workflows/platform-agent-runner.yml
+    with: { agent_id: recipe-sourcer, job_name: recipe-pack-weekly }
+    secrets: inherit

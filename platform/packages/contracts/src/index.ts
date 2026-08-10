@@ -286,6 +286,8 @@ export const scheduleEntrySchema = z.object({
   windowsTask: z.string().min(1).max(300).optional(),
   agentId: nonEmptyId.optional(),
   retirementGate: z.string().min(1).max(1000).optional(),
+  inventoryId: nonEmptyId.optional(),
+  inventoryScope: z.enum(["grocery", "adjacent"]).optional(),
 }).superRefine((value, context) => {
   if (value.executor === "github-actions" && !value.workflowFile) {
     context.addIssue({ code: "custom", path: ["workflowFile"], message: "GitHub schedules require a workflow file" });
@@ -295,6 +297,12 @@ export const scheduleEntrySchema = z.object({
   }
   if (value.lifecycle === "transition" && !value.retirementGate) {
     context.addIssue({ code: "custom", path: ["retirementGate"], message: "transition schedules require a retirement gate" });
+  }
+  if (value.lifecycle === "transition" && (!value.inventoryId || !value.inventoryScope)) {
+    context.addIssue({ code: "custom", path: ["inventoryId"], message: "transition schedules require inventory identity and scope" });
+  }
+  if (Boolean(value.inventoryId) !== Boolean(value.inventoryScope)) {
+    context.addIssue({ code: "custom", path: ["inventoryScope"], message: "inventory id and scope must be supplied together" });
   }
 });
 
@@ -312,12 +320,10 @@ export const scheduleDocumentSchema = z.object({
 
 export const transitionInventorySchema = z.object({
   version: z.number().int().positive(),
-  recordedAt: isoDateTime,
   authority: z.literal("platform/config/schedules.json"),
   evidenceGates: z.array(z.object({
     id: nonEmptyId,
     required: z.number().int().positive(),
-    recorded: z.number().int().nonnegative(),
     retirementBlocking: z.boolean(),
   })).min(1),
   executors: z.array(z.object({
@@ -342,10 +348,16 @@ export const agentRegistryEntrySchema = z.object({
   scheduleId: nonEmptyId.optional(),
   promptFile: z.string().min(1).max(500),
   promptSha256: sha256Hex,
+  provider: z.literal("openai"),
   model: z.string().min(1).max(200),
   fallbackModel: z.string().min(1).max(200).optional(),
+  reasoningEffort: z.enum(["none", "low", "medium", "high", "xhigh", "max"]),
   monthlyBudgetMicrousd: z.number().int().nonnegative(),
+  reserveBudgetPercent: z.number().int().min(0).max(100),
   criticality: z.enum(["safety", "operational", "optional"]),
+  workflowFile: z.string().min(1).max(500),
+  reusableWorkflowFile: z.string().min(1).max(500),
+  executionConfigHash: sha256Hex,
   capabilities: z.array(agentCapabilitySchema).min(1),
   inputContracts: z.array(z.string().min(1).max(300)).min(1),
   outputContract: z.string().min(1).max(300),
@@ -356,6 +368,9 @@ export const agentRegistryEntrySchema = z.object({
   }
   if (value.capabilities.includes("write:pull-request") && value.capabilities.includes("write:content-stage")) {
     context.addIssue({ code: "custom", path: ["capabilities"], message: "PR-writing agents cannot stage publishable content" });
+  }
+  if (value.criticality === "optional" && value.reserveBudgetPercent !== 0) {
+    context.addIssue({ code: "custom", path: ["reserveBudgetPercent"], message: "optional agents do not receive an emergency reserve" });
   }
 });
 
@@ -415,6 +430,42 @@ export const contentBatchAuditSchema = z.object({
   })).max(1000),
 });
 
+export const pullRequestProposalSchema = z.object({
+  title: z.string().trim().min(10).max(200),
+  branch: z.string().regex(/^agent\/[a-z0-9][a-z0-9-]{2,100}$/),
+  rationale: z.string().min(20).max(10_000),
+  files: z.array(z.object({
+    path: z.string().min(1).max(500),
+    operation: z.enum(["create", "update"]),
+    content: z.string().max(500_000),
+  })).min(1).max(50),
+  tests: z.array(z.string().min(3).max(1000)).min(1).max(50),
+  requiresOperator: z.boolean(),
+});
+
+export const recipeSourceCandidatesSchema = z.object({
+  candidates: z.array(z.object({
+    id: nonEmptyId,
+    title: z.string().min(4).max(300),
+    sourceUrl: z.url().max(3000),
+    accessedAt: isoDateTime,
+    ingredients: z.array(z.string().min(1).max(300)).min(2).max(100),
+  })).min(1).max(50),
+});
+
+export const recipeDedupSchema = z.object({
+  acceptedIds: z.array(nonEmptyId).min(1).max(50),
+  duplicates: z.array(z.object({ candidateId: nonEmptyId, duplicateOf: nonEmptyId, reason: z.string().min(5).max(1000) })).max(50),
+});
+
+export const recipeMapSchema = z.object({
+  recipes: z.array(z.object({
+    candidateId: nonEmptyId,
+    ingredients: z.array(z.object({ sourceName: z.string().min(1).max(300), commodityId: nonEmptyId, grams: z.number().positive() })).min(2).max(100),
+    unmapped: z.array(z.string().min(1).max(300)).max(100),
+  })).min(1).max(50),
+});
+
 export const sourceSentinelResultSchema = z.object({
   sourceId: nonEmptyId,
   contractVersion: z.number().int().positive(),
@@ -425,6 +476,73 @@ export const sourceSentinelResultSchema = z.object({
     status: z.enum(["pass", "fail"]),
     detail: z.string().min(1).max(2000),
   })).min(1),
+  evidence: z.record(z.string(), z.unknown()).default({}),
+});
+
+export const agentWorkItemSourceKindSchema = z.enum([
+  "triage-item", "accuracy-draw", "recipe-request", "source-sentinel-result", "release-status",
+]);
+
+export const agentWorkItemClaimSchema = z.object({
+  agentId: nonEmptyId,
+  adapterVersion: z.string().min(1).max(160),
+  inputContract: z.string().min(1).max(300),
+  leaseSeconds: z.number().int().min(60).max(3600).default(900),
+});
+
+export const agentWorkItemCompleteSchema = z.object({
+  leaseId: nonEmptyId,
+  leaseGeneration: z.number().int().positive(),
+  output: z.unknown(),
+});
+
+export const agentWorkItemFailSchema = z.object({
+  leaseId: nonEmptyId,
+  leaseGeneration: z.number().int().positive(),
+  reason: z.string().min(5).max(10_000),
+  retryable: z.boolean().default(true),
+});
+
+export const agentEvaluationRecordSchema = z.object({
+  id: nonEmptyId,
+  agentId: nonEmptyId,
+  executionConfigHash: sha256Hex,
+  modelId: z.string().min(1).max(200),
+  corpusHash: sha256Hex,
+  evaluatorVersion: z.string().min(1).max(160),
+  caseCount: z.number().int().positive(),
+  passedCount: z.number().int().nonnegative(),
+  scoreMillis: z.number().int().min(0).max(1000),
+  thresholdMillis: z.number().int().min(0).max(1000),
+  passed: z.boolean(),
+  detail: z.record(z.string(), z.unknown()).default({}),
+  evaluatedAt: isoDateTime,
+});
+
+export const recipeSuggestionRequestSchema = z.object({
+  id: nonEmptyId,
+  request: z.string().trim().min(10).max(10_000),
+  requestedAt: isoDateTime,
+  sourceRef: z.string().min(1).max(1000),
+});
+
+export const recipeWaveSnapshotSchema = z.object({
+  id: nonEmptyId,
+  contentBatchId: nonEmptyId,
+});
+
+export const recipeWavePublicationSchema = z.object({
+  releaseId: nonEmptyId,
+});
+
+export const loginCanaryProbeSchema = z.object({
+  id: nonEmptyId,
+  storeId: nonEmptyId,
+  runId: nonEmptyId,
+  ordinal: z.union([z.literal(1), z.literal(2)]),
+  status: z.enum(["healthy", "expired", "inconclusive"]),
+  signal: z.string().min(1).max(2000),
+  observedAt: isoDateTime,
   evidence: z.record(z.string(), z.unknown()).default({}),
 });
 
@@ -702,4 +820,8 @@ export type AgentRegistryEntry = z.infer<typeof agentRegistryEntrySchema>;
 export type ContentBatchCreate = z.infer<typeof contentBatchCreateSchema>;
 export type ContentItem = z.infer<typeof contentItemSchema>;
 export type SourceSentinelResult = z.infer<typeof sourceSentinelResultSchema>;
+export type AgentWorkItemClaim = z.infer<typeof agentWorkItemClaimSchema>;
+export type AgentWorkItemComplete = z.infer<typeof agentWorkItemCompleteSchema>;
+export type AgentWorkItemFail = z.infer<typeof agentWorkItemFailSchema>;
+export type AgentEvaluationRecord = z.infer<typeof agentEvaluationRecordSchema>;
 export type ArchivalForecast = z.infer<typeof archivalForecastSchema>;

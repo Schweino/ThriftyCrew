@@ -1,20 +1,321 @@
 {
-  "version": 1,
+  "version": 2,
   "pricingEffectiveAt": "2026-08-10T00:00:00-05:00",
   "pricing": {
-    "gpt-5.4-mini-2026-03-17": { "inputMicrousdPerMillion": 750000, "outputMicrousdPerMillion": 4500000, "cacheReadMicrousdPerMillion": 75000 },
-    "gpt-5-mini-2025-08-07": { "inputMicrousdPerMillion": 250000, "outputMicrousdPerMillion": 2000000, "cacheReadMicrousdPerMillion": 25000 }
+    "gpt-5.6-sol": {
+      "inputMicrousdPerMillion": 5000000,
+      "outputMicrousdPerMillion": 30000000,
+      "cacheReadMicrousdPerMillion": 500000
+    },
+    "gpt-5.6-terra": {
+      "inputMicrousdPerMillion": 2000000,
+      "outputMicrousdPerMillion": 12000000,
+      "cacheReadMicrousdPerMillion": 200000
+    },
+    "gpt-5.6-luna": {
+      "inputMicrousdPerMillion": 200000,
+      "outputMicrousdPerMillion": 1200000,
+      "cacheReadMicrousdPerMillion": 20000
+    }
   },
   "agents": [
-    { "id": "post-publish-reviewer", "enabled": true, "plane": "ci", "scheduleId": "post-publish-review", "promptFile": "agents/post-publish-reviewer/prompt.md", "promptSha256": "9943aacba215eb1d6925cc623d11c33134af77961b59d6ef3608938f0f0ce189", "model": "gpt-5.4-mini-2026-03-17", "fallbackModel": "gpt-5-mini-2025-08-07", "monthlyBudgetMicrousd": 15000000, "criticality": "safety", "capabilities": ["read:status", "read:evidence", "write:ledger", "write:triage-plan"], "inputContracts": ["release-status-v1"], "outputContract": "triage-plan-v1", "fixtureFiles": ["agents/fixtures/review-pass.json", "agents/fixtures/review-missing-evidence.json"] },
-    { "id": "triage-reviewer", "enabled": true, "plane": "ci", "scheduleId": "triage-review", "promptFile": "agents/triage-reviewer/prompt.md", "promptSha256": "0d24ee754c136fa2db0430d87f68ddecc7055604945d7003d1d062b8c7dd1de1", "model": "gpt-5.4-mini-2026-03-17", "fallbackModel": "gpt-5-mini-2025-08-07", "monthlyBudgetMicrousd": 15000000, "criticality": "safety", "capabilities": ["read:status", "read:evidence", "write:ledger", "write:triage-plan"], "inputContracts": ["triage-item-v1"], "outputContract": "triage-plan-v1", "fixtureFiles": ["agents/fixtures/review-missing-evidence.json"] },
-    { "id": "triage-developer", "enabled": true, "plane": "ci", "promptFile": "agents/triage-developer/prompt.md", "promptSha256": "4b547bf335b6608acef692e261767741398a5813a92191aa207e323303d485af", "model": "gpt-5.4-mini-2026-03-17", "fallbackModel": "gpt-5-mini-2025-08-07", "monthlyBudgetMicrousd": 20000000, "criticality": "operational", "capabilities": ["read:status", "read:evidence", "write:ledger", "write:pull-request"], "inputContracts": ["triage-plan-v1"], "outputContract": "pull-request-v1", "fixtureFiles": ["agents/fixtures/review-missing-evidence.json"] },
-    { "id": "accuracy-headless", "enabled": true, "plane": "ci", "promptFile": "agents/accuracy-headless/prompt.md", "promptSha256": "e53220fc31386f9c1f357a29292657786844a4f2cd601bc433ac6d5b2b47c229", "model": "gpt-5.4-mini-2026-03-17", "fallbackModel": "gpt-5-mini-2025-08-07", "monthlyBudgetMicrousd": 10000000, "criticality": "safety", "capabilities": ["read:evidence", "write:ledger"], "inputContracts": ["accuracy-blind-sample-v1"], "outputContract": "accuracy-verdicts-v1", "fixtureFiles": ["agents/fixtures/review-pass.json"] },
-    { "id": "recipe-sourcer", "enabled": true, "plane": "ci", "scheduleId": "recipe-pack-weekly", "promptFile": "agents/recipe-sourcer/prompt.md", "promptSha256": "14b735fe215e40db515f24d2c26b09a936131c4869f0bef09602defe37fe2cde", "model": "gpt-5.4-mini-2026-03-17", "fallbackModel": "gpt-5-mini-2025-08-07", "monthlyBudgetMicrousd": 20000000, "criticality": "optional", "capabilities": ["read:content", "write:ledger", "write:content-stage"], "inputContracts": ["recipe-source-request-v1"], "outputContract": "recipe-source-candidates-v1", "fixtureFiles": ["agents/fixtures/content-valid.json"] },
-    { "id": "recipe-deduper", "enabled": true, "plane": "ci", "promptFile": "agents/recipe-deduper/prompt.md", "promptSha256": "d06177ff66bc4fd9284f2fed08b99870a624550db6ed846f9ba8285f60e45341", "model": "gpt-5.4-mini-2026-03-17", "fallbackModel": "gpt-5-mini-2025-08-07", "monthlyBudgetMicrousd": 10000000, "criticality": "optional", "capabilities": ["read:content", "write:ledger", "write:content-stage"], "inputContracts": ["recipe-source-candidates-v1"], "outputContract": "recipe-dedup-v1", "fixtureFiles": ["agents/fixtures/content-valid.json"] },
-    { "id": "recipe-mapper", "enabled": true, "plane": "ci", "promptFile": "agents/recipe-mapper/prompt.md", "promptSha256": "2ca7bac6258db25d9f4c8e11055b754fef6d6b7cc29ab4f2dd8e9cd9aaa8439b", "model": "gpt-5.4-mini-2026-03-17", "fallbackModel": "gpt-5-mini-2025-08-07", "monthlyBudgetMicrousd": 10000000, "criticality": "optional", "capabilities": ["read:content", "write:ledger", "write:content-stage"], "inputContracts": ["recipe-dedup-v1", "commodity-config-v1"], "outputContract": "recipe-map-v1", "fixtureFiles": ["agents/fixtures/content-invalid.json"] },
-    { "id": "recipe-writer", "enabled": true, "plane": "ci", "promptFile": "agents/recipe-writer/prompt.md", "promptSha256": "e4e38b40a43522826edfbe730d6942be13eb6135a3a39d356089af9f480bcfcf", "model": "gpt-5.4-mini-2026-03-17", "fallbackModel": "gpt-5-mini-2025-08-07", "monthlyBudgetMicrousd": 20000000, "criticality": "optional", "capabilities": ["read:content", "write:ledger", "write:content-stage"], "inputContracts": ["recipe-map-v1"], "outputContract": "content-items-v1", "fixtureFiles": ["agents/fixtures/content-valid.json"] },
-    { "id": "recipe-auditor", "enabled": true, "plane": "ci", "promptFile": "agents/recipe-auditor/prompt.md", "promptSha256": "290523e237a1ffbc6c4cc0f9ce67d38130d80d5334f2ec02a7c0527f7795c210", "model": "gpt-5.4-mini-2026-03-17", "fallbackModel": "gpt-5-mini-2025-08-07", "monthlyBudgetMicrousd": 10000000, "criticality": "safety", "capabilities": ["read:content", "write:ledger", "write:content-stage"], "inputContracts": ["content-items-v1"], "outputContract": "content-audit-v1", "fixtureFiles": ["agents/fixtures/content-valid.json", "agents/fixtures/content-invalid.json"] },
-    { "id": "source-sentinel-investigator", "enabled": true, "plane": "ci", "scheduleId": "source-sentinel-daily", "promptFile": "agents/source-sentinel-investigator/prompt.md", "promptSha256": "9fe44ff13b47efa9c16c54275bb4ae8a06f200400f426875010c9a890f20e3a7", "model": "gpt-5.4-mini-2026-03-17", "fallbackModel": "gpt-5-mini-2025-08-07", "monthlyBudgetMicrousd": 10000000, "criticality": "operational", "capabilities": ["read:evidence", "write:ledger", "write:sentinel-finding", "write:pull-request"], "inputContracts": ["source-sentinel-result-v1"], "outputContract": "pull-request-v1", "fixtureFiles": ["agents/fixtures/review-missing-evidence.json"] }
+    {
+      "id": "post-publish-reviewer",
+      "enabled": true,
+      "plane": "ci",
+      "scheduleId": "post-publish-review",
+      "promptFile": "agents/post-publish-reviewer/prompt.md",
+      "promptSha256": "6f47d8ad67fd711792380358410d53ea6efd76567ee29945beb8edb2af3f7f6a",
+      "provider": "openai",
+      "model": "gpt-5.6-terra",
+      "fallbackModel": "gpt-5.6-luna",
+      "reasoningEffort": "medium",
+      "monthlyBudgetMicrousd": 15000000,
+      "reserveBudgetPercent": 30,
+      "criticality": "safety",
+      "workflowFile": ".github/workflows/agent-post-publish-reviewer.yml",
+      "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
+      "executionConfigHash": "c71b01b49a8e17e111848b5b903b3058436c86344ba3d79e1f8df5cd7581038a",
+      "capabilities": [
+        "read:status",
+        "read:evidence",
+        "write:ledger",
+        "write:triage-plan"
+      ],
+      "inputContracts": [
+        "release-status-v1"
+      ],
+      "outputContract": "triage-plan-v1",
+      "fixtureFiles": [
+        "agents/evals/post-publish-reviewer.json"
+      ]
+    },
+    {
+      "id": "triage-reviewer",
+      "enabled": true,
+      "plane": "ci",
+      "scheduleId": "triage-review",
+      "promptFile": "agents/triage-reviewer/prompt.md",
+      "promptSha256": "eb955979577d914ce7b9a479e51700cd9c8784f0ff15507884572d6f1c1c2cf6",
+      "provider": "openai",
+      "model": "gpt-5.6-sol",
+      "fallbackModel": "gpt-5.6-luna",
+      "reasoningEffort": "high",
+      "monthlyBudgetMicrousd": 15000000,
+      "reserveBudgetPercent": 30,
+      "criticality": "safety",
+      "workflowFile": ".github/workflows/agent-triage-reviewer.yml",
+      "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
+      "executionConfigHash": "32eb5ca8a40a77e4558bcaa935afa8d6765c632c8d67853c0536a62baf11aab9",
+      "capabilities": [
+        "read:status",
+        "read:evidence",
+        "write:ledger",
+        "write:triage-plan"
+      ],
+      "inputContracts": [
+        "triage-item-v1"
+      ],
+      "outputContract": "triage-plan-v1",
+      "fixtureFiles": [
+        "agents/evals/triage-reviewer.json"
+      ]
+    },
+    {
+      "id": "triage-developer",
+      "enabled": true,
+      "plane": "ci",
+      "promptFile": "agents/triage-developer/prompt.md",
+      "promptSha256": "662d6fdd9f2d7bef7f16e3e528d1ec23dd91b9dcdf004b2fb98a27a1e6cd0dae",
+      "provider": "openai",
+      "model": "gpt-5.6-terra",
+      "fallbackModel": "gpt-5.6-luna",
+      "reasoningEffort": "medium",
+      "monthlyBudgetMicrousd": 20000000,
+      "reserveBudgetPercent": 30,
+      "criticality": "operational",
+      "workflowFile": ".github/workflows/agent-triage-developer.yml",
+      "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
+      "executionConfigHash": "6ddcfc87ed9784ae891c16ec19828524e396e59f833fdcc7cdb3032395e130b1",
+      "capabilities": [
+        "read:status",
+        "read:evidence",
+        "write:ledger",
+        "write:pull-request"
+      ],
+      "inputContracts": [
+        "triage-plan-v1"
+      ],
+      "outputContract": "pull-request-v1",
+      "fixtureFiles": [
+        "agents/evals/triage-developer.json"
+      ]
+    },
+    {
+      "id": "accuracy-headless",
+      "enabled": true,
+      "plane": "ci",
+      "promptFile": "agents/accuracy-headless/prompt.md",
+      "promptSha256": "69d44af5bbcf2c0533f2f960eb31dcb84729bfe3433320df69dd8c0aadd35486",
+      "provider": "openai",
+      "model": "gpt-5.6-terra",
+      "fallbackModel": "gpt-5.6-luna",
+      "reasoningEffort": "medium",
+      "monthlyBudgetMicrousd": 10000000,
+      "reserveBudgetPercent": 30,
+      "criticality": "safety",
+      "workflowFile": ".github/workflows/agent-accuracy-headless.yml",
+      "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
+      "executionConfigHash": "f1860e7014ddee2f1cfe62d05dd3184b167b215451df1b2bfb6bd26214760fef",
+      "capabilities": [
+        "read:evidence",
+        "write:ledger"
+      ],
+      "inputContracts": [
+        "accuracy-blind-sample-v1"
+      ],
+      "outputContract": "accuracy-verdicts-v1",
+      "fixtureFiles": [
+        "agents/evals/accuracy-headless.json"
+      ]
+    },
+    {
+      "id": "recipe-sourcer",
+      "enabled": true,
+      "plane": "ci",
+      "scheduleId": "recipe-pack-weekly",
+      "promptFile": "agents/recipe-sourcer/prompt.md",
+      "promptSha256": "76b5308d54fb1773aefdce2c3ad7cab2dbcb614158290d1e9ddf04a223252617",
+      "provider": "openai",
+      "model": "gpt-5.6-terra",
+      "fallbackModel": "gpt-5.6-luna",
+      "reasoningEffort": "medium",
+      "monthlyBudgetMicrousd": 20000000,
+      "reserveBudgetPercent": 0,
+      "criticality": "optional",
+      "workflowFile": ".github/workflows/agent-recipe-sourcer.yml",
+      "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
+      "executionConfigHash": "d6aaef115209bf4e12ca038a7dc9a8374dc8af69d53947abb1a8ada6f761e66f",
+      "capabilities": [
+        "read:content",
+        "write:ledger",
+        "write:content-stage"
+      ],
+      "inputContracts": [
+        "recipe-source-request-v1"
+      ],
+      "outputContract": "recipe-source-candidates-v1",
+      "fixtureFiles": [
+        "agents/evals/recipe-sourcer.json"
+      ]
+    },
+    {
+      "id": "recipe-deduper",
+      "enabled": true,
+      "plane": "ci",
+      "promptFile": "agents/recipe-deduper/prompt.md",
+      "promptSha256": "9e462dfb48d9d4a8afe29073b6e74327a2fa18438797fc39f8b6bf4ffa1a0886",
+      "provider": "openai",
+      "model": "gpt-5.6-terra",
+      "fallbackModel": "gpt-5.6-luna",
+      "reasoningEffort": "medium",
+      "monthlyBudgetMicrousd": 10000000,
+      "reserveBudgetPercent": 0,
+      "criticality": "optional",
+      "workflowFile": ".github/workflows/agent-recipe-deduper.yml",
+      "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
+      "executionConfigHash": "1a170b0370b1636327bd1d4ff8d583ba542a7ecc502866ae9d603deacd499036",
+      "capabilities": [
+        "read:content",
+        "write:ledger",
+        "write:content-stage"
+      ],
+      "inputContracts": [
+        "recipe-source-candidates-v1"
+      ],
+      "outputContract": "recipe-dedup-v1",
+      "fixtureFiles": [
+        "agents/evals/recipe-deduper.json"
+      ]
+    },
+    {
+      "id": "recipe-mapper",
+      "enabled": true,
+      "plane": "ci",
+      "promptFile": "agents/recipe-mapper/prompt.md",
+      "promptSha256": "20e89f179cb119d9c4dc2a39baaa79ad281d71cf9eb7b5c84c3c153f3290a13e",
+      "provider": "openai",
+      "model": "gpt-5.6-sol",
+      "fallbackModel": "gpt-5.6-luna",
+      "reasoningEffort": "high",
+      "monthlyBudgetMicrousd": 10000000,
+      "reserveBudgetPercent": 0,
+      "criticality": "optional",
+      "workflowFile": ".github/workflows/agent-recipe-mapper.yml",
+      "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
+      "executionConfigHash": "b24c1da6455993e295390de8fcb21d70dfa7b3b47969b4a35aa35bd111002f33",
+      "capabilities": [
+        "read:content",
+        "write:ledger",
+        "write:content-stage"
+      ],
+      "inputContracts": [
+        "recipe-dedup-v1",
+        "commodity-config-v1"
+      ],
+      "outputContract": "recipe-map-v1",
+      "fixtureFiles": [
+        "agents/evals/recipe-mapper.json"
+      ]
+    },
+    {
+      "id": "recipe-writer",
+      "enabled": true,
+      "plane": "ci",
+      "promptFile": "agents/recipe-writer/prompt.md",
+      "promptSha256": "446d97bf99f8a86ab5643fbe6859ad8e85f2fe7d85f2a4c70bf7f9e5f9a7e37f",
+      "provider": "openai",
+      "model": "gpt-5.6-terra",
+      "fallbackModel": "gpt-5.6-luna",
+      "reasoningEffort": "medium",
+      "monthlyBudgetMicrousd": 20000000,
+      "reserveBudgetPercent": 0,
+      "criticality": "optional",
+      "workflowFile": ".github/workflows/agent-recipe-writer.yml",
+      "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
+      "executionConfigHash": "8431be8d8443c28a4fc01fe8f50cbbda0f57ca18893fb879b2dbb0f7e8fcb544",
+      "capabilities": [
+        "read:content",
+        "write:ledger",
+        "write:content-stage"
+      ],
+      "inputContracts": [
+        "recipe-map-v1"
+      ],
+      "outputContract": "content-items-v1",
+      "fixtureFiles": [
+        "agents/evals/recipe-writer.json"
+      ]
+    },
+    {
+      "id": "recipe-auditor",
+      "enabled": true,
+      "plane": "ci",
+      "promptFile": "agents/recipe-auditor/prompt.md",
+      "promptSha256": "59e618e5b1d8b7c69227177bf310119e551a33d43008c420ac52c50080eea2ba",
+      "provider": "openai",
+      "model": "gpt-5.6-sol",
+      "fallbackModel": "gpt-5.6-luna",
+      "reasoningEffort": "high",
+      "monthlyBudgetMicrousd": 10000000,
+      "reserveBudgetPercent": 30,
+      "criticality": "safety",
+      "workflowFile": ".github/workflows/agent-recipe-auditor.yml",
+      "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
+      "executionConfigHash": "1c1c23d09305c8bfffa2f7c8933442aafe38772d0e34af1f8084ac5ddfd10228",
+      "capabilities": [
+        "read:content",
+        "write:ledger",
+        "write:content-stage"
+      ],
+      "inputContracts": [
+        "content-items-v1"
+      ],
+      "outputContract": "content-audit-v1",
+      "fixtureFiles": [
+        "agents/evals/recipe-auditor.json"
+      ]
+    },
+    {
+      "id": "source-sentinel-investigator",
+      "enabled": true,
+      "plane": "ci",
+      "scheduleId": "source-sentinel-daily",
+      "promptFile": "agents/source-sentinel-investigator/prompt.md",
+      "promptSha256": "e6a04a3ba228eed497959d079536ff1361a51cd9bfb67089c8a9e0ffeb44d799",
+      "provider": "openai",
+      "model": "gpt-5.6-terra",
+      "fallbackModel": "gpt-5.6-luna",
+      "reasoningEffort": "medium",
+      "monthlyBudgetMicrousd": 10000000,
+      "reserveBudgetPercent": 30,
+      "criticality": "operational",
+      "workflowFile": ".github/workflows/agent-source-sentinel-investigator.yml",
+      "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
+      "executionConfigHash": "d86c815513428b23a5cabc257c97f1cda3e0a4fde024d3d59d353cb0197d106c",
+      "capabilities": [
+        "read:evidence",
+        "write:ledger",
+        "write:sentinel-finding",
+        "write:pull-request"
+      ],
+      "inputContracts": [
+        "source-sentinel-result-v1"
+      ],
+      "outputContract": "pull-request-v1",
+      "fixtureFiles": [
+        "agents/evals/source-sentinel-investigator.json"
+      ]
+    }
   ]
 }

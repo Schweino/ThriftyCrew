@@ -52,4 +52,19 @@ implementation.
 - Byte/growth-based archival forecasts, protected-reference manifests, verified R2 Parquet upload path and
   deterministic source-contract sentinels.
 
+## Phase 2 judgment execution plane
+
+- Ten thin GitHub caller workflows route through one reusable runner. OIDC verifies both the registered caller
+  and reusable workflow identities; the Worker remains the only production write boundary.
+- Exact semantic execution hashes bind model, fallback, reasoning, prompt and contracts. Operational schedule
+  and budget edits do not invalidate evaluation evidence.
+- Every agent has an agent-specific deterministic and prompt-injection corpus. Claims fail closed until the
+  exact execution hash has a passing live candidate evaluation recorded in D1.
+- Durable work items use idempotent fingerprints, leases, fencing, retries, dead letters and late-result
+  discard. Chained triage and recipe stages dispatch immediately and also have a scheduled retry sweep.
+- Structured outputs are validated server-side. Pull-request agents are limited to approved paths, execute the
+  complete quality gate, open GitHub App-authored PRs and have no deploy capability.
+- Recipe waves snapshot the pre-wave release and correct failures through a new immutable release. Login
+  canaries enforce privacy and same-profile timing. Routine and incident reserve budgets are isolated.
+
 See `docs/HARDENING-STATUS.md` for the implementation and retirement boundary.

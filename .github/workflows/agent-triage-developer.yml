@@ -1,0 +1,8 @@
+name: Agent - triage developer
+on: { workflow_dispatch: {} }
+permissions: { contents: read, id-token: write, actions: write }
+jobs:
+  call:
+    uses: ./.github/workflows/platform-agent-runner.yml
+    with: { agent_id: triage-developer }
+    secrets: inherit

@@ -16,6 +16,7 @@ export interface WorkerEnv {
   GITHUB_OIDC_REPOSITORY_ID?: string;
   GITHUB_OIDC_WORKFLOW_REF?: string;
   GITHUB_OIDC_WORKFLOW_REFS?: string;
+  GITHUB_OIDC_AGENT_RUNNER_REF?: string;
   GITHUB_DISPATCH_TOKEN?: string;
   GITHUB_REPOSITORY?: string;
   GITHUB_WORKFLOW_FILE?: string;
@@ -28,6 +29,7 @@ export interface WorkerEnv {
   GHOST_ADMIN_ORIGIN?: string;
   GHOST_ADMIN_KEY?: string;
   GHOST_PUBLIC_ORIGIN?: string;
+  DEPLOYED_COMMIT?: string;
 }
 
 export type MutationRole = "capture" | "engine" | "operator";
@@ -42,4 +44,8 @@ export interface MutationIdentity extends MutationKeyRecord {
   agentId: string;
   authMethod: "hmac" | "github_oidc";
   workflowRef?: string;
+  jobWorkflowRef?: string;
+  githubRunId?: string;
+  capabilities?: string[];
+  registeredAgentId?: string;
 }

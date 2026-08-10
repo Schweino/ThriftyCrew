@@ -2,7 +2,17 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { Agent, run } from "@openai/agents";
-import { agentRegistrySchema } from "@thriftycrew/contracts";
+import {
+  accuracyVerdictsSchema,
+  agentRegistrySchema,
+  contentBatchAuditSchema,
+  contentBatchItemsSchema,
+  pullRequestProposalSchema,
+  recipeDedupSchema,
+  recipeMapSchema,
+  recipeSourceCandidatesSchema,
+  triagePlanSchema,
+} from "@thriftycrew/contracts";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const outputRoot = path.resolve(process.env.RUNNER_TEMP ?? path.join(platformRoot, ".agent-output"));
@@ -56,7 +66,25 @@ if (!process.env.OPENAI_API_KEY) {
 
 const model = process.env.TC_AGENT_MODEL ?? definition.model;
 if (model !== definition.model && model !== definition.fallbackModel) throw new Error(`model ${model} is not registered for ${requestedAgent}`);
-const agent = new Agent({ name: requestedAgent, instructions: prompt, model });
+const outputSchemas = {
+  "triage-plan-v1": triagePlanSchema,
+  "pull-request-v1": pullRequestProposalSchema,
+  "accuracy-verdicts-v1": accuracyVerdictsSchema,
+  "recipe-source-candidates-v1": recipeSourceCandidatesSchema,
+  "recipe-dedup-v1": recipeDedupSchema,
+  "recipe-map-v1": recipeMapSchema,
+  "content-items-v1": contentBatchItemsSchema,
+  "content-audit-v1": contentBatchAuditSchema,
+} as const;
+const outputType = outputSchemas[definition.outputContract as keyof typeof outputSchemas];
+if (!outputType) throw new Error(`output contract ${definition.outputContract} has no structured runner schema`);
+const agent = new Agent({
+  name: requestedAgent,
+  instructions: prompt,
+  model,
+  modelSettings: { reasoning: { effort: definition.reasoningEffort }, text: { verbosity: "low" } },
+  outputType,
+});
 const result = await run(agent, inputJson, { maxTurns: 8 });
 const usage = result.state.usage;
 const prices = registry.pricing[model];

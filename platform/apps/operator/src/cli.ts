@@ -334,6 +334,62 @@ if (command === "status") {
 } else if (command === "agents" && subcommand === "deploy") {
   await checkAgentRegistry(platformRoot);
   result = await (await mutationClient()).request("/internal/agents/sync", { method: "PUT", json: await readAgentRegistry(platformRoot) });
+} else if (command === "agent" && subcommand === "evaluation") {
+  const file = arguments_[0];
+  if (!file) throw new Error("tc agent evaluation requires an evaluation JSON file");
+  result = await (await mutationClient()).request("/internal/agent-evaluations", { json: JSON.parse(await readFile(cliPath(file), "utf8")), acceptStatuses: [422] });
+} else if (command === "agent" && subcommand === "evaluation-status") {
+  const [agentId, outputFile] = arguments_;
+  if (!agentId) throw new Error("tc agent evaluation-status requires an agent id");
+  result = await (await mutationClient()).request(`/internal/agents/${encodeURIComponent(agentId)}/evaluation-status`);
+  if (outputFile) await writeJson(cliPath(outputFile), result);
+} else if (command === "agent" && subcommand === "claim") {
+  const [agentId, outputFile] = arguments_;
+  if (!agentId || !outputFile) throw new Error("tc agent claim requires an agent id and output metadata file");
+  const registry = await readAgentRegistry(platformRoot);
+  const agent = registry.agents.find((entry) => entry.id === agentId);
+  if (!agent) throw new Error(`unknown agent ${agentId}`);
+  const claimed = await (await mutationClient()).request("/internal/agent-work-items/claim", { json: {
+    agentId,
+    adapterVersion: "phase2-v1",
+    inputContract: agent.inputContracts[0],
+    leaseSeconds: 900,
+  } }) as { item?: Record<string, unknown> | null };
+  await writeJson(cliPath(outputFile), claimed);
+  result = { ok: true, claimed: Boolean(claimed.item), outputFile: cliPath(outputFile) };
+} else if (command === "agent" && subcommand === "authorize") {
+  const [agentId, metadataFile, estimated = "500000", outputFile] = arguments_;
+  if (!agentId || !metadataFile) throw new Error("tc agent authorize requires an agent id and claim metadata file");
+  const claim = JSON.parse(await readFile(cliPath(metadataFile), "utf8")) as { item?: { id?: string } };
+  if (!claim.item?.id) throw new Error("claim metadata does not contain a work item");
+  result = await (await mutationClient()).request(`/internal/agents/${encodeURIComponent(agentId)}/authorize?estimatedCostMicrousd=${encodeURIComponent(estimated)}&workItemId=${encodeURIComponent(claim.item.id)}`);
+  if (outputFile) await writeJson(cliPath(outputFile), result);
+} else if (command === "agent" && subcommand === "complete") {
+  const [metadataFile, outputFile] = arguments_;
+  if (!metadataFile || !outputFile) throw new Error("tc agent complete requires claim metadata and agent output files");
+  const claim = JSON.parse(await readFile(cliPath(metadataFile), "utf8")) as { item?: { id?: string; lease_id?: string; lease_generation?: number } };
+  const runnerOutput = JSON.parse(await readFile(cliPath(outputFile), "utf8")) as { finalOutput?: unknown };
+  if (!claim.item?.id || !claim.item.lease_id || !claim.item.lease_generation) throw new Error("claim metadata is incomplete");
+  let output = runnerOutput.finalOutput;
+  if (typeof output === "string") {
+    try { output = JSON.parse(output); } catch { output = { text: output }; }
+  }
+  result = await (await mutationClient()).request(`/internal/agent-work-items/${encodeURIComponent(claim.item.id)}/complete`, { json: {
+    leaseId: claim.item.lease_id,
+    leaseGeneration: claim.item.lease_generation,
+    output,
+  } });
+} else if (command === "agent" && subcommand === "fail") {
+  const [metadataFile, reason = "agent execution failed before producing a valid output"] = arguments_;
+  if (!metadataFile) throw new Error("tc agent fail requires claim metadata");
+  const claim = JSON.parse(await readFile(cliPath(metadataFile), "utf8")) as { item?: { id?: string; lease_id?: string; lease_generation?: number } };
+  if (!claim.item?.id || !claim.item.lease_id || !claim.item.lease_generation) throw new Error("claim metadata is incomplete");
+  result = await (await mutationClient()).request(`/internal/agent-work-items/${encodeURIComponent(claim.item.id)}/fail`, { json: {
+    leaseId: claim.item.lease_id,
+    leaseGeneration: claim.item.lease_generation,
+    reason,
+    retryable: true,
+  } });
 } else if (command === "backup" && subcommand === "trigger") {
   result = await (await mutationClient()).request(`/internal/backups/trigger${arguments_.includes("--replica") ? "?replica=1" : ""}`, { method: "POST" });
 } else if (command === "restore" && subcommand === "record") {
@@ -408,6 +464,10 @@ if (command === "status") {
   result = await (await mutationClient()).request("/internal/entitlement-verifications", { json: JSON.parse(await readFile(cliPath(file), "utf8")) });
 } else if (command === "entitlement" && subcommand === "show") {
   result = await (await mutationClient()).request("/internal/entitlement-verifications");
+} else if (command === "canary" && subcommand === "record") {
+  const file = arguments_[0];
+  if (!file) throw new Error("tc canary record requires a login-canary probe JSON file");
+  result = await (await mutationClient()).request("/internal/login-canary-probes", { json: JSON.parse(await readFile(cliPath(file), "utf8")) });
 } else if (command === "drill" && subcommand === "release-freeze") {
   result = await releaseFreezeDrill();
 } else if (command === "drill" && subcommand === "ghost-clobber") {
@@ -464,7 +524,7 @@ if (command === "status") {
       mutationAuthorized: process.env.TC_AGENT_DIAGNOSTIC !== "1",
       estimatedCostMicrousd: Number(process.env.TC_AGENT_ESTIMATED_COST_MICROUSD ?? "0"),
     } : {}),
-    input: { reason: process.env.TC_RECOVERY_REASON ?? "scheduled operation" },
+    input: { reason: process.env.TC_RECOVERY_REASON ?? "scheduled operation", ...(process.env.TC_AGENT_WORK_ITEM_ID ? { workItemId: process.env.TC_AGENT_WORK_ITEM_ID } : {}) },
   } });
 } else if (command === "job" && subcommand === "github-runs") {
   const limit = arguments_[0] ?? "5";
@@ -714,6 +774,31 @@ if (command === "status") {
   result = await commodityAdd(arguments_[0]);
 } else if (command === "recipe" && subcommand === "add") {
   result = await recipeAdd(arguments_[0]);
+} else if (command === "recipe" && subcommand === "suggest") {
+  const file = arguments_[0];
+  if (!file) throw new Error("tc recipe suggest requires a request JSON file");
+  result = await (await mutationClient()).request("/internal/recipe-suggestions", { json: JSON.parse(await readFile(cliPath(file), "utf8")) });
+} else if (command === "recipe" && subcommand === "wave") {
+  const [action, waveId, value] = arguments_;
+  if (!action || !waveId) throw new Error("tc recipe wave requires snapshot|published|corrective and a wave id");
+  const client = await mutationClient();
+  if (action === "snapshot") {
+    if (!value) throw new Error("tc recipe wave snapshot requires a content batch id");
+    result = await client.request("/internal/recipe-waves/snapshot", { json: { id: waveId, contentBatchId: value } });
+  } else if (action === "published") {
+    if (!value) throw new Error("tc recipe wave published requires a release id");
+    result = await client.request(`/internal/recipe-waves/${encodeURIComponent(waveId)}/published`, { json: { releaseId: value } });
+  } else if (action === "corrective") {
+    const created = await client.request(`/internal/recipe-waves/${encodeURIComponent(waveId)}/corrective-release`, { method: "POST" }) as { correctiveReleaseId?: string };
+    if (!created.correctiveReleaseId) throw new Error("corrective release endpoint omitted the release id");
+    const validation = await client.request(`/internal/releases/${encodeURIComponent(created.correctiveReleaseId)}/validate`, { method: "POST", acceptStatuses: [422] });
+    if (validation.state !== "validated") throw new Error(`corrective release ${created.correctiveReleaseId} failed validation`);
+    const publication = await client.request(`/internal/releases/${encodeURIComponent(created.correctiveReleaseId)}/publish`, { method: "POST" });
+    const recorded = await client.request(`/internal/recipe-waves/${encodeURIComponent(waveId)}/corrected`, { method: "POST" });
+    result = { ok: true, created, validation, publication, recorded };
+  } else {
+    throw new Error(`unknown recipe wave action ${action}`);
+  }
 } else {
   const requestedCommand = [command, subcommand, ...arguments_].filter(Boolean).join(" ");
   const isHelpRequest = command === "help" && subcommand === undefined && arguments_.length === 0;

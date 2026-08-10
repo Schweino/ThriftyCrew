@@ -158,6 +158,52 @@ export async function dispatchGithubJob(
   }
 }
 
+export async function dispatchRegisteredAgent(env: WorkerEnv, agentId: string): Promise<{ dispatched: boolean; workflowFile: string }> {
+  const row = await env.DB.prepare(
+    "SELECT workflow_ref FROM agent_registry WHERE id = ?1 AND active = 1 AND enabled = 1",
+  ).bind(agentId).first<{ workflow_ref: string | null }>();
+  const match = row?.workflow_ref?.match(/\/\.github\/workflows\/([^@]+)@/);
+  const workflowFile = match?.[1];
+  if (!workflowFile || !env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY) throw new Error("registered agent dispatch is not configured");
+  const response = await fetch(`https://api.github.com/repos/${env.GITHUB_REPOSITORY}/actions/workflows/${encodeURIComponent(workflowFile)}/dispatches`, {
+    method: "POST",
+    headers: {
+      accept: "application/vnd.github+json",
+      authorization: `Bearer ${env.GITHUB_DISPATCH_TOKEN}`,
+      "content-type": "application/json",
+      "user-agent": "tc-grocery-v3-agent-chain",
+      "x-github-api-version": "2022-11-28",
+    },
+    body: JSON.stringify({ ref: "main" }),
+  });
+  if (!response.ok) throw new Error(`registered agent dispatch returned ${response.status}`);
+  return { dispatched: true, workflowFile };
+}
+
+async function dispatchPendingRegisteredAgents(env: WorkerEnv): Promise<void> {
+  const queued = await env.DB.prepare(
+    `SELECT DISTINCT agent_id FROM agent_work_items
+      WHERE state IN ('queued', 'retryable') AND available_at <= CURRENT_TIMESTAMP
+     UNION
+     SELECT 'triage-developer' AS agent_id FROM triage_items triage
+      WHERE triage.status = 'planned' AND NOT EXISTS (
+        SELECT 1 FROM agent_work_items work
+         WHERE work.agent_id = 'triage-developer' AND work.source_ref = triage.id
+           AND work.state IN ('leased', 'completed')
+      )`,
+  ).all<{ agent_id: string }>();
+  for (const row of queued.results) {
+    try {
+      await dispatchRegisteredAgent(env, row.agent_id);
+    } catch (error) {
+      await raiseOperationalAlert(env, `agent-dispatch:${row.agent_id}`, `Registered agent dispatch failed for ${row.agent_id}`, {
+        agentId: row.agent_id,
+        error: error instanceof Error ? error.message : "unknown dispatch failure",
+      });
+    }
+  }
+}
+
 interface GithubWorkflowRunResponse {
   workflow_runs?: Array<{
     id?: number;
@@ -430,6 +476,7 @@ function localScheduleParts(scheduledTime: number): Record<string, string> {
 
 export async function runScheduledOperations(env: WorkerEnv, scheduledTime: number): Promise<void> {
   await runLedgerWatchdog(env, scheduledTime);
+  await dispatchPendingRegisteredAgents(env);
   const parts = localScheduleParts(scheduledTime);
   const localDate = `${parts.year}-${parts.month}-${parts.day}`;
   if (parts.hour === "04" && parts.minute === "30") {

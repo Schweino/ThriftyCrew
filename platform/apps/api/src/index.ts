@@ -28,6 +28,14 @@ import {
   observationChunkSchema,
   operationalAlertSchema,
   agentRegistrySchema,
+  agentEvaluationRecordSchema,
+  agentWorkItemClaimSchema,
+  agentWorkItemCompleteSchema,
+  agentWorkItemFailSchema,
+  recipeSuggestionRequestSchema,
+  recipeWaveSnapshotSchema,
+  recipeWavePublicationSchema,
+  loginCanaryProbeSchema,
   archivalForecastSchema,
   archivePlanSchema,
   recipeCostsChunkSchema,
@@ -51,13 +59,15 @@ import { createRelease, findBatch, insertObservations, insertRecipeCosts, insert
 import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation, runGhostClobberDrill } from "./ghost-reconciliation";
-import { dispatchGithubJob, githubWorkflowRuns, jobStatusRequiresAlert, raiseOperationalAlert, recordAudit, resolveOperationalAlert, runScheduledOperations } from "./operations";
+import { dispatchGithubJob, dispatchRegisteredAgent, githubWorkflowRuns, jobStatusRequiresAlert, raiseOperationalAlert, recordAudit, resolveOperationalAlert, runScheduledOperations } from "./operations";
 import { readEngineSnapshot, readEngineSnapshotIdentity, type EngineSnapshotProfile, type EngineSourceMode } from "./engine-snapshot";
 import { memberStatusHtml } from "./member-status";
 import { accrueMilestoneEvidence, milestoneEvidenceSummary } from "./milestone-evidence";
 import { runServerChaosDrill } from "./chaos-drills";
 import { engineMayWriteCaptureSource } from "./capture-authorization";
 import { evaluateContentPromotion } from "./content-batches";
+import { claimAgentWorkItem, completeAgentWorkItem, failAgentWorkItem } from "./agent-work-items";
+import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 export { D1RestoreDrillWorkflow } from "./restore-workflow";
@@ -104,9 +114,22 @@ function requireGithubWorkflowScope(): MiddlewareHandler<Bindings> {
     const identity = context.get("identity");
     if (identity.authMethod !== "github_oidc" || !identity.workflowRef) return next();
     const pathname = new URL(context.req.url).pathname;
-    if (identity.workflowRef.includes("/platform-agents.yml@")) {
-      const allowed = ["/internal/job-runs", "/internal/agents/", "/internal/source-sentinels", "/internal/content-batches"];
-      if (!allowed.some((prefix) => pathname === prefix || pathname.startsWith(prefix))) return context.json({ ok: false, error: "agent workflow is outside its registered capability boundary" }, 403);
+    if (identity.registeredAgentId) {
+      const capabilities = new Set(identity.capabilities ?? []);
+      const method = context.req.method.toUpperCase();
+      const authorized =
+        (pathname.startsWith("/internal/agent-work-items") && capabilities.has("write:ledger"))
+        || (pathname === "/internal/agent-evaluations" && capabilities.has("write:ledger"))
+        || (pathname === `/internal/agents/${identity.registeredAgentId}/authorize` && capabilities.has("write:ledger"))
+        || (pathname === `/internal/agents/${identity.registeredAgentId}/evaluation-status` && capabilities.has("write:ledger"))
+        || (pathname.startsWith("/internal/job-runs") && capabilities.has("write:ledger"))
+        || (pathname.startsWith("/internal/triage") && method === "GET" && capabilities.has("read:evidence"))
+        || (pathname.startsWith("/internal/triage") && method === "POST" && capabilities.has("write:triage-plan"))
+        || (pathname.startsWith("/internal/source-sentinels") && capabilities.has("write:sentinel-finding"))
+        || (pathname.startsWith("/internal/content-batches") && (capabilities.has("read:content") || capabilities.has("write:content-stage")))
+        || (pathname.startsWith("/internal/accuracy") && capabilities.has("write:ledger"))
+        || (pathname === "/internal/operational-alerts" && capabilities.has("write:ledger"));
+      if (!authorized) return context.json({ ok: false, error: "agent workflow is outside its registered capability boundary" }, 403);
     }
     if (identity.workflowRef.includes("/platform-restore.yml@") && pathname !== "/internal/restore-drills/trigger") {
       return context.json({ ok: false, error: "restore workflow may only trigger the deterministic restore drill" }, 403);
@@ -136,6 +159,11 @@ app.use("/internal/operational-alerts", requireIdentityRole(["capture", "engine"
 app.use("/internal/jobs/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/schedules/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/agents/*", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/agent-work-items/*", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/agent-evaluations", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/recipe-suggestions", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/recipe-waves/*", requireIdentityRole(["operator"]));
+app.use("/internal/login-canary-probes", requireIdentityRole(["capture", "operator"]));
 app.use("/internal/content-batches", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/content-batches/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/source-sentinels", requireIdentityRole(["capture", "engine", "operator"]));
@@ -158,7 +186,7 @@ app.use("/internal/engine/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/drills/*", requireIdentityRole(["operator"]));
 
 app.get("/api/v2/status", async (context) => {
-  const [release, schedules, accuracy, triage, milestones] = await Promise.all([
+  const [release, schedules, accuracy, triage, milestones, agentWork, evaluations, loginCanaries] = await Promise.all([
     context.env.DB.prepare(
       `SELECT r.id, r.published_at, r.summary_json
          FROM current_releases c JOIN releases r ON r.id = c.release_id
@@ -166,6 +194,7 @@ app.get("/api/v2/status", async (context) => {
     ).first<{ id: string; published_at: string; summary_json: string }>(),
     context.env.DB.prepare(
       `SELECT s.job, s.cron, s.executor, s.timezone, s.owner, s.proof, s.max_gap_minutes,
+              s.lifecycle, s.retirement_gate,
               (SELECT status FROM job_runs r WHERE r.job = s.job ORDER BY COALESCE(r.started_at, r.scheduled_for) DESC LIMIT 1) AS status,
               (SELECT COALESCE(heartbeat_at, finished_at, started_at, scheduled_for) FROM job_runs r WHERE r.job = s.job ORDER BY COALESCE(heartbeat_at, finished_at, started_at, scheduled_for) DESC LIMIT 1) AS latest_at
          FROM job_schedules s WHERE s.active = 1 ORDER BY s.job`,
@@ -175,6 +204,20 @@ app.get("/api/v2/status", async (context) => {
       "SELECT status, COUNT(*) AS count FROM triage_items GROUP BY status ORDER BY status",
     ).all<{ status: string; count: number }>(),
     milestoneEvidenceSummary(context.env.DB),
+    context.env.DB.prepare("SELECT state, COUNT(*) AS count FROM agent_work_items GROUP BY state ORDER BY state").all<{ state: string; count: number }>(),
+    context.env.DB.prepare(
+      `SELECT registry.id AS agent_id, registry.execution_config_hash,
+              MAX(CASE WHEN evaluation.passed = 1 THEN evaluation.evaluated_at END) AS passed_at
+         FROM agent_registry registry LEFT JOIN agent_evaluations evaluation
+           ON evaluation.agent_id = registry.id AND evaluation.execution_config_hash = registry.execution_config_hash
+        WHERE registry.active = 1 GROUP BY registry.id, registry.execution_config_hash ORDER BY registry.id`,
+    ).all(),
+    context.env.DB.prepare(
+      `SELECT store_id, run_id, COUNT(*) AS probes,
+              SUM(CASE WHEN status = 'healthy' THEN 1 ELSE 0 END) AS healthy_probes,
+              MAX(observed_at) AS latest_at
+         FROM login_canary_probes GROUP BY store_id, run_id ORDER BY latest_at DESC LIMIT 20`,
+    ).all(),
   ]);
   const checkedAt = new Date();
   const jobs = schedules.results.map((row) => {
@@ -186,10 +229,16 @@ app.get("/api/v2/status", async (context) => {
   return context.json({
     ok: true,
     environment: context.env.APP_ENV,
+    deployment: { commit: context.env.DEPLOYED_COMMIT ?? "unknown" },
     currentRelease: release ? { id: release.id, publishedAt: release.published_at, summary: JSON.parse(release.summary_json) } : null,
     jobs,
     accuracy,
     milestones,
+    agents: {
+      workItems: Object.fromEntries(agentWork.results.map((row) => [row.state, row.count])),
+      evaluations: evaluations.results,
+    },
+    loginCanaries: loginCanaries.results,
     triage: Object.fromEntries(triage.results.map((row) => [row.status, row.count])),
     checkedAt: checkedAt.toISOString(),
   });
@@ -706,12 +755,16 @@ app.put("/internal/schedules/sync", zValidator("json", scheduleDocumentSchema), 
 
 app.put("/internal/agents/sync", zValidator("json", agentRegistrySchema), async (context) => {
   const registry = context.req.valid("json");
+  const repository = context.env.GITHUB_REPOSITORY ?? context.env.GITHUB_OIDC_REPOSITORY;
+  if (!repository) return jsonError("GitHub repository is not configured", 500);
   const statements = registry.agents.map((agent) => context.env.DB.prepare(
     `INSERT INTO agent_registry
        (id, registry_version, enabled, plane, schedule_id, prompt_file, prompt_sha256, model_id,
         fallback_model_id, monthly_budget_microusd, criticality, capabilities_json,
-        input_contracts_json, output_contract, fixture_files_json, active, synced_at)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, 1, CURRENT_TIMESTAMP)
+        input_contracts_json, output_contract, fixture_files_json, provider, reasoning_effort,
+        reserve_budget_percent, workflow_ref, reusable_workflow_ref, execution_config_hash, active, synced_at)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15,
+             ?16, ?17, ?18, ?19, ?20, ?21, 1, CURRENT_TIMESTAMP)
      ON CONFLICT(id) DO UPDATE SET
        registry_version = excluded.registry_version, enabled = excluded.enabled, plane = excluded.plane,
        schedule_id = excluded.schedule_id, prompt_file = excluded.prompt_file,
@@ -720,11 +773,17 @@ app.put("/internal/agents/sync", zValidator("json", agentRegistrySchema), async 
        monthly_budget_microusd = excluded.monthly_budget_microusd, criticality = excluded.criticality,
        capabilities_json = excluded.capabilities_json, input_contracts_json = excluded.input_contracts_json,
        output_contract = excluded.output_contract, fixture_files_json = excluded.fixture_files_json,
+       provider = excluded.provider, reasoning_effort = excluded.reasoning_effort,
+       reserve_budget_percent = excluded.reserve_budget_percent, workflow_ref = excluded.workflow_ref,
+       reusable_workflow_ref = excluded.reusable_workflow_ref, execution_config_hash = excluded.execution_config_hash,
        active = 1, synced_at = CURRENT_TIMESTAMP`,
   ).bind(agent.id, registry.version, agent.enabled ? 1 : 0, agent.plane, agent.scheduleId ?? null,
     agent.promptFile, agent.promptSha256, agent.model, agent.fallbackModel ?? null,
     agent.monthlyBudgetMicrousd, agent.criticality, stableJson(agent.capabilities),
-    stableJson(agent.inputContracts), agent.outputContract, stableJson(agent.fixtureFiles)));
+    stableJson(agent.inputContracts), agent.outputContract, stableJson(agent.fixtureFiles),
+    agent.provider, agent.reasoningEffort, agent.reserveBudgetPercent,
+    `${repository}/${agent.workflowFile}@refs/heads/main`,
+    `${repository}/${agent.reusableWorkflowFile}@refs/heads/main`, agent.executionConfigHash));
   const placeholders = registry.agents.map((_, index) => `?${index + 1}`).join(", ");
   statements.push(context.env.DB.prepare(`UPDATE agent_registry SET active = 0 WHERE id NOT IN (${placeholders})`).bind(...registry.agents.map((agent) => agent.id)));
   await context.env.DB.batch(statements);
@@ -733,21 +792,220 @@ app.put("/internal/agents/sync", zValidator("json", agentRegistrySchema), async 
 });
 
 app.get("/internal/agents/:id/authorize", async (context) => {
+  const identity = context.get("identity");
+  if (identity.registeredAgentId && identity.registeredAgentId !== context.req.param("id")) return jsonError("an agent may only authorize its own execution", 403);
   const estimated = Number(context.req.query("estimatedCostMicrousd") ?? "0");
   if (!Number.isInteger(estimated) || estimated < 0) return jsonError("estimatedCostMicrousd must be a nonnegative integer", 422);
   const agent = await context.env.DB.prepare(
-    `SELECT id, enabled, model_id, fallback_model_id, monthly_budget_microusd, criticality
+    `SELECT id, enabled, model_id, fallback_model_id, monthly_budget_microusd, criticality,
+            reserve_budget_percent, execution_config_hash
        FROM agent_registry WHERE id = ?1 AND active = 1`,
-  ).bind(context.req.param("id")).first<{ id: string; enabled: number; model_id: string; fallback_model_id: string | null; monthly_budget_microusd: number; criticality: string }>();
+  ).bind(context.req.param("id")).first<{ id: string; enabled: number; model_id: string; fallback_model_id: string | null; monthly_budget_microusd: number; criticality: string; reserve_budget_percent: number; execution_config_hash: string }>();
   if (!agent || agent.enabled !== 1) return jsonError("agent is unknown or disabled", 404);
+  const evaluation = await context.env.DB.prepare(
+    `SELECT id FROM agent_evaluations WHERE agent_id = ?1 AND execution_config_hash = ?2 AND passed = 1 ORDER BY evaluated_at DESC LIMIT 1`,
+  ).bind(agent.id, agent.execution_config_hash).first<{ id: string }>();
+  if (!evaluation) return jsonError("agent execution is blocked until this exact execution configuration passes evaluation", 422);
   const month = new Date().toISOString().slice(0, 7);
-  const budget = await context.env.DB.prepare("SELECT spent_microusd, reserved_microusd FROM agent_budget_months WHERE agent_id = ?1 AND month_key = ?2")
-    .bind(agent.id, month).first<{ spent_microusd: number; reserved_microusd: number }>();
-  const committed = (budget?.spent_microusd ?? 0) + (budget?.reserved_microusd ?? 0);
-  const exceeded = committed + estimated > agent.monthly_budget_microusd;
-  const modelId = exceeded && agent.fallback_model_id ? agent.fallback_model_id : agent.model_id;
-  const allowed = !exceeded || agent.criticality !== "optional";
-  return context.json({ ok: allowed, allowed, modelId, budget: { month, limitMicrousd: agent.monthly_budget_microusd, committedMicrousd: committed, estimatedMicrousd: estimated, exceeded }, requiresOperator: exceeded && agent.criticality !== "optional" }, allowed ? 200 : 422);
+  const budget = await context.env.DB.prepare(
+    `SELECT routine_spent_microusd, reserve_spent_microusd, routine_reserved_microusd, reserve_reserved_microusd
+       FROM agent_budget_months WHERE agent_id = ?1 AND month_key = ?2`,
+  ).bind(agent.id, month).first<{ routine_spent_microusd: number; reserve_spent_microusd: number; routine_reserved_microusd: number; reserve_reserved_microusd: number }>();
+  const routineLimit = Math.floor(agent.monthly_budget_microusd * (100 - agent.reserve_budget_percent) / 100);
+  const reserveLimit = agent.monthly_budget_microusd - routineLimit;
+  const routineCommitted = (budget?.routine_spent_microusd ?? 0) + (budget?.routine_reserved_microusd ?? 0);
+  const reserveCommitted = (budget?.reserve_spent_microusd ?? 0) + (budget?.reserve_reserved_microusd ?? 0);
+  const workItemId = context.req.query("workItemId");
+  const work = workItemId ? await context.env.DB.prepare("SELECT severity FROM agent_work_items WHERE id = ?1 AND agent_id = ?2").bind(workItemId, agent.id).first<{ severity: string }>() : null;
+  const canUseReserve = Boolean(work && work.severity !== "optional" && agent.criticality !== "optional");
+  const routineAvailable = Math.max(0, routineLimit - routineCommitted);
+  const reserveNeeded = estimated > routineAvailable ? estimated : 0;
+  const allowed = reserveNeeded === 0 || (canUseReserve && reserveCommitted + reserveNeeded <= reserveLimit);
+  const modelId = reserveNeeded > 0 && agent.fallback_model_id ? agent.fallback_model_id : agent.model_id;
+  return context.json({ ok: allowed, allowed, modelId, evaluationId: evaluation.id, budgetClass: reserveNeeded > 0 ? "reserve" : "routine", budget: { month, limitMicrousd: agent.monthly_budget_microusd, routineLimitMicrousd: routineLimit, reserveLimitMicrousd: reserveLimit, routineCommittedMicrousd: routineCommitted, reserveCommittedMicrousd: reserveCommitted, estimatedMicrousd: estimated }, requiresOperator: !allowed && agent.criticality !== "optional" }, allowed ? 200 : 422);
+});
+
+app.get("/internal/agents/:id/evaluation-status", async (context) => {
+  const identity = context.get("identity");
+  if (identity.registeredAgentId && identity.registeredAgentId !== context.req.param("id")) return jsonError("an agent may only inspect its own evaluation", 403);
+  const agent = await context.env.DB.prepare("SELECT execution_config_hash FROM agent_registry WHERE id = ?1 AND active = 1 AND enabled = 1").bind(context.req.param("id")).first<{ execution_config_hash: string }>();
+  if (!agent) return jsonError("agent is unknown or disabled", 404);
+  const evaluation = await context.env.DB.prepare(
+    `SELECT id, model_id, corpus_hash, score_millis, threshold_millis, evaluated_at
+       FROM agent_evaluations WHERE agent_id = ?1 AND execution_config_hash = ?2 AND passed = 1
+       ORDER BY evaluated_at DESC LIMIT 1`,
+  ).bind(context.req.param("id"), agent.execution_config_hash).first<Record<string, unknown>>();
+  return context.json({ ok: true, current: Boolean(evaluation), executionConfigHash: agent.execution_config_hash, evaluation: evaluation ?? null });
+});
+
+app.post("/internal/agent-evaluations", zValidator("json", agentEvaluationRecordSchema), async (context) => {
+  const body = context.req.valid("json");
+  const identity = context.get("identity");
+  if (identity.registeredAgentId && identity.registeredAgentId !== body.agentId) return jsonError("an agent may only record its own evaluation", 403);
+  const agent = await context.env.DB.prepare("SELECT execution_config_hash FROM agent_registry WHERE id = ?1 AND active = 1").bind(body.agentId).first<{ execution_config_hash: string }>();
+  if (!agent || agent.execution_config_hash !== body.executionConfigHash) return jsonError("evaluation does not match the active execution configuration", 409);
+  if (body.passed !== (body.scoreMillis >= body.thresholdMillis) || body.passedCount > body.caseCount) return jsonError("evaluation pass calculation is inconsistent", 422);
+  await context.env.DB.prepare(
+    `INSERT INTO agent_evaluations
+       (id, agent_id, execution_config_hash, model_id, corpus_hash, evaluator_version,
+        case_count, passed_count, score_millis, threshold_millis, passed, detail_json, evaluated_at, actor_id)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)
+     ON CONFLICT(id) DO NOTHING`,
+  ).bind(body.id, body.agentId, body.executionConfigHash, body.modelId, body.corpusHash, body.evaluatorVersion,
+    body.caseCount, body.passedCount, body.scoreMillis, body.thresholdMillis, body.passed ? 1 : 0,
+    stableJson(body.detail), body.evaluatedAt, identity.agentId).run();
+  return context.json({ ok: body.passed, evaluationId: body.id, passed: body.passed }, body.passed ? 201 : 422);
+});
+
+app.post("/internal/agent-work-items/claim", zValidator("json", agentWorkItemClaimSchema), async (context) => {
+  try {
+    const item = await claimAgentWorkItem(context.env.DB, context.get("identity"), context.req.valid("json"));
+    return context.json({ ok: true, item });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "work-item claim failed", 422);
+  }
+});
+
+app.post("/internal/agent-work-items/:id/complete", zValidator("json", agentWorkItemCompleteSchema), async (context) => {
+  try {
+    const identity = context.get("identity");
+    const body = context.req.valid("json");
+    const result = await completeAgentWorkItem(context.env.DB, identity, context.req.param("id"), body);
+    if (identity.registeredAgentId === "accuracy-headless") {
+      await recordAccuracyVerdicts(context.env.DB, accuracyVerdictsSchema.parse(body.output), identity.agentId);
+    }
+    const nextAgentId = typeof result.nextAgentId === "string" ? result.nextAgentId : null;
+    let dispatch: Record<string, unknown> | null = null;
+    if (nextAgentId) {
+      try {
+        dispatch = await dispatchRegisteredAgent(context.env, nextAgentId);
+      } catch (error) {
+        dispatch = { dispatched: false, error: error instanceof Error ? error.message : "unknown dispatch failure" };
+        await raiseOperationalAlert(context.env, `agent-dispatch:${nextAgentId}`, `Registered agent dispatch failed for ${nextAgentId}`, dispatch);
+      }
+    }
+    return context.json({ ok: true, ...result, dispatch });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "work-item completion failed", 409);
+  }
+});
+
+app.post("/internal/agent-work-items/:id/fail", zValidator("json", agentWorkItemFailSchema), async (context) => {
+  try {
+    return context.json({ ok: true, ...await failAgentWorkItem(context.env.DB, context.get("identity"), context.req.param("id"), context.req.valid("json")) });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "work-item failure failed", 409);
+  }
+});
+
+app.post("/internal/recipe-suggestions", zValidator("json", recipeSuggestionRequestSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may create a recipe suggestion request", 403);
+  const body = context.req.valid("json");
+  await context.env.DB.prepare(
+    `INSERT INTO recipe_suggestion_requests (id, request_text, source_ref, requested_at)
+     VALUES (?1, ?2, ?3, ?4) ON CONFLICT(id) DO NOTHING`,
+  ).bind(body.id, body.request, body.sourceRef, body.requestedAt).run();
+  return context.json({ ok: true, requestId: body.id }, 201);
+});
+
+app.post("/internal/recipe-waves/snapshot", zValidator("json", recipeWaveSnapshotSchema), async (context) => {
+  const body = context.req.valid("json");
+  const batch = await context.env.DB.prepare("SELECT status, content_hash FROM content_batches WHERE id = ?1").bind(body.contentBatchId).first<{ status: string; content_hash: string | null }>();
+  if (!batch || batch.status !== "promoted") return jsonError("recipe wave requires a promoted immutable content batch", 409);
+  const release = await context.env.DB.prepare(
+    `SELECT release.* FROM current_releases current JOIN releases release ON release.id = current.release_id
+      WHERE current.market_id = 'omaha'`,
+  ).first<Record<string, unknown>>();
+  if (!release) return jsonError("recipe wave requires a current release", 409);
+  const snapshot = {
+    capturedAt: new Date().toISOString(),
+    releaseId: release.id,
+    configurationId: release.configuration_id,
+    inputHash: release.input_hash,
+    boardHash: release.board_hash,
+    recipeHash: release.recipe_hash,
+    summary: JSON.parse(String(release.summary_json ?? "{}")),
+    contentBatchId: body.contentBatchId,
+    contentHash: batch.content_hash,
+  };
+  await context.env.DB.prepare(
+    `INSERT INTO recipe_wave_runs (id, content_batch_id, pre_wave_release_id, snapshot_json, status)
+     VALUES (?1, ?2, ?3, ?4, 'snapshotted') ON CONFLICT(id) DO NOTHING`,
+  ).bind(body.id, body.contentBatchId, release.id, stableJson(snapshot)).run();
+  return context.json({ ok: true, waveId: body.id, snapshot }, 201);
+});
+
+app.post("/internal/recipe-waves/:id/published", zValidator("json", recipeWavePublicationSchema), async (context) => {
+  const body = context.req.valid("json");
+  const current = await context.env.DB.prepare("SELECT release_id FROM current_releases WHERE market_id = 'omaha'").first<{ release_id: string }>();
+  if (!current || current.release_id !== body.releaseId) return jsonError("the claimed wave release is not the current published release", 409);
+  const update = await context.env.DB.prepare(
+    `UPDATE recipe_wave_runs SET wave_release_id = ?2, status = 'published', updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?1 AND status = 'snapshotted'`,
+  ).bind(context.req.param("id"), body.releaseId).run();
+  if ((update.meta.changes ?? 0) !== 1) return jsonError("recipe wave is not awaiting publication", 409);
+  return context.json({ ok: true, waveId: context.req.param("id"), releaseId: body.releaseId });
+});
+
+app.post("/internal/recipe-waves/:id/corrective-release", async (context) => {
+  const wave = await context.env.DB.prepare("SELECT * FROM recipe_wave_runs WHERE id = ?1").bind(context.req.param("id")).first<Record<string, unknown>>();
+  if (!wave || wave.status !== "published" || !wave.wave_release_id) return jsonError("recipe wave is not eligible for correction", 409);
+  const current = await context.env.DB.prepare("SELECT release_id FROM current_releases WHERE market_id = 'omaha'").first<{ release_id: string }>();
+  if (!current || current.release_id !== wave.wave_release_id) return jsonError("current release changed after the wave; refusing to clobber it", 409);
+  const source = await context.env.DB.prepare("SELECT * FROM releases WHERE id = ?1").bind(String(wave.pre_wave_release_id)).first<Record<string, unknown>>();
+  if (!source) return jsonError("pre-wave immutable release no longer exists", 409);
+  const correctiveId = `rel_corrective_${crypto.randomUUID().replaceAll("-", "")}`;
+  const inputManifest = { kind: "recipe-wave-corrective-v1", waveId: wave.id, preWaveReleaseId: wave.pre_wave_release_id, supersedesWaveReleaseId: wave.wave_release_id };
+  const inputHash = await digestHex(stableJson({ correctiveId, inputManifest, sourceInputHash: source.input_hash }));
+  const statements: D1PreparedStatement[] = [
+    context.env.DB.prepare(
+      `INSERT INTO releases
+         (id, market_id, configuration_id, input_manifest_json, input_hash, state, board_hash, recipe_hash, summary_json)
+       SELECT ?1, market_id, configuration_id, ?2, ?3, 'draft', board_hash, recipe_hash, summary_json
+         FROM releases WHERE id = ?4`,
+    ).bind(correctiveId, stableJson(inputManifest), inputHash, source.id),
+    context.env.DB.prepare("INSERT INTO release_input_batches SELECT ?1, batch_id, ordinal FROM release_input_batches WHERE release_id = ?2").bind(correctiveId, source.id),
+    context.env.DB.prepare("INSERT INTO release_cells SELECT ?1, commodity_id, store_location_id, observation_id, status, is_crown, display_per_unit_micros, display_unit, reason_json FROM release_cells WHERE release_id = ?2").bind(correctiveId, source.id),
+    context.env.DB.prepare("INSERT INTO release_recipe_costs SELECT ?1, recipe_slug, status, batch_cost_minor, serving_cost_minor, servings, missing_ingredients_json, detail_json FROM release_recipe_costs WHERE release_id = ?2").bind(correctiveId, source.id),
+    context.env.DB.prepare("INSERT INTO release_payloads SELECT ?1, kind, payload_json, content_hash FROM release_payloads WHERE release_id = ?2").bind(correctiveId, source.id),
+    context.env.DB.prepare("INSERT INTO release_top5 SELECT ?1, protein, rank, recipe_slug, serving_cost_minor FROM release_top5 WHERE release_id = ?2").bind(correctiveId, source.id),
+    context.env.DB.prepare("INSERT INTO release_free_rotation SELECT ?1, recipe_slug, intended_visibility, protein, rank FROM release_free_rotation WHERE release_id = ?2").bind(correctiveId, source.id),
+    context.env.DB.prepare("INSERT INTO release_feed_entries SELECT ?1, entry_key, ordinal, payload_json FROM release_feed_entries WHERE release_id = ?2").bind(correctiveId, source.id),
+    context.env.DB.prepare("UPDATE recipe_wave_runs SET corrective_release_id = ?2, status = 'corrective_draft', updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(wave.id, correctiveId),
+  ];
+  await context.env.DB.batch(statements);
+  await recordAudit(context.env, context.get("identity"), "recipe_wave.corrective_release", "recipe_wave", String(wave.id), "accepted", { correctiveId, preWaveReleaseId: source.id, waveReleaseId: wave.wave_release_id });
+  return context.json({ ok: true, waveId: wave.id, correctiveReleaseId: correctiveId, next: [`validate ${correctiveId}`, `publish ${correctiveId}`] }, 201);
+});
+
+app.post("/internal/recipe-waves/:id/corrected", async (context) => {
+  const wave = await context.env.DB.prepare("SELECT corrective_release_id, status FROM recipe_wave_runs WHERE id = ?1").bind(context.req.param("id")).first<{ corrective_release_id: string | null; status: string }>();
+  if (!wave || wave.status !== "corrective_draft" || !wave.corrective_release_id) return jsonError("recipe wave has no corrective draft", 409);
+  const current = await context.env.DB.prepare("SELECT release_id FROM current_releases WHERE market_id = 'omaha'").first<{ release_id: string }>();
+  if (!current || current.release_id !== wave.corrective_release_id) return jsonError("corrective release is not current", 409);
+  await context.env.DB.prepare("UPDATE recipe_wave_runs SET status = 'corrected', updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(context.req.param("id")).run();
+  return context.json({ ok: true, waveId: context.req.param("id"), correctiveReleaseId: wave.corrective_release_id });
+});
+
+app.post("/internal/login-canary-probes", zValidator("json", loginCanaryProbeSchema), async (context) => {
+  const body = context.req.valid("json");
+  const evidenceText = stableJson(body.evidence);
+  try { assertLoginCanaryEvidenceHasNoEmail(body.evidence); } catch (error) { return jsonError(error instanceof Error ? error.message : "login-canary evidence contains personal data", 422); }
+  await context.env.DB.prepare(
+    `INSERT INTO login_canary_probes
+       (id, store_id, run_id, ordinal, status, signal, evidence_json, observed_at, actor_id)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9) ON CONFLICT(id) DO NOTHING`,
+  ).bind(body.id, body.storeId, body.runId, body.ordinal, body.status, body.signal,
+    evidenceText, body.observedAt, context.get("identity").agentId).run();
+  const pair = await context.env.DB.prepare(
+    `SELECT ordinal, status, observed_at FROM login_canary_probes
+      WHERE run_id = ?1 AND store_id = ?2 ORDER BY ordinal`,
+  ).bind(body.runId, body.storeId).all<{ ordinal: number; status: string; observed_at: string }>();
+  const first = pair.results.find((row) => row.ordinal === 1);
+  const second = pair.results.find((row) => row.ordinal === 2);
+  const separationMinutes = first && second ? (Date.parse(second.observed_at) - Date.parse(first.observed_at)) / 60000 : null;
+  const passed = Boolean(first && second && first.status === "healthy" && second.status === "healthy" && separationMinutes !== null && separationMinutes >= 9 && separationMinutes <= 30);
+  return context.json({ ok: true, probeId: body.id, pairComplete: Boolean(first && second), passed, separationMinutes }, 201);
 });
 
 app.post("/internal/jobs/:job/dispatch", zValidator("json", jobDispatchSchema), async (context) => {
@@ -949,6 +1207,12 @@ app.post("/internal/entitlement-verifications", zValidator("json", entitlementVe
 
 app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (context) => {
   const body = context.req.valid("json");
+  const identity = context.get("identity");
+  if (identity.registeredAgentId) {
+    if (body.agentId !== identity.registeredAgentId) return jsonError("registered workflow job identity mismatch", 403);
+    const assignment = await context.env.DB.prepare("SELECT schedule_id FROM agent_registry WHERE id = ?1 AND active = 1").bind(identity.registeredAgentId).first<{ schedule_id: string | null }>();
+    if (!assignment?.schedule_id || assignment.schedule_id !== body.job) return jsonError("registered agent is not assigned to this schedule", 403);
+  }
   const schedule = await context.env.DB.prepare("SELECT job FROM job_schedules WHERE job = ?1 AND active = 1").bind(body.job).first();
   if (!schedule) return jsonError("unknown or inactive job", 404);
   const existing = await context.env.DB.prepare("SELECT job, status FROM job_runs WHERE id = ?1").bind(body.id).first<{ job: string; status: string }>();
@@ -956,30 +1220,38 @@ app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (co
     if (existing.job !== body.job) return jsonError("job run id belongs to another job", 409);
     return context.json({ ok: true, runId: body.id, status: existing.status, idempotent: true });
   }
-  let budgetReservation: { agentId: string; month: string; estimatedCostMicrousd: number } | undefined;
+  let budgetReservation: { agentId: string; month: string; estimatedCostMicrousd: number; budgetClass: "routine" | "reserve" } | undefined;
   if (body.agentId) {
     const agent = await context.env.DB.prepare(
-      "SELECT enabled, prompt_sha256, model_id, fallback_model_id, monthly_budget_microusd, criticality FROM agent_registry WHERE id = ?1 AND active = 1",
-    ).bind(body.agentId).first<{ enabled: number; prompt_sha256: string; model_id: string; fallback_model_id: string | null; monthly_budget_microusd: number; criticality: string }>();
+      "SELECT enabled, prompt_sha256, model_id, fallback_model_id, monthly_budget_microusd, criticality, reserve_budget_percent FROM agent_registry WHERE id = ?1 AND active = 1",
+    ).bind(body.agentId).first<{ enabled: number; prompt_sha256: string; model_id: string; fallback_model_id: string | null; monthly_budget_microusd: number; criticality: string; reserve_budget_percent: number }>();
     if (!agent || agent.enabled !== 1) return jsonError("agent is unknown or disabled", 404);
     if (body.promptHash !== agent.prompt_sha256) return jsonError("agent prompt hash differs from the active registry", 409);
     if (body.modelId !== agent.model_id && body.modelId !== agent.fallback_model_id) return jsonError("agent model is not authorized by the active registry", 409);
     const month = new Date().toISOString().slice(0, 7);
-    const budget = await context.env.DB.prepare("SELECT spent_microusd, reserved_microusd FROM agent_budget_months WHERE agent_id = ?1 AND month_key = ?2")
-      .bind(body.agentId, month).first<{ spent_microusd: number; reserved_microusd: number }>();
-    const committed = (budget?.spent_microusd ?? 0) + (budget?.reserved_microusd ?? 0);
-    if (committed + body.estimatedCostMicrousd > agent.monthly_budget_microusd && agent.criticality === "optional") {
-      return jsonError("optional agent monthly budget is exhausted", 422);
-    }
-    budgetReservation = { agentId: body.agentId, month, estimatedCostMicrousd: body.estimatedCostMicrousd };
+    const budget = await context.env.DB.prepare(
+      `SELECT routine_spent_microusd, reserve_spent_microusd, routine_reserved_microusd, reserve_reserved_microusd
+         FROM agent_budget_months WHERE agent_id = ?1 AND month_key = ?2`,
+    ).bind(body.agentId, month).first<{ routine_spent_microusd: number; reserve_spent_microusd: number; routine_reserved_microusd: number; reserve_reserved_microusd: number }>();
+    const routineLimit = Math.floor(agent.monthly_budget_microusd * (100 - agent.reserve_budget_percent) / 100);
+    const reserveLimit = agent.monthly_budget_microusd - routineLimit;
+    const routineCommitted = (budget?.routine_spent_microusd ?? 0) + (budget?.routine_reserved_microusd ?? 0);
+    const reserveCommitted = (budget?.reserve_spent_microusd ?? 0) + (budget?.reserve_reserved_microusd ?? 0);
+    const workItemId = typeof body.input.workItemId === "string" ? body.input.workItemId : null;
+    const work = workItemId ? await context.env.DB.prepare("SELECT severity FROM agent_work_items WHERE id = ?1 AND agent_id = ?2").bind(workItemId, body.agentId).first<{ severity: string }>() : null;
+    const routineAvailable = Math.max(0, routineLimit - routineCommitted);
+    const useReserve = body.estimatedCostMicrousd > routineAvailable;
+    const reserveNeeded = useReserve ? body.estimatedCostMicrousd : 0;
+    if (useReserve && (!work || work.severity === "optional" || agent.criticality === "optional" || reserveCommitted + reserveNeeded > reserveLimit)) return jsonError("agent budget class is exhausted or the work item is not reserve-eligible", 422);
+    budgetReservation = { agentId: body.agentId, month, estimatedCostMicrousd: body.estimatedCostMicrousd, budgetClass: useReserve ? "reserve" : "routine" };
   }
   const status = body.startedAt ? "started" : "scheduled";
   const insertRun = context.env.DB.prepare(
     `INSERT INTO job_runs
        (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, input_json,
         executor_run_id, actor_id, prompt_hash, input_hash, model_id, agent_id, ledger_mode,
-        mutation_authorized, estimated_cost_microusd)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16)`,
+        mutation_authorized, estimated_cost_microusd, budget_class)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17)`,
   ).bind(
     body.id,
     body.job,
@@ -989,7 +1261,7 @@ app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (co
     status,
     stableJson(body.input),
     body.executorRunId ?? null,
-    context.get("identity").agentId,
+    identity.agentId,
     body.promptHash ?? null,
     body.inputHash ?? null,
     body.modelId ?? null,
@@ -997,15 +1269,21 @@ app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (co
     body.ledgerMode,
     body.mutationAuthorized ? 1 : 0,
     body.estimatedCostMicrousd,
+    budgetReservation?.budgetClass ?? null,
   );
   if (budgetReservation) {
     const reserveBudget = context.env.DB.prepare(
-      `INSERT INTO agent_budget_months (agent_id, month_key, spent_microusd, reserved_microusd)
-       VALUES (?1, ?2, 0, ?3)
+      `INSERT INTO agent_budget_months
+         (agent_id, month_key, spent_microusd, reserved_microusd, routine_reserved_microusd, reserve_reserved_microusd)
+       VALUES (?1, ?2, 0, ?3, ?4, ?5)
        ON CONFLICT(agent_id, month_key) DO UPDATE SET
          reserved_microusd = reserved_microusd + excluded.reserved_microusd,
+         routine_reserved_microusd = routine_reserved_microusd + excluded.routine_reserved_microusd,
+         reserve_reserved_microusd = reserve_reserved_microusd + excluded.reserve_reserved_microusd,
          updated_at = CURRENT_TIMESTAMP`,
-    ).bind(budgetReservation.agentId, budgetReservation.month, budgetReservation.estimatedCostMicrousd);
+    ).bind(budgetReservation.agentId, budgetReservation.month, budgetReservation.estimatedCostMicrousd,
+      budgetReservation.budgetClass === "routine" ? budgetReservation.estimatedCostMicrousd : 0,
+      budgetReservation.budgetClass === "reserve" ? budgetReservation.estimatedCostMicrousd : 0);
     await context.env.DB.batch([insertRun, reserveBudget]);
   } else {
     await insertRun.run();
@@ -1015,10 +1293,12 @@ app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (co
 
 app.patch("/internal/job-runs/:id", zValidator("json", jobRunUpdateSchema), async (context) => {
   const body = context.req.valid("json");
-  const current = await context.env.DB.prepare("SELECT job, status, started_at, finished_at, trigger_kind, executor_run_id, agent_id, estimated_cost_microusd FROM job_runs WHERE id = ?1").bind(context.req.param("id")).first<{
-    job: string; status: string; started_at: string | null; finished_at: string | null; trigger_kind: string; executor_run_id: string | null; agent_id: string | null; estimated_cost_microusd: number;
+  const current = await context.env.DB.prepare("SELECT job, status, started_at, finished_at, trigger_kind, executor_run_id, agent_id, estimated_cost_microusd, budget_class FROM job_runs WHERE id = ?1").bind(context.req.param("id")).first<{
+    job: string; status: string; started_at: string | null; finished_at: string | null; trigger_kind: string; executor_run_id: string | null; agent_id: string | null; estimated_cost_microusd: number; budget_class: "routine" | "reserve" | null;
   }>();
   if (!current) return jsonError("job run not found", 404);
+  const updateIdentity = context.get("identity");
+  if (updateIdentity.registeredAgentId && current.agent_id !== updateIdentity.registeredAgentId) return jsonError("registered agent may only update its own job run", 403);
   if (current.status === body.status && current.finished_at === (body.finishedAt ?? null)) {
     return context.json({ ok: true, runId: context.req.param("id"), status: current.status, idempotent: true });
   }
@@ -1055,9 +1335,13 @@ app.patch("/internal/job-runs/:id", zValidator("json", jobRunUpdateSchema), asyn
       `UPDATE agent_budget_months
           SET spent_microusd = spent_microusd + ?3,
               reserved_microusd = MAX(0, reserved_microusd - ?4),
+              routine_spent_microusd = routine_spent_microusd + CASE WHEN ?5 = 'routine' THEN ?3 ELSE 0 END,
+              reserve_spent_microusd = reserve_spent_microusd + CASE WHEN ?5 = 'reserve' THEN ?3 ELSE 0 END,
+              routine_reserved_microusd = MAX(0, routine_reserved_microusd - CASE WHEN ?5 = 'routine' THEN ?4 ELSE 0 END),
+              reserve_reserved_microusd = MAX(0, reserve_reserved_microusd - CASE WHEN ?5 = 'reserve' THEN ?4 ELSE 0 END),
               updated_at = CURRENT_TIMESTAMP
         WHERE agent_id = ?1 AND month_key = ?2`,
-    ).bind(current.agent_id, month, body.usage.costMicrousd, current.estimated_cost_microusd).run();
+    ).bind(current.agent_id, month, body.usage.costMicrousd, current.estimated_cost_microusd, current.budget_class ?? "routine").run();
   }
   const alert = jobStatusRequiresAlert(body.status)
     ? await raiseOperationalAlert(
@@ -1822,7 +2106,9 @@ app.get("/internal/accuracy/draw", async (context) => {
 
 app.post("/internal/accuracy/verdicts", zValidator("json", accuracyVerdictsSchema), async (context) => {
   try {
-    const result = await recordAccuracyVerdicts(context.env.DB, context.req.valid("json"), context.get("identity").agentId);
+    const identity = context.get("identity");
+    if (identity.registeredAgentId && identity.registeredAgentId !== "accuracy-headless") return jsonError("only the registered accuracy agent may submit automated verdicts", 403);
+    const result = await recordAccuracyVerdicts(context.env.DB, context.req.valid("json"), identity.agentId);
     return context.json({ ok: true, ...result });
   } catch (error) {
     return jsonError(error instanceof Error ? error.message : "accuracy verdict failed", 422);
