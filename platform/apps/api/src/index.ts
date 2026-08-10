@@ -1941,9 +1941,14 @@ app.get("/internal/capture-batches/promoted", async (context) => {
   const identity = context.get("identity");
   if (identity.role !== "engine" && identity.role !== "operator") return jsonError("mutation role is not authorized to list promoted batches", 403);
   const batches = await context.env.DB.prepare(
-    `SELECT id, source_id, coverage_mode, captured_to
-       FROM capture_batches WHERE status = 'promoted'
-      ORDER BY source_id, captured_to DESC, id`,
+    `WITH ranked AS (
+       SELECT id, source_id, coverage_mode, captured_to,
+              ROW_NUMBER() OVER (PARTITION BY source_id ORDER BY captured_to DESC, promoted_at DESC, id DESC) AS ordinal
+         FROM capture_batches WHERE status = 'promoted'
+     )
+     SELECT id, source_id, coverage_mode, captured_to
+       FROM ranked WHERE ordinal = 1
+      ORDER BY source_id`,
   ).all();
   return context.json({ ok: true, batches: batches.results });
 });
