@@ -48,6 +48,10 @@ evidence and verified archive objects.
 - `D1RestoreDrillWorkflow` selects the latest completed R2 SQL backup, creates an explicitly named scratch D1,
   imports it through Cloudflare's D1 import API, compares six core table counts and the current release ID/hash,
   records durable evidence and deletes only the exact scratch UUID.
+- Production drill `d1-restore-2026-Q3-a20` passed on 2026-08-10. It restored backup
+  `backup_d1-backup-manual-8a1f...`, matched all six backup-derived table counts plus release ID/hash, recovered
+  ten oversized release payloads, recorded durable evidence, and removed the scratch D1 and attempt-scoped R2
+  staging objects. No restore scratch databases remained after cleanup.
 - `/api/v2/replica-canary` is an isolated `first-primary` Sessions API pilot. No public release route is moved
   to replicas until canary evidence proves a benefit without consistency findings.
 
