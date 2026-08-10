@@ -1393,6 +1393,7 @@
                         "cheese[^,]*(cheddar|mozzarella|colby)"
                     ],
         "exclude":  [
+                        "\\b(?:burritos?|feta)\\b",
                         "cottage",
                         "cream\\s+cheese",
                         "cheesecake",
@@ -6789,6 +6790,7 @@
                         "cucumbers?"
                     ],
         "exclude":  [
+                        "\\bvinegar\\b",
                         "pickle",
                         "\\bkit\\b",
                         "salad",
@@ -6964,6 +6966,7 @@
                         "\\bgarlic\\b"
                     ],
         "exclude":  [
+                        "\\bolives?\\b",
                         "\\bquinoa\\b",
                         "\\brice\\b",
                         "powder",
@@ -8634,6 +8637,8 @@
                         "\\bsugar\\b"
                     ],
         "exclude":  [
+                        "\\bcurd\\b",
+                        "\\bgranola\\b",
                         "brown",
                         "powdered",
                         "confectioner",
@@ -8744,6 +8749,7 @@
                         "sugar,\\s*brown"
                     ],
         "exclude":  [
+                        "\\bcoffee\\b",
                         "\\bseasoning\\b",
                         "oatmeal",
                         "\\btart\\b",
@@ -9351,6 +9357,7 @@
                         "\\bhoney\\b"
                     ],
         "exclude":  [
+                        "\\b(?:refresher|vinegar)\\b",
                         "\\bplums?\\b",
                         "\\bclamshells?\\b",
                         "\\bham\\b",
@@ -15564,6 +15571,7 @@
                         "\\bginger\\b"
                     ],
         "exclude":  [
+                        "\\brefresher\\b",
                         "\\bsqueeze\\b",
                         "\\bminced\\b",
                         "\\bpastes?\\b",
@@ -15913,6 +15921,7 @@
                         "red\\s+potato(?:es)?"
                     ],
         "exclude":  [
+                        "\\b(?:chicken|deli)\\b",
                         "sweet",
                         "\\bfrozen\\b",
                         "\\bcanned\\b",
@@ -30837,7 +30846,7 @@
                         "\\bbrush\\b",
                         "\\bscraper\\b",
                         "\\bmitt\\b",
-                        "\\bdegreaser\\b"
+                        "easy[\\s-]*off.*\\bdegreaser\\b"
                     ]
     },
     {
@@ -31297,7 +31306,7 @@
         "band_min":  0.4,
         "band_max":  14,
         "include":  [
-                        "(?:dried\\s+parsley|parsley\\s+(?:flakes?|leaves?))"
+                        "(?:dried\\s+parsley|parsley\\s+(?:freeze[\\s-]*dried|(?:leaf\\s+)?flakes?|leaves?))"
                     ],
         "exclude":  [
                         "^parsley\\s+[\\d.]+\\s*oz$",
@@ -39116,6 +39125,7 @@
                         "lemon\\s?grass"
                     ],
         "exclude":  [
+                        "\\btray\\s+pack\\b",
                         "\\btea\\b",
                         "essential",
                         "\\boil\\b",
