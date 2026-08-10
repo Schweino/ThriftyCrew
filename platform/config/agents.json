@@ -56,7 +56,7 @@
       "plane": "ci",
       "scheduleId": "triage-review",
       "promptFile": "agents/triage-reviewer/prompt.md",
-      "promptSha256": "eb955979577d914ce7b9a479e51700cd9c8784f0ff15507884572d6f1c1c2cf6",
+      "promptSha256": "7a973b1ee8d795d8f689f42d9788184b52beb8a9454d90e1c00cf594d965b0f6",
       "provider": "openai",
       "model": "gpt-5.6-sol",
       "fallbackModel": "gpt-5.6-luna",
@@ -66,7 +66,7 @@
       "criticality": "safety",
       "workflowFile": ".github/workflows/agent-triage-reviewer.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "32eb5ca8a40a77e4558bcaa935afa8d6765c632c8d67853c0536a62baf11aab9",
+      "executionConfigHash": "6655268d0a04c19266e0b044802a0600e2ab68161b067a03b7899b0b00d8fe8a",
       "capabilities": [
         "read:status",
         "read:evidence",

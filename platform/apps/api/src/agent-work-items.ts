@@ -148,11 +148,12 @@ export async function claimAgentWorkItem(db: D1Database, identity: MutationIdent
   ).bind(agent.id, now.toISOString()).run();
   const candidate = await db.prepare(
     `SELECT id FROM agent_work_items
-      WHERE agent_id = ?1 AND state IN ('queued', 'retryable') AND available_at <= ?2
+      WHERE agent_id = ?1 AND execution_config_hash = ?2
+        AND state IN ('queued', 'retryable') AND available_at <= ?3
         AND attempt_count < max_attempts
       ORDER BY CASE severity WHEN 'safety' THEN 0 WHEN 'operational' THEN 1 ELSE 2 END,
                created_at, id LIMIT 1`,
-  ).bind(agent.id, now.toISOString()).first<{ id: string }>();
+  ).bind(agent.id, agent.execution_config_hash, now.toISOString()).first<{ id: string }>();
   if (!candidate) return null;
   const leaseId = crypto.randomUUID();
   const expiresAt = new Date(now.getTime() + body.leaseSeconds * 1000).toISOString();
