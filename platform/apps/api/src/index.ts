@@ -2223,21 +2223,21 @@ app.post("/internal/triage/reconcile", async (context) => {
         )
       ORDER BY t.id`,
   ).all<{ id: string; failed_release_id: string; guard_id: string; recovery_release_id: string }>();
-  const recoveredBackups = await context.env.DB.prepare(
-    `SELECT t.id, backup.id AS backup_id, replica.id AS replica_id
-       FROM triage_items t
-       JOIN backup_exports backup ON backup.id = (
-         SELECT candidate.id FROM backup_exports candidate
-          WHERE candidate.status = 'completed'
-            AND julianday(candidate.finished_at) > julianday(t.created_at)
-            AND EXISTS (SELECT 1 FROM backup_replicas r WHERE r.backup_id = candidate.id AND r.status = 'completed')
-          ORDER BY candidate.finished_at DESC LIMIT 1
-       )
+  const backupRecovery = await context.env.DB.prepare(
+    `SELECT backup.id AS backup_id, replica.id AS replica_id
+       FROM backup_exports backup
        JOIN backup_replicas replica ON replica.backup_id = backup.id AND replica.status = 'completed'
-      WHERE t.source_kind = 'operational_alert' AND t.title = 'Nightly D1 backup failed'
-        AND t.status <> 'resolved'
-      GROUP BY t.id`,
-  ).all<{ id: string; backup_id: string; replica_id: string }>();
+      WHERE backup.status = 'completed'
+      ORDER BY backup.finished_at DESC LIMIT 1`,
+  ).first<{ backup_id: string; replica_id: string }>();
+  const failedBackupItems = await context.env.DB.prepare(
+    `SELECT id FROM triage_items
+      WHERE source_kind = 'operational_alert' AND title = 'Nightly D1 backup failed'
+        AND status <> 'resolved' ORDER BY created_at, id`,
+  ).all<{ id: string }>();
+  const recoveredBackups = backupRecovery
+    ? failedBackupItems.results.map((row) => ({ id: row.id, ...backupRecovery }))
+    : [];
   const recoveredParity = await context.env.DB.prepare(
     `SELECT t.id, parity.id AS parity_id, parity.diff_count
        FROM triage_items t
@@ -2292,21 +2292,17 @@ app.post("/internal/triage/reconcile", async (context) => {
         AND triage.source_ref LIKE 'source-contract:%'
         AND triage.status <> 'resolved'`,
   ).all<{ id: string; sentinel_id: string; source_id: string; observed_at: string }>();
-  const supersededRestoreFailures = await context.env.DB.prepare(
-    `SELECT triage.id, triage.source_ref, latest.source_ref AS latest_source_ref
-       FROM triage_items triage
-       JOIN triage_items latest ON latest.id = (
-         SELECT candidate.id FROM triage_items candidate
-          WHERE candidate.source_kind = 'operational_alert'
-            AND candidate.title = 'Quarterly D1 restore drill failed'
-            AND candidate.status <> 'resolved'
-          ORDER BY candidate.created_at DESC, candidate.id DESC LIMIT 1
-       )
-      WHERE triage.source_kind = 'operational_alert'
-        AND triage.title = 'Quarterly D1 restore drill failed'
-        AND triage.status <> 'resolved'
-        AND triage.id <> latest.id`,
-  ).all<{ id: string; source_ref: string; latest_source_ref: string }>();
+  const restoreFailures = await context.env.DB.prepare(
+    `SELECT id, source_ref FROM triage_items
+      WHERE source_kind = 'operational_alert'
+        AND title = 'Quarterly D1 restore drill failed'
+        AND status <> 'resolved'
+      ORDER BY created_at DESC, id DESC`,
+  ).all<{ id: string; source_ref: string }>();
+  const latestRestoreFailure = restoreFailures.results[0];
+  const supersededRestoreFailures = latestRestoreFailure
+    ? restoreFailures.results.slice(1).map((row) => ({ ...row, latest_source_ref: latestRestoreFailure.source_ref }))
+    : [];
   const cleanupCandidates = await context.env.DB.prepare(
     `SELECT id, source_ref, title, evidence_json
        FROM triage_items
@@ -2385,7 +2381,7 @@ app.post("/internal/triage/reconcile", async (context) => {
     }))));
   }
   const operationalRecoveries = [
-    ...recoveredBackups.results.map((row) => ({
+    ...recoveredBackups.map((row) => ({
       id: row.id,
       planRef: "auto-plan://later-backup-replicated",
       resolution: {
@@ -2438,7 +2434,7 @@ app.post("/internal/triage/reconcile", async (context) => {
         observedAt,
       },
     })),
-    ...supersededRestoreFailures.results.map((row) => ({
+    ...supersededRestoreFailures.map((row) => ({
       id: row.id,
       planRef: "auto-plan://restore-attempt-superseded",
       resolution: {
@@ -2472,7 +2468,17 @@ app.post("/internal/triage/reconcile", async (context) => {
     resolved,
     observedAt,
   });
-  return context.json({ ok: true, resolved, observedAt });
+  return context.json({
+    ok: true,
+    resolved,
+    observedAt,
+    recoveryCounts: {
+      backupFailures: recoveredBackups.length,
+      supersededRestoreFailures: supersededRestoreFailures.length,
+      cleanupCandidates: cleanupCandidates.results.length,
+      cleanupRecovered: recoveredCleanup.length,
+    },
+  });
 });
 
 app.post("/internal/triage/:id/resolve", zValidator("json", triageResolveSchema), async (context) => {
