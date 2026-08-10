@@ -8,6 +8,21 @@ export function browserWeekPass(rows: ReadonlyArray<{ coverage_mode: string; has
     && rows.every((row) => row.coverage_mode === "full" && row.has_screenshot === 1 && row.has_match === 1);
 }
 
+export function strictBrowserGateEvidence(evidence: unknown): boolean {
+  if (!evidence || typeof evidence !== "object") return false;
+  const batches = (evidence as { batches?: unknown }).batches;
+  if (!Array.isArray(batches)) return false;
+  return browserWeekPass(batches.flatMap((row) => {
+    if (!row || typeof row !== "object") return [];
+    const candidate = row as Record<string, unknown>;
+    return typeof candidate.coverage_mode === "string"
+      && typeof candidate.has_screenshot === "number"
+      && typeof candidate.has_match === "number"
+      ? [{ coverage_mode: candidate.coverage_mode, has_screenshot: candidate.has_screenshot, has_match: candidate.has_match }]
+      : [];
+  }), REQUIRED_BROWSER_SOURCES.length);
+}
+
 export interface ExternalEdgeProof {
   url: string;
   httpStatus: number;
@@ -267,11 +282,16 @@ export async function accrueMilestoneEvidence(env: WorkerEnv, now = new Date(), 
 
 export async function milestoneEvidenceSummary(db: D1Database): Promise<Record<string, unknown>> {
   const rows = await db.prepare(
-    `SELECT gate, period_key, status FROM evidence_gate_events
+    `SELECT gate, period_key, status, evidence_json FROM evidence_gate_events
       WHERE status = 'pass' ORDER BY gate, period_key`,
-  ).all<{ gate: string; period_key: string; status: string }>();
+  ).all<{ gate: string; period_key: string; status: string; evidence_json: string }>();
   const byGate = new Map<string, string[]>();
   for (const row of rows.results) {
+    if (row.gate === "direct-chrome-week") {
+      let evidence: unknown;
+      try { evidence = JSON.parse(row.evidence_json); } catch { continue; }
+      if (!strictBrowserGateEvidence(evidence)) continue;
+    }
     const values = byGate.get(row.gate) ?? [];
     values.push(row.period_key);
     byGate.set(row.gate, values);

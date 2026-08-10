@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addCalendarDays, browserWeekPass, centralDateKey, consecutiveDateCount, validateExternalEdgeProof, weekStartKey } from "./milestone-evidence";
+import { addCalendarDays, browserWeekPass, centralDateKey, consecutiveDateCount, strictBrowserGateEvidence, validateExternalEdgeProof, weekStartKey } from "./milestone-evidence";
 
 describe("milestone evidence calendar", () => {
   it("does not count partial browser captures as a completed direct-Chrome week", () => {
@@ -7,6 +7,9 @@ describe("milestone evidence calendar", () => {
     expect(browserWeekPass(complete, 4)).toBe(true);
     expect(browserWeekPass(complete.map((row, index) => index === 0 ? { ...row, coverage_mode: "partial" } : row), 4)).toBe(false);
     expect(browserWeekPass(complete.map((row, index) => index === 0 ? { ...row, has_match: 0 } : row), 4)).toBe(false);
+    expect(strictBrowserGateEvidence({ batches: complete })).toBe(true);
+    expect(strictBrowserGateEvidence({ batches: complete.map((row, index) => index === 0 ? { ...row, coverage_mode: "partial" } : row) })).toBe(false);
+    expect(strictBrowserGateEvidence({ batches: complete.slice(0, 3) })).toBe(false);
   });
   it("uses Omaha calendar dates instead of UTC dates", () => {
     expect(centralDateKey(new Date("2026-08-10T02:00:00.000Z"))).toBe("2026-08-09");
