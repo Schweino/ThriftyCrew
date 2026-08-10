@@ -179,13 +179,17 @@ jobs:
               wait "$bakers_pid" || capture_status=1
               wait "$family_fare_pid" || capture_status=1
               wait "$hy_vee_pid" || capture_status=1
-              tail -n 40 "$RUNNER_TEMP/bakers-capture.log"
-              tail -n 40 "$RUNNER_TEMP/family-fare-capture.log"
-              tail -n 40 "$RUNNER_TEMP/hy-vee-capture.log"
+              for capture_log in "$RUNNER_TEMP/bakers-capture.log" "$RUNNER_TEMP/family-fare-capture.log" "$RUNNER_TEMP/hy-vee-capture.log"; do
+                echo "::group::$(basename "$capture_log") diagnostics"
+                grep -E -i -C 2 '##\[error\]|fatal|exception|traceback|required production date|\[err_|(^|[[:space:]])(error|failed|failure)(:|[[:space:]]|$)' "$capture_log" | tail -n 60 || true
+                tail -n 40 "$capture_log"
+                echo "::endgroup::"
+              done
               test "$capture_status" -eq 0
               pnpm tc capture ingest-current bakers family-fare hy-vee
               pnpm tc capture promote-ready-browser
               pnpm tc engine publish-native
+              pnpm tc ghost reconcile
               pnpm tc engine parity direct
               pnpm tc evidence accrue
               ;;
