@@ -20,6 +20,22 @@ describe("direct regular capture", () => {
     expect(artifact.audit).toMatchObject({ inputRows: 3, acceptedRows: 2, rejectedRows: 1 });
   });
 
+  it("accepts Freshop ea/pk package counts and canonicalizes date-only evidence before morning runs", async () => {
+    const artifact = await buildRegularCapture("family-fare", {
+      store: "Family Fare",
+      mode_verified: "2026-08-09",
+      deals: [
+        { item: "Granola Bars 6 Ea", current_price: 3.99, size: "6 ea", as_of: "2026-08-09", found_by_term: "granola bars" },
+        { item: "Sparkling Water 12 Pack", current_price: 4.99, size: "12 pk", as_of: "2026-08-09", found_by_term: "sparkling water" },
+      ],
+    });
+    expect(artifact.observations).toHaveLength(2);
+    expect(artifact.observations[0]).toMatchObject({ normalizedBasisUnit: "each", normalizedBasisQtyMicros: 6_000_000, packageCount: 1 });
+    expect(artifact.observations[1]).toMatchObject({ normalizedBasisUnit: "each", normalizedBasisQtyMicros: 12_000_000, packageCount: 1 });
+    expect(artifact.capturedFrom).toBe("2026-08-09T05:00:00.000Z");
+    expect(artifact.capturedTo).toBe("2026-08-09T05:00:00.000Z");
+  });
+
   it("binds an external verification attestation and stable name identity", async () => {
     const artifact = await buildRegularCapture("hy-vee", {
       store: "Hy-Vee", price_mode: "in-store", source: "fixture", deals: [

@@ -61,8 +61,8 @@ function taxonomy(row: Record<string, unknown>, store: StoreKey): string | undef
 
 function basis(sizeText: string): { unit: ObservationInput["normalizedBasisUnit"]; quantityMicros: number; packageCount: number } | undefined {
   const normalized = sizeText.toLowerCase().replace(/fluid ounces?/g, "fl oz").replace(/ounces?/g, "oz").replace(/pounds?/g, "lb").replace(/counts?/g, "ct").trim();
-  const pack = normalized.match(/^(\d+)\s*[x\u00d7]\s*([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|oz|lb|ml|l|liter|g|gram|kg|ct)\b/);
-  const match = pack ?? normalized.match(/([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|oz|lb|ml|l|liter|g|gram|kg|ct|dozen|gal|gallon|qt|pt|each)\b/);
+  const pack = normalized.match(/^(\d+)\s*[x\u00d7]\s*([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|oz|lb|ml|l|liter|g|gram|kg|ct|ea|pk)\b/);
+  const match = pack ?? normalized.match(/([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|oz|lb|ml|l|liter|g|gram|kg|ct|ea|pk|dozen|gal|gallon|qt|pt|each)\b/);
   if (!match) {
     if (/^(lb|per lb)$/.test(normalized)) return { unit: "lb", quantityMicros: 1_000_000, packageCount: 1 };
     if (normalized === "dozen") return { unit: "dozen", quantityMicros: 1_000_000, packageCount: 1 };
@@ -75,7 +75,7 @@ function basis(sizeText: string): { unit: ObservationInput["normalizedBasisUnit"
   const unit: ObservationInput["normalizedBasisUnit"] = rawUnit === "floz" ? "fl_oz"
     : rawUnit === "l" || rawUnit === "liter" ? "liter"
     : rawUnit === "g" || rawUnit === "gram" ? "gram"
-    : rawUnit === "ct" ? "each"
+    : rawUnit === "ct" || rawUnit === "ea" || rawUnit === "pk" ? "each"
     : rawUnit === "gallon" ? "gal"
     : rawUnit as ObservationInput["normalizedBasisUnit"];
   return { unit, quantityMicros: Math.max(1, Math.round(quantity * 1_000_000)), packageCount };
@@ -153,14 +153,17 @@ function packageBasisOptions(sizeText: string, name: string, purchasePriceMinor:
   return options.slice(0, 12);
 }
 
-function omahaNoon(date: string): string {
+function omahaDayStart(date: string): string {
   const [year, month, day] = date.split("-").map(Number);
   if (!year || !month || !day) return new Date(date).toISOString();
   const guess = Date.UTC(year, month - 1, day, 12);
   const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/Chicago", hour12: false, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" })
     .formatToParts(new Date(guess)).reduce<Record<string, number>>((result, item) => { if (item.type !== "literal") result[item.type] = Number(item.value); return result; }, {});
   const represented = Date.UTC(parts.year!, parts.month! - 1, parts.day!, parts.hour!, parts.minute!, parts.second!);
-  return new Date(guess - (represented - guess)).toISOString();
+  // A source date proves the Omaha calendar day, not a wall-clock capture time. Canonicalize it
+  // to the start of that local day. Noon made morning jobs claim a future capture and correctly
+  // fail the API's five-minute future-skew guard.
+  return new Date(Date.UTC(year, month - 1, day) - (represented - guess)).toISOString();
 }
 
 function termKey(value: string): string {
@@ -247,7 +250,7 @@ export async function buildRegularCapture(
     }
     const purchasePriceMinor = Math.round(price * 100);
     const regularPrice = numberValue(row.base_price) ?? numberValue(row.regular);
-    const capturedAt = omahaNoon(asOf.slice(0, 10));
+    const capturedAt = omahaDayStart(asOf.slice(0, 10));
     const productUrl = safeUrl(row.canonical_url) ?? safeUrl(row.link_url);
     const kind: ObservationInput["kind"] = row.marked_down === true ? "markdown" : regularPrice !== undefined && regularPrice > price ? "sale" : "everyday";
     const storeUnitPrice = store === "sams" ? verifiedUnitPrice(row.sams_unit_price) : undefined;
