@@ -10,6 +10,7 @@ interface MutationClientOptions {
   agentId: string;
   secret?: string;
   oidcToken?: string;
+  oidcTokenProvider?: () => Promise<string>;
 }
 
 interface ApiResult {
@@ -31,7 +32,21 @@ function chunks<T>(items: readonly T[], size: number): T[][] {
 }
 
 export class MutationClient {
-  constructor(private readonly options: MutationClientOptions) {}
+  private cachedOidcToken: string | undefined;
+  private oidcExpiresAt = 0;
+
+  constructor(private readonly options: MutationClientOptions) {
+    this.cachedOidcToken = options.oidcToken;
+    this.oidcExpiresAt = options.oidcToken ? oidcExpiry(options.oidcToken) : 0;
+  }
+
+  private async authorizationToken(): Promise<string | undefined> {
+    if (this.options.oidcTokenProvider && (!this.cachedOidcToken || Date.now() >= this.oidcExpiresAt - 60_000)) {
+      this.cachedOidcToken = await this.options.oidcTokenProvider();
+      this.oidcExpiresAt = oidcExpiry(this.cachedOidcToken);
+    }
+    return this.cachedOidcToken;
+  }
 
   async request(pathname: string, init: { method?: string; json?: unknown; body?: Uint8Array; headers?: HeadersInit; acceptStatuses?: number[] } = {}): Promise<ApiResult> {
     const method = init.method ?? (init.json === undefined && init.body === undefined ? "GET" : "POST");
@@ -46,7 +61,8 @@ export class MutationClient {
     headers.set("x-tc-agent", this.options.agentId);
     headers.set("x-tc-timestamp", timestamp);
     headers.set("x-tc-nonce", nonce);
-    if (this.options.oidcToken) headers.set("authorization", `Bearer ${this.options.oidcToken}`);
+    const oidcToken = await this.authorizationToken();
+    if (oidcToken) headers.set("authorization", `Bearer ${oidcToken}`);
     else if (this.options.secret) headers.set("x-tc-signature", await hmacHex(this.options.secret, canonical));
     else throw new Error("mutation client requires an HMAC secret or GitHub OIDC token");
     const requestInit: RequestInit = { method, headers };
@@ -64,6 +80,17 @@ export class MutationClient {
       throw new Error(`${method} ${pathname} returned ${response.status}: ${detail}`);
     }
     return { ...result, httpStatus: response.status };
+  }
+}
+
+function oidcExpiry(token: string): number {
+  try {
+    const payload = token.split(".")[1];
+    if (!payload) return 0;
+    const parsed = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { exp?: unknown };
+    return typeof parsed.exp === "number" && Number.isFinite(parsed.exp) ? parsed.exp * 1_000 : 0;
+  } catch {
+    return 0;
   }
 }
 

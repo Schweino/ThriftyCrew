@@ -40,13 +40,18 @@ async function githubOidcToken(): Promise<string | undefined> {
 }
 
 async function mutationClient(): Promise<MutationClient> {
-  const oidcToken = await githubOidcToken();
+  const oidcToken = process.env.TC_OIDC_TOKEN;
+  const canRequestOidcToken = Boolean(process.env.ACTIONS_ID_TOKEN_REQUEST_URL && process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN);
   const secret = process.env.TC_LOCAL_MUTATION_SECRET;
-  if (!oidcToken && !secret) throw new Error("set TC_LOCAL_MUTATION_SECRET locally or run from a GitHub OIDC-enabled job");
+  if (!oidcToken && !canRequestOidcToken && !secret) throw new Error("set TC_LOCAL_MUTATION_SECRET locally or run from a GitHub OIDC-enabled job");
   return new MutationClient({
     origin: process.env.TC_API_ORIGIN ?? "http://127.0.0.1:8787",
     agentId: process.env.TC_AGENT_ID ?? "local-operator",
-    ...(oidcToken ? { oidcToken } : { secret }),
+    ...(oidcToken ? { oidcToken } : canRequestOidcToken ? { oidcTokenProvider: async () => {
+      const refreshed = await githubOidcToken();
+      if (!refreshed) throw new Error("GitHub OIDC token refresh was unavailable");
+      return refreshed;
+    } } : { secret }),
   });
 }
 
