@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { entitlementVerificationRecordSchema, evidenceGateRecordSchema, restoreDrillRecordSchema } from "@thriftycrew/contracts";
+import { captureBatchAbandonSchema, entitlementVerificationRecordSchema, evidenceGateRecordSchema, restoreDrillRecordSchema } from "@thriftycrew/contracts";
 import { createAccuracyDraw, readAccuracyDraw, wilsonInterval } from "./accuracy";
 import { mayShowFreeBadge } from "./ghost-reconciliation";
 import { storeCoverageFloor } from "./release-guards";
@@ -104,6 +104,11 @@ describe("restore drill evidence contract", () => {
 });
 
 describe("live evidence contracts", () => {
+  it("requires a meaningful reason before an open capture may be abandoned", () => {
+    expect(captureBatchAbandonSchema.safeParse({ reason: "test" }).success).toBe(false);
+    expect(captureBatchAbandonSchema.safeParse({ reason: "superseded one-off operator fixture" }).success).toBe(true);
+  });
+
   it("rejects unknown completion gates", () => {
     expect(evidenceGateRecordSchema.safeParse({
       id: "evidence_1",

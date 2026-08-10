@@ -506,6 +506,11 @@ if (command === "status") {
     promoted.push({ ...batch, matching, promotion });
   }
   result = { ok: true, ready: ready.batches?.length ?? 0, promoted };
+} else if (command === "capture" && subcommand === "abandon") {
+  const batchId = arguments_[0];
+  const reason = arguments_.slice(1).join(" ");
+  if (!batchId || reason.length < 10) throw new Error("tc capture abandon requires a batch id and a reason of at least 10 characters");
+  result = await (await mutationClient()).request(`/internal/capture-batches/${encodeURIComponent(batchId)}/abandon`, { json: { reason } });
 } else if (command === "capture" && subcommand === "queue") {
   const [action, ...queueArguments] = arguments_;
   const root = defaultCaptureQueueRoot();
@@ -598,7 +603,7 @@ if (command === "status") {
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog",
-      "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser",
+      "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|abandon <batch-id> <reason>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",
       "tc match batch <batch-id>", "tc commodity add <file>", "tc recipe add <file>",
     ],

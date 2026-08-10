@@ -3,6 +3,7 @@ import { zValidator } from "@hono/zod-validator";
 import {
   accuracyDrawCreateSchema,
   accuracyVerdictsSchema,
+  captureBatchAbandonSchema,
   captureBatchCreateSchema,
   captureBatchSealSchema,
   configurationCategoriesChunkSchema,
@@ -910,6 +911,38 @@ app.post("/internal/capture-batches", zValidator("json", captureBatchCreateSchem
     body.idempotencyKey,
   ).run();
   return context.json({ ok: true, batchId, status: "open", idempotent: false }, 201);
+});
+
+app.post("/internal/capture-batches/:id/abandon", zValidator("json", captureBatchAbandonSchema), async (context) => {
+  const identity = context.get("identity");
+  if (identity.role !== "operator") return jsonError("only an operator may abandon a capture batch", 403);
+  const batchId = context.req.param("id");
+  const batch = await context.env.DB.prepare(
+    "SELECT status, validation_summary_json FROM capture_batches WHERE id = ?1",
+  ).bind(batchId).first<{ status: string; validation_summary_json: string | null }>();
+  if (!batch) return jsonError("capture batch not found", 404);
+  const reason = context.req.valid("json").reason;
+  if (batch.status === "rejected" && batch.validation_summary_json) {
+    try {
+      const summary = JSON.parse(batch.validation_summary_json) as { abandoned?: boolean; reason?: string };
+      if (summary.abandoned === true && summary.reason === reason) {
+        return context.json({ ok: true, batchId, status: "rejected", idempotent: true });
+      }
+    } catch {
+      // A malformed historical summary is not proof that this operator action already occurred.
+    }
+  }
+  if (batch.status !== "open") return jsonError(`only an open batch may be abandoned (current status: ${batch.status})`, 409);
+  const abandonedAt = new Date().toISOString();
+  const summary = { abandoned: true, reason, abandonedBy: identity.agentId, abandonedAt };
+  const update = await context.env.DB.prepare(
+    `UPDATE capture_batches
+        SET status = 'rejected', validation_summary_json = ?2, sealed_at = CURRENT_TIMESTAMP
+      WHERE id = ?1 AND status = 'open'`,
+  ).bind(batchId, stableJson(summary)).run();
+  if ((update.meta.changes ?? 0) !== 1) return jsonError("capture batch changed while it was being abandoned", 409);
+  await recordAudit(context.env, identity, "capture.abandon", "capture_batch", batchId, "accepted", summary);
+  return context.json({ ok: true, batchId, status: "rejected", idempotent: false });
 });
 
 app.post("/internal/capture-batches/:id/observations", zValidator("json", observationChunkSchema), async (context) => {

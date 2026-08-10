@@ -112,6 +112,10 @@ export const captureBatchSealSchema = z.object({
   evidenceManifestKey: z.string().min(1).max(1000).optional(),
 });
 
+export const captureBatchAbandonSchema = z.object({
+  reason: z.string().trim().min(10).max(1000),
+});
+
 export const directCaptureArtifactSchema = z.object({
   version: z.literal(1),
   sourceId: nonEmptyId,
@@ -513,6 +517,7 @@ export const releaseGuardResultSchema = z.object({
 });
 
 export type CaptureBatchCreate = z.infer<typeof captureBatchCreateSchema>;
+export type CaptureBatchAbandon = z.infer<typeof captureBatchAbandonSchema>;
 export type ObservationInput = z.infer<typeof observationInputSchema>;
 export type ConfigurationCreate = z.infer<typeof configurationCreateSchema>;
 export type ReleaseCreate = z.infer<typeof releaseCreateSchema>;
