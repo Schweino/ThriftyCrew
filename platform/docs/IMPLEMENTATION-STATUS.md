@@ -1,35 +1,41 @@
-# Grocery platform v3 implementation status
+# Grocery Platform V3 implementation status
 
-## Implemented and locally testable
+## Implemented, deployed, and exercised
 
-- The working v2 foundation: strict TypeScript workspace, D1/R2, immutable observations and releases, atomic
-  publication, chunked ingest, deterministic replay, integer money, server-owned guards, and responsive board.
-- Forward-only V3 schema for `taxonomy_path`, explicit release batch snapshots, release Top 5/rotation tables,
-  Ghost reconciliation attempts, weekly accuracy draws/verdicts, and durable triage items.
-- Git-authored configuration under `platform/config`, a byte-identical legacy generator, a checked manifest,
-  and D1 deployment of categories, commodities, 48,975 unique match rules, and active known-wrong names.
-- GitHub OIDC verification bound to issuer, audience, repository, workflow, expiry, signature, and replay nonce;
-  PC/local HMAC credentials remain separately scoped.
-- Workers Analytics Engine funnel events for view, tool-use, signup-click, and join-attempt with no D1 writes.
-- Explicit promoted-batch selection and a release hash that binds both manifest and sorted batch IDs.
-- Shelf taxonomy capture plus an aisle second-opinion rule that cannot flip when evidence is absent.
-- Ghost visibility reconciliation with live re-read, attempt ledger, triage on failure, and remove-only badge truth.
-- Weekly deterministic blind sampling, per-cell verdicts, overdue incidents, and a 95% Wilson interval on status.
-- Guard findings automatically create triage queue items; internal doctor, triage, accuracy, reject, and
-  reconciliation endpoints are available through the unified `pnpm tc` operator CLI.
-- Architecture decisions, AI operator contract, and failure-class catalog live in-repo.
+- Strict TypeScript workspace; D1/R2/Worker authority boundary; immutable captures, observations, match
+  decisions, configurations, releases, input snapshots, and atomic current-release pointer.
+- GitHub OIDC for engine mutations, separately scoped HMAC capture/operator credentials, audit events,
+  idempotency, replay protection, and source-specific capture authorization.
+- One Git-authored configuration source generating both legacy compatibility files and the active D1 version.
+- Direct server capture for Baker's, Family Fare, and Hy-Vee, plus direct Omaha Chrome capture for Aldi,
+  Fareway, Sam's Club, and Walmart. Browser jobs use an immutable local queue, screenshots, manifests, hashes,
+  leases, exponential retry, receipts, permanent rejection, and a separate engine-owned promotion step.
+- Native matching and aisle-family second opinion, taxonomy paths, integer price bases, known-wrong exclusion,
+  promoted-batch selection, native recipe costs, Top 5, rotation, feeds, and release guards.
+- Ghost intent-versus-truth reconciliation with live reread and remove-only badge behavior; entitlement adapter
+  and browser-visible member-state routes.
+- External exact-route beta verification, release rollback drill, Analytics Engine funnel events, deterministic
+  weekly blind accuracy sample, Wilson interval, durable alerts/triage, and typed reviewer-to-developer handoff.
+- GitHub schedules and recovery dispatch, job ledger/watchdog, sanitized private Actions diagnostics, nightly
+  D1 export, secondary private R2 replication, lifecycle policies, and scratch restore evidence.
+- Operator CLI for every platform operation, complete founding-bug port ledger, six chaos proofs, and automated
+  daily/weekly milestone evidence accrual.
+- Production-scale recovery proof: GitHub run `31350242781` acquired all three server sources, attested and
+  promoted them, published `rel_native_50f3f39fd758249c9542`, reconciled Ghost, recorded zero-diff direct
+  parity, accrued evidence, and closed its durable job ledger successfully with no diagnostic tail.
 
-## External and time-based gates still open
+## Evidence gates still open
 
-- The isolated production Worker is deployed at `https://tc-grocery-v3.curly-unit-51a6.workers.dev` with its
-  dedicated D1 database, R2 evidence bucket, Analytics Engine funnel dataset, scoped operator secret, and
-  immutable GitHub repository ID. Release `rel_555c2c6eb2730017e4ae796b` is published there. No existing route
-  or legacy publisher was changed.
-- Private Ghost credentials still need to be configured before live visibility reconciliation can run.
-- The entitlement adapter still needs its seven live Ghost/member states, including mobile Safari.
-- A real remote restore drill, beta Workers Route, route rollback rehearsal, and alert delivery integration remain.
-- Milestone evidence still requires 14 clean shadow-ingest days, four direct Chrome weekly cycles, 30 daily
-  published releases, weekly accuracy verdict completion, and the final chaos drills.
+- 14 consecutive clean shadow-ingest days: 1 recorded.
+- 14 consecutive zero-diff native parity days: 1 recorded.
+- Four direct Chrome weekly cycles: 1 recorded.
+- Four completed blind-accuracy weekly cycles: 1 recorded.
+- 30 consecutive successful beta daily releases: 1 recorded.
+- Four closed beta weeks: 0 recorded; the earlier incomplete week correctly failed.
+- Live entitlement verification: five of seven states recorded. Expired and cancelled require real Ghost/member
+  lifecycle transitions and may not be fabricated.
 
-The PowerShell/Git/Ghost estate remains authoritative. Code completion is not cutover approval, and no legacy
-publisher, capture task, route, or static read path is retired until the applicable milestone is signed off.
+All V3 implementation work is deployed and the live API/member routes and board beta are on V3. The legacy publication/capture estate is retained
+only as the approved rollback path until the evidence gates above close. Final retirement and tombstones are
+therefore not yet authorized, even though the remaining waits are evidence/time rather than missing platform
+implementation.
