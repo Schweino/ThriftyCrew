@@ -91,11 +91,11 @@ jobs:
           mkdir -p "$RUNNER_TEMP/tc-agent-output"
           export RUNNER_TEMP="$RUNNER_TEMP/tc-agent-output"
           if [ "${{ steps.ledger.outcome }}" != "success" ]; then
-            pnpm --filter @thriftycrew/agents run "$TC_AGENT_ID"
+            pnpm --filter @thriftycrew/agents run run "$TC_AGENT_ID"
           elif [ "$AGENT_JOB" = "source-sentinel-daily" ]; then
             pnpm tc sentinel latest
           else
-            pnpm --filter @thriftycrew/agents run "$TC_AGENT_ID"
+            pnpm --filter @thriftycrew/agents run run "$TC_AGENT_ID"
           fi
           usage_file="$RUNNER_TEMP/${TC_AGENT_ID}-usage.json"
           if [ -f "$usage_file" ]; then

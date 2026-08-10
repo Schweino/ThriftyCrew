@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { authenticateMutation, signMutationForTest, validateGithubOidcClaims } from "./auth";
+import { authenticateMutation, githubWorkflowRole, signMutationForTest, validateGithubOidcClaims } from "./auth";
 import type { WorkerEnv } from "./env";
 
 function nonceDatabase(): D1Database {
@@ -84,6 +84,12 @@ describe("mutation authentication", () => {
 });
 
 describe("GitHub OIDC trust policy", () => {
+  it("grants operator role only to the restore workflow", () => {
+    expect(githubWorkflowRole("Schweino/SimpleMoneyPlaybook/.github/workflows/platform-restore.yml@refs/heads/main")).toBe("operator");
+    expect(githubWorkflowRole("Schweino/SimpleMoneyPlaybook/.github/workflows/platform-v3.yml@refs/heads/main")).toBe("engine");
+    expect(githubWorkflowRole("Schweino/SimpleMoneyPlaybook/.github/workflows/platform-agents.yml@refs/heads/main")).toBe("engine");
+  });
+
   it("binds issuer, audience, repository, and workflow", () => {
     const now = Math.floor(Date.now() / 1000);
     expect(() => validateGithubOidcClaims({

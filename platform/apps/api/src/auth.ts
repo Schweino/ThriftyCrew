@@ -60,6 +60,10 @@ function audienceIncludes(claim: string | string[] | undefined, expected: string
   return typeof claim === "string" ? claim === expected : Array.isArray(claim) && claim.includes(expected);
 }
 
+export function githubWorkflowRole(workflowRef: string | undefined): MutationRole {
+  return workflowRef?.includes("/platform-restore.yml@") ? "operator" : "engine";
+}
+
 async function githubKeys(): Promise<JsonWebKeySet> {
   if (cachedGithubKeys && cachedGithubKeys.expiresAt > Date.now()) return cachedGithubKeys.value;
   const response = await fetch(GITHUB_JWKS, { headers: { accept: "application/json" } });
@@ -89,7 +93,6 @@ export function validateGithubOidcClaims(claims: GithubOidcClaims, env: WorkerEn
 }
 
 async function authenticateGithubOidc(request: Request, env: WorkerEnv, allowedRoles: readonly MutationRole[]): Promise<MutationIdentity> {
-  if (!allowedRoles.includes("engine")) throw new Error("GitHub Actions is not authorized for this operation");
   const authorization = request.headers.get("authorization") ?? "";
   const token = authorization.startsWith("Bearer ") ? authorization.slice(7) : "";
   const segments = token.split(".");
@@ -98,6 +101,8 @@ async function authenticateGithubOidc(request: Request, env: WorkerEnv, allowedR
   const claims = decodeJwtJson<GithubOidcClaims>(segments[1]!);
   if (header.alg !== "RS256" || !header.kid || (header.typ && header.typ !== "JWT")) throw new Error("unsupported GitHub OIDC token header");
   validateGithubOidcClaims(claims, env);
+  const role = githubWorkflowRole(claims.workflow_ref);
+  if (!allowedRoles.includes(role)) throw new Error("GitHub Actions is not authorized for this operation");
   const keys = await githubKeys();
   const jwk = keys.keys.find((candidate) => candidate.kid === header.kid && candidate.kty === "RSA");
   if (!jwk) throw new Error("GitHub OIDC signing key is unknown");
@@ -119,7 +124,7 @@ async function authenticateGithubOidc(request: Request, env: WorkerEnv, allowedR
   } catch {
     throw new Error("request nonce has already been used");
   }
-  return { agentId, secret: "", role: "engine", authMethod: "github_oidc", ...(claims.workflow_ref ? { workflowRef: claims.workflow_ref } : {}) };
+  return { agentId, secret: "", role, authMethod: "github_oidc", ...(claims.workflow_ref ? { workflowRef: claims.workflow_ref } : {}) };
 }
 
 export async function authenticateMutation(
