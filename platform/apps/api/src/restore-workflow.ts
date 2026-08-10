@@ -108,7 +108,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
       });
       normalizedMultipartUploadId = multipart.uploadId;
       const statementLimitBytes = 90_000;
-      const targetPartBytes = 4 * 1024 * 1024;
+      const targetPartBytes = 8 * 1024 * 1024;
       const boundarySearchBytes = 512 * 1024;
       const expectedCounts = emptyRestoreCounts();
       const releaseHashes: Record<string, string> = {};
@@ -179,14 +179,9 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
             outputParts.push(`${allDeferredUpdates.join("\n")}\n`);
           }
           const output = outputParts.join("");
-          const encodedOutput = new TextEncoder().encode(output);
-          let outputBytes = encodedOutput;
+          const outputBytes = new TextEncoder().encode(output);
           const minimumMultipartBytes = 5 * 1024 * 1024;
-          if (!isLastPart && encodedOutput.byteLength < minimumMultipartBytes) {
-            outputBytes = new Uint8Array(minimumMultipartBytes);
-            outputBytes.set(encodedOutput);
-            outputBytes.fill(32, encodedOutput.byteLength);
-          }
+          if (!isLastPart && outputBytes.byteLength < minimumMultipartBytes) throw new Error(`normalized multipart part ${partNumber} is below R2's minimum part size`);
           const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey!, multipart.uploadId);
           const uploaded = await upload.uploadPart(partNumber, outputBytes);
           return { sourceEnd, byteLength: outputBytes.byteLength, uploaded, counts: partCounts, releaseHashes: partReleaseHashes, currentReleaseId: partCurrentReleaseId, recoveryRows: partRecoveryRows, deferredUpdates: partDeferredUpdates };
