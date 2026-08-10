@@ -179,9 +179,21 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
             outputParts.push(`${allDeferredUpdates.join("\n")}\n`);
           }
           const output = outputParts.join("");
-          const outputBytes = new TextEncoder().encode(output);
-          const minimumMultipartBytes = 5 * 1024 * 1024;
-          if (!isLastPart && outputBytes.byteLength < minimumMultipartBytes) throw new Error(`normalized multipart part ${partNumber} is below R2's minimum part size`);
+          const encoder = new TextEncoder();
+          const encodedOutput = encoder.encode(output);
+          let outputBytes = encodedOutput;
+          if (!isLastPart) {
+            const multipartPartBytes = 9 * 1024 * 1024;
+            const separator = output.endsWith("\n") ? "" : "\n";
+            const separatorBytes = separator.length;
+            const availablePadding = multipartPartBytes - encodedOutput.byteLength - separatorBytes;
+            if (availablePadding < 0) throw new Error(`normalized multipart part ${partNumber} exceeds the fixed R2 part size`);
+            const paddingBlock = `/*${"p".repeat(8_192)}*/\n`;
+            const wholeBlocks = Math.floor(availablePadding / paddingBlock.length);
+            const remainder = availablePadding % paddingBlock.length;
+            outputBytes = encoder.encode(`${output}${separator}${paddingBlock.repeat(wholeBlocks)}${" ".repeat(remainder)}`);
+            if (outputBytes.byteLength !== multipartPartBytes) throw new Error(`normalized multipart part ${partNumber} padding has the wrong length`);
+          }
           const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey!, multipart.uploadId);
           const uploaded = await upload.uploadPart(partNumber, outputBytes);
           return { sourceEnd, byteLength: outputBytes.byteLength, uploaded, counts: partCounts, releaseHashes: partReleaseHashes, currentReleaseId: partCurrentReleaseId, recoveryRows: partRecoveryRows, deferredUpdates: partDeferredUpdates };
