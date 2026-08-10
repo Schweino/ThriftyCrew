@@ -2,6 +2,7 @@ import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloud
 import { stableJson } from "@thriftycrew/domain";
 import { raiseOperationalAlert, resolveOperationalAlert } from "./operations";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
+import { RESTORE_MULTIPART_PART_BYTES, RESTORE_SOURCE_PART_BYTES } from "./restore-policy";
 import type { WorkerEnv } from "./env";
 import {
   RESTORE_COUNT_TABLES,
@@ -110,7 +111,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
       });
       normalizedMultipartUploadId = multipart.uploadId;
       const statementLimitBytes = 90_000;
-      const targetPartBytes = 8 * 1024 * 1024;
+      const targetPartBytes = RESTORE_SOURCE_PART_BYTES;
       const boundarySearchBytes = 512 * 1024;
       const expectedCounts = emptyRestoreCounts();
       const releaseHashes: Record<string, string> = {};
@@ -189,7 +190,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           const encodedOutput = encoder.encode(output);
           let outputBytes = encodedOutput;
           if (!isLastPart) {
-            const multipartPartBytes = 9 * 1024 * 1024;
+            const multipartPartBytes = RESTORE_MULTIPART_PART_BYTES;
             const separator = output.endsWith("\n") ? "" : "\n";
             const separatorBytes = separator.length;
             const availablePadding = multipartPartBytes - encodedOutput.byteLength - separatorBytes;
