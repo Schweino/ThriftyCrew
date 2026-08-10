@@ -48,6 +48,29 @@ $LogFile  = Join-Path $OutDir 'build-log.txt'
 
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
+# ---------------------------------------------------------------- one run at a time
+# Two concurrent runs share this OutDir, and therefore share build-reel's .work directory, where they
+# overwrite each other's frames mid-render. The symptom is not a clash, it is "Chrome produced no
+# frame for scene 'title'" on a recipe that is perfectly fine, which sends you looking in the wrong
+# place. Learned by doing it: a relaunch while the first run was still alive corrupted both.
+$LockFile = Join-Path $OutDir '.run.lock'
+if (Test-Path $LockFile) {
+  $held = 0
+  if ([int]::TryParse((Get-Content $LockFile -Raw -ErrorAction SilentlyContinue), [ref]$held)) {
+    if (Get-Process -Id $held -ErrorAction SilentlyContinue) {
+      throw ("Another run is already building into $OutDir (pid $held). Two runs share one work " +
+             "directory and corrupt each other's frames. Wait for it, or stop it first.")
+    }
+  }
+  Write-Warning "Clearing a stale lock from pid $held (no such process)."
+  Remove-Item $LockFile -Force
+}
+Set-Content -Path $LockFile -Value $PID -Encoding ASCII
+# Released however the run ends, including Ctrl-C, so a crash does not need a manual cleanup.
+$null = Register-EngineEvent PowerShell.Exiting -Action {
+  Remove-Item $using:LockFile -Force -ErrorAction SilentlyContinue
+} -ErrorAction SilentlyContinue
+
 function Write-Log {
   param([string]$Message)
   $line = "[{0}] {1}" -f (Get-Date -Format 'HH:mm:ss'), $Message
@@ -157,6 +180,8 @@ for ($i = 0; $i -lt $todo.Count; $i++) {
        results = $results
      } | ConvertTo-Json -Depth 5), (New-Object System.Text.UTF8Encoding $false))
 }
+
+Remove-Item $LockFile -Force -ErrorAction SilentlyContinue
 
 Write-Log ("done: {0} built, {1} failed, {2} elapsed" -f $ok, $failed, ((Get-Date) - $started).ToString('hh\:mm\:ss'))
 Write-Log ("folder  : $OutDir")
