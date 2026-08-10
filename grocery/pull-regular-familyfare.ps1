@@ -223,8 +223,10 @@ if ($SelfTest) {
 
   # ---- ATOMIC WRITE. The only fixture here that touches a disk, and it stays inside a fresh TEMP directory.
   # MUST-FIRE m4 reproduces the real incident: the target is held open with FileShare.None, exactly as a
-  # concurrent reader held out\regular\family-fare-regular-2026-08-02.json at 07:06:41. The write must come
-  # back FALSE, must leave the prior file BYTE-IDENTICAL, and must not litter a .tmp orphan behind it.
+  # concurrent reader held out\regular\family-fare-regular-2026-08-02.json at 07:06:41. Windows denies the
+  # replacement, which must return FALSE and preserve the path byte-for-byte. POSIX intentionally permits
+  # an atomic rename over an open inode; there the open reader must keep seeing the old complete catalog
+  # while the path changes to the new complete catalog. Both platforms must leave no .tmp orphan.
   # The backoff argument is passed as 0 so a daily fixture run does not spend 8 seconds asleep; every OTHER
   # property (all 5 attempts, the non-throwing return, the byte-identity, the tmp cleanup) runs exactly as it
   # does live, and test-auditors pins the PRODUCTION defaults (5 attempts / 2s) as a source check so they
@@ -237,11 +239,24 @@ if ($SelfTest) {
     $before = [IO.File]::ReadAllBytes($tf)
     $lock = [IO.File]::Open($tf, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::None)
     $r4 = $true
-    try { $r4 = Write-FfJsonAtomic $tf '{"clobbered":true}' 5 0 } finally { $lock.Close(); $lock.Dispose() }
+    $lockedReaderText = $null
+    try {
+      $r4 = Write-FfJsonAtomic $tf '{"clobbered":true}' 5 0
+      if ($r4) {
+        $lock.Position = 0
+        $reader = [IO.StreamReader]::new($lock, [Text.Encoding]::UTF8, $true, 1024, $true)
+        try { $lockedReaderText = $reader.ReadToEnd() } finally { $reader.Dispose() }
+      }
+    } finally { $lock.Close(); $lock.Dispose() }
     $after = [IO.File]::ReadAllBytes($tf)
     $same = ($after.Length -eq $before.Length)
     if ($same) { for ($bi = 0; $bi -lt $before.Length; $bi++) { if ($after[$bi] -ne $before[$bi]) { $same = $false; break } } }
-    _T 'MUST-FIRE m4: a locked target returns FALSE, leaves the prior catalog byte-identical, and leaves no .tmp orphan' ((-not $r4) -and $same -and (-not (Test-Path ($tf + '.tmp'))))
+    if ($env:OS -eq 'Windows_NT') {
+      _T 'MUST-FIRE m4/windows: a locked target returns FALSE, leaves the prior catalog byte-identical, and leaves no .tmp orphan' ((-not $r4) -and $same -and (-not (Test-Path ($tf + '.tmp'))))
+    } else {
+      $afterText = [Text.Encoding]::UTF8.GetString($after)
+      _T 'MUST-FIRE m4/posix: atomic rename gives the open reader the old complete catalog and the path the new complete catalog, with no .tmp orphan' ($r4 -and ($lockedReaderText -match 'deal_count') -and ($afterText -match 'clobbered') -and (-not (Test-Path ($tf + '.tmp'))))
+    }
     # CLEAN TWIN c2: the ordinary case still works, replaces the content, and cleans up after itself.
     $r2 = Write-FfJsonAtomic $tf '{"clobbered":true}' 5 0
     $txt = [IO.File]::ReadAllText($tf)
