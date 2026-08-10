@@ -3,6 +3,14 @@ import type { WorkerEnv } from "./env";
 
 type DerivedGate = "shadow-ingest-day" | "semantic-parity-day" | "direct-chrome-week" | "beta-release-day" | "beta-week" | "accuracy-week";
 
+export interface ExternalEdgeProof {
+  url: string;
+  httpStatus: number;
+  contentType: string;
+  releaseId: string | null;
+  observedAt: string;
+}
+
 const REQUIRED_BROWSER_SOURCES = [
   "direct-aldi-browser",
   "direct-fareway-browser",
@@ -42,6 +50,28 @@ export function consecutiveDateCount(keys: readonly string[]): number {
     expected = addCalendarDays(expected, -1);
   }
   return count;
+}
+
+export function validateExternalEdgeProof(
+  proof: ExternalEdgeProof,
+  expectedOrigin: string,
+  expectedReleaseId: string,
+  now: Date,
+): { ok: boolean; reason: string } {
+  let url: URL;
+  try {
+    url = new URL(proof.url);
+  } catch {
+    return { ok: false, reason: "edge proof URL is invalid" };
+  }
+  const expected = new URL(expectedOrigin);
+  const ageMillis = now.getTime() - Date.parse(proof.observedAt);
+  if (url.protocol !== "https:" || url.origin !== expected.origin || url.pathname !== "/api/v2/releases/current") return { ok: false, reason: "edge proof did not target the configured public release route" };
+  if (!Number.isFinite(ageMillis) || ageMillis < -60_000 || ageMillis > 10 * 60_000) return { ok: false, reason: "edge proof is outside the ten-minute freshness window" };
+  if (proof.httpStatus !== 200) return { ok: false, reason: `edge route returned HTTP ${proof.httpStatus}` };
+  if (!proof.contentType.toLowerCase().includes("application/json")) return { ok: false, reason: "edge route did not return JSON" };
+  if (proof.releaseId !== expectedReleaseId) return { ok: false, reason: "edge route returned a different release pointer" };
+  return { ok: true, reason: "fresh external edge proof matched the current release" };
 }
 
 function chicagoSqlModifier(instant: Date): string {
@@ -87,7 +117,7 @@ interface ReleaseInputSummary {
   unmatched_batches: number;
 }
 
-export async function accrueMilestoneEvidence(env: WorkerEnv, now = new Date()): Promise<Record<string, unknown>> {
+export async function accrueMilestoneEvidence(env: WorkerEnv, now = new Date(), externalEdgeProof?: ExternalEdgeProof): Promise<Record<string, unknown>> {
   const observedAt = now.toISOString();
   const dayKey = centralDateKey(now);
   const weekKey = weekStartKey(dayKey);
@@ -158,18 +188,12 @@ export async function accrueMilestoneEvidence(env: WorkerEnv, now = new Date()):
     parityRun: parity ?? null,
   }));
 
-  let edge: Record<string, unknown> = { ok: false, error: "Ghost public origin is not configured" };
-  if (env.GHOST_PUBLIC_ORIGIN) {
-    try {
-      const url = new URL("/api/v2/releases/current", env.GHOST_PUBLIC_ORIGIN);
-      url.searchParams.set("milestone_probe", observedAt);
-      const response = await fetch(url, { headers: { accept: "application/json", "cache-control": "no-cache" } });
-      const body = await response.json() as { releaseId?: string; ok?: boolean };
-      edge = { httpStatus: response.status, releaseId: body.releaseId ?? null, ok: response.ok && body.releaseId === release.id };
-    } catch (error) {
-      edge = { ok: false, error: error instanceof Error ? error.message : "edge verification failed" };
-    }
-  }
+  const edgeValidation = !env.GHOST_PUBLIC_ORIGIN
+    ? { ok: false, reason: "Ghost public origin is not configured" }
+    : !externalEdgeProof
+      ? { ok: false, reason: "external edge proof is required" }
+      : validateExternalEdgeProof(externalEdgeProof, env.GHOST_PUBLIC_ORIGIN, release.id, now);
+  const edge: Record<string, unknown> = { ...(externalEdgeProof ?? {}), ...edgeValidation };
   const betaPass = shadowPass && edge.ok === true;
   events.push(await recordDerivedGate(env, "beta-release-day", dayKey, "production-daily", betaPass, observedAt, {
     releaseId: release.id,

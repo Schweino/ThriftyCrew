@@ -315,7 +315,24 @@ if (command === "status") {
   const gate = arguments_[0];
   result = await (await mutationClient()).request(`/internal/evidence-gates${gate ? `?gate=${encodeURIComponent(gate)}` : ""}`);
 } else if (command === "evidence" && subcommand === "accrue") {
-  result = await (await mutationClient()).request("/internal/evidence-gates/accrue", { method: "POST", acceptStatuses: [422] });
+  const observedAt = new Date().toISOString();
+  const edgeUrl = new URL("/api/v2/releases/current", process.env.TC_EDGE_ORIGIN ?? "https://www.thriftycrew.com");
+  edgeUrl.searchParams.set("milestone_probe", observedAt);
+  const edgeResponse = await fetch(edgeUrl, { headers: { accept: "application/json", "cache-control": "no-cache" } });
+  let edgeReleaseId: string | null = null;
+  try {
+    const edgeBody = await edgeResponse.json() as { releaseId?: unknown };
+    edgeReleaseId = typeof edgeBody.releaseId === "string" ? edgeBody.releaseId : null;
+  } catch {
+    // The API records a content-type/release mismatch without laundering a non-JSON edge response.
+  }
+  result = await (await mutationClient()).request("/internal/evidence-gates/accrue", { json: { edgeProof: {
+    url: edgeUrl.toString(),
+    httpStatus: edgeResponse.status,
+    contentType: edgeResponse.headers.get("content-type") ?? "",
+    releaseId: edgeReleaseId,
+    observedAt,
+  } }, acceptStatuses: [422] });
 } else if (command === "entitlement" && subcommand === "record") {
   const file = arguments_[0];
   if (!file) throw new Error("tc entitlement record requires a JSON evidence file");

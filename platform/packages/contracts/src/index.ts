@@ -403,6 +403,16 @@ export const accuracyVerdictsSchema = z.object({
   })).min(1).max(500),
 });
 
+export const milestoneAccrualSchema = z.object({
+  edgeProof: z.object({
+    url: z.string().url().max(2000),
+    httpStatus: z.number().int().min(100).max(599),
+    contentType: z.string().max(500),
+    releaseId: nonEmptyId.nullable(),
+    observedAt: isoDateTime,
+  }),
+});
+
 export const triageResolveSchema = z.object({
   status: z.enum(["planned", "resolved", "needs_operator"]),
   planRef: z.string().min(1).max(1000).optional(),

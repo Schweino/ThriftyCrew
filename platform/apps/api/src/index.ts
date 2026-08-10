@@ -19,6 +19,7 @@ import {
   matchDecisionReconcileSchema,
   matchDecisionsChunkSchema,
   matchRunSchema,
+  milestoneAccrualSchema,
   observationChunkSchema,
   operationalAlertSchema,
   recipeCostsChunkSchema,
@@ -762,9 +763,9 @@ app.post("/internal/evidence-gates", zValidator("json", evidenceGateRecordSchema
   return context.json({ ok: body.status === "pass", eventId: body.id, status: body.status, idempotent: false }, body.status === "pass" ? 201 : 422);
 });
 
-app.post("/internal/evidence-gates/accrue", async (context) => {
+app.post("/internal/evidence-gates/accrue", zValidator("json", milestoneAccrualSchema), async (context) => {
   try {
-    const result = await accrueMilestoneEvidence(context.env);
+    const result = await accrueMilestoneEvidence(context.env, new Date(), context.req.valid("json").edgeProof);
     await recordAudit(context.env, context.get("identity"), "evidence_gate.accrue", "evidence_gate_event", null, "accepted", result);
     return context.json(result);
   } catch (error) {

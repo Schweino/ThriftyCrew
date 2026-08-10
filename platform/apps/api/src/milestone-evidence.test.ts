@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addCalendarDays, centralDateKey, consecutiveDateCount, weekStartKey } from "./milestone-evidence";
+import { addCalendarDays, centralDateKey, consecutiveDateCount, validateExternalEdgeProof, weekStartKey } from "./milestone-evidence";
 
 describe("milestone evidence calendar", () => {
   it("uses Omaha calendar dates instead of UTC dates", () => {
@@ -17,5 +17,19 @@ describe("milestone evidence calendar", () => {
     expect(consecutiveDateCount(["2026-08-06", "2026-08-08", "2026-08-09", "2026-08-08"])).toBe(2);
     expect(consecutiveDateCount(["2026-08-07", "2026-08-08", "2026-08-09"])).toBe(3);
     expect(consecutiveDateCount([])).toBe(0);
+  });
+
+  it("accepts only a fresh exact public release proof", () => {
+    const now = new Date("2026-08-10T00:00:00.000Z");
+    const proof = {
+      url: "https://www.thriftycrew.com/api/v2/releases/current?milestone_probe=test",
+      httpStatus: 200,
+      contentType: "application/json; charset=UTF-8",
+      releaseId: "rel_current",
+      observedAt: "2026-08-09T23:59:00.000Z",
+    };
+    expect(validateExternalEdgeProof(proof, "https://www.thriftycrew.com", "rel_current", now).ok).toBe(true);
+    expect(validateExternalEdgeProof({ ...proof, url: "https://attacker.example/api/v2/releases/current" }, "https://www.thriftycrew.com", "rel_current", now).ok).toBe(false);
+    expect(validateExternalEdgeProof({ ...proof, observedAt: "2026-08-09T22:00:00.000Z" }, "https://www.thriftycrew.com", "rel_current", now).ok).toBe(false);
   });
 });
