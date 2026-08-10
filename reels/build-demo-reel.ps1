@@ -60,7 +60,11 @@ param(
   [switch] $NoVoice,
   [switch] $SkipCapture,
   [switch] $KeepFrames,
-  [switch] $VoiceSamples
+  [switch] $VoiceSamples,
+  # A one-off, pin-worthy tour of the whole customer journey. It uses the same capture, narrator,
+  # timing, mastering and layout as the product demo, but leads with the annual takeout leak,
+  # starts on the meal-prep library, finishes the cooking flow, and lightly hands off to groceries.
+  [switch] $PinnedOverview
 )
 
 $ErrorActionPreference = 'Stop'
@@ -69,7 +73,7 @@ Set-StrictMode -Version 2.0
 $ReelRoot = $PSScriptRoot
 $Income   = Split-Path $ReelRoot -Parent
 if (-not $OutDir) { $OutDir = Join-Path $ReelRoot 'out' }
-$WorkDir  = Join-Path $OutDir '.demo-work'
+$WorkDir  = Join-Path $OutDir $(if ($PinnedOverview) { '.pinned-work' } else { '.demo-work' })
 $ShotDir  = Join-Path $WorkDir 'shots'
 
 . (Join-Path $Income 'lib\design-tokens.ps1')
@@ -191,6 +195,7 @@ if ($SkipCapture) {
   $capArgs = @((Join-Path $ReelRoot 'capture-demo.py'), '--out', $ShotDir,
                '--small-servings', "$SmallServings")
   if ($Slug) { $capArgs += @('--slug', $Slug) }
+  if ($PinnedOverview) { $capArgs += '--overview' }
   Invoke-Tool -Exe $Python -Tag 'capture' -ArgList $capArgs
   if (-not (Test-Path $manifestPath)) { throw 'capture-demo.py produced no manifest' }
 }
@@ -330,6 +335,59 @@ $smallWords    = ConvertTo-Words $small
 # that opens on a spelled-out figure lands flat. Lists get an "and" before the last item: without it
 # a neural voice reads the run as a data dump, with it the intonation resolves like a person's.
 
+if ($PinnedOverview) {
+  $lunchCost  = 12
+  $annualLeak = $lunchCost * 5 * 52
+  $annualText = '$' + $annualLeak.ToString('N0')
+  $annualVo   = Get-MoneySpeech $annualLeak
+
+  Add-Card -Id 'hook' -Shell 'dark' -Eyebrow 'The quiet money leak' `
+    -Big "$annualText<br><em>every year</em>" `
+    -Sub 'One $12 weekday lunch at a time.' `
+    -Vo ("A twelve dollar lunch doesn't feel huge. Do it five days a week, and it becomes more than " +
+         "$annualVo a year. Thrifty Crew helps break that cycle.")
+
+  Add-Screen -Id 'hub' -ShotId 'hub' -Eyebrow 'Start here' `
+    -Caption 'Search. Filter. Sort by price.' `
+    -Vo 'Open Meal Prep, search hundreds of dinners, filter by protein, calories, cuisine, or price, and pick one your family will eat.'
+
+  $introCap = "$perServ a serving &middot; $servings servings" + $(if ($protein) { " &middot; ${protein}g protein" })
+  Add-Screen -Id 'intro' -ShotId 'intro' -Eyebrow 'Your meal plan' -Caption $introCap `
+    -Vo 'Every recipe starts with servings, calories, protein, and a real price per plate.'
+
+  Add-Screen -Id 'size' -ShotId 'size' -Eyebrow 'Fit your table' `
+    -Caption "Tap it to $small. Every amount updates." `
+    -Vo "Cooking for ${smallWords}? Tap the serving control. Every ingredient, amount, and cost rewrites to fit your table."
+
+  Add-Screen -Id 'tabs' -ShotId 'tabs' -Eyebrow 'Price before you shop' `
+    -Caption 'Everyday. Cheapest. Your own plan.' `
+    -Vo "Then price the shopping list three ways: everyday prices, this week's cheapest store prices, or your own customized plan."
+
+  Add-Screen -Id 'totals' -ShotId 'totals' -Eyebrow 'The savings are visible' `
+    -Caption "$everydayTot everyday &rarr; <em>$cheapestTot</em> shopping smart" `
+    -Vo "On this batch, that's $speakEveryday everyday, or $speakCheapest shopping smart. Same meal, $speakGap saved before you cook."
+
+  Add-Screen -Id 'untick' -ShotId 'untick' -Eyebrow 'Only buy what you need' `
+    -Caption "$total &rarr; <em>$untickTot</em> after pantry staples" `
+    -Vo 'Already have staples? Untick them. The total becomes what you still need to buy, not an inflated recipe estimate.'
+
+  Add-Screen -Id 'cook' -ShotId 'cook' -Eyebrow 'Cook once' `
+    -Caption 'Clear steps. No guessing.' `
+    -Vo 'Follow the simple cooking steps, then portion the batch while the kitchen is already working.'
+
+  Add-Screen -Id 'portion' -ShotId 'portion' -Eyebrow 'Eat several times' `
+    -Caption 'Portion. Store. Reheat.' `
+    -Vo 'Your next several meals are ready before hunger can send you back to takeout.'
+
+  Add-Screen -Id 'grocery' -ShotId 'grocery' -Eyebrow 'And for the rest of the cart' `
+    -Caption 'Search items. Compare current prices.' `
+    -Vo 'The grocery page goes wider, letting you search common items and compare current store prices before the rest of your shop.'
+
+  Add-Card -Id 'cta' -Shell 'dark' -Eyebrow 'Keep more of your paycheck' `
+    -Big 'Follow.<br><em>Prep. Save.</em>' `
+    -Sub '$1/month unlocks the full meal-prep library.' `
+    -Vo 'Follow Thrifty Crew for daily budget dinners. Then subscribe for one dollar a month to unlock the full meal prep library, and start keeping more of every paycheck.'
+} else {
 Add-Card -Id 'hook' -Shell 'dark' `
   -Big 'Every recipe<br>prices <em>itself</em>.' `
   -Sub 'Not a photo. A working page.' `
@@ -386,6 +444,7 @@ Add-Card -Id 'cta' -Shell 'dark' -Big 'thriftycrew.com' `
   -Sub $(if ($isFree) { '<span class="free">Free this week</span>' }
          else         { 'Every recipe on the site works like this' }) `
   -Vo $ctaVo
+}
 
 # ---------------------------------------------------------------- voice samples
 
@@ -573,7 +632,8 @@ $lines = foreach ($c in $clipList) { "file '" + $c.Replace('\', '/') + "'" }
 [System.IO.File]::WriteAllLines($concatList, $lines, (New-Object System.Text.UTF8Encoding $false))
 
 $stamp = Get-Date -Format 'yyyy-MM-dd'
-$final = Join-Path $OutDir "$stamp-how-it-works-$($facts.slug).mp4"
+$stem = if ($PinnedOverview) { "$stamp-pinned-page-overview" } else { "$stamp-how-it-works-$($facts.slug)" }
+$final = Join-Path $OutDir "$stem.mp4"
 $joined = Join-Path $WorkDir 'joined.mp4'
 Invoke-Tool -Exe $FFmpeg -Tag 'concat' -ArgList @(
   '-y', '-hide_banner', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', $concatList,
@@ -691,7 +751,17 @@ if ($totalDur -gt 90) {
 
 # ---------------------------------------------------------------- caption
 
-$captionText = @"
+$captionText = if ($PinnedOverview) { @"
+A `$12 weekday lunch can quietly become `$3,120 a year.
+
+Thrifty Crew helps you interrupt that cycle before you shop. Browse hundreds of meal-prep dinners, scale any recipe to your table, compare real store prices, untick what is already in your kitchen, and see what the batch will actually cost. Then follow the cooking and portioning steps so the next several meals are ready when you need them.
+
+The grocery page also lets you search common items and compare current prices for the rest of your cart.
+
+Follow for daily budget dinner ideas. Subscribe for `$1/month to unlock the full meal-prep library at thriftycrew.com.
+
+#mealprep #budgetmeals #savemoney #frugalliving #mealprepsunday #thriftycrew
+"@ } else { @"
 Every Thrifty Crew recipe is a working page, not a picture of one.
 
 Set your own serving count and the whole recipe rewrites: ingredients, grams, cost. Price the batch three ways, everyday or at this week's cheapest shelf prices. Then untick what is already in your cupboard and the total becomes what you actually still need to spend.
@@ -701,8 +771,8 @@ $name, $servings servings: $total at this week's cheapest prices, $untickTot onc
 $(if ($isFree) { "This one is free this week at thriftycrew.com" } else { "Full recipe at thriftycrew.com" })
 
 #mealprep #groceryhaul #budgetmeals #frugalliving #mealprepsunday #thriftycrew
-"@
-$captionFile = Join-Path $OutDir "$stamp-how-it-works-$($facts.slug).txt"
+"@ }
+$captionFile = Join-Path $OutDir "$stem.txt"
 # The post text is the one surface the per-scene check cannot see, and it is the one a
 # reader is most likely to read closely.
 Assert-CopyRules -Text @($captionText) -Context 'the Facebook caption'
@@ -718,7 +788,7 @@ $scriptLines.Add('')
 foreach ($s in $scenes) {
   $scriptLines.Add(("{0,-8} {1,5}s  {2}" -f $s.Id, $s.Dur, (Get-SpokenLine $s.Vo)))
 }
-$scriptFile = Join-Path $OutDir "$stamp-how-it-works-$($facts.slug)-script.txt"
+$scriptFile = Join-Path $OutDir "$stem-script.txt"
 [System.IO.File]::WriteAllLines($scriptFile, $scriptLines, (New-Object System.Text.UTF8Encoding $false))
 
 if (-not $KeepFrames) {

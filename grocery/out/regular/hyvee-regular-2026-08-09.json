@@ -6,10 +6,10 @@
     "source":  "Hy-Vee Aisles Online GraphQL storeProducts.price - the CURRENT shelf price at storeId 1465 (Omaha #01). NOT basePrice (the regular price) and NOT ssrPricing (a different store).",
     "size_policy":  "sizes are OUR verified ones, not Hy-Vee\u0027s - their size field mixes totals, single units of a multipack, and mislabelled units",
     "deal_count":  1552,
-    "refreshed_today":  883,
-    "marked_down":  154,
-    "newly_priced":  14,
-    "not_reverified":  669,
+    "refreshed_today":  884,
+    "marked_down":  153,
+    "newly_priced":  0,
+    "not_reverified":  668,
     "cap_skipped":  0,
     "failed":  0,
     "multiple_descriptive":  6,
@@ -3570,8 +3570,7 @@
                       "store_department":  "Frozen Meat \u0026 Seafood",
                       "store_department_group":  "Frozen",
                       "store_category":  "Frozen Seafood \u0026 Fish",
-                      "base_price":  7.99,
-                      "marked_down":  true
+                      "base_price":  5.99
                   },
                   {
                       "store":  "Hy-Vee",
@@ -6344,17 +6343,17 @@
                   {
                       "store":  "Hy-Vee",
                       "item":  "Gold Peak Black Sweet Tea Bottle, 59 fl oz",
-                      "ad_price":  "$3.22",
+                      "ad_price":  "$2.99",
                       "size":  "59 fl oz",
-                      "regular":  3.22,
-                      "current_price":  3.22,
+                      "regular":  2.99,
+                      "current_price":  2.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-08-09",
                       "product_id":  3299183,
                       "store_department":  "Tea \u0026 Hot Chocolate",
                       "store_department_group":  "Beverages",
                       "store_category":  "Teas \u0026 Lemonade",
-                      "base_price":  3.22
+                      "base_price":  2.99
                   },
                   {
                       "store":  "Hy-Vee",
@@ -11185,9 +11184,14 @@
                       "ad_price":  "$1.79",
                       "size":  "7 oz",
                       "regular":  1.79,
+                      "current_price":  1.79,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
-                      "as_of":  "2026-08-08",
-                      "not_reverified":  true
+                      "as_of":  "2026-08-09",
+                      "product_id":  1722234,
+                      "store_department":  "Packaged Meals \u0026 Sides",
+                      "store_department_group":  "Pantry",
+                      "store_category":  "Hispanic Foods",
+                      "base_price":  1.79
                   },
                   {
                       "store":  "Hy-Vee",

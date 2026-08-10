@@ -132,3 +132,14 @@
 [2026-08-09T08:30:05] pull: Already up to date.
 [2026-08-09T08:30:05] running check-ad-cycles
 [2026-08-09T09:08:44] check-ad-cycles exit 0
+[2026-08-09T09:08:45] rebase[1]: Created autostash: dc1e44da
+[2026-08-09T09:08:45] rebase[1]: Current branch main is up to date.
+[2026-08-09T09:08:45] rebase[1]: Applying autostash resulted in conflicts.
+[2026-08-09T09:08:45] rebase[1]: Your changes are safe in the stash.
+[2026-08-09T09:08:45] rebase[1]: You can run "git stash pop" or "git stash drop" at any time.
+[2026-08-09T09:08:49] push[1]: To https://github.com/Schweino/SimpleMoneyPlaybook.git
+[2026-08-09T09:08:49] push[1]:    08a864bc..5d86df89  HEAD -> main
+[2026-08-09T09:08:49] pushed on attempt 1
+[2026-08-09T09:09:20] EDGE STALE: The edge is serving a feed generated 2026-08-09T07:08:46 but the repo pushed 2026-08-09T09:02:10. The push succeeded, so this is a Cloudflare deploy that has not landed. Live recipe prices are stale until it does. Check the CF dashboard build log for the smp-feed worker.
+[2026-08-09T09:09:21] feed fresh: week 2026-08-09, 542 recipes, 572 ingredients (inputs verified same-day)
+[2026-08-09T09:09:21] done

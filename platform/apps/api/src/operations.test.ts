@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { githubWorkflowRuns, jobStatusRequiresAlert } from "./operations";
+import { githubWorkflowRuns, jobStatusRequiresAlert, scheduleGap } from "./operations";
 import type { WorkerEnv } from "./env";
 
 const configuredEnv = {
@@ -14,6 +14,27 @@ describe("job terminal alerts", () => {
   it("alerts on failed, timed-out, and missed runs but not expected terminal states", () => {
     expect(["failed", "timed_out", "missed"].every(jobStatusRequiresAlert)).toBe(true);
     expect(["completed", "cancelled", "started", "scheduled"].some(jobStatusRequiresAlert)).toBe(false);
+  });
+});
+
+describe("schedule gap lifecycle", () => {
+  const checkedAt = Date.parse("2026-08-10T12:00:00.000Z");
+
+  it("uses the monitoring start as a grace window before the first run", () => {
+    expect(scheduleGap(null, "2026-08-10T11:00:00.000Z", checkedAt, 120)).toEqual({
+      stale: false,
+      ageMinutes: 60,
+      basis: "monitoring-grace",
+    });
+  });
+
+  it("uses durable run evidence once it exists and fails closed without either timestamp", () => {
+    expect(scheduleGap("2026-08-10T08:00:00.000Z", "2026-08-10T11:00:00.000Z", checkedAt, 120)).toEqual({
+      stale: true,
+      ageMinutes: 240,
+      basis: "run",
+    });
+    expect(scheduleGap(null, null, checkedAt, 120)).toEqual({ stale: true, ageMinutes: null, basis: "unknown" });
   });
 });
 

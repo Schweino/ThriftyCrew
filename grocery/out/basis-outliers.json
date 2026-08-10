@@ -1,6 +1,17 @@
 ﻿{
     "kind_mismatch_crown":  [
-
+                                {
+                                    "id":  "furniture-polish",
+                                    "commodity":  "Furniture Polish / Dusting Spray",
+                                    "unit":  "oz",
+                                    "store":  "Baker\u0027s",
+                                    "per_unit":  0.1559,
+                                    "size":  "32 fl oz",
+                                    "item":  "Murphy Oil Soap Wood Cleaner Original",
+                                    "kind":  "volume",
+                                    "row_kind":  "weight",
+                                    "holds_crown":  true
+                                }
                             ],
     "findings":  [
                      {
@@ -96,7 +107,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-09T09:04:32",
+    "generated":  "2026-08-10T06:19:47",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -535,6 +546,18 @@
                               "id":  "furniture-polish",
                               "commodity":  "Furniture Polish / Dusting Spray",
                               "unit":  "oz",
+                              "store":  "Baker\u0027s",
+                              "per_unit":  0.1559,
+                              "size":  "32 fl oz",
+                              "item":  "Murphy Oil Soap Wood Cleaner Original",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  true
+                          },
+                          {
+                              "id":  "furniture-polish",
+                              "commodity":  "Furniture Polish / Dusting Spray",
+                              "unit":  "oz",
                               "store":  "Walmart",
                               "per_unit":  0.3738,
                               "size":  "16 fl oz",
@@ -772,6 +795,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "lemonade",
+                              "commodity":  "Lemonade",
+                              "unit":  "floz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.0422,
+                              "size":  "59 oz",
+                              "item":  "Minute Maid Lemonade 59 Oz",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "egg-whites",
                               "commodity":  "Liquid Egg Whites",
                               "unit":  "floz",
@@ -781,18 +816,6 @@
                               "item":  "Hy-Vee 100% Egg Whites",
                               "kind":  "volume",
                               "row_kind":  "weight",
-                              "holds_crown":  false
-                          },
-                          {
-                              "id":  "bottled-marinade",
-                              "commodity":  "Meat Marinade (bottled)",
-                              "unit":  "floz",
-                              "store":  "Baker\u0027s",
-                              "per_unit":  0.2574,
-                              "size":  "15.5 oz",
-                              "item":  "Kinder\u0027s All Purpose Marinade 15.5 oz",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
                               "holds_crown":  false
                           },
                           {
@@ -970,7 +993,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0993,
                               "size":  "15 oz",
-                              "item":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
+                              "item":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1007,6 +1030,18 @@
                               "per_unit":  0.199,
                               "size":  "10 oz",
                               "item":  "Fareway Soy Sauce",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "sparkling-water",
+                              "commodity":  "Sparkling Water",
+                              "unit":  "floz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.0818,
+                              "size":  "17 oz",
+                              "item":  "Sparkling Ice Sparkling Water, Zero Sugar, Peach Nectarine 17 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false

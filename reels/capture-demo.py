@@ -132,6 +132,20 @@ window.__tcStill = function(){
   document.head.appendChild(s);
   return true;
 };
+window.__tcScrubLocation = function(){
+  /* Pinned social copy is deliberately geography-neutral. The live pages keep their local proof,
+     but the pinned capture must not let a source note or tiny price stamp narrow the audience after
+     the narration and cards worked so hard not to. Touch visible text nodes only; scripts and data
+     remain byte-for-byte what the live page shipped. */
+  var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
+    var p=n.parentElement, tag=p&&p.tagName;
+    if(!p||tag==='SCRIPT'||tag==='STYLE'||tag==='NOSCRIPT') return NodeFilter.FILTER_REJECT;
+    return /omaha/i.test(n.nodeValue||'')?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;
+  }});
+  var hit=[],n;while((n=w.nextNode()))hit.push(n);
+  hit.forEach(function(t){t.nodeValue=t.nodeValue.replace(/omaha/ig,'local');});
+  return hit.length;
+};
 """
 
 
@@ -156,12 +170,15 @@ def load_free_slug(slug_arg):
 
 
 class Capture:
-    def __init__(self, chrome, outdir):
+    def __init__(self, chrome, outdir, scrub_location=False):
         self.c = chrome
         self.outdir = outdir
         self.n = 0
+        self.scrub_location = scrub_location
 
     def frame(self, scene, tag=""):
+        if self.scrub_location:
+            self.c.js("window.__tcScrubLocation()")
         self.n += 1
         name = "%s-%02d%s.png" % (scene, self.n, ("-" + tag) if tag else "")
         path = os.path.join(self.outdir, name)
@@ -197,6 +214,8 @@ def main():
     ap.add_argument("--slug")
     ap.add_argument("--out", required=True)
     ap.add_argument("--small-servings", type=int, default=6)
+    ap.add_argument("--overview", action="store_true",
+                    help="also capture the meal-prep hub, cooking finish, and grocery search for the pinned overview reel")
     ap.add_argument("--head", action="store_true", help="run headed, for watching it work")
     args = ap.parse_args()
 
@@ -220,7 +239,7 @@ def main():
                    label="a total with a price in it")
         time.sleep(1.2)
 
-        cap = Capture(c, args.out)
+        cap = Capture(c, args.out, scrub_location=args.overview)
 
         facts["name"] = c.js("document.querySelector('h1').innerText.trim()")
         facts["stat_line"] = c.js("window.__tcTxt('.smp-stat')")
@@ -248,6 +267,8 @@ def main():
         c.wait_for("[].every.call(document.images,function(i){return !i.loading||i.loading!=='lazy'"
                    "||i.complete;})", timeout=15, label="lazy images")
         time.sleep(0.8)
+        if args.overview:
+            c.js("window.__tcScrubLocation()")
 
         top_y = c.js("(function(){var e=document.querySelector('h1');"
                      "return Math.round(e.getBoundingClientRect().top+window.scrollY-24);})()")
@@ -258,6 +279,25 @@ def main():
         c.js("window.__tcHideFixed(false)")
         scenes.append({"id": "intro", "kind": "pan", "png": intro_png,
                        "src_h_css": pan_h, "win_h_css": CSS_H})
+
+        if args.overview:
+            # The ordinary demo stops at the shopping math. The pinned overview needs to finish the
+            # customer's journey: cook it, portion it, and understand that the page is a complete
+            # plan rather than a price widget attached to a recipe.
+            for scene_id, heading in (("cook", "Make It"), ("portion", "Portion It")):
+                marker = "data-tc-demo-section"
+                found = c.js(
+                    "(function(){var want=%s;var hs=[].slice.call(document.querySelectorAll('h2'));"
+                    "var h=hs.find(function(x){return x.textContent.trim()===want;});"
+                    "if(!h)return false;h.setAttribute(%s,%s);return true;})()"
+                    % (json.dumps(heading), json.dumps(marker), json.dumps(scene_id)))
+                if not found:
+                    raise RuntimeError("recipe section not found: " + heading)
+                sel = '[%s="%s"]' % (marker, scene_id)
+                cap.scroll_to(sel, offset=-20, settle=0.6)
+                scenes.append({"id": scene_id, "kind": "frames", "frames": [
+                    {"png": cap.frame(scene_id, "section"), "hold": 3.0}
+                ]})
 
         # ---------------------------------------------------------------- 2. make it your size
         # Framed on the ingredient list, not the stepper box: the point is that the LIST rewrites.
@@ -418,6 +458,45 @@ def main():
         scenes.append({"id": "tabs", "kind": "frames", "frames": tab_frames})
         scenes.append({"id": "totals", "kind": "frames", "frames": totals_frames})
         scenes.append({"id": "untick", "kind": "frames", "frames": untick_frames})
+
+        if args.overview:
+            # Show the library as the actual starting point. Two frames give the viewer both halves
+            # of the promise: free choices up front, then search/filter controls for the full catalog.
+            c.goto(SITE + "/meal-prep-recipes/", wait_ms=1800)
+            c.js("window.__tcStill()")
+            c.wait_for("document.querySelectorAll('.mpr-card').length>10", timeout=25,
+                       label="the meal-prep recipe library")
+            time.sleep(0.9)
+            hub_frames = []
+            cap.scroll_to(".mpr-rail-wrap", offset=-14, settle=0.6)
+            hub_frames.append({"png": cap.frame("hub", "free"), "hold": 2.4})
+            cap.scroll_to(".mpr-filters", offset=-14, settle=0.6)
+            hub_frames.append({"png": cap.frame("hub", "filters"), "hold": 2.8})
+            scenes.append({"id": "hub", "kind": "frames", "frames": hub_frames})
+            facts["hub_recipe_count"] = int(c.js("document.querySelectorAll('.mpr-grid .mpr-card').length") or 0)
+
+            # The grocery page is intentionally a light handoff. Capture the working search and
+            # rows, not the geographic page heading. Copy in the reel never names the city, and the
+            # useful part for this story is simply that current store prices are searchable.
+            c.goto(SITE + "/omaha-grocery-prices/", wait_ms=2000)
+            c.js("window.__tcStill()")
+            c.wait_for("document.querySelectorAll('.pg-row').length>10", timeout=30,
+                       label="the grocery price rows")
+            time.sleep(1.0)
+            cap.scroll_to(".pg-filters", offset=0, settle=0.7)
+            c.js("(function(){var q=document.getElementById('pg-search');q.value='chicken';"
+                 "q.dispatchEvent(new Event('input',{bubbles:true}));return true;})()")
+            time.sleep(0.8)
+            grocery_text = c.js(
+                "[].map.call(document.querySelectorAll('.pg-row:not(.pg-hide) .pg-name'),"
+                "function(e){return e.textContent.trim();}).slice(0,5)")
+            if not grocery_text:
+                raise RuntimeError("the grocery search produced no visible rows")
+            scenes.append({"id": "grocery", "kind": "frames", "frames": [
+                {"png": cap.frame("grocery", "search"), "hold": 3.2}
+            ]})
+            facts["grocery_search"] = "chicken"
+            facts["grocery_results"] = grocery_text
 
     facts["captured_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
     manifest = {"facts": facts, "scenes": scenes,

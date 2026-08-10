@@ -2,6 +2,7 @@ import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloud
 import { stableJson } from "@thriftycrew/domain";
 import { raiseOperationalAlert } from "./operations";
 import type { WorkerEnv } from "./env";
+import { D1_EXPORT_POLL_STEP_CONFIG } from "./backup-policy";
 
 interface BackupWorkflowPayload { trigger?: string; localDate?: string; forceReplica?: boolean }
 
@@ -56,7 +57,7 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
         if (!result.at_bookmark) throw new Error("D1 export omitted at_bookmark");
         return result.at_bookmark;
       });
-      const stored = await step.do("download and store D1 export", async () => {
+      const stored = await step.do("download and store D1 export", D1_EXPORT_POLL_STEP_CONFIG, async () => {
         const result = await exportRequest<ExportResult>(this.env, { output_format: "polling", current_bookmark: bookmark });
         if (result.status === "error") throw new Error(result.error || "D1 export failed");
         const signedUrl = result.signed_url ?? result.result?.signed_url;

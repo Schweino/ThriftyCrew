@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-09 08:57",
+    "generated":  "2026-08-10 06:13",
     "board":  "comparison-2026-08-09.json",
-    "sidecar_generated":  "2026-08-09 08:57:30",
+    "sidecar_generated":  "2026-08-10 06:13:28",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,16 +9,26 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2862,
-                     "corpus":  31148,
-                     "rule_invisible":  4799
+                     "board_pairs":  2861,
+                     "corpus":  31192,
+                     "rule_invisible":  4820
                  },
     "identity_count":  0,
-    "coverage_count":  24,
+    "coverage_count":  27,
     "identity":  [
 
                  ],
     "coverage":  [
+                     {
+                         "kind":  "coverage",
+                         "id":  "laundry-detergent",
+                         "commodity":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
+                         "store":  "Baker\u0027s",
+                         "product":  "ARM \u0026 HAMMER Liquid Laundry Detergent Clean Burst Scent",
+                         "cos":  0.7782,
+                         "score":  0.980886,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
                      {
                          "kind":  "coverage",
                          "id":  "cod",
@@ -57,6 +67,16 @@
                          "product":  "Progresso Minestrone Soup, Vegetable Classics Canned Soup, 19 oz",
                          "cos":  0.7472,
                          "score":  0.957623,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "bar-soap",
+                         "commodity":  "Bar Soap",
+                         "store":  "Baker\u0027s",
+                         "product":  "Caress Daily Silk Cleansing Bar, White Peach \u0026 Orange Blossom Moisturizing Body Soap",
+                         "cos":  0.675,
+                         "score":  0.954171,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -201,12 +221,22 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "shredded-cheese",
-                         "commodity":  "Shredded / Block Cheese",
-                         "store":  "Aldi",
-                         "product":  "Happy Farms Shredded Mexican Cheese 12 OZ",
-                         "cos":  0.6292,
-                         "score":  0.917926,
+                         "id":  "breakfast-sandwiches",
+                         "commodity":  "Frozen Breakfast Sandwiches",
+                         "store":  "Family Fare",
+                         "product":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
+                         "cos":  0.7193,
+                         "score":  0.921061,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "dried-parsley",
+                         "commodity":  "Parsley (dried)",
+                         "store":  "Walmart",
+                         "product":  "Soeos Parsley Flakes, 2.1 oz (60g), Dried Parsley Leaves, Fresh Flavor and Aroma, Perfect for Seasoning, Garnishing, and Cooking",
+                         "cos":  0.6634,
+                         "score":  0.920791,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

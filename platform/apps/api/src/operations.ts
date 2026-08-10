@@ -5,6 +5,47 @@ export function jobStatusRequiresAlert(status: string): boolean {
   return status === "failed" || status === "timed_out" || status === "missed";
 }
 
+export function scheduleGap(
+  latestAt: string | null,
+  monitoringStartedAt: string | null,
+  checkedAt: number,
+  maxGapMinutes: number,
+): { stale: boolean; ageMinutes: number | null; basis: "run" | "monitoring-grace" | "unknown" } {
+  const basis = latestAt ? "run" : monitoringStartedAt ? "monitoring-grace" : "unknown";
+  const parsed = Date.parse(latestAt ?? monitoringStartedAt ?? "");
+  if (!Number.isFinite(parsed)) return { stale: true, ageMinutes: null, basis };
+  const ageMinutes = Math.max(0, Math.floor((checkedAt - parsed) / 60_000));
+  return { stale: ageMinutes > maxGapMinutes, ageMinutes, basis };
+}
+
+export async function resolveRecoveredJobRunAlerts(
+  env: WorkerEnv,
+  job: string,
+  recoveryRunId: string,
+  observedAt: string,
+): Promise<number> {
+  const alerts = await env.DB.prepare(
+    `SELECT triage.source_ref
+       FROM triage_items triage
+       JOIN job_runs failed ON failed.id = substr(triage.source_ref, 9)
+      WHERE triage.source_kind = 'operational_alert'
+        AND triage.source_ref LIKE 'job-run:%'
+        AND triage.status <> 'resolved'
+        AND failed.job = ?1
+        AND failed.status IN ('failed', 'timed_out', 'missed')
+        AND failed.id <> ?2`,
+  ).bind(job, recoveryRunId).all<{ source_ref: string }>();
+  for (const row of alerts.results) {
+    await resolveOperationalAlert(env, row.source_ref, {
+      resolution: "A later durable run for the same job completed successfully.",
+      job,
+      recoveryRunId,
+      observedAt,
+    });
+  }
+  return alerts.results.length;
+}
+
 export async function recordAudit(
   env: WorkerEnv,
   identity: Pick<MutationIdentity, "agentId" | "authMethod">,
@@ -383,21 +424,31 @@ export async function runLedgerWatchdog(env: WorkerEnv, scheduledTime: number): 
      ON CONFLICT(id) DO NOTHING`,
   ).bind(runId, scheduledFor).run();
   const schedules = await env.DB.prepare(
-    `SELECT s.job, s.max_gap_minutes, s.dispatch_on_gap,
+    `SELECT s.job, s.max_gap_minutes, s.dispatch_on_gap, s.monitoring_started_at,
             MAX(COALESCE(r.heartbeat_at, r.finished_at, r.started_at, r.scheduled_for)) AS latest
        FROM job_schedules s
        LEFT JOIN job_runs r ON r.job = s.job
       WHERE s.active = 1 AND s.job <> 'ledger-watchdog'
-      GROUP BY s.job, s.max_gap_minutes, s.dispatch_on_gap
+      GROUP BY s.job, s.max_gap_minutes, s.dispatch_on_gap, s.monitoring_started_at
       ORDER BY s.job`,
-  ).all<{ job: string; max_gap_minutes: number; dispatch_on_gap: number; latest: string | null }>();
+  ).all<{ job: string; max_gap_minutes: number; dispatch_on_gap: number; monitoring_started_at: string | null; latest: string | null }>();
   const stale: string[] = [];
   for (const schedule of schedules.results) {
-    const latest = schedule.latest ? Date.parse(schedule.latest) : Number.NaN;
-    const ageMinutes = Number.isFinite(latest) ? Math.floor((scheduledTime - latest) / 60_000) : null;
-    if (ageMinutes !== null && ageMinutes <= schedule.max_gap_minutes) continue;
+    const health = scheduleGap(schedule.latest, schedule.monitoring_started_at, scheduledTime, schedule.max_gap_minutes);
+    if (!health.stale) {
+      await resolveOperationalAlert(env, `schedule-gap:${schedule.job}`, {
+        job: schedule.job,
+        latest: schedule.latest,
+        monitoringStartedAt: schedule.monitoring_started_at,
+        ageMinutes: health.ageMinutes,
+        maxGapMinutes: schedule.max_gap_minutes,
+        basis: health.basis,
+        checkedAt: scheduledFor,
+      });
+      continue;
+    }
     stale.push(schedule.job);
-    const evidence = { job: schedule.job, latest: schedule.latest, ageMinutes, maxGapMinutes: schedule.max_gap_minutes, checkedAt: scheduledFor };
+    const evidence = { job: schedule.job, latest: schedule.latest, monitoringStartedAt: schedule.monitoring_started_at, ageMinutes: health.ageMinutes, maxGapMinutes: schedule.max_gap_minutes, basis: health.basis, checkedAt: scheduledFor };
     await raiseOperationalAlert(env, `schedule-gap:${schedule.job}`, `Scheduled job ${schedule.job} exceeded its maximum gap`, evidence);
     if (schedule.dispatch_on_gap === 1) {
       const hour = scheduledFor.slice(0, 13).replaceAll(/[^0-9]/g, "");

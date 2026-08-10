@@ -173,7 +173,7 @@
     {
         "id":  "baby-food",
         "store":  "Family Fare",
-        "product":  "Gerber Prune Apple, Sitter 2nd Foods, 2 Packs 2 Ea",
+        "product":  "Gerber Sitter 2nd Foods Nourishing Blends Sweet Potato Turkey With Oats 2 Ea",
         "dept":  "health_beauty",
         "aisle":  "health_beauty/baby_child",
         "verdict":  "ALLOW",
@@ -209,7 +209,7 @@
     {
         "id":  "bagels",
         "store":  "Family Fare",
-        "product":  "Lender\u0027s Pre Sliced Plain Bagels 6 Ea",
+        "product":  "Lender\u0027s Pre Sliced Cinnamon Raisin Swirl Bagels 6 Ea",
         "dept":  "dairy",
         "aisle":  "dairy/breads_rolls_bagels",
         "verdict":  "ALLOW",
@@ -623,7 +623,7 @@
     {
         "id":  "canned-green-beans",
         "store":  "Family Fare",
-        "product":  "Our Family No Salt Added Cut Green Beans 14.5 Oz",
+        "product":  "Our Family Cut Green Beans 14.5 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -999,15 +999,6 @@
         "reason":  "\u0027beverages\u0027 is a reviewed exception department for \u0027coffee-creamer\u0027"
     },
     {
-        "id":  "coffee-pods",
-        "store":  "Family Fare",
-        "product":  "Eight O\u0027clock Coffee K Cup Pods Dark Roast Dark Italian Espresso Coffee Value Pack 32 Ea",
-        "dept":  "beverages",
-        "aisle":  "beverages/coffee",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
-    },
-    {
         "id":  "cookies",
         "store":  "Family Fare",
         "product":  "Crav\u0027n Flavor Cookies, Chocolate Chip, Candy Gems 12.4 Oz",
@@ -1033,15 +1024,6 @@
         "aisle":  "pantry/chips_other_salty_snacks",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
-    },
-    {
-        "id":  "corn-dogs",
-        "store":  "Family Fare",
-        "product":  "Bar S Corn Dogs, Classic, Honey Crisp, Batter Dipped 16 Ea",
-        "dept":  "freezer",
-        "aisle":  "freezer/other_frozen_items",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
     {
         "id":  "corn-muffin-mix",
@@ -1082,7 +1064,7 @@
     {
         "id":  "cottage-cheese",
         "store":  "Family Fare",
-        "product":  "Our Family Cottage Cheese, Small Curd, 4% Milkfat Minimum 24 Oz",
+        "product":  "Our Family Cottage Cheese, Large Curd, 4% Milkfat Minimum 24 Oz",
         "dept":  "dairy",
         "aisle":  "dairy/cheese",
         "verdict":  "ALLOW",
@@ -1280,7 +1262,7 @@
     {
         "id":  "disinfecting-wipes",
         "store":  "Family Fare",
-        "product":  "Clorox 3 In 1 Crisp Lemon Disinfecting Wipes 75 Ea",
+        "product":  "Clorox Grapefruit \u0026 Orange Blossom Disinfecting Wipes 75 Ea",
         "dept":  "household",
         "aisle":  "household/cleaners_air_fresheners",
         "verdict":  "ALLOW",
@@ -1388,7 +1370,7 @@
     {
         "id":  "english-muffins",
         "store":  "Family Fare",
-        "product":  "Country Hearth English Muffins, Light, Valu Pack 12 Ea",
+        "product":  "Country Hearth Sourdough English Muffins",
         "dept":  "bakery",
         "aisle":  "bakery/english_muffins_biscuits_croissants",
         "verdict":  "ALLOW",
@@ -1458,15 +1440,6 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
-        "id":  "fish-sticks",
-        "store":  "Family Fare",
-        "product":  "Van De Kamp\u0027s Wild Caught Crunchy Breaded Fish Sticks 24.6 Oz",
-        "dept":  "meat",
-        "aisle":  "meat/seafood_fish",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027meat\u0027 is a reviewed exception department for \u0027fish-sticks\u0027"
-    },
-    {
         "id":  "floor-cleaner",
         "store":  "Family Fare",
         "product":  "Bona Hardwood Floor Cleaner 64 Fl Oz",
@@ -1512,24 +1485,6 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
-        "id":  "breakfast-sandwiches",
-        "store":  "Family Fare",
-        "product":  "Jimmy Dean Croissant Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen 8 Ct",
-        "dept":  "freezer",
-        "aisle":  "freezer/frozen_meals_more",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
-    },
-    {
-        "id":  "frozen-broccoli",
-        "store":  "Family Fare",
-        "product":  "Frozen Broccoli Florets Our Family Steamable",
-        "dept":  "freezer",
-        "aisle":  "freezer/frozen_vegetables",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
-    },
-    {
         "id":  "frozen-brussels-sprouts",
         "store":  "Family Fare",
         "product":  "Birds Eye Brussels Sprouts 10.8 Oz",
@@ -1562,15 +1517,6 @@
         "product":  "Our Family Cherry Berry Blend, Fresh Frozen 16 Oz",
         "dept":  "freezer",
         "aisle":  "freezer/frozen_fruit",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
-    },
-    {
-        "id":  "frozen-meatballs",
-        "store":  "Family Fare",
-        "product":  "Marie Callender\u0027s Swedish Meatballs Bowl Frozen Meal 11.5 Oz",
-        "dept":  "freezer",
-        "aisle":  "freezer/frozen_meals_more",
         "verdict":  "ALLOW",
         "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
@@ -1989,15 +1935,6 @@
         "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
     {
-        "id":  "instant-coffee",
-        "store":  "Family Fare",
-        "product":  "Cafe Bustelo Espresso Instant Coffee 7.05 Oz",
-        "dept":  "beverages",
-        "aisle":  "beverages/coffee",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
-    },
-    {
         "id":  "instant-mashed-potatoes",
         "store":  "Family Fare",
         "product":  "Idahoan Baby Reds Mashed Potatoes Family Size 8.2 Oz",
@@ -2009,7 +1946,7 @@
     {
         "id":  "italian-dressing",
         "store":  "Family Fare",
-        "product":  "Our Family Classic Italian Dressing 16 Fl Oz",
+        "product":  "Our Family House Italian Dressing 16 Fl Oz",
         "dept":  "pantry",
         "aisle":  "pantry/condiments_dressing",
         "verdict":  "ALLOW",
@@ -2135,7 +2072,7 @@
     {
         "id":  "lemonade",
         "store":  "Family Fare",
-        "product":  "Minute Maid Strawberry Lemonade Carton 59 Fl Oz",
+        "product":  "Minute Maid Lemonade 59 Oz",
         "dept":  "beverages",
         "aisle":  "beverages/fruit_vegetable_beverages",
         "verdict":  "ALLOW",
@@ -2486,7 +2423,7 @@
     {
         "id":  "pasta",
         "store":  "Family Fare",
-        "product":  "Dried Spaghetti Pasta, Thin Our Family",
+        "product":  "Enriched Macaroni Product, Spaghetti",
         "dept":  "pantry",
         "aisle":  "pantry/pasta_sauces",
         "verdict":  "ALLOW",
@@ -2558,7 +2495,7 @@
     {
         "id":  "pickles",
         "store":  "Family Fare",
-        "product":  "Our Family Spears Kosher Dill Pickles 24 Fl Oz",
+        "product":  "Our Family Reduced Sodium Kosher Dill Pickle Spears 24 Fl Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -2693,7 +2630,7 @@
     {
         "id":  "pretzels",
         "store":  "Family Fare",
-        "product":  "Our Family Pretzels, Classic, Thin Twists 16 Oz",
+        "product":  "Our Family Pretzels, Classic, Mini Twists 16 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/snacks",
         "verdict":  "ALLOW",
@@ -2765,7 +2702,7 @@
     {
         "id":  "ranch-dressing",
         "store":  "Family Fare",
-        "product":  "Our Family Ranch Dressing 16 Fl Oz",
+        "product":  "Our Family Spicy Ranch Dressing 16 Fl Oz",
         "dept":  "pantry",
         "aisle":  "pantry/condiments_dressing",
         "verdict":  "ALLOW",
@@ -3017,7 +2954,7 @@
     {
         "id":  "shampoo",
         "store":  "Family Fare",
-        "product":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
+        "product":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
         "dept":  "health_beauty",
         "aisle":  "health_beauty/grooming_hygiene",
         "verdict":  "ALLOW",
@@ -3044,7 +2981,7 @@
     {
         "id":  "shredded-cheese",
         "store":  "Family Fare",
-        "product":  "Our Family Natural Colby Jack Shredded Cheese 32 Oz",
+        "product":  "Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz",
         "dept":  "deli",
         "aisle":  "deli/cheese",
         "verdict":  "ALLOW",
@@ -3125,7 +3062,7 @@
     {
         "id":  "sparkling-water",
         "store":  "Family Fare",
-        "product":  "Sparkling Ice Zero Sugar Strawberry Watermelon Sparkling Water 17 Fl Oz",
+        "product":  "Sparkling Ice Sparkling Water, Zero Sugar, Peach Nectarine 17 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/soda_other_carbonated_beverages",
         "verdict":  "ALLOW",
@@ -3188,7 +3125,7 @@
     {
         "id":  "stuffing-mix",
         "store":  "Family Fare",
-        "product":  "Our Family Stuffing Mix, Cornbread 6 Oz",
+        "product":  "Our Family Stuffing Mix, Pork Flavor 6 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/dry_goods",
         "verdict":  "ALLOW",
@@ -3283,15 +3220,6 @@
         "aisle":  "pantry/condiments_dressing",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
-    },
-    {
-        "id":  "tater-tots",
-        "store":  "Family Fare",
-        "product":  "Ore Ida Crispy Tater Tots 32 Oz",
-        "dept":  "freezer",
-        "aisle":  "freezer/frozen_potatoes",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
     {
         "id":  "tea-bags",
@@ -3643,15 +3571,6 @@
         "aisle":  "pantry/condiments_dressing",
         "verdict":  "BLIND",
         "reason":  "\u0027sugar-free-bbq-sauce\u0027 is in no estate category - refused rather than guessed"
-    },
-    {
-        "id":  "frozen-broccoli-florets",
-        "store":  "Family Fare",
-        "product":  "Frozen Broccoli Florets Our Family Steamable",
-        "dept":  "freezer",
-        "aisle":  "freezer/frozen_vegetables",
-        "verdict":  "BLIND",
-        "reason":  "\u0027frozen-broccoli-florets\u0027 is in no estate category - refused rather than guessed"
     },
     {
         "id":  "buffalo-wing-sauce",

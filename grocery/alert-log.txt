@@ -109,3 +109,20 @@
 [2026-08-09T09:04:11] SUPPRESSED (already sent this type today) 'Grocery: 1 NEW price flag(s) - 2026-08-09' [type: grocery new price flag s]
 [2026-08-09T09:05:53] QUEUE ABSORBED into open item 2026-08-07-fb1fee (day 2 of this condition, count now 5) - no new id minted
 [2026-08-09T09:05:53] SUPPRESSED (already sent this type today) 'Grocery: Walmart full capture aging - 2026-08-09' [type: grocery walmart full capture aging]
+[2026-08-09T09:09:21] SENT 'smp-feed edge did not pick up today's push - 2026-08-09' -> schweino68@gmail.com (id 19fe6db4f94e0b89)
+[2026-08-10T06:11:49] QUEUE ABSORBED into open item 2026-08-07-9d0317 (day 3 of this condition, count now 4) - no new id minted
+[2026-08-10T06:11:50] SENT 'Grocery: 12 store(s) dropped from a commodity they carry - 2026-08-10' -> schweino68@gmail.com (id 19feb5f2537d9b21)
+[2026-08-10T06:13:30] QUEUE ABSORBED into open item 2026-08-07-cac5f3 (day 3 of this condition, count now 5) - no new id minted
+[2026-08-10T06:13:31] SENT 'Grocery: semantic sweep found 27 product(s) no rule can see - 2026-08-10' -> schweino68@gmail.com (id 19feb60b12669106)
+[2026-08-10T06:15:02] QUEUE BODY UPGRADED on 2026-08-07-79b768 (140 -> 743 chars) - a later occurrence carried fuller evidence
+[2026-08-10T06:15:02] QUEUE ABSORBED into open item 2026-08-07-79b768 (day 3 of this condition, count now 4) - no new id minted
+[2026-08-10T06:15:03] SENT 'Grocery matching soundness - review needed' -> schweino68@gmail.com (id 19feb6214cdb9401)
+[2026-08-10T06:16:37] QUEUE ABSORBED into open item 2026-08-09-e8ea1d (day 1 of this condition, count now 2) - no new id minted
+[2026-08-10T06:16:38] SENT 'Recipe db drift (index vs specs)' -> schweino68@gmail.com (id 19feb638a4a15ec8)
+[2026-08-10T06:16:50] QUEUE ABSORBED into open item 2026-08-09-96a277 (day 1 of this condition, count now 2) - no new id minted
+[2026-08-10T06:16:51] SENT 'Recipe per-serving manifest: skipped recipe(s)' -> schweino68@gmail.com (id 19feb63bc1337f72)
+[2026-08-10T06:17:12] QUEUE ABSORBED into open item 2026-08-09-817ca5 (day 1 of this condition, count now 4) - no new id minted
+[2026-08-10T06:17:13] SENT 'Board prices aging inside a fresh file' -> schweino68@gmail.com (id 19feb6413dcc00cf)
+[2026-08-10T06:20:05] SENT 'Grocery: GUARDS FAILED - board not published - 2026-08-10' -> schweino68@gmail.com (id 19feb66b406cf590)
+[2026-08-10T06:20:09] QUEUE ABSORBED into open item 2026-08-07-fb1fee (day 3 of this condition, count now 6) - no new id minted
+[2026-08-10T06:20:10] SENT 'Grocery: Walmart full capture aging - 2026-08-10' -> schweino68@gmail.com (id 19feb66c7b262a8c)

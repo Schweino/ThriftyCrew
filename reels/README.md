@@ -9,11 +9,15 @@ to post by hand.
 |---|---|---|
 | `build-reel.ps1` | **Recipe of the day.** Sells one dinner: price, protein, shopping list, takeout comparison. Scenes are rendered from JSON, so the site is never on camera. | Scheduled daily 10:00 ("SMP Daily Facebook Reel") |
 | `build-demo-reel.ps1` | **How the page works.** A product demo of a live recipe page: serving control, the three pricing tabs, the "already have it, untick it" checkboxes. | On demand |
+| `build-demo-reel.ps1 -PinnedOverview` | **Pinned Page overview.** Leads with the annual takeout leak, tours the meal-prep library and one recipe end to end, then lightly introduces grocery search. | Pin to the Facebook Page |
 
 ## The demo reel
 
 ```bash
 powershell -File C:\Codex\income\reels\build-demo-reel.ps1
+
+# Build the broader Page overview intended to stay pinned
+powershell -File C:\Codex\income\reels\build-demo-reel.ps1 -PinnedOverview
 ```
 
 Outputs into `reels\out\`:
