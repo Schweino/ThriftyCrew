@@ -2,7 +2,7 @@
 // Parts extend to the next SQL line boundary. Only partitions that remove oversized payload rows
 // need padding, and that padding is emitted as bounded SQL no-ops rather than one parser-sized run.
 export const RESTORE_SOURCE_PART_BYTES = 5 * 1024 * 1024;
-export const RESTORE_MULTIPART_PART_BYTES = 5 * 1024 * 1024;
+export const RESTORE_MULTIPART_PART_BYTES = (11 * 1024 * 1024) / 2;
 const RESTORE_PADDING_STATEMENT_BYTES = 32 * 1024;
 const RESTORE_PADDING_PREFIX = new TextEncoder().encode("--");
 const RESTORE_PADDING_SUFFIX = new TextEncoder().encode("\nSELECT 1;\n");
@@ -15,18 +15,23 @@ export function padRestoreMultipartPart(
   output: Uint8Array<ArrayBufferLike>,
   targetBytes = RESTORE_MULTIPART_PART_BYTES,
 ): Uint8Array<ArrayBuffer> {
-  if (output.byteLength >= targetBytes) return Uint8Array.from(output);
+  if (output.byteLength === targetBytes) return Uint8Array.from(output);
+  if (output.byteLength > targetBytes) throw new Error("normalized multipart part exceeds the fixed R2 part size");
   const needsSeparator = output.byteLength > 0 && output.at(-1) !== 0x0a;
   const prefixBytes = output.byteLength + (needsSeparator ? 1 : 0);
+  if (prefixBytes > targetBytes) throw new Error("normalized multipart part separator exceeds the fixed R2 part size");
   const minimumStatementBytes = RESTORE_PADDING_PREFIX.byteLength + RESTORE_PADDING_SUFFIX.byteLength;
   const statementSizes: number[] = [];
   let remaining = targetBytes - prefixBytes;
-  while (remaining > 0) {
-    const size = Math.min(RESTORE_PADDING_STATEMENT_BYTES, Math.max(minimumStatementBytes, remaining));
+  while (remaining >= minimumStatementBytes) {
+    let size = Math.min(RESTORE_PADDING_STATEMENT_BYTES, remaining);
+    const following = remaining - size;
+    if (following > 0 && following < minimumStatementBytes) size += following;
     statementSizes.push(size);
     remaining -= size;
   }
-  const padded = new Uint8Array(new ArrayBuffer(prefixBytes + statementSizes.reduce((sum, size) => sum + size, 0)));
+  const padded = new Uint8Array(new ArrayBuffer(targetBytes));
+  padded.fill(0x20);
   padded.set(output);
   if (needsSeparator) padded[output.byteLength] = 0x0a;
   let offset = prefixBytes;

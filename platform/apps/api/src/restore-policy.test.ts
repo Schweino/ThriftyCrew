@@ -4,7 +4,7 @@ import { RESTORE_MULTIPART_PART_BYTES, RESTORE_SOURCE_PART_BYTES, padRestoreMult
 describe("restore normalization partitioning", () => {
   it("keeps CPU-bounded source chunks while honoring R2's multipart minimum", () => {
     expect(RESTORE_SOURCE_PART_BYTES).toBe(5 * 1024 * 1024);
-    expect(RESTORE_MULTIPART_PART_BYTES).toBe(5 * 1024 * 1024);
+    expect(RESTORE_MULTIPART_PART_BYTES).toBe((11 * 1024 * 1024) / 2);
     expect(RESTORE_MULTIPART_PART_BYTES).toBeGreaterThanOrEqual(RESTORE_SOURCE_PART_BYTES);
   });
 
@@ -19,12 +19,13 @@ describe("restore normalization partitioning", () => {
 
   it("leaves a part at or above the multipart minimum unchanged", () => {
     expect(new TextDecoder().decode(padRestoreMultipartPart(new TextEncoder().encode("abcd"), 4))).toBe("abcd");
+    expect(() => padRestoreMultipartPart(new TextEncoder().encode("abcde"), 4)).toThrow(/exceeds/);
   });
 
   it("keeps every padding statement below the D1 statement ceiling", () => {
     const result = new TextDecoder().decode(padRestoreMultipartPart(new Uint8Array(), 100_000));
     const statements = result.split("SELECT 1;\n").filter(Boolean);
     expect(statements.length).toBe(4);
-    expect(Math.max(...statements.map((statement) => new TextEncoder().encode(statement).byteLength))).toBeLessThanOrEqual(32 * 1024);
+    expect(Math.max(...statements.map((statement) => new TextEncoder().encode(statement).byteLength))).toBeLessThanOrEqual((32 * 1024) + 12);
   });
 });
