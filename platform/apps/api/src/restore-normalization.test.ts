@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { emptyRestoreCounts, inspectSqlInsert, normalizeCaptureBatchLine, utf8LengthExceeds } from "./restore-normalization";
+import {
+  countSqlInsertLines,
+  emptyRestoreCounts,
+  hasUtf8LineExceeding,
+  inspectSqlInsert,
+  normalizeCaptureBatchLine,
+  utf8LengthExceeds,
+} from "./restore-normalization";
 
 describe("D1 restore normalization", () => {
   it("parses D1 inserts without being confused by JSON commas and escaped quotes", () => {
@@ -37,5 +44,21 @@ describe("D1 restore normalization", () => {
     expect(utf8LengthExceeds("a".repeat(90_001), 90_000)).toBe(true);
     expect(utf8LengthExceeds("😀".repeat(22_501), 90_000)).toBe(true);
     expect(utf8LengthExceeds("a".repeat(90_000), 90_000)).toBe(false);
+  });
+
+  it("counts only SQL insert line prefixes for the requested table", () => {
+    const text = [
+      'INSERT INTO "observations" ("id") VALUES(\'one\');',
+      'INSERT INTO "products" ("id") VALUES(\'INSERT INTO "observations" fake\');',
+      'INSERT INTO "observations" ("id") VALUES(\'two\');',
+      "",
+    ].join("\n");
+    expect(countSqlInsertLines(text, "observations")).toBe(2);
+    expect(countSqlInsertLines(text, "products")).toBe(1);
+  });
+
+  it("detects an oversized UTF-8 line without treating the whole chunk as one statement", () => {
+    expect(hasUtf8LineExceeding("short\nrows\n", 10)).toBe(false);
+    expect(hasUtf8LineExceeding(`short\n${"é".repeat(6)}\n`, 10)).toBe(true);
   });
 });

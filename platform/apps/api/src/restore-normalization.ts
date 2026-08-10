@@ -99,3 +99,29 @@ export function utf8LengthExceeds(value: string, limitBytes: number): boolean {
   if (value.length <= Math.floor(limitBytes / 4)) return false;
   return new TextEncoder().encode(value).byteLength > limitBytes;
 }
+
+export function hasUtf8LineExceeding(text: string, limitBytes: number): boolean {
+  let lineStart = 0;
+  while (lineStart <= text.length) {
+    const newline = text.indexOf("\n", lineStart);
+    const lineEnd = newline < 0 ? text.length : newline;
+    if (lineEnd - lineStart > Math.floor(limitBytes / 4)
+      && utf8LengthExceeds(text.slice(lineStart, lineEnd), limitBytes)) return true;
+    if (newline < 0) return false;
+    lineStart = newline + 1;
+  }
+  return false;
+}
+
+export function countSqlInsertLines(text: string, table: string): number {
+  const prefix = `INSERT INTO "${table}" `;
+  let count = text.startsWith(prefix) ? 1 : 0;
+  const linePrefix = `\n${prefix}`;
+  let cursor = 0;
+  while (true) {
+    const match = text.indexOf(linePrefix, cursor);
+    if (match < 0) return count;
+    count += 1;
+    cursor = match + linePrefix.length;
+  }
+}

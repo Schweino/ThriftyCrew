@@ -6,7 +6,9 @@ import { padRestoreMultipartPart, RESTORE_SOURCE_PART_BYTES } from "./restore-po
 import type { WorkerEnv } from "./env";
 import {
   RESTORE_COUNT_TABLES,
+  countSqlInsertLines,
   emptyRestoreCounts,
+  hasUtf8LineExceeding,
   inspectSqlInsert,
   normalizeCaptureBatchLine,
   utf8LengthExceeds,
@@ -143,7 +145,31 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           if (!object?.body) throw new Error(`backup object part ${partNumber} is unreadable`);
           const bytes = await object.arrayBuffer();
           if (bytes.byteLength !== sourceEnd - sourceOffset) throw new Error(`backup object part ${partNumber} has the wrong length`);
-          const text = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+          const sourceBytes = new Uint8Array(bytes);
+          const text = new TextDecoder("utf-8", { fatal: true }).decode(sourceBytes);
+          const isLastPart = sourceEnd === dump.length;
+          const needsSemanticNormalization = text.includes('INSERT INTO "capture_batches"')
+            || text.includes('INSERT INTO "releases"')
+            || text.includes('INSERT INTO "current_releases"')
+            || (isLastPart && deferredUpdates.length > 0);
+          const hasOversizedStatement = hasUtf8LineExceeding(text, statementLimitBytes);
+          if (!needsSemanticNormalization && !hasOversizedStatement) {
+            const partCounts = emptyRestoreCounts();
+            for (const table of RESTORE_COUNT_TABLES) partCounts[table] = countSqlInsertLines(text, table);
+            const outputBytes = isLastPart ? sourceBytes : padRestoreMultipartPart(sourceBytes);
+            const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey!, multipart.uploadId);
+            const uploaded = await upload.uploadPart(partNumber, outputBytes);
+            return {
+              sourceEnd,
+              byteLength: outputBytes.byteLength,
+              uploaded,
+              counts: partCounts,
+              releaseHashes: {},
+              currentReleaseId: null,
+              recoveryObjectKeys: [],
+              deferredUpdates: [],
+            };
+          }
           const hasTrailingNewline = text.endsWith("\n");
           const lines = text.split("\n");
           if (hasTrailingNewline) lines.pop();
@@ -179,7 +205,6 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
             outputParts.push(adjusted.line);
             if (hasTrailingNewline || lineIndex < lines.length - 1) outputParts.push("\n");
           }
-          const isLastPart = sourceEnd === dump.length;
           const allDeferredUpdates = [...deferredUpdates, ...partDeferredUpdates];
           if (isLastPart && allDeferredUpdates.length > 0) {
             if (outputParts.at(-1) !== "\n") outputParts.push("\n");
