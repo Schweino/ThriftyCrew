@@ -1409,6 +1409,7 @@ app.patch("/internal/job-runs/:id", zValidator("json", jobRunUpdateSchema), asyn
         error: body.error ?? null,
         stats: body.stats,
       },
+      { notification: "digest", deferMinutes: 15, observedAt: body.finishedAt ?? new Date().toISOString() },
     )
     : null;
   return context.json({ ok: true, runId: context.req.param("id"), status: body.status, idempotent: false, alert });

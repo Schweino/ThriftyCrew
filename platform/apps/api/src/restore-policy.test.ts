@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { RESTORE_MULTIPART_PART_BYTES, RESTORE_SOURCE_PART_BYTES, padRestoreMultipartPart } from "./restore-policy";
+import { RESTORE_MULTIPART_PART_BYTES, RESTORE_SOURCE_PART_BYTES, padRestoreMultipartPart, restoreIncidentKey } from "./restore-policy";
 
 describe("restore normalization partitioning", () => {
+  it("coalesces restore attempts into one quarterly incident", () => {
+    expect(restoreIncidentKey("d1-restore-2026-Q3-a38")).toBe("restore-drill:d1-restore-2026-Q3");
+    expect(restoreIncidentKey("d1-restore-2026-Q3")).toBe("restore-drill:d1-restore-2026-Q3");
+  });
   it("keeps CPU-bounded source chunks while honoring R2's multipart minimum", () => {
     expect(RESTORE_SOURCE_PART_BYTES).toBe(5 * 1024 * 1024);
     expect(RESTORE_MULTIPART_PART_BYTES).toBe((11 * 1024 * 1024) / 2);

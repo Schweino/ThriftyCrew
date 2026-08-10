@@ -2,7 +2,7 @@ import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloud
 import { stableJson } from "@thriftycrew/domain";
 import { raiseOperationalAlert, resolveOperationalAlert } from "./operations";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
-import { padRestoreMultipartPart, RESTORE_SOURCE_PART_BYTES } from "./restore-policy";
+import { padRestoreMultipartPart, RESTORE_SOURCE_PART_BYTES, restoreIncidentKey } from "./restore-policy";
 import type { WorkerEnv } from "./env";
 import {
   RESTORE_COUNT_TABLES,
@@ -63,6 +63,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
     const startedAt = new Date().toISOString();
     const drillId = `restore_${event.instanceId}`;
     const runId = `run_${event.instanceId}`;
+    const incidentKey = restoreIncidentKey(event.instanceId);
     const recoveryObjectPrefix = `restore-recovery/${event.instanceId}/`;
     let scratchDatabaseId: string | null = null;
     let backupId = "unknown";
@@ -393,11 +394,13 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           .bind(drillId, finishedAt, stableJson({ comparisons, expectedRelease: normalized.expectedRelease, scratchRelease, liveRelease, byteLength: dump.length, etag: dump.etag, hashScheme, hashChunkBytes, chunkCount: chunkHashes.length, normalizedObjectKey: normalized.objectKey, normalizedEtag: normalized.etag, normalizedByteLength: normalized.length, deferredSupersessionUpdates: normalized.deferredSupersessionUpdates, statementLimitBytes: normalized.statementLimitBytes, recoveredOversizedRows: normalized.recoveryRowCount, comparisonBasis: "dump-stream-counts+dump-release-pointer", importStatus: completed.status })),
         this.env.DB.prepare("UPDATE job_runs SET status = 'completed', heartbeat_at = ?2, finished_at = ?2, stats_json = ?3 WHERE id = ?1")
           .bind(runId, finishedAt, stableJson({ drillId, backupId, scratchDatabaseId, comparisons })),
-        this.env.DB.prepare(
-          `UPDATE triage_items SET status = 'resolved', resolution_json = ?2, resolved_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
-            WHERE source_kind = 'operational_alert' AND source_ref LIKE ?1 AND status <> 'resolved'`,
-        ).bind(`restore-drill:${event.instanceId.replace(/-a\d+$/, "")}%`, stableJson({ drillId, backupId, recoveredBy: event.instanceId })),
       ]);
+      const recoveryEvidence = { drillId, backupId, recoveredBy: event.instanceId, finishedAt };
+      await resolveOperationalAlert(this.env, incidentKey, recoveryEvidence, { recoveryTitle: "Quarterly D1 restore recovered successfully" });
+      await this.env.DB.prepare(
+        `UPDATE triage_items SET status = 'resolved', resolution_json = ?2, resolved_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
+          WHERE source_kind = 'operational_alert' AND source_ref LIKE ?1 AND status <> 'resolved'`,
+      ).bind(`${incidentKey}-a%`, stableJson(recoveryEvidence)).run();
     } catch (error) {
       const message = error instanceof Error ? error.message : "unknown restore drill failure";
       const finishedAt = new Date().toISOString();
@@ -410,7 +413,13 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
       }
       await this.env.DB.prepare("UPDATE job_runs SET status = 'failed', heartbeat_at = ?2, finished_at = ?2, error = ?3 WHERE id = ?1")
         .bind(runId, finishedAt, message).run();
-      await raiseOperationalAlert(this.env, `restore-drill:${event.instanceId}`, "Quarterly D1 restore drill failed", { drillId, backupId, scratchDatabaseId, error: message });
+      await raiseOperationalAlert(
+        this.env,
+        incidentKey,
+        "Quarterly D1 restore drill failed",
+        { drillId, backupId, scratchDatabaseId, failedAttempt: event.instanceId, trigger: event.payload.trigger ?? "scheduled", error: message },
+        event.payload.trigger === "operator-forced" ? { notification: "digest", deferMinutes: 15 } : {},
+      );
       throw error;
     } finally {
       if (scratchDatabaseId) {
@@ -421,7 +430,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           });
           await resolveOperationalAlert(this.env, `restore-scratch-cleanup:${scratchDatabaseId}`, { scratchDatabaseId, status: "deleted" });
         } catch (error) {
-          await raiseOperationalAlert(this.env, `restore-scratch-cleanup:${scratchDatabaseId}`, "Restore drill scratch database cleanup failed", { scratchDatabaseId, error: error instanceof Error ? error.message : "unknown cleanup failure" });
+          await raiseOperationalAlert(this.env, `restore-scratch-cleanup:${scratchDatabaseId}`, "Restore drill scratch database cleanup failed", { scratchDatabaseId, error: error instanceof Error ? error.message : "unknown cleanup failure" }, { notification: "digest", deferMinutes: 30 });
         }
       }
       if (normalizedStagingObjectKey && normalizedMultipartUploadId && !normalizedMultipartCompleted) {
@@ -438,7 +447,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           });
           await resolveOperationalAlert(this.env, `restore-multipart-cleanup:${normalizedMultipartUploadId}`, { normalizedObjectKey, normalizedMultipartUploadId, status: "absent-or-aborted" });
         } catch (error) {
-          await raiseOperationalAlert(this.env, `restore-multipart-cleanup:${normalizedMultipartUploadId}`, "Normalized restore multipart cleanup failed", { normalizedObjectKey, normalizedMultipartUploadId, error: error instanceof Error ? error.message : "unknown cleanup failure" });
+          await raiseOperationalAlert(this.env, `restore-multipart-cleanup:${normalizedMultipartUploadId}`, "Normalized restore multipart cleanup failed", { normalizedObjectKey, normalizedMultipartUploadId, error: error instanceof Error ? error.message : "unknown cleanup failure" }, { notification: "digest", deferMinutes: 30 });
         }
       }
       if (normalizedObjectKey) {
@@ -449,7 +458,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           });
           await resolveOperationalAlert(this.env, `restore-normalized-cleanup:${normalizedObjectKey}`, { normalizedObjectKey, status: "deleted" });
         } catch (error) {
-          await raiseOperationalAlert(this.env, `restore-normalized-cleanup:${normalizedObjectKey}`, "Normalized restore object cleanup failed", { normalizedObjectKey, error: error instanceof Error ? error.message : "unknown cleanup failure" });
+          await raiseOperationalAlert(this.env, `restore-normalized-cleanup:${normalizedObjectKey}`, "Normalized restore object cleanup failed", { normalizedObjectKey, error: error instanceof Error ? error.message : "unknown cleanup failure" }, { notification: "digest", deferMinutes: 30 });
         }
       }
       if (normalizedStagingObjectKey) {
@@ -460,7 +469,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           });
           await resolveOperationalAlert(this.env, `restore-normalized-staging-cleanup:${normalizedStagingObjectKey}`, { normalizedStagingObjectKey, status: "deleted" });
         } catch (error) {
-          await raiseOperationalAlert(this.env, `restore-normalized-staging-cleanup:${normalizedStagingObjectKey}`, "Normalized restore staging object cleanup failed", { normalizedStagingObjectKey, error: error instanceof Error ? error.message : "unknown cleanup failure" });
+          await raiseOperationalAlert(this.env, `restore-normalized-staging-cleanup:${normalizedStagingObjectKey}`, "Normalized restore staging object cleanup failed", { normalizedStagingObjectKey, error: error instanceof Error ? error.message : "unknown cleanup failure" }, { notification: "digest", deferMinutes: 30 });
         }
       }
       try {
@@ -471,7 +480,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
         });
         await resolveOperationalAlert(this.env, `restore-recovery-cleanup:${event.instanceId}`, { recoveryObjectPrefix, status: "deleted" });
       } catch (error) {
-        await raiseOperationalAlert(this.env, `restore-recovery-cleanup:${event.instanceId}`, "Restore recovery staging cleanup failed", { recoveryObjectPrefix, error: error instanceof Error ? error.message : "unknown cleanup failure" });
+        await raiseOperationalAlert(this.env, `restore-recovery-cleanup:${event.instanceId}`, "Restore recovery staging cleanup failed", { recoveryObjectPrefix, error: error instanceof Error ? error.message : "unknown cleanup failure" }, { notification: "digest", deferMinutes: 30 });
       }
     }
   }

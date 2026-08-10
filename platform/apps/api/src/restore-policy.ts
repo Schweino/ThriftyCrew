@@ -11,6 +11,10 @@ if (RESTORE_MULTIPART_PART_BYTES < 5 * 1024 * 1024) {
   throw new Error("R2 multipart parts must be at least 5 MiB except for the final part");
 }
 
+export function restoreIncidentKey(instanceId: string): string {
+  return `restore-drill:${instanceId.replace(/-a\d+$/, "")}`;
+}
+
 export function padRestoreMultipartPart(
   output: Uint8Array<ArrayBufferLike>,
   targetBytes = RESTORE_MULTIPART_PART_BYTES,

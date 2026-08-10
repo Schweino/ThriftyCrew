@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { d1DatabaseFileSize, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, scheduleGap } from "./operations";
+import { d1DatabaseFileSize, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalNotificationDueAt, scheduleGap } from "./operations";
 import type { WorkerEnv } from "./env";
 
 const configuredEnv = {
@@ -14,6 +14,18 @@ describe("job terminal alerts", () => {
   it("alerts on failed, timed-out, and missed runs but not expected terminal states", () => {
     expect(["failed", "timed_out", "missed"].every(jobStatusRequiresAlert)).toBe(true);
     expect(["completed", "cancelled", "started", "scheduled"].some(jobStatusRequiresAlert)).toBe(false);
+  });
+});
+
+describe("operational notification policy", () => {
+  it("uses deterministic grace windows for digest delivery", () => {
+    expect(operationalNotificationDueAt("2026-08-10T14:00:00.000Z", 15)).toBe("2026-08-10T14:15:00.000Z");
+    expect(operationalNotificationDueAt("2026-08-10T14:00:00.000Z", 30)).toBe("2026-08-10T14:30:00.000Z");
+  });
+
+  it("rejects invalid digest timing evidence", () => {
+    expect(() => operationalNotificationDueAt("not-a-date", 15)).toThrow(/invalid/);
+    expect(() => operationalNotificationDueAt("2026-08-10T14:00:00.000Z", -1)).toThrow(/invalid/);
   });
 });
 

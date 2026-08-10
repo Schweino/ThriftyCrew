@@ -1,6 +1,6 @@
 import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloudflare:workers";
 import { stableJson } from "@thriftycrew/domain";
-import { raiseOperationalAlert } from "./operations";
+import { raiseOperationalAlert, resolveOperationalAlert } from "./operations";
 import type { WorkerEnv } from "./env";
 import { D1_EXPORT_POLL_STEP_CONFIG } from "./backup-policy";
 
@@ -118,6 +118,7 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
             WHERE id = ?1`,
         ).bind(runId, finishedAt, stableJson({ backupId, bookmark, ...stored, replica })),
       ]);
+      await resolveOperationalAlert(this.env, "d1-backup", { backupId, finishedAt, byteLength: stored.byteLength }, { recoveryTitle: "Nightly D1 backup recovered successfully" });
     } catch (error) {
       const finishedAt = new Date().toISOString();
       const message = error instanceof Error ? error.message : "unknown backup failure";
@@ -133,7 +134,7 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
             WHERE backup_id = ?1 AND status = 'started'`,
         ).bind(backupId, finishedAt, stableJson({ error: message })),
       ]);
-      await raiseOperationalAlert(this.env, `d1-backup:${event.instanceId}`, "Nightly D1 backup failed", { backupId, error: message });
+      await raiseOperationalAlert(this.env, "d1-backup", "Nightly D1 backup failed", { backupId, failedAttempt: event.instanceId, error: message });
       throw error;
     }
   }

@@ -120,12 +120,32 @@ async function deliverAlert(env: WorkerEnv, alertKey: string, subject: string, b
   }
 }
 
+export type OperationalNotificationMode = "immediate" | "digest" | "silent";
+
+export interface OperationalAlertOptions {
+  notification?: OperationalNotificationMode;
+  deferMinutes?: number;
+  observedAt?: string;
+}
+
+export function operationalNotificationDueAt(observedAt: string, deferMinutes: number): string {
+  const timestamp = Date.parse(observedAt);
+  if (!Number.isFinite(timestamp) || !Number.isFinite(deferMinutes) || deferMinutes < 0) throw new Error("invalid operational notification delay");
+  return new Date(timestamp + deferMinutes * 60_000).toISOString();
+}
+
 export async function raiseOperationalAlert(
   env: WorkerEnv,
   alertKey: string,
   title: string,
   evidence: Record<string, unknown>,
+  options: OperationalAlertOptions = {},
 ): Promise<{ triageId: string; delivery: string }> {
+  const notification = options.notification ?? "immediate";
+  const observedAt = options.observedAt ?? new Date().toISOString();
+  const storedEvidence = notification === "digest"
+    ? { ...evidence, _notification: { mode: notification, notifyAfter: operationalNotificationDueAt(observedAt, options.deferMinutes ?? 15) } }
+    : { ...evidence, ...(notification === "silent" ? { _notification: { mode: notification } } : {}) };
   const triageId = await deterministicId("triage", "operational_alert", alertKey);
   await env.DB.prepare(
     `INSERT INTO triage_items
@@ -135,20 +155,25 @@ export async function raiseOperationalAlert(
        status = CASE WHEN triage_items.status = 'resolved' THEN 'open' ELSE triage_items.status END,
        title = excluded.title, evidence_json = excluded.evidence_json, updated_at = CURRENT_TIMESTAMP,
        resolved_at = NULL`,
-  ).bind(triageId, alertKey, title, stableJson(evidence)).run();
-  const delivery = await deliverAlert(env, alertKey, title, stableJson(evidence));
+  ).bind(triageId, alertKey, title, stableJson(storedEvidence)).run();
+  const delivery = notification === "immediate" ? await deliverAlert(env, alertKey, title, stableJson(evidence)) : notification === "digest" ? "deferred" : "suppressed";
   return { triageId, delivery };
+}
+
+export interface OperationalResolutionOptions {
+  recoveryTitle?: string;
 }
 
 export async function resolveOperationalAlert(
   env: WorkerEnv,
   alertKey: string,
   evidence: Record<string, unknown>,
-): Promise<{ triageId: string; resolved: boolean; idempotent: boolean }> {
+  options: OperationalResolutionOptions = {},
+): Promise<{ triageId: string; resolved: boolean; idempotent: boolean; recoveryDelivery?: string }> {
   const triageId = await deterministicId("triage", "operational_alert", alertKey);
   const existing = await env.DB.prepare(
-    "SELECT status FROM triage_items WHERE id = ?1 AND source_kind = 'operational_alert'",
-  ).bind(triageId).first<{ status: string }>();
+    "SELECT status, updated_at FROM triage_items WHERE id = ?1 AND source_kind = 'operational_alert'",
+  ).bind(triageId).first<{ status: string; updated_at: string }>();
   if (!existing || existing.status === "resolved") return { triageId, resolved: Boolean(existing), idempotent: true };
   await env.DB.prepare(
     `UPDATE triage_items
@@ -156,7 +181,55 @@ export async function resolveOperationalAlert(
             resolved_at = CURRENT_TIMESTAMP
       WHERE id = ?1 AND status <> 'resolved'`,
   ).bind(triageId, stableJson(evidence)).run();
-  return { triageId, resolved: true, idempotent: false };
+  let recoveryDelivery: string | undefined;
+  if (options.recoveryTitle) {
+    const previouslyNotified = await env.DB.prepare(
+      `SELECT 1 AS found FROM alert_deliveries
+        WHERE alert_key = ?1 AND status = 'delivered' AND created_at >= ?2
+          AND channel IN ('ops-alert', 'ops-digest-member') LIMIT 1`,
+    ).bind(alertKey, existing.updated_at).first<{ found: number }>();
+    if (previouslyNotified) recoveryDelivery = await deliverAlert(env, `${alertKey}:recovered`, options.recoveryTitle, stableJson(evidence));
+  }
+  return { triageId, resolved: true, idempotent: false, ...(recoveryDelivery ? { recoveryDelivery } : {}) };
+}
+
+export async function flushOperationalAlertDigest(env: WorkerEnv, observedAt = new Date().toISOString()): Promise<{ due: number; delivery: string; membersRecorded: number }> {
+  const due = await env.DB.prepare(
+    `SELECT t.id, t.source_ref, t.title, t.evidence_json
+       FROM triage_items t
+      WHERE t.source_kind = 'operational_alert' AND t.status <> 'resolved'
+        AND json_extract(t.evidence_json, '$._notification.mode') = 'digest'
+        AND json_extract(t.evidence_json, '$._notification.notifyAfter') <= ?1
+        AND NOT EXISTS (
+          SELECT 1 FROM alert_deliveries d
+           WHERE d.alert_key = t.source_ref AND d.channel IN ('ops-alert', 'ops-digest-member')
+             AND d.status = 'delivered' AND d.created_at >= t.updated_at
+        )
+      ORDER BY t.created_at, t.id LIMIT 100`,
+  ).bind(observedAt).all<{ id: string; source_ref: string; title: string; evidence_json: string }>();
+  if (due.results.length === 0) return { due: 0, delivery: "suppressed", membersRecorded: 0 };
+  const incidents = due.results.map((row) => {
+    let evidence: Record<string, unknown> = {};
+    try {
+      evidence = JSON.parse(row.evidence_json) as Record<string, unknown>;
+    } catch {
+      evidence = { parseError: true };
+    }
+    delete evidence._notification;
+    return { key: row.source_ref, title: row.title, evidence };
+  });
+  const digestKey = await deterministicId("operational-digest", observedAt, stableJson(incidents.map((incident) => incident.key)));
+  const delivery = await deliverAlert(env, digestKey, `ThriftyCrew alert digest: ${incidents.length} unresolved`, stableJson({ observedAt, incidents }));
+  if (delivery !== "delivered") return { due: incidents.length, delivery, membersRecorded: 0 };
+  for (const row of due.results) {
+    const memberId = await deterministicId("alert-digest-member", digestKey, row.source_ref);
+    await env.DB.prepare(
+      `INSERT OR IGNORE INTO alert_deliveries
+         (id, alert_key, channel, status, attempt, detail_json, finished_at)
+       VALUES (?1, ?2, 'ops-digest-member', 'delivered', 1, ?3, CURRENT_TIMESTAMP)`,
+    ).bind(memberId, row.source_ref, stableJson({ digestKey, observedAt })).run();
+  }
+  return { due: incidents.length, delivery, membersRecorded: incidents.length };
 }
 
 export async function dispatchGithubJob(
@@ -469,7 +542,7 @@ export async function runLedgerWatchdog(env: WorkerEnv, scheduledTime: number): 
     }
     stale.push(schedule.job);
     const evidence = { job: schedule.job, latest: schedule.latest, monitoringStartedAt: schedule.monitoring_started_at, ageMinutes: health.ageMinutes, maxGapMinutes: schedule.max_gap_minutes, basis: health.basis, checkedAt: scheduledFor };
-    await raiseOperationalAlert(env, `schedule-gap:${schedule.job}`, `Scheduled job ${schedule.job} exceeded its maximum gap`, evidence);
+    await raiseOperationalAlert(env, `schedule-gap:${schedule.job}`, `Scheduled job ${schedule.job} exceeded its maximum gap`, evidence, { notification: "digest", deferMinutes: 15, observedAt: scheduledFor });
     if (schedule.dispatch_on_gap === 1) {
       const hour = scheduledFor.slice(0, 13).replaceAll(/[^0-9]/g, "");
       await dispatchGithubJob(env, schedule.job, `watchdog gap at ${scheduledFor}`, `watchdog-${schedule.job}-${hour}`);
@@ -537,7 +610,7 @@ export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number)
     const finishedAt = new Date().toISOString();
     await env.DB.prepare("UPDATE job_runs SET status = 'failed', heartbeat_at = ?2, finished_at = ?2, error = ?3 WHERE id = ?1")
       .bind(runId, finishedAt, message).run();
-    await raiseOperationalAlert(env, `archival-forecast:${observedAt.slice(0, 10)}`, "Daily D1 archival forecast failed", { error: message, observedAt });
+    await raiseOperationalAlert(env, `archival-forecast:${observedAt.slice(0, 10)}`, "Daily D1 archival forecast failed", { error: message, observedAt }, { notification: "digest", deferMinutes: 15, observedAt });
     throw error;
   }
 }
@@ -559,6 +632,7 @@ function localScheduleParts(scheduledTime: number): Record<string, string> {
 export async function runScheduledOperations(env: WorkerEnv, scheduledTime: number): Promise<void> {
   await runLedgerWatchdog(env, scheduledTime);
   await dispatchPendingRegisteredAgents(env);
+  await flushOperationalAlertDigest(env, new Date(scheduledTime).toISOString());
   const parts = localScheduleParts(scheduledTime);
   const localDate = `${parts.year}-${parts.month}-${parts.day}`;
   if (parts.hour === "04" && parts.minute === "30") {
