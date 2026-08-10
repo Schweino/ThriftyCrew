@@ -169,6 +169,7 @@ jobs:
               tail -n 40 "$RUNNER_TEMP/hy-vee-capture.log"
               test "$capture_status" -eq 0
               pnpm tc capture ingest-current bakers family-fare hy-vee
+              pnpm tc capture promote-ready-browser
               pnpm tc engine publish-native
               pnpm tc engine parity direct
               pnpm tc evidence accrue

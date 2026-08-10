@@ -1019,6 +1019,22 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   return context.json({ ok: status === "validated", batchId: batch.id, status, counts: { attempted, successful, empty, rejected, blocked, capturedPages } }, status === "validated" ? 200 : 422);
 });
 
+app.get("/internal/capture-batches/ready-browser", async (context) => {
+  const identity = context.get("identity");
+  if (identity.role !== "engine" && identity.role !== "operator") return jsonError("mutation role is not authorized to select promotion candidates", 403);
+  const rows = await context.env.DB.prepare(
+    `SELECT batch.id, batch.source_id, batch.captured_to, batch.coverage_mode,
+            COUNT(observation.id) AS observation_count
+       FROM capture_batches batch
+       JOIN capture_sources source ON source.id = batch.source_id
+       LEFT JOIN observations observation ON observation.batch_id = batch.id
+      WHERE batch.status = 'validated' AND source.capture_method = 'browser'
+      GROUP BY batch.id, batch.source_id, batch.captured_to, batch.coverage_mode
+      ORDER BY batch.captured_to, batch.id`,
+  ).all<Record<string, unknown>>();
+  return context.json({ ok: true, batches: rows.results });
+});
+
 app.post("/internal/capture-batches/:id/promote", async (context) => {
   const identity = context.get("identity");
   if (identity.role !== "engine" && identity.role !== "operator") return jsonError("mutation role is not authorized to promote captures", 403);

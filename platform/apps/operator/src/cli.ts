@@ -491,6 +491,17 @@ if (command === "status") {
     captures.push({ store, file, newestCaptureDate: fresh.newestCaptureDate, oldestCaptureDate: fresh.oldestCaptureDate, sourceRows: fresh.rows, ...ingestion, matching });
   }
   result = { ok: true, captures };
+} else if (command === "capture" && subcommand === "promote-ready-browser") {
+  const client = await mutationClient();
+  const ready = await client.request("/internal/capture-batches/ready-browser") as { batches?: Array<{ id: string; source_id: string; captured_to: string }> };
+  const promoted: Array<Record<string, unknown>> = [];
+  for (const batch of ready.batches ?? []) {
+    const matching = await matchBatch(client, batch.id);
+    if (matching.status !== "passed") throw new Error(`validated browser batch ${batch.id} failed matching and was not promoted`);
+    const promotion = await client.request(`/internal/capture-batches/${encodeURIComponent(batch.id)}/promote`, { method: "POST" });
+    promoted.push({ ...batch, matching, promotion });
+  }
+  result = { ok: true, ready: ready.batches?.length ?? 0, promoted };
 } else if (command === "capture" && subcommand === "queue") {
   const [action, ...queueArguments] = arguments_;
   const root = defaultCaptureQueueRoot();
@@ -507,10 +518,9 @@ if (command === "status") {
         kind: evidence.kind,
         contentType: evidence.contentType,
       })));
-      const ingestion = await ingestDirectCapture(client, job.artifact, artifactBody, additionalEvidence);
+      const ingestion = await ingestDirectCapture(client, job.artifact, artifactBody, additionalEvidence, { promote: false });
       if (!ingestion.ok) throw new PermanentCaptureError(`capture batch ${String(ingestion.batchId)} was rejected: ${stableJson(ingestion)}`);
-      const matching = await matchBatch(client, String(ingestion.batchId));
-      return { ...ingestion, matching };
+      return ingestion;
     });
     result = drained;
     if (!drained.ok) process.exitCode = 2;
@@ -584,7 +594,7 @@ if (command === "status") {
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog",
-      "tc capture ingest-current [bakers family-fare hy-vee]",
+      "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",
       "tc match batch <batch-id>", "tc commodity add <file>", "tc recipe add <file>",
     ],

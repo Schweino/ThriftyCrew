@@ -69,7 +69,13 @@ export class MutationClient {
 
 export interface CaptureEvidenceInput { body: Uint8Array; kind: "screenshot" | "flyer_page" | "raw_payload" | "manifest"; contentType: string }
 
-export async function ingestDirectCapture(client: MutationClient, artifact: DirectCaptureArtifact, evidenceBody: Uint8Array, additionalEvidence: readonly CaptureEvidenceInput[] = []): Promise<Record<string, unknown>> {
+export async function ingestDirectCapture(
+  client: MutationClient,
+  artifact: DirectCaptureArtifact,
+  evidenceBody: Uint8Array,
+  additionalEvidence: readonly CaptureEvidenceInput[] = [],
+  options: { promote?: boolean } = {},
+): Promise<Record<string, unknown>> {
   const created = await client.request("/internal/capture-batches", { json: {
     sourceId: artifact.sourceId,
     coverageMode: artifact.coverageMode,
@@ -111,6 +117,9 @@ export async function ingestDirectCapture(client: MutationClient, artifact: Dire
     const sealed = await client.request(`/internal/capture-batches/${batchId}/seal`, { json: { terms: artifact.terms, evidenceManifestKey: evidenceId }, acceptStatuses: [422] });
     status = String(sealed.status);
     if (status === "rejected") return { ok: false, batchId, status, audit: artifact.audit, seal: sealed };
+  }
+  if (status === "validated" && options.promote === false) {
+    return { ok: true, batchId, status, evidenceId, evidenceIds, observations: artifact.observations.length, terms: artifact.terms.length, audit: artifact.audit, promotionPending: true };
   }
   if (status === "validated") {
     const promoted = await client.request(`/internal/capture-batches/${batchId}/promote`, { method: "POST" });
