@@ -78,7 +78,15 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
       scratchDatabaseId = scratch.uuid;
       await this.env.DB.prepare(
         `INSERT INTO restore_drills (id, backup_id, scratch_database_id, dump_sha256, status, started_at, evidence_json)
-         VALUES (?1, ?2, ?3, ?4, 'started', ?5, ?6)`,
+         VALUES (?1, ?2, ?3, ?4, 'started', ?5, ?6)
+         ON CONFLICT(id) DO UPDATE SET
+           backup_id = excluded.backup_id,
+           scratch_database_id = excluded.scratch_database_id,
+           dump_sha256 = excluded.dump_sha256,
+           status = 'started',
+           started_at = excluded.started_at,
+           finished_at = NULL,
+           evidence_json = excluded.evidence_json`,
       ).bind(drillId, backupId, scratchDatabaseId, dumpSha256, startedAt, stableJson({ objectKey: backup.object_key, byteLength: dump.length, etag: dump.etag, hashScheme, hashChunkBytes, chunkCount: chunkHashes.length, trigger: event.payload.trigger ?? "scheduled" })).run();
       const initialized = await step.do("initialize scratch import", async () => cloudflare<{ upload_url?: string; filename?: string }>(this.env, `/d1/database/${scratchDatabaseId}/import`, {
         method: "POST", body: JSON.stringify({ action: "init", etag: dump.etag }),
@@ -92,7 +100,10 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
         const response = await fetch(initialized.upload_url!, { method: "PUT", body: object.body });
         if (!response.ok) throw new Error(`scratch import upload returned ${response.status}`);
       });
-      const ingested = await step.do("start scratch import", async () => cloudflare<{ at_bookmark?: string; status?: string; error?: string }>(this.env, `/d1/database/${scratchDatabaseId}/import`, {
+      const ingested = await step.do("start scratch import", {
+        retries: { limit: 2, delay: "30 seconds", backoff: "constant" },
+        timeout: "30 minutes",
+      }, async () => cloudflare<{ at_bookmark?: string; status?: string; error?: string }>(this.env, `/d1/database/${scratchDatabaseId}/import`, {
         method: "POST", body: JSON.stringify({ action: "ingest", etag: dump.etag, filename: initialized.filename }),
       }));
       if (!ingested.at_bookmark) throw new Error("scratch import omitted polling bookmark");
