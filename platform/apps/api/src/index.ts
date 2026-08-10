@@ -1842,6 +1842,8 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   if (identity.sourceIds && !identity.sourceIds.includes(batch.source_id)) return jsonError("agent is not authorized for this capture source", 403);
   if (batch.status !== "open") return jsonError("batch is already sealed", 409);
   const body = context.req.valid("json");
+  if (new Set(body.terms.map((term) => term.termKey)).size !== body.terms.length) return jsonError("capture term keys must be unique", 422);
+  if (new Set(body.terms.map((term) => term.ordinal)).size !== body.terms.length) return jsonError("capture term ordinals must be unique", 422);
   const attempted = body.terms.filter((term) => term.outcome !== "not_attempted").length;
   const successful = body.terms.filter((term) => term.outcome === "success").length;
   const empty = body.terms.filter((term) => term.outcome === "empty").length;
@@ -1893,10 +1895,26 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
     }, evidenceRows.results)
     : { pass: true, detail: { required: false }, metrics: null };
   const status = identityPass && completePass && collapsePass && freshnessPass && browserEvidence.pass ? "validated" : "rejected";
-  // Packing term rows keeps the transactional D1 batch well below its
-  // 30-second duration ceiling while respecting its per-statement bind limit.
-  const statements: D1PreparedStatement[] = buildCaptureTermInserts(batch.id, body.terms)
-    .map((insert) => context.env.DB.prepare(insert.sql).bind(...insert.bindings));
+  // Capture terms are staged while the batch is still private/open. Run each packed
+  // insert separately so a full catalog cannot make one D1 transaction exceed its
+  // aggregate execution ceiling. The UPSERT makes a retry safe after any partial
+  // staging failure. Only the final status/metrics/guards transition is atomic.
+  try {
+    for (const insert of buildCaptureTermInserts(batch.id, body.terms)) {
+      await context.env.DB.prepare(insert.sql).bind(...insert.bindings).run();
+    }
+    const persistedTerms = await context.env.DB.prepare(
+      "SELECT COUNT(*) AS count FROM capture_terms WHERE batch_id = ?1",
+    ).bind(batch.id).first<{ count: number }>();
+    if ((persistedTerms?.count ?? 0) !== body.terms.length) {
+      throw new Error(`capture term staging count mismatch: expected ${body.terms.length}, stored ${persistedTerms?.count ?? 0}`);
+    }
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : "unknown D1 term staging failure";
+    console.error("capture seal term staging failed", { batchId: batch.id, sourceId: batch.source_id, termCount: body.terms.length, detail });
+    return jsonError(`capture seal term staging failed: ${detail}`, 500);
+  }
+  const statements: D1PreparedStatement[] = [];
   statements.push(context.env.DB.prepare(
     `UPDATE capture_batches SET status = ?2, attempted_terms = ?3, successful_terms = ?4, empty_terms = ?5,
        rejected_terms = ?6, blocked_terms = ?7, captured_pages = ?8, evidence_manifest_key = ?9,
@@ -1934,7 +1952,13 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)`,
     ).bind(resultId, guardId, batch.id, pass ? "pass" : "fail", eligible, Math.min(eligible, examined), pass ? 0 : 1, stableJson(detail)));
   }
-  await context.env.DB.batch(statements);
+  try {
+    await context.env.DB.batch(statements);
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : "unknown D1 finalization failure";
+    console.error("capture seal finalization failed", { batchId: batch.id, sourceId: batch.source_id, statementCount: statements.length, detail });
+    return jsonError(`capture seal finalization failed: ${detail}`, 500);
+  }
   return context.json({ ok: status === "validated", batchId: batch.id, status, counts: { attempted, successful, empty, rejected, blocked, capturedPages } }, status === "validated" ? 200 : 422);
 });
 

@@ -19,7 +19,12 @@ export function buildCaptureTermInserts(batchId: string, terms: readonly Capture
     const chunk = terms.slice(offset, offset + 16);
     inserts.push({
       sql: `INSERT INTO capture_terms (batch_id, term_key, ordinal, outcome, row_count, reason)
-            VALUES ${chunk.map(() => "(?, ?, ?, ?, ?, ?)").join(", ")}`,
+            VALUES ${chunk.map(() => "(?, ?, ?, ?, ?, ?)").join(", ")}
+            ON CONFLICT(batch_id, term_key) DO UPDATE SET
+              ordinal = excluded.ordinal,
+              outcome = excluded.outcome,
+              row_count = excluded.row_count,
+              reason = excluded.reason`,
       bindings: chunk.flatMap((term) => [batchId, term.termKey, term.ordinal, term.outcome, term.rowCount, term.reason ?? null]),
     });
   }

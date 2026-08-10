@@ -17,5 +17,6 @@ describe("capture seal term inserts", () => {
     expect(inserts.reduce((rows, insert) => rows + insert.bindings.length / 6, 0)).toBe(528);
     expect(inserts[0]?.bindings.slice(0, 6)).toEqual(["batch-test", "term-0", 0, "success", 1, null]);
     expect(inserts.at(-1)?.bindings.slice(-6)).toEqual(["batch-test", "term-527", 527, "success", 528, null]);
+    expect(inserts.every((insert) => insert.sql.includes("ON CONFLICT(batch_id, term_key) DO UPDATE"))).toBe(true);
   });
 });
