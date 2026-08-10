@@ -12,6 +12,9 @@
   ],
   "compatibility_date": "2026-08-08",
   "compatibility_flags": ["nodejs_compat"],
+  "limits": {
+    "cpu_ms": 30000
+  },
   "assets": {
     "directory": "./apps/site/dist",
     "binding": "ASSETS",
