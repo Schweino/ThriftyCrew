@@ -313,6 +313,11 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           method: "POST", body: JSON.stringify({ action: "poll", current_bookmark: ingested.at_bookmark }),
         }));
         if (!polled) throw new Error("scratch import poll returned no status");
+        if (polled.error === "Not currently importing anything.") {
+          completed = { ...polled, status: "complete" };
+          break;
+        }
+        if (polled.error && polled.error !== '{"D1_RESET_DO":true}') throw new Error(polled.error);
         completed = polled;
         if (completed.status === "error") throw new Error(completed.error ?? "scratch import failed");
       }
