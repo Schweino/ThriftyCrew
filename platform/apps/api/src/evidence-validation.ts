@@ -1,5 +1,5 @@
-import { browserCaptureSessionSchema, type BrowserCaptureSession } from "@thriftycrew/contracts";
-import { digestHex, stableJson } from "@thriftycrew/domain";
+import { BROWSER_CAPTURE_ACCURACY_CUTOVER, browserCaptureSessionSchema, type BrowserCaptureSession } from "@thriftycrew/contracts";
+import { buildBrowserCaptureAccuracy, digestHex, stableJson } from "@thriftycrew/domain";
 import { browserCaptureCycleWindow } from "./browser-capture-sla";
 
 function uint16(bytes: Uint8Array, offset: number, littleEndian: boolean): number {
@@ -87,6 +87,15 @@ export interface BrowserCaptureMetricSummary {
   termDurationP50Ms: number;
   termDurationP95Ms: number;
   projectedRows: number;
+  accuracyPolicyVersion: number;
+  discoveryRows: number;
+  requiredVerificationRows: number;
+  matchedVerificationRows: number;
+  unresolvedVerificationRows: number;
+  priceAgreementRows: number;
+  singleChannelRows: number;
+  anomalyRows: number;
+  retrievalCompleteTerms: number;
 }
 
 function percentile(values: readonly number[], percentileValue: number): number {
@@ -116,6 +125,15 @@ export function summarizeBrowserCaptureSession(session: BrowserCaptureSession): 
     termDurationP50Ms: percentile(durations, 0.5),
     termDurationP95Ms: percentile(durations, 0.95),
     projectedRows: session.terms.reduce((sum, term) => sum + term.rowCount, 0),
+    accuracyPolicyVersion: session.version === 2 ? session.accuracy.policyVersion : 0,
+    discoveryRows: session.version === 2 ? session.accuracy.discoveryRows.length : 0,
+    requiredVerificationRows: session.version === 2 ? session.accuracy.requiredVerificationRows : 0,
+    matchedVerificationRows: session.version === 2 ? session.accuracy.matchedVerificationRows : 0,
+    unresolvedVerificationRows: session.version === 2 ? session.accuracy.unresolvedVerificationRows : 0,
+    priceAgreementRows: session.version === 2 ? session.accuracy.priceAgreementRows : 0,
+    singleChannelRows: session.version === 2 ? session.accuracy.singleChannelRows : 0,
+    anomalyRows: session.version === 2 ? session.accuracy.anomalyRows : 0,
+    retrievalCompleteTerms: session.version === 2 ? session.accuracy.retrievalCompleteTerms : 0,
   };
 }
 
@@ -150,7 +168,16 @@ export async function validateBrowserCaptureEvidence(
     && session.startedAt === batch.capturedFrom
     && session.finishedAt === batch.capturedTo
     && session.expectedTerms === batch.expectedTerms;
-  const pass = calculatedContentHash === contentHash && screenshotBound && rawBound && identityPass;
+  const accuracyRequired = Date.parse(session.finishedAt) >= Date.parse(BROWSER_CAPTURE_ACCURACY_CUTOVER);
+  let accuracyPass = !accuracyRequired;
+  let accuracyReproducible = !accuracyRequired;
+  if (session.version === 2) {
+    const candidates = session.accuracy.discoveryRows.map(({ rowKey: _rowKey, discoveryHash: _discoveryHash, riskReasons: _riskReasons, verificationRequired: _verificationRequired, ...row }) => row);
+    const recomputed = await buildBrowserCaptureAccuracy(session.store, candidates, session.accuracy.verifications, session.terms);
+    accuracyReproducible = stableJson(recomputed) === stableJson(session.accuracy);
+    accuracyPass = recomputed.pass && accuracyReproducible;
+  }
+  const pass = calculatedContentHash === contentHash && screenshotBound && rawBound && identityPass && accuracyPass;
   const trustedSession = calculatedContentHash === contentHash && identityPass;
-  return { pass, detail: { sessionId: session.sessionId, contentHashPass: calculatedContentHash === contentHash, screenshotBound, rawBound, identityPass, screenshots: screenshots.length, rawPayloads: rawPayloads.length, manifests: manifests.length }, metrics: trustedSession ? summarizeBrowserCaptureSession(session) : null };
+  return { pass, detail: { sessionId: session.sessionId, contentHashPass: calculatedContentHash === contentHash, screenshotBound, rawBound, identityPass, accuracyRequired, accuracyPass, accuracyReproducible, sessionVersion: session.version, screenshots: screenshots.length, rawPayloads: rawPayloads.length, manifests: manifests.length }, metrics: trustedSession ? summarizeBrowserCaptureSession(session) : null };
 }

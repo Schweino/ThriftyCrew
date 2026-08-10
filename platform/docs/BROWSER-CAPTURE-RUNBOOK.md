@@ -50,6 +50,14 @@ Run the automation every day at 06:15 America/Chicago.
   of a proof screenshot so a retailer silently resetting fulfillment during a long sweep is detectable.
 - Record exact term outcomes, row counts, attempts, and time intervals. A challenge is `blocked`, never `empty`.
   A capture is `full` only when every worklist term is `success` or verified `empty`.
+- Every term records its bounded result-depth target, loaded/available counts, page count, continuation state, and
+  termination. Success requires either the real end of results or reaching the declared target; a truncated page
+  is never complete.
+- Every accepted discovery row retains an internal truth record with page URL and position, capture instant,
+  location/mode, raw visible price/name/size, parsed integer cents, and exact parser rule. Walmart and Sam's also
+  require the independently read structured product key/name/size/price, and both channels must agree.
+- Never guess a decimal, glue split visual nodes, repair a product identity, or silently discard an ambiguous
+  loaded result. The chunk validator fails accepted rows it cannot reproduce exactly.
 - Capture first-party taxonomy/department/category fields when present. Leave taxonomy blank when unavailable;
   never infer a shelf path from the product name.
 
@@ -62,7 +70,7 @@ Verify the pickup store is Omaha L St Supercenter, 12850 L St, Omaha 68137. Buil
 search URL and read each result from
 `__NEXT_DATA__.props.pageProps.initialData.searchResult.itemStacks[].items[]`. Price fields are under
 `priceInfo.priceDetails.priceLines`: `CURRENT_PRICE` and `UNIT_PRICE`. Keep broad candidate sets and preserve
-`usItemId`, product URL/image, and `departmentName/category.categoryPathId` when present. Stop after three consecutive challenge/no-data pages. Write the UTF-8 pipe CSV to
+`usItemId`, exact package size, product URL/image, and `departmentName/category.categoryPathId` when present. Stop after three consecutive challenge/no-data pages. Write the UTF-8 pipe CSV to
 `grocery/out/captures/walmart-capture-<date>.csv`, then run `grocery/build-walmart-deals.ps1`.
 
 Do not enqueue a weekly Walmart artifact unless the capture attempted the complete worklist. Treat a wall-truncated
@@ -72,8 +80,8 @@ slice as retryable evidence, not a successful weekly capture.
 
 Verify an Omaha club is selected. Build the priority order with
 `grocery/build-pull-order.ps1 -Store "Sam's Club"`. Navigate to `/s/<term>` and parse the resulting page's
-`__NEXT_DATA__`; project only query, name, line/item price, unit price, product ID, product URL/image, and available
-first-party taxonomy as `departmentName/category.categoryPathId`. Keep broad candidate sets, write a UTF-8 `q|n|lp|up|id|taxonomy_path|url|image_url` capture, and run `grocery/build-sams-deals.ps1`. Do not return or persist raw
+`__NEXT_DATA__`; project only query, name, line/item price, unit price, product ID, exact package size, product URL/image, and available
+first-party taxonomy as `departmentName/category.categoryPathId`. Keep broad candidate sets, write a UTF-8 `q|n|lp|up|id|size|taxonomy_path|url|image_url` capture, and run `grocery/build-sams-deals.ps1`. Do not return or persist raw
 tracking/cookie-bearing product objects.
 
 ### Aldi
@@ -101,10 +109,23 @@ Create the complete generated worklist and initialize before the first term:
 pnpm tc capture session init <aldi|fareway|sams|walmart> <worklist.txt> <session-directory> <started-at-iso>
 ```
 
-For every 10-20-term chunk, write JSON containing `version`, `store`, one current location/mode `canary`, exact
-`terms`, and projected `rows`. Append with `pnpm tc capture session append <session-directory> <chunk.json>`.
+For every 10-20-term discovery chunk, write JSON containing `version: 2`, `phase: discovery`, `store`, one current
+location/mode `canary`, exact `terms` with `retrieval`, and projected `rows` with internal `_capture` truth.
+Append with `pnpm tc capture session append <session-directory> <chunk.json>`.
 Use `pnpm tc capture session status <session-directory>` to resume. A later successful retry replaces the earlier
 blocked result for that term while both immutable chunks remain evidence.
+
+After discovery is complete, create the deterministic independent second-pass worklist:
+
+```powershell
+pnpm tc capture session verification-plan <session-directory> <verification-plan.json>
+```
+
+The plan includes likely lowest-price winners, a stable audit sample, produce/count/multi-buy/outlier risks, and
+duplicate-price conflicts. Revisit each target with a fresh top-level navigation. Append `version: 2`,
+`phase: verification` chunks containing the plan row/hash and a newly read complete truth record. A changed row
+must be recaptured as a new discovery result and replanned; missing, blocked, stale, copied, or disagreeing
+verification cannot authorize publication.
 
 Finalize after exhausting the worklist:
 
@@ -112,8 +133,11 @@ Finalize after exhausting the worklist:
 pnpm tc capture session finalize <session-directory> <projected-capture> <capture-session-manifest.json> <finished-at-iso>
 ```
 
-The finalizer deterministically merges the latest result for every term, hashes the projected capture, and emits
-the authoritative term ledger. It cannot label a session `full` while any term is rejected, blocked, or unattempted.
+The finalizer deterministically merges the latest result for every term, strips internal `_capture` fields from
+the builder input, hashes the projected capture, computes the accuracy/anomaly report, and emits the authoritative
+term ledger. It cannot label a session `full` while a term, pagination envelope, raw-price contract, location/mode
+check, or required second-pass verification is unresolved. Beginning 2026-08-12, Cloudflare independently
+recomputes the report from the immutable R2 manifest before it validates or promotes the batch.
 
 ## V3 handoff
 

@@ -53,6 +53,11 @@ implementation.
   deterministic source-contract sentinels.
 - An hourly Cloudflare-side browser SLA independently detects an offline PC or missing strict weekly capture
   after the Saturday retry deadline and reports its exact remote promotion, matching and evidence gaps.
+- Capture-time accuracy contract for every strict browser pull: exact visible/structured source agreement,
+  truth-preserving row provenance, continuous Omaha location/mode checks, complete worklist and bounded
+  pagination accounting, deterministic anomaly/risk selection, and an independent targeted second pass.
+  Local queue admission and the Worker both reproduce the R2-bound report; unresolved checks fail the
+  `batch-browser-accuracy` guard beginning with the 2026-08-12 strict cycle.
 
 ## Phase 2 judgment execution plane
 

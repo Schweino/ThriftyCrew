@@ -26,11 +26,11 @@ describe("browser screenshot evidence", () => {
     const rawHash = "b".repeat(64);
     const content = {
       version: 1 as const, sessionId: "browser-walmart-fixture", store: "walmart" as const, sourceId: "direct-walmart-browser",
-      worklistHash: "c".repeat(64), startedAt: "2026-08-12T15:00:00.000Z", finishedAt: "2026-08-12T15:02:00.000Z",
+      worklistHash: "c".repeat(64), startedAt: "2026-08-11T15:00:00.000Z", finishedAt: "2026-08-11T15:02:00.000Z",
       coverageMode: "full" as const, expectedTerms: 1,
-      terms: [{ termKey: "eggs", query: "eggs", ordinal: 0, outcome: "success" as const, rowCount: 1, attempts: 1, startedAt: "2026-08-12T15:00:00.000Z", finishedAt: "2026-08-12T15:01:00.000Z" }],
-      canaries: [{ ordinal: 0, observedAt: "2026-08-12T15:00:00.000Z", market: "Omaha", location: "Omaha L St Supercenter", priceMode: "pickup", evidenceUrl: "https://www.walmart.com/", marketVerified: true as const, locationVerified: true as const, priceModeVerified: true as const, screenshotSha256: screenshotHash }],
-      chunks: [{ id: "chunk-fixture", ordinal: 0, termKeys: ["eggs"], rowCount: 1, sha256: "d".repeat(64), createdAt: "2026-08-12T15:01:00.000Z" }],
+      terms: [{ termKey: "eggs", query: "eggs", ordinal: 0, outcome: "success" as const, rowCount: 1, attempts: 1, startedAt: "2026-08-11T15:00:00.000Z", finishedAt: "2026-08-11T15:01:00.000Z" }],
+      canaries: [{ ordinal: 0, observedAt: "2026-08-11T15:00:00.000Z", market: "Omaha", location: "Omaha L St Supercenter", priceMode: "pickup", evidenceUrl: "https://www.walmart.com/", marketVerified: true as const, locationVerified: true as const, priceModeVerified: true as const, screenshotSha256: screenshotHash }],
+      chunks: [{ id: "chunk-fixture", ordinal: 0, termKeys: ["eggs"], rowCount: 1, sha256: "d".repeat(64), createdAt: "2026-08-11T15:01:00.000Z" }],
       projectedCaptureSha256: rawHash,
     };
     const session = { ...content, contentHash: await digestHex(stableJson(content)) };
@@ -38,7 +38,7 @@ describe("browser screenshot evidence", () => {
     const rows = [{ object_key: "manifest", kind: "manifest", sha256: "e".repeat(64) }, { object_key: "raw", kind: "raw_payload", sha256: rawHash }, { object_key: "proof", kind: "screenshot", sha256: screenshotHash }];
     const result = await validateBrowserCaptureEvidence(bucket, { sourceId: content.sourceId, coverageMode: "full", capturedFrom: content.startedAt, capturedTo: content.finishedAt, expectedTerms: 1 }, rows);
     expect(result).toMatchObject({ pass: true, detail: { contentHashPass: true, screenshotBound: true, rawBound: true, identityPass: true } });
-    expect(result.metrics).toMatchObject({ cycleStart: "2026-08-12", durationMs: 120_000, termDurationP50Ms: 60_000, termDurationP95Ms: 60_000, retryCount: 0, projectedRows: 1 });
+    expect(result.metrics).toMatchObject({ cycleStart: "2026-08-05", durationMs: 120_000, termDurationP50Ms: 60_000, termDurationP95Ms: 60_000, retryCount: 0, projectedRows: 1 });
     expect((await validateBrowserCaptureEvidence(bucket, { sourceId: content.sourceId, coverageMode: "partial", capturedFrom: content.startedAt, capturedTo: content.finishedAt, expectedTerms: 1 }, rows)).pass).toBe(false);
   });
 

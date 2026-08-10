@@ -1,7 +1,7 @@
 import { copyFile, mkdir, readFile, readdir, rename, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { browserCaptureSessionSchema, directCaptureArtifactSchema, type DirectCaptureArtifact } from "@thriftycrew/contracts";
-import { digestHex, stableJson } from "@thriftycrew/domain";
+import { BROWSER_CAPTURE_ACCURACY_CUTOVER, browserCaptureSessionSchema, directCaptureArtifactSchema, type DirectCaptureArtifact } from "@thriftycrew/contracts";
+import { buildBrowserCaptureAccuracy, digestHex, stableJson } from "@thriftycrew/domain";
 
 export interface QueuedEvidence {
   file: string;
@@ -158,7 +158,7 @@ function imageDimensions(bytes: Uint8Array, extension: string): { width: number;
   throw new Error(`unsupported screenshot extension ${extension}`);
 }
 
-function browserAudit(artifact: DirectCaptureArtifact): { session: ReturnType<typeof browserCaptureSessionSchema.parse>; screenshotHashes: Set<string> } {
+async function browserAudit(artifact: DirectCaptureArtifact): Promise<{ session: ReturnType<typeof browserCaptureSessionSchema.parse>; screenshotHashes: Set<string> }> {
   const session = browserCaptureSessionSchema.parse(artifact.audit.captureSession);
   if (session.sourceId !== artifact.sourceId) throw new Error("browser artifact and capture-session source identities differ");
   const attestation = artifact.audit.attestation as Record<string, unknown> | undefined;
@@ -167,6 +167,12 @@ function browserAudit(artifact: DirectCaptureArtifact): { session: ReturnType<ty
   if (attestation?.captureSessionHash !== session.contentHash) throw new Error("browser artifact attestation does not bind its capture-session manifest");
   const verifiedAt = Date.parse(String(attestation?.verifiedAt ?? ""));
   if (!Number.isFinite(verifiedAt) || verifiedAt < Date.parse(session.startedAt) - 5 * 60_000 || verifiedAt > Date.parse(session.finishedAt) + 5 * 60_000) throw new Error("browser proof timestamp is outside the capture session");
+  if (Date.parse(session.finishedAt) >= Date.parse(BROWSER_CAPTURE_ACCURACY_CUTOVER)) {
+    if (session.version !== 2) throw new Error("browser capture uses the retired pre-accuracy session contract");
+    const candidates = session.accuracy.discoveryRows.map(({ rowKey: _rowKey, discoveryHash: _discoveryHash, riskReasons: _riskReasons, verificationRequired: _verificationRequired, ...row }) => row);
+    const recomputed = await buildBrowserCaptureAccuracy(session.store, candidates, session.accuracy.verifications, session.terms);
+    if (!recomputed.pass || stableJson(recomputed) !== stableJson(session.accuracy)) throw new Error("browser capture accuracy report is incomplete, unresolved, or not reproducible");
+  }
   return { session, screenshotHashes };
 }
 
@@ -227,7 +233,7 @@ export async function enqueueCapture(
   if (!artifact.sourceId.endsWith("-browser")) throw new Error("the PC queue only accepts direct browser capture sources");
   const evidenceKinds = evidenceInputs.map(evidenceKind);
   if (!evidenceKinds.includes("screenshot") || !evidenceKinds.includes("manifest") || !evidenceKinds.includes("raw_payload")) throw new Error("a browser capture queue job requires screenshot, capture-session manifest, and projected raw evidence");
-  const { session, screenshotHashes } = browserAudit(artifact);
+  const { session, screenshotHashes } = await browserAudit(artifact);
   const suppliedHashes = new Map<string, string>();
   for (const file of evidenceInputs) {
     const input = path.resolve(file);

@@ -29,6 +29,15 @@ foreach ($file in $screenshots) {
 }
 $session = Get-Content -LiteralPath $sessionPath -Raw -Encoding UTF8 | ConvertFrom-Json
 if ([string]$session.store -ne $Store) { throw "capture session is for $($session.store), not $Store" }
+$accuracyCutover = [datetime]::Parse('2026-08-12T05:00:00.000Z').ToUniversalTime()
+$sessionFinished = [datetime]::Parse([string]$session.finishedAt).ToUniversalTime()
+if ($sessionFinished -ge $accuracyCutover) {
+  if ([int]$session.version -ne 2) { throw 'pre-accuracy browser session contract is retired for this capture window' }
+  if ($session.accuracy.pass -ne $true) { throw 'capture-session accuracy report did not pass' }
+  if ([int]$session.accuracy.unresolvedVerificationRows -ne 0) { throw 'capture-session has unresolved targeted verification rows' }
+  if ([int]$session.accuracy.matchedVerificationRows -ne [int]$session.accuracy.requiredVerificationRows) { throw 'capture-session targeted verification counts do not balance' }
+  if ([int]$session.accuracy.retrievalCompleteTerms -ne [int]$session.expectedTerms) { throw 'capture-session pagination/result-depth coverage is incomplete' }
+}
 $rawHash = (Get-FileHash -LiteralPath $rawCapturePath -Algorithm SHA256).Hash.ToLowerInvariant()
 if ($rawHash -ne [string]$session.projectedCaptureSha256) { throw 'raw projected capture does not match the capture-session manifest' }
 $screenshotHashes = @($screenshots | ForEach-Object { (Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash.ToLowerInvariant() })

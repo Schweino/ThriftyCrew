@@ -59,6 +59,106 @@ export const captureTermSchema = z.object({
 });
 
 export const browserCaptureStore = z.enum(["aldi", "fareway", "sams", "walmart"]);
+export const BROWSER_CAPTURE_ACCURACY_CUTOVER = "2026-08-12T05:00:00.000Z";
+
+export const browserCapturePriceChannelSchema = z.object({
+  rawText: z.string().trim().min(1).max(500),
+  priceMinor: z.number().int().nonnegative().max(10_000_000),
+  productName: z.string().trim().min(1).max(1000),
+  productKey: z.string().trim().min(1).max(300).optional(),
+  sizeText: z.string().trim().max(500).optional(),
+});
+
+export const browserCaptureRetrievalSchema = z.object({
+  targetResultCount: z.number().int().positive().max(200),
+  loadedResultCount: z.number().int().nonnegative().max(10_000),
+  availableResultCount: z.number().int().nonnegative().max(1_000_000).optional(),
+  pageCount: z.number().int().positive().max(500),
+  hasMoreResults: z.boolean(),
+  termination: z.enum(["end-of-results", "target-depth", "no-results", "blocked", "error"]),
+}).superRefine((value, context) => {
+  if (value.availableResultCount !== undefined && value.loadedResultCount > value.availableResultCount) {
+    context.addIssue({ code: "custom", path: ["loadedResultCount"], message: "cannot exceed availableResultCount" });
+  }
+  if (value.termination === "target-depth" && value.loadedResultCount < value.targetResultCount) {
+    context.addIssue({ code: "custom", path: ["loadedResultCount"], message: "target-depth termination must reach targetResultCount" });
+  }
+  if (value.termination === "no-results" && (value.loadedResultCount !== 0 || value.hasMoreResults)) {
+    context.addIssue({ code: "custom", path: ["termination"], message: "no-results must contain zero loaded rows and no continuation" });
+  }
+  if (value.termination === "end-of-results" && value.hasMoreResults) {
+    context.addIssue({ code: "custom", path: ["hasMoreResults"], message: "end-of-results cannot retain a continuation" });
+  }
+});
+
+export const browserCaptureTruthSchema = z.object({
+  capturedAt: isoDateTime,
+  pageUrl: z.url().max(3000),
+  location: z.string().trim().min(1).max(500),
+  priceMode: z.string().trim().min(1).max(100),
+  pageIndex: z.number().int().nonnegative().max(500),
+  resultIndex: z.number().int().nonnegative().max(10_000),
+  visible: browserCapturePriceChannelSchema,
+  structured: browserCapturePriceChannelSchema.optional(),
+  parser: z.object({
+    status: z.literal("exact"),
+    rule: z.enum(["current-price-label", "next-data-price-lines"]),
+    notes: z.string().trim().min(1).max(1000).optional(),
+  }),
+});
+
+export const browserCaptureAccuracyRowSchema = z.object({
+  rowKey: nonEmptyId,
+  termKey: nonEmptyId,
+  query: z.string().trim().min(1).max(500),
+  productKey: z.string().trim().min(1).max(300),
+  name: z.string().trim().min(1).max(1000),
+  sizeText: z.string().trim().max(500),
+  taxonomyPath: z.string().trim().max(3000).optional(),
+  purchasePriceMinor: z.number().int().nonnegative().max(10_000_000),
+  truth: browserCaptureTruthSchema,
+  discoveryHash: sha256Hex,
+  riskReasons: z.array(z.enum([
+    "likely-board-winner", "deterministic-sample", "fresh-produce", "count-priced",
+    "multibuy", "price-outlier", "missing-taxonomy", "duplicate-price-conflict",
+  ])).max(8),
+  verificationRequired: z.boolean(),
+});
+
+export const browserCaptureVerificationSchema = z.object({
+  rowKey: nonEmptyId,
+  discoveryHash: sha256Hex,
+  observedAt: isoDateTime,
+  outcome: z.enum(["observed", "missing", "blocked"]),
+  reason: z.string().trim().min(1).max(1000).optional(),
+  productKey: z.string().trim().min(1).max(300).optional(),
+  name: z.string().trim().min(1).max(1000).optional(),
+  sizeText: z.string().trim().max(500).optional(),
+  purchasePriceMinor: z.number().int().nonnegative().max(10_000_000).optional(),
+  truth: browserCaptureTruthSchema.optional(),
+}).superRefine((value, context) => {
+  const observedFields = [value.productKey, value.name, value.sizeText, value.purchasePriceMinor, value.truth];
+  if (value.outcome === "observed" && observedFields.some((item) => item === undefined)) {
+    context.addIssue({ code: "custom", path: ["outcome"], message: "observed verification requires the complete independently recaptured row" });
+  }
+  if (value.outcome !== "observed" && !value.reason) {
+    context.addIssue({ code: "custom", path: ["reason"], message: "missing or blocked verification requires a reason" });
+  }
+});
+
+export const browserCaptureAccuracySchema = z.object({
+  policyVersion: z.literal(1),
+  discoveryRows: z.array(browserCaptureAccuracyRowSchema).min(1).max(100_000),
+  verifications: z.array(browserCaptureVerificationSchema).max(100_000),
+  requiredVerificationRows: z.number().int().nonnegative(),
+  matchedVerificationRows: z.number().int().nonnegative(),
+  unresolvedVerificationRows: z.number().int().nonnegative(),
+  priceAgreementRows: z.number().int().nonnegative(),
+  singleChannelRows: z.number().int().nonnegative(),
+  anomalyRows: z.number().int().nonnegative(),
+  retrievalCompleteTerms: z.number().int().nonnegative(),
+  pass: z.boolean(),
+});
 
 export const browserCaptureCanarySchema = z.object({
   ordinal: z.number().int().nonnegative(),
@@ -73,7 +173,7 @@ export const browserCaptureCanarySchema = z.object({
   screenshotSha256: sha256Hex.optional(),
 });
 
-export const browserCaptureSessionSchema = z.object({
+const browserCaptureSessionV1Schema = z.object({
   version: z.literal(1),
   sessionId: nonEmptyId,
   store: browserCaptureStore,
@@ -121,6 +221,59 @@ export const browserCaptureSessionSchema = z.object({
   for (const [index, chunk] of value.chunks.entries()) if (chunk.ordinal !== index) context.addIssue({ code: "custom", path: ["chunks", index, "ordinal"], message: "chunk ordinals must be contiguous" });
   if (!value.canaries.some((canary) => canary.screenshotSha256)) context.addIssue({ code: "custom", path: ["canaries"], message: "at least one canary must bind screenshot evidence" });
 });
+
+export const browserCaptureSessionV2Schema = z.object({
+  version: z.literal(2),
+  sessionId: nonEmptyId,
+  store: browserCaptureStore,
+  sourceId: nonEmptyId,
+  worklistHash: sha256Hex,
+  startedAt: isoDateTime,
+  finishedAt: isoDateTime,
+  coverageMode,
+  expectedTerms: z.number().int().positive().max(2000),
+  terms: z.array(captureTermSchema.extend({
+    query: z.string().trim().min(1).max(500),
+    attempts: z.number().int().nonnegative().max(20),
+    startedAt: isoDateTime,
+    finishedAt: isoDateTime,
+    retrieval: browserCaptureRetrievalSchema,
+  })).min(1).max(2000),
+  canaries: z.array(browserCaptureCanarySchema).min(1).max(4000),
+  chunks: z.array(z.object({
+    id: nonEmptyId,
+    phase: z.enum(["discovery", "verification"]),
+    ordinal: z.number().int().nonnegative(),
+    termKeys: z.array(nonEmptyId).max(20),
+    rowCount: z.number().int().nonnegative(),
+    verificationCount: z.number().int().nonnegative(),
+    sha256: sha256Hex,
+    createdAt: isoDateTime,
+  })).min(1).max(4000),
+  accuracy: browserCaptureAccuracySchema,
+  projectedCaptureSha256: sha256Hex,
+  contentHash: sha256Hex,
+}).superRefine((value, context) => {
+  if (value.finishedAt < value.startedAt) context.addIssue({ code: "custom", path: ["finishedAt"], message: "must not precede startedAt" });
+  if (value.terms.length !== value.expectedTerms) context.addIssue({ code: "custom", path: ["terms"], message: "must match expectedTerms" });
+  if (value.canaries.length !== value.chunks.length) context.addIssue({ code: "custom", path: ["canaries"], message: "every chunk requires a canary" });
+  if (new Set(value.terms.map((term) => term.termKey)).size !== value.terms.length) context.addIssue({ code: "custom", path: ["terms"], message: "term keys must be unique" });
+  if (new Set(value.terms.map((term) => term.ordinal)).size !== value.terms.length) context.addIssue({ code: "custom", path: ["terms"], message: "term ordinals must be unique" });
+  const complete = value.terms.every((term) => term.outcome === "success" || term.outcome === "empty");
+  if (value.coverageMode === "full" && (!complete || !value.accuracy.pass)) context.addIssue({ code: "custom", path: ["coverageMode"], message: "full sessions require complete terms and a passing capture-accuracy report" });
+  for (const [index, term] of value.terms.entries()) {
+    if (term.finishedAt < term.startedAt) context.addIssue({ code: "custom", path: ["terms", index, "finishedAt"], message: "must not precede startedAt" });
+    if (term.startedAt < value.startedAt || term.finishedAt > value.finishedAt) context.addIssue({ code: "custom", path: ["terms", index], message: "term interval must be inside the session interval" });
+  }
+  for (const [index, canary] of value.canaries.entries()) {
+    if (canary.ordinal !== index) context.addIssue({ code: "custom", path: ["canaries", index, "ordinal"], message: "canary ordinals must be contiguous" });
+    if (canary.observedAt < value.startedAt || canary.observedAt > value.finishedAt) context.addIssue({ code: "custom", path: ["canaries", index, "observedAt"], message: "canary must be observed inside the session interval" });
+  }
+  for (const [index, chunk] of value.chunks.entries()) if (chunk.ordinal !== index) context.addIssue({ code: "custom", path: ["chunks", index, "ordinal"], message: "chunk ordinals must be contiguous" });
+  if (!value.canaries.some((canary) => canary.screenshotSha256)) context.addIssue({ code: "custom", path: ["canaries"], message: "at least one canary must bind screenshot evidence" });
+});
+
+export const browserCaptureSessionSchema = z.union([browserCaptureSessionV2Schema, browserCaptureSessionV1Schema]);
 
 export const observationInputSchema = z
   .object({
@@ -902,6 +1055,12 @@ export type AccuracyDrawCreate = z.infer<typeof accuracyDrawCreateSchema>;
 export type AccuracyVerdicts = z.infer<typeof accuracyVerdictsSchema>;
 export type DirectCaptureArtifact = z.infer<typeof directCaptureArtifactSchema>;
 export type BrowserCaptureSession = z.infer<typeof browserCaptureSessionSchema>;
+export type BrowserCaptureSessionV2 = z.infer<typeof browserCaptureSessionV2Schema>;
+export type BrowserCaptureAccuracy = z.infer<typeof browserCaptureAccuracySchema>;
+export type BrowserCaptureAccuracyRow = z.infer<typeof browserCaptureAccuracyRowSchema>;
+export type BrowserCaptureStore = z.infer<typeof browserCaptureStore>;
+export type BrowserCaptureTruth = z.infer<typeof browserCaptureTruthSchema>;
+export type BrowserCaptureVerification = z.infer<typeof browserCaptureVerificationSchema>;
 export type EngineParityReport = z.infer<typeof engineParityReportSchema>;
 export type RestoreDrillRecord = z.infer<typeof restoreDrillRecordSchema>;
 export type RestoreDrillCleanup = z.infer<typeof restoreDrillCleanupSchema>;

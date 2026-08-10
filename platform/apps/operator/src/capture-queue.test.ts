@@ -2,7 +2,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { digestHex, stableJson } from "@thriftycrew/domain";
+import { buildBrowserCaptureAccuracy, digestHex, stableJson } from "@thriftycrew/domain";
 import { browserCaptureCycleStatus, captureQueueStatus, drainCaptureQueue, enqueueCapture, PermanentCaptureError, reconcileCaptureQueueRemote, verifyCaptureQueueFilesystem } from "./capture-queue";
 
 const roots: string[] = [];
@@ -32,12 +32,40 @@ async function fixture(sourceId = "direct-walmart-browser", captureDate = "2026-
   const projectedCaptureSha256 = await digestHex(rawBytes);
   const location = store === "walmart" ? "Omaha L St Supercenter" : store === "sams" ? "Omaha Sam's Club" : store === "aldi" ? "ALDI OLA 42 Omaha" : "17070 Audrey Street Omaha";
   const priceMode = store === "walmart" ? "pickup" : store === "sams" ? "club pickup" : "in-store";
+  const pageUrl = store === "walmart" ? "https://www.walmart.com/search?q=eggs" : store === "sams" ? "https://www.samsclub.com/s/eggs" : store === "aldi" ? "https://www.aldi.us/results?q=eggs" : "https://shop.fareway.com/search?q=eggs";
+  const dual = store === "walmart" || store === "sams";
+  const discoveryTruth = {
+    capturedAt: `${captureDate}T15:01:00.000Z`, pageUrl, location, priceMode, pageIndex: 0, resultIndex: 0,
+    visible: { rawText: "$1.99", priceMinor: 199, productName: "Large Eggs", sizeText: "12 ct" },
+    ...(dual ? { structured: { rawText: "1.99", priceMinor: 199, productName: "Large Eggs", productKey: "123", sizeText: "12 ct" } } : {}),
+    parser: { status: "exact" as const, rule: dual ? "next-data-price-lines" as const : "current-price-label" as const },
+  };
+  const terms = [{
+    termKey: "eggs", query: "eggs", ordinal: 0, outcome: "success" as const, rowCount: 1, attempts: 1, startedAt: start, finishedAt: `${captureDate}T15:01:00.000Z`,
+    retrieval: { targetResultCount: 1, loadedResultCount: 1, availableResultCount: 1, pageCount: 1, hasMoreResults: false, termination: "end-of-results" as const },
+  }];
+  const candidate = { termKey: "eggs", query: "eggs", productKey: "123", name: "Large Eggs", sizeText: "12 ct", taxonomyPath: "Food/Dairy", purchasePriceMinor: 199, truth: discoveryTruth };
+  const provisional = await buildBrowserCaptureAccuracy(store, [candidate], [], terms);
+  const target = provisional.discoveryRows[0]!;
+  const verificationTruth = { ...discoveryTruth, capturedAt: `${captureDate}T15:01:30.000Z` };
+  const verifications = [{
+    rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt: `${captureDate}T15:01:30.000Z`, outcome: "observed" as const,
+    productKey: "123", name: "Large Eggs", sizeText: "12 ct", purchasePriceMinor: 199, truth: verificationTruth,
+  }];
+  const accuracy = await buildBrowserCaptureAccuracy(store, [candidate], verifications, terms);
   const sessionContent = {
-    version: 1 as const, sessionId: `browser-${store}-${captureDate}-fixture`, store, sourceId,
+    version: 2 as const, sessionId: `browser-${store}-${captureDate}-fixture`, store, sourceId,
     worklistHash: "b".repeat(64), startedAt: start, finishedAt: finish, coverageMode: "full" as const, expectedTerms: 1,
-    terms: [{ termKey: "eggs", query: "eggs", ordinal: 0, outcome: "success" as const, rowCount: 1, attempts: 1, startedAt: start, finishedAt: `${captureDate}T15:01:00.000Z` }],
-    canaries: [{ ordinal: 0, observedAt: start, market: "Omaha", location, priceMode, evidenceUrl: "https://example.com/store", marketVerified: true as const, locationVerified: true as const, priceModeVerified: true as const, screenshotSha256 }],
-    chunks: [{ id: "chunk-fixture", ordinal: 0, termKeys: ["eggs"], rowCount: 1, sha256: "c".repeat(64), createdAt: `${captureDate}T15:01:00.000Z` }],
+    terms,
+    canaries: [
+      { ordinal: 0, observedAt: start, market: "Omaha", location, priceMode, evidenceUrl: pageUrl, marketVerified: true as const, locationVerified: true as const, priceModeVerified: true as const, screenshotSha256 },
+      { ordinal: 1, observedAt: `${captureDate}T15:01:30.000Z`, market: "Omaha", location, priceMode, evidenceUrl: pageUrl, marketVerified: true as const, locationVerified: true as const, priceModeVerified: true as const },
+    ],
+    chunks: [
+      { id: "chunk-discovery", phase: "discovery" as const, ordinal: 0, termKeys: ["eggs"], rowCount: 1, verificationCount: 0, sha256: "c".repeat(64), createdAt: `${captureDate}T15:01:00.000Z` },
+      { id: "chunk-verification", phase: "verification" as const, ordinal: 1, termKeys: [], rowCount: 0, verificationCount: 1, sha256: "d".repeat(64), createdAt: `${captureDate}T15:01:30.000Z` },
+    ],
+    accuracy,
     projectedCaptureSha256,
   };
   const session = { ...sessionContent, contentHash: await digestHex(stableJson(sessionContent)) };

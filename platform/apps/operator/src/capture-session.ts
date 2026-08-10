@@ -1,15 +1,25 @@
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
-import { browserCaptureCanarySchema, browserCaptureSessionSchema, type BrowserCaptureSession } from "@thriftycrew/contracts";
-import { digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
+import {
+  browserCaptureCanarySchema,
+  browserCaptureRetrievalSchema,
+  browserCaptureSessionSchema,
+  browserCaptureTruthSchema,
+  browserCaptureVerificationSchema,
+  type BrowserCaptureSessionV2,
+  type BrowserCaptureStore,
+  type BrowserCaptureVerification,
+} from "@thriftycrew/contracts";
+import { browserCaptureTruthPass, buildBrowserCaptureAccuracy, digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 
 const storeSchema = z.enum(["aldi", "fareway", "sams", "walmart"]);
 type BrowserStore = z.infer<typeof storeSchema>;
 
 const termOutcomeSchema = z.enum(["success", "empty", "rejected", "blocked"]);
-const chunkSchema = z.object({
-  version: z.literal(1),
+const discoveryChunkSchema = z.object({
+  version: z.literal(2),
+  phase: z.literal("discovery"),
   store: storeSchema,
   canary: browserCaptureCanarySchema.omit({ ordinal: true }),
   terms: z.array(z.object({
@@ -19,15 +29,26 @@ const chunkSchema = z.object({
     attempts: z.number().int().positive().max(20),
     startedAt: z.iso.datetime({ offset: true }),
     finishedAt: z.iso.datetime({ offset: true }),
+    retrieval: browserCaptureRetrievalSchema,
     reason: z.string().trim().min(1).max(1000).optional(),
   })).min(1).max(20),
   rows: z.array(z.record(z.string(), z.unknown())).max(10_000),
 });
 
+const verificationChunkSchema = z.object({
+  version: z.literal(2),
+  phase: z.literal("verification"),
+  store: storeSchema,
+  canary: browserCaptureCanarySchema.omit({ ordinal: true }),
+  verifications: z.array(browserCaptureVerificationSchema).min(1).max(200),
+});
+
+const chunkSchema = z.discriminatedUnion("phase", [discoveryChunkSchema, verificationChunkSchema]);
 type CaptureChunk = z.infer<typeof chunkSchema>;
+type DiscoveryChunk = z.infer<typeof discoveryChunkSchema>;
 
 interface DraftSession {
-  version: 1;
+  version: 2;
   sessionId: string;
   store: BrowserStore;
   sourceId: string;
@@ -38,8 +59,8 @@ interface DraftSession {
 }
 
 const STORE_COLUMNS: Record<BrowserStore, string[]> = {
-  walmart: ["q", "n", "lp", "up", "id", "taxonomy_path", "url", "image_url"],
-  sams: ["q", "n", "lp", "up", "id", "taxonomy_path", "url", "image_url"],
+  walmart: ["q", "n", "lp", "up", "id", "size", "taxonomy_path", "url", "image_url"],
+  sams: ["q", "n", "lp", "up", "id", "size", "taxonomy_path", "url", "image_url"],
   aldi: ["id", "term", "name", "prices", "unit", "size", "href", "taxonomy_path"],
   fareway: ["id", "term", "name", "price", "per", "orig", "unit", "size", "url", "taxonomy_path"],
 };
@@ -60,7 +81,7 @@ function normalizedString(value: unknown): string {
   return typeof value === "string" ? value.trim() : value === undefined || value === null ? "" : String(value).trim();
 }
 
-function validateCanary(store: BrowserStore, canary: CaptureChunk["canary"]): void {
+function validateCanary(store: BrowserStore, canary: DiscoveryChunk["canary"]): void {
   if (!/^omaha(?:,?\s*(?:ne|nebraska))?$/i.test(canary.market.trim())) throw new Error("capture canary must verify the Omaha market");
   const location = canary.location.toLowerCase();
   const mode = canary.priceMode.toLowerCase();
@@ -75,19 +96,39 @@ function validateCanary(store: BrowserStore, canary: CaptureChunk["canary"]): vo
   if (!modePass) throw new Error(`${store} canary does not prove the required price mode`);
 }
 
-function validateRows(store: BrowserStore, chunk: CaptureChunk, worklist: Map<string, string>): void {
-  const termColumn = TERM_COLUMN[store];
+function projectedIdentity(store: BrowserStore, row: Record<string, unknown>): { query: string; productKey: string; name: string; sizeText: string; taxonomyPath?: string; purchasePriceMinor: number } {
+  const query = normalizedString(row[TERM_COLUMN[store]]);
+  const name = normalizedString(row[store === "walmart" || store === "sams" ? "n" : "name"]);
+  const productKey = normalizedString(row[store === "aldi" ? "href" : store === "fareway" ? "url" : "id"]);
+  const rawPrice = normalizedString(row[store === "aldi" ? "prices" : store === "fareway" ? "price" : "lp"]);
+  const match = rawPrice.replace(/,/g, "").match(/\$?([0-9]+(?:\.[0-9]{1,2})?)/);
+  if (!match) throw new Error(`${store} projected row price is not an exact decimal price: ${rawPrice || "(missing)"}`);
+  const purchasePriceMinor = Math.round(Number(match[1]) * 100);
+  if (!Number.isSafeInteger(purchasePriceMinor)) throw new Error(`${store} projected row price is outside the supported range`);
+  const sizeText = normalizedString(row.size);
+  const taxonomyPath = normalizedString(row.taxonomy_path) || undefined;
+  return { query, productKey, name, sizeText, ...(taxonomyPath ? { taxonomyPath } : {}), purchasePriceMinor };
+}
+
+function validateRows(store: BrowserStore, chunk: DiscoveryChunk, worklist: Map<string, string>): void {
   const counts = new Map<string, number>();
   for (const row of chunk.rows) {
-    const unexpected = Object.keys(row).filter((column) => !STORE_COLUMNS[store].includes(column));
+    const unexpected = Object.keys(row).filter((column) => column !== "_capture" && !STORE_COLUMNS[store].includes(column));
     if (unexpected.length) throw new Error(`${store} projected row contains non-allowlisted fields: ${unexpected.join(", ")}`);
-    const query = normalizedString(row[termColumn]);
+    const identity = projectedIdentity(store, row);
+    const query = identity.query;
     if (!worklist.has(query)) throw new Error(`row refers to query outside the worklist: ${query || "(missing)"}`);
     counts.set(query, (counts.get(query) ?? 0) + 1);
-    const name = normalizedString(row[store === "walmart" || store === "sams" ? "n" : "name"]);
-    const identity = normalizedString(row[store === "aldi" ? "href" : store === "fareway" ? "url" : "id"]);
-    const price = normalizedString(row[store === "aldi" ? "prices" : store === "fareway" ? "price" : "lp"]);
-    if (!name || !identity || !price) throw new Error(`${store} projected row must retain term, name, product identity, and price`);
+    if (!identity.name || !identity.productKey) throw new Error(`${store} projected row must retain term, name, product identity, and price`);
+    const truth = browserCaptureTruthSchema.parse(row._capture);
+    if (!browserCaptureTruthPass(store as BrowserCaptureStore, identity, truth)) {
+      throw new Error(`${store} projected row visible/structured price, product identity, parser, location, or price-mode evidence disagrees with the accepted row`);
+    }
+    if (normalizeName(truth.location) !== normalizeName(chunk.canary.location) || normalizeName(truth.priceMode) !== normalizeName(chunk.canary.priceMode)) {
+      throw new Error(`${store} projected row location/price-mode truth disagrees with its chunk canary`);
+    }
+    const termInterval = chunk.terms.find((term) => term.query === query)!;
+    if (truth.capturedAt < termInterval.startedAt || truth.capturedAt > termInterval.finishedAt) throw new Error(`${store} projected row capture instant is outside its term interval`);
   }
   for (const term of chunk.terms) {
     const count = counts.get(term.query) ?? 0;
@@ -95,6 +136,9 @@ function validateRows(store: BrowserStore, chunk: CaptureChunk, worklist: Map<st
     if (term.outcome === "success" && count === 0) throw new Error(`successful term ${term.query} must contain at least one row`);
     if (term.outcome !== "success" && count !== 0) throw new Error(`${term.outcome} term ${term.query} cannot contain rows`);
     if ((term.outcome === "blocked" || term.outcome === "rejected") && !term.reason) throw new Error(`${term.outcome} term ${term.query} requires a reason`);
+    if (term.outcome === "success" && term.retrieval.loadedResultCount !== count) throw new Error(`term ${term.query} loaded ${term.retrieval.loadedResultCount} results but retained ${count}`);
+    if (term.outcome === "empty" && term.retrieval.termination !== "no-results") throw new Error(`empty term ${term.query} must prove no-results pagination termination`);
+    if ((term.outcome === "blocked" || term.outcome === "rejected") && !["blocked", "error"].includes(term.retrieval.termination)) throw new Error(`${term.outcome} term ${term.query} must retain blocked/error retrieval state`);
   }
 }
 
@@ -106,7 +150,7 @@ async function atomicJson(file: string, value: unknown): Promise<void> {
 
 async function loadDraft(directory: string): Promise<DraftSession> {
   const draft = JSON.parse((await readFile(path.join(directory, "session.json"), "utf8")).replace(/^\uFEFF/, "")) as DraftSession;
-  if (draft.version !== 1 || !draft.sessionId || !Array.isArray(draft.worklist) || !Array.isArray(draft.chunks)) throw new Error(`invalid browser capture session in ${directory}`);
+  if (draft.version !== 2 || !draft.sessionId || !Array.isArray(draft.worklist) || !Array.isArray(draft.chunks)) throw new Error(`invalid browser capture session in ${directory}`);
   return draft;
 }
 
@@ -137,7 +181,7 @@ export async function initializeCaptureSession(storeInput: string, worklistFile:
   });
   const worklistHash = await digestHex(stableJson(terms));
   const sessionId = `browser-${store}-${startedAt.slice(0, 10)}-${worklistHash.slice(0, 12)}`;
-  const draft: DraftSession = { version: 1, sessionId, store, sourceId: SOURCE_IDS[store], worklist: keyed, worklistHash, startedAt, chunks: [] };
+  const draft: DraftSession = { version: 2, sessionId, store, sourceId: SOURCE_IDS[store], worklist: keyed, worklistHash, startedAt, chunks: [] };
   await mkdir(path.join(directory, "chunks"), { recursive: true });
   try {
     const existing = await loadDraft(directory);
@@ -157,18 +201,31 @@ export async function appendCaptureChunk(directory: string, chunkFile: string): 
   if (chunk.store !== draft.store) throw new Error(`chunk is for ${chunk.store}, not ${draft.store}`);
   validateCanary(draft.store, chunk.canary);
   const worklist = new Map(draft.worklist.map((term) => [term.query, term.termKey]));
-  if (new Set(chunk.terms.map((term) => term.query)).size !== chunk.terms.length) throw new Error("chunk contains duplicate term results");
-  for (const term of chunk.terms) if (!worklist.has(term.query)) throw new Error(`chunk term is outside the worklist: ${term.query}`);
-  validateRows(draft.store, chunk, worklist);
+  if (chunk.phase === "discovery") {
+    if (new Set(chunk.terms.map((term) => term.query)).size !== chunk.terms.length) throw new Error("chunk contains duplicate term results");
+    for (const term of chunk.terms) if (!worklist.has(term.query)) throw new Error(`chunk term is outside the worklist: ${term.query}`);
+    validateRows(draft.store, chunk, worklist);
+  } else {
+    if (new Set(chunk.verifications.map((item) => item.rowKey)).size !== chunk.verifications.length) throw new Error("verification chunk contains duplicate row keys");
+    for (const verification of chunk.verifications) {
+      if (verification.outcome === "observed" && verification.truth && !browserCaptureTruthPass(draft.store, {
+        productKey: verification.productKey!, name: verification.name!, sizeText: verification.sizeText!, purchasePriceMinor: verification.purchasePriceMinor!,
+      }, verification.truth)) throw new Error(`verification ${verification.rowKey} contains internally disagreeing product or price evidence`);
+      if (verification.truth && (normalizeName(verification.truth.location) !== normalizeName(chunk.canary.location) || normalizeName(verification.truth.priceMode) !== normalizeName(chunk.canary.priceMode))) {
+        throw new Error(`verification ${verification.rowKey} location/price-mode truth disagrees with its chunk canary`);
+      }
+      if (verification.truth && verification.truth.capturedAt !== verification.observedAt) throw new Error(`verification ${verification.rowKey} truth timestamp does not match observedAt`);
+    }
+  }
   const sha256 = await digestHex(bytes);
   const id = `chunk-${sha256.slice(0, 24)}`;
   const existing = draft.chunks.find((entry) => entry.id === id);
-  if (existing) return { id, idempotent: true, terms: chunk.terms.length, rows: chunk.rows.length };
+  if (existing) return { id, idempotent: true, terms: chunk.phase === "discovery" ? chunk.terms.length : 0, rows: chunk.phase === "discovery" ? chunk.rows.length : chunk.verifications.length };
   const stored = `${String(draft.chunks.length).padStart(4, "0")}-${id}.json`;
   await writeFile(path.join(directory, "chunks", stored), bytes);
   draft.chunks.push({ id, file: stored, sha256, createdAt: new Date().toISOString() });
   await atomicJson(path.join(directory, "session.json"), draft);
-  return { id, idempotent: false, terms: chunk.terms.length, rows: chunk.rows.length };
+  return { id, idempotent: false, terms: chunk.phase === "discovery" ? chunk.terms.length : 0, rows: chunk.phase === "discovery" ? chunk.rows.length : chunk.verifications.length };
 }
 
 function csvValue(value: unknown): string {
@@ -201,33 +258,94 @@ async function renderProjectedCapture(store: BrowserStore, rows: Array<Record<st
   return digestHex(new TextEncoder().encode(output));
 }
 
-export async function finalizeCaptureSession(directory: string, projectedOutputFile: string, manifestOutputFile: string, finishedAt = new Date().toISOString()): Promise<BrowserCaptureSession> {
-  const draft = await loadDraft(directory);
-  if (draft.chunks.length === 0) throw new Error("cannot finalize a browser capture session without chunks");
-  const latest = new Map<string, { result: CaptureChunk["terms"][number]; rows: Array<Record<string, unknown>> }>();
-  const canaries: BrowserCaptureSession["canaries"] = [];
-  const chunkEntries: BrowserCaptureSession["chunks"] = [];
+interface LoadedSessionState {
+  latest: Map<string, { result: DiscoveryChunk["terms"][number]; rows: Array<Record<string, unknown>> }>;
+  canaries: BrowserCaptureSessionV2["canaries"];
+  chunkEntries: BrowserCaptureSessionV2["chunks"];
+  verifications: BrowserCaptureVerification[];
+}
+
+async function loadSessionState(directory: string, draft: DraftSession): Promise<LoadedSessionState> {
+  const latest: LoadedSessionState["latest"] = new Map();
+  const canaries: BrowserCaptureSessionV2["canaries"] = [];
+  const chunkEntries: BrowserCaptureSessionV2["chunks"] = [];
+  const verifications: BrowserCaptureVerification[] = [];
   for (let ordinal = 0; ordinal < draft.chunks.length; ordinal += 1) {
     const entry = draft.chunks[ordinal]!;
     const bytes = new Uint8Array(await readFile(path.join(directory, "chunks", entry.file)));
     if (await digestHex(bytes) !== entry.sha256) throw new Error(`capture chunk hash mismatch: ${entry.file}`);
     const chunk = chunkSchema.parse(JSON.parse(new TextDecoder().decode(bytes).replace(/^\uFEFF/, "")));
-    const termColumn = TERM_COLUMN[draft.store];
-    for (const result of chunk.terms) latest.set(result.query, { result, rows: chunk.rows.filter((row) => normalizedString(row[termColumn]) === result.query) });
     canaries.push({ ...chunk.canary, ordinal });
-    chunkEntries.push({ id: entry.id, ordinal, termKeys: chunk.terms.map((term) => draft.worklist.find((item) => item.query === term.query)!.termKey), rowCount: chunk.rows.length, sha256: entry.sha256, createdAt: entry.createdAt });
+    if (chunk.phase === "discovery") {
+      const termColumn = TERM_COLUMN[draft.store];
+      for (const result of chunk.terms) latest.set(result.query, { result, rows: chunk.rows.filter((row) => normalizedString(row[termColumn]) === result.query) });
+      chunkEntries.push({ id: entry.id, phase: chunk.phase, ordinal, termKeys: chunk.terms.map((term) => draft.worklist.find((item) => item.query === term.query)!.termKey), rowCount: chunk.rows.length, verificationCount: 0, sha256: entry.sha256, createdAt: entry.createdAt });
+    } else {
+      verifications.push(...chunk.verifications);
+      chunkEntries.push({ id: entry.id, phase: chunk.phase, ordinal, termKeys: [], rowCount: 0, verificationCount: chunk.verifications.length, sha256: entry.sha256, createdAt: entry.createdAt });
+    }
   }
-  const terms: BrowserCaptureSession["terms"] = draft.worklist.map((term) => {
+  return { latest, canaries, chunkEntries, verifications };
+}
+
+function finalizedTerms(draft: DraftSession, latest: LoadedSessionState["latest"]): BrowserCaptureSessionV2["terms"] {
+  return draft.worklist.map((term) => {
     const captured = latest.get(term.query)?.result;
-    return captured ? { termKey: term.termKey, query: term.query, ordinal: term.ordinal, outcome: captured.outcome, rowCount: captured.rowCount, attempts: captured.attempts, startedAt: captured.startedAt, finishedAt: captured.finishedAt, ...(captured.reason ? { reason: captured.reason } : {}) }
-      : { termKey: term.termKey, query: term.query, ordinal: term.ordinal, outcome: "not_attempted", rowCount: 0, attempts: 0, startedAt: draft.startedAt, finishedAt: draft.startedAt, reason: "term was not attempted before finalization" };
+    return captured ? {
+      termKey: term.termKey, query: term.query, ordinal: term.ordinal, outcome: captured.outcome, rowCount: captured.rowCount,
+      attempts: captured.attempts, startedAt: captured.startedAt, finishedAt: captured.finishedAt, retrieval: captured.retrieval,
+      ...(captured.reason ? { reason: captured.reason } : {}),
+    } : {
+      termKey: term.termKey, query: term.query, ordinal: term.ordinal, outcome: "not_attempted" as const, rowCount: 0, attempts: 0,
+      startedAt: draft.startedAt, finishedAt: draft.startedAt, reason: "term was not attempted before finalization",
+      retrieval: { targetResultCount: 1, loadedResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "error" as const },
+    };
   });
-  const mergedRows = draft.worklist.flatMap((term) => latest.get(term.query)?.rows ?? []);
+}
+
+function accuracyCandidates(draft: DraftSession, state: LoadedSessionState): Array<Parameters<typeof buildBrowserCaptureAccuracy>[1][number]> {
+  return draft.worklist.flatMap((term) => (state.latest.get(term.query)?.rows ?? []).map((row) => {
+    const identity = projectedIdentity(draft.store, row);
+    return {
+      termKey: term.termKey,
+      query: term.query,
+      productKey: identity.productKey,
+      name: identity.name,
+      sizeText: identity.sizeText,
+      ...(identity.taxonomyPath ? { taxonomyPath: identity.taxonomyPath } : {}),
+      purchasePriceMinor: identity.purchasePriceMinor,
+      truth: browserCaptureTruthSchema.parse(row._capture),
+    };
+  }));
+}
+
+export async function buildCaptureVerificationPlan(directory: string, outputFile: string): Promise<Record<string, unknown>> {
+  const draft = await loadDraft(directory);
+  const state = await loadSessionState(directory, draft);
+  const terms = finalizedTerms(draft, state.latest);
+  const accuracy = await buildBrowserCaptureAccuracy(draft.store, accuracyCandidates(draft, state), state.verifications, terms);
+  const targets = accuracy.discoveryRows.filter((row) => row.verificationRequired).map((row) => ({
+    rowKey: row.rowKey, discoveryHash: row.discoveryHash, termKey: row.termKey, query: row.query,
+    productKey: row.productKey, name: row.name, sizeText: row.sizeText, purchasePriceMinor: row.purchasePriceMinor,
+    pageUrl: row.truth.pageUrl, riskReasons: row.riskReasons,
+  }));
+  const content = { version: 1, sessionId: draft.sessionId, sourceId: draft.sourceId, createdAt: new Date().toISOString(), targets };
+  await atomicJson(outputFile, { ...content, contentHash: await digestHex(stableJson(content)) });
+  return { ok: true, outputFile, targets: targets.length, discoveryRows: accuracy.discoveryRows.length };
+}
+
+export async function finalizeCaptureSession(directory: string, projectedOutputFile: string, manifestOutputFile: string, finishedAt = new Date().toISOString()): Promise<BrowserCaptureSessionV2> {
+  const draft = await loadDraft(directory);
+  if (draft.chunks.length === 0) throw new Error("cannot finalize a browser capture session without chunks");
+  const state = await loadSessionState(directory, draft);
+  const terms = finalizedTerms(draft, state.latest);
+  const mergedRows = draft.worklist.flatMap((term) => state.latest.get(term.query)?.rows ?? []);
   if (mergedRows.length === 0) throw new Error("capture session contains no projected product rows");
+  const accuracy = await buildBrowserCaptureAccuracy(draft.store, accuracyCandidates(draft, state), state.verifications, terms);
   const projectedCaptureSha256 = await renderProjectedCapture(draft.store, mergedRows, projectedOutputFile);
-  const coverageMode: BrowserCaptureSession["coverageMode"] = terms.every((term) => term.outcome === "success" || term.outcome === "empty") ? "full" : "partial";
+  const coverageMode: BrowserCaptureSessionV2["coverageMode"] = terms.every((term) => term.outcome === "success" || term.outcome === "empty") && accuracy.pass ? "full" : "partial";
   const manifestContent = {
-    version: 1,
+    version: 2 as const,
     sessionId: draft.sessionId,
     store: draft.store,
     sourceId: draft.sourceId,
@@ -237,33 +355,36 @@ export async function finalizeCaptureSession(directory: string, projectedOutputF
     coverageMode,
     expectedTerms: draft.worklist.length,
     terms,
-    canaries,
-    chunks: chunkEntries,
+    canaries: state.canaries,
+    chunks: state.chunkEntries,
+    accuracy,
     projectedCaptureSha256,
-  } as const;
+  };
   const manifest = browserCaptureSessionSchema.parse({ ...manifestContent, contentHash: await digestHex(stableJson(manifestContent)) });
+  if (manifest.version !== 2) throw new Error("capture session manifest unexpectedly downgraded");
   await atomicJson(manifestOutputFile, manifest);
   return manifest;
 }
 
 export async function captureSessionStatus(directory: string): Promise<Record<string, unknown>> {
   const draft = await loadDraft(directory);
-  const latest = new Map<string, CaptureChunk["terms"][number]>();
-  let rows = 0;
-  for (const entry of draft.chunks) {
-    const chunk = chunkSchema.parse(JSON.parse((await readFile(path.join(directory, "chunks", entry.file), "utf8")).replace(/^\uFEFF/, "")));
-    for (const term of chunk.terms) latest.set(term.query, term);
-    rows += chunk.rows.length;
-  }
+  const state = await loadSessionState(directory, draft);
+  const terms = finalizedTerms(draft, state.latest);
+  const candidates = accuracyCandidates(draft, state);
+  const accuracy = candidates.length ? await buildBrowserCaptureAccuracy(draft.store, candidates, state.verifications, terms) : null;
   return {
     ok: true,
     sessionId: draft.sessionId,
     store: draft.store,
     expectedTerms: draft.worklist.length,
-    attemptedTerms: latest.size,
-    remainingTerms: draft.worklist.filter((term) => !latest.has(term.query)),
-    retryTerms: draft.worklist.filter((term) => ["blocked", "rejected"].includes(latest.get(term.query)?.outcome ?? "")),
+    attemptedTerms: state.latest.size,
+    remainingTerms: draft.worklist.filter((term) => !state.latest.has(term.query)),
+    retryTerms: draft.worklist.filter((term) => ["blocked", "rejected"].includes(state.latest.get(term.query)?.result.outcome ?? "")),
     chunks: draft.chunks.length,
-    rows,
+    discoveryRows: candidates.length,
+    verificationTargets: accuracy?.requiredVerificationRows ?? 0,
+    matchedVerifications: accuracy?.matchedVerificationRows ?? 0,
+    unresolvedVerifications: accuracy?.unresolvedVerificationRows ?? 0,
+    accuracyPass: accuracy?.pass ?? false,
   };
 }

@@ -1,12 +1,12 @@
 {
-  "version": 2,
+  "version": 3,
   "sources": [
     { "sourceId": "direct-bakers-headless", "minimumRows": 1000, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 10, "requiredPriceMode": true, "allowedPriceModes": ["in_store"], "maximumRejectedPercent": 10 },
     { "sourceId": "direct-family-fare-headless", "minimumRows": 1000, "minimumTermCompletionPercent": 95, "minimumTaxonomyPercent": 10, "requiredPriceMode": true, "allowedPriceModes": ["pickup"], "maximumRejectedPercent": 10 },
     { "sourceId": "direct-hy-vee-headless", "minimumRows": 500, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 10, "requiredPriceMode": true, "allowedPriceModes": ["in_store"], "maximumRejectedPercent": 10 },
-    { "sourceId": "direct-aldi-browser", "minimumRows": 100, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 0, "requiredPriceMode": true, "allowedPriceModes": ["in_store"], "maximumRejectedPercent": 10 },
-    { "sourceId": "direct-fareway-browser", "minimumRows": 100, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 0, "requiredPriceMode": true, "allowedPriceModes": ["in_store"], "maximumRejectedPercent": 10 },
-    { "sourceId": "direct-sams-browser", "minimumRows": 100, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 0, "requiredPriceMode": true, "allowedPriceModes": ["club", "club_pickup"], "maximumRejectedPercent": 10 },
-    { "sourceId": "direct-walmart-browser", "minimumRows": 100, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 0, "requiredPriceMode": true, "allowedPriceModes": ["pickup", "in_store"], "maximumRejectedPercent": 10 }
+    { "sourceId": "direct-aldi-browser", "minimumRows": 100, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 0, "requiredPriceMode": true, "allowedPriceModes": ["in_store"], "maximumRejectedPercent": 10, "requiredCaptureAccuracy": true, "minimumVerificationPercent": 100, "requireDualPriceAgreement": false },
+    { "sourceId": "direct-fareway-browser", "minimumRows": 100, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 0, "requiredPriceMode": true, "allowedPriceModes": ["in_store"], "maximumRejectedPercent": 10, "requiredCaptureAccuracy": true, "minimumVerificationPercent": 100, "requireDualPriceAgreement": false },
+    { "sourceId": "direct-sams-browser", "minimumRows": 100, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 0, "requiredPriceMode": true, "allowedPriceModes": ["club", "club_pickup"], "maximumRejectedPercent": 10, "requiredCaptureAccuracy": true, "minimumVerificationPercent": 100, "requireDualPriceAgreement": true },
+    { "sourceId": "direct-walmart-browser", "minimumRows": 100, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 0, "requiredPriceMode": true, "allowedPriceModes": ["pickup", "in_store"], "maximumRejectedPercent": 10, "requiredCaptureAccuracy": true, "minimumVerificationPercent": 100, "requireDualPriceAgreement": true }
   ]
 }

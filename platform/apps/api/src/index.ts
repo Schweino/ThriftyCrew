@@ -235,14 +235,18 @@ app.get("/api/v2/status", async (context) => {
          SELECT source_id, cycle_start, coverage_mode, expected_terms, attempted_terms,
                 success_terms, empty_terms, rejected_terms, blocked_terms, not_attempted_terms,
                 retry_count, chunk_count, duration_ms, term_duration_p50_ms, term_duration_p95_ms,
-                projected_rows, observation_count, taxonomy_rows, recorded_at,
+                projected_rows, observation_count, taxonomy_rows, accuracy_policy_version, discovery_rows,
+                required_verification_rows, matched_verification_rows, unresolved_verification_rows,
+                price_agreement_rows, single_channel_rows, anomaly_rows, retrieval_complete_terms, recorded_at,
                 ROW_NUMBER() OVER (PARTITION BY source_id ORDER BY cycle_start DESC, recorded_at DESC) AS ordinal
            FROM browser_capture_metrics
        )
        SELECT source_id, cycle_start, coverage_mode, expected_terms, attempted_terms,
               success_terms, empty_terms, rejected_terms, blocked_terms, not_attempted_terms,
               retry_count, chunk_count, duration_ms, term_duration_p50_ms, term_duration_p95_ms,
-              projected_rows, observation_count, taxonomy_rows, recorded_at
+              projected_rows, observation_count, taxonomy_rows, accuracy_policy_version, discovery_rows,
+              required_verification_rows, matched_verification_rows, unresolved_verification_rows,
+              price_agreement_rows, single_channel_rows, anomaly_rows, retrieval_complete_terms, recorded_at
          FROM ranked WHERE ordinal = 1 ORDER BY source_id`,
     ).all(),
   ]);
@@ -737,7 +741,9 @@ app.get("/internal/capture-metrics", async (context) => {
             expected_terms, attempted_terms, success_terms, empty_terms, rejected_terms,
             blocked_terms, not_attempted_terms, retry_count, chunk_count, duration_ms,
             term_duration_p50_ms, term_duration_p95_ms, projected_rows, observation_count,
-            taxonomy_rows, recorded_at
+            taxonomy_rows, accuracy_policy_version, discovery_rows, required_verification_rows,
+            matched_verification_rows, unresolved_verification_rows, price_agreement_rows,
+            single_channel_rows, anomaly_rows, retrieval_complete_terms, recorded_at
        FROM browser_capture_metrics
       ORDER BY recorded_at DESC, source_id LIMIT ?1`,
   ).bind(limit).all();
@@ -1930,16 +1936,21 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
          batch_id, session_id, source_id, cycle_start, coverage_mode,
          expected_terms, attempted_terms, success_terms, empty_terms, rejected_terms,
          blocked_terms, not_attempted_terms, retry_count, chunk_count, duration_ms,
-         term_duration_p50_ms, term_duration_p95_ms, projected_rows, observation_count, taxonomy_rows
+         term_duration_p50_ms, term_duration_p95_ms, projected_rows, observation_count, taxonomy_rows,
+         accuracy_policy_version, discovery_rows, required_verification_rows, matched_verification_rows,
+         unresolved_verification_rows, price_agreement_rows, single_channel_rows, anomaly_rows, retrieval_complete_terms
        ) VALUES (
          ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10,
-         ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20
+         ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20,
+         ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29
        )`,
     ).bind(
       batch.id, metrics.sessionId, metrics.sourceId, metrics.cycleStart, metrics.coverageMode,
       metrics.expectedTerms, metrics.attemptedTerms, metrics.successTerms, metrics.emptyTerms, metrics.rejectedTerms,
       metrics.blockedTerms, metrics.notAttemptedTerms, metrics.retryCount, metrics.chunkCount, metrics.durationMs,
       metrics.termDurationP50Ms, metrics.termDurationP95Ms, metrics.projectedRows, observationCount, taxonomyRows,
+      metrics.accuracyPolicyVersion, metrics.discoveryRows, metrics.requiredVerificationRows, metrics.matchedVerificationRows,
+      metrics.unresolvedVerificationRows, metrics.priceAgreementRows, metrics.singleChannelRows, metrics.anomalyRows, metrics.retrievalCompleteTerms,
     ));
   }
   for (const [guardId, pass, eligible, examined, detail] of [
@@ -1948,12 +1959,29 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
     ["batch-collapse", collapsePass, predecessor ? 2 : 0, predecessor ? 2 : 0, { observationCount, predecessorBatchId: predecessor?.id ?? null, predecessorObservationCount: predecessor?.observation_count ?? null, collapseFloor }],
     ["batch-freshness", freshnessPass, 1, 1, { capturedTo: batch.captured_to, captureAgeMillis, maxAgeDays: batch.max_age_days }],
     ["batch-browser-evidence", browserEvidence.pass, batch.capture_method === "browser" ? 3 : 0, batch.capture_method === "browser" ? 3 : 0, browserEvidence.detail],
+    ["batch-browser-accuracy", batch.capture_method !== "browser" || browserEvidence.detail.accuracyPass === true, batch.capture_method === "browser" ? 10 : 0, batch.capture_method === "browser" ? 10 : 0, browserEvidence.detail],
   ] as const) {
     const resultId = await deterministicId("guard", batch.id, guardId);
     statements.push(context.env.DB.prepare(
       `INSERT INTO guard_results (id, guard_id, batch_id, status, eligible_count, examined_count, finding_count, detail_json)
        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)`,
     ).bind(resultId, guardId, batch.id, pass ? "pass" : "fail", eligible, Math.min(eligible, examined), pass ? 0 : 1, stableJson(detail)));
+    if (!pass) {
+      const findingId = await deterministicId("finding", resultId, "capture-rejected");
+      const message = `${guardId} rejected capture ${batch.id}`;
+      statements.push(context.env.DB.prepare(
+        `INSERT INTO guard_findings (id, result_id, finding_key, message, evidence_json)
+         VALUES (?1, ?2, 'capture-rejected', ?3, ?4)`,
+      ).bind(findingId, resultId, message, stableJson(detail)));
+      const triageId = await deterministicId("triage", "guard_finding", findingId);
+      statements.push(context.env.DB.prepare(
+        `INSERT INTO triage_items (id, source_kind, source_ref, severity, status, title, evidence_json)
+         VALUES (?1, 'guard_finding', ?2, 'hard', 'open', ?3, ?4)
+         ON CONFLICT(source_ref) DO UPDATE SET
+           status = CASE WHEN triage_items.status = 'resolved' THEN 'open' ELSE triage_items.status END,
+           title = excluded.title, evidence_json = excluded.evidence_json, updated_at = CURRENT_TIMESTAMP, resolved_at = NULL`,
+      ).bind(triageId, findingId, message, stableJson({ batchId: batch.id, sourceId: batch.source_id, guardId, detail })));
+    }
   }
   try {
     await context.env.DB.batch(statements);

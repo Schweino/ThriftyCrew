@@ -1,5 +1,5 @@
-import { browserCaptureSessionSchema, type BrowserCaptureSession, type DirectCaptureArtifact, type ObservationInput } from "@thriftycrew/contracts";
-import { digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
+import { BROWSER_CAPTURE_ACCURACY_CUTOVER, browserCaptureSessionSchema, type BrowserCaptureSession, type DirectCaptureArtifact, type ObservationInput } from "@thriftycrew/contracts";
+import { buildBrowserCaptureAccuracy, digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 
 type StoreKey = "aldi" | "bakers" | "family-fare" | "fareway" | "hy-vee" | "sams" | "walmart";
 interface RegularDocument {
@@ -275,6 +275,12 @@ export async function buildRegularCapture(
     const proofHashes = new Set(captureSession.canaries.flatMap((canary) => canary.screenshotSha256 ? [canary.screenshotSha256] : []));
     if (!(attestation?.screenshotSha256 ?? []).some((hash) => proofHashes.has(hash))) throw new Error("capture-session canaries do not bind the attested screenshot evidence");
     if (captureSession.canaries.length !== captureSession.chunks.length) throw new Error("every browser capture chunk requires a location/price-mode canary");
+    if (Date.parse(captureSession.finishedAt) >= Date.parse(BROWSER_CAPTURE_ACCURACY_CUTOVER)) {
+      if (captureSession.version !== 2) throw new Error("browser capture uses the retired pre-accuracy session contract");
+      const candidates = captureSession.accuracy.discoveryRows.map(({ rowKey: _rowKey, discoveryHash: _discoveryHash, riskReasons: _riskReasons, verificationRequired: _verificationRequired, ...row }) => row);
+      const recomputed = await buildBrowserCaptureAccuracy(captureSession.store, candidates, captureSession.accuracy.verifications, captureSession.terms);
+      if (!recomputed.pass || stableJson(recomputed) !== stableJson(captureSession.accuracy)) throw new Error("browser capture accuracy report is incomplete, unresolved, or not reproducible");
+    }
   }
   const deals = Array.isArray(document.deals) ? document.deals : [];
   if (deals.length === 0) throw new Error("regular capture document has no deals");
@@ -371,6 +377,17 @@ export async function buildRegularCapture(
     count.accepted += 1;
   }
   if (observations.length === 0) throw new Error("no regular rows could be normalized");
+  let truthBoundObservations = 0;
+  if (captureSession?.version === 2) {
+    for (const observation of observations) {
+      const match = captureSession.accuracy.discoveryRows.some((row) => row.termKey === observation.termKey
+        && row.productKey === observation.externalProductKey
+        && row.purchasePriceMinor === observation.purchasePriceMinor
+        && normalizeName(row.name) === normalizeName(observation.name));
+      if (!match) throw new Error(`normalized browser observation is not bound to exact capture truth: ${observation.termKey ?? "(no-term)"}/${observation.externalProductKey}`);
+      truthBoundObservations += 1;
+    }
+  }
   const captured = observations.map((item) => item.capturedAt).sort();
   const derivedTerms = [...buckets.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([key, value], ordinal) => ({
     termKey: key, ordinal, outcome: value.accepted > 0 ? "success" as const : "rejected" as const, rowCount: value.accepted,
@@ -403,6 +420,6 @@ export async function buildRegularCapture(
     version: 1, sourceId: `direct-${store}-${captureClient}`, coverageMode, capturedFrom, capturedTo,
     expectedTerms: captureSession?.expectedTerms ?? terms.length, marketVerified, locationVerified, priceModeVerified, priceMode,
     idempotencyKey: `regular-${store}-${capturedTo.slice(0, 10)}-${manifestHash.slice(0, 16)}`, terms, observations,
-    audit: { inputRows: deals.length, acceptedRows: observations.length, rejectedRows: rejected.length, rejectionReasons: Object.fromEntries([...new Set(rejected.map((item) => item.reason))].sort().map((reason) => [reason, rejected.filter((item) => item.reason === reason).length])), taxonomyRows: observations.filter((item) => item.taxonomyPath).length, ...(captureSession ? { captureSession } : {}), ...(attestation ? { attestation, attestationHash } : {}) },
+    audit: { inputRows: deals.length, acceptedRows: observations.length, rejectedRows: rejected.length, rejectionReasons: Object.fromEntries([...new Set(rejected.map((item) => item.reason))].sort().map((reason) => [reason, rejected.filter((item) => item.reason === reason).length])), taxonomyRows: observations.filter((item) => item.taxonomyPath).length, truthBoundObservations, ...(captureSession ? { captureSession } : {}), ...(attestation ? { attestation, attestationHash } : {}) },
   };
 }

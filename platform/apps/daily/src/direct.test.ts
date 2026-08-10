@@ -1,22 +1,46 @@
 import { describe, expect, it } from "vitest";
 import { buildRegularCapture } from "./direct";
-import { digestHex, stableJson } from "@thriftycrew/domain";
+import { buildBrowserCaptureAccuracy, digestHex, stableJson } from "@thriftycrew/domain";
 
 async function walmartBrowserSession() {
   const screenshotSha256 = "a".repeat(64);
+  const truth = {
+    capturedAt: "2026-08-12T15:01:00.000Z", pageUrl: "https://www.walmart.com/search?q=eggs", location: "Omaha L St Supercenter", priceMode: "pickup", pageIndex: 0, resultIndex: 0,
+    visible: { rawText: "$1.99", priceMinor: 199, productName: "Eggs", sizeText: "dozen" },
+    structured: { rawText: "1.99", priceMinor: 199, productName: "Eggs", productKey: "wm-eggs", sizeText: "dozen" },
+    parser: { status: "exact" as const, rule: "next-data-price-lines" as const },
+  };
+  const terms = [{
+    termKey: "eggs", query: "eggs", ordinal: 0, outcome: "success" as const, rowCount: 1, attempts: 1,
+    startedAt: "2026-08-12T15:00:00.000Z", finishedAt: "2026-08-12T15:01:00.000Z",
+    retrieval: { targetResultCount: 1, loadedResultCount: 1, availableResultCount: 1, pageCount: 1, hasMoreResults: false, termination: "end-of-results" as const },
+  }];
+  const candidate = { termKey: "eggs", query: "eggs", productKey: "wm-eggs", name: "Eggs", sizeText: "dozen", purchasePriceMinor: 199, truth };
+  const provisional = await buildBrowserCaptureAccuracy("walmart", [candidate], [], terms);
+  const target = provisional.discoveryRows[0]!;
+  const verificationTruth = { ...truth, capturedAt: "2026-08-12T15:01:30.000Z" };
+  const verifications = [{ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt: verificationTruth.capturedAt, outcome: "observed" as const, productKey: "wm-eggs", name: "Eggs", sizeText: "dozen", purchasePriceMinor: 199, truth: verificationTruth }];
+  const accuracy = await buildBrowserCaptureAccuracy("walmart", [candidate], verifications, terms);
   const content = {
-    version: 1 as const,
-    sessionId: "browser-walmart-2026-08-09-fixture",
+    version: 2 as const,
+    sessionId: "browser-walmart-2026-08-12-fixture",
     store: "walmart" as const,
     sourceId: "direct-walmart-browser",
     worklistHash: "b".repeat(64),
-    startedAt: "2026-08-09T15:00:00.000Z",
-    finishedAt: "2026-08-09T15:02:00.000Z",
+    startedAt: "2026-08-12T15:00:00.000Z",
+    finishedAt: "2026-08-12T15:02:00.000Z",
     coverageMode: "full" as const,
     expectedTerms: 1,
-    terms: [{ termKey: "eggs", query: "eggs", ordinal: 0, outcome: "success" as const, rowCount: 1, attempts: 1, startedAt: "2026-08-09T15:00:00.000Z", finishedAt: "2026-08-09T15:01:00.000Z" }],
-    canaries: [{ ordinal: 0, observedAt: "2026-08-09T15:00:00.000Z", market: "Omaha", location: "Omaha L St Supercenter", priceMode: "pickup", evidenceUrl: "https://www.walmart.com/", marketVerified: true as const, locationVerified: true as const, priceModeVerified: true as const, screenshotSha256 }],
-    chunks: [{ id: "chunk-fixture", ordinal: 0, termKeys: ["eggs"], rowCount: 1, sha256: "c".repeat(64), createdAt: "2026-08-09T15:01:00.000Z" }],
+    terms,
+    canaries: [
+      { ordinal: 0, observedAt: "2026-08-12T15:00:00.000Z", market: "Omaha", location: "Omaha L St Supercenter", priceMode: "pickup", evidenceUrl: "https://www.walmart.com/", marketVerified: true as const, locationVerified: true as const, priceModeVerified: true as const, screenshotSha256 },
+      { ordinal: 1, observedAt: "2026-08-12T15:01:30.000Z", market: "Omaha", location: "Omaha L St Supercenter", priceMode: "pickup", evidenceUrl: "https://www.walmart.com/", marketVerified: true as const, locationVerified: true as const, priceModeVerified: true as const },
+    ],
+    chunks: [
+      { id: "chunk-discovery", phase: "discovery" as const, ordinal: 0, termKeys: ["eggs"], rowCount: 1, verificationCount: 0, sha256: "c".repeat(64), createdAt: "2026-08-12T15:01:00.000Z" },
+      { id: "chunk-verification", phase: "verification" as const, ordinal: 1, termKeys: [], rowCount: 0, verificationCount: 1, sha256: "e".repeat(64), createdAt: "2026-08-12T15:01:30.000Z" },
+    ],
+    accuracy,
     projectedCaptureSha256: "d".repeat(64),
   };
   return { ...content, contentHash: await digestHex(stableJson(content)), screenshotSha256 };
@@ -74,10 +98,16 @@ describe("direct regular capture", () => {
 
   it("builds a real-Chrome artifact only with an explicit verification attestation", async () => {
     const session = await walmartBrowserSession();
-    const document = { coverage_mode: "full", capture_session: session, deals: [{ item: "Eggs", current_price: 1.99, size: "dozen", as_of: "2026-08-09", found_by_term: "eggs" }] };
+    const document = { coverage_mode: "full", capture_session: session, deals: [{ item: "Eggs", current_price: 1.99, size: "dozen", as_of: "2026-08-12", found_by_term: "eggs", product_id: "wm-eggs" }] };
     await expect(buildRegularCapture("walmart", document, undefined, "browser")).rejects.toThrow("browser captures require");
+    await expect(buildRegularCapture("walmart", { ...document, deals: [{ ...document.deals[0], current_price: 2.99 }] }, {
+      store: "Walmart", market: "Omaha", priceMode: "pickup", verifiedAt: "2026-08-12T15:00:00.000Z",
+      evidenceUrl: "https://www.walmart.com/", statement: "Logged-in Omaha pickup context verified in Chrome",
+      marketVerified: true, locationVerified: true, priceModeVerified: true,
+      screenshotSha256: [session.screenshotSha256], captureSessionHash: session.contentHash,
+    }, "browser")).rejects.toThrow("not bound to exact capture truth");
     const artifact = await buildRegularCapture("walmart", document, {
-      store: "Walmart", market: "Omaha", priceMode: "pickup", verifiedAt: "2026-08-09T15:00:00.000Z",
+      store: "Walmart", market: "Omaha", priceMode: "pickup", verifiedAt: "2026-08-12T15:00:00.000Z",
       evidenceUrl: "https://www.walmart.com/", statement: "Logged-in Omaha pickup context verified in Chrome",
       marketVerified: true, locationVerified: true, priceModeVerified: true,
       screenshotSha256: [session.screenshotSha256], captureSessionHash: session.contentHash,

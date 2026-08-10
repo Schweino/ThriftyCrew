@@ -13,7 +13,7 @@ import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
 import { checkAgentRegistry, readAgentRegistry } from "./agents";
 import { browserCaptureCycleStatus, captureQueueStatus, defaultCaptureQueueRoot, drainCaptureQueue, enqueueCapture, PermanentCaptureError, reconcileCaptureQueueRemote, verifyCaptureQueueFilesystem } from "./capture-queue";
 import { findLatestRegularCapture, omahaDateKey, parseServerCaptureStore, readFreshRegularCapture, SERVER_CAPTURE_STORES } from "./current-captures";
-import { appendCaptureChunk, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession } from "./capture-session";
+import { appendCaptureChunk, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession } from "./capture-session";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
@@ -629,8 +629,12 @@ if (command === "status") {
     const [directory] = sessionArguments;
     if (!directory) throw new Error("tc capture session status requires a session directory");
     result = await captureSessionStatus(cliPath(directory));
+  } else if (action === "verification-plan") {
+    const [directory, outputFile] = sessionArguments;
+    if (!directory || !outputFile) throw new Error("tc capture session verification-plan requires a session directory and output JSON");
+    result = await buildCaptureVerificationPlan(cliPath(directory), cliPath(outputFile));
   } else {
-    throw new Error("tc capture session requires init, append, finalize, or status");
+    throw new Error("tc capture session requires init, append, verification-plan, finalize, or status");
   }
 } else if (command === "capture" && subcommand === "build-regular") {
   const browser = arguments_.includes("--browser");
@@ -858,7 +862,7 @@ if (command === "status") {
       "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
-        "tc capture metrics [limit]", "tc capture session init|append|finalize|status",
+        "tc capture metrics [limit]", "tc capture session init|append|verification-plan|finalize|status",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog",
       "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|rematch-promoted|abandon <batch-id> <reason>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",
