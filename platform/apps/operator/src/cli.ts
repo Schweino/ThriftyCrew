@@ -611,8 +611,11 @@ if (command === "status") {
 } else if (command === "recipe" && subcommand === "add") {
   result = await recipeAdd(arguments_[0]);
 } else {
+  const requestedCommand = [command, subcommand, ...arguments_].filter(Boolean).join(" ");
+  const isHelpRequest = command === "help" && subcommand === undefined && arguments_.length === 0;
   result = {
-    ok: true,
+    ok: isHelpRequest,
+    ...(!isHelpRequest ? { error: `Unknown command: ${requestedCommand}` } : {}),
     usage: [
       "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy",
       "tc schedules check|deploy", "tc backup trigger [--replica]", "tc restore record <file>|show", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
@@ -624,6 +627,7 @@ if (command === "status") {
       "tc match batch <batch-id>", "tc commodity add <file>", "tc recipe add <file>",
     ],
   };
+  if (!isHelpRequest) process.exitCode = 2;
 }
 
 console.log(JSON.stringify(result, null, 2));
