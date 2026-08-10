@@ -36,7 +36,6 @@ jobs:
       TC_API_ORIGIN: ${{ vars.TC_V3_API_ORIGIN }}
       TC_OIDC_AUDIENCE: tc-grocery-v3
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      TC_OUTPUT_ROOT: ${{ runner.temp }}/tc-agent-output
     steps:
       - uses: actions/checkout@v6
 
@@ -52,6 +51,11 @@ jobs:
           cache-dependency-path: platform/pnpm-lock.yaml
 
       - run: pnpm install --frozen-lockfile
+
+      - name: Initialize bounded output directory
+        run: |
+          echo "TC_OUTPUT_ROOT=$RUNNER_TEMP/tc-agent-output" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/tc-agent-output"
 
       - name: Verify registry and deterministic evaluation corpus
         run: |
