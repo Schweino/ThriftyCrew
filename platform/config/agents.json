@@ -86,7 +86,7 @@
       "enabled": true,
       "plane": "ci",
       "promptFile": "agents/triage-developer/prompt.md",
-      "promptSha256": "ee4158a3ef3d673fdf307056bf3171bdaa147bd770c8bbbc286c69ce4506bff7",
+      "promptSha256": "a4c9fd6002fbc829a09849233dc19ba6f6c6c03a87de80e552d1d1633eaf9c69",
       "provider": "openai",
       "model": "gpt-5.6-terra",
       "fallbackModel": "gpt-5.6-luna",
@@ -96,7 +96,7 @@
       "criticality": "operational",
       "workflowFile": ".github/workflows/agent-triage-developer.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "b51330c13f26d55211b4cd2c98a133122030a9e0468ac7b21a9b248a481312f7",
+      "executionConfigHash": "55d627c58e4546bbeb155ae2a07d3d934aa7376060fd685769ab1ee86479cff6",
       "capabilities": [
         "read:status",
         "read:evidence",
