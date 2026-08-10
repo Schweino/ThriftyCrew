@@ -14,7 +14,12 @@ import { findLatestRegularCapture, omahaDateKey, parseServerCaptureStore, readFr
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
+const invocationRoot = path.resolve(process.env.INIT_CWD ?? process.cwd());
 const [command = "help", subcommand, ...arguments_] = process.argv.slice(2);
+
+function cliPath(file: string): string {
+  return path.isAbsolute(file) ? file : path.resolve(invocationRoot, file);
+}
 
 async function githubOidcToken(): Promise<string | undefined> {
   if (process.env.TC_OIDC_TOKEN) return process.env.TC_OIDC_TOKEN;
@@ -175,7 +180,7 @@ async function rematchPromotedBatches(client: MutationClient): Promise<{ ok: boo
 
 async function commodityAdd(inputFile: string | undefined): Promise<unknown> {
   if (!inputFile) throw new Error("tc commodity add requires a JSON file");
-  const incoming = JSON.parse(await readFile(path.resolve(inputFile), "utf8")) as { id?: string; label?: string; unit?: string; include?: string[]; exclude?: string[]; categoryId?: string };
+  const incoming = JSON.parse(await readFile(cliPath(inputFile), "utf8")) as { id?: string; label?: string; unit?: string; include?: string[]; exclude?: string[]; categoryId?: string };
   if (!incoming.id || !/^[a-z0-9][a-z0-9-]*$/.test(incoming.id) || !incoming.label || !incoming.unit || !incoming.categoryId) throw new Error("commodity file needs id, label, unit, and categoryId");
   const commodityFile = path.join(platformRoot, "config", "commodities.json");
   const categoryFile = path.join(platformRoot, "config", "categories.json");
@@ -193,7 +198,7 @@ async function commodityAdd(inputFile: string | undefined): Promise<unknown> {
 
 async function recipeAdd(inputFile: string | undefined): Promise<unknown> {
   if (!inputFile) throw new Error("tc recipe add requires a JSON specification file");
-  const specification = JSON.parse(await readFile(path.resolve(inputFile), "utf8")) as { slug?: string; servings?: number; ingredients_grams?: unknown[] };
+  const specification = JSON.parse(await readFile(cliPath(inputFile), "utf8")) as { slug?: string; servings?: number; ingredients_grams?: unknown[] };
   if (!specification.slug || !/^[a-z0-9][a-z0-9-]*$/.test(specification.slug) || !Number.isInteger(specification.servings) || !Array.isArray(specification.ingredients_grams)) {
     throw new Error("recipe needs a safe slug, integer servings, and ingredients_grams");
   }
@@ -283,12 +288,13 @@ if (command === "status") {
     const [triageId, outputFile] = arguments_;
     if (!triageId || !outputFile) throw new Error("tc triage review requires a triage id and output file");
     const packet = await (await mutationClient()).request(`/internal/triage/${encodeURIComponent(triageId)}/review`);
-    await writeJson(path.resolve(outputFile), packet);
-    result = { ok: true, triageId, outputFile: path.resolve(outputFile), readOnly: true };
+    const resolvedOutputFile = cliPath(outputFile);
+    await writeJson(resolvedOutputFile, packet);
+    result = { ok: true, triageId, outputFile: resolvedOutputFile, readOnly: true };
   } else if (subcommand === "plan" || subcommand === "resolve" || subcommand === "needs-operator") {
     const [triageId, file] = arguments_;
     if (!triageId || !file) throw new Error(`tc triage ${subcommand} requires a triage id and JSON file`);
-    const resolution = JSON.parse(await readFile(path.resolve(file), "utf8")) as Record<string, unknown>;
+    const resolution = JSON.parse(await readFile(cliPath(file), "utf8")) as Record<string, unknown>;
     const status = subcommand === "plan" ? "planned" : subcommand === "resolve" ? "resolved" : "needs_operator";
     const planRef = status === "planned" ? `sha256:${await digestHex(stableJson(resolution))}` : undefined;
     result = await (await mutationClient()).request(`/internal/triage/${encodeURIComponent(triageId)}/resolve`, { json: {
@@ -326,13 +332,13 @@ if (command === "status") {
 } else if (command === "restore" && subcommand === "record") {
   const file = arguments_[0];
   if (!file) throw new Error("tc restore record requires a JSON evidence file");
-  result = await (await mutationClient()).request("/internal/restore-drills", { json: JSON.parse(await readFile(path.resolve(file), "utf8")) });
+  result = await (await mutationClient()).request("/internal/restore-drills", { json: JSON.parse(await readFile(cliPath(file), "utf8")) });
 } else if (command === "restore" && subcommand === "show") {
   result = await (await mutationClient()).request("/internal/restore-drills");
 } else if (command === "evidence" && subcommand === "record") {
   const file = arguments_[0];
   if (!file) throw new Error("tc evidence record requires a JSON evidence file");
-  result = await (await mutationClient()).request("/internal/evidence-gates", { json: JSON.parse(await readFile(path.resolve(file), "utf8")) });
+  result = await (await mutationClient()).request("/internal/evidence-gates", { json: JSON.parse(await readFile(cliPath(file), "utf8")) });
 } else if (command === "evidence" && subcommand === "show") {
   const gate = arguments_[0];
   result = await (await mutationClient()).request(`/internal/evidence-gates${gate ? `?gate=${encodeURIComponent(gate)}` : ""}`);
@@ -358,7 +364,7 @@ if (command === "status") {
 } else if (command === "entitlement" && subcommand === "record") {
   const file = arguments_[0];
   if (!file) throw new Error("tc entitlement record requires a JSON evidence file");
-  result = await (await mutationClient()).request("/internal/entitlement-verifications", { json: JSON.parse(await readFile(path.resolve(file), "utf8")) });
+  result = await (await mutationClient()).request("/internal/entitlement-verifications", { json: JSON.parse(await readFile(cliPath(file), "utf8")) });
 } else if (command === "entitlement" && subcommand === "show") {
   result = await (await mutationClient()).request("/internal/entitlement-verifications");
 } else if (command === "drill" && subcommand === "release-freeze") {
@@ -375,7 +381,7 @@ if (command === "status") {
   result = await (await mutationClient()).request(`/internal/drills/${encodeURIComponent(kind)}`, { method: "POST", acceptStatuses: [422] });
 } else if (command === "drill" && subcommand === "stale-capture") {
   const file = arguments_[0] ?? path.join(platformRoot, "fixtures", "chaos", "stale-browser-capture.json");
-  const bytes = new Uint8Array(await readFile(path.resolve(file)));
+  const bytes = new Uint8Array(await readFile(cliPath(file)));
   const artifact = directCaptureArtifactSchema.parse(JSON.parse(new TextDecoder().decode(bytes).replace(/^\uFEFF/, "")));
   if (!artifact.sourceId.endsWith("-browser") || Date.parse(artifact.capturedTo) > Date.now() - 15 * 24 * 60 * 60 * 1000) {
     throw new Error("stale-capture drill requires a browser artifact older than every browser source freshness window");
@@ -461,12 +467,12 @@ if (command === "status") {
   const snapshot = await client.request("/internal/engine/snapshot?mode=direct") as unknown as NativeEngineSnapshot;
   const artifact = await buildNativeRelease(incomeRoot, snapshot);
   const outputArgument = arguments_.find((value: string) => value.endsWith(".json"));
-  if (outputArgument) await writeJson(path.resolve(outputArgument), artifact);
+  if (outputArgument) await writeJson(cliPath(outputArgument), artifact);
   if (Number(artifact.audit.top5Entries) !== 20 || Number(artifact.audit.rotationEntries) !== 20) {
     throw new Error(`native release preflight requires exactly 20 complete ranked recipes; got ${String(artifact.audit.top5Entries)}`);
   }
   result = subcommand === "build-native"
-    ? { ok: true, releaseId: artifact.releaseId, inputHash: artifact.inputHash, outputFile: outputArgument ? path.resolve(outputArgument) : null, audit: artifact.audit }
+    ? { ok: true, releaseId: artifact.releaseId, inputHash: artifact.inputHash, outputFile: outputArgument ? cliPath(outputArgument) : null, audit: artifact.audit }
     : await publishNativeRelease(client, artifact);
 } else if (command === "replay") {
   const artifact = await buildCurrentBridge(incomeRoot);
@@ -475,22 +481,23 @@ if (command === "status") {
   const browser = arguments_.includes("--browser");
   const [store, inputFile, outputFile, attestationFile] = arguments_.filter((value: string) => value !== "--browser");
   if (!store || !inputFile || !outputFile) throw new Error("tc capture build-regular requires store, input file, and output file");
-  const source = JSON.parse(await readFile(path.resolve(inputFile), "utf8").then((value) => value.replace(/^\uFEFF/, "")));
-  const attestation = attestationFile ? JSON.parse(await readFile(path.resolve(attestationFile), "utf8")) as CaptureAttestation : undefined;
+  const source = JSON.parse(await readFile(cliPath(inputFile), "utf8").then((value) => value.replace(/^\uFEFF/, "")));
+  const attestation = attestationFile ? JSON.parse(await readFile(cliPath(attestationFile), "utf8")) as CaptureAttestation : undefined;
   const artifact = await buildRegularCapture(store, source, attestation, browser ? "browser" : "headless");
-  await writeJson(path.resolve(outputFile), artifact);
-  result = { ok: true, outputFile: path.resolve(outputFile), sourceId: artifact.sourceId, observations: artifact.observations.length, terms: artifact.terms.length, audit: artifact.audit };
+  const resolvedOutputFile = cliPath(outputFile);
+  await writeJson(resolvedOutputFile, artifact);
+  result = { ok: true, outputFile: resolvedOutputFile, sourceId: artifact.sourceId, observations: artifact.observations.length, terms: artifact.terms.length, audit: artifact.audit };
 } else if (command === "capture" && subcommand === "ingest") {
   const [artifactFile, ...evidenceFiles] = arguments_;
   if (!artifactFile) throw new Error("tc capture ingest requires an artifact file");
-  const artifactBytes = await readFile(path.resolve(artifactFile));
+  const artifactBytes = await readFile(cliPath(artifactFile));
   const artifact = directCaptureArtifactSchema.parse(JSON.parse(new TextDecoder().decode(artifactBytes).replace(/^\uFEFF/, "")));
   const selectedEvidenceFiles = evidenceFiles.length > 0 ? evidenceFiles : [artifactFile];
   const evidenceInputs: CaptureEvidenceInput[] = await Promise.all(selectedEvidenceFiles.map(async (file: string, index: number) => {
     const extension = path.extname(file).toLowerCase();
     const screenshot = [".png", ".jpg", ".jpeg", ".webp"].includes(extension);
     return {
-      body: new Uint8Array(await readFile(path.resolve(file))),
+      body: new Uint8Array(await readFile(cliPath(file))),
       kind: screenshot ? "screenshot" : index === 0 ? artifact.evidence?.kind ?? "raw_payload" : "manifest",
       contentType: extension === ".png" ? "image/png" : extension === ".jpg" || extension === ".jpeg" ? "image/jpeg" : extension === ".webp" ? "image/webp" : "application/json",
     };
@@ -541,7 +548,7 @@ if (command === "status") {
   if (action === "enqueue") {
     const [artifactFile, ...evidenceFiles] = queueArguments;
     if (!artifactFile) throw new Error("tc capture queue enqueue requires an artifact file and screenshot evidence");
-    result = await enqueueCapture(root, artifactFile, evidenceFiles);
+    result = await enqueueCapture(root, cliPath(artifactFile), evidenceFiles.map(cliPath));
   } else if (action === "drain") {
     const client = await mutationClient();
     const drained = await drainCaptureQueue(root, async (job) => {
@@ -595,7 +602,7 @@ if (command === "status") {
 } else if (command === "capture" && subcommand === "validate") {
   const file = arguments_[0];
   if (!file) throw new Error("tc capture validate requires a JSON file");
-  const parsed = JSON.parse(await readFile(path.resolve(file), "utf8"));
+  const parsed = JSON.parse(await readFile(cliPath(file), "utf8"));
   const direct = directCaptureArtifactSchema.safeParse(parsed);
   result = direct.success
     ? { ok: true, kind: "direct-capture", sourceId: direct.data.sourceId, observations: direct.data.observations.length, terms: direct.data.terms.length, audit: direct.data.audit }
@@ -613,7 +620,7 @@ if (command === "status") {
 } else if (command === "accuracy" && subcommand === "verdict") {
   const file = arguments_[0];
   if (!file) throw new Error("tc accuracy verdict requires a JSON file");
-  result = await (await mutationClient()).request("/internal/accuracy/verdicts", { json: JSON.parse(await readFile(path.resolve(file), "utf8")) });
+  result = await (await mutationClient()).request("/internal/accuracy/verdicts", { json: JSON.parse(await readFile(cliPath(file), "utf8")) });
 } else if (command === "commodity" && subcommand === "add") {
   result = await commodityAdd(arguments_[0]);
 } else if (command === "recipe" && subcommand === "add") {
