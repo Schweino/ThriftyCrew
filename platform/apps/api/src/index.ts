@@ -2350,10 +2350,24 @@ app.post("/internal/triage/reconcile", async (context) => {
       continue;
     }
     if (typeof evidence.recoveryObjectPrefix === "string") {
-      const listed = await context.env.BACKUPS.list({ prefix: evidence.recoveryObjectPrefix, limit: 1 });
-      if (listed.objects.length === 0) {
-        recoveredCleanup.push({ id: row.id, sourceRef: row.source_ref, proof: { bucket: "tc-grocery-v3-backups", prefix: evidence.recoveryObjectPrefix, objects: 0 } });
-        continue;
+      const prefix = evidence.recoveryObjectPrefix;
+      if (/^restore-recovery\/[a-zA-Z0-9._:-]+\/$/.test(prefix)) {
+        let cursor: string | undefined;
+        let deletedObjects = 0;
+        do {
+          const listed = await context.env.BACKUPS.list({ prefix, limit: 1_000, ...(cursor ? { cursor } : {}) });
+          const keys = listed.objects.map((object) => object.key);
+          if (keys.length > 0) {
+            await context.env.BACKUPS.delete(keys);
+            deletedObjects += keys.length;
+          }
+          cursor = listed.truncated ? listed.cursor : undefined;
+        } while (cursor);
+        const remaining = await context.env.BACKUPS.list({ prefix, limit: 1 });
+        if (remaining.objects.length === 0) {
+          recoveredCleanup.push({ id: row.id, sourceRef: row.source_ref, proof: { bucket: "tc-grocery-v3-backups", prefix, deletedObjects, objects: 0 } });
+          continue;
+        }
       }
     }
     if (typeof evidence.scratchDatabaseId === "string" && context.env.D1_REST_API_TOKEN && context.env.CLOUDFLARE_ACCOUNT_ID) {
