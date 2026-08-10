@@ -7,11 +7,13 @@ import {
   emptyRestoreCounts,
   inspectSqlInsert,
   normalizeCaptureBatchLine,
+  utf8LengthExceeds,
   type RestoreCountTable,
 } from "./restore-normalization";
 
 interface RestoreWorkflowPayload { trigger?: string }
 interface ApiEnvelope<T> { success?: boolean; errors?: unknown[]; result?: T }
+interface D1QueryResult<T> { success?: boolean; error?: string; results?: T[] }
 
 async function sha256Hex(bytes: ArrayBuffer | Uint8Array): Promise<string> {
   const normalized = bytes instanceof Uint8Array ? Uint8Array.from(bytes).buffer : bytes;
@@ -31,8 +33,22 @@ async function cloudflare<T>(env: WorkerEnv, pathname: string, init: RequestInit
 }
 
 async function queryScratch<T>(env: WorkerEnv, databaseId: string, sql: string): Promise<T[]> {
-  const result = await cloudflare<Array<{ results?: T[] }>>(env, `/d1/database/${databaseId}/query`, { method: "POST", body: JSON.stringify({ sql }) });
+  const result = await cloudflare<Array<D1QueryResult<T>>>(env, `/d1/database/${databaseId}/query`, { method: "POST", body: JSON.stringify({ sql }) });
+  if (result[0]?.success === false) throw new Error(result[0].error ?? "scratch D1 query failed");
   return result[0]?.results ?? [];
+}
+
+async function executeScratch(env: WorkerEnv, databaseId: string, sql: string, params: Array<string | null>): Promise<void> {
+  const result = await cloudflare<Array<D1QueryResult<unknown>>>(env, `/d1/database/${databaseId}/query`, {
+    method: "POST",
+    body: JSON.stringify({ sql, params }),
+  });
+  if (result[0]?.success === false) throw new Error(result[0].error ?? "scratch D1 mutation failed");
+}
+
+function quoteIdentifier(value: string): string {
+  if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(value)) throw new Error(`unsafe SQL identifier in restore dump: ${value}`);
+  return `"${value}"`;
 }
 
 export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, RestoreWorkflowPayload> {
@@ -90,6 +106,8 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
         const expectedCounts = emptyRestoreCounts();
         const releaseHashes: Record<string, string> = {};
         const deferredUpdates: string[] = [];
+        const recoveryRows: Array<{ table: string; columns: string[]; values: Array<string | null> }> = [];
+        const statementLimitBytes = 90_000;
         let currentReleaseId: string | null = null;
         let carry = "";
         const processLine = (line: string): string => {
@@ -107,6 +125,11 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
             if (insert.table === "releases" && typeof record.id === "string" && typeof record.input_hash === "string") {
               releaseHashes[record.id] = record.input_hash;
             }
+          }
+          if (utf8LengthExceeds(line, statementLimitBytes)) {
+            if (!insert) throw new Error("oversized non-INSERT statement cannot be normalized");
+            recoveryRows.push(insert);
+            return `-- oversized INSERT for ${insert.table} restored through parameter binding\n`;
           }
           return `${adjusted.line}\n`;
         };
@@ -137,6 +160,8 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           etag: stored.etag.replaceAll('"', ""),
           length: stored.size,
           deferredSupersessionUpdates: deferredUpdates.length,
+          statementLimitBytes,
+          recoveryRows,
           expectedCounts,
           expectedRelease,
         };
@@ -158,7 +183,25 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
            started_at = excluded.started_at,
            finished_at = NULL,
            evidence_json = excluded.evidence_json`,
-      ).bind(drillId, backupId, scratchDatabaseId, dumpSha256, startedAt, stableJson({ objectKey: backup.object_key, byteLength: dump.length, etag: dump.etag, hashScheme, hashChunkBytes, chunkCount: chunkHashes.length, normalized, trigger: event.payload.trigger ?? "scheduled" })).run();
+      ).bind(drillId, backupId, scratchDatabaseId, dumpSha256, startedAt, stableJson({
+        objectKey: backup.object_key,
+        byteLength: dump.length,
+        etag: dump.etag,
+        hashScheme,
+        hashChunkBytes,
+        chunkCount: chunkHashes.length,
+        normalized: {
+          objectKey: normalized.objectKey,
+          etag: normalized.etag,
+          length: normalized.length,
+          deferredSupersessionUpdates: normalized.deferredSupersessionUpdates,
+          statementLimitBytes: normalized.statementLimitBytes,
+          recoveryRows: normalized.recoveryRows.length,
+          expectedCounts: normalized.expectedCounts,
+          expectedRelease: normalized.expectedRelease,
+        },
+        trigger: event.payload.trigger ?? "scheduled",
+      })).run();
       const initialized = await step.do("initialize scratch import", async () => cloudflare<{ upload_url?: string; filename?: string }>(this.env, `/d1/database/${scratchDatabaseId}/import`, {
         method: "POST", body: JSON.stringify({ action: "init", etag: normalized.etag }),
       }));
@@ -189,6 +232,15 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
         if (completed.status === "error") throw new Error(completed.error ?? "scratch import failed");
       }
       if (completed.status !== "complete") throw new Error("scratch import did not complete within five minutes");
+      for (let index = 0; index < normalized.recoveryRows.length; index += 1) {
+        const row = normalized.recoveryRows[index]!;
+        await step.do(`restore oversized ${row.table} row ${index}`, async () => {
+          const placeholders = row.values.map((_, valueIndex) => `?${valueIndex + 1}`).join(", ");
+          const sql = `INSERT INTO ${quoteIdentifier(row.table)} (${row.columns.map(quoteIdentifier).join(", ")}) VALUES (${placeholders})`;
+          await executeScratch(this.env, scratchDatabaseId!, sql, row.values);
+          return true;
+        });
+      }
       const comparisons: Record<RestoreCountTable, { expected: number; scratch: number; liveAtVerification: number }> = {} as Record<RestoreCountTable, { expected: number; scratch: number; liveAtVerification: number }>;
       for (const table of RESTORE_COUNT_TABLES) {
         const live = await this.env.DB.prepare(`SELECT COUNT(*) AS count FROM ${table}`).first<{ count: number }>();
@@ -210,7 +262,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
       const finishedAt = new Date().toISOString();
       await this.env.DB.batch([
         this.env.DB.prepare("UPDATE restore_drills SET status = 'passed', finished_at = ?2, evidence_json = ?3 WHERE id = ?1")
-          .bind(drillId, finishedAt, stableJson({ comparisons, expectedRelease: normalized.expectedRelease, scratchRelease, liveRelease, byteLength: dump.length, etag: dump.etag, hashScheme, hashChunkBytes, chunkCount: chunkHashes.length, normalizedObjectKey: normalized.objectKey, normalizedEtag: normalized.etag, normalizedByteLength: normalized.length, deferredSupersessionUpdates: normalized.deferredSupersessionUpdates, comparisonBasis: "dump-stream-counts+dump-release-pointer", importStatus: completed.status })),
+          .bind(drillId, finishedAt, stableJson({ comparisons, expectedRelease: normalized.expectedRelease, scratchRelease, liveRelease, byteLength: dump.length, etag: dump.etag, hashScheme, hashChunkBytes, chunkCount: chunkHashes.length, normalizedObjectKey: normalized.objectKey, normalizedEtag: normalized.etag, normalizedByteLength: normalized.length, deferredSupersessionUpdates: normalized.deferredSupersessionUpdates, statementLimitBytes: normalized.statementLimitBytes, recoveredOversizedRows: normalized.recoveryRows.length, comparisonBasis: "dump-stream-counts+dump-release-pointer", importStatus: completed.status })),
         this.env.DB.prepare("UPDATE job_runs SET status = 'completed', heartbeat_at = ?2, finished_at = ?2, stats_json = ?3 WHERE id = ?1")
           .bind(runId, finishedAt, stableJson({ drillId, backupId, scratchDatabaseId, comparisons })),
         this.env.DB.prepare(

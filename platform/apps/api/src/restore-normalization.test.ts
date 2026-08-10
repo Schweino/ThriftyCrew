@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { emptyRestoreCounts, inspectSqlInsert, normalizeCaptureBatchLine } from "./restore-normalization";
+import { emptyRestoreCounts, inspectSqlInsert, normalizeCaptureBatchLine, utf8LengthExceeds } from "./restore-normalization";
 
 describe("D1 restore normalization", () => {
   it("parses D1 inserts without being confused by JSON commas and escaped quotes", () => {
@@ -31,5 +31,11 @@ describe("D1 restore normalization", () => {
       release_cells: 0,
       job_runs: 0,
     });
+  });
+
+  it("measures oversized statements in UTF-8 bytes", () => {
+    expect(utf8LengthExceeds("a".repeat(90_001), 90_000)).toBe(true);
+    expect(utf8LengthExceeds("😀".repeat(22_501), 90_000)).toBe(true);
+    expect(utf8LengthExceeds("a".repeat(90_000), 90_000)).toBe(false);
   });
 });

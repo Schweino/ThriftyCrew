@@ -94,3 +94,8 @@ export function normalizeCaptureBatchLine(line: string): { line: string; deferre
 export function emptyRestoreCounts(): RestoreCounts {
   return Object.fromEntries(RESTORE_COUNT_TABLES.map((table) => [table, 0])) as RestoreCounts;
 }
+
+export function utf8LengthExceeds(value: string, limitBytes: number): boolean {
+  if (value.length <= Math.floor(limitBytes / 4)) return false;
+  return new TextEncoder().encode(value).byteLength > limitBytes;
+}
