@@ -2,7 +2,7 @@
 
 ## Scope and authority
 
-This document records hardening phases H0-H6 on top of the deployed V3 platform. It does not accelerate or
+This document records hardening phases H0-H8 on top of the deployed V3 platform. It does not accelerate or
 waive V3 evidence gates. `config/schedules.json` owns recurring grocery schedules, `config/agents.json` owns
 judgment-agent definitions and prompts live under `agents/`. D1 is the operational ledger; R2 owns backup,
 evidence and verified archive objects.
@@ -87,6 +87,17 @@ evidence and verified archive objects.
   alert covers failures in the SLA evaluator itself.
 - The public status response exposes the current cycle, deadline, ready sources and exact missing conditions,
   so a powered-off PC cannot hide a missed browser week.
+
+## H8 - deployment convergence and browser performance
+
+- `pnpm deploy` now waits for both the direct Workers endpoint and the customer-facing `www.thriftycrew.com`
+  route to report the exact deployed Git commit. Cache-busting probes retry for up to 90 seconds, and a stale,
+  unavailable or divergent route fails the deployment instead of producing a false-success handoff.
+- Every browser batch with a valid, identity-bound session manifest writes one immutable metrics record in the
+  same D1 transaction that seals the batch. It records exact term outcomes, retries, chunks, total and p50/p95
+  term duration, row yield, accepted observation count and first-party taxonomy coverage.
+- `/api/v2/status` exposes the latest aggregate per browser source without evidence payloads. Operators can read
+  recent history with `tc capture metrics [limit]`; only engine/operator identities can access batch/session IDs.
 
 ## Remaining calendar proof
 

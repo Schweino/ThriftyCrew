@@ -153,6 +153,7 @@ app.use("/internal/*", requireMutation(["capture", "engine", "operator"]));
 app.use("/internal/*", requireGithubWorkflowScope());
 app.use("/internal/capture-batches", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/capture-batches/*", requireIdentityRole(["capture", "engine", "operator"]));
+app.use("/internal/capture-metrics", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/configurations", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/configurations/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/match-decisions", requireIdentityRole(["engine", "operator"]));
@@ -191,7 +192,7 @@ app.use("/internal/drills/*", requireIdentityRole(["operator"]));
 
 app.get("/api/v2/status", async (context) => {
   const checkedAt = new Date();
-  const [release, schedules, accuracy, triage, milestones, agentWork, evaluations, loginCanaries, browserCaptureSla] = await Promise.all([
+  const [release, schedules, accuracy, triage, milestones, agentWork, evaluations, loginCanaries, browserCaptureSla, browserCaptureTelemetry] = await Promise.all([
     context.env.DB.prepare(
       `SELECT r.id, r.published_at, r.summary_json
          FROM current_releases c JOIN releases r ON r.id = c.release_id
@@ -224,6 +225,21 @@ app.get("/api/v2/status", async (context) => {
          FROM login_canary_probes GROUP BY store_id, run_id ORDER BY latest_at DESC LIMIT 20`,
     ).all(),
     readBrowserCaptureSla(context.env.DB, checkedAt),
+    context.env.DB.prepare(
+      `WITH ranked AS (
+         SELECT source_id, cycle_start, coverage_mode, expected_terms, attempted_terms,
+                success_terms, empty_terms, rejected_terms, blocked_terms, not_attempted_terms,
+                retry_count, chunk_count, duration_ms, term_duration_p50_ms, term_duration_p95_ms,
+                projected_rows, observation_count, taxonomy_rows, recorded_at,
+                ROW_NUMBER() OVER (PARTITION BY source_id ORDER BY cycle_start DESC, recorded_at DESC) AS ordinal
+           FROM browser_capture_metrics
+       )
+       SELECT source_id, cycle_start, coverage_mode, expected_terms, attempted_terms,
+              success_terms, empty_terms, rejected_terms, blocked_terms, not_attempted_terms,
+              retry_count, chunk_count, duration_ms, term_duration_p50_ms, term_duration_p95_ms,
+              projected_rows, observation_count, taxonomy_rows, recorded_at
+         FROM ranked WHERE ordinal = 1 ORDER BY source_id`,
+    ).all(),
   ]);
   const jobs = schedules.results.map((row) => {
     const item = row as Record<string, unknown>;
@@ -250,6 +266,7 @@ app.get("/api/v2/status", async (context) => {
     },
     loginCanaries: loginCanaries.results,
     browserCaptureSla,
+    browserCaptureTelemetry: browserCaptureTelemetry.results,
     triage: Object.fromEntries(triage.results.map((row) => [row.status, row.count])),
     checkedAt: checkedAt.toISOString(),
   });
@@ -704,6 +721,21 @@ app.get("/internal/capture-batches/:id/status", async (context) => {
     matching: matching ?? null,
     evidence: evidence.results,
   });
+});
+
+app.get("/internal/capture-metrics", async (context) => {
+  const requestedLimit = Number.parseInt(context.req.query("limit") ?? "25", 10);
+  const limit = Number.isFinite(requestedLimit) ? Math.min(100, Math.max(1, requestedLimit)) : 25;
+  const metrics = await context.env.DB.prepare(
+    `SELECT batch_id, session_id, source_id, cycle_start, coverage_mode,
+            expected_terms, attempted_terms, success_terms, empty_terms, rejected_terms,
+            blocked_terms, not_attempted_terms, retry_count, chunk_count, duration_ms,
+            term_duration_p50_ms, term_duration_p95_ms, projected_rows, observation_count,
+            taxonomy_rows, recorded_at
+       FROM browser_capture_metrics
+      ORDER BY recorded_at DESC, source_id LIMIT ?1`,
+  ).bind(limit).all();
+  return context.json({ ok: true, metrics: metrics.results });
 });
 
 app.post("/internal/match-runs", zValidator("json", matchRunSchema), async (context) => {
@@ -1816,6 +1848,13 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   const observationCount = (await context.env.DB.prepare(
     "SELECT COUNT(*) AS count FROM observations WHERE batch_id = ?1",
   ).bind(batch.id).first<{ count: number }>())?.count ?? 0;
+  const taxonomyRows = batch.capture_method === "browser"
+    ? (await context.env.DB.prepare(
+      `SELECT COUNT(*) AS count
+         FROM observations o JOIN product_versions pv ON pv.id = o.product_version_id
+        WHERE o.batch_id = ?1 AND pv.taxonomy_path IS NOT NULL AND TRIM(pv.taxonomy_path) <> ''`,
+    ).bind(batch.id).first<{ count: number }>())?.count ?? 0
+    : 0;
   const predecessor = await context.env.DB.prepare(
     `SELECT prior.id, COUNT(o.id) AS observation_count
        FROM capture_batches prior
@@ -1846,7 +1885,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
       capturedTo: batch.captured_to,
       expectedTerms: batch.expected_terms,
     }, evidenceRows.results)
-    : { pass: true, detail: { required: false } };
+    : { pass: true, detail: { required: false }, metrics: null };
   const status = identityPass && completePass && collapsePass && freshnessPass && browserEvidence.pass ? "validated" : "rejected";
   const statements: D1PreparedStatement[] = body.terms.map((term) => context.env.DB.prepare(
     `INSERT INTO capture_terms (batch_id, term_key, ordinal, outcome, row_count, reason)
@@ -1857,6 +1896,25 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
        rejected_terms = ?6, blocked_terms = ?7, captured_pages = ?8, evidence_manifest_key = ?9,
        validation_summary_json = ?10, sealed_at = CURRENT_TIMESTAMP WHERE id = ?1`,
   ).bind(batch.id, status, attempted, successful, empty, rejected, blocked, capturedPages, body.evidenceManifestKey ?? null, stableJson({ identityPass, termEnvelopePass, pageEnvelopePass, collapsePass, freshnessPass, browserEvidencePass: browserEvidence.pass, browserEvidence: browserEvidence.detail, captureAgeMillis, maxAgeDays: batch.max_age_days, observationCount, predecessorBatchId: predecessor?.id ?? null, predecessorObservationCount: predecessor?.observation_count ?? null, collapseFloor })));
+  if (browserEvidence.metrics) {
+    const metrics = browserEvidence.metrics;
+    statements.push(context.env.DB.prepare(
+      `INSERT INTO browser_capture_metrics (
+         batch_id, session_id, source_id, cycle_start, coverage_mode,
+         expected_terms, attempted_terms, success_terms, empty_terms, rejected_terms,
+         blocked_terms, not_attempted_terms, retry_count, chunk_count, duration_ms,
+         term_duration_p50_ms, term_duration_p95_ms, projected_rows, observation_count, taxonomy_rows
+       ) VALUES (
+         ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10,
+         ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20
+       )`,
+    ).bind(
+      batch.id, metrics.sessionId, metrics.sourceId, metrics.cycleStart, metrics.coverageMode,
+      metrics.expectedTerms, metrics.attemptedTerms, metrics.successTerms, metrics.emptyTerms, metrics.rejectedTerms,
+      metrics.blockedTerms, metrics.notAttemptedTerms, metrics.retryCount, metrics.chunkCount, metrics.durationMs,
+      metrics.termDurationP50Ms, metrics.termDurationP95Ms, metrics.projectedRows, observationCount, taxonomyRows,
+    ));
+  }
   for (const [guardId, pass, eligible, examined, detail] of [
     ["batch-location", identityPass, 3, 3, {}],
     ["batch-completeness", completePass, (batch.expected_terms ?? 0) + (batch.expected_pages ?? 0), attempted + capturedPages, {}],

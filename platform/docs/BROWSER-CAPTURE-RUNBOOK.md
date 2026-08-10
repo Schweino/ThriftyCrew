@@ -149,3 +149,11 @@ monitor does not depend on the capture PC, its queue, or Codex being online. Beg
 cycle, it opens a digest alert after Saturday noon Central unless all four strict browser sources are full,
 promoted or superseded, matched, and backed by screenshot, session-manifest, and projected-raw evidence. The
 alert resolves automatically when those remote conditions recover.
+
+## Performance telemetry
+
+Sealing a browser batch records immutable performance telemetry from its verified capture-session manifest.
+Use `pnpm tc capture metrics [limit]` for recent history. The public `/api/v2/status` response includes only the
+latest aggregate per source under `browserCaptureTelemetry`. Review retries, total duration, p50/p95 term
+duration, projected-versus-accepted rows, and taxonomy coverage after each weekly cycle. A successful capture
+with rising latency, retries, or falling row/taxonomy yield is an early-warning signal even before the SLA fails.

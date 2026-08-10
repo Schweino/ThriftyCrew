@@ -602,6 +602,10 @@ if (command === "status") {
 } else if (command === "replay") {
   const artifact = await buildCurrentBridge(incomeRoot);
   result = await replayCurrentArtifact(await mutationClient(), artifact);
+} else if (command === "capture" && subcommand === "metrics") {
+  const requestedLimit = Number.parseInt(arguments_[0] ?? "25", 10);
+  if (!Number.isFinite(requestedLimit) || requestedLimit < 1 || requestedLimit > 100) throw new Error("tc capture metrics limit must be between 1 and 100");
+  result = await (await mutationClient()).request(`/internal/capture-metrics?limit=${requestedLimit}`);
 } else if (command === "capture" && subcommand === "session") {
   const [action, ...sessionArguments] = arguments_;
   if (action === "init") {
@@ -850,7 +854,7 @@ if (command === "status") {
       "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
-      "tc capture session init|append|finalize|status",
+        "tc capture metrics [limit]", "tc capture session init|append|finalize|status",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog",
       "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|rematch-promoted|abandon <batch-id> <reason>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",

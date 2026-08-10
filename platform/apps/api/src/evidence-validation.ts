@@ -1,5 +1,6 @@
-import { browserCaptureSessionSchema } from "@thriftycrew/contracts";
+import { browserCaptureSessionSchema, type BrowserCaptureSession } from "@thriftycrew/contracts";
 import { digestHex, stableJson } from "@thriftycrew/domain";
+import { browserCaptureCycleWindow } from "./browser-capture-sla";
 
 function uint16(bytes: Uint8Array, offset: number, littleEndian: boolean): number {
   return littleEndian ? bytes[offset]! | bytes[offset + 1]! << 8 : bytes[offset]! << 8 | bytes[offset + 1]!;
@@ -68,11 +69,61 @@ interface EvidenceRow {
   sha256: string;
 }
 
+export interface BrowserCaptureMetricSummary {
+  sessionId: string;
+  sourceId: string;
+  cycleStart: string;
+  coverageMode: "full" | "partial" | "targeted" | "ad_only";
+  expectedTerms: number;
+  attemptedTerms: number;
+  successTerms: number;
+  emptyTerms: number;
+  rejectedTerms: number;
+  blockedTerms: number;
+  notAttemptedTerms: number;
+  retryCount: number;
+  chunkCount: number;
+  durationMs: number;
+  termDurationP50Ms: number;
+  termDurationP95Ms: number;
+  projectedRows: number;
+}
+
+function percentile(values: readonly number[], percentileValue: number): number {
+  if (values.length === 0) return 0;
+  const sorted = [...values].sort((left, right) => left - right);
+  return sorted[Math.max(0, Math.ceil(sorted.length * percentileValue) - 1)]!;
+}
+
+export function summarizeBrowserCaptureSession(session: BrowserCaptureSession): BrowserCaptureMetricSummary {
+  const attempted = session.terms.filter((term) => term.attempts > 0);
+  const durations = attempted.map((term) => Math.max(0, Date.parse(term.finishedAt) - Date.parse(term.startedAt)));
+  return {
+    sessionId: session.sessionId,
+    sourceId: session.sourceId,
+    cycleStart: browserCaptureCycleWindow(new Date(session.finishedAt)).cycleStart,
+    coverageMode: session.coverageMode,
+    expectedTerms: session.expectedTerms,
+    attemptedTerms: attempted.length,
+    successTerms: session.terms.filter((term) => term.outcome === "success").length,
+    emptyTerms: session.terms.filter((term) => term.outcome === "empty").length,
+    rejectedTerms: session.terms.filter((term) => term.outcome === "rejected").length,
+    blockedTerms: session.terms.filter((term) => term.outcome === "blocked").length,
+    notAttemptedTerms: session.terms.filter((term) => term.outcome === "not_attempted").length,
+    retryCount: session.terms.reduce((sum, term) => sum + Math.max(0, term.attempts - 1), 0),
+    chunkCount: session.chunks.length,
+    durationMs: Math.max(0, Date.parse(session.finishedAt) - Date.parse(session.startedAt)),
+    termDurationP50Ms: percentile(durations, 0.5),
+    termDurationP95Ms: percentile(durations, 0.95),
+    projectedRows: session.terms.reduce((sum, term) => sum + term.rowCount, 0),
+  };
+}
+
 export async function validateBrowserCaptureEvidence(
   bucket: R2Bucket,
   batch: BrowserBatchEvidenceIdentity,
   rows: readonly EvidenceRow[],
-): Promise<{ pass: boolean; detail: Record<string, unknown> }> {
+): Promise<{ pass: boolean; detail: Record<string, unknown>; metrics: BrowserCaptureMetricSummary | null }> {
   const screenshots = rows.filter((row) => row.kind === "screenshot");
   const rawPayloads = rows.filter((row) => row.kind === "raw_payload");
   const manifests = rows.filter((row) => row.kind === "manifest");
@@ -87,7 +138,7 @@ export async function validateBrowserCaptureEvidence(
       // Other manifest evidence cannot authorize browser-session completeness.
     }
   }
-  if (!session) return { pass: false, detail: { reason: "missing-valid-capture-session", screenshots: screenshots.length, rawPayloads: rawPayloads.length, manifests: manifests.length } };
+  if (!session) return { pass: false, detail: { reason: "missing-valid-capture-session", screenshots: screenshots.length, rawPayloads: rawPayloads.length, manifests: manifests.length }, metrics: null };
   const { contentHash, ...sessionContent } = session;
   const calculatedContentHash = await digestHex(stableJson(sessionContent));
   const screenshotHashes = new Set(screenshots.map((row) => row.sha256));
@@ -100,5 +151,6 @@ export async function validateBrowserCaptureEvidence(
     && session.finishedAt === batch.capturedTo
     && session.expectedTerms === batch.expectedTerms;
   const pass = calculatedContentHash === contentHash && screenshotBound && rawBound && identityPass;
-  return { pass, detail: { sessionId: session.sessionId, contentHashPass: calculatedContentHash === contentHash, screenshotBound, rawBound, identityPass, screenshots: screenshots.length, rawPayloads: rawPayloads.length, manifests: manifests.length } };
+  const trustedSession = calculatedContentHash === contentHash && identityPass;
+  return { pass, detail: { sessionId: session.sessionId, contentHashPass: calculatedContentHash === contentHash, screenshotBound, rawBound, identityPass, screenshots: screenshots.length, rawPayloads: rawPayloads.length, manifests: manifests.length }, metrics: trustedSession ? summarizeBrowserCaptureSession(session) : null };
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { digestHex, stableJson } from "@thriftycrew/domain";
-import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
+import { summarizeBrowserCaptureSession, validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
 
 function png(width: number, height: number, length = 512): Uint8Array {
   const bytes = new Uint8Array(length);
@@ -38,6 +38,24 @@ describe("browser screenshot evidence", () => {
     const rows = [{ object_key: "manifest", kind: "manifest", sha256: "e".repeat(64) }, { object_key: "raw", kind: "raw_payload", sha256: rawHash }, { object_key: "proof", kind: "screenshot", sha256: screenshotHash }];
     const result = await validateBrowserCaptureEvidence(bucket, { sourceId: content.sourceId, coverageMode: "full", capturedFrom: content.startedAt, capturedTo: content.finishedAt, expectedTerms: 1 }, rows);
     expect(result).toMatchObject({ pass: true, detail: { contentHashPass: true, screenshotBound: true, rawBound: true, identityPass: true } });
+    expect(result.metrics).toMatchObject({ cycleStart: "2026-08-12", durationMs: 120_000, termDurationP50Ms: 60_000, termDurationP95Ms: 60_000, retryCount: 0, projectedRows: 1 });
     expect((await validateBrowserCaptureEvidence(bucket, { sourceId: content.sourceId, coverageMode: "partial", capturedFrom: content.startedAt, capturedTo: content.finishedAt, expectedTerms: 1 }, rows)).pass).toBe(false);
+  });
+
+  it("summarizes retries and percentile durations without storing term-level payloads", async () => {
+    const session = {
+      version: 1 as const, sessionId: "browser-aldi-metrics", store: "aldi" as const, sourceId: "direct-aldi-browser",
+      worklistHash: "a".repeat(64), startedAt: "2026-08-12T14:00:00.000Z", finishedAt: "2026-08-12T14:10:00.000Z",
+      coverageMode: "partial" as const, expectedTerms: 3,
+      terms: [
+        { termKey: "a", query: "a", ordinal: 0, outcome: "success" as const, rowCount: 2, attempts: 2, startedAt: "2026-08-12T14:00:00.000Z", finishedAt: "2026-08-12T14:01:00.000Z" },
+        { termKey: "b", query: "b", ordinal: 1, outcome: "blocked" as const, rowCount: 0, attempts: 1, reason: "challenge", startedAt: "2026-08-12T14:01:00.000Z", finishedAt: "2026-08-12T14:05:00.000Z" },
+        { termKey: "c", query: "c", ordinal: 2, outcome: "not_attempted" as const, rowCount: 0, attempts: 0, reason: "stopped", startedAt: "2026-08-12T14:00:00.000Z", finishedAt: "2026-08-12T14:00:00.000Z" },
+      ],
+      canaries: [{ ordinal: 0, observedAt: "2026-08-12T14:00:00.000Z", market: "Omaha", location: "ALDI OLA 42 Omaha", priceMode: "in-store", evidenceUrl: "https://aldi.us", marketVerified: true as const, locationVerified: true as const, priceModeVerified: true as const, screenshotSha256: "b".repeat(64) }],
+      chunks: [{ id: "chunk", ordinal: 0, termKeys: ["a", "b"], rowCount: 2, sha256: "c".repeat(64), createdAt: "2026-08-12T14:05:00.000Z" }],
+      projectedCaptureSha256: "d".repeat(64), contentHash: "e".repeat(64),
+    };
+    expect(summarizeBrowserCaptureSession(session)).toMatchObject({ attemptedTerms: 2, successTerms: 1, blockedTerms: 1, notAttemptedTerms: 1, retryCount: 1, termDurationP50Ms: 60_000, termDurationP95Ms: 240_000, projectedRows: 2 });
   });
 });
