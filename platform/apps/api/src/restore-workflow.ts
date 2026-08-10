@@ -149,20 +149,23 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           let output = "";
           for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
             const line = lines[lineIndex]!;
-            const insert = inspectSqlInsert(line);
+            const table = line.match(/^INSERT INTO "([^"]+)"/)?.[1];
+            if (table && RESTORE_COUNT_TABLES.includes(table as RestoreCountTable)) partCounts[table as RestoreCountTable] += 1;
+            const oversized = utf8LengthExceeds(line, statementLimitBytes);
+            const needsParsedValues = table === "releases" || table === "current_releases" || oversized;
+            const insert = needsParsedValues ? inspectSqlInsert(line) : null;
             if (insert) {
-              if (RESTORE_COUNT_TABLES.includes(insert.table as RestoreCountTable)) partCounts[insert.table as RestoreCountTable] += 1;
               const record = Object.fromEntries(insert.columns.map((column, index) => [column, insert.values[index]]));
               if (insert.table === "current_releases" && record.market_id === "omaha" && typeof record.release_id === "string") partCurrentReleaseId = record.release_id;
               if (insert.table === "releases" && typeof record.id === "string" && typeof record.input_hash === "string") partReleaseHashes[record.id] = record.input_hash;
             }
-            if (utf8LengthExceeds(line, statementLimitBytes)) {
+            if (oversized) {
               if (!insert) throw new Error("oversized non-INSERT statement cannot be normalized");
               partRecoveryRows.push(insert);
               output += `-- oversized INSERT for ${insert.table} restored through parameter binding\n`;
               continue;
             }
-            const adjusted = normalizeCaptureBatchLine(line);
+            const adjusted = table === "capture_batches" ? normalizeCaptureBatchLine(line) : { line };
             if (adjusted.deferredUpdate) partDeferredUpdates.push(adjusted.deferredUpdate);
             output += adjusted.line;
             if (hasTrailingNewline || lineIndex < lines.length - 1) output += "\n";
