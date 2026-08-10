@@ -212,16 +212,35 @@ async function githubText(env: WorkerEnv, url: string): Promise<string> {
 }
 
 function sanitizedDiagnosticTail(log: string): string[] {
-  return log
+  const lines = log
     .replaceAll(/\x1B\[[0-?]*[ -/]*[@-~]/g, "")
     .split(/\r?\n/)
     .filter((line) => line.trim().length > 0)
-    .slice(-60)
     .map((line) => line
       .replaceAll(/(github_pat_|gh[pousr]_)[A-Za-z0-9_]+/gi, "$1[REDACTED]")
       .replaceAll(/(authorization:\s*(?:bearer|token)\s+)[^\s]+/gi, "$1[REDACTED]")
       .replaceAll(/((?:secret|token|password|TC_LOCAL_MUTATION_SECRET)\s*[=:]\s*)[^\s]+/gi, "$1[REDACTED]")
       .slice(0, 600));
+  if (lines.length <= 60) return lines;
+
+  // GitHub jobs often emit a long cleanup sequence after the useful failure. Preserve bounded
+  // context around strong error signals as well as the final tail so operators see both cause
+  // and teardown without exposing an unbounded job log.
+  const strongSignal = /##\[error\]|\b(?:fatal|exception|traceback)\b|\[err_[a-z0-9_]+\]|required production date/i;
+  const weakSignal = /(?:^|\s)(?:error|failed|failure)(?::|\s|$)/i;
+  const contextIndexes = new Set<number>();
+  const collectContext = (pattern: RegExp, limit: number) => {
+    for (let index = 0; index < lines.length && contextIndexes.size < limit; index += 1) {
+      if (!pattern.test(lines[index] ?? "")) continue;
+      for (let cursor = Math.max(0, index - 2); cursor <= Math.min(lines.length - 1, index + 2) && contextIndexes.size < limit; cursor += 1) {
+        contextIndexes.add(cursor);
+      }
+    }
+  };
+  collectContext(strongSignal, 30);
+  collectContext(weakSignal, 30);
+  for (let index = lines.length - 1; index >= 0 && contextIndexes.size < 60; index -= 1) contextIndexes.add(index);
+  return [...contextIndexes].sort((left, right) => left - right).slice(-60).map((index) => lines[index] as string);
 }
 
 /**

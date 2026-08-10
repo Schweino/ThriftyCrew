@@ -67,4 +67,28 @@ describe("githubWorkflowRuns", () => {
     expect(job?.diagnosticTail.at(-1)).toBe("##[error]adapter failed");
     expect(fetchMock.mock.calls[3]?.[0]).toContain("actions/jobs/7/logs");
   });
+
+  it("keeps early failure context when a long cleanup tail follows", async () => {
+    const lines = [
+      "setup",
+      "adapter starting",
+      "TC_LOCAL_MUTATION_SECRET=must-not-leak",
+      "##[error]required production date 2026-08-09 was not captured",
+      "adapter stopped",
+      ...Array.from({ length: 100 }, (_, index) => `cleanup ${index}`),
+    ];
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({ workflow_runs: [{ id: 11, status: "completed", conclusion: "failure" }] })))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ jobs: [{ id: 12, name: "scheduled operation", status: "completed", conclusion: "failure" }] })))
+      .mockResolvedValueOnce(new Response("forbidden", { status: 403 }))
+      .mockResolvedValueOnce(new Response(lines.join("\n")));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await githubWorkflowRuns(configuredEnv, 1);
+    const job = (result.runs[0]?.jobs as Array<{ diagnosticTail: string[] }>)[0];
+    expect(job?.diagnosticTail.length).toBeLessThanOrEqual(60);
+    expect(job?.diagnosticTail).toContain("TC_LOCAL_MUTATION_SECRET=[REDACTED]");
+    expect(job?.diagnosticTail).toContain("##[error]required production date 2026-08-09 was not captured");
+    expect(job?.diagnosticTail.at(-1)).toBe("cleanup 99");
+  });
 });
