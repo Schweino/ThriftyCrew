@@ -390,8 +390,13 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
         try {
           await step.do("abort exact normalized restore multipart upload", async () => {
             const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey!, normalizedMultipartUploadId!);
-            await upload.abort();
-            return true;
+            try {
+              await upload.abort();
+              return { absent: false };
+            } catch (error) {
+              if (error instanceof Error && error.message.includes("specified multipart upload does not exist")) return { absent: true };
+              throw error;
+            }
           });
         } catch (error) {
           await raiseOperationalAlert(this.env, `restore-multipart-cleanup:${normalizedMultipartUploadId}`, "Normalized restore multipart cleanup failed", { normalizedObjectKey, normalizedMultipartUploadId, error: error instanceof Error ? error.message : "unknown cleanup failure" });
