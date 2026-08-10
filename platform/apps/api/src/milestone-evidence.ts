@@ -211,6 +211,7 @@ export async function accrueMilestoneEvidence(env: WorkerEnv, now = new Date(), 
          JOIN capture_batches batch ON batch.source_id = source.id
         WHERE source.id IN (${REQUIRED_BROWSER_SOURCES.map((_, index) => `?${index + 1}`).join(",")})
           AND batch.status IN ('promoted','superseded')
+          AND batch.coverage_mode IN ('full','partial')
           AND date(batch.captured_to, ?5) BETWEEN ?6 AND ?7
      )
      SELECT ranked.*,
