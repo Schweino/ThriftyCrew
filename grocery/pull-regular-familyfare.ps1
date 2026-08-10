@@ -7,6 +7,7 @@
 param([string]$OutDir = "", [int]$MaxMinutes = 9, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+. (Join-Path $root 'omaha-time.ps1')
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
 # Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
 # arrive truncated - it did not arrive at all, and the launch error read like the CHECK had crashed. Three
@@ -274,7 +275,7 @@ if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $regDir = Join-Path $OutDir 'regular'
 if (-not (Test-Path $regDir)) { New-Item -ItemType Directory -Force $regDir | Out-Null }
 $UA = @{ 'User-Agent' = 'Mozilla/5.0' }
-$todayS = (Get-Date).ToString('yyyy-MM-dd')
+$todayS = Get-OmahaDateKey
 $terms = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
 
 $ak = 'family_fare'; $sid = '6401'; $b = 'https://api.freshop.ncrcloud.com/1'

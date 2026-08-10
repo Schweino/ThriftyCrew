@@ -73,10 +73,11 @@ param(
 $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+. (Join-Path $root 'omaha-time.ps1')
 $out  = if ($OutDir) { $OutDir } else { Join-Path $root 'out' }
 if (-not (Test-Path $out)) { New-Item -ItemType Directory -Path $out -Force | Out-Null }
 if (-not (Test-Path (Join-Path $out 'regular'))) { New-Item -ItemType Directory -Path (Join-Path $out 'regular') -Force | Out-Null }
-$today = (Get-Date).ToString('yyyy-MM-dd')
+$today = Get-OmahaDateKey
 
 # ---------------------------------------------------------------- credentials
 $cid = $env:KROGER_CLIENT_ID; $csec = $env:KROGER_CLIENT_SECRET

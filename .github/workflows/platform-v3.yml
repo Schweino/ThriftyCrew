@@ -8,6 +8,7 @@ on:
       - "grocery/pull-regular-bakers-api.ps1"
       - "grocery/pull-regular-familyfare.ps1"
       - "grocery/pull-regular-hyvee.ps1"
+      - "grocery/omaha-time.ps1"
       - ".github/workflows/platform-v3.yml"
   pull_request:
     branches: [main]
@@ -16,6 +17,7 @@ on:
       - "grocery/pull-regular-bakers-api.ps1"
       - "grocery/pull-regular-familyfare.ps1"
       - "grocery/pull-regular-hyvee.ps1"
+      - "grocery/omaha-time.ps1"
       - ".github/workflows/platform-v3.yml"
   schedule:
     - cron: "0 12 * * *"
@@ -84,6 +86,9 @@ jobs:
       - name: Verify migrated PowerShell source adapters under PowerShell 7
         shell: pwsh
         run: |
+          . ../grocery/omaha-time.ps1
+          if ((Get-OmahaDateKey ([datetime]'2026-08-10T00:30:00Z')) -ne '2026-08-09') { throw 'Omaha DST crossover date fixture failed' }
+          if ((Get-OmahaDateKey ([datetime]'2026-01-10T05:30:00Z')) -ne '2026-01-09') { throw 'Omaha standard-time crossover date fixture failed' }
           & ../grocery/pull-regular-bakers-api.ps1 -SelfTest
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           & ../grocery/pull-regular-familyfare.ps1 -SelfTest

@@ -37,10 +37,11 @@
 param([string]$OutDir = "", [int]$StoreId = 1465, [switch]$Quick)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+. (Join-Path $root 'omaha-time.ps1')
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $regDir = Join-Path $OutDir 'regular'
 if (-not (Test-Path $regDir)) { New-Item -ItemType Directory -Path $regDir -Force | Out-Null }
-$todayS = (Get-Date -Format 'yyyy-MM-dd')
+$todayS = Get-OmahaDateKey
 . (Join-Path $root 'pu-lib.ps1')   # shared per-unit math - used to prove a productId really is our row's size
 
 $qFile = Join-Path $root 'hyvee\query-b64.txt'
