@@ -21,7 +21,11 @@ describe("githubWorkflowRuns", () => {
       .mockResolvedValueOnce(new Response(JSON.stringify({ jobs: [{
         id: 7, name: "verify", status: "completed", conclusion: "failure", started_at: "2026-08-09T12:00:00Z",
         completed_at: "2026-08-09T12:01:00Z", runner_name: "must-not-leak", steps: [{ name: "test", status: "completed", conclusion: "failure", number: 3 }],
-      }] }), { status: 200 }));
+      }] }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify([{
+        path: ".github/workflows/test.yml", start_line: 12, end_line: 12, annotation_level: "failure", title: "Process completed", message: "exit code 1",
+        raw_details: "must-not-leak",
+      }]), { status: 200 }));
     vi.stubGlobal("fetch", fetchMock);
 
     const result = await githubWorkflowRuns(configuredEnv, 1);
@@ -30,10 +34,12 @@ describe("githubWorkflowRuns", () => {
       id: 42, event: "workflow_dispatch", status: "completed", conclusion: "failure", headSha: "abc",
       createdAt: "2026-08-09T12:00:00Z", updatedAt: "2026-08-09T12:01:00Z", url: "https://github.test/run/42",
       jobs: [{ id: 7, name: "verify", status: "completed", conclusion: "failure", startedAt: "2026-08-09T12:00:00Z",
-        completedAt: "2026-08-09T12:01:00Z", steps: [{ name: "test", status: "completed", conclusion: "failure", number: 3 }] }],
+        completedAt: "2026-08-09T12:01:00Z", steps: [{ name: "test", status: "completed", conclusion: "failure", number: 3 }],
+        annotations: [{ path: ".github/workflows/test.yml", startLine: 12, endLine: 12, level: "failure", title: "Process completed", message: "exit code 1" }] }],
     }] });
     expect(fetchMock.mock.calls[0]?.[0]).toContain("daily-engine.yml/runs?per_page=1");
     expect(fetchMock.mock.calls[1]?.[0]).toContain("actions/runs/42/jobs?per_page=20");
+    expect(fetchMock.mock.calls[2]?.[0]).toContain("check-runs/7/annotations?per_page=50");
   });
 
   it("rejects missing configuration and GitHub API failures", async () => {

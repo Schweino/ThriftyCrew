@@ -176,6 +176,15 @@ interface GithubWorkflowJobsResponse {
   }>;
 }
 
+interface GithubAnnotationResponse {
+  path?: string;
+  start_line?: number;
+  end_line?: number;
+  annotation_level?: string;
+  title?: string | null;
+  message?: string;
+}
+
 async function githubJson<T>(env: WorkerEnv, url: string): Promise<T> {
   const response = await fetch(url, {
     headers: {
@@ -206,16 +215,11 @@ export async function githubWorkflowRuns(env: WorkerEnv, requestedLimit = 5): Pr
     const jobs = run.id
       ? await githubJson<GithubWorkflowJobsResponse>(env, `${base}/actions/runs/${run.id}/jobs?per_page=20`)
       : { jobs: [] };
-    return {
-      id: run.id ?? null,
-      event: run.event ?? null,
-      status: run.status ?? null,
-      conclusion: run.conclusion ?? null,
-      headSha: run.head_sha ?? null,
-      createdAt: run.created_at ?? null,
-      updatedAt: run.updated_at ?? null,
-      url: run.html_url ?? null,
-      jobs: (jobs.jobs ?? []).map((job) => ({
+    const sanitizedJobs = await Promise.all((jobs.jobs ?? []).map(async (job) => {
+      const annotations = job.id && job.conclusion === "failure"
+        ? await githubJson<GithubAnnotationResponse[]>(env, `${base}/check-runs/${job.id}/annotations?per_page=50`)
+        : [];
+      return {
         id: job.id ?? null,
         name: job.name ?? null,
         status: job.status ?? null,
@@ -228,7 +232,26 @@ export async function githubWorkflowRuns(env: WorkerEnv, requestedLimit = 5): Pr
           conclusion: step.conclusion ?? null,
           number: step.number ?? null,
         })),
-      })),
+        annotations: annotations.map((annotation) => ({
+          path: annotation.path ?? null,
+          startLine: annotation.start_line ?? null,
+          endLine: annotation.end_line ?? null,
+          level: annotation.annotation_level ?? null,
+          title: annotation.title ?? null,
+          message: annotation.message ?? null,
+        })),
+      };
+    }));
+    return {
+      id: run.id ?? null,
+      event: run.event ?? null,
+      status: run.status ?? null,
+      conclusion: run.conclusion ?? null,
+      headSha: run.head_sha ?? null,
+      createdAt: run.created_at ?? null,
+      updatedAt: run.updated_at ?? null,
+      url: run.html_url ?? null,
+      jobs: sanitizedJobs,
     };
   }));
   return { runs };
