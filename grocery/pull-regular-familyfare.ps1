@@ -689,7 +689,7 @@ if ($prevF) {
 }
 $deals = $rows.ToArray()
 
-$out = [ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; source='Freshop catalog base_price (store_id 6401, Omaha), NOT Instacart'; deal_count=@($deals).Count; fresh_count=(@($deals).Count - $carried); carried_count=$carried; expired_count=$expired; expired_starved=$expStarved; expired_churn=$expChurn; expired_unknown=$expUnknown; max_carry_days=$MaxCarryDays; empty_terms=@($empty); deals=$deals }
+$out = [ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; price_mode='pickup'; mode_verified=$todayS; source='Freshop catalog base_price (store_id 6401, Omaha), NOT Instacart'; deal_count=@($deals).Count; fresh_count=(@($deals).Count - $carried); carried_count=$carried; expired_count=$expired; expired_starved=$expStarved; expired_churn=$expChurn; expired_unknown=$expUnknown; max_carry_days=$MaxCarryDays; empty_terms=@($empty); deals=$deals }
 
 # THE ONE WRITE THIS RUN EXISTS TO PRODUCE. Atomic, retried, and NON-FATAL - see Write-FfJsonAtomic. Under the
 # old bare Set-Content this line threw at 2026-08-02T07:06:41 and took 686 rows of purchases down with it,

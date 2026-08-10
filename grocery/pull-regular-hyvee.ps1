@@ -466,7 +466,7 @@ if ((-not $Quick) -and $prevMax -gt 100 -and $deals.Count -lt ($prevMax * 0.5)) 
 
 $file = if ($Quick) { Join-Path $OutDir 'hyvee-quick-test.json' } else { Join-Path $regDir ("hyvee-regular-$todayS.json") }
 $out = [ordered]@{
-  store='Hy-Vee'; week_of=$todayS; price_type='everyday'; price_mode='in-store'
+  store='Hy-Vee'; week_of=$todayS; price_type='everyday'; price_mode='in-store'; mode_verified=$todayS
   source='Hy-Vee Aisles Online GraphQL storeProducts.price - the CURRENT shelf price at storeId 1465 (Omaha #01). NOT basePrice (the regular price) and NOT ssrPricing (a different store).'
   size_policy='sizes are OUR verified ones, not Hy-Vee''s - their size field mixes totals, single units of a multipack, and mislabelled units'
   # cap_skipped is ADDITIVE and sits beside the counts that were already here. Every consumer of this file

@@ -56,6 +56,18 @@ describe("direct regular capture", () => {
     expect(artifact.priceModeVerified).toBe(true);
   });
 
+  it.each([
+    ["family-fare", "pickup"],
+    ["hy-vee", "in-store"],
+  ])("accepts the dated price-mode proof emitted by the %s adapter", async (store, priceMode) => {
+    const artifact = await buildRegularCapture(store, {
+      mode_verified: "2026-08-09",
+      price_mode: priceMode,
+      deals: [{ item: "Large Eggs", current_price: 1.99, size: "dozen", as_of: "2026-08-09" }],
+    });
+    expect(artifact.priceModeVerified).toBe(true);
+  });
+
   it("preserves the source's complete per-term receipt ledger", async () => {
     const artifact = await buildRegularCapture("bakers", {
       coverage_mode: "full",
