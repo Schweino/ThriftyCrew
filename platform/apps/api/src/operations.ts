@@ -18,6 +18,22 @@ export function scheduleGap(
   return { stale: ageMinutes > maxGapMinutes, ageMinutes, basis };
 }
 
+export async function d1DatabaseFileSize(env: WorkerEnv): Promise<number> {
+  if (!env.D1_REST_API_TOKEN || !env.CLOUDFLARE_ACCOUNT_ID || !env.D1_DATABASE_ID) {
+    throw new Error("D1 database metadata credentials are not configured");
+  }
+  const response = await fetch(
+    `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/d1/database/${env.D1_DATABASE_ID}?fields=file_size`,
+    { headers: { authorization: `Bearer ${env.D1_REST_API_TOKEN}` } },
+  );
+  const body = await response.json() as { success?: boolean; errors?: unknown[]; result?: { file_size?: number } };
+  const fileSize = body.result?.file_size;
+  if (!response.ok || body.success !== true || typeof fileSize !== "number" || !Number.isFinite(fileSize) || fileSize < 0) {
+    throw new Error(`D1 database metadata request failed with ${response.status}: ${stableJson(body.errors ?? [])}`);
+  }
+  return fileSize;
+}
+
 export async function resolveRecoveredJobRunAlerts(
   env: WorkerEnv,
   job: string,
@@ -480,14 +496,12 @@ export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number)
     ).bind(runId, observedAt).run();
   }
   try {
-    const [pageCount, pageSize, observations, protectedRows, previous] = await Promise.all([
-      env.DB.prepare("PRAGMA page_count").first<{ page_count: number }>(),
-      env.DB.prepare("PRAGMA page_size").first<{ page_size: number }>(),
+    const [databaseBytes, observations, protectedRows, previous] = await Promise.all([
+      d1DatabaseFileSize(env),
       env.DB.prepare("SELECT COUNT(*) AS count, MIN(captured_at) AS oldest FROM observations").first<{ count: number; oldest: string | null }>(),
       env.DB.prepare("SELECT COUNT(DISTINCT observation_id) AS count FROM release_cells WHERE observation_id IS NOT NULL").first<{ count: number }>(),
       env.DB.prepare("SELECT database_bytes, observed_at FROM archival_forecasts ORDER BY observed_at DESC LIMIT 1").first<{ database_bytes: number; observed_at: string }>(),
     ]);
-    const databaseBytes = (pageCount?.page_count ?? 0) * (pageSize?.page_size ?? 4096);
     const databaseLimitBytes = Number(env.D1_DATABASE_LIMIT_BYTES ?? 10 * 1024 * 1024 * 1024);
     const elapsedDays = previous ? Math.max(1, (scheduledTime - Date.parse(previous.observed_at)) / 86_400_000) : 0;
     const monthlyGrowthBytes = previous ? Math.round((databaseBytes - previous.database_bytes) * 30 / elapsedDays) : 0;

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { githubWorkflowRuns, jobStatusRequiresAlert, scheduleGap } from "./operations";
+import { d1DatabaseFileSize, githubWorkflowRuns, jobStatusRequiresAlert, scheduleGap } from "./operations";
 import type { WorkerEnv } from "./env";
 
 const configuredEnv = {
@@ -35,6 +35,26 @@ describe("schedule gap lifecycle", () => {
       basis: "run",
     });
     expect(scheduleGap(null, null, checkedAt, 120)).toEqual({ stale: true, ageMinutes: null, basis: "unknown" });
+  });
+});
+
+describe("D1 database size metadata", () => {
+  it("uses the authorized Cloudflare metadata endpoint instead of forbidden Worker PRAGMAs", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ success: true, result: { file_size: 318_574_592 } })));
+    vi.stubGlobal("fetch", fetchMock);
+    const size = await d1DatabaseFileSize({
+      D1_REST_API_TOKEN: "test-token",
+      CLOUDFLARE_ACCOUNT_ID: "account",
+      D1_DATABASE_ID: "database",
+    } as WorkerEnv);
+    expect(size).toBe(318_574_592);
+    expect(fetchMock.mock.calls[0]?.[0]).toContain("/accounts/account/d1/database/database?fields=file_size");
+  });
+
+  it("fails closed when metadata credentials or file size are unavailable", async () => {
+    await expect(d1DatabaseFileSize({} as WorkerEnv)).rejects.toThrow("credentials");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ success: true, result: {} }))));
+    await expect(d1DatabaseFileSize({ D1_REST_API_TOKEN: "x", CLOUDFLARE_ACCOUNT_ID: "a", D1_DATABASE_ID: "d" } as WorkerEnv)).rejects.toThrow("metadata request failed");
   });
 });
 
