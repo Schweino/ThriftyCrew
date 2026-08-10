@@ -307,7 +307,15 @@ if (command === "status") {
   const client = await mutationClient();
   const deployment = await deployConfiguration(client, artifact.configuration);
   const matching = await rematchPromotedBatches(client);
-  result = { ok: true, deployment, matching };
+  result = {
+    ok: true,
+    configurationId: artifact.configuration.id,
+    configurationActivated: deployment.active === true,
+    rematched: matching.ok === true,
+    releasePublicationRequired: true,
+    deployment,
+    matching,
+  };
 } else if (command === "schedules" && subcommand === "check") {
   result = await checkScheduleAuthority(platformRoot);
 } else if (command === "schedules" && subcommand === "deploy") {

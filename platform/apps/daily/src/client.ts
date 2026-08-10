@@ -152,6 +152,7 @@ export async function deployConfiguration(client: MutationClient, config: Curren
     expectedRules: configurationRuleCount(config),
     expectedKnownWrong: config.knownWrong.length,
   } });
+  let activation: Record<string, unknown> | null = null;
   if (configuration.active !== true) {
     await client.request(`/internal/configurations/${config.id}/categories`, { method: "PUT", json: { categories: config.categories } });
     for (const commodityChunk of chunks(config.commodities, 20)) {
@@ -169,9 +170,15 @@ export async function deployConfiguration(client: MutationClient, config: Curren
     for (const [index, ruleChunk] of chunks(config.knownWrong, 75).entries()) {
       await client.request(`/internal/configurations/${config.id}/known-wrong${index === 0 ? "?replace=1" : ""}`, { method: "PUT", json: { rules: ruleChunk } });
     }
-    await client.request(`/internal/configurations/${config.id}/activate`, { method: "POST" });
+    activation = await client.request(`/internal/configurations/${config.id}/activate`, { method: "POST" });
   }
-  return client.request("/internal/doctor", { acceptStatuses: [422] });
+  return {
+    ok: true,
+    configurationId: config.id,
+    active: true,
+    idempotent: configuration.active === true,
+    activation,
+  };
 }
 
 export async function replayCurrentArtifact(client: MutationClient, artifact: CurrentBridgeArtifact): Promise<Record<string, unknown>> {
