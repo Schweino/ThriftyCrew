@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "id": "browser-capture-local",
+  "automationId": "grocery-v3-browser-capture",
+  "name": "Grocery V3 browser capture",
+  "cron": "15 6 * * *",
+  "rrule": "FREQ=DAILY;BYHOUR=6;BYMINUTE=15;BYSECOND=0",
+  "timezone": "America/Chicago",
+  "model": "gpt-5.6-sol",
+  "reasoningEffort": "high",
+  "notificationPolicy": "failed_runs_only",
+  "promptFile": "config/automations/grocery-v3-browser-capture.md"
+}

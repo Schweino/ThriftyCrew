@@ -1,5 +1,26 @@
 import { describe, expect, it } from "vitest";
 import { buildRegularCapture } from "./direct";
+import { digestHex, stableJson } from "@thriftycrew/domain";
+
+async function walmartBrowserSession() {
+  const screenshotSha256 = "a".repeat(64);
+  const content = {
+    version: 1 as const,
+    sessionId: "browser-walmart-2026-08-09-fixture",
+    store: "walmart" as const,
+    sourceId: "direct-walmart-browser",
+    worklistHash: "b".repeat(64),
+    startedAt: "2026-08-09T15:00:00.000Z",
+    finishedAt: "2026-08-09T15:02:00.000Z",
+    coverageMode: "full" as const,
+    expectedTerms: 1,
+    terms: [{ termKey: "eggs", query: "eggs", ordinal: 0, outcome: "success" as const, rowCount: 1, attempts: 1, startedAt: "2026-08-09T15:00:00.000Z", finishedAt: "2026-08-09T15:01:00.000Z" }],
+    canaries: [{ ordinal: 0, observedAt: "2026-08-09T15:00:00.000Z", market: "Omaha", location: "Omaha L St Supercenter", priceMode: "pickup", evidenceUrl: "https://www.walmart.com/", marketVerified: true as const, locationVerified: true as const, priceModeVerified: true as const, screenshotSha256 }],
+    chunks: [{ id: "chunk-fixture", ordinal: 0, termKeys: ["eggs"], rowCount: 1, sha256: "c".repeat(64), createdAt: "2026-08-09T15:01:00.000Z" }],
+    projectedCaptureSha256: "d".repeat(64),
+  };
+  return { ...content, contentHash: await digestHex(stableJson(content)), screenshotSha256 };
+}
 
 describe("direct regular capture", () => {
   it("normalizes exact integer price bases and preserves shelf taxonomy", async () => {
@@ -52,14 +73,16 @@ describe("direct regular capture", () => {
   });
 
   it("builds a real-Chrome artifact only with an explicit verification attestation", async () => {
-    const document = { coverage_mode: "targeted", deals: [{ item: "Eggs", current_price: 1.99, size: "dozen", as_of: "2026-08-09" }] };
+    const session = await walmartBrowserSession();
+    const document = { coverage_mode: "full", capture_session: session, deals: [{ item: "Eggs", current_price: 1.99, size: "dozen", as_of: "2026-08-09", found_by_term: "eggs" }] };
     await expect(buildRegularCapture("walmart", document, undefined, "browser")).rejects.toThrow("browser captures require");
     const artifact = await buildRegularCapture("walmart", document, {
       store: "Walmart", market: "Omaha", priceMode: "pickup", verifiedAt: "2026-08-09T15:00:00.000Z",
       evidenceUrl: "https://www.walmart.com/", statement: "Logged-in Omaha pickup context verified in Chrome",
       marketVerified: true, locationVerified: true, priceModeVerified: true,
+      screenshotSha256: [session.screenshotSha256], captureSessionHash: session.contentHash,
     }, "browser");
-    expect(artifact).toMatchObject({ sourceId: "direct-walmart-browser", coverageMode: "targeted", marketVerified: true, locationVerified: true, priceModeVerified: true });
+    expect(artifact).toMatchObject({ sourceId: "direct-walmart-browser", coverageMode: "full", expectedTerms: 1, capturedFrom: session.startedAt, capturedTo: session.finishedAt, marketVerified: true, locationVerified: true, priceModeVerified: true });
   });
 
   it("refuses to claim verified price mode when the source did not prove it", async () => {

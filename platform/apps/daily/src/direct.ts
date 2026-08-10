@@ -1,4 +1,4 @@
-import type { DirectCaptureArtifact, ObservationInput } from "@thriftycrew/contracts";
+import { browserCaptureSessionSchema, type BrowserCaptureSession, type DirectCaptureArtifact, type ObservationInput } from "@thriftycrew/contracts";
 import { digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 
 type StoreKey = "aldi" | "bakers" | "family-fare" | "fareway" | "hy-vee" | "sams" | "walmart";
@@ -12,6 +12,7 @@ interface RegularDocument {
   capture_terms?: Array<Record<string, unknown>>;
   empty_terms?: unknown[];
   deals?: Array<Record<string, unknown>>;
+  capture_session?: unknown;
 }
 export interface CaptureAttestation {
   store: string;
@@ -23,6 +24,8 @@ export interface CaptureAttestation {
   marketVerified: boolean;
   locationVerified: boolean;
   priceModeVerified: boolean;
+  screenshotSha256?: string[];
+  captureSessionHash?: string;
 }
 
 const STORE_ALIASES: Record<string, StoreKey> = {
@@ -222,20 +225,41 @@ export async function buildRegularCapture(
   const store = STORE_ALIASES[storeInput.toLowerCase()] ?? STORE_ALIASES[(document.store ?? "").toLowerCase()];
   if (!store) throw new Error(`unsupported store ${storeInput}`);
   if (captureClient === "browser" && !attestation) throw new Error("browser captures require a market, location, and price-mode attestation");
+  const captureSession: BrowserCaptureSession | undefined = captureClient === "browser" ? browserCaptureSessionSchema.parse(document.capture_session) : undefined;
+  if (captureClient === "browser" && !captureSession) throw new Error("browser captures require an immutable capture-session manifest");
   if (attestation) {
     const attestedStore = STORE_ALIASES[attestation.store.toLowerCase()];
     if (attestedStore !== store) throw new Error(`capture attestation is for ${attestation.store}, not ${store}`);
-    if (!/^omaha(?:,? nebraska)?$/i.test(attestation.market.trim())) throw new Error("capture attestation must verify the Omaha market");
+    if (!/^omaha(?:,?\s*(?:ne|nebraska))?$/i.test(attestation.market.trim())) throw new Error("capture attestation must verify the Omaha market");
     if (!/^\d{4}-\d{2}-\d{2}T/.test(attestation.verifiedAt) || !safeUrl(attestation.evidenceUrl) || !attestation.statement.trim()) throw new Error("capture attestation needs an ISO instant, HTTPS evidence URL, and statement");
+    if (captureClient === "browser") {
+      if (attestation.marketVerified !== true || attestation.locationVerified !== true || attestation.priceModeVerified !== true) throw new Error("browser capture attestation must affirm market, location, and price mode");
+      if (!Array.isArray(attestation.screenshotSha256) || attestation.screenshotSha256.length === 0 || attestation.screenshotSha256.some((hash) => !/^[a-f0-9]{64}$/.test(hash))) throw new Error("browser capture attestation must bind screenshot SHA-256 evidence");
+      if (!attestation.captureSessionHash || !/^[a-f0-9]{64}$/.test(attestation.captureSessionHash)) throw new Error("browser capture attestation must bind the capture-session manifest");
+    }
+  }
+  if (captureSession) {
+    if (captureSession.store !== store || captureSession.sourceId !== `direct-${store}-browser`) throw new Error("capture-session store/source identity does not match the requested browser capture");
+    const { contentHash: declaredSessionHash, ...sessionContent } = captureSession;
+    const sessionHash = await digestHex(stableJson(sessionContent));
+    if (declaredSessionHash !== sessionHash) throw new Error("capture-session content hash is invalid");
+    if (attestation?.captureSessionHash !== sessionHash) throw new Error("capture attestation does not bind the supplied capture-session manifest");
+    const proofHashes = new Set(captureSession.canaries.flatMap((canary) => canary.screenshotSha256 ? [canary.screenshotSha256] : []));
+    if (!(attestation?.screenshotSha256 ?? []).some((hash) => proofHashes.has(hash))) throw new Error("capture-session canaries do not bind the attested screenshot evidence");
+    if (captureSession.canaries.length !== captureSession.chunks.length) throw new Error("every browser capture chunk requires a location/price-mode canary");
   }
   const deals = Array.isArray(document.deals) ? document.deals : [];
   if (deals.length === 0) throw new Error("regular capture document has no deals");
   const observations: ObservationInput[] = [];
   const rejected: Array<{ index: number; reason: string }> = [];
   const buckets = new Map<string, { accepted: number; rejected: number }>();
+  const sessionTerms = new Map(captureSession?.terms.map((term) => [term.termKey, term]) ?? []);
+  const sessionQueries = new Map(captureSession?.terms.map((term) => [term.query, term]) ?? []);
   for (let index = 0; index < deals.length; index += 1) {
     const row = deals[index]!;
-    const bucket = termKey(stringValue(row.found_by_term) ?? `catalog-${Math.floor(index / 100).toString().padStart(4, "0")}`);
+    const foundByTerm = stringValue(row.found_by_term);
+    const sessionTermByQuery = foundByTerm ? sessionQueries.get(foundByTerm) : undefined;
+    const bucket = sessionTermByQuery?.termKey ?? termKey(foundByTerm ?? `catalog-${Math.floor(index / 100).toString().padStart(4, "0")}`);
     const count = buckets.get(bucket) ?? { accepted: 0, rejected: 0 };
     buckets.set(bucket, count);
     const name = stringValue(row.item) ?? stringValue(row.name);
@@ -250,7 +274,18 @@ export async function buildRegularCapture(
     }
     const purchasePriceMinor = Math.round(price * 100);
     const regularPrice = numberValue(row.base_price) ?? numberValue(row.regular);
-    const capturedAt = omahaDayStart(asOf.slice(0, 10));
+    const sessionTerm = captureSession ? sessionTerms.get(bucket) : undefined;
+    const capturedAt = captureSession ? sessionTerm?.finishedAt : omahaDayStart(asOf.slice(0, 10));
+    if (captureSession && (!foundByTerm || !sessionTerm || sessionTerm.outcome !== "success")) {
+      count.rejected += 1;
+      rejected.push({ index, reason: !foundByTerm ? "missing-capture-term" : !sessionTerm ? "term-outside-session" : "term-not-successful" });
+      continue;
+    }
+    if (!capturedAt) {
+      count.rejected += 1;
+      rejected.push({ index, reason: "missing-capture-time" });
+      continue;
+    }
     const productUrl = safeUrl(row.canonical_url) ?? safeUrl(row.link_url);
     const kind: ObservationInput["kind"] = row.marked_down === true ? "markdown" : regularPrice !== undefined && regularPrice > price ? "sale" : "everyday";
     const storeUnitPrice = store === "sams" ? verifiedUnitPrice(row.sams_unit_price) : undefined;
@@ -260,6 +295,7 @@ export async function buildRegularCapture(
     observations.push({
       externalProductKey: await externalKey(row, index), name, sizeText,
       ...(productUrl ? { productUrl } : {}),
+      ...(safeUrl(row.image_url) ? { imageUrl: safeUrl(row.image_url)! } : {}),
       ...(taxonomy(row, store) ? { taxonomyPath: taxonomy(row, store)! } : {}),
       package: {
         source: document.source ?? "regular-catalog",
@@ -284,20 +320,24 @@ export async function buildRegularCapture(
     termKey: key, ordinal, outcome: value.accepted > 0 ? "success" as const : "rejected" as const, rowCount: value.accepted,
     ...(value.rejected > 0 ? { reason: `${value.rejected} source rows rejected during normalization` } : {}),
   }));
-  const terms = authoredTermLedger(document) ?? derivedTerms;
+  const terms = captureSession
+    ? captureSession.terms.map((term) => ({ termKey: term.termKey, ordinal: term.ordinal, outcome: term.outcome, rowCount: term.rowCount, ...(term.reason ? { reason: term.reason } : {}) }))
+    : authoredTermLedger(document) ?? derivedTerms;
   const requestedCoverage: DirectCaptureArtifact["coverageMode"] = ["full", "partial", "targeted", "ad_only"].includes(document.coverage_mode ?? "")
     ? document.coverage_mode as DirectCaptureArtifact["coverageMode"] : "partial";
-  const coverageMode: DirectCaptureArtifact["coverageMode"] = requestedCoverage === "full"
-    && !terms.every((term) => term.outcome === "success" || term.outcome === "empty") ? "partial" : requestedCoverage;
+  const coverageMode: DirectCaptureArtifact["coverageMode"] = captureSession?.coverageMode
+    ?? (requestedCoverage === "full" && !terms.every((term) => term.outcome === "success" || term.outcome === "empty") ? "partial" : requestedCoverage);
   const priceModeVerified = attestation?.priceModeVerified === true || document.mode_verified === true || /^\d{4}-\d{2}-\d{2}/.test(stringValue(document.mode_verified) ?? "");
   const marketVerified = attestation?.marketVerified ?? true;
   const locationVerified = attestation?.locationVerified ?? true;
   const attestationHash = attestation ? await digestHex(stableJson(attestation)) : null;
   const manifestHash = await digestHex(stableJson({ store, source: document.source, priceMode: attestation?.priceMode ?? document.price_mode, priceModeVerified, marketVerified, locationVerified, attestationHash, observations: observations.map((item) => [item.externalProductKey, item.capturedAt, item.perUnitMicros, item.basisOptions ?? []]) }));
+  const capturedFrom = captureSession?.startedAt ?? captured[0]!;
+  const capturedTo = captureSession?.finishedAt ?? captured.at(-1)!;
   return {
-    version: 1, sourceId: `direct-${store}-${captureClient}`, coverageMode, capturedFrom: captured[0]!, capturedTo: captured.at(-1)!,
-    expectedTerms: terms.length, marketVerified, locationVerified, priceModeVerified,
-    idempotencyKey: `regular-${store}-${captured.at(-1)!.slice(0, 10)}-${manifestHash.slice(0, 16)}`, terms, observations,
-    audit: { inputRows: deals.length, acceptedRows: observations.length, rejectedRows: rejected.length, rejectionReasons: Object.fromEntries([...new Set(rejected.map((item) => item.reason))].sort().map((reason) => [reason, rejected.filter((item) => item.reason === reason).length])), taxonomyRows: observations.filter((item) => item.taxonomyPath).length, ...(attestation ? { attestation, attestationHash } : {}) },
+    version: 1, sourceId: `direct-${store}-${captureClient}`, coverageMode, capturedFrom, capturedTo,
+    expectedTerms: captureSession?.expectedTerms ?? terms.length, marketVerified, locationVerified, priceModeVerified,
+    idempotencyKey: `regular-${store}-${capturedTo.slice(0, 10)}-${manifestHash.slice(0, 16)}`, terms, observations,
+    audit: { inputRows: deals.length, acceptedRows: observations.length, rejectedRows: rejected.length, rejectionReasons: Object.fromEntries([...new Set(rejected.map((item) => item.reason))].sort().map((reason) => [reason, rejected.filter((item) => item.reason === reason).length])), taxonomyRows: observations.filter((item) => item.taxonomyPath).length, ...(captureSession ? { captureSession } : {}), ...(attestation ? { attestation, attestationHash } : {}) },
   };
 }

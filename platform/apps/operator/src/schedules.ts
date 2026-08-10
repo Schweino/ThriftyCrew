@@ -62,6 +62,20 @@ async function verifyWindowsInventory(platformRoot: string, document: ScheduleDo
   return [...actual].sort();
 }
 
+async function verifyCodexAutomations(platformRoot: string, document: ScheduleDocument): Promise<Record<string, unknown>> {
+  const verified: Record<string, unknown> = {};
+  for (const schedule of document.schedules.filter((entry) => entry.executor === "codex-automation" && entry.lifecycle !== "retired")) {
+    const authorityFile = path.join(platformRoot, schedule.automationFile!);
+    const authority = JSON.parse(await readFile(authorityFile, "utf8")) as { id?: string; cron?: string; timezone?: string; promptFile?: string };
+    if (authority.id !== schedule.id || authority.cron !== schedule.cron || authority.timezone !== document.timezone || !authority.promptFile) {
+      throw new Error(`Codex automation authority drift for ${schedule.id}`);
+    }
+    await readFile(path.join(platformRoot, authority.promptFile), "utf8");
+    verified[schedule.id] = { authorityFile: schedule.automationFile, promptFile: authority.promptFile };
+  }
+  return verified;
+}
+
 export async function checkScheduleAuthority(platformRoot: string): Promise<Record<string, unknown>> {
   const document = await readScheduleAuthority(platformRoot);
   const inventory = transitionInventorySchema.parse(JSON.parse(await readFile(path.join(platformRoot, "config", "transition-inventory.json"), "utf8")));
@@ -82,10 +96,11 @@ export async function checkScheduleAuthority(platformRoot: string): Promise<Reco
     }
     if (!gateIds.has(schedule.retirementGate!)) throw new Error(`transition schedule ${schedule.id} references unknown evidence gate ${schedule.retirementGate}`);
   }
-  const [github, workerCrons, windowsTasks] = await Promise.all([
+  const [github, workerCrons, windowsTasks, codexAutomations] = await Promise.all([
     verifyGithubSchedules(platformRoot, document),
     verifyWorkerSchedules(platformRoot, document),
     verifyWindowsInventory(platformRoot, document),
+    verifyCodexAutomations(platformRoot, document),
   ]);
   return {
     ok: true,
@@ -96,6 +111,6 @@ export async function checkScheduleAuthority(platformRoot: string): Promise<Reco
     transition: document.schedules.filter((entry) => entry.lifecycle === "transition").length,
     retired: document.schedules.filter((entry) => entry.lifecycle === "retired").length,
     executors: Object.fromEntries([...new Set(document.schedules.map((schedule) => schedule.executor))].sort().map((executor) => [executor, document.schedules.filter((schedule) => schedule.executor === executor).length])),
-    verified: { github, workerCrons, windowsTasks, transitionInventoryVersion: inventory.version },
+    verified: { github, workerCrons, windowsTasks, codexAutomations, transitionInventoryVersion: inventory.version },
   };
 }

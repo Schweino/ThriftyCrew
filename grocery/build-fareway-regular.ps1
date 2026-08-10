@@ -493,10 +493,11 @@ foreach ($f in $In) {
     # exactly the bug that had Hy-Vee sirloin at $13.99/lb while the store charged $11.99.
     $curNum = 0.0
     [void][double]::TryParse(($adp -replace '[^0-9.]',''), [ref]$curNum)
-    $row = [ordered]@{ store='Fareway'; item=$name; ad_price=$adp; size=$sz; regular=$reg; source_ad='shop.fareway.com'; as_of=$srcAsOf }
+    $row = [ordered]@{ store='Fareway'; item=$name; ad_price=$adp; size=$sz; regular=$reg; source_ad='shop.fareway.com'; as_of=$srcAsOf; found_by_term=[string]$r.term }
     # identity rule: the link belongs ON the price row (derive-links reads link_url verbatim), not only in
     # the url-inputs side file - two homes for one fact is how they drift.
     if ($r.url -and "$($r.url)" -ne '') { $row['link_url'] = [string]$r.url }
+    if ($r.taxonomy_path) { $row['taxonomy_path'] = [string]$r.taxonomy_path }
     if ($curNum -gt 0) { $row['current_price'] = $curNum }
 
     # base_price (the was-price) ONLY when it is in the same basis as what we publish. For a weighted good we

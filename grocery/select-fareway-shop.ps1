@@ -71,7 +71,8 @@ foreach ($id in $byIdRaw.Keys) {
   $best = $hits | Sort-Object @{Expression={PerUnit $_}}, @{Expression={([string]$_.name).Length}} | Select-Object -First 1
   [void]$outRows.Add([ordered]@{
     id=$id; name=[string]$best.name; price=[string]$best.price; per=[string]$best.per;
-    orig=[string]$best.orig; unit=[string]$best.unit; size=[string]$best.size; url=[string]$best.url
+    orig=[string]$best.orig; unit=[string]$best.unit; size=[string]$best.size; url=[string]$best.url;
+    term=[string]$byIdRaw[$id].term; taxonomy_path=[string]$best.taxonomy_path
   })
 }
 $outDir = Split-Path $Out -Parent; New-Item -ItemType Directory -Force -Path $outDir | Out-Null

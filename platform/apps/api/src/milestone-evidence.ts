@@ -3,6 +3,11 @@ import type { WorkerEnv } from "./env";
 
 type DerivedGate = "shadow-ingest-day" | "semantic-parity-day" | "direct-chrome-week" | "beta-release-day" | "beta-week" | "accuracy-week";
 
+export function browserWeekPass(rows: ReadonlyArray<{ coverage_mode: string; has_screenshot: number; has_match: number }>, requiredSources: number): boolean {
+  return rows.length === requiredSources
+    && rows.every((row) => row.coverage_mode === "full" && row.has_screenshot === 1 && row.has_match === 1);
+}
+
 export interface ExternalEdgeProof {
   url: string;
   httpStatus: number;
@@ -211,7 +216,7 @@ export async function accrueMilestoneEvidence(env: WorkerEnv, now = new Date(), 
          JOIN capture_batches batch ON batch.source_id = source.id
         WHERE source.id IN (${REQUIRED_BROWSER_SOURCES.map((_, index) => `?${index + 1}`).join(",")})
           AND batch.status IN ('promoted','superseded')
-          AND batch.coverage_mode IN ('full','partial')
+           AND batch.coverage_mode = 'full'
           AND date(batch.captured_to, ?5) BETWEEN ?6 AND ?7
      )
      SELECT ranked.*,
@@ -221,8 +226,7 @@ export async function accrueMilestoneEvidence(env: WorkerEnv, now = new Date(), 
   ).bind(...REQUIRED_BROWSER_SOURCES, sqlModifier, weekKey, addCalendarDays(weekKey, 6)).all<{
     source_id: string; batch_id: string; coverage_mode: string; captured_to: string; status: string; has_screenshot: number; has_match: number;
   }>();
-  const chromePass = browserRows.results.length === REQUIRED_BROWSER_SOURCES.length
-    && browserRows.results.every((row) => ["full", "partial"].includes(row.coverage_mode) && row.has_screenshot === 1 && row.has_match === 1);
+  const chromePass = browserWeekPass(browserRows.results, REQUIRED_BROWSER_SOURCES.length);
   events.push(await recordDerivedGate(env, "direct-chrome-week", weekKey, "required-browser-sources", chromePass, observedAt, {
     requiredSources: REQUIRED_BROWSER_SOURCES,
     batches: browserRows.results,

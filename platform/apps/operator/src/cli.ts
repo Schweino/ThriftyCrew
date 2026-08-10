@@ -11,8 +11,9 @@ import { generateLegacyConfiguration } from "./config";
 import { buildNativeParityReport, compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot } from "@thriftycrew/engine";
 import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
 import { checkAgentRegistry, readAgentRegistry } from "./agents";
-import { browserCaptureCycleStatus, captureQueueStatus, defaultCaptureQueueRoot, drainCaptureQueue, enqueueCapture, PermanentCaptureError, verifyCaptureQueueFilesystem } from "./capture-queue";
+import { browserCaptureCycleStatus, captureQueueStatus, defaultCaptureQueueRoot, drainCaptureQueue, enqueueCapture, PermanentCaptureError, reconcileCaptureQueueRemote, verifyCaptureQueueFilesystem } from "./capture-queue";
 import { findLatestRegularCapture, omahaDateKey, parseServerCaptureStore, readFreshRegularCapture, SERVER_CAPTURE_STORES } from "./current-captures";
+import { appendCaptureChunk, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession } from "./capture-session";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
@@ -601,6 +602,28 @@ if (command === "status") {
 } else if (command === "replay") {
   const artifact = await buildCurrentBridge(incomeRoot);
   result = await replayCurrentArtifact(await mutationClient(), artifact);
+} else if (command === "capture" && subcommand === "session") {
+  const [action, ...sessionArguments] = arguments_;
+  if (action === "init") {
+    const [store, worklistFile, directory, startedAt] = sessionArguments;
+    if (!store || !worklistFile || !directory) throw new Error("tc capture session init requires store, worklist file, and session directory");
+    result = { ok: true, ...(await initializeCaptureSession(store, cliPath(worklistFile), cliPath(directory), startedAt)) };
+  } else if (action === "append") {
+    const [directory, chunkFile] = sessionArguments;
+    if (!directory || !chunkFile) throw new Error("tc capture session append requires session directory and chunk JSON");
+    result = { ok: true, ...(await appendCaptureChunk(cliPath(directory), cliPath(chunkFile))) };
+  } else if (action === "finalize") {
+    const [directory, projectedFile, manifestFile, finishedAt] = sessionArguments;
+    if (!directory || !projectedFile || !manifestFile) throw new Error("tc capture session finalize requires session directory, projected capture output, and manifest output");
+    const session = await finalizeCaptureSession(cliPath(directory), cliPath(projectedFile), cliPath(manifestFile), finishedAt);
+    result = { ok: true, sessionId: session.sessionId, store: session.store, coverageMode: session.coverageMode, expectedTerms: session.expectedTerms, observations: session.terms.reduce((total, term) => total + term.rowCount, 0), outputFile: cliPath(projectedFile), manifestFile: cliPath(manifestFile) };
+  } else if (action === "status") {
+    const [directory] = sessionArguments;
+    if (!directory) throw new Error("tc capture session status requires a session directory");
+    result = await captureSessionStatus(cliPath(directory));
+  } else {
+    throw new Error("tc capture session requires init, append, finalize, or status");
+  }
 } else if (command === "capture" && subcommand === "build-regular") {
   const browser = arguments_.includes("--browser");
   const [store, inputFile, outputFile, attestationFile] = arguments_.filter((value: string) => value !== "--browser");
@@ -705,7 +728,7 @@ if (command === "status") {
   const root = defaultCaptureQueueRoot();
   if (action === "enqueue") {
     const [artifactFile, ...evidenceFiles] = queueArguments;
-    if (!artifactFile) throw new Error("tc capture queue enqueue requires an artifact file and screenshot evidence");
+    if (!artifactFile) throw new Error("tc capture queue enqueue requires an artifact plus screenshot, projected raw, and capture-session manifest evidence");
     result = await enqueueCapture(root, cliPath(artifactFile), evidenceFiles.map(cliPath));
   } else if (action === "drain") {
     const client = await mutationClient();
@@ -723,17 +746,21 @@ if (command === "status") {
     result = drained;
     if (!drained.ok) process.exitCode = 2;
   } else if (action === "status" || action === "watchdog") {
+    const watchdogClient = action === "watchdog" ? await mutationClient() : null;
+    const reconciliation = watchdogClient
+      ? await reconcileCaptureQueueRemote(root, (batchId) => watchdogClient.request(`/internal/capture-batches/${encodeURIComponent(batchId)}/status`))
+      : null;
     const filesystem = await verifyCaptureQueueFilesystem(root);
     const status = await captureQueueStatus(root, {
       maxPendingMinutes: Number(process.env.TC_CAPTURE_QUEUE_MAX_PENDING_MINUTES ?? 180),
       maxAttempts: Number(process.env.TC_CAPTURE_QUEUE_MAX_ATTEMPTS ?? 5),
     });
     const cycle = await browserCaptureCycleStatus(root);
-    const healthy = status.ok && !cycle.alertDue;
-    const queueResult = { ...status, ok: healthy, filesystem, cycle };
+    const healthy = status.ok && !cycle.alertDue && (reconciliation?.errors ?? 0) === 0;
+    const queueResult = { ...status, ok: healthy, filesystem, cycle, ...(reconciliation ? { reconciliation } : {}) };
     result = queueResult;
     if (action === "watchdog") {
-      const alert = await (await mutationClient()).request("/internal/operational-alerts", { json: {
+      const alert = await watchdogClient!.request("/internal/operational-alerts", { json: {
         key: "pc-browser-capture-queue",
         title: "PC browser capture pipeline is unhealthy",
         status: healthy ? "resolved" : "firing",
@@ -748,6 +775,7 @@ if (command === "status") {
           unhealthyJobs: status.unhealthyJobs,
           filesystem,
           cycle,
+          reconciliation,
         },
       } });
       result = { ...queueResult, alert };
@@ -822,6 +850,7 @@ if (command === "status") {
       "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
+      "tc capture session init|append|finalize|status",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog",
       "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|rematch-promoted|abandon <batch-id> <reason>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",

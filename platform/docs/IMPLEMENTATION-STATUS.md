@@ -28,7 +28,7 @@
 
 - 14 consecutive clean shadow-ingest days: 1 recorded.
 - 14 consecutive zero-diff native parity days: 1 recorded.
-- Four direct Chrome weekly cycles: 1 recorded.
+- Four direct Chrome weekly cycles: 0 strict full-session cycles recorded; the earlier partial bootstrap week was intentionally invalidated, with strict counting beginning 2026-08-12.
 - Four completed blind-accuracy weekly cycles: 1 recorded.
 - 30 consecutive successful beta daily releases: 1 recorded.
 - Four closed beta weeks: 0 recorded; the earlier incomplete week correctly failed.

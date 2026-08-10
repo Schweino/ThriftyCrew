@@ -70,6 +70,7 @@ import { evaluateContentPromotion } from "./content-batches";
 import { claimAgentWorkItem, completeAgentWorkItem, failAgentWorkItem } from "./agent-work-items";
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
+import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 export { D1RestoreDrillWorkflow } from "./restore-workflow";
@@ -195,7 +196,7 @@ app.get("/api/v2/status", async (context) => {
         WHERE c.market_id = 'omaha'`,
     ).first<{ id: string; published_at: string; summary_json: string }>(),
     context.env.DB.prepare(
-      `SELECT s.job, s.cron, s.executor, s.timezone, s.owner, s.proof, s.max_gap_minutes,
+      `SELECT s.job, s.cron, COALESCE(s.authority_executor, s.executor) AS executor, s.timezone, s.owner, s.proof, s.max_gap_minutes,
               s.lifecycle, s.retirement_gate, s.monitoring_started_at,
               (SELECT status FROM job_runs r WHERE r.job = s.job ORDER BY COALESCE(r.started_at, r.scheduled_for) DESC LIMIT 1) AS status,
               (SELECT COALESCE(heartbeat_at, finished_at, started_at, scheduled_for) FROM job_runs r WHERE r.job = s.job ORDER BY COALESCE(heartbeat_at, finished_at, started_at, scheduled_for) DESC LIMIT 1) AS latest_at
@@ -675,6 +676,33 @@ app.get("/internal/capture-batches/:id/products", async (context) => {
   });
 });
 
+app.get("/internal/capture-batches/:id/status", async (context) => {
+  const batch = await findBatch(context.env.DB, context.req.param("id"));
+  if (!batch) return jsonError("capture batch not found", 404);
+  const identity = context.get("identity");
+  const privileged = identity.role === "operator" || identity.role === "engine";
+  if (!privileged && batch.agent_id !== identity.agentId) return jsonError("capture batch belongs to another agent", 403);
+  if (identity.sourceIds && !identity.sourceIds.includes(batch.source_id)) return jsonError("agent is not authorized for this capture source", 403);
+  const matching = await context.env.DB.prepare(
+    `SELECT id, status, product_count, matched_count, unmatched_count, collision_count,
+            aisle_rejected_count, created_at
+       FROM match_runs WHERE batch_id = ?1 ORDER BY created_at DESC, id DESC LIMIT 1`,
+  ).bind(batch.id).first<Record<string, unknown>>();
+  const evidence = await context.env.DB.prepare(
+    `SELECT kind, COUNT(*) AS count FROM evidence_objects WHERE batch_id = ?1 GROUP BY kind ORDER BY kind`,
+  ).bind(batch.id).all<{ kind: string; count: number }>();
+  return context.json({
+    ok: batch.status === "promoted" || batch.status === "superseded",
+    batchId: batch.id,
+    sourceId: batch.source_id,
+    status: batch.status,
+    coverageMode: batch.coverage_mode,
+    capturedTo: batch.captured_to,
+    matching: matching ?? null,
+    evidence: evidence.results,
+  });
+});
+
 app.post("/internal/match-runs", zValidator("json", matchRunSchema), async (context) => {
   const body = context.req.valid("json");
   const batch = await findBatch(context.env.DB, body.batchId);
@@ -722,14 +750,18 @@ app.post("/internal/match-runs", zValidator("json", matchRunSchema), async (cont
 app.put("/internal/schedules/sync", zValidator("json", scheduleDocumentSchema), async (context) => {
   const document = context.req.valid("json");
   const identity = context.get("identity");
+  if (identity.role !== "operator" && identity.role !== "engine") {
+    return context.json({ ok: false, error: "operator or engine identity required" }, 403);
+  }
   const statements = document.schedules.map((schedule) => context.env.DB.prepare(
     `INSERT INTO job_schedules
-       (job, cron, max_gap_minutes, active, executor, timezone, owner, proof, dispatch_on_gap,
+       (job, cron, max_gap_minutes, active, executor, authority_executor, timezone, owner, proof, dispatch_on_gap,
         lifecycle, authority_version, retirement_gate, workflow_file, monitoring_started_at)
-     VALUES (?1, ?2, ?3, ?9, ?4, ?5, ?6, ?7, ?8, ?10, ?11, ?12, ?13, CURRENT_TIMESTAMP)
+     VALUES (?1, ?2, ?3, ?10, ?4, ?5, ?6, ?7, ?8, ?9, ?11, ?12, ?13, ?14, CURRENT_TIMESTAMP)
      ON CONFLICT(job) DO UPDATE SET
        cron = excluded.cron, max_gap_minutes = excluded.max_gap_minutes, active = excluded.active,
-       executor = excluded.executor, timezone = excluded.timezone, owner = excluded.owner,
+       executor = excluded.executor, authority_executor = excluded.authority_executor,
+       timezone = excluded.timezone, owner = excluded.owner,
        proof = excluded.proof, dispatch_on_gap = excluded.dispatch_on_gap,
        lifecycle = excluded.lifecycle, authority_version = excluded.authority_version,
        retirement_gate = excluded.retirement_gate, workflow_file = excluded.workflow_file,
@@ -738,6 +770,7 @@ app.put("/internal/schedules/sync", zValidator("json", scheduleDocumentSchema), 
     schedule.id,
     schedule.cron,
     schedule.maxGapMinutes,
+    schedule.executor === "codex-automation" ? "pc" : schedule.executor,
     schedule.executor,
     document.timezone,
     schedule.owner,
@@ -1738,6 +1771,10 @@ app.put("/internal/capture-batches/:id/evidence", async (context) => {
   const actualHash = await digestHex(bytes);
   if (actualHash !== metadataResult.data.sha256) return jsonError("evidence hash does not match content", 422);
   const contentType = context.req.header("content-type") || "application/octet-stream";
+  if (metadataResult.data.kind === "screenshot") {
+    try { validateScreenshotEvidence(bytes, contentType); }
+    catch (error) { return jsonError(error instanceof Error ? error.message : "invalid screenshot evidence", 422); }
+  }
   const objectKey = `batches/${batch.id}/${metadataResult.data.id}`;
   const existingEvidence = await context.env.DB.prepare(
     "SELECT object_key, sha256 FROM evidence_objects WHERE id = ?1 AND batch_id = ?2",
@@ -1795,7 +1832,19 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   const termEnvelopePass = batch.coverage_mode !== "full" || batch.expected_terms === null || attempted === batch.expected_terms;
   const pageEnvelopePass = batch.expected_pages === null || capturedPages === batch.expected_pages;
   const completePass = termEnvelopePass && pageEnvelopePass;
-  const status = identityPass && completePass && collapsePass && freshnessPass ? "validated" : "rejected";
+  const evidenceRows = await context.env.DB.prepare(
+    "SELECT object_key, kind, sha256 FROM evidence_objects WHERE batch_id = ?1 ORDER BY id",
+  ).bind(batch.id).all<{ object_key: string; kind: string; sha256: string }>();
+  const browserEvidence = batch.capture_method === "browser"
+    ? await validateBrowserCaptureEvidence(context.env.EVIDENCE, {
+      sourceId: batch.source_id,
+      coverageMode: batch.coverage_mode,
+      capturedFrom: batch.captured_from,
+      capturedTo: batch.captured_to,
+      expectedTerms: batch.expected_terms,
+    }, evidenceRows.results)
+    : { pass: true, detail: { required: false } };
+  const status = identityPass && completePass && collapsePass && freshnessPass && browserEvidence.pass ? "validated" : "rejected";
   const statements: D1PreparedStatement[] = body.terms.map((term) => context.env.DB.prepare(
     `INSERT INTO capture_terms (batch_id, term_key, ordinal, outcome, row_count, reason)
      VALUES (?1, ?2, ?3, ?4, ?5, ?6)`,
@@ -1804,12 +1853,13 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
     `UPDATE capture_batches SET status = ?2, attempted_terms = ?3, successful_terms = ?4, empty_terms = ?5,
        rejected_terms = ?6, blocked_terms = ?7, captured_pages = ?8, evidence_manifest_key = ?9,
        validation_summary_json = ?10, sealed_at = CURRENT_TIMESTAMP WHERE id = ?1`,
-  ).bind(batch.id, status, attempted, successful, empty, rejected, blocked, capturedPages, body.evidenceManifestKey ?? null, stableJson({ identityPass, termEnvelopePass, pageEnvelopePass, collapsePass, freshnessPass, captureAgeMillis, maxAgeDays: batch.max_age_days, observationCount, predecessorBatchId: predecessor?.id ?? null, predecessorObservationCount: predecessor?.observation_count ?? null, collapseFloor })));
+  ).bind(batch.id, status, attempted, successful, empty, rejected, blocked, capturedPages, body.evidenceManifestKey ?? null, stableJson({ identityPass, termEnvelopePass, pageEnvelopePass, collapsePass, freshnessPass, browserEvidencePass: browserEvidence.pass, browserEvidence: browserEvidence.detail, captureAgeMillis, maxAgeDays: batch.max_age_days, observationCount, predecessorBatchId: predecessor?.id ?? null, predecessorObservationCount: predecessor?.observation_count ?? null, collapseFloor })));
   for (const [guardId, pass, eligible, examined, detail] of [
     ["batch-location", identityPass, 3, 3, {}],
     ["batch-completeness", completePass, (batch.expected_terms ?? 0) + (batch.expected_pages ?? 0), attempted + capturedPages, {}],
     ["batch-collapse", collapsePass, predecessor ? 2 : 0, predecessor ? 2 : 0, { observationCount, predecessorBatchId: predecessor?.id ?? null, predecessorObservationCount: predecessor?.observation_count ?? null, collapseFloor }],
     ["batch-freshness", freshnessPass, 1, 1, { capturedTo: batch.captured_to, captureAgeMillis, maxAgeDays: batch.max_age_days }],
+    ["batch-browser-evidence", browserEvidence.pass, batch.capture_method === "browser" ? 3 : 0, batch.capture_method === "browser" ? 3 : 0, browserEvidence.detail],
   ] as const) {
     const resultId = await deterministicId("guard", batch.id, guardId);
     statements.push(context.env.DB.prepare(

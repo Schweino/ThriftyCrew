@@ -194,9 +194,11 @@ function Invoke-Build([object[]]$raw, [string]$date) {
       source_ad     = 'everyday shelf price'
       price_type    = 'everyday'
       as_of         = $date
+      found_by_term = [string]$r.term
     }
     $u = [string]$r.href
     if ($u -match '^https?://') { $row['link_url'] = $u }
+    if ($r.taxonomy_path) { $row['taxonomy_path'] = [string]$r.taxonomy_path }
     [void]$rows.Add([pscustomobject]$row)
   }
   return @{ rows = $rows.ToArray(); rejects = $rejects.ToArray() }
@@ -365,4 +367,3 @@ if ($res.rejects.Count) {
   Write-Output ("  {0} rejected -> aldi-rejects-$Date.json" -f $res.rejects.Count)
   foreach ($g in $why) { Write-Output ("     {0}x {1}" -f $g.Count, $g.Name) }
 }
-

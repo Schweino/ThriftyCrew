@@ -57,6 +57,70 @@ export const captureTermSchema = z.object({
   reason: z.string().max(1000).optional(),
 });
 
+export const browserCaptureStore = z.enum(["aldi", "fareway", "sams", "walmart"]);
+
+export const browserCaptureCanarySchema = z.object({
+  ordinal: z.number().int().nonnegative(),
+  observedAt: isoDateTime,
+  market: z.string().trim().min(1).max(300),
+  location: z.string().trim().min(1).max(500),
+  priceMode: z.string().trim().min(1).max(100),
+  evidenceUrl: z.url().max(3000),
+  marketVerified: z.literal(true),
+  locationVerified: z.literal(true),
+  priceModeVerified: z.literal(true),
+  screenshotSha256: sha256Hex.optional(),
+});
+
+export const browserCaptureSessionSchema = z.object({
+  version: z.literal(1),
+  sessionId: nonEmptyId,
+  store: browserCaptureStore,
+  sourceId: nonEmptyId,
+  worklistHash: sha256Hex,
+  startedAt: isoDateTime,
+  finishedAt: isoDateTime,
+  coverageMode,
+  expectedTerms: z.number().int().positive().max(2000),
+  terms: z.array(captureTermSchema.extend({
+    query: z.string().trim().min(1).max(500),
+    attempts: z.number().int().nonnegative().max(20),
+    startedAt: isoDateTime,
+    finishedAt: isoDateTime,
+  })).min(1).max(2000),
+  canaries: z.array(browserCaptureCanarySchema).min(1).max(2000),
+  chunks: z.array(z.object({
+    id: nonEmptyId,
+    ordinal: z.number().int().nonnegative(),
+    termKeys: z.array(nonEmptyId).min(1).max(20),
+    rowCount: z.number().int().nonnegative(),
+    sha256: sha256Hex,
+    createdAt: isoDateTime,
+  })).min(1).max(2000),
+  projectedCaptureSha256: sha256Hex,
+  contentHash: sha256Hex,
+}).superRefine((value, context) => {
+  if (value.finishedAt < value.startedAt) context.addIssue({ code: "custom", path: ["finishedAt"], message: "must not precede startedAt" });
+  if (value.terms.length !== value.expectedTerms) context.addIssue({ code: "custom", path: ["terms"], message: "must match expectedTerms" });
+  if (value.canaries.length !== value.chunks.length) context.addIssue({ code: "custom", path: ["canaries"], message: "every chunk requires a canary" });
+  const termKeys = new Set(value.terms.map((term) => term.termKey));
+  const ordinals = new Set(value.terms.map((term) => term.ordinal));
+  if (termKeys.size !== value.terms.length) context.addIssue({ code: "custom", path: ["terms"], message: "term keys must be unique" });
+  if (ordinals.size !== value.terms.length) context.addIssue({ code: "custom", path: ["terms"], message: "term ordinals must be unique" });
+  const complete = value.terms.every((term) => term.outcome === "success" || term.outcome === "empty");
+  if (value.coverageMode === "full" && !complete) context.addIssue({ code: "custom", path: ["coverageMode"], message: "full sessions cannot contain rejected, blocked, or unattempted terms" });
+  for (const [index, term] of value.terms.entries()) {
+    if (term.finishedAt < term.startedAt) context.addIssue({ code: "custom", path: ["terms", index, "finishedAt"], message: "must not precede startedAt" });
+    if (term.startedAt < value.startedAt || term.finishedAt > value.finishedAt) context.addIssue({ code: "custom", path: ["terms", index], message: "term interval must be inside the session interval" });
+  }
+  for (const [index, canary] of value.canaries.entries()) {
+    if (canary.ordinal !== index) context.addIssue({ code: "custom", path: ["canaries", index, "ordinal"], message: "canary ordinals must be contiguous" });
+    if (canary.observedAt < value.startedAt || canary.observedAt > value.finishedAt) context.addIssue({ code: "custom", path: ["canaries", index, "observedAt"], message: "canary must be observed inside the session interval" });
+  }
+  for (const [index, chunk] of value.chunks.entries()) if (chunk.ordinal !== index) context.addIssue({ code: "custom", path: ["chunks", index, "ordinal"], message: "chunk ordinals must be contiguous" });
+  if (!value.canaries.some((canary) => canary.screenshotSha256)) context.addIssue({ code: "custom", path: ["canaries"], message: "at least one canary must bind screenshot evidence" });
+});
+
 export const observationInputSchema = z
   .object({
     externalProductKey: z.string().min(1).max(300),
@@ -275,7 +339,7 @@ export const scheduleEntrySchema = z.object({
   id: nonEmptyId,
   cron: z.string().min(5).max(256),
   triggerCron: z.string().min(5).max(256).optional(),
-  executor: z.enum(["github-actions", "worker-cron", "cloudflare-workflow", "pc"]),
+  executor: z.enum(["github-actions", "worker-cron", "cloudflare-workflow", "pc", "codex-automation"]),
   maxGapMinutes: z.number().int().positive(),
   owner: z.string().min(1).max(160),
   proof: z.string().min(1).max(500),
@@ -284,6 +348,7 @@ export const scheduleEntrySchema = z.object({
   lifecycle: z.enum(["active", "transition", "retired"]).default("active"),
   workflowFile: z.string().min(1).max(500).optional(),
   windowsTask: z.string().min(1).max(300).optional(),
+  automationFile: z.string().min(1).max(500).optional(),
   agentId: nonEmptyId.optional(),
   retirementGate: z.string().min(1).max(1000).optional(),
   inventoryId: nonEmptyId.optional(),
@@ -294,6 +359,9 @@ export const scheduleEntrySchema = z.object({
   }
   if (value.executor === "pc" && !value.windowsTask) {
     context.addIssue({ code: "custom", path: ["windowsTask"], message: "PC schedules require a Windows task name" });
+  }
+  if (value.executor === "codex-automation" && !value.automationFile) {
+    context.addIssue({ code: "custom", path: ["automationFile"], message: "Codex automation schedules require an authority file" });
   }
   if (value.lifecycle === "transition" && !value.retirementGate) {
     context.addIssue({ code: "custom", path: ["retirementGate"], message: "transition schedules require a retirement gate" });
@@ -823,6 +891,7 @@ export type TelemetryEvent = z.infer<typeof telemetryEventSchema>;
 export type AccuracyDrawCreate = z.infer<typeof accuracyDrawCreateSchema>;
 export type AccuracyVerdicts = z.infer<typeof accuracyVerdictsSchema>;
 export type DirectCaptureArtifact = z.infer<typeof directCaptureArtifactSchema>;
+export type BrowserCaptureSession = z.infer<typeof browserCaptureSessionSchema>;
 export type EngineParityReport = z.infer<typeof engineParityReportSchema>;
 export type RestoreDrillRecord = z.infer<typeof restoreDrillRecordSchema>;
 export type RestoreDrillCleanup = z.infer<typeof restoreDrillCleanupSchema>;

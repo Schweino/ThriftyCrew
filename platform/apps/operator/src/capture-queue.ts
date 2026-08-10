@@ -1,6 +1,6 @@
 import { copyFile, mkdir, readFile, readdir, rename, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { directCaptureArtifactSchema, type DirectCaptureArtifact } from "@thriftycrew/contracts";
+import { browserCaptureSessionSchema, directCaptureArtifactSchema, type DirectCaptureArtifact } from "@thriftycrew/contracts";
 import { digestHex, stableJson } from "@thriftycrew/domain";
 
 export interface QueuedEvidence {
@@ -67,6 +67,7 @@ export const REQUIRED_BROWSER_CAPTURE_SOURCES = [
   "direct-sams-browser",
   "direct-walmart-browser",
 ] as const;
+export const STRICT_BROWSER_COVERAGE_START = "2026-08-12";
 
 const IMAGE_EXTENSIONS = new Map([
   [".png", "image/png"],
@@ -102,11 +103,71 @@ function centralDateKey(date: Date): string {
 }
 
 function evidenceKind(file: string): QueuedEvidence["kind"] {
-  return IMAGE_EXTENSIONS.has(path.extname(file).toLowerCase()) ? "screenshot" : "manifest";
+  const extension = path.extname(file).toLowerCase();
+  if (IMAGE_EXTENSIONS.has(extension)) return "screenshot";
+  return /(?:session|manifest)/i.test(path.basename(file)) ? "manifest" : "raw_payload";
 }
 
 function contentType(file: string): string {
-  return IMAGE_EXTENSIONS.get(path.extname(file).toLowerCase()) ?? "application/json";
+  const extension = path.extname(file).toLowerCase();
+  return IMAGE_EXTENSIONS.get(extension) ?? (extension === ".csv" ? "text/csv; charset=utf-8" : extension === ".jsonl" ? "application/x-ndjson" : extension === ".txt" ? "text/plain; charset=utf-8" : "application/json");
+}
+
+function uint16(bytes: Uint8Array, offset: number, littleEndian: boolean): number {
+  return littleEndian ? bytes[offset]! | bytes[offset + 1]! << 8 : bytes[offset]! << 8 | bytes[offset + 1]!;
+}
+
+function uint24le(bytes: Uint8Array, offset: number): number {
+  return bytes[offset]! | bytes[offset + 1]! << 8 | bytes[offset + 2]! << 16;
+}
+
+function uint32be(bytes: Uint8Array, offset: number): number {
+  return ((bytes[offset]! << 24) | (bytes[offset + 1]! << 16) | (bytes[offset + 2]! << 8) | bytes[offset + 3]!) >>> 0;
+}
+
+function imageDimensions(bytes: Uint8Array, extension: string): { width: number; height: number } {
+  if (extension === ".png") {
+    const signature = [137, 80, 78, 71, 13, 10, 26, 10];
+    if (bytes.length < 24 || !signature.every((value, index) => bytes[index] === value) || new TextDecoder().decode(bytes.slice(12, 16)) !== "IHDR") throw new Error("invalid PNG screenshot evidence");
+    return { width: uint32be(bytes, 16), height: uint32be(bytes, 20) };
+  }
+  if (extension === ".jpg" || extension === ".jpeg") {
+    if (bytes.length < 4 || bytes[0] !== 0xff || bytes[1] !== 0xd8) throw new Error("invalid JPEG screenshot evidence");
+    let offset = 2;
+    while (offset + 8 < bytes.length) {
+      if (bytes[offset] !== 0xff) { offset += 1; continue; }
+      const marker = bytes[offset + 1]!;
+      if ([0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf].includes(marker)) return { height: uint16(bytes, offset + 5, false), width: uint16(bytes, offset + 7, false) };
+      const length = uint16(bytes, offset + 2, false);
+      if (length < 2) break;
+      offset += 2 + length;
+    }
+    throw new Error("JPEG screenshot evidence has no dimensions");
+  }
+  if (extension === ".webp") {
+    if (bytes.length < 30 || new TextDecoder().decode(bytes.slice(0, 4)) !== "RIFF" || new TextDecoder().decode(bytes.slice(8, 12)) !== "WEBP") throw new Error("invalid WebP screenshot evidence");
+    const kind = new TextDecoder().decode(bytes.slice(12, 16));
+    if (kind === "VP8X") return { width: uint24le(bytes, 24) + 1, height: uint24le(bytes, 27) + 1 };
+    if (kind === "VP8L" && bytes[20] === 0x2f) {
+      const bits = (bytes[21]! | bytes[22]! << 8 | bytes[23]! << 16 | bytes[24]! << 24) >>> 0;
+      return { width: (bits & 0x3fff) + 1, height: ((bits >>> 14) & 0x3fff) + 1 };
+    }
+    if (kind === "VP8 " && bytes.length >= 30) return { width: uint16(bytes, 26, true) & 0x3fff, height: uint16(bytes, 28, true) & 0x3fff };
+    throw new Error("unsupported WebP screenshot encoding");
+  }
+  throw new Error(`unsupported screenshot extension ${extension}`);
+}
+
+function browserAudit(artifact: DirectCaptureArtifact): { session: ReturnType<typeof browserCaptureSessionSchema.parse>; screenshotHashes: Set<string> } {
+  const session = browserCaptureSessionSchema.parse(artifact.audit.captureSession);
+  if (session.sourceId !== artifact.sourceId) throw new Error("browser artifact and capture-session source identities differ");
+  const attestation = artifact.audit.attestation as Record<string, unknown> | undefined;
+  const screenshotHashes = new Set(Array.isArray(attestation?.screenshotSha256) ? attestation.screenshotSha256.filter((hash): hash is string => typeof hash === "string") : []);
+  if (screenshotHashes.size === 0) throw new Error("browser artifact does not bind screenshot hashes in its attestation");
+  if (attestation?.captureSessionHash !== session.contentHash) throw new Error("browser artifact attestation does not bind its capture-session manifest");
+  const verifiedAt = Date.parse(String(attestation?.verifiedAt ?? ""));
+  if (!Number.isFinite(verifiedAt) || verifiedAt < Date.parse(session.startedAt) - 5 * 60_000 || verifiedAt > Date.parse(session.finishedAt) + 5 * 60_000) throw new Error("browser proof timestamp is outside the capture session");
+  return { session, screenshotHashes };
 }
 
 function safeExtension(file: string): string {
@@ -164,9 +225,27 @@ export async function enqueueCapture(
   const artifactBytes = new Uint8Array(await readFile(artifactPath));
   const artifact = directCaptureArtifactSchema.parse(JSON.parse(new TextDecoder().decode(artifactBytes).replace(/^\uFEFF/, "")));
   if (!artifact.sourceId.endsWith("-browser")) throw new Error("the PC queue only accepts direct browser capture sources");
-  if (evidenceInputs.length === 0 || !evidenceInputs.some((file) => IMAGE_EXTENSIONS.has(path.extname(file).toLowerCase()))) {
-    throw new Error("a browser capture queue job requires at least one screenshot evidence file");
+  const evidenceKinds = evidenceInputs.map(evidenceKind);
+  if (!evidenceKinds.includes("screenshot") || !evidenceKinds.includes("manifest") || !evidenceKinds.includes("raw_payload")) throw new Error("a browser capture queue job requires screenshot, capture-session manifest, and projected raw evidence");
+  const { session, screenshotHashes } = browserAudit(artifact);
+  const suppliedHashes = new Map<string, string>();
+  for (const file of evidenceInputs) {
+    const input = path.resolve(file);
+    const bytes = new Uint8Array(await readFile(input));
+    const hash = await digestHex(bytes);
+    suppliedHashes.set(input, hash);
+    if (evidenceKind(input) === "screenshot") {
+      if (bytes.length < 512) throw new Error(`screenshot evidence is implausibly small: ${input}`);
+      const dimensions = imageDimensions(bytes, path.extname(input).toLowerCase());
+      if (dimensions.width < 400 || dimensions.height < 200) throw new Error(`screenshot evidence is too small (${dimensions.width}x${dimensions.height}): ${input}`);
+      if (!screenshotHashes.has(hash)) throw new Error(`screenshot evidence is not bound by the artifact attestation: ${input}`);
+    }
   }
+  const manifestInput = evidenceInputs.find((file) => evidenceKind(file) === "manifest")!;
+  const suppliedSession = browserCaptureSessionSchema.parse(JSON.parse((await readFile(manifestInput, "utf8")).replace(/^\uFEFF/, "")));
+  if (stableJson(suppliedSession) !== stableJson(session)) throw new Error("supplied capture-session evidence does not match the artifact audit");
+  const rawInput = evidenceInputs.find((file) => evidenceKind(file) === "raw_payload")!;
+  if (suppliedHashes.get(path.resolve(rawInput)) !== session.projectedCaptureSha256) throw new Error("projected raw evidence hash does not match the capture-session manifest");
   const artifactSha256 = await digestHex(artifactBytes);
   const identityHash = await digestHex(stableJson({ sourceId: artifact.sourceId, idempotencyKey: artifact.idempotencyKey, artifactSha256 }));
   const id = `capture_${identityHash.slice(0, 32)}`;
@@ -304,6 +383,66 @@ export async function drainCaptureQueue(
   return { ok: failed === 0, processed, completed, failed, skipped, results };
 }
 
+export async function reconcileCaptureQueueRemote(
+  root: string,
+  inspector: (batchId: string) => Promise<Record<string, unknown>>,
+  now = new Date(),
+): Promise<{ checked: number; ready: number; inflight: number; rejected: number; errors: number }> {
+  await mkdir(root, { recursive: true });
+  let checked = 0;
+  let ready = 0;
+  let inflight = 0;
+  let rejected = 0;
+  let errors = 0;
+  for (const entry of await readdir(root, { withFileTypes: true })) {
+    if (!entry.isDirectory() || !entry.name.startsWith("capture_")) continue;
+    const directory = path.join(root, entry.name);
+    const manifest = await readManifest(directory);
+    if (manifest.status !== "completed" || !manifest.receipt || typeof manifest.receipt.batchId !== "string") continue;
+    checked += 1;
+    let remote: Record<string, unknown>;
+    try {
+      remote = await inspector(manifest.receipt.batchId);
+    } catch (error) {
+      errors += 1;
+      inflight += 1;
+      const message = error instanceof Error ? error.message : String(error);
+      const updated: CaptureQueueManifest = { ...manifest, receipt: { ...manifest.receipt, remoteError: message.slice(0, 2000), remoteCheckedAt: now.toISOString() } };
+      await atomicJson(path.join(directory, "manifest.json"), updated);
+      await atomicJson(path.join(directory, "receipt.json"), updated.receipt);
+      continue;
+    }
+    const remoteStatus = String(remote.status ?? "unknown");
+    const matching = remote.matching as Record<string, unknown> | null | undefined;
+    const matchStatus = matching ? String(matching.status ?? "unknown") : "pending";
+    const nextReceipt: Record<string, unknown> = { ...manifest.receipt, remote, remoteCheckedAt: now.toISOString() };
+    delete nextReceipt.remoteError;
+    const updated: CaptureQueueManifest = { ...manifest, receipt: nextReceipt };
+    if (remoteStatus === "rejected" || matchStatus === "failed") {
+      updated.status = "rejected";
+      updated.lastError = `remote browser batch ${manifest.receipt.batchId} is ${remoteStatus} with matching ${matchStatus}`;
+      updated.nextAttemptAt = now.toISOString();
+      rejected += 1;
+    } else if ((remoteStatus === "promoted" || remoteStatus === "superseded") && matchStatus === "passed") {
+      delete updated.lastError;
+      ready += 1;
+    } else {
+      inflight += 1;
+    }
+    await atomicJson(path.join(directory, "manifest.json"), updated);
+    await atomicJson(path.join(directory, "receipt.json"), updated.receipt);
+  }
+  return { checked, ready, inflight, rejected, errors };
+}
+
+function remoteCaptureReady(job: CaptureQueueJob, captureDate: string): boolean {
+  if (captureDate < STRICT_BROWSER_COVERAGE_START) return job.manifest.status === "completed";
+  if (job.artifact.coverageMode !== "full" || job.manifest.status !== "completed") return false;
+  const remote = job.manifest.receipt?.remote as Record<string, unknown> | undefined;
+  const matching = remote?.matching as Record<string, unknown> | null | undefined;
+  return (remote?.status === "promoted" || remote?.status === "superseded") && matching?.status === "passed";
+}
+
 export async function captureQueueStatus(
   root: string,
   options: { now?: Date; maxPendingMinutes?: number; maxAttempts?: number } = {},
@@ -356,7 +495,11 @@ export async function browserCaptureCycleStatus(root: string, now = new Date()):
   for (const job of jobs) {
     if (!REQUIRED_BROWSER_CAPTURE_SOURCES.includes(job.artifact.sourceId as typeof REQUIRED_BROWSER_CAPTURE_SOURCES[number])) continue;
     const prior = latestBySource.get(job.artifact.sourceId);
-    if (!prior || job.artifact.capturedTo > prior.artifact.capturedTo) latestBySource.set(job.artifact.sourceId, job);
+    if (!prior
+      || job.artifact.capturedTo > prior.artifact.capturedTo
+      || (job.artifact.capturedTo === prior.artifact.capturedTo && job.manifest.enqueuedAt > prior.manifest.enqueuedAt)) {
+      latestBySource.set(job.artifact.sourceId, job);
+    }
   }
   const due: string[] = [];
   const inflight: string[] = [];
@@ -366,8 +509,8 @@ export async function browserCaptureCycleStatus(root: string, now = new Date()):
     const latest = latestBySource.get(sourceId);
     const captureDate = latest ? centralDateKey(new Date(latest.artifact.capturedTo)) : null;
     const currentWeek = captureDate !== null && captureDate >= weekStart;
-    if (currentWeek && latest?.manifest.status === "completed") completed.push(sourceId);
-    else if (currentWeek && (latest?.manifest.status === "pending" || latest?.manifest.status === "retrying")) inflight.push(sourceId);
+    if (currentWeek && latest && remoteCaptureReady(latest, captureDate!)) completed.push(sourceId);
+    else if (currentWeek && latest && (latest.manifest.status === "pending" || latest.manifest.status === "retrying" || latest.manifest.status === "completed")) inflight.push(sourceId);
     else due.push(sourceId);
     if (!captureDate || captureDate < previousWeekStart) overdue.push(sourceId);
   }

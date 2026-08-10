@@ -28,7 +28,7 @@ America/Chicago; `/api/v2/status` and `tc evidence show` are the live authority 
 | D1/R2/Worker write boundary | Deployed | GitHub OIDC, scoped PC HMAC, replay protection, role rejection, and audited live mutations | complete |
 | Immutable capture batches and observations | Deployed | 18 promoted batches; release inputs bind sorted promoted batch IDs before engine work | complete |
 | Direct headless source through batch protocol | Deployed for Baker's, Family Fare, and Hy-Vee | Fresh source acquisition, ingest, matching, promotion, and native publication exercised from GitHub Actions | complete |
-| Direct Chrome capture through batch protocol | Deployed for Aldi, Fareway, Sam's Club, and Walmart | Four Omaha in-store captures with screenshots, manifests, durable PC queue receipts, matching, and promotion; 1 of 4 weekly cycles | time-gated |
+| Direct Chrome capture through batch protocol | Deployed for Aldi, Fareway, Sam's Club, and Walmart | Hash-bound full-worklist sessions, per-chunk Omaha/mode canaries, screenshots, projected raw evidence, durable PC queue receipts, matching, promotion, and remote reconciliation; prior partial bootstrap week no longer counts | time-gated |
 | Git-authored configuration generates legacy and D1 copies | Deployed | Active `cfg_153ffab51cb0c1c6692d`; generated compatibility files are checked in CI | complete |
 | Promoted-batch input snapshot and atomic release pointer | Deployed | `rel_native_50f3f39fd758249c9542` published from 11 selected batches; interruption drill preserved the prior pointer | complete |
 | Native engine semantic parity | Deployed; direct source is the native release input | Full 3,549-cell direct parity has zero diffs; production-scale parity snapshots omit recipe-only raw products; 1 of 14 consecutive required days | time-gated |
@@ -43,7 +43,7 @@ America/Chicago; `/api/v2/status` and `tc evidence show` are the live authority 
 | Nightly D1 export and quarterly restore drill | Deployed | Primary and secondary private R2 copies, lifecycle policies, and a scratch-D1 restore proof exist | complete |
 | Complete founding-bug fixture port | Deployed | Every entry in `founding-bug-port.json` is a ported proof or structural elimination; CI rejects pending entries | complete |
 | `tc` operator surface from the Plan of Record | Deployed | Config, schedules, capture queue/ingest/match/promote/abandon, release, parity, evidence, accuracy, triage, backup, restore, jobs, Ghost, and drills are callable | complete |
-| Four direct weekly Chrome cycles | Automated and first cycle complete | 1 of 4 | time-gated |
+| Four direct weekly Chrome cycles | Automated; strict full-session counting begins 2026-08-12 | 0 of 4 | time-gated |
 | Four weekly boundaries during board beta | Automated accrual deployed | 0 of 4 closed weeks; an incomplete prior week correctly records failure | time-gated |
 | Fourteen clean shadow-ingest days | Automated accrual deployed | 1 of 14 | time-gated |
 | Fourteen clean semantic-parity days | Automated accrual deployed | 1 of 14 | time-gated |

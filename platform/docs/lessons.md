@@ -6,6 +6,7 @@ with an enforcing fixture; prose by itself is not a safeguard.
 | Failure class | V3 constraint | Enforcement |
 | --- | --- | --- |
 | Partial capture presented as a full refresh | Coverage mode and term/page outcomes are immutable batch facts | `batch-completeness`, `batch-collapse` |
+| Output-row buckets are mistaken for the browser worklist, allowing a thin sweep to count as a completed week | A hash-bound capture session records every generated query, chunk canary, retry, raw payload, and proof image; direct-Chrome milestone evidence requires four remotely matched full batches | capture-session fixtures, `batch-browser-evidence`, `browserWeekPass`, PC remote reconciliation |
 | Thin capture evicts a complete observation | Complete/ad-only observations are protected from partial/targeted eviction | `selectWinner` fixture, `release-capture-eviction` |
 | Cat litter crowned as baking soda | Store shelf taxonomy is captured and aisle flips require evidence | `evaluateAisleEvidence` fixtures, `release-aisle-taxonomy` |
 | A previously adjudicated wrong product returns | Known-wrong rulings deploy with the configuration version | `release-known-wrong` |

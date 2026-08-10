@@ -34,8 +34,8 @@ Run the automation every day at 06:15 America/Chicago.
   or marketplace pricing.
 - Codex browser page evaluation is read-only. Do not copy Claude's page-mutating router, iframe, local-storage,
   or Blob-download tricks. Use ordinary top-level Chrome navigation for each search term, read the resulting DOM
-  or `__NEXT_DATA__`, and append projected capture rows to the local UTF-8 capture file outside the page. Work in
-  bounded 10-20 term chunks so progress remains visible and a stopped run can resume without losing a store.
+  or `__NEXT_DATA__`, and append projected capture rows outside the page. Work in bounded 10-20 term chunks and
+  commit each through `tc capture session`; prose progress or a partially written CSV is not a checkpoint.
 - Verify Omaha and the price mode before reading any price. Save a screenshot that visibly proves both. If either
   cannot be proved, do not create an artifact.
 - Use the store's own first-party surface. Never invent, interpolate, or carry a price from an unrelated product.
@@ -46,8 +46,12 @@ Run the automation every day at 06:15 America/Chicago.
 - Retry an ordinary empty/error once. If a human-verification wall survives one retry, do not evade it or solve
   a challenge. Run `grocery/notify-desktop.ps1 -Store <store> -Detail <progress> -AlsoEmail`, continue with another
   store, and leave the affected source due for the next retry day.
-- A partial file may be queued only when its coverage is explicitly partial and it is deeper than the source it
-  replaces. Never label a partial pull full.
+- A current Omaha location/price-mode canary is required in every chunk. Bind at least one canary to the SHA-256
+  of a proof screenshot so a retailer silently resetting fulfillment during a long sweep is detectable.
+- Record exact term outcomes, row counts, attempts, and time intervals. A challenge is `blocked`, never `empty`.
+  A capture is `full` only when every worklist term is `success` or verified `empty`.
+- Capture first-party taxonomy/department/category fields when present. Leave taxonomy blank when unavailable;
+  never infer a shelf path from the product name.
 
 ## Store methods
 
@@ -58,7 +62,7 @@ Verify the pickup store is Omaha L St Supercenter, 12850 L St, Omaha 68137. Buil
 search URL and read each result from
 `__NEXT_DATA__.props.pageProps.initialData.searchResult.itemStacks[].items[]`. Price fields are under
 `priceInfo.priceDetails.priceLines`: `CURRENT_PRICE` and `UNIT_PRICE`. Keep broad candidate sets and preserve
-`usItemId`. Stop after three consecutive challenge/no-data pages. Write the UTF-8 pipe CSV to
+`usItemId`, product URL/image, and `departmentName/category.categoryPathId` when present. Stop after three consecutive challenge/no-data pages. Write the UTF-8 pipe CSV to
 `grocery/out/captures/walmart-capture-<date>.csv`, then run `grocery/build-walmart-deals.ps1`.
 
 Do not enqueue a weekly Walmart artifact unless the capture attempted the complete worklist. Treat a wall-truncated
@@ -68,8 +72,8 @@ slice as retryable evidence, not a successful weekly capture.
 
 Verify an Omaha club is selected. Build the priority order with
 `grocery/build-pull-order.ps1 -Store "Sam's Club"`. Navigate to `/s/<term>` and parse the resulting page's
-`__NEXT_DATA__`; project only name, line/item price, unit price, and product ID. Keep broad candidate
-sets, write a UTF-8 `q|n|lp|up|id` capture, and run `grocery/build-sams-deals.ps1`. Do not return or persist raw
+`__NEXT_DATA__`; project only query, name, line/item price, unit price, product ID, product URL/image, and available
+first-party taxonomy as `departmentName/category.categoryPathId`. Keep broad candidate sets, write a UTF-8 `q|n|lp|up|id|taxonomy_path|url|image_url` capture, and run `grocery/build-sams-deals.ps1`. Do not return or persist raw
 tracking/cookie-bearing product objects.
 
 ### Aldi
@@ -77,17 +81,39 @@ tracking/cookie-bearing product objects.
 Verify `ALDI - OLA 42 - Omaha` and independently verify `In-Store`; delivery/pickup prices are not acceptable.
 Navigate normally to `/store/aldi/s?k=<term>` and wait for product anchors before extracting. Parse the card's
 authoritative `Current price: $X.XX` text, not glued visual price nodes. Take the name
-and identity from the product URL, retain card size, and write UTF-8
-`id|term|name|prices|unit|size|href`. Run `grocery/build-aldi-regular.ps1`, followed by the existing carry-forward
+and identity from the product URL, retain card size and the explicit category/aisle label printed on the card, and write UTF-8
+`id|term|name|prices|unit|size|href|taxonomy_path`. Run `grocery/build-aldi-regular.ps1`, followed by the existing carry-forward
 and degraded-size repair commands only when the builder reports a complete, current pull.
 
 ### Fareway
 
 Verify the stable Omaha address `17070 Audrey Street, Omaha, NE 68136` from the page state and independently
 verify `In-Store`; do not rely on the reissuable shop ID. Navigate normally to each storefront search URL, use the
-product image `alt` for the product name, the product URL for identity, and the authoritative `Current price: $X.XX` / original-price
+product image `alt` for the product name, the product URL for identity, the explicit category/aisle label printed on the card, and the authoritative `Current price: $X.XX` / original-price
 text. Retry empty terms once. Feed the repaired JSONL into `grocery/select-fareway-shop.ps1`, then run
 `grocery/build-fareway-regular.ps1 -Today <date> -ModeVerified <date>`. Every selected row must retain `url`.
+
+## Durable capture session
+
+Create the complete generated worklist and initialize before the first term:
+
+```powershell
+pnpm tc capture session init <aldi|fareway|sams|walmart> <worklist.txt> <session-directory> <started-at-iso>
+```
+
+For every 10-20-term chunk, write JSON containing `version`, `store`, one current location/mode `canary`, exact
+`terms`, and projected `rows`. Append with `pnpm tc capture session append <session-directory> <chunk.json>`.
+Use `pnpm tc capture session status <session-directory>` to resume. A later successful retry replaces the earlier
+blocked result for that term while both immutable chunks remain evidence.
+
+Finalize after exhausting the worklist:
+
+```powershell
+pnpm tc capture session finalize <session-directory> <projected-capture> <capture-session-manifest.json> <finished-at-iso>
+```
+
+The finalizer deterministically merges the latest result for every term, hashes the projected capture, and emits
+the authoritative term ledger. It cannot label a session `full` while any term is rejected, blocked, or unattempted.
 
 ## V3 handoff
 
@@ -97,17 +123,21 @@ For each successful store pull, keep the Omaha/mode screenshot and run:
 powershell -ExecutionPolicy Bypass -File platform/scripts/enqueue-browser-capture.ps1 `
   -Store <aldi|fareway|sams|walmart> `
   -RegularFile <grocery/out/regular/...json> `
+  -SessionManifest <capture-session-manifest.json> `
+  -RawCapture <projected-capture> `
   -Screenshot <proof.png> `
   -EvidenceUrl <https store URL shown in proof> `
   -Statement <what Chrome visibly proved>
 ```
 
-The wrapper builds and validates a signed-shape V3 artifact and atomically enqueues it. It never reads or exposes
-the capture credential. The installed five-minute client drains the queue with hashes, retries, receipts, and a
-source-scoped credential. Run the queue watchdog at the end. Do not call `capture promote-ready-browser` from the
-PC automation; the engine identity owns promotion.
+The wrapper verifies that the raw capture, manifest, and screenshot hashes bind to one session, builds and
+validates the V3 artifact, and atomically enqueues all three evidence classes. Image magic bytes and minimum
+dimensions are checked locally and again by the Worker. The installed five-minute client drains the queue with
+hashes, retries, receipts, and a source-scoped credential. Run the queue watchdog at the end. Do not call
+`capture promote-ready-browser` from the PC automation; the engine identity owns matching and promotion.
 
-Success means all required stores are completed in the local queue, not merely that browser files exist. The next
+Success means every required source is remotely promoted (or later superseded), passed matching, and carries a
+full term ledger, not merely that browser files or local upload receipts exist. The next
 daily engine run promotes validated browser batches and publishes only if every hard guard passes. On failure,
 leave the last good release live and report the exact store, attempted terms, captured rows, screenshots, queue
 state, and whether operator action is required.

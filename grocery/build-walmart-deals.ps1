@@ -400,8 +400,12 @@ function Build-Row($raw) {
       as_of         = $script:CaptureDate
       wm_unit_price = $upm.Groups[0].Value.Trim()   # kept for audit; the engine ignores unknown fields
       item_id       = [string]$raw.id
+      found_by_term = [string]$raw.q
       qty_basis     = ($t.shape + '; qty ' + $basis)
       engine_check  = ('' + [math]::Round($got.unit_price,4) + '/' + $u.unit + ' [' + $got.basis + ']')
+      taxonomy_path = [string]$raw.taxonomy_path
+      link_url      = [string]$raw.url
+      image_url     = [string]$raw.image_url
     } }
   }
   return @{ err=("INVARIANT: no shape reproduces Walmart's " + $up + '/' + $u.tok + ' -> ' + ($errs -join ' | ')) }

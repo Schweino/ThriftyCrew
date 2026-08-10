@@ -13,6 +13,7 @@ $requiredSources = @(
   'direct-sams-browser',
   'direct-walmart-browser'
 )
+$strictCoverageStart = [datetime]'2026-08-12'
 
 function Get-OmahaDate([datetime]$Instant) {
   $zone = [TimeZoneInfo]::FindSystemTimeZoneById('Central Standard Time')
@@ -47,6 +48,9 @@ function Get-BrowserCaptureState([string]$Root, [datetime]$AsOf) {
           enqueuedAt = [string]$manifest.enqueuedAt
           attempts = [int]$manifest.attempts
           id = [string]$manifest.id
+          coverageMode = [string]$artifact.coverageMode
+          remoteStatus = [string]$manifest.receipt.remote.status
+          matchStatus = [string]$manifest.receipt.remote.matching.status
         }
         $prior = $latestBySource[$candidate.sourceId]
         if ($null -eq $prior -or [datetime]$candidate.capturedTo -gt [datetime]$prior.capturedTo) {
@@ -62,8 +66,10 @@ function Get-BrowserCaptureState([string]$Root, [datetime]$AsOf) {
   $sources = foreach ($source in $requiredSources) {
     $latest = $latestBySource[$source]
     $thisWeek = $latest -and ([datetime]$latest.capturedDate -ge $weekStart)
-    $fresh = $thisWeek -and $latest.status -eq 'completed'
-    $inflight = $thisWeek -and @('pending', 'retrying') -contains $latest.status
+    $strict = $latest -and ([datetime]$latest.capturedDate -ge $strictCoverageStart)
+    $remoteReady = @('promoted','superseded') -contains $latest.remoteStatus -and $latest.matchStatus -eq 'passed'
+    $fresh = $thisWeek -and $latest.status -eq 'completed' -and (-not $strict -or ($latest.coverageMode -eq 'full' -and $remoteReady))
+    $inflight = $thisWeek -and (@('pending', 'retrying') -contains $latest.status -or ($latest.status -eq 'completed' -and -not $fresh))
     [pscustomobject]@{
       sourceId = $source
       state = if ($fresh) { 'fresh' } elseif ($inflight) { 'inflight' } else { 'due' }
@@ -96,15 +102,15 @@ if ($SelfTest) {
       $index++
       $job = Join-Path $fixture ('capture-' + $index)
       New-Item -ItemType Directory -Path $job | Out-Null
-      @{ sourceId = $source; capturedTo = '2026-08-12T11:00:00.000Z' } | ConvertTo-Json | Set-Content (Join-Path $job 'artifact.json') -Encoding UTF8
-      @{ id = 'capture-' + $index; status = if ($index -eq 4) { 'retrying' } else { 'completed' }; enqueuedAt = '2026-08-12T11:01:00.000Z'; attempts = 1 } | ConvertTo-Json | Set-Content (Join-Path $job 'manifest.json') -Encoding UTF8
+      @{ sourceId = $source; capturedTo = '2026-08-12T11:00:00.000Z'; coverageMode = 'full' } | ConvertTo-Json | Set-Content (Join-Path $job 'artifact.json') -Encoding UTF8
+      @{ id = 'capture-' + $index; status = if ($index -eq 4) { 'retrying' } else { 'completed' }; enqueuedAt = '2026-08-12T11:01:00.000Z'; attempts = 1; receipt = @{ remote = @{ status = 'promoted'; matching = @{ status = 'passed' } } } } | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $job 'manifest.json') -Encoding UTF8
     }
     $waiting = Get-BrowserCaptureState $fixture $asOf
     if ($waiting.status -ne 'INFLIGHT' -or $waiting.inflight.Count -ne 1) { throw 'a current retrying job must report INFLIGHT without recapturing it' }
     $lastManifest = Join-Path (Join-Path $fixture 'capture-4') 'manifest.json'
     $m = Get-Content $lastManifest -Raw | ConvertFrom-Json
     $m.status = 'completed'
-    $m | ConvertTo-Json | Set-Content $lastManifest -Encoding UTF8
+    $m | ConvertTo-Json -Depth 5 | Set-Content $lastManifest -Encoding UTF8
     $fresh = Get-BrowserCaptureState $fixture $asOf
     if ($fresh.status -ne 'FRESH') { throw 'four completed current-week captures must report FRESH' }
     Write-Output 'browser-capture-due SELF-TEST PASS'
