@@ -334,6 +334,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
         method: "POST", body: JSON.stringify({ action: "ingest", etag: normalized.etag, filename: initialized.filename }),
       }));
       if (!ingested.at_bookmark) throw new Error("scratch import omitted polling bookmark");
+      if (ingested.status === "error") throw new Error(ingested.error ?? "scratch import failed before polling");
       let completed = ingested;
       for (let attempt = 0; attempt < 30 && completed.status !== "complete"; attempt += 1) {
         await step.sleep(`wait for scratch import ${attempt}`, "10 seconds");

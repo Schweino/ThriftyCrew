@@ -1,7 +1,7 @@
-// Paid Workers gives each normalization step enough CPU for a 4 MiB source window. Keeping the
-// window close to R2's 5 MiB multipart minimum also prevents padding whitespace from becoming a
-// multi-megabyte prefix that D1 counts toward the following SQL statement's length.
-export const RESTORE_SOURCE_PART_BYTES = 4 * 1024 * 1024;
+// Paid Workers gives each normalization step enough CPU for a 4.5 MiB source window. The boundary
+// search is capped at 512 KiB, so every part still fits R2's 5 MiB multipart limit while padding can
+// never exceed 512 KiB. D1 counts that whitespace toward the following SQL statement's length.
+export const RESTORE_SOURCE_PART_BYTES = (9 * 1024 * 1024) / 2;
 export const RESTORE_MULTIPART_PART_BYTES = 5 * 1024 * 1024;
 
 if (RESTORE_MULTIPART_PART_BYTES < 5 * 1024 * 1024) {
