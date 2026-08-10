@@ -11,7 +11,7 @@ import { generateLegacyConfiguration } from "./config";
 import { buildNativeParityReport, compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot } from "@thriftycrew/engine";
 import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
 import { checkAgentRegistry, readAgentRegistry } from "./agents";
-import { captureQueueStatus, defaultCaptureQueueRoot, drainCaptureQueue, enqueueCapture, PermanentCaptureError, verifyCaptureQueueFilesystem } from "./capture-queue";
+import { browserCaptureCycleStatus, captureQueueStatus, defaultCaptureQueueRoot, drainCaptureQueue, enqueueCapture, PermanentCaptureError, verifyCaptureQueueFilesystem } from "./capture-queue";
 import { findLatestRegularCapture, omahaDateKey, parseServerCaptureStore, readFreshRegularCapture, SERVER_CAPTURE_STORES } from "./current-captures";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
@@ -606,7 +606,9 @@ if (command === "status") {
   const [store, inputFile, outputFile, attestationFile] = arguments_.filter((value: string) => value !== "--browser");
   if (!store || !inputFile || !outputFile) throw new Error("tc capture build-regular requires store, input file, and output file");
   const source = JSON.parse(await readFile(cliPath(inputFile), "utf8").then((value) => value.replace(/^\uFEFF/, "")));
-  const attestation = attestationFile ? JSON.parse(await readFile(cliPath(attestationFile), "utf8")) as CaptureAttestation : undefined;
+  const attestation = attestationFile
+    ? JSON.parse(await readFile(cliPath(attestationFile), "utf8").then((value) => value.replace(/^\uFEFF/, ""))) as CaptureAttestation
+    : undefined;
   const artifact = await buildRegularCapture(store, source, attestation, browser ? "browser" : "headless");
   const resolvedOutputFile = cliPath(outputFile);
   await writeJson(resolvedOutputFile, artifact);
@@ -726,13 +728,15 @@ if (command === "status") {
       maxPendingMinutes: Number(process.env.TC_CAPTURE_QUEUE_MAX_PENDING_MINUTES ?? 180),
       maxAttempts: Number(process.env.TC_CAPTURE_QUEUE_MAX_ATTEMPTS ?? 5),
     });
-    const queueResult = { ...status, filesystem };
+    const cycle = await browserCaptureCycleStatus(root);
+    const healthy = status.ok && !cycle.alertDue;
+    const queueResult = { ...status, ok: healthy, filesystem, cycle };
     result = queueResult;
     if (action === "watchdog") {
       const alert = await (await mutationClient()).request("/internal/operational-alerts", { json: {
         key: "pc-browser-capture-queue",
-        title: "PC browser capture queue is not draining",
-        status: status.ok ? "resolved" : "firing",
+        title: "PC browser capture pipeline is unhealthy",
+        status: healthy ? "resolved" : "firing",
         observedAt: new Date().toISOString(),
         evidence: {
           pending: status.pending,
@@ -743,10 +747,11 @@ if (command === "status") {
           highestAttempts: status.highestAttempts,
           unhealthyJobs: status.unhealthyJobs,
           filesystem,
+          cycle,
         },
       } });
       result = { ...queueResult, alert };
-      if (!status.ok) process.exitCode = 2;
+      if (!healthy) process.exitCode = 2;
     }
   } else {
     throw new Error("tc capture queue requires enqueue, drain, status, or watchdog");

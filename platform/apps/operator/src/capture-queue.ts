@@ -50,6 +50,24 @@ export interface CaptureQueueStatus {
   unhealthyJobs: Array<{ id: string; sourceId: string; attempts: number; ageMinutes: number; lastError?: string }>;
 }
 
+export interface BrowserCaptureCycleStatus {
+  status: "fresh" | "inflight" | "due";
+  weekStart: string;
+  previousWeekStart: string;
+  due: string[];
+  inflight: string[];
+  completed: string[];
+  overdue: string[];
+  alertDue: boolean;
+}
+
+export const REQUIRED_BROWSER_CAPTURE_SOURCES = [
+  "direct-aldi-browser",
+  "direct-fareway-browser",
+  "direct-sams-browser",
+  "direct-walmart-browser",
+] as const;
+
 const IMAGE_EXTENSIONS = new Map([
   [".png", "image/png"],
   [".jpg", "image/jpeg"],
@@ -63,6 +81,24 @@ export class PermanentCaptureError extends Error {
 
 function nowIso(now: Date | undefined): string {
   return (now ?? new Date()).toISOString();
+}
+
+function centralParts(date: Date): { dateKey: string; weekday: number; hour: number } {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago", hour12: false, year: "numeric", month: "2-digit", day: "2-digit", weekday: "short", hour: "2-digit",
+  }).formatToParts(date);
+  const value = Object.fromEntries(parts.filter((part) => part.type !== "literal").map((part) => [part.type, part.value]));
+  const weekdays: Record<string, number> = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  return { dateKey: `${value.year}-${value.month}-${value.day}`, weekday: weekdays[value.weekday!]!, hour: Number(value.hour) % 24 };
+}
+
+function shiftDateKey(dateKey: string, days: number): string {
+  const [year, month, day] = dateKey.split("-").map(Number);
+  return new Date(Date.UTC(year!, month! - 1, day! + days)).toISOString().slice(0, 10);
+}
+
+function centralDateKey(date: Date): string {
+  return centralParts(date).dateKey;
 }
 
 function evidenceKind(file: string): QueuedEvidence["kind"] {
@@ -304,6 +340,40 @@ export async function captureQueueStatus(
     highestAttempts: manifests.reduce((maximum, manifest) => Math.max(maximum, manifest.attempts), 0),
     unhealthyJobs,
   };
+}
+
+export async function browserCaptureCycleStatus(root: string, now = new Date()): Promise<BrowserCaptureCycleStatus> {
+  await mkdir(root, { recursive: true });
+  const current = centralParts(now);
+  const weekStart = shiftDateKey(current.dateKey, -((current.weekday - 3 + 7) % 7));
+  const previousWeekStart = shiftDateKey(weekStart, -7);
+  const jobs: CaptureQueueJob[] = [];
+  for (const entry of await readdir(root, { withFileTypes: true })) {
+    if (!entry.isDirectory() || !entry.name.startsWith("capture_")) continue;
+    try { jobs.push(await loadJob(path.join(root, entry.name))); } catch { /* queue health reports corrupt jobs separately */ }
+  }
+  const latestBySource = new Map<string, CaptureQueueJob>();
+  for (const job of jobs) {
+    if (!REQUIRED_BROWSER_CAPTURE_SOURCES.includes(job.artifact.sourceId as typeof REQUIRED_BROWSER_CAPTURE_SOURCES[number])) continue;
+    const prior = latestBySource.get(job.artifact.sourceId);
+    if (!prior || job.artifact.capturedTo > prior.artifact.capturedTo) latestBySource.set(job.artifact.sourceId, job);
+  }
+  const due: string[] = [];
+  const inflight: string[] = [];
+  const completed: string[] = [];
+  const overdue: string[] = [];
+  for (const sourceId of REQUIRED_BROWSER_CAPTURE_SOURCES) {
+    const latest = latestBySource.get(sourceId);
+    const captureDate = latest ? centralDateKey(new Date(latest.artifact.capturedTo)) : null;
+    const currentWeek = captureDate !== null && captureDate >= weekStart;
+    if (currentWeek && latest?.manifest.status === "completed") completed.push(sourceId);
+    else if (currentWeek && (latest?.manifest.status === "pending" || latest?.manifest.status === "retrying")) inflight.push(sourceId);
+    else due.push(sourceId);
+    if (!captureDate || captureDate < previousWeekStart) overdue.push(sourceId);
+  }
+  const status = due.length ? "due" : inflight.length ? "inflight" : "fresh";
+  const retryWindowExpired = current.weekday === 6 && current.hour >= 12 || current.weekday === 0 || current.weekday === 1 || current.weekday === 2;
+  return { status, weekStart, previousWeekStart, due, inflight, completed, overdue, alertDue: status !== "fresh" && (retryWindowExpired || overdue.length > 0) };
 }
 
 export async function verifyCaptureQueueFilesystem(root: string): Promise<{ ok: boolean; jobs: number; bytes: number }> {

@@ -2,7 +2,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { captureQueueStatus, drainCaptureQueue, enqueueCapture, PermanentCaptureError, verifyCaptureQueueFilesystem } from "./capture-queue";
+import { browserCaptureCycleStatus, captureQueueStatus, drainCaptureQueue, enqueueCapture, PermanentCaptureError, verifyCaptureQueueFilesystem } from "./capture-queue";
 
 const roots: string[] = [];
 
@@ -88,5 +88,19 @@ describe("PC browser capture queue", () => {
     const second = await drainCaptureQueue(input.root, async () => ({ shouldNotRun: true }), { now: new Date("2026-08-10T15:01:00.000Z") });
     expect(second).toMatchObject({ processed: 0, skipped: 1 });
     expect(await captureQueueStatus(input.root, { now: new Date("2026-08-09T15:02:00.000Z") })).toMatchObject({ ok: false, rejected: 1 });
+  });
+
+  it("alerts only after the browser retry window or when a prior week was missed", async () => {
+    const input = await fixture();
+    const base = JSON.parse(await readFile(input.artifact, "utf8")) as Record<string, unknown>;
+    for (const sourceId of ["direct-aldi-browser", "direct-fareway-browser", "direct-sams-browser", "direct-walmart-browser"]) {
+      const artifact = path.join(path.dirname(input.artifact), `${sourceId}.json`);
+      await writeFile(artifact, JSON.stringify({ ...base, sourceId, idempotencyKey: `${sourceId}-2026-08-09` }));
+      await enqueueCapture(input.root, artifact, [input.screenshot], new Date("2026-08-09T15:02:00.000Z"));
+    }
+    await drainCaptureQueue(input.root, async () => ({ ok: true }), { now: new Date("2026-08-09T15:03:00.000Z") });
+    expect(await browserCaptureCycleStatus(input.root, new Date("2026-08-12T15:00:00.000Z"))).toMatchObject({ status: "due", alertDue: false });
+    expect(await browserCaptureCycleStatus(input.root, new Date("2026-08-15T18:00:00.000Z"))).toMatchObject({ status: "due", alertDue: true });
+    expect(await browserCaptureCycleStatus(input.root, new Date("2026-08-19T05:00:00.000Z"))).toMatchObject({ status: "due", alertDue: true });
   });
 });
