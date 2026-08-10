@@ -128,7 +128,7 @@ jobs:
         env:
           RUNNER_TEMP: ${{ runner.temp }}/tc-agent-output
           TC_AGENT_INPUT_FILE: ${{ runner.temp }}/tc-agent-output/input.json
-        run: pnpm --filter @thriftycrew/agents run "$TC_AGENT_ID"
+        run: pnpm --filter @thriftycrew/agents run run -- "$TC_AGENT_ID"
 
       - name: Require GitHub App credentials for PR agents
         if: steps.claim.outputs.claimed == 'true' && steps.execute.outcome == 'success' && (inputs.agent_id == 'triage-developer' || inputs.agent_id == 'source-sentinel-investigator')
