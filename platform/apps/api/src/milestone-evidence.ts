@@ -130,18 +130,20 @@ export async function accrueMilestoneEvidence(env: WorkerEnv, now = new Date()):
   const releaseDay = await env.DB.prepare("SELECT date(?1, ?2) AS day").bind(release.published_at, sqlModifier).first<{ day: string }>();
   const shadowEvidence = {
     releaseId: release.id,
+    releaseDay: releaseDay?.day ?? null,
+    expectedDay: dayKey,
     expectedStores,
     ...inputs,
     hardGuardFailures,
     rejectedToday,
   };
   const shadowPass = releaseDay?.day === dayKey
-    && inputs.store_count === expectedStores
-    && inputs.legacy_batches === 0
-    && inputs.invalid_identity === 0
-    && inputs.stale_batches === 0
-    && inputs.unmatched_batches === 0
-    && hardGuardFailures === 0;
+    && Number(inputs.store_count) === Number(expectedStores)
+    && Number(inputs.legacy_batches) === 0
+    && Number(inputs.invalid_identity) === 0
+    && Number(inputs.stale_batches) === 0
+    && Number(inputs.unmatched_batches) === 0
+    && Number(hardGuardFailures) === 0;
   const events: Array<Record<string, unknown>> = [await recordDerivedGate(env, "shadow-ingest-day", dayKey, "production-daily", shadowPass, observedAt, shadowEvidence)];
 
   const parity = await env.DB.prepare(
