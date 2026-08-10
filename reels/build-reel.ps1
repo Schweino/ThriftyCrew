@@ -58,7 +58,12 @@ param(
   [switch] $NoVoice,
   [switch] $KeepFrames,
   [switch] $VoiceSamples,
-  [switch] $WhatIfPick
+  [switch] $WhatIfPick,
+  # Do not record this build in reel-state.json. The state file exists so the DAILY reel avoids
+  # repeating a recipe; a bulk run over the whole catalogue would fill it with 534 entries and leave
+  # the rotation with nothing to pick, which is the opposite of what it is for. Bulk and archive
+  # builds pass this. A real daily build must not.
+  [switch] $NoState
 )
 
 $ErrorActionPreference = 'Stop'
@@ -492,14 +497,18 @@ Add-Scene -Id 'compare' `
 # The site, then the ask, spoken as well as shown: a viewer watching muted needs it on screen, and a
 # viewer listening needs to be told. The ask is specific rather than "engage with this post" - naming
 # who to send it to gets a share in a way that asking for a share does not.
-$ctaBadge = if ($isFree) { '<div class="free">Free this week</div>' } else { '' }
-$ctaSite  = if ($isFree) { 'Free this week at thrifty crew dot com.' } else { 'Full recipe at thrifty crew dot com.' }
-$ctaVo    = ($ctaSite + ' If this saved you money, hit like, send it to someone who feeds a family, ' +
-             "and follow along for tomorrow's dinner.")
-$ctaCap   = if ($isFree) { 'Free this week at thriftycrew.com' } else { 'Full recipe at thriftycrew.com' }
+# NOTHING TIME-SENSITIVE ON THIS CARD. It used to say "Free this week", which is true on the day the
+# reel is built and false a week later: the free rotation turns over every Monday. That was harmless
+# while reels were built and posted the same morning, and became a defect the moment we started
+# building an archive to post from over months. A neutral invitation ages correctly.
+# "Come check it out" measured cleanest of five phrasings on this voice too: 0.237s on "Come" with no
+# rushing, where "Come AND check it out" puts a 0.312s hole between "Come" and "and".
+$ctaVo  = ('Come check it out at thrifty crew dot com. If this saved you money, hit like, ' +
+           'send it to someone who feeds a family, and follow along for the next one.')
+$ctaCap = 'Come check it out at thriftycrew.com'
 Add-Scene -Dark -Id 'cta' `
   -Vo $ctaVo -Caption $ctaCap `
-  -Body ($ctaBadge + '<div class="url">thriftycrew.com</div>' +
+  -Body ('<div class="url">thriftycrew.com</div>' +
          '<div class="ask">Like &middot; Share &middot; Follow</div>' +
          '<div class="stamp">Real shelf prices, seven real stores, updated weekly.</div>')
 
@@ -771,13 +780,43 @@ if ($totalDur -gt 90) { Write-Warning "Reel is $([math]::Round($totalDur,1))s. F
 
 # ---------------------------------------------------------------- caption + state
 
-$hashtags = '#mealprep #groceryhaul #budgetmeals #frugalliving #mealprepsunday #thriftycrew'
+# Hashtags derived from THIS recipe, not one generic block on every video. With 500+ reels in an
+# archive, identical tags on all of them is a spam signal and reaches nobody; the protein, the
+# cuisine and the cooking method are the terms people actually browse.
+function Get-Hashtags {
+  param([string]$Name, [string]$Protein, [string]$Cuisine, [int]$ProteinG)
+  $tags = New-Object System.Collections.Generic.List[string]
+  foreach ($t in '#mealprep', '#mealprepsunday', '#budgetmeals', '#groceryhaul', '#frugalliving') {
+    $tags.Add($t)
+  }
+  if ($Protein) { $tags.Add('#' + ($Protein.ToLower() -replace '[^a-z]', '') + 'recipes') }
+  if ($ProteinG -ge 40) { $tags.Add('#highprotein') }
+  if ($Cuisine) {
+    $c = $Cuisine.ToLower() -replace '[^a-z]', ''
+    if ($c -and $c.Length -ge 3) { $tags.Add("#${c}food") }
+  }
+  # Method and format, read off the title, because that is how people search for dinner.
+  $n = $Name.ToLower()
+  foreach ($pair in @(@('slow cooker', '#slowcooker'), @('crockpot', '#slowcooker'),
+                      @('sheet pan', '#sheetpandinner'), @('casserole', '#casserole'),
+                      @('skillet', '#onepanmeal'), @('one pot', '#onepotmeal'),
+                      @('soup', '#soup'), @('chili', '#chili'), @('stew', '#stew'),
+                      @('taco', '#tacos'), @('pasta', '#pasta'), @('rice bowl', '#ricebowls'),
+                      @('bake', '#dinnerideas'))) {
+    if ($n -like "*$($pair[0])*" -and -not $tags.Contains($pair[1])) { $tags.Add($pair[1]) }
+  }
+  $tags.Add('#thriftycrew')
+  return ($tags -join ' ')
+}
+
+$hashtags   = Get-Hashtags -Name $name -Protein ([string]$ps.protein) -Cuisine $cuisine -ProteinG $proteinG
+$recipeUrl  = "https://www.thriftycrew.com/$pick/"
 $caption = @"
 $name for $moneyPs a serving.
 
 $servings servings out of one batch, $(Format-Money $batchCost) total, ${proteinG}g of protein a bowl. Priced at the cheapest whole-package price across seven real stores, week of $weekOf.
 
-$(if ($isFree) { "Full recipe is free this week at thriftycrew.com" } else { "Full recipe at thriftycrew.com" })
+Full recipe: $recipeUrl
 
 $hashtags
 "@
@@ -787,12 +826,16 @@ $captionFile = Join-Path $OutDir "$stamp-$pick.txt"
 Assert-CopyRules -Text @($caption) -Context 'the Facebook caption'
 [System.IO.File]::WriteAllText($captionFile, $caption, (New-Object System.Text.UTF8Encoding $false))
 
-$used = @($state.used) + @([pscustomobject]@{ slug = $pick; date = $stamp; per_serving = $cheapestPs; week_of = $weekOf })
-$newState = [pscustomobject]@{
-  readme = 'Reels already published, newest last. build-reel.ps1 avoids repeats until the pool is exhausted.'
-  used   = $used
+if ($NoState) {
+  Write-Output 'State   : not recorded (-NoState)'
+} else {
+  $used = @($state.used) + @([pscustomobject]@{ slug = $pick; date = $stamp; per_serving = $cheapestPs; week_of = $weekOf })
+  $newState = [pscustomobject]@{
+    readme = 'Reels already published, newest last. build-reel.ps1 avoids repeats until the pool is exhausted.'
+    used   = $used
+  }
+  [System.IO.File]::WriteAllText($StateFile, ($newState | ConvertTo-Json -Depth 5), (New-Object System.Text.UTF8Encoding $false))
 }
-[System.IO.File]::WriteAllText($StateFile, ($newState | ConvertTo-Json -Depth 5), (New-Object System.Text.UTF8Encoding $false))
 
 if (-not $KeepFrames) { Remove-Item $WorkDir -Recurse -Force -ErrorAction SilentlyContinue }
 
