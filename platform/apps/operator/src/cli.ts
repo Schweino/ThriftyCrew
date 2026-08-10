@@ -389,6 +389,10 @@ if (command === "status") {
       : runId,
     input: { reason: process.env.TC_RECOVERY_REASON ?? "scheduled operation" },
   } });
+} else if (command === "job" && subcommand === "github-runs") {
+  const limit = arguments_[0] ?? "5";
+  if (!/^([1-9]|10)$/.test(limit)) throw new Error("tc job github-runs limit must be from 1 through 10");
+  result = await (await mutationClient()).request(`/internal/jobs/github-runs?limit=${limit}`);
 } else if (command === "job" && subcommand === "dispatch") {
   const job = arguments_[0];
   if (!job) throw new Error("tc job dispatch requires a job id");
@@ -590,7 +594,7 @@ if (command === "status") {
     ok: true,
     usage: [
       "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy",
-      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc restore record <file>|show", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]",
+      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc restore record <file>|show", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog",

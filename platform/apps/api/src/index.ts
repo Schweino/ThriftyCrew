@@ -42,7 +42,7 @@ import { createRelease, findBatch, insertObservations, insertRecipeCosts, insert
 import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation, runGhostClobberDrill } from "./ghost-reconciliation";
-import { dispatchGithubJob, raiseOperationalAlert, recordAudit, resolveOperationalAlert, runScheduledOperations } from "./operations";
+import { dispatchGithubJob, githubWorkflowRuns, raiseOperationalAlert, recordAudit, resolveOperationalAlert, runScheduledOperations } from "./operations";
 import { readEngineSnapshot, type EngineSourceMode } from "./engine-snapshot";
 import { memberStatusHtml } from "./member-status";
 import { accrueMilestoneEvidence, milestoneEvidenceSummary } from "./milestone-evidence";
@@ -53,7 +53,7 @@ export { D1BackupWorkflow } from "./backup-workflow";
 type Bindings = { Bindings: WorkerEnv; Variables: { identity: MutationIdentity } };
 const app = new Hono<Bindings>();
 
-function jsonError(message: string, status: 400 | 401 | 403 | 404 | 409 | 422 | 500 = 400): Response {
+function jsonError(message: string, status: 400 | 401 | 403 | 404 | 409 | 422 | 500 | 502 = 400): Response {
   return Response.json({ ok: false, error: message }, { status });
 }
 
@@ -647,6 +647,17 @@ app.post("/internal/jobs/:job/dispatch", zValidator("json", jobDispatchSchema), 
   const result = await dispatchGithubJob(context.env, job, body.reason, body.idempotencyKey, body.ref);
   await recordAudit(context.env, context.get("identity"), "job.dispatch", "job_schedule", job, result.status === "dispatched" ? "accepted" : "failed", result);
   return context.json({ ok: result.status === "dispatched", ...result }, result.status === "dispatched" ? 202 : 500);
+});
+
+app.get("/internal/jobs/github-runs", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may inspect GitHub workflow runs", 403);
+  const requestedLimit = Number(context.req.query("limit") ?? "5");
+  if (!Number.isInteger(requestedLimit) || requestedLimit < 1 || requestedLimit > 10) return jsonError("limit must be an integer from 1 through 10", 422);
+  try {
+    return context.json({ ok: true, ...await githubWorkflowRuns(context.env, requestedLimit) });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "GitHub Actions inspection failed", 502);
+  }
 });
 
 app.get("/internal/engine/snapshot", async (context) => {

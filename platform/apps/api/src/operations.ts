@@ -146,6 +146,94 @@ export async function dispatchGithubJob(
   }
 }
 
+interface GithubWorkflowRunResponse {
+  workflow_runs?: Array<{
+    id?: number;
+    event?: string;
+    status?: string;
+    conclusion?: string | null;
+    head_sha?: string;
+    created_at?: string;
+    updated_at?: string;
+    html_url?: string;
+  }>;
+}
+
+interface GithubWorkflowJobsResponse {
+  jobs?: Array<{
+    id?: number;
+    name?: string;
+    status?: string;
+    conclusion?: string | null;
+    started_at?: string;
+    completed_at?: string | null;
+    steps?: Array<{
+      name?: string;
+      status?: string;
+      conclusion?: string | null;
+      number?: number;
+    }>;
+  }>;
+}
+
+async function githubJson<T>(env: WorkerEnv, url: string): Promise<T> {
+  const response = await fetch(url, {
+    headers: {
+      accept: "application/vnd.github+json",
+      authorization: `Bearer ${env.GITHUB_DISPATCH_TOKEN}`,
+      "user-agent": "tc-grocery-v3-operator",
+      "x-github-api-version": "2022-11-28",
+    },
+  });
+  if (!response.ok) throw new Error(`GitHub Actions API returned ${response.status}`);
+  return response.json<T>();
+}
+
+/**
+ * Return a deliberately narrow, log-free view of recent workflow health.
+ * This keeps the configured GitHub token inside the Worker while exposing
+ * enough step metadata for an operator to diagnose pre-ledger failures.
+ */
+export async function githubWorkflowRuns(env: WorkerEnv, requestedLimit = 5): Promise<{ runs: Array<Record<string, unknown>> }> {
+  if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY || !env.GITHUB_WORKFLOW_FILE) {
+    throw new Error("GitHub Actions inspection is not configured");
+  }
+  const limit = Math.max(1, Math.min(10, Math.trunc(requestedLimit)));
+  const workflow = encodeURIComponent(env.GITHUB_WORKFLOW_FILE);
+  const base = `https://api.github.com/repos/${env.GITHUB_REPOSITORY}`;
+  const response = await githubJson<GithubWorkflowRunResponse>(env, `${base}/actions/workflows/${workflow}/runs?per_page=${limit}`);
+  const runs = await Promise.all((response.workflow_runs ?? []).slice(0, limit).map(async (run) => {
+    const jobs = run.id
+      ? await githubJson<GithubWorkflowJobsResponse>(env, `${base}/actions/runs/${run.id}/jobs?per_page=20`)
+      : { jobs: [] };
+    return {
+      id: run.id ?? null,
+      event: run.event ?? null,
+      status: run.status ?? null,
+      conclusion: run.conclusion ?? null,
+      headSha: run.head_sha ?? null,
+      createdAt: run.created_at ?? null,
+      updatedAt: run.updated_at ?? null,
+      url: run.html_url ?? null,
+      jobs: (jobs.jobs ?? []).map((job) => ({
+        id: job.id ?? null,
+        name: job.name ?? null,
+        status: job.status ?? null,
+        conclusion: job.conclusion ?? null,
+        startedAt: job.started_at ?? null,
+        completedAt: job.completed_at ?? null,
+        steps: (job.steps ?? []).map((step) => ({
+          name: step.name ?? null,
+          status: step.status ?? null,
+          conclusion: step.conclusion ?? null,
+          number: step.number ?? null,
+        })),
+      })),
+    };
+  }));
+  return { runs };
+}
+
 export async function runLedgerWatchdog(env: WorkerEnv, scheduledTime: number): Promise<void> {
   const scheduledFor = new Date(scheduledTime).toISOString();
   const runId = await deterministicId("run", "ledger-watchdog", scheduledFor);
