@@ -59,7 +59,7 @@ import { createRelease, findBatch, insertObservations, insertRecipeCosts, insert
 import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation, runGhostClobberDrill } from "./ghost-reconciliation";
-import { dispatchGithubJob, dispatchRegisteredAgent, githubWorkflowRuns, jobStatusRequiresAlert, raiseOperationalAlert, recordAudit, resolveOperationalAlert, runScheduledOperations } from "./operations";
+import { dispatchGithubJob, dispatchRegisteredAgent, githubWorkflowRuns, jobStatusRequiresAlert, raiseOperationalAlert, recordAudit, resolveOperationalAlert, resolveRecoveredJobRunAlerts, runArchivalForecast, runScheduledOperations, scheduleGap } from "./operations";
 import { readEngineSnapshot, readEngineSnapshotIdentity, type EngineSnapshotProfile, type EngineSourceMode } from "./engine-snapshot";
 import { memberStatusHtml } from "./member-status";
 import { accrueMilestoneEvidence, milestoneEvidenceSummary } from "./milestone-evidence";
@@ -194,7 +194,7 @@ app.get("/api/v2/status", async (context) => {
     ).first<{ id: string; published_at: string; summary_json: string }>(),
     context.env.DB.prepare(
       `SELECT s.job, s.cron, s.executor, s.timezone, s.owner, s.proof, s.max_gap_minutes,
-              s.lifecycle, s.retirement_gate,
+              s.lifecycle, s.retirement_gate, s.monitoring_started_at,
               (SELECT status FROM job_runs r WHERE r.job = s.job ORDER BY COALESCE(r.started_at, r.scheduled_for) DESC LIMIT 1) AS status,
               (SELECT COALESCE(heartbeat_at, finished_at, started_at, scheduled_for) FROM job_runs r WHERE r.job = s.job ORDER BY COALESCE(heartbeat_at, finished_at, started_at, scheduled_for) DESC LIMIT 1) AS latest_at
          FROM job_schedules s WHERE s.active = 1 ORDER BY s.job`,
@@ -222,9 +222,14 @@ app.get("/api/v2/status", async (context) => {
   const checkedAt = new Date();
   const jobs = schedules.results.map((row) => {
     const item = row as Record<string, unknown>;
-    const latestAt = typeof item.latest_at === "string" ? Date.parse(item.latest_at) : Number.NaN;
     const maxGap = typeof item.max_gap_minutes === "number" ? item.max_gap_minutes : 0;
-    return { ...item, stale: !Number.isFinite(latestAt) || checkedAt.getTime() - latestAt > maxGap * 60_000 };
+    const health = scheduleGap(
+      typeof item.latest_at === "string" ? item.latest_at : null,
+      typeof item.monitoring_started_at === "string" ? item.monitoring_started_at : null,
+      checkedAt.getTime(),
+      maxGap,
+    );
+    return { ...item, stale: health.stale, age_minutes: health.ageMinutes, freshness_basis: health.basis };
   });
   return context.json({
     ok: true,
@@ -718,14 +723,15 @@ app.put("/internal/schedules/sync", zValidator("json", scheduleDocumentSchema), 
   const statements = document.schedules.map((schedule) => context.env.DB.prepare(
     `INSERT INTO job_schedules
        (job, cron, max_gap_minutes, active, executor, timezone, owner, proof, dispatch_on_gap,
-        lifecycle, authority_version, retirement_gate, workflow_file)
-     VALUES (?1, ?2, ?3, ?9, ?4, ?5, ?6, ?7, ?8, ?10, ?11, ?12, ?13)
+        lifecycle, authority_version, retirement_gate, workflow_file, monitoring_started_at)
+     VALUES (?1, ?2, ?3, ?9, ?4, ?5, ?6, ?7, ?8, ?10, ?11, ?12, ?13, CURRENT_TIMESTAMP)
      ON CONFLICT(job) DO UPDATE SET
        cron = excluded.cron, max_gap_minutes = excluded.max_gap_minutes, active = excluded.active,
        executor = excluded.executor, timezone = excluded.timezone, owner = excluded.owner,
        proof = excluded.proof, dispatch_on_gap = excluded.dispatch_on_gap,
        lifecycle = excluded.lifecycle, authority_version = excluded.authority_version,
-       retirement_gate = excluded.retirement_gate, workflow_file = excluded.workflow_file`,
+       retirement_gate = excluded.retirement_gate, workflow_file = excluded.workflow_file,
+       monitoring_started_at = COALESCE(job_schedules.monitoring_started_at, CURRENT_TIMESTAMP)`,
   ).bind(
     schedule.id,
     schedule.cron,
@@ -1343,6 +1349,14 @@ app.patch("/internal/job-runs/:id", zValidator("json", jobRunUpdateSchema), asyn
         WHERE agent_id = ?1 AND month_key = ?2`,
     ).bind(current.agent_id, month, body.usage.costMicrousd, current.estimated_cost_microusd, current.budget_class ?? "routine").run();
   }
+  if (body.status === "completed") {
+    await resolveRecoveredJobRunAlerts(
+      context.env,
+      current.job,
+      context.req.param("id"),
+      body.finishedAt ?? new Date().toISOString(),
+    );
+  }
   const alert = jobStatusRequiresAlert(body.status)
     ? await raiseOperationalAlert(
       context.env,
@@ -1492,6 +1506,16 @@ app.post("/internal/archival/forecasts", zValidator("json", archivalForecastSche
   if (status !== "healthy") await raiseOperationalAlert(context.env, "d1-archive-capacity", `D1 archival threshold is ${status}`, { id, ...body, usagePercentMillis, projectedLimitAt });
   else await resolveOperationalAlert(context.env, "d1-archive-capacity", { id, usagePercentMillis, projectedLimitAt });
   return context.json({ ok: status !== "critical", id, status, usagePercentMillis, projectedLimitAt }, status === "critical" ? 422 : 201);
+});
+
+app.post("/internal/archival/forecast/run", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may run the archival forecast", 403);
+  const observedAt = Date.now();
+  await runArchivalForecast(context.env, observedAt);
+  await recordAudit(context.env, context.get("identity"), "archival_forecast.run", "job", "archival-forecast-daily", "accepted", {
+    observedAt: new Date(observedAt).toISOString(),
+  });
+  return context.json({ ok: true, job: "archival-forecast-daily", observedAt: new Date(observedAt).toISOString() });
 });
 
 app.post("/internal/archival/plan", zValidator("json", archivePlanSchema), async (context) => {
@@ -2228,6 +2252,96 @@ app.post("/internal/triage/reconcile", async (context) => {
       WHERE t.source_kind = 'operational_alert' AND t.title LIKE 'Native legacy engine has % parity differences'
         AND t.status <> 'resolved'`,
   ).all<{ id: string; parity_id: string; diff_count: number }>();
+  const recoveredJobRuns = await context.env.DB.prepare(
+    `SELECT triage.id, failed.job, recovery.id AS recovery_run_id, recovery.finished_at
+       FROM triage_items triage
+       JOIN job_runs failed ON failed.id = substr(triage.source_ref, 9)
+       JOIN job_runs recovery ON recovery.id = (
+         SELECT candidate.id FROM job_runs candidate
+          WHERE candidate.job = failed.job AND candidate.status = 'completed'
+            AND julianday(candidate.finished_at) > julianday(COALESCE(failed.finished_at, failed.started_at, triage.created_at))
+          ORDER BY candidate.finished_at DESC LIMIT 1
+       )
+      WHERE triage.source_kind = 'operational_alert'
+        AND triage.source_ref LIKE 'job-run:%'
+        AND triage.status <> 'resolved'
+        AND failed.status IN ('failed', 'timed_out', 'missed')`,
+  ).all<{ id: string; job: string; recovery_run_id: string; finished_at: string }>();
+  const recoveredScheduleGaps = await context.env.DB.prepare(
+    `SELECT triage.id, schedule.job, recovery.id AS recovery_run_id, recovery.finished_at
+       FROM triage_items triage
+       JOIN job_schedules schedule ON triage.source_ref = 'schedule-gap:' || schedule.job
+       JOIN job_runs recovery ON recovery.id = (
+         SELECT candidate.id FROM job_runs candidate
+          WHERE candidate.job = schedule.job AND candidate.status = 'completed'
+          ORDER BY candidate.finished_at DESC LIMIT 1
+       )
+      WHERE triage.source_kind = 'operational_alert'
+        AND triage.status <> 'resolved'
+        AND julianday('now') - julianday(recovery.finished_at) <= schedule.max_gap_minutes / 1440.0`,
+  ).all<{ id: string; job: string; recovery_run_id: string; finished_at: string }>();
+  const recoveredSourceContracts = await context.env.DB.prepare(
+    `SELECT triage.id, sentinel.id AS sentinel_id, sentinel.source_id, sentinel.observed_at
+       FROM triage_items triage
+       JOIN source_sentinel_results sentinel ON sentinel.id = (
+         SELECT candidate.id FROM source_sentinel_results candidate
+          WHERE triage.source_ref = 'source-contract:' || candidate.source_id
+            AND candidate.status = 'pass'
+            AND julianday(candidate.observed_at) > julianday(triage.created_at)
+          ORDER BY candidate.observed_at DESC LIMIT 1
+       )
+      WHERE triage.source_kind = 'operational_alert'
+        AND triage.source_ref LIKE 'source-contract:%'
+        AND triage.status <> 'resolved'`,
+  ).all<{ id: string; sentinel_id: string; source_id: string; observed_at: string }>();
+  const cleanupCandidates = await context.env.DB.prepare(
+    `SELECT id, source_ref, title, evidence_json
+       FROM triage_items
+      WHERE source_kind = 'operational_alert' AND status <> 'resolved'
+        AND (source_ref LIKE 'restore-scratch-cleanup:%'
+          OR source_ref LIKE 'restore-multipart-cleanup:%'
+          OR source_ref LIKE 'restore-normalized-cleanup:%'
+          OR source_ref LIKE 'restore-normalized-staging-cleanup:%'
+          OR source_ref LIKE 'restore-recovery-cleanup:%')
+      ORDER BY id`,
+  ).all<{ id: string; source_ref: string; title: string; evidence_json: string }>();
+  const recoveredCleanup: Array<{ id: string; sourceRef: string; proof: Record<string, unknown> }> = [];
+  for (const row of cleanupCandidates.results) {
+    let evidence: Record<string, unknown>;
+    try {
+      evidence = JSON.parse(row.evidence_json) as Record<string, unknown>;
+    } catch {
+      continue;
+    }
+    if (row.source_ref.startsWith("restore-multipart-cleanup:")
+      && typeof evidence.error === "string"
+      && evidence.error.toLowerCase().includes("specified multipart upload does not exist")) {
+      recoveredCleanup.push({ id: row.id, sourceRef: row.source_ref, proof: { providerResult: "multipart upload absent" } });
+      continue;
+    }
+    const objectKey = typeof evidence.normalizedObjectKey === "string"
+      ? evidence.normalizedObjectKey
+      : typeof evidence.normalizedStagingObjectKey === "string" ? evidence.normalizedStagingObjectKey : null;
+    if (objectKey && !row.source_ref.startsWith("restore-multipart-cleanup:") && !(await context.env.BACKUPS.head(objectKey))) {
+      recoveredCleanup.push({ id: row.id, sourceRef: row.source_ref, proof: { bucket: "tc-grocery-v3-backups", objectKey, exists: false } });
+      continue;
+    }
+    if (typeof evidence.recoveryObjectPrefix === "string") {
+      const listed = await context.env.BACKUPS.list({ prefix: evidence.recoveryObjectPrefix, limit: 1 });
+      if (listed.objects.length === 0) {
+        recoveredCleanup.push({ id: row.id, sourceRef: row.source_ref, proof: { bucket: "tc-grocery-v3-backups", prefix: evidence.recoveryObjectPrefix, objects: 0 } });
+        continue;
+      }
+    }
+    if (typeof evidence.scratchDatabaseId === "string" && context.env.D1_REST_API_TOKEN && context.env.CLOUDFLARE_ACCOUNT_ID) {
+      const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${context.env.CLOUDFLARE_ACCOUNT_ID}/d1/database/${encodeURIComponent(evidence.scratchDatabaseId)}`, {
+        headers: { authorization: `Bearer ${context.env.D1_REST_API_TOKEN}` },
+      });
+      if (response.status === 404) {
+        recoveredCleanup.push({ id: row.id, sourceRef: row.source_ref, proof: { scratchDatabaseId: evidence.scratchDatabaseId, exists: false } });
+      }
+    }
+  }
   const observedAt = new Date().toISOString();
   for (let offset = 0; offset < recoverable.results.length; offset += 90) {
     await context.env.DB.batch(recoverable.results.slice(offset, offset + 90).map((row) => context.env.DB.prepare(
@@ -2262,6 +2376,49 @@ app.post("/internal/triage/reconcile", async (context) => {
         resolution: "A later legacy parity run compared the full surface with zero differences.",
         parityRunId: row.parity_id,
         diffCount: row.diff_count,
+        observedAt,
+      },
+    })),
+    ...recoveredJobRuns.results.map((row) => ({
+      id: row.id,
+      planRef: "auto-plan://later-job-run-completed",
+      resolution: {
+        resolution: "A later durable run for the same job completed successfully.",
+        job: row.job,
+        recoveryRunId: row.recovery_run_id,
+        finishedAt: row.finished_at,
+        observedAt,
+      },
+    })),
+    ...recoveredScheduleGaps.results.map((row) => ({
+      id: row.id,
+      planRef: "auto-plan://schedule-heartbeat-recovered",
+      resolution: {
+        resolution: "A successful run is now recorded inside the schedule's maximum gap.",
+        job: row.job,
+        recoveryRunId: row.recovery_run_id,
+        finishedAt: row.finished_at,
+        observedAt,
+      },
+    })),
+    ...recoveredSourceContracts.results.map((row) => ({
+      id: row.id,
+      planRef: "auto-plan://source-contract-recovered",
+      resolution: {
+        resolution: "A later source-contract observation passed for the same source.",
+        sourceId: row.source_id,
+        sentinelId: row.sentinel_id,
+        sourceObservedAt: row.observed_at,
+        observedAt,
+      },
+    })),
+    ...recoveredCleanup.map((row) => ({
+      id: row.id,
+      planRef: "auto-plan://cleanup-absence-verified",
+      resolution: {
+        resolution: "The exact cleanup target is verified absent.",
+        sourceRef: row.sourceRef,
+        proof: row.proof,
         observedAt,
       },
     })),

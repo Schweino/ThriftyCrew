@@ -1,4 +1,4 @@
--- @policy expand
+-- @policy expand-contract
 -- Give newly registered schedules a truthful first-run grace window. The
 -- watchdog uses this timestamp only until the first durable run is recorded.
 

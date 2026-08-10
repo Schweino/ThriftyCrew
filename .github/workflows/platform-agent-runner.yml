@@ -117,7 +117,7 @@ jobs:
           NODE
 
       - name: Start scheduled ledger
-        if: steps.claim.outputs.claimed == 'true' && inputs.job_name != ''
+        if: inputs.job_name != ''
         run: pnpm tc job start "$TC_JOB_NAME"
 
       - name: Execute registered agent
@@ -178,7 +178,7 @@ jobs:
         run: pnpm tc agent fail "$TC_OUTPUT_ROOT/claim.json" "registered agent workflow failed"
 
       - name: Finish scheduled ledger
-        if: always() && steps.claim.outputs.claimed == 'true' && inputs.job_name != ''
+        if: always() && inputs.job_name != ''
         env:
           TC_GITHUB_JOB_STATUS: ${{ job.status }}
         run: |

@@ -464,12 +464,21 @@ export async function runLedgerWatchdog(env: WorkerEnv, scheduledTime: number): 
 export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number): Promise<void> {
   const observedAt = new Date(scheduledTime).toISOString();
   const runId = await deterministicId("run", "archival-forecast-daily", observedAt.slice(0, 10));
-  const existing = await env.DB.prepare("SELECT id FROM job_runs WHERE id = ?1").bind(runId).first();
-  if (existing) return;
-  await env.DB.prepare(
-    `INSERT INTO job_runs (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, actor_id, input_json)
-     VALUES (?1, 'archival-forecast-daily', 'schedule', ?2, ?2, ?2, 'started', 'cloudflare:scheduled', '{}')`,
-  ).bind(runId, observedAt).run();
+  const existing = await env.DB.prepare("SELECT status FROM job_runs WHERE id = ?1").bind(runId).first<{ status: string }>();
+  if (existing?.status === "completed") return;
+  if (existing) {
+    await env.DB.prepare(
+      `UPDATE job_runs
+          SET scheduled_for = ?2, started_at = ?2, heartbeat_at = ?2, finished_at = NULL,
+              status = 'started', error = NULL, actor_id = 'cloudflare:scheduled'
+        WHERE id = ?1`,
+    ).bind(runId, observedAt).run();
+  } else {
+    await env.DB.prepare(
+      `INSERT INTO job_runs (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, actor_id, input_json)
+       VALUES (?1, 'archival-forecast-daily', 'schedule', ?2, ?2, ?2, 'started', 'cloudflare:scheduled', '{}')`,
+    ).bind(runId, observedAt).run();
+  }
   try {
     const [pageCount, pageSize, observations, protectedRows, previous] = await Promise.all([
       env.DB.prepare("PRAGMA page_count").first<{ page_count: number }>(),
@@ -502,6 +511,9 @@ export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number)
     ]);
     if (status !== "healthy") await raiseOperationalAlert(env, "d1-archive-capacity", `D1 archival threshold is ${status}`, { forecastId, databaseBytes, databaseLimitBytes, usagePercentMillis, monthlyGrowthBytes, projectedLimitAt });
     else await resolveOperationalAlert(env, "d1-archive-capacity", { forecastId, databaseBytes, usagePercentMillis, projectedLimitAt });
+    await resolveOperationalAlert(env, "schedule-gap:archival-forecast-daily", { forecastId, runId, observedAt, status: "completed" });
+    await resolveOperationalAlert(env, `archival-forecast:${observedAt.slice(0, 10)}`, { forecastId, runId, observedAt, status: "completed" });
+    await resolveRecoveredJobRunAlerts(env, "archival-forecast-daily", runId, observedAt);
   } catch (error) {
     const message = error instanceof Error ? error.message : "archival forecast failed";
     await env.DB.prepare("UPDATE job_runs SET status = 'failed', heartbeat_at = CURRENT_TIMESTAMP, finished_at = CURRENT_TIMESTAMP, error = ?2 WHERE id = ?1")

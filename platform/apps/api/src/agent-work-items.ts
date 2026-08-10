@@ -80,8 +80,15 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
   }
   if (agentId === "source-sentinel-investigator") {
     const rows = await db.prepare(
-      `SELECT id, source_id, contract_version, status, checks_json, evidence_json, observed_at
-         FROM source_sentinel_results WHERE status = 'fail' ORDER BY observed_at DESC LIMIT 10`,
+      `SELECT result.id, result.source_id, result.contract_version, result.status,
+              result.checks_json, result.evidence_json, result.observed_at
+         FROM source_sentinel_results result
+         JOIN triage_items triage
+           ON triage.source_kind = 'operational_alert'
+          AND triage.source_ref = 'source-contract:' || result.source_id
+          AND triage.status <> 'resolved'
+        WHERE result.status = 'fail'
+        ORDER BY result.observed_at DESC LIMIT 10`,
     ).all<Record<string, unknown>>();
     return rows.results.map((row) => ({ sourceKind: "source-sentinel-result", sourceRef: String(row.id), stage: "investigate", severity: "operational", input: { contract: "source-sentinel-result-v1", result: row } }));
   }

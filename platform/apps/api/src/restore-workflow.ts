@@ -1,6 +1,7 @@
 import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloudflare:workers";
 import { stableJson } from "@thriftycrew/domain";
-import { raiseOperationalAlert } from "./operations";
+import { raiseOperationalAlert, resolveOperationalAlert } from "./operations";
+import { isMissingMultipartUploadError } from "./restore-cleanup";
 import type { WorkerEnv } from "./env";
 import {
   RESTORE_COUNT_TABLES,
@@ -382,6 +383,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
             await cloudflare<null>(this.env, `/d1/database/${scratchDatabaseId}`, { method: "DELETE" });
             return true;
           });
+          await resolveOperationalAlert(this.env, `restore-scratch-cleanup:${scratchDatabaseId}`, { scratchDatabaseId, status: "deleted" });
         } catch (error) {
           await raiseOperationalAlert(this.env, `restore-scratch-cleanup:${scratchDatabaseId}`, "Restore drill scratch database cleanup failed", { scratchDatabaseId, error: error instanceof Error ? error.message : "unknown cleanup failure" });
         }
@@ -394,10 +396,11 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
               await upload.abort();
               return { absent: false };
             } catch (error) {
-              if (error instanceof Error && error.message.includes("specified multipart upload does not exist")) return { absent: true };
+              if (isMissingMultipartUploadError(error)) return { absent: true };
               throw error;
             }
           });
+          await resolveOperationalAlert(this.env, `restore-multipart-cleanup:${normalizedMultipartUploadId}`, { normalizedObjectKey, normalizedMultipartUploadId, status: "absent-or-aborted" });
         } catch (error) {
           await raiseOperationalAlert(this.env, `restore-multipart-cleanup:${normalizedMultipartUploadId}`, "Normalized restore multipart cleanup failed", { normalizedObjectKey, normalizedMultipartUploadId, error: error instanceof Error ? error.message : "unknown cleanup failure" });
         }
@@ -408,6 +411,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
             await this.env.BACKUPS.delete(normalizedObjectKey!);
             return true;
           });
+          await resolveOperationalAlert(this.env, `restore-normalized-cleanup:${normalizedObjectKey}`, { normalizedObjectKey, status: "deleted" });
         } catch (error) {
           await raiseOperationalAlert(this.env, `restore-normalized-cleanup:${normalizedObjectKey}`, "Normalized restore object cleanup failed", { normalizedObjectKey, error: error instanceof Error ? error.message : "unknown cleanup failure" });
         }
@@ -418,6 +422,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
             await this.env.BACKUPS.delete(normalizedStagingObjectKey!);
             return true;
           });
+          await resolveOperationalAlert(this.env, `restore-normalized-staging-cleanup:${normalizedStagingObjectKey}`, { normalizedStagingObjectKey, status: "deleted" });
         } catch (error) {
           await raiseOperationalAlert(this.env, `restore-normalized-staging-cleanup:${normalizedStagingObjectKey}`, "Normalized restore staging object cleanup failed", { normalizedStagingObjectKey, error: error instanceof Error ? error.message : "unknown cleanup failure" });
         }
@@ -428,6 +433,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           if (listed.objects.length > 0) await this.env.BACKUPS.delete(listed.objects.map((object) => object.key));
           return { deleted: listed.objects.length };
         });
+        await resolveOperationalAlert(this.env, `restore-recovery-cleanup:${event.instanceId}`, { recoveryObjectPrefix, status: "deleted" });
       } catch (error) {
         await raiseOperationalAlert(this.env, `restore-recovery-cleanup:${event.instanceId}`, "Restore recovery staging cleanup failed", { recoveryObjectPrefix, error: error instanceof Error ? error.message : "unknown cleanup failure" });
       }

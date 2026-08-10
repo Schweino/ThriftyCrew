@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "timezone": "America/Chicago",
   "schedules": [
     { "id": "ledger-watchdog", "cron": "*/15 * * * *", "executor": "worker-cron", "maxGapMinutes": 30, "owner": "platform", "proof": "job_runs:ledger-watchdog", "dispatchOnGap": false },
