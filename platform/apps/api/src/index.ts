@@ -73,6 +73,7 @@ import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
 import { readBrowserCaptureSla } from "./browser-capture-sla";
+import { buildCaptureTermInserts } from "./capture-seal";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 export { D1RestoreDrillWorkflow } from "./restore-workflow";
@@ -1892,10 +1893,10 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
     }, evidenceRows.results)
     : { pass: true, detail: { required: false }, metrics: null };
   const status = identityPass && completePass && collapsePass && freshnessPass && browserEvidence.pass ? "validated" : "rejected";
-  const statements: D1PreparedStatement[] = body.terms.map((term) => context.env.DB.prepare(
-    `INSERT INTO capture_terms (batch_id, term_key, ordinal, outcome, row_count, reason)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?6)`,
-  ).bind(batch.id, term.termKey, term.ordinal, term.outcome, term.rowCount, term.reason ?? null));
+  // Packing term rows keeps the transactional D1 batch well below its
+  // 30-second duration ceiling while respecting its per-statement bind limit.
+  const statements: D1PreparedStatement[] = buildCaptureTermInserts(batch.id, body.terms)
+    .map((insert) => context.env.DB.prepare(insert.sql).bind(...insert.bindings));
   statements.push(context.env.DB.prepare(
     `UPDATE capture_batches SET status = ?2, attempted_terms = ?3, successful_terms = ?4, empty_terms = ?5,
        rejected_terms = ?6, blocked_terms = ?7, captured_pages = ?8, evidence_manifest_key = ?9,
