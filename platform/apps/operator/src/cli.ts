@@ -500,7 +500,7 @@ if (command === "status") {
     result = await enqueueCapture(root, artifactFile, evidenceFiles);
   } else if (action === "drain") {
     const client = await mutationClient();
-    result = await drainCaptureQueue(root, async (job) => {
+    const drained = await drainCaptureQueue(root, async (job) => {
       const artifactBody = new Uint8Array(await readFile(job.artifactPath));
       const additionalEvidence: CaptureEvidenceInput[] = await Promise.all(job.evidencePaths.map(async (evidence) => ({
         body: new Uint8Array(await readFile(evidence.path)),
@@ -512,6 +512,8 @@ if (command === "status") {
       const matching = await matchBatch(client, String(ingestion.batchId));
       return { ...ingestion, matching };
     });
+    result = drained;
+    if (!drained.ok) process.exitCode = 2;
   } else if (action === "status" || action === "watchdog") {
     const filesystem = await verifyCaptureQueueFilesystem(root);
     const status = await captureQueueStatus(root, {
