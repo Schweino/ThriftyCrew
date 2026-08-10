@@ -826,22 +826,23 @@ app.post("/internal/restore-drills/trigger", async (context) => {
   const now = new Date();
   const quarter = `${now.getUTCFullYear()}-Q${Math.floor(now.getUTCMonth() / 3) + 1}`;
   const quarterStart = new Date(Date.UTC(now.getUTCFullYear(), Math.floor(now.getUTCMonth() / 3) * 3, 1)).toISOString();
+  const force = context.req.query("force") === "1";
   const passed = await context.env.DB.prepare(
     "SELECT id FROM restore_drills WHERE status = 'passed' AND started_at >= ?1 ORDER BY started_at DESC LIMIT 1",
   ).bind(quarterStart).first<{ id: string }>();
-  if (passed) return context.json({ ok: true, instanceId: passed.id.replace(/^restore_/, ""), quarter, idempotent: true }, 200);
+  if (passed && !force) return context.json({ ok: true, instanceId: passed.id.replace(/^restore_/, ""), quarter, idempotent: true }, 200);
   const attempts = await context.env.DB.prepare(
     "SELECT COUNT(*) AS count FROM job_runs WHERE job = 'restore-drill-quarterly' AND started_at >= ?1",
   ).bind(quarterStart).first<{ count: number }>();
   const instanceId = `d1-restore-${quarter}-a${(attempts?.count ?? 0) + 1}`;
   try {
-    await context.env.RESTORE_WORKFLOW.create({ id: instanceId, params: { trigger: "operator-or-schedule" } });
+    await context.env.RESTORE_WORKFLOW.create({ id: instanceId, params: { trigger: force ? "operator-forced" : "operator-or-schedule" } });
   } catch (error) {
     const message = error instanceof Error ? error.message : "restore workflow create failed";
     if (!message.toLowerCase().includes("already")) throw error;
   }
-  await recordAudit(context.env, context.get("identity"), "restore_drill.trigger", "workflow", instanceId, "accepted", { quarter });
-  return context.json({ ok: true, instanceId, quarter, idempotent: false }, 202);
+  await recordAudit(context.env, context.get("identity"), "restore_drill.trigger", "workflow", instanceId, "accepted", { quarter, force });
+  return context.json({ ok: true, instanceId, quarter, force, idempotent: false }, 202);
 });
 
 app.get("/internal/restore-drills", async (context) => {

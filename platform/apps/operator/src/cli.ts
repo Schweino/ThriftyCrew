@@ -343,7 +343,7 @@ if (command === "status") {
 } else if (command === "restore" && subcommand === "show") {
   result = await (await mutationClient()).request("/internal/restore-drills");
 } else if (command === "restore" && subcommand === "trigger") {
-  result = await (await mutationClient()).request("/internal/restore-drills/trigger", { method: "POST" });
+  result = await (await mutationClient()).request(`/internal/restore-drills/trigger${arguments_.includes("--force") ? "?force=1" : ""}`, { method: "POST" });
 } else if (command === "archive" && subcommand === "plan") {
   // Keep one full day of safety behind the API's moving 18-month retention boundary.
   const cutoffAt = arguments_.find((value: string) => !value.startsWith("--")) ?? new Date(Date.now() - (18 * 30 + 1) * 24 * 60 * 60 * 1000).toISOString();
@@ -722,7 +722,7 @@ if (command === "status") {
     ...(!isHelpRequest ? { error: `Unknown command: ${requestedCommand}` } : {}),
     usage: [
       "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy",
-      "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup trigger [--replica]", "tc restore trigger|record <file>|show", "tc archive plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
+      "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup trigger [--replica]", "tc restore trigger [--force]|record <file>|show", "tc archive plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog",
