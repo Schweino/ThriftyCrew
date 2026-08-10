@@ -1,6 +1,4 @@
 import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloudflare:workers";
-import { sha256 } from "@noble/hashes/sha2.js";
-import { bytesToHex } from "@noble/hashes/utils.js";
 import { stableJson } from "@thriftycrew/domain";
 import { raiseOperationalAlert } from "./operations";
 import type { WorkerEnv } from "./env";
@@ -8,15 +6,10 @@ import type { WorkerEnv } from "./env";
 interface RestoreWorkflowPayload { trigger?: string }
 interface ApiEnvelope<T> { success?: boolean; errors?: unknown[]; result?: T }
 
-async function sha256Stream(body: ReadableStream<Uint8Array>): Promise<string> {
-  const hasher = sha256.create();
-  const reader = body.getReader();
-  while (true) {
-    const chunk = await reader.read();
-    if (chunk.done) break;
-    hasher.update(chunk.value);
-  }
-  return bytesToHex(hasher.digest());
+async function sha256Hex(bytes: ArrayBuffer | Uint8Array): Promise<string> {
+  const normalized = bytes instanceof Uint8Array ? Uint8Array.from(bytes).buffer : bytes;
+  const digest = await crypto.subtle.digest("SHA-256", normalized);
+  return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
 async function cloudflare<T>(env: WorkerEnv, pathname: string, init: RequestInit = {}): Promise<T> {
@@ -62,14 +55,21 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
         if (!object) throw new Error(`backup object ${backup.object_key} is missing`);
         return { etag: object.etag.replaceAll('"', ""), length: object.size };
       });
-      const hashed = await step.do("hash exact R2 backup", async () => {
-        const object = await this.env.BACKUPS.get(backup.object_key);
-        if (!object?.body) throw new Error(`backup object ${backup.object_key} is unreadable`);
-        const etag = object.etag.replaceAll('"', "");
-        if (etag !== dump.etag || object.size !== dump.length) throw new Error("backup object changed between inspection and hashing");
-        return { sha256: await sha256Stream(object.body), etag, length: object.size };
-      });
-      dumpSha256 = hashed.sha256;
+      const hashChunkBytes = 4 * 1024 * 1024;
+      const chunkHashes: string[] = [];
+      for (let offset = 0, index = 0; offset < dump.length; offset += hashChunkBytes, index += 1) {
+        const length = Math.min(hashChunkBytes, dump.length - offset);
+        const hash = await step.do(`hash R2 backup chunk ${index}`, async () => {
+          const object = await this.env.BACKUPS.get(backup.object_key, { range: { offset, length } });
+          if (!object?.body) throw new Error(`backup object ${backup.object_key} chunk ${index} is unreadable`);
+          const bytes = await object.arrayBuffer();
+          if (bytes.byteLength !== length) throw new Error(`backup object ${backup.object_key} chunk ${index} has the wrong length`);
+          return sha256Hex(bytes);
+        });
+        chunkHashes.push(hash);
+      }
+      const hashScheme = "sha256-merkle-r2-v1";
+      dumpSha256 = await sha256Hex(new TextEncoder().encode(stableJson({ hashScheme, objectKey: backup.object_key, etag: dump.etag, length: dump.length, hashChunkBytes, chunkHashes })));
       const scratch = await step.do("create isolated scratch D1", async () => cloudflare<{ uuid?: string }>(this.env, "/d1/database", {
         method: "POST",
         body: JSON.stringify({ name: `tc-grocery-v3-restore-${startedAt.slice(0, 10).replaceAll("-", "")}-${event.instanceId.slice(-8)}`, primary_location_hint: "wnam", read_replication: { mode: "disabled" } }),
@@ -79,7 +79,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
       await this.env.DB.prepare(
         `INSERT INTO restore_drills (id, backup_id, scratch_database_id, dump_sha256, status, started_at, evidence_json)
          VALUES (?1, ?2, ?3, ?4, 'started', ?5, ?6)`,
-      ).bind(drillId, backupId, scratchDatabaseId, dumpSha256, startedAt, stableJson({ objectKey: backup.object_key, byteLength: dump.length, trigger: event.payload.trigger ?? "scheduled" })).run();
+      ).bind(drillId, backupId, scratchDatabaseId, dumpSha256, startedAt, stableJson({ objectKey: backup.object_key, byteLength: dump.length, etag: dump.etag, hashScheme, hashChunkBytes, chunkCount: chunkHashes.length, trigger: event.payload.trigger ?? "scheduled" })).run();
       const initialized = await step.do("initialize scratch import", async () => cloudflare<{ upload_url?: string; filename?: string }>(this.env, `/d1/database/${scratchDatabaseId}/import`, {
         method: "POST", body: JSON.stringify({ action: "init", etag: dump.etag }),
       }));
@@ -88,7 +88,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
         const object = await this.env.BACKUPS.get(backup.object_key);
         if (!object?.body) throw new Error(`backup object ${backup.object_key} is unreadable during upload`);
         const etag = object.etag.replaceAll('"', "");
-        if (etag !== hashed.etag || object.size !== hashed.length) throw new Error("backup object changed between hashing and upload");
+        if (etag !== dump.etag || object.size !== dump.length) throw new Error("backup object changed between hashing and upload");
         const response = await fetch(initialized.upload_url!, { method: "PUT", body: object.body });
         if (!response.ok) throw new Error(`scratch import upload returned ${response.status}`);
       });
@@ -125,7 +125,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
       const finishedAt = new Date().toISOString();
       await this.env.DB.batch([
         this.env.DB.prepare("UPDATE restore_drills SET status = 'passed', finished_at = ?2, evidence_json = ?3 WHERE id = ?1")
-          .bind(drillId, finishedAt, stableJson({ comparisons, productionRelease, scratchRelease, byteLength: dump.length, importStatus: completed.status })),
+          .bind(drillId, finishedAt, stableJson({ comparisons, productionRelease, scratchRelease, byteLength: dump.length, etag: dump.etag, hashScheme, hashChunkBytes, chunkCount: chunkHashes.length, importStatus: completed.status })),
         this.env.DB.prepare("UPDATE job_runs SET status = 'completed', heartbeat_at = ?2, finished_at = ?2, stats_json = ?3 WHERE id = ?1")
           .bind(runId, finishedAt, stableJson({ drillId, backupId, scratchDatabaseId, comparisons })),
       ]);
