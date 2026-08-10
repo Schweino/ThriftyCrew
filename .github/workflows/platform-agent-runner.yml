@@ -188,7 +188,7 @@ jobs:
 
       - name: Retain bounded evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: agent-${{ inputs.agent_id }}-${{ github.run_id }}
           path: ${{ runner.temp }}/tc-agent-output/*.json
