@@ -280,6 +280,101 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
     })),
   ));
 
+  const priceRows = await db.prepare(
+    `SELECT c.commodity_id, c.store_location_id, c.observation_id, c.display_per_unit_micros,
+            x.band_min_micros, x.band_max_micros
+       FROM release_cells c
+       JOIN releases r ON r.id = c.release_id
+       JOIN commodities x ON x.id = c.commodity_id AND x.configuration_id = r.configuration_id
+      WHERE c.release_id = ?1 AND c.status = 'priced'
+      ORDER BY c.commodity_id, c.store_location_id`,
+  ).bind(context.releaseId).all<{ commodity_id: string; store_location_id: string; observation_id: string; display_per_unit_micros: number; band_min_micros: number | null; band_max_micros: number | null }>();
+  const pricesByCommodity = new Map<string, typeof priceRows.results>();
+  for (const row of priceRows.results) {
+    const rows = pricesByCommodity.get(row.commodity_id) ?? [];
+    rows.push(row);
+    pricesByCommodity.set(row.commodity_id, rows);
+  }
+  const priceFindings: ReleaseGuardResult["findings"] = [];
+  for (const [commodityId, rows] of pricesByCommodity) {
+    for (const row of rows) {
+      if ((row.band_min_micros !== null && row.display_per_unit_micros < row.band_min_micros)
+        || (row.band_max_micros !== null && row.display_per_unit_micros > row.band_max_micros)) {
+        priceFindings.push({ key: `band:${commodityId}:${row.store_location_id}`, message: "Selected price is outside the authored commodity price band", evidence: { observationId: row.observation_id, priceMicros: row.display_per_unit_micros, bandMinMicros: row.band_min_micros, bandMaxMicros: row.band_max_micros } });
+      }
+    }
+    if (rows.length < 3) continue;
+    const sorted = rows.map((row) => row.display_per_unit_micros).sort((left, right) => left - right);
+    const median = sorted[Math.floor(sorted.length / 2)]!;
+    const crown = [...rows].sort((left, right) => left.display_per_unit_micros - right.display_per_unit_micros)[0]!;
+    if (median > 0 && crown.display_per_unit_micros * 10 < median) {
+      priceFindings.push({ key: `extreme:${commodityId}`, message: "Commodity crown is more than 10x below the cross-store median", evidence: { observationId: crown.observation_id, storeLocationId: crown.store_location_id, crownMicros: crown.display_per_unit_micros, medianMicros: median, comparedStores: rows.length } });
+    }
+  }
+  if (previous && previous.release_id !== context.releaseId) {
+    const historyRows = await db.prepare(
+      `SELECT current.commodity_id, current.store_location_id, current.observation_id,
+              current.display_per_unit_micros AS current_micros, prior.display_per_unit_micros AS prior_micros,
+              current_product.external_key AS current_product_key, prior_product.external_key AS prior_product_key
+         FROM release_cells current
+         JOIN release_cells prior ON prior.release_id = ?2 AND prior.commodity_id = current.commodity_id AND prior.store_location_id = current.store_location_id
+         JOIN observations current_observation ON current_observation.id = current.observation_id
+         JOIN product_versions current_version ON current_version.id = current_observation.product_version_id
+         JOIN products current_product ON current_product.id = current_version.product_id
+         JOIN observations prior_observation ON prior_observation.id = prior.observation_id
+         JOIN product_versions prior_version ON prior_version.id = prior_observation.product_version_id
+         JOIN products prior_product ON prior_product.id = prior_version.product_id
+        WHERE current.release_id = ?1 AND current.status = 'priced' AND prior.status = 'priced'
+          AND current_product.external_key = prior_product.external_key
+          AND (current.display_per_unit_micros * 4 < prior.display_per_unit_micros OR prior.display_per_unit_micros * 4 < current.display_per_unit_micros)
+        ORDER BY current.commodity_id, current.store_location_id LIMIT 500`,
+    ).bind(context.releaseId, previous.release_id).all<{ commodity_id: string; store_location_id: string; observation_id: string; current_micros: number; prior_micros: number; current_product_key: string; prior_product_key: string }>();
+    for (const row of historyRows.results) priceFindings.push({ key: `history:${row.commodity_id}:${row.store_location_id}`, message: "The same store product changed normalized price by more than 4x from the prior release", evidence: { observationId: row.observation_id, productKey: row.current_product_key, currentMicros: row.current_micros, priorMicros: row.prior_micros, priorReleaseId: previous.release_id } });
+  }
+  await upsertGuardResult(db, context.releaseId, result(
+    "release-price-plausibility",
+    priceFindings.length === 0,
+    priceRows.results.length,
+    priceRows.results.length,
+    priceFindings,
+    { policy: "authored bands plus a hard 10x-below-median crown stop when at least three stores are priced" },
+  ));
+
+  const packageRows = await db.prepare(
+    `SELECT c.commodity_id, c.store_location_id, o.id AS observation_id, o.purchase_price_minor,
+            o.normalized_basis_unit, o.normalized_basis_qty_micros, o.raw_price_text,
+            pv.name, pv.size_text
+       FROM release_cells c
+       JOIN observations o ON o.id = c.observation_id
+       JOIN product_versions pv ON pv.id = o.product_version_id
+      WHERE c.release_id = ?1 AND c.status = 'priced'
+      ORDER BY c.commodity_id, c.store_location_id`,
+  ).bind(context.releaseId).all<{ commodity_id: string; store_location_id: string; observation_id: string; purchase_price_minor: number; normalized_basis_unit: string; normalized_basis_qty_micros: number; raw_price_text: string; name: string; size_text: string }>();
+  const packageFindings: ReleaseGuardResult["findings"] = [];
+  for (const row of packageRows.results) {
+    const normalizedName = row.name.toLowerCase();
+    const simplePrice = row.raw_price_text.trim().replace(/,/g, "").match(/^\$?([0-9]+(?:\.[0-9]+)?)$/);
+    if (simplePrice && Math.abs(Math.round(Number(simplePrice[1]) * 100) - row.purchase_price_minor) > 1) {
+      packageFindings.push({ key: `raw-price:${row.observation_id}`, message: "Structured purchase price disagrees with the simple raw price text", evidence: { rawPriceText: row.raw_price_text, purchasePriceMinor: row.purchase_price_minor } });
+    }
+    if (row.normalized_basis_unit !== "each" || row.normalized_basis_qty_micros <= 1_000_000) continue;
+    const quantity = row.normalized_basis_qty_micros / 1_000_000;
+    const paperTrap = /\b(?:paper\s+towels?|toilet\s+paper|bath\s+tissue)\b/.test(normalizedName) && quantity > 100;
+    const foilTrap = /\baluminum\s+foil\b/.test(normalizedName) && /\bsq\.?\s*ft\b|square\s+feet/.test(normalizedName);
+    const caseTrap = /\b(?:lettuce|iceberg|romaine)\b/.test(normalizedName) && /\bhead\b/.test(normalizedName) && quantity >= 12;
+    const sliceTrap = /\bbread\b/.test(normalizedName) && /\bloaf\b/.test(normalizedName) && quantity > 1;
+    if (paperTrap || foilTrap || caseTrap || sliceTrap) {
+      packageFindings.push({ key: `consumer-unit:${row.observation_id}`, message: "Captured count appears to describe sheets, feet, slices, or a supplier case instead of the consumer unit", evidence: { commodityId: row.commodity_id, storeLocationId: row.store_location_id, name: row.name, sizeText: row.size_text, normalizedQuantity: quantity } });
+    }
+  }
+  await upsertGuardResult(db, context.releaseId, result(
+    "release-package-semantics",
+    packageFindings.length === 0,
+    packageRows.results.length,
+    packageRows.results.length,
+    packageFindings,
+  ));
+
   const staleRows = await db.prepare(
     `SELECT c.commodity_id, c.store_location_id, o.id AS observation_id, o.captured_at,
             CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days,

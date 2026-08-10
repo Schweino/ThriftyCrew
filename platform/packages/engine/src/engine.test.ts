@@ -127,6 +127,19 @@ describe("alternative package bases", () => {
   });
 });
 
+describe("authored price bands", () => {
+  it("rejects an internally consistent but implausible semantic price before winner selection", () => {
+    const cells = buildNativeCells({
+      mode: "direct", observedAt: "2026-08-09T12:00:00.000Z", configurationId: "config", currentReleaseId: "release", inputHash: "e".repeat(64), inputBatchIds: ["batch"],
+      commodities: [{ id: "shrimp", label: "Shrimp", basis_unit: "lb", category_id: "meat", band_min_micros: 2_500_000, band_max_micros: 16_000_000 }],
+      stores: [{ id: "walmart", store_name: "Walmart" }],
+      candidates: [{ observation_id: "bad", commodity_id: "shrimp", store_location_id: "walmart", per_unit_micros: 500_000, normalized_basis_unit: "lb", captured_at: "2026-08-09T11:00:00.000Z", valid_to: null, coverage_mode: "full", captured_to: "2026-08-09T11:00:00.000Z", known_wrong: 0 }],
+      currentCells: [],
+    });
+    expect(cells[0]).toMatchObject({ status: "missing", reason: { rejectedCandidates: [{ observationId: "bad", reason: "outside-authored-price-band" }] } });
+  });
+});
+
 describe("guard coverage", () => {
   it("refuses a blind pass", () => {
     expect(() => guardResult({ guardId: "x", status: "pass", eligibleCount: 10, examinedCount: 0, detail: {} })).toThrow(/blind/);

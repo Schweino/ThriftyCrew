@@ -58,6 +58,7 @@ import { GhostEntitlementProvider, type Entitlement } from "@thriftycrew/entitle
 import { authenticateMutation } from "./auth";
 import { createRelease, findBatch, insertObservations, insertRecipeCosts, insertReleaseCells, upsertGuardResult } from "./database";
 import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
+import { evaluateReleaseIntegrity } from "./release-integrity";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation, runGhostClobberDrill } from "./ghost-reconciliation";
 import { dispatchGithubJob, dispatchRegisteredAgent, githubWorkflowRuns, jobStatusRequiresAlert, raiseOperationalAlert, recordAudit, resolveOperationalAlert, resolveRecoveredJobRunAlerts, runArchivalForecast, runScheduledOperations, scheduleGap } from "./operations";
@@ -533,11 +534,12 @@ app.put("/internal/configurations/:id/commodities", zValidator("json", configura
   const statements: D1PreparedStatement[] = [];
   for (const commodity of context.req.valid("json").commodities) {
     statements.push(context.env.DB.prepare(
-      `INSERT INTO commodities (id, configuration_id, label, basis_unit, category_id)
-       VALUES (?1, ?2, ?3, ?4, ?5)
+      `INSERT INTO commodities (id, configuration_id, label, basis_unit, category_id, band_min_micros, band_max_micros)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
        ON CONFLICT(id, configuration_id) DO UPDATE SET
-         label = excluded.label, basis_unit = excluded.basis_unit, category_id = excluded.category_id`,
-    ).bind(commodity.id, configurationId, commodity.label, commodity.basisUnit, commodity.categoryId));
+         label = excluded.label, basis_unit = excluded.basis_unit, category_id = excluded.category_id,
+         band_min_micros = excluded.band_min_micros, band_max_micros = excluded.band_max_micros`,
+    ).bind(commodity.id, configurationId, commodity.label, commodity.basisUnit, commodity.categoryId, commodity.bandMinMicros ?? null, commodity.bandMaxMicros ?? null));
     for (const [kind, patterns] of [["include", commodity.include], ["exclude", commodity.exclude]] as const) {
       for (const pattern of patterns) {
         const ruleId = await deterministicId("rule", configurationId, commodity.id, kind, pattern);
@@ -1703,8 +1705,10 @@ app.post("/internal/capture-batches", zValidator("json", captureBatchCreateSchem
   const body = context.req.valid("json");
   const identity = context.get("identity");
   if (identity.sourceIds && !identity.sourceIds.includes(body.sourceId)) return jsonError("agent is not authorized for this capture source", 403);
-  const source = await context.env.DB.prepare("SELECT id, capture_method FROM capture_sources WHERE id = ?1 AND active = 1").bind(body.sourceId).first<{ id: string; capture_method: string }>();
+  const source = await context.env.DB.prepare("SELECT id, capture_method, price_mode FROM capture_sources WHERE id = ?1 AND active = 1").bind(body.sourceId).first<{ id: string; capture_method: string; price_mode: string }>();
   if (!source) return jsonError("unknown or inactive capture source", 404);
+  const canonicalMode = (value: string) => value.toLowerCase().replaceAll(/[_\s-]+/g, "").replace("clubpickup", "club");
+  if (canonicalMode(body.priceMode) !== canonicalMode(source.price_mode)) return jsonError(`capture price mode ${body.priceMode} does not match source contract ${source.price_mode}`, 422);
   if (identity.role === "engine" && !engineMayWriteCaptureSource(source.id, source.capture_method)) {
     return jsonError("engine identities may only create migration-bridge or approved direct-headless batches", 403);
   }
@@ -1716,8 +1720,8 @@ app.post("/internal/capture-batches", zValidator("json", captureBatchCreateSchem
   await context.env.DB.prepare(
     `INSERT INTO capture_batches
        (id, source_id, coverage_mode, captured_from, captured_to, valid_from, valid_to, expected_terms,
-        expected_pages, market_verified, location_verified, price_mode_verified, agent_id, idempotency_key)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)`,
+        expected_pages, market_verified, location_verified, price_mode_verified, price_mode, agent_id, idempotency_key)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15)`,
   ).bind(
     batchId,
     body.sourceId,
@@ -1731,6 +1735,7 @@ app.post("/internal/capture-batches", zValidator("json", captureBatchCreateSchem
     body.marketVerified ? 1 : 0,
     body.locationVerified ? 1 : 0,
     body.priceModeVerified ? 1 : 0,
+    body.priceMode,
     identity.agentId,
     body.idempotencyKey,
   ).run();
@@ -2167,6 +2172,7 @@ app.post("/internal/releases/:id/validate", async (context) => {
     findings: invalidRankedRecipes.results.map((row) => ({ key: `${row.surface}:${row.recipe_slug}`, message: "Incomplete or missing recipe entered a price-ranked public surface", evidence: { recipeSlug: row.recipe_slug, surface: row.surface } })),
     detail: { incompleteRecipes: recipeStats?.incomplete ?? 0, policy: "incomplete recipes remain auditable and are excluded from ranked/public surfaces" },
   });
+  await evaluateReleaseIntegrity(context.env, releaseId);
   await evaluateNotBlindGuard(context.env.DB, releaseId);
   const missingHard = await context.env.DB.prepare(
     `SELECT d.id
@@ -2312,11 +2318,12 @@ app.get("/internal/triage/:id/review", async (context) => {
         WHERE finding.id = ?1`,
     ).bind(String(item.source_ref)).first<Record<string, unknown>>();
   } else if (item.source_kind === "accuracy_gap") {
+    const drawRef = String(item.source_ref).split("#", 1)[0]!;
     source = await context.env.DB.prepare(
       `SELECT draw.*, COUNT(verdict.id) AS verdict_count
          FROM accuracy_draws draw LEFT JOIN operator_verdicts verdict ON verdict.draw_id = draw.id
         WHERE draw.id = ?1 GROUP BY draw.id`,
-    ).bind(String(item.source_ref)).first<Record<string, unknown>>();
+    ).bind(drawRef).first<Record<string, unknown>>();
   }
   const current = await context.env.DB.prepare(
     `SELECT release.id, release.published_at, release.configuration_id, release.input_hash

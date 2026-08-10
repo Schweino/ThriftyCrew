@@ -61,6 +61,8 @@ interface LegacyCommodity {
   unit: LegacyUnit;
   include: string[];
   exclude: string[];
+  band_min?: number;
+  band_max?: number;
 }
 
 interface LegacyCategory {

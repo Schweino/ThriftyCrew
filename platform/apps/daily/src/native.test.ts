@@ -48,9 +48,9 @@ describe("native release construction", () => {
     };
     const artifact = await buildNativeRelease(root, snapshot);
     expect(artifact.recipeCosts).toEqual(expect.arrayContaining([
-      expect.objectContaining({ recipeSlug: "complete", status: "complete", batchCostMinor: 200, servingCostMinor: 100 }),
+      expect.objectContaining({ recipeSlug: "complete", status: "complete", batchCostMinor: 100, servingCostMinor: 50, detail: expect.objectContaining({ utilizedBatchCostMinor: 100, splitStoreCheckoutCostMinor: 200, bestSingleStoreCheckoutCostMinor: 200 }) }),
       expect.objectContaining({ recipeSlug: "incomplete", status: "incomplete", missingIngredients: ["Mystery"] }),
-      expect.objectContaining({ recipeSlug: "recipe-rule", status: "complete", batchCostMinor: 100, servingCostMinor: 50 }),
+      expect.objectContaining({ recipeSlug: "recipe-rule", status: "complete", batchCostMinor: 50, servingCostMinor: 25 }),
     ]));
     expect(artifact.top5.map((entry) => entry.recipeSlug)).toEqual(["complete", "recipe-rule"]);
     expect(artifact.freeRotation.map((entry) => entry.recipeSlug)).toEqual(["complete", "recipe-rule"]);

@@ -152,6 +152,14 @@ describe("direct regular capture", () => {
     ]));
   });
 
+  it("reconstructs a Sam's package checkout price when the displayed price is explicitly per unit", async () => {
+    const artifact = await buildRegularCapture("sams", { mode_verified: true, price_mode: "club", deals: [{
+      item: "Member's Mark Raw Shrimp, 2 lbs.", current_price: "$8.48", size: "lb", as_of: "2026-08-05",
+      sams_unit_price: "$8.48/lb", sams_item_id: "shrimp",
+    }] });
+    expect(artifact.observations[0]).toMatchObject({ purchasePriceMinor: 1696, normalizedBasisUnit: "lb", normalizedBasisQtyMicros: 2_000_000, perUnitMicros: 8_480_000 });
+  });
+
   it("does not multiply a total package weight by an item count", async () => {
     const artifact = await buildRegularCapture("sams", { mode_verified: true, deals: [
       {
@@ -181,5 +189,21 @@ describe("direct regular capture", () => {
       expect.objectContaining({ unit: "oz", quantityMicros: 850_000, source: "stated-measure" }),
     ]));
     expect(artifact.observations[0]!.basisOptions).not.toContainEqual(expect.objectContaining({ unit: "oz", quantityMicros: 85_000_000 }));
+  });
+
+  it("normalizes consumer units instead of sheets, square feet, slices, or supplier cases", async () => {
+    const artifact = await buildRegularCapture("walmart", { mode_verified: true, price_mode: "pickup", deals: [
+      { item: "Great Value Toilet Paper, 1000 Sheets per Roll, 12 Rolls", current_price: "$9.48", size: "12000 ct", as_of: "2026-08-09" },
+      { item: "Aluminum Foil Roll, 12in x 165 SQ.FT", current_price: "$13.99", size: "165 ct", as_of: "2026-08-09" },
+      { item: "Italian Sandwich Bread Loaf, 17 oz, 18 Count", current_price: "$2.84", size: "18 ct", as_of: "2026-08-09" },
+      { item: "Fresh Iceberg Lettuce Head", current_price: "$2.49", size: "24 ct", as_of: "2026-08-09" },
+    ] });
+    expect(artifact.observations.map((row) => row.normalizedBasisQtyMicros)).toEqual([12_000_000, 1_000_000, 1_000_000, 1_000_000]);
+  });
+
+  it("rejects compound price strings instead of stripping punctuation into a different price", async () => {
+    await expect(buildRegularCapture("walmart", { mode_verified: true, price_mode: "pickup", deals: [
+      { item: "Large Eggs", current_price: "2/$5", size: "dozen", as_of: "2026-08-09" },
+    ] })).rejects.toThrow("no regular rows could be normalized");
   });
 });

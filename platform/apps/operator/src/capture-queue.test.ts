@@ -54,6 +54,7 @@ async function fixture(sourceId = "direct-walmart-browser", captureDate = "2026-
     marketVerified: true,
     locationVerified: true,
     priceModeVerified: true,
+    priceMode,
     idempotencyKey: `browser-${store}-${captureDate}-fixture`,
     terms: [{ termKey: "eggs", ordinal: 0, outcome: "success", rowCount: 1 }],
     observations: [{

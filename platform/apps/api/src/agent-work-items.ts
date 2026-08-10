@@ -73,10 +73,38 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
   }
   if (agentId === "accuracy-headless") {
     const rows = await db.prepare(
-      `SELECT id, market_id, sample_size, seed_commitment, opened_at, due_at
-         FROM accuracy_draws WHERE status = 'open' ORDER BY opened_at, id LIMIT 10`,
+      `SELECT id, market_id, release_id, requested_size, sampled_count, seed, protocol_version, created_at, due_at
+         FROM accuracy_draws WHERE status = 'open' ORDER BY created_at, id LIMIT 10`,
     ).all<Record<string, unknown>>();
-    return rows.results.map((row) => ({ sourceKind: "accuracy-draw", sourceRef: String(row.id), stage: "judge", severity: "safety", input: { contract: "accuracy-blind-sample-v1", draw: row } }));
+    return Promise.all(rows.results.map(async (row) => {
+      const cells = await db.prepare(
+        `SELECT cell.ordinal, cell.commodity_id, commodity.label AS commodity_label,
+                cell.store_location_id, location.display_name AS store_name,
+                version.name AS product_name, version.size_text, version.product_url, version.taxonomy_path,
+                observation.purchase_price_minor, observation.normalized_basis_unit, observation.normalized_basis_qty_micros,
+                observation.per_unit_micros, observation.raw_price_text, observation.captured_at
+           FROM accuracy_draw_cells cell
+           JOIN accuracy_draws draw ON draw.id = cell.draw_id
+           JOIN releases release ON release.id = draw.release_id
+           JOIN commodities commodity ON commodity.id = cell.commodity_id AND commodity.configuration_id = release.configuration_id
+           JOIN store_locations location ON location.id = cell.store_location_id
+           JOIN observations observation ON observation.id = cell.observation_id
+           JOIN product_versions version ON version.id = observation.product_version_id
+          WHERE cell.draw_id = ?1 ORDER BY cell.ordinal`,
+      ).bind(String(row.id)).all();
+      const riskSamples = await db.prepare(
+        `SELECT sample.ordinal, sample.lane, sample.risk_kind, sample.risk_score,
+                sample.commodity_id, sample.store_location_id, sample.observation_id, sample.recipe_slug,
+                sample.evidence_json, version.name AS product_name, version.size_text, version.product_url,
+                cost.status AS recipe_status, cost.batch_cost_minor, cost.serving_cost_minor, cost.detail_json
+           FROM accuracy_risk_samples sample
+           LEFT JOIN observations observation ON observation.id = sample.observation_id
+           LEFT JOIN product_versions version ON version.id = observation.product_version_id
+           LEFT JOIN release_recipe_costs cost ON cost.release_id = sample.release_id AND cost.recipe_slug = sample.recipe_slug
+          WHERE sample.draw_id = ?1 ORDER BY sample.ordinal`,
+      ).bind(String(row.id)).all();
+      return { sourceKind: "accuracy-draw", sourceRef: String(row.id), stage: "judge", severity: "safety", input: { contract: "accuracy-blind-sample-v1", draw: row, cells: cells.results, riskSamples: riskSamples.results } };
+    }));
   }
   if (agentId === "source-sentinel-investigator") {
     const rows = await db.prepare(

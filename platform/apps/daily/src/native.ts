@@ -38,6 +38,15 @@ interface KnownWrongDocument {
   entries?: Array<{ commodity?: string; store?: string; names?: string[]; product_id?: string; reversed_on?: string; reversed_by?: string }>;
 }
 
+interface PricedRecipeOption {
+  commodityId: string;
+  storeLocationId: string;
+  observationId: string;
+  displayPerUnitMicros: number;
+  displayUnit: string;
+  raw: NonNullable<NativeEngineSnapshot["rawCandidates"]>[number] | NativeEngineSnapshot["candidates"][number];
+}
+
 export interface NativeReleaseArtifact {
   version: 3;
   marketId: "omaha";
@@ -129,7 +138,7 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
   const inputBatchIds = [...snapshot.inputBatchIds].sort();
   const inputManifest = {
     kind: "native-v3-release",
-    engineVersion: "native-v3.1.1",
+    engineVersion: "native-v3.2.0-accuracy",
     marketId: "omaha",
     mode: "direct",
     releaseDate: weekOf,
@@ -144,7 +153,6 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
 
   const nativeCells = buildNativeCells(snapshot);
   const cells = nativeCells.map(publicCell);
-  const crownByCommodity = new Map(nativeCells.filter((cell) => cell.isCrown && cell.winner).map((cell) => [cell.commodityId, cell]));
   const commodityById = new Map(snapshot.commodities.map((commodity) => [commodity.id, commodity]));
   const storeById = new Map(snapshot.stores.map((store) => [store.id, store]));
   const ingredientByName = new Map(ingredientDefinitions.filter((item) => item.item).map((item) => [key(item.item), item]));
@@ -209,7 +217,8 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
     recipeRuleStats.get(selected.rule.id)!.accepted += 1;
   }
   const activeKnownWrong = (knownWrong.entries ?? []).filter((entry) => !(entry.reversed_on && entry.reversed_by));
-  const recipeCrownByCommodity = new Map<string, { commodityId: string; storeLocationId: string; observationId: string; displayPerUnitMicros: number; displayUnit: string; raw: RawCandidate }>();
+  const recipeCrownByCommodity = new Map<string, PricedRecipeOption>();
+  const recipeOptionsByCommodity = new Map<string, PricedRecipeOption[]>();
   for (const rule of recipeRules) {
     const storeWinners: Array<{ commodityId: string; storeLocationId: string; observationId: string; displayPerUnitMicros: number; displayUnit: string; raw: RawCandidate }> = [];
     const candidatesByStore = new Map<string, Array<{ raw: RawCandidate; convertedMicros: number }>>();
@@ -241,8 +250,27 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
       storeWinners.push({ commodityId: rule.id, storeLocationId, observationId: selected.observationId, displayPerUnitMicros: selected.perUnitMicros, displayUnit: apiUnit(rule.unit), raw });
     }
     const crown = storeWinners.sort((left, right) => left.displayPerUnitMicros - right.displayPerUnitMicros || left.storeLocationId.localeCompare(right.storeLocationId))[0];
+    recipeOptionsByCommodity.set(rule.id, storeWinners);
     if (crown) recipeCrownByCommodity.set(rule.id, crown);
   }
+
+  const boardOptionsByCommodity = new Map<string, PricedRecipeOption[]>();
+  for (const cell of nativeCells.filter((item) => item.status === "priced" && item.winner && item.displayPerUnitMicros !== null && item.displayUnit)) {
+    const options = boardOptionsByCommodity.get(cell.commodityId) ?? [];
+    options.push({ commodityId: cell.commodityId, storeLocationId: cell.storeLocationId, observationId: cell.observationId!, displayPerUnitMicros: cell.displayPerUnitMicros!, displayUnit: cell.displayUnit!, raw: cell.winner! });
+    boardOptionsByCommodity.set(cell.commodityId, options);
+  }
+
+  const optionCosts = (option: PricedRecipeOption, requiredBasisUnits: number) => {
+    const utilizedMinor = moneyMinor(option.displayPerUnitMicros, requiredBasisUnits);
+    const purchasePriceMinor = option.raw.purchase_price_minor;
+    if (!purchasePriceMinor || purchasePriceMinor <= 0) return { utilizedMinor, checkoutMinor: utilizedMinor, packages: 0, variableWeight: true };
+    const packageBasisUnits = purchasePriceMinor * 10_000 / option.displayPerUnitMicros;
+    const rawSize = option.raw.size_text?.trim().toLowerCase() ?? "";
+    const variableWeight = ((option.raw.normalized_basis_qty_micros ?? 0) === 1_000_000 && ["lb", "per lb", "oz", "per oz"].includes(rawSize)) || /\bpriced\s+per\s+(?:pound|lb|oz)\b/i.test(option.raw.name ?? "");
+    const packages = variableWeight ? 0 : Math.max(1, Math.ceil(requiredBasisUnits / packageBasisUnits - 1e-9));
+    return { utilizedMinor, checkoutMinor: variableWeight ? utilizedMinor : purchasePriceMinor * packages, packages, variableWeight };
+  };
 
   const recipeCosts: RecipeCost[] = [];
   const recipePayload: Array<Record<string, unknown>> = [];
@@ -252,8 +280,12 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
     const ingredientDetails: Array<Record<string, unknown>> = [];
     const missingIngredients: string[] = [];
     let utilizedBatchMinor = 0;
-    let trueBatchMinor = 0;
-    let pantryAddMinor = 0;
+    let splitStoreCheckoutMinor = 0;
+    let nonMemberSplitStoreCheckoutMinor = 0;
+    let nonMemberUtilizedBatchMinor = 0;
+    let nonMemberMissing = false;
+    const singleStoreCheckout = new Map(snapshot.stores.map((store) => [store.id, { total: 0, missing: [] as string[] }]));
+    const nonMemberSingleStoreCheckout = new Map(snapshot.stores.filter((store) => store.membership_required !== 1).map((store) => [store.id, { total: 0, missing: [] as string[] }]));
     for (const ingredient of recipe.ingredients_grams ?? []) {
       const scaler = scalerByName.get(key(ingredient.item));
       const definition = ingredientByName.get(key(scaler?.canon ?? ingredient.item)) ?? ingredientByName.get(key(ingredient.item));
@@ -264,36 +296,42 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
       const commodityId = resolvedBid ?? commodityByLabel.get(key(scaler?.canon ?? ingredient.item));
       const gpu = asNumber(scaler?.gpu) ?? asNumber(definition?.gpu);
       const grams = asNumber(ingredient.grams);
-      const boardCrown = commodityId ? crownByCommodity.get(commodityId) : undefined;
-      const recipeCrown = commodityId ? recipeCrownByCommodity.get(commodityId) : undefined;
-      const crown = boardCrown ?? (recipeCrown ? {
-        observationId: recipeCrown.observationId,
-        storeLocationId: recipeCrown.storeLocationId,
-        displayPerUnitMicros: recipeCrown.displayPerUnitMicros,
-        displayUnit: recipeCrown.displayUnit,
-        winner: recipeCrown.raw,
-      } : undefined);
-      const packageGrams = definition?.bulk ? asNumber(definition.pantry_pkg_g) : asNumber(definition?.buy_pkg_g);
+      const options = commodityId ? (boardOptionsByCommodity.get(commodityId) ?? recipeOptionsByCommodity.get(commodityId) ?? []) : [];
+      const crown = [...options].sort((left, right) => left.displayPerUnitMicros - right.displayPerUnitMicros || left.storeLocationId.localeCompare(right.storeLocationId))[0];
+      const nonMemberOptions = options.filter((option) => option.raw.membership_required !== 1 && option.raw.loyalty_required !== 1 && storeById.get(option.storeLocationId)?.membership_required !== 1);
       const missing: string[] = [];
       if (!commodityId) missing.push("commodity-mapping");
       if (!gpu) missing.push("grams-per-basis-unit");
       if (!grams) missing.push("ingredient-grams");
-      if (!crown?.winner || crown.displayPerUnitMicros === null) missing.push("priced-release-cell");
-      if (!definition?.bulk && !packageGrams) missing.push("purchase-package-size");
+      if (!crown) missing.push("priced-release-cell");
       if (missing.length > 0) {
+        for (const accumulator of [...singleStoreCheckout.values(), ...nonMemberSingleStoreCheckout.values()]) accumulator.missing.push(ingredient.item);
         missingIngredients.push(ingredient.item);
         missingFrequency.set(`${ingredient.item}: ${missing.join(",")}`, (missingFrequency.get(`${ingredient.item}: ${missing.join(",")}`) ?? 0) + 1);
         ingredientDetails.push({ item: ingredient.item, grams: ingredient.grams, commodityId: commodityId ?? null, status: "missing", reasons: missing });
         continue;
       }
-      const utilizedMinor = moneyMinor(crown!.displayPerUnitMicros!, grams! / gpu!);
-      const purchaseUnits = packageGrams! / gpu!;
-      const packages = definition!.bulk ? 0 : Math.max(1, Math.ceil(grams! / packageGrams! - 1e-9));
-      const purchaseMinor = definition!.bulk ? utilizedMinor : moneyMinor(crown!.displayPerUnitMicros!, purchaseUnits * packages);
-      const pantryContainerMinor = definition!.bulk ? moneyMinor(crown!.displayPerUnitMicros!, purchaseUnits) : 0;
-      utilizedBatchMinor += utilizedMinor;
-      trueBatchMinor += purchaseMinor;
-      pantryAddMinor += Math.max(0, pantryContainerMinor - utilizedMinor);
+      const requiredBasisUnits = grams! / gpu!;
+      const selectedCosts = optionCosts(crown!, requiredBasisUnits);
+      const nonMember = [...nonMemberOptions].sort((left, right) => left.displayPerUnitMicros - right.displayPerUnitMicros || left.storeLocationId.localeCompare(right.storeLocationId))[0];
+      const nonMemberCosts = nonMember ? optionCosts(nonMember, requiredBasisUnits) : null;
+      utilizedBatchMinor += selectedCosts.utilizedMinor;
+      splitStoreCheckoutMinor += selectedCosts.checkoutMinor;
+      if (nonMemberCosts) {
+        nonMemberSplitStoreCheckoutMinor += nonMemberCosts.checkoutMinor;
+        nonMemberUtilizedBatchMinor += nonMemberCosts.utilizedMinor;
+      }
+      else nonMemberMissing = true;
+      for (const [storeId, accumulator] of singleStoreCheckout) {
+        const storeOption = options.find((option) => option.storeLocationId === storeId);
+        if (!storeOption) accumulator.missing.push(ingredient.item);
+        else accumulator.total += optionCosts(storeOption, requiredBasisUnits).checkoutMinor;
+      }
+      for (const [storeId, accumulator] of nonMemberSingleStoreCheckout) {
+        const storeOption = nonMemberOptions.find((option) => option.storeLocationId === storeId);
+        if (!storeOption) accumulator.missing.push(ingredient.item);
+        else accumulator.total += optionCosts(storeOption, requiredBasisUnits).checkoutMinor;
+      }
       ingredientDetails.push({
         item: ingredient.item,
         grams: grams!,
@@ -303,28 +341,57 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
         perUnitMicros: crown!.displayPerUnitMicros,
         basisUnit: crown!.displayUnit,
         gpu: gpu!,
-        utilizedCostMinor: utilizedMinor,
-        purchaseCostMinor: purchaseMinor,
-        packageCount: packages,
-        packageLabel: definition!.bulk ? definition!.pantry_pkg_label : definition!.buy_pkg_label,
+        gpuSource: scaler?.gpu !== undefined ? "recipe-scaler" : "ingredient-definition",
+        scalerGpu: asNumber(scaler?.gpu) ?? null,
+        definitionGpu: asNumber(definition?.gpu) ?? null,
+        utilizedCostMinor: selectedCosts.utilizedMinor,
+        purchaseCostMinor: selectedCosts.checkoutMinor,
+        packageCount: selectedCosts.packages,
+        variableWeight: selectedCosts.variableWeight,
+        sourcePurchasePriceMinor: crown!.raw.purchase_price_minor ?? null,
+        sourceNormalizedBasisUnit: crown!.raw.normalized_basis_unit,
+        sourceNormalizedBasisQtyMicros: crown!.raw.normalized_basis_qty_micros ?? null,
+        membershipRequired: crown!.raw.membership_required === 1 || storeById.get(crown!.storeLocationId)?.membership_required === 1,
+        loyaltyRequired: crown!.raw.loyalty_required === 1,
+        nonMemberObservationId: nonMember?.observationId ?? null,
+        nonMemberPurchaseCostMinor: nonMemberCosts?.checkoutMinor ?? null,
+        nonMemberUtilizedCostMinor: nonMemberCosts?.utilizedMinor ?? null,
+        packageLabel: definition?.bulk ? definition?.pantry_pkg_label : definition?.buy_pkg_label,
         pantry: Boolean(definition!.bulk),
         status: "priced",
       });
     }
     const complete = missingIngredients.length === 0 && (recipe.ingredients_grams?.length ?? 0) > 0;
-    const servingCostMinor = complete ? Math.round(trueBatchMinor / recipe.servings) : undefined;
+    const servingCostMinor = complete ? Math.round(utilizedBatchMinor / recipe.servings) : undefined;
+    const completeSingleStores = [...singleStoreCheckout.entries()].filter(([, value]) => value.missing.length === 0).sort((left, right) => left[1].total - right[1].total || left[0].localeCompare(right[0]));
+    const bestSingleStore = completeSingleStores[0];
+    const completeNonMemberSingleStores = [...nonMemberSingleStoreCheckout.entries()].filter(([, value]) => value.missing.length === 0).sort((left, right) => left[1].total - right[1].total || left[0].localeCompare(right[0]));
+    const bestNonMemberSingleStore = completeNonMemberSingleStores[0];
     const cost: RecipeCost = {
       recipeSlug: recipe.slug,
       status: complete ? "complete" : "incomplete",
-      ...(complete ? { batchCostMinor: trueBatchMinor, servingCostMinor } : {}),
+      ...(complete ? { batchCostMinor: utilizedBatchMinor, servingCostMinor } : {}),
       servings: recipe.servings,
       missingIngredients: [...new Set(missingIngredients)].sort(),
       detail: {
         pricingAuthority: "native-release-crowns",
+        protein: recipe.protein ?? null,
+        calories: recipe.stat?.cal ?? null,
         utilizedBatchCostMinor: utilizedBatchMinor,
         utilizedServingCostMinor: Math.round(utilizedBatchMinor / recipe.servings),
-        pantryAddMinor,
-        firstRunMinor: trueBatchMinor + pantryAddMinor,
+        splitStoreCheckoutCostMinor: complete ? splitStoreCheckoutMinor : null,
+        nonMemberSplitStoreCheckoutCostMinor: complete && !nonMemberMissing ? nonMemberSplitStoreCheckoutMinor : null,
+        nonMemberUtilizedBatchCostMinor: complete && !nonMemberMissing ? nonMemberUtilizedBatchMinor : null,
+        nonMemberServingCostMinor: complete && !nonMemberMissing ? Math.round(nonMemberUtilizedBatchMinor / recipe.servings) : null,
+        bestSingleStoreCheckoutCostMinor: complete && bestSingleStore ? bestSingleStore[1].total : null,
+        bestSingleStoreLocationId: complete && bestSingleStore ? bestSingleStore[0] : null,
+        bestSingleStore: complete && bestSingleStore ? storeById.get(bestSingleStore[0])?.store_name ?? bestSingleStore[0] : null,
+        bestNonMemberSingleStoreCheckoutCostMinor: complete && bestNonMemberSingleStore ? bestNonMemberSingleStore[1].total : null,
+        bestNonMemberSingleStoreLocationId: complete && bestNonMemberSingleStore ? bestNonMemberSingleStore[0] : null,
+        bestNonMemberSingleStore: complete && bestNonMemberSingleStore ? storeById.get(bestNonMemberSingleStore[0])?.store_name ?? bestNonMemberSingleStore[0] : null,
+        singleStoreCoverage: Object.fromEntries([...singleStoreCheckout].map(([storeId, value]) => [storeId, { checkoutCostMinor: value.missing.length === 0 ? value.total : null, missingIngredients: value.missing }])),
+        pantryAddMinor: complete ? Math.max(0, splitStoreCheckoutMinor - utilizedBatchMinor) : null,
+        firstRunMinor: complete ? splitStoreCheckoutMinor : null,
         ingredientCount: recipe.ingredients_grams?.length ?? 0,
         ingredients: ingredientDetails,
       },
@@ -340,6 +407,15 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
       status: cost.status,
       servingCostMinor: cost.servingCostMinor ?? null,
       batchCostMinor: cost.batchCostMinor ?? null,
+      utilizedBatchCostMinor: cost.detail.utilizedBatchCostMinor ?? null,
+      splitStoreCheckoutCostMinor: cost.detail.splitStoreCheckoutCostMinor ?? null,
+      nonMemberSplitStoreCheckoutCostMinor: cost.detail.nonMemberSplitStoreCheckoutCostMinor ?? null,
+      nonMemberUtilizedBatchCostMinor: cost.detail.nonMemberUtilizedBatchCostMinor ?? null,
+      nonMemberServingCostMinor: cost.detail.nonMemberServingCostMinor ?? null,
+      bestSingleStoreCheckoutCostMinor: cost.detail.bestSingleStoreCheckoutCostMinor ?? null,
+      bestSingleStore: cost.detail.bestSingleStore ?? null,
+      bestNonMemberSingleStoreCheckoutCostMinor: cost.detail.bestNonMemberSingleStoreCheckoutCostMinor ?? null,
+      bestNonMemberSingleStore: cost.detail.bestNonMemberSingleStore ?? null,
       missingIngredients: cost.missingIngredients,
     });
   }
@@ -414,6 +490,15 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
     servings: recipe.servings,
     week_cost: Number(((Number(recipe.batchCostMinor) || 0) / 100).toFixed(2)),
     per_serving: Number(((Number(recipe.servingCostMinor) || 0) / 100).toFixed(2)),
+    utilized_batch_cost: Number(((Number(recipe.utilizedBatchCostMinor) || 0) / 100).toFixed(2)),
+    split_store_checkout_cost: recipe.splitStoreCheckoutCostMinor === null ? null : Number((Number(recipe.splitStoreCheckoutCostMinor) / 100).toFixed(2)),
+    non_member_split_store_checkout_cost: recipe.nonMemberSplitStoreCheckoutCostMinor === null ? null : Number((Number(recipe.nonMemberSplitStoreCheckoutCostMinor) / 100).toFixed(2)),
+    non_member_utilized_batch_cost: recipe.nonMemberUtilizedBatchCostMinor === null ? null : Number((Number(recipe.nonMemberUtilizedBatchCostMinor) / 100).toFixed(2)),
+    non_member_per_serving: recipe.nonMemberServingCostMinor === null ? null : Number((Number(recipe.nonMemberServingCostMinor) / 100).toFixed(2)),
+    best_single_store_checkout_cost: recipe.bestSingleStoreCheckoutCostMinor === null ? null : Number((Number(recipe.bestSingleStoreCheckoutCostMinor) / 100).toFixed(2)),
+    best_single_store: recipe.bestSingleStore,
+    best_non_member_single_store_checkout_cost: recipe.bestNonMemberSingleStoreCheckoutCostMinor === null ? null : Number((Number(recipe.bestNonMemberSingleStoreCheckoutCostMinor) / 100).toFixed(2)),
+    best_non_member_single_store: recipe.bestNonMemberSingleStore,
     calories: recipe.calories,
     sale_items: [],
   }]));

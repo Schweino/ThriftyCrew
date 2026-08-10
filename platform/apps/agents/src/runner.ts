@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { Agent, run } from "@openai/agents";
+import { Agent, run, webSearchTool } from "@openai/agents";
 import {
   accuracyVerdictsSchema,
   agentRegistrySchema,
@@ -83,6 +83,13 @@ const agent = new Agent({
   instructions: prompt,
   model,
   modelSettings: { reasoning: { effort: definition.reasoningEffort }, text: { verbosity: "low" } },
+  tools: requestedAgent === "accuracy-headless"
+    ? [webSearchTool({
+        searchContextSize: "low",
+        externalWebAccess: true,
+        userLocation: { type: "approximate", city: "Omaha", region: "Nebraska", country: "US", timezone: "America/Chicago" },
+      })]
+    : [],
   outputType,
 });
 const result = await run(agent, inputJson, { maxTurns: 8 });

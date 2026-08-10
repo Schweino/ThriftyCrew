@@ -13,6 +13,8 @@ interface RegularDocument {
   empty_terms?: unknown[];
   deals?: Array<Record<string, unknown>>;
   capture_session?: unknown;
+  location_id?: string | number;
+  store_label?: string;
 }
 export interface CaptureAttestation {
   store: string;
@@ -32,6 +34,9 @@ const STORE_ALIASES: Record<string, StoreKey> = {
   aldi: "aldi", bakers: "bakers", "baker's": "bakers", "family-fare": "family-fare", "family fare": "family-fare",
   fareway: "fareway", hyvee: "hy-vee", "hy-vee": "hy-vee", sams: "sams", "sam's club": "sams", walmart: "walmart",
 };
+const HEADLESS_PRICE_MODE: Record<StoreKey, string> = {
+  aldi: "in_store", bakers: "in_store", "family-fare": "pickup", fareway: "in_store", "hy-vee": "in_store", sams: "club", walmart: "pickup",
+};
 
 function stringValue(value: unknown): string | undefined {
   return typeof value === "string" && value.trim() ? value.trim() : undefined;
@@ -40,7 +45,10 @@ function stringValue(value: unknown): string | undefined {
 function numberValue(value: unknown): number | undefined {
   if (typeof value === "number" && Number.isFinite(value)) return value;
   if (typeof value !== "string") return undefined;
-  const parsed = Number(value.replace(/[^0-9.-]/g, ""));
+  const normalized = value.trim().replace(/,/g, "");
+  const match = normalized.match(/^\$?([0-9]+(?:\.[0-9]+)?)$/);
+  if (!match) return undefined;
+  const parsed = Number(match[1]);
   return Number.isFinite(parsed) ? parsed : undefined;
 }
 
@@ -82,6 +90,26 @@ function basis(sizeText: string): { unit: ObservationInput["normalizedBasisUnit"
     : rawUnit === "gallon" ? "gal"
     : rawUnit as ObservationInput["normalizedBasisUnit"];
   return { unit, quantityMicros: Math.max(1, Math.round(quantity * 1_000_000)), packageCount };
+}
+
+function consumerPackageBasis(name: string | undefined, parsed: ReturnType<typeof basis>): ReturnType<typeof basis> {
+  if (!parsed || parsed.unit !== "each" || parsed.quantityMicros <= 1_000_000) return parsed;
+  const normalized = name?.toLowerCase() ?? "";
+  if (/\baluminum\s+foil\b/.test(normalized) && /\bsq\.?\s*ft\b|square\s+feet/.test(normalized)) {
+    return { unit: "each", quantityMicros: 1_000_000, packageCount: 1 };
+  }
+  if (/\b(?:lettuce|iceberg|romaine)\b/.test(normalized) && /\bhead\b/.test(normalized) && parsed.quantityMicros >= 12_000_000) {
+    return { unit: "each", quantityMicros: 1_000_000, packageCount: 1 };
+  }
+  if (/\bbread\b/.test(normalized) && /\bloaf\b/.test(normalized)) {
+    return { unit: "each", quantityMicros: 1_000_000, packageCount: 1 };
+  }
+  if (/\b(?:paper\s+towels?|toilet\s+paper|bath\s+tissue)\b/.test(normalized)) {
+    const counts = [...normalized.matchAll(/(\d+)\s*(?:ct|count|rolls?)\b/g)].map((match) => Number(match[1])).filter((count) => count > 0 && count <= 100);
+    const count = counts.at(-1);
+    if (count) return { unit: "each", quantityMicros: count * 1_000_000, packageCount: count };
+  }
+  return parsed;
 }
 
 type BasisOption = NonNullable<ObservationInput["basisOptions"]>[number];
@@ -264,7 +292,7 @@ export async function buildRegularCapture(
     buckets.set(bucket, count);
     const name = stringValue(row.item) ?? stringValue(row.name);
     const sizeText = stringValue(row.size_raw) ?? stringValue(row.size) ?? "";
-    const parsedBasis = basis(sizeText);
+    const parsedBasis = consumerPackageBasis(name, basis(sizeText));
     const price = numberValue(row.current_price) ?? numberValue(row.ad_price);
     const asOf = stringValue(row.as_of) ?? stringValue(document.generated)?.slice(0, 10);
     if (!name || !parsedBasis || price === undefined || price < 0 || !asOf) {
@@ -272,7 +300,7 @@ export async function buildRegularCapture(
       rejected.push({ index, reason: !name ? "missing-name" : !parsedBasis ? "unparsed-size" : price === undefined ? "missing-price" : "missing-as-of" });
       continue;
     }
-    const purchasePriceMinor = Math.round(price * 100);
+    let purchasePriceMinor = Math.round(price * 100);
     const regularPrice = numberValue(row.base_price) ?? numberValue(row.regular);
     const sessionTerm = captureSession ? sessionTerms.get(bucket) : undefined;
     const capturedAt = captureSession ? sessionTerm?.finishedAt : omahaDayStart(asOf.slice(0, 10));
@@ -287,8 +315,22 @@ export async function buildRegularCapture(
       continue;
     }
     const productUrl = safeUrl(row.canonical_url) ?? safeUrl(row.link_url);
-    const kind: ObservationInput["kind"] = row.marked_down === true ? "markdown" : regularPrice !== undefined && regularPrice > price ? "sale" : "everyday";
+    const loyaltyRequired = row.loyalty_required === true || row.member_price === true || /\b(?:loyalty|member|digital\s+coupon|with\s+card)\b/i.test(stringValue(row.price_type) ?? "");
+    const membershipRequired = store === "sams" || row.membership_required === true;
+    const kind: ObservationInput["kind"] = membershipRequired || loyaltyRequired ? "member" : row.marked_down === true ? "markdown" : regularPrice !== undefined && regularPrice > price ? "sale" : "everyday";
     const storeUnitPrice = store === "sams" ? verifiedUnitPrice(row.sams_unit_price) : undefined;
+    const preliminaryBasisOptions = packageBasisOptions(sizeText, name, purchasePriceMinor);
+    if (storeUnitPrice && Math.abs(price * 1_000_000 - storeUnitPrice.perUnitMicros) <= Math.max(20_000, storeUnitPrice.perUnitMicros * 0.02)) {
+      const packageQuantity = preliminaryBasisOptions
+        .filter((option) => option.unit === storeUnitPrice.unit)
+        .map((option) => option.quantityMicros / 1_000_000)
+        .filter((quantity) => quantity > 1)
+        .sort((left, right) => right - left)[0];
+      if (packageQuantity) purchasePriceMinor = Math.round(storeUnitPrice.perUnitMicros * packageQuantity / 10_000);
+    }
+    const regularPriceMinor = regularPrice !== undefined && regularPrice >= price
+      ? Math.round(regularPrice * 100 * (purchasePriceMinor / Math.max(1, Math.round(price * 100))))
+      : undefined;
     const normalizedBasisQtyMicros = storeUnitPrice
       ? Math.max(1, Math.round((purchasePriceMinor * 10_000 * 1_000_000) / storeUnitPrice.perUnitMicros))
       : parsedBasis.quantityMicros;
@@ -303,13 +345,13 @@ export async function buildRegularCapture(
         rawIndex: index,
         ...(storeUnitPrice ? { normalizedUnitPriceSource: "sams_unit_price" } : {}),
       }, termKey: bucket, kind, currency: "USD",
-      purchasePriceMinor, ...(regularPrice !== undefined && regularPrice >= price ? { regularPriceMinor: Math.round(regularPrice * 100) } : {}),
+      purchasePriceMinor, ...(regularPriceMinor !== undefined ? { regularPriceMinor } : {}),
       purchaseQuantity: 1, packageCount: parsedBasis.packageCount, capturedBasisUnit: parsedBasis.unit,
       capturedBasisQtyMicros: parsedBasis.quantityMicros, normalizedBasisUnit: storeUnitPrice?.unit ?? parsedBasis.unit,
       normalizedBasisQtyMicros,
       perUnitMicros: Math.round((purchasePriceMinor * 10_000 * 1_000_000) / normalizedBasisQtyMicros),
       basisOptions: packageBasisOptions(sizeText, name, purchasePriceMinor),
-      loyaltyRequired: false, membershipRequired: store === "sams", rawPriceText: stringValue(row.ad_price) ?? String(price), rawSizeText: sizeText,
+      loyaltyRequired, membershipRequired, rawPriceText: stringValue(row.ad_price) ?? String(price), rawSizeText: sizeText,
       capturedAt, sourcePayloadKey: `regular:${store}:${index}`,
     });
     count.accepted += 1;
@@ -328,15 +370,24 @@ export async function buildRegularCapture(
   const coverageMode: DirectCaptureArtifact["coverageMode"] = captureSession?.coverageMode
     ?? (requestedCoverage === "full" && !terms.every((term) => term.outcome === "success" || term.outcome === "empty") ? "partial" : requestedCoverage);
   const priceModeVerified = attestation?.priceModeVerified === true || document.mode_verified === true || /^\d{4}-\d{2}-\d{2}/.test(stringValue(document.mode_verified) ?? "");
-  const marketVerified = attestation?.marketVerified ?? true;
-  const locationVerified = attestation?.locationVerified ?? true;
+  const priceMode = stringValue(attestation?.priceMode) ?? stringValue(document.price_mode) ?? HEADLESS_PRICE_MODE[store];
+  const sourceDescription = stringValue(document.source) ?? "";
+  const headlessLocationVerified = store === "bakers"
+    ? String(document.location_id ?? "") === "61500319" && /omaha\s+68106/i.test(stringValue(document.store_label) ?? "")
+    : store === "family-fare"
+      ? /store[_ ]id\s*6401/i.test(sourceDescription) && /omaha/i.test(sourceDescription)
+      : store === "hy-vee"
+        ? /store[_ ]?id\s*1465/i.test(sourceDescription) && /omaha/i.test(sourceDescription)
+        : false;
+  const marketVerified = attestation?.marketVerified ?? headlessLocationVerified;
+  const locationVerified = attestation?.locationVerified ?? headlessLocationVerified;
   const attestationHash = attestation ? await digestHex(stableJson(attestation)) : null;
   const manifestHash = await digestHex(stableJson({ store, source: document.source, priceMode: attestation?.priceMode ?? document.price_mode, priceModeVerified, marketVerified, locationVerified, attestationHash, observations: observations.map((item) => [item.externalProductKey, item.capturedAt, item.perUnitMicros, item.basisOptions ?? []]) }));
   const capturedFrom = captureSession?.startedAt ?? captured[0]!;
   const capturedTo = captureSession?.finishedAt ?? captured.at(-1)!;
   return {
     version: 1, sourceId: `direct-${store}-${captureClient}`, coverageMode, capturedFrom, capturedTo,
-    expectedTerms: captureSession?.expectedTerms ?? terms.length, marketVerified, locationVerified, priceModeVerified,
+    expectedTerms: captureSession?.expectedTerms ?? terms.length, marketVerified, locationVerified, priceModeVerified, priceMode,
     idempotencyKey: `regular-${store}-${capturedTo.slice(0, 10)}-${manifestHash.slice(0, 16)}`, terms, observations,
     audit: { inputRows: deals.length, acceptedRows: observations.length, rejectedRows: rejected.length, rejectionReasons: Object.fromEntries([...new Set(rejected.map((item) => item.reason))].sort().map((reason) => [reason, rejected.filter((item) => item.reason === reason).length])), taxonomyRows: observations.filter((item) => item.taxonomyPath).length, ...(captureSession ? { captureSession } : {}), ...(attestation ? { attestation, attestationHash } : {}) },
   };

@@ -115,6 +115,9 @@ export interface WinnerCandidate {
   validTo?: string;
   knownWrong?: boolean;
   maxAgeDays?: number;
+  outOfBand?: boolean;
+  basisSource?: string;
+  sourceBasisUnit?: string;
 }
 
 const UNIT_TO_BASE: Readonly<Record<string, { family: "mass" | "volume" | "count"; unitsPerBase: number }>> = {
@@ -151,6 +154,10 @@ export function selectWinner(candidates: readonly WinnerCandidate[], nowIso: str
   const eligible = candidates.filter((candidate) => {
     if (candidate.knownWrong) {
       rejected.push({ observationId: candidate.observationId, reason: "known-wrong" });
+      return false;
+    }
+    if (candidate.outOfBand) {
+      rejected.push({ observationId: candidate.observationId, reason: "outside-authored-price-band" });
       return false;
     }
     if (candidate.validTo && candidate.validTo < nowIso) {
@@ -192,7 +199,7 @@ export interface NativeEngineSnapshot {
   currentReleaseId: string;
   inputHash: string;
   inputBatchIds: string[];
-  commodities: Array<{ id: string; label: string; basis_unit: WinnerCandidate["commodityId"] extends string ? string : never; category_id: string; category_label?: string; sort_order?: number }>;
+  commodities: Array<{ id: string; label: string; basis_unit: WinnerCandidate["commodityId"] extends string ? string : never; category_id: string; category_label?: string; sort_order?: number; band_min_micros?: number | null; band_max_micros?: number | null }>;
   stores: Array<{ id: string; store_name: string; display_name?: string; membership_required?: number }>;
   candidates: Array<{
     observation_id: string; commodity_id: string; store_location_id: string; per_unit_micros: number;
@@ -316,6 +323,10 @@ export function buildNativeCells(snapshot: NativeEngineSnapshot): NativeReleaseC
         ...(candidate.valid_to ? { validTo: candidate.valid_to } : {}),
         knownWrong: candidate.known_wrong === 1,
         ...(candidate.max_age_days !== undefined ? { maxAgeDays: candidate.max_age_days } : {}),
+        outOfBand: (commodity.band_min_micros != null && converted.perUnitMicros < commodity.band_min_micros)
+          || (commodity.band_max_micros != null && converted.perUnitMicros > commodity.band_max_micros),
+        basisSource: converted.source,
+        sourceBasisUnit: converted.unit,
       }]; }), snapshot.observedAt);
       cells.push({
         commodityId: commodity.id,
@@ -329,7 +340,7 @@ export function buildNativeCells(snapshot: NativeEngineSnapshot): NativeReleaseC
           ? (groups.get(key) ?? []).find((candidate) => candidate.observation_id === selection.winner!.observationId) ?? null
           : null,
         reason: selection.winner
-          ? { code: "native-winner", eligibleCandidates: selection.eligible.length, rejectedCandidates: selection.rejected }
+          ? { code: "native-winner", eligibleCandidates: selection.eligible.length, rejectedCandidates: selection.rejected, basisSource: selection.winner.basisSource ?? "normalized", sourceBasisUnit: selection.winner.sourceBasisUnit ?? commodity.basis_unit }
           : { code: "no-eligible-observation", rejectedCandidates: selection.rejected },
       });
     }

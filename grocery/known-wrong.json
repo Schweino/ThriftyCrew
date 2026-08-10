@@ -1656,6 +1656,71 @@
                         "ruled_on":  "2026-08-09",
                         "ruled_by":  "V3 live Chrome accuracy QA",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "lemons|Bakers|kroger-caffeine-free-lemon-sparkling-water",
+                        "commodity":  "lemons",
+                        "store":  "Baker's",
+                        "names":  ["Kroger Caffeine Free Lemon Sparkling Water"],
+                        "product_id":  "0001111015385",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Sparkling lemon-flavored water is a beverage, not a fresh lemon. It was published in the lemons row on 2026-08-10 and its 12-can count could underbid actual produce.",
+                        "seen_on_board":  "2026-08-10",
+                        "ruled_on":  "2026-08-10",
+                        "ruled_by":  "V3 semantic accuracy audit",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "lemons|SamsClub|true-lemon-crystallized-packets",
+                        "commodity":  "lemons",
+                        "store":  "Sam's Club",
+                        "names":  ["True Lemon Crystallized Lemon Packets, 100 ct.", "True Lemon Crystallized Lemon Packets, 500 ct."],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Crystallized flavor packets are not fresh lemons. The 500-count package held the lemons crown on 2026-08-10 at four cents per packet.",
+                        "seen_on_board":  "2026-08-10 (crown)",
+                        "ruled_on":  "2026-08-10",
+                        "ruled_by":  "V3 semantic accuracy audit",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "dried-oregano|Walmart|sw-crushed-tomatoes-oregano-basil",
+                        "commodity":  "dried-oregano",
+                        "store":  "Walmart",
+                        "names":  ["(3 pack) S&W Crushed Tomatoes with Oregano Basil, 28 oz Can"],
+                        "product_id":  "14903667945",
+                        "verdict":  "wrong-product",
+                        "evidence":  "This is a three-pack of canned tomatoes flavored with oregano and basil, not dried oregano. It held the dried-oregano crown on 2026-08-10.",
+                        "seen_on_board":  "2026-08-10 (crown)",
+                        "ruled_on":  "2026-08-10",
+                        "ruled_by":  "V3 semantic accuracy audit",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "avocados|Walmart|lunchskins-avocado-design-sandwich-bags",
+                        "commodity":  "avocados",
+                        "store":  "Walmart",
+                        "names":  ["(3 pack) Lunchskins Sandwich Bags – 50 Count   Avocado Design   Eco-Friendly Food Storage Bags Made from Unbleached Kraft Paper with Recyclable Resealable Stickers"],
+                        "product_id":  "15519000593",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Paper sandwich bags with an avocado print are household storage goods, not avocados. Their 150-count package held the avocados crown on 2026-08-10.",
+                        "seen_on_board":  "2026-08-10 (crown)",
+                        "ruled_on":  "2026-08-10",
+                        "ruled_by":  "V3 semantic accuracy audit",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "sliced-cheese|SamsClub|red-baron-deep-dish-pizza-combo",
+                        "commodity":  "sliced-cheese",
+                        "store":  "Sam's Club",
+                        "names":  ["Red Baron Pepperoni & Four Cheese Deep Dish Singles Frozen Personal Pizza Combo, 69.60 oz., 12 PK"],
+                        "product_id":  "13610718589",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Frozen personal pizzas described as four-cheese are not packages of sliced cheese. The pizza combo held the sliced-cheese crown on 2026-08-10.",
+                        "seen_on_board":  "2026-08-10 (crown)",
+                        "ruled_on":  "2026-08-10",
+                        "ruled_by":  "V3 semantic accuracy audit",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

@@ -35,6 +35,7 @@ export const captureBatchCreateSchema = z
     marketVerified: z.boolean(),
     locationVerified: z.boolean(),
     priceModeVerified: z.boolean(),
+    priceMode: z.string().trim().min(1).max(100),
     idempotencyKey: nonEmptyId,
   })
   .superRefine((value, context) => {
@@ -193,6 +194,7 @@ export const directCaptureArtifactSchema = z.object({
   marketVerified: z.boolean(),
   locationVerified: z.boolean(),
   priceModeVerified: z.boolean(),
+  priceMode: z.string().trim().min(1).max(100),
   idempotencyKey: nonEmptyId,
   terms: z.array(captureTermSchema).max(2000),
   observations: z.array(observationInputSchema).min(1).max(100_000),
@@ -241,7 +243,9 @@ export const configurationCommoditiesChunkSchema = z.object({
     categoryId: nonEmptyId,
     include: z.array(z.string().min(1).max(1000)).max(300),
     exclude: z.array(z.string().min(1).max(1000)).max(300),
-  })).min(1).max(25),
+    bandMinMicros: z.number().int().nonnegative().optional(),
+    bandMaxMicros: z.number().int().nonnegative().optional(),
+  }).refine((value) => value.bandMinMicros === undefined || value.bandMaxMicros === undefined || value.bandMinMicros <= value.bandMaxMicros, { message: "band minimum cannot exceed band maximum" })).min(1).max(25),
 });
 
 export const configurationKnownWrongChunkSchema = z.object({
@@ -405,7 +409,7 @@ export const transitionInventorySchema = z.object({
 });
 
 export const agentCapabilitySchema = z.enum([
-  "read:status", "read:evidence", "read:content", "write:ledger", "write:content-stage",
+  "read:status", "read:evidence", "read:content", "search:web", "write:ledger", "write:content-stage",
   "write:triage-plan", "write:pull-request", "write:sentinel-finding",
 ]);
 
@@ -760,8 +764,14 @@ export const accuracyVerdictsSchema = z.object({
     verdict: z.enum(["right", "wrong", "cannot_tell"]),
     verifiedAt: isoDateTime,
     evidence: z.record(z.string(), z.unknown()).default({}),
-  })).min(1).max(500),
-});
+  })).max(500).default([]),
+  riskVerdicts: z.array(z.object({
+    ordinal: z.number().int().nonnegative(),
+    verdict: z.enum(["right", "wrong", "cannot_tell"]),
+    verifiedAt: isoDateTime,
+    evidence: z.record(z.string(), z.unknown()).default({}),
+  })).max(500).default([]),
+}).refine((value) => value.verdicts.length + value.riskVerdicts.length > 0, { message: "at least one uniform or risk verdict is required" });
 
 export const milestoneAccrualSchema = z.object({
   edgeProof: z.object({

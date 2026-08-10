@@ -88,6 +88,7 @@ export async function ingestDirectCapture(
     marketVerified: artifact.marketVerified,
     locationVerified: artifact.locationVerified,
     priceModeVerified: artifact.priceModeVerified,
+    priceMode: artifact.priceMode,
     idempotencyKey: artifact.idempotencyKey,
   } });
   const batchId = String(created.batchId);
@@ -164,6 +165,8 @@ export async function deployConfiguration(client: MutationClient, config: Curren
           categoryId: commodity.categoryId,
           include: commodity.include,
           exclude: commodity.exclude,
+          ...(commodity.band_min !== undefined ? { bandMinMicros: Math.round(commodity.band_min * 1_000_000) } : {}),
+          ...(commodity.band_max !== undefined ? { bandMaxMicros: Math.round(commodity.band_max * 1_000_000) } : {}),
         })),
       } });
     }

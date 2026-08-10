@@ -2154,6 +2154,7 @@
                         "avocado"
                     ],
         "exclude":  [
+                        "sandwich\\s+bags?|food\\s+storage|avocado\\s+design",
                         "\\broll\\b",
                         "\\bsushi\\b",
                         "\\boil\\b",
@@ -3595,6 +3596,8 @@
         "id":  "bread",
         "label":  "Bread (loaf)",
         "unit":  "each",
+        "band_min":  0.5,
+        "band_max":  8,
         "include":  [
                         "\\bbread\\b",
                         "sandwich\\s+loaf",
@@ -5031,6 +5034,7 @@
                         "american\\s+cheese\\b.{0,15}slices?"
                     ],
         "exclude":  [
+                        "pizza|frozen\\s+personal",
                         "shredded",
                         "cream\\s*cheese",
                         "string",
@@ -5315,6 +5319,7 @@
                         "\\blemons?\\b"
                     ],
         "exclude":  [
+                        "sparkling|crystalli[sz]ed|packets?",
                         "lemon[\\s-]*lime",
                         "\\bmini\\s+cans?\\b",
                         "\\bchips?\\b",
@@ -31190,6 +31195,7 @@
                         "\\boregano\\b"
                     ],
         "exclude":  [
+                        "tomatoes?|canned",
                         "\\bfresh\\b",
                         "\\bplant\\b",
                         "\\boil\\b",
@@ -40299,6 +40305,8 @@
         "id":  "dried-dill",
         "label":  "Dill Weed (dried)",
         "unit":  "oz",
+        "band_min":  0.25,
+        "band_max":  12,
         "include":  [
                         "dill\\s+weed",
                         "dried\\s+dill"

@@ -101,7 +101,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
   ).bind(...batches.results.map((batch) => batch.id)).all() : { results: [] };
   const [commodities, stores, currentCells] = await Promise.all([
     env.DB.prepare(
-      `SELECT c.id, c.label, c.basis_unit, c.category_id, cat.label AS category_label, cat.sort_order
+      `SELECT c.id, c.label, c.basis_unit, c.category_id, c.band_min_micros, c.band_max_micros, cat.label AS category_label, cat.sort_order
          FROM commodities c LEFT JOIN categories cat ON cat.id = c.category_id
         WHERE c.configuration_id = ?1 AND c.active = 1 ORDER BY cat.sort_order, c.id`,
     ).bind(configuration.id).all(),
