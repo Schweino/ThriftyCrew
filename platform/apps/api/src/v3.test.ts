@@ -47,7 +47,7 @@ describe("out-of-band accuracy reporting", () => {
         };
       },
     } as unknown as D1Database;
-    await readAccuracyDraw(db, "draw");
+    await readAccuracyDraw(db, "draw", true);
     expect(sql[1]).toContain("pv.size_text AS raw_size_text");
     expect(sql[1]).toContain("o.purchase_price_minor");
     expect(sql[1]).toContain("o.captured_at");

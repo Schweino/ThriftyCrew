@@ -35,6 +35,17 @@ describe("direct regular capture", () => {
     expect(artifact.audit.attestationHash).toMatch(/^[a-f0-9]{64}$/);
   });
 
+  it("builds a real-Chrome artifact only with an explicit verification attestation", async () => {
+    const document = { coverage_mode: "targeted", deals: [{ item: "Eggs", current_price: 1.99, size: "dozen", as_of: "2026-08-09" }] };
+    await expect(buildRegularCapture("walmart", document, undefined, "browser")).rejects.toThrow("browser captures require");
+    const artifact = await buildRegularCapture("walmart", document, {
+      store: "Walmart", market: "Omaha", priceMode: "pickup", verifiedAt: "2026-08-09T15:00:00.000Z",
+      evidenceUrl: "https://www.walmart.com/", statement: "Logged-in Omaha pickup context verified in Chrome",
+      marketVerified: true, locationVerified: true, priceModeVerified: true,
+    }, "browser");
+    expect(artifact).toMatchObject({ sourceId: "direct-walmart-browser", coverageMode: "targeted", marketVerified: true, locationVerified: true, priceModeVerified: true });
+  });
+
   it("refuses to claim verified price mode when the source did not prove it", async () => {
     const artifact = await buildRegularCapture("fareway", { deals: [{ item: "Eggs", current_price: 1.99, size: "dozen", as_of: "2026-08-09" }] });
     expect(artifact.priceModeVerified).toBe(false);
@@ -43,6 +54,34 @@ describe("direct regular capture", () => {
   it("accepts the legacy capture-date proof used by verified store pulls", async () => {
     const artifact = await buildRegularCapture("fareway", { mode_verified: "2026-08-09", price_mode: "in-store", deals: [{ item: "Eggs", current_price: 1.99, size: "dozen", as_of: "2026-08-09" }] });
     expect(artifact.priceModeVerified).toBe(true);
+  });
+
+  it("preserves the source's complete per-term receipt ledger", async () => {
+    const artifact = await buildRegularCapture("bakers", {
+      coverage_mode: "full",
+      mode_verified: true,
+      capture_terms: [
+        { term_key: "eggs", ordinal: 0, outcome: "success", row_count: 2 },
+        { term_key: "unicorn-fruit", ordinal: 1, outcome: "empty", row_count: 0 },
+      ],
+      deals: [{ item: "Large Eggs", current_price: 1.99, size: "dozen", as_of: "2026-08-09", found_by_term: "eggs" }],
+    });
+    expect(artifact.coverageMode).toBe("full");
+    expect(artifact.expectedTerms).toBe(2);
+    expect(artifact.terms).toEqual([
+      { termKey: "eggs", ordinal: 0, outcome: "success", rowCount: 2 },
+      { termKey: "unicorn-fruit", ordinal: 1, outcome: "empty", rowCount: 0 },
+    ]);
+  });
+
+  it("downgrades a claimed full capture when any term was blocked", async () => {
+    const artifact = await buildRegularCapture("bakers", {
+      coverage_mode: "full",
+      mode_verified: true,
+      capture_terms: [{ term_key: "eggs", ordinal: 0, outcome: "blocked", row_count: 0, reason: "API refused" }],
+      deals: [{ item: "Large Eggs", current_price: 1.99, size: "dozen", as_of: "2026-08-09" }],
+    });
+    expect(artifact.coverageMode).toBe("partial");
   });
 
   it("uses Sam's verified unit-price field for club packs", async () => {

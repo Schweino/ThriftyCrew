@@ -16,11 +16,13 @@ export interface BatchRow {
   location_verified: number;
   price_mode_verified: number;
   agent_id: string;
+  max_age_days: number;
 }
 
 export async function findBatch(db: D1Database, batchId: string): Promise<BatchRow | null> {
   return db.prepare(
-    `SELECT b.*, s.store_location_id, s.capture_method
+    `SELECT b.*, s.store_location_id, s.capture_method,
+            CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days
        FROM capture_batches b
        JOIN capture_sources s ON s.id = b.source_id
       WHERE b.id = ?1`,

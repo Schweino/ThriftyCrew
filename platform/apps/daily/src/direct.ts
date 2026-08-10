@@ -2,7 +2,17 @@ import type { DirectCaptureArtifact, ObservationInput } from "@thriftycrew/contr
 import { digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 
 type StoreKey = "aldi" | "bakers" | "family-fare" | "fareway" | "hy-vee" | "sams" | "walmart";
-interface RegularDocument { store?: string; price_mode?: string; mode_verified?: boolean | string; source?: string; generated?: string; deals?: Array<Record<string, unknown>> }
+interface RegularDocument {
+  store?: string;
+  price_mode?: string;
+  mode_verified?: boolean | string;
+  source?: string;
+  generated?: string;
+  coverage_mode?: string;
+  capture_terms?: Array<Record<string, unknown>>;
+  empty_terms?: unknown[];
+  deals?: Array<Record<string, unknown>>;
+}
 export interface CaptureAttestation {
   store: string;
   market: string;
@@ -154,6 +164,28 @@ function termKey(value: string): string {
   return normalizeName(value).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 150) || "catalog";
 }
 
+function authoredTermLedger(document: RegularDocument): DirectCaptureArtifact["terms"] | undefined {
+  if (!Array.isArray(document.capture_terms) || document.capture_terms.length === 0) return undefined;
+  const outcomes = new Set(["success", "empty", "rejected", "blocked", "not_attempted"]);
+  const terms = document.capture_terms.map((raw, index) => {
+    const key = termKey(stringValue(raw.term_key) ?? stringValue(raw.term) ?? `term-${index}`);
+    const rawOutcome = stringValue(raw.outcome) ?? "blocked";
+    if (!outcomes.has(rawOutcome)) throw new Error(`capture term ${key} has unsupported outcome ${rawOutcome}`);
+    const rowCount = numberValue(raw.row_count) ?? numberValue(raw.rowCount) ?? 0;
+    if (!Number.isInteger(rowCount) || rowCount < 0) throw new Error(`capture term ${key} has invalid row count`);
+    return {
+      termKey: key,
+      ordinal: Number.isInteger(numberValue(raw.ordinal)) ? Number(numberValue(raw.ordinal)) : index,
+      outcome: rawOutcome as DirectCaptureArtifact["terms"][number]["outcome"],
+      rowCount,
+      ...(stringValue(raw.reason) ? { reason: stringValue(raw.reason)! } : {}),
+    };
+  });
+  if (new Set(terms.map((term) => term.termKey)).size !== terms.length) throw new Error("capture term ledger contains duplicate term keys");
+  if (new Set(terms.map((term) => term.ordinal)).size !== terms.length) throw new Error("capture term ledger contains duplicate ordinals");
+  return terms.sort((left, right) => left.ordinal - right.ordinal);
+}
+
 async function externalKey(row: Record<string, unknown>, index: number): Promise<string> {
   const direct = stringValue(row.product_id) ?? stringValue(row.item_id) ?? stringValue(row.sams_item_id) ?? stringValue(row.upc) ?? stringValue(row.sku) ?? safeUrl(row.canonical_url) ?? safeUrl(row.link_url);
   if (direct) return direct.slice(0, 300);
@@ -175,9 +207,15 @@ function verifiedUnitPrice(value: unknown): { unit: ObservationInput["normalized
   return { unit, perUnitMicros: Math.round(Number(match[1]) * 1_000_000) };
 }
 
-export async function buildRegularCapture(storeInput: string, document: RegularDocument, attestation?: CaptureAttestation): Promise<DirectCaptureArtifact> {
+export async function buildRegularCapture(
+  storeInput: string,
+  document: RegularDocument,
+  attestation?: CaptureAttestation,
+  captureClient: "headless" | "browser" = "headless",
+): Promise<DirectCaptureArtifact> {
   const store = STORE_ALIASES[storeInput.toLowerCase()] ?? STORE_ALIASES[(document.store ?? "").toLowerCase()];
   if (!store) throw new Error(`unsupported store ${storeInput}`);
+  if (captureClient === "browser" && !attestation) throw new Error("browser captures require a market, location, and price-mode attestation");
   if (attestation) {
     const attestedStore = STORE_ALIASES[attestation.store.toLowerCase()];
     if (attestedStore !== store) throw new Error(`capture attestation is for ${attestation.store}, not ${store}`);
@@ -236,17 +274,22 @@ export async function buildRegularCapture(storeInput: string, document: RegularD
   }
   if (observations.length === 0) throw new Error("no regular rows could be normalized");
   const captured = observations.map((item) => item.capturedAt).sort();
-  const terms = [...buckets.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([key, value], ordinal) => ({
+  const derivedTerms = [...buckets.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([key, value], ordinal) => ({
     termKey: key, ordinal, outcome: value.accepted > 0 ? "success" as const : "rejected" as const, rowCount: value.accepted,
     ...(value.rejected > 0 ? { reason: `${value.rejected} source rows rejected during normalization` } : {}),
   }));
+  const terms = authoredTermLedger(document) ?? derivedTerms;
+  const requestedCoverage: DirectCaptureArtifact["coverageMode"] = ["full", "partial", "targeted", "ad_only"].includes(document.coverage_mode ?? "")
+    ? document.coverage_mode as DirectCaptureArtifact["coverageMode"] : "partial";
+  const coverageMode: DirectCaptureArtifact["coverageMode"] = requestedCoverage === "full"
+    && !terms.every((term) => term.outcome === "success" || term.outcome === "empty") ? "partial" : requestedCoverage;
   const priceModeVerified = attestation?.priceModeVerified === true || document.mode_verified === true || /^\d{4}-\d{2}-\d{2}/.test(stringValue(document.mode_verified) ?? "");
   const marketVerified = attestation?.marketVerified ?? true;
   const locationVerified = attestation?.locationVerified ?? true;
   const attestationHash = attestation ? await digestHex(stableJson(attestation)) : null;
   const manifestHash = await digestHex(stableJson({ store, source: document.source, priceMode: attestation?.priceMode ?? document.price_mode, priceModeVerified, marketVerified, locationVerified, attestationHash, observations: observations.map((item) => [item.externalProductKey, item.capturedAt, item.perUnitMicros, item.basisOptions ?? []]) }));
   return {
-    version: 1, sourceId: `direct-${store}-headless`, coverageMode: "partial", capturedFrom: captured[0]!, capturedTo: captured.at(-1)!,
+    version: 1, sourceId: `direct-${store}-${captureClient}`, coverageMode, capturedFrom: captured[0]!, capturedTo: captured.at(-1)!,
     expectedTerms: terms.length, marketVerified, locationVerified, priceModeVerified,
     idempotencyKey: `regular-${store}-${captured.at(-1)!.slice(0, 10)}-${manifestHash.slice(0, 16)}`, terms, observations,
     audit: { inputRows: deals.length, acceptedRows: observations.length, rejectedRows: rejected.length, rejectionReasons: Object.fromEntries([...new Set(rejected.map((item) => item.reason))].sort().map((reason) => [reason, rejected.filter((item) => item.reason === reason).length])), taxonomyRows: observations.filter((item) => item.taxonomyPath).length, ...(attestation ? { attestation, attestationHash } : {}) },

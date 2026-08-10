@@ -409,6 +409,35 @@ export const triageResolveSchema = z.object({
   resolution: z.record(z.string(), z.unknown()).default({}),
 });
 
+export const triagePlanSchema = z.object({
+  version: z.literal(1),
+  triageId: nonEmptyId,
+  diagnosis: z.string().min(20).max(10_000),
+  evidenceRefs: z.array(z.string().min(1).max(1000)).min(1).max(100),
+  blastRadius: z.object({
+    routes: z.array(z.string().min(1).max(500)).max(100),
+    releases: z.array(nonEmptyId).max(100),
+    stores: z.array(nonEmptyId).max(100),
+    commodities: z.array(nonEmptyId).max(1000),
+    recipes: z.array(nonEmptyId).max(1000),
+  }),
+  implementation: z.array(z.string().min(5).max(2000)).min(1).max(100),
+  verification: z.array(z.string().min(5).max(2000)).min(1).max(100),
+  rollback: z.array(z.string().min(5).max(2000)).min(1).max(100),
+  requiresOperator: z.boolean(),
+  operatorReason: z.string().min(5).max(2000).optional(),
+}).superRefine((value, context) => {
+  if (value.requiresOperator && !value.operatorReason) context.addIssue({ code: "custom", path: ["operatorReason"], message: "is required when the plan needs an operator" });
+});
+
+export const operationalAlertSchema = z.object({
+  key: nonEmptyId,
+  title: z.string().min(1).max(500),
+  status: z.enum(["firing", "resolved"]),
+  observedAt: isoDateTime,
+  evidence: z.record(z.string(), z.unknown()).default({}),
+});
+
 export const restoreDrillRecordSchema = z.object({
   id: nonEmptyId,
   backupId: nonEmptyId,

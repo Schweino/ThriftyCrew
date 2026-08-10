@@ -1,0 +1,23 @@
+{
+  "rules": [
+    {
+      "id": "Default Multipart Abort Rule",
+      "enabled": true,
+      "conditions": {},
+      "abortMultipartUploadsTransition": {
+        "condition": { "type": "Age", "maxAge": 604800 }
+      }
+    },
+    {
+      "id": "Archive nightly backups then expire",
+      "enabled": true,
+      "conditions": {},
+      "storageClassTransitions": [
+        { "storageClass": "InfrequentAccess", "condition": { "type": "Age", "maxAge": 2592000 } }
+      ],
+      "deleteObjectsTransition": {
+        "condition": { "type": "Age", "maxAge": 7776000 }
+      }
+    }
+  ]
+}

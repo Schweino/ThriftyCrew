@@ -9,6 +9,8 @@ import { digestHex, stableJson } from "@thriftycrew/domain";
 import { generateLegacyConfiguration } from "./config";
 import { buildNativeParityReport, compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot } from "@thriftycrew/engine";
 import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
+import { captureQueueStatus, defaultCaptureQueueRoot, drainCaptureQueue, enqueueCapture, PermanentCaptureError, verifyCaptureQueueFilesystem } from "./capture-queue";
+import { findLatestRegularCapture, omahaDateKey, parseServerCaptureStore, readFreshRegularCapture, SERVER_CAPTURE_STORES } from "./current-captures";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
@@ -264,9 +266,28 @@ if (command === "status") {
 } else if (command === "doctor") {
   result = await (await mutationClient()).request("/internal/doctor", { acceptStatuses: [422] });
 } else if (command === "triage") {
-  result = subcommand === "run" || subcommand === "reconcile"
-    ? await (await mutationClient()).request(`/internal/triage/${subcommand}`, { method: "POST" })
-    : await (await mutationClient()).request(`/internal/triage?status=${encodeURIComponent(subcommand ?? "open")}`);
+  if (subcommand === "run" || subcommand === "reconcile") {
+    result = await (await mutationClient()).request(`/internal/triage/${subcommand}`, { method: "POST" });
+  } else if (subcommand === "review") {
+    const [triageId, outputFile] = arguments_;
+    if (!triageId || !outputFile) throw new Error("tc triage review requires a triage id and output file");
+    const packet = await (await mutationClient()).request(`/internal/triage/${encodeURIComponent(triageId)}/review`);
+    await writeJson(path.resolve(outputFile), packet);
+    result = { ok: true, triageId, outputFile: path.resolve(outputFile), readOnly: true };
+  } else if (subcommand === "plan" || subcommand === "resolve" || subcommand === "needs-operator") {
+    const [triageId, file] = arguments_;
+    if (!triageId || !file) throw new Error(`tc triage ${subcommand} requires a triage id and JSON file`);
+    const resolution = JSON.parse(await readFile(path.resolve(file), "utf8")) as Record<string, unknown>;
+    const status = subcommand === "plan" ? "planned" : subcommand === "resolve" ? "resolved" : "needs_operator";
+    const planRef = status === "planned" ? `sha256:${await digestHex(stableJson(resolution))}` : undefined;
+    result = await (await mutationClient()).request(`/internal/triage/${encodeURIComponent(triageId)}/resolve`, { json: {
+      status,
+      ...(planRef ? { planRef } : {}),
+      resolution,
+    } });
+  } else {
+    result = await (await mutationClient()).request(`/internal/triage?status=${encodeURIComponent(subcommand ?? "open")}`);
+  }
 } else if (command === "config" && (subcommand === "generate" || subcommand === "check")) {
   result = await generateLegacyConfiguration(incomeRoot, subcommand === "check");
 } else if (command === "config" && subcommand === "deploy") {
@@ -293,6 +314,8 @@ if (command === "status") {
 } else if (command === "evidence" && subcommand === "show") {
   const gate = arguments_[0];
   result = await (await mutationClient()).request(`/internal/evidence-gates${gate ? `?gate=${encodeURIComponent(gate)}` : ""}`);
+} else if (command === "evidence" && subcommand === "accrue") {
+  result = await (await mutationClient()).request("/internal/evidence-gates/accrue", { method: "POST", acceptStatuses: [422] });
 } else if (command === "entitlement" && subcommand === "record") {
   const file = arguments_[0];
   if (!file) throw new Error("tc entitlement record requires a JSON evidence file");
@@ -307,6 +330,32 @@ if (command === "status") {
   const releaseId = requestedRelease ?? status?.currentRelease?.id;
   if (!releaseId) throw new Error("no published release is available for the Ghost clobber drill");
   result = await (await mutationClient()).request(`/internal/releases/${releaseId}/drill-ghost-clobber`, { method: "POST", acceptStatuses: [422] });
+} else if (command === "drill" && subcommand === "chaos") {
+  const kind = arguments_[0];
+  if (!kind) throw new Error("tc drill chaos requires run-interruption, wrong-basis, or referenced-commodity-delete");
+  result = await (await mutationClient()).request(`/internal/drills/${encodeURIComponent(kind)}`, { method: "POST", acceptStatuses: [422] });
+} else if (command === "drill" && subcommand === "stale-capture") {
+  const file = arguments_[0] ?? path.join(platformRoot, "fixtures", "chaos", "stale-browser-capture.json");
+  const bytes = new Uint8Array(await readFile(path.resolve(file)));
+  const artifact = directCaptureArtifactSchema.parse(JSON.parse(new TextDecoder().decode(bytes).replace(/^\uFEFF/, "")));
+  if (!artifact.sourceId.endsWith("-browser") || Date.parse(artifact.capturedTo) > Date.now() - 15 * 24 * 60 * 60 * 1000) {
+    throw new Error("stale-capture drill requires a browser artifact older than every browser source freshness window");
+  }
+  const client = await mutationClient();
+  const ingestion = await ingestDirectCapture(client, artifact, bytes);
+  const passed = ingestion.ok === false && ingestion.status === "rejected";
+  const observedAt = new Date().toISOString();
+  const evidence = { artifact: path.basename(file), ingestion, expected: "batch-freshness rejection and no promotion" };
+  const recorded = await client.request("/internal/evidence-gates", { json: {
+    id: `evidence_stale_capture_${observedAt.slice(0, 10).replaceAll("-", "")}`,
+    gate: "chaos-drill",
+    periodKey: `stale-capture-${observedAt.slice(0, 10)}`,
+    sourceRef: String(ingestion.batchId),
+    status: passed ? "pass" : "fail",
+    observedAt,
+    evidence,
+  }, acceptStatuses: [422] });
+  result = { ok: passed, ingestion, evidenceEventId: recorded.eventId };
 } else if (command === "job" && subcommand === "start") {
   const job = arguments_[0];
   if (!job) throw new Error("tc job start requires a job id");
@@ -380,11 +429,12 @@ if (command === "status") {
   const artifact = await buildCurrentBridge(incomeRoot);
   result = await replayCurrentArtifact(await mutationClient(), artifact);
 } else if (command === "capture" && subcommand === "build-regular") {
-  const [store, inputFile, outputFile, attestationFile] = arguments_;
+  const browser = arguments_.includes("--browser");
+  const [store, inputFile, outputFile, attestationFile] = arguments_.filter((value: string) => value !== "--browser");
   if (!store || !inputFile || !outputFile) throw new Error("tc capture build-regular requires store, input file, and output file");
   const source = JSON.parse(await readFile(path.resolve(inputFile), "utf8").then((value) => value.replace(/^\uFEFF/, "")));
   const attestation = attestationFile ? JSON.parse(await readFile(path.resolve(attestationFile), "utf8")) as CaptureAttestation : undefined;
-  const artifact = await buildRegularCapture(store, source, attestation);
+  const artifact = await buildRegularCapture(store, source, attestation, browser ? "browser" : "headless");
   await writeJson(path.resolve(outputFile), artifact);
   result = { ok: true, outputFile: path.resolve(outputFile), sourceId: artifact.sourceId, observations: artifact.observations.length, terms: artifact.terms.length, audit: artifact.audit };
 } else if (command === "capture" && subcommand === "ingest") {
@@ -406,6 +456,76 @@ if (command === "status") {
   const ingestion = await ingestDirectCapture(client, artifact, evidenceInputs[0]!.body, evidenceInputs.slice(1));
   const matching = ingestion.ok ? await matchBatch(client, String(ingestion.batchId)) : null;
   result = { ...ingestion, matching };
+} else if (command === "capture" && subcommand === "ingest-current") {
+  const stores = arguments_.length > 0 ? arguments_.map(parseServerCaptureStore) : [...SERVER_CAPTURE_STORES];
+  const regularDirectory = path.join(incomeRoot, "grocery", "out", "regular");
+  const client = await mutationClient();
+  const captures: Array<Record<string, unknown>> = [];
+  for (const store of stores) {
+    const file = await findLatestRegularCapture(regularDirectory, store);
+    const fresh = await readFreshRegularCapture(file, {
+      maximumAgeHours: Number(process.env.TC_SERVER_CAPTURE_MAX_AGE_HOURS ?? 36),
+      ...(process.env.TC_SERVER_CAPTURE_ALLOW_PRIOR === "1" ? {} : { requiredDate: omahaDateKey(new Date()) }),
+    });
+    const artifact = await buildRegularCapture(store, fresh.document);
+    const ingestion = await ingestDirectCapture(client, artifact, new Uint8Array(await readFile(file)));
+    if (!ingestion.ok) throw new Error(`current ${store} capture was rejected: ${stableJson(ingestion)}`);
+    const matching = await matchBatch(client, String(ingestion.batchId));
+    captures.push({ store, file, newestCaptureDate: fresh.newestCaptureDate, oldestCaptureDate: fresh.oldestCaptureDate, sourceRows: fresh.rows, ...ingestion, matching });
+  }
+  result = { ok: true, captures };
+} else if (command === "capture" && subcommand === "queue") {
+  const [action, ...queueArguments] = arguments_;
+  const root = defaultCaptureQueueRoot();
+  if (action === "enqueue") {
+    const [artifactFile, ...evidenceFiles] = queueArguments;
+    if (!artifactFile) throw new Error("tc capture queue enqueue requires an artifact file and screenshot evidence");
+    result = await enqueueCapture(root, artifactFile, evidenceFiles);
+  } else if (action === "drain") {
+    const client = await mutationClient();
+    result = await drainCaptureQueue(root, async (job) => {
+      const artifactBody = new Uint8Array(await readFile(job.artifactPath));
+      const additionalEvidence: CaptureEvidenceInput[] = await Promise.all(job.evidencePaths.map(async (evidence) => ({
+        body: new Uint8Array(await readFile(evidence.path)),
+        kind: evidence.kind,
+        contentType: evidence.contentType,
+      })));
+      const ingestion = await ingestDirectCapture(client, job.artifact, artifactBody, additionalEvidence);
+      if (!ingestion.ok) throw new PermanentCaptureError(`capture batch ${String(ingestion.batchId)} was rejected: ${stableJson(ingestion)}`);
+      const matching = await matchBatch(client, String(ingestion.batchId));
+      return { ...ingestion, matching };
+    });
+  } else if (action === "status" || action === "watchdog") {
+    const filesystem = await verifyCaptureQueueFilesystem(root);
+    const status = await captureQueueStatus(root, {
+      maxPendingMinutes: Number(process.env.TC_CAPTURE_QUEUE_MAX_PENDING_MINUTES ?? 180),
+      maxAttempts: Number(process.env.TC_CAPTURE_QUEUE_MAX_ATTEMPTS ?? 5),
+    });
+    const queueResult = { ...status, filesystem };
+    result = queueResult;
+    if (action === "watchdog") {
+      const alert = await (await mutationClient()).request("/internal/operational-alerts", { json: {
+        key: "pc-browser-capture-queue",
+        title: "PC browser capture queue is not draining",
+        status: status.ok ? "resolved" : "firing",
+        observedAt: new Date().toISOString(),
+        evidence: {
+          pending: status.pending,
+          retrying: status.retrying,
+          completed: status.completed,
+          rejected: status.rejected,
+          oldestPendingMinutes: status.oldestPendingMinutes,
+          highestAttempts: status.highestAttempts,
+          unhealthyJobs: status.unhealthyJobs,
+          filesystem,
+        },
+      } });
+      result = { ...queueResult, alert };
+      if (!status.ok) process.exitCode = 2;
+    }
+  } else {
+    throw new Error("tc capture queue requires enqueue, drain, status, or watchdog");
+  }
 } else if (command === "match" && subcommand === "batch") {
   const batchId = arguments_[0];
   if (!batchId) throw new Error("tc match batch requires a capture batch id");
@@ -423,7 +543,11 @@ if (command === "status") {
   const due = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
   result = await (await mutationClient()).request("/internal/accuracy/draws", { json: { marketId: "omaha", seed: arguments_[0] ?? `week-${now.toISOString().slice(0, 10)}`, protocolVersion: "blind-cell-v1", sampleSize: 100, dueAt: due.toISOString() } });
 } else if (command === "accuracy" && subcommand === "show") {
-  result = await (await mutationClient()).request(`/internal/accuracy/draw${arguments_[0] ? `?id=${encodeURIComponent(arguments_[0])}` : ""}`);
+  const drawId = arguments_.find((value: string) => value !== "--reveal");
+  const query = new URLSearchParams();
+  if (drawId) query.set("id", drawId);
+  if (arguments_.includes("--reveal")) query.set("reveal", "1");
+  result = await (await mutationClient()).request(`/internal/accuracy/draw${query.size ? `?${query}` : ""}`);
 } else if (command === "accuracy" && subcommand === "verdict") {
   const file = arguments_[0];
   if (!file) throw new Error("tc accuracy verdict requires a JSON file");
@@ -436,11 +560,13 @@ if (command === "status") {
   result = {
     ok: true,
     usage: [
-      "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc config generate|check|deploy",
-      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc restore record <file>|show", "tc evidence record <file>|show [gate]", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]", "tc job start|finish|dispatch <job> [status|reason]",
+      "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy",
+      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc restore record <file>|show", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]",
       "tc ghost reconcile [release-id]",
-        "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output>",
-      "tc accuracy draw [seed]", "tc accuracy show [draw-id]", "tc accuracy verdict <file>",
+        "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
+      "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog",
+      "tc capture ingest-current [bakers family-fare hy-vee]",
+      "tc accuracy draw [seed]", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",
       "tc match batch <batch-id>", "tc commodity add <file>", "tc recipe add <file>",
     ],
   };

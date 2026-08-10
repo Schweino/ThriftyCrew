@@ -82,12 +82,12 @@ export async function createAccuracyDraw(db: D1Database, input: AccuracyDrawCrea
   return { drawId, sampled: sampled.length, idempotent: false };
 }
 
-export async function readAccuracyDraw(db: D1Database, drawId?: string): Promise<Record<string, unknown> | null> {
+export async function readAccuracyDraw(db: D1Database, drawId?: string, reveal = false): Promise<Record<string, unknown> | null> {
   const draw = drawId
     ? await db.prepare("SELECT * FROM accuracy_draws WHERE id = ?1").bind(drawId).first<Record<string, unknown>>()
     : await db.prepare("SELECT * FROM accuracy_draws ORDER BY created_at DESC LIMIT 1").first<Record<string, unknown>>();
   if (!draw) return null;
-  const cells = await db.prepare(
+  const cells = reveal ? await db.prepare(
     `SELECT c.ordinal, c.commodity_id, x.label AS commodity_label,
             c.store_location_id, l.display_name AS store_name,
             pv.name AS product_name, pv.size_text AS raw_size_text, pv.product_url, pv.taxonomy_path,
@@ -103,8 +103,24 @@ export async function readAccuracyDraw(db: D1Database, drawId?: string): Promise
        JOIN product_versions pv ON pv.id = o.product_version_id
        LEFT JOIN operator_verdicts v ON v.draw_id = c.draw_id AND v.cell_ordinal = c.ordinal
       WHERE c.draw_id = ?1 ORDER BY c.ordinal`,
+  ).bind(String(draw.id)).all() : await db.prepare(
+    `SELECT c.ordinal, c.commodity_id, x.label AS commodity_label,
+            c.store_location_id, l.display_name AS store_name,
+            v.verdict, v.verified_by, v.verified_at
+       FROM accuracy_draw_cells c
+       JOIN accuracy_draws d ON d.id = c.draw_id
+       JOIN releases r ON r.id = d.release_id
+       JOIN commodities x ON x.id = c.commodity_id AND x.configuration_id = r.configuration_id
+       JOIN store_locations l ON l.id = c.store_location_id
+       LEFT JOIN operator_verdicts v ON v.draw_id = c.draw_id AND v.cell_ordinal = c.ordinal
+      WHERE c.draw_id = ?1 ORDER BY l.display_name, c.ordinal`,
   ).bind(String(draw.id)).all();
-  return { ...draw, cells: cells.results };
+  const stores: Record<string, Array<Record<string, unknown>>> = {};
+  for (const raw of cells.results as Array<Record<string, unknown>>) {
+    const store = String(raw.store_name);
+    (stores[store] ??= []).push(raw);
+  }
+  return { ...draw, blind: !reveal, cells: cells.results, stores };
 }
 
 export async function recordAccuracyVerdicts(db: D1Database, input: AccuracyVerdicts, verifiedBy: string): Promise<{ recorded: number; completed: boolean }> {

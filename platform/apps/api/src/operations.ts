@@ -73,6 +73,25 @@ export async function raiseOperationalAlert(
   return { triageId, delivery };
 }
 
+export async function resolveOperationalAlert(
+  env: WorkerEnv,
+  alertKey: string,
+  evidence: Record<string, unknown>,
+): Promise<{ triageId: string; resolved: boolean; idempotent: boolean }> {
+  const triageId = await deterministicId("triage", "operational_alert", alertKey);
+  const existing = await env.DB.prepare(
+    "SELECT status FROM triage_items WHERE id = ?1 AND source_kind = 'operational_alert'",
+  ).bind(triageId).first<{ status: string }>();
+  if (!existing || existing.status === "resolved") return { triageId, resolved: Boolean(existing), idempotent: true };
+  await env.DB.prepare(
+    `UPDATE triage_items
+        SET status = 'resolved', resolution_json = ?2, updated_at = CURRENT_TIMESTAMP,
+            resolved_at = CURRENT_TIMESTAMP
+      WHERE id = ?1 AND status <> 'resolved'`,
+  ).bind(triageId, stableJson(evidence)).run();
+  return { triageId, resolved: true, idempotent: false };
+}
+
 export async function dispatchGithubJob(
   env: WorkerEnv,
   job: string,

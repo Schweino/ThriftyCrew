@@ -71,6 +71,15 @@ jobs:
           WRANGLER_SEND_METRICS: "false"
         run: pnpm check
 
+      - name: Verify migrated PowerShell source adapters under PowerShell 7
+        shell: pwsh
+        run: |
+          & ../grocery/pull-regular-bakers-api.ps1 -SelfTest
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & ../grocery/pull-regular-familyfare.ps1 -SelfTest
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          [void][scriptblock]::Create((Get-Content ../grocery/pull-regular-hyvee.ps1 -Raw))
+
   shadow-replay:
     if: github.event_name == 'workflow_dispatch' && inputs.shadow_replay
     needs: verify
@@ -119,6 +128,8 @@ jobs:
     env:
       TC_API_ORIGIN: ${{ vars.TC_V3_API_ORIGIN }}
       TC_OIDC_AUDIENCE: tc-grocery-v3
+      KROGER_CLIENT_ID: ${{ secrets.KROGER_CLIENT_ID }}
+      KROGER_CLIENT_SECRET: ${{ secrets.KROGER_CLIENT_SECRET }}
       TC_RECOVERY_REASON: ${{ inputs.recovery_reason || format('primary schedule {0}', github.event.schedule) }}
       RECOVERY_JOB: ${{ inputs.recovery_job || (github.event.schedule == '0 12 * * *' && 'daily-engine') || (github.event.schedule == '0 15 * * 1' && 'accuracy-weekly') || (github.event.schedule == '30 13 * * *' && 'triage-daily') || (github.event.schedule == '0 16 * * *' && 'ghost-rotation-reconcile') }}
     steps:
@@ -145,7 +156,23 @@ jobs:
         shell: bash
         run: |
           case "$RECOVERY_JOB" in
-            daily-engine) pnpm tc engine publish-native ;;
+            daily-engine)
+              pwsh -NoProfile -File ../grocery/pull-regular-bakers-api.ps1 > "$RUNNER_TEMP/bakers-capture.log" & bakers_pid=$!
+              pwsh -NoProfile -File ../grocery/pull-regular-familyfare.ps1 > "$RUNNER_TEMP/family-fare-capture.log" & family_fare_pid=$!
+              pwsh -NoProfile -File ../grocery/pull-regular-hyvee.ps1 > "$RUNNER_TEMP/hy-vee-capture.log" & hy_vee_pid=$!
+              capture_status=0
+              wait "$bakers_pid" || capture_status=1
+              wait "$family_fare_pid" || capture_status=1
+              wait "$hy_vee_pid" || capture_status=1
+              tail -n 40 "$RUNNER_TEMP/bakers-capture.log"
+              tail -n 40 "$RUNNER_TEMP/family-fare-capture.log"
+              tail -n 40 "$RUNNER_TEMP/hy-vee-capture.log"
+              test "$capture_status" -eq 0
+              pnpm tc capture ingest-current bakers family-fare hy-vee
+              pnpm tc engine publish-native
+              pnpm tc engine parity direct
+              pnpm tc evidence accrue
+              ;;
             accuracy-weekly) pnpm tc accuracy draw ;;
             triage-daily) pnpm tc triage run ;;
             ghost-rotation-reconcile) pnpm tc ghost reconcile ;;

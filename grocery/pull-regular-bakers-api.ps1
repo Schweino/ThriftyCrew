@@ -67,12 +67,15 @@ param(
   [int]$Limit = 0,
   [int]$ResultsPerTerm = 25,   # 15 missed real staples behind promo churn (vegetable oil, fresh cauliflower)
   [string]$LocationId = '61500319',   # Baker's - Saddlecreek, 888 S Saddle Creek Rd, Omaha 68106
-  [int]$PaceMs = 180
+  [int]$PaceMs = 180,
+  [string]$OutDir = ''
 )
 $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
-$out  = Join-Path $root 'out'
+$out  = if ($OutDir) { $OutDir } else { Join-Path $root 'out' }
+if (-not (Test-Path $out)) { New-Item -ItemType Directory -Path $out -Force | Out-Null }
+if (-not (Test-Path (Join-Path $out 'regular'))) { New-Item -ItemType Directory -Path (Join-Path $out 'regular') -Force | Out-Null }
 $today = (Get-Date).ToString('yyyy-MM-dd')
 
 # ---------------------------------------------------------------- credentials
@@ -409,6 +412,11 @@ $deals = New-Object System.Collections.Generic.List[object]
 $seen = @{}          # keyed by productId: a product legitimately answers several terms
 $stats = [ordered]@{ terms=0; fail=0; products=0; promo=0; nopriced=0; refused=0 }
 $refusals = New-Object System.Collections.Generic.List[object]
+$termReceipts = @{}
+$termOrdinals = @{}
+for ($termOrdinal = 0; $termOrdinal -lt $termList.Count; $termOrdinal++) {
+  $termOrdinals[[string]$termList[$termOrdinal].Name] = $termOrdinal
+}
 
 # RETRY FAILED TERMS ONCE (2026-07-28). A term was one HTTP call with no retry, and a failure just
 # `continue`d - so every product only reachable through that term vanished from the day's capture. Because
@@ -433,7 +441,14 @@ foreach ($tp in $pending) {
     $failedThisPass.Add($tp); Write-Warning ("term '$term' failed (pass $pass): " + $_.Exception.Message); Start-Sleep -Milliseconds ($PaceMs * 3); continue
   }
   $stats.terms++
-  foreach ($p in @($r.data)) {
+  $responseRows = @($r.data)
+  $termReceipts[$id] = [ordered]@{
+    term_key = $id
+    ordinal = [int]$termOrdinals[$id]
+    outcome = $(if ($responseRows.Count -gt 0) { 'success' } else { 'empty' })
+    row_count = $responseRows.Count
+  }
+  foreach ($p in $responseRows) {
     $it = @($p.items)[0]
     if (-not $it -or -not $it.price) { $stats.nopriced++; continue }
     $reg = 0.0; $promo = 0.0
@@ -469,6 +484,7 @@ foreach ($tp in $pending) {
       size_raw    = [string]$it.size
       size_basis  = [string]$res.basis
       stock_level = [string]$it.inventory.stockLevel
+      found_by_term = $id
       # 2026-07-28: keep Kroger's OWN package weight on the row. The resolver above already uses it to settle
       # the "4 ct / 16 oz" total-vs-per-item ambiguity at CAPTURE time, but nothing re-checked it afterwards -
       # and the shipped cell is not the captured row. Carry-forward, an override, a board merge or an engine
@@ -498,6 +514,18 @@ foreach ($tp in $pending) {
 # only terms that failed BOTH passes count as failures
 $stats.fail = $pending.Count
 if ($pending.Count -gt 0) { Write-Output ("bakers-api: {0} term(s) failed twice and are NOT in this capture: {1}" -f $pending.Count, (@($pending | ForEach-Object { $_.Value }) -join ', ')) }
+$captureTerms = New-Object System.Collections.Generic.List[object]
+foreach ($tp in $termList) {
+  $termId = [string]$tp.Name
+  if ($termReceipts.ContainsKey($termId)) { $captureTerms.Add([pscustomobject]$termReceipts[$termId]); continue }
+  $captureTerms.Add([pscustomobject][ordered]@{
+    term_key = $termId
+    ordinal = [int]$termOrdinals[$termId]
+    outcome = 'blocked'
+    row_count = 0
+    reason = 'Kroger API request failed twice'
+  })
+}
 
 Write-Output ("bakers-api: terms ok={0} failed={1} | rows={2} (promo/sale={3}, unpriced={4}, size-REFUSED={5})" -f $stats.terms, $stats.fail, $stats.products, $stats.promo, $stats.nopriced, $stats.refused)
 if ($refusals.Count -gt 0) {
@@ -565,7 +593,8 @@ $doc = [ordered]@{
   store = "Baker's"; week_of = $today; price_type = 'everyday'
   price_mode = 'in-store'; mode_verified = $today   # Kroger's API prices ARE the store's shelf prices (locationId-scoped, no delivery markup layer)
   source = 'kroger-public-api'; location_id = $LocationId; store_label = "Baker's - Saddlecreek, Omaha 68106"
-  pull_terms = $stats.terms; deal_count = $deals.Count
+  coverage_mode = $(if ($stats.fail -eq 0) { 'full' } else { 'partial' })
+  pull_terms = $stats.terms; capture_terms = $captureTerms.ToArray(); deal_count = $deals.Count
   deals = $deals.ToArray()
 }
 $file = Join-Path $out ('regular\bakers-regular-' + $today + '.json')

@@ -20,6 +20,7 @@ import {
   matchDecisionsChunkSchema,
   matchRunSchema,
   observationChunkSchema,
+  operationalAlertSchema,
   recipeCostsChunkSchema,
   releaseCellsChunkSchema,
   releaseCreateSchema,
@@ -31,6 +32,7 @@ import {
   scheduleDocumentSchema,
   telemetryEventSchema,
   triageResolveSchema,
+  triagePlanSchema,
 } from "@thriftycrew/contracts";
 import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
 import { GhostEntitlementProvider, type Entitlement } from "@thriftycrew/entitlements";
@@ -39,9 +41,11 @@ import { createRelease, findBatch, insertObservations, insertRecipeCosts, insert
 import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation, runGhostClobberDrill } from "./ghost-reconciliation";
-import { dispatchGithubJob, recordAudit, runScheduledOperations } from "./operations";
+import { dispatchGithubJob, raiseOperationalAlert, recordAudit, resolveOperationalAlert, runScheduledOperations } from "./operations";
 import { readEngineSnapshot, type EngineSourceMode } from "./engine-snapshot";
 import { memberStatusHtml } from "./member-status";
+import { accrueMilestoneEvidence, milestoneEvidenceSummary } from "./milestone-evidence";
+import { runServerChaosDrill } from "./chaos-drills";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 
@@ -98,13 +102,14 @@ app.use("/internal/match-decisions", requireIdentityRole(["engine", "operator"])
 app.use("/internal/match-runs", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/job-runs", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/job-runs/*", requireIdentityRole(["capture", "engine", "operator"]));
+app.use("/internal/operational-alerts", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/jobs/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/schedules/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/backups/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/restore-drills", requireIdentityRole(["operator"]));
 app.use("/internal/restore-drills/*", requireIdentityRole(["operator"]));
 app.use("/internal/evidence-gates", requireIdentityRole(["operator"]));
-app.use("/internal/evidence-gates/*", requireIdentityRole(["operator"]));
+app.use("/internal/evidence-gates/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/entitlement-verifications", requireIdentityRole(["operator"]));
 app.use("/internal/entitlement-verifications/*", requireIdentityRole(["operator"]));
 app.use("/internal/releases", requireIdentityRole(["engine", "operator"]));
@@ -114,9 +119,10 @@ app.use("/internal/triage", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/triage/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/doctor", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/engine/*", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/drills/*", requireIdentityRole(["operator"]));
 
 app.get("/api/v2/status", async (context) => {
-  const [release, schedules, accuracy, triage] = await Promise.all([
+  const [release, schedules, accuracy, triage, milestones] = await Promise.all([
     context.env.DB.prepare(
       `SELECT r.id, r.published_at, r.summary_json
          FROM current_releases c JOIN releases r ON r.id = c.release_id
@@ -132,6 +138,7 @@ app.get("/api/v2/status", async (context) => {
     context.env.DB.prepare(
       "SELECT status, COUNT(*) AS count FROM triage_items GROUP BY status ORDER BY status",
     ).all<{ status: string; count: number }>(),
+    milestoneEvidenceSummary(context.env.DB),
   ]);
   const checkedAt = new Date();
   const jobs = schedules.results.map((row) => {
@@ -146,6 +153,7 @@ app.get("/api/v2/status", async (context) => {
     currentRelease: release ? { id: release.id, publishedAt: release.published_at, summary: JSON.parse(release.summary_json) } : null,
     jobs,
     accuracy,
+    milestones,
     triage: Object.fromEntries(triage.results.map((row) => [row.status, row.count])),
     checkedAt: checkedAt.toISOString(),
   });
@@ -754,6 +762,16 @@ app.post("/internal/evidence-gates", zValidator("json", evidenceGateRecordSchema
   return context.json({ ok: body.status === "pass", eventId: body.id, status: body.status, idempotent: false }, body.status === "pass" ? 201 : 422);
 });
 
+app.post("/internal/evidence-gates/accrue", async (context) => {
+  try {
+    const result = await accrueMilestoneEvidence(context.env);
+    await recordAudit(context.env, context.get("identity"), "evidence_gate.accrue", "evidence_gate_event", null, "accepted", result);
+    return context.json(result);
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "milestone evidence accrual failed", 422);
+  }
+});
+
 app.get("/internal/entitlement-verifications", async (context) => {
   const rows = await context.env.DB.prepare("SELECT * FROM entitlement_verifications ORDER BY verified_at DESC LIMIT 500").all<Record<string, unknown>>();
   return context.json({ ok: true, verifications: rows.results.map((row) => ({ ...row, evidence: JSON.parse(String(row.evidence_json ?? "{}")), evidence_json: undefined })) });
@@ -966,10 +984,15 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   const collapseFloor = predecessor ? Math.ceil(predecessor.observation_count * 0.6) : 0;
   const collapsePass = !predecessor || observationCount >= collapseFloor;
   const identityPass = batch.market_verified === 1 && batch.location_verified === 1 && batch.price_mode_verified === 1;
+  const capturedToMillis = Date.parse(batch.captured_to);
+  const captureAgeMillis = Date.now() - capturedToMillis;
+  const freshnessPass = Number.isFinite(capturedToMillis)
+    && captureAgeMillis >= -5 * 60 * 1000
+    && captureAgeMillis <= batch.max_age_days * 24 * 60 * 60 * 1000;
   const termEnvelopePass = batch.coverage_mode !== "full" || batch.expected_terms === null || attempted === batch.expected_terms;
   const pageEnvelopePass = batch.expected_pages === null || capturedPages === batch.expected_pages;
   const completePass = termEnvelopePass && pageEnvelopePass;
-  const status = identityPass && completePass && collapsePass ? "validated" : "rejected";
+  const status = identityPass && completePass && collapsePass && freshnessPass ? "validated" : "rejected";
   const statements: D1PreparedStatement[] = body.terms.map((term) => context.env.DB.prepare(
     `INSERT INTO capture_terms (batch_id, term_key, ordinal, outcome, row_count, reason)
      VALUES (?1, ?2, ?3, ?4, ?5, ?6)`,
@@ -978,11 +1001,12 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
     `UPDATE capture_batches SET status = ?2, attempted_terms = ?3, successful_terms = ?4, empty_terms = ?5,
        rejected_terms = ?6, blocked_terms = ?7, captured_pages = ?8, evidence_manifest_key = ?9,
        validation_summary_json = ?10, sealed_at = CURRENT_TIMESTAMP WHERE id = ?1`,
-  ).bind(batch.id, status, attempted, successful, empty, rejected, blocked, capturedPages, body.evidenceManifestKey ?? null, stableJson({ identityPass, termEnvelopePass, pageEnvelopePass, collapsePass, observationCount, predecessorBatchId: predecessor?.id ?? null, predecessorObservationCount: predecessor?.observation_count ?? null, collapseFloor })));
+  ).bind(batch.id, status, attempted, successful, empty, rejected, blocked, capturedPages, body.evidenceManifestKey ?? null, stableJson({ identityPass, termEnvelopePass, pageEnvelopePass, collapsePass, freshnessPass, captureAgeMillis, maxAgeDays: batch.max_age_days, observationCount, predecessorBatchId: predecessor?.id ?? null, predecessorObservationCount: predecessor?.observation_count ?? null, collapseFloor })));
   for (const [guardId, pass, eligible, examined, detail] of [
     ["batch-location", identityPass, 3, 3, {}],
     ["batch-completeness", completePass, (batch.expected_terms ?? 0) + (batch.expected_pages ?? 0), attempted + capturedPages, {}],
     ["batch-collapse", collapsePass, predecessor ? 2 : 0, predecessor ? 2 : 0, { observationCount, predecessorBatchId: predecessor?.id ?? null, predecessorObservationCount: predecessor?.observation_count ?? null, collapseFloor }],
+    ["batch-freshness", freshnessPass, 1, 1, { capturedTo: batch.captured_to, captureAgeMillis, maxAgeDays: batch.max_age_days }],
   ] as const) {
     const resultId = await deterministicId("guard", batch.id, guardId);
     statements.push(context.env.DB.prepare(
@@ -1284,6 +1308,16 @@ app.post("/internal/releases/:id/drill-ghost-clobber", async (context) => {
   return context.json({ ok: result.passed, eventId, ...result }, result.passed ? 200 : 422);
 });
 
+app.post("/internal/drills/:kind", async (context) => {
+  try {
+    const result = await runServerChaosDrill(context.env, context.req.param("kind"));
+    await recordAudit(context.env, context.get("identity"), "chaos_drill.run", "evidence_gate_event", String(result.eventId), result.ok === true ? "accepted" : "failed", result);
+    return context.json(result, result.ok === true ? 200 : 422);
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "chaos drill failed", 422);
+  }
+});
+
 app.post("/internal/accuracy/draws", zValidator("json", accuracyDrawCreateSchema), async (context) => {
   try {
     const result = await createAccuracyDraw(context.env.DB, context.req.valid("json"));
@@ -1294,7 +1328,9 @@ app.post("/internal/accuracy/draws", zValidator("json", accuracyDrawCreateSchema
 });
 
 app.get("/internal/accuracy/draw", async (context) => {
-  const draw = await readAccuracyDraw(context.env.DB, context.req.query("id"));
+  const reveal = context.req.query("reveal") === "1";
+  if (reveal && context.get("identity").role !== "operator") return jsonError("only an operator may reveal sampled board answers", 403);
+  const draw = await readAccuracyDraw(context.env.DB, context.req.query("id"), reveal);
   if (!draw) return jsonError("accuracy draw not found", 404);
   return context.json({ ok: true, draw });
 });
@@ -1315,6 +1351,49 @@ app.get("/internal/triage", async (context) => {
     ? await context.env.DB.prepare("SELECT * FROM triage_items ORDER BY created_at, id LIMIT 1000").all()
     : await context.env.DB.prepare("SELECT * FROM triage_items WHERE status = ?1 ORDER BY created_at, id LIMIT 1000").bind(requestedStatus).all();
   return context.json({ ok: true, items: rows.results });
+});
+
+app.get("/internal/triage/:id/review", async (context) => {
+  const triageId = context.req.param("id");
+  const item = await context.env.DB.prepare("SELECT * FROM triage_items WHERE id = ?1").bind(triageId).first<Record<string, unknown>>();
+  if (!item) return jsonError("triage item not found", 404);
+  let source: Record<string, unknown> | null = null;
+  if (item.source_kind === "guard_finding") {
+    source = await context.env.DB.prepare(
+      `SELECT finding.*, result.release_id, result.guard_id, result.status AS guard_status,
+              result.eligible_count, result.examined_count, result.detail_json AS guard_detail_json,
+              release.state AS release_state, release.input_hash, release.configuration_id
+         FROM guard_findings finding
+         JOIN guard_results result ON result.id = finding.result_id
+         JOIN releases release ON release.id = result.release_id
+        WHERE finding.id = ?1`,
+    ).bind(String(item.source_ref)).first<Record<string, unknown>>();
+  } else if (item.source_kind === "accuracy_gap") {
+    source = await context.env.DB.prepare(
+      `SELECT draw.*, COUNT(verdict.id) AS verdict_count
+         FROM accuracy_draws draw LEFT JOIN operator_verdicts verdict ON verdict.draw_id = draw.id
+        WHERE draw.id = ?1 GROUP BY draw.id`,
+    ).bind(String(item.source_ref)).first<Record<string, unknown>>();
+  }
+  const current = await context.env.DB.prepare(
+    `SELECT release.id, release.published_at, release.configuration_id, release.input_hash
+       FROM current_releases current JOIN releases release ON release.id = current.release_id
+      WHERE current.market_id = 'omaha'`,
+  ).first<Record<string, unknown>>();
+  await recordAudit(context.env, context.get("identity"), "triage.review", "triage_item", triageId, "accepted", { sourceKind: item.source_kind });
+  return context.json({ ok: true, readOnly: true, item, source, currentRelease: current });
+});
+
+app.post("/internal/operational-alerts", zValidator("json", operationalAlertSchema), async (context) => {
+  const body = context.req.valid("json");
+  const identity = context.get("identity");
+  const alertKey = `${identity.agentId}:${body.key}`;
+  const evidence = { ...body.evidence, observedAt: body.observedAt, agentId: identity.agentId };
+  const result = body.status === "firing"
+    ? await raiseOperationalAlert(context.env, alertKey, body.title, evidence)
+    : await resolveOperationalAlert(context.env, alertKey, evidence);
+  await recordAudit(context.env, identity, `operational_alert.${body.status}`, "triage_item", result.triageId, "accepted", evidence);
+  return context.json({ ok: true, status: body.status, ...result }, body.status === "firing" ? 201 : 200);
 });
 
 app.post("/internal/triage/run", async (context) => {
@@ -1436,6 +1515,11 @@ app.post("/internal/triage/:id/resolve", zValidator("json", triageResolveSchema)
   const body = context.req.valid("json");
   const existing = await context.env.DB.prepare("SELECT id FROM triage_items WHERE id = ?1").bind(context.req.param("id")).first();
   if (!existing) return jsonError("triage item not found", 404);
+  if (body.status === "planned") {
+    const parsedPlan = triagePlanSchema.safeParse(body.resolution);
+    if (!parsedPlan.success) return jsonError(`planned triage items require the typed reviewer plan: ${parsedPlan.error.message}`, 422);
+    if (parsedPlan.data.triageId !== context.req.param("id")) return jsonError("reviewer plan belongs to a different triage item", 409);
+  }
   await context.env.DB.prepare(
     `UPDATE triage_items
         SET status = ?2, plan_ref = ?3, resolution_json = ?4, updated_at = CURRENT_TIMESTAMP,
