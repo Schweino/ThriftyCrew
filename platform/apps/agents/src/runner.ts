@@ -15,7 +15,7 @@ import {
 } from "@thriftycrew/contracts";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
-const outputRoot = path.resolve(process.env.RUNNER_TEMP ?? path.join(platformRoot, ".agent-output"));
+const outputRoot = path.resolve(process.env.TC_OUTPUT_ROOT ?? process.env.RUNNER_TEMP ?? path.join(platformRoot, ".agent-output"));
 const arguments_ = process.argv.slice(2);
 const fixtureMode = arguments_.includes("--fixture");
 const requestedAgent = arguments_.find((value) => !value.startsWith("--")) ?? process.env.TC_AGENT_ID;

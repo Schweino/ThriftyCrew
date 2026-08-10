@@ -12,7 +12,7 @@ interface EvalCase {
 interface EvalCorpus { version: number; agentId: string; thresholdMillis: number; cases: EvalCase[] }
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
-const outputRoot = path.resolve(process.env.RUNNER_TEMP ?? path.join(platformRoot, ".agent-output"));
+const outputRoot = path.resolve(process.env.TC_OUTPUT_ROOT ?? process.env.RUNNER_TEMP ?? path.join(platformRoot, ".agent-output"));
 const args = process.argv.slice(2);
 const fixturesOnly = args.includes("--fixtures-only");
 const requested = args.find((value) => !value.startsWith("--"));

@@ -86,8 +86,6 @@ jobs:
 
       - name: Evaluate exact execution configuration
         if: steps.evaluation-status.outputs.current != 'true'
-        env:
-          RUNNER_TEMP: ${{ runner.temp }}/tc-agent-output
         run: |
           mkdir -p "$TC_OUTPUT_ROOT"
           pnpm --filter @thriftycrew/agents eval "$TC_AGENT_ID"
@@ -126,7 +124,6 @@ jobs:
         id: execute
         if: steps.claim.outputs.claimed == 'true'
         env:
-          RUNNER_TEMP: ${{ runner.temp }}/tc-agent-output
           TC_AGENT_INPUT_FILE: ${{ runner.temp }}/tc-agent-output/input.json
         run: pnpm --filter @thriftycrew/agents run run -- "$TC_AGENT_ID"
 
@@ -173,6 +170,7 @@ jobs:
         id: complete
         if: steps.claim.outputs.claimed == 'true' && steps.execute.outcome == 'success' && ((inputs.agent_id != 'triage-developer' && inputs.agent_id != 'source-sentinel-investigator') || steps.open-pr.outcome == 'success')
         run: |
+          set -o pipefail
           pnpm tc agent complete "$TC_OUTPUT_ROOT/claim.json" "$TC_OUTPUT_ROOT/${TC_AGENT_ID}.json" | tee "$TC_OUTPUT_ROOT/completion.log"
 
       - name: Fail fenced work item
