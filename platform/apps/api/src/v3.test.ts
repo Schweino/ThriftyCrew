@@ -4,6 +4,18 @@ import { createAccuracyDraw, readAccuracyDraw, wilsonInterval } from "./accuracy
 import { mayShowFreeBadge } from "./ghost-reconciliation";
 import { storeCoverageFloor } from "./release-guards";
 import { memberStatusHtml } from "./member-status";
+import { engineMayWriteCaptureSource } from "./capture-authorization";
+
+describe("capture role/source authorization", () => {
+  it("allows GitHub engine writes only for migration bridges and approved direct headless sources", () => {
+    expect(engineMayWriteCaptureSource("legacy-bakers", "legacy_bridge")).toBe(true);
+    expect(engineMayWriteCaptureSource("direct-bakers-headless", "api")).toBe(true);
+    expect(engineMayWriteCaptureSource("direct-family-fare-headless", "freshop")).toBe(true);
+    expect(engineMayWriteCaptureSource("direct-walmart-browser", "browser")).toBe(false);
+    expect(engineMayWriteCaptureSource("direct-walmart-headless", "browser")).toBe(false);
+    expect(engineMayWriteCaptureSource("unapproved-source", "api")).toBe(false);
+  });
+});
 
 describe("out-of-band accuracy reporting", () => {
   it("computes the standard 95% Wilson interval without treating cannot-tell as a verdict", () => {

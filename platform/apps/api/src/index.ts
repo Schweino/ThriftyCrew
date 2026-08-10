@@ -48,6 +48,7 @@ import { readEngineSnapshot, readEngineSnapshotIdentity, type EngineSourceMode }
 import { memberStatusHtml } from "./member-status";
 import { accrueMilestoneEvidence, milestoneEvidenceSummary } from "./milestone-evidence";
 import { runServerChaosDrill } from "./chaos-drills";
+import { engineMayWriteCaptureSource } from "./capture-authorization";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 
@@ -882,10 +883,12 @@ app.patch("/internal/job-runs/:id", zValidator("json", jobRunUpdateSchema), asyn
 app.post("/internal/capture-batches", zValidator("json", captureBatchCreateSchema), async (context) => {
   const body = context.req.valid("json");
   const identity = context.get("identity");
-  if (identity.role === "engine" && !body.sourceId.startsWith("legacy-")) return jsonError("engine identities may only create migration-bridge batches", 403);
   if (identity.sourceIds && !identity.sourceIds.includes(body.sourceId)) return jsonError("agent is not authorized for this capture source", 403);
-  const source = await context.env.DB.prepare("SELECT id FROM capture_sources WHERE id = ?1 AND active = 1").bind(body.sourceId).first();
+  const source = await context.env.DB.prepare("SELECT id, capture_method FROM capture_sources WHERE id = ?1 AND active = 1").bind(body.sourceId).first<{ id: string; capture_method: string }>();
   if (!source) return jsonError("unknown or inactive capture source", 404);
+  if (identity.role === "engine" && !engineMayWriteCaptureSource(source.id, source.capture_method)) {
+    return jsonError("engine identities may only create migration-bridge or approved direct-headless batches", 403);
+  }
   const existing = await context.env.DB.prepare(
     "SELECT id, status FROM capture_batches WHERE agent_id = ?1 AND idempotency_key = ?2",
   ).bind(identity.agentId, body.idempotencyKey).first<{ id: string; status: string }>();
@@ -951,8 +954,8 @@ app.post("/internal/capture-batches/:id/observations", zValidator("json", observ
   const batch = await findBatch(context.env.DB, context.req.param("id"));
   if (!batch) return jsonError("capture batch not found", 404);
   const identity = context.get("identity");
-  const migrationBridge = identity.role === "engine" && batch.capture_method === "legacy_bridge";
-  if (identity.role !== "capture" && identity.role !== "operator" && !migrationBridge) return jsonError("mutation role is not authorized for capture content", 403);
+  const engineOwnedCapture = identity.role === "engine" && engineMayWriteCaptureSource(batch.source_id, batch.capture_method);
+  if (identity.role !== "capture" && identity.role !== "operator" && !engineOwnedCapture) return jsonError("mutation role is not authorized for capture content", 403);
   if (batch.agent_id !== identity.agentId && identity.role !== "operator") return jsonError("batch belongs to another agent", 403);
   if (identity.sourceIds && !identity.sourceIds.includes(batch.source_id)) return jsonError("agent is not authorized for this capture source", 403);
   try {
@@ -967,9 +970,10 @@ app.put("/internal/capture-batches/:id/evidence", async (context) => {
   const batch = await findBatch(context.env.DB, context.req.param("id"));
   if (!batch) return jsonError("capture batch not found", 404);
   const identity = context.get("identity");
-  const migrationBridge = identity.role === "engine" && batch.capture_method === "legacy_bridge";
-  if (identity.role !== "capture" && identity.role !== "operator" && !migrationBridge) return jsonError("mutation role is not authorized for capture evidence", 403);
+  const engineOwnedCapture = identity.role === "engine" && engineMayWriteCaptureSource(batch.source_id, batch.capture_method);
+  if (identity.role !== "capture" && identity.role !== "operator" && !engineOwnedCapture) return jsonError("mutation role is not authorized for capture evidence", 403);
   if (batch.agent_id !== identity.agentId && identity.role !== "operator") return jsonError("batch belongs to another agent", 403);
+  if (identity.sourceIds && !identity.sourceIds.includes(batch.source_id)) return jsonError("agent is not authorized for this capture source", 403);
   if (batch.status !== "open") return jsonError("evidence can only be added to an open batch", 409);
   const metadataResult = evidenceMetadataSchema.safeParse({
     id: context.req.header("x-evidence-id"),
@@ -1003,9 +1007,10 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   const batch = await findBatch(context.env.DB, context.req.param("id"));
   if (!batch) return jsonError("capture batch not found", 404);
   const identity = context.get("identity");
-  const migrationBridge = identity.role === "engine" && batch.capture_method === "legacy_bridge";
-  if (identity.role !== "capture" && identity.role !== "operator" && !migrationBridge) return jsonError("mutation role is not authorized to seal captures", 403);
+  const engineOwnedCapture = identity.role === "engine" && engineMayWriteCaptureSource(batch.source_id, batch.capture_method);
+  if (identity.role !== "capture" && identity.role !== "operator" && !engineOwnedCapture) return jsonError("mutation role is not authorized to seal captures", 403);
   if (batch.agent_id !== identity.agentId && identity.role !== "operator") return jsonError("batch belongs to another agent", 403);
+  if (identity.sourceIds && !identity.sourceIds.includes(batch.source_id)) return jsonError("agent is not authorized for this capture source", 403);
   if (batch.status !== "open") return jsonError("batch is already sealed", 409);
   const body = context.req.valid("json");
   const attempted = body.terms.filter((term) => term.outcome !== "not_attempted").length;
