@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import type { CurrentBridgeArtifact } from "./legacy";
 import { deployConfiguration, MutationClient } from "./client";
 
@@ -50,5 +50,78 @@ describe("GitHub OIDC authorization", () => {
     expect(authorizations).toEqual([`Bearer ${first}`, `Bearer ${second}`]);
     vi.unstubAllGlobals();
     vi.useRealTimers();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
+  });
+
+  it.each([
+    ["GET", undefined],
+    ["POST", { value: "post" }],
+    ["PUT", { value: "put" }],
+    ["PATCH", { value: "patch" }],
+  ] as const)("retries an explicit expired-token 401 once for %s with a rebuilt envelope", async (method, json) => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-08-10T19:00:00Z"));
+    const token = (label: string) => `header.${Buffer.from(JSON.stringify({ exp: Math.floor(Date.now() / 1_000) + 300, label })).toString("base64url")}.signature`;
+    const first = token("first");
+    const second = token("second");
+    const provider = vi.fn().mockResolvedValueOnce(first).mockResolvedValueOnce(second);
+    const requests: Array<{ authorization: string; timestamp: string; nonce: string; body: Uint8Array }> = [];
+    vi.stubGlobal("fetch", vi.fn(async (_url: URL, init?: RequestInit) => {
+      const headers = new Headers(init?.headers);
+      const requestBody = init?.body instanceof Blob ? new Uint8Array(await init.body.arrayBuffer()) : new Uint8Array();
+      requests.push({
+        authorization: headers.get("authorization") ?? "",
+        timestamp: headers.get("x-tc-timestamp") ?? "",
+        nonce: headers.get("x-tc-nonce") ?? "",
+        body: requestBody,
+      });
+      if (requests.length === 1) {
+        vi.setSystemTime(new Date("2026-08-10T19:00:01Z"));
+        return new Response(JSON.stringify({ ok: false, error: "GitHub OIDC token is expired" }), { status: 401 });
+      }
+      return new Response(JSON.stringify({ ok: true }), { status: 200 });
+    }));
+    const client = new MutationClient({ origin: "https://example.test", agentId: "test", oidcTokenProvider: provider });
+
+    await expect(client.request("/internal/test", { method, ...(json === undefined ? {} : { json }) })).resolves.toMatchObject({ ok: true, httpStatus: 200 });
+
+    expect(provider).toHaveBeenCalledTimes(2);
+    expect(requests).toHaveLength(2);
+    expect(requests.map((request) => request.authorization)).toEqual([`Bearer ${first}`, `Bearer ${second}`]);
+    expect(requests[0]?.timestamp).not.toBe(requests[1]?.timestamp);
+    expect(requests[0]?.nonce).not.toBe(requests[1]?.nonce);
+    expect(requests[0]?.body).toEqual(requests[1]?.body);
+  });
+
+  it("surfaces a second expired-token 401 without another retry", async () => {
+    const token = (label: string) => `header.${Buffer.from(JSON.stringify({ exp: Math.floor(Date.now() / 1_000) + 300, label })).toString("base64url")}.signature`;
+    const provider = vi.fn().mockResolvedValueOnce(token("first")).mockResolvedValueOnce(token("second"));
+    const fetchMock = vi.fn(async () => new Response(JSON.stringify({ ok: false, error: "GitHub OIDC token is expired" }), { status: 401 }));
+    vi.stubGlobal("fetch", fetchMock);
+    const client = new MutationClient({ origin: "https://example.test", agentId: "test", oidcTokenProvider: provider });
+
+    await expect(client.request("/internal/test", { json: { value: 1 } })).rejects.toThrow("returned 401: GitHub OIDC token is expired");
+    expect(provider).toHaveBeenCalledTimes(2);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not retry another 401 or an HMAC-authenticated request", async () => {
+    const provider = vi.fn().mockResolvedValue("header.eyJleHAiOjQxMDI0NDQ4MDB9.signature");
+    const genericFetch = vi.fn().mockResolvedValue(new Response(JSON.stringify({ ok: false, error: "mutation role is not authorized" }), { status: 401 }));
+    vi.stubGlobal("fetch", genericFetch);
+    const oidcClient = new MutationClient({ origin: "https://example.test", agentId: "test", oidcTokenProvider: provider });
+    await expect(oidcClient.request("/internal/test")).rejects.toThrow("mutation role is not authorized");
+    expect(genericFetch).toHaveBeenCalledTimes(1);
+    expect(provider).toHaveBeenCalledTimes(1);
+
+    const expiredFetch = vi.fn().mockResolvedValue(new Response(JSON.stringify({ ok: false, error: "GitHub OIDC token is expired" }), { status: 401 }));
+    vi.stubGlobal("fetch", expiredFetch);
+    const hmacClient = new MutationClient({ origin: "https://example.test", agentId: "test", secret: "fixture-secret" });
+    await expect(hmacClient.request("/internal/test")).rejects.toThrow("GitHub OIDC token is expired");
+    expect(expiredFetch).toHaveBeenCalledTimes(1);
   });
 });

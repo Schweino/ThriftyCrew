@@ -40,8 +40,8 @@ export class MutationClient {
     this.oidcExpiresAt = options.oidcToken ? oidcExpiry(options.oidcToken) : 0;
   }
 
-  private async authorizationToken(): Promise<string | undefined> {
-    if (this.options.oidcTokenProvider && (!this.cachedOidcToken || Date.now() >= this.oidcExpiresAt - 60_000)) {
+  private async authorizationToken(forceRefresh = false): Promise<string | undefined> {
+    if (this.options.oidcTokenProvider && (forceRefresh || !this.cachedOidcToken || Date.now() >= this.oidcExpiresAt - 60_000)) {
       this.cachedOidcToken = await this.options.oidcTokenProvider();
       this.oidcExpiresAt = oidcExpiry(this.cachedOidcToken);
     }
@@ -51,29 +51,39 @@ export class MutationClient {
   async request(pathname: string, init: { method?: string; json?: unknown; body?: Uint8Array; headers?: HeadersInit; acceptStatuses?: number[] } = {}): Promise<ApiResult> {
     const method = init.method ?? (init.json === undefined && init.body === undefined ? "GET" : "POST");
     const body = init.body ?? (init.json === undefined ? new Uint8Array() : encoder.encode(JSON.stringify(init.json)));
-    const timestamp = new Date().toISOString();
-    const nonce = `nonce_${crypto.randomUUID()}`;
     const bodyHash = await digestHex(body);
     const url = new URL(pathname, this.options.origin);
-    const canonical = [timestamp, nonce, method.toUpperCase(), url.pathname, bodyHash].join("\n");
-    const headers = new Headers(init.headers);
-    if (init.json !== undefined) headers.set("content-type", "application/json");
-    headers.set("x-tc-agent", this.options.agentId);
-    headers.set("x-tc-timestamp", timestamp);
-    headers.set("x-tc-nonce", nonce);
-    const oidcToken = await this.authorizationToken();
-    if (oidcToken) headers.set("authorization", `Bearer ${oidcToken}`);
-    else if (this.options.secret) headers.set("x-tc-signature", await hmacHex(this.options.secret, canonical));
-    else throw new Error("mutation client requires an HMAC secret or GitHub OIDC token");
-    const requestInit: RequestInit = { method, headers };
-    if (body.byteLength > 0) requestInit.body = new Blob([Uint8Array.from(body)]);
-    const response = await fetch(url, requestInit);
-    const responseText = await response.text();
-    let result: ApiResult;
-    try {
-      result = responseText ? JSON.parse(responseText) as ApiResult : { ok: false, error: `empty response from ${url.hostname}` };
-    } catch {
-      result = { ok: false, error: `non-JSON response from ${url.hostname}: ${responseText.slice(0, 500)}` };
+    const send = async (forceOidcRefresh = false): Promise<{ response: Response; result: ApiResult }> => {
+      const timestamp = new Date().toISOString();
+      const nonce = `nonce_${crypto.randomUUID()}`;
+      const canonical = [timestamp, nonce, method.toUpperCase(), url.pathname, bodyHash].join("\n");
+      const headers = new Headers(init.headers);
+      if (init.json !== undefined) headers.set("content-type", "application/json");
+      headers.set("x-tc-agent", this.options.agentId);
+      headers.set("x-tc-timestamp", timestamp);
+      headers.set("x-tc-nonce", nonce);
+      const oidcToken = await this.authorizationToken(forceOidcRefresh);
+      if (oidcToken) headers.set("authorization", `Bearer ${oidcToken}`);
+      else if (this.options.secret) headers.set("x-tc-signature", await hmacHex(this.options.secret, canonical));
+      else throw new Error("mutation client requires an HMAC secret or GitHub OIDC token");
+      const requestInit: RequestInit = { method, headers };
+      if (body.byteLength > 0) requestInit.body = new Blob([Uint8Array.from(body)]);
+      const response = await fetch(url, requestInit);
+      const responseText = await response.text();
+      let result: ApiResult;
+      try {
+        result = responseText ? JSON.parse(responseText) as ApiResult : { ok: false, error: `empty response from ${url.hostname}` };
+      } catch {
+        result = { ok: false, error: `non-JSON response from ${url.hostname}: ${responseText.slice(0, 500)}` };
+      }
+      return { response, result };
+    };
+    let { response, result } = await send();
+    // Authentication rejects an expired bearer before the route handler, so
+    // rebuilding the envelope and retrying the unchanged body once cannot
+    // duplicate a successful mutation.
+    if (response.status === 401 && result.error === "GitHub OIDC token is expired" && this.options.oidcTokenProvider) {
+      ({ response, result } = await send(true));
     }
     if (!response.ok && !init.acceptStatuses?.includes(response.status)) {
       const detail = typeof result.error === "string" ? result.error : stableJson(result);

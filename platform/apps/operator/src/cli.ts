@@ -25,7 +25,6 @@ function cliPath(file: string): string {
 }
 
 async function githubOidcToken(): Promise<string | undefined> {
-  if (process.env.TC_OIDC_TOKEN) return process.env.TC_OIDC_TOKEN;
   const requestUrl = process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
   const requestToken = process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
   if (!requestUrl || !requestToken) return undefined;
