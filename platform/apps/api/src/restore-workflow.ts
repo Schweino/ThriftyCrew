@@ -60,6 +60,8 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
     let backupId = "unknown";
     let dumpSha256 = "0".repeat(64);
     let normalizedObjectKey: string | null = null;
+    let normalizedMultipartUploadId: string | null = null;
+    let normalizedMultipartCompleted = false;
     await this.env.DB.prepare(
       `INSERT INTO job_runs (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, executor_run_id, actor_id, input_json)
        VALUES (?1, 'restore-drill-quarterly', 'schedule', ?2, ?2, ?2, 'started', ?3, 'cloudflare:restore-workflow', '{}')
@@ -95,109 +97,107 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
       const hashScheme = "sha256-merkle-r2-v1";
       dumpSha256 = await sha256Hex(new TextEncoder().encode(stableJson({ hashScheme, objectKey: backup.object_key, etag: dump.etag, length: dump.length, hashChunkBytes, chunkHashes })));
       normalizedObjectKey = `restore-normalized/${backup.id}/${dumpSha256}.sql`;
-      const analysis = await step.do("analyze restore normalization", {
-        retries: { limit: 2, delay: "30 seconds", backoff: "constant" },
-        timeout: "30 minutes",
-      }, async () => {
-        const source = await this.env.BACKUPS.get(backup.object_key);
-        if (!source?.body) throw new Error(`backup object ${backup.object_key} is unreadable during restore analysis`);
-        const sourceEtag = source.etag.replaceAll('"', "");
-        if (sourceEtag !== dump.etag || source.size !== dump.length) throw new Error("backup object changed between hashing and restore analysis");
-        const expectedCounts = emptyRestoreCounts();
-        const releaseHashes: Record<string, string> = {};
-        const deferredUpdates: string[] = [];
-        const recoveryRows: Array<{ table: string; columns: string[]; values: Array<string | null> }> = [];
-        const statementLimitBytes = 90_000;
-        let currentReleaseId: string | null = null;
-        let carry = "";
-        let normalizedByteLength = 0;
-        const encoder = new TextEncoder();
-        const analyzeLine = (line: string): void => {
-          const adjusted = normalizeCaptureBatchLine(line);
-          if (adjusted.deferredUpdate) deferredUpdates.push(adjusted.deferredUpdate);
-          const insert = inspectSqlInsert(line);
-          if (insert) {
-            if (RESTORE_COUNT_TABLES.includes(insert.table as RestoreCountTable)) {
-              expectedCounts[insert.table as RestoreCountTable] += 1;
-            }
-            const record = Object.fromEntries(insert.columns.map((column, index) => [column, insert.values[index]]));
-            if (insert.table === "current_releases" && record.market_id === "omaha" && typeof record.release_id === "string") {
-              currentReleaseId = record.release_id;
-            }
-            if (insert.table === "releases" && typeof record.id === "string" && typeof record.input_hash === "string") {
-              releaseHashes[record.id] = record.input_hash;
-            }
-          }
-          if (utf8LengthExceeds(line, statementLimitBytes)) {
-            if (!insert) throw new Error("oversized non-INSERT statement cannot be normalized");
-            recoveryRows.push(insert);
-            normalizedByteLength += encoder.encode(`-- oversized INSERT for ${insert.table} restored through parameter binding\n`).byteLength;
-            return;
-          }
-          normalizedByteLength += encoder.encode(`${adjusted.line}\n`).byteLength;
-        };
-        const reader = source.body.getReader();
-        const decoder = new TextDecoder();
-        while (true) {
-          const chunk = await reader.read();
-          if (chunk.done) break;
-          const lines = `${carry}${decoder.decode(chunk.value, { stream: true })}`.split("\n");
-          carry = lines.pop() ?? "";
-          for (const line of lines) analyzeLine(line);
-        }
-        carry += decoder.decode();
-        if (carry) analyzeLine(carry);
-        if (deferredUpdates.length > 0) normalizedByteLength += encoder.encode(`${deferredUpdates.join("\n")}\n`).byteLength;
-        const expectedRelease = currentReleaseId ? { id: currentReleaseId, inputHash: releaseHashes[currentReleaseId] } : null;
-        if (!expectedRelease?.inputHash) throw new Error("backup dump omitted the current Omaha release or its input hash");
-        return { deferredSupersessionUpdates: deferredUpdates.length, statementLimitBytes, recoveryRows, expectedCounts, expectedRelease, normalizedByteLength };
-      });
-      const normalizedObject = await step.do("write fixed-length normalized restore object", {
-        retries: { limit: 2, delay: "30 seconds", backoff: "constant" },
-        timeout: "30 minutes",
-      }, async () => {
-        const source = await this.env.BACKUPS.get(backup.object_key);
-        if (!source?.body) throw new Error(`backup object ${backup.object_key} is unreadable during normalization upload`);
-        const sourceEtag = source.etag.replaceAll('"', "");
-        if (sourceEtag !== dump.etag || source.size !== dump.length) throw new Error("backup object changed between analysis and normalization upload");
-        let carry = "";
-        const deferredUpdates: string[] = [];
-        const renderLine = (line: string): string => {
-          if (utf8LengthExceeds(line, analysis.statementLimitBytes)) {
-            const insert = inspectSqlInsert(line);
-            if (!insert) throw new Error("oversized non-INSERT statement cannot be normalized");
-            return `-- oversized INSERT for ${insert.table} restored through parameter binding\n`;
-          }
-          const adjusted = normalizeCaptureBatchLine(line);
-          if (adjusted.deferredUpdate) deferredUpdates.push(adjusted.deferredUpdate);
-          return `${adjusted.line}\n`;
-        };
-        const transformer = new TransformStream<string, string>({
-          transform(chunk, controller) {
-            const lines = `${carry}${chunk}`.split("\n");
-            carry = lines.pop() ?? "";
-            for (const line of lines) controller.enqueue(renderLine(line));
-          },
-          flush(controller) {
-            if (carry) controller.enqueue(renderLine(carry));
-            if (deferredUpdates.length > 0) controller.enqueue(`${deferredUpdates.join("\n")}\n`);
-          },
-        });
-        const encoded = source.body.pipeThrough(new TextDecoderStream()).pipeThrough(transformer).pipeThrough(new TextEncoderStream());
-        const fixed = new FixedLengthStream(analysis.normalizedByteLength);
-        const [stored] = await Promise.all([
-          this.env.BACKUPS.put(normalizedObjectKey!, fixed.readable, {
+      const multipart = await step.do("create normalized restore multipart upload", async () => {
+        const upload = await this.env.BACKUPS.createMultipartUpload(normalizedObjectKey!, {
           httpMetadata: { contentType: "application/sql" },
           customMetadata: { sourceObjectKey: backup.object_key, sourceDumpSha256: dumpSha256 },
-          }),
-          encoded.pipeTo(fixed.writable),
-        ]);
-        if (!stored) throw new Error("normalized restore object upload returned no object metadata");
-        if (stored.size !== analysis.normalizedByteLength) throw new Error("normalized restore object has the wrong byte length");
-        if (deferredUpdates.length !== analysis.deferredSupersessionUpdates) throw new Error("normalization analysis changed before upload");
-        return { objectKey: normalizedObjectKey!, etag: stored.etag.replaceAll('"', ""), length: stored.size };
+        });
+        return { uploadId: upload.uploadId };
       });
-      const normalized = { ...analysis, ...normalizedObject };
+      normalizedMultipartUploadId = multipart.uploadId;
+      const statementLimitBytes = 90_000;
+      const targetPartBytes = 8 * 1024 * 1024;
+      const boundarySearchBytes = 512 * 1024;
+      const expectedCounts = emptyRestoreCounts();
+      const releaseHashes: Record<string, string> = {};
+      const recoveryRows: Array<{ table: string; columns: string[]; values: Array<string | null> }> = [];
+      const deferredUpdates: string[] = [];
+      const uploadedParts: Array<{ partNumber: number; etag: string }> = [];
+      let currentReleaseId: string | null = null;
+      let normalizedByteLength = 0;
+      let sourceOffset = 0;
+      for (let partNumber = 1; sourceOffset < dump.length; partNumber += 1) {
+        const remaining = dump.length - sourceOffset;
+        const nominalEnd = Math.min(sourceOffset + targetPartBytes, dump.length);
+        const part = await step.do(`normalize and upload restore part ${partNumber}`, {
+          retries: { limit: 2, delay: "30 seconds", backoff: "constant" },
+          timeout: "10 minutes",
+        }, async () => {
+          let sourceEnd = nominalEnd;
+          if (sourceEnd < dump.length) {
+            const searchLength = Math.min(boundarySearchBytes, dump.length - sourceEnd);
+            const boundary = await this.env.BACKUPS.get(backup.object_key, { range: { offset: sourceEnd, length: searchLength } });
+            if (!boundary?.body) throw new Error("backup object is unreadable while locating a multipart line boundary");
+            const boundaryBytes = new Uint8Array(await boundary.arrayBuffer());
+            const newline = boundaryBytes.indexOf(10);
+            if (newline < 0) throw new Error(`restore SQL line exceeds ${boundarySearchBytes} boundary-search bytes`);
+            sourceEnd += newline + 1;
+          }
+          const object = await this.env.BACKUPS.get(backup.object_key, { range: { offset: sourceOffset, length: sourceEnd - sourceOffset } });
+          if (!object?.body) throw new Error(`backup object part ${partNumber} is unreadable`);
+          const bytes = await object.arrayBuffer();
+          if (bytes.byteLength !== sourceEnd - sourceOffset) throw new Error(`backup object part ${partNumber} has the wrong length`);
+          const text = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+          const hasTrailingNewline = text.endsWith("\n");
+          const lines = text.split("\n");
+          if (hasTrailingNewline) lines.pop();
+          const partCounts = emptyRestoreCounts();
+          const partReleaseHashes: Record<string, string> = {};
+          const partRecoveryRows: Array<{ table: string; columns: string[]; values: Array<string | null> }> = [];
+          const partDeferredUpdates: string[] = [];
+          let partCurrentReleaseId: string | null = null;
+          let output = "";
+          for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
+            const line = lines[lineIndex]!;
+            const insert = inspectSqlInsert(line);
+            if (insert) {
+              if (RESTORE_COUNT_TABLES.includes(insert.table as RestoreCountTable)) partCounts[insert.table as RestoreCountTable] += 1;
+              const record = Object.fromEntries(insert.columns.map((column, index) => [column, insert.values[index]]));
+              if (insert.table === "current_releases" && record.market_id === "omaha" && typeof record.release_id === "string") partCurrentReleaseId = record.release_id;
+              if (insert.table === "releases" && typeof record.id === "string" && typeof record.input_hash === "string") partReleaseHashes[record.id] = record.input_hash;
+            }
+            if (utf8LengthExceeds(line, statementLimitBytes)) {
+              if (!insert) throw new Error("oversized non-INSERT statement cannot be normalized");
+              partRecoveryRows.push(insert);
+              output += `-- oversized INSERT for ${insert.table} restored through parameter binding\n`;
+              continue;
+            }
+            const adjusted = normalizeCaptureBatchLine(line);
+            if (adjusted.deferredUpdate) partDeferredUpdates.push(adjusted.deferredUpdate);
+            output += adjusted.line;
+            if (hasTrailingNewline || lineIndex < lines.length - 1) output += "\n";
+          }
+          const isLastPart = sourceEnd === dump.length;
+          const allDeferredUpdates = [...deferredUpdates, ...partDeferredUpdates];
+          if (isLastPart && allDeferredUpdates.length > 0) {
+            if (!output.endsWith("\n")) output += "\n";
+            output += `${allDeferredUpdates.join("\n")}\n`;
+          }
+          const outputBytes = new TextEncoder().encode(output);
+          if (!isLastPart && outputBytes.byteLength < 5 * 1024 * 1024) throw new Error(`normalized multipart part ${partNumber} is below R2's minimum part size`);
+          const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedObjectKey!, multipart.uploadId);
+          const uploaded = await upload.uploadPart(partNumber, outputBytes);
+          return { sourceEnd, byteLength: outputBytes.byteLength, uploaded, counts: partCounts, releaseHashes: partReleaseHashes, currentReleaseId: partCurrentReleaseId, recoveryRows: partRecoveryRows, deferredUpdates: partDeferredUpdates };
+        });
+        sourceOffset = part.sourceEnd;
+        normalizedByteLength += part.byteLength;
+        uploadedParts.push(part.uploaded);
+        for (const table of RESTORE_COUNT_TABLES) expectedCounts[table] += part.counts[table];
+        Object.assign(releaseHashes, part.releaseHashes);
+        if (part.currentReleaseId) currentReleaseId = part.currentReleaseId;
+        recoveryRows.push(...part.recoveryRows);
+        deferredUpdates.push(...part.deferredUpdates);
+      }
+      const completedMultipart = await step.do("complete normalized restore multipart upload", async () => {
+        const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedObjectKey!, multipart.uploadId);
+        const object = await upload.complete(uploadedParts);
+        return { etag: object.etag.replaceAll('"', ""), length: object.size };
+      });
+      normalizedMultipartCompleted = true;
+      if (completedMultipart.length !== normalizedByteLength) throw new Error("completed normalized restore object has the wrong byte length");
+      const expectedRelease = currentReleaseId ? { id: currentReleaseId, inputHash: releaseHashes[currentReleaseId] } : null;
+      if (!expectedRelease?.inputHash) throw new Error("backup dump omitted the current Omaha release or its input hash");
+      const normalized = { objectKey: normalizedObjectKey, ...completedMultipart, deferredSupersessionUpdates: deferredUpdates.length, statementLimitBytes, recoveryRows, expectedCounts, expectedRelease };
       const scratch = await step.do("create isolated scratch D1", async () => cloudflare<{ uuid?: string }>(this.env, "/d1/database", {
         method: "POST",
         body: JSON.stringify({ name: `tc-grocery-v3-restore-${startedAt.slice(0, 10).replaceAll("-", "")}-${event.instanceId.slice(-8)}`, primary_location_hint: "wnam", read_replication: { mode: "disabled" } }),
@@ -325,6 +325,17 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           });
         } catch (error) {
           await raiseOperationalAlert(this.env, `restore-scratch-cleanup:${scratchDatabaseId}`, "Restore drill scratch database cleanup failed", { scratchDatabaseId, error: error instanceof Error ? error.message : "unknown cleanup failure" });
+        }
+      }
+      if (normalizedObjectKey && normalizedMultipartUploadId && !normalizedMultipartCompleted) {
+        try {
+          await step.do("abort exact normalized restore multipart upload", async () => {
+            const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedObjectKey!, normalizedMultipartUploadId!);
+            await upload.abort();
+            return true;
+          });
+        } catch (error) {
+          await raiseOperationalAlert(this.env, `restore-multipart-cleanup:${normalizedMultipartUploadId}`, "Normalized restore multipart cleanup failed", { normalizedObjectKey, normalizedMultipartUploadId, error: error instanceof Error ? error.message : "unknown cleanup failure" });
         }
       }
       if (normalizedObjectKey) {
