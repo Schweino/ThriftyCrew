@@ -26,7 +26,9 @@ function environment(): WorkerEnv {
     EVIDENCE: {} as R2Bucket,
     BACKUPS: {} as R2Bucket,
     BACKUPS_SECONDARY: {} as R2Bucket,
+    ARCHIVE: {} as R2Bucket,
     BACKUP_WORKFLOW: {} as Workflow,
+    RESTORE_WORKFLOW: {} as Workflow,
     ASSETS: {} as Fetcher,
     APP_ENV: "test",
     PUBLIC_ORIGIN: "https://example.test",
@@ -115,5 +117,29 @@ describe("GitHub OIDC trust policy", () => {
       GITHUB_OIDC_AUDIENCE: "tc-grocery-v3",
       GITHUB_OIDC_REPOSITORY: "Schweino/SimpleMoneyPlaybook",
     }, now)).toThrow(/repository is not trusted/);
+  });
+
+  it("accepts only an explicitly listed workflow", () => {
+    const now = Math.floor(Date.now() / 1000);
+    const base = {
+      iss: "https://token.actions.githubusercontent.com",
+      aud: "tc-grocery-v3",
+      sub: "repo:Schweino/SimpleMoneyPlaybook:ref:refs/heads/main",
+      exp: now + 300,
+      iat: now,
+      repository: "Schweino/SimpleMoneyPlaybook",
+      run_id: "1234",
+    };
+    const env = {
+      ...environment(),
+      GITHUB_OIDC_AUDIENCE: "tc-grocery-v3",
+      GITHUB_OIDC_REPOSITORY: "Schweino/SimpleMoneyPlaybook",
+      GITHUB_OIDC_WORKFLOW_REFS: JSON.stringify([
+        "Schweino/SimpleMoneyPlaybook/.github/workflows/platform-v3.yml@refs/heads/main",
+        "Schweino/SimpleMoneyPlaybook/.github/workflows/platform-agents.yml@refs/heads/main",
+      ]),
+    };
+    expect(() => validateGithubOidcClaims({ ...base, workflow_ref: "Schweino/SimpleMoneyPlaybook/.github/workflows/platform-agents.yml@refs/heads/main" }, env, now)).not.toThrow();
+    expect(() => validateGithubOidcClaims({ ...base, workflow_ref: "Schweino/SimpleMoneyPlaybook/.github/workflows/rogue.yml@refs/heads/main" }, env, now)).toThrow(/workflow is not trusted/);
   });
 });

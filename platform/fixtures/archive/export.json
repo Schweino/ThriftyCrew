@@ -1,0 +1,25 @@
+{
+  "manifestId": "archive-fixture-v1",
+  "rows": [
+    {
+      "observation_id": "obs-fixture-1",
+      "source_id": "family-fare-api",
+      "store_id": "family-fare-omaha",
+      "observed_at": "2024-01-15T12:00:00Z",
+      "product_name": "Fixture Chicken Breast",
+      "price_cents": 399,
+      "currency": "USD",
+      "evidence_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "observation_id": "obs-fixture-2",
+      "source_id": "hy-vee-browser",
+      "store_id": "hy-vee-omaha",
+      "observed_at": "2024-01-16T12:00:00Z",
+      "product_name": "Fixture White Rice",
+      "price_cents": 249,
+      "currency": "USD",
+      "evidence_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  ]
+}

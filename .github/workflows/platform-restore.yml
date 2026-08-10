@@ -1,0 +1,36 @@
+name: Grocery quarterly restore drill
+
+on:
+  schedule:
+    - cron: "23 5 1 1,4,7,10 *"
+      timezone: "America/Chicago"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: platform
+    env:
+      TC_API_ORIGIN: ${{ vars.TC_V3_API_ORIGIN }}
+      TC_OIDC_AUDIENCE: tc-grocery-v3
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.16.0
+          run_install: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: platform/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Trigger deterministic restore workflow
+        run: pnpm tc restore trigger

@@ -236,7 +236,18 @@ export const jobRunCreateSchema = z.object({
   promptHash: sha256Hex.optional(),
   inputHash: sha256Hex.optional(),
   modelId: z.string().min(1).max(200).optional(),
+  agentId: nonEmptyId.optional(),
+  ledgerMode: z.enum(["normal", "diagnostic"]).default("normal"),
+  mutationAuthorized: z.boolean().default(true),
+  estimatedCostMicrousd: z.number().int().nonnegative().default(0),
   input: z.record(z.string(), z.unknown()).default({}),
+}).superRefine((value, context) => {
+  if (value.ledgerMode === "diagnostic" && value.mutationAuthorized) {
+    context.addIssue({ code: "custom", path: ["mutationAuthorized"], message: "diagnostic runs cannot authorize mutation" });
+  }
+  if (value.agentId && (!value.promptHash || !value.modelId)) {
+    context.addIssue({ code: "custom", message: "agent runs require promptHash and modelId" });
+  }
 });
 
 export const jobRunUpdateSchema = z.object({
@@ -263,11 +274,28 @@ export const jobRunUpdateSchema = z.object({
 export const scheduleEntrySchema = z.object({
   id: nonEmptyId,
   cron: z.string().min(5).max(256),
+  triggerCron: z.string().min(5).max(256).optional(),
   executor: z.enum(["github-actions", "worker-cron", "cloudflare-workflow", "pc"]),
   maxGapMinutes: z.number().int().positive(),
   owner: z.string().min(1).max(160),
   proof: z.string().min(1).max(500),
   dispatchOnGap: z.boolean().default(false),
+  monitorInLedger: z.boolean().default(true),
+  lifecycle: z.enum(["active", "transition", "retired"]).default("active"),
+  workflowFile: z.string().min(1).max(500).optional(),
+  windowsTask: z.string().min(1).max(300).optional(),
+  agentId: nonEmptyId.optional(),
+  retirementGate: z.string().min(1).max(1000).optional(),
+}).superRefine((value, context) => {
+  if (value.executor === "github-actions" && !value.workflowFile) {
+    context.addIssue({ code: "custom", path: ["workflowFile"], message: "GitHub schedules require a workflow file" });
+  }
+  if (value.executor === "pc" && !value.windowsTask) {
+    context.addIssue({ code: "custom", path: ["windowsTask"], message: "PC schedules require a Windows task name" });
+  }
+  if (value.lifecycle === "transition" && !value.retirementGate) {
+    context.addIssue({ code: "custom", path: ["retirementGate"], message: "transition schedules require a retirement gate" });
+  }
 });
 
 export const scheduleDocumentSchema = z.object({
@@ -280,6 +308,141 @@ export const scheduleDocumentSchema = z.object({
     if (ids.has(schedule.id)) context.addIssue({ code: "custom", path: ["schedules", index, "id"], message: "schedule ids must be unique" });
     ids.add(schedule.id);
   });
+});
+
+export const transitionInventorySchema = z.object({
+  version: z.number().int().positive(),
+  recordedAt: isoDateTime,
+  authority: z.literal("platform/config/schedules.json"),
+  evidenceGates: z.array(z.object({
+    id: nonEmptyId,
+    required: z.number().int().positive(),
+    recorded: z.number().int().nonnegative(),
+    retirementBlocking: z.boolean(),
+  })).min(1),
+  executors: z.array(z.object({
+    id: nonEmptyId,
+    kind: z.enum(["github-actions", "worker-cron", "cloudflare-workflow", "pc"]),
+    lifecycle: z.enum(["active", "transition", "retired"]),
+    scheduleId: nonEmptyId.optional(),
+    scope: z.enum(["grocery", "adjacent"]),
+    retirementGate: z.string().min(1).max(1000).optional(),
+  })).min(1),
+});
+
+export const agentCapabilitySchema = z.enum([
+  "read:status", "read:evidence", "read:content", "write:ledger", "write:content-stage",
+  "write:triage-plan", "write:pull-request", "write:sentinel-finding",
+]);
+
+export const agentRegistryEntrySchema = z.object({
+  id: nonEmptyId,
+  enabled: z.boolean(),
+  plane: z.enum(["ci", "pc"]),
+  scheduleId: nonEmptyId.optional(),
+  promptFile: z.string().min(1).max(500),
+  promptSha256: sha256Hex,
+  model: z.string().min(1).max(200),
+  fallbackModel: z.string().min(1).max(200).optional(),
+  monthlyBudgetMicrousd: z.number().int().nonnegative(),
+  criticality: z.enum(["safety", "operational", "optional"]),
+  capabilities: z.array(agentCapabilitySchema).min(1),
+  inputContracts: z.array(z.string().min(1).max(300)).min(1),
+  outputContract: z.string().min(1).max(300),
+  fixtureFiles: z.array(z.string().min(1).max(500)).min(1),
+}).superRefine((value, context) => {
+  if (value.plane === "pc" && value.capabilities.some((capability) => capability.startsWith("write:") && capability !== "write:ledger")) {
+    context.addIssue({ code: "custom", path: ["capabilities"], message: "PC agents may only write their ledger" });
+  }
+  if (value.capabilities.includes("write:pull-request") && value.capabilities.includes("write:content-stage")) {
+    context.addIssue({ code: "custom", path: ["capabilities"], message: "PR-writing agents cannot stage publishable content" });
+  }
+});
+
+export const agentRegistrySchema = z.object({
+  version: z.number().int().positive(),
+  pricingEffectiveAt: isoDateTime,
+  pricing: z.record(z.string(), z.object({
+    inputMicrousdPerMillion: z.number().int().nonnegative(),
+    outputMicrousdPerMillion: z.number().int().nonnegative(),
+    cacheReadMicrousdPerMillion: z.number().int().nonnegative().default(0),
+  })),
+  agents: z.array(agentRegistryEntrySchema).min(1).max(50),
+}).superRefine((value, context) => {
+  const ids = new Set<string>();
+  value.agents.forEach((agent, index) => {
+    if (ids.has(agent.id)) context.addIssue({ code: "custom", path: ["agents", index, "id"], message: "agent ids must be unique" });
+    ids.add(agent.id);
+    if (!value.pricing[agent.model]) context.addIssue({ code: "custom", path: ["agents", index, "model"], message: "model needs effective pricing" });
+    if (agent.fallbackModel && !value.pricing[agent.fallbackModel]) context.addIssue({ code: "custom", path: ["agents", index, "fallbackModel"], message: "fallback model needs effective pricing" });
+  });
+});
+
+export const contentBatchCreateSchema = z.object({
+  id: nonEmptyId,
+  kind: z.literal("recipe-pack"),
+  inputHash: sha256Hex,
+  promptHash: sha256Hex,
+  sourceRefs: z.array(z.string().min(1).max(1000)).min(1).max(1000),
+});
+
+export const contentItemSchema = z.object({
+  slug: nonEmptyId,
+  title: z.string().trim().min(4).max(300),
+  servings: z.number().int().min(1).max(100),
+  ingredients: z.array(z.object({
+    name: z.string().trim().min(1).max(300),
+    quantity: z.number().positive(),
+    unit: z.string().trim().min(1).max(80),
+    commodityId: nonEmptyId,
+  })).min(2).max(100),
+  instructions: z.array(z.string().trim().min(10).max(2000)).min(1).max(100),
+  provenance: z.array(z.object({
+    url: z.url().max(3000),
+    accessedAt: isoDateTime,
+  })).min(1).max(50),
+});
+
+export const contentBatchItemsSchema = z.object({ items: z.array(contentItemSchema).min(1).max(100) });
+export const contentBatchAuditSchema = z.object({
+  auditorAgentId: nonEmptyId,
+  promptHash: sha256Hex,
+  findings: z.array(z.object({
+    key: nonEmptyId,
+    severity: z.enum(["info", "warning", "hard"]),
+    message: z.string().min(5).max(2000),
+    itemSlug: nonEmptyId.optional(),
+  })).max(1000),
+});
+
+export const sourceSentinelResultSchema = z.object({
+  sourceId: nonEmptyId,
+  contractVersion: z.number().int().positive(),
+  observedAt: isoDateTime,
+  status: z.enum(["pass", "fail"]),
+  checks: z.array(z.object({
+    key: nonEmptyId,
+    status: z.enum(["pass", "fail"]),
+    detail: z.string().min(1).max(2000),
+  })).min(1),
+  evidence: z.record(z.string(), z.unknown()).default({}),
+});
+
+export const archivalForecastSchema = z.object({
+  observedAt: isoDateTime,
+  databaseBytes: z.number().int().nonnegative(),
+  databaseLimitBytes: z.number().int().positive(),
+  observationCount: z.number().int().nonnegative(),
+  monthlyGrowthBytes: z.number().int(),
+  oldestObservationAt: isoDateTime.nullable(),
+  protectedObservationCount: z.number().int().nonnegative(),
+  thresholdPercent: z.number().int().min(1).max(99).default(70),
+});
+
+export const archivePlanSchema = z.object({
+  cutoffAt: isoDateTime,
+  dryRun: z.boolean().default(true),
+  maximumRows: z.number().int().min(1).max(10_000).default(10_000),
 });
 
 export const jobDispatchSchema = z.object({
@@ -532,3 +695,11 @@ export type EngineParityReport = z.infer<typeof engineParityReportSchema>;
 export type RestoreDrillRecord = z.infer<typeof restoreDrillRecordSchema>;
 export type EvidenceGateRecord = z.infer<typeof evidenceGateRecordSchema>;
 export type EntitlementVerificationRecord = z.infer<typeof entitlementVerificationRecordSchema>;
+export type ScheduleDocument = z.infer<typeof scheduleDocumentSchema>;
+export type TransitionInventory = z.infer<typeof transitionInventorySchema>;
+export type AgentRegistry = z.infer<typeof agentRegistrySchema>;
+export type AgentRegistryEntry = z.infer<typeof agentRegistryEntrySchema>;
+export type ContentBatchCreate = z.infer<typeof contentBatchCreateSchema>;
+export type ContentItem = z.infer<typeof contentItemSchema>;
+export type SourceSentinelResult = z.infer<typeof sourceSentinelResultSchema>;
+export type ArchivalForecast = z.infer<typeof archivalForecastSchema>;

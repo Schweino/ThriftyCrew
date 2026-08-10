@@ -1,60 +1,29 @@
 {
-  "version": 1,
+  "version": 2,
   "timezone": "America/Chicago",
   "schedules": [
-    {
-      "id": "ledger-watchdog",
-      "cron": "*/15 * * * *",
-      "executor": "worker-cron",
-      "maxGapMinutes": 30,
-      "owner": "platform",
-      "proof": "job_runs:ledger-watchdog",
-      "dispatchOnGap": false
-    },
-    {
-      "id": "d1-backup",
-      "cron": "30 4 * * *",
-      "executor": "cloudflare-workflow",
-      "maxGapMinutes": 1560,
-      "owner": "platform",
-      "proof": "backup_exports:completed",
-      "dispatchOnGap": false
-    },
-    {
-      "id": "daily-engine",
-      "cron": "0 12 * * *",
-      "executor": "github-actions",
-      "maxGapMinutes": 1560,
-      "owner": "pricing",
-      "proof": "releases:published",
-      "dispatchOnGap": true
-    },
-    {
-      "id": "accuracy-weekly",
-      "cron": "0 15 * * 1",
-      "executor": "github-actions",
-      "maxGapMinutes": 11520,
-      "owner": "accuracy",
-      "proof": "accuracy_draws:open-or-completed",
-      "dispatchOnGap": true
-    },
-    {
-      "id": "triage-daily",
-      "cron": "30 13 * * *",
-      "executor": "github-actions",
-      "maxGapMinutes": 1560,
-      "owner": "operations",
-      "proof": "job_runs:triage-daily",
-      "dispatchOnGap": true
-    },
-    {
-      "id": "ghost-rotation-reconcile",
-      "cron": "0 16 * * *",
-      "executor": "github-actions",
-      "maxGapMinutes": 1560,
-      "owner": "publication",
-      "proof": "ghost_rotation_reconciliations:verified",
-      "dispatchOnGap": true
-    }
+    { "id": "ledger-watchdog", "cron": "*/15 * * * *", "executor": "worker-cron", "maxGapMinutes": 30, "owner": "platform", "proof": "job_runs:ledger-watchdog", "dispatchOnGap": false },
+    { "id": "archival-forecast-daily", "cron": "15 5 * * *", "triggerCron": "*/15 * * * *", "executor": "worker-cron", "maxGapMinutes": 1560, "owner": "platform", "proof": "archival_forecasts", "dispatchOnGap": false },
+    { "id": "d1-backup", "cron": "30 4 * * *", "executor": "cloudflare-workflow", "maxGapMinutes": 1560, "owner": "platform", "proof": "backup_exports:completed", "dispatchOnGap": false },
+    { "id": "daily-engine", "cron": "7 12 * * *", "executor": "github-actions", "workflowFile": ".github/workflows/platform-v3.yml", "maxGapMinutes": 1560, "owner": "pricing", "proof": "releases:published", "dispatchOnGap": true },
+    { "id": "family-fare-paced", "cron": "17 */3 * * *", "executor": "github-actions", "workflowFile": ".github/workflows/platform-v3.yml", "maxGapMinutes": 240, "owner": "capture", "proof": "capture_batches:direct-family-fare-headless", "dispatchOnGap": true },
+    { "id": "accuracy-weekly", "cron": "17 15 * * 1", "executor": "github-actions", "workflowFile": ".github/workflows/platform-v3.yml", "maxGapMinutes": 11520, "owner": "accuracy", "proof": "accuracy_draws:open-or-completed", "dispatchOnGap": true },
+    { "id": "triage-daily", "cron": "37 13 * * *", "executor": "github-actions", "workflowFile": ".github/workflows/platform-v3.yml", "maxGapMinutes": 1560, "owner": "operations", "proof": "job_runs:triage-daily", "dispatchOnGap": true },
+    { "id": "ghost-rotation-reconcile", "cron": "7 16 * * *", "executor": "github-actions", "workflowFile": ".github/workflows/platform-v3.yml", "maxGapMinutes": 1560, "owner": "publication", "proof": "ghost_rotation_reconciliations:verified", "dispatchOnGap": true },
+    { "id": "source-sentinel-daily", "cron": "47 14 * * *", "executor": "github-actions", "workflowFile": ".github/workflows/platform-agents.yml", "agentId": "source-sentinel-investigator", "maxGapMinutes": 1560, "owner": "capture", "proof": "source_sentinel_results", "dispatchOnGap": true },
+    { "id": "post-publish-review", "cron": "47 12 * * *", "executor": "github-actions", "workflowFile": ".github/workflows/platform-agents.yml", "agentId": "post-publish-reviewer", "maxGapMinutes": 1560, "owner": "operations", "proof": "job_runs:post-publish-review", "dispatchOnGap": true },
+    { "id": "triage-review", "cron": "57 13 * * *", "executor": "github-actions", "workflowFile": ".github/workflows/platform-agents.yml", "agentId": "triage-reviewer", "maxGapMinutes": 1560, "owner": "operations", "proof": "job_runs:triage-review", "dispatchOnGap": true },
+    { "id": "recipe-pack-weekly", "cron": "27 10 * * 2", "executor": "github-actions", "workflowFile": ".github/workflows/platform-agents.yml", "agentId": "recipe-sourcer", "maxGapMinutes": 11520, "owner": "content", "proof": "content_batches:promoted-or-rejected", "dispatchOnGap": false },
+    { "id": "restore-drill-quarterly", "cron": "23 5 1 1,4,7,10 *", "executor": "github-actions", "workflowFile": ".github/workflows/platform-restore.yml", "maxGapMinutes": 133920, "owner": "platform", "proof": "restore_drills:passed", "dispatchOnGap": true },
+
+    { "id": "legacy-bakers-scan", "cron": "0 6 * * *", "executor": "pc", "windowsTask": "SMP Bakers Daily Scan", "maxGapMinutes": 1800, "owner": "legacy", "proof": "grocery/out/regular/bakers-regular-*.json", "dispatchOnGap": false, "monitorInLedger": false, "lifecycle": "transition", "retirementGate": "14 shadow days and cloud server capture proof" },
+    { "id": "legacy-family-fare-sweep", "cron": "0 */3 * * *", "executor": "pc", "windowsTask": "SMP Family Fare Term Sweep", "maxGapMinutes": 240, "owner": "legacy", "proof": "grocery/out/regular/family-fare-regular-*.json", "dispatchOnGap": false, "monitorInLedger": false, "lifecycle": "transition", "retirementGate": "cloud paced sweep sustains term cursor and four weekly capture cycles" },
+    { "id": "legacy-grocery-daily", "cron": "30 8 * * *", "executor": "pc", "windowsTask": "SMP Grocery Daily Pipeline (local)", "maxGapMinutes": 1800, "owner": "legacy", "proof": "grocery/out/smp-feed.json", "dispatchOnGap": false, "monitorInLedger": false, "lifecycle": "transition", "retirementGate": "30 beta days, four beta weeks, route rollback proof" },
+    { "id": "legacy-failure-watchdog", "cron": "45 6 * * *", "executor": "pc", "windowsTask": "SMP Grocery Failure Watchdog", "maxGapMinutes": 1800, "owner": "legacy", "proof": "grocery/alert-log.txt", "dispatchOnGap": false, "monitorInLedger": false, "lifecycle": "transition", "retirementGate": "legacy daily pipeline retired" },
+    { "id": "legacy-agent-wake", "cron": "50 5,7 * * *", "executor": "pc", "windowsTask": "SMP Wake For Grocery Agents", "maxGapMinutes": 1800, "owner": "legacy", "proof": "%LOCALAPPDATA%/smp-wake.log", "dispatchOnGap": false, "monitorInLedger": false, "lifecycle": "transition", "retirementGate": "only approved Chrome capture/canary wake schedule remains" },
+    { "id": "legacy-friday-email", "cron": "15 7 * * 5", "executor": "pc", "windowsTask": "SMP Friday Email (draft)", "maxGapMinutes": 11520, "owner": "content", "proof": "Ghost draft", "dispatchOnGap": false, "monitorInLedger": false, "lifecycle": "transition", "retirementGate": "content batch and Ghost draft replacement proves one scheduled wave" },
+    { "id": "adjacent-facebook-reel", "cron": "0 10 * * *", "executor": "pc", "windowsTask": "SMP Daily Facebook Reel", "maxGapMinutes": 1800, "owner": "adjacent", "proof": "reels/out/*.mp4", "dispatchOnGap": false, "monitorInLedger": false, "lifecycle": "active" },
+    { "id": "legacy-cloud-daily-backup", "cron": "0 16 * * *", "executor": "github-actions", "workflowFile": ".github/workflows/daily.yml", "maxGapMinutes": 1800, "owner": "legacy", "proof": "legacy bot commit", "dispatchOnGap": false, "monitorInLedger": false, "lifecycle": "transition", "retirementGate": "30 beta days and legacy daily pipeline retirement" },
+    { "id": "legacy-cloud-heartbeat", "cron": "0 15 * * *", "executor": "github-actions", "workflowFile": ".github/workflows/heartbeat.yml", "maxGapMinutes": 1800, "owner": "legacy", "proof": "GitHub workflow conclusion", "dispatchOnGap": false, "monitorInLedger": false, "lifecycle": "transition", "retirementGate": "legacy cloud daily backup retirement" }
   ]
 }

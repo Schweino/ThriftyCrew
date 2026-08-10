@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "sources": [
+    { "sourceId": "direct-bakers-headless", "minimumRows": 1, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 0, "requiredPriceMode": true },
+    { "sourceId": "direct-family-fare-headless", "minimumRows": 1, "minimumTermCompletionPercent": 95, "minimumTaxonomyPercent": 0, "requiredPriceMode": true },
+    { "sourceId": "direct-hy-vee-headless", "minimumRows": 1, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 0, "requiredPriceMode": true },
+    { "sourceId": "direct-aldi-browser", "minimumRows": 1, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 0, "requiredPriceMode": true },
+    { "sourceId": "direct-fareway-browser", "minimumRows": 1, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 0, "requiredPriceMode": true },
+    { "sourceId": "direct-sams-browser", "minimumRows": 1, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 0, "requiredPriceMode": true },
+    { "sourceId": "direct-walmart-browser", "minimumRows": 1, "minimumTermCompletionPercent": 100, "minimumTaxonomyPercent": 0, "requiredPriceMode": true }
+  ]
+}

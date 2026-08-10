@@ -108,11 +108,14 @@ export async function dispatchGithubJob(
   ).bind(idempotencyKey).first<{ id: string; status: "dispatched" | "failed" | "suppressed" }>();
   if (existing) return { dispatchId: existing.id, status: existing.status, idempotent: true };
   const dispatchId = `dispatch_${crypto.randomUUID()}`;
+  const schedule = await env.DB.prepare("SELECT workflow_file FROM job_schedules WHERE job = ?1 AND active = 1")
+    .bind(job).first<{ workflow_file: string | null }>();
+  const workflowFile = (schedule?.workflow_file ?? env.GITHUB_WORKFLOW_FILE)?.split("/").at(-1);
   await env.DB.prepare(
     `INSERT INTO watchdog_dispatches (id, job, idempotency_key, reason, status)
      VALUES (?1, ?2, ?3, ?4, 'started')`,
   ).bind(dispatchId, job, idempotencyKey, reason).run();
-  if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY || !env.GITHUB_WORKFLOW_FILE) {
+  if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY || !workflowFile) {
     const detail = { error: "GitHub recovery dispatch is not configured" };
     await env.DB.prepare(
       "UPDATE watchdog_dispatches SET status = 'failed', detail_json = ?2, finished_at = CURRENT_TIMESTAMP WHERE id = ?1",
@@ -122,7 +125,7 @@ export async function dispatchGithubJob(
   }
   try {
     const response = await fetch(
-      `https://api.github.com/repos/${env.GITHUB_REPOSITORY}/actions/workflows/${env.GITHUB_WORKFLOW_FILE}/dispatches`,
+      `https://api.github.com/repos/${env.GITHUB_REPOSITORY}/actions/workflows/${workflowFile}/dispatches`,
       {
         method: "POST",
         headers: {
@@ -132,7 +135,12 @@ export async function dispatchGithubJob(
           "user-agent": "tc-grocery-v3-watchdog",
           "x-github-api-version": "2022-11-28",
         },
-        body: JSON.stringify({ ref, inputs: { recovery_job: job, recovery_reason: reason } }),
+        body: JSON.stringify({
+          ref,
+          ...(workflowFile === "platform-agents.yml" ? { inputs: { agent_job: job } }
+            : workflowFile === "platform-restore.yml" ? {}
+            : { inputs: { recovery_job: job, recovery_reason: reason } }),
+        }),
       },
     );
     if (response.status !== 204) throw new Error(`GitHub workflow dispatch returned ${response.status}`);
@@ -356,6 +364,56 @@ export async function runLedgerWatchdog(env: WorkerEnv, scheduledTime: number): 
   ).bind(runId, new Date().toISOString(), stableJson({ checked: schedules.results.length, stale })).run();
 }
 
+export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number): Promise<void> {
+  const observedAt = new Date(scheduledTime).toISOString();
+  const runId = await deterministicId("run", "archival-forecast-daily", observedAt.slice(0, 10));
+  const existing = await env.DB.prepare("SELECT id FROM job_runs WHERE id = ?1").bind(runId).first();
+  if (existing) return;
+  await env.DB.prepare(
+    `INSERT INTO job_runs (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, actor_id, input_json)
+     VALUES (?1, 'archival-forecast-daily', 'schedule', ?2, ?2, ?2, 'started', 'cloudflare:scheduled', '{}')`,
+  ).bind(runId, observedAt).run();
+  try {
+    const [pageCount, pageSize, observations, protectedRows, previous] = await Promise.all([
+      env.DB.prepare("PRAGMA page_count").first<{ page_count: number }>(),
+      env.DB.prepare("PRAGMA page_size").first<{ page_size: number }>(),
+      env.DB.prepare("SELECT COUNT(*) AS count, MIN(captured_at) AS oldest FROM observations").first<{ count: number; oldest: string | null }>(),
+      env.DB.prepare("SELECT COUNT(DISTINCT observation_id) AS count FROM release_cells WHERE observation_id IS NOT NULL").first<{ count: number }>(),
+      env.DB.prepare("SELECT database_bytes, observed_at FROM archival_forecasts ORDER BY observed_at DESC LIMIT 1").first<{ database_bytes: number; observed_at: string }>(),
+    ]);
+    const databaseBytes = (pageCount?.page_count ?? 0) * (pageSize?.page_size ?? 4096);
+    const databaseLimitBytes = Number(env.D1_DATABASE_LIMIT_BYTES ?? 10 * 1024 * 1024 * 1024);
+    const elapsedDays = previous ? Math.max(1, (scheduledTime - Date.parse(previous.observed_at)) / 86_400_000) : 0;
+    const monthlyGrowthBytes = previous ? Math.round((databaseBytes - previous.database_bytes) * 30 / elapsedDays) : 0;
+    const usagePercentMillis = Math.floor(databaseBytes * 100_000 / databaseLimitBytes);
+    const status = usagePercentMillis >= 90_000 ? "critical" : usagePercentMillis >= 70_000 ? "armed" : "healthy";
+    const projectedLimitAt = monthlyGrowthBytes > 0
+      ? new Date(scheduledTime + Math.max(0, databaseLimitBytes - databaseBytes) / monthlyGrowthBytes * 30 * 86_400_000).toISOString()
+      : null;
+    const forecastId = await deterministicId("archival-forecast", observedAt);
+    await env.DB.batch([
+      env.DB.prepare(
+        `INSERT INTO archival_forecasts
+           (id, database_bytes, database_limit_bytes, observation_count, monthly_growth_bytes,
+            oldest_observation_at, protected_observation_count, threshold_percent, usage_percent_millis,
+            projected_limit_at, status, observed_at)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, 70, ?8, ?9, ?10, ?11)`,
+      ).bind(forecastId, databaseBytes, databaseLimitBytes, observations?.count ?? 0, monthlyGrowthBytes,
+        observations?.oldest ?? null, protectedRows?.count ?? 0, usagePercentMillis, projectedLimitAt, status, observedAt),
+      env.DB.prepare("UPDATE job_runs SET status = 'completed', heartbeat_at = ?2, finished_at = ?2, stats_json = ?3 WHERE id = ?1")
+        .bind(runId, new Date().toISOString(), stableJson({ forecastId, databaseBytes, databaseLimitBytes, usagePercentMillis, monthlyGrowthBytes, projectedLimitAt, status })),
+    ]);
+    if (status !== "healthy") await raiseOperationalAlert(env, "d1-archive-capacity", `D1 archival threshold is ${status}`, { forecastId, databaseBytes, databaseLimitBytes, usagePercentMillis, monthlyGrowthBytes, projectedLimitAt });
+    else await resolveOperationalAlert(env, "d1-archive-capacity", { forecastId, databaseBytes, usagePercentMillis, projectedLimitAt });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "archival forecast failed";
+    await env.DB.prepare("UPDATE job_runs SET status = 'failed', heartbeat_at = CURRENT_TIMESTAMP, finished_at = CURRENT_TIMESTAMP, error = ?2 WHERE id = ?1")
+      .bind(runId, message).run();
+    await raiseOperationalAlert(env, `archival-forecast:${observedAt.slice(0, 10)}`, "Daily D1 archival forecast failed", { error: message, observedAt });
+    throw error;
+  }
+}
+
 function localScheduleParts(scheduledTime: number): Record<string, string> {
   return Object.fromEntries(
     new Intl.DateTimeFormat("en-CA", {
@@ -373,17 +431,19 @@ function localScheduleParts(scheduledTime: number): Record<string, string> {
 export async function runScheduledOperations(env: WorkerEnv, scheduledTime: number): Promise<void> {
   await runLedgerWatchdog(env, scheduledTime);
   const parts = localScheduleParts(scheduledTime);
-  if (parts.hour !== "04" || parts.minute !== "30") return;
   const localDate = `${parts.year}-${parts.month}-${parts.day}`;
-  const instanceId = `d1-backup-${localDate}`;
-  const recorded = await env.DB.prepare("SELECT id FROM backup_exports WHERE id = ?1")
-    .bind(`backup_${instanceId}`).first();
-  if (recorded) return;
-  try {
-    await env.BACKUP_WORKFLOW.create({ id: instanceId, params: { trigger: "worker-cron", localDate } });
-  } catch (error) {
-    // A deterministic Workflow ID makes concurrent/retried cron delivery safe.
-    const message = error instanceof Error ? error.message : "unknown workflow create failure";
-    if (!message.toLowerCase().includes("already")) throw error;
+  if (parts.hour === "04" && parts.minute === "30") {
+    const instanceId = `d1-backup-${localDate}`;
+    const recorded = await env.DB.prepare("SELECT id FROM backup_exports WHERE id = ?1")
+      .bind(`backup_${instanceId}`).first();
+    if (!recorded) {
+      try {
+        await env.BACKUP_WORKFLOW.create({ id: instanceId, params: { trigger: "worker-cron", localDate } });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "unknown workflow create failure";
+        if (!message.toLowerCase().includes("already")) throw error;
+      }
+    }
   }
+  if (parts.hour === "05" && parts.minute === "15") await runArchivalForecast(env, scheduledTime);
 }

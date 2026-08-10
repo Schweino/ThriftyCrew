@@ -20,13 +20,15 @@ on:
       - "grocery/omaha-time.ps1"
       - ".github/workflows/platform-v3.yml"
   schedule:
-    - cron: "0 12 * * *"
+    - cron: "7 12 * * *"
       timezone: "America/Chicago"
-    - cron: "0 15 * * 1"
+    - cron: "17 */3 * * *"
       timezone: "America/Chicago"
-    - cron: "30 13 * * *"
+    - cron: "17 15 * * 1"
       timezone: "America/Chicago"
-    - cron: "0 16 * * *"
+    - cron: "37 13 * * *"
+      timezone: "America/Chicago"
+    - cron: "7 16 * * *"
       timezone: "America/Chicago"
   workflow_dispatch:
     inputs:
@@ -146,7 +148,7 @@ jobs:
       KROGER_CLIENT_ID: ${{ secrets.KROGER_CLIENT_ID }}
       KROGER_CLIENT_SECRET: ${{ secrets.KROGER_CLIENT_SECRET }}
       TC_RECOVERY_REASON: ${{ inputs.recovery_reason || format('primary schedule {0}', github.event.schedule) }}
-      RECOVERY_JOB: ${{ inputs.recovery_job || (github.event.schedule == '0 12 * * *' && 'daily-engine') || (github.event.schedule == '0 15 * * 1' && 'accuracy-weekly') || (github.event.schedule == '30 13 * * *' && 'triage-daily') || (github.event.schedule == '0 16 * * *' && 'ghost-rotation-reconcile') }}
+      RECOVERY_JOB: ${{ inputs.recovery_job || (github.event.schedule == '7 12 * * *' && 'daily-engine') || (github.event.schedule == '17 */3 * * *' && 'family-fare-paced') || (github.event.schedule == '17 15 * * 1' && 'accuracy-weekly') || (github.event.schedule == '37 13 * * *' && 'triage-daily') || (github.event.schedule == '7 16 * * *' && 'ghost-rotation-reconcile') }}
     steps:
       - uses: actions/checkout@v6
 
@@ -192,6 +194,11 @@ jobs:
               pnpm tc ghost reconcile
               pnpm tc engine parity direct
               pnpm tc evidence accrue
+              ;;
+            family-fare-paced)
+              pwsh -NoProfile -File ../grocery/pull-regular-familyfare.ps1 > "$RUNNER_TEMP/family-fare-paced.log"
+              tail -n 60 "$RUNNER_TEMP/family-fare-paced.log"
+              pnpm tc capture ingest-current family-fare
               ;;
             accuracy-weekly) pnpm tc accuracy draw ;;
             triage-daily) pnpm tc triage run ;;

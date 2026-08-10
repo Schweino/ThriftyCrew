@@ -1,0 +1,127 @@
+name: Grocery platform agents
+
+on:
+  schedule:
+    - cron: "47 12 * * *"
+      timezone: "America/Chicago"
+    - cron: "57 13 * * *"
+      timezone: "America/Chicago"
+    - cron: "47 14 * * *"
+      timezone: "America/Chicago"
+    - cron: "27 10 * * 2"
+      timezone: "America/Chicago"
+  workflow_dispatch:
+    inputs:
+      agent_job:
+        description: "Registered agent schedule to run"
+        required: true
+        default: "post-publish-review"
+        type: choice
+        options: [post-publish-review, triage-review, source-sentinel-daily, recipe-pack-weekly]
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: grocery-agents-${{ inputs.agent_job || github.event.schedule }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: platform
+    env:
+      TC_API_ORIGIN: ${{ vars.TC_V3_API_ORIGIN }}
+      TC_OIDC_AUDIENCE: tc-grocery-v3
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      AGENT_JOB: ${{ inputs.agent_job || (github.event.schedule == '47 12 * * *' && 'post-publish-review') || (github.event.schedule == '57 13 * * *' && 'triage-review') || (github.event.schedule == '47 14 * * *' && 'source-sentinel-daily') || (github.event.schedule == '27 10 * * 2' && 'recipe-pack-weekly') }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.16.0
+          run_install: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: platform/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Resolve registered agent identity
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE' >> "$GITHUB_ENV"
+          import fs from 'node:fs';
+          const registry = JSON.parse(fs.readFileSync('config/agents.json', 'utf8'));
+          const job = process.env.AGENT_JOB;
+          const map = {
+            'post-publish-review': 'post-publish-reviewer',
+            'triage-review': 'triage-reviewer',
+            'source-sentinel-daily': 'source-sentinel-investigator',
+            'recipe-pack-weekly': 'recipe-sourcer',
+          };
+          const agent = registry.agents.find((entry) => entry.id === map[job]);
+          if (!agent || !agent.enabled) throw new Error(`No enabled agent for ${job}`);
+          console.log(`TC_AGENT_ID=${agent.id}`);
+          console.log(`TC_AGENT_PROMPT_HASH=${agent.promptSha256}`);
+          console.log(`TC_AGENT_MODEL=${agent.model}`);
+          console.log(`TC_AGENT_ESTIMATED_COST_MICROUSD=${Math.min(agent.monthlyBudgetMicrousd, 500000)}`);
+          NODE
+
+      - name: Start durable agent ledger
+        id: ledger
+        continue-on-error: true
+        run: pnpm tc job start "$AGENT_JOB"
+
+      - name: Run deterministic sentinel or registered judgment agent
+        id: agent
+        shell: bash
+        env:
+          TC_AGENT_DIAGNOSTIC: ${{ steps.ledger.outcome == 'success' && '0' || '1' }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/tc-agent-output"
+          export RUNNER_TEMP="$RUNNER_TEMP/tc-agent-output"
+          if [ "${{ steps.ledger.outcome }}" != "success" ]; then
+            pnpm --filter @thriftycrew/agents run "$TC_AGENT_ID"
+          elif [ "$AGENT_JOB" = "source-sentinel-daily" ]; then
+            pnpm tc sentinel latest
+          else
+            pnpm --filter @thriftycrew/agents run "$TC_AGENT_ID"
+          fi
+          usage_file="$RUNNER_TEMP/${TC_AGENT_ID}-usage.json"
+          if [ -f "$usage_file" ]; then
+            echo "usage=$(cat "$usage_file")" >> "$GITHUB_OUTPUT"
+          else
+            echo 'usage={"inputTokens":0,"outputTokens":0,"cacheReadTokens":0,"cacheWriteTokens":0,"costMicrousd":0}' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Finish durable agent ledger
+        if: always() && steps.ledger.outcome == 'success'
+        env:
+          TC_AGENT_USAGE_JSON: ${{ steps.agent.outputs.usage }}
+          TC_GITHUB_JOB_STATUS: ${{ job.status }}
+        run: pnpm tc job finish "$AGENT_JOB" "$TC_GITHUB_JOB_STATUS"
+
+      - name: Retain bounded agent evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grocery-agent-${{ env.AGENT_JOB }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/tc-agent-output/*.json
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Fail closed when the ledger was unavailable
+        if: steps.ledger.outcome != 'success'
+        run: |
+          echo "::error::Agent ledger was unavailable. Diagnostic evidence was retained, but no mutation was permitted."
+          exit 1

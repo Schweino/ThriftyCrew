@@ -39,3 +39,17 @@ All V3 implementation work is deployed and the live API/member routes and board 
 only as the approved rollback path until the evidence gates above close. Final retirement and tombstones are
 therefore not yet authorized, even though the remaining waits are evidence/time rather than missing platform
 implementation.
+
+## Infrastructure hardening implemented after the V3 baseline
+
+- Truthful transition inventory and bidirectional schedule drift enforcement across GitHub, Worker and PC.
+- Off-hour, Central-time V3 schedules plus a cloud Family Fare paced sweep.
+- Agents-as-code registry, hashed prompts, fixtures, budgets, token cost ledger and workflow-scoped OIDC.
+- Read-only diagnostic fallback when the agent ledger is unavailable; no invisible mutation path.
+- Immutable recipe content batches with separate AI audit and deterministic promotion authority.
+- Expand/contract forward migration governance and automated quarterly scratch restore Workflow.
+- Isolated D1 Sessions replication canary; no premature public-route cutover.
+- Byte/growth-based archival forecasts, protected-reference manifests, verified R2 Parquet upload path and
+  deterministic source-contract sentinels.
+
+See `docs/HARDENING-STATUS.md` for the implementation and retirement boundary.

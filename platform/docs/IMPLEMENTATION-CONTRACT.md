@@ -32,6 +32,14 @@ Ghost owns content, entitlements, billing, email, and live paywall truth. Only t
 16. Weekly blind accuracy draws require verdicts; a missed verdict window creates a triage incident.
 17. Guard findings and operational alerts enter the durable two-agent triage queue.
 18. Every cutover has a tested rollback and the legacy estate remains authoritative until its gate passes.
+19. Every recurring grocery executor is derived from or bidirectionally verified against one Git authority.
+20. Every judgment prompt is versioned and its deployed hash must match the active agent registry.
+21. Every agent run has a durable ledger; ledger failure authorizes diagnostic reads only, never mutation.
+22. CI workflow identity is endpoint-scoped and every agent has an explicit capability set and audit identity.
+23. Judgment agents execute in CI. PC workloads remain deterministic browser capture, accuracy, canary or wake.
+24. Publishable recipe content exists only in immutable staging batches and deterministic guards own promotion.
+25. Unbounded historical analytics and archive queries never run against operational D1.
+26. A quarterly automated scratch restore must pass; absence or failure creates a durable operational incident.
 
 ## Migration calendar and retirement
 

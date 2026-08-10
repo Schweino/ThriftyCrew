@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "enforcedFrom": 16,
+  "strategy": "expand-contract-forward-fix",
+  "requireRestoreProofForContract": true,
+  "forbidDownMigrationFiles": true,
+  "forbiddenPragmas": ["foreign_keys=off", "foreign_keys = off"]
+}

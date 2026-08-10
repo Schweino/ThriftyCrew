@@ -12,6 +12,17 @@ Before changing pricing behavior:
 5. Never make a hard guard client-authoritative or allow eligible rows to pass with zero examined rows.
 6. Run `pnpm check`, a local migration, a replay, and the relevant browser review.
 
+Before changing schedules, agents, content batches, migrations, recovery, or archival:
+
+1. Edit `config/schedules.json` or `config/agents.json`; never patch an executor or prompt out of band.
+2. Run `pnpm schedules:check`, `pnpm agents:check`, and `pnpm migrations:check`.
+3. A judgment agent may write only the capabilities in its registry record. The triage developer opens a PR;
+   it never deploys or mutates production.
+4. An unavailable agent ledger means diagnostic/read-only mode. No production mutation is permitted.
+5. Recipe content publishes only through an immutable content batch and deterministic promotion guards.
+6. Contract migrations require recorded restore evidence. Prefer a forward fix; do not create down migrations.
+7. Archive execution remains disarmed below its byte threshold and may never include release-referenced rows.
+
 Authored grocery configuration lives only in `config/`. After an approved edit run `pnpm tc config generate`;
 the files with the same names under `../grocery/` are generated compatibility outputs, not authorities.
 

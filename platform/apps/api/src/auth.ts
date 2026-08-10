@@ -81,7 +81,10 @@ export function validateGithubOidcClaims(claims: GithubOidcClaims, env: WorkerEn
   if (claims.iat && claims.iat > nowSeconds + 30) throw new Error("GitHub OIDC token was issued in the future");
   if (env.GITHUB_OIDC_REPOSITORY && claims.repository !== env.GITHUB_OIDC_REPOSITORY) throw new Error("GitHub OIDC repository is not trusted");
   if (env.GITHUB_OIDC_REPOSITORY_ID && claims.repository_id !== env.GITHUB_OIDC_REPOSITORY_ID) throw new Error("GitHub OIDC repository id is not trusted");
-  if (env.GITHUB_OIDC_WORKFLOW_REF && claims.workflow_ref !== env.GITHUB_OIDC_WORKFLOW_REF) throw new Error("GitHub OIDC workflow is not trusted");
+  const trustedWorkflowRefs = env.GITHUB_OIDC_WORKFLOW_REFS
+    ? JSON.parse(env.GITHUB_OIDC_WORKFLOW_REFS) as string[]
+    : env.GITHUB_OIDC_WORKFLOW_REF ? [env.GITHUB_OIDC_WORKFLOW_REF] : [];
+  if (trustedWorkflowRefs.length > 0 && (!claims.workflow_ref || !trustedWorkflowRefs.includes(claims.workflow_ref))) throw new Error("GitHub OIDC workflow is not trusted");
   if (!claims.sub || !claims.run_id) throw new Error("GitHub OIDC identity claims are incomplete");
 }
 
@@ -116,7 +119,7 @@ async function authenticateGithubOidc(request: Request, env: WorkerEnv, allowedR
   } catch {
     throw new Error("request nonce has already been used");
   }
-  return { agentId, secret: "", role: "engine", authMethod: "github_oidc" };
+  return { agentId, secret: "", role: "engine", authMethod: "github_oidc", ...(claims.workflow_ref ? { workflowRef: claims.workflow_ref } : {}) };
 }
 
 export async function authenticateMutation(

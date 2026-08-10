@@ -37,6 +37,10 @@
     {
       "binding": "BACKUPS_SECONDARY",
       "bucket_name": "tc-grocery-v3-backups-secondary"
+    },
+    {
+      "binding": "ARCHIVE",
+      "bucket_name": "tc-grocery-v3-archive"
     }
   ],
   "workflows": [
@@ -44,6 +48,11 @@
       "name": "tc-grocery-v3-d1-backup",
       "binding": "BACKUP_WORKFLOW",
       "class_name": "D1BackupWorkflow"
+    },
+    {
+      "name": "tc-grocery-v3-d1-restore-drill",
+      "binding": "RESTORE_WORKFLOW",
+      "class_name": "D1RestoreDrillWorkflow"
     }
   ],
   "triggers": {
@@ -64,10 +73,12 @@
     "GITHUB_OIDC_REPOSITORY": "Schweino/SimpleMoneyPlaybook",
     "GITHUB_OIDC_REPOSITORY_ID": "1293567395",
     "GITHUB_OIDC_WORKFLOW_REF": "Schweino/SimpleMoneyPlaybook/.github/workflows/platform-v3.yml@refs/heads/main",
+    "GITHUB_OIDC_WORKFLOW_REFS": "[\"Schweino/SimpleMoneyPlaybook/.github/workflows/platform-v3.yml@refs/heads/main\",\"Schweino/SimpleMoneyPlaybook/.github/workflows/platform-agents.yml@refs/heads/main\",\"Schweino/SimpleMoneyPlaybook/.github/workflows/platform-restore.yml@refs/heads/main\"]",
     "GITHUB_REPOSITORY": "Schweino/SimpleMoneyPlaybook",
     "GITHUB_WORKFLOW_FILE": "platform-v3.yml",
     "OPS_ALERT_URL": "https://feed.thriftycrew.com/ops-alert",
     "CLOUDFLARE_ACCOUNT_ID": "bdf84c0d4146b198e8a14a59d08701ed",
-    "D1_DATABASE_ID": "a567ae53-a582-498f-b4c2-2d8843096b75"
+    "D1_DATABASE_ID": "a567ae53-a582-498f-b4c2-2d8843096b75",
+    "D1_DATABASE_LIMIT_BYTES": "10737418240"
   }
 }

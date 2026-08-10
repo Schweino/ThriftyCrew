@@ -1,0 +1,5 @@
+{
+  "case": "missing-evidence",
+  "input": { "releaseStatus": "published", "hardGuards": "pass", "evidenceComplete": false },
+  "expected": { "severity": "hard", "needsOperator": true }
+}

@@ -6,6 +6,10 @@ import {
   captureBatchAbandonSchema,
   captureBatchCreateSchema,
   captureBatchSealSchema,
+  contentBatchAuditSchema,
+  contentBatchCreateSchema,
+  contentBatchItemsSchema,
+  contentItemSchema,
   configurationCategoriesChunkSchema,
   configurationCommoditiesChunkSchema,
   configurationCreateSchema,
@@ -23,6 +27,9 @@ import {
   milestoneAccrualSchema,
   observationChunkSchema,
   operationalAlertSchema,
+  agentRegistrySchema,
+  archivalForecastSchema,
+  archivePlanSchema,
   recipeCostsChunkSchema,
   releaseCellsChunkSchema,
   releaseCreateSchema,
@@ -32,6 +39,7 @@ import {
   releasePayloadSchema,
   restoreDrillRecordSchema,
   scheduleDocumentSchema,
+  sourceSentinelResultSchema,
   telemetryEventSchema,
   triageResolveSchema,
   triagePlanSchema,
@@ -49,8 +57,10 @@ import { memberStatusHtml } from "./member-status";
 import { accrueMilestoneEvidence, milestoneEvidenceSummary } from "./milestone-evidence";
 import { runServerChaosDrill } from "./chaos-drills";
 import { engineMayWriteCaptureSource } from "./capture-authorization";
+import { evaluateContentPromotion } from "./content-batches";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
+export { D1RestoreDrillWorkflow } from "./restore-workflow";
 
 type Bindings = { Bindings: WorkerEnv; Variables: { identity: MutationIdentity } };
 const app = new Hono<Bindings>();
@@ -89,6 +99,22 @@ function requireIdentityRole(roles: readonly MutationRole[]): MiddlewareHandler<
   };
 }
 
+function requireGithubWorkflowScope(): MiddlewareHandler<Bindings> {
+  return async (context, next) => {
+    const identity = context.get("identity");
+    if (identity.authMethod !== "github_oidc" || !identity.workflowRef) return next();
+    const pathname = new URL(context.req.url).pathname;
+    if (identity.workflowRef.includes("/platform-agents.yml@")) {
+      const allowed = ["/internal/job-runs", "/internal/agents/", "/internal/source-sentinels", "/internal/content-batches"];
+      if (!allowed.some((prefix) => pathname === prefix || pathname.startsWith(prefix))) return context.json({ ok: false, error: "agent workflow is outside its registered capability boundary" }, 403);
+    }
+    if (identity.workflowRef.includes("/platform-restore.yml@") && pathname !== "/internal/restore-drills/trigger") {
+      return context.json({ ok: false, error: "restore workflow may only trigger the deterministic restore drill" }, 403);
+    }
+    return next();
+  };
+}
+
 async function requireDraftRelease(db: D1Database, releaseId: string): Promise<Response | null> {
   const release = await db.prepare("SELECT state FROM releases WHERE id = ?1").bind(releaseId).first<{ state: string }>();
   if (!release) return jsonError("release not found", 404);
@@ -97,6 +123,7 @@ async function requireDraftRelease(db: D1Database, releaseId: string): Promise<R
 }
 
 app.use("/internal/*", requireMutation(["capture", "engine", "operator"]));
+app.use("/internal/*", requireGithubWorkflowScope());
 app.use("/internal/capture-batches", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/capture-batches/*", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/configurations", requireIdentityRole(["engine", "operator"]));
@@ -108,6 +135,12 @@ app.use("/internal/job-runs/*", requireIdentityRole(["capture", "engine", "opera
 app.use("/internal/operational-alerts", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/jobs/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/schedules/*", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/agents/*", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/content-batches", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/content-batches/*", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/source-sentinels", requireIdentityRole(["capture", "engine", "operator"]));
+app.use("/internal/source-sentinels/*", requireIdentityRole(["capture", "engine", "operator"]));
+app.use("/internal/archival/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/backups/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/restore-drills", requireIdentityRole(["operator"]));
 app.use("/internal/restore-drills/*", requireIdentityRole(["operator"]));
@@ -163,6 +196,30 @@ app.get("/api/v2/status", async (context) => {
 });
 
 app.get("/v2/status", (context) => context.redirect("/api/v2/status", 307));
+
+// A deliberately isolated Sessions API pilot. Public release routes remain on
+// the primary binding until this canary proves latency and consistency benefits.
+app.get("/api/v2/replica-canary", async (context) => {
+  const started = Date.now();
+  const session = context.env.DB.withSession("first-primary");
+  const query = await session.prepare(
+    `SELECT r.id, r.published_at
+       FROM current_releases c JOIN releases r ON r.id = c.release_id
+      WHERE c.market_id = 'omaha'`,
+  ).run<{ id: string; published_at: string }>();
+  const result = query.results[0] ?? null;
+  const meta = query.meta as typeof query.meta & { served_by_region?: string; served_by_primary?: boolean };
+  context.header("cache-control", "no-store");
+  return context.json({
+    ok: result !== null,
+    constraint: "first-primary",
+    release: result ?? null,
+    bookmark: session.getBookmark() ?? null,
+    latencyMs: Date.now() - started,
+    servedByRegion: meta.served_by_region ?? null,
+    servedByPrimary: meta.served_by_primary ?? null,
+  });
+});
 
 app.get("/api/v2/entitlement", async (context) => {
   try {
@@ -611,12 +668,15 @@ app.put("/internal/schedules/sync", zValidator("json", scheduleDocumentSchema), 
   const identity = context.get("identity");
   const statements = document.schedules.map((schedule) => context.env.DB.prepare(
     `INSERT INTO job_schedules
-       (job, cron, max_gap_minutes, active, executor, timezone, owner, proof, dispatch_on_gap)
-     VALUES (?1, ?2, ?3, 1, ?4, ?5, ?6, ?7, ?8)
+       (job, cron, max_gap_minutes, active, executor, timezone, owner, proof, dispatch_on_gap,
+        lifecycle, authority_version, retirement_gate, workflow_file)
+     VALUES (?1, ?2, ?3, ?9, ?4, ?5, ?6, ?7, ?8, ?10, ?11, ?12, ?13)
      ON CONFLICT(job) DO UPDATE SET
-       cron = excluded.cron, max_gap_minutes = excluded.max_gap_minutes, active = 1,
+       cron = excluded.cron, max_gap_minutes = excluded.max_gap_minutes, active = excluded.active,
        executor = excluded.executor, timezone = excluded.timezone, owner = excluded.owner,
-       proof = excluded.proof, dispatch_on_gap = excluded.dispatch_on_gap`,
+       proof = excluded.proof, dispatch_on_gap = excluded.dispatch_on_gap,
+       lifecycle = excluded.lifecycle, authority_version = excluded.authority_version,
+       retirement_gate = excluded.retirement_gate, workflow_file = excluded.workflow_file`,
   ).bind(
     schedule.id,
     schedule.cron,
@@ -626,6 +686,11 @@ app.put("/internal/schedules/sync", zValidator("json", scheduleDocumentSchema), 
     schedule.owner,
     schedule.proof,
     schedule.dispatchOnGap ? 1 : 0,
+    schedule.monitorInLedger && schedule.lifecycle !== "retired" ? 1 : 0,
+    schedule.lifecycle,
+    document.version,
+    schedule.retirementGate ?? null,
+    schedule.workflowFile ?? null,
   ));
   const placeholders = document.schedules.map((_, index) => `?${index + 1}`).join(", ");
   statements.push(context.env.DB.prepare(
@@ -637,6 +702,52 @@ app.put("/internal/schedules/sync", zValidator("json", scheduleDocumentSchema), 
     timezone: document.timezone,
   });
   return context.json({ ok: true, version: document.version, schedules: document.schedules.length });
+});
+
+app.put("/internal/agents/sync", zValidator("json", agentRegistrySchema), async (context) => {
+  const registry = context.req.valid("json");
+  const statements = registry.agents.map((agent) => context.env.DB.prepare(
+    `INSERT INTO agent_registry
+       (id, registry_version, enabled, plane, schedule_id, prompt_file, prompt_sha256, model_id,
+        fallback_model_id, monthly_budget_microusd, criticality, capabilities_json,
+        input_contracts_json, output_contract, fixture_files_json, active, synced_at)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, 1, CURRENT_TIMESTAMP)
+     ON CONFLICT(id) DO UPDATE SET
+       registry_version = excluded.registry_version, enabled = excluded.enabled, plane = excluded.plane,
+       schedule_id = excluded.schedule_id, prompt_file = excluded.prompt_file,
+       prompt_sha256 = excluded.prompt_sha256, model_id = excluded.model_id,
+       fallback_model_id = excluded.fallback_model_id,
+       monthly_budget_microusd = excluded.monthly_budget_microusd, criticality = excluded.criticality,
+       capabilities_json = excluded.capabilities_json, input_contracts_json = excluded.input_contracts_json,
+       output_contract = excluded.output_contract, fixture_files_json = excluded.fixture_files_json,
+       active = 1, synced_at = CURRENT_TIMESTAMP`,
+  ).bind(agent.id, registry.version, agent.enabled ? 1 : 0, agent.plane, agent.scheduleId ?? null,
+    agent.promptFile, agent.promptSha256, agent.model, agent.fallbackModel ?? null,
+    agent.monthlyBudgetMicrousd, agent.criticality, stableJson(agent.capabilities),
+    stableJson(agent.inputContracts), agent.outputContract, stableJson(agent.fixtureFiles)));
+  const placeholders = registry.agents.map((_, index) => `?${index + 1}`).join(", ");
+  statements.push(context.env.DB.prepare(`UPDATE agent_registry SET active = 0 WHERE id NOT IN (${placeholders})`).bind(...registry.agents.map((agent) => agent.id)));
+  await context.env.DB.batch(statements);
+  await recordAudit(context.env, context.get("identity"), "agents.sync", "agent_registry", `v${registry.version}`, "accepted", { agents: registry.agents.length, pricingEffectiveAt: registry.pricingEffectiveAt });
+  return context.json({ ok: true, version: registry.version, agents: registry.agents.length });
+});
+
+app.get("/internal/agents/:id/authorize", async (context) => {
+  const estimated = Number(context.req.query("estimatedCostMicrousd") ?? "0");
+  if (!Number.isInteger(estimated) || estimated < 0) return jsonError("estimatedCostMicrousd must be a nonnegative integer", 422);
+  const agent = await context.env.DB.prepare(
+    `SELECT id, enabled, model_id, fallback_model_id, monthly_budget_microusd, criticality
+       FROM agent_registry WHERE id = ?1 AND active = 1`,
+  ).bind(context.req.param("id")).first<{ id: string; enabled: number; model_id: string; fallback_model_id: string | null; monthly_budget_microusd: number; criticality: string }>();
+  if (!agent || agent.enabled !== 1) return jsonError("agent is unknown or disabled", 404);
+  const month = new Date().toISOString().slice(0, 7);
+  const budget = await context.env.DB.prepare("SELECT spent_microusd, reserved_microusd FROM agent_budget_months WHERE agent_id = ?1 AND month_key = ?2")
+    .bind(agent.id, month).first<{ spent_microusd: number; reserved_microusd: number }>();
+  const committed = (budget?.spent_microusd ?? 0) + (budget?.reserved_microusd ?? 0);
+  const exceeded = committed + estimated > agent.monthly_budget_microusd;
+  const modelId = exceeded && agent.fallback_model_id ? agent.fallback_model_id : agent.model_id;
+  const allowed = !exceeded || agent.criticality !== "optional";
+  return context.json({ ok: allowed, allowed, modelId, budget: { month, limitMicrousd: agent.monthly_budget_microusd, committedMicrousd: committed, estimatedMicrousd: estimated, exceeded }, requiresOperator: exceeded && agent.criticality !== "optional" }, allowed ? 200 : 422);
 });
 
 app.post("/internal/jobs/:job/dispatch", zValidator("json", jobDispatchSchema), async (context) => {
@@ -709,6 +820,19 @@ app.post("/internal/backups/trigger", async (context) => {
   await context.env.BACKUP_WORKFLOW.create({ id: instanceId, params: { trigger: "operator", forceReplica } });
   await recordAudit(context.env, context.get("identity"), "backup.trigger", "workflow", instanceId, "accepted");
   return context.json({ ok: true, instanceId, forceReplica }, 202);
+});
+
+app.post("/internal/restore-drills/trigger", async (context) => {
+  const quarter = `${new Date().getUTCFullYear()}-Q${Math.floor(new Date().getUTCMonth() / 3) + 1}`;
+  const instanceId = `d1-restore-${quarter}`;
+  try {
+    await context.env.RESTORE_WORKFLOW.create({ id: instanceId, params: { trigger: "operator-or-schedule" } });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "restore workflow create failed";
+    if (!message.toLowerCase().includes("already")) throw error;
+  }
+  await recordAudit(context.env, context.get("identity"), "restore_drill.trigger", "workflow", instanceId, "accepted", { quarter });
+  return context.json({ ok: true, instanceId, quarter }, 202);
 });
 
 app.get("/internal/restore-drills", async (context) => {
@@ -822,12 +946,30 @@ app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (co
     if (existing.job !== body.job) return jsonError("job run id belongs to another job", 409);
     return context.json({ ok: true, runId: body.id, status: existing.status, idempotent: true });
   }
+  let budgetReservation: { agentId: string; month: string; estimatedCostMicrousd: number } | undefined;
+  if (body.agentId) {
+    const agent = await context.env.DB.prepare(
+      "SELECT enabled, prompt_sha256, model_id, fallback_model_id, monthly_budget_microusd, criticality FROM agent_registry WHERE id = ?1 AND active = 1",
+    ).bind(body.agentId).first<{ enabled: number; prompt_sha256: string; model_id: string; fallback_model_id: string | null; monthly_budget_microusd: number; criticality: string }>();
+    if (!agent || agent.enabled !== 1) return jsonError("agent is unknown or disabled", 404);
+    if (body.promptHash !== agent.prompt_sha256) return jsonError("agent prompt hash differs from the active registry", 409);
+    if (body.modelId !== agent.model_id && body.modelId !== agent.fallback_model_id) return jsonError("agent model is not authorized by the active registry", 409);
+    const month = new Date().toISOString().slice(0, 7);
+    const budget = await context.env.DB.prepare("SELECT spent_microusd, reserved_microusd FROM agent_budget_months WHERE agent_id = ?1 AND month_key = ?2")
+      .bind(body.agentId, month).first<{ spent_microusd: number; reserved_microusd: number }>();
+    const committed = (budget?.spent_microusd ?? 0) + (budget?.reserved_microusd ?? 0);
+    if (committed + body.estimatedCostMicrousd > agent.monthly_budget_microusd && agent.criticality === "optional") {
+      return jsonError("optional agent monthly budget is exhausted", 422);
+    }
+    budgetReservation = { agentId: body.agentId, month, estimatedCostMicrousd: body.estimatedCostMicrousd };
+  }
   const status = body.startedAt ? "started" : "scheduled";
-  await context.env.DB.prepare(
+  const insertRun = context.env.DB.prepare(
     `INSERT INTO job_runs
        (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, input_json,
-        executor_run_id, actor_id, prompt_hash, input_hash, model_id)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)`,
+        executor_run_id, actor_id, prompt_hash, input_hash, model_id, agent_id, ledger_mode,
+        mutation_authorized, estimated_cost_microusd)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16)`,
   ).bind(
     body.id,
     body.job,
@@ -841,14 +983,30 @@ app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (co
     body.promptHash ?? null,
     body.inputHash ?? null,
     body.modelId ?? null,
-  ).run();
+    body.agentId ?? null,
+    body.ledgerMode,
+    body.mutationAuthorized ? 1 : 0,
+    body.estimatedCostMicrousd,
+  );
+  if (budgetReservation) {
+    const reserveBudget = context.env.DB.prepare(
+      `INSERT INTO agent_budget_months (agent_id, month_key, spent_microusd, reserved_microusd)
+       VALUES (?1, ?2, 0, ?3)
+       ON CONFLICT(agent_id, month_key) DO UPDATE SET
+         reserved_microusd = reserved_microusd + excluded.reserved_microusd,
+         updated_at = CURRENT_TIMESTAMP`,
+    ).bind(budgetReservation.agentId, budgetReservation.month, budgetReservation.estimatedCostMicrousd);
+    await context.env.DB.batch([insertRun, reserveBudget]);
+  } else {
+    await insertRun.run();
+  }
   return context.json({ ok: true, runId: body.id, status, idempotent: false }, 201);
 });
 
 app.patch("/internal/job-runs/:id", zValidator("json", jobRunUpdateSchema), async (context) => {
   const body = context.req.valid("json");
-  const current = await context.env.DB.prepare("SELECT job, status, started_at, finished_at, trigger_kind, executor_run_id FROM job_runs WHERE id = ?1").bind(context.req.param("id")).first<{
-    job: string; status: string; started_at: string | null; finished_at: string | null; trigger_kind: string; executor_run_id: string | null;
+  const current = await context.env.DB.prepare("SELECT job, status, started_at, finished_at, trigger_kind, executor_run_id, agent_id, estimated_cost_microusd FROM job_runs WHERE id = ?1").bind(context.req.param("id")).first<{
+    job: string; status: string; started_at: string | null; finished_at: string | null; trigger_kind: string; executor_run_id: string | null; agent_id: string | null; estimated_cost_microusd: number;
   }>();
   if (!current) return jsonError("job run not found", 404);
   if (current.status === body.status && current.finished_at === (body.finishedAt ?? null)) {
@@ -881,6 +1039,16 @@ app.patch("/internal/job-runs/:id", zValidator("json", jobRunUpdateSchema), asyn
     stableJson(body.stats),
     body.error ?? null,
   ).run();
+  if (current.agent_id) {
+    const month = new Date(startedAt ?? body.finishedAt ?? Date.now()).toISOString().slice(0, 7);
+    await context.env.DB.prepare(
+      `UPDATE agent_budget_months
+          SET spent_microusd = spent_microusd + ?3,
+              reserved_microusd = MAX(0, reserved_microusd - ?4),
+              updated_at = CURRENT_TIMESTAMP
+        WHERE agent_id = ?1 AND month_key = ?2`,
+    ).bind(current.agent_id, month, body.usage.costMicrousd, current.estimated_cost_microusd).run();
+  }
   const alert = jobStatusRequiresAlert(body.status)
     ? await raiseOperationalAlert(
       context.env,
@@ -900,6 +1068,212 @@ app.patch("/internal/job-runs/:id", zValidator("json", jobRunUpdateSchema), asyn
     )
     : null;
   return context.json({ ok: true, runId: context.req.param("id"), status: body.status, idempotent: false, alert });
+});
+
+app.get("/internal/content-batches", async (context) => {
+  const rows = await context.env.DB.prepare("SELECT * FROM content_batches ORDER BY created_at DESC LIMIT 100").all<Record<string, unknown>>();
+  return context.json({ ok: true, batches: rows.results });
+});
+
+app.post("/internal/content-batches", zValidator("json", contentBatchCreateSchema), async (context) => {
+  const body = context.req.valid("json");
+  const existing = await context.env.DB.prepare("SELECT status, input_hash, prompt_hash FROM content_batches WHERE id = ?1").bind(body.id)
+    .first<{ status: string; input_hash: string; prompt_hash: string }>();
+  if (existing) {
+    if (existing.input_hash !== body.inputHash || existing.prompt_hash !== body.promptHash) return jsonError("content batch id belongs to different immutable inputs", 409);
+    return context.json({ ok: true, batchId: body.id, status: existing.status, idempotent: true });
+  }
+  await context.env.DB.prepare(
+    `INSERT INTO content_batches (id, kind, input_hash, prompt_hash, source_refs_json, created_by)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6)`,
+  ).bind(body.id, body.kind, body.inputHash, body.promptHash, stableJson(body.sourceRefs), context.get("identity").agentId).run();
+  await recordAudit(context.env, context.get("identity"), "content_batch.create", "content_batch", body.id, "accepted", { kind: body.kind, sourceRefs: body.sourceRefs.length });
+  return context.json({ ok: true, batchId: body.id, status: "staging", idempotent: false }, 201);
+});
+
+app.post("/internal/content-batches/:id/items", zValidator("json", contentBatchItemsSchema), async (context) => {
+  const body = context.req.valid("json");
+  const batch = await context.env.DB.prepare("SELECT status FROM content_batches WHERE id = ?1").bind(context.req.param("id")).first<{ status: string }>();
+  if (!batch) return jsonError("content batch not found", 404);
+  if (batch.status !== "staging") return jsonError(`content batch items are immutable in ${batch.status}`, 409);
+  const statements: D1PreparedStatement[] = [];
+  for (const [ordinal, item] of body.items.entries()) {
+    const content = stableJson(item);
+    const hash = await digestHex(content);
+    statements.push(context.env.DB.prepare(
+      `INSERT INTO content_batch_items (batch_id, slug, ordinal, content_json, content_hash)
+       VALUES (?1, ?2, ?3, ?4, ?5)`,
+    ).bind(context.req.param("id"), item.slug, ordinal, content, hash));
+  }
+  await context.env.DB.batch(statements);
+  return context.json({ ok: true, batchId: context.req.param("id"), items: body.items.length }, 201);
+});
+
+app.post("/internal/content-batches/:id/audit", zValidator("json", contentBatchAuditSchema), async (context) => {
+  const body = context.req.valid("json");
+  const batch = await context.env.DB.prepare("SELECT status FROM content_batches WHERE id = ?1").bind(context.req.param("id")).first<{ status: string }>();
+  if (!batch) return jsonError("content batch not found", 404);
+  if (batch.status !== "staging") return jsonError(`content batch cannot be audited from ${batch.status}`, 409);
+  const count = await context.env.DB.prepare("SELECT COUNT(*) AS count FROM content_batch_items WHERE batch_id = ?1").bind(context.req.param("id")).first<{ count: number }>();
+  if (!count?.count) return jsonError("content batch has no items", 422);
+  const hard = body.findings.filter((finding) => finding.severity === "hard").length;
+  const warnings = body.findings.filter((finding) => finding.severity === "warning").length;
+  const auditId = await deterministicId("content-audit", context.req.param("id"), body.auditorAgentId, body.promptHash);
+  await context.env.DB.batch([
+    context.env.DB.prepare(
+      `INSERT INTO content_batch_audits
+         (id, batch_id, auditor_agent_id, prompt_hash, findings_json, hard_findings, warning_findings)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)`,
+    ).bind(auditId, context.req.param("id"), body.auditorAgentId, body.promptHash, stableJson(body.findings), hard, warnings),
+    context.env.DB.prepare("UPDATE content_batches SET status = ?2, sealed_at = CURRENT_TIMESTAMP WHERE id = ?1")
+      .bind(context.req.param("id"), hard > 0 ? "rejected" : "audited"),
+  ]);
+  return context.json({ ok: hard === 0, batchId: context.req.param("id"), auditId, hardFindings: hard, warningFindings: warnings }, hard === 0 ? 201 : 422);
+});
+
+app.post("/internal/content-batches/:id/promote", async (context) => {
+  const batchId = context.req.param("id");
+  const batch = await context.env.DB.prepare("SELECT status FROM content_batches WHERE id = ?1").bind(batchId).first<{ status: string }>();
+  if (!batch) return jsonError("content batch not found", 404);
+  if (batch.status === "promoted") return context.json({ ok: true, batchId, status: "promoted", idempotent: true });
+  if (batch.status !== "audited") return jsonError(`content batch cannot be promoted from ${batch.status}`, 409);
+  const rows = await context.env.DB.prepare("SELECT content_json FROM content_batch_items WHERE batch_id = ?1 ORDER BY ordinal").bind(batchId).all<{ content_json: string }>();
+  const items = rows.results.map((row) => contentItemSchema.parse(JSON.parse(row.content_json)));
+  const commodities = await context.env.DB.prepare(
+    `SELECT c.id FROM commodities c JOIN configuration_versions v ON v.id = c.configuration_id WHERE v.active = 1`,
+  ).all<{ id: string }>();
+  const guard = await evaluateContentPromotion(items, new Set(commodities.results.map((row) => row.id)));
+  if (!guard.ok) {
+    await context.env.DB.prepare("UPDATE content_batches SET status = 'rejected', content_hash = ?2 WHERE id = ?1").bind(batchId, guard.contentHash).run();
+    await recordAudit(context.env, context.get("identity"), "content_batch.promote", "content_batch", batchId, "rejected", { findings: guard.findings });
+    return context.json({ ok: false, batchId, status: "rejected", guardVersion: "recipe-content-v1", findings: guard.findings }, 422);
+  }
+  const promotionId = await deterministicId("content-promotion", batchId, guard.contentHash);
+  await context.env.DB.batch([
+    context.env.DB.prepare(
+      `INSERT INTO content_promotions
+         (id, batch_id, promoted_by, deterministic_guard_version, content_hash, detail_json)
+       VALUES (?1, ?2, ?3, 'recipe-content-v1', ?4, ?5)`,
+    ).bind(promotionId, batchId, context.get("identity").agentId, guard.contentHash, stableJson({ findings: guard.findings })),
+    context.env.DB.prepare("UPDATE content_batches SET status = 'promoted', promoted_at = CURRENT_TIMESTAMP, content_hash = ?2 WHERE id = ?1")
+      .bind(batchId, guard.contentHash),
+  ]);
+  await recordAudit(context.env, context.get("identity"), "content_batch.promote", "content_batch", batchId, "accepted", { promotionId, contentHash: guard.contentHash });
+  return context.json({ ok: true, batchId, status: "promoted", promotionId, guardVersion: "recipe-content-v1", contentHash: guard.contentHash, warnings: guard.findings }, 201);
+});
+
+app.post("/internal/source-sentinels", zValidator("json", sourceSentinelResultSchema), async (context) => {
+  const body = context.req.valid("json");
+  const source = await context.env.DB.prepare("SELECT id FROM capture_sources WHERE id = ?1 AND active = 1").bind(body.sourceId).first();
+  if (!source) return jsonError("unknown or inactive source", 404);
+  const id = await deterministicId("source-sentinel", body.sourceId, String(body.contractVersion), body.observedAt);
+  await context.env.DB.prepare(
+    `INSERT INTO source_sentinel_results
+       (id, source_id, contract_version, status, checks_json, evidence_json, observed_at, actor_id)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
+     ON CONFLICT(id) DO NOTHING`,
+  ).bind(id, body.sourceId, body.contractVersion, body.status, stableJson(body.checks), stableJson(body.evidence), body.observedAt, context.get("identity").agentId).run();
+  if (body.status === "fail") await raiseOperationalAlert(context.env, `source-contract:${body.sourceId}`, `Source contract failed for ${body.sourceId}`, { checks: body.checks, evidence: body.evidence, observedAt: body.observedAt });
+  else await resolveOperationalAlert(context.env, `source-contract:${body.sourceId}`, { checks: body.checks, observedAt: body.observedAt });
+  return context.json({ ok: body.status === "pass", resultId: id, status: body.status }, body.status === "pass" ? 201 : 422);
+});
+
+app.post("/internal/archival/forecasts", zValidator("json", archivalForecastSchema), async (context) => {
+  const body = context.req.valid("json");
+  const usagePercentMillis = Math.floor(body.databaseBytes * 100_000 / body.databaseLimitBytes);
+  const status = usagePercentMillis >= 90_000 ? "critical" : usagePercentMillis >= body.thresholdPercent * 1000 ? "armed" : "healthy";
+  const projectedLimitAt = body.monthlyGrowthBytes > 0
+    ? new Date(Date.parse(body.observedAt) + Math.max(0, body.databaseLimitBytes - body.databaseBytes) / body.monthlyGrowthBytes * 30 * 24 * 60 * 60 * 1000).toISOString()
+    : null;
+  const id = await deterministicId("archival-forecast", body.observedAt);
+  await context.env.DB.prepare(
+    `INSERT INTO archival_forecasts
+       (id, database_bytes, database_limit_bytes, observation_count, monthly_growth_bytes,
+        oldest_observation_at, protected_observation_count, threshold_percent, usage_percent_millis,
+        projected_limit_at, status, observed_at)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)`,
+  ).bind(id, body.databaseBytes, body.databaseLimitBytes, body.observationCount, body.monthlyGrowthBytes,
+    body.oldestObservationAt, body.protectedObservationCount, body.thresholdPercent, usagePercentMillis,
+    projectedLimitAt, status, body.observedAt).run();
+  if (status !== "healthy") await raiseOperationalAlert(context.env, "d1-archive-capacity", `D1 archival threshold is ${status}`, { id, ...body, usagePercentMillis, projectedLimitAt });
+  else await resolveOperationalAlert(context.env, "d1-archive-capacity", { id, usagePercentMillis, projectedLimitAt });
+  return context.json({ ok: status !== "critical", id, status, usagePercentMillis, projectedLimitAt }, status === "critical" ? 422 : 201);
+});
+
+app.post("/internal/archival/plan", zValidator("json", archivePlanSchema), async (context) => {
+  const body = context.req.valid("json");
+  const minimumCutoff = Date.now() - 18 * 30 * 24 * 60 * 60 * 1000;
+  if (Date.parse(body.cutoffAt) > minimumCutoff) return jsonError("archive cutoff must retain at least 18 months", 422);
+  const forecast = await context.env.DB.prepare("SELECT status, usage_percent_millis FROM archival_forecasts ORDER BY observed_at DESC LIMIT 1")
+    .first<{ status: string; usage_percent_millis: number }>();
+  const rows = await context.env.DB.prepare(
+    `SELECT o.id
+       FROM observations o
+      WHERE o.captured_at < ?1
+        AND NOT EXISTS (SELECT 1 FROM release_cells rc WHERE rc.observation_id = o.id)
+        AND NOT EXISTS (SELECT 1 FROM archive_manifest_observations amo WHERE amo.observation_id = o.id)
+      ORDER BY o.captured_at, o.id
+      LIMIT ?2`,
+  ).bind(body.cutoffAt, body.maximumRows).all<{ id: string }>();
+  const ids = rows.results.map((row) => row.id);
+  const protectedCount = (await context.env.DB.prepare(
+    `SELECT COUNT(DISTINCT o.id) AS count FROM observations o JOIN release_cells rc ON rc.observation_id = o.id WHERE o.captured_at < ?1`,
+  ).bind(body.cutoffAt).first<{ count: number }>())?.count ?? 0;
+  const protectedRefsHash = await digestHex(stableJson({ cutoffAt: body.cutoffAt, protectedCount }));
+  const result = { cutoffAt: body.cutoffAt, candidates: ids.length, protectedCount, protectedRefsHash, forecast: forecast ?? null };
+  if (body.dryRun) return context.json({ ok: true, dryRun: true, ...result });
+  if (!forecast || !["armed", "critical"].includes(forecast.status)) return jsonError("archive execution is disarmed while D1 capacity is healthy", 409);
+  if (!ids.length) return jsonError("archive plan has no eligible observations", 422);
+  const manifestId = await deterministicId("archive-manifest", body.cutoffAt, protectedRefsHash, ...ids);
+  const statements: D1PreparedStatement[] = [context.env.DB.prepare(
+    `INSERT INTO archive_manifests (id, cutoff_at, format, row_count, status, protected_refs_hash, detail_json)
+     VALUES (?1, ?2, 'parquet', ?3, 'planned', ?4, ?5)`,
+  ).bind(manifestId, body.cutoffAt, ids.length, protectedRefsHash, stableJson({ forecast }))];
+  for (const observationId of ids) statements.push(context.env.DB.prepare(
+    "INSERT INTO archive_manifest_observations (manifest_id, observation_id) VALUES (?1, ?2)",
+  ).bind(manifestId, observationId));
+  for (let offset = 0; offset < statements.length; offset += 80) await context.env.DB.batch(statements.slice(offset, offset + 80));
+  return context.json({ ok: true, dryRun: false, manifestId, ...result }, 201);
+});
+
+app.get("/internal/archival/:id/export", async (context) => {
+  const manifest = await context.env.DB.prepare("SELECT id, status, cutoff_at, protected_refs_hash FROM archive_manifests WHERE id = ?1")
+    .bind(context.req.param("id")).first<{ id: string; status: string; cutoff_at: string; protected_refs_hash: string }>();
+  if (!manifest) return jsonError("archive manifest not found", 404);
+  const rows = await context.env.DB.prepare(
+    `SELECT o.*, pv.product_id, pv.name, pv.normalized_name, pv.size_text, pv.product_url,
+            pv.image_url, pv.taxonomy_path, p.store_location_id, p.external_key, b.source_id
+       FROM archive_manifest_observations amo
+       JOIN observations o ON o.id = amo.observation_id
+       JOIN product_versions pv ON pv.id = o.product_version_id
+       JOIN products p ON p.id = pv.product_id
+       JOIN capture_batches b ON b.id = o.batch_id
+      WHERE amo.manifest_id = ?1 ORDER BY o.captured_at, o.id`,
+  ).bind(manifest.id).all<Record<string, unknown>>();
+  return context.json({ ok: true, manifest, rows: rows.results });
+});
+
+app.put("/internal/archival/:id/parquet", async (context) => {
+  const manifest = await context.env.DB.prepare("SELECT id, status, row_count FROM archive_manifests WHERE id = ?1")
+    .bind(context.req.param("id")).first<{ id: string; status: string; row_count: number }>();
+  if (!manifest) return jsonError("archive manifest not found", 404);
+  if (manifest.status !== "planned") return jsonError(`archive manifest cannot accept bytes in ${manifest.status}`, 409);
+  const body = await context.req.arrayBuffer();
+  const bytes = new Uint8Array(body);
+  const parquetMagic = bytes.length >= 8
+    && new TextDecoder().decode(bytes.slice(0, 4)) === "PAR1"
+    && new TextDecoder().decode(bytes.slice(-4)) === "PAR1";
+  if (!parquetMagic) return jsonError("archive object is not a complete Parquet file", 422);
+  const sha256 = await digestHex(bytes);
+  const objectKey = `observations/${new Date().toISOString().slice(0, 10).replaceAll("-", "/")}/${manifest.id}.parquet`;
+  await context.env.ARCHIVE.put(objectKey, body, { httpMetadata: { contentType: "application/vnd.apache.parquet" }, customMetadata: { manifestId: manifest.id, sha256, rows: String(manifest.row_count) } });
+  const stored = await context.env.ARCHIVE.head(objectKey);
+  if (!stored || stored.size !== bytes.byteLength) return jsonError("archive object failed post-write size verification", 500);
+  await context.env.DB.prepare(
+    "UPDATE archive_manifests SET object_key = ?2, byte_length = ?3, sha256 = ?4, status = 'verified', verified_at = CURRENT_TIMESTAMP WHERE id = ?1",
+  ).bind(manifest.id, objectKey, stored.size, sha256).run();
+  await recordAudit(context.env, context.get("identity"), "archive.verify", "archive_manifest", manifest.id, "accepted", { objectKey, byteLength: stored.size, sha256, rowCount: manifest.row_count });
+  return context.json({ ok: true, manifestId: manifest.id, status: "verified", objectKey, byteLength: stored.size, sha256 });
 });
 
 app.post("/internal/capture-batches", zValidator("json", captureBatchCreateSchema), async (context) => {

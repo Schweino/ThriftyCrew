@@ -4,11 +4,13 @@ import { directCaptureArtifactSchema, observationChunkSchema } from "@thriftycre
 import { deployConfiguration, ingestDirectCapture, MutationClient, publishNativeRelease, replayCurrentArtifact, type CaptureEvidenceInput } from "@thriftycrew/daily/client";
 import { buildCurrentBridge } from "@thriftycrew/daily/legacy";
 import { buildRegularCapture, type CaptureAttestation } from "@thriftycrew/daily/direct";
+import { evaluateSourceContract, type SourceContract } from "@thriftycrew/daily/source-contracts";
 import { buildNativeRelease } from "@thriftycrew/daily/native";
 import { digestHex, stableJson } from "@thriftycrew/domain";
 import { generateLegacyConfiguration } from "./config";
 import { buildNativeParityReport, compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot } from "@thriftycrew/engine";
 import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
+import { checkAgentRegistry, readAgentRegistry } from "./agents";
 import { captureQueueStatus, defaultCaptureQueueRoot, drainCaptureQueue, enqueueCapture, PermanentCaptureError, verifyCaptureQueueFilesystem } from "./capture-queue";
 import { findLatestRegularCapture, omahaDateKey, parseServerCaptureStore, readFreshRegularCapture, SERVER_CAPTURE_STORES } from "./current-captures";
 
@@ -327,6 +329,11 @@ if (command === "status") {
 } else if (command === "schedules" && subcommand === "deploy") {
   const document = await readScheduleAuthority(platformRoot);
   result = await (await mutationClient()).request("/internal/schedules/sync", { method: "PUT", json: document });
+} else if (command === "agents" && subcommand === "check") {
+  result = await checkAgentRegistry(platformRoot);
+} else if (command === "agents" && subcommand === "deploy") {
+  await checkAgentRegistry(platformRoot);
+  result = await (await mutationClient()).request("/internal/agents/sync", { method: "PUT", json: await readAgentRegistry(platformRoot) });
 } else if (command === "backup" && subcommand === "trigger") {
   result = await (await mutationClient()).request(`/internal/backups/trigger${arguments_.includes("--replica") ? "?replica=1" : ""}`, { method: "POST" });
 } else if (command === "restore" && subcommand === "record") {
@@ -335,6 +342,39 @@ if (command === "status") {
   result = await (await mutationClient()).request("/internal/restore-drills", { json: JSON.parse(await readFile(cliPath(file), "utf8")) });
 } else if (command === "restore" && subcommand === "show") {
   result = await (await mutationClient()).request("/internal/restore-drills");
+} else if (command === "restore" && subcommand === "trigger") {
+  result = await (await mutationClient()).request("/internal/restore-drills/trigger", { method: "POST" });
+} else if (command === "archive" && subcommand === "plan") {
+  const cutoffAt = arguments_.find((value: string) => !value.startsWith("--")) ?? new Date(Date.now() - 18 * 30 * 24 * 60 * 60 * 1000).toISOString();
+  result = await (await mutationClient()).request("/internal/archival/plan", { json: { cutoffAt, dryRun: !arguments_.includes("--execute"), maximumRows: 10000 }, acceptStatuses: [409, 422] });
+} else if (command === "archive" && subcommand === "export") {
+  const [manifestId, outputFile] = arguments_;
+  if (!manifestId || !outputFile) throw new Error("tc archive export requires a manifest id and output JSON file");
+  const exported = await (await mutationClient()).request(`/internal/archival/${encodeURIComponent(manifestId)}/export`);
+  await writeJson(cliPath(outputFile), exported);
+  result = { ok: true, manifestId, outputFile: cliPath(outputFile), rows: Array.isArray(exported.rows) ? exported.rows.length : 0 };
+} else if (command === "archive" && subcommand === "upload") {
+  const [manifestId, parquetFile] = arguments_;
+  if (!manifestId || !parquetFile) throw new Error("tc archive upload requires a manifest id and Parquet file");
+  result = await (await mutationClient()).request(`/internal/archival/${encodeURIComponent(manifestId)}/parquet`, { method: "PUT", body: new Uint8Array(await readFile(cliPath(parquetFile))), headers: { "content-type": "application/vnd.apache.parquet" } });
+} else if (command === "content" && subcommand === "show") {
+  result = await (await mutationClient()).request("/internal/content-batches");
+} else if (command === "content" && subcommand === "create") {
+  const file = arguments_[0];
+  if (!file) throw new Error("tc content create requires a batch JSON file");
+  result = await (await mutationClient()).request("/internal/content-batches", { json: JSON.parse(await readFile(cliPath(file), "utf8")) });
+} else if (command === "content" && subcommand === "items") {
+  const [batchId, file] = arguments_;
+  if (!batchId || !file) throw new Error("tc content items requires a batch id and items JSON file");
+  result = await (await mutationClient()).request(`/internal/content-batches/${encodeURIComponent(batchId)}/items`, { json: JSON.parse(await readFile(cliPath(file), "utf8")) });
+} else if (command === "content" && subcommand === "audit") {
+  const [batchId, file] = arguments_;
+  if (!batchId || !file) throw new Error("tc content audit requires a batch id and audit JSON file");
+  result = await (await mutationClient()).request(`/internal/content-batches/${encodeURIComponent(batchId)}/audit`, { json: JSON.parse(await readFile(cliPath(file), "utf8")), acceptStatuses: [422] });
+} else if (command === "content" && subcommand === "promote") {
+  const batchId = arguments_[0];
+  if (!batchId) throw new Error("tc content promote requires a batch id");
+  result = await (await mutationClient()).request(`/internal/content-batches/${encodeURIComponent(batchId)}/promote`, { method: "POST", acceptStatuses: [422] });
 } else if (command === "evidence" && subcommand === "record") {
   const file = arguments_[0];
   if (!file) throw new Error("tc evidence record requires a JSON evidence file");
@@ -415,6 +455,14 @@ if (command === "status") {
     executorRunId: process.env.GITHUB_SERVER_URL && process.env.GITHUB_REPOSITORY && process.env.GITHUB_RUN_ID
       ? `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
       : runId,
+    ...(process.env.TC_AGENT_ID ? {
+      agentId: process.env.TC_AGENT_ID,
+      promptHash: process.env.TC_AGENT_PROMPT_HASH,
+      modelId: process.env.TC_AGENT_MODEL,
+      ledgerMode: process.env.TC_AGENT_DIAGNOSTIC === "1" ? "diagnostic" : "normal",
+      mutationAuthorized: process.env.TC_AGENT_DIAGNOSTIC !== "1",
+      estimatedCostMicrousd: Number(process.env.TC_AGENT_ESTIMATED_COST_MICROUSD ?? "0"),
+    } : {}),
     input: { reason: process.env.TC_RECOVERY_REASON ?? "scheduled operation" },
   } });
 } else if (command === "job" && subcommand === "github-runs") {
@@ -436,10 +484,18 @@ if (command === "status") {
   const requested = arguments_[1] ?? "completed";
   const status = requested === "success" ? "completed" : requested === "completed" ? "completed" : "failed";
   const now = new Date().toISOString();
+  const usage = process.env.TC_AGENT_USAGE_JSON ? JSON.parse(process.env.TC_AGENT_USAGE_JSON) as Record<string, number> : {};
   result = await (await mutationClient()).request(`/internal/job-runs/${githubRunId(job)}`, { method: "PATCH", json: {
     status,
     heartbeatAt: now,
     finishedAt: now,
+    usage: {
+      inputTokens: usage.inputTokens ?? 0,
+      outputTokens: usage.outputTokens ?? 0,
+      cacheReadTokens: usage.cacheReadTokens ?? 0,
+      cacheWriteTokens: usage.cacheWriteTokens ?? 0,
+      costMicrousd: usage.costMicrousd ?? 0,
+    },
     stats: { githubJobStatus: requested },
     ...(status === "failed" ? { error: `GitHub recovery job ended with ${requested}` } : {}),
   } });
@@ -510,6 +566,7 @@ if (command === "status") {
   const stores = arguments_.length > 0 ? arguments_.map(parseServerCaptureStore) : [...SERVER_CAPTURE_STORES];
   const regularDirectory = path.join(incomeRoot, "grocery", "out", "regular");
   const client = await mutationClient();
+  const sourceContractDocument = JSON.parse(await readFile(path.join(platformRoot, "config", "source-contracts.json"), "utf8")) as { version: number; sources: SourceContract[] };
   const captures: Array<Record<string, unknown>> = [];
   for (const store of stores) {
     const file = await findLatestRegularCapture(regularDirectory, store);
@@ -518,12 +575,43 @@ if (command === "status") {
       ...(process.env.TC_SERVER_CAPTURE_ALLOW_PRIOR === "1" ? {} : { requiredDate: omahaDateKey(new Date()) }),
     });
     const artifact = await buildRegularCapture(store, fresh.document);
+    const contract = sourceContractDocument.sources.find((entry) => entry.sourceId === artifact.sourceId);
+    if (!contract) throw new Error(`no source contract is registered for ${artifact.sourceId}`);
+    const sentinel = evaluateSourceContract(artifact, contract);
+    const sentinelReceipt = await client.request("/internal/source-sentinels", { json: {
+      sourceId: artifact.sourceId,
+      contractVersion: sourceContractDocument.version,
+      observedAt: artifact.capturedTo,
+      status: sentinel.status,
+      checks: sentinel.checks,
+      evidence: { file, rows: fresh.rows, newestCaptureDate: fresh.newestCaptureDate },
+    }, acceptStatuses: [422] });
+    if (sentinel.status !== "pass") throw new Error(`source contract failed for ${artifact.sourceId}: ${stableJson(sentinel.checks)}`);
     const ingestion = await ingestDirectCapture(client, artifact, new Uint8Array(await readFile(file)));
     if (!ingestion.ok) throw new Error(`current ${store} capture was rejected: ${stableJson(ingestion)}`);
     const matching = await matchBatch(client, String(ingestion.batchId));
-    captures.push({ store, file, newestCaptureDate: fresh.newestCaptureDate, oldestCaptureDate: fresh.oldestCaptureDate, sourceRows: fresh.rows, ...ingestion, matching });
+    captures.push({ store, file, newestCaptureDate: fresh.newestCaptureDate, oldestCaptureDate: fresh.oldestCaptureDate, sourceRows: fresh.rows, sentinel: sentinelReceipt, ...ingestion, matching });
   }
   result = { ok: true, captures };
+} else if (command === "sentinel" && subcommand === "latest") {
+  const stores = arguments_.length > 0 ? arguments_.map(parseServerCaptureStore) : [...SERVER_CAPTURE_STORES];
+  const regularDirectory = path.join(incomeRoot, "grocery", "out", "regular");
+  const client = await mutationClient();
+  const sourceContractDocument = JSON.parse(await readFile(path.join(platformRoot, "config", "source-contracts.json"), "utf8")) as { version: number; sources: SourceContract[] };
+  const sentinels: Array<Record<string, unknown>> = [];
+  for (const store of stores) {
+    const file = await findLatestRegularCapture(regularDirectory, store);
+    const fresh = await readFreshRegularCapture(file, { maximumAgeHours: Number(process.env.TC_SERVER_CAPTURE_MAX_AGE_HOURS ?? 36) });
+    const artifact = await buildRegularCapture(store, fresh.document);
+    const contract = sourceContractDocument.sources.find((entry) => entry.sourceId === artifact.sourceId);
+    if (!contract) throw new Error(`no source contract is registered for ${artifact.sourceId}`);
+    const evaluated = evaluateSourceContract(artifact, contract);
+    const receipt = await client.request("/internal/source-sentinels", { json: { sourceId: artifact.sourceId, contractVersion: sourceContractDocument.version, observedAt: artifact.capturedTo, status: evaluated.status, checks: evaluated.checks, evidence: { file, rows: fresh.rows } }, acceptStatuses: [422] });
+    sentinels.push({ store, status: evaluated.status, checks: evaluated.checks, receipt });
+  }
+  const allSentinelsPass = sentinels.every((entry) => entry.status === "pass");
+  result = { ok: allSentinelsPass, sentinels };
+  if (!allSentinelsPass) process.exitCode = 2;
 } else if (command === "capture" && subcommand === "promote-ready-browser") {
   const client = await mutationClient();
   const ready = await client.request("/internal/capture-batches/ready-browser") as { batches?: Array<{ id: string; source_id: string; captured_to: string }> };
@@ -633,12 +721,13 @@ if (command === "status") {
     ...(!isHelpRequest ? { error: `Unknown command: ${requestedCommand}` } : {}),
     usage: [
       "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy",
-      "tc schedules check|deploy", "tc backup trigger [--replica]", "tc restore record <file>|show", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
+      "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup trigger [--replica]", "tc restore trigger|record <file>|show", "tc archive plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog",
       "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|rematch-promoted|abandon <batch-id> <reason>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",
+      "tc sentinel latest [bakers family-fare hy-vee]",
       "tc match batch <batch-id>", "tc commodity add <file>", "tc recipe add <file>",
     ],
   };
