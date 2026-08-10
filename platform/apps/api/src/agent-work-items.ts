@@ -293,6 +293,15 @@ export async function completeAgentWorkItem(db: D1Database, identity: MutationId
     ).bind(current.source_ref, `agent-work://${workItemId}`, outputJson).run();
     nextAgentId = "triage-developer";
   }
+  if (current.agent_id === "triage-developer") {
+    const proposal = pullRequestProposalSchema.parse(output);
+    if (proposal.requiresOperator) {
+      await db.prepare(
+        `UPDATE triage_items SET status = 'needs_operator', resolution_json = ?2,
+           updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status = 'planned'`,
+      ).bind(current.source_ref, outputJson).run();
+    }
+  }
   if (current.agent_id === "recipe-auditor") contentBatch = await stageAuditedRecipeBatch(db, current, output);
   else if (String(current.agent_id).startsWith("recipe-")) nextAgentId = await enqueueRecipeNext(db, current, output);
   return { idempotent: false, workItemId, state: "completed", outputHash, nextAgentId: nextAgentId ?? null, contentBatch: contentBatch ?? null };

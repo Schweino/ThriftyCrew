@@ -438,9 +438,16 @@ export const pullRequestProposalSchema = z.object({
     path: z.string().min(1).max(500),
     operation: z.enum(["create", "update"]),
     content: z.string().max(500_000),
-  })).min(1).max(50),
+  })).max(50),
   tests: z.array(z.string().min(3).max(1000)).min(1).max(50),
   requiresOperator: z.boolean(),
+}).superRefine((value, context) => {
+  if (value.requiresOperator && value.files.length > 0) {
+    context.addIssue({ code: "custom", path: ["files"], message: "must be empty when operator intervention is required" });
+  }
+  if (!value.requiresOperator && value.files.length === 0) {
+    context.addIssue({ code: "custom", path: ["files"], message: "must contain at least one change for an autonomous pull request" });
+  }
 });
 
 export const recipeSourceCandidatesSchema = z.object({

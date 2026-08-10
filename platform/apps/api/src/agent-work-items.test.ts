@@ -22,6 +22,26 @@ describe("agent output boundary", () => {
     expect(() => validateAgentOutput("pull-request-v1", proposal, "sentinel_one", "source-sentinel-investigator")).toThrow(/forbidden/);
   });
 
+  it("forbids placeholder file changes when the agent requires an operator", () => {
+    const proposal = {
+      title: "Operator intervention is required for scheduler repair", branch: "agent/operator-scheduler-repair",
+      rationale: "The evidence does not identify a safe repository change, so an operator must inspect runtime configuration.",
+      files: [{ path: "README.md", operation: "update", content: "" }],
+      tests: ["Verify the scheduler and its success telemetry manually."], requiresOperator: true,
+    };
+    expect(() => validateAgentOutput("pull-request-v1", proposal, "triage_one", "triage-developer")).toThrow(/must be empty/);
+  });
+
+  it("accepts a file-free operator escalation and rejects a file-free autonomous PR", () => {
+    const proposal = {
+      title: "Operator intervention is required for scheduler repair", branch: "agent/operator-scheduler-repair",
+      rationale: "The evidence does not identify a safe repository change, so an operator must inspect runtime configuration.",
+      files: [], tests: ["Verify the scheduler and its success telemetry manually."], requiresOperator: true,
+    };
+    expect(validateAgentOutput("pull-request-v1", proposal, "triage_one", "triage-developer")).toEqual(proposal);
+    expect(() => validateAgentOutput("pull-request-v1", { ...proposal, requiresOperator: false }, "triage_one", "triage-developer")).toThrow(/at least one change/);
+  });
+
   it("accepts structured staged recipe content", () => {
     const content = { items: [{
       slug: "bean-chili", title: "Weeknight Bean Chili", servings: 4,

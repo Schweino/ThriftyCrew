@@ -127,8 +127,14 @@ jobs:
           TC_AGENT_INPUT_FILE: ${{ runner.temp }}/tc-agent-output/input.json
         run: pnpm --filter @thriftycrew/agents run run -- "$TC_AGENT_ID"
 
-      - name: Require GitHub App credentials for PR agents
+      - name: Stage bounded PR proposal
+        id: proposal
         if: steps.claim.outputs.claimed == 'true' && steps.execute.outcome == 'success' && (inputs.agent_id == 'triage-developer' || inputs.agent_id == 'source-sentinel-investigator')
+        working-directory: .
+        run: node platform/scripts/stage-agent-pr.mjs "$TC_AGENT_ID" "$TC_OUTPUT_ROOT/${TC_AGENT_ID}.json"
+
+      - name: Require GitHub App credentials for PR agents
+        if: steps.proposal.outcome == 'success' && steps.proposal.outputs.requires_operator != 'true'
         env:
           APP_ID: ${{ secrets.TC_AGENT_APP_ID }}
           PRIVATE_KEY: ${{ secrets.TC_AGENT_APP_PRIVATE_KEY }}
@@ -137,7 +143,7 @@ jobs:
 
       - name: Mint bounded GitHub App token
         id: app-token
-        if: steps.claim.outputs.claimed == 'true' && steps.execute.outcome == 'success' && (inputs.agent_id == 'triage-developer' || inputs.agent_id == 'source-sentinel-investigator')
+        if: steps.proposal.outcome == 'success' && steps.proposal.outputs.requires_operator != 'true'
         uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ secrets.TC_AGENT_APP_ID }}
@@ -145,19 +151,13 @@ jobs:
           permission-contents: write
           permission-pull-requests: write
 
-      - name: Stage bounded PR proposal
-        id: proposal
-        if: steps.app-token.outcome == 'success'
-        working-directory: .
-        run: node platform/scripts/stage-agent-pr.mjs "$TC_AGENT_ID" "$TC_OUTPUT_ROOT/${TC_AGENT_ID}.json"
-
       - name: Verify proposed changes through all gates
-        if: steps.proposal.outcome == 'success'
+        if: steps.proposal.outcome == 'success' && steps.proposal.outputs.requires_operator != 'true'
         run: pnpm check
 
       - name: Open PR without deployment authority
         id: open-pr
-        if: steps.proposal.outcome == 'success'
+        if: steps.proposal.outcome == 'success' && steps.proposal.outputs.requires_operator != 'true'
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ steps.app-token.outputs.token }}
@@ -168,7 +168,7 @@ jobs:
 
       - name: Complete fenced work item
         id: complete
-        if: steps.claim.outputs.claimed == 'true' && steps.execute.outcome == 'success' && ((inputs.agent_id != 'triage-developer' && inputs.agent_id != 'source-sentinel-investigator') || steps.open-pr.outcome == 'success')
+        if: steps.claim.outputs.claimed == 'true' && steps.execute.outcome == 'success' && ((inputs.agent_id != 'triage-developer' && inputs.agent_id != 'source-sentinel-investigator') || steps.proposal.outputs.requires_operator == 'true' || steps.open-pr.outcome == 'success')
         run: |
           set -o pipefail
           pnpm tc agent complete "$TC_OUTPUT_ROOT/claim.json" "$TC_OUTPUT_ROOT/${TC_AGENT_ID}.json" | tee "$TC_OUTPUT_ROOT/completion.log"
