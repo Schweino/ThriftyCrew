@@ -77,6 +77,17 @@ evidence and verified archive objects.
 - Source-contract checks are deterministic and run before each server-source ingestion. Failures create durable
   operational alerts; the AI investigator is a read-only second stage.
 
+## H7 - independent browser-capture SLA
+
+- Cloudflare evaluates the Wednesday-through-Tuesday browser cycle independently of the capture PC every hour.
+  The check requires all four sources to be full, promoted or superseded, matched, and backed by screenshot,
+  session-manifest and projected-raw evidence.
+- The SLA begins with the strict 2026-08-12 cycle. It opens a durable digest alert after the Saturday noon
+  America/Chicago retry deadline and resolves it automatically after remote truth recovers. A separate monitor
+  alert covers failures in the SLA evaluator itself.
+- The public status response exposes the current cycle, deadline, ready sources and exact missing conditions,
+  so a powered-off PC cannot hide a missed browser week.
+
 ## Remaining calendar proof
 
 V3 legacy retirement still depends on the live evidence counters in `IMPLEMENTATION-STATUS.md`. Hardening code

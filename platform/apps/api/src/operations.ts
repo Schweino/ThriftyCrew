@@ -1,5 +1,6 @@
 import { deterministicId, stableJson } from "@thriftycrew/domain";
 import type { MutationIdentity, WorkerEnv } from "./env";
+import { readBrowserCaptureSla } from "./browser-capture-sla";
 
 export function jobStatusRequiresAlert(status: string): boolean {
   return status === "failed" || status === "timed_out" || status === "missed";
@@ -554,6 +555,44 @@ export async function runLedgerWatchdog(env: WorkerEnv, scheduledTime: number): 
   ).bind(runId, new Date().toISOString(), stableJson({ checked: schedules.results.length, stale })).run();
 }
 
+export async function runBrowserCaptureSla(env: WorkerEnv, scheduledTime: number): Promise<void> {
+  const observedAt = new Date(scheduledTime).toISOString();
+  const runId = await deterministicId("run", "browser-capture-sla", observedAt.slice(0, 13));
+  await env.DB.prepare(
+    `INSERT INTO job_runs
+       (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, actor_id, input_json)
+     VALUES (?1, 'browser-capture-sla', 'schedule', ?2, ?2, ?2, 'started', 'cloudflare:scheduled', '{}')
+     ON CONFLICT(id) DO UPDATE SET started_at = ?2, heartbeat_at = ?2, finished_at = NULL, status = 'started', error = NULL`,
+  ).bind(runId, observedAt).run();
+  try {
+    const assessment = await readBrowserCaptureSla(env.DB, new Date(scheduledTime));
+    if (assessment.ready) {
+      await resolveOperationalAlert(env, "browser-capture-sla", { ...assessment, checkedAt: observedAt }, {
+        recoveryTitle: "Weekly browser capture SLA recovered",
+      });
+    } else if (assessment.enforced && assessment.deadlineExpired) {
+      await raiseOperationalAlert(env, "browser-capture-sla", "Weekly browser capture SLA missed its retry deadline", {
+        ...assessment,
+        checkedAt: observedAt,
+      }, { notification: "digest", deferMinutes: 15, observedAt });
+    }
+    await resolveOperationalAlert(env, "browser-capture-sla-monitor", { checkedAt: observedAt, status: "completed" });
+    await env.DB.prepare(
+      "UPDATE job_runs SET status = 'completed', heartbeat_at = ?2, finished_at = ?2, stats_json = ?3 WHERE id = ?1",
+    ).bind(runId, new Date().toISOString(), stableJson(assessment)).run();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "browser capture SLA monitor failed";
+    const finishedAt = new Date().toISOString();
+    await env.DB.prepare("UPDATE job_runs SET status = 'failed', heartbeat_at = ?2, finished_at = ?2, error = ?3 WHERE id = ?1")
+      .bind(runId, finishedAt, message).run();
+    await raiseOperationalAlert(env, "browser-capture-sla-monitor", "Browser capture SLA monitor failed", {
+      error: message,
+      checkedAt: observedAt,
+    }, { notification: "digest", deferMinutes: 15, observedAt });
+    throw error;
+  }
+}
+
 export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number): Promise<void> {
   const observedAt = new Date(scheduledTime).toISOString();
   const runId = await deterministicId("run", "archival-forecast-daily", observedAt.slice(0, 10));
@@ -635,6 +674,7 @@ export async function runScheduledOperations(env: WorkerEnv, scheduledTime: numb
   await flushOperationalAlertDigest(env, new Date(scheduledTime).toISOString());
   const parts = localScheduleParts(scheduledTime);
   const localDate = `${parts.year}-${parts.month}-${parts.day}`;
+  if (parts.minute === "00") await runBrowserCaptureSla(env, scheduledTime);
   if (parts.hour === "04" && parts.minute === "30") {
     const instanceId = `d1-backup-${localDate}`;
     const recorded = await env.DB.prepare("SELECT id FROM backup_exports WHERE id = ?1")

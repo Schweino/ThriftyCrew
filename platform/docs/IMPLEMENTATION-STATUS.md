@@ -51,6 +51,8 @@ implementation.
 - Isolated D1 Sessions replication canary; no premature public-route cutover.
 - Byte/growth-based archival forecasts, protected-reference manifests, verified R2 Parquet upload path and
   deterministic source-contract sentinels.
+- An hourly Cloudflare-side browser SLA independently detects an offline PC or missing strict weekly capture
+  after the Saturday retry deadline and reports its exact remote promotion, matching and evidence gaps.
 
 ## Phase 2 judgment execution plane
 

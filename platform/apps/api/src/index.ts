@@ -71,6 +71,7 @@ import { claimAgentWorkItem, completeAgentWorkItem, failAgentWorkItem } from "./
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
+import { readBrowserCaptureSla } from "./browser-capture-sla";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 export { D1RestoreDrillWorkflow } from "./restore-workflow";
@@ -189,7 +190,8 @@ app.use("/internal/engine/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/drills/*", requireIdentityRole(["operator"]));
 
 app.get("/api/v2/status", async (context) => {
-  const [release, schedules, accuracy, triage, milestones, agentWork, evaluations, loginCanaries] = await Promise.all([
+  const checkedAt = new Date();
+  const [release, schedules, accuracy, triage, milestones, agentWork, evaluations, loginCanaries, browserCaptureSla] = await Promise.all([
     context.env.DB.prepare(
       `SELECT r.id, r.published_at, r.summary_json
          FROM current_releases c JOIN releases r ON r.id = c.release_id
@@ -221,8 +223,8 @@ app.get("/api/v2/status", async (context) => {
               MAX(observed_at) AS latest_at
          FROM login_canary_probes GROUP BY store_id, run_id ORDER BY latest_at DESC LIMIT 20`,
     ).all(),
+    readBrowserCaptureSla(context.env.DB, checkedAt),
   ]);
-  const checkedAt = new Date();
   const jobs = schedules.results.map((row) => {
     const item = row as Record<string, unknown>;
     const maxGap = typeof item.max_gap_minutes === "number" ? item.max_gap_minutes : 0;
@@ -247,6 +249,7 @@ app.get("/api/v2/status", async (context) => {
       evaluations: evaluations.results,
     },
     loginCanaries: loginCanaries.results,
+    browserCaptureSla,
     triage: Object.fromEntries(triage.results.map((row) => [row.status, row.count])),
     checkedAt: checkedAt.toISOString(),
   });

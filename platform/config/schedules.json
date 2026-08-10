@@ -4,6 +4,7 @@
   "schedules": [
     { "id": "ledger-watchdog", "cron": "*/15 * * * *", "executor": "worker-cron", "maxGapMinutes": 30, "owner": "platform", "proof": "job_runs:ledger-watchdog", "dispatchOnGap": false },
     { "id": "archival-forecast-daily", "cron": "15 5 * * *", "triggerCron": "*/15 * * * *", "executor": "worker-cron", "maxGapMinutes": 1560, "owner": "platform", "proof": "archival_forecasts", "dispatchOnGap": false },
+    { "id": "browser-capture-sla", "cron": "0 * * * *", "triggerCron": "*/15 * * * *", "executor": "worker-cron", "maxGapMinutes": 90, "owner": "capture", "proof": "job_runs:browser-capture-sla", "dispatchOnGap": false },
     { "id": "d1-backup", "cron": "30 4 * * *", "executor": "cloudflare-workflow", "maxGapMinutes": 1560, "owner": "platform", "proof": "backup_exports:completed", "dispatchOnGap": false },
     { "id": "daily-engine", "cron": "7 12 * * *", "executor": "github-actions", "workflowFile": ".github/workflows/platform-v3.yml", "maxGapMinutes": 1560, "owner": "pricing", "proof": "releases:published", "dispatchOnGap": true },
     { "id": "family-fare-paced", "cron": "17 */3 * * *", "executor": "github-actions", "workflowFile": ".github/workflows/platform-v3.yml", "maxGapMinutes": 240, "owner": "capture", "proof": "capture_batches:direct-family-fare-headless", "dispatchOnGap": true },

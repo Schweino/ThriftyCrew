@@ -141,3 +141,11 @@ full term ledger, not merely that browser files or local upload receipts exist. 
 daily engine run promotes validated browser batches and publishes only if every hard guard passes. On failure,
 leave the last good release live and report the exact store, attempted terms, captured rows, screenshots, queue
 state, and whether operator action is required.
+
+## Independent remote SLA
+
+Cloudflare evaluates the remote weekly result every hour through the `browser-capture-sla` schedule. This
+monitor does not depend on the capture PC, its queue, or Codex being online. Beginning with the 2026-08-12
+cycle, it opens a digest alert after Saturday noon Central unless all four strict browser sources are full,
+promoted or superseded, matched, and backed by screenshot, session-manifest, and projected-raw evidence. The
+alert resolves automatically when those remote conditions recover.
