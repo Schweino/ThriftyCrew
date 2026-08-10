@@ -1924,13 +1924,6 @@
                                                     "size":  "28 oz",
                                                     "name":  "Sweet Baby Ray\u0027s Honey Barbecue Sauce"
                                                 },
-                                    "Hy-Vee":  {
-                                                   "url":  "https://www.hy-vee.com/aisles-online/p/3963368/hy-vee-honey-bbq-sauce",
-                                                   "price":  2.28,
-                                                   "size":  "18 oz",
-                                                   "name":  "Hy-Vee Honey BBQ Sauce",
-                                                   "board_pu":  0.1267
-                                               },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/13599611407",
                                                             "price":  11.98,
@@ -2778,14 +2771,6 @@
                                                     "size":  "19 oz",
                                                     "name":  "Johnsonville Cheddar Brats"
                                                 },
-                                    "Hy-Vee":  {
-                                                   "url":  "https://www.hy-vee.com/aisles-online/p/65395/johnsonville-original-brats-5-count",
-                                                   "name":  "Johnsonville Original Brats 5 Count",
-                                                   "board_pu":  5.0442,
-                                                   "price":  5.92,
-                                                   "size":  "19 oz",
-                                                   "verified":  "2026-08-07 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                               },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/Johnsonville-Brats-Original-Pork-Bratwurst-Links-18-ct/13610718508",
                                                             "price":  14.98,
@@ -2957,12 +2942,6 @@
                                                                    "size":  "8 ct",
                                                                    "verified":  "2026-08-08 DERIVED from the price row (same record the board priced)"
                                                                },
-                                               "Fareway":  {
-                                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/42274-jimmy-dean-sausage-egg-cheese-croissant-breakfast-sandwiches-4-5-oz",
-                                                               "price":  6.99,
-                                                               "size":  "each",
-                                                               "name":  "Jimmy Dean Croissant Breakfast Sandwiches with Sausage, Egg, and Cheese, Frozen, 4 Count"
-                                                           },
                                                "Hy-Vee":  {
                                                               "url":  "https://www.hy-vee.com/aisles-online/p/4234539/hy-vee-sausage-egg-and-cheese-muffin-breakfast-sandwiches",
                                                               "name":  "Hy-Vee Sausage, Egg, \u0026 Cheese Muffin Breakfast Sandwiches",
@@ -4081,14 +4060,7 @@
                                                                "price":  "$6.54",
                                                                "size":  "24 oz",
                                                                "verified":  "2026-08-07 DERIVED from the price row (same record the board priced)"
-                                                           },
-                                               "Hy-Vee":  {
-                                                              "url":  "https://www.hy-vee.com/aisles-online/p/1722234/hy-vee-mild-green-chiles-diced",
-                                                              "name":  "Hy-Vee Mild Green Chiles Diced",
-                                                              "price":  1.79,
-                                                              "size":  "4 oz",
-                                                              "verified":  "2026-08-10 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                                          }
+                                                           }
                                            },
                   "canned-mixed-vegetables":  {
                                                   "commodity":  "Canned Mixed Vegetables",
@@ -4188,12 +4160,6 @@
                                                             "verified":  "2026-08-10",
                                                             "board_pu":  0.1
                                                         },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/89855-chef-boyardee-beef-ravioli-60-oz",
-                                                       "price":  4.99,
-                                                       "size":  "60 oz",
-                                                       "name":  "Chef Boyardee Beef Ravioli in Pasta Sauce, Ready-to-Eat Meal"
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/861407/spaghettios-canned-pasta-with-meatballs-22-2-oz-can",
                                                       "name":  "SpaghettiOs Canned Pasta with Meatballs, 22.2 oz Can",
@@ -8780,14 +8746,6 @@
                                                              "size":  "35 ct",
                                                              "name":  "Clorox Disinfecting Wipes, Bleach Free Cleaning Wipes, Fresh Scent"
                                                          },
-                                             "Hy-Vee":  {
-                                                            "url":  "https://www.hy-vee.com/aisles-online/p/50222/clorox-disinfecting-bleach-free-crisp-lemon-cleaning-wipes-35-count",
-                                                            "price":  3.99,
-                                                            "size":  "35 ct",
-                                                            "name":  "Clorox Disinfecting Bleach Free Crisp Lemon Cleaning Wipes",
-                                                            "verified":  "2026-08-01 Hy-Vee search API (storeId 1465)",
-                                                            "board_pu":  0.114
-                                                        },
                                              "Sam\u0027s Club":  {
                                                                      "url":  "https://www.samsclub.com/ip/13610418712",
                                                                      "price":  10.98,
@@ -9514,13 +9472,7 @@
                                               "price":  1.67,
                                               "size":  "dozen",
                                               "verified":  "2026-08-07 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                          },
-                               "Family Fare":  {
-                                                   "url":  "https://www.shopfamilyfare.com/shop/dairy/eggs/large_eggs_grade_a_our_family/p/6787472",
-                                                   "name":  "Large Eggs, Grade A Our Family",
-                                                   "price":  "$2.39",
-                                                   "size":  "12 ct"
-                                               }
+                                          }
                            },
                   "egg-whites":  {
                                      "commodity":  "egg-whites",
@@ -10907,13 +10859,7 @@
                                                                "price":  9.99,
                                                                "size":  "16 pk 4 oz",
                                                                "verified":  "2026-08-10"
-                                                           },
-                                          "Fareway":  {
-                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2133850-tina-s-burrito-beef-bean-green-chili-big-10-oz",
-                                                          "price":  1.67,
-                                                          "size":  "each",
-                                                          "name":  "Tina\u0027s Big Burrito Beef \u0026 Bean Green Chili, Quick Meal"
-                                                      }
+                                                           }
                                       },
                   "frozen-chopped-spinach":  {
                                                  "commodity":  "Frozen Chopped Spinach",
@@ -11364,12 +11310,6 @@
                                                            "name":  "Jack\u0027s Original Thin Sausage Pizza 14.9 Oz",
                                                            "board_pu":  3.6667
                                                        },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/205454-jack-s-original-thin-crust-supreme-frozen-pizza-16-9-oz",
-                                                       "price":  3.33,
-                                                       "size":  "each",
-                                                       "name":  "Jack\u0027s Original Thin Supreme Pizza Pepperoni Sausage Onion Pizza Frozen"
-                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/13860174379",
                                                                "price":  11.88,
@@ -13590,14 +13530,6 @@
                                                       "size":  "32 oz",
                                                       "name":  "Fareway Southern Style Hash Browns"
                                                   },
-                                      "Hy-Vee":  {
-                                                     "url":  "https://www.hy-vee.com/aisles-online/p/4113322/hy-vee-frozen-shredded-hash-brown-potatoes",
-                                                     "price":  4.48,
-                                                     "size":  "30 oz",
-                                                     "name":  "Hy Vee Frozen Shredded Hash Brown Potatoes",
-                                                     "verified":  "2026-07-16 Hy-Vee search API (storeId 1465)",
-                                                     "board_pu":  0.1493
-                                                 },
                                       "Sam\u0027s Club":  {
                                                               "url":  "https://www.samsclub.com/ip/19268962404",
                                                               "name":  "Ore-Ida Crispy Hash Brown Patties, Shredded Potatoes, Frozen, 5 lb.",
@@ -15522,14 +15454,6 @@
                                },
                   "lemongrass-paste":  {
                                            "commodity":  "Lemongrass Paste",
-                                           "Baker\u0027s":  {
-                                                                "url":  "https://www.bakersplus.com/p/gourmet-garden-lemongrass-stir-in-paste/0087520800067",
-                                                                "price":  4.99,
-                                                                "size":  "4 oz",
-                                                                "name":  "Gourmet Garden Lemongrass Stir-In Paste",
-                                                                "verified":  "2026-08-10",
-                                                                "board_pu":  1.2475
-                                                            },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/35932/gourmet-garden-lemongrass-stir-in-paste-4-0-oz",
                                                           "price":  6.99,

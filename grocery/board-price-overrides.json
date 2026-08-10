@@ -2,7 +2,7 @@
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
     "updated":  "2026-08-10",
     "tol":  0.3,
-    "count":  11,
+    "count":  10,
     "cells":  [
                   {
                       "id":  "boneless-skinless-chicken-thigh",
@@ -86,21 +86,12 @@
                       "set":  "2026-08-10"
                   },
                   {
-                      "id":  "swiss-cheese",
+                      "id":  "dried-rosemary",
                       "store":  "Hy-Vee",
-                      "per_unit":  0.5,
+                      "per_unit":  2.2223,
                       "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.3125,
-                      "link_name":  "Hy-Vee Sliced Swiss Cheese 10Ct",
-                      "set":  "2026-08-10"
-                  },
-                  {
-                      "id":  "white-wine-vinegar",
-                      "store":  "Hy-Vee",
-                      "per_unit":  0.27,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.1473,
-                      "link_name":  "Gustare Vita White Wine Vinegar",
+                      "board_was":  3.9867,
+                      "link_name":  "Hy-Vee Rosemary Leaves",
                       "set":  "2026-08-10"
                   }
               ]

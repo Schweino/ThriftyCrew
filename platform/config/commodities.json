@@ -30836,7 +30836,8 @@
                         "\\bwipes?\\b",
                         "\\bbrush\\b",
                         "\\bscraper\\b",
-                        "\\bmitt\\b"
+                        "\\bmitt\\b",
+                        "\\bdegreaser\\b"
                     ]
     },
     {
@@ -30878,7 +30879,8 @@
                         "\\bfloor\\b",
                         "\\bcloth\\b",
                         "\\bduster\\b",
-                        "\\brefill\\b"
+                        "\\brefill\\b",
+                        "murphy.*oil\\s+soap|wood\\s+soap"
                     ]
     },
     {

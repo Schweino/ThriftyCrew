@@ -1024,7 +1024,7 @@ $eliteCss = '<style>' + (Compress-TcCss ((Get-TcTokenCss -Scope '.pg-wrap' -Part
 .pg-wrap .pg-spark-l{font-size:.72em;font-weight:700;color:#8a6d1f;font-variant-numeric:tabular-nums}
 .pg-wrap .pg-spark-c{font-size:.68em;color:var(--mut)}
 /* ---- TRIP BAR: a readout, not just a counter ---- */
-.pg-wrap .pg-tripbar{padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+.pg-wrap .pg-tripbar{left:50%;right:auto;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
 .pg-wrap .pg-trip-txt{display:flex;flex-direction:column;line-height:1.25;min-width:0}
 .pg-wrap .pg-trip-sub{font-size:.72em;color:#b9c4d4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pg-wrap .pg-demo{display:inline-block;margin-top:8px;background:#E2A43C;color:#16263F;border:none;border-radius:999px;padding:7px 15px;min-height:40px;font-size:.92em;font-weight:800;cursor:pointer;font-family:inherit}

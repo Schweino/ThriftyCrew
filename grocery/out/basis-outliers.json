@@ -1,29 +1,6 @@
 ﻿{
     "kind_mismatch_crown":  [
-                                {
-                                    "id":  "furniture-polish",
-                                    "commodity":  "Furniture Polish / Dusting Spray",
-                                    "unit":  "oz",
-                                    "store":  "Baker\u0027s",
-                                    "per_unit":  0.1559,
-                                    "size":  "32 fl oz",
-                                    "item":  "Murphy Oil Soap Wood Cleaner Original",
-                                    "kind":  "volume",
-                                    "row_kind":  "weight",
-                                    "holds_crown":  true
-                                },
-                                {
-                                    "id":  "oven-cleaner",
-                                    "commodity":  "Oven Cleaner",
-                                    "unit":  "oz",
-                                    "store":  "Walmart",
-                                    "per_unit":  0.1713,
-                                    "size":  "96 fl oz",
-                                    "item":  "(3 pack) Easy-Off Heavy Duty Degreaser, Removes Grease \u0026 Grime, For Kitchen, Garage, Outdoor \u0026 More 32oz",
-                                    "kind":  "volume",
-                                    "row_kind":  "weight",
-                                    "holds_crown":  true
-                                }
+
                             ],
     "findings":  [
                      {
@@ -119,7 +96,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-10T09:05:58",
+    "generated":  "2026-08-10T17:10:19",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -558,18 +535,6 @@
                               "id":  "furniture-polish",
                               "commodity":  "Furniture Polish / Dusting Spray",
                               "unit":  "oz",
-                              "store":  "Baker\u0027s",
-                              "per_unit":  0.1559,
-                              "size":  "32 fl oz",
-                              "item":  "Murphy Oil Soap Wood Cleaner Original",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  true
-                          },
-                          {
-                              "id":  "furniture-polish",
-                              "commodity":  "Furniture Polish / Dusting Spray",
-                              "unit":  "oz",
                               "store":  "Walmart",
                               "per_unit":  0.3738,
                               "size":  "16 fl oz",
@@ -894,18 +859,6 @@
                               "id":  "oven-cleaner",
                               "commodity":  "Oven Cleaner",
                               "unit":  "oz",
-                              "store":  "Walmart",
-                              "per_unit":  0.1713,
-                              "size":  "96 fl oz",
-                              "item":  "(3 pack) Easy-Off Heavy Duty Degreaser, Removes Grease \u0026 Grime, For Kitchen, Garage, Outdoor \u0026 More 32oz",
-                              "kind":  "volume",
-                              "row_kind":  "weight",
-                              "holds_crown":  true
-                          },
-                          {
-                              "id":  "oven-cleaner",
-                              "commodity":  "Oven Cleaner",
-                              "unit":  "oz",
                               "store":  "Fareway",
                               "per_unit":  0.3779,
                               "size":  "14.5 fl oz",
@@ -1053,7 +1006,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0818,
                               "size":  "17 oz",
-                              "item":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
+                              "item":  "Sparkling Ice Sparkling Water, Zero Sugar, Peach Nectarine 17 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
