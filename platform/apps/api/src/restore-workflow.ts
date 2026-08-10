@@ -1,4 +1,6 @@
 import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloudflare:workers";
+import { sha256 } from "@noble/hashes/sha2.js";
+import { bytesToHex } from "@noble/hashes/utils.js";
 import { stableJson } from "@thriftycrew/domain";
 import { raiseOperationalAlert } from "./operations";
 import type { WorkerEnv } from "./env";
@@ -6,9 +8,15 @@ import type { WorkerEnv } from "./env";
 interface RestoreWorkflowPayload { trigger?: string }
 interface ApiEnvelope<T> { success?: boolean; errors?: unknown[]; result?: T }
 
-async function sha256Hex(bytes: ArrayBuffer): Promise<string> {
-  const digest = await crypto.subtle.digest("SHA-256", bytes);
-  return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+async function sha256Stream(body: ReadableStream<Uint8Array>): Promise<string> {
+  const hasher = sha256.create();
+  const reader = body.getReader();
+  while (true) {
+    const chunk = await reader.read();
+    if (chunk.done) break;
+    hasher.update(chunk.value);
+  }
+  return bytesToHex(hasher.digest());
 }
 
 async function cloudflare<T>(env: WorkerEnv, pathname: string, init: RequestInit = {}): Promise<T> {
@@ -49,13 +57,19 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
         return row;
       });
       backupId = backup.id;
-      const dump = await step.do("read exact R2 backup", async () => {
-        const object = await this.env.BACKUPS.get(backup.object_key);
+      const dump = await step.do("inspect exact R2 backup", async () => {
+        const object = await this.env.BACKUPS.head(backup.object_key);
         if (!object) throw new Error(`backup object ${backup.object_key} is missing`);
-        const bytes = await object.arrayBuffer();
-        return { bytes, etag: object.etag.replaceAll('"', ""), sha256: await sha256Hex(bytes), length: bytes.byteLength };
+        return { etag: object.etag.replaceAll('"', ""), length: object.size };
       });
-      dumpSha256 = dump.sha256;
+      const hashed = await step.do("hash exact R2 backup", async () => {
+        const object = await this.env.BACKUPS.get(backup.object_key);
+        if (!object?.body) throw new Error(`backup object ${backup.object_key} is unreadable`);
+        const etag = object.etag.replaceAll('"', "");
+        if (etag !== dump.etag || object.size !== dump.length) throw new Error("backup object changed between inspection and hashing");
+        return { sha256: await sha256Stream(object.body), etag, length: object.size };
+      });
+      dumpSha256 = hashed.sha256;
       const scratch = await step.do("create isolated scratch D1", async () => cloudflare<{ uuid?: string }>(this.env, "/d1/database", {
         method: "POST",
         body: JSON.stringify({ name: `tc-grocery-v3-restore-${startedAt.slice(0, 10).replaceAll("-", "")}-${event.instanceId.slice(-8)}`, primary_location_hint: "wnam", read_replication: { mode: "disabled" } }),
@@ -71,7 +85,11 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
       }));
       if (!initialized.upload_url || !initialized.filename) throw new Error("D1 import initialization omitted upload metadata");
       await step.do("upload backup to scratch import", async () => {
-        const response = await fetch(initialized.upload_url!, { method: "PUT", body: dump.bytes });
+        const object = await this.env.BACKUPS.get(backup.object_key);
+        if (!object?.body) throw new Error(`backup object ${backup.object_key} is unreadable during upload`);
+        const etag = object.etag.replaceAll('"', "");
+        if (etag !== hashed.etag || object.size !== hashed.length) throw new Error("backup object changed between hashing and upload");
+        const response = await fetch(initialized.upload_url!, { method: "PUT", body: object.body });
         if (!response.ok) throw new Error(`scratch import upload returned ${response.status}`);
       });
       const ingested = await step.do("start scratch import", async () => cloudflare<{ at_bookmark?: string; status?: string; error?: string }>(this.env, `/d1/database/${scratchDatabaseId}/import`, {

@@ -47,6 +47,9 @@ importers:
       '@hono/zod-validator':
         specifier: 0.9.0
         version: 0.9.0(hono@4.13.1)(zod@4.4.3)
+      '@noble/hashes':
+        specifier: 2.3.0
+        version: 2.3.0
       '@thriftycrew/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
@@ -747,6 +750,10 @@ packages:
     peerDependencies:
       '@emnapi/core': ^1.7.1 || ^2.0.0-alpha.3
       '@emnapi/runtime': ^1.7.1 || ^2.0.0-alpha.3
+
+  '@noble/hashes@2.3.0':
+    resolution: {integrity: sha512-oN+QwyX7VSHotibwubG3kpzbwKrfnyR6OOO+3Nk/53ADL7FmgHHz4TgrbaYKvvOw09u6QTx0oiH1cNCIOuN0CQ==}
+    engines: {node: '>= 20.19.0'}
 
   '@openai/agents-core@0.14.3':
     resolution: {integrity: sha512-5tJnFL4Ei34GtArVatM9TUtILDYUXJ2/H0+9jIU8B7y5eINjrQtajmeaudFHmxA4/t7blRgG1SuKQfoA0FPy7A==}
@@ -2988,6 +2995,8 @@ snapshots:
       '@emnapi/runtime': 1.11.3
       '@tybys/wasm-util': 0.10.3
     optional: true
+
+  '@noble/hashes@2.3.0': {}
 
   '@openai/agents-core@0.14.3(supports-color@10.2.2)(ws@8.21.0)(zod@4.4.3)':
     dependencies:
