@@ -2,7 +2,7 @@ import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloud
 import { stableJson } from "@thriftycrew/domain";
 import { raiseOperationalAlert, resolveOperationalAlert } from "./operations";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
-import { RESTORE_MULTIPART_PART_BYTES, RESTORE_SOURCE_PART_BYTES } from "./restore-policy";
+import { padRestoreMultipartPart, RESTORE_SOURCE_PART_BYTES } from "./restore-policy";
 import type { WorkerEnv } from "./env";
 import {
   RESTORE_COUNT_TABLES,
@@ -190,17 +190,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           const encodedOutput = encoder.encode(output);
           let outputBytes = encodedOutput;
           if (!isLastPart) {
-            const multipartPartBytes = RESTORE_MULTIPART_PART_BYTES;
-            const separator = output.endsWith("\n") ? "" : "\n";
-            const separatorBytes = separator.length;
-            const availablePadding = multipartPartBytes - encodedOutput.byteLength - separatorBytes;
-            if (availablePadding < 0) throw new Error(`normalized multipart part ${partNumber} exceeds the fixed R2 part size`);
-            const paddingBlock = `SELECT '${"p".repeat(80_000)}';\n`;
-            const wholeBlocks = Math.floor(availablePadding / paddingBlock.length);
-            const remainder = availablePadding % paddingBlock.length;
-            const remainderPadding = remainder >= 11 ? `SELECT '${"p".repeat(remainder - 11)}';\n` : " ".repeat(remainder);
-            outputBytes = encoder.encode(`${output}${separator}${paddingBlock.repeat(wholeBlocks)}${remainderPadding}`);
-            if (outputBytes.byteLength !== multipartPartBytes) throw new Error(`normalized multipart part ${partNumber} padding has the wrong length`);
+            outputBytes = padRestoreMultipartPart(encodedOutput);
           }
           const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey!, multipart.uploadId);
           const uploaded = await upload.uploadPart(partNumber, outputBytes);
