@@ -35,7 +35,8 @@ describe("githubWorkflowRuns", () => {
       createdAt: "2026-08-09T12:00:00Z", updatedAt: "2026-08-09T12:01:00Z", url: "https://github.test/run/42",
       jobs: [{ id: 7, name: "verify", status: "completed", conclusion: "failure", startedAt: "2026-08-09T12:00:00Z",
         completedAt: "2026-08-09T12:01:00Z", steps: [{ name: "test", status: "completed", conclusion: "failure", number: 3 }],
-        annotations: [{ path: ".github/workflows/test.yml", startLine: 12, endLine: 12, level: "failure", title: "Process completed", message: "exit code 1" }] }],
+        annotations: [{ path: ".github/workflows/test.yml", startLine: 12, endLine: 12, level: "failure", title: "Process completed", message: "exit code 1" }],
+        diagnosticTail: [], diagnosticError: null }],
     }] });
     expect(fetchMock.mock.calls[0]?.[0]).toContain("daily-engine.yml/runs?per_page=1");
     expect(fetchMock.mock.calls[1]?.[0]).toContain("actions/runs/42/jobs?per_page=20");
@@ -46,5 +47,24 @@ describe("githubWorkflowRuns", () => {
     await expect(githubWorkflowRuns({} as WorkerEnv)).rejects.toThrow("not configured");
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("forbidden", { status: 403 })));
     await expect(githubWorkflowRuns(configuredEnv)).rejects.toThrow("returned 403");
+  });
+
+  it("falls back to a short redacted failed-job log tail when annotations are forbidden", async () => {
+    const lines = Array.from({ length: 70 }, (_, index) => `line ${index}`);
+    lines.push("token=github_pat_SENSITIVEVALUE", "##[error]adapter failed");
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({ workflow_runs: [{ id: 42, conclusion: "failure" }] }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ jobs: [{ id: 7, conclusion: "failure" }] }), { status: 200 }))
+      .mockResolvedValueOnce(new Response("forbidden", { status: 403 }))
+      .mockResolvedValueOnce(new Response(lines.join("\n"), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await githubWorkflowRuns(configuredEnv, 1);
+    const job = (result.runs[0]?.jobs as Array<{ diagnosticTail: string[] }>)[0];
+
+    expect(job?.diagnosticTail).toHaveLength(60);
+    expect(job?.diagnosticTail.at(-2)).toBe("token=[REDACTED]");
+    expect(job?.diagnosticTail.at(-1)).toBe("##[error]adapter failed");
+    expect(fetchMock.mock.calls[3]?.[0]).toContain("actions/jobs/7/logs");
   });
 });

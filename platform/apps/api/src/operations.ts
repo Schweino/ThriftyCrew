@@ -198,6 +198,32 @@ async function githubJson<T>(env: WorkerEnv, url: string): Promise<T> {
   return response.json<T>();
 }
 
+async function githubText(env: WorkerEnv, url: string): Promise<string> {
+  const response = await fetch(url, {
+    headers: {
+      accept: "application/vnd.github+json",
+      authorization: `Bearer ${env.GITHUB_DISPATCH_TOKEN}`,
+      "user-agent": "tc-grocery-v3-operator",
+      "x-github-api-version": "2022-11-28",
+    },
+  });
+  if (!response.ok) throw new Error(`GitHub Actions log API returned ${response.status}`);
+  return response.text();
+}
+
+function sanitizedDiagnosticTail(log: string): string[] {
+  return log
+    .replaceAll(/\x1B\[[0-?]*[ -/]*[@-~]/g, "")
+    .split(/\r?\n/)
+    .filter((line) => line.trim().length > 0)
+    .slice(-60)
+    .map((line) => line
+      .replaceAll(/(github_pat_|gh[pousr]_)[A-Za-z0-9_]+/gi, "$1[REDACTED]")
+      .replaceAll(/(authorization:\s*(?:bearer|token)\s+)[^\s]+/gi, "$1[REDACTED]")
+      .replaceAll(/((?:secret|token|password|TC_LOCAL_MUTATION_SECRET)\s*[=:]\s*)[^\s]+/gi, "$1[REDACTED]")
+      .slice(0, 600));
+}
+
 /**
  * Return a deliberately narrow, log-free view of recent workflow health.
  * This keeps the configured GitHub token inside the Worker while exposing
@@ -216,9 +242,20 @@ export async function githubWorkflowRuns(env: WorkerEnv, requestedLimit = 5): Pr
       ? await githubJson<GithubWorkflowJobsResponse>(env, `${base}/actions/runs/${run.id}/jobs?per_page=20`)
       : { jobs: [] };
     const sanitizedJobs = await Promise.all((jobs.jobs ?? []).map(async (job) => {
-      const annotations = job.id && job.conclusion === "failure"
-        ? await githubJson<GithubAnnotationResponse[]>(env, `${base}/check-runs/${job.id}/annotations?per_page=50`)
-        : [];
+      let annotations: GithubAnnotationResponse[] = [];
+      let diagnosticTail: string[] = [];
+      let diagnosticError: string | null = null;
+      if (job.id && job.conclusion === "failure") {
+        try {
+          annotations = await githubJson<GithubAnnotationResponse[]>(env, `${base}/check-runs/${job.id}/annotations?per_page=50`);
+        } catch {
+          try {
+            diagnosticTail = sanitizedDiagnosticTail(await githubText(env, `${base}/actions/jobs/${job.id}/logs`));
+          } catch (error) {
+            diagnosticError = error instanceof Error ? error.message : "failed job diagnostics are unavailable";
+          }
+        }
+      }
       return {
         id: job.id ?? null,
         name: job.name ?? null,
@@ -240,6 +277,8 @@ export async function githubWorkflowRuns(env: WorkerEnv, requestedLimit = 5): Pr
           title: annotation.title ?? null,
           message: annotation.message ?? null,
         })),
+        diagnosticTail,
+        diagnosticError,
       };
     }));
     return {
