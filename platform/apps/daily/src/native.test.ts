@@ -56,7 +56,7 @@ describe("native release construction", () => {
     expect(artifact.freeRotation.map((entry) => entry.recipeSlug)).toEqual(["complete", "recipe-rule"]);
     expect((artifact.payloads.feed as { recipes: Record<string, unknown> }).recipes).toHaveProperty("complete");
     expect((artifact.payloads.feed as { recipes: Record<string, unknown> }).recipes).not.toHaveProperty("incomplete");
-    const board = artifact.payloads.board as { commodities: Array<{ stores: Array<{ membership: boolean; member_label: string }> }> };
-    expect(board.commodities[0]?.stores[0]).toMatchObject({ membership: true, member_label: "Membership required" });
+    const board = artifact.payloads.board as { commodities: Array<{ stores: Array<{ observationId: string; membership: boolean; member_label: string }> }> };
+    expect(board.commodities[0]?.stores[0]).toMatchObject({ observationId: "obs", membership: true, member_label: "Membership required" });
   });
 });

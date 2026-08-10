@@ -326,6 +326,7 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
          JOIN products prior_product ON prior_product.id = prior_version.product_id
         WHERE current.release_id = ?1 AND current.status = 'priced' AND prior.status = 'priced'
           AND current_product.external_key = prior_product.external_key
+          AND current.display_unit = prior.display_unit
           AND (current.display_per_unit_micros * 4 < prior.display_per_unit_micros OR prior.display_per_unit_micros * 4 < current.display_per_unit_micros)
         ORDER BY current.commodity_id, current.store_location_id LIMIT 500`,
     ).bind(context.releaseId, previous.release_id).all<{ commodity_id: string; store_location_id: string; observation_id: string; current_micros: number; prior_micros: number; current_product_key: string; prior_product_key: string }>();

@@ -446,6 +446,7 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
     const stores = commodityCells.map((cell) => ({
       store: storeById.get(cell.storeLocationId)?.store_name ?? cell.storeLocationId,
       storeLocationId: cell.storeLocationId,
+      observationId: cell.observationId!,
       perUnitMicros: cell.displayPerUnitMicros,
       unit: cell.displayUnit,
       membership: cell.winner!.membership_required === 1 || storeById.get(cell.storeLocationId)?.membership_required === 1,

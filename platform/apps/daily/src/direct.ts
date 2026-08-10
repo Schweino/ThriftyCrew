@@ -293,7 +293,20 @@ export async function buildRegularCapture(
     const name = stringValue(row.item) ?? stringValue(row.name);
     const sizeText = stringValue(row.size_raw) ?? stringValue(row.size) ?? "";
     const parsedBasis = consumerPackageBasis(name, basis(sizeText));
-    const price = numberValue(row.current_price) ?? numberValue(row.ad_price);
+    const advertisedPrice = numberValue(row.ad_price);
+    const sourceCheckoutPrice = numberValue(row.current_price);
+    const priceMultiple = numberValue(row.price_multiple);
+    // Hy-Vee preserves the retailer's multi-buy total in current_price for an
+    // independent source-contract check, while ad_price is the per-item shelf
+    // price we intentionally publish. Normalize that explicit contract here so
+    // a 2/$5 offer costs one item at $2.50, not one item at $5.00.
+    const verifiedPerItemMultiBuy = advertisedPrice !== undefined
+      && sourceCheckoutPrice !== undefined
+      && priceMultiple !== undefined
+      && Number.isInteger(priceMultiple)
+      && priceMultiple > 1
+      && Math.abs(sourceCheckoutPrice - advertisedPrice * priceMultiple) <= 0.02;
+    const price = verifiedPerItemMultiBuy ? advertisedPrice : sourceCheckoutPrice ?? advertisedPrice;
     const asOf = stringValue(row.as_of) ?? stringValue(document.generated)?.slice(0, 10);
     if (!name || !parsedBasis || price === undefined || price < 0 || !asOf) {
       count.rejected += 1;
@@ -343,6 +356,7 @@ export async function buildRegularCapture(
         source: document.source ?? "regular-catalog",
         store,
         rawIndex: index,
+        ...(verifiedPerItemMultiBuy ? { sourceCheckoutPrice, priceMultiple, priceInterpretation: "verified-per-item-multibuy" } : {}),
         ...(storeUnitPrice ? { normalizedUnitPriceSource: "sams_unit_price" } : {}),
       }, termKey: bucket, kind, currency: "USD",
       purchasePriceMinor, ...(regularPriceMinor !== undefined ? { regularPriceMinor } : {}),

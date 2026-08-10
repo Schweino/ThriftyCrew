@@ -95,6 +95,31 @@ describe("direct regular capture", () => {
     expect(artifact.priceModeVerified).toBe(true);
   });
 
+  it("uses Hy-Vee's verified per-item price when current_price preserves the multi-buy total", async () => {
+    const artifact = await buildRegularCapture("hy-vee", {
+      mode_verified: "2026-08-10",
+      price_mode: "in-store",
+      deals: [{
+        item: "Hy-Vee Whole Grain Raisin Bran",
+        ad_price: "$2.5",
+        current_price: 5,
+        price_multiple: 2,
+        regular: 2.5,
+        size: "16.6 oz",
+        as_of: "2026-08-10",
+      }],
+    });
+    expect(artifact.observations[0]).toMatchObject({
+      purchasePriceMinor: 250,
+      rawPriceText: "$2.5",
+      package: expect.objectContaining({
+        sourceCheckoutPrice: 5,
+        priceMultiple: 2,
+        priceInterpretation: "verified-per-item-multibuy",
+      }),
+    });
+  });
+
   it.each([
     ["family-fare", "pickup"],
     ["hy-vee", "in-store"],
