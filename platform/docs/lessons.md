@@ -19,3 +19,5 @@ with an enforcing fixture; prose by itself is not a safeguard.
 | Conversion remains unmeasurable | Funnel events write to Analytics Engine, never operational D1 | telemetry contract and binding |
 | Board grades its own answers | Weekly seeded blind sample records external verdicts and a Wilson interval | accuracy service fixtures and `/v2/status` |
 | Findings wait in email | Every guard finding creates a durable triage item | `upsertGuardResult` triage write |
+| A leading-decimal package size becomes an 85 oz alternate and wins on a false 100x discount | Direct capture canonicalizes leading decimals, and a compatible normalized basis outranks ambiguous same-unit alternatives | direct-capture `.85 oz` fixture and `candidatePriceForUnit` normalized-basis fixture |
+| A broad baby-food brand rule crowns toddler juice | Adjacent beverages are explicitly excluded while real puree products remain accepted | authored `baby-food` config matcher fixture |

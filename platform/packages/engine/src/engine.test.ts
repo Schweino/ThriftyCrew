@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { buildNativeCells, buildNativeParityReport, candidatePriceForUnit, convertUnitPriceMicros, evaluateAisleEvidence, evaluateAisleFamilyEvidence, guardResult, matchProductName, selectWinner } from "./index";
 
@@ -37,6 +38,16 @@ describe("matching", () => {
     expect(matchProductName("Lawry's Coarse Ground Garlic Salt with Parsley, 33 oz.", parsley).status).toBe("unmatched");
     expect(matchProductName("Smart Way Parsley Flakes 0.5 OZ", parsley)).toMatchObject({ status: "matched", commodityId: "dried-parsley" });
     expect(matchProductName("Badia Dried Parsley 3 OZ", parsley)).toMatchObject({ status: "matched", commodityId: "dried-parsley" });
+  });
+
+  it("keeps adjacent Gerber beverages out of the authored baby-food rule", () => {
+    const authored = JSON.parse(readFileSync(new URL("../../../config/commodities.json", import.meta.url), "utf8")) as
+      Array<{ id: string; include: string[]; exclude: string[] }>;
+    const babyFood = authored.find((commodity) => commodity.id === "baby-food");
+    expect(babyFood).toBeDefined();
+    const rules = [{ commodityId: "baby-food", includes: babyFood!.include, excludes: babyFood!.exclude, priority: 1 }];
+    expect(matchProductName("Gerber Toddler Apple Juice Beverage 32 fl oz", rules).status).toBe("unmatched");
+    expect(matchProductName("Gerber Stage 2 Sweet Corn and Green Beans Baby Food 4 oz", rules)).toMatchObject({ status: "matched", commodityId: "baby-food" });
   });
 
   it("rejects a food match when the store shelves it as cat litter", () => {
