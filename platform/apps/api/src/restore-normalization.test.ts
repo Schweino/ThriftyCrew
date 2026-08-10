@@ -6,6 +6,7 @@ import {
   inspectSqlInsert,
   normalizeCaptureBatchLine,
   restoreChunkNeedsOversizedScan,
+  summarizeHomogeneousSqlInsertChunk,
   utf8LengthExceeds,
 } from "./restore-normalization";
 
@@ -66,5 +67,18 @@ describe("D1 restore normalization", () => {
   it("reserves expensive oversized scans for payload table blocks", () => {
     expect(restoreChunkNeedsOversizedScan('INSERT INTO "observations" ("id") VALUES(\'one\');')).toBe(false);
     expect(restoreChunkNeedsOversizedScan('INSERT INTO "release_payloads" ("payload_json") VALUES(\'{}\');')).toBe(true);
+  });
+
+  it("summarizes homogeneous D1 table blocks without scanning unrelated tables", () => {
+    expect(summarizeHomogeneousSqlInsertChunk([
+      'INSERT INTO "match_rules" ("id") VALUES(\'one\');',
+      'INSERT INTO "match_rules" ("id") VALUES(\'two\');',
+      "",
+    ].join("\n"))).toEqual({ table: "match_rules", rows: 2 });
+    expect(summarizeHomogeneousSqlInsertChunk([
+      'INSERT INTO "products" ("id") VALUES(\'one\');',
+      'INSERT INTO "observations" ("id") VALUES(\'two\');',
+      "",
+    ].join("\n"))).toBeNull();
   });
 });

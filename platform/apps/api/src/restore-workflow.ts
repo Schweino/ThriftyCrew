@@ -12,6 +12,7 @@ import {
   inspectSqlInsert,
   normalizeCaptureBatchLine,
   restoreChunkNeedsOversizedScan,
+  summarizeHomogeneousSqlInsertChunk,
   utf8LengthExceeds,
   type RestoreCountTable,
 } from "./restore-normalization";
@@ -159,7 +160,12 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
             && hasUtf8LineExceeding(text, statementLimitBytes);
           if (!needsSemanticNormalization && !hasOversizedStatement) {
             const partCounts = emptyRestoreCounts();
-            for (const table of RESTORE_COUNT_TABLES) partCounts[table] = countSqlInsertLines(text, table);
+            const homogeneous = summarizeHomogeneousSqlInsertChunk(text);
+            if (homogeneous && RESTORE_COUNT_TABLES.includes(homogeneous.table as RestoreCountTable)) {
+              partCounts[homogeneous.table as RestoreCountTable] = homogeneous.rows;
+            } else if (!homogeneous) {
+              for (const table of RESTORE_COUNT_TABLES) partCounts[table] = countSqlInsertLines(text, table);
+            }
             const outputBytes = isLastPart ? sourceBytes : padRestoreMultipartPart(sourceBytes);
             const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey!, multipart.uploadId);
             const uploaded = await upload.uploadPart(partNumber, outputBytes);

@@ -110,6 +110,17 @@ export function restoreChunkNeedsOversizedScan(text: string): boolean {
   return text.includes('INSERT INTO "release_payloads"');
 }
 
+export function summarizeHomogeneousSqlInsertChunk(text: string): { table: string; rows: number } | null {
+  const first = text.match(/^INSERT INTO "([^"]+)" /)?.[1];
+  if (!first) return null;
+  const contentEnd = text.endsWith("\n") ? text.length - 1 : text.length;
+  const lastLineStart = text.lastIndexOf("\n", contentEnd - 1) + 1;
+  const last = text.slice(lastLineStart, contentEnd).match(/^INSERT INTO "([^"]+)" /)?.[1];
+  if (last !== first) return null;
+  const newlines = text.match(/\n/g)?.length ?? 0;
+  return { table: first, rows: newlines + (text.endsWith("\n") ? 0 : 1) };
+}
+
 export function countSqlInsertLines(text: string, table: string): number {
   const prefix = `INSERT INTO "${table}" `;
   const linePrefix = `\n${prefix}`;
