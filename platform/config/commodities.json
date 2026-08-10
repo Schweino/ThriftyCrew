@@ -5321,6 +5321,9 @@
         "exclude":  [
                         "sparkling|crystalli[sz]ed|packets?",
                         "\\bpuddings?\\b",
+                        "italian\\s+ice|\\bfrozen\\b",
+                        "\\bcurd\\b|\\bcremes?\\b|\\bextract\\b|\\bvinegar\\b|\\btartar\\b|\\bpreserved\\b|\\bpaste\\b|\\bolives?\\b|\\bgnocchi\\b|\\bbreading\\b",
+                        "\\b(?:pork|chicken)\\b|lemon\\s*grass|lemonade|refresher|floor\\s+cleaning",
                         "lemon[\\s-]*lime",
                         "\\bmini\\s+cans?\\b",
                         "\\bchips?\\b",

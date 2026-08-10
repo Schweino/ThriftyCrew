@@ -57,6 +57,8 @@ describe("matching", () => {
     expect(lemons).toBeDefined();
     const rules = [{ commodityId: "lemons", includes: lemons!.include, excludes: lemons!.exclude, priority: 1 }];
     expect(matchProductName("Snack Pack Lemon Pudding, 3.25 oz Pudding Cups, 4 Count", rules).status).toBe("unmatched");
+    expect(matchProductName("Luigi's Lemon & Strawberry Real Italian Ice, 6 fl oz, 6 Count, (Frozen)", rules).status).toBe("unmatched");
+    expect(matchProductName("GOOD GOOD Vegan Lemon Curd With No Added Sugar, 12 oz Jar", rules).status).toBe("unmatched");
     expect(matchProductName("Fresh Lemons, Each", rules)).toMatchObject({ status: "matched", commodityId: "lemons" });
   });
 

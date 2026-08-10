@@ -1734,6 +1734,32 @@
                         "ruled_on":  "2026-08-10",
                         "ruled_by":  "V3 semantic accuracy audit",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "lemons|Walmart|luigis-lemon-strawberry-italian-ice",
+                        "commodity":  "lemons",
+                        "store":  "Walmart",
+                        "names":  ["Luigi's Lemon & Strawberry Real Italian Ice, 6 fl oz, 6 Count, (Frozen)"],
+                        "product_id":  "10801194",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Frozen lemon-and-strawberry Italian ice is a prepared dessert, not fresh lemons. It became the lemons crown after the pudding ruling was deployed on 2026-08-10.",
+                        "seen_on_board":  "2026-08-10 (crown)",
+                        "ruled_on":  "2026-08-10",
+                        "ruled_by":  "V3 semantic accuracy audit",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "lemons|Walmart|good-good-vegan-lemon-curd",
+                        "commodity":  "lemons",
+                        "store":  "Walmart",
+                        "names":  ["GOOD GOOD Vegan Lemon Curd With No Added Sugar, 12 oz Jar"],
+                        "product_id":  "18670771126",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Jarred lemon curd is a prepared spread, not fresh lemons. Its source count basis makes it an eligible false fallback unless permanently excluded.",
+                        "seen_on_board":  "2026-08-10 candidate audit",
+                        "ruled_on":  "2026-08-10",
+                        "ruled_by":  "V3 semantic accuracy audit",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }
