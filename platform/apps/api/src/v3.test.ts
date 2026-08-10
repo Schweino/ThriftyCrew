@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { captureBatchAbandonSchema, entitlementVerificationRecordSchema, evidenceGateRecordSchema, restoreDrillRecordSchema } from "@thriftycrew/contracts";
+import { captureBatchAbandonSchema, entitlementVerificationRecordSchema, evidenceGateRecordSchema, restoreDrillCleanupSchema, restoreDrillRecordSchema } from "@thriftycrew/contracts";
 import { createAccuracyDraw, readAccuracyDraw, wilsonInterval } from "./accuracy";
 import { mayShowFreeBadge } from "./ghost-reconciliation";
 import { releaseCaptureEvictionSql, storeCoverageFloor } from "./release-guards";
@@ -128,6 +128,19 @@ describe("restore drill evidence contract", () => {
 
   it("rejects a finish timestamp before the drill started", () => {
     expect(restoreDrillRecordSchema.safeParse({ ...base, status: "failed", finishedAt: "2026-08-09T20:59:00.000Z" }).success).toBe(false);
+  });
+});
+
+describe("restore drill cleanup contract", () => {
+  it("requires deterministic restore identity and exact multipart evidence", () => {
+    const valid = {
+      instanceId: "d1-restore-2026-Q3-a35",
+      backupId: "backup_example",
+      dumpSha256: "a".repeat(64),
+      uploadId: "u".repeat(32),
+    };
+    expect(restoreDrillCleanupSchema.safeParse(valid).success).toBe(true);
+    expect(restoreDrillCleanupSchema.safeParse({ ...valid, instanceId: "../../other" }).success).toBe(false);
   });
 });
 

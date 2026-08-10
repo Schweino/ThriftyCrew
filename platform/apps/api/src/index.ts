@@ -45,6 +45,7 @@ import {
   releaseTop5ChunkSchema,
   releaseGuardResultSchema,
   releasePayloadSchema,
+  restoreDrillCleanupSchema,
   restoreDrillRecordSchema,
   scheduleDocumentSchema,
   sourceSentinelResultSchema,
@@ -68,6 +69,7 @@ import { engineMayWriteCaptureSource } from "./capture-authorization";
 import { evaluateContentPromotion } from "./content-batches";
 import { claimAgentWorkItem, completeAgentWorkItem, failAgentWorkItem } from "./agent-work-items";
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
+import { isMissingMultipartUploadError } from "./restore-cleanup";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 export { D1RestoreDrillWorkflow } from "./restore-workflow";
@@ -1107,6 +1109,40 @@ app.post("/internal/restore-drills/trigger", async (context) => {
   }
   await recordAudit(context.env, context.get("identity"), "restore_drill.trigger", "workflow", instanceId, "accepted", { quarter, force });
   return context.json({ ok: true, instanceId, quarter, force, idempotent: false }, 202);
+});
+
+app.post("/internal/restore-drills/cleanup", zValidator("json", restoreDrillCleanupSchema), async (context) => {
+  const body = context.req.valid("json");
+  const normalizedObjectKey = `restore-normalized/${body.instanceId}/${body.backupId}/${body.dumpSha256}.sql`;
+  const normalizedStagingObjectKey = `restore-normalized-staging/${body.instanceId}/${body.backupId}/${body.dumpSha256}.multipart.sql`;
+  const recoveryObjectPrefix = `restore-recovery/${body.instanceId}/`;
+  let multipartStatus = "aborted";
+  try {
+    await context.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey, body.uploadId).abort();
+  } catch (error) {
+    if (!isMissingMultipartUploadError(error)) throw error;
+    multipartStatus = "absent";
+  }
+  await context.env.BACKUPS.delete([normalizedObjectKey, normalizedStagingObjectKey]);
+  let cursor: string | undefined;
+  let deletedRecoveryObjects = 0;
+  do {
+    const listed = await context.env.BACKUPS.list({ prefix: recoveryObjectPrefix, limit: 1_000, ...(cursor ? { cursor } : {}) });
+    const keys = listed.objects.map((object) => object.key);
+    if (keys.length > 0) {
+      await context.env.BACKUPS.delete(keys);
+      deletedRecoveryObjects += keys.length;
+    }
+    cursor = listed.truncated ? listed.cursor : undefined;
+  } while (cursor);
+  await recordAudit(context.env, context.get("identity"), "restore_drill.cleanup", "workflow", body.instanceId, "accepted", {
+    multipartStatus,
+    normalizedObjectKey,
+    normalizedStagingObjectKey,
+    recoveryObjectPrefix,
+    deletedRecoveryObjects,
+  });
+  return context.json({ ok: true, instanceId: body.instanceId, multipartStatus, deletedRecoveryObjects });
 });
 
 app.get("/internal/restore-drills", async (context) => {

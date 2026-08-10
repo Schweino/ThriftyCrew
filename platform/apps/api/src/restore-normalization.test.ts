@@ -3,6 +3,7 @@ import {
   countSqlInsertLines,
   emptyRestoreCounts,
   hasUtf8LineExceeding,
+  homogeneousSqlInsertTable,
   inspectSqlInsert,
   normalizeCaptureBatchLine,
   restoreChunkNeedsOversizedScan,
@@ -78,6 +79,19 @@ describe("D1 restore normalization", () => {
     expect(summarizeHomogeneousSqlInsertChunk([
       'INSERT INTO "products" ("id") VALUES(\'one\');',
       'INSERT INTO "observations" ("id") VALUES(\'two\');',
+      "",
+    ].join("\n"))).toBeNull();
+  });
+
+  it("identifies homogeneous untracked table blocks without counting their rows", () => {
+    expect(homogeneousSqlInsertTable([
+      'INSERT INTO "product_versions" ("id") VALUES(\'one\');',
+      'INSERT INTO "product_versions" ("id") VALUES(\'two\');',
+      "",
+    ].join("\n"))).toBe("product_versions");
+    expect(homogeneousSqlInsertTable([
+      'INSERT INTO "product_versions" ("id") VALUES(\'one\');',
+      'INSERT INTO "products" ("id") VALUES(\'two\');',
       "",
     ].join("\n"))).toBeNull();
   });

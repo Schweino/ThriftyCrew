@@ -9,6 +9,7 @@ import {
   countSqlInsertLines,
   emptyRestoreCounts,
   hasUtf8LineExceeding,
+  homogeneousSqlInsertTable,
   inspectSqlInsert,
   normalizeCaptureBatchLine,
   restoreChunkNeedsOversizedScan,
@@ -120,7 +121,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
       const expectedCounts = emptyRestoreCounts();
       const releaseHashes: Record<string, string> = {};
       const recoveryObjectKeys: string[] = [];
-      const recoveryRows: Array<{ table: string; columns: string[]; values: Array<string | null> }> = [];
+      let recoveryRowCount = 0;
       const deferredUpdates: string[] = [];
       const uploadedParts: Array<{ partNumber: number; etag: string }> = [];
       let currentReleaseId: string | null = null;
@@ -160,10 +161,12 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
             && hasUtf8LineExceeding(text, statementLimitBytes);
           if (!needsSemanticNormalization && !hasOversizedStatement) {
             const partCounts = emptyRestoreCounts();
-            const homogeneous = summarizeHomogeneousSqlInsertChunk(text);
-            if (homogeneous && RESTORE_COUNT_TABLES.includes(homogeneous.table as RestoreCountTable)) {
-              partCounts[homogeneous.table as RestoreCountTable] = homogeneous.rows;
-            } else if (!homogeneous) {
+            const homogeneousTable = homogeneousSqlInsertTable(text);
+            if (homogeneousTable && RESTORE_COUNT_TABLES.includes(homogeneousTable as RestoreCountTable)) {
+              const homogeneous = summarizeHomogeneousSqlInsertChunk(text);
+              if (!homogeneous) throw new Error("homogeneous restore partition changed during row counting");
+              partCounts[homogeneousTable as RestoreCountTable] = homogeneous.rows;
+            } else if (!homogeneousTable) {
               for (const table of RESTORE_COUNT_TABLES) partCounts[table] = countSqlInsertLines(text, table);
             }
             const outputBytes = isLastPart ? sourceBytes : padRestoreMultipartPart(sourceBytes);
@@ -177,6 +180,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
               releaseHashes: {},
               currentReleaseId: null,
               recoveryObjectKeys: [],
+              recoveryRowCount: 0,
               deferredUpdates: [],
             };
           }
@@ -186,6 +190,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           const partCounts = emptyRestoreCounts();
           const partReleaseHashes: Record<string, string> = {};
           const partRecoveryObjectKeys: string[] = [];
+          const partRecoveryLines: string[] = [];
           const partDeferredUpdates: string[] = [];
           let partCurrentReleaseId: string | null = null;
           const outputParts: string[] = [];
@@ -203,10 +208,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
             }
             if (oversized) {
               if (!table) throw new Error("oversized non-INSERT statement cannot be normalized");
-              const recoveryObjectKey = `${recoveryObjectPrefix}${partNumber}-${partRecoveryObjectKeys.length}.sql`;
-              const storedRecovery = await this.env.BACKUPS.put(recoveryObjectKey, line, { httpMetadata: { contentType: "application/sql" } });
-              if (!storedRecovery) throw new Error(`oversized recovery object ${recoveryObjectKey} was not stored`);
-              partRecoveryObjectKeys.push(recoveryObjectKey);
+              partRecoveryLines.push(line);
               outputParts.push(`-- oversized INSERT for ${table} restored through parameter binding\n`);
               continue;
             }
@@ -220,6 +222,12 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
             if (outputParts.at(-1) !== "\n") outputParts.push("\n");
             outputParts.push(`${allDeferredUpdates.join("\n")}\n`);
           }
+          if (partRecoveryLines.length > 0) {
+            const recoveryObjectKey = `${recoveryObjectPrefix}${partNumber}.sql`;
+            const storedRecovery = await this.env.BACKUPS.put(recoveryObjectKey, partRecoveryLines.join("\n"), { httpMetadata: { contentType: "application/sql" } });
+            if (!storedRecovery) throw new Error(`oversized recovery object ${recoveryObjectKey} was not stored`);
+            partRecoveryObjectKeys.push(recoveryObjectKey);
+          }
           const output = outputParts.join("");
           const encoder = new TextEncoder();
           const encodedOutput = encoder.encode(output);
@@ -229,7 +237,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           }
           const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey!, multipart.uploadId);
           const uploaded = await upload.uploadPart(partNumber, outputBytes);
-          return { sourceEnd, byteLength: outputBytes.byteLength, uploaded, counts: partCounts, releaseHashes: partReleaseHashes, currentReleaseId: partCurrentReleaseId, recoveryObjectKeys: partRecoveryObjectKeys, deferredUpdates: partDeferredUpdates };
+          return { sourceEnd, byteLength: outputBytes.byteLength, uploaded, counts: partCounts, releaseHashes: partReleaseHashes, currentReleaseId: partCurrentReleaseId, recoveryObjectKeys: partRecoveryObjectKeys, recoveryRowCount: partRecoveryLines.length, deferredUpdates: partDeferredUpdates };
         });
         sourceOffset = part.sourceEnd;
         normalizedByteLength += part.byteLength;
@@ -238,6 +246,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
         Object.assign(releaseHashes, part.releaseHashes);
         if (part.currentReleaseId) currentReleaseId = part.currentReleaseId;
         recoveryObjectKeys.push(...part.recoveryObjectKeys);
+        recoveryRowCount += part.recoveryRowCount;
         deferredUpdates.push(...part.deferredUpdates);
       }
       const completedMultipart = await step.do("complete normalized restore multipart upload", async () => {
@@ -263,19 +272,9 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
         await this.env.BACKUPS.delete(normalizedStagingObjectKey!);
         return true;
       });
-      for (let index = 0; index < recoveryObjectKeys.length; index += 1) {
-        const row = await step.do(`parse oversized recovery row ${index}`, async () => {
-          const object = await this.env.BACKUPS.get(recoveryObjectKeys[index]!);
-          if (!object?.body) throw new Error(`oversized recovery object ${recoveryObjectKeys[index]} is missing`);
-          const parsed = inspectSqlInsert(await object.text());
-          if (!parsed) throw new Error(`oversized recovery statement ${index} is not a supported INSERT`);
-          return parsed;
-        });
-        recoveryRows.push(row);
-      }
       const expectedRelease = currentReleaseId ? { id: currentReleaseId, inputHash: releaseHashes[currentReleaseId] } : null;
       if (!expectedRelease?.inputHash) throw new Error("backup dump omitted the current Omaha release or its input hash");
-      const normalized = { objectKey: normalizedObjectKey, ...materialized, deferredSupersessionUpdates: deferredUpdates.length, statementLimitBytes, recoveryRows, expectedCounts, expectedRelease };
+      const normalized = { objectKey: normalizedObjectKey, ...materialized, deferredSupersessionUpdates: deferredUpdates.length, statementLimitBytes, recoveryRowCount, expectedCounts, expectedRelease };
       const scratch = await step.do("create isolated scratch D1", async () => cloudflare<{ uuid?: string }>(this.env, "/d1/database", {
         method: "POST",
         body: JSON.stringify({ name: `tc-grocery-v3-restore-${startedAt.slice(0, 10).replaceAll("-", "")}-${event.instanceId.slice(-8)}`, primary_location_hint: "wnam", read_replication: { mode: "disabled" } }),
@@ -306,7 +305,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           length: normalized.length,
           deferredSupersessionUpdates: normalized.deferredSupersessionUpdates,
           statementLimitBytes: normalized.statementLimitBytes,
-          recoveryRows: normalized.recoveryRows.length,
+          recoveryRows: normalized.recoveryRowCount,
           expectedCounts: normalized.expectedCounts,
           expectedRelease: normalized.expectedRelease,
         },
@@ -351,15 +350,25 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
         if (completed.status === "error") throw new Error(completed.error ?? "scratch import failed");
       }
       if (completed.status !== "complete") throw new Error("scratch import did not complete within five minutes");
-      for (let index = 0; index < normalized.recoveryRows.length; index += 1) {
-        const row = normalized.recoveryRows[index]!;
-        await step.do(`restore oversized ${row.table} row ${index}`, async () => {
-          const placeholders = row.values.map((_, valueIndex) => `?${valueIndex + 1}`).join(", ");
-          const sql = `INSERT INTO ${quoteIdentifier(row.table)} (${row.columns.map(quoteIdentifier).join(", ")}) VALUES (${placeholders})`;
-          await executeScratch(this.env, scratchDatabaseId!, sql, row.values);
-          return true;
+      let restoredRecoveryRows = 0;
+      for (let objectIndex = 0; objectIndex < recoveryObjectKeys.length; objectIndex += 1) {
+        const restored = await step.do(`restore oversized recovery batch ${objectIndex}`, { timeout: "10 minutes" }, async () => {
+          const objectKey = recoveryObjectKeys[objectIndex]!;
+          const object = await this.env.BACKUPS.get(objectKey);
+          if (!object?.body) throw new Error(`oversized recovery object ${objectKey} is missing`);
+          const statements = (await object.text()).split("\n").filter(Boolean);
+          for (let rowIndex = 0; rowIndex < statements.length; rowIndex += 1) {
+            const row = inspectSqlInsert(statements[rowIndex]!);
+            if (!row) throw new Error(`oversized recovery statement ${objectIndex}:${rowIndex} is not a supported INSERT`);
+            const placeholders = row.values.map((_, valueIndex) => `?${valueIndex + 1}`).join(", ");
+            const sql = `INSERT INTO ${quoteIdentifier(row.table)} (${row.columns.map(quoteIdentifier).join(", ")}) VALUES (${placeholders})`;
+            await executeScratch(this.env, scratchDatabaseId!, sql, row.values);
+          }
+          return { rows: statements.length };
         });
+        restoredRecoveryRows += restored.rows;
       }
+      if (restoredRecoveryRows !== normalized.recoveryRowCount) throw new Error(`oversized recovery row count mismatch: expected ${normalized.recoveryRowCount}, restored ${restoredRecoveryRows}`);
       const comparisons: Record<RestoreCountTable, { expected: number; scratch: number; liveAtVerification: number }> = {} as Record<RestoreCountTable, { expected: number; scratch: number; liveAtVerification: number }>;
       for (const table of RESTORE_COUNT_TABLES) {
         const live = await this.env.DB.prepare(`SELECT COUNT(*) AS count FROM ${table}`).first<{ count: number }>();
@@ -381,7 +390,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
       const finishedAt = new Date().toISOString();
       await this.env.DB.batch([
         this.env.DB.prepare("UPDATE restore_drills SET status = 'passed', finished_at = ?2, evidence_json = ?3 WHERE id = ?1")
-          .bind(drillId, finishedAt, stableJson({ comparisons, expectedRelease: normalized.expectedRelease, scratchRelease, liveRelease, byteLength: dump.length, etag: dump.etag, hashScheme, hashChunkBytes, chunkCount: chunkHashes.length, normalizedObjectKey: normalized.objectKey, normalizedEtag: normalized.etag, normalizedByteLength: normalized.length, deferredSupersessionUpdates: normalized.deferredSupersessionUpdates, statementLimitBytes: normalized.statementLimitBytes, recoveredOversizedRows: normalized.recoveryRows.length, comparisonBasis: "dump-stream-counts+dump-release-pointer", importStatus: completed.status })),
+          .bind(drillId, finishedAt, stableJson({ comparisons, expectedRelease: normalized.expectedRelease, scratchRelease, liveRelease, byteLength: dump.length, etag: dump.etag, hashScheme, hashChunkBytes, chunkCount: chunkHashes.length, normalizedObjectKey: normalized.objectKey, normalizedEtag: normalized.etag, normalizedByteLength: normalized.length, deferredSupersessionUpdates: normalized.deferredSupersessionUpdates, statementLimitBytes: normalized.statementLimitBytes, recoveredOversizedRows: normalized.recoveryRowCount, comparisonBasis: "dump-stream-counts+dump-release-pointer", importStatus: completed.status })),
         this.env.DB.prepare("UPDATE job_runs SET status = 'completed', heartbeat_at = ?2, finished_at = ?2, stats_json = ?3 WHERE id = ?1")
           .bind(runId, finishedAt, stableJson({ drillId, backupId, scratchDatabaseId, comparisons })),
         this.env.DB.prepare(

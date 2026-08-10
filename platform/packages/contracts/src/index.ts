@@ -758,6 +758,13 @@ export const restoreDrillRecordSchema = z.object({
   }
 });
 
+export const restoreDrillCleanupSchema = z.object({
+  instanceId: z.string().regex(/^d1-restore-\d{4}-Q[1-4]-a\d+$/),
+  backupId: nonEmptyId,
+  dumpSha256: sha256Hex,
+  uploadId: z.string().min(32).max(2_000),
+});
+
 export const evidenceGate = z.enum([
   "shadow-ingest-day",
   "semantic-parity-day",
@@ -818,6 +825,7 @@ export type AccuracyVerdicts = z.infer<typeof accuracyVerdictsSchema>;
 export type DirectCaptureArtifact = z.infer<typeof directCaptureArtifactSchema>;
 export type EngineParityReport = z.infer<typeof engineParityReportSchema>;
 export type RestoreDrillRecord = z.infer<typeof restoreDrillRecordSchema>;
+export type RestoreDrillCleanup = z.infer<typeof restoreDrillCleanupSchema>;
 export type EvidenceGateRecord = z.infer<typeof evidenceGateRecordSchema>;
 export type EntitlementVerificationRecord = z.infer<typeof entitlementVerificationRecordSchema>;
 export type ScheduleDocument = z.infer<typeof scheduleDocumentSchema>;
