@@ -51,7 +51,7 @@ async function activeAgent(db: D1Database, agentId: string): Promise<RegistryRow
 async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
   if (agentId === "triage-reviewer") {
     const rows = await db.prepare(
-      `SELECT id, source_kind, source_ref, severity, title, detail_json, created_at
+      `SELECT id, source_kind, source_ref, severity, title, evidence_json, created_at
          FROM triage_items WHERE status = 'open' ORDER BY created_at, id LIMIT 25`,
     ).all<Record<string, unknown>>();
     return rows.results.map((row) => ({
@@ -62,7 +62,7 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
   }
   if (agentId === "triage-developer") {
     const rows = await db.prepare(
-      `SELECT id, source_kind, source_ref, severity, title, detail_json, plan_ref, resolution_json, updated_at
+      `SELECT id, source_kind, source_ref, severity, title, evidence_json, plan_ref, resolution_json, updated_at
          FROM triage_items WHERE status = 'planned' ORDER BY updated_at, id LIMIT 25`,
     ).all<Record<string, unknown>>();
     return rows.results.map((row) => ({
