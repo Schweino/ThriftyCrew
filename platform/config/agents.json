@@ -25,7 +25,7 @@
       "plane": "ci",
       "scheduleId": "post-publish-review",
       "promptFile": "agents/post-publish-reviewer/prompt.md",
-      "promptSha256": "6f47d8ad67fd711792380358410d53ea6efd76567ee29945beb8edb2af3f7f6a",
+      "promptSha256": "122f8fddfa0e28274c73933894f38b0d450c0e0aa8a1368945fc430ed74227ce",
       "provider": "openai",
       "model": "gpt-5.6-terra",
       "fallbackModel": "gpt-5.6-luna",
@@ -35,7 +35,7 @@
       "criticality": "safety",
       "workflowFile": ".github/workflows/agent-post-publish-reviewer.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "c71b01b49a8e17e111848b5b903b3058436c86344ba3d79e1f8df5cd7581038a",
+      "executionConfigHash": "3185a62521612412cd2dbbde0f9110a1cb69a82c645e9b32ae713b2399e44478",
       "capabilities": [
         "read:status",
         "read:evidence",
