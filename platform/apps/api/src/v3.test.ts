@@ -5,6 +5,7 @@ import { mayShowFreeBadge } from "./ghost-reconciliation";
 import { releaseCaptureEvictionSql, storeCoverageFloor } from "./release-guards";
 import { memberStatusHtml } from "./member-status";
 import { engineMayWriteCaptureSource } from "./capture-authorization";
+import { snapshotIncludesRawCandidates } from "./engine-snapshot";
 
 describe("capture role/source authorization", () => {
   it("allows GitHub engine writes only for migration bridges and approved direct headless sources", () => {
@@ -100,6 +101,13 @@ describe("capture eviction guard", () => {
     expect(releaseCaptureEvictionSql).toContain("FROM release_input_batches candidate_input");
     expect(releaseCaptureEvictionSql).toContain("candidate_input.release_id = ?1");
     expect(releaseCaptureEvictionSql).not.toContain("candidate_batch.status IN");
+  });
+});
+
+describe("engine snapshot profiles", () => {
+  it("omits recipe-only raw candidates from parity snapshots", () => {
+    expect(snapshotIncludesRawCandidates("parity")).toBe(false);
+    expect(snapshotIncludesRawCandidates("release")).toBe(true);
   });
 });
 

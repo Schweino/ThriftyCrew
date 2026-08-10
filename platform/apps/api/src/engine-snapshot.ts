@@ -2,6 +2,11 @@ import { digestHex, stableJson } from "@thriftycrew/domain";
 import type { WorkerEnv } from "./env";
 
 export type EngineSourceMode = "legacy" | "direct" | "all";
+export type EngineSnapshotProfile = "release" | "parity";
+
+export function snapshotIncludesRawCandidates(profile: EngineSnapshotProfile): boolean {
+  return profile === "release";
+}
 
 function modePredicate(mode: EngineSourceMode): string {
   if (mode === "legacy") return "s.capture_method = 'legacy_bridge'";
@@ -36,7 +41,7 @@ export async function readEngineSnapshotIdentity(env: WorkerEnv, mode: EngineSou
   };
 }
 
-export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode) {
+export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode, profile: EngineSnapshotProfile = "release") {
   const configuration = await env.DB.prepare("SELECT id, content_hash FROM configuration_versions WHERE active = 1").first<{ id: string; content_hash: string }>();
   if (!configuration) throw new Error("No active engine configuration");
   const currentRelease = await env.DB.prepare("SELECT release_id FROM current_releases WHERE market_id = 'omaha'").first<{ release_id: string }>();
@@ -78,7 +83,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode)
       WHERE o.batch_id IN (${placeholders})
       ORDER BY m.commodity_id, p.store_location_id, o.per_unit_micros, o.id`,
   ).bind(configuration.id, ...batches.results.map((batch) => batch.id)).all();
-  const rawCandidates = await env.DB.prepare(
+  const rawCandidates = snapshotIncludesRawCandidates(profile) ? await env.DB.prepare(
     `SELECT o.id AS observation_id, p.store_location_id, o.per_unit_micros, o.captured_at, o.valid_to,
             b.coverage_mode, b.captured_to, b.id AS batch_id, o.normalized_basis_unit,
             o.normalized_basis_qty_micros, o.purchase_price_minor, o.purchase_quantity, o.package_count,
@@ -93,7 +98,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode)
        JOIN products p ON p.id = pv.product_id
       WHERE o.batch_id IN (${rawPlaceholders})
       ORDER BY p.store_location_id, o.per_unit_micros, o.id`,
-  ).bind(...batches.results.map((batch) => batch.id)).all();
+  ).bind(...batches.results.map((batch) => batch.id)).all() : { results: [] };
   const [commodities, stores, currentCells] = await Promise.all([
     env.DB.prepare(
       `SELECT c.id, c.label, c.basis_unit, c.category_id, cat.label AS category_label, cat.sort_order

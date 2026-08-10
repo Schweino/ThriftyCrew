@@ -459,7 +459,7 @@ if (command === "status") {
   const requestedMode = arguments_[0] ?? "legacy";
   if (!(["legacy", "direct", "all"] as const).includes(requestedMode as "legacy" | "direct" | "all")) throw new Error("tc engine parity mode must be legacy, direct, or all");
   const client = await mutationClient();
-  const snapshot = await client.request(`/internal/engine/snapshot?mode=${requestedMode}`) as unknown as NativeEngineSnapshot;
+  const snapshot = await client.request(`/internal/engine/snapshot?mode=${requestedMode}&profile=parity`) as unknown as NativeEngineSnapshot;
   const report = buildNativeParityReport(snapshot);
   result = await client.request("/internal/engine/parity", { json: report, acceptStatuses: [422] });
 } else if (command === "engine" && (subcommand === "build-native" || subcommand === "publish-native")) {

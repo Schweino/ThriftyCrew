@@ -44,7 +44,7 @@ import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation, runGhostClobberDrill } from "./ghost-reconciliation";
 import { dispatchGithubJob, githubWorkflowRuns, jobStatusRequiresAlert, raiseOperationalAlert, recordAudit, resolveOperationalAlert, runScheduledOperations } from "./operations";
-import { readEngineSnapshot, readEngineSnapshotIdentity, type EngineSourceMode } from "./engine-snapshot";
+import { readEngineSnapshot, readEngineSnapshotIdentity, type EngineSnapshotProfile, type EngineSourceMode } from "./engine-snapshot";
 import { memberStatusHtml } from "./member-status";
 import { accrueMilestoneEvidence, milestoneEvidenceSummary } from "./milestone-evidence";
 import { runServerChaosDrill } from "./chaos-drills";
@@ -665,8 +665,10 @@ app.get("/internal/jobs/github-runs", async (context) => {
 app.get("/internal/engine/snapshot", async (context) => {
   const requested = context.req.query("mode") ?? "legacy";
   if (!(["legacy", "direct", "all"] as const).includes(requested as EngineSourceMode)) return jsonError("engine mode must be legacy, direct, or all", 422);
+  const requestedProfile = context.req.query("profile") ?? "release";
+  if (!(["release", "parity"] as const).includes(requestedProfile as EngineSnapshotProfile)) return jsonError("engine snapshot profile must be release or parity", 422);
   try {
-    return context.json(await readEngineSnapshot(context.env, requested as EngineSourceMode));
+    return context.json(await readEngineSnapshot(context.env, requested as EngineSourceMode, requestedProfile as EngineSnapshotProfile));
   } catch (error) {
     return jsonError(error instanceof Error ? error.message : "engine snapshot failed", 422);
   }
