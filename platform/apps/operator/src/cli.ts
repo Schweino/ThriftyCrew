@@ -345,7 +345,8 @@ if (command === "status") {
 } else if (command === "restore" && subcommand === "trigger") {
   result = await (await mutationClient()).request("/internal/restore-drills/trigger", { method: "POST" });
 } else if (command === "archive" && subcommand === "plan") {
-  const cutoffAt = arguments_.find((value: string) => !value.startsWith("--")) ?? new Date(Date.now() - 18 * 30 * 24 * 60 * 60 * 1000).toISOString();
+  // Keep one full day of safety behind the API's moving 18-month retention boundary.
+  const cutoffAt = arguments_.find((value: string) => !value.startsWith("--")) ?? new Date(Date.now() - (18 * 30 + 1) * 24 * 60 * 60 * 1000).toISOString();
   result = await (await mutationClient()).request("/internal/archival/plan", { json: { cutoffAt, dryRun: !arguments_.includes("--execute"), maximumRows: 10000 }, acceptStatuses: [409, 422] });
 } else if (command === "archive" && subcommand === "export") {
   const [manifestId, outputFile] = arguments_;
