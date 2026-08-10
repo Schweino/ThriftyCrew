@@ -98,8 +98,8 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
       }
       const hashScheme = "sha256-merkle-r2-v1";
       dumpSha256 = await sha256Hex(new TextEncoder().encode(stableJson({ hashScheme, objectKey: backup.object_key, etag: dump.etag, length: dump.length, hashChunkBytes, chunkHashes })));
-      normalizedObjectKey = `restore-normalized/${backup.id}/${dumpSha256}.sql`;
-      normalizedStagingObjectKey = `restore-normalized-staging/${backup.id}/${dumpSha256}.multipart.sql`;
+      normalizedObjectKey = `restore-normalized/${event.instanceId}/${backup.id}/${dumpSha256}.sql`;
+      normalizedStagingObjectKey = `restore-normalized-staging/${event.instanceId}/${backup.id}/${dumpSha256}.multipart.sql`;
       const multipart = await step.do("create normalized restore multipart upload", async () => {
         const upload = await this.env.BACKUPS.createMultipartUpload(normalizedStagingObjectKey!, {
           httpMetadata: { contentType: "application/sql" },
