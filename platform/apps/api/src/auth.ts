@@ -65,6 +65,10 @@ export function githubWorkflowRole(workflowRef: string | undefined): MutationRol
   return workflowRef?.includes("/platform-restore.yml@") ? "operator" : "engine";
 }
 
+export function isGithubReusableWorkflowCall(workflowRef: string | undefined, jobWorkflowRef: string | undefined): boolean {
+  return Boolean(jobWorkflowRef && jobWorkflowRef !== workflowRef);
+}
+
 async function githubKeys(): Promise<JsonWebKeySet> {
   if (cachedGithubKeys && cachedGithubKeys.expiresAt > Date.now()) return cachedGithubKeys.value;
   const response = await fetch(GITHUB_JWKS, { headers: { accept: "application/json" } });
@@ -118,7 +122,7 @@ async function authenticateGithubOidc(request: Request, env: WorkerEnv, allowedR
   const verified = await crypto.subtle.verify("RSASSA-PKCS1-v1_5", key, signature, signed);
   if (!verified) throw new Error("invalid GitHub OIDC signature");
   let registeredAgent: { id: string; capabilities_json: string; workflow_ref: string; reusable_workflow_ref: string } | null = null;
-  if (claims.job_workflow_ref) {
+  if (isGithubReusableWorkflowCall(claims.workflow_ref, claims.job_workflow_ref)) {
     registeredAgent = await env.DB.prepare(
       `SELECT id, capabilities_json, workflow_ref, reusable_workflow_ref
          FROM agent_registry

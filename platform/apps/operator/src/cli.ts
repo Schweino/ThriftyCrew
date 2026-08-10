@@ -305,7 +305,8 @@ if (command === "status") {
       resolution,
     } });
   } else {
-    result = await (await mutationClient()).request(`/internal/triage?status=${encodeURIComponent(subcommand ?? "open")}`);
+    const requestedStatus = !subcommand || subcommand === "status" ? "open" : subcommand;
+    result = await (await mutationClient()).request(`/internal/triage?status=${encodeURIComponent(requestedStatus)}`);
   }
 } else if (command === "config" && (subcommand === "generate" || subcommand === "check")) {
   result = await generateLegacyConfiguration(incomeRoot, subcommand === "check");

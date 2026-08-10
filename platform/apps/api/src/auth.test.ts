@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { authenticateMutation, githubWorkflowRole, signMutationForTest, validateGithubOidcClaims } from "./auth";
+import { authenticateMutation, githubWorkflowRole, isGithubReusableWorkflowCall, signMutationForTest, validateGithubOidcClaims } from "./auth";
 import type { WorkerEnv } from "./env";
 
 function nonceDatabase(): D1Database {
@@ -88,6 +88,16 @@ describe("GitHub OIDC trust policy", () => {
     expect(githubWorkflowRole("Schweino/SimpleMoneyPlaybook/.github/workflows/platform-restore.yml@refs/heads/main")).toBe("operator");
     expect(githubWorkflowRole("Schweino/SimpleMoneyPlaybook/.github/workflows/platform-v3.yml@refs/heads/main")).toBe("engine");
     expect(githubWorkflowRole("Schweino/SimpleMoneyPlaybook/.github/workflows/agent-triage-reviewer.yml@refs/heads/main")).toBe("engine");
+  });
+
+  it("distinguishes a direct workflow token from a reusable agent runner token", () => {
+    const platform = "Schweino/SimpleMoneyPlaybook/.github/workflows/platform-v3.yml@refs/heads/main";
+    const thinAgent = "Schweino/SimpleMoneyPlaybook/.github/workflows/agent-triage-reviewer.yml@refs/heads/main";
+    const runner = "Schweino/SimpleMoneyPlaybook/.github/workflows/platform-agent-runner.yml@refs/heads/main";
+
+    expect(isGithubReusableWorkflowCall(platform, platform)).toBe(false);
+    expect(isGithubReusableWorkflowCall(platform, undefined)).toBe(false);
+    expect(isGithubReusableWorkflowCall(thinAgent, runner)).toBe(true);
   });
 
   it("binds issuer, audience, repository, and workflow", () => {
