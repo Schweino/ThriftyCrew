@@ -11,6 +11,7 @@ import {
   hasUtf8LineExceeding,
   inspectSqlInsert,
   normalizeCaptureBatchLine,
+  restoreChunkNeedsOversizedScan,
   utf8LengthExceeds,
   type RestoreCountTable,
 } from "./restore-normalization";
@@ -152,7 +153,10 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
             || text.includes('INSERT INTO "releases"')
             || text.includes('INSERT INTO "current_releases"')
             || (isLastPart && deferredUpdates.length > 0);
-          const hasOversizedStatement = hasUtf8LineExceeding(text, statementLimitBytes);
+          // D1 exports table blocks together. Release payload JSON is the only authored column large enough
+          // to exceed the import statement ceiling; ordinary row blocks stay on the byte-preserving path.
+          const hasOversizedStatement = restoreChunkNeedsOversizedScan(text)
+            && hasUtf8LineExceeding(text, statementLimitBytes);
           if (!needsSemanticNormalization && !hasOversizedStatement) {
             const partCounts = emptyRestoreCounts();
             for (const table of RESTORE_COUNT_TABLES) partCounts[table] = countSqlInsertLines(text, table);

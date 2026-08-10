@@ -5,6 +5,7 @@ import {
   hasUtf8LineExceeding,
   inspectSqlInsert,
   normalizeCaptureBatchLine,
+  restoreChunkNeedsOversizedScan,
   utf8LengthExceeds,
 } from "./restore-normalization";
 
@@ -60,5 +61,10 @@ describe("D1 restore normalization", () => {
   it("detects an oversized UTF-8 line without treating the whole chunk as one statement", () => {
     expect(hasUtf8LineExceeding("short\nrows\n", 10)).toBe(false);
     expect(hasUtf8LineExceeding(`short\n${"é".repeat(6)}\n`, 10)).toBe(true);
+  });
+
+  it("reserves expensive oversized scans for payload table blocks", () => {
+    expect(restoreChunkNeedsOversizedScan('INSERT INTO "observations" ("id") VALUES(\'one\');')).toBe(false);
+    expect(restoreChunkNeedsOversizedScan('INSERT INTO "release_payloads" ("payload_json") VALUES(\'{}\');')).toBe(true);
   });
 });

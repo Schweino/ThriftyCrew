@@ -106,6 +106,10 @@ export function hasUtf8LineExceeding(text: string, limitBytes: number): boolean 
   return candidates?.some((line) => utf8LengthExceeds(line, limitBytes)) ?? false;
 }
 
+export function restoreChunkNeedsOversizedScan(text: string): boolean {
+  return text.includes('INSERT INTO "release_payloads"');
+}
+
 export function countSqlInsertLines(text: string, table: string): number {
   const prefix = `INSERT INTO "${table}" `;
   const linePrefix = `\n${prefix}`;
