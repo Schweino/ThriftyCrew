@@ -260,7 +260,13 @@ export function candidatePriceForUnit(candidate: {
   per_unit_micros: number;
   basis_options_json?: string;
 }, targetUnit: string): { perUnitMicros: number; source: string; unit: string } | null {
-  const compatible = candidateBasisOptions(candidate).flatMap((option) => {
+  // The normalized observation basis is the captured source of truth. Alternative package bases exist to
+  // bridge an otherwise incompatible commodity axis (for example an each-normalized club pack to ounces),
+  // not to underbid a valid normalized basis. Choosing the cheapest of two same-unit interpretations let a
+  // product name ending in ".85 oz" contribute a bogus 85 oz option and understate toothpaste by 100x.
+  const normalized = convertUnitPriceMicros(candidate.per_unit_micros, candidate.normalized_basis_unit, targetUnit);
+  if (normalized !== null) return { perUnitMicros: normalized, source: "normalized", unit: candidate.normalized_basis_unit };
+  const compatible = candidateBasisOptions(candidate).slice(1).flatMap((option) => {
     const converted = convertUnitPriceMicros(option.perUnitMicros, option.unit, targetUnit);
     return converted === null ? [] : [{ perUnitMicros: converted, source: option.source, unit: option.unit }];
   });

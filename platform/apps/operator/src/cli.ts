@@ -162,6 +162,17 @@ async function matchBatch(client: MutationClient, batchId: string): Promise<Reco
   return { ...persisted, ...report };
 }
 
+async function rematchPromotedBatches(client: MutationClient): Promise<{ ok: boolean; batches: Array<Record<string, unknown>> }> {
+  const listed = await client.request("/internal/capture-batches/promoted") as { batches?: Array<{ id: string; source_id: string; captured_to: string }> };
+  const batches: Array<Record<string, unknown>> = [];
+  for (const batch of listed.batches ?? []) {
+    const matching = await matchBatch(client, batch.id);
+    if (matching.status !== "passed") throw new Error(`promoted batch ${batch.id} failed matching under the active configuration`);
+    batches.push({ ...batch, matching });
+  }
+  return { ok: true, batches };
+}
+
 async function commodityAdd(inputFile: string | undefined): Promise<unknown> {
   if (!inputFile) throw new Error("tc commodity add requires a JSON file");
   const incoming = JSON.parse(await readFile(path.resolve(inputFile), "utf8")) as { id?: string; label?: string; unit?: string; include?: string[]; exclude?: string[]; categoryId?: string };
@@ -293,7 +304,10 @@ if (command === "status") {
 } else if (command === "config" && subcommand === "deploy") {
   await generateLegacyConfiguration(incomeRoot, true);
   const artifact = await buildCurrentBridge(incomeRoot);
-  result = await deployConfiguration(await mutationClient(), artifact.configuration);
+  const client = await mutationClient();
+  const deployment = await deployConfiguration(client, artifact.configuration);
+  const matching = await rematchPromotedBatches(client);
+  result = { ok: true, deployment, matching };
 } else if (command === "schedules" && subcommand === "check") {
   result = await checkScheduleAuthority(platformRoot);
 } else if (command === "schedules" && subcommand === "deploy") {
@@ -506,6 +520,8 @@ if (command === "status") {
     promoted.push({ ...batch, matching, promotion });
   }
   result = { ok: true, ready: ready.batches?.length ?? 0, promoted };
+} else if (command === "capture" && subcommand === "rematch-promoted") {
+  result = await rematchPromotedBatches(await mutationClient());
 } else if (command === "capture" && subcommand === "abandon") {
   const batchId = arguments_[0];
   const reason = arguments_.slice(1).join(" ");
@@ -603,7 +619,7 @@ if (command === "status") {
       "tc ghost reconcile [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog",
-      "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|abandon <batch-id> <reason>",
+      "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|rematch-promoted|abandon <batch-id> <reason>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",
       "tc match batch <batch-id>", "tc commodity add <file>", "tc recipe add <file>",
     ],

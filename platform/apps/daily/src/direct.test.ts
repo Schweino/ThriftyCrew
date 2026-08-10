@@ -121,4 +121,14 @@ describe("direct regular capture", () => {
     ]));
     expect(artifact.observations[1]!.basisOptions).not.toContainEqual(expect.objectContaining({ unit: "lb", quantityMicros: 224_250_000 }));
   });
+
+  it("parses a leading-decimal name measure as 0.x rather than 100x larger", async () => {
+    const artifact = await buildRegularCapture("walmart", { mode_verified: true, deals: [{
+      item: "Crest Toothpaste Radiant Mint, .85 oz Travel Size", current_price: "$0.97", size: "0.85 oz", as_of: "2026-08-09", product_id: "travel-toothpaste",
+    }] });
+    expect(artifact.observations[0]!.basisOptions).toEqual(expect.arrayContaining([
+      expect.objectContaining({ unit: "oz", quantityMicros: 850_000, source: "stated-measure" }),
+    ]));
+    expect(artifact.observations[0]!.basisOptions).not.toContainEqual(expect.objectContaining({ unit: "oz", quantityMicros: 85_000_000 }));
+  });
 });

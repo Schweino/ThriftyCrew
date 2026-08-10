@@ -30667,6 +30667,7 @@
                         "\\bcat\\b",
                         "formula",
                         "cereal\\s+puffs?",
+                        "\\b(juice|beverage|drink)\\b",
                         "\\b(wash|shampoo|conditioner|lotion|soap|bath|balm|ointment|detergent|diapers?|wipes?)\\b"
                     ],
         "relax_global":  [

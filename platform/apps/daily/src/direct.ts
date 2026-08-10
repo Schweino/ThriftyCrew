@@ -114,8 +114,11 @@ function packageBasisOptions(sizeText: string, name: string, purchasePriceMinor:
       source,
     });
   };
-  const normalizedSize = sizeText.toLowerCase().replace(/fluid ounces?/g, "fl oz");
-  const normalizedName = name.toLowerCase().replace(/fluid ounces?/g, "fl oz");
+  const normalizeMeasureText = (text: string): string => text.toLowerCase()
+    .replace(/fluid ounces?/g, "fl oz")
+    .replace(/(^|[^\d])\.(\d+)/g, (_match, prefix: string, digits: string) => `${prefix}0.${digits}`);
+  const normalizedSize = normalizeMeasureText(sizeText);
+  const normalizedName = normalizeMeasureText(name);
   // Package names often state container capacity ("13 gallon, 110 ct.") rather than contents.
   // Limit name-derived multiplication to mass and small-volume contents units; standalone captured
   // sizes still retain gallons/quarts/pints through basis().

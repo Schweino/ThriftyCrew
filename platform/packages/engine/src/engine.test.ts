@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildNativeCells, buildNativeParityReport, convertUnitPriceMicros, evaluateAisleEvidence, evaluateAisleFamilyEvidence, guardResult, matchProductName, selectWinner } from "./index";
+import { buildNativeCells, buildNativeParityReport, candidatePriceForUnit, convertUnitPriceMicros, evaluateAisleEvidence, evaluateAisleFamilyEvidence, guardResult, matchProductName, selectWinner } from "./index";
 
 describe("matching", () => {
   it("ports the authored .NET inline case-insensitive prefix", () => {
@@ -91,6 +91,14 @@ describe("winner selection", () => {
 });
 
 describe("alternative package bases", () => {
+  it("never lets an ambiguous same-unit option underbid the normalized captured basis", () => {
+    expect(candidatePriceForUnit({
+      normalized_basis_unit: "oz",
+      per_unit_micros: 1_080_178,
+      basis_options_json: JSON.stringify([{ unit: "oz", perUnitMicros: 11_412, source: "stated-measure" }]),
+    }, "oz")).toEqual({ unit: "oz", perUnitMicros: 1_080_178, source: "normalized" });
+  });
+
   it("prices a matched weight commodity from an audited multipack basis", () => {
     const snapshot = {
       mode: "direct" as const, observedAt: "2026-08-09T12:00:00.000Z", configurationId: "config", currentReleaseId: "release", inputHash: "d".repeat(64), inputBatchIds: ["batch"],

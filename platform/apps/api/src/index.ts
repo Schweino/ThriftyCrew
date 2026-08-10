@@ -1063,6 +1063,17 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   return context.json({ ok: status === "validated", batchId: batch.id, status, counts: { attempted, successful, empty, rejected, blocked, capturedPages } }, status === "validated" ? 200 : 422);
 });
 
+app.get("/internal/capture-batches/promoted", async (context) => {
+  const identity = context.get("identity");
+  if (identity.role !== "engine" && identity.role !== "operator") return jsonError("mutation role is not authorized to list promoted batches", 403);
+  const batches = await context.env.DB.prepare(
+    `SELECT id, source_id, coverage_mode, captured_to
+       FROM capture_batches WHERE status = 'promoted'
+      ORDER BY source_id, captured_to DESC, id`,
+  ).all();
+  return context.json({ ok: true, batches: batches.results });
+});
+
 app.get("/internal/capture-batches/ready-browser", async (context) => {
   const identity = context.get("identity");
   if (identity.role !== "engine" && identity.role !== "operator") return jsonError("mutation role is not authorized to select promotion candidates", 403);
