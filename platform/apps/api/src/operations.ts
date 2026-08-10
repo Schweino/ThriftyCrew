@@ -516,8 +516,9 @@ export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number)
     await resolveRecoveredJobRunAlerts(env, "archival-forecast-daily", runId, observedAt);
   } catch (error) {
     const message = error instanceof Error ? error.message : "archival forecast failed";
-    await env.DB.prepare("UPDATE job_runs SET status = 'failed', heartbeat_at = CURRENT_TIMESTAMP, finished_at = CURRENT_TIMESTAMP, error = ?2 WHERE id = ?1")
-      .bind(runId, message).run();
+    const finishedAt = new Date().toISOString();
+    await env.DB.prepare("UPDATE job_runs SET status = 'failed', heartbeat_at = ?2, finished_at = ?2, error = ?3 WHERE id = ?1")
+      .bind(runId, finishedAt, message).run();
     await raiseOperationalAlert(env, `archival-forecast:${observedAt.slice(0, 10)}`, "Daily D1 archival forecast failed", { error: message, observedAt });
     throw error;
   }
