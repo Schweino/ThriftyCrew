@@ -1721,6 +1721,19 @@
                         "ruled_on":  "2026-08-10",
                         "ruled_by":  "V3 semantic accuracy audit",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "lemons|Walmart|snack-pack-lemon-pudding",
+                        "commodity":  "lemons",
+                        "store":  "Walmart",
+                        "names":  ["Snack Pack Lemon Pudding, 3.25 oz Pudding Cups, 4 Count"],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Lemon-flavored pudding cups are a prepared dessert, not fresh lemons. They held the lemons crown on 2026-08-10 after the four-count package was normalized as individual items.",
+                        "seen_on_board":  "2026-08-10 (crown)",
+                        "ruled_on":  "2026-08-10",
+                        "ruled_by":  "V3 semantic accuracy audit",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

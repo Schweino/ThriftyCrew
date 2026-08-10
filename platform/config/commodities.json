@@ -5320,6 +5320,7 @@
                     ],
         "exclude":  [
                         "sparkling|crystalli[sz]ed|packets?",
+                        "\\bpuddings?\\b",
                         "lemon[\\s-]*lime",
                         "\\bmini\\s+cans?\\b",
                         "\\bchips?\\b",

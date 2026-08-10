@@ -50,6 +50,16 @@ describe("matching", () => {
     expect(matchProductName("Gerber Stage 2 Sweet Corn and Green Beans Baby Food 4 oz", rules)).toMatchObject({ status: "matched", commodityId: "baby-food" });
   });
 
+  it("keeps lemon-flavored pudding out of the fresh lemons commodity", () => {
+    const authored = JSON.parse(readFileSync(new URL("../../../config/commodities.json", import.meta.url), "utf8")) as
+      Array<{ id: string; include: string[]; exclude: string[] }>;
+    const lemons = authored.find((commodity) => commodity.id === "lemons");
+    expect(lemons).toBeDefined();
+    const rules = [{ commodityId: "lemons", includes: lemons!.include, excludes: lemons!.exclude, priority: 1 }];
+    expect(matchProductName("Snack Pack Lemon Pudding, 3.25 oz Pudding Cups, 4 Count", rules).status).toBe("unmatched");
+    expect(matchProductName("Fresh Lemons, Each", rules)).toMatchObject({ status: "matched", commodityId: "lemons" });
+  });
+
   it("rejects a food match when the store shelves it as cat litter", () => {
     expect(evaluateAisleEvidence("Pets/Cats/Cat Litter", ["baking"], ["cat litter", "pets"]).status).toBe("rejected");
   });
