@@ -74,6 +74,7 @@ import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
 import { readBrowserCaptureSla } from "./browser-capture-sla";
 import { buildCaptureTermInserts } from "./capture-seal";
+import { handleGithubActionsWebhook } from "./github-recovery";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 export { D1RestoreDrillWorkflow } from "./restore-workflow";
@@ -191,6 +192,8 @@ app.use("/internal/triage/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/doctor", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/engine/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/drills/*", requireIdentityRole(["operator"]));
+
+app.post("/webhooks/github/actions", (context) => handleGithubActionsWebhook(context.req.raw, context.env, context.executionCtx));
 
 app.get("/api/v2/status", async (context) => {
   const checkedAt = new Date();

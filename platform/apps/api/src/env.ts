@@ -18,6 +18,8 @@ export interface WorkerEnv {
   GITHUB_OIDC_WORKFLOW_REFS?: string;
   GITHUB_OIDC_AGENT_RUNNER_REF?: string;
   GITHUB_DISPATCH_TOKEN?: string;
+  GITHUB_WEBHOOK_SECRET?: string;
+  GITHUB_AUTO_RECOVERY_MAX_ATTEMPTS?: string;
   GITHUB_REPOSITORY?: string;
   GITHUB_WORKFLOW_FILE?: string;
   OPS_ALERT_URL?: string;
