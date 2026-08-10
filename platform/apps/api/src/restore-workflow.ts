@@ -60,6 +60,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
     let backupId = "unknown";
     let dumpSha256 = "0".repeat(64);
     let normalizedObjectKey: string | null = null;
+    let normalizedStagingObjectKey: string | null = null;
     let normalizedMultipartUploadId: string | null = null;
     let normalizedMultipartCompleted = false;
     await this.env.DB.prepare(
@@ -97,8 +98,9 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
       const hashScheme = "sha256-merkle-r2-v1";
       dumpSha256 = await sha256Hex(new TextEncoder().encode(stableJson({ hashScheme, objectKey: backup.object_key, etag: dump.etag, length: dump.length, hashChunkBytes, chunkHashes })));
       normalizedObjectKey = `restore-normalized/${backup.id}/${dumpSha256}.sql`;
+      normalizedStagingObjectKey = `restore-normalized-staging/${backup.id}/${dumpSha256}.multipart.sql`;
       const multipart = await step.do("create normalized restore multipart upload", async () => {
-        const upload = await this.env.BACKUPS.createMultipartUpload(normalizedObjectKey!, {
+        const upload = await this.env.BACKUPS.createMultipartUpload(normalizedStagingObjectKey!, {
           httpMetadata: { contentType: "application/sql" },
           customMetadata: { sourceObjectKey: backup.object_key, sourceDumpSha256: dumpSha256 },
         });
@@ -185,7 +187,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
             outputBytes.set(encodedOutput);
             outputBytes.fill(32, encodedOutput.byteLength);
           }
-          const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedObjectKey!, multipart.uploadId);
+          const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey!, multipart.uploadId);
           const uploaded = await upload.uploadPart(partNumber, outputBytes);
           return { sourceEnd, byteLength: outputBytes.byteLength, uploaded, counts: partCounts, releaseHashes: partReleaseHashes, currentReleaseId: partCurrentReleaseId, recoveryRows: partRecoveryRows, deferredUpdates: partDeferredUpdates };
         });
@@ -199,15 +201,31 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
         deferredUpdates.push(...part.deferredUpdates);
       }
       const completedMultipart = await step.do("complete normalized restore multipart upload", async () => {
-        const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedObjectKey!, multipart.uploadId);
+        const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey!, multipart.uploadId);
         const object = await upload.complete(uploadedParts);
         return { etag: object.etag.replaceAll('"', ""), length: object.size };
       });
       normalizedMultipartCompleted = true;
       if (completedMultipart.length !== normalizedByteLength) throw new Error("completed normalized restore object has the wrong byte length");
+      const materialized = await step.do("materialize normalized restore with content MD5", async () => {
+        const staging = await this.env.BACKUPS.get(normalizedStagingObjectKey!);
+        if (!staging?.body || staging.size !== normalizedByteLength) throw new Error("normalized multipart staging object is missing or has the wrong length");
+        const object = await this.env.BACKUPS.put(normalizedObjectKey!, staging.body, {
+          httpMetadata: { contentType: "application/sql" },
+          customMetadata: { sourceObjectKey: backup.object_key, sourceDumpSha256: dumpSha256 },
+        });
+        if (!object || object.size !== normalizedByteLength) throw new Error("materialized normalized restore object has the wrong length");
+        const etag = object.etag.replaceAll('"', "");
+        if (!/^[a-f0-9]{32}$/i.test(etag)) throw new Error("materialized normalized restore object did not receive a content MD5 ETag");
+        return { etag, length: object.size };
+      });
+      await step.do("delete normalized multipart staging object", async () => {
+        await this.env.BACKUPS.delete(normalizedStagingObjectKey!);
+        return true;
+      });
       const expectedRelease = currentReleaseId ? { id: currentReleaseId, inputHash: releaseHashes[currentReleaseId] } : null;
       if (!expectedRelease?.inputHash) throw new Error("backup dump omitted the current Omaha release or its input hash");
-      const normalized = { objectKey: normalizedObjectKey, ...completedMultipart, deferredSupersessionUpdates: deferredUpdates.length, statementLimitBytes, recoveryRows, expectedCounts, expectedRelease };
+      const normalized = { objectKey: normalizedObjectKey, ...materialized, deferredSupersessionUpdates: deferredUpdates.length, statementLimitBytes, recoveryRows, expectedCounts, expectedRelease };
       const scratch = await step.do("create isolated scratch D1", async () => cloudflare<{ uuid?: string }>(this.env, "/d1/database", {
         method: "POST",
         body: JSON.stringify({ name: `tc-grocery-v3-restore-${startedAt.slice(0, 10).replaceAll("-", "")}-${event.instanceId.slice(-8)}`, primary_location_hint: "wnam", read_replication: { mode: "disabled" } }),
@@ -255,6 +273,9 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
         if (etag !== normalized.etag || object.size !== normalized.length) throw new Error("normalized restore object changed between creation and upload");
         const response = await fetch(initialized.upload_url!, { method: "PUT", body: object.body });
         if (!response.ok) throw new Error(`scratch import upload returned ${response.status}`);
+        const uploadedEtag = response.headers.get("etag")?.replaceAll('"', "");
+        if (uploadedEtag !== normalized.etag) throw new Error(`scratch import upload ETag mismatch: expected ${normalized.etag}, received ${uploadedEtag ?? "none"}`);
+        return { etag: uploadedEtag };
       });
       const ingested = await step.do("start scratch import", {
         retries: { limit: 2, delay: "30 seconds", backoff: "constant" },
@@ -337,10 +358,10 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           await raiseOperationalAlert(this.env, `restore-scratch-cleanup:${scratchDatabaseId}`, "Restore drill scratch database cleanup failed", { scratchDatabaseId, error: error instanceof Error ? error.message : "unknown cleanup failure" });
         }
       }
-      if (normalizedObjectKey && normalizedMultipartUploadId && !normalizedMultipartCompleted) {
+      if (normalizedStagingObjectKey && normalizedMultipartUploadId && !normalizedMultipartCompleted) {
         try {
           await step.do("abort exact normalized restore multipart upload", async () => {
-            const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedObjectKey!, normalizedMultipartUploadId!);
+            const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey!, normalizedMultipartUploadId!);
             await upload.abort();
             return true;
           });
@@ -356,6 +377,16 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           });
         } catch (error) {
           await raiseOperationalAlert(this.env, `restore-normalized-cleanup:${normalizedObjectKey}`, "Normalized restore object cleanup failed", { normalizedObjectKey, error: error instanceof Error ? error.message : "unknown cleanup failure" });
+        }
+      }
+      if (normalizedStagingObjectKey) {
+        try {
+          await step.do("delete exact normalized staging object", async () => {
+            await this.env.BACKUPS.delete(normalizedStagingObjectKey!);
+            return true;
+          });
+        } catch (error) {
+          await raiseOperationalAlert(this.env, `restore-normalized-staging-cleanup:${normalizedStagingObjectKey}`, "Normalized restore staging object cleanup failed", { normalizedStagingObjectKey, error: error instanceof Error ? error.message : "unknown cleanup failure" });
         }
       }
     }
