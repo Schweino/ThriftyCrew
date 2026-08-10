@@ -146,7 +146,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           const partRecoveryRows: Array<{ table: string; columns: string[]; values: Array<string | null> }> = [];
           const partDeferredUpdates: string[] = [];
           let partCurrentReleaseId: string | null = null;
-          let output = "";
+          const outputParts: string[] = [];
           for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
             const line = lines[lineIndex]!;
             const table = line.match(/^INSERT INTO "([^"]+)"/)?.[1];
@@ -162,20 +162,21 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
             if (oversized) {
               if (!insert) throw new Error("oversized non-INSERT statement cannot be normalized");
               partRecoveryRows.push(insert);
-              output += `-- oversized INSERT for ${insert.table} restored through parameter binding\n`;
+              outputParts.push(`-- oversized INSERT for ${insert.table} restored through parameter binding\n`);
               continue;
             }
             const adjusted = table === "capture_batches" ? normalizeCaptureBatchLine(line) : { line };
             if (adjusted.deferredUpdate) partDeferredUpdates.push(adjusted.deferredUpdate);
-            output += adjusted.line;
-            if (hasTrailingNewline || lineIndex < lines.length - 1) output += "\n";
+            outputParts.push(adjusted.line);
+            if (hasTrailingNewline || lineIndex < lines.length - 1) outputParts.push("\n");
           }
           const isLastPart = sourceEnd === dump.length;
           const allDeferredUpdates = [...deferredUpdates, ...partDeferredUpdates];
           if (isLastPart && allDeferredUpdates.length > 0) {
-            if (!output.endsWith("\n")) output += "\n";
-            output += `${allDeferredUpdates.join("\n")}\n`;
+            if (outputParts.at(-1) !== "\n") outputParts.push("\n");
+            outputParts.push(`${allDeferredUpdates.join("\n")}\n`);
           }
+          const output = outputParts.join("");
           const encodedOutput = new TextEncoder().encode(output);
           let outputBytes = encodedOutput;
           const minimumMultipartBytes = 5 * 1024 * 1024;
