@@ -193,10 +193,11 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
             const separatorBytes = separator.length;
             const availablePadding = multipartPartBytes - encodedOutput.byteLength - separatorBytes;
             if (availablePadding < 0) throw new Error(`normalized multipart part ${partNumber} exceeds the fixed R2 part size`);
-            const paddingBlock = `/*${"p".repeat(8_192)}*/\n`;
+            const paddingBlock = `SELECT '${"p".repeat(80_000)}';\n`;
             const wholeBlocks = Math.floor(availablePadding / paddingBlock.length);
             const remainder = availablePadding % paddingBlock.length;
-            outputBytes = encoder.encode(`${output}${separator}${paddingBlock.repeat(wholeBlocks)}${" ".repeat(remainder)}`);
+            const remainderPadding = remainder >= 11 ? `SELECT '${"p".repeat(remainder - 11)}';\n` : " ".repeat(remainder);
+            outputBytes = encoder.encode(`${output}${separator}${paddingBlock.repeat(wholeBlocks)}${remainderPadding}`);
             if (outputBytes.byteLength !== multipartPartBytes) throw new Error(`normalized multipart part ${partNumber} padding has the wrong length`);
           }
           const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey!, multipart.uploadId);
