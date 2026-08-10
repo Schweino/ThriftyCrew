@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { d1DatabaseFileSize, githubWorkflowRuns, jobStatusRequiresAlert, scheduleGap } from "./operations";
+import { d1DatabaseFileSize, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, scheduleGap } from "./operations";
 import type { WorkerEnv } from "./env";
 
 const configuredEnv = {
@@ -55,6 +55,18 @@ describe("D1 database size metadata", () => {
     await expect(d1DatabaseFileSize({} as WorkerEnv)).rejects.toThrow("credentials");
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ success: true, result: {} }))));
     await expect(d1DatabaseFileSize({ D1_REST_API_TOKEN: "x", CLOUDFLARE_ACCOUNT_ID: "a", D1_DATABASE_ID: "d" } as WorkerEnv)).rejects.toThrow("metadata request failed");
+  });
+});
+
+describe("GitHub recovery dispatch inputs", () => {
+  it("does not send unsupported inputs to thin agent or restore workflows", () => {
+    expect(githubDispatchInputs("agent-source-sentinel-investigator.yml", "source-sentinel-daily", "gap")).toEqual({});
+    expect(githubDispatchInputs("platform-restore.yml", "restore-drill-quarterly", "gap")).toEqual({});
+  });
+
+  it("preserves registered legacy and platform recovery input contracts", () => {
+    expect(githubDispatchInputs("platform-agents.yml", "triage-review", "gap")).toEqual({ inputs: { agent_job: "triage-review" } });
+    expect(githubDispatchInputs("platform-v3.yml", "daily-engine", "gap")).toEqual({ inputs: { recovery_job: "daily-engine", recovery_reason: "gap" } });
   });
 });
 

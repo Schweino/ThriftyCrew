@@ -34,6 +34,12 @@ export async function d1DatabaseFileSize(env: WorkerEnv): Promise<number> {
   return fileSize;
 }
 
+export function githubDispatchInputs(workflowFile: string, job: string, reason: string): Record<string, unknown> {
+  if (workflowFile === "platform-agents.yml") return { inputs: { agent_job: job } };
+  if (workflowFile === "platform-restore.yml" || workflowFile.startsWith("agent-")) return {};
+  return { inputs: { recovery_job: job, recovery_reason: reason } };
+}
+
 export async function resolveRecoveredJobRunAlerts(
   env: WorkerEnv,
   job: string,
@@ -194,9 +200,7 @@ export async function dispatchGithubJob(
         },
         body: JSON.stringify({
           ref,
-          ...(workflowFile === "platform-agents.yml" ? { inputs: { agent_job: job } }
-            : workflowFile === "platform-restore.yml" ? {}
-            : { inputs: { recovery_job: job, recovery_reason: reason } }),
+          ...githubDispatchInputs(workflowFile, job, reason),
         }),
       },
     );
