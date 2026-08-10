@@ -64,9 +64,9 @@ $configuration = [ordered]@{
 }
 $configuration | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $configFile -Encoding UTF8
 
-$runner = Join-Path $platformRoot 'scripts\run-pc-capture-client.ps1'
-$actionArguments = "-NoProfile -ExecutionPolicy Bypass -File `"$runner`" -Mode Cycle"
-$action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument $actionArguments
+$launcher = Join-Path $platformRoot 'scripts\run-pc-capture-client-hidden.vbs'
+$actionArguments = "//B //NoLogo `"$launcher`" -Mode Cycle"
+$action = New-ScheduledTaskAction -Execute 'wscript.exe' -Argument $actionArguments
 $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) -RepetitionInterval (New-TimeSpan -Minutes 5)
 $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Minutes 20) -MultipleInstances IgnoreNew
 $principal = New-ScheduledTaskPrincipal -UserId ("{0}\{1}" -f $env:USERDOMAIN, $env:USERNAME) -LogonType Interactive -RunLevel Limited
