@@ -96,7 +96,7 @@ function percentile(values: readonly number[], percentileValue: number): number 
 }
 
 export function summarizeBrowserCaptureSession(session: BrowserCaptureSession): BrowserCaptureMetricSummary {
-  const attempted = session.terms.filter((term) => term.attempts > 0);
+  const attempted = session.terms.filter((term) => term.outcome !== "not_attempted");
   const durations = attempted.map((term) => Math.max(0, Date.parse(term.finishedAt) - Date.parse(term.startedAt)));
   return {
     sessionId: session.sessionId,
@@ -110,7 +110,7 @@ export function summarizeBrowserCaptureSession(session: BrowserCaptureSession): 
     rejectedTerms: session.terms.filter((term) => term.outcome === "rejected").length,
     blockedTerms: session.terms.filter((term) => term.outcome === "blocked").length,
     notAttemptedTerms: session.terms.filter((term) => term.outcome === "not_attempted").length,
-    retryCount: session.terms.reduce((sum, term) => sum + Math.max(0, term.attempts - 1), 0),
+    retryCount: attempted.reduce((sum, term) => sum + Math.max(0, term.attempts - 1), 0),
     chunkCount: session.chunks.length,
     durationMs: Math.max(0, Date.parse(session.finishedAt) - Date.parse(session.startedAt)),
     termDurationP50Ms: percentile(durations, 0.5),

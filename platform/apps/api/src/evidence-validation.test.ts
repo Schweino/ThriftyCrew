@@ -50,7 +50,7 @@ describe("browser screenshot evidence", () => {
       terms: [
         { termKey: "a", query: "a", ordinal: 0, outcome: "success" as const, rowCount: 2, attempts: 2, startedAt: "2026-08-12T14:00:00.000Z", finishedAt: "2026-08-12T14:01:00.000Z" },
         { termKey: "b", query: "b", ordinal: 1, outcome: "blocked" as const, rowCount: 0, attempts: 1, reason: "challenge", startedAt: "2026-08-12T14:01:00.000Z", finishedAt: "2026-08-12T14:05:00.000Z" },
-        { termKey: "c", query: "c", ordinal: 2, outcome: "not_attempted" as const, rowCount: 0, attempts: 0, reason: "stopped", startedAt: "2026-08-12T14:00:00.000Z", finishedAt: "2026-08-12T14:00:00.000Z" },
+        { termKey: "c", query: "c", ordinal: 2, outcome: "not_attempted" as const, rowCount: 0, attempts: 3, reason: "stopped", startedAt: "2026-08-12T14:00:00.000Z", finishedAt: "2026-08-12T14:00:00.000Z" },
       ],
       canaries: [{ ordinal: 0, observedAt: "2026-08-12T14:00:00.000Z", market: "Omaha", location: "ALDI OLA 42 Omaha", priceMode: "in-store", evidenceUrl: "https://aldi.us", marketVerified: true as const, locationVerified: true as const, priceModeVerified: true as const, screenshotSha256: "b".repeat(64) }],
       chunks: [{ id: "chunk", ordinal: 0, termKeys: ["a", "b"], rowCount: 2, sha256: "c".repeat(64), createdAt: "2026-08-12T14:05:00.000Z" }],
