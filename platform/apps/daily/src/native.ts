@@ -138,7 +138,7 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
   const inputBatchIds = [...snapshot.inputBatchIds].sort();
   const inputManifest = {
     kind: "native-v3-release",
-    engineVersion: "native-v3.2.0-accuracy",
+    engineVersion: "native-v3.2.1-accuracy",
     marketId: "omaha",
     mode: "direct",
     releaseDate: weekOf,
