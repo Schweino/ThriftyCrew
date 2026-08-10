@@ -17,12 +17,20 @@ $env:TC_CAPTURE_QUEUE = [string]$config.queueRoot
 $logFile = Join-Path $clientDir 'pc-capture-client.log'
 $platformRoot = [string]$config.platformRoot
 $pnpmPath = [string]$config.pnpmPath
+$runtimePath = @($config.runtimePath | ForEach-Object { [string]$_ })
+if ($runtimePath.Count -gt 0) { $env:Path = (($runtimePath -join [IO.Path]::PathSeparator) + [IO.Path]::PathSeparator + $env:Path) }
 
 function Invoke-CaptureCommand([string[]]$Arguments) {
   Push-Location $platformRoot
   try {
-    $output = & $pnpmPath @Arguments 2>&1
-    $exitCode = $LASTEXITCODE
+    $previousErrorAction = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+      $output = & $pnpmPath @Arguments 2>&1
+      $exitCode = $LASTEXITCODE
+    } finally {
+      $ErrorActionPreference = $previousErrorAction
+    }
     $output | ForEach-Object { Add-Content -LiteralPath $logFile -Value ("[{0}] {1}" -f (Get-Date).ToString('s'), $_) }
     return $exitCode
   } finally { Pop-Location }

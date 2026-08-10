@@ -39,6 +39,8 @@ $remoteSecret = $keyRecords | ConvertTo-Json -Depth 8 -Compress
 
 $pnpmCommand = Get-Command pnpm -ErrorAction Stop
 $pnpmPath = $pnpmCommand.Source
+$nodeCommand = Get-Command node -ErrorAction Stop
+$runtimePath = @((Split-Path -Parent $nodeCommand.Source), (Split-Path -Parent $pnpmPath)) | Select-Object -Unique
 Push-Location $platformRoot
 try {
   $remoteSecret | & $pnpmPath exec wrangler secret put MUTATION_KEYS
@@ -55,6 +57,7 @@ $configuration = [ordered]@{
   queueRoot = $queueRoot
   platformRoot = $platformRoot
   pnpmPath = $pnpmPath
+  runtimePath = $runtimePath
   encryptedSecret = $encryptedSecret
   installedAt = (Get-Date).ToUniversalTime().ToString('o')
   sourceIds = $browserSources
