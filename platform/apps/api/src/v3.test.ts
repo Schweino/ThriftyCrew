@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { captureBatchAbandonSchema, entitlementVerificationRecordSchema, evidenceGateRecordSchema, restoreDrillRecordSchema } from "@thriftycrew/contracts";
 import { createAccuracyDraw, readAccuracyDraw, wilsonInterval } from "./accuracy";
 import { mayShowFreeBadge } from "./ghost-reconciliation";
-import { storeCoverageFloor } from "./release-guards";
+import { releaseCaptureEvictionSql, storeCoverageFloor } from "./release-guards";
 import { memberStatusHtml } from "./member-status";
 import { engineMayWriteCaptureSource } from "./capture-authorization";
 
@@ -92,6 +92,14 @@ describe("first native coverage baseline", () => {
     expect(storeCoverageFloor(345, 276, true)).toBe(276);
     expect(storeCoverageFloor(345, 276, false)).toBe(310);
     expect(storeCoverageFloor(345, undefined, true)).toBe(310);
+  });
+});
+
+describe("capture eviction guard", () => {
+  it("bounds complete-capture protection to the immutable release snapshot", () => {
+    expect(releaseCaptureEvictionSql).toContain("FROM release_input_batches candidate_input");
+    expect(releaseCaptureEvictionSql).toContain("candidate_input.release_id = ?1");
+    expect(releaseCaptureEvictionSql).not.toContain("candidate_batch.status IN");
   });
 });
 

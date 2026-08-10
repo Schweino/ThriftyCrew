@@ -12,6 +12,39 @@ interface ReleaseContext {
 
 interface CountRow { count: number }
 
+export const releaseCaptureEvictionSql = `WITH complete_candidates AS (
+    SELECT candidate_match.commodity_id, candidate_product.store_location_id,
+           candidate.id AS observation_id
+      FROM release_input_batches candidate_input
+      JOIN capture_batches candidate_batch
+        ON candidate_batch.id = candidate_input.batch_id
+       AND candidate_batch.coverage_mode IN ('full','ad_only')
+      JOIN observations candidate ON candidate.batch_id = candidate_batch.id
+      JOIN product_versions candidate_version ON candidate_version.id = candidate.product_version_id
+      JOIN products candidate_product ON candidate_product.id = candidate_version.product_id
+      JOIN match_decisions candidate_match
+        ON candidate_match.product_id = candidate_product.id
+       AND candidate_match.configuration_id = ?2
+       AND candidate_match.superseded_at IS NULL
+     WHERE candidate_input.release_id = ?1
+       AND (candidate.valid_to IS NULL OR candidate.valid_to >= CURRENT_TIMESTAMP)
+  ), thin_selected AS (
+    SELECT selected.commodity_id, selected.store_location_id, selected.observation_id
+      FROM release_cells selected
+      JOIN observations chosen ON chosen.id = selected.observation_id
+      JOIN capture_batches selected_batch ON selected_batch.id = chosen.batch_id
+     WHERE selected.release_id = ?1 AND selected.status = 'priced'
+       AND selected_batch.coverage_mode IN ('partial','targeted')
+  )
+  SELECT selected.commodity_id, selected.store_location_id, selected.observation_id,
+         candidate.observation_id AS protected_observation_id
+    FROM thin_selected selected
+    JOIN complete_candidates candidate
+      ON candidate.commodity_id = selected.commodity_id
+     AND candidate.store_location_id = selected.store_location_id
+     AND candidate.observation_id <> selected.observation_id
+   ORDER BY selected.commodity_id, selected.store_location_id LIMIT 500`;
+
 export function storeCoverageFloor(priorPriced: number | undefined, firstNativeMinimum: number | undefined, firstNativeCutover: boolean): number {
   if (firstNativeCutover && firstNativeMinimum !== undefined) return firstNativeMinimum;
   return priorPriced === undefined ? 1 : Math.floor(priorPriced * 0.9);
@@ -273,28 +306,13 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
     })),
   ));
 
-  const evictionRows = await db.prepare(
-    `SELECT selected.commodity_id, selected.store_location_id, selected.observation_id,
-            candidate.id AS protected_observation_id, selected_batch.coverage_mode AS selected_coverage
-       FROM release_cells selected
-       JOIN observations chosen ON chosen.id = selected.observation_id
-       JOIN capture_batches selected_batch ON selected_batch.id = chosen.batch_id
-       JOIN products selected_product ON selected_product.id = (SELECT product_id FROM product_versions WHERE id = chosen.product_version_id)
-       JOIN match_decisions selected_match ON selected_match.product_id = selected_product.id AND selected_match.superseded_at IS NULL
-       JOIN match_decisions candidate_match
-         ON candidate_match.commodity_id = selected.commodity_id
-        AND candidate_match.configuration_id = ?2 AND candidate_match.superseded_at IS NULL
-       JOIN products candidate_product ON candidate_product.id = candidate_match.product_id AND candidate_product.store_location_id = selected.store_location_id
-       JOIN product_versions candidate_version ON candidate_version.product_id = candidate_product.id
-       JOIN observations candidate ON candidate.product_version_id = candidate_version.id
-       JOIN capture_batches candidate_batch ON candidate_batch.id = candidate.batch_id AND candidate_batch.status IN ('validated','promoted')
-      WHERE selected.release_id = ?1 AND selected.status = 'priced'
-        AND selected_batch.coverage_mode IN ('partial','targeted')
-        AND candidate_batch.coverage_mode IN ('full','ad_only')
-        AND candidate.id <> selected.observation_id
-        AND (candidate.valid_to IS NULL OR candidate.valid_to >= CURRENT_TIMESTAMP)
-      ORDER BY selected.commodity_id, selected.store_location_id LIMIT 500`,
-  ).bind(context.releaseId, context.configurationId).all<{ commodity_id: string; store_location_id: string; observation_id: string; protected_observation_id: string }>();
+  // Protection is evaluated against the immutable release snapshot. Looking
+  // through all validated/promoted history made the result depend on captures
+  // arriving after the snapshot and created a combinatorial history join once
+  // direct catalogs grew. Snapshot batches are the correct bounded input.
+  const evictionRows = await db.prepare(releaseCaptureEvictionSql)
+    .bind(context.releaseId, context.configurationId)
+    .all<{ commodity_id: string; store_location_id: string; observation_id: string; protected_observation_id: string }>();
   await upsertGuardResult(db, context.releaseId, result(
     "release-capture-eviction",
     evictionRows.results.length === 0,
