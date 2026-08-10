@@ -3,7 +3,7 @@ import { RESTORE_MULTIPART_PART_BYTES, RESTORE_SOURCE_PART_BYTES } from "./resto
 
 describe("restore normalization partitioning", () => {
   it("keeps CPU-bounded source chunks while honoring R2's multipart minimum", () => {
-    expect(RESTORE_SOURCE_PART_BYTES).toBe(4 * 1024 * 1024);
+    expect(RESTORE_SOURCE_PART_BYTES).toBe(2 * 1024 * 1024);
     expect(RESTORE_MULTIPART_PART_BYTES).toBe(5 * 1024 * 1024);
     expect(RESTORE_MULTIPART_PART_BYTES).toBeGreaterThanOrEqual(RESTORE_SOURCE_PART_BYTES);
   });
