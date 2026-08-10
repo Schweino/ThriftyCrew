@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { githubWorkflowRuns } from "./operations";
+import { githubWorkflowRuns, jobStatusRequiresAlert } from "./operations";
 import type { WorkerEnv } from "./env";
 
 const configuredEnv = {
@@ -9,6 +9,13 @@ const configuredEnv = {
 } as WorkerEnv;
 
 afterEach(() => vi.unstubAllGlobals());
+
+describe("job terminal alerts", () => {
+  it("alerts on failed, timed-out, and missed runs but not expected terminal states", () => {
+    expect(["failed", "timed_out", "missed"].every(jobStatusRequiresAlert)).toBe(true);
+    expect(["completed", "cancelled", "started", "scheduled"].some(jobStatusRequiresAlert)).toBe(false);
+  });
+});
 
 describe("githubWorkflowRuns", () => {
   it("returns only sanitized run, job, and step metadata", async () => {

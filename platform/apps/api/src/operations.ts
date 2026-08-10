@@ -1,6 +1,10 @@
 import { deterministicId, stableJson } from "@thriftycrew/domain";
 import type { MutationIdentity, WorkerEnv } from "./env";
 
+export function jobStatusRequiresAlert(status: string): boolean {
+  return status === "failed" || status === "timed_out" || status === "missed";
+}
+
 export async function recordAudit(
   env: WorkerEnv,
   identity: Pick<MutationIdentity, "agentId" | "authMethod">,

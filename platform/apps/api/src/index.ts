@@ -43,7 +43,7 @@ import { createRelease, findBatch, insertObservations, insertRecipeCosts, insert
 import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation, runGhostClobberDrill } from "./ghost-reconciliation";
-import { dispatchGithubJob, githubWorkflowRuns, raiseOperationalAlert, recordAudit, resolveOperationalAlert, runScheduledOperations } from "./operations";
+import { dispatchGithubJob, githubWorkflowRuns, jobStatusRequiresAlert, raiseOperationalAlert, recordAudit, resolveOperationalAlert, runScheduledOperations } from "./operations";
 import { readEngineSnapshot, readEngineSnapshotIdentity, type EngineSourceMode } from "./engine-snapshot";
 import { memberStatusHtml } from "./member-status";
 import { accrueMilestoneEvidence, milestoneEvidenceSummary } from "./milestone-evidence";
@@ -845,7 +845,9 @@ app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (co
 
 app.patch("/internal/job-runs/:id", zValidator("json", jobRunUpdateSchema), async (context) => {
   const body = context.req.valid("json");
-  const current = await context.env.DB.prepare("SELECT status, started_at, finished_at FROM job_runs WHERE id = ?1").bind(context.req.param("id")).first<{ status: string; started_at: string | null; finished_at: string | null }>();
+  const current = await context.env.DB.prepare("SELECT job, status, started_at, finished_at, trigger_kind, executor_run_id FROM job_runs WHERE id = ?1").bind(context.req.param("id")).first<{
+    job: string; status: string; started_at: string | null; finished_at: string | null; trigger_kind: string; executor_run_id: string | null;
+  }>();
   if (!current) return jsonError("job run not found", 404);
   if (current.status === body.status && current.finished_at === (body.finishedAt ?? null)) {
     return context.json({ ok: true, runId: context.req.param("id"), status: current.status, idempotent: true });
@@ -877,7 +879,25 @@ app.patch("/internal/job-runs/:id", zValidator("json", jobRunUpdateSchema), asyn
     stableJson(body.stats),
     body.error ?? null,
   ).run();
-  return context.json({ ok: true, runId: context.req.param("id"), status: body.status, idempotent: false });
+  const alert = jobStatusRequiresAlert(body.status)
+    ? await raiseOperationalAlert(
+      context.env,
+      `job-run:${context.req.param("id")}`,
+      `Scheduled job ${current.job} ended ${body.status}`,
+      {
+        runId: context.req.param("id"),
+        job: current.job,
+        status: body.status,
+        triggerKind: current.trigger_kind,
+        executorRunId: current.executor_run_id,
+        startedAt,
+        finishedAt: body.finishedAt ?? null,
+        error: body.error ?? null,
+        stats: body.stats,
+      },
+    )
+    : null;
+  return context.json({ ok: true, runId: context.req.param("id"), status: body.status, idempotent: false, alert });
 });
 
 app.post("/internal/capture-batches", zValidator("json", captureBatchCreateSchema), async (context) => {
