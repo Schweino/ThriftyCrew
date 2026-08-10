@@ -9,6 +9,33 @@ function modePredicate(mode: EngineSourceMode): string {
   return "1 = 1";
 }
 
+export async function readEngineSnapshotIdentity(env: WorkerEnv, mode: EngineSourceMode) {
+  const configuration = await env.DB.prepare("SELECT id, content_hash FROM configuration_versions WHERE active = 1").first<{ id: string; content_hash: string }>();
+  if (!configuration) throw new Error("No active engine configuration");
+  const currentRelease = await env.DB.prepare("SELECT release_id FROM current_releases WHERE market_id = 'omaha'").first<{ release_id: string }>();
+  if (!currentRelease) throw new Error("No current Omaha release");
+  const batches = await env.DB.prepare(
+    `WITH ranked AS (
+       SELECT b.id, b.source_id, b.coverage_mode, b.captured_to, s.capture_method,
+              ROW_NUMBER() OVER (PARTITION BY b.source_id ORDER BY b.captured_to DESC, b.promoted_at DESC, b.id DESC) AS ordinal
+         FROM capture_batches b JOIN capture_sources s ON s.id = b.source_id
+        WHERE b.status = 'promoted' AND ${modePredicate(mode)}
+     )
+     SELECT id, source_id, coverage_mode, captured_to, capture_method FROM ranked WHERE ordinal = 1 ORDER BY source_id`,
+  ).all<{ id: string; source_id: string; coverage_mode: string; captured_to: string; capture_method: string }>();
+  if (batches.results.length === 0) throw new Error(`No promoted ${mode} capture batches`);
+  const inputBatchIds = batches.results.map((batch) => batch.id).sort();
+  const inputHash = await digestHex(stableJson({ configurationId: configuration.id, configurationHash: configuration.content_hash, mode, inputBatchIds }));
+  return {
+    mode,
+    configurationId: configuration.id,
+    currentReleaseId: currentRelease.release_id,
+    inputHash,
+    inputBatchIds,
+    batches: batches.results,
+  };
+}
+
 export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode) {
   const configuration = await env.DB.prepare("SELECT id, content_hash FROM configuration_versions WHERE active = 1").first<{ id: string; content_hash: string }>();
   if (!configuration) throw new Error("No active engine configuration");

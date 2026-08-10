@@ -44,7 +44,7 @@ import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation, runGhostClobberDrill } from "./ghost-reconciliation";
 import { dispatchGithubJob, githubWorkflowRuns, raiseOperationalAlert, recordAudit, resolveOperationalAlert, runScheduledOperations } from "./operations";
-import { readEngineSnapshot, type EngineSourceMode } from "./engine-snapshot";
+import { readEngineSnapshot, readEngineSnapshotIdentity, type EngineSourceMode } from "./engine-snapshot";
 import { memberStatusHtml } from "./member-status";
 import { accrueMilestoneEvidence, milestoneEvidenceSummary } from "./milestone-evidence";
 import { runServerChaosDrill } from "./chaos-drills";
@@ -675,7 +675,9 @@ app.post("/internal/engine/parity", zValidator("json", engineParityReportSchema)
   const body = context.req.valid("json");
   const existing = await context.env.DB.prepare("SELECT status, diff_count FROM engine_parity_runs WHERE id = ?1").bind(body.runId).first<{ status: string; diff_count: number }>();
   if (existing) return context.json({ ok: existing.status === "passed", runId: body.runId, status: existing.status, diffCount: existing.diff_count, idempotent: true });
-  const snapshot = await readEngineSnapshot(context.env, body.mode);
+  // The CLI already computed parity from the immutable full snapshot. Rebuilding all candidate/product rows
+  // here only to authenticate four identity fields exceeded Worker CPU limits at production scale.
+  const snapshot = await readEngineSnapshotIdentity(context.env, body.mode);
   if (snapshot.currentReleaseId !== body.currentReleaseId || snapshot.configurationId !== body.configurationId || snapshot.inputHash !== body.inputHash || stableJson(snapshot.inputBatchIds) !== stableJson([...body.inputBatchIds].sort())) {
     return jsonError("parity report does not match the current immutable engine snapshot", 409);
   }
