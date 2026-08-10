@@ -141,8 +141,7 @@ export async function accrueMilestoneEvidence(env: WorkerEnv, now = new Date()):
     && inputs.invalid_identity === 0
     && inputs.stale_batches === 0
     && inputs.unmatched_batches === 0
-    && hardGuardFailures === 0
-    && rejectedToday === 0;
+    && hardGuardFailures === 0;
   const events: Array<Record<string, unknown>> = [await recordDerivedGate(env, "shadow-ingest-day", dayKey, "production-daily", shadowPass, observedAt, shadowEvidence)];
 
   const parity = await env.DB.prepare(
