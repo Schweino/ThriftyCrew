@@ -187,4 +187,31 @@ describe("source-specific capture-time parser contracts", () => {
     expect(accuracy.requiredVerificationRows).toBe(0);
     expect(accuracy.discoveryRows[0]!.riskReasons).not.toContain("likely-board-winner");
   });
+
+  it("does not spend verification budget on anomalies from authored-rule rejects", async () => {
+    const makeCandidate = (index: number, productKey: string, name: string, price: number, matchEligible: boolean) => {
+      const truth = browserCaptureTruthSchema.parse({
+        capturedAt: "2026-08-12T12:00:00.000Z", pageUrl: "https://www.samsclub.com/search?q=plums",
+        location: "Omaha Sam's Club", priceMode: "Pickup", pageIndex: 0, resultIndex: index,
+        pageState: { pageType: "search_results", pageTitle: "plums - Samsclub.com", query: "plums", resultRegionPresent: true, challengeDetected: false, currency: "USD", locale: "en-US", locationText: "Omaha Sam's Club", fulfillmentText: "Pickup" },
+        visible: { rawText: `$${(price / 100).toFixed(2)}`, priceMinor: price, productName: name, productKey, priceSemantics: { offerType: "everyday", condition: "none", unitPriceMinor: price, qualifyingQuantity: 1, totalPriceMinor: price, ambiguity: false } },
+        structured: { rawText: String(price / 100), priceMinor: price, productName: name, productKey, priceSemantics: { offerType: "everyday", condition: "none", unitPriceMinor: price, qualifyingQuantity: 1, totalPriceMinor: price, ambiguity: false } },
+        parser: { status: "exact", rule: "next-data-price-lines" },
+      });
+      return { termKey: "plums", query: "plums", productKey, name, sizeText: "", taxonomyPath: "Food/Produce", matchEligible, purchasePriceMinor: price, truth };
+    };
+    const candidates = [
+      makeCandidate(0, "plums", "Plums, 3.5 lbs.", 696, true),
+      makeCandidate(1, "blueberries", "Organic Blueberries, 18 oz.", 617, false),
+      makeCandidate(2, "blueberries", "Organic Blueberries, 18 oz.", 626, false),
+    ];
+    const accuracy = await buildBrowserCaptureAccuracy("sams", candidates, [], [{
+      outcome: "success", rowCount: candidates.length,
+      retrieval: { targetResultCount: candidates.length, loadedResultCount: candidates.length, availableResultCount: candidates.length, hasMoreResults: false, termination: "end-of-results" },
+    }]);
+
+    expect(accuracy.discoveryRows.filter((row) => row.productKey === "blueberries").every((row) => !row.verificationRequired)).toBe(true);
+    expect(accuracy.discoveryRows.filter((row) => row.productKey === "blueberries").every((row) => !row.riskReasons.includes("duplicate-price-conflict"))).toBe(true);
+    expect(accuracy.requiredVerificationRows).toBe(1);
+  });
 });

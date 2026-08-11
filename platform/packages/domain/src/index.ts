@@ -276,15 +276,16 @@ export async function buildBrowserCaptureAccuracy(
     const discoveryHash = await digestHex(stableJson(accuracyFingerprint(candidate)));
     const rowKey = `row-${(await digestHex(stableJson([candidate.termKey, candidate.productKey, candidate.truth.pageIndex, candidate.truth.resultIndex]))).slice(0, 28)}`;
     const likelyWinner = cheapest.has(String(index));
+    const verificationEligible = blindSampleEligible.has(String(index));
     const text = `${candidate.query} ${candidate.name} ${candidate.sizeText}`.toLowerCase();
     const reasons: BrowserCaptureAccuracyRow["riskReasons"] = [];
     if (likelyWinner) reasons.push("likely-board-winner");
     if (likelyWinner && /\b(?:apple|avocado|banana|berry|berries|lemon|lime|orange|peach|pear|pepper|potato|tomato|lettuce|onion|produce)\b/.test(text)) reasons.push("fresh-produce");
     if (likelyWinner && /\b(?:each|ea|ct|count|head|bunch)\b/.test(text)) reasons.push("count-priced");
-    if (/\b\d+\s*(?:\/|for)\s*\$?\d+/i.test(candidate.truth.visible.rawText)) reasons.push("multibuy");
-    if (candidate.purchasePriceMinor <= 10 || candidate.purchasePriceMinor >= 50_000) reasons.push("price-outlier");
+    if (verificationEligible && /\b\d+\s*(?:\/|for)\s*\$?\d+/i.test(candidate.truth.visible.rawText)) reasons.push("multibuy");
+    if (verificationEligible && (candidate.purchasePriceMinor <= 10 || candidate.purchasePriceMinor >= 50_000)) reasons.push("price-outlier");
     if (!candidate.taxonomyPath) reasons.push("missing-taxonomy");
-    if ((duplicatePrices.get(candidate.productKey)?.size ?? 0) > 1) reasons.push("duplicate-price-conflict");
+    if (verificationEligible && (duplicatePrices.get(candidate.productKey)?.size ?? 0) > 1) reasons.push("duplicate-price-conflict");
     const verificationRequired = reasons.some((reason) => reason !== "missing-taxonomy");
     if (!browserCaptureTruthPass(store, candidate, candidate.truth)
       || (candidate.truth.pageState?.pageType === "search_results" && normalizeName(candidate.truth.pageState.query ?? "") !== normalizeName(candidate.query))) allTruthPass = false;
