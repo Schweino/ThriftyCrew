@@ -154,16 +154,21 @@ async function captureCanary(tab, store, screenshotSha256) {
   return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: config.location, priceMode: config.priceMode, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
 }
 
-export async function captureNextDataChunk({ tab, store, terms, file, screenshotSha256 }) {
+export async function captureNextDataChunk({ tab, store, terms, file, screenshotSha256, interTermDelayMs }) {
   if (!CONFIG[store]) throw new Error("next-data adapter supports sams or walmart");
-  if (!Array.isArray(terms) || terms.length < 1 || terms.length > 20) throw new Error(`${store} chunk requires 1-20 terms`);
+  const maxTerms = store === "sams" ? 10 : 20;
+  const effectiveDelayMs = interTermDelayMs ?? (store === "sams" ? 2_000 : 0);
+  if (!Array.isArray(terms) || terms.length < 1 || terms.length > maxTerms) throw new Error(`${store} chunk requires 1-${maxTerms} terms`);
+  if (!Number.isInteger(effectiveDelayMs) || effectiveDelayMs < 0 || effectiveDelayMs > 30_000) throw new Error(`${store} inter-term delay must be 0-30000ms`);
   const canary = await captureCanary(tab, store, screenshotSha256);
   const results = [];
-  for (const query of terms) {
+  for (let index = 0; index < terms.length; index += 1) {
+    const query = terms[index];
     const captured = await captureTerm(tab, store, query);
     results.push(captured);
     await atomicJson(file, { version: 2, phase: "discovery", store, canary, terms: results.map((result) => result.term), rows: results.flatMap((result) => result.rows) });
     if (captured.blocked) break;
+    if (index < terms.length - 1 && effectiveDelayMs > 0) await tab.playwright.waitForTimeout(effectiveDelayMs);
   }
   return { file, attempted: results.length, rows: results.reduce((total, result) => total + result.rows.length, 0), blocked: results.some((result) => result.blocked), rejected: results.filter((result) => result.term.outcome === "rejected").map((result) => ({ query: result.term.query, reason: result.term.reason })), empty: results.filter((result) => result.term.outcome === "empty").map((result) => result.term.query) };
 }

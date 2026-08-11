@@ -84,6 +84,10 @@ Verify an Omaha club is selected. Build the priority order with
 first-party taxonomy as `departmentName/category.categoryPathId`. Keep broad candidate sets, write a UTF-8 `q|n|lp|up|id|size|taxonomy_path|url|image_url` capture, and run `grocery/build-sams-deals.ps1`. Do not return or persist raw
 tracking/cookie-bearing product objects.
 
+Use `scripts/browser-capture-adapters/next-data-v2.mjs` with no more than ten Sam's terms per chunk and at least two
+seconds between term navigations. A challenge/block ends the Sam's lane immediately; do not retry it in the same
+cycle. Keep Sam's isolated from Walmart so either retailer can cool down without pausing the other.
+
 ### Aldi
 
 Verify `ALDI - OLA 42 - Omaha` and independently verify `In-Store`; delivery/pickup prices are not acceptable.
