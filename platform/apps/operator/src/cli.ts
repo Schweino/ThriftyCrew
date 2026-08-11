@@ -11,7 +11,7 @@ import { generateLegacyConfiguration } from "./config";
 import { buildNativeParityReport, compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot } from "@thriftycrew/engine";
 import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
 import { checkAgentRegistry, readAgentRegistry } from "./agents";
-import { browserCaptureCycleStatus, captureQueueStatus, defaultCaptureQueueRoot, drainCaptureQueue, enqueueCapture, PermanentCaptureError, reconcileCaptureQueueRemote, verifyCaptureQueueFilesystem } from "./capture-queue";
+import { browserCaptureCycleStatus, captureQueueStatus, compactPromotedCaptureQueue, defaultCaptureQueueRoot, drainCaptureQueue, enqueueCapture, markCaptureEvidenceUploaded, PermanentCaptureError, reconcileCaptureQueueRemote, verifyCaptureQueueFilesystem } from "./capture-queue";
 import { findLatestRegularCapture, omahaDateKey, parseServerCaptureStore, readFreshRegularCapture, SERVER_CAPTURE_STORES } from "./current-captures";
 import { appendCaptureChunk, buildCaptureSessionWorklist, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession } from "./capture-session";
 import { agentJobRunFields } from "./job-run";
@@ -919,17 +919,28 @@ if (command === "status") {
           : source;
         return { body, kind: evidence.kind, contentType: evidence.contentType };
       }));
-      const ingestion = await ingestDirectCapture(client, job.artifact, artifactBody, additionalEvidence, { promote: false });
-      if (!ingestion.ok) throw new PermanentCaptureError(`capture batch ${String(ingestion.batchId)} was rejected: ${stableJson(ingestion)}`);
+      const ingestion = await ingestDirectCapture(client, job.artifact, artifactBody, additionalEvidence, {
+        promote: false,
+        ...(job.manifest.browserEvidenceAttestation ? { browserEvidenceAttestation: job.manifest.browserEvidenceAttestation } : {}),
+        uploadedEvidenceSha256: new Set((job.manifest.uploadedEvidence ?? []).map((entry) => entry.sha256)),
+        onEvidenceUploaded: async ({ sha256, evidenceId }) => markCaptureEvidenceUploaded(job, { sha256, evidenceId }),
+      });
+      if (!ingestion.ok) {
+        const seal = ingestion.seal as Record<string, unknown> | undefined;
+        throw new PermanentCaptureError(`capture batch ${String(ingestion.batchId)} was rejected (${String(seal?.status ?? ingestion.status ?? "unknown")}): ${String(seal?.error ?? "capture guards failed")}`);
+      }
       return ingestion;
     }, { maxJobs });
     result = drained;
     if (!drained.ok) process.exitCode = 2;
+  } else if (action === "compact") {
+    result = { ok: true, ...(await compactPromotedCaptureQueue(root)) };
   } else if (action === "status" || action === "watchdog") {
     const watchdogClient = action === "watchdog" ? await mutationClient() : null;
     const reconciliation = watchdogClient
       ? await reconcileCaptureQueueRemote(root, (batchId) => watchdogClient.request(`/internal/capture-batches/${encodeURIComponent(batchId)}/status`))
       : null;
+    const compaction = watchdogClient ? await compactPromotedCaptureQueue(root) : null;
     const filesystem = await verifyCaptureQueueFilesystem(root);
     const status = await captureQueueStatus(root, {
       maxPendingMinutes: Number(process.env.TC_CAPTURE_QUEUE_MAX_PENDING_MINUTES ?? 180),
@@ -937,7 +948,7 @@ if (command === "status") {
     });
     const cycle = await browserCaptureCycleStatus(root);
     const healthy = status.ok && !cycle.alertDue && (reconciliation?.errors ?? 0) === 0;
-    const queueResult = { ...status, ok: healthy, filesystem, cycle, ...(reconciliation ? { reconciliation } : {}) };
+    const queueResult = { ...status, ok: healthy, filesystem, cycle, ...(reconciliation ? { reconciliation } : {}), ...(compaction ? { compaction } : {}) };
     result = queueResult;
     if (action === "watchdog") {
       const alert = await watchdogClient!.request("/internal/operational-alerts", { json: {
@@ -962,7 +973,7 @@ if (command === "status") {
       if (!healthy) process.exitCode = 2;
     }
   } else {
-    throw new Error("tc capture queue requires enqueue, drain, status, or watchdog");
+    throw new Error("tc capture queue requires enqueue, drain, status, watchdog, or compact");
   }
 } else if (command === "match" && subcommand === "batch") {
   const batchId = arguments_[0];

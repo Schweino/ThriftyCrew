@@ -1,5 +1,6 @@
 import { mkdir, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { browserLanePolicy, recordBrowserLaneResult, withBrowserStoreLane } from "./lane-policy.mjs";
 
 const LOCATION = "ALDI - OLA 42 - Omaha";
 const PRICE_MODE = "In-Store";
@@ -9,6 +10,11 @@ const DEFAULT_INTER_TERM_DELAY_MS = 5_000;
 
 function normalize(value) {
   return String(value ?? "").trim().toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function expandVerification(target, verification) {
+  const rows = Array.isArray(target.satisfies) && target.satisfies.length ? target.satisfies : [target];
+  return rows.map((row) => ({ ...verification, rowKey: row.rowKey, discoveryHash: row.discoveryHash }));
 }
 
 async function atomicJson(file, value) {
@@ -144,44 +150,51 @@ async function captureCanary(tab, screenshotSha256) {
   return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: LOCATION, priceMode: PRICE_MODE, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
 }
 
-export async function captureAldiChunk({ tab, terms, file, screenshotSha256, interTermDelayMs = DEFAULT_INTER_TERM_DELAY_MS }) {
-  if (!Array.isArray(terms) || terms.length < 1 || terms.length > MAX_TERMS_PER_CHUNK) throw new Error(`ALDI chunk requires 1-${MAX_TERMS_PER_CHUNK} terms`);
+async function captureAldiChunkInternal({ tab, terms, file, screenshotSha256, interTermDelayMs = DEFAULT_INTER_TERM_DELAY_MS }) {
+  const policy = await browserLanePolicy("aldi");
+  if (!Array.isArray(terms) || terms.length < 1 || terms.length > policy.maxTerms) throw new Error(`ALDI chunk requires 1-${policy.maxTerms} terms`);
+  interTermDelayMs = Math.max(interTermDelayMs, policy.dynamicDelayMs);
   if (!Number.isInteger(interTermDelayMs) || interTermDelayMs < 0 || interTermDelayMs > 30_000) throw new Error("ALDI inter-term delay must be 0-30000ms");
   const canary = await captureCanary(tab, screenshotSha256);
   const results = [];
+  const chunkStarted = Date.now();
   for (let index = 0; index < terms.length; index += 1) {
     const query = terms[index];
+    const termStarted = Date.now();
     const captured = await captureTerm(tab, query);
+    await recordBrowserLaneResult("aldi", captured.term.outcome, Date.now() - termStarted);
     results.push(captured);
     await atomicJson(file, { version: 2, phase: "discovery", store: "aldi", canary, terms: results.map((result) => result.term), rows: results.flatMap((result) => result.rows) });
     if (captured.blocked) break;
+    if (Date.now() - chunkStarted >= 45_000) break;
     if (index < terms.length - 1 && interTermDelayMs > 0) await tab.playwright.waitForTimeout(interTermDelayMs);
   }
   return { file, attempted: results.length, rows: results.reduce((total, result) => total + result.rows.length, 0), blocked: results.some((result) => result.blocked), rejected: results.filter((result) => result.term.outcome === "rejected").map((result) => ({ query: result.term.query, reason: result.term.reason })), empty: results.filter((result) => result.term.outcome === "empty").map((result) => result.term.query) };
 }
 
-export async function captureAldiVerificationChunk({ tab, targets, file, screenshotSha256, interTermDelayMs = DEFAULT_INTER_TERM_DELAY_MS }) {
-  if (!Array.isArray(targets) || targets.length < 1 || targets.length > MAX_TERMS_PER_CHUNK) throw new Error(`ALDI verification chunk requires 1-${MAX_TERMS_PER_CHUNK} targets`);
+async function captureAldiVerificationChunkInternal({ tab, targets, file, screenshotSha256, interTermDelayMs = DEFAULT_INTER_TERM_DELAY_MS }) {
+  const policy = await browserLanePolicy("aldi");
+  if (!Array.isArray(targets) || targets.length < 1 || targets.length > policy.maxTerms) throw new Error(`ALDI verification chunk requires 1-${policy.maxTerms} targets`);
+  interTermDelayMs = Math.max(interTermDelayMs, policy.dynamicDelayMs);
   if (!Number.isInteger(interTermDelayMs) || interTermDelayMs < 0 || interTermDelayMs > 30_000) throw new Error("ALDI verification inter-target delay must be 0-30000ms");
   const canary = await captureCanary(tab, screenshotSha256);
   const verifications = [];
+  const chunkStarted = Date.now();
   for (let index = 0; index < targets.length; index += 1) {
     const target = targets[index];
     const captured = await captureTerm(tab, target.query);
     const observedAt = new Date().toISOString();
     if (captured.blocked || captured.term.outcome === "blocked") {
-      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "blocked", reason: captured.term.reason || "ALDI challenge detected during independent verification" });
+      verifications.push(...expandVerification(target, { observedAt, outcome: "blocked", reason: captured.term.reason || "ALDI challenge detected during independent verification" }));
       await atomicJson(file, { version: 2, phase: "verification", store: "aldi", canary, verifications });
       break;
     }
     const row = captured.rows.find((candidate) => candidate.href === target.productKey);
     if (!row) {
-      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "missing", reason: captured.term.reason || "target product was not present in the independently reloaded result envelope" });
+      verifications.push(...expandVerification(target, { observedAt, outcome: "missing", reason: captured.term.reason || "target product was not present in the independently reloaded result envelope" }));
     } else {
       const truth = { ...row._capture, capturedAt: observedAt };
-      verifications.push({
-        rowKey: target.rowKey,
-        discoveryHash: target.discoveryHash,
+      verifications.push(...expandVerification(target, {
         observedAt,
         outcome: "observed",
         productKey: row.href,
@@ -189,9 +202,10 @@ export async function captureAldiVerificationChunk({ tab, targets, file, screens
         sizeText: row.size,
         purchasePriceMinor: Math.round(Number(String(row.prices).replace(/[^0-9.]/g, "")) * 100),
         truth,
-      });
+      }));
     }
     await atomicJson(file, { version: 2, phase: "verification", store: "aldi", canary, verifications });
+    if (Date.now() - chunkStarted >= 45_000) break;
     if (index < targets.length - 1 && interTermDelayMs > 0) await tab.playwright.waitForTimeout(interTermDelayMs);
   }
   return {
@@ -200,5 +214,14 @@ export async function captureAldiVerificationChunk({ tab, targets, file, screens
     observed: verifications.filter((item) => item.outcome === "observed").length,
     missing: verifications.filter((item) => item.outcome === "missing").map((item) => item.rowKey),
     blocked: verifications.some((item) => item.outcome === "blocked"),
+    budgetExhausted: Date.now() - chunkStarted >= 45_000,
   };
+}
+
+export async function captureAldiChunk(options) {
+  return withBrowserStoreLane("aldi", () => captureAldiChunkInternal(options));
+}
+
+export async function captureAldiVerificationChunk(options) {
+  return withBrowserStoreLane("aldi", () => captureAldiVerificationChunkInternal(options));
 }

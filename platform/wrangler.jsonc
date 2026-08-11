@@ -60,6 +60,11 @@
       "name": "tc-grocery-v3-d1-restore-drill",
       "binding": "RESTORE_WORKFLOW",
       "class_name": "D1RestoreDrillWorkflow"
+    },
+    {
+      "name": "tc-grocery-v3-capture-validation",
+      "binding": "CAPTURE_VALIDATION_WORKFLOW",
+      "class_name": "CaptureValidationWorkflow"
     }
   ],
   "triggers": {

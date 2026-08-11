@@ -86,6 +86,7 @@ import { cachedPublicJson, PublicJsonError, releaseEtag } from "./public-cache";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 export { D1RestoreDrillWorkflow } from "./restore-workflow";
+export { CaptureValidationWorkflow } from "./capture-validation-workflow";
 
 type Bindings = { Bindings: WorkerEnv; Variables: { identity: MutationIdentity } };
 const app = new Hono<Bindings>();
@@ -286,6 +287,8 @@ app.get("/api/v2/status", async (context) => {
                 projected_rows, observation_count, taxonomy_rows, accuracy_policy_version, discovery_rows,
                 required_verification_rows, matched_verification_rows, unresolved_verification_rows,
                 price_agreement_rows, single_channel_rows, anomaly_rows, retrieval_complete_terms, recorded_at,
+                unique_products, discovery_edges, duplicate_product_references, product_reads_required,
+                verification_reuse, immutable_shard_count,
                 ROW_NUMBER() OVER (PARTITION BY source_id ORDER BY cycle_start DESC, recorded_at DESC) AS ordinal
            FROM browser_capture_metrics
        )
@@ -295,6 +298,8 @@ app.get("/api/v2/status", async (context) => {
               projected_rows, observation_count, taxonomy_rows, accuracy_policy_version, discovery_rows,
               required_verification_rows, matched_verification_rows, unresolved_verification_rows,
               price_agreement_rows, single_channel_rows, anomaly_rows, retrieval_complete_terms, recorded_at
+              , unique_products, discovery_edges, duplicate_product_references, product_reads_required,
+                verification_reuse, immutable_shard_count
          FROM ranked WHERE ordinal = 1 ORDER BY source_id`,
     ).all(),
   ]);
@@ -830,6 +835,10 @@ app.get("/internal/capture-batches/:id/status", async (context) => {
   const evidence = await context.env.DB.prepare(
     `SELECT kind, COUNT(*) AS count FROM evidence_objects WHERE batch_id = ?1 GROUP BY kind ORDER BY kind`,
   ).bind(batch.id).all<{ kind: string; count: number }>();
+  const validation = await context.env.DB.prepare(
+    `SELECT workflow_instance_id, status, attempts, result_status, error, created_at, started_at, completed_at
+       FROM capture_validation_jobs WHERE batch_id = ?1`,
+  ).bind(batch.id).first<Record<string, unknown>>();
   return context.json({
     ok: batch.status === "promoted" || batch.status === "superseded",
     batchId: batch.id,
@@ -838,6 +847,7 @@ app.get("/internal/capture-batches/:id/status", async (context) => {
     coverageMode: batch.coverage_mode,
     capturedTo: batch.captured_to,
     matching: matching ?? null,
+    validation: validation ?? null,
     evidence: evidence.results,
   });
 });
@@ -853,6 +863,8 @@ app.get("/internal/capture-metrics", async (context) => {
             taxonomy_rows, accuracy_policy_version, discovery_rows, required_verification_rows,
             matched_verification_rows, unresolved_verification_rows, price_agreement_rows,
             single_channel_rows, anomaly_rows, retrieval_complete_terms, recorded_at
+            , unique_products, discovery_edges, duplicate_product_references, product_reads_required,
+              verification_reuse, immutable_shard_count
        FROM browser_capture_metrics
       ORDER BY recorded_at DESC, source_id LIMIT ?1`,
   ).bind(limit).all();
@@ -2053,6 +2065,49 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   const body = context.req.valid("json");
   if (new Set(body.terms.map((term) => term.termKey)).size !== body.terms.length) return jsonError("capture term keys must be unique", 422);
   if (new Set(body.terms.map((term) => term.ordinal)).size !== body.terms.length) return jsonError("capture term ordinals must be unique", 422);
+  if (batch.capture_method === "browser") {
+    const workflowHeader = context.req.header("x-tc-validation-workflow");
+    let workflowInstanceId = `capture-${batch.id}`.replace(/[^a-zA-Z0-9_-]/g, "-").slice(0, 100);
+    if (!workflowHeader) {
+      const sealJson = stableJson(body);
+      const prior = await context.env.DB.prepare(
+        "SELECT seal_json, status, result_status, attempts, workflow_instance_id FROM capture_validation_jobs WHERE batch_id = ?1",
+      ).bind(batch.id).first<{ seal_json: string; status: string; result_status: string | null; attempts: number; workflow_instance_id: string }>();
+      if (prior && prior.seal_json !== sealJson) return jsonError("capture validation job is already bound to different seal content", 409);
+      if (!prior) {
+        await context.env.DB.prepare(
+          `INSERT INTO capture_validation_jobs (batch_id, workflow_instance_id, requested_by, seal_json, status)
+           VALUES (?1, ?2, ?3, ?4, 'pending')`,
+        ).bind(batch.id, workflowInstanceId, identity.agentId, sealJson).run();
+      } else if (prior.status === "failed") {
+        workflowInstanceId = `${workflowInstanceId.slice(0, 80)}-retry-${prior.attempts + 1}`;
+        await context.env.DB.prepare(
+          `UPDATE capture_validation_jobs SET workflow_instance_id = ?2, requested_by = ?3, status = 'pending',
+             result_status = NULL, error = NULL, completed_at = NULL WHERE batch_id = ?1`,
+        ).bind(batch.id, workflowInstanceId, identity.agentId).run();
+      } else {
+        workflowInstanceId = prior.workflow_instance_id;
+      }
+      if (prior?.status === "completed") {
+        return context.json({ ok: prior.result_status === "validated", batchId: batch.id, status: prior.result_status ?? "rejected", validationWorkflow: workflowInstanceId }, prior.result_status === "validated" ? 200 : 422);
+      }
+      if (!context.env.CAPTURE_VALIDATION_WORKFLOW) throw new Error("capture validation workflow binding is unavailable");
+      try {
+        await context.env.CAPTURE_VALIDATION_WORKFLOW.create({ id: workflowInstanceId, params: { batchId: batch.id } });
+      } catch (error) {
+        // A client retry races safely with the already-created deterministic instance.
+        const message = error instanceof Error ? error.message : String(error);
+        if (!/already|exist|duplicate|conflict/i.test(message)) throw error;
+      }
+      return context.json({ ok: true, batchId: batch.id, status: "validating", validationWorkflow: workflowInstanceId }, 202);
+    }
+    const job = await context.env.DB.prepare(
+      "SELECT workflow_instance_id, seal_json FROM capture_validation_jobs WHERE batch_id = ?1",
+    ).bind(batch.id).first<{ workflow_instance_id: string; seal_json: string }>();
+    if (!job || job.workflow_instance_id !== workflowHeader || job.seal_json !== stableJson(body) || identity.role !== "operator") {
+      return jsonError("capture validation workflow proof is invalid", 403);
+    }
+  }
   const attempted = body.terms.filter((term) => term.outcome !== "not_attempted").length;
   const successful = body.terms.filter((term) => term.outcome === "success").length;
   const empty = body.terms.filter((term) => term.outcome === "empty").length;
@@ -2199,11 +2254,13 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
          term_duration_p50_ms, term_duration_p95_ms, projected_rows, observation_count, taxonomy_rows,
          accuracy_policy_version, discovery_rows, required_verification_rows, matched_verification_rows,
          unresolved_verification_rows, price_agreement_rows, single_channel_rows, anomaly_rows, retrieval_complete_terms,
-         page_state_attested_rows, promotion_semantics_rows
+         page_state_attested_rows, promotion_semantics_rows, unique_products, discovery_edges,
+         duplicate_product_references, product_reads_required, verification_reuse, immutable_shard_count
        ) VALUES (
          ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10,
          ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20,
-         ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29, ?30, ?31
+         ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29, ?30, ?31,
+         ?32, ?33, ?34, ?35, ?36, ?37
        )`,
     ).bind(
       batch.id, metrics.sessionId, metrics.sourceId, metrics.cycleStart, metrics.coverageMode,
@@ -2213,6 +2270,8 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
       metrics.accuracyPolicyVersion, metrics.discoveryRows, metrics.requiredVerificationRows, metrics.matchedVerificationRows,
       metrics.unresolvedVerificationRows, metrics.priceAgreementRows, metrics.singleChannelRows, metrics.anomalyRows, metrics.retrievalCompleteTerms,
       metrics.pageStateAttestedRows, metrics.promotionSemanticsRows,
+      metrics.uniqueProducts ?? 0, metrics.discoveryEdges ?? 0, metrics.duplicateProductReferences ?? 0,
+      metrics.productReadsRequired ?? 0, metrics.verificationReuse ?? 0, metrics.immutableShardCount ?? 0,
     ));
   }
   for (const [guardId, pass, eligible, examined, detail] of [

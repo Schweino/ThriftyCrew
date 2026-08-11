@@ -99,6 +99,12 @@ export interface BrowserCaptureMetricSummary {
   retrievalCompleteTerms: number;
   pageStateAttestedRows: number;
   promotionSemanticsRows: number;
+  uniqueProducts: number | undefined;
+  discoveryEdges: number | undefined;
+  duplicateProductReferences: number | undefined;
+  productReadsRequired: number | undefined;
+  verificationReuse: number | undefined;
+  immutableShardCount: number | undefined;
 }
 
 function percentile(values: readonly number[], percentileValue: number): number {
@@ -139,6 +145,13 @@ export function summarizeBrowserCaptureSession(session: BrowserCaptureSession): 
     retrievalCompleteTerms: session.version === 2 ? session.accuracy.retrievalCompleteTerms : 0,
     pageStateAttestedRows: session.version === 2 ? session.accuracy.pageStateAttestedRows ?? 0 : 0,
     promotionSemanticsRows: session.version === 2 ? session.accuracy.promotionSemanticsRows ?? 0 : 0,
+    uniqueProducts: session.version === 2 ? session.productEvidence?.uniqueProducts : undefined,
+    discoveryEdges: session.version === 2 ? session.productEvidence?.discoveryEdges.length : undefined,
+    duplicateProductReferences: session.version === 2 ? session.productEvidence?.duplicateProductReferences : undefined,
+    productReadsRequired: session.version === 2 ? session.productEvidence?.productReadsRequired : undefined,
+    verificationReuse: session.version === 2 && session.productEvidence
+      ? Math.max(0, session.productEvidence.rowVerificationsSatisfied - session.productEvidence.verificationReads.length) : undefined,
+    immutableShardCount: session.version === 2 ? session.productEvidence?.immutableShards.length : undefined,
   };
 }
 
@@ -181,6 +194,12 @@ export async function validateBrowserCaptureEvidence(
       coverageMode: attestation.coverageMode,
       expectedTerms: attestation.expectedTerms,
       ...metric,
+      uniqueProducts: metric.uniqueProducts,
+      discoveryEdges: metric.discoveryEdges,
+      duplicateProductReferences: metric.duplicateProductReferences,
+      productReadsRequired: metric.productReadsRequired,
+      verificationReuse: metric.verificationReuse,
+      immutableShardCount: metric.immutableShardCount,
     };
     return {
       pass,

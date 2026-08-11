@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { buildBrowserCaptureAccuracy, digestHex, stableJson } from "@thriftycrew/domain";
-import { browserCaptureCycleStatus, captureQueueStatus, drainCaptureQueue, enqueueCapture, PermanentCaptureError, reconcileCaptureQueueRemote, verifyCaptureQueueFilesystem } from "./capture-queue";
+import { browserCaptureCycleStatus, captureQueueStatus, compactPromotedCaptureQueue, drainCaptureQueue, enqueueCapture, PermanentCaptureError, reconcileCaptureQueueRemote, verifyCaptureQueueFilesystem } from "./capture-queue";
 
 const roots: string[] = [];
 
@@ -175,6 +175,9 @@ describe("PC browser capture queue", () => {
     expect(await browserCaptureCycleStatus(input.root, new Date("2026-08-12T16:00:00.000Z"))).toMatchObject({ status: "due", inflight: ["direct-walmart-browser"] });
     expect(await reconcileCaptureQueueRemote(input.root, async () => ({ status: "promoted", matching: { status: "passed" } }))).toMatchObject({ checked: 1, ready: 1, errors: 0 });
     expect(await browserCaptureCycleStatus(input.root, new Date("2026-08-12T16:01:00.000Z"))).toMatchObject({ status: "due", completed: ["direct-walmart-browser"] });
+    expect(await compactPromotedCaptureQueue(input.root, new Date("2026-08-12T16:02:00.000Z"))).toMatchObject({ checked: 1, compacted: 1 });
+    expect(await verifyCaptureQueueFilesystem(input.root)).toMatchObject({ ok: true, jobs: 1 });
+    expect(await browserCaptureCycleStatus(input.root, new Date("2026-08-12T16:03:00.000Z"))).toMatchObject({ completed: ["direct-walmart-browser"] });
     const receipt = JSON.parse(await readFile(path.join(queued.directory, "receipt.json"), "utf8"));
     expect(receipt.remote).toMatchObject({ status: "promoted", matching: { status: "passed" } });
   });

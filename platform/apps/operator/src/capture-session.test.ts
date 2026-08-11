@@ -128,7 +128,7 @@ describe("resumable browser capture sessions", () => {
     await expect(buildCaptureSessionWorklist(pullOrder, rescue, output)).resolves.toMatchObject({
       pullOrderTerms: 2, rescueTerms: 2, rescueTermsInPullOrder: 1, rescueOnlyTerms: 1, totalTerms: 3,
     });
-    expect(JSON.parse(await readFile(output, "utf8"))).toEqual({ version: 1, terms: ["large eggs", "rye bread", "milk gallon"] });
+    expect(JSON.parse(await readFile(output, "utf8"))).toMatchObject({ version: 2, terms: ["large eggs", "rye bread", "milk gallon"], aliases: [], planner: { historyQueries: 0, shadowCoverageTerms: 2 } });
   });
 
   it("hashes the worklist, replaces a failed term with its retry, and emits a full real term ledger", async () => {
@@ -160,7 +160,11 @@ describe("resumable browser capture sessions", () => {
     const projected = path.join(root, "walmart-capture.csv");
     const manifestFile = path.join(root, "capture-session-manifest.json");
     const manifest = await finalizeCaptureSession(directory, projected, manifestFile, "2026-08-12T15:08:00.000Z");
-    expect(manifest).toMatchObject({ version: 2, coverageMode: "full", expectedTerms: 2, accuracy: { pass: true, requiredVerificationRows: 2, matchedVerificationRows: 2 } });
+    expect(manifest).toMatchObject({
+      version: 2, coverageMode: "full", expectedTerms: 2,
+      accuracy: { pass: true, requiredVerificationRows: 2, matchedVerificationRows: 2 },
+      productEvidence: { version: 1, uniqueProducts: 2, duplicateProductReferences: 0, productReadsRequired: 2, rowVerificationsSatisfied: 2 },
+    });
     expect(manifest.terms).toEqual([
       expect.objectContaining({ query: "milk", ordinal: 0, outcome: "success", attempts: 1, rowCount: 1 }),
       expect.objectContaining({ query: "eggs", ordinal: 1, outcome: "success", attempts: 2, rowCount: 1 }),

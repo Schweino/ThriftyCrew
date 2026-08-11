@@ -1,5 +1,6 @@
 import { mkdir, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { browserLanePolicy, recordBrowserLaneResult, withBrowserStoreLane } from "./lane-policy.mjs";
 
 const LOCATION = "Omaha 17070 Audrey Street";
 const PRICE_MODE = "In-Store";
@@ -7,6 +8,11 @@ const TARGET_RESULTS = 25;
 
 function normalize(value) {
   return String(value ?? "").trim().toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function expandVerification(target, verification) {
+  const rows = Array.isArray(target.satisfies) && target.satisfies.length ? target.satisfies : [target];
+  return rows.map((row) => ({ ...verification, rowKey: row.rowKey, discoveryHash: row.discoveryHash }));
 }
 
 export function validatedRegularPrice(currentPriceMinor, candidateRegularPriceMinor) {
@@ -346,16 +352,23 @@ async function captureExactNameVerification(tab, target, detailReason) {
   };
 }
 
-export async function captureFarewayChunk({ tab, terms, file, screenshotSha256 }) {
-  if (!Array.isArray(terms) || terms.length < 1 || terms.length > 20) throw new Error("Fareway chunk requires 1-20 terms");
+async function captureFarewayChunkInternal({ tab, terms, file, screenshotSha256 }) {
+  const policy = await browserLanePolicy("fareway");
+  if (!Array.isArray(terms) || terms.length < 1 || terms.length > policy.maxTerms) throw new Error(`Fareway chunk requires 1-${policy.maxTerms} terms`);
   const canary = await captureCanary(tab, screenshotSha256);
   const results = [];
-  for (const query of terms) {
+  const chunkStarted = Date.now();
+  for (let index = 0; index < terms.length; index += 1) {
+    const query = terms[index];
+    const termStarted = Date.now();
     const captured = await captureTerm(tab, query);
+    await recordBrowserLaneResult("fareway", captured.term.outcome, Date.now() - termStarted);
     results.push(captured);
     const chunk = { version: 2, phase: "discovery", store: "fareway", canary, terms: results.map((result) => result.term), rows: results.flatMap((result) => result.rows) };
     await atomicJson(file, chunk);
     if (captured.blocked) break;
+    if (Date.now() - chunkStarted >= 45_000) break;
+    if (index < terms.length - 1) await tab.playwright.waitForTimeout(policy.dynamicDelayMs);
   }
   return {
     file,
@@ -367,11 +380,14 @@ export async function captureFarewayChunk({ tab, terms, file, screenshotSha256 }
   };
 }
 
-export async function captureFarewayVerificationChunk({ tab, targets, file, screenshotSha256 }) {
-  if (!Array.isArray(targets) || targets.length < 1 || targets.length > 20) throw new Error("Fareway verification chunk requires 1-20 targets");
+async function captureFarewayVerificationChunkInternal({ tab, targets, file, screenshotSha256 }) {
+  const policy = await browserLanePolicy("fareway");
+  if (!Array.isArray(targets) || targets.length < 1 || targets.length > policy.maxTerms) throw new Error(`Fareway verification chunk requires 1-${policy.maxTerms} targets`);
   const canary = await captureCanary(tab, screenshotSha256);
   const verifications = [];
-  for (const target of targets) {
+  const chunkStarted = Date.now();
+  for (let index = 0; index < targets.length; index += 1) {
+    const target = targets[index];
     const detail = await captureProductDetail(tab, target);
     const captured = detail.outcome === "blocked" || verificationMatchesTarget(target, detail)
       ? detail
@@ -380,16 +396,14 @@ export async function captureFarewayVerificationChunk({ tab, targets, file, scre
         : (detail.reason || "product detail was not independently readable"));
     const observedAt = captured.observedAt || new Date().toISOString();
     if (captured.outcome === "blocked") {
-      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "blocked", reason: captured.reason || "Fareway challenge detected during independent verification" });
+      verifications.push(...expandVerification(target, { observedAt, outcome: "blocked", reason: captured.reason || "Fareway challenge detected during independent verification" }));
       await atomicJson(file, { version: 2, phase: "verification", store: "fareway", canary, verifications });
       break;
     }
     if (captured.outcome !== "observed") {
-      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "missing", reason: captured.reason || "target product detail was not independently readable" });
+      verifications.push(...expandVerification(target, { observedAt, outcome: "missing", reason: captured.reason || "target product detail was not independently readable" }));
     } else {
-      verifications.push({
-        rowKey: target.rowKey,
-        discoveryHash: target.discoveryHash,
+      verifications.push(...expandVerification(target, {
         observedAt,
         outcome: "observed",
         productKey: captured.productKey,
@@ -397,9 +411,11 @@ export async function captureFarewayVerificationChunk({ tab, targets, file, scre
         sizeText: captured.sizeText,
         purchasePriceMinor: captured.purchasePriceMinor,
         truth: captured.truth,
-      });
+      }));
     }
     await atomicJson(file, { version: 2, phase: "verification", store: "fareway", canary, verifications });
+    if (Date.now() - chunkStarted >= 45_000) break;
+    if (index < targets.length - 1) await tab.playwright.waitForTimeout(policy.dynamicDelayMs);
   }
   return {
     file,
@@ -407,5 +423,14 @@ export async function captureFarewayVerificationChunk({ tab, targets, file, scre
     observed: verifications.filter((item) => item.outcome === "observed").length,
     missing: verifications.filter((item) => item.outcome === "missing").map((item) => item.rowKey),
     blocked: verifications.some((item) => item.outcome === "blocked"),
+    budgetExhausted: Date.now() - chunkStarted >= 45_000,
   };
+}
+
+export async function captureFarewayChunk(options) {
+  return withBrowserStoreLane("fareway", () => captureFarewayChunkInternal(options));
+}
+
+export async function captureFarewayVerificationChunk(options) {
+  return withBrowserStoreLane("fareway", () => captureFarewayVerificationChunkInternal(options));
 }

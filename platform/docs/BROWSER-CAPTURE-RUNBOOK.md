@@ -88,8 +88,7 @@ Verify an Omaha club is selected. Build the priority order with
 first-party taxonomy as `departmentName/category.categoryPathId`. Keep broad candidate sets, write a UTF-8 `q|n|lp|up|id|size|taxonomy_path|url|image_url` capture, and run `grocery/build-sams-deals.ps1`. Do not return or persist raw
 tracking/cookie-bearing product objects.
 
-Use `scripts/browser-capture-adapters/next-data-v2.mjs` with no more than five Sam's terms per chunk and at least two
-seconds between term navigations. A challenge/block ends the Sam's lane immediately; do not retry it in the same
+Use `scripts/browser-capture-adapters/next-data-v2.mjs` with no more than three Sam's terms per chunk and the adaptive delay (never less than three seconds). A challenge/block ends the Sam's lane immediately; do not retry it in the same
 cycle. Keep Sam's isolated from Walmart so either retailer can cool down without pausing the other.
 
 ### Aldi
@@ -126,7 +125,7 @@ pnpm tc capture session worklist <pull-order.txt> <rescue-terms.txt-or-> <workli
 pnpm tc capture session init <aldi|fareway|sams|walmart> <worklist.txt> <session-directory> <started-at-iso>
 ```
 
-For every 10-20-term discovery chunk (except ALDI's three-term rate-limited chunks), write JSON containing `version: 2`, `phase: discovery`, `store`, one current
+For every adapter-bounded discovery chunk (Aldi 3, Fareway 4, Sam's 3, Walmart 5, with a 45-second soft start budget), write JSON containing `version: 2`, `phase: discovery`, `store`, one current
 location/mode `canary`, exact `terms` with `retrieval`, and projected `rows` with internal `_capture` truth.
 Append with `pnpm tc capture session append <session-directory> <chunk.json>`.
 Use `pnpm tc capture session status <session-directory>` to resume. A later successful retry replaces the earlier
@@ -138,7 +137,7 @@ After discovery is complete, create the deterministic independent second-pass wo
 pnpm tc capture session verification-plan <session-directory> <verification-plan.json>
 ```
 
-The plan includes likely lowest-price winners, a stable blind sample capped at 100 rows per store and drawn from
+The version-2 product-centric plan includes likely lowest-price winners, a stable blind sample capped at 100 rows per store and drawn from
 each query's strongest lexical matches, produce/count risk on those likely winners, and
 multi-buy/outlier/duplicate-price conflicts only among authored-match or strongest-match candidates that can affect
 the board. When a transitional query has no authored matcher or lexical match, all of its results remain eligible
@@ -152,7 +151,7 @@ navigation using `captureAldiVerificationChunk`, `captureFarewayVerificationChun
 `captureNextDataVerificationChunk` from the store adapter. Each adapter atomically checkpoints the chunk and stops
 its lane on a challenge. On resume, a target counts as complete only when the latest observed verification matches
 the plan's `rowKey` and current `discoveryHash`, and its `observedAt` is later than the target's
-`discoveryCapturedAt`. A refreshed discovery row must never be skipped because an old verification shares its row
+`discoveryCapturedAt`. One exact product read may satisfy all of the target's `satisfies` query edges; the adapter emits one independently hash-bound verification per row without repeating the navigation. A refreshed discovery row must never be skipped because an old verification shares its row
 key or unchanged hash. Fareway performs this second pass on the exact first-party product-detail URL because its
 search envelope is volatile; verification equality compares product identity, normalized name/size, price,
 location/mode, channels, and price semantics while the discovery hash separately binds the planned discovery row.
@@ -195,8 +194,7 @@ powershell -ExecutionPolicy Bypass -File platform/scripts/enqueue-browser-captur
 
 The wrapper verifies that the raw capture, manifest, and screenshot hashes bind to one session, builds and
 validates the V3 artifact, and atomically enqueues all three evidence classes. Image magic bytes and minimum
-dimensions are checked locally and again by the Worker. The installed five-minute client drains the queue with
-hashes, retries, receipts, and a source-scoped credential. Run the queue watchdog at the end. Do not call
+dimensions are checked locally and again by the Worker. The installed five-minute client drains the queue with cached local accuracy attestations, immutable product shards, per-object upload receipts, resumable hashes, and a source-scoped credential. Browser seal returns `202`; a Cloudflare Workflow performs validation under durable retries. After remote promotion and passed matching, the watchdog compresses the local artifact/evidence into a hash-verified recovery bundle and retires the originals. Run the queue watchdog at the end. Do not call
 `capture promote-ready-browser` from the PC automation; the engine identity owns matching and promotion.
 
 Success means every required source is remotely promoted (or later superseded), passed matching, and carries a
@@ -218,5 +216,5 @@ alert resolves automatically when those remote conditions recover.
 Sealing a browser batch records immutable performance telemetry from its verified capture-session manifest.
 Use `pnpm tc capture metrics [limit]` for recent history. The public `/api/v2/status` response includes only the
 latest aggregate per source under `browserCaptureTelemetry`. Review retries, total duration, p50/p95 term
-duration, projected-versus-accepted rows, and taxonomy coverage after each weekly cycle. A successful capture
+duration, unique products versus query edges, verification reuse, immutable shard count, projected-versus-accepted rows, and taxonomy coverage after each weekly cycle. A successful capture
 with rising latency, retries, or falling row/taxonomy yield is an early-warning signal even before the SLA fails.

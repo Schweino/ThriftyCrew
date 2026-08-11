@@ -217,6 +217,29 @@ export const browserCaptureVerificationSchema = z.object({
   }
 });
 
+const browserProductEvidenceSchema = z.object({
+  version: z.literal(1),
+  productSnapshots: z.array(z.object({
+    snapshotId: nonEmptyId, productKey: z.string().trim().min(1).max(300), name: z.string().trim().min(1).max(1000),
+    sizeText: z.string().trim().max(500), taxonomyPath: z.string().trim().max(3000).optional(),
+    purchasePriceMinor: z.number().int().nonnegative().max(10_000_000), semanticHash: sha256Hex, canonicalRowKey: nonEmptyId,
+  })).min(1).max(100_000),
+  discoveryEdges: z.array(z.object({
+    rowKey: nonEmptyId, termKey: nonEmptyId, query: z.string().trim().min(1).max(500), snapshotId: nonEmptyId,
+    discoveryHash: sha256Hex, riskReasons: browserCaptureAccuracyRowSchema.shape.riskReasons, verificationRequired: z.boolean(),
+  })).min(1).max(100_000),
+  verificationReads: z.array(z.object({
+    snapshotId: nonEmptyId, observedAt: isoDateTime, outcome: z.enum(["observed", "missing", "blocked"]),
+    satisfies: z.array(z.object({ rowKey: nonEmptyId, discoveryHash: sha256Hex })).min(1).max(2000),
+  })).max(100_000),
+  immutableShards: z.array(z.object({
+    id: nonEmptyId, phase: z.enum(["discovery", "verification"]), sha256: sha256Hex,
+    rowCount: z.number().int().nonnegative(), verificationCount: z.number().int().nonnegative(),
+  })).min(1).max(4000),
+  uniqueProducts: z.number().int().positive(), duplicateProductReferences: z.number().int().nonnegative(),
+  productReadsRequired: z.number().int().nonnegative(), rowVerificationsSatisfied: z.number().int().nonnegative(), contentHash: sha256Hex,
+});
+
 export const browserCaptureAccuracySchema = z.object({
   policyVersion: z.union([z.literal(1), z.literal(2)]),
   discoveryRows: z.array(browserCaptureAccuracyRowSchema).min(1).max(100_000),
@@ -324,6 +347,7 @@ export const browserCaptureSessionV2Schema = z.object({
     createdAt: isoDateTime,
   })).min(1).max(4000),
   accuracy: browserCaptureAccuracySchema,
+  productEvidence: browserProductEvidenceSchema.optional(),
   projectedCaptureSha256: sha256Hex,
   contentHash: sha256Hex,
 }).superRefine((value, context) => {
@@ -451,6 +475,12 @@ export const captureBatchSealSchema = z.object({
       retrievalCompleteTerms: z.number().int().nonnegative(),
       pageStateAttestedRows: z.number().int().nonnegative(),
       promotionSemanticsRows: z.number().int().nonnegative(),
+      uniqueProducts: z.number().int().positive().optional(),
+      discoveryEdges: z.number().int().positive().optional(),
+      duplicateProductReferences: z.number().int().nonnegative().optional(),
+      productReadsRequired: z.number().int().nonnegative().optional(),
+      verificationReuse: z.number().int().nonnegative().optional(),
+      immutableShardCount: z.number().int().positive().optional(),
     }),
   }).optional(),
 });

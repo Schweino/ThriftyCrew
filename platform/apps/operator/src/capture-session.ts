@@ -58,6 +58,7 @@ interface DraftSession {
   worklistHash: string;
   startedAt: string;
   chunks: Array<{ id: string; file: string; sha256: string; createdAt: string }>;
+  plannerHistoryFile?: string;
 }
 
 const STORE_COLUMNS: Record<BrowserStore, string[]> = {
@@ -188,6 +189,27 @@ function uniqueInOrder(values: readonly string[]): string[] {
   }).map((value) => value.trim());
 }
 
+function queryIdentity(value: string): string {
+  return normalizeName(value).replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function mergeEquivalentQueries(values: readonly string[]): { terms: string[]; aliases: Array<{ retained: string; merged: string }> } {
+  const canonical = new Map<string, string>();
+  const terms: string[] = [];
+  const aliases: Array<{ retained: string; merged: string }> = [];
+  for (const value of values.map((item) => item.trim()).filter(Boolean)) {
+    const identity = queryIdentity(value);
+    const retained = canonical.get(identity);
+    if (retained) {
+      if (retained !== value) aliases.push({ retained, merged: value });
+      continue;
+    }
+    canonical.set(identity, value);
+    terms.push(value);
+  }
+  return { terms, aliases };
+}
+
 function pullOrderQueries(source: string): string[] {
   return uniqueInOrder(source.split(/\r?\n/).flatMap((line) => {
     const trimmed = line.trim();
@@ -216,11 +238,30 @@ export async function buildCaptureSessionWorklist(
   const pullOrder = pullOrderQueries(await readFile(pullOrderFile, "utf8"));
   if (pullOrder.length === 0) throw new Error("generated pull order contains no search queries");
   const rescue = rescueFile ? rescueQueries(await readFile(rescueFile, "utf8")) : [];
-  const terms = uniqueInOrder([...rescue, ...pullOrder]);
+  const merged = mergeEquivalentQueries([...rescue, ...pullOrder]);
+  const rescueIdentities = new Set(rescue.map(queryIdentity));
+  // Rescue stays first. Within each lane, prefer queries that historically produce
+  // distinct products quickly; no query is removed except a proven normalized duplicate.
+  let history: Record<string, { distinctProducts?: number; duplicateProducts?: number; durationMs?: number; complete?: boolean }> = {};
+  const historyFile = path.join(path.dirname(pullOrderFile), `${path.basename(pullOrderFile, path.extname(pullOrderFile))}-query-history.json`);
+  try { history = JSON.parse(await readFile(historyFile, "utf8")) as typeof history; } catch { /* first cycle has no history */ }
+  const score = (query: string): number => {
+    const row = history[queryIdentity(query)];
+    if (!row) return 0;
+    const yieldScore = Math.max(0, row.distinctProducts ?? 0) * 1000;
+    const duplicatePenalty = Math.max(0, row.duplicateProducts ?? 0) * 100;
+    const latencyPenalty = Math.max(0, row.durationMs ?? 0) / 1000;
+    return yieldScore - duplicatePenalty - latencyPenalty + (row.complete === true ? 100 : 0);
+  };
+  const terms = merged.terms
+    .map((query, ordinal) => ({ query, ordinal, rescue: rescueIdentities.has(queryIdentity(query)), score: score(query) }))
+    .sort((left, right) => Number(right.rescue) - Number(left.rescue) || right.score - left.score || left.ordinal - right.ordinal)
+    .map((entry) => entry.query);
   const pullSet = new Set(pullOrder);
-  const retainedPullTerms = terms.filter((term) => pullSet.has(term)).length;
+  const termIdentities = new Set(terms.map(queryIdentity));
+  const retainedPullTerms = pullOrder.filter((term) => termIdentities.has(queryIdentity(term))).length;
   if (retainedPullTerms !== pullOrder.length) throw new Error(`capture worklist lost ${pullOrder.length - retainedPullTerms} generated pull-order queries`);
-  await atomicJson(outputFile, { version: 1, terms });
+  await atomicJson(outputFile, { version: 2, terms, aliases: merged.aliases, planner: { historyFile, historyQueries: Object.keys(history).length, shadowCoverageTerms: pullOrder.length } });
   return {
     ok: true,
     outputFile,
@@ -228,6 +269,8 @@ export async function buildCaptureSessionWorklist(
     rescueTerms: rescue.length,
     rescueTermsInPullOrder: rescue.filter((term) => pullSet.has(term)).length,
     rescueOnlyTerms: rescue.filter((term) => !pullSet.has(term)).length,
+    mergedDuplicateTerms: merged.aliases.length,
+    historyQueries: Object.keys(history).length,
     totalTerms: terms.length,
   };
 }
@@ -235,7 +278,8 @@ export async function buildCaptureSessionWorklist(
 export async function initializeCaptureSession(storeInput: string, worklistFile: string, directory: string, startedAt = new Date().toISOString()): Promise<DraftSession> {
   const store = storeSchema.parse(storeInput);
   z.iso.datetime({ offset: true }).parse(startedAt);
-  const terms = [...new Set(parseWorklist(await readFile(worklistFile, "utf8")))];
+  const worklistSource = await readFile(worklistFile, "utf8");
+  const terms = [...new Set(parseWorklist(worklistSource))];
   if (terms.length === 0 || terms.length > 2000) throw new Error("browser capture worklist must contain 1-2000 terms");
   const usedKeys = new Set<string>();
   const keyed = terms.map((query, ordinal) => {
@@ -248,7 +292,12 @@ export async function initializeCaptureSession(storeInput: string, worklistFile:
   });
   const worklistHash = await digestHex(stableJson(terms));
   const sessionId = `browser-${store}-${startedAt.slice(0, 10)}-${worklistHash.slice(0, 12)}`;
-  const draft: DraftSession = { version: 2, sessionId, store, sourceId: SOURCE_IDS[store], worklist: keyed, worklistHash, startedAt, chunks: [] };
+  let plannerHistoryFile: string | undefined;
+  try {
+    const document = JSON.parse(worklistSource) as { planner?: { historyFile?: unknown } };
+    if (typeof document.planner?.historyFile === "string") plannerHistoryFile = path.resolve(document.planner.historyFile);
+  } catch { /* plain-text worklists have no planner history */ }
+  const draft: DraftSession = { version: 2, sessionId, store, sourceId: SOURCE_IDS[store], worklist: keyed, worklistHash, startedAt, chunks: [], ...(plannerHistoryFile ? { plannerHistoryFile } : {}) };
   await mkdir(path.join(directory, "chunks"), { recursive: true });
   try {
     const existing = await loadDraft(directory);
@@ -400,20 +449,67 @@ function accuracyCandidates(draft: DraftSession, state: LoadedSessionState): Arr
   }));
 }
 
+async function buildProductEvidence(
+  accuracy: Awaited<ReturnType<typeof buildBrowserCaptureAccuracy>>,
+  chunks: BrowserCaptureSessionV2["chunks"],
+): Promise<NonNullable<BrowserCaptureSessionV2["productEvidence"]>> {
+  type ProductEvidence = NonNullable<BrowserCaptureSessionV2["productEvidence"]>;
+  const snapshots = new Map<string, ProductEvidence["productSnapshots"][number]>();
+  const snapshotByRow = new Map<string, string>();
+  for (const row of accuracy.discoveryRows) {
+    const semanticHash = await digestHex(stableJson({ productKey: row.productKey, name: row.name, sizeText: row.sizeText, taxonomyPath: row.taxonomyPath ?? null, purchasePriceMinor: row.purchasePriceMinor, visible: row.truth.visible, structured: row.truth.structured ?? null }));
+    const snapshotId = `product-${semanticHash.slice(0, 32)}`;
+    snapshotByRow.set(row.rowKey, snapshotId);
+    if (!snapshots.has(snapshotId)) snapshots.set(snapshotId, { snapshotId, productKey: row.productKey, name: row.name, sizeText: row.sizeText, ...(row.taxonomyPath ? { taxonomyPath: row.taxonomyPath } : {}), purchasePriceMinor: row.purchasePriceMinor, semanticHash, canonicalRowKey: row.rowKey });
+  }
+  const discoveryEdges = accuracy.discoveryRows.map((row) => ({ rowKey: row.rowKey, termKey: row.termKey, query: row.query, snapshotId: snapshotByRow.get(row.rowKey)!, discoveryHash: row.discoveryHash, riskReasons: row.riskReasons, verificationRequired: row.verificationRequired }));
+  const groupedReads = new Map<string, ProductEvidence["verificationReads"][number]>();
+  for (const verification of accuracy.verifications) {
+    const snapshotId = snapshotByRow.get(verification.rowKey);
+    if (!snapshotId) continue;
+    const key = stableJson([snapshotId, verification.observedAt, verification.outcome]);
+    const prior = groupedReads.get(key);
+    if (prior) prior.satisfies.push({ rowKey: verification.rowKey, discoveryHash: verification.discoveryHash });
+    else groupedReads.set(key, { snapshotId, observedAt: verification.observedAt, outcome: verification.outcome, satisfies: [{ rowKey: verification.rowKey, discoveryHash: verification.discoveryHash }] });
+  }
+  const productSnapshots = [...snapshots.values()];
+  const verificationReads = [...groupedReads.values()];
+  const content = {
+    version: 1 as const, productSnapshots, discoveryEdges, verificationReads,
+    immutableShards: chunks.map((chunk) => ({ id: chunk.id, phase: chunk.phase, sha256: chunk.sha256, rowCount: chunk.rowCount, verificationCount: chunk.verificationCount })),
+    uniqueProducts: productSnapshots.length, duplicateProductReferences: discoveryEdges.length - productSnapshots.length,
+    productReadsRequired: new Set(discoveryEdges.filter((edge) => edge.verificationRequired).map((edge) => edge.snapshotId)).size,
+    rowVerificationsSatisfied: verificationReads.reduce((total, read) => total + read.satisfies.length, 0),
+  };
+  return { ...content, contentHash: await digestHex(stableJson(content)) };
+}
+
 export async function buildCaptureVerificationPlan(directory: string, outputFile: string): Promise<Record<string, unknown>> {
   const draft = await loadDraft(directory);
   const state = await loadSessionState(directory, draft);
   const terms = finalizedTerms(draft, state.latest);
   const accuracy = await buildBrowserCaptureAccuracy(draft.store, accuracyCandidates(draft, state), state.verifications, terms);
-  const targets = accuracy.discoveryRows.filter((row) => row.verificationRequired).map((row) => ({
-    rowKey: row.rowKey, discoveryHash: row.discoveryHash, termKey: row.termKey, query: row.query,
-    discoveryCapturedAt: row.truth.capturedAt,
-    productKey: row.productKey, name: row.name, sizeText: row.sizeText, purchasePriceMinor: row.purchasePriceMinor,
-    pageUrl: row.truth.pageUrl, riskReasons: row.riskReasons,
-  }));
-  const content = { version: 1, sessionId: draft.sessionId, sourceId: draft.sourceId, createdAt: new Date().toISOString(), targets };
+  const required = accuracy.discoveryRows.filter((row) => row.verificationRequired);
+  const grouped = new Map<string, typeof required>();
+  for (const row of required) {
+    const key = stableJson([row.productKey, row.name, row.sizeText, row.purchasePriceMinor, row.truth.visible.priceSemantics ?? null]);
+    const rows = grouped.get(key) ?? [];
+    rows.push(row);
+    grouped.set(key, rows);
+  }
+  const targets = [...grouped.values()].map((rows) => {
+    const primary = rows[0]!;
+    return {
+      rowKey: primary.rowKey, discoveryHash: primary.discoveryHash, termKey: primary.termKey, query: primary.query,
+      discoveryCapturedAt: primary.truth.capturedAt, productKey: primary.productKey, name: primary.name,
+      sizeText: primary.sizeText, purchasePriceMinor: primary.purchasePriceMinor, pageUrl: primary.truth.pageUrl,
+      riskReasons: [...new Set(rows.flatMap((row) => row.riskReasons))],
+      satisfies: rows.map((row) => ({ rowKey: row.rowKey, discoveryHash: row.discoveryHash, termKey: row.termKey, query: row.query, discoveryCapturedAt: row.truth.capturedAt })),
+    };
+  });
+  const content = { version: 2, sessionId: draft.sessionId, sourceId: draft.sourceId, createdAt: new Date().toISOString(), targets };
   await atomicJson(outputFile, { ...content, contentHash: await digestHex(stableJson(content)) });
-  return { ok: true, outputFile, targets: targets.length, discoveryRows: accuracy.discoveryRows.length };
+  return { ok: true, outputFile, productReads: targets.length, rowTargets: required.length, verificationReuse: required.length - targets.length, discoveryRows: accuracy.discoveryRows.length };
 }
 
 export async function finalizeCaptureSession(directory: string, projectedOutputFile: string, manifestOutputFile: string, finishedAt = new Date().toISOString()): Promise<BrowserCaptureSessionV2> {
@@ -426,6 +522,7 @@ export async function finalizeCaptureSession(directory: string, projectedOutputF
   const accuracy = await buildBrowserCaptureAccuracy(draft.store, accuracyCandidates(draft, state), state.verifications, terms);
   const projectedCaptureSha256 = await renderProjectedCapture(draft.store, mergedRows, projectedOutputFile, draft.worklist);
   const coverageMode: BrowserCaptureSessionV2["coverageMode"] = terms.every((term) => term.outcome === "success" || term.outcome === "empty") && accuracy.pass ? "full" : "partial";
+  const productEvidence = await buildProductEvidence(accuracy, state.chunkEntries);
   const manifestContent = {
     version: 2 as const,
     sessionId: draft.sessionId,
@@ -440,11 +537,26 @@ export async function finalizeCaptureSession(directory: string, projectedOutputF
     canaries: state.canaries,
     chunks: state.chunkEntries,
     accuracy,
+    productEvidence,
     projectedCaptureSha256,
   };
   const manifest = browserCaptureSessionSchema.parse({ ...manifestContent, contentHash: await digestHex(stableJson(manifestContent)) });
   if (manifest.version !== 2) throw new Error("capture session manifest unexpectedly downgraded");
   await atomicJson(manifestOutputFile, manifest, false);
+  if (draft.plannerHistoryFile) {
+    const history = Object.fromEntries(draft.worklist.map((term) => {
+      const captured = state.latest.get(term.query);
+      const identities = (captured?.rows ?? []).map((row) => projectedIdentity(draft.store, row).productKey);
+      return [queryIdentity(term.query), {
+        distinctProducts: new Set(identities).size,
+        duplicateProducts: identities.length - new Set(identities).size,
+        durationMs: captured ? Math.max(0, Date.parse(captured.result.finishedAt) - Date.parse(captured.result.startedAt)) : 0,
+        complete: captured ? ["success", "empty"].includes(captured.result.outcome) : false,
+        observedAt: finishedAt,
+      }];
+    }));
+    await atomicJson(draft.plannerHistoryFile, history);
+  }
   return manifest;
 }
 
@@ -493,6 +605,9 @@ export async function captureSessionStatus(directory: string): Promise<Record<st
     verificationTargets: accuracy?.requiredVerificationRows ?? 0,
     matchedVerifications: accuracy?.matchedVerificationRows ?? 0,
     unresolvedVerifications: accuracy?.unresolvedVerificationRows ?? 0,
+    uniqueProducts: accuracy ? new Set(accuracy.discoveryRows.map((row) => row.productKey)).size : 0,
+    duplicateProductReferences: accuracy ? accuracy.discoveryRows.length - new Set(accuracy.discoveryRows.map((row) => row.productKey)).size : 0,
+    productReadsRequired: accuracy ? new Set(accuracy.discoveryRows.filter((row) => row.verificationRequired).map((row) => row.productKey)).size : 0,
     retrievalCompleteTerms: accuracy?.retrievalCompleteTerms ?? 0,
     sourceTruthFailureCount: sourceTruthFailures.length,
     sourceTruthFailures: sourceTruthFailures.slice(0, previewLimit),

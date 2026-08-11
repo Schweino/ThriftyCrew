@@ -1,7 +1,9 @@
 import { copyFile, mkdir, readFile, readdir, rename, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { BROWSER_CAPTURE_ACCURACY_CUTOVER, browserCaptureSessionSchema, directCaptureArtifactSchema, type DirectCaptureArtifact } from "@thriftycrew/contracts";
+import { gunzipSync, gzipSync } from "node:zlib";
+import { BROWSER_CAPTURE_ACCURACY_CUTOVER, browserCaptureSessionSchema, directCaptureArtifactSchema, type BrowserCaptureSealAttestation, type DirectCaptureArtifact } from "@thriftycrew/contracts";
 import { buildBrowserCaptureAccuracy, digestHex, stableJson } from "@thriftycrew/domain";
+import { buildBrowserEvidenceAttestation, type CaptureEvidenceInput } from "@thriftycrew/daily/client";
 
 export interface QueuedEvidence {
   file: string;
@@ -11,7 +13,7 @@ export interface QueuedEvidence {
 }
 
 export interface CaptureQueueManifest {
-  version: 1;
+  version: 1 | 2;
   id: string;
   sourceId: string;
   idempotencyKey: string;
@@ -26,6 +28,9 @@ export interface CaptureQueueManifest {
   lastError?: string;
   completedAt?: string;
   receipt?: Record<string, unknown>;
+  browserEvidenceAttestation?: BrowserCaptureSealAttestation;
+  uploadedEvidence?: Array<{ sha256: string; evidenceId: string; uploadedAt: string }>;
+  compacted?: { at: string; recoveryFiles: Array<{ originalFile: string; file: string; sha256: string; originalBytes: number; compressedBytes: number }> };
 }
 
 export interface CaptureQueueJob {
@@ -189,7 +194,7 @@ async function atomicJson(file: string, value: unknown): Promise<void> {
 
 async function readManifest(directory: string): Promise<CaptureQueueManifest> {
   const value = JSON.parse(await readFile(path.join(directory, "manifest.json"), "utf8")) as CaptureQueueManifest;
-  if (value.version !== 1 || !value.id || !value.sourceId || !value.artifactFile || !Array.isArray(value.evidence)) {
+  if (![1, 2].includes(value.version) || !value.id || !value.sourceId || !value.artifactFile || !Array.isArray(value.evidence)) {
     throw new Error(`invalid capture queue manifest in ${directory}`);
   }
   return value;
@@ -219,10 +224,22 @@ function parseQueuedArtifact(artifactBytes: Uint8Array): DirectCaptureArtifact {
   return directCaptureArtifactSchema.parse(artifactInput);
 }
 
+async function readStoredBytes(directory: string, manifest: CaptureQueueManifest, file: string): Promise<{ bytes: Uint8Array; path: string }> {
+  try { return { bytes: new Uint8Array(await readFile(path.join(directory, file))), path: path.join(directory, file) }; }
+  catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+    const recovery = manifest.compacted?.recoveryFiles.find((entry) => entry.originalFile === file);
+    if (!recovery) throw error;
+    const recoveryPath = path.join(directory, recovery.file);
+    return { bytes: new Uint8Array(gunzipSync(await readFile(recoveryPath))), path: recoveryPath };
+  }
+}
+
 async function loadJob(directory: string): Promise<CaptureQueueJob> {
   const manifest = await readManifest(directory);
   const artifactPath = path.join(directory, manifest.artifactFile);
-  const artifactBytes = new Uint8Array(await readFile(artifactPath));
+  const storedArtifact = await readStoredBytes(directory, manifest, manifest.artifactFile);
+  const artifactBytes = storedArtifact.bytes;
   if (await digestHex(artifactBytes) !== manifest.artifactSha256) throw new Error(`queued artifact hash mismatch for ${manifest.id}`);
   const artifact = parseQueuedArtifact(artifactBytes);
   if (artifact.sourceId !== manifest.sourceId || artifact.idempotencyKey !== manifest.idempotencyKey) {
@@ -230,12 +247,13 @@ async function loadJob(directory: string): Promise<CaptureQueueJob> {
   }
   const evidencePaths: CaptureQueueJob["evidencePaths"] = [];
   for (const evidence of manifest.evidence) {
-    const evidencePath = path.join(directory, evidence.file);
-    const bytes = new Uint8Array(await readFile(evidencePath));
+    const storedEvidence = await readStoredBytes(directory, manifest, evidence.file);
+    const evidencePath = storedEvidence.path;
+    const bytes = storedEvidence.bytes;
     if (await digestHex(bytes) !== evidence.sha256) throw new Error(`queued evidence hash mismatch for ${manifest.id}/${evidence.file}`);
     evidencePaths.push({ ...evidence, path: evidencePath });
   }
-  return { directory, artifactPath, evidencePaths, manifest, artifact };
+  return { directory, artifactPath: storedArtifact.path, evidencePaths, manifest, artifact };
 }
 
 export function defaultCaptureQueueRoot(environment: NodeJS.ProcessEnv = process.env): string {
@@ -276,6 +294,17 @@ export async function enqueueCapture(
   if (stableJson(suppliedSession) !== stableJson(session)) throw new Error("supplied capture-session evidence does not match the artifact audit");
   const rawInput = evidenceInputs.find((file) => evidenceKind(file) === "raw_payload")!;
   if (suppliedHashes.get(path.resolve(rawInput)) !== session.projectedCaptureSha256) throw new Error("projected raw evidence hash does not match the capture-session manifest");
+  const attestationInputs: CaptureEvidenceInput[] = await Promise.all(evidenceInputs.map(async (file) => {
+    const kind = evidenceKind(file);
+    const source = new Uint8Array(await readFile(path.resolve(file)));
+    const body = kind === "manifest"
+      ? new TextEncoder().encode(JSON.stringify(suppliedSession))
+      : source;
+    return { body, kind, contentType: contentType(file) };
+  }));
+  const browserEvidenceAttestation = session.version === 2
+    ? await buildBrowserEvidenceAttestation(artifact, attestationInputs)
+    : undefined;
   const artifactSha256 = await digestHex(artifactBytes);
   const identityHash = await digestHex(stableJson({ sourceId: artifact.sourceId, idempotencyKey: artifact.idempotencyKey, artifactSha256 }));
   const id = `capture_${identityHash.slice(0, 32)}`;
@@ -303,9 +332,30 @@ export async function enqueueCapture(
       await copyFile(input, path.join(temporary, stored));
       evidence.push({ file: stored, sha256: await digestHex(bytes), kind: evidenceKind(input), contentType: contentType(input) });
     }
+    if (session.version === 2 && session.productEvidence) {
+      const edgesBySnapshot = new Map<string, typeof session.productEvidence.discoveryEdges>();
+      for (const edge of session.productEvidence.discoveryEdges) {
+        const edges = edgesBySnapshot.get(edge.snapshotId) ?? [];
+        edges.push(edge);
+        edgesBySnapshot.set(edge.snapshotId, edges);
+      }
+      for (let offset = 0, shard = 0; offset < session.productEvidence.productSnapshots.length; offset += 250, shard += 1) {
+        const productSnapshots = session.productEvidence.productSnapshots.slice(offset, offset + 250);
+        const payload = {
+          version: 1, kind: "browser-product-evidence-shard", sessionId: session.sessionId,
+          productEvidenceContentHash: session.productEvidence.contentHash, shard,
+          productSnapshots, discoveryEdges: productSnapshots.flatMap((snapshot) => edgesBySnapshot.get(snapshot.snapshotId) ?? []),
+          verificationReads: session.productEvidence.verificationReads.filter((read) => productSnapshots.some((snapshot) => snapshot.snapshotId === read.snapshotId)),
+        };
+        const bytes = new TextEncoder().encode(stableJson(payload));
+        const stored = `product-shard-${String(shard + 1).padStart(4, "0")}.json`;
+        await writeFile(path.join(temporary, stored), bytes);
+        evidence.push({ file: stored, sha256: await digestHex(bytes), kind: "manifest", contentType: "application/json" });
+      }
+    }
     const instant = nowIso(now);
     const manifest: CaptureQueueManifest = {
-      version: 1,
+      version: 2,
       id,
       sourceId: artifact.sourceId,
       idempotencyKey: artifact.idempotencyKey,
@@ -316,6 +366,8 @@ export async function enqueueCapture(
       status: "pending",
       attempts: 0,
       nextAttemptAt: instant,
+      ...(browserEvidenceAttestation ? { browserEvidenceAttestation } : {}),
+      uploadedEvidence: [],
     };
     await atomicJson(path.join(temporary, "manifest.json"), manifest);
     try {
@@ -413,6 +465,21 @@ export async function drainCaptureQueue(
   return { ok: failed === 0, processed, completed, failed, skipped, results };
 }
 
+export async function markCaptureEvidenceUploaded(
+  job: CaptureQueueJob,
+  upload: { sha256: string; evidenceId: string },
+  uploadedAt = new Date(),
+): Promise<void> {
+  const current = await readManifest(job.directory);
+  const uploadedEvidence = [...(current.uploadedEvidence ?? [])];
+  if (!uploadedEvidence.some((entry) => entry.sha256 === upload.sha256)) {
+    uploadedEvidence.push({ ...upload, uploadedAt: uploadedAt.toISOString() });
+    await atomicJson(path.join(job.directory, "manifest.json"), { ...current, version: 2, uploadedEvidence });
+    job.manifest.version = 2;
+    job.manifest.uploadedEvidence = uploadedEvidence;
+  }
+}
+
 export async function reconcileCaptureQueueRemote(
   root: string,
   inspector: (batchId: string) => Promise<Record<string, unknown>>,
@@ -463,6 +530,51 @@ export async function reconcileCaptureQueueRemote(
     await atomicJson(path.join(directory, "receipt.json"), updated.receipt);
   }
   return { checked, ready, inflight, rejected, errors };
+}
+
+export async function compactPromotedCaptureQueue(
+  root: string,
+  now = new Date(),
+): Promise<{ checked: number; compacted: number; originalBytes: number; compressedBytes: number }> {
+  await mkdir(root, { recursive: true });
+  let checked = 0;
+  let compacted = 0;
+  let originalBytes = 0;
+  let compressedBytes = 0;
+  for (const entry of await readdir(root, { withFileTypes: true })) {
+    if (!entry.isDirectory() || !entry.name.startsWith("capture_")) continue;
+    const directory = path.join(root, entry.name);
+    const manifest = await readManifest(directory);
+    if (manifest.compacted || manifest.status !== "completed") continue;
+    const remote = manifest.receipt?.remote as Record<string, unknown> | undefined;
+    const matching = remote?.matching as Record<string, unknown> | undefined;
+    if (!(["promoted", "superseded"].includes(String(remote?.status))) || matching?.status !== "passed") continue;
+    checked += 1;
+    const recoveryDirectory = path.join(directory, "recovery");
+    await mkdir(recoveryDirectory, { recursive: true });
+    const recoveryFiles: NonNullable<CaptureQueueManifest["compacted"]>["recoveryFiles"] = [];
+    for (const file of [manifest.artifactFile, ...manifest.evidence.map((evidence) => evidence.file)]) {
+      const sourcePath = path.join(directory, file);
+      const bytes = new Uint8Array(await readFile(sourcePath));
+      const compressed = new Uint8Array(gzipSync(bytes, { level: 9 }));
+      const recoveryFile = path.join("recovery", `${file}.gz`);
+      const temporary = path.join(directory, `${recoveryFile}.tmp-${crypto.randomUUID()}`);
+      await mkdir(path.dirname(temporary), { recursive: true });
+      await writeFile(temporary, compressed);
+      await rename(temporary, path.join(directory, recoveryFile));
+      recoveryFiles.push({ originalFile: file, file: recoveryFile, sha256: await digestHex(bytes), originalBytes: bytes.byteLength, compressedBytes: compressed.byteLength });
+    }
+    // Publish the complete recovery map before removing originals. A crash before
+    // this point leaves only harmless duplicate compressed files; a crash after it
+    // remains readable through readStoredBytes.
+    const updated: CaptureQueueManifest = { ...manifest, version: 2, compacted: { at: now.toISOString(), recoveryFiles } };
+    await atomicJson(path.join(directory, "manifest.json"), updated);
+    for (const file of recoveryFiles) await rm(path.join(directory, file.originalFile), { force: true });
+    originalBytes += recoveryFiles.reduce((total, file) => total + file.originalBytes, 0);
+    compressedBytes += recoveryFiles.reduce((total, file) => total + file.compressedBytes, 0);
+    compacted += 1;
+  }
+  return { checked, compacted, originalBytes, compressedBytes };
 }
 
 function remoteCaptureReady(job: CaptureQueueJob, captureDate: string): boolean {

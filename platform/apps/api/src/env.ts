@@ -6,6 +6,7 @@ export interface WorkerEnv {
   ARCHIVE: R2Bucket;
   BACKUP_WORKFLOW: Workflow;
   RESTORE_WORKFLOW: Workflow;
+  CAPTURE_VALIDATION_WORKFLOW?: Workflow;
   ASSETS: Fetcher;
   FUNNEL_ANALYTICS?: AnalyticsEngineDataset;
   APP_ENV: string;

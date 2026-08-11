@@ -158,7 +158,7 @@ function centralCycleStart(instant: string): string {
   return new Date(Date.UTC(year!, month! - 1, day! - ((weekday - 3 + 7) % 7))).toISOString().slice(0, 10);
 }
 
-async function buildBrowserEvidenceAttestation(
+export async function buildBrowserEvidenceAttestation(
   artifact: DirectCaptureArtifact,
   evidenceInputs: readonly CaptureEvidenceInput[],
 ): Promise<BrowserCaptureSealAttestation> {
@@ -231,6 +231,14 @@ async function buildBrowserEvidenceAttestation(
       retrievalCompleteTerms: session.accuracy.retrievalCompleteTerms,
       pageStateAttestedRows: session.accuracy.pageStateAttestedRows ?? 0,
       promotionSemanticsRows: session.accuracy.promotionSemanticsRows ?? 0,
+      ...(session.productEvidence ? {
+        uniqueProducts: session.productEvidence.uniqueProducts,
+        discoveryEdges: session.productEvidence.discoveryEdges.length,
+        duplicateProductReferences: session.productEvidence.duplicateProductReferences,
+        productReadsRequired: session.productEvidence.productReadsRequired,
+        verificationReuse: Math.max(0, session.productEvidence.rowVerificationsSatisfied - session.productEvidence.verificationReads.length),
+        immutableShardCount: session.productEvidence.immutableShards.length,
+      } : {}),
     },
   };
 }
@@ -240,7 +248,12 @@ export async function ingestDirectCapture(
   artifact: DirectCaptureArtifact,
   evidenceBody: Uint8Array,
   additionalEvidence: readonly CaptureEvidenceInput[] = [],
-  options: { promote?: boolean } = {},
+  options: {
+    promote?: boolean;
+    browserEvidenceAttestation?: BrowserCaptureSealAttestation;
+    uploadedEvidenceSha256?: ReadonlySet<string>;
+    onEvidenceUploaded?: (evidence: { sha256: string; evidenceId: string; index: number }) => Promise<void>;
+  } = {},
 ): Promise<Record<string, unknown>> {
   const deduplicated = deduplicateDirectObservations(artifact.observations);
   const created = await client.request("/internal/capture-batches", { json: {
@@ -272,7 +285,7 @@ export async function ingestDirectCapture(
   // then sends a compact request-bound attestation. The Worker independently binds that attestation
   // to the immutable R2 hashes instead of loading a 40-80 MiB manifest into its 128 MiB isolate.
   const browserEvidenceAttestation = browserRawIndex >= 0
-    ? await buildBrowserEvidenceAttestation(artifact, evidenceInputs)
+    ? options.browserEvidenceAttestation ?? await buildBrowserEvidenceAttestation(artifact, evidenceInputs)
     : undefined;
   const evidenceIds: string[] = [];
   for (const evidence of evidenceInputs) evidenceIds.push(`evidence-${batchId}-${(await digestHex(evidence.body)).slice(0, 16)}`);
@@ -281,6 +294,8 @@ export async function ingestDirectCapture(
   if (status === "open") {
     for (let index = 0; index < evidenceInputs.length; index += 1) {
       const evidence = evidenceInputs[index]!;
+      const evidenceSha256 = await digestHex(evidence.body);
+      if (options.uploadedEvidenceSha256?.has(evidenceSha256)) continue;
       const compress = evidence.body.byteLength > 8 * 1024 * 1024;
       const uploadBody = compress ? new Uint8Array(gzipSync(evidence.body, { level: 9 })) : evidence.body;
       await client.request(`/internal/capture-batches/${batchId}/evidence`, {
@@ -291,9 +306,10 @@ export async function ingestDirectCapture(
           ...(compress ? { "content-encoding": "gzip", "x-uncompressed-length": String(evidence.body.byteLength) } : {}),
           "x-evidence-id": evidenceIds[index]!,
           "x-evidence-kind": evidence.kind,
-          "x-content-sha256": await digestHex(evidence.body),
+          "x-content-sha256": evidenceSha256,
         },
       });
+      await options.onEvidenceUploaded?.({ sha256: evidenceSha256, evidenceId: evidenceIds[index]!, index });
     }
     for (const observationChunk of chunks(deduplicated.observations, 100)) {
       await client.request(`/internal/capture-batches/${batchId}/observations`, { json: { observations: observationChunk.map((observation) => ({ ...observation, evidenceObjectId: observation.evidenceObjectId ?? evidenceId })) } });
@@ -305,6 +321,9 @@ export async function ingestDirectCapture(
     }, acceptStatuses: [422] });
     status = String(sealed.status);
     if (status === "rejected") return { ok: false, batchId, status, audit: artifact.audit, seal: sealed };
+  }
+  if (status === "validating") {
+    return { ok: true, batchId, status, evidenceId, evidenceIds, observations: deduplicated.observations.length, duplicateObservationsAvoided: deduplicated.duplicatesAvoided, terms: artifact.terms.length, audit: artifact.audit, validationPending: true };
   }
   if (status === "validated" && options.promote === false) {
     return { ok: true, batchId, status, evidenceId, evidenceIds, observations: deduplicated.observations.length, duplicateObservationsAvoided: deduplicated.duplicatesAvoided, terms: artifact.terms.length, audit: artifact.audit, promotionPending: true };

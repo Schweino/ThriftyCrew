@@ -1,5 +1,6 @@
 import { mkdir, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { browserLanePolicy, recordBrowserLaneResult, withBrowserStoreLane } from "./lane-policy.mjs";
 
 const TARGET_RESULTS = 25;
 const CONFIG = {
@@ -24,6 +25,11 @@ function normalize(value) {
 function priceMinor(value) {
   const match = String(value ?? "").trim().match(/^\$([0-9][0-9,]*(?:\.[0-9]{1,2})?)$/);
   return match ? Math.round(Number(match[1].replace(/,/g, "")) * 100) : null;
+}
+
+function expandVerification(target, verification) {
+  const rows = Array.isArray(target.satisfies) && target.satisfies.length ? target.satisfies : [target];
+  return rows.map((row) => ({ ...verification, rowKey: row.rowKey, discoveryHash: row.discoveryHash }));
 }
 
 export function walmartPickupEligible(row) {
@@ -181,33 +187,40 @@ export async function captureNextDataCanary(tab, store, screenshotSha256) {
   throw new Error(`${store} Omaha/Pickup canary failed after waiting for the page to settle`);
 }
 
-export async function captureNextDataChunk({ tab, store, terms, file, screenshotSha256, interTermDelayMs }) {
+async function captureNextDataChunkInternal({ tab, store, terms, file, screenshotSha256, interTermDelayMs }) {
   if (!CONFIG[store]) throw new Error("next-data adapter supports sams or walmart");
-  const maxTerms = store === "sams" ? 5 : 20;
-  const effectiveDelayMs = interTermDelayMs ?? (store === "sams" ? 2_000 : 0);
+  const policy = await browserLanePolicy(store);
+  const maxTerms = policy.maxTerms;
+  const effectiveDelayMs = Math.max(interTermDelayMs ?? 0, policy.dynamicDelayMs);
   if (!Array.isArray(terms) || terms.length < 1 || terms.length > maxTerms) throw new Error(`${store} chunk requires 1-${maxTerms} terms`);
   if (!Number.isInteger(effectiveDelayMs) || effectiveDelayMs < 0 || effectiveDelayMs > 30_000) throw new Error(`${store} inter-term delay must be 0-30000ms`);
   const canary = await captureNextDataCanary(tab, store, screenshotSha256);
   const results = [];
+  const chunkStarted = Date.now();
   for (let index = 0; index < terms.length; index += 1) {
     const query = terms[index];
+    const termStarted = Date.now();
     const captured = await captureTerm(tab, store, query);
+    await recordBrowserLaneResult(store, captured.term.outcome, Date.now() - termStarted);
     results.push(captured);
     await atomicJson(file, { version: 2, phase: "discovery", store, canary, terms: results.map((result) => result.term), rows: results.flatMap((result) => result.rows) });
     if (captured.blocked) break;
+    if (Date.now() - chunkStarted >= 45_000) break;
     if (index < terms.length - 1 && effectiveDelayMs > 0) await tab.playwright.waitForTimeout(effectiveDelayMs);
   }
   return { file, attempted: results.length, rows: results.reduce((total, result) => total + result.rows.length, 0), blocked: results.some((result) => result.blocked), rejected: results.filter((result) => result.term.outcome === "rejected").map((result) => ({ query: result.term.query, reason: result.term.reason })), empty: results.filter((result) => result.term.outcome === "empty").map((result) => result.term.query) };
 }
 
-export async function captureNextDataVerificationChunk({ tab, store, targets, file, screenshotSha256, interTermDelayMs }) {
+async function captureNextDataVerificationChunkInternal({ tab, store, targets, file, screenshotSha256, interTermDelayMs }) {
   if (!CONFIG[store]) throw new Error("next-data verification adapter supports sams or walmart");
-  const maxTargets = store === "sams" ? 5 : 20;
-  const effectiveDelayMs = interTermDelayMs ?? (store === "sams" ? 2_000 : 0);
+  const policy = await browserLanePolicy(store);
+  const maxTargets = policy.maxTerms;
+  const effectiveDelayMs = Math.max(interTermDelayMs ?? 0, policy.dynamicDelayMs);
   if (!Array.isArray(targets) || targets.length < 1 || targets.length > maxTargets) throw new Error(`${store} verification chunk requires 1-${maxTargets} targets`);
   if (!Number.isInteger(effectiveDelayMs) || effectiveDelayMs < 0 || effectiveDelayMs > 30_000) throw new Error(`${store} verification inter-target delay must be 0-30000ms`);
   const canary = await captureNextDataCanary(tab, store, screenshotSha256);
   const verifications = [];
+  const chunkStarted = Date.now();
   for (let index = 0; index < targets.length; index += 1) {
     const target = targets[index];
     let captured = await captureTerm(tab, store, target.query);
@@ -226,17 +239,15 @@ export async function captureNextDataVerificationChunk({ tab, store, targets, fi
     }
     const observedAt = new Date().toISOString();
     if (captured.blocked || captured.term.outcome === "blocked") {
-      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "blocked", reason: captured.term.reason || `${store} challenge detected during independent verification` });
+      verifications.push(...expandVerification(target, { observedAt, outcome: "blocked", reason: captured.term.reason || `${store} challenge detected during independent verification` }));
       await atomicJson(file, { version: 2, phase: "verification", store, canary, verifications });
       break;
     }
     if (!row) {
-      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "missing", reason: captured.term.reason || "target product was absent from both the commodity and exact-name result envelopes" });
+      verifications.push(...expandVerification(target, { observedAt, outcome: "missing", reason: captured.term.reason || "target product was absent from both the commodity and exact-name result envelopes" }));
     } else {
       const truth = { ...row._capture, capturedAt: observedAt };
-      verifications.push({
-        rowKey: target.rowKey,
-        discoveryHash: target.discoveryHash,
+      verifications.push(...expandVerification(target, {
         observedAt,
         outcome: "observed",
         productKey: row.id,
@@ -244,9 +255,10 @@ export async function captureNextDataVerificationChunk({ tab, store, targets, fi
         sizeText: row.size,
         purchasePriceMinor: priceMinor(row.lp),
         truth,
-      });
+      }));
     }
     await atomicJson(file, { version: 2, phase: "verification", store, canary, verifications });
+    if (Date.now() - chunkStarted >= 45_000) break;
     if (index < targets.length - 1 && effectiveDelayMs > 0) await tab.playwright.waitForTimeout(effectiveDelayMs);
   }
   return {
@@ -255,5 +267,14 @@ export async function captureNextDataVerificationChunk({ tab, store, targets, fi
     observed: verifications.filter((item) => item.outcome === "observed").length,
     missing: verifications.filter((item) => item.outcome === "missing").map((item) => item.rowKey),
     blocked: verifications.some((item) => item.outcome === "blocked"),
+    budgetExhausted: Date.now() - chunkStarted >= 45_000,
   };
+}
+
+export async function captureNextDataChunk(options) {
+  return withBrowserStoreLane(options.store, () => captureNextDataChunkInternal(options));
+}
+
+export async function captureNextDataVerificationChunk(options) {
+  return withBrowserStoreLane(options.store, () => captureNextDataVerificationChunkInternal(options));
 }
