@@ -32,6 +32,14 @@ export function robustMonthlyGrowth(history: Array<{ database_bytes: number; obs
   return Math.round(median * 30);
 }
 
+export function archivalGrowthProjectionReliable(history: Array<{ observed_at: string }>, observedAt: string): boolean {
+  const timestamps = [...history.map((point) => Date.parse(point.observed_at)), Date.parse(observedAt)]
+    .filter(Number.isFinite)
+    .sort((left, right) => left - right);
+  const days = new Set(timestamps.map((timestamp) => new Date(timestamp).toISOString().slice(0, 10)));
+  return days.size >= 7 && timestamps.length >= 7 && timestamps.at(-1)! - timestamps[0]! >= 6 * 86_400_000;
+}
+
 export function controlPlaneProofPass(checks: ReadonlyArray<{ required: boolean; ok: boolean }>): boolean {
   return checks.every((check) => !check.required || check.ok);
 }
@@ -980,8 +988,9 @@ export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number,
     ]);
     const databaseLimitBytes = Number(env.D1_DATABASE_LIMIT_BYTES ?? 10 * 1024 * 1024 * 1024);
     const monthlyGrowthBytes = robustMonthlyGrowth(history.results, databaseBytes, observedAt);
+    const projectionReliable = archivalGrowthProjectionReliable(history.results, observedAt);
     const usagePercentMillis = Math.floor(databaseBytes * 100_000 / databaseLimitBytes);
-    const projectedLimitAt = monthlyGrowthBytes > 0
+    const projectedLimitAt = projectionReliable && monthlyGrowthBytes > 0
       ? new Date(scheduledTime + Math.max(0, databaseLimitBytes - databaseBytes) / monthlyGrowthBytes * 30 * 86_400_000).toISOString()
       : null;
     const status = archivalCapacityStatus(usagePercentMillis, projectedLimitAt, observedAt);
@@ -996,10 +1005,10 @@ export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number,
       ).bind(forecastId, databaseBytes, databaseLimitBytes, observations?.count ?? 0, monthlyGrowthBytes,
         observations?.oldest ?? null, protectedRows?.count ?? 0, usagePercentMillis, projectedLimitAt, status, observedAt),
       env.DB.prepare("UPDATE job_runs SET status = 'completed', heartbeat_at = ?2, finished_at = ?2, stats_json = ?3 WHERE id = ?1")
-        .bind(runId, new Date().toISOString(), stableJson({ forecastId, databaseBytes, databaseLimitBytes, usagePercentMillis, monthlyGrowthBytes, projectedLimitAt, status })),
+        .bind(runId, new Date().toISOString(), stableJson({ forecastId, databaseBytes, databaseLimitBytes, usagePercentMillis, monthlyGrowthBytes, projectionReliable, projectedLimitAt, status })),
     ]);
-    if (status !== "healthy") await raiseOperationalAlert(env, "d1-archive-capacity", `D1 archival threshold is ${status}`, { forecastId, databaseBytes, databaseLimitBytes, usagePercentMillis, monthlyGrowthBytes, projectedLimitAt });
-    else await resolveOperationalAlert(env, "d1-archive-capacity", { forecastId, databaseBytes, usagePercentMillis, projectedLimitAt });
+    if (status !== "healthy") await raiseOperationalAlert(env, "d1-archive-capacity", `D1 archival threshold is ${status}`, { forecastId, databaseBytes, databaseLimitBytes, usagePercentMillis, monthlyGrowthBytes, projectionReliable, projectedLimitAt });
+    else await resolveOperationalAlert(env, "d1-archive-capacity", { forecastId, databaseBytes, usagePercentMillis, projectionReliable, projectedLimitAt });
     await resolveOperationalAlert(env, "schedule-gap:archival-forecast-daily", { forecastId, runId, observedAt, status: "completed" });
     await resolveOperationalAlert(env, `archival-forecast:${observedAt.slice(0, 10)}`, { forecastId, runId, observedAt, status: "completed" });
     await resolveRecoveredJobRunAlerts(env, "archival-forecast-daily", runId, observedAt);

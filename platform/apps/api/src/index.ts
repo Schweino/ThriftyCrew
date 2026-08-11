@@ -2645,7 +2645,7 @@ app.post("/internal/triage/reconcile", async (context) => {
   ).first<{ backup_id: string; replica_id: string }>();
   const failedBackupItems = await context.env.DB.prepare(
     `SELECT id FROM triage_items
-      WHERE source_kind = 'operational_alert' AND title = 'Nightly D1 backup failed'
+      WHERE source_kind = 'operational_alert' AND title IN ('Nightly D1 backup failed', 'Weekly D1 full export failed')
         AND status <> 'resolved' ORDER BY created_at, id`,
   ).all<{ id: string }>();
   const recoveredBackups = backupRecovery
@@ -2670,14 +2670,28 @@ app.post("/internal/triage/reconcile", async (context) => {
        JOIN job_runs recovery ON recovery.id = (
          SELECT candidate.id FROM job_runs candidate
           WHERE candidate.job = failed.job AND candidate.status = 'completed'
-            AND julianday(candidate.finished_at) > julianday(COALESCE(failed.finished_at, failed.started_at, triage.created_at))
-          ORDER BY candidate.finished_at DESC LIMIT 1
+            AND julianday(COALESCE(candidate.started_at, candidate.scheduled_for, candidate.finished_at))
+              > julianday(COALESCE(failed.started_at, failed.scheduled_for, failed.finished_at, triage.created_at))
+          ORDER BY COALESCE(candidate.started_at, candidate.scheduled_for, candidate.finished_at) DESC LIMIT 1
        )
       WHERE triage.source_kind = 'operational_alert'
         AND triage.source_ref LIKE 'job-run:%'
         AND triage.status <> 'resolved'
         AND failed.status IN ('failed', 'timed_out', 'missed')`,
   ).all<{ id: string; job: string; recovery_run_id: string; finished_at: string }>();
+  const recoveredEnginePublications = await context.env.DB.prepare(
+    `SELECT triage.id, failed.id AS failed_run_id, release.id AS recovery_release_id, release.published_at
+       FROM triage_items triage
+       JOIN job_runs failed ON failed.id = substr(triage.source_ref, 9) AND failed.job = 'daily-engine'
+       JOIN current_releases current ON current.market_id = 'omaha'
+       JOIN releases release ON release.id = current.release_id
+      WHERE triage.source_kind = 'operational_alert'
+        AND triage.source_ref LIKE 'job-run:%'
+        AND triage.status <> 'resolved'
+        AND failed.status IN ('failed', 'timed_out', 'missed')
+        AND julianday(release.published_at)
+          > julianday(COALESCE(failed.started_at, failed.scheduled_for, failed.finished_at, triage.created_at))`,
+  ).all<{ id: string; failed_run_id: string; recovery_release_id: string; published_at: string }>();
   const recoveredScheduleGaps = await context.env.DB.prepare(
     `SELECT triage.id, schedule.job, recovery.id AS recovery_run_id, recovery.finished_at
        FROM triage_items triage
@@ -2836,6 +2850,17 @@ app.post("/internal/triage/reconcile", async (context) => {
         job: row.job,
         recoveryRunId: row.recovery_run_id,
         finishedAt: row.finished_at,
+        observedAt,
+      },
+    })),
+    ...recoveredEnginePublications.results.map((row) => ({
+      id: row.id,
+      planRef: "auto-plan://later-release-published",
+      resolution: {
+        resolution: "A later guarded native release published successfully after this failed engine attempt.",
+        failedRunId: row.failed_run_id,
+        recoveryReleaseId: row.recovery_release_id,
+        publishedAt: row.published_at,
         observedAt,
       },
     })),

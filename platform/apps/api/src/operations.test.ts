@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { archivalCapacityStatus, controlPlaneProofPass, d1DatabaseFileSize, d1TimeTravelBookmark, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalDigestMemberKey, operationalIncidentIsNew, operationalNotificationDueAt, recoveryCheckpointTriggerKind, robustMonthlyGrowth, scheduleGap, weeklyFullExportDue } from "./operations";
+import { archivalCapacityStatus, archivalGrowthProjectionReliable, controlPlaneProofPass, d1DatabaseFileSize, d1TimeTravelBookmark, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalDigestMemberKey, operationalIncidentIsNew, operationalNotificationDueAt, recoveryCheckpointTriggerKind, robustMonthlyGrowth, scheduleGap, weeklyFullExportDue } from "./operations";
 
 describe("archival capacity policy", () => {
   it("arms on projected exhaustion before the static percentage threshold", () => {
@@ -14,6 +14,16 @@ describe("archival capacity policy", () => {
       { database_bytes: 1_110, observed_at: "2026-08-10T00:00:00.000Z" },
     ];
     expect(robustMonthlyGrowth(history, 1_120, "2026-08-11T00:00:00.000Z")).toBe(300);
+  });
+
+  it("does not extrapolate migration spikes until seven distinct days establish a trend", () => {
+    expect(archivalGrowthProjectionReliable([
+      { observed_at: "2026-08-10T00:00:00.000Z" },
+      { observed_at: "2026-08-11T10:00:00.000Z" },
+    ], "2026-08-11T12:00:00.000Z")).toBe(false);
+    expect(archivalGrowthProjectionReliable(Array.from({ length: 6 }, (_, index) => ({
+      observed_at: `2026-08-${String(index + 5).padStart(2, "0")}T12:00:00.000Z`,
+    })), "2026-08-11T12:00:00.000Z")).toBe(true);
   });
 });
 
