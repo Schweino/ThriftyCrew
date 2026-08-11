@@ -91,9 +91,13 @@ try {
       Set-PcRuntimeCredential $config 'local-operator'
       $env:TC_GITHUB_JOB_STATUS = if ($failed) { 'failure' } else { 'success' }
       Push-Location $platformRoot
-      try { & $pnpmPath tc job finish $Job 2>&1 | ForEach-Object { Write-PcRuntimeLog $logFile ("job-ledger-finish: {0}" -f $_) } }
+      try { Invoke-Logged 'job-ledger-finish' { & $pnpmPath tc job finish $Job $env:TC_GITHUB_JOB_STATUS } }
       finally { Pop-Location }
-    } catch { Write-PcRuntimeLog $logFile ("job-ledger-finish failed: {0}" -f $_.Exception.Message) }
+    } catch {
+      $failed = $true
+      Write-PcRuntimeLog $logFile ("job-ledger-finish failed: {0}" -f $_.Exception.Message)
+      Send-PcRuntimeAlert ("ThriftyCrew V3 job ledger finish failed: $Job") ("The authoritative local job completed its work but could not record a terminal ledger state.`n`n$($_.Exception.Message)`n`nLog: $logFile")
+    }
   }
   Exit-PcRuntimeLock $lock
 }
