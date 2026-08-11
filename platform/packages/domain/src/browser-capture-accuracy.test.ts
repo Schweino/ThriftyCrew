@@ -38,4 +38,29 @@ describe("source-specific capture-time parser contracts", () => {
     }]);
     expect(incomplete).toMatchObject({ pass: false, retrievalCompleteTerms: 0, requiredVerificationRows: 1, unresolvedVerificationRows: 1 });
   });
+
+  it("caps the blind sample at 100 and applies count risk only to the likely winner", async () => {
+    const candidates = Array.from({ length: 250 }, (_, index) => {
+      const productKey = `wm-paper-${index}`;
+      const name = `Paper Item ${index}`;
+      const purchasePriceMinor = 100 + index;
+      const truth = browserCaptureTruthSchema.parse({
+        capturedAt: "2026-08-12T12:00:00.000Z", pageUrl: "https://www.walmart.com/search?q=paper",
+        location: "Omaha L St Supercenter", priceMode: "Pickup", pageIndex: 0, resultIndex: index,
+        pageState: { pageType: "search_results", pageTitle: "paper - Walmart.com", query: "paper", resultRegionPresent: true, challengeDetected: false, currency: "USD", locale: "en-US", locationText: "Omaha L St Supercenter", fulfillmentText: "Pickup" },
+        visible: { rawText: `$${(purchasePriceMinor / 100).toFixed(2)}`, priceMinor: purchasePriceMinor, productName: name, productKey, priceSemantics: { offerType: "everyday", condition: "none", unitPriceMinor: purchasePriceMinor, qualifyingQuantity: 1, totalPriceMinor: purchasePriceMinor, ambiguity: false } },
+        structured: { rawText: String(purchasePriceMinor / 100), priceMinor: purchasePriceMinor, productName: name, productKey, priceSemantics: { offerType: "everyday", condition: "none", unitPriceMinor: purchasePriceMinor, qualifyingQuantity: 1, totalPriceMinor: purchasePriceMinor, ambiguity: false } },
+        parser: { status: "exact", rule: "next-data-price-lines" },
+      });
+      return { termKey: "paper", query: "paper", productKey, name, sizeText: "12 ct", taxonomyPath: "Household/Paper", purchasePriceMinor, truth };
+    });
+    const accuracy = await buildBrowserCaptureAccuracy("walmart", candidates, [], [{
+      outcome: "success", rowCount: candidates.length,
+      retrieval: { targetResultCount: 25, loadedResultCount: candidates.length, availableResultCount: candidates.length, hasMoreResults: false, termination: "end-of-results" },
+    }]);
+    expect(accuracy.discoveryRows.filter((row) => row.riskReasons.includes("deterministic-sample"))).toHaveLength(100);
+    expect(accuracy.discoveryRows.filter((row) => row.riskReasons.includes("count-priced"))).toHaveLength(1);
+    expect(accuracy.requiredVerificationRows).toBeGreaterThanOrEqual(100);
+    expect(accuracy.requiredVerificationRows).toBeLessThanOrEqual(101);
+  });
 });

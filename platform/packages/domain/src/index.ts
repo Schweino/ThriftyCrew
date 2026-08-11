@@ -227,13 +227,12 @@ export async function buildBrowserCaptureAccuracy(
     const candidate = candidates[index]!;
     const discoveryHash = await digestHex(stableJson(accuracyFingerprint(candidate)));
     const rowKey = `row-${(await digestHex(stableJson([candidate.termKey, candidate.productKey, candidate.truth.pageIndex, candidate.truth.resultIndex]))).slice(0, 28)}`;
-    const sample = Number.parseInt((await digestHex(rowKey)).slice(0, 4), 16) < 6554;
+    const likelyWinner = cheapest.has(String(index));
     const text = `${candidate.query} ${candidate.name} ${candidate.sizeText}`.toLowerCase();
     const reasons: BrowserCaptureAccuracyRow["riskReasons"] = [];
-    if (cheapest.has(String(index))) reasons.push("likely-board-winner");
-    if (sample) reasons.push("deterministic-sample");
-    if (/\b(?:apple|avocado|banana|berry|berries|lemon|lime|orange|peach|pear|pepper|potato|tomato|lettuce|onion|produce)\b/.test(text)) reasons.push("fresh-produce");
-    if (/\b(?:each|ea|ct|count|head|bunch)\b/.test(text)) reasons.push("count-priced");
+    if (likelyWinner) reasons.push("likely-board-winner");
+    if (likelyWinner && /\b(?:apple|avocado|banana|berry|berries|lemon|lime|orange|peach|pear|pepper|potato|tomato|lettuce|onion|produce)\b/.test(text)) reasons.push("fresh-produce");
+    if (likelyWinner && /\b(?:each|ea|ct|count|head|bunch)\b/.test(text)) reasons.push("count-priced");
     if (/\b\d+\s*(?:\/|for)\s*\$?\d+/i.test(candidate.truth.visible.rawText)) reasons.push("multibuy");
     if (candidate.purchasePriceMinor <= 10 || candidate.purchasePriceMinor >= 50_000) reasons.push("price-outlier");
     if (!candidate.taxonomyPath) reasons.push("missing-taxonomy");
@@ -242,6 +241,13 @@ export async function buildBrowserCaptureAccuracy(
     if (!browserCaptureTruthPass(store, candidate, candidate.truth)
       || (candidate.truth.pageState?.pageType === "search_results" && normalizeName(candidate.truth.pageState.query ?? "") !== normalizeName(candidate.query))) allTruthPass = false;
     rows.push({ ...candidate, rowKey, discoveryHash, riskReasons: reasons, verificationRequired });
+  }
+  const deterministicSample = (await Promise.all(rows.map(async (row) => ({ row, rank: await digestHex(`browser-capture-sample:${row.rowKey}`) }))))
+    .sort((left, right) => left.rank.localeCompare(right.rank) || left.row.rowKey.localeCompare(right.row.rowKey))
+    .slice(0, Math.min(100, rows.length));
+  for (const { row } of deterministicSample) {
+    if (!row.riskReasons.includes("deterministic-sample")) row.riskReasons.push("deterministic-sample");
+    row.verificationRequired = true;
   }
   const rowMap = new Map(rows.map((row) => [row.rowKey, row]));
   const latest = new Map<string, BrowserCaptureVerification>();

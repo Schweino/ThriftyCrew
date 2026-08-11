@@ -134,8 +134,9 @@ After discovery is complete, create the deterministic independent second-pass wo
 pnpm tc capture session verification-plan <session-directory> <verification-plan.json>
 ```
 
-The plan includes likely lowest-price winners, a stable audit sample, produce/count/multi-buy/outlier risks, and
-duplicate-price conflicts. Revisit each target with a fresh top-level navigation. Append `version: 2`,
+The plan includes likely lowest-price winners, a stable blind sample capped at 100 rows per store, produce/count risk
+on those likely winners, and every multi-buy/outlier/duplicate-price conflict. The blind-sample cap never suppresses
+an explicit risk target. Revisit each target with a fresh top-level navigation. Append `version: 2`,
 `phase: verification` chunks containing the plan row/hash and a newly read complete truth record. A changed row
 must be recaptured as a new discovery result and replanned; missing, blocked, stale, copied, or disagreeing
 verification cannot authorize publication.
