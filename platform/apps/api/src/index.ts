@@ -2094,6 +2094,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   const evidenceRows = await context.env.DB.prepare(
     "SELECT object_key, kind, sha256, byte_length FROM evidence_objects WHERE batch_id = ?1 ORDER BY id",
   ).bind(batch.id).all<{ object_key: string; kind: string; sha256: string; byte_length: number }>();
+  const captureTermsSha256 = await digestHex(stableJson(body.terms));
   const browserEvidence = batch.capture_method === "browser"
     ? await validateBrowserCaptureEvidence(context.env.EVIDENCE, {
       sourceId: batch.source_id,
@@ -2101,7 +2102,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
       capturedFrom: batch.captured_from,
       capturedTo: batch.captured_to,
       expectedTerms: batch.expected_terms,
-    }, evidenceRows.results)
+    }, evidenceRows.results, body.browserEvidenceAttestation, captureTermsSha256)
     : { pass: true, detail: { required: false }, metrics: null };
   const captureSemanticsRequired = batch.capture_method !== "legacy_bridge"
     && Date.parse(batch.captured_to) >= Date.parse(CAPTURE_SEMANTICS_CUTOVER);

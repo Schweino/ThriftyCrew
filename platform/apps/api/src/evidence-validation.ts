@@ -1,4 +1,4 @@
-import { BROWSER_CAPTURE_ACCURACY_CUTOVER, browserCaptureSessionSchema, type BrowserCaptureSession } from "@thriftycrew/contracts";
+import { BROWSER_CAPTURE_ACCURACY_CUTOVER, browserCaptureSessionSchema, type BrowserCaptureSealAttestation, type BrowserCaptureSession } from "@thriftycrew/contracts";
 import { digestHex, stableJson, verifyBrowserCaptureAccuracy } from "@thriftycrew/domain";
 import { browserCaptureCycleWindow } from "./browser-capture-sla";
 
@@ -146,11 +146,66 @@ export async function validateBrowserCaptureEvidence(
   bucket: R2Bucket,
   batch: BrowserBatchEvidenceIdentity,
   rows: readonly EvidenceRow[],
+  attestation?: BrowserCaptureSealAttestation,
+  captureTermsSha256?: string,
 ): Promise<{ pass: boolean; detail: Record<string, unknown>; metrics: BrowserCaptureMetricSummary | null }> {
   const screenshots = rows.filter((row) => row.kind === "screenshot");
   const rawPayloads = rows.filter((row) => row.kind === "raw_payload");
   const manifests = rows.filter((row) => row.kind === "manifest")
     .sort((left, right) => (left.byte_length ?? Number.MAX_SAFE_INTEGER) - (right.byte_length ?? Number.MAX_SAFE_INTEGER));
+  if (attestation) {
+    const manifestBound = manifests.some((row) => row.sha256 === attestation.manifestSha256);
+    const rawBound = rawPayloads.some((row) => row.sha256 === attestation.projectedCaptureSha256);
+    const screenshotBound = screenshots.some((row) => row.sha256 === attestation.screenshotSha256);
+    const identityPass = attestation.sourceId === batch.sourceId
+      && attestation.coverageMode === batch.coverageMode
+      && attestation.startedAt === batch.capturedFrom
+      && attestation.finishedAt === batch.capturedTo
+      && attestation.expectedTerms === batch.expectedTerms;
+    const termsBound = captureTermsSha256 !== undefined && attestation.captureTermsSha256 === captureTermsSha256;
+    const metric = attestation.metrics;
+    const metricPass = metric.attemptedTerms + metric.notAttemptedTerms === attestation.expectedTerms
+      && metric.successTerms + metric.emptyTerms + metric.rejectedTerms + metric.blockedTerms === metric.attemptedTerms
+      && metric.requiredVerificationRows === metric.matchedVerificationRows + metric.unresolvedVerificationRows
+      && metric.unresolvedVerificationRows === 0
+      && metric.retrievalCompleteTerms === attestation.expectedTerms
+      && metric.priceAgreementRows + metric.singleChannelRows === metric.discoveryRows
+      && metric.pageStateAttestedRows === metric.discoveryRows
+      && metric.promotionSemanticsRows === metric.discoveryRows
+      && (attestation.coverageMode !== "full"
+        || (metric.rejectedTerms === 0 && metric.blockedTerms === 0 && metric.notAttemptedTerms === 0));
+    const pass = manifestBound && rawBound && screenshotBound && identityPass && termsBound && metricPass;
+    const metrics: BrowserCaptureMetricSummary = {
+      sessionId: attestation.sessionId,
+      sourceId: attestation.sourceId,
+      coverageMode: attestation.coverageMode,
+      expectedTerms: attestation.expectedTerms,
+      ...metric,
+    };
+    return {
+      pass,
+      detail: {
+        sessionId: attestation.sessionId,
+        verificationPlane: "authenticated-pc-browser-capture-agent",
+        requestBoundAttestation: true,
+        manifestBound,
+        screenshotBound,
+        rawBound,
+        identityPass,
+        termsBound,
+        metricPass,
+        accuracyRequired: true,
+        accuracyPass: metricPass,
+        accuracyReproducible: metricPass,
+        sessionVersion: attestation.sessionVersion,
+        sessionContentHash: attestation.sessionContentHash,
+        screenshots: screenshots.length,
+        rawPayloads: rawPayloads.length,
+        manifests: manifests.length,
+      },
+      metrics: pass ? metrics : null,
+    };
+  }
   let session: ReturnType<typeof browserCaptureSessionSchema.parse> | null = null;
   for (const row of manifests) {
     const object = await bucket.get(row.object_key);

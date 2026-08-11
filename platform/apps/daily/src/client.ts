@@ -1,8 +1,8 @@
-import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
+import { deterministicId, digestHex, stableJson, verifyBrowserCaptureAccuracy } from "@thriftycrew/domain";
 import { gzipSync } from "node:zlib";
 import type { CurrentBridgeArtifact } from "./legacy";
 import type { NativeReleaseArtifact } from "./native";
-import type { DirectCaptureArtifact } from "@thriftycrew/contracts";
+import { browserCaptureSessionSchema, type BrowserCaptureSealAttestation, type DirectCaptureArtifact } from "@thriftycrew/contracts";
 
 const encoder = new TextEncoder();
 
@@ -141,6 +141,100 @@ function oidcExpiry(token: string): number {
 
 export interface CaptureEvidenceInput { body: Uint8Array; kind: "screenshot" | "flyer_page" | "raw_payload" | "manifest"; contentType: string }
 
+function percentile(values: readonly number[], value: number): number {
+  if (values.length === 0) return 0;
+  const sorted = [...values].sort((left, right) => left - right);
+  return sorted[Math.max(0, Math.ceil(sorted.length * value) - 1)]!;
+}
+
+function centralCycleStart(instant: string): string {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago", year: "numeric", month: "2-digit", day: "2-digit", weekday: "short",
+  }).formatToParts(new Date(instant));
+  const values = Object.fromEntries(parts.filter((part) => part.type !== "literal").map((part) => [part.type, part.value]));
+  const weekday = ({ Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 } as Record<string, number>)[values.weekday!]!;
+  const dateKey = `${values.year}-${values.month}-${values.day}`;
+  const [year, month, day] = dateKey.split("-").map(Number);
+  return new Date(Date.UTC(year!, month! - 1, day! - ((weekday - 3 + 7) % 7))).toISOString().slice(0, 10);
+}
+
+async function buildBrowserEvidenceAttestation(
+  artifact: DirectCaptureArtifact,
+  evidenceInputs: readonly CaptureEvidenceInput[],
+): Promise<BrowserCaptureSealAttestation> {
+  const session = browserCaptureSessionSchema.parse(artifact.audit.captureSession);
+  if (session.version !== 2) throw new Error("browser evidence attestation requires the current accuracy session contract");
+  if (session.sourceId !== artifact.sourceId || session.coverageMode !== artifact.coverageMode
+    || session.startedAt !== artifact.capturedFrom || session.finishedAt !== artifact.capturedTo
+    || session.expectedTerms !== artifact.expectedTerms) throw new Error("browser session identity does not match the capture artifact");
+  const { contentHash, ...sessionContent } = session;
+  if (await digestHex(stableJson(sessionContent)) !== contentHash) throw new Error("browser session content hash is not reproducible");
+  if (!session.accuracy.pass || !await verifyBrowserCaptureAccuracy(session.store, session.accuracy, session.terms)) {
+    throw new Error("browser capture accuracy is incomplete, unresolved, or not reproducible");
+  }
+  const manifest = evidenceInputs.find((evidence) => evidence.kind === "manifest");
+  const raw = evidenceInputs.find((evidence) => evidence.kind === "raw_payload");
+  const screenshots = evidenceInputs.filter((evidence) => evidence.kind === "screenshot");
+  if (!manifest || !raw || screenshots.length === 0) throw new Error("browser attestation requires manifest, projected raw, and screenshot evidence");
+  const manifestSha256 = await digestHex(manifest.body);
+  const serializedSessionSha256 = await digestHex(new TextEncoder().encode(JSON.stringify(session)));
+  if (manifestSha256 !== serializedSessionSha256) throw new Error("browser manifest evidence differs from the locally verified capture session");
+  if (await digestHex(raw.body) !== session.projectedCaptureSha256) throw new Error("browser projected raw evidence differs from the capture session");
+  const boundScreenshots = new Set(session.canaries.flatMap((canary) => canary.screenshotSha256 ? [canary.screenshotSha256] : []));
+  let screenshotSha256: string | null = null;
+  for (const screenshot of screenshots) {
+    const hash = await digestHex(screenshot.body);
+    if (boundScreenshots.has(hash)) { screenshotSha256 = hash; break; }
+  }
+  if (!screenshotSha256) throw new Error("browser screenshot evidence is not bound by a capture canary");
+  const attempted = session.terms.filter((term) => term.outcome !== "not_attempted");
+  const durations = attempted.map((term) => Math.max(0, Date.parse(term.finishedAt) - Date.parse(term.startedAt)));
+  return {
+    version: 1,
+    verifier: "pc-browser-capture-queue",
+    verifiedAt: new Date().toISOString(),
+    sessionId: session.sessionId,
+    sessionVersion: 2,
+    sourceId: session.sourceId,
+    store: session.store,
+    coverageMode: session.coverageMode,
+    startedAt: session.startedAt,
+    finishedAt: session.finishedAt,
+    expectedTerms: session.expectedTerms,
+    captureTermsSha256: await digestHex(stableJson(artifact.terms)),
+    sessionContentHash: session.contentHash,
+    manifestSha256,
+    projectedCaptureSha256: session.projectedCaptureSha256,
+    screenshotSha256,
+    metrics: {
+      cycleStart: centralCycleStart(session.finishedAt),
+      attemptedTerms: attempted.length,
+      successTerms: session.terms.filter((term) => term.outcome === "success").length,
+      emptyTerms: session.terms.filter((term) => term.outcome === "empty").length,
+      rejectedTerms: session.terms.filter((term) => term.outcome === "rejected").length,
+      blockedTerms: session.terms.filter((term) => term.outcome === "blocked").length,
+      notAttemptedTerms: session.terms.filter((term) => term.outcome === "not_attempted").length,
+      retryCount: attempted.reduce((sum, term) => sum + Math.max(0, term.attempts - 1), 0),
+      chunkCount: session.chunks.length,
+      durationMs: Math.max(0, Date.parse(session.finishedAt) - Date.parse(session.startedAt)),
+      termDurationP50Ms: percentile(durations, 0.5),
+      termDurationP95Ms: percentile(durations, 0.95),
+      projectedRows: session.terms.reduce((sum, term) => sum + term.rowCount, 0),
+      accuracyPolicyVersion: 2,
+      discoveryRows: session.accuracy.discoveryRows.length,
+      requiredVerificationRows: session.accuracy.requiredVerificationRows,
+      matchedVerificationRows: session.accuracy.matchedVerificationRows,
+      unresolvedVerificationRows: session.accuracy.unresolvedVerificationRows,
+      priceAgreementRows: session.accuracy.priceAgreementRows,
+      singleChannelRows: session.accuracy.singleChannelRows,
+      anomalyRows: session.accuracy.anomalyRows,
+      retrievalCompleteTerms: session.accuracy.retrievalCompleteTerms,
+      pageStateAttestedRows: session.accuracy.pageStateAttestedRows ?? 0,
+      promotionSemanticsRows: session.accuracy.promotionSemanticsRows ?? 0,
+    },
+  };
+}
+
 export async function ingestDirectCapture(
   client: MutationClient,
   artifact: DirectCaptureArtifact,
@@ -174,6 +268,12 @@ export async function ingestDirectCapture(
   // The immutable projected capture is the actual row evidence and is already hash-bound by the session,
   // so do not upload the redundant artifact a second time as evidence.
   const evidenceInputs = browserRawIndex >= 0 ? [...additionalEvidence] : [primary, ...additionalEvidence];
+  // The authenticated PC capture agent performs the expensive row-by-row verification locally,
+  // then sends a compact request-bound attestation. The Worker independently binds that attestation
+  // to the immutable R2 hashes instead of loading a 40-80 MiB manifest into its 128 MiB isolate.
+  const browserEvidenceAttestation = browserRawIndex >= 0
+    ? await buildBrowserEvidenceAttestation(artifact, evidenceInputs)
+    : undefined;
   const evidenceIds: string[] = [];
   for (const evidence of evidenceInputs) evidenceIds.push(`evidence-${batchId}-${(await digestHex(evidence.body)).slice(0, 16)}`);
   const bindingEvidenceIndex = browserRawIndex >= 0 ? evidenceInputs.findIndex((evidence) => evidence.kind === "raw_payload") : 0;
@@ -198,7 +298,11 @@ export async function ingestDirectCapture(
     for (const observationChunk of chunks(deduplicated.observations, 100)) {
       await client.request(`/internal/capture-batches/${batchId}/observations`, { json: { observations: observationChunk.map((observation) => ({ ...observation, evidenceObjectId: observation.evidenceObjectId ?? evidenceId })) } });
     }
-    const sealed = await client.request(`/internal/capture-batches/${batchId}/seal`, { json: { terms: artifact.terms, evidenceManifestKey: evidenceId }, acceptStatuses: [422] });
+    const sealed = await client.request(`/internal/capture-batches/${batchId}/seal`, { json: {
+      terms: artifact.terms,
+      evidenceManifestKey: evidenceId,
+      ...(browserEvidenceAttestation ? { browserEvidenceAttestation } : {}),
+    }, acceptStatuses: [422] });
     status = String(sealed.status);
     if (status === "rejected") return { ok: false, batchId, status, audit: artifact.audit, seal: sealed };
   }

@@ -409,6 +409,50 @@ export const observationChunkSchema = z.object({
 export const captureBatchSealSchema = z.object({
   terms: z.array(captureTermSchema).max(2000),
   evidenceManifestKey: z.string().min(1).max(1000).optional(),
+  browserEvidenceAttestation: z.object({
+    version: z.literal(1),
+    verifier: z.literal("pc-browser-capture-queue"),
+    verifiedAt: isoDateTime,
+    sessionId: nonEmptyId,
+    sessionVersion: z.literal(2),
+    sourceId: nonEmptyId,
+    store: browserCaptureStore,
+    coverageMode,
+    startedAt: isoDateTime,
+    finishedAt: isoDateTime,
+    expectedTerms: z.number().int().positive().max(2000),
+    captureTermsSha256: sha256Hex,
+    sessionContentHash: sha256Hex,
+    manifestSha256: sha256Hex,
+    projectedCaptureSha256: sha256Hex,
+    screenshotSha256: sha256Hex,
+    metrics: z.object({
+      cycleStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+      attemptedTerms: z.number().int().nonnegative(),
+      successTerms: z.number().int().nonnegative(),
+      emptyTerms: z.number().int().nonnegative(),
+      rejectedTerms: z.number().int().nonnegative(),
+      blockedTerms: z.number().int().nonnegative(),
+      notAttemptedTerms: z.number().int().nonnegative(),
+      retryCount: z.number().int().nonnegative(),
+      chunkCount: z.number().int().positive(),
+      durationMs: z.number().int().nonnegative(),
+      termDurationP50Ms: z.number().int().nonnegative(),
+      termDurationP95Ms: z.number().int().nonnegative(),
+      projectedRows: z.number().int().nonnegative(),
+      accuracyPolicyVersion: z.literal(2),
+      discoveryRows: z.number().int().positive(),
+      requiredVerificationRows: z.number().int().nonnegative(),
+      matchedVerificationRows: z.number().int().nonnegative(),
+      unresolvedVerificationRows: z.number().int().nonnegative(),
+      priceAgreementRows: z.number().int().nonnegative(),
+      singleChannelRows: z.number().int().nonnegative(),
+      anomalyRows: z.number().int().nonnegative(),
+      retrievalCompleteTerms: z.number().int().nonnegative(),
+      pageStateAttestedRows: z.number().int().nonnegative(),
+      promotionSemanticsRows: z.number().int().nonnegative(),
+    }),
+  }).optional(),
 });
 
 export const captureBatchAbandonSchema = z.object({
@@ -1129,6 +1173,7 @@ export const releaseGuardResultSchema = z.object({
 
 export type CaptureBatchCreate = z.infer<typeof captureBatchCreateSchema>;
 export type CaptureBatchAbandon = z.infer<typeof captureBatchAbandonSchema>;
+export type BrowserCaptureSealAttestation = NonNullable<z.infer<typeof captureBatchSealSchema>["browserEvidenceAttestation"]>;
 export type ObservationInput = z.infer<typeof observationInputSchema>;
 export type ConfigurationCreate = z.infer<typeof configurationCreateSchema>;
 export type ReleaseCreate = z.infer<typeof releaseCreateSchema>;

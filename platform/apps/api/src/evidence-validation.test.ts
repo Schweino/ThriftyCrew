@@ -58,4 +58,39 @@ describe("browser screenshot evidence", () => {
     };
     expect(summarizeBrowserCaptureSession(session)).toMatchObject({ attemptedTerms: 2, successTerms: 1, blockedTerms: 1, notAttemptedTerms: 1, retryCount: 1, termDurationP50Ms: 60_000, termDurationP95Ms: 240_000, projectedRows: 2 });
   });
+
+  it("validates a compact authenticated PC attestation without loading the large manifest", async () => {
+    const manifestHash = "a".repeat(64);
+    const rawHash = "b".repeat(64);
+    const screenshotHash = "c".repeat(64);
+    const termsHash = "d".repeat(64);
+    const bucket = { async get() { throw new Error("large manifest must not be loaded"); } } as unknown as R2Bucket;
+    const batch = {
+      sourceId: "direct-walmart-browser", coverageMode: "full", expectedTerms: 1,
+      capturedFrom: "2026-08-11T15:00:00.000Z", capturedTo: "2026-08-11T15:02:00.000Z",
+    };
+    const attestation = {
+      version: 1 as const, verifier: "pc-browser-capture-queue" as const, verifiedAt: "2026-08-11T15:03:00.000Z",
+      sessionId: "browser-walmart-fixture", sessionVersion: 2 as const, sourceId: batch.sourceId, store: "walmart" as const,
+      coverageMode: "full" as const, startedAt: batch.capturedFrom, finishedAt: batch.capturedTo, expectedTerms: 1,
+      captureTermsSha256: termsHash, sessionContentHash: "e".repeat(64), manifestSha256: manifestHash,
+      projectedCaptureSha256: rawHash, screenshotSha256: screenshotHash,
+      metrics: {
+        cycleStart: "2026-08-05", attemptedTerms: 1, successTerms: 1, emptyTerms: 0, rejectedTerms: 0,
+        blockedTerms: 0, notAttemptedTerms: 0, retryCount: 0, chunkCount: 2, durationMs: 120_000,
+        termDurationP50Ms: 60_000, termDurationP95Ms: 60_000, projectedRows: 3, accuracyPolicyVersion: 2 as const,
+        discoveryRows: 3, requiredVerificationRows: 1, matchedVerificationRows: 1, unresolvedVerificationRows: 0,
+        priceAgreementRows: 3, singleChannelRows: 0, anomalyRows: 0, retrievalCompleteTerms: 1,
+        pageStateAttestedRows: 3, promotionSemanticsRows: 3,
+      },
+    };
+    const rows = [
+      { object_key: "manifest", kind: "manifest", sha256: manifestHash },
+      { object_key: "raw", kind: "raw_payload", sha256: rawHash },
+      { object_key: "proof", kind: "screenshot", sha256: screenshotHash },
+    ];
+    const result = await validateBrowserCaptureEvidence(bucket, batch, rows, attestation, termsHash);
+    expect(result).toMatchObject({ pass: true, detail: { verificationPlane: "authenticated-pc-browser-capture-agent", manifestBound: true, termsBound: true, accuracyPass: true }, metrics: { discoveryRows: 3 } });
+    expect((await validateBrowserCaptureEvidence(bucket, batch, rows, { ...attestation, manifestSha256: "f".repeat(64) }, termsHash)).pass).toBe(false);
+  });
 });
