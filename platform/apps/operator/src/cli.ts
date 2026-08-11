@@ -22,7 +22,7 @@ const invocationRoot = path.resolve(process.env.INIT_CWD ?? process.cwd());
 const [command = "help", subcommand, ...arguments_] = process.argv.slice(2);
 
 function cliPath(file: string): string {
-  return path.isAbsolute(file) ? file : path.resolve(invocationRoot, file);
+  return path.normalize(path.isAbsolute(file) ? file : path.resolve(invocationRoot, file));
 }
 
 async function githubOidcToken(): Promise<string | undefined> {
@@ -766,7 +766,17 @@ if (command === "status") {
   } else if (action === "init") {
     const [store, worklistFile, directory, startedAt] = sessionArguments;
     if (!store || !worklistFile || !directory) throw new Error("tc capture session init requires store, worklist file, and session directory");
-    result = { ok: true, ...(await initializeCaptureSession(store, cliPath(worklistFile), cliPath(directory), startedAt)) };
+    const session = await initializeCaptureSession(store, cliPath(worklistFile), cliPath(directory), startedAt);
+    result = {
+      ok: true,
+      sessionId: session.sessionId,
+      store: session.store,
+      sourceId: session.sourceId,
+      startedAt: session.startedAt,
+      expectedTerms: session.worklist.length,
+      worklistHash: session.worklistHash,
+      sessionDirectory: cliPath(directory),
+    };
   } else if (action === "append") {
     const [directory, chunkFile] = sessionArguments;
     if (!directory || !chunkFile) throw new Error("tc capture session append requires session directory and chunk JSON");
