@@ -806,9 +806,9 @@ export async function runBrowserCaptureSla(env: WorkerEnv, scheduledTime: number
   }
 }
 
-export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number): Promise<void> {
+export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number, force = false): Promise<void> {
   const observedAt = new Date(scheduledTime).toISOString();
-  const runId = await deterministicId("run", "archival-forecast-daily", observedAt.slice(0, 10));
+  const runId = await deterministicId("run", "archival-forecast-daily", force ? observedAt : observedAt.slice(0, 10));
   const existing = await env.DB.prepare("SELECT status FROM job_runs WHERE id = ?1").bind(runId).first<{ status: string }>();
   if (existing?.status === "completed") return;
   if (existing) {

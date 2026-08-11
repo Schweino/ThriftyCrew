@@ -1756,7 +1756,7 @@ app.post("/internal/archival/forecasts", zValidator("json", archivalForecastSche
 app.post("/internal/archival/forecast/run", async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only an operator may run the archival forecast", 403);
   const observedAt = Date.now();
-  await runArchivalForecast(context.env, observedAt);
+  await runArchivalForecast(context.env, observedAt, true);
   await recordAudit(context.env, context.get("identity"), "archival_forecast.run", "job", "archival-forecast-daily", "accepted", {
     observedAt: new Date(observedAt).toISOString(),
   });
