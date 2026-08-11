@@ -603,6 +603,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "canned-white-beans",
+        "store":  "Family Fare",
+        "product":  "Delallo Cannellini Beans, White Kidney 15.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "canned-yams",
         "store":  "Family Fare",
         "product":  "Bruce\u0027s Sweet Potatoes, In Syrup, Cut, Yams 40 Oz",
@@ -1755,6 +1764,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
+        "id":  "kidney-beans",
+        "store":  "Family Fare",
+        "product":  "Full Circle Market Kidney Beans, Low Sodium, Dark Red 15 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "kielbasa",
         "store":  "Family Fare",
         "product":  "Eckrich Polska Kielbasa Skinless Smoked Sausage Rope 14 Oz",
@@ -2576,7 +2594,7 @@
     {
         "id":  "shampoo",
         "store":  "Family Fare",
-        "product":  "Alberto Vo5 Shampoo, Revitalizing, Ocean Refresh, Bonus Size 15 Fl Oz",
+        "product":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
         "dept":  "health_beauty",
         "aisle":  "health_beauty/grooming_hygiene",
         "verdict":  "ALLOW",

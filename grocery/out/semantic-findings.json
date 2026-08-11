@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-11 06:11",
-    "board":  "comparison-2026-08-10.json",
-    "sidecar_generated":  "2026-08-11 06:11:53",
+    "generated":  "2026-08-11 08:59",
+    "board":  "comparison-2026-08-11.json",
+    "sidecar_generated":  "2026-08-11 08:59:52",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -11,10 +11,10 @@
     "examined":  {
                      "board_pairs":  2866,
                      "corpus":  31259,
-                     "rule_invisible":  4846
+                     "rule_invisible":  4852
                  },
     "identity_count":  0,
-    "coverage_count":  31,
+    "coverage_count":  30,
     "identity":  [
 
                  ],
@@ -97,16 +97,6 @@
                          "product":  "El Monterey Beef, Bean \u0026 Cheese Flavor Chimichangas, 30.4 oz, 8 Count (Frozen)",
                          "cos":  0.718,
                          "score":  0.948516,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "ice-cream",
-                         "commodity":  "Ice Cream",
-                         "store":  "Hy-Vee",
-                         "product":  "Hy Vee We All Scream Vanilla",
-                         "cos":  0.5968,
-                         "score":  0.947653,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -295,8 +285,8 @@
                          "commodity":  "80/20 Ground Beef",
                          "store":  "Walmart",
                          "product":  "80% Lean / 20% Fat Ground Beef Patties, 12 Count, 2.25 lb Tray, Fresh, All Natural*",
-                         "cos":  0.722,
-                         "score":  0.910699,
+                         "cos":  0.7258,
+                         "score":  0.903094,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

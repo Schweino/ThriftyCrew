@@ -1926,3 +1926,26 @@
 [2026-08-11T04:06:40]   Family Fare: term cursor advanced to #181 (this run bought terms #85..#180, merged catalog landed)
 [2026-08-11T04:06:40]   Family Fare: catalog healthy - 4901 items, 0 expired, 3787 re-verified in 48h (no alert)
 [2026-08-11T04:06:40] sweep done rc=0 - cursor #85 -> #181
+[2026-08-11T07:00:02] sweep start (cursor before = #292, MaxMinutes=9)
+[2026-08-11T07:06:32]   Family Fare: 529 search term(s) across 528 commodit(y/ies) - 1 are ADDITIONAL terms on multi-term commodities and each one spends a budget slot every rotation
+[2026-08-11T07:06:32]   Family Fare: term cursor at #292 of 529 - this run's budget starts there and wraps
+[2026-08-11T07:06:32]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-11T07:06:32]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-11T07:06:32]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-11T07:06:32]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-11T07:06:32]   Family Fare: throttle streak (15 empties) - cooling down 45s...
+[2026-08-11T07:06:32]   Family Fare: ABORTING - 60 consecutive empty terms after 440 rows. API said: HTTP 400 x180. Continuing would burn time for nothing and push the limit out further. Carrying forward and writing what we have.
+[2026-08-11T07:06:32]   WARNING: Family Fare: 469 term(s) STILL empty after recovery (not carried, or persistent throttle): body wash, bar
+[2026-08-11T07:06:32]   soap, deodorant, disposable razors, shaving cream, body lotion, hand sanitizer, facial tissues, cotton swabs, maxi
+[2026-08-11T07:06:32]   pads, tampons, diapers size 4, baby wipes, infant formula, baby food pouches, crushed tomatoes, tomato paste, tomato
+[2026-08-11T07:06:32]   sauce, soy sauce, distilled white vinegar, lemon juice, canned beef stew, canned ravioli, corned beef hash, canned
+[2026-08-11T07:06:32]   vegetable soup, clam chowder canned, chili beans, great northern beans canned, canned mixed vegetables, canned beets,
+[2026-08-11T07:06:32]   miracle whip, caesar dressing, blue cheese dressing, balsamic vinegar, rice vinegar, red wine vinegar, teriyaki sauce,
+[2026-08-11T07:06:32]   a1 steak sauce, cocktail sauce, tartar sauce
+[2026-08-11T07:06:32]   WARNING: Family Fare: throttled - got only 440 items vs 4906 in the last good file. Diagnostic copy:
+[2026-08-11T07:06:32]   C:\Codex\income\grocery\out\throttled\family-fare-2026-08-11.throttled.json. These rows are REAL and are being MERGED
+[2026-08-11T07:06:32]   (today's prices win, everything else carries forward).
+[2026-08-11T07:06:32]   Family Fare everyday prices: 4906 catalog items (440 fresh, 4466 carried forward, 0 expired past 14 d [0 starved, 0 churn, 0 unknown]; 469 terms still empty) -> C:\Codex\income\grocery\out\regular\family-fare-regular-2026-08-11.json
+[2026-08-11T07:06:32]   Family Fare: term cursor advanced to #382 (this run bought terms #292..#381, merged catalog landed)
+[2026-08-11T07:06:32]   Family Fare: catalog healthy - 4906 items, 0 expired, 4169 re-verified in 48h (no alert)
+[2026-08-11T07:06:32] sweep done rc=0 - cursor #292 -> #382

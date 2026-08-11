@@ -1,74 +1,108 @@
 ﻿{
     "resolved":  [
-
+                     {
+                         "id":  "aluminum-foil",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Our Family Aluminum Foil, 25 Square Feet 1 Ea",
+                         "board_pu":  1.79,
+                         "name":  "Our Family Aluminum Foil, 25 Square Feet 1 Ea",
+                         "url":  "https://www.shopfamilyfare.com/shop/household/food_storage/food_wraps/our_family_aluminum_foil_25_square_feet_1_ea/p/6787298",
+                         "price":  "$1.79",
+                         "size":  "1 ea",
+                         "score":  1
+                     },
+                     {
+                         "id":  "celery",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Celery Hearts",
+                         "board_pu":  2.99,
+                         "name":  "Celery Hearts",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/celery/celery_hearts/p/78687",
+                         "price":  "$2.99",
+                         "size":  "1 ct",
+                         "score":  1
+                     },
+                     {
+                         "id":  "jalapenos",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Jalapeno Peppers",
+                         "board_pu":  2.49,
+                         "name":  "Jalapeno Peppers",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/jalapeno_peppers/p/12548",
+                         "price":  "$2.49",
+                         "size":  "lb",
+                         "score":  1
+                     },
+                     {
+                         "id":  "eggs",
+                         "fault":  "NO-LINK",
+                         "board":  "Large Grade A Eggs Our Family (30 Ct)",
+                         "board_pu":  2.356,
+                         "name":  "Large Eggs, Grade A Our Family",
+                         "url":  "https://www.shopfamilyfare.com/shop/dairy/eggs/large_eggs_grade_a_our_family/p/6787472",
+                         "price":  "$2.39",
+                         "size":  "12 ct",
+                         "score":  1
+                     },
+                     {
+                         "id":  "plums",
+                         "fault":  "PRICE-DRIFT",
+                         "board":  "Fresh Plums, Red",
+                         "board_pu":  3.49,
+                         "name":  "Fresh Plums, Red",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/pears_peaches_plums/fresh_plums_red/p/1564405684716713557",
+                         "price":  "$3.49",
+                         "size":  "lb",
+                         "score":  1
+                     }
                  ],
     "refused":  [
                     {
                         "id":  "ground-beef-8020",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
-                        "id":  "aluminum-foil",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but per-unit disagrees: board $5.99 vs link $7.99 (25%)"
                     },
                     {
                         "id":  "caesar-salad-kit",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
-                        "id":  "celery",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"1 bag\" gives no per-unit in oz"
                     },
                     {
                         "id":  "cherry-tomatoes",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"1 pt\" gives no per-unit in oz"
                     },
                     {
                         "id":  "croissants",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"10 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "dinner-rolls",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"15 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "donuts",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"10 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "hamburger-buns",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "jalapenos",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"16 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "jarred-gravy",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "eggs",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $0.1429 vs link $0.1843 (22.5%)"
                     },
                     {
                         "id":  "orange-juice",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "plums",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"0.5 gll\" gives no per-unit in floz"
                     },
                     {
                         "id":  "queso",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"23\" gives no per-unit in oz"
                     },
                     {
                         "id":  "sports-drinks",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"8pk/20oz\" gives no per-unit in floz"
                     }
                 ],
     "worked":  16,
-    "generated":  "2026-08-11 06:17",
-    "board":  "comparison-2026-08-10.json"
+    "generated":  "2026-08-11 09:06",
+    "board":  "comparison-2026-08-11.json"
 }

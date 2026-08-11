@@ -14,19 +14,6 @@
     },
     {
         "id":  "aluminum-foil",
-        "store":  "Family Fare",
-        "unit":  "each",
-        "board":  1.79,
-        "link":  1.99,
-        "ratio":  1.11,
-        "price":  1.99,
-        "size":  "1 ea",
-        "boardItem":  "Our Family Aluminum Foil, 25 Square Feet 1 Ea",
-        "linkItem":  "Our Family Aluminum Foil, 25 Square Feet 1 Ea",
-        "board_src":  "main"
-    },
-    {
-        "id":  "aluminum-foil",
         "store":  "Walmart",
         "unit":  "each",
         "board":  12.2,
@@ -114,19 +101,6 @@
         "size":  "12.5 oz",
         "boardItem":  "Brookdale Chicken Breast Extra Lean White Premium Chunk With Rib Meat IN Water 12.5 OZ",
         "linkItem":  "Brookdale Chunk Chicken Breast",
-        "board_src":  "main"
-    },
-    {
-        "id":  "celery",
-        "store":  "Family Fare",
-        "unit":  "each",
-        "board":  2.99,
-        "link":  2.79,
-        "ratio":  0.93,
-        "price":  2.79,
-        "size":  "1 ct",
-        "boardItem":  "Celery Hearts",
-        "linkItem":  "Celery Hearts",
         "board_src":  "main"
     },
     {
@@ -286,19 +260,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "jalapenos",
-        "store":  "Family Fare",
-        "unit":  "lb",
-        "board":  2.49,
-        "link":  2.99,
-        "ratio":  1.2,
-        "price":  2.99,
-        "size":  "lb",
-        "boardItem":  "Jalapeno Peppers",
-        "linkItem":  "Jalapeno Peppers",
-        "board_src":  "main"
-    },
-    {
         "id":  "eggs",
         "store":  "Hy-Vee",
         "unit":  "dozen",
@@ -335,19 +296,6 @@
         "size":  "2 lb",
         "boardItem":  "Plum Bag 2 Lbs",
         "linkItem":  "Plums, Bag",
-        "board_src":  "main"
-    },
-    {
-        "id":  "plums",
-        "store":  "Family Fare",
-        "unit":  "lb",
-        "board":  3.49,
-        "link":  3.29,
-        "ratio":  0.94,
-        "price":  3.29,
-        "size":  "lb",
-        "boardItem":  "Fresh Plums, Red",
-        "linkItem":  "Fresh Plums, Red",
         "board_src":  "main"
     },
     {
@@ -894,6 +842,19 @@
         "size":  "16 oz",
         "boardItem":  "Kroger® Hot Italian Sausage",
         "linkItem":  "Johnsonville Hot Italian Ground Sausage",
+        "board_src":  "recipe"
+    },
+    {
+        "id":  "reduced-fat-mozzarella",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.31,
+        "link":  0.2462,
+        "ratio":  0.79,
+        "price":  1.97,
+        "size":  "8 oz",
+        "boardItem":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Natural Cheese",
+        "linkItem":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Natural Cheese",
         "board_src":  "recipe"
     },
     {
