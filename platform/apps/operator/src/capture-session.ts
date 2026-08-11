@@ -445,6 +445,25 @@ export async function captureSessionStatus(directory: string): Promise<Record<st
   const remainingTerms = draft.worklist.filter((term) => !state.latest.has(term.query));
   const retryTerms = draft.worklist.filter((term) => ["blocked", "rejected"].includes(state.latest.get(term.query)?.result.outcome ?? ""));
   const previewLimit = 20;
+  const sourceTruthFailures = accuracy?.discoveryRows.flatMap((row) => {
+    const identityPass = browserCaptureTruthPass(draft.store, {
+      productKey: row.productKey,
+      name: row.name,
+      sizeText: row.sizeText,
+      purchasePriceMinor: row.purchasePriceMinor,
+    }, row.truth);
+    const queryPass = row.truth.pageState?.pageType !== "search_results"
+      || normalizeName(row.truth.pageState.query ?? "") === normalizeName(row.query);
+    if (identityPass && queryPass) return [];
+    return [{
+      rowKey: row.rowKey,
+      termKey: row.termKey,
+      query: row.query,
+      productKey: row.productKey,
+      reason: !identityPass ? "source-truth-disagreement" : "search-query-disagreement",
+      pageQuery: row.truth.pageState?.query ?? null,
+    }];
+  }) ?? [];
   return {
     ok: true,
     sessionId: draft.sessionId,
@@ -462,6 +481,10 @@ export async function captureSessionStatus(directory: string): Promise<Record<st
     verificationTargets: accuracy?.requiredVerificationRows ?? 0,
     matchedVerifications: accuracy?.matchedVerificationRows ?? 0,
     unresolvedVerifications: accuracy?.unresolvedVerificationRows ?? 0,
+    retrievalCompleteTerms: accuracy?.retrievalCompleteTerms ?? 0,
+    sourceTruthFailureCount: sourceTruthFailures.length,
+    sourceTruthFailures: sourceTruthFailures.slice(0, previewLimit),
+    sourceTruthFailuresTruncated: sourceTruthFailures.length > previewLimit,
     accuracyPass: accuracy?.pass ?? false,
   };
 }

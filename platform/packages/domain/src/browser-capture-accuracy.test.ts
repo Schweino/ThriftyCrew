@@ -37,6 +37,11 @@ describe("source-specific capture-time parser contracts", () => {
       retrieval: { targetResultCount: 24, loadedResultCount: 1, availableResultCount: 50, hasMoreResults: true, termination: "end-of-results" },
     }]);
     expect(incomplete).toMatchObject({ pass: false, retrievalCompleteTerms: 0, requiredVerificationRows: 1, unresolvedVerificationRows: 1 });
+    const scarceButComplete = await buildBrowserCaptureAccuracy("walmart", [candidate], [], [{
+      outcome: "success", rowCount: 1,
+      retrieval: { targetResultCount: 24, loadedResultCount: 1, hasMoreResults: false, termination: "end-of-results" },
+    }]);
+    expect(scarceButComplete.retrievalCompleteTerms).toBe(1);
   });
 
   it("caps the blind sample at 100 and applies count risk only to the likely winner", async () => {

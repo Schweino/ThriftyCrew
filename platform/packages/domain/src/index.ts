@@ -232,9 +232,12 @@ function retrievalComplete(term: CaptureAccuracyTerm): boolean {
   const retrieval = term.retrieval;
   if (term.outcome === "empty") return term.rowCount === 0 && retrieval.loadedResultCount === 0 && retrieval.termination === "no-results" && !retrieval.hasMoreResults;
   if (term.outcome !== "success" || term.rowCount !== retrieval.loadedResultCount) return false;
-  const required = Math.min(retrieval.targetResultCount, retrieval.availableResultCount ?? retrieval.targetResultCount);
-  if (retrieval.loadedResultCount < required) return false;
-  return retrieval.termination === "end-of-results" || (retrieval.termination === "target-depth" && retrieval.loadedResultCount >= retrieval.targetResultCount);
+  if (retrieval.termination === "end-of-results") {
+    if (retrieval.hasMoreResults) return false;
+    return retrieval.availableResultCount === undefined
+      || retrieval.loadedResultCount >= Math.min(retrieval.targetResultCount, retrieval.availableResultCount);
+  }
+  return retrieval.termination === "target-depth" && retrieval.loadedResultCount >= retrieval.targetResultCount;
 }
 
 export async function buildBrowserCaptureAccuracy(

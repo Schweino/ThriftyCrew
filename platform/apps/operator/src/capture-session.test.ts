@@ -119,7 +119,7 @@ describe("resumable browser capture sessions", () => {
     const verificationFile = path.join(root, "verification.json");
     await writeFile(verificationFile, JSON.stringify(verificationChunk(plan.targets)));
     await appendCaptureChunk(directory, verificationFile);
-    expect(await captureSessionStatus(directory)).toMatchObject({ matchedVerifications: 2, unresolvedVerifications: 0, accuracyPass: true });
+    expect(await captureSessionStatus(directory)).toMatchObject({ matchedVerifications: 2, unresolvedVerifications: 0, retrievalCompleteTerms: 2, sourceTruthFailureCount: 0, accuracyPass: true });
     const projected = path.join(root, "walmart-capture.csv");
     const manifestFile = path.join(root, "capture-session-manifest.json");
     const manifest = await finalizeCaptureSession(directory, projected, manifestFile, "2026-08-12T15:08:00.000Z");
