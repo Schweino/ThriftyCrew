@@ -142,8 +142,11 @@ The plan includes likely lowest-price winners, a stable blind sample capped at 1
 each query's strongest lexical matches, produce/count risk on those likely winners, and every
 multi-buy/outlier/duplicate-price conflict. When a query has no lexical match, all of its results remain eligible
 so aliases cannot silently escape sampling. The blind-sample cap never suppresses
-an explicit risk target. A likely winner is the cheapest candidate among the search results with the strongest
-query-token match; raw cheapest search position alone is insufficient. Revisit each target with a fresh top-level
+an explicit risk target. For configured commodities, likely-winner and blind-sample eligibility comes from the
+same authored include/exclude/priority matcher used by the production engine; this decision is persisted so local
+and Cloudflare recomputation agree. If every result is rejected, the capture layer invents no winner. Lexical
+ranking is only a fallback for transitional worklist terms with no authored commodity. Raw cheapest search
+position alone is insufficient. Revisit each target with a fresh top-level
 navigation using `captureAldiVerificationChunk`, `captureFarewayVerificationChunk`, or
 `captureNextDataVerificationChunk` from the store adapter. Each adapter atomically checkpoints the chunk and stops
 its lane on a challenge. Fareway performs this second pass on the exact first-party product-detail URL because its

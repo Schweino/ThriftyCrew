@@ -245,15 +245,20 @@ export async function buildBrowserCaptureAccuracy(
 ): Promise<BrowserCaptureAccuracy> {
   const cheapest = new Set<string>();
   const blindSampleEligible = new Set<string>();
-  const byTerm = new Map<string, Array<{ index: number; price: number; relevance: number }>>();
+  const byTerm = new Map<string, Array<{ index: number; price: number; relevance: number; matchEligible: boolean | undefined }>>();
   candidates.forEach((row, index) => {
     const values = byTerm.get(row.termKey) ?? [];
-    values.push({ index, price: row.purchasePriceMinor, relevance: captureCandidateRelevanceScore(row) });
+    values.push({ index, price: row.purchasePriceMinor, relevance: captureCandidateRelevanceScore(row), matchEligible: row.matchEligible });
     byTerm.set(row.termKey, values);
   });
   for (const values of byTerm.values()) {
+    const authoredMatchEvidence = values.some((value) => value.matchEligible !== undefined);
+    const authoredMatches = values.filter((value) => value.matchEligible === true);
+    if (authoredMatchEvidence && authoredMatches.length === 0) continue;
     const bestRelevance = Math.max(...values.map((value) => value.relevance));
-    const relevant = bestRelevance > 0 ? values.filter((value) => value.relevance === bestRelevance) : values;
+    const relevant = authoredMatches.length > 0
+      ? authoredMatches
+      : (bestRelevance > 0 ? values.filter((value) => value.relevance === bestRelevance) : values);
     for (const value of relevant) blindSampleEligible.add(String(value.index));
     const ranked = relevant.sort((left, right) => left.price - right.price || left.index - right.index);
     cheapest.add(String(ranked[0]?.index));

@@ -185,6 +185,7 @@ export const browserCaptureAccuracyRowSchema = z.object({
   name: z.string().trim().min(1).max(1000),
   sizeText: z.string().trim().max(500),
   taxonomyPath: z.string().trim().max(3000).optional(),
+  matchEligible: z.boolean().optional(),
   purchasePriceMinor: z.number().int().nonnegative().max(10_000_000),
   truth: browserCaptureTruthSchema,
   discoveryHash: sha256Hex,

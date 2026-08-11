@@ -146,4 +146,45 @@ describe("source-specific capture-time parser contracts", () => {
     expect(verified.unresolvedVerificationRows).toBe(0);
     expect(verified.pass).toBe(true);
   });
+
+  it("uses authored commodity-match evidence instead of an exact token false positive", async () => {
+    const makeCandidate = (index: number, productKey: string, name: string, price: number, matchEligible: boolean) => {
+      const truth = browserCaptureTruthSchema.parse({
+        capturedAt: "2026-08-12T12:00:00.000Z", pageUrl: "https://www.walmart.com/search?q=watermelon",
+        location: "Omaha L St Supercenter", priceMode: "Pickup", pageIndex: 0, resultIndex: index,
+        pageState: { pageType: "search_results", pageTitle: "watermelon - Walmart.com", query: "watermelon", resultRegionPresent: true, challengeDetected: false, currency: "USD", locale: "en-US", locationText: "Omaha L St Supercenter", fulfillmentText: "Pickup" },
+        visible: { rawText: `$${(price / 100).toFixed(2)}`, priceMinor: price, productName: name, productKey, priceSemantics: { offerType: "everyday", condition: "none", unitPriceMinor: price, qualifyingQuantity: 1, totalPriceMinor: price, ambiguity: false } },
+        structured: { rawText: String(price / 100), priceMinor: price, productName: name, productKey, priceSemantics: { offerType: "everyday", condition: "none", unitPriceMinor: price, qualifyingQuantity: 1, totalPriceMinor: price, ambiguity: false } },
+        parser: { status: "exact", rule: "next-data-price-lines" },
+      });
+      return { termKey: "watermelon", query: "watermelon", productKey, name, sizeText: "1 each", taxonomyPath: "Food", matchEligible, purchasePriceMinor: price, truth };
+    };
+    const candidates = [
+      makeCandidate(0, "drink-mix", "Kool-Aid Watermelon Drink Mix", 47, false),
+      makeCandidate(1, "whole-watermelon", "Fresh Seedless Watermelon, Each", 498, true),
+    ];
+    const accuracy = await buildBrowserCaptureAccuracy("walmart", candidates, [], [{
+      outcome: "success", rowCount: 2,
+      retrieval: { targetResultCount: 2, loadedResultCount: 2, availableResultCount: 2, hasMoreResults: false, termination: "end-of-results" },
+    }]);
+    expect(accuracy.discoveryRows.find((row) => row.productKey === "drink-mix")!.riskReasons).not.toContain("likely-board-winner");
+    expect(accuracy.discoveryRows.find((row) => row.productKey === "whole-watermelon")!.riskReasons).toContain("likely-board-winner");
+  });
+
+  it("does not invent a winner when authored rules reject every result", async () => {
+    const truth = browserCaptureTruthSchema.parse({
+      capturedAt: "2026-08-12T12:00:00.000Z", pageUrl: "https://www.walmart.com/search?q=watermelon",
+      location: "Omaha L St Supercenter", priceMode: "Pickup", pageIndex: 0, resultIndex: 0,
+      pageState: { pageType: "search_results", pageTitle: "watermelon - Walmart.com", query: "watermelon", resultRegionPresent: true, challengeDetected: false, currency: "USD", locale: "en-US", locationText: "Omaha L St Supercenter", fulfillmentText: "Pickup" },
+      visible: { rawText: "$0.47", priceMinor: 47, productName: "Kool-Aid Watermelon Drink Mix", productKey: "drink-mix", priceSemantics: { offerType: "everyday", condition: "none", unitPriceMinor: 47, qualifyingQuantity: 1, totalPriceMinor: 47, ambiguity: false } },
+      structured: { rawText: "0.47", priceMinor: 47, productName: "Kool-Aid Watermelon Drink Mix", productKey: "drink-mix", priceSemantics: { offerType: "everyday", condition: "none", unitPriceMinor: 47, qualifyingQuantity: 1, totalPriceMinor: 47, ambiguity: false } },
+      parser: { status: "exact", rule: "next-data-price-lines" },
+    });
+    const accuracy = await buildBrowserCaptureAccuracy("walmart", [{ termKey: "watermelon", query: "watermelon", productKey: "drink-mix", name: "Kool-Aid Watermelon Drink Mix", sizeText: "0.15 oz", taxonomyPath: "Food/Beverages", matchEligible: false, purchasePriceMinor: 47, truth }], [], [{
+      outcome: "success", rowCount: 1,
+      retrieval: { targetResultCount: 1, loadedResultCount: 1, availableResultCount: 1, hasMoreResults: false, termination: "end-of-results" },
+    }]);
+    expect(accuracy.requiredVerificationRows).toBe(0);
+    expect(accuracy.discoveryRows[0]!.riskReasons).not.toContain("likely-board-winner");
+  });
 });

@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
@@ -12,6 +13,7 @@ import {
   type BrowserCaptureVerification,
 } from "@thriftycrew/contracts";
 import { browserCaptureTruthPass, buildBrowserCaptureAccuracy, digestHex, normalizeName, parseCapturePriceText, stableJson } from "@thriftycrew/domain";
+import { compileProductMatcher } from "@thriftycrew/engine";
 
 const storeSchema = z.enum(["aldi", "fareway", "sams", "walmart"]);
 type BrowserStore = z.infer<typeof storeSchema>;
@@ -72,6 +74,17 @@ const SOURCE_IDS: Record<BrowserStore, string> = {
   sams: "direct-sams-browser",
   walmart: "direct-walmart-browser",
 };
+
+const CAPTURE_COMMODITIES = JSON.parse(readFileSync(new URL("../../../config/commodities.json", import.meta.url), "utf8")) as Array<{
+  id: string; include?: string[]; exclude?: string[]; priority?: number;
+}>;
+const CAPTURE_COMMODITY_IDS = new Set(CAPTURE_COMMODITIES.map((commodity) => commodity.id));
+const CAPTURE_PRODUCT_MATCHER = compileProductMatcher(CAPTURE_COMMODITIES.map((commodity) => ({
+  commodityId: commodity.id,
+  includes: commodity.include ?? [],
+  excludes: commodity.exclude ?? [],
+  priority: commodity.priority ?? 0,
+})));
 
 function termKey(query: string): string {
   return normalizeName(query).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 150) || "term";
@@ -360,6 +373,7 @@ function finalizedTerms(draft: DraftSession, latest: LoadedSessionState["latest"
 function accuracyCandidates(draft: DraftSession, state: LoadedSessionState): Array<Parameters<typeof buildBrowserCaptureAccuracy>[1][number]> {
   return draft.worklist.flatMap((term) => (state.latest.get(term.query)?.rows ?? []).map((row) => {
     const identity = projectedIdentity(draft.store, row);
+    const match = CAPTURE_COMMODITY_IDS.has(term.termKey) ? CAPTURE_PRODUCT_MATCHER(identity.name) : undefined;
     return {
       termKey: term.termKey,
       query: term.query,
@@ -367,6 +381,7 @@ function accuracyCandidates(draft: DraftSession, state: LoadedSessionState): Arr
       name: identity.name,
       sizeText: identity.sizeText,
       ...(identity.taxonomyPath ? { taxonomyPath: identity.taxonomyPath } : {}),
+      ...(match ? { matchEligible: match.status === "matched" && match.commodityId === term.termKey } : {}),
       purchasePriceMinor: identity.purchasePriceMinor,
       truth: browserCaptureTruthSchema.parse(row._capture),
     };
