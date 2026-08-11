@@ -11,7 +11,8 @@ function fingerprint(query) {
 }
 
 export function evaluateD1Efficiency(insights, budgets = policy.budgets) {
-  const queries = [...new Map(insights.map((item) => [fingerprint(item.query), { ...item, fingerprint: fingerprint(item.query) }])).values()];
+  const operational = insights.filter((item) => !/^\s*(?:CREATE|ALTER|DROP|PRAGMA)\b/i.test(item.query));
+  const queries = [...new Map(operational.map((item) => [fingerprint(item.query), { ...item, fingerprint: fingerprint(item.query) }])).values()];
   const findings = [];
   for (const query of queries) {
     if (query.avgRowsRead > budgets.averageRowsReadPerQuery) findings.push({
@@ -46,6 +47,12 @@ if (process.argv.includes("--self-test")) {
     numberOfTimesRun: 1, queryEfficiency: 0,
   }]);
   if (report.ok || report.findings[0]?.metric !== "averageRowsReadPerQuery") throw new Error("efficiency budget self-test failed");
+  const maintenance = evaluateD1Efficiency([{
+    query: "CREATE INDEX example ON observations(batch_id)", avgRowsRead: 9_000_000, totalRowsRead: 9_000_000,
+    avgRowsWritten: 9_000_000, totalRowsWritten: 9_000_000, avgDurationMs: 9_000, totalDurationMs: 9_000,
+    numberOfTimesRun: 1, queryEfficiency: 0,
+  }]);
+  if (!maintenance.ok || maintenance.queries.length !== 0) throw new Error("efficiency budget must exclude one-time schema maintenance");
   console.log(JSON.stringify({ ok: true, selfTest: true }));
 } else {
   const periodArgument = process.argv.find((value) => /^\d+[mhd]$/.test(value));
@@ -54,4 +61,3 @@ if (process.argv.includes("--self-test")) {
   console.log(JSON.stringify({ ...report, period, policyVersion: policy.version }, null, 2));
   if (!report.ok && process.argv.includes("--enforce")) process.exitCode = 2;
 }
-
