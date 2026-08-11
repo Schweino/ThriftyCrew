@@ -1,5 +1,28 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { d1DatabaseFileSize, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalDigestMemberKey, operationalIncidentIsNew, operationalNotificationDueAt, scheduleGap } from "./operations";
+import { archivalCapacityStatus, controlPlaneProofPass, d1DatabaseFileSize, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalDigestMemberKey, operationalIncidentIsNew, operationalNotificationDueAt, robustMonthlyGrowth, scheduleGap } from "./operations";
+
+describe("archival capacity policy", () => {
+  it("arms on projected exhaustion before the static percentage threshold", () => {
+    expect(archivalCapacityStatus(5_500, "2026-10-01T00:00:00.000Z", "2026-08-11T00:00:00.000Z")).toBe("armed");
+    expect(archivalCapacityStatus(5_500, "2026-08-25T00:00:00.000Z", "2026-08-11T00:00:00.000Z")).toBe("critical");
+  });
+
+  it("uses a median growth rate so one spike cannot dominate a longer sample", () => {
+    const history = [
+      { database_bytes: 100, observed_at: "2026-08-08T00:00:00.000Z" },
+      { database_bytes: 110, observed_at: "2026-08-09T00:00:00.000Z" },
+      { database_bytes: 1_110, observed_at: "2026-08-10T00:00:00.000Z" },
+    ];
+    expect(robustMonthlyGrowth(history, 1_120, "2026-08-11T00:00:00.000Z")).toBe(300);
+  });
+});
+
+describe("cross-plane proof policy", () => {
+  it("fails only required checks", () => {
+    expect(controlPlaneProofPass([{ required: true, ok: true }, { required: false, ok: false }])).toBe(true);
+    expect(controlPlaneProofPass([{ required: true, ok: false }])).toBe(false);
+  });
+});
 import type { WorkerEnv } from "./env";
 
 const configuredEnv = {

@@ -42,6 +42,9 @@ Ghost owns content, entitlements, billing, email, and live paywall truth. Only t
 24. Publishable recipe content exists only in immutable staging batches and deterministic guards own promotion.
 25. Unbounded historical analytics and archive queries never run against operational D1.
 26. A quarterly automated scratch restore must pass; absence or failure creates a durable operational incident.
+27. Mutating scheduled work must hold the current D1 lease fence, and deployments must drain non-safe leases.
+28. A configuration cannot activate until its content-addressed R2 recovery object passes read-after-write verification.
+29. A retired transition executor is a durable tombstone and schedule synchronization cannot reactivate it.
 
 ## Migration calendar and retirement
 

@@ -106,3 +106,19 @@ evidence and verified archive objects.
 
 V3 legacy retirement still depends on the live evidence counters in `IMPLEMENTATION-STATUS.md`. Hardening code
 may deploy while those counters accrue, but no transition executor is retired early.
+
+## H9 - unified control plane and bounded state
+
+- Migration `0026` gives PC jobs, agent cycles and Cloudflare Workflows one D1 lease authority with monotonic
+  fencing tokens. Scheduled clients carry the acquired fence on every later mutation; current requests renew
+  it and stale holders are rejected.
+- `pnpm deploy` performs an authenticated drain preflight. Active jobs, D1 exports, restore drills or maintenance
+  block a Worker replacement rather than being reset by it.
+- Configuration activation now requires a content-addressed, read-after-write verified R2 archive. This bounds
+  future recovery dependence on repeated normalized D1 copies without prematurely deleting retained history.
+- Capacity planning uses robust recent growth and projected exhaustion in addition to 70%/90% usage thresholds.
+  Projected exhaustion within 180 days arms the archive plan; within 30 days is critical.
+- Transition retirement is evidence-gated and tombstoned in D1. A later authority sync cannot resurrect a
+  retired executor. The current eight transition executors remain because their live gates are not complete.
+- The daily cross-plane proof ties configuration, publication, price/recipe accuracy, browser capture, backup,
+  execution fencing and capacity into one durable recovery signal.

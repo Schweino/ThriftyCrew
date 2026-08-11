@@ -198,12 +198,18 @@ if (-not $lock) { Write-PcRuntimeLog $logFile 'another instance holds the cycle 
 $job = $jobByCycle[$Cycle]
 $env:TC_JOB_RUN_ID = "run_{0}_pc-{1}" -f $job, ([DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())
 $env:TC_SCHEDULED_FOR = (Get-Date).ToUniversalTime().ToString('o')
+$env:TC_JOB_LEASE_FILE = Join-Path ([string]$config.logRoot) ("lease-{0}.json" -f ($env:TC_JOB_RUN_ID -replace '[^a-zA-Z0-9_-]', '-'))
 $failed = $false
 $jobStarted = $false
 try {
   Set-PcRuntimeCredential $config 'local-operator'
   Push-Location $platformRoot
-  try { Invoke-LoggedCommand 'job-ledger-start' { & $pnpmPath tc job start $job } | Out-Null; $jobStarted = $true }
+  try {
+    $start = Invoke-LoggedCommand 'job-ledger-start' { & $pnpmPath tc job start $job } -AllowFailure
+    if ($start.ExitCode -eq 75) { Write-PcRuntimeLog $logFile 'control-plane lease is held; standing down'; exit 0 }
+    if ($start.ExitCode -ne 0) { throw "job-ledger-start failed with exit code $($start.ExitCode)" }
+    $jobStarted = $true
+  }
   finally { Pop-Location }
   foreach ($agentId in $cycleAgents[$Cycle]) {
     for ($item = 0; $item -lt $MaxItems; $item++) {
@@ -220,10 +226,15 @@ try {
       Set-PcRuntimeCredential $config 'local-operator'
       $env:TC_GITHUB_JOB_STATUS = if ($failed) { 'failure' } else { 'success' }
       Push-Location $platformRoot
-      try { & $pnpmPath tc job finish $job 2>&1 | ForEach-Object { Write-PcRuntimeLog $logFile ("job-ledger-finish: {0}" -f $_) } }
+      try { Invoke-LoggedCommand 'job-ledger-finish' { & $pnpmPath tc job finish $job } | Out-Null }
       finally { Pop-Location }
-    } catch { Write-PcRuntimeLog $logFile ("job-ledger-finish failed: {0}" -f $_.Exception.Message) }
+    } catch {
+      $failed = $true
+      Write-PcRuntimeLog $logFile ("job-ledger-finish failed: {0}" -f $_.Exception.Message)
+      Send-PcRuntimeAlert ("ThriftyCrew V3 agent ledger finish failed: $Cycle") ("The agent cycle could not record a terminal job state.`n`n$($_.Exception.Message)`n`nLog: $logFile")
+    }
   }
   Exit-PcRuntimeLock $lock
+  if (Test-Path -LiteralPath $env:TC_JOB_LEASE_FILE) { Remove-Item -LiteralPath $env:TC_JOB_LEASE_FILE -Force }
 }
 if ($failed) { exit 1 }

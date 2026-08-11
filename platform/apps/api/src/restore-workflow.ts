@@ -4,6 +4,7 @@ import { raiseOperationalAlert, resolveOperationalAlert } from "./operations";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { padRestoreMultipartPart, RESTORE_SOURCE_PART_BYTES, restoreIncidentKey } from "./restore-policy";
 import type { WorkerEnv } from "./env";
+import { acquireOperationLease, releaseOperationLease } from "./orchestration";
 import {
   RESTORE_COUNT_TABLES,
   countSqlInsertLines,
@@ -65,6 +66,11 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
     const runId = `run_${event.instanceId}`;
     const incidentKey = restoreIncidentKey(event.instanceId);
     const recoveryObjectPrefix = `restore-recovery/${event.instanceId}/`;
+    const lease = await acquireOperationLease(this.env.DB, {
+      resource: "workflow:d1-maintenance", holderId: runId, ownerKind: "workflow", leaseMinutes: 1_440, now: startedAt,
+      metadata: { job: "restore-drill-quarterly", workflowInstance: event.instanceId, deploymentSafe: false },
+    });
+    if (!lease) throw new Error("another D1 maintenance workflow is active");
     let scratchDatabaseId: string | null = null;
     let backupId = "unknown";
     let dumpSha256 = "0".repeat(64);
@@ -422,6 +428,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
       );
       throw error;
     } finally {
+      await releaseOperationLease(this.env.DB, lease.resource, runId, lease.fence);
       if (scratchDatabaseId) {
         try {
           await step.do("delete exact scratch D1", async () => {

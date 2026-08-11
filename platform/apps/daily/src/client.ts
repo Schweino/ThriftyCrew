@@ -11,6 +11,8 @@ interface MutationClientOptions {
   secret?: string;
   oidcToken?: string;
   oidcTokenProvider?: () => Promise<string>;
+  jobRunId?: string;
+  leaseFence?: number;
 }
 
 interface ApiResult {
@@ -62,6 +64,10 @@ export class MutationClient {
       headers.set("x-tc-agent", this.options.agentId);
       headers.set("x-tc-timestamp", timestamp);
       headers.set("x-tc-nonce", nonce);
+      if (this.options.jobRunId && this.options.leaseFence) {
+        headers.set("x-tc-job-run", this.options.jobRunId);
+        headers.set("x-tc-lease-fence", String(this.options.leaseFence));
+      }
       const oidcToken = await this.authorizationToken(forceOidcRefresh);
       if (oidcToken) headers.set("authorization", `Bearer ${oidcToken}`);
       else if (this.options.secret) headers.set("x-tc-signature", await hmacHex(this.options.secret, canonical));

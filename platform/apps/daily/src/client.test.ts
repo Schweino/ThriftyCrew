@@ -28,6 +28,21 @@ describe("configuration deployment", () => {
 });
 
 describe("GitHub OIDC authorization", () => {
+  it("carries the acquired execution fence on every scheduled mutation", async () => {
+    let headers = new Headers();
+    vi.stubGlobal("fetch", vi.fn(async (_url: URL, init?: RequestInit) => {
+      headers = new Headers(init?.headers);
+      return new Response(JSON.stringify({ ok: true }), { status: 200 });
+    }));
+    const client = new MutationClient({
+      origin: "https://example.test", agentId: "test", secret: "fixture-secret",
+      jobRunId: "run_daily", leaseFence: 7,
+    });
+    await client.request("/internal/test", { json: { value: 1 } });
+    expect(headers.get("x-tc-job-run")).toBe("run_daily");
+    expect(headers.get("x-tc-lease-fence")).toBe("7");
+  });
+
   it("refreshes a cached token before it expires during a long operation", async () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-08-10T19:00:00Z"));

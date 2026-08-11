@@ -33,7 +33,7 @@ if ($Job -eq 'restore-drill-quarterly' -and -not $Force) {
 $lock = Enter-PcRuntimeLock ("platform-job-{0}" -f $Job) 180
 if (-not $lock) { Write-PcRuntimeLog $logFile 'another instance holds the job lock; standing down'; exit 0 }
 
-function Invoke-Logged([string]$Label, [scriptblock]$Command) {
+function Invoke-Logged([string]$Label, [scriptblock]$Command, [int[]]$AllowedExitCodes = @(0)) {
   Write-PcRuntimeLog $logFile ("START {0}" -f $Label)
   $prior = $ErrorActionPreference
   $ErrorActionPreference = 'Continue'
@@ -41,20 +41,23 @@ function Invoke-Logged([string]$Label, [scriptblock]$Command) {
   finally { $ErrorActionPreference = $prior }
   foreach ($line in @($output)) { Write-PcRuntimeLog $logFile ("{0}: {1}" -f $Label, $line) }
   if ($null -eq $exitCode) { $exitCode = 0 }
-  if ($exitCode -ne 0) { throw "$Label failed with exit code $exitCode" }
+  if ($AllowedExitCodes -notcontains $exitCode) { throw "$Label failed with exit code $exitCode" }
   Write-PcRuntimeLog $logFile ("DONE {0}" -f $Label)
+  return $exitCode
 }
 
 Set-PcRuntimeCredential $config 'local-operator'
 $env:TC_JOB_RUN_ID = "run_{0}_pc-{1}" -f $Job, ([DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())
 $env:TC_SCHEDULED_FOR = (Get-Date).ToUniversalTime().ToString('o')
 $env:TC_RECOVERY_REASON = 'authoritative Windows Task Scheduler execution'
+$env:TC_JOB_LEASE_FILE = Join-Path ([string]$config.logRoot) ("lease-{0}.json" -f ($env:TC_JOB_RUN_ID -replace '[^a-zA-Z0-9_-]', '-'))
 $jobStarted = $false
 $failed = $false
 try {
   Push-Location $platformRoot
   try {
-    Invoke-Logged 'job-ledger-start' { & $pnpmPath tc job start $Job }
+    $startExit = Invoke-Logged 'job-ledger-start' { & $pnpmPath tc job start $Job } @(0,75)
+    if ($startExit -eq 75) { Write-PcRuntimeLog $logFile 'control-plane lease is held; standing down'; exit 0 }
     $jobStarted = $true
     switch ($Job) {
       'daily-engine' {
@@ -100,5 +103,6 @@ try {
     }
   }
   Exit-PcRuntimeLock $lock
+  if (Test-Path -LiteralPath $env:TC_JOB_LEASE_FILE) { Remove-Item -LiteralPath $env:TC_JOB_LEASE_FILE -Force }
 }
 if ($failed) { exit 1 }

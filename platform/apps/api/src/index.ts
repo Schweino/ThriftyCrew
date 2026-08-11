@@ -62,7 +62,7 @@ import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
 import { evaluateReleaseIntegrity } from "./release-integrity";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation, runGhostClobberDrill } from "./ghost-reconciliation";
-import { dispatchGithubJob, dispatchRegisteredAgent, githubWorkflowRuns, jobStatusRequiresAlert, raiseOperationalAlert, recordAudit, resolveOperationalAlert, resolveRecoveredJobRunAlerts, runArchivalForecast, runScheduledOperations, scheduleGap } from "./operations";
+import { dispatchGithubJob, dispatchRegisteredAgent, githubWorkflowRuns, jobStatusRequiresAlert, raiseOperationalAlert, recordAudit, resolveOperationalAlert, resolveRecoveredJobRunAlerts, runArchivalForecast, runControlPlaneProof, runScheduledOperations, scheduleGap } from "./operations";
 import { readEngineSnapshot, readEngineSnapshotIdentity, type EngineSnapshotProfile, type EngineSourceMode } from "./engine-snapshot";
 import { memberStatusHtml } from "./member-status";
 import { accrueMilestoneEvidence, milestoneEvidenceSummary } from "./milestone-evidence";
@@ -77,6 +77,9 @@ import { readBrowserCaptureSla } from "./browser-capture-sla";
 import { buildCaptureTermInserts } from "./capture-seal";
 import { assessProductHistory, assessSourceSchema, type ProductHistoryRow } from "./capture-semantic-guards";
 import { handleGithubActionsWebhook } from "./github-recovery";
+import { acquireOperationLease, activeDeploymentBlockers, releaseOperationLease, renewOperationLease } from "./orchestration";
+import { archiveConfiguration, compactConfiguration } from "./configuration-archive";
+import { transitionReadiness } from "./transitions";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 export { D1RestoreDrillWorkflow } from "./restore-workflow";
@@ -106,6 +109,28 @@ function requireMutation(roles: readonly MutationRole[]): MiddlewareHandler<Bind
     } catch (error) {
       return context.json({ ok: false, error: error instanceof Error ? error.message : "unauthorized" }, 401);
     }
+  };
+}
+
+function requireValidExecutionFence(): MiddlewareHandler<Bindings> {
+  return async (context, next) => {
+    const runId = context.req.header("x-tc-job-run");
+    const fenceText = context.req.header("x-tc-lease-fence");
+    if (!runId && !fenceText) return await next();
+    if (!runId || !fenceText || !/^[1-9][0-9]*$/.test(fenceText)) return jsonError("execution fence headers are incomplete", 409);
+    const run = await context.env.DB.prepare(
+      `SELECT run.status, run.lease_resource, run.lease_fence, schedule.lease_minutes
+         FROM job_runs run JOIN job_schedules schedule ON schedule.job = run.job
+        WHERE run.id = ?1`,
+    ).bind(runId).first<{ status: string; lease_resource: string | null; lease_fence: number | null; lease_minutes: number }>();
+    const fence = Number(fenceText);
+    if (!run?.lease_resource || run.lease_fence !== fence) return jsonError("execution fence is stale", 409);
+    if (["completed", "failed", "missed", "timed_out", "cancelled"].includes(run.status)
+      && context.req.method === "PATCH" && context.req.path === `/internal/job-runs/${runId}`) return await next();
+    if (run.status !== "started") return jsonError("execution is not active", 409);
+    const renewed = await renewOperationLease(context.env.DB, run.lease_resource, runId, fence, run.lease_minutes);
+    if (!renewed) return jsonError("execution lease expired or was superseded", 409);
+    return await next();
   };
 }
 
@@ -154,6 +179,7 @@ async function requireDraftRelease(db: D1Database, releaseId: string): Promise<R
 }
 
 app.use("/internal/*", requireMutation(["capture", "engine", "operator"]));
+app.use("/internal/*", requireValidExecutionFence());
 app.use("/internal/*", requireRegisteredAgentScope());
 app.use("/internal/capture-batches", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/capture-batches/*", requireIdentityRole(["capture", "engine", "operator"]));
@@ -191,6 +217,9 @@ app.use("/internal/accuracy/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/triage", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/triage/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/doctor", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/deployments/*", requireIdentityRole(["operator"]));
+app.use("/internal/transitions/*", requireIdentityRole(["operator"]));
+app.use("/internal/control-plane/*", requireIdentityRole(["operator"]));
 app.use("/internal/engine/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/drills/*", requireIdentityRole(["operator"]));
 
@@ -551,12 +580,15 @@ app.put("/internal/configurations/:id/commodities", zValidator("json", configura
     ).bind(commodity.id, configurationId, commodity.label, commodity.basisUnit, commodity.categoryId, commodity.bandMinMicros ?? null, commodity.bandMaxMicros ?? null));
     for (const [kind, patterns] of [["include", commodity.include], ["exclude", commodity.exclude]] as const) {
       for (const pattern of patterns) {
-        const ruleId = await deterministicId("rule", configurationId, commodity.id, kind, pattern);
+        const ruleId = await deterministicId("rule-definition", commodity.id, kind, pattern, "authored configuration", "0");
         statements.push(context.env.DB.prepare(
-          `INSERT OR IGNORE INTO match_rules
-             (id, configuration_id, commodity_id, kind, pattern, reason, priority)
-           VALUES (?1, ?2, ?3, ?4, ?5, 'authored configuration', 0)`,
-        ).bind(ruleId, configurationId, commodity.id, kind, pattern));
+          `INSERT OR IGNORE INTO match_rule_definitions
+             (id, commodity_id, kind, pattern, reason, priority)
+           VALUES (?1, ?2, ?3, ?4, 'authored configuration', 0)`,
+        ).bind(ruleId, commodity.id, kind, pattern));
+        statements.push(context.env.DB.prepare(
+          "INSERT OR IGNORE INTO configuration_match_rules (configuration_id, definition_id) VALUES (?1, ?2)",
+        ).bind(configurationId, ruleId));
       }
     }
   }
@@ -597,7 +629,8 @@ app.post("/internal/configurations/:id/activate", async (context) => {
     `SELECT v.expected_categories, v.expected_commodities, v.expected_rules, v.expected_known_wrong,
              (SELECT COUNT(*) FROM configuration_categories c WHERE c.configuration_id = v.id) AS categories,
              (SELECT COUNT(*) FROM commodities c WHERE c.configuration_id = v.id) AS commodities,
-             (SELECT COUNT(*) FROM match_rules r WHERE r.configuration_id = v.id) AS rules,
+             ((SELECT COUNT(*) FROM match_rules r WHERE r.configuration_id = v.id)
+               + (SELECT COUNT(*) FROM configuration_match_rules r WHERE r.configuration_id = v.id)) AS rules,
              (SELECT COUNT(*) FROM known_wrong_rules k WHERE k.configuration_id = v.id) AS known_wrong
        FROM configuration_versions v WHERE v.id = ?1`,
   ).bind(configurationId).first<{
@@ -610,11 +643,37 @@ app.post("/internal/configurations/:id/activate", async (context) => {
     && row.rules === row.expected_rules
     && row.known_wrong === row.expected_known_wrong;
   if (!complete) return jsonError(`configuration counts do not match: ${stableJson(row)}`, 422);
+  const archive = await archiveConfiguration(context.env, configurationId);
   await context.env.DB.batch([
     context.env.DB.prepare("UPDATE configuration_versions SET active = 0 WHERE active = 1 AND id <> ?1").bind(configurationId),
     context.env.DB.prepare("UPDATE configuration_versions SET active = 1, deployed_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(configurationId),
   ]);
-  return context.json({ ok: true, configurationId, active: true, counts: { categories: row.categories, commodities: row.commodities, rules: row.rules, knownWrong: row.known_wrong } });
+  return context.json({ ok: true, configurationId, active: true, archive, counts: { categories: row.categories, commodities: row.commodities, rules: row.rules, knownWrong: row.known_wrong } });
+});
+
+app.post("/internal/configurations/:id/archive", async (context) => {
+  const configurationId = context.req.param("id");
+  const archive = await archiveConfiguration(context.env, configurationId);
+  return context.json({ ok: true, configurationId, archive });
+});
+
+app.get("/internal/configurations/archives", async (context) => {
+  const rows = await context.env.DB.prepare(
+    `SELECT version.id, version.content_hash, version.active, version.deployed_at,
+            archive.object_key, archive.byte_length, archive.sha256, archive.status, archive.verified_at
+       FROM configuration_versions version LEFT JOIN configuration_archives archive ON archive.configuration_id = version.id
+      ORDER BY version.deployed_at DESC`,
+  ).all();
+  return context.json({ ok: true, configurations: rows.results });
+});
+
+app.post("/internal/configurations/:id/compact", async (context) => {
+  try {
+    const compacted = await compactConfiguration(context.env, context.req.param("id"), context.get("identity").agentId);
+    return context.json({ ok: true, ...compacted });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "configuration compaction failed", 409);
+  }
 });
 
 app.put("/internal/match-decisions", zValidator("json", matchDecisionsChunkSchema), async (context) => {
@@ -804,15 +863,18 @@ app.put("/internal/schedules/sync", zValidator("json", scheduleDocumentSchema), 
   const statements = document.schedules.map((schedule) => context.env.DB.prepare(
     `INSERT INTO job_schedules
        (job, cron, max_gap_minutes, active, executor, authority_executor, timezone, owner, proof, dispatch_on_gap,
-        lifecycle, authority_version, retirement_gate, workflow_file, monitoring_started_at)
-     VALUES (?1, ?2, ?3, ?10, ?4, ?5, ?6, ?7, ?8, ?9, ?11, ?12, ?13, ?14, CURRENT_TIMESTAMP)
+        lifecycle, authority_version, retirement_gate, workflow_file, monitoring_started_at, lease_minutes)
+     VALUES (?1, ?2, ?3, ?10, ?4, ?5, ?6, ?7, ?8, ?9, ?11, ?12, ?13, ?14, CURRENT_TIMESTAMP, ?15)
      ON CONFLICT(job) DO UPDATE SET
-       cron = excluded.cron, max_gap_minutes = excluded.max_gap_minutes, active = excluded.active,
+       cron = excluded.cron, max_gap_minutes = excluded.max_gap_minutes,
        executor = excluded.executor, authority_executor = excluded.authority_executor,
        timezone = excluded.timezone, owner = excluded.owner,
        proof = excluded.proof, dispatch_on_gap = excluded.dispatch_on_gap,
-       lifecycle = excluded.lifecycle, authority_version = excluded.authority_version,
+       lifecycle = CASE WHEN job_schedules.lifecycle = 'retired' THEN 'retired' ELSE excluded.lifecycle END,
+       active = CASE WHEN job_schedules.lifecycle = 'retired' THEN 0 ELSE excluded.active END,
+       authority_version = excluded.authority_version,
        retirement_gate = excluded.retirement_gate, workflow_file = excluded.workflow_file,
+       lease_minutes = excluded.lease_minutes,
        monitoring_started_at = CASE
          WHEN job_schedules.authority_version <> excluded.authority_version
            OR job_schedules.executor <> excluded.executor
@@ -835,6 +897,7 @@ app.put("/internal/schedules/sync", zValidator("json", scheduleDocumentSchema), 
     document.version,
     schedule.retirementGate ?? null,
     schedule.workflowFile ?? null,
+    schedule.leaseMinutes,
   ));
   const placeholders = document.schedules.map((_, index) => `?${index + 1}`).join(", ");
   statements.push(context.env.DB.prepare(
@@ -1355,12 +1418,16 @@ app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (co
     const assignment = await context.env.DB.prepare("SELECT schedule_id FROM agent_registry WHERE id = ?1 AND active = 1").bind(identity.registeredAgentId).first<{ schedule_id: string | null }>();
     if (!assignment?.schedule_id || assignment.schedule_id !== body.job) return jsonError("registered agent is not assigned to this schedule", 403);
   }
-  const schedule = await context.env.DB.prepare("SELECT job FROM job_schedules WHERE job = ?1 AND active = 1").bind(body.job).first();
+  const schedule = await context.env.DB.prepare("SELECT job, lease_minutes FROM job_schedules WHERE job = ?1 AND active = 1").bind(body.job).first<{ job: string; lease_minutes: number }>();
   if (!schedule) return jsonError("unknown or inactive job", 404);
-  const existing = await context.env.DB.prepare("SELECT job, status FROM job_runs WHERE id = ?1").bind(body.id).first<{ job: string; status: string }>();
+  const existing = await context.env.DB.prepare("SELECT job, status, lease_resource, lease_fence FROM job_runs WHERE id = ?1").bind(body.id).first<{ job: string; status: string; lease_resource: string | null; lease_fence: number | null }>();
   if (existing) {
     if (existing.job !== body.job) return jsonError("job run id belongs to another job", 409);
-    return context.json({ ok: true, runId: body.id, status: existing.status, idempotent: true });
+    const lease = existing.lease_resource && existing.lease_fence
+      ? await context.env.DB.prepare("SELECT resource, holder_id AS holderId, owner_kind AS ownerKind, fence, acquired_at AS acquiredAt, heartbeat_at AS heartbeatAt, expires_at AS expiresAt FROM operation_leases WHERE resource = ?1 AND holder_id = ?2 AND fence = ?3 AND released_at IS NULL")
+        .bind(existing.lease_resource, body.id, existing.lease_fence).first()
+      : null;
+    return context.json({ ok: true, runId: body.id, status: existing.status, lease, idempotent: true });
   }
   let budgetReservation: { agentId: string; month: string; estimatedCostMicrousd: number; budgetClass: "routine" | "reserve" } | undefined;
   if (body.agentId) {
@@ -1388,12 +1455,26 @@ app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (co
     budgetReservation = { agentId: body.agentId, month, estimatedCostMicrousd: body.estimatedCostMicrousd, budgetClass: useReserve ? "reserve" : "routine" };
   }
   const status = body.startedAt ? "started" : "scheduled";
+  const leaseResource = `job:${body.job}`;
+  const lease = status === "started" ? await acquireOperationLease(context.env.DB, {
+    resource: leaseResource,
+    holderId: body.id,
+    ownerKind: "job",
+    leaseMinutes: schedule.lease_minutes,
+    metadata: { job: body.job, actorId: identity.agentId, deploymentSafe: false },
+  }) : null;
+  if (status === "started" && !lease) {
+    const active = await context.env.DB.prepare(
+      "SELECT holder_id, fence, acquired_at, heartbeat_at, expires_at FROM operation_leases WHERE resource = ?1 AND released_at IS NULL",
+    ).bind(leaseResource).first();
+    return context.json({ ok: false, error: "job already has an active execution", job: body.job, resource: leaseResource, active }, 409);
+  }
   const insertRun = context.env.DB.prepare(
     `INSERT INTO job_runs
        (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, input_json,
         executor_run_id, actor_id, prompt_hash, input_hash, model_id, agent_id, ledger_mode,
-        mutation_authorized, estimated_cost_microusd, budget_class)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17)`,
+        mutation_authorized, estimated_cost_microusd, budget_class, lease_resource, lease_fence)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19)`,
   ).bind(
     body.id,
     body.job,
@@ -1412,7 +1493,10 @@ app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (co
     body.mutationAuthorized ? 1 : 0,
     body.estimatedCostMicrousd,
     budgetReservation?.budgetClass ?? null,
+    lease?.resource ?? null,
+    lease?.fence ?? null,
   );
+  try {
   if (budgetReservation) {
     const reserveBudget = context.env.DB.prepare(
       `INSERT INTO agent_budget_months
@@ -1430,18 +1514,25 @@ app.post("/internal/job-runs", zValidator("json", jobRunCreateSchema), async (co
   } else {
     await insertRun.run();
   }
-  return context.json({ ok: true, runId: body.id, status, idempotent: false }, 201);
+  } catch (error) {
+    if (lease) await releaseOperationLease(context.env.DB, lease.resource, body.id, lease.fence);
+    throw error;
+  }
+  return context.json({ ok: true, runId: body.id, status, lease, idempotent: false }, 201);
 });
 
 app.patch("/internal/job-runs/:id", zValidator("json", jobRunUpdateSchema), async (context) => {
   const body = context.req.valid("json");
-  const current = await context.env.DB.prepare("SELECT job, status, started_at, finished_at, trigger_kind, executor_run_id, agent_id, estimated_cost_microusd, budget_class FROM job_runs WHERE id = ?1").bind(context.req.param("id")).first<{
-    job: string; status: string; started_at: string | null; finished_at: string | null; trigger_kind: string; executor_run_id: string | null; agent_id: string | null; estimated_cost_microusd: number; budget_class: "routine" | "reserve" | null;
+  const current = await context.env.DB.prepare("SELECT job, status, started_at, finished_at, trigger_kind, executor_run_id, agent_id, estimated_cost_microusd, budget_class, lease_resource, lease_fence FROM job_runs WHERE id = ?1").bind(context.req.param("id")).first<{
+    job: string; status: string; started_at: string | null; finished_at: string | null; trigger_kind: string; executor_run_id: string | null; agent_id: string | null; estimated_cost_microusd: number; budget_class: "routine" | "reserve" | null; lease_resource: string | null; lease_fence: number | null;
   }>();
   if (!current) return jsonError("job run not found", 404);
   const updateIdentity = context.get("identity");
   if (updateIdentity.registeredAgentId && current.agent_id !== updateIdentity.registeredAgentId) return jsonError("registered agent may only update its own job run", 403);
   if (current.status === body.status && current.finished_at === (body.finishedAt ?? null)) {
+    if (current.lease_resource && current.lease_fence) {
+      await releaseOperationLease(context.env.DB, current.lease_resource, context.req.param("id"), current.lease_fence, body.finishedAt ?? new Date().toISOString());
+    }
     return context.json({ ok: true, runId: context.req.param("id"), status: current.status, idempotent: true });
   }
   const allowed: Record<string, string[]> = {
@@ -1451,10 +1542,20 @@ app.patch("/internal/job-runs/:id", zValidator("json", jobRunUpdateSchema), asyn
   if (!allowed[current.status]?.includes(body.status)) return jsonError(`invalid job transition ${current.status} -> ${body.status}`, 409);
   const startedAt = body.startedAt ?? current.started_at;
   if (body.status !== "missed" && !startedAt) return jsonError("startedAt is required once a job starts", 422);
+  let startedLease: Awaited<ReturnType<typeof acquireOperationLease>> = null;
+  if (current.status === "scheduled" && body.status === "started") {
+    const policy = await context.env.DB.prepare("SELECT lease_minutes FROM job_schedules WHERE job = ?1").bind(current.job).first<{ lease_minutes: number }>();
+    startedLease = await acquireOperationLease(context.env.DB, {
+      resource: `job:${current.job}`, holderId: context.req.param("id"), ownerKind: "job", leaseMinutes: policy?.lease_minutes ?? 180,
+      metadata: { job: current.job, actorId: updateIdentity.agentId, deploymentSafe: false },
+    });
+    if (!startedLease) return jsonError("job already has an active execution", 409);
+  }
   await context.env.DB.prepare(
     `UPDATE job_runs SET status = ?2, started_at = ?3, heartbeat_at = ?4, finished_at = ?5,
        output_hash = ?6, input_tokens = ?7, output_tokens = ?8, cache_read_tokens = ?9,
-       cache_write_tokens = ?10, cost_microusd = ?11, stats_json = ?12, error = ?13
+       cache_write_tokens = ?10, cost_microusd = ?11, stats_json = ?12, error = ?13,
+       lease_resource = COALESCE(lease_resource, ?14), lease_fence = COALESCE(lease_fence, ?15)
       WHERE id = ?1`,
   ).bind(
     context.req.param("id"),
@@ -1470,7 +1571,14 @@ app.patch("/internal/job-runs/:id", zValidator("json", jobRunUpdateSchema), asyn
     body.usage.costMicrousd,
     stableJson(body.stats),
     body.error ?? null,
+    startedLease?.resource ?? null,
+    startedLease?.fence ?? null,
   ).run();
+  if (["completed", "failed", "missed", "timed_out", "cancelled"].includes(body.status)) {
+    const resource = current.lease_resource ?? startedLease?.resource;
+    const fence = current.lease_fence ?? startedLease?.fence;
+    if (resource && fence) await releaseOperationLease(context.env.DB, resource, context.req.param("id"), fence, body.finishedAt ?? new Date().toISOString());
+  }
   if (current.agent_id) {
     const month = new Date(startedAt ?? body.finishedAt ?? Date.now()).toISOString().slice(0, 7);
     await context.env.DB.prepare(
@@ -2818,9 +2926,53 @@ app.post("/internal/triage/:id/resolve", zValidator("json", triageResolveSchema)
   return context.json({ ok: true, triageId: context.req.param("id"), status: body.status });
 });
 
+app.post("/internal/deployments/preflight", async (context) => {
+  const payload = await context.req.json().catch(() => ({})) as { sourceCommit?: unknown };
+  const sourceCommit = typeof payload.sourceCommit === "string" && /^[a-f0-9]{40}$/.test(payload.sourceCommit)
+    ? payload.sourceCommit
+    : null;
+  if (!sourceCommit) return jsonError("deployment preflight requires a full git commit", 422);
+  const checkedAt = new Date().toISOString();
+  const blockers = await activeDeploymentBlockers(context.env.DB, checkedAt);
+  const id = await deterministicId("deployment-check", sourceCommit, checkedAt);
+  await context.env.DB.prepare(
+    `INSERT INTO deployment_checks (id, source_commit, actor_id, status, blocker_count, blockers_json, checked_at)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)`,
+  ).bind(id, sourceCommit, context.get("identity").agentId, blockers.length ? "blocked" : "clear", blockers.length, stableJson(blockers), checkedAt).run();
+  return context.json({ ok: blockers.length === 0, checkId: id, sourceCommit, checkedAt, blockers }, blockers.length ? 409 : 200);
+});
+
+app.get("/internal/transitions/readiness", async (context) => {
+  const schedules = await transitionReadiness(context.env.DB);
+  return context.json({ ok: true, eligible: schedules.filter((schedule) => schedule.eligible === true).length, schedules });
+});
+
+app.post("/internal/control-plane/prove", async (context) => {
+  await runControlPlaneProof(context.env, Date.now());
+  const proof = await context.env.DB.prepare("SELECT id, status, source_commit, checks_json, observed_at FROM control_plane_proofs ORDER BY observed_at DESC LIMIT 1").first<Record<string, unknown>>();
+  return context.json({ ok: proof?.status === "pass", proof }, proof?.status === "pass" ? 200 : 422);
+});
+
+app.post("/internal/transitions/:job/retire", async (context) => {
+  const job = context.req.param("job");
+  const readiness = await transitionReadiness(context.env.DB);
+  const schedule = readiness.find((candidate) => candidate.job === job);
+  if (!schedule) return jsonError("transition schedule not found", 404);
+  if (schedule.eligible !== true) return context.json({ ok: false, error: "retirement evidence gate is incomplete", schedule }, 409);
+  const retiredAt = new Date().toISOString();
+  await context.env.DB.batch([
+    context.env.DB.prepare("UPDATE job_schedules SET lifecycle = 'retired', active = 0 WHERE job = ?1 AND lifecycle = 'transition'").bind(job),
+    context.env.DB.prepare(
+      `INSERT INTO transition_retirements (schedule_id, retirement_gate, evidence_json, retired_by, retired_at)
+       VALUES (?1, ?2, ?3, ?4, ?5) ON CONFLICT(schedule_id) DO NOTHING`,
+    ).bind(job, String(schedule.retirement_gate), stableJson(schedule.evidence), context.get("identity").agentId, retiredAt),
+  ]);
+  return context.json({ ok: true, job, status: "retired", retiredAt, evidence: schedule.evidence });
+});
+
 app.get("/internal/doctor", async (context) => {
   const overdueAccuracyDraws = await markOverdueAccuracyDraws(context.env.DB);
-  const [configuration, release, hardGuards, triage, batches] = await Promise.all([
+  const [configuration, release, hardGuards, triage, batches, leases, capacity, deploymentCheck] = await Promise.all([
     context.env.DB.prepare("SELECT id, deployed_at FROM configuration_versions WHERE active = 1").first(),
     context.env.DB.prepare(
       `SELECT current.release_id, current.updated_at, release.configuration_id
@@ -2834,12 +2986,15 @@ app.get("/internal/doctor", async (context) => {
     ).all(),
     context.env.DB.prepare("SELECT status, COUNT(*) AS count FROM triage_items GROUP BY status").all(),
     context.env.DB.prepare("SELECT status, COUNT(*) AS count FROM capture_batches GROUP BY status").all(),
+    context.env.DB.prepare("SELECT resource, holder_id, owner_kind, fence, heartbeat_at, expires_at FROM operation_leases WHERE released_at IS NULL AND expires_at > CURRENT_TIMESTAMP ORDER BY acquired_at").all(),
+    context.env.DB.prepare("SELECT status, usage_percent_millis, monthly_growth_bytes, projected_limit_at, observed_at FROM archival_forecasts ORDER BY observed_at DESC LIMIT 1").first(),
+    context.env.DB.prepare("SELECT status, blocker_count, checked_at, source_commit FROM deployment_checks ORDER BY checked_at DESC LIMIT 1").first(),
   ]);
   const healthy = Boolean(configuration && release)
     && (configuration as { id?: string } | null)?.id === (release as { configuration_id?: string } | null)?.configuration_id
     && hardGuards.results.every((row) => (row as { status: string }).status === "pass")
     && !triage.results.some((row) => (row as { status: string; count: number }).status === "open" && (row as { count: number }).count > 0);
-  return context.json({ ok: healthy, configuration, release, hardGuards: hardGuards.results, triage: triage.results, batches: batches.results, overdueAccuracyDraws }, healthy ? 200 : 422);
+  return context.json({ ok: healthy, configuration, release, hardGuards: hardGuards.results, triage: triage.results, batches: batches.results, activeLeases: leases.results, capacity, deploymentCheck, overdueAccuracyDraws }, healthy ? 200 : 422);
 });
 
 app.all("/board-beta*", (context) => context.env.ASSETS.fetch(context.req.raw));

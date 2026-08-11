@@ -579,6 +579,7 @@ export const scheduleEntrySchema = z.object({
   triggerCron: z.string().min(5).max(256).optional(),
   executor: z.enum(["github-actions", "worker-cron", "cloudflare-workflow", "pc", "codex-automation"]),
   maxGapMinutes: z.number().int().positive(),
+  leaseMinutes: z.number().int().min(1).max(10_080).default(180),
   owner: z.string().min(1).max(160),
   proof: z.string().min(1).max(500),
   dispatchOnGap: z.boolean().default(false),

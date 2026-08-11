@@ -6,6 +6,98 @@ export function jobStatusRequiresAlert(status: string): boolean {
   return status === "failed" || status === "timed_out" || status === "missed";
 }
 
+export function archivalCapacityStatus(usagePercentMillis: number, projectedLimitAt: string | null, observedAt: string): "healthy" | "armed" | "critical" {
+  const projectedDays = projectedLimitAt ? (Date.parse(projectedLimitAt) - Date.parse(observedAt)) / 86_400_000 : Number.POSITIVE_INFINITY;
+  if (usagePercentMillis >= 90_000 || projectedDays <= 30) return "critical";
+  if (usagePercentMillis >= 70_000 || projectedDays <= 180) return "armed";
+  return "healthy";
+}
+
+export function robustMonthlyGrowth(history: Array<{ database_bytes: number; observed_at: string }>, currentBytes: number, observedAt: string): number {
+  const points = [...history, { database_bytes: currentBytes, observed_at: observedAt }]
+    .filter((point) => Number.isFinite(Date.parse(point.observed_at)))
+    .sort((left, right) => Date.parse(left.observed_at) - Date.parse(right.observed_at));
+  const dailyRates: number[] = [];
+  for (let index = 1; index < points.length; index += 1) {
+    const previous = points[index - 1]!;
+    const current = points[index]!;
+    const days = (Date.parse(current.observed_at) - Date.parse(previous.observed_at)) / 86_400_000;
+    if (days > 0) dailyRates.push((current.database_bytes - previous.database_bytes) / days);
+  }
+  const positive = dailyRates.filter((rate) => rate > 0).sort((left, right) => left - right);
+  if (positive.length === 0) return 0;
+  const middle = Math.floor(positive.length / 2);
+  const median = positive.length % 2 ? positive[middle]! : (positive[middle - 1]! + positive[middle]!) / 2;
+  return Math.round(median * 30);
+}
+
+export function controlPlaneProofPass(checks: ReadonlyArray<{ required: boolean; ok: boolean }>): boolean {
+  return checks.every((check) => !check.required || check.ok);
+}
+
+export async function runControlPlaneProof(env: WorkerEnv, scheduledTime: number): Promise<void> {
+  const observedAt = new Date(scheduledTime).toISOString();
+  const day = observedAt.slice(0, 10);
+  const proofId = await deterministicId("control-plane-proof", day);
+  const existing = await env.DB.prepare("SELECT status FROM control_plane_proofs WHERE id = ?1").bind(proofId).first();
+  if (existing) return;
+  const [configuration, release, hardGuards, recipeIssues, backup, orphanExecutions, capacity, browser] = await Promise.all([
+    env.DB.prepare(
+      `SELECT version.id, version.content_hash, archive.status AS archive_status
+         FROM configuration_versions version LEFT JOIN configuration_archives archive ON archive.configuration_id = version.id
+        WHERE version.active = 1`,
+    ).first<{ id: string; content_hash: string; archive_status: string | null }>(),
+    env.DB.prepare(
+      `SELECT release.id, release.configuration_id, release.published_at
+         FROM current_releases current JOIN releases release ON release.id = current.release_id
+        WHERE current.market_id = 'omaha'`,
+    ).first<{ id: string; configuration_id: string; published_at: string }>(),
+    env.DB.prepare(
+      `SELECT COUNT(*) AS count FROM guard_results result
+        JOIN guard_definitions definition ON definition.id = result.guard_id
+        JOIN current_releases current ON current.release_id = result.release_id
+       WHERE definition.severity = 'hard' AND result.status <> 'pass'`,
+    ).first<{ count: number }>(),
+    env.DB.prepare(
+      `SELECT COUNT(*) AS count FROM release_recipe_costs cost
+        JOIN current_releases current ON current.release_id = cost.release_id
+       WHERE cost.status <> 'complete'`,
+    ).first<{ count: number }>(),
+    env.DB.prepare(
+      `SELECT id, finished_at FROM backup_exports
+        WHERE status = 'completed' AND finished_at >= datetime(?1, '-36 hours')
+        ORDER BY finished_at DESC LIMIT 1`,
+    ).bind(observedAt).first<{ id: string; finished_at: string }>(),
+    env.DB.prepare(
+      `SELECT run.id, run.job, run.started_at FROM job_runs run JOIN job_schedules schedule ON schedule.job = run.job
+        WHERE run.status = 'started' AND COALESCE(schedule.authority_executor, schedule.executor) IN ('pc','cloudflare-workflow')
+          AND NOT EXISTS (
+            SELECT 1 FROM operation_leases lease
+             WHERE lease.holder_id = run.id AND lease.released_at IS NULL AND lease.expires_at > ?1
+          )`,
+    ).bind(observedAt).all(),
+    env.DB.prepare("SELECT status, projected_limit_at, usage_percent_millis, observed_at FROM archival_forecasts ORDER BY observed_at DESC LIMIT 1").first<{ status: string; projected_limit_at: string | null; usage_percent_millis: number; observed_at: string }>(),
+    readBrowserCaptureSla(env.DB, new Date(scheduledTime)),
+  ]);
+  const checks = [
+    { id: "configuration-archive", required: true, ok: configuration?.archive_status === "verified", detail: configuration ?? null },
+    { id: "release-pointer", required: true, ok: Boolean(release && configuration && release.configuration_id === configuration.id), detail: release ?? null },
+    { id: "hard-guards", required: true, ok: (hardGuards?.count ?? 1) === 0, detail: hardGuards ?? null },
+    { id: "recipe-costs", required: true, ok: (recipeIssues?.count ?? 1) === 0, detail: recipeIssues ?? null },
+    { id: "backup-rpo", required: true, ok: Boolean(backup), detail: backup ?? null },
+    { id: "execution-fencing", required: true, ok: orphanExecutions.results.length === 0, detail: orphanExecutions.results },
+    { id: "d1-capacity", required: true, ok: capacity?.status !== "critical", detail: capacity ?? null },
+    { id: "browser-capture", required: browser.enforced && browser.deadlineExpired, ok: browser.ready, detail: browser },
+  ];
+  const status = controlPlaneProofPass(checks) ? "pass" : "fail";
+  await env.DB.prepare(
+    `INSERT INTO control_plane_proofs (id, status, source_commit, checks_json, observed_at)
+     VALUES (?1, ?2, ?3, ?4, ?5)`,
+  ).bind(proofId, status, env.DEPLOYED_COMMIT ?? "unknown", stableJson(checks), observedAt).run();
+  if (status === "fail") await raiseOperationalAlert(env, "control-plane-proof", "Daily cross-plane proof failed", { proofId, checks }, { notification: "digest", deferMinutes: 15, observedAt });
+  else await resolveOperationalAlert(env, "control-plane-proof", { proofId, checks }, { recoveryTitle: "Daily cross-plane proof recovered" });
+}
+
 export function scheduleGap(
   latestAt: string | null,
   monitoringStartedAt: string | null,
@@ -671,20 +763,19 @@ export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number)
     ).bind(runId, observedAt).run();
   }
   try {
-    const [databaseBytes, observations, protectedRows, previous] = await Promise.all([
+    const [databaseBytes, observations, protectedRows, history] = await Promise.all([
       d1DatabaseFileSize(env),
       env.DB.prepare("SELECT COUNT(*) AS count, MIN(captured_at) AS oldest FROM observations").first<{ count: number; oldest: string | null }>(),
       env.DB.prepare("SELECT COUNT(DISTINCT observation_id) AS count FROM release_cells WHERE observation_id IS NOT NULL").first<{ count: number }>(),
-      env.DB.prepare("SELECT database_bytes, observed_at FROM archival_forecasts ORDER BY observed_at DESC LIMIT 1").first<{ database_bytes: number; observed_at: string }>(),
+      env.DB.prepare("SELECT database_bytes, observed_at FROM archival_forecasts ORDER BY observed_at DESC LIMIT 8").all<{ database_bytes: number; observed_at: string }>(),
     ]);
     const databaseLimitBytes = Number(env.D1_DATABASE_LIMIT_BYTES ?? 10 * 1024 * 1024 * 1024);
-    const elapsedDays = previous ? Math.max(1, (scheduledTime - Date.parse(previous.observed_at)) / 86_400_000) : 0;
-    const monthlyGrowthBytes = previous ? Math.round((databaseBytes - previous.database_bytes) * 30 / elapsedDays) : 0;
+    const monthlyGrowthBytes = robustMonthlyGrowth(history.results, databaseBytes, observedAt);
     const usagePercentMillis = Math.floor(databaseBytes * 100_000 / databaseLimitBytes);
-    const status = usagePercentMillis >= 90_000 ? "critical" : usagePercentMillis >= 70_000 ? "armed" : "healthy";
     const projectedLimitAt = monthlyGrowthBytes > 0
       ? new Date(scheduledTime + Math.max(0, databaseLimitBytes - databaseBytes) / monthlyGrowthBytes * 30 * 86_400_000).toISOString()
       : null;
+    const status = archivalCapacityStatus(usagePercentMillis, projectedLimitAt, observedAt);
     const forecastId = await deterministicId("archival-forecast", observedAt);
     await env.DB.batch([
       env.DB.prepare(
@@ -748,4 +839,5 @@ export async function runScheduledOperations(env: WorkerEnv, scheduledTime: numb
     }
   }
   if (parts.hour === "05" && parts.minute === "15") await runArchivalForecast(env, scheduledTime);
+  if (parts.hour === "05" && parts.minute === "45") await runControlPlaneProof(env, scheduledTime);
 }

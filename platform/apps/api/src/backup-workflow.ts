@@ -4,6 +4,7 @@ import { stableJson } from "@thriftycrew/domain";
 import { raiseOperationalAlert, resolveOperationalAlert } from "./operations";
 import type { WorkerEnv } from "./env";
 import { D1_EXPORT_POLL_STEP_CONFIG, d1ExportPollPayload, d1ExportTerminalError } from "./backup-policy";
+import { acquireOperationLease, releaseOperationLease } from "./orchestration";
 
 interface BackupWorkflowPayload { trigger?: string; localDate?: string; forceReplica?: boolean }
 
@@ -41,6 +42,11 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
     const backupId = `backup_${event.instanceId}`;
     const runId = `run_${event.instanceId}`;
     const startedAt = new Date().toISOString();
+    const lease = await acquireOperationLease(this.env.DB, {
+      resource: "workflow:d1-maintenance", holderId: runId, ownerKind: "workflow", leaseMinutes: 360, now: startedAt,
+      metadata: { job: "d1-backup", workflowInstance: event.instanceId, deploymentSafe: false },
+    });
+    if (!lease) throw new NonRetryableError("another D1 maintenance workflow is active");
     await this.env.DB.batch([
       this.env.DB.prepare(
         `INSERT INTO job_runs
@@ -122,6 +128,7 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
         ).bind(runId, finishedAt, stableJson({ backupId, bookmark, ...stored, replica })),
       ]);
       await resolveOperationalAlert(this.env, "d1-backup", { backupId, finishedAt, byteLength: stored.byteLength }, { recoveryTitle: "Nightly D1 backup recovered successfully" });
+      await releaseOperationLease(this.env.DB, lease.resource, runId, lease.fence, finishedAt);
     } catch (error) {
       const finishedAt = new Date().toISOString();
       const message = error instanceof Error ? error.message : "unknown backup failure";
@@ -138,6 +145,7 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
         ).bind(backupId, finishedAt, stableJson({ error: message })),
       ]);
       await raiseOperationalAlert(this.env, "d1-backup", "Nightly D1 backup failed", { backupId, failedAttempt: event.instanceId, error: message });
+      await releaseOperationLease(this.env.DB, lease.resource, runId, lease.fence, finishedAt);
       throw error;
     }
   }

@@ -43,10 +43,18 @@ async function mutationClient(): Promise<MutationClient> {
   const oidcToken = process.env.TC_OIDC_TOKEN;
   const canRequestOidcToken = Boolean(process.env.ACTIONS_ID_TOKEN_REQUEST_URL && process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN);
   const secret = process.env.TC_LOCAL_MUTATION_SECRET;
+  let executionFence: { runId: string; fence: number } | undefined;
+  if (process.env.TC_JOB_LEASE_FILE) {
+    try {
+      const parsed = JSON.parse(await readFile(process.env.TC_JOB_LEASE_FILE, "utf8")) as { runId?: unknown; lease?: { fence?: unknown } };
+      if (typeof parsed.runId === "string" && typeof parsed.lease?.fence === "number") executionFence = { runId: parsed.runId, fence: parsed.lease.fence };
+    } catch { /* Job start intentionally runs before the lease file exists. */ }
+  }
   if (!oidcToken && !canRequestOidcToken && !secret) throw new Error("set TC_LOCAL_MUTATION_SECRET locally or run from a GitHub OIDC-enabled job");
   return new MutationClient({
     origin: process.env.TC_API_ORIGIN ?? "http://127.0.0.1:8787",
     agentId: process.env.TC_AGENT_ID ?? "local-operator",
+    ...(executionFence ? { jobRunId: executionFence.runId, leaseFence: executionFence.fence } : {}),
     ...(oidcToken ? { oidcToken } : canRequestOidcToken ? { oidcTokenProvider: async () => {
       const refreshed = await githubOidcToken();
       if (!refreshed) throw new Error("GitHub OIDC token refresh was unavailable");
@@ -331,11 +339,29 @@ if (command === "status") {
     deployment,
     matching,
   };
+} else if (command === "config" && subcommand === "archives") {
+  result = await (await mutationClient()).request("/internal/configurations/archives");
+} else if (command === "config" && subcommand === "archive") {
+  const configurationId = arguments_[0];
+  if (!configurationId) throw new Error("tc config archive requires a configuration id");
+  result = await (await mutationClient()).request(`/internal/configurations/${encodeURIComponent(configurationId)}/archive`, { method: "POST" });
+} else if (command === "config" && subcommand === "compact") {
+  const configurationId = arguments_[0];
+  if (!configurationId) throw new Error("tc config compact requires a configuration id");
+  result = await (await mutationClient()).request(`/internal/configurations/${encodeURIComponent(configurationId)}/compact`, { method: "POST", acceptStatuses: [409] });
 } else if (command === "schedules" && subcommand === "check") {
   result = await checkScheduleAuthority(platformRoot);
 } else if (command === "schedules" && subcommand === "deploy") {
   const document = await readScheduleAuthority(platformRoot);
   result = await (await mutationClient()).request("/internal/schedules/sync", { method: "PUT", json: document });
+} else if (command === "transition" && subcommand === "readiness") {
+  result = await (await mutationClient()).request("/internal/transitions/readiness");
+} else if (command === "transition" && subcommand === "retire") {
+  const job = arguments_[0];
+  if (!job) throw new Error("tc transition retire requires a schedule id");
+  result = await (await mutationClient()).request(`/internal/transitions/${encodeURIComponent(job)}/retire`, { method: "POST", acceptStatuses: [409] });
+} else if (command === "control-plane" && subcommand === "prove") {
+  result = await (await mutationClient()).request("/internal/control-plane/prove", { method: "POST", acceptStatuses: [422] });
 } else if (command === "agents" && subcommand === "check") {
   result = await checkAgentRegistry(platformRoot);
 } else if (command === "agents" && subcommand === "deploy") {
@@ -520,7 +546,7 @@ if (command === "status") {
   if (!job) throw new Error("tc job start requires a job id");
   const runId = githubRunId(job);
   const now = new Date().toISOString();
-  result = await (await mutationClient()).request("/internal/job-runs", { json: {
+  const started = await (await mutationClient()).request("/internal/job-runs", { json: {
     id: runId,
     job,
     triggerKind: process.env.GITHUB_RUN_ID ? "schedule" : "operator",
@@ -531,7 +557,10 @@ if (command === "status") {
       : runId,
     ...agentJobRunFields(process.env),
     input: { reason: process.env.TC_RECOVERY_REASON ?? "scheduled operation", ...(process.env.TC_AGENT_WORK_ITEM_ID ? { workItemId: process.env.TC_AGENT_WORK_ITEM_ID } : {}) },
-  } });
+  }, acceptStatuses: [409] });
+  result = started;
+  if (started.httpStatus !== 409 && process.env.TC_JOB_LEASE_FILE) await writeJson(process.env.TC_JOB_LEASE_FILE, started);
+  if (started.httpStatus === 409) process.exitCode = 75;
 } else if (command === "job" && subcommand === "github-runs") {
   const limit = arguments_[0] ?? "5";
   if (!/^([1-9]|10)$/.test(limit)) throw new Error("tc job github-runs limit must be from 1 through 10");
@@ -852,9 +881,9 @@ if (command === "status") {
     ok: isHelpRequest,
     ...(!isHelpRequest ? { error: `Unknown command: ${requestedCommand}` } : {}),
     usage: [
-      "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy",
+      "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy|archives|archive <id>",
       "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
-      "tc ghost reconcile [release-id]",
+      "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
         "tc capture metrics [limit]", "tc capture session init|append|verification-plan|finalize|status",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog",
