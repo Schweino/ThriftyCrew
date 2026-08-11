@@ -91,7 +91,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
   if (batches.results.length === 0) throw new Error(`No promoted ${mode} capture batches`);
   const placeholders = batches.results.map((_, index) => `?${index + 2}`).join(",");
   const rawPlaceholders = batches.results.map((_, index) => `?${index + 1}`).join(",");
-  const candidates = await env.DB.prepare(
+  const candidatesRequest = env.DB.prepare(
     `SELECT o.id AS observation_id, m.commodity_id, p.store_location_id, o.per_unit_micros,
             o.captured_at, o.valid_to, b.coverage_mode, b.captured_to, b.id AS batch_id,
             o.normalized_basis_unit, o.normalized_basis_qty_micros, o.purchase_price_minor,
@@ -109,14 +109,12 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
       WHERE o.batch_id IN (${placeholders})
       ORDER BY m.commodity_id, p.store_location_id, o.per_unit_micros, o.id`,
   ).bind(configuration.id, ...batches.results.map((batch) => batch.id)).all();
-  const rawCandidates = snapshotIncludesRawCandidates(profile) ? await env.DB.prepare(
+  const rawCandidatesRequest = snapshotIncludesRawCandidates(profile) ? env.DB.prepare(
     `SELECT o.id AS observation_id, p.store_location_id, o.per_unit_micros, o.captured_at, o.valid_to,
             b.coverage_mode, b.captured_to, b.id AS batch_id, o.normalized_basis_unit,
-            o.normalized_basis_qty_micros, o.purchase_price_minor, o.purchase_quantity, o.package_count,
-            o.membership_required, o.loyalty_required, o.raw_price_text, pv.name, pv.normalized_name,
-            pv.size_text, pv.product_url, pv.taxonomy_path, p.external_key
-            , o.basis_options_json
-            , CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days
+            o.normalized_basis_qty_micros, o.purchase_price_minor,
+            o.membership_required, o.loyalty_required, pv.name, pv.size_text, p.external_key,
+            CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days
        FROM observations o
        JOIN capture_batches b ON b.id = o.batch_id
        JOIN capture_sources s ON s.id = b.source_id
@@ -125,7 +123,9 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
       WHERE o.batch_id IN (${rawPlaceholders})
       ORDER BY p.store_location_id, o.per_unit_micros, o.id`,
   ).bind(...batches.results.map((batch) => batch.id)).all() : { results: [] };
-  const [commodities, stores, currentCells, knownWrongRules] = await Promise.all([
+  const [candidates, rawCandidates, commodities, stores, currentCells, knownWrongRules] = await Promise.all([
+    candidatesRequest,
+    rawCandidatesRequest,
     env.DB.prepare(
       `SELECT c.id, c.label, c.basis_unit, c.category_id, c.band_min_micros, c.band_max_micros, cat.label AS category_label, cat.sort_order
          FROM commodities c LEFT JOIN categories cat ON cat.id = c.category_id
