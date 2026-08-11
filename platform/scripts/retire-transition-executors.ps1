@@ -10,8 +10,11 @@ $authority = Get-Content -LiteralPath (Join-Path $platformRoot 'config\schedules
 
 Push-Location $platformRoot
 try {
-  $raw = & $pnpmPath --silent --filter '@thriftycrew/operator' tc transition readiness 2>&1
-  if ($LASTEXITCODE -ne 0) { throw "transition readiness failed with exit code $LASTEXITCODE" }
+  $prior = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try { $raw = & $pnpmPath --silent --filter '@thriftycrew/operator' tc transition readiness 2>&1; $readinessExit = $LASTEXITCODE }
+  finally { $ErrorActionPreference = $prior }
+  if ($readinessExit -ne 0) { throw "transition readiness failed with exit code $readinessExit`: $($raw -join ' ')" }
   $readiness = ($raw -join "`n") | ConvertFrom-Json
   $eligible = @($readiness.schedules | Where-Object { $_.eligible -eq $true })
   if (-not $Apply) {
@@ -30,8 +33,11 @@ try {
         Disable-ScheduledTask -InputObject $task | Out-Null
         $disabledTask = [string]$definition.windowsTask
       }
-      $result = & $pnpmPath --silent --filter '@thriftycrew/operator' tc transition retire ([string]$candidate.job) 2>&1
-      if ($LASTEXITCODE -ne 0) { throw "server retirement failed: $($result -join ' ')" }
+      $prior = $ErrorActionPreference
+      $ErrorActionPreference = 'Continue'
+      try { $result = & $pnpmPath --silent --filter '@thriftycrew/operator' tc transition retire ([string]$candidate.job) 2>&1; $retireExit = $LASTEXITCODE }
+      finally { $ErrorActionPreference = $prior }
+      if ($retireExit -ne 0) { throw "server retirement failed: $($result -join ' ')" }
       $retired += [pscustomobject]@{ job = [string]$candidate.job; windowsTask = $disabledTask; result = (($result -join "`n") | ConvertFrom-Json) }
     } catch {
       if ($disabledTask) { Enable-ScheduledTask -TaskName $disabledTask | Out-Null }
