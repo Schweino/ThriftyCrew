@@ -52,8 +52,10 @@ I can't clear this one - solving the challenge is off-limits, so the pull stops
 here and that store's prices go stale (or get quarantined) unless someone
 clears it.
 
-WHAT HELPS: open $store in Chrome, clear the "not a robot" / press-and-hold
-challenge, then tell me and I'll resume the pull from where it stopped.
+WHAT HELPS: leave this alert open, switch to $store in Chrome, and clear the
+"not a robot" / press-and-hold challenge yourself. Then return to this alert
+and click OK. That OK click is the callback that tells me to re-check the
+store canary and resume from where the pull stopped.
 "@
        }
        elseif ($detail) { $detail }
