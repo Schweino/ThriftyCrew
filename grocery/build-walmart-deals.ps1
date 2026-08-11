@@ -389,6 +389,10 @@ function Build-Row($raw) {
       # gate instead of publishing. The independent store-truth check remains the builder's reproduce-invariant
       # at capture time (same division of labor as Baker's guard 11 raw-capture check).
       current_price = $t.ad
+      # Preserve the actual checkout total independently from the legacy engine-shaped ad/current basis.
+      # A small minority of rows must use the per-unit shape to make the legacy engine reproduce Walmart's
+      # posted unit price. V3 must still bind the normalized observation to the linePrice captured in Chrome.
+      source_checkout_price = ('${0:N2}' -f $lp)
       # PER-ROW as_of (2026-08-07). Walmart rows shipped with NO date at all - 11,092 of them - so the only
       # freshness signal was the FILENAME, and compare-deals unions captures across 14 days. Guard 9 reads
       # file age, the file is rewritten daily, so it passed every run while individual prices aged for weeks

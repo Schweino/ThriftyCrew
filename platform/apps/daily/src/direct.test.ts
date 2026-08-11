@@ -2,14 +2,14 @@ import { describe, expect, it } from "vitest";
 import { buildRegularCapture } from "./direct";
 import { buildBrowserCaptureAccuracy, digestHex, stableJson } from "@thriftycrew/domain";
 
-async function walmartBrowserSession() {
+async function walmartBrowserSession(productName = "Eggs") {
   const screenshotSha256 = "a".repeat(64);
   const priceSemantics = { offerType: "everyday" as const, condition: "none" as const, unitPriceMinor: 199, qualifyingQuantity: 1, totalPriceMinor: 199, ambiguity: false as const };
   const truth = {
     capturedAt: "2026-08-12T15:01:00.000Z", pageUrl: "https://www.walmart.com/search?q=eggs", location: "Omaha L St Supercenter", priceMode: "pickup", pageIndex: 0, resultIndex: 0,
     pageState: { pageType: "search_results" as const, pageTitle: "eggs - Walmart.com", query: "eggs", resultRegionPresent: true as const, challengeDetected: false as const, currency: "USD" as const, locale: "en-US", locationText: "Omaha L St Supercenter", fulfillmentText: "pickup" },
-    visible: { rawText: "$1.99", priceMinor: 199, productName: "Eggs", sizeText: "dozen", priceSemantics },
-    structured: { rawText: "1.99", priceMinor: 199, productName: "Eggs", productKey: "wm-eggs", sizeText: "dozen", priceSemantics },
+    visible: { rawText: "$1.99", priceMinor: 199, productName, sizeText: "dozen", priceSemantics },
+    structured: { rawText: "1.99", priceMinor: 199, productName, productKey: "wm-eggs", sizeText: "dozen", priceSemantics },
     parser: { status: "exact" as const, rule: "next-data-price-lines" as const },
   };
   const terms = [{
@@ -17,11 +17,11 @@ async function walmartBrowserSession() {
     startedAt: "2026-08-12T15:00:00.000Z", finishedAt: "2026-08-12T15:01:00.000Z",
     retrieval: { targetResultCount: 1, loadedResultCount: 1, availableResultCount: 1, pageCount: 1, hasMoreResults: false, termination: "end-of-results" as const },
   }];
-  const candidate = { termKey: "eggs", query: "eggs", productKey: "wm-eggs", name: "Eggs", sizeText: "dozen", purchasePriceMinor: 199, truth };
+  const candidate = { termKey: "eggs", query: "eggs", productKey: "wm-eggs", name: productName, sizeText: "dozen", purchasePriceMinor: 199, truth };
   const provisional = await buildBrowserCaptureAccuracy("walmart", [candidate], [], terms);
   const target = provisional.discoveryRows[0]!;
   const verificationTruth = { ...truth, capturedAt: "2026-08-12T15:01:30.000Z" };
-  const verifications = [{ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt: verificationTruth.capturedAt, outcome: "observed" as const, productKey: "wm-eggs", name: "Eggs", sizeText: "dozen", purchasePriceMinor: 199, truth: verificationTruth }];
+  const verifications = [{ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt: verificationTruth.capturedAt, outcome: "observed" as const, productKey: "wm-eggs", name: productName, sizeText: "dozen", purchasePriceMinor: 199, truth: verificationTruth }];
   const accuracy = await buildBrowserCaptureAccuracy("walmart", [candidate], verifications, terms);
   const content = {
     version: 2 as const,
@@ -120,6 +120,40 @@ describe("direct regular capture", () => {
       screenshotSha256: [session.screenshotSha256], captureSessionHash: session.contentHash,
     }, "browser");
     expect(artifact).toMatchObject({ sourceId: "direct-walmart-browser", coverageMode: "full", expectedTerms: 1, capturedFrom: session.startedAt, capturedTo: session.finishedAt, marketVerified: true, locationVerified: true, priceModeVerified: true });
+  });
+
+  it("binds a Walmart per-unit legacy row to Chrome's independently preserved checkout price", async () => {
+    const session = await walmartBrowserSession();
+    const artifact = await buildRegularCapture("walmart", {
+      coverage_mode: "full", capture_session: session, deals: [{
+        item: "Eggs", ad_price: "$0.99", current_price: "$0.99", source_checkout_price: "$1.99",
+        wm_unit_price: "$0.99/ea", size: "each", as_of: "2026-08-12", found_by_term: "eggs", product_id: "wm-eggs",
+      }],
+    }, {
+      store: "Walmart", market: "Omaha", priceMode: "pickup", verifiedAt: "2026-08-12T15:00:00.000Z",
+      evidenceUrl: "https://www.walmart.com/", statement: "Logged-in Omaha pickup context verified in Chrome",
+      marketVerified: true, locationVerified: true, priceModeVerified: true,
+      screenshotSha256: [session.screenshotSha256], captureSessionHash: session.contentHash,
+    }, "browser");
+    expect(artifact.observations[0]).toMatchObject({
+      purchasePriceMinor: 199, normalizedBasisUnit: "each", perUnitMicros: 990_000,
+    });
+  });
+
+  it("binds a deterministically repaired Windows-1252 product name to immutable browser truth", async () => {
+    const session = await walmartBrowserSession("Brianna\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u201e\u00a2s Dressing");
+    const artifact = await buildRegularCapture("walmart", {
+      coverage_mode: "full", capture_session: session, deals: [{
+        item: "Brianna\u2019s Dressing", current_price: "$1.99", size: "dozen", as_of: "2026-08-12",
+        found_by_term: "eggs", product_id: "wm-eggs",
+      }],
+    }, {
+      store: "Walmart", market: "Omaha", priceMode: "pickup", verifiedAt: "2026-08-12T15:00:00.000Z",
+      evidenceUrl: "https://www.walmart.com/", statement: "Logged-in Omaha pickup context verified in Chrome",
+      marketVerified: true, locationVerified: true, priceModeVerified: true,
+      screenshotSha256: [session.screenshotSha256], captureSessionHash: session.contentHash,
+    }, "browser");
+    expect(artifact.audit.truthBoundObservations).toBe(1);
   });
 
   it("refuses to claim verified price mode when the source did not prove it", async () => {

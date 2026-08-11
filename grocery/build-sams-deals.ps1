@@ -297,6 +297,9 @@ function Build-Row($raw) {
       # becomes a file-integrity invariant for Sam's rows: an edit/merge/corruption that moves ad_price
       # without current_price hard-fails the gate. Store-truth stays with the capture-time reproduce-invariant.
       current_price = $t.ad
+      # Preserve the actual club checkout total independently from the legacy engine-shaped ad/current basis.
+      # Per-unit fallback rows still need to bind to Chrome's captured linePrice in the V3 observation model.
+      source_checkout_price = ('${0:N2}' -f $lp)
       sams_unit_price = $upm.Groups[0].Value.Trim()   # kept for audit; the engine ignores unknown fields
       sams_item_id    = [string]$raw.id
       found_by_term   = [string]$raw.q

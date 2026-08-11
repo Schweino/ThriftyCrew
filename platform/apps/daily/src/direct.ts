@@ -42,6 +42,35 @@ function stringValue(value: unknown): string | undefined {
   return typeof value === "string" && value.trim() ? value.trim() : undefined;
 }
 
+const WINDOWS_1252_BYTES = new Map<number, number>([
+  [0x20ac, 0x80], [0x201a, 0x82], [0x0192, 0x83], [0x201e, 0x84], [0x2026, 0x85], [0x2020, 0x86],
+  [0x2021, 0x87], [0x02c6, 0x88], [0x2030, 0x89], [0x0160, 0x8a], [0x2039, 0x8b], [0x0152, 0x8c],
+  [0x017d, 0x8e], [0x2018, 0x91], [0x2019, 0x92], [0x201c, 0x93], [0x201d, 0x94], [0x2022, 0x95],
+  [0x2013, 0x96], [0x2014, 0x97], [0x02dc, 0x98], [0x2122, 0x99], [0x0161, 0x9a], [0x203a, 0x9b],
+  [0x0153, 0x9c], [0x017e, 0x9e], [0x0178, 0x9f],
+]);
+
+function repairCaptureMojibake(value: string): string {
+  let current = value;
+  for (let pass = 0; pass < 4 && /[ÃÂâ]/.test(current); pass += 1) {
+    const bytes: number[] = [];
+    let encodable = true;
+    for (const character of current) {
+      const code = character.codePointAt(0)!;
+      const byte = WINDOWS_1252_BYTES.get(code) ?? (code <= 0xff ? code : undefined);
+      if (byte === undefined) { encodable = false; break; }
+      bytes.push(byte);
+    }
+    if (!encodable) break;
+    try {
+      const repaired = new TextDecoder("utf-8", { fatal: true }).decode(Uint8Array.from(bytes));
+      if (repaired === current || repaired.includes("\ufffd")) break;
+      current = repaired;
+    } catch { break; }
+  }
+  return current;
+}
+
 function identifierValue(value: unknown): string | undefined {
   const text = stringValue(value);
   if (text) return text;
@@ -374,6 +403,7 @@ export async function buildRegularCapture(
     const parsedBasis = consumerPackageBasis(name, basis(sizeText));
     const advertisedPrice = numberValue(row.ad_price);
     const sourceCheckoutPrice = numberValue(row.current_price);
+    const retailerCheckoutPrice = numberValue(row.source_checkout_price);
     const priceMultiple = numberValue(row.price_multiple);
     // Hy-Vee preserves the retailer's multi-buy total in current_price for an
     // independent source-contract check, while ad_price is the per-item shelf
@@ -385,7 +415,7 @@ export async function buildRegularCapture(
       && Number.isInteger(priceMultiple)
       && priceMultiple > 1
       && Math.abs(sourceCheckoutPrice - advertisedPrice * priceMultiple) <= 0.02;
-    const price = verifiedPerItemMultiBuy ? advertisedPrice : sourceCheckoutPrice ?? advertisedPrice;
+    const price = verifiedPerItemMultiBuy ? advertisedPrice : retailerCheckoutPrice ?? sourceCheckoutPrice ?? advertisedPrice;
     const asOf = stringValue(row.as_of) ?? stringValue(document.generated)?.slice(0, 10);
     if (!name || !parsedBasis || price === undefined || price < 0 || !asOf) {
       count.rejected += 1;
@@ -410,9 +440,11 @@ export async function buildRegularCapture(
     const loyaltyRequired = row.loyalty_required === true || row.member_price === true || /\b(?:loyalty|member|digital\s+coupon|with\s+card)\b/i.test(stringValue(row.price_type) ?? "");
     const membershipRequired = store === "sams" || row.membership_required === true;
     const kind: ObservationInput["kind"] = membershipRequired || loyaltyRequired ? "member" : row.marked_down === true ? "markdown" : regularPrice !== undefined && regularPrice > price ? "sale" : "everyday";
-    const storeUnitPrice = store === "sams" ? verifiedUnitPrice(row.sams_unit_price) : undefined;
+    const storeUnitPrice = store === "sams" ? verifiedUnitPrice(row.sams_unit_price)
+      : store === "walmart" ? verifiedUnitPrice(row.wm_unit_price) : undefined;
     const preliminaryBasisOptions = packageBasisOptions(sizeText, name, purchasePriceMinor);
-    if (storeUnitPrice && Math.abs(price * 1_000_000 - storeUnitPrice.perUnitMicros) <= Math.max(20_000, storeUnitPrice.perUnitMicros * 0.02)) {
+    if (storeUnitPrice && retailerCheckoutPrice === undefined
+      && Math.abs(price * 1_000_000 - storeUnitPrice.perUnitMicros) <= Math.max(20_000, storeUnitPrice.perUnitMicros * 0.02)) {
       const packageQuantity = preliminaryBasisOptions
         .filter((option) => option.unit === storeUnitPrice.unit)
         .map((option) => option.quantityMicros / 1_000_000)
@@ -471,7 +503,7 @@ export async function buildRegularCapture(
       const match = captureSession.accuracy.discoveryRows.find((row) => row.termKey === observation.termKey
         && row.productKey === observation.externalProductKey
         && row.purchasePriceMinor === observation.purchasePriceMinor
-        && normalizeName(row.name) === normalizeName(observation.name));
+        && normalizeName(repairCaptureMojibake(row.name)) === normalizeName(repairCaptureMojibake(observation.name)));
       if (!match) throw new Error(`normalized browser observation is not bound to exact capture truth: ${observation.termKey ?? "(no-term)"}/${observation.externalProductKey}`);
       if (Date.parse(captureSession.finishedAt) >= Date.parse(CAPTURE_SEMANTICS_CUTOVER)) {
         if (!match.truth.visible.priceSemantics || !match.truth.pageState) throw new Error("browser capture truth is missing required price semantics or page-state attestation");
