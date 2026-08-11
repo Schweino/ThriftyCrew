@@ -1,5 +1,5 @@
 import { BROWSER_CAPTURE_ACCURACY_CUTOVER, browserCaptureSessionSchema, type BrowserCaptureSession } from "@thriftycrew/contracts";
-import { buildBrowserCaptureAccuracy, digestHex, stableJson } from "@thriftycrew/domain";
+import { digestHex, stableJson, verifyBrowserCaptureAccuracy } from "@thriftycrew/domain";
 import { browserCaptureCycleWindow } from "./browser-capture-sla";
 
 function uint16(bytes: Uint8Array, offset: number, littleEndian: boolean): number {
@@ -178,10 +178,8 @@ export async function validateBrowserCaptureEvidence(
   let accuracyPass = !accuracyRequired;
   let accuracyReproducible = !accuracyRequired;
   if (session.version === 2) {
-    const candidates = session.accuracy.discoveryRows.map(({ rowKey: _rowKey, discoveryHash: _discoveryHash, riskReasons: _riskReasons, verificationRequired: _verificationRequired, ...row }) => row);
-    const recomputed = await buildBrowserCaptureAccuracy(session.store, candidates, session.accuracy.verifications, session.terms);
-    accuracyReproducible = stableJson(recomputed) === stableJson(session.accuracy);
-    accuracyPass = recomputed.pass && accuracyReproducible;
+    accuracyReproducible = await verifyBrowserCaptureAccuracy(session.store, session.accuracy, session.terms);
+    accuracyPass = session.accuracy.pass && accuracyReproducible;
   }
   const pass = calculatedContentHash === contentHash && screenshotBound && rawBound && identityPass && accuracyPass;
   const trustedSession = calculatedContentHash === contentHash && identityPass;

@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { browserCaptureTruthSchema, browserCaptureStore, type BrowserCaptureTruth } from "@thriftycrew/contracts";
-import { browserCaptureTruthPass, buildBrowserCaptureAccuracy } from "./index";
+import { browserCaptureTruthPass, buildBrowserCaptureAccuracy, verifyBrowserCaptureAccuracy } from "./index";
 
 describe("source-specific capture-time parser contracts", () => {
   it("keeps a frozen clean twin and must-fire failure for every browser source", async () => {
@@ -67,6 +67,16 @@ describe("source-specific capture-time parser contracts", () => {
     expect(accuracy.discoveryRows.filter((row) => row.riskReasons.includes("count-priced"))).toHaveLength(1);
     expect(accuracy.requiredVerificationRows).toBeGreaterThanOrEqual(100);
     expect(accuracy.requiredVerificationRows).toBeLessThanOrEqual(101);
+    expect(await verifyBrowserCaptureAccuracy("walmart", accuracy, [{
+      outcome: "success", rowCount: candidates.length,
+      retrieval: { targetResultCount: 25, loadedResultCount: candidates.length, availableResultCount: candidates.length, hasMoreResults: false, termination: "end-of-results" },
+    }])).toBe(true);
+    const tampered = structuredClone(accuracy);
+    tampered.discoveryRows[0]!.riskReasons = [];
+    expect(await verifyBrowserCaptureAccuracy("walmart", tampered, [{
+      outcome: "success", rowCount: candidates.length,
+      retrieval: { targetResultCount: 25, loadedResultCount: candidates.length, availableResultCount: candidates.length, hasMoreResults: false, termination: "end-of-results" },
+    }])).toBe(false);
   });
 
   it("does not crown an irrelevant cheaper result as the likely query winner", async () => {

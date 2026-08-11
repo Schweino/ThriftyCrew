@@ -348,6 +348,111 @@ export async function buildBrowserCaptureAccuracy(
   };
 }
 
+export async function verifyBrowserCaptureAccuracy(
+  store: BrowserCaptureStore,
+  accuracy: BrowserCaptureAccuracy,
+  terms: readonly CaptureAccuracyTerm[],
+): Promise<boolean> {
+  const rows = accuracy.discoveryRows;
+  const cheapest = new Set<number>();
+  const blindSampleEligible = new Set<number>();
+  const byTerm = new Map<string, Array<{ index: number; price: number; relevance: number; matchEligible: boolean | undefined }>>();
+  rows.forEach((row, index) => {
+    const values = byTerm.get(row.termKey) ?? [];
+    values.push({ index, price: row.purchasePriceMinor, relevance: captureCandidateRelevanceScore(row), matchEligible: row.matchEligible });
+    byTerm.set(row.termKey, values);
+  });
+  for (const values of byTerm.values()) {
+    const authoredMatchEvidence = values.some((value) => value.matchEligible !== undefined);
+    const authoredMatches = values.filter((value) => value.matchEligible === true);
+    if (authoredMatchEvidence && authoredMatches.length === 0) continue;
+    const bestRelevance = Math.max(...values.map((value) => value.relevance));
+    const relevant = authoredMatches.length > 0
+      ? authoredMatches
+      : (bestRelevance > 0 ? values.filter((value) => value.relevance === bestRelevance) : values);
+    for (const value of relevant) blindSampleEligible.add(value.index);
+    relevant.sort((left, right) => left.price - right.price || left.index - right.index);
+    if (relevant[0]) cheapest.add(relevant[0].index);
+  }
+  const duplicatePrices = new Map<string, Set<number>>();
+  for (const row of rows) {
+    const values = duplicatePrices.get(row.productKey) ?? new Set<number>();
+    values.add(row.purchasePriceMinor);
+    duplicatePrices.set(row.productKey, values);
+  }
+  const sampleRanks: Array<{ index: number; rowKey: string; rank: string }> = [];
+  const expectedReasons = new Map<number, BrowserCaptureAccuracyRow["riskReasons"]>();
+  let allTruthPass = true;
+  for (let index = 0; index < rows.length; index += 1) {
+    const row = rows[index]!;
+    const expectedDiscoveryHash = await digestHex(stableJson(accuracyFingerprint(row)));
+    const expectedRowKey = `row-${(await digestHex(stableJson([row.termKey, row.productKey, row.truth.pageIndex, row.truth.resultIndex]))).slice(0, 28)}`;
+    if (row.discoveryHash !== expectedDiscoveryHash || row.rowKey !== expectedRowKey) return false;
+    const likelyWinner = cheapest.has(index);
+    const verificationEligible = blindSampleEligible.has(index);
+    const text = `${row.query} ${row.name} ${row.sizeText}`.toLowerCase();
+    const reasons: BrowserCaptureAccuracyRow["riskReasons"] = [];
+    if (likelyWinner) reasons.push("likely-board-winner");
+    if (likelyWinner && /\b(?:apple|avocado|banana|berry|berries|lemon|lime|orange|peach|pear|pepper|potato|tomato|lettuce|onion|produce)\b/.test(text)) reasons.push("fresh-produce");
+    if (likelyWinner && /\b(?:each|ea|ct|count|head|bunch)\b/.test(text)) reasons.push("count-priced");
+    if (verificationEligible && /\b\d+\s*(?:\/|for)\s*\$?\d+/i.test(row.truth.visible.rawText)) reasons.push("multibuy");
+    if (verificationEligible && (row.purchasePriceMinor <= 10 || row.purchasePriceMinor >= 50_000)) reasons.push("price-outlier");
+    if (!row.taxonomyPath) reasons.push("missing-taxonomy");
+    if (verificationEligible && (duplicatePrices.get(row.productKey)?.size ?? 0) > 1) reasons.push("duplicate-price-conflict");
+    expectedReasons.set(index, reasons);
+    if (verificationEligible) sampleRanks.push({ index, rowKey: row.rowKey, rank: await digestHex(`browser-capture-sample:${row.rowKey}`) });
+    if (!browserCaptureTruthPass(store, row, row.truth)
+      || (row.truth.pageState?.pageType === "search_results" && normalizeName(row.truth.pageState.query ?? "") !== normalizeName(row.query))) allTruthPass = false;
+  }
+  sampleRanks.sort((left, right) => left.rank.localeCompare(right.rank) || left.rowKey.localeCompare(right.rowKey));
+  for (const sample of sampleRanks.slice(0, Math.min(100, sampleRanks.length))) expectedReasons.get(sample.index)!.push("deterministic-sample");
+  for (let index = 0; index < rows.length; index += 1) {
+    const reasons = expectedReasons.get(index)!;
+    if (stableJson(rows[index]!.riskReasons) !== stableJson(reasons)
+      || rows[index]!.verificationRequired !== reasons.some((reason) => reason !== "missing-taxonomy")) return false;
+  }
+  const rowMap = new Map(rows.map((row) => [row.rowKey, row]));
+  if (accuracy.verifications.some((verification) => !rowMap.has(verification.rowKey))) return false;
+  const latest = new Map<string, BrowserCaptureVerification>();
+  for (const verification of accuracy.verifications) {
+    const current = latest.get(verification.rowKey);
+    if (!current || verification.observedAt > current.observedAt) latest.set(verification.rowKey, verification);
+  }
+  let matchedVerificationRows = 0;
+  for (const row of rows) {
+    if (!row.verificationRequired) continue;
+    const verification = latest.get(row.rowKey);
+    if (!verification || verification.discoveryHash !== row.discoveryHash || verification.outcome !== "observed" || !verification.truth
+      || verification.productKey === undefined || verification.name === undefined || verification.sizeText === undefined || verification.purchasePriceMinor === undefined) continue;
+    if (verification.truth.capturedAt !== verification.observedAt || verification.observedAt <= row.truth.capturedAt || !browserCaptureTruthPass(store, {
+      productKey: verification.productKey, name: verification.name, sizeText: verification.sizeText, purchasePriceMinor: verification.purchasePriceMinor,
+    }, verification.truth)) continue;
+    const verificationHash = await digestHex(stableJson(accuracyObservationFingerprint({
+      productKey: verification.productKey, name: verification.name, sizeText: verification.sizeText,
+      purchasePriceMinor: verification.purchasePriceMinor, truth: verification.truth,
+    })));
+    const discoveryObservationHash = await digestHex(stableJson(accuracyObservationFingerprint(row)));
+    if (verificationHash === discoveryObservationHash) matchedVerificationRows += 1;
+  }
+  const requiredVerificationRows = rows.filter((row) => row.verificationRequired).length;
+  const retrievalCompleteTerms = terms.filter(retrievalComplete).length;
+  const anomalyRows = rows.filter((row) => row.riskReasons.includes("price-outlier") || row.riskReasons.includes("duplicate-price-conflict")).length;
+  const policyVersion = rows.every((row) => Date.parse(row.truth.capturedAt) < Date.parse(CAPTURE_SEMANTICS_CUTOVER)) ? 1 : 2;
+  const expectedPass = allTruthPass && matchedVerificationRows === requiredVerificationRows && retrievalCompleteTerms === terms.length;
+  return accuracy.policyVersion === policyVersion
+    && accuracy.requiredVerificationRows === requiredVerificationRows
+    && accuracy.matchedVerificationRows === matchedVerificationRows
+    && accuracy.unresolvedVerificationRows === requiredVerificationRows - matchedVerificationRows
+    && accuracy.priceAgreementRows === rows.filter((row) => Boolean(row.truth.structured)).length
+    && accuracy.singleChannelRows === rows.filter((row) => !row.truth.structured).length
+    && accuracy.anomalyRows === anomalyRows
+    && (policyVersion !== 2 || accuracy.pageStateAttestedRows === rows.filter((row) => Boolean(row.truth.pageState)).length)
+    && (policyVersion !== 2 || accuracy.promotionSemanticsRows === rows.filter((row) => Boolean(row.truth.visible.priceSemantics)
+      && (!row.truth.structured || Boolean(row.truth.structured.priceSemantics))).length)
+    && accuracy.retrievalCompleteTerms === retrievalCompleteTerms
+    && accuracy.pass === expectedPass;
+}
+
 export function centsFromLegacyDollars(value: number): number {
   if (!Number.isFinite(value) || value < 0) throw new Error("legacy dollar amount must be non-negative and finite");
   return Math.round(value * 100);
