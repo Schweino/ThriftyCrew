@@ -139,8 +139,9 @@ pnpm tc capture session verification-plan <session-directory> <verification-plan
 ```
 
 The plan includes likely lowest-price winners, a stable blind sample capped at 100 rows per store and drawn from
-each query's strongest lexical matches, produce/count risk on those likely winners, and every
-multi-buy/outlier/duplicate-price conflict. When a query has no lexical match, all of its results remain eligible
+each query's strongest lexical matches, produce/count risk on those likely winners, and
+multi-buy/outlier/duplicate-price conflicts only among authored-match or strongest-match candidates that can affect
+the board. When a transitional query has no authored matcher or lexical match, all of its results remain eligible
 so aliases cannot silently escape sampling. The blind-sample cap never suppresses
 an explicit risk target. For configured commodities, likely-winner and blind-sample eligibility comes from the
 same authored include/exclude/priority matcher used by the production engine; this decision is persisted so local
@@ -149,7 +150,9 @@ ranking is only a fallback for transitional worklist terms with no authored comm
 position alone is insufficient. Revisit each target with a fresh top-level
 navigation using `captureAldiVerificationChunk`, `captureFarewayVerificationChunk`, or
 `captureNextDataVerificationChunk` from the store adapter. Each adapter atomically checkpoints the chunk and stops
-its lane on a challenge. Fareway performs this second pass on the exact first-party product-detail URL because its
+its lane on a challenge. On resume, a target counts as complete only when the latest observed verification matches
+both the plan's `rowKey` and current `discoveryHash`; a refreshed discovery row must never be skipped because an old
+verification shares its row key. Fareway performs this second pass on the exact first-party product-detail URL because its
 search envelope is volatile; verification equality compares product identity, normalized name/size, price,
 location/mode, channels, and price semantics while the discovery hash separately binds the planned discovery row.
 If Fareway's product page disagrees with the discovery card (notably, some multipacks expose only a component-unit
