@@ -62,6 +62,16 @@ describe("matching", () => {
     expect(matchProductName("Fresh Lemons, Each", rules)).toMatchObject({ status: "matched", commodityId: "lemons" });
   });
 
+  it("keeps turkey breakfast sausage out of the pork breakfast-sausage commodity", () => {
+    const authored = JSON.parse(readFileSync(new URL("../../../config/commodities.json", import.meta.url), "utf8")) as
+      Array<{ id: string; include: string[]; exclude: string[] }>;
+    const breakfastSausage = authored.find((commodity) => commodity.id === "breakfast-sausage");
+    expect(breakfastSausage).toBeDefined();
+    const rules = [{ commodityId: "breakfast-sausage", includes: breakfastSausage!.include, excludes: breakfastSausage!.exclude, priority: 1 }];
+    expect(matchProductName("FESTIVE Turkey Breakfast Sausage, Frozen, 1 lb Roll", rules).status).toBe("unmatched");
+    expect(matchProductName("Appleton Farms Premium Pork Sausage Roll 16 OZ", rules)).toMatchObject({ status: "matched", commodityId: "breakfast-sausage" });
+  });
+
   it("rejects a food match when the store shelves it as cat litter", () => {
     expect(evaluateAisleEvidence("Pets/Cats/Cat Litter", ["baking"], ["cat litter", "pets"]).status).toBe("rejected");
   });

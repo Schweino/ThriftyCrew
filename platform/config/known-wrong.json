@@ -1760,6 +1760,19 @@
                         "ruled_on":  "2026-08-10",
                         "ruled_by":  "V3 semantic accuracy audit",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "breakfast-sausage|Walmart|festive-turkey-breakfast-sausage-frozen-1-lb-roll",
+                        "commodity":  "breakfast-sausage",
+                        "store":  "Walmart",
+                        "names":  ["FESTIVE Turkey Breakfast Sausage, Frozen, 1 lb Roll"],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Turkey breakfast sausage is not pork breakfast sausage. It incorrectly held the V3 Breakfast Sausage (pork) crown at $1.98/lb during live Chrome QA on 2026-08-11 because the prior exclusion only matched the adjacent phrase turkey sausage.",
+                        "seen_on_board":  "2026-08-11 (V3 crown)",
+                        "ruled_on":  "2026-08-11",
+                        "ruled_by":  "V3 Chrome semantic accuracy audit",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

@@ -4180,6 +4180,7 @@
                         "bratwurst",
                         "chicken\\s+sausage",
                         "turkey\\s+sausage",
+                        "\\bturkey\\b",
                         "corn\\s*dog",
                         "biscuit",
                         "sandwich",
