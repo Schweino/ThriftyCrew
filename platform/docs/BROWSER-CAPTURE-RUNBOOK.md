@@ -146,7 +146,13 @@ an explicit risk target. A likely winner is the cheapest candidate among the sea
 query-token match; raw cheapest search position alone is insufficient. Revisit each target with a fresh top-level
 navigation using `captureAldiVerificationChunk`, `captureFarewayVerificationChunk`, or
 `captureNextDataVerificationChunk` from the store adapter. Each adapter atomically checkpoints the chunk and stops
-its lane on a challenge. Append `version: 2`,
+its lane on a challenge. Fareway performs this second pass on the exact first-party product-detail URL because its
+search envelope is volatile; verification equality compares product identity, normalized name/size, price,
+location/mode, channels, and price semantics while the discovery hash separately binds the planned discovery row.
+If Fareway's product page disagrees with the discovery card (notably, some multipacks expose only a component-unit
+size), the adapter performs a fresh exact-product-name search and accepts only the exact product URL and complete
+card truth. It never normalizes away or guesses through the disagreement.
+Append `version: 2`,
 `phase: verification` chunks containing the plan row/hash and a newly read complete truth record. A changed row
 must be recaptured as a new discovery result and replanned; missing, blocked, stale, copied, or disagreeing
 verification cannot authorize publication.

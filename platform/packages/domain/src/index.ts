@@ -213,6 +213,21 @@ function accuracyFingerprint(value: { productKey: string; name: string; sizeText
   };
 }
 
+function accuracyObservationFingerprint(value: { productKey: string; name: string; sizeText: string; purchasePriceMinor: number; truth: BrowserCaptureTruth }): Record<string, unknown> {
+  return {
+    productKey: value.productKey,
+    name: normalizeName(value.name),
+    sizeText: normalizeName(value.sizeText),
+    purchasePriceMinor: value.purchasePriceMinor,
+    location: normalizeName(value.truth.location),
+    priceMode: normalizeName(value.truth.priceMode),
+    visible: [normalizeName(value.truth.visible.productName), value.truth.visible.priceMinor],
+    structured: value.truth.structured ? [value.truth.structured.productKey, normalizeName(value.truth.structured.productName), value.truth.structured.priceMinor] : null,
+    priceSemantics: value.truth.visible.priceSemantics ?? null,
+    structuredPriceSemantics: value.truth.structured?.priceSemantics ?? null,
+  };
+}
+
 function retrievalComplete(term: CaptureAccuracyTerm): boolean {
   const retrieval = term.retrieval;
   if (term.outcome === "empty") return term.rowCount === 0 && retrieval.loadedResultCount === 0 && retrieval.termination === "no-results" && !retrieval.hasMoreResults;
@@ -292,11 +307,12 @@ export async function buildBrowserCaptureAccuracy(
     if (verification.truth.capturedAt !== verification.observedAt || verification.observedAt <= row.truth.capturedAt || !browserCaptureTruthPass(store, {
       productKey: verification.productKey, name: verification.name, sizeText: verification.sizeText, purchasePriceMinor: verification.purchasePriceMinor,
     }, verification.truth)) continue;
-    const verificationHash = await digestHex(stableJson(accuracyFingerprint({
+    const verificationHash = await digestHex(stableJson(accuracyObservationFingerprint({
       productKey: verification.productKey, name: verification.name, sizeText: verification.sizeText,
       purchasePriceMinor: verification.purchasePriceMinor, truth: verification.truth,
     })));
-    if (verificationHash === row.discoveryHash) matchedVerificationRows += 1;
+    const discoveryObservationHash = await digestHex(stableJson(accuracyObservationFingerprint(row)));
+    if (verificationHash === discoveryObservationHash) matchedVerificationRows += 1;
   }
   const requiredVerificationRows = rows.filter((row) => row.verificationRequired).length;
   const retrievalCompleteTerms = terms.filter(retrievalComplete).length;

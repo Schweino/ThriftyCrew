@@ -116,4 +116,34 @@ describe("source-specific capture-time parser contracts", () => {
     expect(sampled).toHaveLength(20);
     expect(sampled.every((row) => row.productKey.startsWith("grapes-"))).toBe(true);
   });
+
+  it("accepts an identical product observation from an independent product-detail page", async () => {
+    const semantics = { offerType: "everyday" as const, condition: "none" as const, unitPriceMinor: 99, qualifyingQuantity: 1, totalPriceMinor: 99, ambiguity: false };
+    const discoveryTruth = browserCaptureTruthSchema.parse({
+      capturedAt: "2026-08-12T12:00:00.000Z", pageUrl: "https://shop.fareway.com/store/fareway-meat-grocery/s?k=yogurt",
+      location: "Omaha 17070 Audrey Street", priceMode: "In-Store", pageIndex: 0, resultIndex: 0,
+      pageState: { pageType: "search_results", pageTitle: "Yogurt Pickup Near Me", query: "yogurt", resultRegionPresent: true, challengeDetected: false, currency: "USD", locale: "en-US", locationText: "Omaha 17070 Audrey Street", fulfillmentText: "In-Store" },
+      visible: { rawText: "Current price: $0.99", priceMinor: 99, productName: "AE Peach Yogurt", productKey: "https://shop.fareway.com/store/fareway-meat-grocery/products/123-ae-peach-yogurt", sizeText: "6 oz", priceSemantics: semantics },
+      parser: { status: "exact", rule: "current-price-label" },
+    });
+    const candidate = { termKey: "yogurt", query: "yogurt", productKey: "https://shop.fareway.com/store/fareway-meat-grocery/products/123-ae-peach-yogurt", name: "AE Peach Yogurt", sizeText: "6 oz", taxonomyPath: "Dairy/Yogurt", purchasePriceMinor: 99, truth: discoveryTruth };
+    const terms = [{ outcome: "success", rowCount: 1, retrieval: { targetResultCount: 1, loadedResultCount: 1, availableResultCount: 1, hasMoreResults: false, termination: "end-of-results" } }];
+    const planned = await buildBrowserCaptureAccuracy("fareway", [candidate], [], terms);
+    const row = planned.discoveryRows[0]!;
+    const observedAt = "2026-08-12T12:05:00.000Z";
+    const verificationTruth = browserCaptureTruthSchema.parse({
+      ...discoveryTruth,
+      capturedAt: observedAt,
+      pageUrl: candidate.productKey,
+      pageState: { pageType: "product_detail", pageTitle: "AE Peach Yogurt Same-Day Pickup", resultRegionPresent: true, challengeDetected: false, currency: "USD", locale: "en-US", locationText: "Omaha 17070 Audrey Street", fulfillmentText: "In-Store" },
+    });
+    const verified = await buildBrowserCaptureAccuracy("fareway", [candidate], [{
+      rowKey: row.rowKey, discoveryHash: row.discoveryHash, observedAt, outcome: "observed",
+      productKey: candidate.productKey, name: candidate.name, sizeText: candidate.sizeText,
+      purchasePriceMinor: candidate.purchasePriceMinor, truth: verificationTruth,
+    }], terms);
+    expect(verified.matchedVerificationRows).toBe(1);
+    expect(verified.unresolvedVerificationRows).toBe(0);
+    expect(verified.pass).toBe(true);
+  });
 });

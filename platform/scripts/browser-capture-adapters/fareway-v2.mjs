@@ -195,6 +195,147 @@ async function captureCanary(tab, screenshotSha256) {
   return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: LOCATION, priceMode: PRICE_MODE, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
 }
 
+async function readProductDetail(tab) {
+  return tab.playwright.evaluate(() => {
+    const body = document.body.innerText;
+    const heading = document.querySelector("h1");
+    const root = heading?.parentElement;
+    const productId = location.pathname.match(/\/products\/(\d+)(?:-|$)/)?.[1] || "";
+    const exactLink = root ? [...root.querySelectorAll('a[href*="/products/"]')].find((link) => {
+      try { return new URL(link.href).pathname.match(/\/products\/(\d+)(?:-|$)/)?.[1] === productId; } catch { return false; }
+    }) : null;
+    const exactPriceNode = exactLink ? [...exactLink.querySelectorAll("*")].find((node) => /^Current price:\s*\$[0-9]+(?:\.[0-9]{1,2})?$/i.test((node.textContent || "").trim())) : null;
+    const orderedNodes = [...document.querySelectorAll("h1, span.screen-reader-only")];
+    const headingIndex = orderedNodes.indexOf(heading);
+    const followingPriceNode = !exactPriceNode && headingIndex >= 0 ? orderedNodes.slice(headingIndex + 1).find((node) => (
+      /^Current price:\s*\$[0-9]+(?:\.[0-9]{1,2})?(?:\s+.*)?$/i.test((node.textContent || "").trim())
+    )) : null;
+    const currentNode = exactPriceNode || followingPriceNode;
+    const current = (currentNode?.textContent || "").trim();
+    let priceScope = exactLink || currentNode?.parentElement || null;
+    for (let depth = 0; depth < 6 && priceScope && !/Original Price:\s*\$/i.test(priceScope.innerText || ""); depth += 1) priceScope = priceScope.parentElement;
+    const original = priceScope ? ([...priceScope.querySelectorAll("*")].map((node) => (node.textContent || "").trim()).find((text) => /^Original Price:\s*\$[0-9]+(?:\.[0-9]{1,2})?(?:\s+.*)?$/i.test(text)) || "") : "";
+    const currentMatch = current.match(/\$([0-9]+(?:\.[0-9]{1,2})?)/);
+    const originalMatch = original.match(/\$([0-9]+(?:\.[0-9]{1,2})?)/);
+    const lines = (root?.innerText || "").split(/\n+/).map((line) => line.trim()).filter(Boolean);
+    const itemIndex = lines.findIndex((line) => /^Item:\s*/i.test(line));
+    const size = itemIndex >= 0 ? (lines.slice(itemIndex + 1).find((line) => !/^\s*[•$]|^(?:Current|Original) price:/i.test(line)) || "") : "";
+    const canonicalUrl = `${location.origin}${location.pathname}`;
+    return {
+      url: canonicalUrl,
+      title: document.title,
+      locale: document.documentElement.lang || "en-US",
+      name: (heading?.innerText || "").trim(),
+      size,
+      current,
+      priceMinor: currentMatch ? Math.round(Number(currentMatch[1]) * 100) : null,
+      regularPriceMinor: originalMatch ? Math.round(Number(originalMatch[1]) * 100) : null,
+      challenge: /verify you are human|captcha|access denied|unusual traffic|403 error|request blocked|request could not be satisfied|robot or human/i.test(body),
+      unavailable: /(?:item|product) (?:is )?(?:unavailable|not found)|page not found|404/i.test(body),
+      plainOmaha: [...document.querySelectorAll("button")].some((button) => /In-Store[\s\S]*Omaha/i.test(button.innerText || "") && !/Omaha (?:Meat Market|- North)/i.test(button.innerText || "")),
+    };
+  });
+}
+
+async function captureProductDetail(tab, target) {
+  let lastError = "";
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    try {
+      await tab.goto(target.productKey);
+      let page = null;
+      for (let poll = 0; poll < 16; poll += 1) {
+        await tab.playwright.waitForTimeout(poll === 0 ? 650 : 250);
+        page = await readProductDetail(tab);
+        if (page.challenge || page.unavailable || (page.name && Number.isInteger(page.priceMinor))) break;
+      }
+      if (!page) throw new Error("Fareway product page produced no readable state");
+      if (page.challenge) return { outcome: "blocked", reason: "Retailer challenge detected on the product-detail verification page." };
+      if (page.unavailable) return { outcome: "missing", reason: "Fareway reports the product is unavailable or missing." };
+      if (!page.plainOmaha) throw new Error("Fareway product-detail page lost the Omaha/In-Store context");
+      if (page.url !== target.productKey) return { outcome: "missing", reason: `product detail redirected from ${target.productKey} to ${page.url}` };
+      if (!page.name || !page.size || !Number.isInteger(page.priceMinor) || !page.current) throw new Error("product detail lacked exact name, size, or Current price label");
+      const observedAt = new Date().toISOString();
+      const priceSemantics = {
+        offerType: page.regularPriceMinor ? "sale" : "everyday",
+        condition: "none",
+        unitPriceMinor: page.priceMinor,
+        qualifyingQuantity: 1,
+        totalPriceMinor: page.priceMinor,
+        ...(page.regularPriceMinor ? { regularPriceMinor: page.regularPriceMinor } : {}),
+        ambiguity: false,
+      };
+      return {
+        outcome: "observed",
+        observedAt,
+        productKey: page.url,
+        name: page.name,
+        sizeText: page.size,
+        purchasePriceMinor: page.priceMinor,
+        truth: {
+          capturedAt: observedAt,
+          pageUrl: page.url,
+          location: LOCATION,
+          priceMode: PRICE_MODE,
+          pageIndex: 0,
+          resultIndex: 0,
+          pageState: {
+            pageType: "product_detail",
+            pageTitle: page.title,
+            resultRegionPresent: true,
+            challengeDetected: false,
+            currency: "USD",
+            locale: page.locale,
+            locationText: LOCATION,
+            fulfillmentText: PRICE_MODE,
+          },
+          visible: {
+            rawText: page.current,
+            priceMinor: page.priceMinor,
+            productName: page.name,
+            productKey: page.url,
+            sizeText: page.size,
+            priceSemantics,
+          },
+          parser: {
+            status: "exact",
+            rule: "current-price-label",
+            notes: "Independent Fareway product-detail Current price label with exact Omaha/In-Store context.",
+          },
+        },
+      };
+    } catch (error) {
+      lastError = String(error?.message || error);
+      if (attempt < 2) await tab.playwright.waitForTimeout(500);
+    }
+  }
+  return { outcome: "missing", reason: lastError || "Fareway product-detail verification failed twice" };
+}
+
+function verificationMatchesTarget(target, captured) {
+  return captured.outcome === "observed"
+    && captured.productKey === target.productKey
+    && normalize(captured.name) === normalize(target.name)
+    && normalize(captured.sizeText) === normalize(target.sizeText)
+    && captured.purchasePriceMinor === target.purchasePriceMinor;
+}
+
+async function captureExactNameVerification(tab, target, detailReason) {
+  const search = await captureTerm(tab, target.name);
+  const observedAt = new Date().toISOString();
+  if (search.blocked || search.term.outcome === "blocked") return { outcome: "blocked", observedAt, reason: search.term.reason || "Fareway challenge detected during exact-name verification" };
+  const row = search.rows.find((candidate) => candidate.url === target.productKey);
+  if (!row) return { outcome: "missing", observedAt, reason: `${detailReason}; exact-name search did not reproduce the target card` };
+  return {
+    outcome: "observed",
+    observedAt,
+    productKey: row.url,
+    name: row.name,
+    sizeText: row.size,
+    purchasePriceMinor: Math.round(Number(String(row.price).replace(/[^0-9.]/g, "")) * 100),
+    truth: { ...row._capture, capturedAt: observedAt },
+  };
+}
+
 export async function captureFarewayChunk({ tab, terms, file, screenshotSha256 }) {
   if (!Array.isArray(terms) || terms.length < 1 || terms.length > 20) throw new Error("Fareway chunk requires 1-20 terms");
   const canary = await captureCanary(tab, screenshotSha256);
@@ -221,28 +362,31 @@ export async function captureFarewayVerificationChunk({ tab, targets, file, scre
   const canary = await captureCanary(tab, screenshotSha256);
   const verifications = [];
   for (const target of targets) {
-    const captured = await captureTerm(tab, target.query);
-    const observedAt = new Date().toISOString();
-    if (captured.blocked || captured.term.outcome === "blocked") {
-      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "blocked", reason: captured.term.reason || "Fareway challenge detected during independent verification" });
+    const detail = await captureProductDetail(tab, target);
+    const captured = detail.outcome === "blocked" || verificationMatchesTarget(target, detail)
+      ? detail
+      : await captureExactNameVerification(tab, target, detail.outcome === "observed"
+        ? "product-detail identity, size, or price disagreed with discovery"
+        : (detail.reason || "product detail was not independently readable"));
+    const observedAt = captured.observedAt || new Date().toISOString();
+    if (captured.outcome === "blocked") {
+      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "blocked", reason: captured.reason || "Fareway challenge detected during independent verification" });
       await atomicJson(file, { version: 2, phase: "verification", store: "fareway", canary, verifications });
       break;
     }
-    const row = captured.rows.find((candidate) => candidate.url === target.productKey);
-    if (!row) {
-      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "missing", reason: captured.term.reason || "target product was not present in the independently reloaded result envelope" });
+    if (captured.outcome !== "observed") {
+      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "missing", reason: captured.reason || "target product detail was not independently readable" });
     } else {
-      const truth = { ...row._capture, capturedAt: observedAt };
       verifications.push({
         rowKey: target.rowKey,
         discoveryHash: target.discoveryHash,
         observedAt,
         outcome: "observed",
-        productKey: row.url,
-        name: row.name,
-        sizeText: row.size,
-        purchasePriceMinor: Math.round(Number(String(row.price).replace(/[^0-9.]/g, "")) * 100),
-        truth,
+        productKey: captured.productKey,
+        name: captured.name,
+        sizeText: captured.sizeText,
+        purchasePriceMinor: captured.purchasePriceMinor,
+        truth: captured.truth,
       });
     }
     await atomicJson(file, { version: 2, phase: "verification", store: "fareway", canary, verifications });
