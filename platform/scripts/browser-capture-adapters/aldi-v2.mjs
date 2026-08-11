@@ -50,7 +50,7 @@ async function readPage(tab) {
       title: document.title,
       query: new URL(location.href).searchParams.get("k") || [...document.querySelectorAll('input[type="text"]')].map((input) => input.value).find(Boolean) || "",
       locale: document.documentElement.lang || "en-US",
-      challenge: /verify you are human|captcha|access denied|unusual traffic/i.test(body),
+      challenge: /verify you are human|captcha|access denied|unusual traffic|403 error|request blocked|request could not be satisfied/i.test(body),
       noResults: /no (?:matching )?(?:results|products)|0 results|couldn.t find/i.test(body),
       hasMore: [...document.querySelectorAll("button")].some((button) => /^(load|show) more$/i.test((button.innerText || "").trim()) && button.offsetParent !== null),
       rows: candidates.filter((row) => row.href && !seen.has(row.href) && (seen.add(row.href), true)),
@@ -136,8 +136,9 @@ async function captureTerm(tab, query) {
 }
 
 async function captureCanary(tab, screenshotSha256) {
-  const state = await tab.playwright.evaluate(() => ({ url: location.href, challenge: /verify you are human|captcha|access denied|unusual traffic/i.test(document.body.innerText), exact: document.body.innerText.includes("In-Store") && document.body.innerText.includes("ALDI - OLA 42 - Omaha") }));
-  if (state.challenge || !state.exact) throw new Error("ALDI OLA 42 Omaha/In-Store canary failed");
+  const state = await tab.playwright.evaluate(() => ({ url: location.href, challenge: /verify you are human|captcha|access denied|unusual traffic|403 error|request blocked|request could not be satisfied/i.test(document.body.innerText), exact: document.body.innerText.includes("In-Store") && document.body.innerText.includes("ALDI - OLA 42 - Omaha") }));
+  if (state.challenge) throw new Error("ALDI retailer block page detected; stop the lane without retrying or attempting a bypass");
+  if (!state.exact) throw new Error("ALDI OLA 42 Omaha/In-Store canary failed");
   return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: LOCATION, priceMode: PRICE_MODE, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
 }
 

@@ -79,7 +79,7 @@ async function readPage(tab) {
       title: document.title,
       query,
       locale: document.documentElement.lang || "en-US",
-      challenge: /verify you are human|captcha|access denied|unusual traffic|robot or human/i.test(body),
+      challenge: /verify you are human|captcha|access denied|unusual traffic|robot or human|403 error|request blocked|request could not be satisfied/i.test(body),
       noResults: /no (?:matching )?(?:results|products)|0 results|couldn.t find/i.test(body),
       hasMore: [...document.querySelectorAll("button,a")].some((element) => /^(?:next|next page|load more|show more)$/i.test((element.innerText || element.getAttribute("aria-label") || "").trim()) && element.offsetParent !== null),
       rows,
@@ -146,7 +146,7 @@ async function captureTerm(tab, store, query) {
 
 async function captureCanary(tab, store, screenshotSha256) {
   const config = CONFIG[store];
-  const state = await tab.playwright.evaluate(() => ({ url: location.href, body: document.body.innerText.slice(0, 2000), challenge: /verify you are human|captcha|access denied|unusual traffic|robot or human/i.test(document.body.innerText) }));
+  const state = await tab.playwright.evaluate(() => ({ url: location.href, body: document.body.innerText.slice(0, 2000), challenge: /verify you are human|captcha|access denied|unusual traffic|robot or human|403 error|request blocked|request could not be satisfied/i.test(document.body.innerText) }));
   const pass = store === "sams"
     ? /Pickup[\s\S]*Omaha Sam's Club/i.test(state.body)
     : /Omaha L St Supercenter/i.test(state.body) && /12812 S 38TH St/i.test(state.body) && /fulfillment_method%3APickup/i.test(state.url);

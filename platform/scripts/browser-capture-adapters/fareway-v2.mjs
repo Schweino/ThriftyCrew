@@ -56,7 +56,7 @@ async function readPage(tab) {
       title: document.title,
       query: document.querySelector('input[placeholder*="Search Fareway"]')?.value || "",
       locale: document.documentElement.lang || "en-US",
-      challenge: /verify you are human|captcha|access denied|unusual traffic/i.test(body),
+      challenge: /verify you are human|captcha|access denied|unusual traffic|403 error|request blocked|request could not be satisfied|robot or human/i.test(body),
       noResults: /no (?:matching )?(?:results|products)|0 results|couldn.t find/i.test(body),
       hasMore: [...document.querySelectorAll("button")].some((button) => /^(load|show) more$/i.test((button.innerText || "").trim()) && button.offsetParent !== null),
       rows: candidates.filter((row) => row.href && !seen.has(row.href) && (seen.add(row.href), true)),
@@ -187,7 +187,7 @@ async function captureTerm(tab, query) {
 async function captureCanary(tab, screenshotSha256) {
   const state = await tab.playwright.evaluate(() => ({
     url: location.href,
-    challenge: /verify you are human|captcha|access denied|unusual traffic/i.test(document.body.innerText),
+    challenge: /verify you are human|captcha|access denied|unusual traffic|403 error|request blocked|request could not be satisfied|robot or human/i.test(document.body.innerText),
     plainOmaha: [...document.querySelectorAll("button")].some((button) => /In-Store[\s\S]*Omaha/i.test(button.innerText || "") && !/Omaha (?:Meat Market|- North)/i.test(button.innerText || "")),
   }));
   const visibleHeaders = await tab.playwright.getByRole("button", { name: /In-Store.*Omaha/ }).filter({ visible: true }).count();
