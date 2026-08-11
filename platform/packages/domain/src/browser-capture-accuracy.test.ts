@@ -91,4 +91,29 @@ describe("source-specific capture-time parser contracts", () => {
     expect(seasoning.riskReasons).not.toContain("likely-board-winner");
     expect(garlic.riskReasons).toContain("likely-board-winner");
   });
+
+  it("draws the blind sample from the query's strongest matching results", async () => {
+    const makeCandidate = (index: number, productKey: string, name: string) => {
+      const truth = browserCaptureTruthSchema.parse({
+        capturedAt: "2026-08-12T12:00:00.000Z", pageUrl: "https://www.walmart.com/search?q=grapes",
+        location: "Omaha L St Supercenter", priceMode: "Pickup", pageIndex: 0, resultIndex: index,
+        pageState: { pageType: "search_results", pageTitle: "grapes - Walmart.com", query: "grapes", resultRegionPresent: true, challengeDetected: false, currency: "USD", locale: "en-US", locationText: "Omaha L St Supercenter", fulfillmentText: "Pickup" },
+        visible: { rawText: "$1.25", priceMinor: 125, productName: name, productKey, priceSemantics: { offerType: "everyday", condition: "none", unitPriceMinor: 125, qualifyingQuantity: 1, totalPriceMinor: 125, ambiguity: false } },
+        structured: { rawText: "1.25", priceMinor: 125, productName: name, productKey, priceSemantics: { offerType: "everyday", condition: "none", unitPriceMinor: 125, qualifyingQuantity: 1, totalPriceMinor: 125, ambiguity: false } },
+        parser: { status: "exact", rule: "next-data-price-lines" },
+      });
+      return { termKey: "grapes", query: "grapes", productKey, name, sizeText: "1 each", taxonomyPath: "Food/Produce", purchasePriceMinor: 125, truth };
+    };
+    const candidates = [
+      ...Array.from({ length: 120 }, (_, index) => makeCandidate(index, `mango-${index}`, `Red Mango ${index}`)),
+      ...Array.from({ length: 20 }, (_, index) => makeCandidate(index + 120, `grapes-${index}`, `Red Grapes ${index}`)),
+    ];
+    const accuracy = await buildBrowserCaptureAccuracy("walmart", candidates, [], [{
+      outcome: "success", rowCount: candidates.length,
+      retrieval: { targetResultCount: candidates.length, loadedResultCount: candidates.length, availableResultCount: candidates.length, hasMoreResults: false, termination: "end-of-results" },
+    }]);
+    const sampled = accuracy.discoveryRows.filter((row) => row.riskReasons.includes("deterministic-sample"));
+    expect(sampled).toHaveLength(20);
+    expect(sampled.every((row) => row.productKey.startsWith("grapes-"))).toBe(true);
+  });
 });

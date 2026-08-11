@@ -138,8 +138,10 @@ After discovery is complete, create the deterministic independent second-pass wo
 pnpm tc capture session verification-plan <session-directory> <verification-plan.json>
 ```
 
-The plan includes likely lowest-price winners, a stable blind sample capped at 100 rows per store, produce/count risk
-on those likely winners, and every multi-buy/outlier/duplicate-price conflict. The blind-sample cap never suppresses
+The plan includes likely lowest-price winners, a stable blind sample capped at 100 rows per store and drawn from
+each query's strongest lexical matches, produce/count risk on those likely winners, and every
+multi-buy/outlier/duplicate-price conflict. When a query has no lexical match, all of its results remain eligible
+so aliases cannot silently escape sampling. The blind-sample cap never suppresses
 an explicit risk target. A likely winner is the cheapest candidate among the search results with the strongest
 query-token match; raw cheapest search position alone is insufficient. Revisit each target with a fresh top-level
 navigation using `captureAldiVerificationChunk`, `captureFarewayVerificationChunk`, or

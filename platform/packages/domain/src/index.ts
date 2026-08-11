@@ -229,6 +229,7 @@ export async function buildBrowserCaptureAccuracy(
   terms: readonly CaptureAccuracyTerm[],
 ): Promise<BrowserCaptureAccuracy> {
   const cheapest = new Set<string>();
+  const blindSampleEligible = new Set<string>();
   const byTerm = new Map<string, Array<{ index: number; price: number; relevance: number }>>();
   candidates.forEach((row, index) => {
     const values = byTerm.get(row.termKey) ?? [];
@@ -238,6 +239,7 @@ export async function buildBrowserCaptureAccuracy(
   for (const values of byTerm.values()) {
     const bestRelevance = Math.max(...values.map((value) => value.relevance));
     const relevant = bestRelevance > 0 ? values.filter((value) => value.relevance === bestRelevance) : values;
+    for (const value of relevant) blindSampleEligible.add(String(value.index));
     const ranked = relevant.sort((left, right) => left.price - right.price || left.index - right.index);
     cheapest.add(String(ranked[0]?.index));
   }
@@ -268,9 +270,10 @@ export async function buildBrowserCaptureAccuracy(
       || (candidate.truth.pageState?.pageType === "search_results" && normalizeName(candidate.truth.pageState.query ?? "") !== normalizeName(candidate.query))) allTruthPass = false;
     rows.push({ ...candidate, rowKey, discoveryHash, riskReasons: reasons, verificationRequired });
   }
-  const deterministicSample = (await Promise.all(rows.map(async (row) => ({ row, rank: await digestHex(`browser-capture-sample:${row.rowKey}`) }))))
+  const blindSamplePool = rows.filter((_row, index) => blindSampleEligible.has(String(index)));
+  const deterministicSample = (await Promise.all(blindSamplePool.map(async (row) => ({ row, rank: await digestHex(`browser-capture-sample:${row.rowKey}`) }))))
     .sort((left, right) => left.rank.localeCompare(right.rank) || left.row.rowKey.localeCompare(right.row.rowKey))
-    .slice(0, Math.min(100, rows.length));
+    .slice(0, Math.min(100, blindSamplePool.length));
   for (const { row } of deterministicSample) {
     if (!row.riskReasons.includes("deterministic-sample")) row.riskReasons.push("deterministic-sample");
     row.verificationRequired = true;
