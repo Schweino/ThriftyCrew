@@ -1,4 +1,5 @@
 import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
+import { gzipSync } from "node:zlib";
 import type { CurrentBridgeArtifact } from "./legacy";
 import type { NativeReleaseArtifact } from "./native";
 import type { DirectCaptureArtifact } from "@thriftycrew/contracts";
@@ -174,11 +175,14 @@ export async function ingestDirectCapture(
   if (status === "open") {
     for (let index = 0; index < evidenceInputs.length; index += 1) {
       const evidence = evidenceInputs[index]!;
+      const compress = evidence.body.byteLength > 8 * 1024 * 1024;
+      const uploadBody = compress ? new Uint8Array(gzipSync(evidence.body, { level: 9 })) : evidence.body;
       await client.request(`/internal/capture-batches/${batchId}/evidence`, {
         method: "PUT",
-        body: evidence.body,
+        body: uploadBody,
         headers: {
           "content-type": evidence.contentType,
+          ...(compress ? { "content-encoding": "gzip", "x-uncompressed-length": String(evidence.body.byteLength) } : {}),
           "x-evidence-id": evidenceIds[index]!,
           "x-evidence-kind": evidence.kind,
           "x-content-sha256": await digestHex(evidence.body),

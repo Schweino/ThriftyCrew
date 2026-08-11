@@ -55,6 +55,7 @@ import {
   triagePlanSchema,
   CAPTURE_SEMANTICS_CUTOVER,
 } from "@thriftycrew/contracts";
+import { decodeEvidenceUpload } from "./evidence-upload";
 import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
 import { GhostEntitlementProvider, type Entitlement } from "@thriftycrew/entitlements";
 import { authenticateMutation } from "./auth";
@@ -2007,8 +2008,16 @@ app.put("/internal/capture-batches/:id/evidence", async (context) => {
     expiresAt: context.req.header("x-expires-at") || undefined,
   });
   if (!metadataResult.success) return jsonError(metadataResult.error.message, 422);
-  const bytes = new Uint8Array(await context.req.arrayBuffer());
-  if (bytes.byteLength > 20 * 1024 * 1024) return jsonError("evidence object exceeds 20 MiB", 422);
+  let bytes: Uint8Array;
+  try {
+    bytes = await decodeEvidenceUpload(
+      new Uint8Array(await context.req.arrayBuffer()),
+      context.req.header("content-encoding"),
+      context.req.header("x-uncompressed-length"),
+    );
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "invalid evidence upload", 422);
+  }
   const actualHash = await digestHex(bytes);
   if (actualHash !== metadataResult.data.sha256) return jsonError("evidence hash does not match content", 422);
   const contentType = context.req.header("content-type") || "application/octet-stream";
