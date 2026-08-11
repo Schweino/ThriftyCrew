@@ -3,7 +3,7 @@ import { NonRetryableError } from "cloudflare:workflows";
 import { stableJson } from "@thriftycrew/domain";
 import { raiseOperationalAlert, resolveOperationalAlert } from "./operations";
 import type { WorkerEnv } from "./env";
-import { D1_EXPORT_POLL_STEP_CONFIG, d1ExportPollPayload } from "./backup-policy";
+import { D1_EXPORT_POLL_STEP_CONFIG, d1ExportPollPayload, d1ExportTerminalError } from "./backup-policy";
 
 interface BackupWorkflowPayload { trigger?: string; localDate?: string; forceReplica?: boolean }
 
@@ -61,9 +61,8 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
       });
       const stored = await step.do("download and store D1 export", D1_EXPORT_POLL_STEP_CONFIG, async () => {
         const result = await exportRequest<ExportResult>(this.env, d1ExportPollPayload(bookmark));
-        if (result.status === "error") {
-          throw new NonRetryableError(result.error || `D1 export failed: ${stableJson(result.messages ?? [])}`);
-        }
+        const terminalError = d1ExportTerminalError(result);
+        if (terminalError) throw new NonRetryableError(terminalError);
         const signedUrl = result.signed_url ?? result.result?.signed_url;
         const filename = result.filename ?? result.result?.filename;
         // Throwing here is intentional: Workflow step retries keep the export
