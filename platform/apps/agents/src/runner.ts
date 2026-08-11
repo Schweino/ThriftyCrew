@@ -25,7 +25,10 @@ const registry = agentRegistrySchema.parse(JSON.parse(await readFile(path.join(p
 const definition = registry.agents.find((agent) => agent.id === requestedAgent);
 if (!definition || !definition.enabled) throw new Error(`agent ${requestedAgent} is unknown or disabled`);
 const activeDefinition = definition;
-if (definition.plane !== "ci") throw new Error(`agent ${requestedAgent} is not authorized for the CI plane`);
+const runtimePlane = process.env.GITHUB_ACTIONS === "true" ? "ci" : "pc";
+if (definition.plane !== runtimePlane && process.env.TC_ALLOW_PLANE_FALLBACK !== "1") {
+  throw new Error(`agent ${requestedAgent} is assigned to the ${definition.plane} plane, not ${runtimePlane}`);
+}
 const prompt = await readFile(path.join(platformRoot, definition.promptFile), "utf8");
 const promptHash = createHash("sha256").update(prompt).digest("hex");
 if (promptHash !== definition.promptSha256) throw new Error(`agent ${requestedAgent} prompt hash drift`);

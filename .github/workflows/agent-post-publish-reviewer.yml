@@ -1,9 +1,5 @@
 name: Agent - post publish reviewer
-on:
-  schedule:
-    - cron: "47 12 * * *"
-      timezone: "America/Chicago"
-  workflow_dispatch:
+on: { workflow_dispatch: {} }
 permissions: { contents: read, id-token: write, actions: write }
 jobs:
   call:

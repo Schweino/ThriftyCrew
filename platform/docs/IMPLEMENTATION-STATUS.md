@@ -16,8 +16,9 @@
   and browser-visible member-state routes.
 - External exact-route beta verification, release rollback drill, Analytics Engine funnel events, deterministic
   weekly blind accuracy sample, Wilson interval, durable alerts/triage, and typed reviewer-to-developer handoff.
-- GitHub schedules and recovery dispatch, job ledger/watchdog, sanitized private Actions diagnostics, nightly
-  D1 export, secondary private R2 replication, lifecycle policies, and scratch restore evidence.
+- Authoritative local schedules with durable Worker job ledgers/watchdog, DPAPI credentials, bounded alerts,
+  nightly D1 export, secondary private R2 replication, lifecycle policies, and scratch restore evidence.
+  GitHub workflows remain checked-in manual fallbacks; automatic hosted-runner dispatch is fail-closed.
 - Operator CLI for every platform operation, complete founding-bug port ledger, six chaos proofs, and automated
   daily/weekly milestone evidence accrual.
 - Production-scale recovery proof: GitHub run `31350242781` acquired all three server sources, attested and
@@ -43,8 +44,8 @@ implementation.
 ## Infrastructure hardening implemented after the V3 baseline
 
 - Truthful transition inventory and bidirectional schedule drift enforcement across GitHub, Worker and PC.
-- Off-hour, Central-time V3 schedules plus a cloud Family Fare paced sweep.
-- Agents-as-code registry, hashed prompts, fixtures, budgets, token cost ledger and workflow-scoped OIDC.
+- Off-hour, Central-time V3 Windows schedules plus a local Family Fare paced sweep.
+- Agents-as-code registry, hashed prompts, fixtures, budgets, token cost ledger, scoped local HMAC and fallback OIDC.
 - Read-only diagnostic fallback when the agent ledger is unavailable; no invisible mutation path.
 - Immutable recipe content batches with separate AI audit and deterministic promotion authority.
 - Expand/contract forward migration governance and automated quarterly scratch restore Workflow.
@@ -61,16 +62,21 @@ implementation.
 
 ## Phase 2 judgment execution plane
 
-- Ten thin GitHub caller workflows route through one reusable runner. OIDC verifies both the registered caller
-  and reusable workflow identities; the Worker remains the only production write boundary.
+- Ten agents run in bounded local cycles with separate DPAPI-protected HMAC identities. The Worker binds each
+  identity to its active PC registry entry and applies the same capabilities, evaluations, leases, fencing and
+  budgets; the Worker remains the only production write boundary.
+- Ten thin GitHub caller workflows and one reusable runner remain as manual fallback artifacts. OIDC still
+  verifies both caller and reusable identities when an operator explicitly chooses that fallback.
 - Exact semantic execution hashes bind model, fallback, reasoning, prompt and contracts. Operational schedule
   and budget edits do not invalidate evaluation evidence.
 - Every agent has an agent-specific deterministic and prompt-injection corpus. Claims fail closed until the
   exact execution hash has a passing live candidate evaluation recorded in D1.
 - Durable work items use idempotent fingerprints, leases, fencing, retries, dead letters and late-result
-  discard. Chained triage and recipe stages dispatch immediately and also have a scheduled retry sweep.
-- Structured outputs are validated server-side. Pull-request agents are limited to approved paths, execute the
-  complete quality gate, open GitHub App-authored PRs and have no deploy capability.
+  discard. Chained triage and recipe stages are picked up by bounded local cycles; the 15-minute Worker no
+  longer turns queue presence into unbounded GitHub workflow dispatch.
+- Structured outputs are validated server-side. Pull-request agents are limited to approved paths, apply
+  proposals only in isolated local worktrees, execute the complete quality gate, open a GitHub PR, and have
+  no merge or deploy capability.
 - Recipe waves snapshot the pre-wave release and correct failures through a new immutable release. Login
   canaries enforce privacy and same-profile timing. Routine and incident reserve budgets are isolated.
 

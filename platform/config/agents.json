@@ -22,7 +22,7 @@
     {
       "id": "post-publish-reviewer",
       "enabled": true,
-      "plane": "ci",
+      "plane": "pc",
       "scheduleId": "post-publish-review",
       "promptFile": "agents/post-publish-reviewer/prompt.md",
       "promptSha256": "6f47d8ad67fd711792380358410d53ea6efd76567ee29945beb8edb2af3f7f6a",
@@ -53,7 +53,7 @@
     {
       "id": "triage-reviewer",
       "enabled": true,
-      "plane": "ci",
+      "plane": "pc",
       "scheduleId": "triage-review",
       "promptFile": "agents/triage-reviewer/prompt.md",
       "promptSha256": "7a973b1ee8d795d8f689f42d9788184b52beb8a9454d90e1c00cf594d965b0f6",
@@ -84,7 +84,7 @@
     {
       "id": "triage-developer",
       "enabled": true,
-      "plane": "ci",
+      "plane": "pc",
       "promptFile": "agents/triage-developer/prompt.md",
       "promptSha256": "a4c9fd6002fbc829a09849233dc19ba6f6c6c03a87de80e552d1d1633eaf9c69",
       "provider": "openai",
@@ -114,7 +114,7 @@
     {
       "id": "accuracy-headless",
       "enabled": true,
-      "plane": "ci",
+      "plane": "pc",
       "promptFile": "agents/accuracy-headless/prompt.md",
       "promptSha256": "e2a1cee6b582a26faa2c9a45b850409072707b5a2f6cca5899718cb3631e1900",
       "provider": "openai",
@@ -143,7 +143,7 @@
     {
       "id": "recipe-sourcer",
       "enabled": true,
-      "plane": "ci",
+      "plane": "pc",
       "scheduleId": "recipe-pack-weekly",
       "promptFile": "agents/recipe-sourcer/prompt.md",
       "promptSha256": "76b5308d54fb1773aefdce2c3ad7cab2dbcb614158290d1e9ddf04a223252617",
@@ -173,7 +173,7 @@
     {
       "id": "recipe-deduper",
       "enabled": true,
-      "plane": "ci",
+      "plane": "pc",
       "promptFile": "agents/recipe-deduper/prompt.md",
       "promptSha256": "9e462dfb48d9d4a8afe29073b6e74327a2fa18438797fc39f8b6bf4ffa1a0886",
       "provider": "openai",
@@ -202,7 +202,7 @@
     {
       "id": "recipe-mapper",
       "enabled": true,
-      "plane": "ci",
+      "plane": "pc",
       "promptFile": "agents/recipe-mapper/prompt.md",
       "promptSha256": "20e89f179cb119d9c4dc2a39baaa79ad281d71cf9eb7b5c84c3c153f3290a13e",
       "provider": "openai",
@@ -232,7 +232,7 @@
     {
       "id": "recipe-writer",
       "enabled": true,
-      "plane": "ci",
+      "plane": "pc",
       "promptFile": "agents/recipe-writer/prompt.md",
       "promptSha256": "446d97bf99f8a86ab5643fbe6859ad8e85f2fe7d85f2a4c70bf7f9e5f9a7e37f",
       "provider": "openai",
@@ -261,7 +261,7 @@
     {
       "id": "recipe-auditor",
       "enabled": true,
-      "plane": "ci",
+      "plane": "pc",
       "promptFile": "agents/recipe-auditor/prompt.md",
       "promptSha256": "59e618e5b1d8b7c69227177bf310119e551a33d43008c420ac52c50080eea2ba",
       "provider": "openai",
@@ -290,7 +290,7 @@
     {
       "id": "source-sentinel-investigator",
       "enabled": true,
-      "plane": "ci",
+      "plane": "pc",
       "scheduleId": "source-sentinel-daily",
       "promptFile": "agents/source-sentinel-investigator/prompt.md",
       "promptSha256": "e6a04a3ba228eed497959d079536ff1361a51cd9bfb67089c8a9e0ffeb44d799",

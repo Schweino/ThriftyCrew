@@ -41,6 +41,10 @@ export function githubDispatchInputs(workflowFile: string, job: string, reason: 
   return { inputs: { recovery_job: job, recovery_reason: reason } };
 }
 
+export function githubActionsDispatchEnabled(env: Pick<WorkerEnv, "GITHUB_ACTIONS_DISPATCH_ENABLED">): boolean {
+  return env.GITHUB_ACTIONS_DISPATCH_ENABLED === "1";
+}
+
 export async function resolveRecoveredJobRunAlerts(
   env: WorkerEnv,
   job: string,
@@ -252,6 +256,12 @@ export async function dispatchGithubJob(
     `INSERT INTO watchdog_dispatches (id, job, idempotency_key, reason, status)
      VALUES (?1, ?2, ?3, ?4, 'started')`,
   ).bind(dispatchId, job, idempotencyKey, reason).run();
+  if (!githubActionsDispatchEnabled(env)) {
+    await env.DB.prepare(
+      "UPDATE watchdog_dispatches SET status = 'suppressed', detail_json = ?2, finished_at = CURRENT_TIMESTAMP WHERE id = ?1",
+    ).bind(dispatchId, stableJson({ reason: "automatic GitHub Actions dispatch is disabled; local execution is authoritative" })).run();
+    return { dispatchId, status: "suppressed", idempotent: false };
+  }
   if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY || !workflowFile) {
     const detail = { error: "GitHub recovery dispatch is not configured" };
     await env.DB.prepare(
@@ -293,13 +303,16 @@ export async function dispatchGithubJob(
   }
 }
 
-export async function dispatchRegisteredAgent(env: WorkerEnv, agentId: string): Promise<{ dispatched: boolean; workflowFile: string }> {
+export async function dispatchRegisteredAgent(env: WorkerEnv, agentId: string): Promise<{ dispatched: boolean; workflowFile: string; reason?: string }> {
   const row = await env.DB.prepare(
-    "SELECT workflow_ref FROM agent_registry WHERE id = ?1 AND active = 1 AND enabled = 1",
-  ).bind(agentId).first<{ workflow_ref: string | null }>();
+    "SELECT workflow_ref, plane FROM agent_registry WHERE id = ?1 AND active = 1 AND enabled = 1",
+  ).bind(agentId).first<{ workflow_ref: string | null; plane: string }>();
   const match = row?.workflow_ref?.match(/\/\.github\/workflows\/([^@]+)@/);
   const workflowFile = match?.[1];
-  if (!workflowFile || !env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY) throw new Error("registered agent dispatch is not configured");
+  if (!workflowFile) throw new Error("registered agent workflow is not configured");
+  if (row?.plane === "pc") return { dispatched: false, workflowFile, reason: "PC execution plane is authoritative" };
+  if (!githubActionsDispatchEnabled(env)) return { dispatched: false, workflowFile, reason: "automatic GitHub Actions dispatch is disabled" };
+  if (!env.GITHUB_DISPATCH_TOKEN || !env.GITHUB_REPOSITORY) throw new Error("registered agent dispatch is not configured");
   const response = await fetch(`https://api.github.com/repos/${env.GITHUB_REPOSITORY}/actions/workflows/${encodeURIComponent(workflowFile)}/dispatches`, {
     method: "POST",
     headers: {

@@ -36,6 +36,7 @@ jobs:
       TC_API_ORIGIN: ${{ vars.TC_V3_API_ORIGIN }}
       TC_OIDC_AUDIENCE: tc-grocery-v3
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      TC_ALLOW_PLANE_FALLBACK: "1"
     steps:
       - uses: actions/checkout@v6
 

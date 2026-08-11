@@ -1,13 +1,13 @@
 import { deterministicId, stableJson } from "@thriftycrew/domain";
 import type { WorkerEnv } from "./env";
-import { raiseOperationalAlert, resolveOperationalAlert } from "./operations";
+import { githubActionsDispatchEnabled, raiseOperationalAlert, resolveOperationalAlert } from "./operations";
 
 const encoder = new TextEncoder();
 const ACTIONABLE_CONCLUSIONS = new Set(["failure", "timed_out", "stale", "startup_failure", "action_required"]);
 const AUTOMATIC_INFRASTRUCTURE_CONCLUSIONS = new Set(["timed_out", "stale", "startup_failure"]);
 const OPERATIONAL_EVENTS = new Set(["schedule", "workflow_dispatch", "repository_dispatch"]);
 const TRANSIENT_FAILURE = /(?:returned|status(?:\s+code)?|http)\s*(?:429|5\d\d)\b|\b(?:429|500|502|503|504)\s*\((?:internal error|bad gateway|service unavailable|gateway timeout)\)|\b(?:econnreset|etimedout|econnrefused|enotfound|socket hang up|connection reset|service unavailable|internal error|bad gateway|gateway timeout|temporarily unavailable)\b|(?:hosted\s+)?runner.*(?:lost|disconnected|unavailable)/i;
-const DETERMINISTIC_FAILURE = /\b(?:assertionerror|tests? failed|typecheck(?:ing)? failed|compile(?:r|ation)? error|permission denied|unauthorized|forbidden|schema validation|contract failed|migration failed|unknown recovery job|invalid configuration)\b|\bTS\d{4}:|(?:returned|status(?:\s+code)?|http)\s*(?:400|401|403|404|409|422)\b/i;
+const DETERMINISTIC_FAILURE = /\b(?:assertionerror|tests? failed|typecheck(?:ing)? failed|compile(?:r|ation)? error|permission denied|unauthorized|forbidden|schema validation|contract failed|migration failed|unknown recovery job|invalid configuration|spending limit|payments? (?:have )?failed|billing limit)\b|\bTS\d{4}:|(?:returned|status(?:\s+code)?|http)\s*(?:400|401|403|404|409|422)\b/i;
 
 export interface GithubFailureDecision {
   action: "retry" | "alert" | "ignore";
@@ -223,6 +223,14 @@ export async function processGithubWorkflowRun(
   };
 
   if (decision.action === "retry") {
+    if (!githubActionsDispatchEnabled(env)) {
+      await updateWebhookLedger(env, ledgerId, "suppressed", { ...detail, recovery: "disabled-by-local-execution-policy" });
+      await raiseOperationalAlert(env, alertKey, `GitHub Actions failure retained without automatic retry: ${run.name ?? payload.workflow?.name ?? run.id}`, {
+        ...detail,
+        recovery: "disabled-by-local-execution-policy",
+      }, { notification: "digest", deferMinutes: 15 });
+      return { decision: "retry-suppressed" };
+    }
     try {
       await rerunFailedJobs(env, run.id);
       await updateWebhookLedger(env, ledgerId, "delivered", { ...detail, recovery: "rerun-failed-jobs-requested" });

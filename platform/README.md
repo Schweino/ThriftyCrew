@@ -6,7 +6,7 @@ grocery configuration is the exception: `config/` is the single source and gener
 
 ## Runtime
 
-- Production and CI: Node 22
+- Production and authoritative local automation: Node 22
 - Package manager: pnpm 11.16.0
 - Local development may use a newer Node release, but CI is the compatibility authority.
 
@@ -41,6 +41,7 @@ snapshot. `replay:current` signs every mutation, writes evidence and large paylo
 server-owned hard guards, and publishes only when the release is complete. The bridge keeps single-store
 recipe bases private while the public comparison continues to require multi-store coverage.
 
-PC credentials and Ghost credentials belong in Cloudflare secrets, never the repository. GitHub Actions gets a
-short-lived OIDC identity (`id-token: write`) bound to the repository and workflow; it does not use a static ingest
-secret. Remote resources, beta routing, entitlements, and cutover remain explicit rollout steps.
+PC credentials are DPAPI-protected for the scheduled-task user and mirrored into Cloudflare's mutation-key
+secret; plaintext credentials never enter Git. Registered PC agents retain server-owned capability, evaluation,
+lease, fencing and budget enforcement. GitHub Actions is manual fallback only and receives a short-lived OIDC
+identity when explicitly invoked. Remote resources, routing, entitlements, and cutover remain explicit steps.

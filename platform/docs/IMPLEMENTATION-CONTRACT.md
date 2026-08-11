@@ -36,7 +36,9 @@ Ghost owns content, entitlements, billing, email, and live paywall truth. Only t
 20. Every judgment prompt is versioned and its deployed hash must match the active agent registry.
 21. Every agent run has a durable ledger; ledger failure authorizes diagnostic reads only, never mutation.
 22. CI workflow identity is endpoint-scoped and every agent has an explicit capability set and audit identity.
-23. Judgment agents execute in CI. PC workloads remain deterministic browser capture, accuracy, canary or wake.
+23. Judgment agents execute only on their registered plane. The authoritative PC plane uses per-agent,
+    DPAPI-protected HMAC identities, the same server-owned capabilities, leases, fencing, evaluations and
+    budgets as OIDC; GitHub-hosted execution is a manually selected fallback and never dispatches itself.
 24. Publishable recipe content exists only in immutable staging batches and deterministic guards own promotion.
 25. Unbounded historical analytics and archive queries never run against operational D1.
 26. A quarterly automated scratch restore must pass; absence or failure creates a durable operational incident.

@@ -1,35 +1,6 @@
 name: Grocery platform v3
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "platform/**"
-      - "grocery/pull-regular-bakers-api.ps1"
-      - "grocery/pull-regular-familyfare.ps1"
-      - "grocery/pull-regular-hyvee.ps1"
-      - "grocery/omaha-time.ps1"
-      - ".github/workflows/platform-v3.yml"
-  pull_request:
-    branches: [main]
-    paths:
-      - "platform/**"
-      - "grocery/pull-regular-bakers-api.ps1"
-      - "grocery/pull-regular-familyfare.ps1"
-      - "grocery/pull-regular-hyvee.ps1"
-      - "grocery/omaha-time.ps1"
-      - ".github/workflows/platform-v3.yml"
-  schedule:
-    - cron: "7 12 * * *"
-      timezone: "America/Chicago"
-    - cron: "17 */3 * * *"
-      timezone: "America/Chicago"
-    - cron: "17 15 * * 1"
-      timezone: "America/Chicago"
-    - cron: "37 13 * * *"
-      timezone: "America/Chicago"
-    - cron: "7 16 * * *"
-      timezone: "America/Chicago"
   workflow_dispatch:
     inputs:
       shadow_replay:

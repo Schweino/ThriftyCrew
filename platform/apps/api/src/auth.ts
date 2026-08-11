@@ -193,6 +193,21 @@ export async function authenticateMutation(
   } catch {
     throw new Error("request nonce has already been used");
   }
+  if (record.registeredAgent) {
+    if (record.role !== "engine") throw new Error("registered local agents require the engine mutation role");
+    const registered = await env.DB.prepare(
+      `SELECT id, capabilities_json FROM agent_registry
+        WHERE id = ?1 AND active = 1 AND enabled = 1 AND plane = 'pc'`,
+    ).bind(agentId).first<{ id: string; capabilities_json: string }>();
+    if (!registered) throw new Error("local agent is not assigned to an enabled PC registry entry");
+    return {
+      agentId,
+      ...record,
+      authMethod: "hmac",
+      registeredAgentId: registered.id,
+      capabilities: JSON.parse(registered.capabilities_json) as string[],
+    };
+  }
   return { agentId, ...record, authMethod: "hmac" };
 }
 

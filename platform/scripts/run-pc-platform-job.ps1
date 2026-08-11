@@ -1,0 +1,100 @@
+param(
+  [Parameter(Mandatory=$true)]
+  [ValidateSet('daily-engine','family-fare-paced','accuracy-weekly','triage-daily','ghost-rotation-reconcile','restore-drill-quarterly')]
+  [string]$Job,
+  [switch]$Force,
+  [switch]$SelfTest
+)
+$ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'pc-runtime-lib.ps1')
+$config = Read-PcRuntimeConfig
+Initialize-PcRuntimeEnvironment $config
+$logFile = Join-Path ([string]$config.logRoot) ("platform-{0}.log" -f $Job)
+$platformRoot = [string]$config.platformRoot
+$incomeRoot = Split-Path -Parent $platformRoot
+$pnpmPath = [string]$config.pnpmPath
+
+if ($SelfTest) {
+  if (-not (Test-Path -LiteralPath $pnpmPath)) { throw "pnpm runtime is missing: $pnpmPath" }
+  if (-not (Test-Path -LiteralPath (Join-Path $incomeRoot 'grocery\pull-regular-familyfare.ps1'))) { throw 'Family Fare source adapter is missing' }
+  Set-PcRuntimeCredential $config 'local-operator'
+  Write-Output "PC platform job self-test passed for $Job"
+  exit 0
+}
+
+if ($Job -eq 'restore-drill-quarterly' -and -not $Force) {
+  $now = Get-Date
+  if ($now.Day -ne 1 -or @(1,4,7,10) -notcontains $now.Month) {
+    Write-PcRuntimeLog $logFile 'quarterly guard: not a scheduled restore-drill date; standing down'
+    exit 0
+  }
+}
+
+$lock = Enter-PcRuntimeLock ("platform-job-{0}" -f $Job) 180
+if (-not $lock) { Write-PcRuntimeLog $logFile 'another instance holds the job lock; standing down'; exit 0 }
+
+function Invoke-Logged([string]$Label, [scriptblock]$Command) {
+  Write-PcRuntimeLog $logFile ("START {0}" -f $Label)
+  $prior = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try { $output = & $Command 2>&1; $exitCode = $LASTEXITCODE }
+  finally { $ErrorActionPreference = $prior }
+  foreach ($line in @($output)) { Write-PcRuntimeLog $logFile ("{0}: {1}" -f $Label, $line) }
+  if ($null -eq $exitCode) { $exitCode = 0 }
+  if ($exitCode -ne 0) { throw "$Label failed with exit code $exitCode" }
+  Write-PcRuntimeLog $logFile ("DONE {0}" -f $Label)
+}
+
+Set-PcRuntimeCredential $config 'local-operator'
+$env:TC_JOB_RUN_ID = "run_{0}_pc-{1}" -f $Job, ([DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())
+$env:TC_SCHEDULED_FOR = (Get-Date).ToUniversalTime().ToString('o')
+$env:TC_RECOVERY_REASON = 'authoritative Windows Task Scheduler execution'
+$jobStarted = $false
+$failed = $false
+try {
+  Push-Location $platformRoot
+  try {
+    Invoke-Logged 'job-ledger-start' { & $pnpmPath tc job start $Job }
+    $jobStarted = $true
+    switch ($Job) {
+      'daily-engine' {
+        Invoke-Logged 'config-deploy' { & $pnpmPath tc config deploy }
+        Invoke-Logged 'bakers-capture' { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $incomeRoot 'grocery\pull-regular-bakers-api.ps1') }
+        Invoke-Logged 'family-fare-capture' { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $incomeRoot 'grocery\pull-regular-familyfare.ps1') }
+        Invoke-Logged 'hy-vee-capture' { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $incomeRoot 'grocery\pull-regular-hyvee.ps1') }
+        Invoke-Logged 'capture-ingest' { & $pnpmPath tc capture ingest-current bakers family-fare hy-vee }
+        Invoke-Logged 'browser-promotion' { & $pnpmPath tc capture promote-ready-browser }
+        Invoke-Logged 'native-publish' { & $pnpmPath tc engine publish-native }
+        Invoke-Logged 'ghost-reconcile' { & $pnpmPath tc ghost reconcile }
+        Invoke-Logged 'direct-parity' { & $pnpmPath tc engine parity direct }
+        Invoke-Logged 'evidence-accrue' { & $pnpmPath tc evidence accrue }
+      }
+      'family-fare-paced' {
+        $globalLock = Join-Path $env:LOCALAPPDATA 'ThriftyCrew\grocery-v3\locks\platform-job-daily-engine.lock'
+        if (Test-Path -LiteralPath $globalLock) { Write-PcRuntimeLog $logFile 'daily engine owns the capture files; paced run standing down'; break }
+        Invoke-Logged 'family-fare-capture' { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $incomeRoot 'grocery\pull-regular-familyfare.ps1') }
+        Invoke-Logged 'family-fare-ingest' { & $pnpmPath tc capture ingest-current family-fare }
+      }
+      'accuracy-weekly' { Invoke-Logged 'accuracy-draw' { & $pnpmPath tc accuracy draw } }
+      'triage-daily' { Invoke-Logged 'triage-run' { & $pnpmPath tc triage run } }
+      'ghost-rotation-reconcile' { Invoke-Logged 'ghost-reconcile' { & $pnpmPath tc ghost reconcile } }
+      'restore-drill-quarterly' { Invoke-Logged 'restore-trigger' { & $pnpmPath tc restore trigger } }
+    }
+  } finally { Pop-Location }
+} catch {
+  $failed = $true
+  Write-PcRuntimeLog $logFile ("FAILED: {0}" -f $_.Exception.Message)
+  Send-PcRuntimeAlert ("ThriftyCrew V3 local job failed: $Job") ("The authoritative local job $Job failed. The last error was:`n`n$($_.Exception.Message)`n`nLog: $logFile`n`nThe Worker will also retain the missed/failed ledger incident; GitHub Actions is intentionally not used for automatic recovery.")
+} finally {
+  if ($jobStarted) {
+    try {
+      Set-PcRuntimeCredential $config 'local-operator'
+      $env:TC_GITHUB_JOB_STATUS = if ($failed) { 'failure' } else { 'success' }
+      Push-Location $platformRoot
+      try { & $pnpmPath tc job finish $Job 2>&1 | ForEach-Object { Write-PcRuntimeLog $logFile ("job-ledger-finish: {0}" -f $_) } }
+      finally { Pop-Location }
+    } catch { Write-PcRuntimeLog $logFile ("job-ledger-finish failed: {0}" -f $_.Exception.Message) }
+  }
+  Exit-PcRuntimeLock $lock
+}
+if ($failed) { exit 1 }

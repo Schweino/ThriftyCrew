@@ -17,10 +17,11 @@ evidence and verified archive objects.
 
 ## H1/H2 - schedule and credential authority
 
-- `tc schedules check` performs bidirectional drift detection across GitHub workflow cron entries, Wrangler
-  cron triggers and `grocery/expected-automations.json`. A rogue or missing executor entry fails CI.
-- GitHub schedules use `America/Chicago` and avoid top-of-hour execution for V3 workloads.
-- The Family Fare paced sweep has a cloud three-hour replacement before the Windows task may retire.
+- `tc schedules check` performs bidirectional drift detection across manual-only GitHub workflows, Wrangler
+  cron triggers and `grocery/expected-automations.json`. A rogue or missing executor entry fails the local gate.
+- GitHub-hosted workflows reject `push`, `pull_request`, and `schedule` triggers. They remain operator-selected
+  manual fallbacks; all recurring V3 workloads use America/Chicago Windows tasks.
+- The Family Fare paced sweep has an authoritative local three-hour replacement before the legacy task may retire.
 - GitHub OIDC trusts exact infrastructure workflows plus ten registered thin agent callers. Agent callers must
   invoke the one approved reusable runner, and both the caller `workflow_ref` and reusable `job_workflow_ref`
   are verified before any capability is granted. The restore workflow can only trigger the deterministic drill.
@@ -33,11 +34,13 @@ evidence and verified archive objects.
 - An exact execution-hash evaluation must pass before a work item can be claimed. The server owns work-item
   idempotency, leases, fencing, retries, dead letters, severity and chained dispatch; late completions are
   retained as evidence but cannot mutate current state.
-- The triage reviewer-to-developer and recipe sourcer-to-auditor chains dispatch immediately, with a Worker
-  retry sweep for queued work. Registered agents cannot select their own input contract or workflow identity.
-- PC has no judgment agent in the registry. Browser capture and accuracy remain deterministic clients.
+- The triage reviewer-to-developer and recipe sourcer-to-auditor chains drain in bounded local cycles.
+  Registered agents cannot select their own input contract, credential identity or execution plane.
+- Each PC judgment agent has a separate DPAPI-protected HMAC credential. The Worker rereads the active registry
+  and applies the same per-agent capability boundary used for GitHub OIDC.
 - The triage developer and source-sentinel investigator are pull-request-only, restricted by server and staging
-  path allowlists, and run the full repository gate before a GitHub App opens a PR. They cannot deploy.
+  path allowlists, and run the full repository gate inside an isolated worktree before opening a PR. They
+  cannot merge or deploy.
 
 ## H4 - immutable content batches
 

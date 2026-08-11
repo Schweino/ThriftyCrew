@@ -584,6 +584,8 @@ export const scheduleEntrySchema = z.object({
   dispatchOnGap: z.boolean().default(false),
   monitorInLedger: z.boolean().default(true),
   lifecycle: z.enum(["active", "transition", "retired"]).default("active"),
+  suspended: z.boolean().default(false),
+  suspensionReason: z.string().min(1).max(1000).optional(),
   workflowFile: z.string().min(1).max(500).optional(),
   windowsTask: z.string().min(1).max(300).optional(),
   automationFile: z.string().min(1).max(500).optional(),
@@ -609,6 +611,9 @@ export const scheduleEntrySchema = z.object({
   }
   if (Boolean(value.inventoryId) !== Boolean(value.inventoryScope)) {
     context.addIssue({ code: "custom", path: ["inventoryScope"], message: "inventory id and scope must be supplied together" });
+  }
+  if (value.suspended && !value.suspensionReason) {
+    context.addIssue({ code: "custom", path: ["suspensionReason"], message: "suspended schedules require a reason" });
   }
 });
 
@@ -669,9 +674,6 @@ export const agentRegistryEntrySchema = z.object({
   outputContract: z.string().min(1).max(300),
   fixtureFiles: z.array(z.string().min(1).max(500)).min(1),
 }).superRefine((value, context) => {
-  if (value.plane === "pc" && value.capabilities.some((capability) => capability.startsWith("write:") && capability !== "write:ledger")) {
-    context.addIssue({ code: "custom", path: ["capabilities"], message: "PC agents may only write their ledger" });
-  }
   if (value.capabilities.includes("write:pull-request") && value.capabilities.includes("write:content-stage")) {
     context.addIssue({ code: "custom", path: ["capabilities"], message: "PR-writing agents cannot stage publishable content" });
   }

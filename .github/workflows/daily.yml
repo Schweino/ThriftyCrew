@@ -7,16 +7,7 @@ name: Daily grocery pipeline
 # Windows runner on purpose: the engine is Windows PowerShell 5.1 and spawns child `powershell`
 # processes, so we run it in the exact interpreter it was written and tested for (no pwsh porting).
 
-on:
-  schedule:
-    # BACKUP SLOT (2026-07-23). The pipeline now runs LOCALLY first - the Windows task
-    # "SMP Grocery Daily Pipeline (local)" fires at 8:30am Central on Brad's PC (which is already awake for
-    # the browser agents) and commits as smp-pipeline-bot for free. This cloud run is the safety net for
-    # days the PC slept through it: 16:00 UTC = 11:00 CDT / 10:00 CST, hours after the local slot, and the
-    # gate below stands down (cheaply, before checkout) whenever a bot commit already landed. Rationale:
-    # ~39 min/day on a 2x-billed Windows runner was ~2,300 min/mo against a 2,000 free-tier cap.
-    - cron: '0 16 * * *'
-  workflow_dispatch: {}        # manual "Run workflow" button for testing
+on: { workflow_dispatch: {} }  # retained only as a manually selected rollback/fallback
 
 permissions:
   contents: write              # allow committing the refreshed data back

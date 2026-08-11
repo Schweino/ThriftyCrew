@@ -20,6 +20,7 @@ export interface WorkerEnv {
   GITHUB_DISPATCH_TOKEN?: string;
   GITHUB_WEBHOOK_SECRET?: string;
   GITHUB_AUTO_RECOVERY_MAX_ATTEMPTS?: string;
+  GITHUB_ACTIONS_DISPATCH_ENABLED?: string;
   GITHUB_REPOSITORY?: string;
   GITHUB_WORKFLOW_FILE?: string;
   OPS_ALERT_URL?: string;
@@ -40,6 +41,7 @@ export interface MutationKeyRecord {
   secret: string;
   role: MutationRole;
   sourceIds?: string[];
+  registeredAgent?: boolean;
 }
 
 export interface MutationIdentity extends MutationKeyRecord {

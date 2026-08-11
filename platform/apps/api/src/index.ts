@@ -118,10 +118,9 @@ function requireIdentityRole(roles: readonly MutationRole[]): MiddlewareHandler<
   };
 }
 
-function requireGithubWorkflowScope(): MiddlewareHandler<Bindings> {
+function requireRegisteredAgentScope(): MiddlewareHandler<Bindings> {
   return async (context, next) => {
     const identity = context.get("identity");
-    if (identity.authMethod !== "github_oidc" || !identity.workflowRef) return next();
     const pathname = new URL(context.req.url).pathname;
     if (identity.registeredAgentId) {
       const capabilities = new Set(identity.capabilities ?? []);
@@ -140,7 +139,7 @@ function requireGithubWorkflowScope(): MiddlewareHandler<Bindings> {
         || (pathname === "/internal/operational-alerts" && capabilities.has("write:ledger"));
       if (!authorized) return context.json({ ok: false, error: "agent workflow is outside its registered capability boundary" }, 403);
     }
-    if (identity.workflowRef.includes("/platform-restore.yml@") && pathname !== "/internal/restore-drills/trigger") {
+    if (identity.authMethod === "github_oidc" && identity.workflowRef?.includes("/platform-restore.yml@") && pathname !== "/internal/restore-drills/trigger") {
       return context.json({ ok: false, error: "restore workflow may only trigger the deterministic restore drill" }, 403);
     }
     return next();
@@ -155,7 +154,7 @@ async function requireDraftRelease(db: D1Database, releaseId: string): Promise<R
 }
 
 app.use("/internal/*", requireMutation(["capture", "engine", "operator"]));
-app.use("/internal/*", requireGithubWorkflowScope());
+app.use("/internal/*", requireRegisteredAgentScope());
 app.use("/internal/capture-batches", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/capture-batches/*", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/capture-metrics", requireIdentityRole(["engine", "operator"]));
@@ -825,7 +824,7 @@ app.put("/internal/schedules/sync", zValidator("json", scheduleDocumentSchema), 
     schedule.owner,
     schedule.proof,
     schedule.dispatchOnGap ? 1 : 0,
-    schedule.monitorInLedger && schedule.lifecycle !== "retired" ? 1 : 0,
+    schedule.monitorInLedger && schedule.lifecycle !== "retired" && !schedule.suspended ? 1 : 0,
     schedule.lifecycle,
     document.version,
     schedule.retirementGate ?? null,

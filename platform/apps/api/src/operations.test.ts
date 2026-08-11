@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { d1DatabaseFileSize, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalNotificationDueAt, scheduleGap } from "./operations";
+import { d1DatabaseFileSize, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalNotificationDueAt, scheduleGap } from "./operations";
 import type { WorkerEnv } from "./env";
 
 const configuredEnv = {
@@ -71,6 +71,12 @@ describe("D1 database size metadata", () => {
 });
 
 describe("GitHub recovery dispatch inputs", () => {
+  it("defaults automatic hosted-runner dispatch to fail closed", () => {
+    expect(githubActionsDispatchEnabled({})).toBe(false);
+    expect(githubActionsDispatchEnabled({ GITHUB_ACTIONS_DISPATCH_ENABLED: "0" })).toBe(false);
+    expect(githubActionsDispatchEnabled({ GITHUB_ACTIONS_DISPATCH_ENABLED: "1" })).toBe(true);
+  });
+
   it("does not send unsupported inputs to thin agent or restore workflows", () => {
     expect(githubDispatchInputs("agent-source-sentinel-investigator.yml", "source-sentinel-daily", "gap")).toEqual({});
     expect(githubDispatchInputs("platform-restore.yml", "restore-drill-quarterly", "gap")).toEqual({});

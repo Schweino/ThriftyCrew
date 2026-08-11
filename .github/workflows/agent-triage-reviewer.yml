@@ -1,9 +1,5 @@
 name: Agent - triage reviewer
-on:
-  schedule:
-    - cron: "57 13 * * *"
-      timezone: "America/Chicago"
-  workflow_dispatch:
+on: { workflow_dispatch: {} }
 permissions: { contents: read, id-token: write, actions: write }
 jobs:
   call:

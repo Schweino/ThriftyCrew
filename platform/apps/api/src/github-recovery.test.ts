@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import type { WorkerEnv } from "./env";
 
 const operations = vi.hoisted(() => ({
+  githubActionsDispatchEnabled: vi.fn((env: WorkerEnv) => env.GITHUB_ACTIONS_DISPATCH_ENABLED === "1"),
   raiseOperationalAlert: vi.fn().mockResolvedValue(undefined),
   resolveOperationalAlert: vi.fn().mockResolvedValue(undefined),
 }));
@@ -87,6 +88,7 @@ describe("repository-wide GitHub Actions recovery policy", () => {
   it("does not hide deterministic code or authorization failures behind retries", () => {
     expect(classifyGithubFailure({ conclusion: "failure", event: "push", runAttempt: 1, diagnostics: ["AssertionError: expected 1 to be 2"] }).action).toBe("alert");
     expect(classifyGithubFailure({ conclusion: "failure", event: "workflow_dispatch", runAttempt: 1, diagnostics: ["HTTP 403 Forbidden"] }).action).toBe("alert");
+    expect(classifyGithubFailure({ conclusion: "failure", event: "workflow_dispatch", runAttempt: 1, diagnostics: ["The job was not started because your spending limit needs to be increased"] }).action).toBe("alert");
   });
 
   it("gives operational runs one bounded recovery attempt when diagnostics are unavailable", () => {
@@ -112,6 +114,7 @@ describe("GitHub workflow-run recovery processing", () => {
       DB: db,
       GITHUB_REPOSITORY: "owner/repo",
       GITHUB_DISPATCH_TOKEN: "token",
+      GITHUB_ACTIONS_DISPATCH_ENABLED: "1",
     } as WorkerEnv, "delivery-redelivery", {
       action: "completed",
       repository: { full_name: "owner/repo" },
@@ -133,6 +136,7 @@ describe("GitHub workflow-run recovery processing", () => {
       DB: db,
       GITHUB_REPOSITORY: "owner/repo",
       GITHUB_DISPATCH_TOKEN: "token",
+      GITHUB_ACTIONS_DISPATCH_ENABLED: "1",
     } as WorkerEnv, "delivery-1", {
       action: "completed",
       repository: { full_name: "owner/repo" },
@@ -145,6 +149,25 @@ describe("GitHub workflow-run recovery processing", () => {
     const persisted = calls.filter((call) => call.sql.startsWith("UPDATE alert_deliveries")).at(-1)?.bindings[2];
     expect(String(persisted)).toContain("scheduled-operation");
     expect(String(persisted)).not.toContain("Internal error");
+  });
+
+  it("retains transient failures without rerunning when local execution is authoritative", async () => {
+    const { db } = webhookDatabase();
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({ jobs: [] })));
+    vi.stubGlobal("fetch", fetchMock);
+    const result = await processGithubWorkflowRun({
+      DB: db,
+      GITHUB_REPOSITORY: "owner/repo",
+      GITHUB_DISPATCH_TOKEN: "token",
+      GITHUB_ACTIONS_DISPATCH_ENABLED: "0",
+    } as WorkerEnv, "delivery-local-plane", {
+      action: "completed",
+      repository: { full_name: "owner/repo" },
+      workflow_run: { id: 44, run_attempt: 1, event: "workflow_dispatch", conclusion: "failure" },
+    });
+    expect(result).toEqual({ decision: "retry-suppressed" });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
   it("resolves the deferred alert when a later attempt succeeds", async () => {

@@ -20,6 +20,21 @@ function nonceDatabase(): D1Database {
   } as unknown as D1Database;
 }
 
+function localAgentDatabase(): D1Database {
+  const nonceDb = nonceDatabase();
+  return {
+    prepare(query: string) {
+      if (query.includes("FROM agent_registry")) {
+        return {
+          bind() { return this; },
+          async first() { return { id: "triage-reviewer", capabilities_json: JSON.stringify(["write:ledger", "write:triage-plan"]) }; },
+        };
+      }
+      return nonceDb.prepare(query);
+    },
+  } as unknown as D1Database;
+}
+
 function environment(): WorkerEnv {
   return {
     DB: nonceDatabase(),
@@ -80,6 +95,24 @@ describe("mutation authentication", () => {
       environment(),
       ["capture"],
     )).rejects.toThrow(/invalid mutation signature/);
+  });
+
+  it("binds a DPAPI-backed HMAC identity to its enabled PC agent registry entry", async () => {
+    const env = environment();
+    env.DB = localAgentDatabase();
+    env.MUTATION_KEYS = JSON.stringify({
+      "triage-reviewer": { secret: "local-agent-secret", role: "engine", registeredAgent: true },
+    });
+    const identity = await authenticateMutation(
+      await signedRequest("triage-reviewer", "local-agent-secret", "nonce_local_agent"),
+      env,
+      ["engine"],
+    );
+    expect(identity).toMatchObject({
+      authMethod: "hmac",
+      registeredAgentId: "triage-reviewer",
+      capabilities: ["write:ledger", "write:triage-plan"],
+    });
   });
 });
 

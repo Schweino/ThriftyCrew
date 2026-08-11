@@ -12,11 +12,7 @@ name: Pipeline heartbeat
 # NOT depend on the pipeline, so it still fires when the pipeline is the thing that is broken. Deliberately a
 # SEPARATE workflow - a heartbeat living inside the job it watches cannot report that job's absence.
 
-on:
-  schedule:
-    - cron: '0 15 * * *'      # 15:00 UTC = 10:00 Central - 3.5h after the daily's 11:30 UTC slot, so a merely
-                              # late GitHub cron (they routinely drift ~1h under load) does not cry wolf.
-  workflow_dispatch: {}
+on: { workflow_dispatch: {} }
 
 permissions:
   contents: read

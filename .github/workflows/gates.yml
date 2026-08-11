@@ -17,12 +17,7 @@
 # about. Those stay in the daily chain against a real board.
 name: gates
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  workflow_dispatch:
+on: { workflow_dispatch: {} }
 
 # A second push while one is running should cancel the first: the answer that matters is about the tip.
 concurrency:

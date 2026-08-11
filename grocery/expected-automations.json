@@ -8,6 +8,17 @@
     { "name": "SMP Daily Facebook Reel",            "max_age_hours": 30, "why": "daily 10:00 reel build (headless Chrome + edge-tts + ffmpeg)", "proves": "reels/out/*.mp4" },
     { "name": "SMP Family Fare Term Sweep",         "max_age_hours": 24, "why": "every-3h Freshop term sweep; one run a day can only reach ~60-130 of 526 terms, so if this dies Family Fare freezes within days", "proves": "grocery/out/regular/family-fare-regular-*.json" },
     { "name": "SMP Friday Email (draft)",           "max_age_hours": 192, "why": "weekly Friday 7:15 member email draft; 192h = 8 days, one missed Friday", "allow_pending": true }
+    ,{ "name": "ThriftyCrew V3 Daily Engine",        "max_age_hours": 30, "why": "local V3 direct capture, immutable release, Ghost reconciliation, parity and evidence", "allow_pending": true }
+    ,{ "name": "ThriftyCrew V3 Family Fare Paced",  "max_age_hours": 6, "why": "local three-hour Freshop pacing into the V3 capture ledger", "allow_pending": true }
+    ,{ "name": "ThriftyCrew V3 Accuracy Weekly",     "max_age_hours": 192, "why": "weekly deterministic blind accuracy draw", "allow_pending": true }
+    ,{ "name": "ThriftyCrew V3 Accuracy Agent",      "max_age_hours": 192, "why": "weekly local registered accuracy verdict agent", "allow_pending": true }
+    ,{ "name": "ThriftyCrew V3 Triage Daily",        "max_age_hours": 30, "why": "daily deterministic triage seeding and reconciliation", "allow_pending": true }
+    ,{ "name": "ThriftyCrew V3 Ghost Reconcile",     "max_age_hours": 30, "why": "daily Ghost intent-versus-truth reconciliation", "allow_pending": true }
+    ,{ "name": "ThriftyCrew V3 Source Sentinel",     "max_age_hours": 30, "why": "daily local registered source-contract investigator", "allow_pending": true }
+    ,{ "name": "ThriftyCrew V3 Post Publish Review", "max_age_hours": 30, "why": "daily local registered post-publish reviewer", "allow_pending": true }
+    ,{ "name": "ThriftyCrew V3 Triage Agents",       "max_age_hours": 30, "why": "bounded daily local reviewer-to-developer triage drain", "allow_pending": true }
+    ,{ "name": "ThriftyCrew V3 Recipe Pack",         "max_age_hours": 192, "why": "weekly bounded local immutable recipe-content agent chain", "allow_pending": true }
+    ,{ "name": "ThriftyCrew V3 Restore Drill",       "max_age_hours": 2232, "why": "quarterly local trigger of the Cloudflare scratch restore workflow", "allow_pending": true }
   ],
   "output_files": [
     { "path": "grocery/out/smp-feed.json",             "max_age_hours": 30, "why": "public price feed every card fetches" },
