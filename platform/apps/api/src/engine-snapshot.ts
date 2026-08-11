@@ -14,6 +14,36 @@ function modePredicate(mode: EngineSourceMode): string {
   return "1 = 1";
 }
 
+interface KnownWrongLookupRule {
+  commodity_id: string;
+  store_location_id: string | null;
+  external_product_key: string | null;
+  normalized_name: string | null;
+}
+
+export function markKnownWrongCandidates<T extends {
+  commodity_id: unknown; store_location_id: unknown; external_key: unknown; normalized_name?: unknown;
+}>(candidates: readonly T[], rules: readonly KnownWrongLookupRule[]): Array<T & { known_wrong: number }> {
+  const externalKnownWrong = new Set<string>();
+  const nameKnownWrong = new Set<string>();
+  for (const rule of rules) {
+    const scope = rule.store_location_id ?? "*";
+    if (rule.external_product_key) externalKnownWrong.add(stableJson([rule.commodity_id, scope, rule.external_product_key]));
+    if (rule.normalized_name) nameKnownWrong.add(stableJson([rule.commodity_id, scope, rule.normalized_name]));
+  }
+  return candidates.map((candidate) => {
+    const commodityId = String(candidate.commodity_id);
+    const storeLocationId = String(candidate.store_location_id);
+    const externalKey = String(candidate.external_key);
+    const normalizedName = String(candidate.normalized_name ?? "");
+    const scopedKeys = [storeLocationId, "*"];
+    const knownWrong = scopedKeys.some((scope) =>
+      externalKnownWrong.has(stableJson([commodityId, scope, externalKey]))
+      || nameKnownWrong.has(stableJson([commodityId, scope, normalizedName])));
+    return { ...candidate, known_wrong: knownWrong ? 1 : 0 };
+  });
+}
+
 export async function readEngineSnapshotIdentity(env: WorkerEnv, mode: EngineSourceMode) {
   const observedAt = new Date().toISOString();
   const configuration = await env.DB.prepare("SELECT id, content_hash FROM configuration_versions WHERE active = 1").first<{ id: string; content_hash: string }>();
@@ -66,21 +96,10 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
             o.captured_at, o.valid_to, b.coverage_mode, b.captured_to, b.id AS batch_id,
             o.normalized_basis_unit, o.normalized_basis_qty_micros, o.purchase_price_minor,
             o.purchase_quantity, o.package_count, pv.size_text,
-            o.membership_required, o.loyalty_required, o.raw_price_text, pv.name, pv.product_url,
+            o.membership_required, o.loyalty_required, o.raw_price_text, pv.name, pv.normalized_name, pv.product_url,
             pv.taxonomy_path, p.external_key,
             o.basis_options_json,
-            CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days,
-            (EXISTS (
-              SELECT 1 FROM known_wrong_rules k
-               WHERE k.configuration_id = ?1 AND k.commodity_id = m.commodity_id
-                 AND (k.store_location_id IS NULL OR k.store_location_id = p.store_location_id)
-                 AND k.external_product_key = p.external_key
-            ) OR EXISTS (
-              SELECT 1 FROM known_wrong_rules k
-               WHERE k.configuration_id = ?1 AND k.commodity_id = m.commodity_id
-                 AND (k.store_location_id IS NULL OR k.store_location_id = p.store_location_id)
-                 AND k.normalized_name = pv.normalized_name
-            )) AS known_wrong
+            CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days
        FROM observations o
        JOIN capture_batches b ON b.id = o.batch_id
        JOIN capture_sources s ON s.id = b.source_id
@@ -106,7 +125,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
       WHERE o.batch_id IN (${rawPlaceholders})
       ORDER BY p.store_location_id, o.per_unit_micros, o.id`,
   ).bind(...batches.results.map((batch) => batch.id)).all() : { results: [] };
-  const [commodities, stores, currentCells] = await Promise.all([
+  const [commodities, stores, currentCells, knownWrongRules] = await Promise.all([
     env.DB.prepare(
       `SELECT c.id, c.label, c.basis_unit, c.category_id, c.band_min_micros, c.band_max_micros, cat.label AS category_label, cat.sort_order
          FROM commodities c LEFT JOIN categories cat ON cat.id = c.category_id
@@ -122,7 +141,15 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
               c.display_per_unit_micros, c.display_unit
          FROM release_cells c WHERE c.release_id = ?1 ORDER BY c.commodity_id, c.store_location_id`,
     ).bind(currentRelease.release_id).all(),
+    env.DB.prepare(
+      `SELECT commodity_id, store_location_id, external_product_key, normalized_name
+         FROM known_wrong_rules WHERE configuration_id = ?1 ORDER BY commodity_id, id`,
+    ).bind(configuration.id).all<KnownWrongLookupRule>(),
   ]);
+  const markedCandidates = markKnownWrongCandidates(
+    candidates.results as Array<Record<string, unknown> & { commodity_id: unknown; store_location_id: unknown; external_key: unknown }>,
+    knownWrongRules.results,
+  );
   const inputBatchIds = batches.results.map((batch) => batch.id).sort();
   const inputHash = await digestHex(stableJson({ configurationId: configuration.id, configurationHash: configuration.content_hash, mode, inputBatchIds }));
   return {
@@ -136,7 +163,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
     batches: batches.results,
     commodities: commodities.results,
     stores: stores.results,
-    candidates: candidates.results,
+    candidates: markedCandidates,
     rawCandidates: rawCandidates.results,
     currentCells: currentCells.results,
   };
