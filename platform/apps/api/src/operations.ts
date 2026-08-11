@@ -1,6 +1,7 @@
 import { deterministicId, stableJson } from "@thriftycrew/domain";
 import type { MutationIdentity, WorkerEnv } from "./env";
 import { readBrowserCaptureSla } from "./browser-capture-sla";
+import { compactConfiguration } from "./configuration-archive";
 
 export function jobStatusRequiresAlert(status: string): boolean {
   return status === "failed" || status === "timed_out" || status === "missed";
@@ -96,6 +97,46 @@ export async function runControlPlaneProof(env: WorkerEnv, scheduledTime: number
   ).bind(proofId, status, env.DEPLOYED_COMMIT ?? "unknown", stableJson(checks), observedAt).run();
   if (status === "fail") await raiseOperationalAlert(env, "control-plane-proof", "Daily cross-plane proof failed", { proofId, checks }, { notification: "digest", deferMinutes: 15, observedAt });
   else await resolveOperationalAlert(env, "control-plane-proof", { proofId, checks }, { recoveryTitle: "Daily cross-plane proof recovered" });
+}
+
+export async function runConfigurationLifecycle(env: WorkerEnv, scheduledTime: number): Promise<void> {
+  const observedAt = new Date(scheduledTime).toISOString();
+  const runId = await deterministicId("run", "configuration-lifecycle-daily", observedAt.slice(0, 10));
+  const existing = await env.DB.prepare("SELECT status FROM job_runs WHERE id = ?1").bind(runId).first<{ status: string }>();
+  if (existing?.status === "completed") return;
+  await env.DB.prepare(
+    `INSERT INTO job_runs (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, actor_id, input_json)
+     VALUES (?1, 'configuration-lifecycle-daily', 'schedule', ?2, ?2, ?2, 'started', 'cloudflare:scheduled', '{}')
+     ON CONFLICT(id) DO UPDATE SET started_at = ?2, heartbeat_at = ?2, finished_at = NULL, status = 'started', error = NULL`,
+  ).bind(runId, observedAt).run();
+  try {
+    const candidates = await env.DB.prepare(
+      `SELECT version.id FROM configuration_versions version
+        JOIN configuration_archives archive ON archive.configuration_id = version.id AND archive.status = 'verified'
+       WHERE version.active = 0
+         AND NOT EXISTS (SELECT 1 FROM configuration_compactions compacted WHERE compacted.configuration_id = version.id)
+         AND version.id <> COALESCE((
+           SELECT release.configuration_id FROM releases release
+            WHERE release.state IN ('published','superseded')
+              AND release.configuration_id <> COALESCE((SELECT id FROM configuration_versions WHERE active = 1), '')
+            ORDER BY release.published_at DESC LIMIT 1
+         ), '')
+       ORDER BY version.deployed_at LIMIT 3`,
+    ).all<{ id: string }>();
+    const compacted: Array<Record<string, unknown>> = [];
+    for (const candidate of candidates.results) compacted.push(await compactConfiguration(env, candidate.id, "cloudflare:scheduled"));
+    const finishedAt = new Date().toISOString();
+    await env.DB.prepare("UPDATE job_runs SET status = 'completed', heartbeat_at = ?2, finished_at = ?2, stats_json = ?3 WHERE id = ?1")
+      .bind(runId, finishedAt, stableJson({ candidates: candidates.results.length, compacted })).run();
+    await resolveOperationalAlert(env, "configuration-lifecycle", { runId, compacted });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "configuration lifecycle failed";
+    const finishedAt = new Date().toISOString();
+    await env.DB.prepare("UPDATE job_runs SET status = 'failed', heartbeat_at = ?2, finished_at = ?2, error = ?3 WHERE id = ?1")
+      .bind(runId, finishedAt, message).run();
+    await raiseOperationalAlert(env, "configuration-lifecycle", "Configuration archival lifecycle failed", { runId, error: message }, { notification: "digest", deferMinutes: 15, observedAt });
+    throw error;
+  }
 }
 
 export function scheduleGap(
@@ -861,4 +902,5 @@ export async function runScheduledOperations(env: WorkerEnv, scheduledTime: numb
   }
   if (parts.hour === "05" && parts.minute === "15") await runArchivalForecast(env, scheduledTime);
   if (parts.hour === "05" && parts.minute === "45") await runControlPlaneProof(env, scheduledTime);
+  if (parts.hour === "06" && parts.minute === "00") await runConfigurationLifecycle(env, scheduledTime);
 }

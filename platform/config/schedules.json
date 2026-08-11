@@ -1,10 +1,11 @@
 {
-  "version": 6,
+  "version": 7,
   "timezone": "America/Chicago",
   "schedules": [
     { "id": "ledger-watchdog", "cron": "*/15 * * * *", "executor": "worker-cron", "maxGapMinutes": 30, "owner": "platform", "proof": "job_runs:ledger-watchdog", "dispatchOnGap": false },
     { "id": "archival-forecast-daily", "cron": "15 5 * * *", "triggerCron": "*/15 * * * *", "executor": "worker-cron", "maxGapMinutes": 1560, "owner": "platform", "proof": "archival_forecasts", "dispatchOnGap": false },
     { "id": "control-plane-proof-daily", "cron": "45 5 * * *", "triggerCron": "*/15 * * * *", "executor": "worker-cron", "maxGapMinutes": 1560, "owner": "platform", "proof": "control_plane_proofs:pass", "dispatchOnGap": false },
+    { "id": "configuration-lifecycle-daily", "cron": "0 6 * * *", "triggerCron": "*/15 * * * *", "executor": "worker-cron", "maxGapMinutes": 1560, "owner": "platform", "proof": "configuration_compactions", "dispatchOnGap": false },
     { "id": "browser-capture-sla", "cron": "0 * * * *", "triggerCron": "*/15 * * * *", "executor": "worker-cron", "maxGapMinutes": 90, "owner": "capture", "proof": "job_runs:browser-capture-sla", "dispatchOnGap": false },
     { "id": "d1-backup", "cron": "30 4 * * *", "executor": "cloudflare-workflow", "maxGapMinutes": 1560, "leaseMinutes": 360, "owner": "platform", "proof": "backup_exports:completed", "dispatchOnGap": false },
     { "id": "daily-engine", "cron": "7 12 * * *", "executor": "pc", "windowsTask": "ThriftyCrew V3 Daily Engine", "workflowFile": ".github/workflows/platform-v3.yml", "maxGapMinutes": 1560, "leaseMinutes": 240, "owner": "pricing", "proof": "releases:published", "dispatchOnGap": false },

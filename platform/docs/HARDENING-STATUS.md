@@ -116,6 +116,8 @@ may deploy while those counters accrue, but no transition executor is retired ea
   block a Worker replacement rather than being reset by it.
 - Configuration activation now requires a content-addressed, read-after-write verified R2 archive. This bounds
   future recovery dependence on repeated normalized D1 copies without prematurely deleting retained history.
+- New configurations reuse content-addressed rule definitions, and the daily lifecycle keeps only the active
+  and immediate published rollback rule sets materialized after full-object rehydration verification.
 - Capacity planning uses robust recent growth and projected exhaustion in addition to 70%/90% usage thresholds.
   Projected exhaustion within 180 days arms the archive plan; within 30 days is critical.
 - Transition retirement is evidence-gated and tombstoned in D1. A later authority sync cannot resurrect a
