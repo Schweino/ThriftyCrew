@@ -67,6 +67,7 @@ interface EvidenceRow {
   object_key: string;
   kind: string;
   sha256: string;
+  byte_length?: number;
 }
 
 export interface BrowserCaptureMetricSummary {
@@ -148,7 +149,8 @@ export async function validateBrowserCaptureEvidence(
 ): Promise<{ pass: boolean; detail: Record<string, unknown>; metrics: BrowserCaptureMetricSummary | null }> {
   const screenshots = rows.filter((row) => row.kind === "screenshot");
   const rawPayloads = rows.filter((row) => row.kind === "raw_payload");
-  const manifests = rows.filter((row) => row.kind === "manifest");
+  const manifests = rows.filter((row) => row.kind === "manifest")
+    .sort((left, right) => (left.byte_length ?? Number.MAX_SAFE_INTEGER) - (right.byte_length ?? Number.MAX_SAFE_INTEGER));
   let session: ReturnType<typeof browserCaptureSessionSchema.parse> | null = null;
   for (const row of manifests) {
     const object = await bucket.get(row.object_key);

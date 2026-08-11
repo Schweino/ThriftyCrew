@@ -909,11 +909,16 @@ if (command === "status") {
     if (!Number.isInteger(maxJobs) || maxJobs < 1 || maxJobs > 20) throw new Error("TC_CAPTURE_QUEUE_MAX_JOBS_PER_DRAIN must be an integer from 1 through 20");
     const drained = await drainCaptureQueue(root, async (job) => {
       const artifactBody = new Uint8Array(await readFile(job.artifactPath));
-      const additionalEvidence: CaptureEvidenceInput[] = await Promise.all(job.evidencePaths.map(async (evidence) => ({
-        body: new Uint8Array(await readFile(evidence.path)),
-        kind: evidence.kind,
-        contentType: evidence.contentType,
-      })));
+      const additionalEvidence: CaptureEvidenceInput[] = await Promise.all(job.evidencePaths.map(async (evidence) => {
+        const source = new Uint8Array(await readFile(evidence.path));
+        // Formatting whitespace is not evidence. Canonicalize the very large session JSON before transport;
+        // its internal contentHash and schema still bind the exact parsed document, while R2/Worker memory
+        // no longer pays for tens of MiB of indentation.
+        const body = evidence.kind === "manifest"
+          ? new TextEncoder().encode(JSON.stringify(JSON.parse(new TextDecoder().decode(source).replace(/^\uFEFF/, ""))))
+          : source;
+        return { body, kind: evidence.kind, contentType: evidence.contentType };
+      }));
       const ingestion = await ingestDirectCapture(client, job.artifact, artifactBody, additionalEvidence, { promote: false });
       if (!ingestion.ok) throw new PermanentCaptureError(`capture batch ${String(ingestion.batchId)} was rejected: ${stableJson(ingestion)}`);
       return ingestion;

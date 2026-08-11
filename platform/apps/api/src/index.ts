@@ -2092,8 +2092,8 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   const pageEnvelopePass = batch.expected_pages === null || capturedPages === batch.expected_pages;
   const completePass = termEnvelopePass && pageEnvelopePass;
   const evidenceRows = await context.env.DB.prepare(
-    "SELECT object_key, kind, sha256 FROM evidence_objects WHERE batch_id = ?1 ORDER BY id",
-  ).bind(batch.id).all<{ object_key: string; kind: string; sha256: string }>();
+    "SELECT object_key, kind, sha256, byte_length FROM evidence_objects WHERE batch_id = ?1 ORDER BY id",
+  ).bind(batch.id).all<{ object_key: string; kind: string; sha256: string; byte_length: number }>();
   const browserEvidence = batch.capture_method === "browser"
     ? await validateBrowserCaptureEvidence(context.env.EVIDENCE, {
       sourceId: batch.source_id,

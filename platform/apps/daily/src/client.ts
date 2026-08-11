@@ -168,10 +168,16 @@ export async function ingestDirectCapture(
   const batchId = String(created.batchId);
   let status = String(created.status);
   const primary: CaptureEvidenceInput = { body: evidenceBody, kind: artifact.evidence?.kind ?? "raw_payload", contentType: artifact.evidence?.contentType ?? "application/json" };
-  const evidenceInputs = [primary, ...additionalEvidence];
+  const browserRawIndex = artifact.sourceId.endsWith("-browser")
+    ? additionalEvidence.findIndex((evidence) => evidence.kind === "raw_payload") : -1;
+  // Browser artifacts can be tens of MiB because they contain normalized observations plus the audit.
+  // The immutable projected capture is the actual row evidence and is already hash-bound by the session,
+  // so do not upload the redundant artifact a second time as evidence.
+  const evidenceInputs = browserRawIndex >= 0 ? [...additionalEvidence] : [primary, ...additionalEvidence];
   const evidenceIds: string[] = [];
   for (const evidence of evidenceInputs) evidenceIds.push(`evidence-${batchId}-${(await digestHex(evidence.body)).slice(0, 16)}`);
-  const evidenceId = evidenceIds[0]!;
+  const bindingEvidenceIndex = browserRawIndex >= 0 ? evidenceInputs.findIndex((evidence) => evidence.kind === "raw_payload") : 0;
+  const evidenceId = evidenceIds[bindingEvidenceIndex]!;
   if (status === "open") {
     for (let index = 0; index < evidenceInputs.length; index += 1) {
       const evidence = evidenceInputs[index]!;

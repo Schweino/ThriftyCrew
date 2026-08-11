@@ -155,9 +155,9 @@ function validateRows(store: BrowserStore, chunk: DiscoveryChunk, worklist: Map<
   }
 }
 
-async function atomicJson(file: string, value: unknown): Promise<void> {
+async function atomicJson(file: string, value: unknown, pretty = true): Promise<void> {
   const temporary = `${file}.tmp-${crypto.randomUUID()}`;
-  await writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+  await writeFile(temporary, `${JSON.stringify(value, null, pretty ? 2 : undefined)}\n`, "utf8");
   await rename(temporary, file);
 }
 
@@ -444,7 +444,7 @@ export async function finalizeCaptureSession(directory: string, projectedOutputF
   };
   const manifest = browserCaptureSessionSchema.parse({ ...manifestContent, contentHash: await digestHex(stableJson(manifestContent)) });
   if (manifest.version !== 2) throw new Error("capture session manifest unexpectedly downgraded");
-  await atomicJson(manifestOutputFile, manifest);
+  await atomicJson(manifestOutputFile, manifest, false);
   return manifest;
 }
 
