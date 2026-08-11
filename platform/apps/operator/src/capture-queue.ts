@@ -195,12 +195,36 @@ async function readManifest(directory: string): Promise<CaptureQueueManifest> {
   return value;
 }
 
+function parseQueuedArtifact(artifactBytes: Uint8Array): DirectCaptureArtifact {
+  const artifactInput = JSON.parse(new TextDecoder().decode(artifactBytes).replace(/^\uFEFF/, "")) as Record<string, unknown>;
+  const capturedTo = typeof artifactInput.capturedTo === "string" ? Date.parse(artifactInput.capturedTo) : Number.NaN;
+  if ((typeof artifactInput.priceMode !== "string" || artifactInput.priceMode.trim().length === 0)
+    && artifactInput.priceModeVerified === true
+    && Number.isFinite(capturedTo)
+    && capturedTo < Date.parse(BROWSER_CAPTURE_ACCURACY_CUTOVER)) {
+    const audit = artifactInput.audit && typeof artifactInput.audit === "object" ? artifactInput.audit as Record<string, unknown> : {};
+    const attestation = audit.attestation && typeof audit.attestation === "object" ? audit.attestation as Record<string, unknown> : {};
+    const modes = new Set<string>();
+    if (attestation.priceModeVerified === true && typeof attestation.priceMode === "string" && attestation.priceMode.trim()) modes.add(attestation.priceMode.trim());
+    const session = audit.captureSession && typeof audit.captureSession === "object" ? audit.captureSession as Record<string, unknown> : {};
+    if (Array.isArray(session.canaries)) {
+      for (const canary of session.canaries) {
+        if (!canary || typeof canary !== "object") continue;
+        const value = canary as Record<string, unknown>;
+        if (value.priceModeVerified === true && typeof value.priceMode === "string" && value.priceMode.trim()) modes.add(value.priceMode.trim());
+      }
+    }
+    if (modes.size === 1) artifactInput.priceMode = [...modes][0];
+  }
+  return directCaptureArtifactSchema.parse(artifactInput);
+}
+
 async function loadJob(directory: string): Promise<CaptureQueueJob> {
   const manifest = await readManifest(directory);
   const artifactPath = path.join(directory, manifest.artifactFile);
   const artifactBytes = new Uint8Array(await readFile(artifactPath));
   if (await digestHex(artifactBytes) !== manifest.artifactSha256) throw new Error(`queued artifact hash mismatch for ${manifest.id}`);
-  const artifact = directCaptureArtifactSchema.parse(JSON.parse(new TextDecoder().decode(artifactBytes).replace(/^\uFEFF/, "")));
+  const artifact = parseQueuedArtifact(artifactBytes);
   if (artifact.sourceId !== manifest.sourceId || artifact.idempotencyKey !== manifest.idempotencyKey) {
     throw new Error(`queued artifact identity mismatch for ${manifest.id}`);
   }

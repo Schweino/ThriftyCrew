@@ -117,6 +117,43 @@ describe("PC browser capture queue", () => {
     expect(await verifyCaptureQueueFilesystem(input.root)).toMatchObject({ ok: true, jobs: 1 });
   });
 
+  it("reads a pre-cutover queued artifact whose verified price mode only exists in its immutable attestation", async () => {
+    const input = await fixture("direct-walmart-browser", "2026-08-09");
+    const queued = await enqueueCapture(input.root, input.artifact, input.evidence, new Date("2026-08-09T15:02:00.000Z"));
+    const artifactPath = path.join(queued.directory, "artifact.json");
+    const artifact = JSON.parse(await readFile(artifactPath, "utf8"));
+    delete artifact.priceMode;
+    artifact.audit = { attestation: { priceMode: "pickup", priceModeVerified: true } };
+    const artifactBytes = new TextEncoder().encode(JSON.stringify(artifact));
+    await writeFile(artifactPath, artifactBytes);
+    const manifestPath = path.join(queued.directory, "manifest.json");
+    const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+    manifest.artifactSha256 = await digestHex(artifactBytes);
+    manifest.status = "completed";
+    await writeFile(manifestPath, JSON.stringify(manifest));
+
+    expect(await verifyCaptureQueueFilesystem(input.root)).toMatchObject({ ok: true, jobs: 1 });
+    expect(await browserCaptureCycleStatus(input.root, new Date("2026-08-10T15:00:00.000Z"))).toMatchObject({ completed: ["direct-walmart-browser"] });
+  });
+
+  it("does not backfill an absent price mode after the accuracy cutover", async () => {
+    const input = await fixture("direct-walmart-browser", "2026-08-12");
+    const queued = await enqueueCapture(input.root, input.artifact, input.evidence, new Date("2026-08-12T15:02:00.000Z"));
+    const artifactPath = path.join(queued.directory, "artifact.json");
+    const artifact = JSON.parse(await readFile(artifactPath, "utf8"));
+    delete artifact.priceMode;
+    artifact.audit.attestation.priceMode = "pickup";
+    artifact.audit.attestation.priceModeVerified = true;
+    const artifactBytes = new TextEncoder().encode(JSON.stringify(artifact));
+    await writeFile(artifactPath, artifactBytes);
+    const manifestPath = path.join(queued.directory, "manifest.json");
+    const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+    manifest.artifactSha256 = await digestHex(artifactBytes);
+    await writeFile(manifestPath, JSON.stringify(manifest));
+
+    await expect(verifyCaptureQueueFilesystem(input.root)).rejects.toThrow("priceMode");
+  });
+
   it("rejects headless artifacts, incomplete evidence, and fake screenshots", async () => {
     const headless = await fixture("direct-walmart-headless");
     await expect(enqueueCapture(headless.root, headless.artifact, headless.evidence)).rejects.toThrow("only accepts direct browser");

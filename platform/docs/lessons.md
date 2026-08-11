@@ -10,6 +10,7 @@ with an enforcing fixture; prose by itself is not a safeguard.
 | Thin capture evicts a complete observation | Complete/ad-only observations are protected from partial/targeted eviction | `selectWinner` fixture, `release-capture-eviction` |
 | Cat litter crowned as baking soda | Store shelf taxonomy is captured and aisle flips require evidence | `evaluateAisleEvidence` fixtures, `release-aisle-taxonomy` |
 | A previously adjudicated wrong product returns | Known-wrong rulings deploy with the configuration version | `release-known-wrong` |
+| A browser queue artifact predates a stricter top-level capture field | Pre-cutover compatibility may recover the value only from a unique, verified immutable attestation; post-cutover artifacts still fail closed | `capture-queue` legacy price-mode fixture |
 | Rounded legacy unit prices fail exact native arithmetic | Legacy bridge alone receives a bounded 50-micro tolerance | domain arithmetic fixture, `release-basis` |
 | Required recipe ingredient disappears from the total | Incomplete recipes never enter price-ranked surfaces | bridge fixture, `release-recipe-completeness` |
 | Grocery moves while recipe/feed/rotation stays stale | All five payloads and release-owned counts validate before one pointer swap | `release-surface-counts` |
