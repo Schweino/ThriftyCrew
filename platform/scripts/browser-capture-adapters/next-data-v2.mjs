@@ -178,7 +178,7 @@ async function captureCanary(tab, store, screenshotSha256) {
 
 export async function captureNextDataChunk({ tab, store, terms, file, screenshotSha256, interTermDelayMs }) {
   if (!CONFIG[store]) throw new Error("next-data adapter supports sams or walmart");
-  const maxTerms = store === "sams" ? 10 : 20;
+  const maxTerms = store === "sams" ? 5 : 20;
   const effectiveDelayMs = interTermDelayMs ?? (store === "sams" ? 2_000 : 0);
   if (!Array.isArray(terms) || terms.length < 1 || terms.length > maxTerms) throw new Error(`${store} chunk requires 1-${maxTerms} terms`);
   if (!Number.isInteger(effectiveDelayMs) || effectiveDelayMs < 0 || effectiveDelayMs > 30_000) throw new Error(`${store} inter-term delay must be 0-30000ms`);
@@ -197,7 +197,7 @@ export async function captureNextDataChunk({ tab, store, terms, file, screenshot
 
 export async function captureNextDataVerificationChunk({ tab, store, targets, file, screenshotSha256, interTermDelayMs }) {
   if (!CONFIG[store]) throw new Error("next-data verification adapter supports sams or walmart");
-  const maxTargets = store === "sams" ? 10 : 20;
+  const maxTargets = store === "sams" ? 5 : 20;
   const effectiveDelayMs = interTermDelayMs ?? (store === "sams" ? 2_000 : 0);
   if (!Array.isArray(targets) || targets.length < 1 || targets.length > maxTargets) throw new Error(`${store} verification chunk requires 1-${maxTargets} targets`);
   if (!Number.isInteger(effectiveDelayMs) || effectiveDelayMs < 0 || effectiveDelayMs > 30_000) throw new Error(`${store} verification inter-target delay must be 0-30000ms`);
