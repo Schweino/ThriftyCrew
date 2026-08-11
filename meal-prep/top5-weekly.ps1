@@ -161,7 +161,7 @@ $recipeCount = @($db).Count
 $cntSec = "<!--SMP-COUNT--><div class='smp-count' style='margin:0 0 1.6rem;padding:1.8rem 2.2rem;background:#16263F;border-radius:12px;text-align:center;color:#fff'>"
 $cntSec += "<div style='font-family:Georgia,serif;font-size:4.2rem;line-height:1;font-weight:700;color:#E2A43C'>" + $recipeCount + "</div>"
 $cntSec += "<div style='font-size:1.5rem;font-weight:700;margin:.5rem 0 0;letter-spacing:.01em'>budget high-protein recipes, and counting</div>"
-$cntSec += "<div style='font-size:1.25rem;color:#b9c4d4;margin:.35rem 0 0'>Every one re-costed weekly from real Omaha grocery prices. Members get them all for \$1/month.</div>"
+$cntSec += "<div style='font-size:1.25rem;color:#b9c4d4;margin:.35rem 0 0'>Every one re-costed weekly from real Omaha grocery prices. Members get them all for `$1/month.</div>"
 $cntSec += "</div><!--/SMP-COUNT-->"
 
 $jwt = New-GhostJWT
