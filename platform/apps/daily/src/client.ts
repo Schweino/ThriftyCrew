@@ -220,7 +220,7 @@ async function buildBrowserEvidenceAttestation(
       termDurationP50Ms: percentile(durations, 0.5),
       termDurationP95Ms: percentile(durations, 0.95),
       projectedRows: session.terms.reduce((sum, term) => sum + term.rowCount, 0),
-      accuracyPolicyVersion: 2,
+      accuracyPolicyVersion: session.accuracy.policyVersion,
       discoveryRows: session.accuracy.discoveryRows.length,
       requiredVerificationRows: session.accuracy.requiredVerificationRows,
       matchedVerificationRows: session.accuracy.matchedVerificationRows,

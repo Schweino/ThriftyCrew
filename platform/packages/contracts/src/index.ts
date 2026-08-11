@@ -440,7 +440,7 @@ export const captureBatchSealSchema = z.object({
       termDurationP50Ms: z.number().int().nonnegative(),
       termDurationP95Ms: z.number().int().nonnegative(),
       projectedRows: z.number().int().nonnegative(),
-      accuracyPolicyVersion: z.literal(2),
+      accuracyPolicyVersion: z.union([z.literal(1), z.literal(2)]),
       discoveryRows: z.number().int().positive(),
       requiredVerificationRows: z.number().int().nonnegative(),
       matchedVerificationRows: z.number().int().nonnegative(),

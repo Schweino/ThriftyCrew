@@ -91,6 +91,8 @@ describe("browser screenshot evidence", () => {
     ];
     const result = await validateBrowserCaptureEvidence(bucket, batch, rows, attestation, termsHash);
     expect(result).toMatchObject({ pass: true, detail: { verificationPlane: "authenticated-pc-browser-capture-agent", manifestBound: true, termsBound: true, accuracyPass: true }, metrics: { discoveryRows: 3 } });
+    const legacyAccuracyAttestation = { ...attestation, metrics: { ...attestation.metrics, accuracyPolicyVersion: 1 as const, pageStateAttestedRows: 0, promotionSemanticsRows: 0 } };
+    expect((await validateBrowserCaptureEvidence(bucket, batch, rows, legacyAccuracyAttestation, termsHash)).pass).toBe(true);
     expect((await validateBrowserCaptureEvidence(bucket, batch, rows, { ...attestation, manifestSha256: "f".repeat(64) }, termsHash)).pass).toBe(false);
   });
 });

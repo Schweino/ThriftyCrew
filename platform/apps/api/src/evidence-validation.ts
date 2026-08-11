@@ -170,8 +170,8 @@ export async function validateBrowserCaptureEvidence(
       && metric.unresolvedVerificationRows === 0
       && metric.retrievalCompleteTerms === attestation.expectedTerms
       && metric.priceAgreementRows + metric.singleChannelRows === metric.discoveryRows
-      && metric.pageStateAttestedRows === metric.discoveryRows
-      && metric.promotionSemanticsRows === metric.discoveryRows
+      && (metric.accuracyPolicyVersion !== 2 || metric.pageStateAttestedRows === metric.discoveryRows)
+      && (metric.accuracyPolicyVersion !== 2 || metric.promotionSemanticsRows === metric.discoveryRows)
       && (attestation.coverageMode !== "full"
         || (metric.rejectedTerms === 0 && metric.blockedTerms === 0 && metric.notAttemptedTerms === 0));
     const pass = manifestBound && rawBound && screenshotBound && identityPass && termsBound && metricPass;
