@@ -13,7 +13,7 @@ import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
 import { checkAgentRegistry, readAgentRegistry } from "./agents";
 import { browserCaptureCycleStatus, captureQueueStatus, defaultCaptureQueueRoot, drainCaptureQueue, enqueueCapture, PermanentCaptureError, reconcileCaptureQueueRemote, verifyCaptureQueueFilesystem } from "./capture-queue";
 import { findLatestRegularCapture, omahaDateKey, parseServerCaptureStore, readFreshRegularCapture, SERVER_CAPTURE_STORES } from "./current-captures";
-import { appendCaptureChunk, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession } from "./capture-session";
+import { appendCaptureChunk, buildCaptureSessionWorklist, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession } from "./capture-session";
 import { agentJobRunFields } from "./job-run";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
@@ -759,7 +759,11 @@ if (command === "status") {
   result = await (await mutationClient()).request(`/internal/capture-metrics?limit=${requestedLimit}`);
 } else if (command === "capture" && subcommand === "session") {
   const [action, ...sessionArguments] = arguments_;
-  if (action === "init") {
+  if (action === "worklist") {
+    const [pullOrderFile, rescueFile, outputFile] = sessionArguments;
+    if (!pullOrderFile || !rescueFile || !outputFile) throw new Error("tc capture session worklist requires pull-order, rescue (or -), and output files");
+    result = await buildCaptureSessionWorklist(cliPath(pullOrderFile), rescueFile === "-" ? null : cliPath(rescueFile), cliPath(outputFile));
+  } else if (action === "init") {
     const [store, worklistFile, directory, startedAt] = sessionArguments;
     if (!store || !worklistFile || !directory) throw new Error("tc capture session init requires store, worklist file, and session directory");
     result = { ok: true, ...(await initializeCaptureSession(store, cliPath(worklistFile), cliPath(directory), startedAt)) };
@@ -781,7 +785,7 @@ if (command === "status") {
     if (!directory || !outputFile) throw new Error("tc capture session verification-plan requires a session directory and output JSON");
     result = await buildCaptureVerificationPlan(cliPath(directory), cliPath(outputFile));
   } else {
-    throw new Error("tc capture session requires init, append, verification-plan, finalize, or status");
+    throw new Error("tc capture session requires worklist, init, append, verification-plan, finalize, or status");
   }
 } else if (command === "capture" && subcommand === "build-regular") {
   const browser = arguments_.includes("--browser");
@@ -1025,7 +1029,7 @@ if (command === "status") {
       "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
       "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>", "tc efficiency record <report.json>",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
-        "tc capture metrics [limit]", "tc capture session init|append|verification-plan|finalize|status",
+        "tc capture metrics [limit]", "tc capture session worklist|init|append|verification-plan|finalize|status",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog",
       "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|rematch-promoted|abandon <batch-id> <reason>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",

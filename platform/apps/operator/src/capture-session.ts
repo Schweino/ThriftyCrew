@@ -165,6 +165,60 @@ function parseWorklist(source: string): string[] {
   return source.split(/\r?\n/).map((line) => line.trim()).filter((line) => line && !line.startsWith("#"));
 }
 
+function uniqueInOrder(values: readonly string[]): string[] {
+  const seen = new Set<string>();
+  return values.filter((value) => {
+    const normalized = value.trim();
+    if (!normalized || seen.has(normalized)) return false;
+    seen.add(normalized);
+    return true;
+  }).map((value) => value.trim());
+}
+
+function pullOrderQueries(source: string): string[] {
+  return uniqueInOrder(source.split(/\r?\n/).flatMap((line) => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) return [];
+    const columns = line.split("\t").map((value) => value.trim());
+    if (columns.length < 2 || !columns[0] || !columns[1]) throw new Error(`invalid generated pull-order row: ${trimmed}`);
+    return [columns[1]];
+  }));
+}
+
+function rescueQueries(source: string): string[] {
+  return uniqueInOrder(source.split(/\r?\n/).flatMap((line) => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) return [];
+    const columns = line.split("\t").map((value) => value.trim());
+    if (columns.length < 2 || !columns[0] || !columns[1]) throw new Error(`invalid rescue worklist row: ${trimmed}`);
+    return [columns[0]];
+  }));
+}
+
+export async function buildCaptureSessionWorklist(
+  pullOrderFile: string,
+  rescueFile: string | null,
+  outputFile: string,
+): Promise<Record<string, unknown>> {
+  const pullOrder = pullOrderQueries(await readFile(pullOrderFile, "utf8"));
+  if (pullOrder.length === 0) throw new Error("generated pull order contains no search queries");
+  const rescue = rescueFile ? rescueQueries(await readFile(rescueFile, "utf8")) : [];
+  const terms = uniqueInOrder([...rescue, ...pullOrder]);
+  const pullSet = new Set(pullOrder);
+  const retainedPullTerms = terms.filter((term) => pullSet.has(term)).length;
+  if (retainedPullTerms !== pullOrder.length) throw new Error(`capture worklist lost ${pullOrder.length - retainedPullTerms} generated pull-order queries`);
+  await atomicJson(outputFile, { version: 1, terms });
+  return {
+    ok: true,
+    outputFile,
+    pullOrderTerms: pullOrder.length,
+    rescueTerms: rescue.length,
+    rescueTermsInPullOrder: rescue.filter((term) => pullSet.has(term)).length,
+    rescueOnlyTerms: rescue.filter((term) => !pullSet.has(term)).length,
+    totalTerms: terms.length,
+  };
+}
+
 export async function initializeCaptureSession(storeInput: string, worklistFile: string, directory: string, startedAt = new Date().toISOString()): Promise<DraftSession> {
   const store = storeSchema.parse(storeInput);
   z.iso.datetime({ offset: true }).parse(startedAt);

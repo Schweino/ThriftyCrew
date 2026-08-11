@@ -2,7 +2,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { appendCaptureChunk, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession } from "./capture-session";
+import { appendCaptureChunk, buildCaptureSessionWorklist, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession } from "./capture-session";
 
 const roots: string[] = [];
 const screenshotSha256 = "a".repeat(64);
@@ -68,6 +68,20 @@ function verificationChunk(targets: Array<Record<string, unknown>>) {
 afterEach(async () => Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true }))));
 
 describe("resumable browser capture sessions", () => {
+  it("builds a rescue-first query-only worklist from the opposite generated TSV layouts", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-browser-session-"));
+    roots.push(root);
+    const pullOrder = path.join(root, "pull-order.txt");
+    const rescue = path.join(root, "rescue.txt");
+    const output = path.join(root, "worklist.json");
+    await writeFile(pullOrder, "milk-gallon\tmilk gallon\nlarge-eggs\tlarge eggs\n", "utf8");
+    await writeFile(rescue, "# columns: term<TAB>commodityId<TAB>section<TAB>detail\nlarge eggs\tlarge-eggs\tEXPIRING\t2d left\nrye bread\trye-bread\tDROPPED\tmissing\n", "utf8");
+    await expect(buildCaptureSessionWorklist(pullOrder, rescue, output)).resolves.toMatchObject({
+      pullOrderTerms: 2, rescueTerms: 2, rescueTermsInPullOrder: 1, rescueOnlyTerms: 1, totalTerms: 3,
+    });
+    expect(JSON.parse(await readFile(output, "utf8"))).toEqual({ version: 1, terms: ["large eggs", "rye bread", "milk gallon"] });
+  });
+
   it("hashes the worklist, replaces a failed term with its retry, and emits a full real term ledger", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "tc-browser-session-"));
     roots.push(root);

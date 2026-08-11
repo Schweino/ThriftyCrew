@@ -103,9 +103,12 @@ text. Retry empty terms once. Feed the repaired JSONL into `grocery/select-farew
 
 ## Durable capture session
 
-Create the complete generated worklist and initialize before the first term:
+Create one rescue-first, query-only worklist from the generated files, then initialize before the first term. The
+generated pull order is `commodityId<TAB>query` while the rescue file is `query<TAB>commodityId<TAB>...`; never
+concatenate or pass either TSV directly to the session initializer.
 
 ```powershell
+pnpm tc capture session worklist <pull-order.txt> <rescue-terms.txt-or-> <worklist.json>
 pnpm tc capture session init <aldi|fareway|sams|walmart> <worklist.txt> <session-directory> <started-at-iso>
 ```
 
