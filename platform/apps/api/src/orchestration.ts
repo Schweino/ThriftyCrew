@@ -57,6 +57,17 @@ export async function acquireOperationLease(
     ).bind(now).first();
     if (deployment) return null;
   }
+  if (input.resource !== "workflow:d1-maintenance") {
+    const maintenance = await db.prepare(
+      "SELECT holder_id FROM operation_leases WHERE resource = 'workflow:d1-maintenance' AND released_at IS NULL AND expires_at > ?1",
+    ).bind(now).first();
+    if (maintenance) return null;
+  } else {
+    const activeJob = await db.prepare(
+      "SELECT holder_id FROM operation_leases WHERE owner_kind = 'job' AND released_at IS NULL AND expires_at > ?1 LIMIT 1",
+    ).bind(now).first();
+    if (activeJob) return null;
+  }
   const expiresAt = leaseExpiry(now, input.leaseMinutes);
   const row = await db.prepare(
     `INSERT INTO operation_leases
