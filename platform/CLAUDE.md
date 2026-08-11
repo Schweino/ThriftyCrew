@@ -1,7 +1,9 @@
 # Grocery platform operator contract
 
-The v3 Worker is the only production write boundary. Do not write D1 or R2 from a capture client, workflow,
-or maintenance script. Use `pnpm tc help` and the authenticated `/internal/*` API.
+The v3 Worker is the only production authority boundary. Do not give a capture client, workflow, or maintenance
+script general D1/R2 credentials. A capture client may PUT one immutable object only through the Worker's
+short-lived, object-bound, checksum-bound R2 URL; every D1 mutation and R2 finalization still uses the
+authenticated `/internal/*` API. Use `pnpm tc help` for the supported operator surface.
 
 Before changing pricing behavior:
 

@@ -1,4 +1,5 @@
 import { deterministicId, digestHex, stableJson, verifyBrowserCaptureAccuracy } from "@thriftycrew/domain";
+import { createHash } from "node:crypto";
 import { gzipSync } from "node:zlib";
 import type { CurrentBridgeArtifact } from "./legacy";
 import type { NativeReleaseArtifact } from "./native";
@@ -141,6 +142,26 @@ function oidcExpiry(token: string): number {
 
 export interface CaptureEvidenceInput { body: Uint8Array; kind: "screenshot" | "flyer_page" | "raw_payload" | "manifest"; contentType: string }
 
+export async function uploadCaptureEvidenceDirect(
+  client: MutationClient,
+  batchId: string,
+  evidenceId: string,
+  evidence: CaptureEvidenceInput,
+  suppliedSha256?: string,
+): Promise<Record<string, unknown>> {
+  const sha256 = suppliedSha256 ?? await digestHex(evidence.body);
+  const contentMd5 = createHash("md5").update(evidence.body).digest("base64");
+  const issued = await client.request(`/internal/capture-batches/${encodeURIComponent(batchId)}/evidence-upload-sessions`, { json: {
+    id: evidenceId, kind: evidence.kind, contentType: evidence.contentType,
+    sha256, contentMd5, byteLength: evidence.body.byteLength,
+  } }) as Record<string, unknown> & { finalized?: boolean; uploadSessionId?: string; url?: string; headers?: Record<string, string> };
+  if (issued.finalized === true) return issued;
+  if (!issued.url || !issued.uploadSessionId || !issued.headers) throw new Error(`direct R2 upload session for ${evidenceId} is incomplete`);
+  const response = await fetch(issued.url, { method: "PUT", headers: issued.headers, body: new Blob([Uint8Array.from(evidence.body)]) });
+  if (!response.ok) throw new Error(`direct R2 PUT for ${evidenceId} returned ${response.status}: ${(await response.text()).slice(0, 500)}`);
+  return client.request(`/internal/capture-batches/${encodeURIComponent(batchId)}/evidence-upload-sessions/finalize`, { json: { uploadSessionId: issued.uploadSessionId } });
+}
+
 function percentile(values: readonly number[], value: number): number {
   if (values.length === 0) return 0;
   const sorted = [...values].sort((left, right) => left - right);
@@ -250,6 +271,7 @@ export async function ingestDirectCapture(
   additionalEvidence: readonly CaptureEvidenceInput[] = [],
   options: {
     promote?: boolean;
+    directEvidenceUpload?: boolean;
     browserEvidenceAttestation?: BrowserCaptureSealAttestation;
     uploadedEvidenceSha256?: ReadonlySet<string>;
     onEvidenceUploaded?: (evidence: { sha256: string; evidenceId: string; index: number }) => Promise<void>;
@@ -296,19 +318,23 @@ export async function ingestDirectCapture(
       const evidence = evidenceInputs[index]!;
       const evidenceSha256 = await digestHex(evidence.body);
       if (options.uploadedEvidenceSha256?.has(evidenceSha256)) continue;
-      const compress = evidence.body.byteLength > 8 * 1024 * 1024;
-      const uploadBody = compress ? new Uint8Array(gzipSync(evidence.body, { level: 9 })) : evidence.body;
-      await client.request(`/internal/capture-batches/${batchId}/evidence`, {
-        method: "PUT",
-        body: uploadBody,
-        headers: {
-          "content-type": evidence.contentType,
-          ...(compress ? { "content-encoding": "gzip", "x-uncompressed-length": String(evidence.body.byteLength) } : {}),
-          "x-evidence-id": evidenceIds[index]!,
-          "x-evidence-kind": evidence.kind,
-          "x-content-sha256": evidenceSha256,
-        },
-      });
+      if (options.directEvidenceUpload) {
+        await uploadCaptureEvidenceDirect(client, batchId, evidenceIds[index]!, evidence, evidenceSha256);
+      } else {
+        const compress = evidence.body.byteLength > 8 * 1024 * 1024;
+        const uploadBody = compress ? new Uint8Array(gzipSync(evidence.body, { level: 9 })) : evidence.body;
+        await client.request(`/internal/capture-batches/${batchId}/evidence`, {
+          method: "PUT",
+          body: uploadBody,
+          headers: {
+            "content-type": evidence.contentType,
+            ...(compress ? { "content-encoding": "gzip", "x-uncompressed-length": String(evidence.body.byteLength) } : {}),
+            "x-evidence-id": evidenceIds[index]!,
+            "x-evidence-kind": evidence.kind,
+            "x-content-sha256": evidenceSha256,
+          },
+        });
+      }
       await options.onEvidenceUploaded?.({ sha256: evidenceSha256, evidenceId: evidenceIds[index]!, index });
     }
     for (const observationChunk of chunks(deduplicated.observations, 100)) {
@@ -364,13 +390,14 @@ export async function deployConfiguration(client: MutationClient, config: Curren
     await client.request(`/internal/configurations/${config.id}/categories`, { method: "PUT", json: { categories: config.categories } });
     for (const commodityChunk of chunks(config.commodities, 20)) {
       await client.request(`/internal/configurations/${config.id}/commodities`, { method: "PUT", json: {
-        commodities: commodityChunk.map((commodity) => ({
+        commodities: commodityChunk.map((commodity, chunkIndex) => ({
           id: commodity.id,
           label: commodity.label,
           basisUnit: apiBasisUnit(commodity.unit),
           categoryId: commodity.categoryId,
           include: commodity.include,
           exclude: commodity.exclude,
+          matchPriority: config.commodities.length - (config.commodities.indexOf(commodityChunk[0]!) + chunkIndex),
           ...(commodity.band_min !== undefined ? { bandMinMicros: Math.round(commodity.band_min * 1_000_000) } : {}),
           ...(commodity.band_max !== undefined ? { bandMaxMicros: Math.round(commodity.band_max * 1_000_000) } : {}),
         })),

@@ -38,7 +38,7 @@ pnpm tc engine publish-native
 ```
 
 `tc replay` reads the newest ignored local comparison artifact and the tracked upstream recipe-basis
-snapshot. `replay:current` signs every mutation, writes evidence and large payloads to local R2, validates all
+snapshot. `replay:current` signs every mutation, writes evidence and large payloads to the isolated R2 estate, validates all
 server-owned hard guards, and publishes only when the release is complete. The bridge keeps single-store
 recipe bases private while the public comparison continues to require multi-store coverage.
 

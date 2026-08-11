@@ -30,6 +30,9 @@ export interface WorkerEnv {
   CLOUDFLARE_ACCOUNT_ID?: string;
   D1_DATABASE_ID?: string;
   D1_DATABASE_LIMIT_BYTES?: string;
+  R2_ACCESS_KEY_ID?: string;
+  R2_SECRET_ACCESS_KEY?: string;
+  R2_EVIDENCE_BUCKET?: string;
   GHOST_ADMIN_ORIGIN?: string;
   GHOST_ADMIN_KEY?: string;
   GHOST_PUBLIC_ORIGIN?: string;

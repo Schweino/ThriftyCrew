@@ -194,12 +194,20 @@ powershell -ExecutionPolicy Bypass -File platform/scripts/enqueue-browser-captur
 
 The wrapper verifies that the raw capture, manifest, and screenshot hashes bind to one session, builds and
 validates the V3 artifact, and atomically enqueues all three evidence classes. Image magic bytes and minimum
-dimensions are checked locally and again by the Worker. The installed five-minute client drains the queue with cached local accuracy attestations, immutable product shards, per-object upload receipts, resumable hashes, and a source-scoped credential. Browser seal returns `202`; a Cloudflare Workflow performs validation under durable retries. After remote promotion and passed matching, the watchdog compresses the local artifact/evidence into a hash-verified recovery bundle and retires the originals. Run the queue watchdog at the end. Do not call
-`capture promote-ready-browser` from the PC automation; the engine identity owns matching and promotion.
+dimensions are checked locally and again by the Worker. The at-logon capture controller owns a SQLite WAL
+journal, enforces at most two distinct concurrent store lanes, and drains on startup, wake events, and a
+five-minute fallback interval. Adapter reads use one append-only streaming protocol; compact JSON is a recovery
+mirror. The drainer sends bounded, compressed product shards straight to R2 with a 15-minute one-object URL
+whose content type, MD5, SHA-256 metadata, evidence ID, and upload session are signed. Per-object receipts make
+interrupted uploads resumable. Browser seal returns `202`; a Cloudflare Workflow validates, matches, and promotes
+under durable retries, and Cloudflare cron redispatches failed incomplete pipelines. After remote promotion and
+passed matching, the watchdog compresses the local artifact/evidence into a hash-verified recovery bundle and
+retires the originals. Run the queue watchdog at the end. Do not call
+`capture promote-ready-browser` from the PC automation; the cloud event pipeline owns matching and promotion.
 
 Success means every required source is remotely promoted (or later superseded), passed matching, and carries a
-full term ledger, not merely that browser files or local upload receipts exist. The next
-daily engine run promotes validated browser batches and publishes only if every hard guard passes. On failure,
+full term ledger, not merely that browser files or local upload receipts exist. The next daily engine run
+consumes already-promoted browser truth and publishes only if every hard guard passes. On failure,
 leave the last good release live and report the exact store, attempted terms, captured rows, screenshots, queue
 state, and whether operator action is required.
 

@@ -1,6 +1,5 @@
-import { mkdir, rename, writeFile } from "node:fs/promises";
-import path from "node:path";
 import { browserLanePolicy, recordBrowserLaneResult, withBrowserStoreLane } from "./lane-policy.mjs";
+import { checkpointAdapterChunk } from "./adapter-protocol.mjs";
 
 const TARGET_RESULTS = 25;
 const CONFIG = {
@@ -36,13 +35,6 @@ export function walmartPickupEligible(row) {
   return row?.availabilityStatus === "IN_STOCK"
     && Array.isArray(row.pickupStoreIds)
     && row.pickupStoreIds.includes("5361");
-}
-
-async function atomicJson(file, value) {
-  await mkdir(path.dirname(file), { recursive: true });
-  const temporary = `${file}.tmp`;
-  await writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, "utf8");
-  await rename(temporary, file);
 }
 
 async function readPage(tab) {
@@ -202,8 +194,9 @@ async function captureNextDataChunkInternal({ tab, store, terms, file, screensho
     const termStarted = Date.now();
     const captured = await captureTerm(tab, store, query);
     await recordBrowserLaneResult(store, captured.term.outcome, Date.now() - termStarted);
+    const previousCount = results.length;
     results.push(captured);
-    await atomicJson(file, { version: 2, phase: "discovery", store, canary, terms: results.map((result) => result.term), rows: results.flatMap((result) => result.rows) });
+    await checkpointAdapterChunk(file, { version: 2, phase: "discovery", store, canary, terms: results.map((result) => result.term), rows: results.flatMap((result) => result.rows) }, previousCount);
     if (captured.blocked) break;
     if (Date.now() - chunkStarted >= 45_000) break;
     if (index < terms.length - 1 && effectiveDelayMs > 0) await tab.playwright.waitForTimeout(effectiveDelayMs);
@@ -223,6 +216,7 @@ async function captureNextDataVerificationChunkInternal({ tab, store, targets, f
   const chunkStarted = Date.now();
   for (let index = 0; index < targets.length; index += 1) {
     const target = targets[index];
+    const previousCount = verifications.length;
     let captured = await captureTerm(tab, store, target.query);
     let row = captured.rows.find((candidate) => candidate.id === target.productKey);
     if (!captured.blocked && captured.term.outcome !== "blocked" && !row && normalize(target.name) !== normalize(target.query)) {
@@ -240,7 +234,7 @@ async function captureNextDataVerificationChunkInternal({ tab, store, targets, f
     const observedAt = new Date().toISOString();
     if (captured.blocked || captured.term.outcome === "blocked") {
       verifications.push(...expandVerification(target, { observedAt, outcome: "blocked", reason: captured.term.reason || `${store} challenge detected during independent verification` }));
-      await atomicJson(file, { version: 2, phase: "verification", store, canary, verifications });
+      await checkpointAdapterChunk(file, { version: 2, phase: "verification", store, canary, verifications }, previousCount);
       break;
     }
     if (!row) {
@@ -257,7 +251,7 @@ async function captureNextDataVerificationChunkInternal({ tab, store, targets, f
         truth,
       }));
     }
-    await atomicJson(file, { version: 2, phase: "verification", store, canary, verifications });
+    await checkpointAdapterChunk(file, { version: 2, phase: "verification", store, canary, verifications }, previousCount);
     if (Date.now() - chunkStarted >= 45_000) break;
     if (index < targets.length - 1 && effectiveDelayMs > 0) await tab.playwright.waitForTimeout(effectiveDelayMs);
   }

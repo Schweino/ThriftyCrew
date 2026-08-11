@@ -61,8 +61,15 @@ function Invoke-CaptureCommand([string[]]$Arguments) {
 
 $finalExit = 0
 if ($Mode -eq 'Drain' -or $Mode -eq 'Cycle') {
-  $drainExit = Invoke-CaptureCommand @('tc','capture','queue','drain')
-  if ($drainExit -ne 0) { $finalExit = $drainExit }
+  $controllerAccepted = $false
+  try {
+    $controller = Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:43763/v1/queue/wake' -ContentType 'application/json' -Body '{"reason":"pc-client"}' -TimeoutSec 2
+    $controllerAccepted = $controller.accepted -eq $true
+  } catch { $controllerAccepted = $false }
+  if (-not $controllerAccepted) {
+    $drainExit = Invoke-CaptureCommand @('tc','capture','queue','drain')
+    if ($drainExit -ne 0) { $finalExit = $drainExit }
+  }
 }
 if ($Mode -eq 'Watchdog' -or $Mode -eq 'Cycle') {
   $watchdogExit = Invoke-CaptureCommand @('tc','capture','queue','watchdog')

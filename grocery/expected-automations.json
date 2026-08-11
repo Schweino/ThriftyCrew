@@ -21,6 +21,9 @@
     ,{ "name": "ThriftyCrew V3 Recipe Pack",         "max_age_hours": 192, "why": "weekly bounded local immutable recipe-content agent chain", "allow_pending": true }
     ,{ "name": "ThriftyCrew V3 Restore Drill",       "max_age_hours": 2232, "why": "quarterly local trigger of the Cloudflare scratch restore workflow", "allow_pending": true }
   ],
+  "startup_entries": [
+    { "name": "ThriftyCrew V3 Capture Controller", "why": "persistent per-user browser-capture lane coordinator and direct R2 queue drainer" }
+  ],
   "output_files": [
     { "path": "grocery/out/smp-feed.json",             "max_age_hours": 30, "why": "public price feed every card fetches" },
     { "path": "public/smp-feed.json",                  "max_age_hours": 30, "why": "the SERVED feed (Cloudflare)" },

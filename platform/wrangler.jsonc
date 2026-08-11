@@ -93,6 +93,7 @@
     "OPS_ALERT_URL": "https://feed.thriftycrew.com/ops-alert",
     "CLOUDFLARE_ACCOUNT_ID": "bdf84c0d4146b198e8a14a59d08701ed",
     "D1_DATABASE_ID": "a567ae53-a582-498f-b4c2-2d8843096b75",
-    "D1_DATABASE_LIMIT_BYTES": "10737418240"
+    "D1_DATABASE_LIMIT_BYTES": "10737418240",
+    "R2_EVIDENCE_BUCKET": "tc-grocery-v3-evidence"
   }
 }

@@ -1,6 +1,5 @@
-import { mkdir, rename, writeFile } from "node:fs/promises";
-import path from "node:path";
 import { browserLanePolicy, recordBrowserLaneResult, withBrowserStoreLane } from "./lane-policy.mjs";
+import { checkpointAdapterChunk } from "./adapter-protocol.mjs";
 
 const LOCATION = "ALDI - OLA 42 - Omaha";
 const PRICE_MODE = "In-Store";
@@ -15,13 +14,6 @@ function normalize(value) {
 function expandVerification(target, verification) {
   const rows = Array.isArray(target.satisfies) && target.satisfies.length ? target.satisfies : [target];
   return rows.map((row) => ({ ...verification, rowKey: row.rowKey, discoveryHash: row.discoveryHash }));
-}
-
-async function atomicJson(file, value) {
-  await mkdir(path.dirname(file), { recursive: true });
-  const temporary = `${file}.tmp`;
-  await writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, "utf8");
-  await rename(temporary, file);
 }
 
 async function readPage(tab) {
@@ -163,8 +155,9 @@ async function captureAldiChunkInternal({ tab, terms, file, screenshotSha256, in
     const termStarted = Date.now();
     const captured = await captureTerm(tab, query);
     await recordBrowserLaneResult("aldi", captured.term.outcome, Date.now() - termStarted);
+    const previousCount = results.length;
     results.push(captured);
-    await atomicJson(file, { version: 2, phase: "discovery", store: "aldi", canary, terms: results.map((result) => result.term), rows: results.flatMap((result) => result.rows) });
+    await checkpointAdapterChunk(file, { version: 2, phase: "discovery", store: "aldi", canary, terms: results.map((result) => result.term), rows: results.flatMap((result) => result.rows) }, previousCount);
     if (captured.blocked) break;
     if (Date.now() - chunkStarted >= 45_000) break;
     if (index < terms.length - 1 && interTermDelayMs > 0) await tab.playwright.waitForTimeout(interTermDelayMs);
@@ -182,11 +175,12 @@ async function captureAldiVerificationChunkInternal({ tab, targets, file, screen
   const chunkStarted = Date.now();
   for (let index = 0; index < targets.length; index += 1) {
     const target = targets[index];
+    const previousCount = verifications.length;
     const captured = await captureTerm(tab, target.query);
     const observedAt = new Date().toISOString();
     if (captured.blocked || captured.term.outcome === "blocked") {
       verifications.push(...expandVerification(target, { observedAt, outcome: "blocked", reason: captured.term.reason || "ALDI challenge detected during independent verification" }));
-      await atomicJson(file, { version: 2, phase: "verification", store: "aldi", canary, verifications });
+      await checkpointAdapterChunk(file, { version: 2, phase: "verification", store: "aldi", canary, verifications }, previousCount);
       break;
     }
     const row = captured.rows.find((candidate) => candidate.href === target.productKey);
@@ -204,7 +198,7 @@ async function captureAldiVerificationChunkInternal({ tab, targets, file, screen
         truth,
       }));
     }
-    await atomicJson(file, { version: 2, phase: "verification", store: "aldi", canary, verifications });
+    await checkpointAdapterChunk(file, { version: 2, phase: "verification", store: "aldi", canary, verifications }, previousCount);
     if (Date.now() - chunkStarted >= 45_000) break;
     if (index < targets.length - 1 && interTermDelayMs > 0) await tab.playwright.waitForTimeout(interTermDelayMs);
   }

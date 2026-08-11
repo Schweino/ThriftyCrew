@@ -14,6 +14,7 @@ import {
 } from "@thriftycrew/contracts";
 import { browserCaptureTruthPass, buildBrowserCaptureAccuracy, digestHex, normalizeName, parseCapturePriceText, stableJson } from "@thriftycrew/domain";
 import { compileProductMatcher } from "@thriftycrew/engine";
+import { readPlannerJournal, readSessionJournal, replacePlannerJournal, upsertSessionJournal } from "./capture-journal";
 
 const storeSchema = z.enum(["aldi", "fareway", "sams", "walmart"]);
 type BrowserStore = z.infer<typeof storeSchema>;
@@ -59,6 +60,7 @@ interface DraftSession {
   startedAt: string;
   chunks: Array<{ id: string; file: string; sha256: string; createdAt: string }>;
   plannerHistoryFile?: string;
+  plannerHistoryNamespace?: string;
 }
 
 const STORE_COLUMNS: Record<BrowserStore, string[]> = {
@@ -163,9 +165,20 @@ async function atomicJson(file: string, value: unknown, pretty = true): Promise<
 }
 
 async function loadDraft(directory: string): Promise<DraftSession> {
-  const draft = JSON.parse((await readFile(path.join(directory, "session.json"), "utf8")).replace(/^\uFEFF/, "")) as DraftSession;
+  let draft = readSessionJournal<DraftSession>(directory);
+  if (!draft) {
+    draft = JSON.parse((await readFile(path.join(directory, "session.json"), "utf8")).replace(/^\uFEFF/, "")) as DraftSession;
+    upsertSessionJournal(directory, draft);
+  }
   if (draft.version !== 2 || !draft.sessionId || !Array.isArray(draft.worklist) || !Array.isArray(draft.chunks)) throw new Error(`invalid browser capture session in ${directory}`);
   return draft;
+}
+
+async function persistDraft(directory: string, draft: DraftSession): Promise<void> {
+  // SQLite/WAL is the concurrency and recovery authority. The JSON mirror remains
+  // a portable recovery artifact and keeps pre-controller sessions readable.
+  upsertSessionJournal(directory, draft);
+  await atomicJson(path.join(directory, "session.json"), draft);
 }
 
 function parseWorklist(source: string): string[] {
@@ -244,7 +257,14 @@ export async function buildCaptureSessionWorklist(
   // distinct products quickly; no query is removed except a proven normalized duplicate.
   let history: Record<string, { distinctProducts?: number; duplicateProducts?: number; durationMs?: number; complete?: boolean }> = {};
   const historyFile = path.join(path.dirname(pullOrderFile), `${path.basename(pullOrderFile, path.extname(pullOrderFile))}-query-history.json`);
-  try { history = JSON.parse(await readFile(historyFile, "utf8")) as typeof history; } catch { /* first cycle has no history */ }
+  const historyNamespace = path.resolve(pullOrderFile).toLowerCase();
+  history = readPlannerJournal(historyNamespace) as typeof history;
+  if (Object.keys(history).length === 0) {
+    try {
+      history = JSON.parse(await readFile(historyFile, "utf8")) as typeof history;
+      replacePlannerJournal(historyNamespace, history as Record<string, Record<string, unknown>>, new Date().toISOString());
+    } catch { /* first cycle has no history */ }
+  }
   const score = (query: string): number => {
     const row = history[queryIdentity(query)];
     if (!row) return 0;
@@ -261,7 +281,7 @@ export async function buildCaptureSessionWorklist(
   const termIdentities = new Set(terms.map(queryIdentity));
   const retainedPullTerms = pullOrder.filter((term) => termIdentities.has(queryIdentity(term))).length;
   if (retainedPullTerms !== pullOrder.length) throw new Error(`capture worklist lost ${pullOrder.length - retainedPullTerms} generated pull-order queries`);
-  await atomicJson(outputFile, { version: 2, terms, aliases: merged.aliases, planner: { historyFile, historyQueries: Object.keys(history).length, shadowCoverageTerms: pullOrder.length } });
+  await atomicJson(outputFile, { version: 2, terms, aliases: merged.aliases, planner: { historyFile, historyNamespace, historyQueries: Object.keys(history).length, shadowCoverageTerms: pullOrder.length } });
   return {
     ok: true,
     outputFile,
@@ -293,11 +313,13 @@ export async function initializeCaptureSession(storeInput: string, worklistFile:
   const worklistHash = await digestHex(stableJson(terms));
   const sessionId = `browser-${store}-${startedAt.slice(0, 10)}-${worklistHash.slice(0, 12)}`;
   let plannerHistoryFile: string | undefined;
+  let plannerHistoryNamespace: string | undefined;
   try {
-    const document = JSON.parse(worklistSource) as { planner?: { historyFile?: unknown } };
+    const document = JSON.parse(worklistSource) as { planner?: { historyFile?: unknown; historyNamespace?: unknown } };
     if (typeof document.planner?.historyFile === "string") plannerHistoryFile = path.resolve(document.planner.historyFile);
+    if (typeof document.planner?.historyNamespace === "string") plannerHistoryNamespace = document.planner.historyNamespace;
   } catch { /* plain-text worklists have no planner history */ }
-  const draft: DraftSession = { version: 2, sessionId, store, sourceId: SOURCE_IDS[store], worklist: keyed, worklistHash, startedAt, chunks: [], ...(plannerHistoryFile ? { plannerHistoryFile } : {}) };
+  const draft: DraftSession = { version: 2, sessionId, store, sourceId: SOURCE_IDS[store], worklist: keyed, worklistHash, startedAt, chunks: [], ...(plannerHistoryFile ? { plannerHistoryFile } : {}), ...(plannerHistoryNamespace ? { plannerHistoryNamespace } : {}) };
   await mkdir(path.join(directory, "chunks"), { recursive: true });
   try {
     const existing = await loadDraft(directory);
@@ -306,7 +328,7 @@ export async function initializeCaptureSession(storeInput: string, worklistFile:
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
   }
-  await atomicJson(path.join(directory, "session.json"), draft);
+  await persistDraft(directory, draft);
   return draft;
 }
 
@@ -340,7 +362,7 @@ export async function appendCaptureChunk(directory: string, chunkFile: string): 
   const stored = `${String(draft.chunks.length).padStart(4, "0")}-${id}.json`;
   await writeFile(path.join(directory, "chunks", stored), bytes);
   draft.chunks.push({ id, file: stored, sha256, createdAt: new Date().toISOString() });
-  await atomicJson(path.join(directory, "session.json"), draft);
+  await persistDraft(directory, draft);
   return { id, idempotent: false, terms: chunk.phase === "discovery" ? chunk.terms.length : 0, rows: chunk.phase === "discovery" ? chunk.rows.length : chunk.verifications.length };
 }
 
@@ -556,6 +578,7 @@ export async function finalizeCaptureSession(directory: string, projectedOutputF
       }];
     }));
     await atomicJson(draft.plannerHistoryFile, history);
+    replacePlannerJournal(draft.plannerHistoryNamespace ?? path.resolve(draft.plannerHistoryFile).toLowerCase(), history, finishedAt);
   }
   return manifest;
 }

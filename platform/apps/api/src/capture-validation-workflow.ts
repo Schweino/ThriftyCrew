@@ -2,6 +2,7 @@ import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloud
 import { digestHex } from "@thriftycrew/domain";
 import type { MutationKeyRecord, WorkerEnv } from "./env";
 import { raiseOperationalAlert, resolveOperationalAlert } from "./operations";
+import { promoteCloudMatchedCapture, runCloudCaptureMatch } from "./capture-cloud-match";
 
 interface CaptureValidationPayload { batchId: string }
 
@@ -23,12 +24,15 @@ export class CaptureValidationWorkflow extends WorkflowEntrypoint<WorkerEnv, Cap
   override async run(event: WorkflowEvent<CaptureValidationPayload>, step: WorkflowStep): Promise<void> {
     const batchId = event.payload.batchId;
     try {
-      await step.do("validate and seal immutable capture", { retries: { limit: 5, delay: "10 seconds", backoff: "exponential" }, timeout: "5 minutes" }, async () => {
+      const validationStatus = await step.do("validate and seal immutable capture", { retries: { limit: 5, delay: "10 seconds", backoff: "exponential" }, timeout: "5 minutes" }, async () => {
       const job = await this.env.DB.prepare(
         "SELECT seal_json, status FROM capture_validation_jobs WHERE batch_id = ?1",
       ).bind(batchId).first<{ seal_json: string; status: string }>();
       if (!job) throw new Error(`capture validation job ${batchId} is missing`);
-      if (job.status === "completed") return;
+      if (job.status === "completed") {
+        const prior = await this.env.DB.prepare("SELECT result_status FROM capture_validation_jobs WHERE batch_id = ?1").bind(batchId).first<{ result_status: string | null }>();
+        return prior?.result_status ?? "rejected";
+      }
       await this.env.DB.prepare(
         `UPDATE capture_validation_jobs SET status = 'running', attempts = attempts + 1,
           started_at = COALESCE(started_at, CURRENT_TIMESTAMP), error = NULL WHERE batch_id = ?1`,
@@ -55,9 +59,31 @@ export class CaptureValidationWorkflow extends WorkflowEntrypoint<WorkerEnv, Cap
       const resultStatus = String(result.status ?? (response.status === 422 ? "rejected" : "validated"));
       await this.env.DB.prepare(
         `UPDATE capture_validation_jobs SET status = 'completed', result_status = ?2, error = ?3,
-          completed_at = CURRENT_TIMESTAMP WHERE batch_id = ?1`,
-      ).bind(batchId, resultStatus, typeof result.error === "string" ? result.error.slice(0, 2000) : null).run();
+          completed_at = CURRENT_TIMESTAMP, pipeline_stage = ?4 WHERE batch_id = ?1`,
+      ).bind(batchId, resultStatus, typeof result.error === "string" ? result.error.slice(0, 2000) : null, resultStatus === "validated" ? "matching" : "rejected").run();
+      return resultStatus;
       });
+      if (validationStatus === "validated") {
+        const matching = await step.do("match immutable capture products", { retries: { limit: 4, delay: "10 seconds", backoff: "exponential" }, timeout: "5 minutes" }, async () => {
+          const result = await runCloudCaptureMatch(this.env, batchId);
+          await this.env.DB.prepare("UPDATE capture_validation_jobs SET pipeline_stage = 'matching', match_run_id = ?2 WHERE batch_id = ?1").bind(batchId, result.runId).run();
+          return result;
+        });
+        if (matching.status === "passed") {
+          await step.do("promote matched capture", { retries: { limit: 4, delay: "10 seconds", backoff: "exponential" }, timeout: "2 minutes" }, async () => {
+            const promoted = await promoteCloudMatchedCapture(this.env, batchId);
+            await this.env.DB.prepare(`UPDATE capture_validation_jobs SET pipeline_stage = 'completed',
+              promoted_at = CURRENT_TIMESTAMP, pipeline_completed_at = CURRENT_TIMESTAMP WHERE batch_id = ?1`).bind(batchId).run();
+            return promoted;
+          });
+        } else {
+          await this.env.DB.prepare(`UPDATE capture_validation_jobs SET pipeline_stage = 'matching_failed',
+            pipeline_completed_at = CURRENT_TIMESTAMP WHERE batch_id = ?1`).bind(batchId).run();
+          await raiseOperationalAlert(this.env, `capture-matching:${batchId}`, `Browser capture matching failed for ${batchId}`, { batchId, workflowInstanceId: event.instanceId, matchRunId: matching.runId });
+        }
+      } else {
+        await this.env.DB.prepare("UPDATE capture_validation_jobs SET pipeline_completed_at = CURRENT_TIMESTAMP WHERE batch_id = ?1").bind(batchId).run();
+      }
       await resolveOperationalAlert(this.env, `capture-validation:${batchId}`, { batchId, workflowInstanceId: event.instanceId }, { recoveryTitle: `Browser capture validation recovered for ${batchId}` });
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);

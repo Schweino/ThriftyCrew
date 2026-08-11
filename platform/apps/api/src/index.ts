@@ -15,6 +15,8 @@ import {
   configurationCommoditiesChunkSchema,
   configurationCreateSchema,
   configurationKnownWrongChunkSchema,
+  captureEvidenceUploadFinalizeSchema,
+  captureEvidenceUploadSessionSchema,
   evidenceMetadataSchema,
   engineParityReportSchema,
   entitlementVerificationRecordSchema,
@@ -77,6 +79,7 @@ import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
 import { readBrowserCaptureSla } from "./browser-capture-sla";
 import { buildCaptureTermInserts } from "./capture-seal";
+import { createDirectEvidenceUpload } from "./capture-direct-upload";
 import { assessProductHistory, assessSourceSchema, type ProductHistoryRow } from "./capture-semantic-guards";
 import { handleGithubActionsWebhook } from "./github-recovery";
 import { acquireOperationLease, activeDeploymentBlockers, releaseOperationLease, renewOperationLease } from "./orchestration";
@@ -611,12 +614,13 @@ app.put("/internal/configurations/:id/commodities", zValidator("json", configura
   const statements: D1PreparedStatement[] = [];
   for (const commodity of context.req.valid("json").commodities) {
     statements.push(context.env.DB.prepare(
-      `INSERT INTO commodities (id, configuration_id, label, basis_unit, category_id, band_min_micros, band_max_micros)
-       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+      `INSERT INTO commodities (id, configuration_id, label, basis_unit, category_id, band_min_micros, band_max_micros, match_priority)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
        ON CONFLICT(id, configuration_id) DO UPDATE SET
          label = excluded.label, basis_unit = excluded.basis_unit, category_id = excluded.category_id,
-         band_min_micros = excluded.band_min_micros, band_max_micros = excluded.band_max_micros`,
-    ).bind(commodity.id, configurationId, commodity.label, commodity.basisUnit, commodity.categoryId, commodity.bandMinMicros ?? null, commodity.bandMaxMicros ?? null));
+         band_min_micros = excluded.band_min_micros, band_max_micros = excluded.band_max_micros,
+         match_priority = excluded.match_priority`,
+    ).bind(commodity.id, configurationId, commodity.label, commodity.basisUnit, commodity.categoryId, commodity.bandMinMicros ?? null, commodity.bandMaxMicros ?? null, commodity.matchPriority ?? 0));
     for (const [kind, patterns] of [["include", commodity.include], ["exclude", commodity.exclude]] as const) {
       for (const pattern of patterns) {
         const ruleId = await deterministicId("rule-definition", commodity.id, kind, pattern, "authored configuration", "0");
@@ -836,7 +840,8 @@ app.get("/internal/capture-batches/:id/status", async (context) => {
     `SELECT kind, COUNT(*) AS count FROM evidence_objects WHERE batch_id = ?1 GROUP BY kind ORDER BY kind`,
   ).bind(batch.id).all<{ kind: string; count: number }>();
   const validation = await context.env.DB.prepare(
-    `SELECT workflow_instance_id, status, attempts, result_status, error, created_at, started_at, completed_at
+    `SELECT workflow_instance_id, status, attempts, result_status, pipeline_stage, match_run_id,
+            promoted_at, pipeline_completed_at, error, created_at, started_at, completed_at
        FROM capture_validation_jobs WHERE batch_id = ?1`,
   ).bind(batch.id).first<Record<string, unknown>>();
   return context.json({
@@ -958,7 +963,7 @@ app.put("/internal/schedules/sync", zValidator("json", scheduleDocumentSchema), 
     schedule.id,
     schedule.cron,
     schedule.maxGapMinutes,
-    schedule.executor === "codex-automation" ? "pc" : schedule.executor,
+    schedule.executor === "codex-automation" || schedule.executor === "pc-startup" ? "pc" : schedule.executor,
     schedule.executor,
     document.timezone,
     schedule.owner,
@@ -2002,6 +2007,98 @@ app.post("/internal/capture-batches/:id/observations", zValidator("json", observ
   } catch (error) {
     return jsonError(error instanceof Error ? error.message : "observation insert failed", 422);
   }
+});
+
+app.post("/internal/capture-batches/:id/evidence-upload-sessions", zValidator("json", captureEvidenceUploadSessionSchema), async (context) => {
+  const batch = await findBatch(context.env.DB, context.req.param("id"));
+  if (!batch) return jsonError("capture batch not found", 404);
+  const identity = context.get("identity");
+  if (identity.role !== "capture" && identity.role !== "operator") return jsonError("mutation role is not authorized for direct capture evidence", 403);
+  if (batch.agent_id !== identity.agentId && identity.role !== "operator") return jsonError("batch belongs to another agent", 403);
+  if (identity.sourceIds && !identity.sourceIds.includes(batch.source_id)) return jsonError("agent is not authorized for this capture source", 403);
+  if (batch.status !== "open") return jsonError("evidence can only be added to an open batch", 409);
+  const body = context.req.valid("json");
+  const existingEvidence = await context.env.DB.prepare(
+    "SELECT object_key, sha256, byte_length FROM evidence_objects WHERE id = ?1 AND batch_id = ?2",
+  ).bind(body.id, batch.id).first<{ object_key: string; sha256: string; byte_length: number }>();
+  if (existingEvidence) {
+    if (existingEvidence.sha256 !== body.sha256 || existingEvidence.byte_length !== body.byteLength) return jsonError("evidence id already exists with different content", 409);
+    return context.json({ ok: true, evidenceId: body.id, objectKey: existingEvidence.object_key, finalized: true, idempotent: true });
+  }
+  const uploadSessionId = await deterministicId("capture-upload", batch.id, body.id, body.sha256);
+  const objectKey = `batches/${batch.id}/${body.id}`;
+  const expiresAt = new Date(Date.now() + 15 * 60_000).toISOString();
+  const existing = await context.env.DB.prepare(
+    `SELECT expected_sha256, expected_md5, expected_bytes, status, expires_at FROM capture_evidence_upload_sessions
+      WHERE id = ?1 AND batch_id = ?2`,
+  ).bind(uploadSessionId, batch.id).first<{ expected_sha256: string; expected_md5: string; expected_bytes: number; status: string; expires_at: string }>();
+  if (existing && (existing.expected_sha256 !== body.sha256 || existing.expected_md5 !== body.contentMd5 || existing.expected_bytes !== body.byteLength)) return jsonError("upload session is bound to different evidence", 409);
+  await context.env.DB.prepare(
+    `INSERT INTO capture_evidence_upload_sessions
+       (id, batch_id, requested_by, evidence_id, object_key, kind, content_type, expected_sha256, expected_md5, expected_bytes, expires_at)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)
+     ON CONFLICT(id) DO UPDATE SET
+       expires_at = CASE WHEN capture_evidence_upload_sessions.status = 'issued' THEN excluded.expires_at ELSE capture_evidence_upload_sessions.expires_at END`,
+  ).bind(uploadSessionId, batch.id, identity.agentId, body.id, objectKey, body.kind, body.contentType, body.sha256, body.contentMd5, body.byteLength, expiresAt).run();
+  if (existing?.status === "finalized") return context.json({ ok: true, uploadSessionId, evidenceId: body.id, objectKey, finalized: true, idempotent: true });
+  const upload = await createDirectEvidenceUpload(context.env, {
+    uploadSessionId, objectKey, evidenceId: body.id, kind: body.kind,
+    contentType: body.contentType, sha256: body.sha256, contentMd5: body.contentMd5, expiresSeconds: 900,
+  });
+  return context.json({ ok: true, uploadSessionId, evidenceId: body.id, objectKey, expiresAt, ...upload }, 201);
+});
+
+app.post("/internal/capture-batches/:id/evidence-upload-sessions/finalize", zValidator("json", captureEvidenceUploadFinalizeSchema), async (context) => {
+  const batch = await findBatch(context.env.DB, context.req.param("id"));
+  if (!batch) return jsonError("capture batch not found", 404);
+  const identity = context.get("identity");
+  if (identity.role !== "capture" && identity.role !== "operator") return jsonError("mutation role is not authorized for direct capture evidence", 403);
+  if (batch.agent_id !== identity.agentId && identity.role !== "operator") return jsonError("batch belongs to another agent", 403);
+  if (identity.sourceIds && !identity.sourceIds.includes(batch.source_id)) return jsonError("agent is not authorized for this capture source", 403);
+  if (batch.status !== "open") return jsonError("evidence can only be finalized on an open batch", 409);
+  const body = context.req.valid("json");
+  const upload = await context.env.DB.prepare(
+    `SELECT id, requested_by, evidence_id, object_key, kind, content_type, expected_sha256,
+            expected_bytes, status, expires_at
+       FROM capture_evidence_upload_sessions WHERE id = ?1 AND batch_id = ?2`,
+  ).bind(body.uploadSessionId, batch.id).first<{
+    id: string; requested_by: string; evidence_id: string; object_key: string; kind: string; content_type: string;
+    expected_sha256: string; expected_bytes: number; status: string; expires_at: string;
+  }>();
+  if (!upload) return jsonError("direct evidence upload session not found", 404);
+  if (upload.requested_by !== identity.agentId && identity.role !== "operator") return jsonError("upload session belongs to another agent", 403);
+  if (upload.status === "finalized") return context.json({ ok: true, uploadSessionId: upload.id, evidenceId: upload.evidence_id, objectKey: upload.object_key, idempotent: true });
+  if (Date.parse(upload.expires_at) < Date.now()) {
+    await context.env.DB.prepare("UPDATE capture_evidence_upload_sessions SET status = 'expired' WHERE id = ?1").bind(upload.id).run();
+    return jsonError("direct evidence upload session expired", 409);
+  }
+  const object = await context.env.EVIDENCE.head(upload.object_key);
+  if (!object) return jsonError("direct evidence object has not reached R2", 409);
+  const metadata = object.customMetadata ?? {};
+  const metadataPass = metadata.sha256 === upload.expected_sha256
+    && metadata.kind === upload.kind
+    && metadata.evidenceid === upload.evidence_id
+    && metadata.uploadsessionid === upload.id;
+  if (object.size !== upload.expected_bytes || !metadataPass) {
+    await context.env.DB.prepare("UPDATE capture_evidence_upload_sessions SET status = 'rejected' WHERE id = ?1").bind(upload.id).run();
+    return jsonError("direct evidence object metadata or length does not match the signed upload session", 422);
+  }
+  if (upload.kind === "screenshot") {
+    const screenshot = await context.env.EVIDENCE.get(upload.object_key);
+    if (!screenshot) return jsonError("direct screenshot evidence disappeared during finalization", 409);
+    try { validateScreenshotEvidence(new Uint8Array(await screenshot.arrayBuffer()), upload.content_type); }
+    catch (error) { return jsonError(error instanceof Error ? error.message : "invalid screenshot evidence", 422); }
+  }
+  await context.env.DB.batch([
+    context.env.DB.prepare(
+      `INSERT INTO evidence_objects (id, batch_id, object_key, kind, content_type, byte_length, sha256)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)`,
+    ).bind(upload.evidence_id, batch.id, upload.object_key, upload.kind, upload.content_type, upload.expected_bytes, upload.expected_sha256),
+    context.env.DB.prepare(
+      "UPDATE capture_evidence_upload_sessions SET status = 'finalized', finalized_at = CURRENT_TIMESTAMP WHERE id = ?1",
+    ).bind(upload.id),
+  ]);
+  return context.json({ ok: true, uploadSessionId: upload.id, evidenceId: upload.evidence_id, objectKey: upload.object_key }, 201);
 });
 
 app.put("/internal/capture-batches/:id/evidence", async (context) => {

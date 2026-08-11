@@ -127,3 +127,17 @@ may deploy while those counters accrue, but no transition executor is retired ea
   retired executor. The current eight transition executors remain because their live gates are not complete.
 - The daily cross-plane proof ties configuration, publication, price/recipe accuracy, browser capture, backup,
   execution fencing and capacity into one durable recovery signal.
+
+## H10 - streaming capture transport and event pipeline
+
+- Local capture authority moved from scattered queue, planner, lane and session JSON files into one SQLite WAL
+  journal. JSON and NDJSON remain bounded, hash-bound recovery evidence rather than mutable control state.
+- Aldi, Fareway, Walmart and Sam's adapters emit the same append-only discovery/verification protocol. The
+  persistent at-logon controller owns the two-store concurrency ceiling, store leases, queue wakeups and bounded
+  logs, eliminating repeated process startup as the coordination mechanism.
+- Browser evidence is split into bounded immutable product shards and uploaded straight to the evidence bucket.
+  The PC never receives an R2 credential: the Worker issues a 15-minute URL bound to one object, identity,
+  content type, MD5, SHA-256 metadata and expected byte length, then independently finalizes R2 truth into D1.
+- Seal is the handoff boundary. Cloudflare Workflow validates, runs the authored matcher and aisle second
+  opinion, promotes passed batches, and records each stage. Cron redispatches transiently failed incomplete
+  pipelines, so PC uptime is no longer part of validation, matching or promotion correctness.

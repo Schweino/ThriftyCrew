@@ -526,6 +526,19 @@ export const evidenceMetadataSchema = z.object({
   expiresAt: isoDateTime.optional(),
 });
 
+export const captureEvidenceUploadSessionSchema = z.object({
+  id: nonEmptyId,
+  kind: z.enum(["screenshot", "flyer_page", "raw_payload", "manifest"]),
+  contentType: z.string().trim().min(1).max(200),
+  sha256: sha256Hex,
+  contentMd5: z.string().regex(/^[A-Za-z0-9+/]{22}==$/),
+  byteLength: z.number().int().positive().max(512 * 1024 * 1024),
+});
+
+export const captureEvidenceUploadFinalizeSchema = z.object({
+  uploadSessionId: nonEmptyId,
+});
+
 export const configurationCreateSchema = z.object({
   id: nonEmptyId,
   sourceCommit: z.string().min(1).max(200),
@@ -554,6 +567,7 @@ export const configurationCommoditiesChunkSchema = z.object({
     exclude: z.array(z.string().min(1).max(1000)).max(300),
     bandMinMicros: z.number().int().nonnegative().optional(),
     bandMaxMicros: z.number().int().nonnegative().optional(),
+    matchPriority: z.number().int().nonnegative().optional(),
   }).refine((value) => value.bandMinMicros === undefined || value.bandMaxMicros === undefined || value.bandMinMicros <= value.bandMaxMicros, { message: "band minimum cannot exceed band maximum" })).min(1).max(25),
 });
 
@@ -652,7 +666,7 @@ export const scheduleEntrySchema = z.object({
   id: nonEmptyId,
   cron: z.string().min(5).max(256),
   triggerCron: z.string().min(5).max(256).optional(),
-  executor: z.enum(["github-actions", "worker-cron", "cloudflare-workflow", "pc", "codex-automation"]),
+  executor: z.enum(["github-actions", "worker-cron", "cloudflare-workflow", "pc", "pc-startup", "codex-automation"]),
   maxGapMinutes: z.number().int().positive(),
   leaseMinutes: z.number().int().min(1).max(10_080).default(180),
   owner: z.string().min(1).max(160),
@@ -664,6 +678,7 @@ export const scheduleEntrySchema = z.object({
   suspensionReason: z.string().min(1).max(1000).optional(),
   workflowFile: z.string().min(1).max(500).optional(),
   windowsTask: z.string().min(1).max(300).optional(),
+  startupEntry: z.string().min(1).max(300).optional(),
   automationFile: z.string().min(1).max(500).optional(),
   agentId: nonEmptyId.optional(),
   retirementGate: z.string().min(1).max(1000).optional(),
@@ -675,6 +690,9 @@ export const scheduleEntrySchema = z.object({
   }
   if (value.executor === "pc" && !value.windowsTask) {
     context.addIssue({ code: "custom", path: ["windowsTask"], message: "PC schedules require a Windows task name" });
+  }
+  if (value.executor === "pc-startup" && !value.startupEntry) {
+    context.addIssue({ code: "custom", path: ["startupEntry"], message: "PC startup schedules require a startup entry name" });
   }
   if (value.executor === "codex-automation" && !value.automationFile) {
     context.addIssue({ code: "custom", path: ["automationFile"], message: "Codex automation schedules require an authority file" });

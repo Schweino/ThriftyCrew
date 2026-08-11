@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { archivalCapacityStatus, archivalGrowthProjectionReliable, controlPlaneProofPass, d1DatabaseFileSize, d1TimeTravelBookmark, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalDigestMemberKey, operationalIncidentIsNew, operationalNotificationDueAt, recoveryCheckpointTriggerKind, robustMonthlyGrowth, scheduleGap, weeklyFullExportDue } from "./operations";
+import { archivalCapacityStatus, archivalGrowthProjectionReliable, controlPlaneProofPass, d1DatabaseFileSize, d1TimeTravelBookmark, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalDigestMemberKey, operationalIncidentIsNew, operationalNotificationDueAt, recoveryCheckpointTriggerKind, resumeFailedCapturePipelines, robustMonthlyGrowth, scheduleGap, weeklyFullExportDue } from "./operations";
 
 describe("archival capacity policy", () => {
   it("arms on projected exhaustion before the static percentage threshold", () => {
@@ -63,6 +63,30 @@ describe("D1 recovery cadence", () => {
     await expect(d1TimeTravelBookmark({
       D1_REST_API_TOKEN: "x", CLOUDFLARE_ACCOUNT_ID: "a", D1_DATABASE_ID: "d",
     } as WorkerEnv)).rejects.toThrow("bookmark request failed");
+  });
+});
+
+describe("capture pipeline recovery", () => {
+  it("restarts a failed incomplete event pipeline with a fresh workflow instance", async () => {
+    const create = vi.fn().mockResolvedValue(undefined);
+    const updates: unknown[][] = [];
+    const db = {
+      prepare(sql: string) {
+        if (sql.includes("SELECT job.batch_id")) return { all: async () => ({ results: [{ batch_id: "batch-1", attempts: 2 }] }) };
+        return {
+          bind: (...values: unknown[]) => ({
+            run: async () => {
+              updates.push(values);
+              return { meta: { changes: 1 } };
+            },
+          }),
+        };
+      },
+    };
+    const resumed = await resumeFailedCapturePipelines({ DB: db, CAPTURE_VALIDATION_WORKFLOW: { create } } as unknown as WorkerEnv, Date.parse("2026-08-11T15:30:00.000Z"));
+    expect(resumed).toBe(1);
+    expect(create).toHaveBeenCalledWith(expect.objectContaining({ params: { batchId: "batch-1" } }));
+    expect(updates[0]?.[0]).toBe("batch-1");
   });
 });
 import type { WorkerEnv } from "./env";

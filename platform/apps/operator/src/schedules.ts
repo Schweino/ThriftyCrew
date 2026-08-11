@@ -81,11 +81,23 @@ async function verifyWorkerSchedules(platformRoot: string, document: ScheduleDoc
 async function verifyWindowsInventory(platformRoot: string, document: ScheduleDocument): Promise<string[]> {
   const registry = JSON.parse(await readFile(path.resolve(platformRoot, "..", "grocery", "expected-automations.json"), "utf8")) as {
     windows_tasks?: Array<{ name?: string }>;
+    startup_entries?: Array<{ name?: string }>;
   };
   const actual = new Set((registry.windows_tasks ?? []).map((entry) => entry.name).filter((name): name is string => Boolean(name)));
   const expected = new Set(document.schedules.filter((entry) => entry.executor === "pc" && entry.lifecycle !== "retired" && !entry.suspended).map((entry) => entry.windowsTask!));
   const { missing, rogue } = scheduleDiff(expected, actual);
   if (missing.length || rogue.length) throw new Error(`Windows task registry drift: ${JSON.stringify({ missing, rogue })}`);
+  return [...actual].sort();
+}
+
+async function verifyStartupInventory(platformRoot: string, document: ScheduleDocument): Promise<string[]> {
+  const registry = JSON.parse(await readFile(path.resolve(platformRoot, "..", "grocery", "expected-automations.json"), "utf8")) as {
+    startup_entries?: Array<{ name?: string }>;
+  };
+  const actual = new Set((registry.startup_entries ?? []).map((entry) => entry.name).filter((name): name is string => Boolean(name)));
+  const expected = new Set(document.schedules.filter((entry) => entry.executor === "pc-startup" && entry.lifecycle !== "retired" && !entry.suspended).map((entry) => entry.startupEntry!));
+  const { missing, rogue } = scheduleDiff(expected, actual);
+  if (missing.length || rogue.length) throw new Error(`PC startup registry drift: ${JSON.stringify({ missing, rogue })}`);
   return [...actual].sort();
 }
 
@@ -123,10 +135,11 @@ export async function checkScheduleAuthority(platformRoot: string): Promise<Reco
     }
     if (!gateIds.has(schedule.retirementGate!)) throw new Error(`transition schedule ${schedule.id} references unknown evidence gate ${schedule.retirementGate}`);
   }
-  const [github, workerCrons, windowsTasks, codexAutomations] = await Promise.all([
+  const [github, workerCrons, windowsTasks, startupEntries, codexAutomations] = await Promise.all([
     verifyGithubSchedules(platformRoot, document),
     verifyWorkerSchedules(platformRoot, document),
     verifyWindowsInventory(platformRoot, document),
+    verifyStartupInventory(platformRoot, document),
     verifyCodexAutomations(platformRoot, document),
   ]);
   return {
@@ -138,6 +151,6 @@ export async function checkScheduleAuthority(platformRoot: string): Promise<Reco
     transition: document.schedules.filter((entry) => entry.lifecycle === "transition").length,
     retired: document.schedules.filter((entry) => entry.lifecycle === "retired").length,
     executors: Object.fromEntries([...new Set(document.schedules.map((schedule) => schedule.executor))].sort().map((executor) => [executor, document.schedules.filter((schedule) => schedule.executor === executor).length])),
-    verified: { github, workerCrons, windowsTasks, codexAutomations, transitionInventoryVersion: inventory.version },
+    verified: { github, workerCrons, windowsTasks, startupEntries, codexAutomations, transitionInventoryVersion: inventory.version },
   };
 }

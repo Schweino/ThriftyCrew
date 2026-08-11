@@ -9,7 +9,9 @@ shelf taxonomy, durable alert triage, independent accuracy sampling, the `tc` CL
 Git owns code, migrations, fixtures, recipes, and the authored files in `config/`. The generator emits the
 legacy `grocery/*.json` compatibility files and the bridge deploys the same version to D1. D1 owns operational
 state, R2 owns private evidence and large immutable payloads, Analytics Engine owns non-PII funnel events, and
-Ghost owns content, entitlements, billing, email, and live paywall truth. Only the Worker mutates D1 or R2.
+Ghost owns content, entitlements, billing, email, and live paywall truth. Only the Worker owns general D1/R2
+authority. A source-scoped capture identity may upload one checksum-bound object through a Worker-issued URL;
+the Worker validates and finalizes it before the object becomes evidence.
 
 ## Non-negotiable invariants
 
@@ -45,6 +47,10 @@ Ghost owns content, entitlements, billing, email, and live paywall truth. Only t
 27. Mutating scheduled work must hold the current D1 lease fence, and deployments must drain non-safe leases.
 28. A configuration cannot activate until its content-addressed R2 recovery object passes read-after-write verification.
 29. A retired transition executor is a durable tombstone and schedule synchronization cannot reactivate it.
+30. Browser capture state is journaled in local SQLite; append-only adapter events and compressed JSON are
+    recovery artifacts, not competing state authorities.
+31. A validated browser batch is matched and promoted by its Cloudflare Workflow. The PC does not need to
+    remain online after seal, and failed incomplete pipelines are redispatched by Cloudflare cron.
 
 ## Migration calendar and retirement
 

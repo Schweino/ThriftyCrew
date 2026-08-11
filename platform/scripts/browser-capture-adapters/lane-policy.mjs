@@ -1,6 +1,4 @@
-import { mkdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
-import os from "node:os";
-import path from "node:path";
+import { acquireLaneLease, readLaneState, releaseLaneLease, writeLaneState } from "./capture-journal.mjs";
 
 const DEFAULTS = {
   aldi: { maxTerms: 3, minimumDelayMs: 5_000 },
@@ -9,32 +7,34 @@ const DEFAULTS = {
   walmart: { maxTerms: 5, minimumDelayMs: 1_500 },
 };
 
-function rootDirectory(environment = process.env) {
-  return path.join(environment.LOCALAPPDATA || os.tmpdir(), "ThriftyCrew", "grocery-v3", "browser-lanes");
-}
+const DEFAULT_CONTROLLER_ORIGIN = "http://127.0.0.1:43763";
 
-async function atomicJson(file, value) {
-  const temporary = `${file}.tmp-${crypto.randomUUID()}`;
-  await writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, "utf8");
-  await rename(temporary, file);
+async function controllerRequest(pathname, init = {}, environment = process.env) {
+  const origin = environment.TC_CAPTURE_CONTROLLER_ORIGIN ?? DEFAULT_CONTROLLER_ORIGIN;
+  if (origin === "disabled") return null;
+  try {
+    const response = await fetch(`${origin.replace(/\/$/, "")}${pathname}`, {
+      ...init,
+      signal: AbortSignal.timeout(750),
+      headers: { "content-type": "application/json", ...(init.headers || {}) },
+    });
+    const body = await response.json().catch(() => ({}));
+    return { ...body, controllerReachable: true, controllerAccepted: response.ok };
+  } catch { return null; }
 }
 
 export async function browserLanePolicy(store, now = new Date(), environment = process.env) {
   const defaults = DEFAULTS[store];
   if (!defaults) throw new Error(`unsupported browser lane ${store}`);
-  const root = rootDirectory(environment);
-  await mkdir(root, { recursive: true });
-  const stateFile = path.join(root, `${store}.json`);
-  let state = { consecutiveFailures: 0, dynamicDelayMs: defaults.minimumDelayMs, circuitOpenUntil: null };
-  try { state = { ...state, ...JSON.parse(await readFile(stateFile, "utf8")) }; } catch { /* first run */ }
+  const state = readLaneState(store, { consecutiveFailures: 0, dynamicDelayMs: defaults.minimumDelayMs, circuitOpenUntil: null }, environment);
   if (state.circuitOpenUntil && Date.parse(state.circuitOpenUntil) > now.getTime()) throw new Error(`${store} browser lane circuit is open until ${state.circuitOpenUntil}`);
-  return { ...defaults, dynamicDelayMs: Math.max(defaults.minimumDelayMs, Number(state.dynamicDelayMs) || 0), stateFile, state };
+  return { ...defaults, dynamicDelayMs: Math.max(defaults.minimumDelayMs, Number(state.dynamicDelayMs) || 0), state };
 }
 
 export async function recordBrowserLaneResult(store, outcome, latencyMs, now = new Date(), environment = process.env) {
   const policy = await browserLanePolicy(store, now, environment).catch((error) => {
     if (!String(error?.message).includes("circuit is open")) throw error;
-    return { ...DEFAULTS[store], dynamicDelayMs: DEFAULTS[store].minimumDelayMs, stateFile: path.join(rootDirectory(environment), `${store}.json`), state: { consecutiveFailures: 0 } };
+    return { ...DEFAULTS[store], dynamicDelayMs: DEFAULTS[store].minimumDelayMs, state: { consecutiveFailures: 0 } };
   });
   const failure = outcome === "blocked" || outcome === "rejected";
   const consecutiveFailures = failure ? Number(policy.state.consecutiveFailures || 0) + 1 : 0;
@@ -47,24 +47,20 @@ export async function recordBrowserLaneResult(store, outcome, latencyMs, now = n
     lastLatencyMs: Math.max(0, Math.round(latencyMs)), lastCompletedAt: now.toISOString(),
     circuitOpenUntil: circuitMinutes ? new Date(now.getTime() + circuitMinutes * 60_000).toISOString() : null,
   };
-  await mkdir(path.dirname(policy.stateFile), { recursive: true });
-  await atomicJson(policy.stateFile, next);
+  writeLaneState(store, next, environment);
+  await controllerRequest(`/v1/lanes/${encodeURIComponent(store)}/result`, { method: "POST", body: JSON.stringify(next) }, environment);
   return next;
 }
 
 export async function withBrowserStoreLane(store, operation, environment = process.env) {
-  const root = rootDirectory(environment);
-  await mkdir(root, { recursive: true });
-  const lock = path.join(root, `${store}.lock`);
-  try {
-    await mkdir(lock);
-  } catch (error) {
-    if (error?.code !== "EEXIST") throw error;
-    const ageMs = Date.now() - (await stat(lock)).mtimeMs;
-    if (ageMs < 15 * 60_000) throw new Error(`${store} browser lane already has an active capture`);
-    await rm(lock, { recursive: true, force: true });
-    await mkdir(lock);
-  }
+  const owner = `adapter-${process.pid}-${crypto.randomUUID()}`;
+  const controller = await controllerRequest(`/v1/lanes/${encodeURIComponent(store)}/acquire`, { method: "POST", body: JSON.stringify({ owner, ttlMs: 15 * 60_000 }) }, environment);
+  const controllerOwned = controller?.acquired === true;
+  if (controller?.controllerReachable && !controllerOwned) throw new Error(`${store} browser lane is unavailable: ${controller.reason ?? "controller rejected the lease"}`);
+  if (!controller && !acquireLaneLease(store, owner, new Date(), 15 * 60_000, environment)) throw new Error(`${store} browser lane already has an active capture`);
   try { return await operation(await browserLanePolicy(store, new Date(), environment)); }
-  finally { await rm(lock, { recursive: true, force: true }); }
+  finally {
+    if (controllerOwned) await controllerRequest(`/v1/lanes/${encodeURIComponent(store)}/release`, { method: "POST", body: JSON.stringify({ owner }) }, environment);
+    else releaseLaneLease(store, owner, environment);
+  }
 }

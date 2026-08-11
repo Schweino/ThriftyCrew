@@ -961,6 +961,49 @@ export async function runBrowserCaptureSla(env: WorkerEnv, scheduledTime: number
   }
 }
 
+export async function resumeFailedCapturePipelines(env: WorkerEnv, scheduledTime: number): Promise<number> {
+  if (!env.CAPTURE_VALIDATION_WORKFLOW) return 0;
+  const failed = await env.DB.prepare(`
+    SELECT job.batch_id, job.attempts
+      FROM capture_validation_jobs job
+      JOIN capture_batches batch ON batch.id = job.batch_id
+     WHERE job.status = 'failed'
+       AND job.pipeline_completed_at IS NULL
+       AND job.completed_at <= datetime('now', '-5 minutes')
+       AND job.attempts < 12
+       AND batch.status IN ('open', 'validated')
+     ORDER BY job.completed_at
+     LIMIT 5
+  `).all<{ batch_id: string; attempts: number }>();
+  let resumed = 0;
+  for (const job of failed.results) {
+    const suffix = new Date(scheduledTime).toISOString().replaceAll(/[^0-9]/g, "").slice(0, 12);
+    const instanceId = `capture-recovery-${job.batch_id}-${job.attempts + 1}-${suffix}`.replaceAll(/[^a-zA-Z0-9_-]/g, "-").slice(0, 100);
+    const claimed = await env.DB.prepare(`
+      UPDATE capture_validation_jobs
+         SET workflow_instance_id = ?2, status = 'pending', error = NULL, completed_at = NULL
+       WHERE batch_id = ?1 AND status = 'failed' AND pipeline_completed_at IS NULL
+    `).bind(job.batch_id, instanceId).run();
+    if ((claimed.meta.changes ?? 0) !== 1) continue;
+    try {
+      await env.CAPTURE_VALIDATION_WORKFLOW.create({ id: instanceId, params: { batchId: job.batch_id } });
+      resumed += 1;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      if (/already|exist|duplicate|conflict/i.test(message)) {
+        resumed += 1;
+        continue;
+      }
+      await env.DB.prepare(`
+        UPDATE capture_validation_jobs
+           SET status = 'failed', error = ?2, completed_at = CURRENT_TIMESTAMP
+         WHERE batch_id = ?1 AND workflow_instance_id = ?3 AND status = 'pending'
+      `).bind(job.batch_id, `pipeline recovery dispatch failed: ${message}`.slice(0, 2000), instanceId).run();
+    }
+  }
+  return resumed;
+}
+
 export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number, force = false): Promise<void> {
   const observedAt = new Date(scheduledTime).toISOString();
   const runId = await deterministicId("run", "archival-forecast-daily", force ? observedAt : observedAt.slice(0, 10));
@@ -1040,6 +1083,7 @@ function localScheduleParts(scheduledTime: number): Record<string, string> {
 
 export async function runScheduledOperations(env: WorkerEnv, scheduledTime: number): Promise<void> {
   await runLedgerWatchdog(env, scheduledTime);
+  await resumeFailedCapturePipelines(env, scheduledTime);
   await dispatchPendingRegisteredAgents(env);
   await flushOperationalAlertDigest(env, new Date(scheduledTime).toISOString());
   const parts = localScheduleParts(scheduledTime);

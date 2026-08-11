@@ -11,7 +11,7 @@ import { generateLegacyConfiguration } from "./config";
 import { buildNativeParityReport, compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot } from "@thriftycrew/engine";
 import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
 import { checkAgentRegistry, readAgentRegistry } from "./agents";
-import { browserCaptureCycleStatus, captureQueueStatus, compactPromotedCaptureQueue, defaultCaptureQueueRoot, drainCaptureQueue, enqueueCapture, markCaptureEvidenceUploaded, PermanentCaptureError, reconcileCaptureQueueRemote, verifyCaptureQueueFilesystem } from "./capture-queue";
+import { browserCaptureCycleStatus, captureQueueStatus, compactPromotedCaptureQueue, defaultCaptureQueueRoot, drainCaptureQueue, enqueueCapture, markCaptureEvidenceUploaded, PermanentCaptureError, readCaptureQueueEvidence, reconcileCaptureQueueRemote, verifyCaptureQueueFilesystem } from "./capture-queue";
 import { findLatestRegularCapture, omahaDateKey, parseServerCaptureStore, readFreshRegularCapture, SERVER_CAPTURE_STORES } from "./current-captures";
 import { appendCaptureChunk, buildCaptureSessionWorklist, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession } from "./capture-session";
 import { agentJobRunFields } from "./job-run";
@@ -908,9 +908,9 @@ if (command === "status") {
     const maxJobs = Number(process.env.TC_CAPTURE_QUEUE_MAX_JOBS_PER_DRAIN ?? 4);
     if (!Number.isInteger(maxJobs) || maxJobs < 1 || maxJobs > 20) throw new Error("TC_CAPTURE_QUEUE_MAX_JOBS_PER_DRAIN must be an integer from 1 through 20");
     const drained = await drainCaptureQueue(root, async (job) => {
-      const artifactBody = new Uint8Array(await readFile(job.artifactPath));
+      const artifactBody = job.artifactBody;
       const additionalEvidence: CaptureEvidenceInput[] = await Promise.all(job.evidencePaths.map(async (evidence) => {
-        const source = new Uint8Array(await readFile(evidence.path));
+        const source = await readCaptureQueueEvidence(job, evidence);
         // Formatting whitespace is not evidence. Canonicalize the very large session JSON before transport;
         // its internal contentHash and schema still bind the exact parsed document, while R2/Worker memory
         // no longer pays for tens of MiB of indentation.
@@ -921,6 +921,7 @@ if (command === "status") {
       }));
       const ingestion = await ingestDirectCapture(client, job.artifact, artifactBody, additionalEvidence, {
         promote: false,
+        directEvidenceUpload: true,
         ...(job.manifest.browserEvidenceAttestation ? { browserEvidenceAttestation: job.manifest.browserEvidenceAttestation } : {}),
         uploadedEvidenceSha256: new Set((job.manifest.uploadedEvidence ?? []).map((entry) => entry.sha256)),
         onEvidenceUploaded: async ({ sha256, evidenceId }) => markCaptureEvidenceUploaded(job, { sha256, evidenceId }),

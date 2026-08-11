@@ -1,24 +1,29 @@
-import { copyFile, mkdir, readFile, readdir, rename, rm, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rename, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { gunzipSync, gzipSync } from "node:zlib";
 import { BROWSER_CAPTURE_ACCURACY_CUTOVER, browserCaptureSessionSchema, directCaptureArtifactSchema, type BrowserCaptureSealAttestation, type DirectCaptureArtifact } from "@thriftycrew/contracts";
 import { buildBrowserCaptureAccuracy, digestHex, stableJson } from "@thriftycrew/domain";
 import { buildBrowserEvidenceAttestation, type CaptureEvidenceInput } from "@thriftycrew/daily/client";
+import { acquireQueueJournalLease, queueJournalJobs, releaseQueueJournalLease, upsertQueueJournalJob } from "./capture-journal";
 
 export interface QueuedEvidence {
   file: string;
   sha256: string;
   kind: "screenshot" | "flyer_page" | "raw_payload" | "manifest";
   contentType: string;
+  byteLength?: number;
+  storedEncoding?: "gzip";
 }
 
 export interface CaptureQueueManifest {
-  version: 1 | 2;
+  version: 1 | 2 | 3;
   id: string;
   sourceId: string;
   idempotencyKey: string;
   artifactFile: string;
   artifactSha256: string;
+  artifactByteLength?: number;
+  artifactStoredEncoding?: "gzip";
   evidence: QueuedEvidence[];
   enqueuedAt: string;
   status: "pending" | "retrying" | "completed" | "rejected";
@@ -36,6 +41,7 @@ export interface CaptureQueueManifest {
 export interface CaptureQueueJob {
   directory: string;
   artifactPath: string;
+  artifactBody: Uint8Array;
   evidencePaths: Array<QueuedEvidence & { path: string }>;
   manifest: CaptureQueueManifest;
   artifact: DirectCaptureArtifact;
@@ -194,10 +200,34 @@ async function atomicJson(file: string, value: unknown): Promise<void> {
 
 async function readManifest(directory: string): Promise<CaptureQueueManifest> {
   const value = JSON.parse(await readFile(path.join(directory, "manifest.json"), "utf8")) as CaptureQueueManifest;
-  if (![1, 2].includes(value.version) || !value.id || !value.sourceId || !value.artifactFile || !Array.isArray(value.evidence)) {
+  if (![1, 2, 3].includes(value.version) || !value.id || !value.sourceId || !value.artifactFile || !Array.isArray(value.evidence)) {
     throw new Error(`invalid capture queue manifest in ${directory}`);
   }
+  upsertQueueJournalJob({ id: value.id, directory, sourceId: value.sourceId, status: value.status, enqueuedAt: value.enqueuedAt, nextAttemptAt: value.nextAttemptAt, manifestJson: JSON.stringify(value) }, path.join(path.dirname(directory), "capture-journal.sqlite"));
   return value;
+}
+
+async function writeQueuedObject(directory: string, baseName: string, bytes: Uint8Array, compress = false): Promise<{ file: string; byteLength: number; storedEncoding?: "gzip" }> {
+  const shouldCompress = compress && bytes.byteLength >= 1024 * 1024;
+  const file = shouldCompress ? `${baseName}.gz` : baseName;
+  await writeFile(path.join(directory, file), shouldCompress ? gzipSync(bytes, { level: 6 }) : bytes);
+  return { file, byteLength: bytes.byteLength, ...(shouldCompress ? { storedEncoding: "gzip" as const } : {}) };
+}
+
+async function persistManifest(directory: string, manifest: CaptureQueueManifest): Promise<void> {
+  await atomicJson(path.join(directory, "manifest.json"), manifest);
+  upsertQueueJournalJob({ id: manifest.id, directory, sourceId: manifest.sourceId, status: manifest.status, enqueuedAt: manifest.enqueuedAt, nextAttemptAt: manifest.nextAttemptAt, manifestJson: JSON.stringify(manifest) }, path.join(path.dirname(directory), "capture-journal.sqlite"));
+}
+
+async function queueDirectories(root: string): Promise<string[]> {
+  const journalFile = path.join(root, "capture-journal.sqlite");
+  const journal = queueJournalJobs(journalFile);
+  if (journal.length > 0) return journal.map((job) => job.directory).sort();
+  const disk = (await readdir(root, { withFileTypes: true }))
+    .filter((entry) => entry.isDirectory() && entry.name.startsWith("capture_"))
+    .map((entry) => path.join(root, entry.name));
+  for (const directory of disk) await readManifest(directory);
+  return queueJournalJobs(journalFile).map((job) => job.directory).sort();
 }
 
 function parseQueuedArtifact(artifactBytes: Uint8Array): DirectCaptureArtifact {
@@ -225,13 +255,19 @@ function parseQueuedArtifact(artifactBytes: Uint8Array): DirectCaptureArtifact {
 }
 
 async function readStoredBytes(directory: string, manifest: CaptureQueueManifest, file: string): Promise<{ bytes: Uint8Array; path: string }> {
-  try { return { bytes: new Uint8Array(await readFile(path.join(directory, file))), path: path.join(directory, file) }; }
+  try {
+    const stored = new Uint8Array(await readFile(path.join(directory, file)));
+    const encoding = file === manifest.artifactFile ? manifest.artifactStoredEncoding : manifest.evidence.find((entry) => entry.file === file)?.storedEncoding;
+    return { bytes: encoding === "gzip" ? new Uint8Array(gunzipSync(stored)) : stored, path: path.join(directory, file) };
+  }
   catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
     const recovery = manifest.compacted?.recoveryFiles.find((entry) => entry.originalFile === file);
     if (!recovery) throw error;
     const recoveryPath = path.join(directory, recovery.file);
-    return { bytes: new Uint8Array(gunzipSync(await readFile(recoveryPath))), path: recoveryPath };
+    const recoveredStored = new Uint8Array(gunzipSync(await readFile(recoveryPath)));
+    const encoding = file === manifest.artifactFile ? manifest.artifactStoredEncoding : manifest.evidence.find((entry) => entry.file === file)?.storedEncoding;
+    return { bytes: encoding === "gzip" ? new Uint8Array(gunzipSync(recoveredStored)) : recoveredStored, path: recoveryPath };
   }
 }
 
@@ -253,7 +289,11 @@ async function loadJob(directory: string): Promise<CaptureQueueJob> {
     if (await digestHex(bytes) !== evidence.sha256) throw new Error(`queued evidence hash mismatch for ${manifest.id}/${evidence.file}`);
     evidencePaths.push({ ...evidence, path: evidencePath });
   }
-  return { directory, artifactPath: storedArtifact.path, evidencePaths, manifest, artifact };
+  return { directory, artifactPath: storedArtifact.path, artifactBody: artifactBytes, evidencePaths, manifest, artifact };
+}
+
+export async function readCaptureQueueEvidence(job: CaptureQueueJob, evidence: CaptureQueueJob["evidencePaths"][number]): Promise<Uint8Array> {
+  return (await readStoredBytes(job.directory, job.manifest, evidence.file)).bytes;
 }
 
 export function defaultCaptureQueueRoot(environment: NodeJS.ProcessEnv = process.env): string {
@@ -322,15 +362,13 @@ export async function enqueueCapture(
   const temporary = path.join(root, `.tmp-${id}-${crypto.randomUUID()}`);
   await mkdir(temporary);
   try {
-    const storedArtifact = "artifact.json";
-    await copyFile(artifactPath, path.join(temporary, storedArtifact));
+    const storedArtifact = await writeQueuedObject(temporary, "artifact.json", artifactBytes, true);
     const evidence: QueuedEvidence[] = [];
     for (let index = 0; index < evidenceInputs.length; index += 1) {
       const input = path.resolve(evidenceInputs[index]!);
       const bytes = new Uint8Array(await readFile(input));
-      const stored = `evidence-${String(index + 1).padStart(3, "0")}${safeExtension(input)}`;
-      await copyFile(input, path.join(temporary, stored));
-      evidence.push({ file: stored, sha256: await digestHex(bytes), kind: evidenceKind(input), contentType: contentType(input) });
+      const stored = await writeQueuedObject(temporary, `evidence-${String(index + 1).padStart(3, "0")}${safeExtension(input)}`, bytes, !IMAGE_EXTENSIONS.has(path.extname(input).toLowerCase()));
+      evidence.push({ ...stored, sha256: await digestHex(bytes), kind: evidenceKind(input), contentType: contentType(input) });
     }
     if (session.version === 2 && session.productEvidence) {
       const edgesBySnapshot = new Map<string, typeof session.productEvidence.discoveryEdges>();
@@ -341,26 +379,28 @@ export async function enqueueCapture(
       }
       for (let offset = 0, shard = 0; offset < session.productEvidence.productSnapshots.length; offset += 250, shard += 1) {
         const productSnapshots = session.productEvidence.productSnapshots.slice(offset, offset + 250);
-        const payload = {
-          version: 1, kind: "browser-product-evidence-shard", sessionId: session.sessionId,
-          productEvidenceContentHash: session.productEvidence.contentHash, shard,
-          productSnapshots, discoveryEdges: productSnapshots.flatMap((snapshot) => edgesBySnapshot.get(snapshot.snapshotId) ?? []),
-          verificationReads: session.productEvidence.verificationReads.filter((read) => productSnapshots.some((snapshot) => snapshot.snapshotId === read.snapshotId)),
-        };
-        const bytes = new TextEncoder().encode(stableJson(payload));
-        const stored = `product-shard-${String(shard + 1).padStart(4, "0")}.json`;
-        await writeFile(path.join(temporary, stored), bytes);
-        evidence.push({ file: stored, sha256: await digestHex(bytes), kind: "manifest", contentType: "application/json" });
+        const snapshotIds = new Set(productSnapshots.map((snapshot) => snapshot.snapshotId));
+        const records = [
+          { type: "shard-header", version: 1, kind: "browser-product-evidence-shard", sessionId: session.sessionId, productEvidenceContentHash: session.productEvidence.contentHash, shard },
+          ...productSnapshots.map((snapshot) => ({ type: "product-snapshot", snapshot })),
+          ...productSnapshots.flatMap((snapshot) => (edgesBySnapshot.get(snapshot.snapshotId) ?? []).map((edge) => ({ type: "discovery-edge", edge }))),
+          ...session.productEvidence.verificationReads.filter((read) => snapshotIds.has(read.snapshotId)).map((verificationRead) => ({ type: "verification-read", verificationRead })),
+        ];
+        const bytes = new TextEncoder().encode(`${records.map((record) => stableJson(record)).join("\n")}\n`);
+        const stored = await writeQueuedObject(temporary, `product-shard-${String(shard + 1).padStart(4, "0")}.ndjson`, bytes, true);
+        evidence.push({ ...stored, sha256: await digestHex(bytes), kind: "manifest", contentType: "application/x-ndjson" });
       }
     }
     const instant = nowIso(now);
     const manifest: CaptureQueueManifest = {
-      version: 2,
+      version: 3,
       id,
       sourceId: artifact.sourceId,
       idempotencyKey: artifact.idempotencyKey,
-      artifactFile: storedArtifact,
+      artifactFile: storedArtifact.file,
       artifactSha256,
+      artifactByteLength: storedArtifact.byteLength,
+      ...(storedArtifact.storedEncoding ? { artifactStoredEncoding: storedArtifact.storedEncoding } : {}),
       evidence,
       enqueuedAt: instant,
       status: "pending",
@@ -378,6 +418,7 @@ export async function enqueueCapture(
       const existing = await loadJob(directory);
       return { id, directory, idempotent: true, manifest: existing.manifest };
     }
+    await persistManifest(directory, manifest);
     return { id, directory, idempotent: false, manifest };
   } catch (error) {
     await rm(temporary, { recursive: true, force: true });
@@ -395,10 +436,7 @@ export async function drainCaptureQueue(
   options: { now?: Date; maxJobs?: number } = {},
 ): Promise<{ ok: boolean; processed: number; completed: number; failed: number; skipped: number; results: Array<Record<string, unknown>> }> {
   await mkdir(root, { recursive: true });
-  const entries = (await readdir(root, { withFileTypes: true }))
-    .filter((entry) => entry.isDirectory() && entry.name.startsWith("capture_"))
-    .map((entry) => path.join(root, entry.name))
-    .sort();
+  const entries = await queueDirectories(root);
   const now = options.now ?? new Date();
   const results: Array<Record<string, unknown>> = [];
   let processed = 0;
@@ -412,15 +450,10 @@ export async function drainCaptureQueue(
       skipped += 1;
       continue;
     }
-    const lease = path.join(directory, ".lease");
-    try {
-      await mkdir(lease);
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code === "EEXIST") {
-        skipped += 1;
-        continue;
-      }
-      throw error;
+    const leaseOwner = `queue-${process.pid}-${crypto.randomUUID()}`;
+    if (!acquireQueueJournalLease(manifest.id, leaseOwner, now, 15 * 60_000, path.join(root, "capture-journal.sqlite"))) {
+      skipped += 1;
+      continue;
     }
     processed += 1;
     try {
@@ -439,7 +472,7 @@ export async function drainCaptureQueue(
           receipt,
         };
         delete updated.lastError;
-        await atomicJson(path.join(directory, "manifest.json"), updated);
+        await persistManifest(directory, updated);
         await atomicJson(path.join(directory, "receipt.json"), receipt);
         completed += 1;
         results.push({ id: updated.id, sourceId: updated.sourceId, status: "completed", attempts, receipt });
@@ -454,12 +487,12 @@ export async function drainCaptureQueue(
           lastError: message.slice(0, 10_000),
           nextAttemptAt: permanent ? attemptedAt : new Date(now.getTime() + retryDelayMs(attempts)).toISOString(),
         };
-        await atomicJson(path.join(directory, "manifest.json"), updated);
+        await persistManifest(directory, updated);
         failed += 1;
         results.push({ id: updated.id, sourceId: updated.sourceId, status: updated.status, attempts, nextAttemptAt: updated.nextAttemptAt, error: updated.lastError });
       }
     } finally {
-      await rm(lease, { recursive: true, force: true });
+      releaseQueueJournalLease(manifest.id, leaseOwner, path.join(root, "capture-journal.sqlite"));
     }
   }
   return { ok: failed === 0, processed, completed, failed, skipped, results };
@@ -474,8 +507,8 @@ export async function markCaptureEvidenceUploaded(
   const uploadedEvidence = [...(current.uploadedEvidence ?? [])];
   if (!uploadedEvidence.some((entry) => entry.sha256 === upload.sha256)) {
     uploadedEvidence.push({ ...upload, uploadedAt: uploadedAt.toISOString() });
-    await atomicJson(path.join(job.directory, "manifest.json"), { ...current, version: 2, uploadedEvidence });
-    job.manifest.version = 2;
+    await persistManifest(job.directory, { ...current, version: Math.max(2, current.version) as 2 | 3, uploadedEvidence });
+    job.manifest.version = Math.max(2, current.version) as 2 | 3;
     job.manifest.uploadedEvidence = uploadedEvidence;
   }
 }
@@ -491,9 +524,7 @@ export async function reconcileCaptureQueueRemote(
   let inflight = 0;
   let rejected = 0;
   let errors = 0;
-  for (const entry of await readdir(root, { withFileTypes: true })) {
-    if (!entry.isDirectory() || !entry.name.startsWith("capture_")) continue;
-    const directory = path.join(root, entry.name);
+  for (const directory of await queueDirectories(root)) {
     const manifest = await readManifest(directory);
     if (manifest.status !== "completed" || !manifest.receipt || typeof manifest.receipt.batchId !== "string") continue;
     checked += 1;
@@ -505,7 +536,7 @@ export async function reconcileCaptureQueueRemote(
       inflight += 1;
       const message = error instanceof Error ? error.message : String(error);
       const updated: CaptureQueueManifest = { ...manifest, receipt: { ...manifest.receipt, remoteError: message.slice(0, 2000), remoteCheckedAt: now.toISOString() } };
-      await atomicJson(path.join(directory, "manifest.json"), updated);
+      await persistManifest(directory, updated);
       await atomicJson(path.join(directory, "receipt.json"), updated.receipt);
       continue;
     }
@@ -526,7 +557,7 @@ export async function reconcileCaptureQueueRemote(
     } else {
       inflight += 1;
     }
-    await atomicJson(path.join(directory, "manifest.json"), updated);
+    await persistManifest(directory, updated);
     await atomicJson(path.join(directory, "receipt.json"), updated.receipt);
   }
   return { checked, ready, inflight, rejected, errors };
@@ -541,9 +572,7 @@ export async function compactPromotedCaptureQueue(
   let compacted = 0;
   let originalBytes = 0;
   let compressedBytes = 0;
-  for (const entry of await readdir(root, { withFileTypes: true })) {
-    if (!entry.isDirectory() || !entry.name.startsWith("capture_")) continue;
-    const directory = path.join(root, entry.name);
+  for (const directory of await queueDirectories(root)) {
     const manifest = await readManifest(directory);
     if (manifest.compacted || manifest.status !== "completed") continue;
     const remote = manifest.receipt?.remote as Record<string, unknown> | undefined;
@@ -567,8 +596,8 @@ export async function compactPromotedCaptureQueue(
     // Publish the complete recovery map before removing originals. A crash before
     // this point leaves only harmless duplicate compressed files; a crash after it
     // remains readable through readStoredBytes.
-    const updated: CaptureQueueManifest = { ...manifest, version: 2, compacted: { at: now.toISOString(), recoveryFiles } };
-    await atomicJson(path.join(directory, "manifest.json"), updated);
+    const updated: CaptureQueueManifest = { ...manifest, version: Math.max(2, manifest.version) as 2 | 3, compacted: { at: now.toISOString(), recoveryFiles } };
+    await persistManifest(directory, updated);
     for (const file of recoveryFiles) await rm(path.join(directory, file.originalFile), { force: true });
     originalBytes += recoveryFiles.reduce((total, file) => total + file.originalBytes, 0);
     compressedBytes += recoveryFiles.reduce((total, file) => total + file.compressedBytes, 0);
@@ -592,10 +621,7 @@ export async function captureQueueStatus(
   await mkdir(root, { recursive: true });
   const now = options.now ?? new Date();
   const manifests: CaptureQueueManifest[] = [];
-  for (const entry of await readdir(root, { withFileTypes: true })) {
-    if (!entry.isDirectory() || !entry.name.startsWith("capture_")) continue;
-    manifests.push(await readManifest(path.join(root, entry.name)));
-  }
+  for (const directory of await queueDirectories(root)) manifests.push(await readManifest(directory));
   const active = manifests.filter((manifest) => manifest.status !== "completed");
   const ages = active.map((manifest) => Math.max(0, (now.getTime() - Date.parse(manifest.enqueuedAt)) / 60_000));
   const maxPendingMinutes = options.maxPendingMinutes ?? 180;
@@ -629,9 +655,8 @@ export async function browserCaptureCycleStatus(root: string, now = new Date()):
   const weekStart = shiftDateKey(current.dateKey, -((current.weekday - 3 + 7) % 7));
   const previousWeekStart = shiftDateKey(weekStart, -7);
   const jobs: CaptureQueueJob[] = [];
-  for (const entry of await readdir(root, { withFileTypes: true })) {
-    if (!entry.isDirectory() || !entry.name.startsWith("capture_")) continue;
-    try { jobs.push(await loadJob(path.join(root, entry.name))); } catch { /* queue health reports corrupt jobs separately */ }
+  for (const directory of await queueDirectories(root)) {
+    try { jobs.push(await loadJob(directory)); } catch { /* queue health reports corrupt jobs separately */ }
   }
   const latestBySource = new Map<string, CaptureQueueJob>();
   for (const job of jobs) {
@@ -665,9 +690,8 @@ export async function verifyCaptureQueueFilesystem(root: string): Promise<{ ok: 
   await mkdir(root, { recursive: true });
   let jobs = 0;
   let bytes = 0;
-  for (const entry of await readdir(root, { withFileTypes: true })) {
-    if (!entry.isDirectory() || !entry.name.startsWith("capture_")) continue;
-    const job = await loadJob(path.join(root, entry.name));
+  for (const directory of await queueDirectories(root)) {
+    const job = await loadJob(directory);
     jobs += 1;
     bytes += (await stat(job.artifactPath)).size;
     for (const evidence of job.evidencePaths) bytes += (await stat(evidence.path)).size;
