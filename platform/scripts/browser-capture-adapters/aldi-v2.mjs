@@ -4,6 +4,8 @@ import path from "node:path";
 const LOCATION = "ALDI - OLA 42 - Omaha";
 const PRICE_MODE = "In-Store";
 const TARGET_RESULTS = 25;
+const MAX_TERMS_PER_CHUNK = 3;
+const DEFAULT_INTER_TERM_DELAY_MS = 5_000;
 
 function normalize(value) {
   return String(value ?? "").trim().toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
@@ -142,8 +144,8 @@ async function captureCanary(tab, screenshotSha256) {
   return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: LOCATION, priceMode: PRICE_MODE, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
 }
 
-export async function captureAldiChunk({ tab, terms, file, screenshotSha256, interTermDelayMs = 1_500 }) {
-  if (!Array.isArray(terms) || terms.length < 1 || terms.length > 20) throw new Error("ALDI chunk requires 1-20 terms");
+export async function captureAldiChunk({ tab, terms, file, screenshotSha256, interTermDelayMs = DEFAULT_INTER_TERM_DELAY_MS }) {
+  if (!Array.isArray(terms) || terms.length < 1 || terms.length > MAX_TERMS_PER_CHUNK) throw new Error(`ALDI chunk requires 1-${MAX_TERMS_PER_CHUNK} terms`);
   if (!Number.isInteger(interTermDelayMs) || interTermDelayMs < 0 || interTermDelayMs > 30_000) throw new Error("ALDI inter-term delay must be 0-30000ms");
   const canary = await captureCanary(tab, screenshotSha256);
   const results = [];

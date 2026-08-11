@@ -93,6 +93,12 @@ and identity from the product URL, retain card size and the explicit category/ai
 `id|term|name|prices|unit|size|href|taxonomy_path`. Run `grocery/build-aldi-regular.ps1`, followed by the existing carry-forward
 and degraded-size repair commands only when the builder reports a complete, current pull.
 
+ALDI is a deliberately low-rate lane: use `scripts/browser-capture-adapters/aldi-v2.mjs`, capture no more than three
+terms per chunk, leave at least five seconds between term navigations, and leave at least two minutes between chunks.
+Run other stores during that cooldown instead of increasing ALDI concurrency. A challenge/block ends the ALDI lane
+immediately; do not retry it in the same cycle or attempt a bypass. Resume only in a later operator cycle after a
+cooldown and a fresh Omaha/In-Store canary.
+
 ### Fareway
 
 Verify the stable Omaha address `17070 Audrey Street, Omaha, NE 68136` from the page state and independently
@@ -112,7 +118,7 @@ pnpm tc capture session worklist <pull-order.txt> <rescue-terms.txt-or-> <workli
 pnpm tc capture session init <aldi|fareway|sams|walmart> <worklist.txt> <session-directory> <started-at-iso>
 ```
 
-For every 10-20-term discovery chunk, write JSON containing `version: 2`, `phase: discovery`, `store`, one current
+For every 10-20-term discovery chunk (except ALDI's three-term rate-limited chunks), write JSON containing `version: 2`, `phase: discovery`, `store`, one current
 location/mode `canary`, exact `terms` with `retrieval`, and projected `rows` with internal `_capture` truth.
 Append with `pnpm tc capture session append <session-directory> <chunk.json>`.
 Use `pnpm tc capture session status <session-directory>` to resume. A later successful retry replaces the earlier
