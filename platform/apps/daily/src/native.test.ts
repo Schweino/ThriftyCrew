@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import type { NativeEngineSnapshot } from "@thriftycrew/engine";
-import { buildNativeRelease } from "./native";
+import { buildNativeRelease, loadNativeReleaseCatalog, nativeReleaseIdentity } from "./native";
 
 const temporaryRoots: string[] = [];
 afterEach(async () => Promise.all(temporaryRoots.splice(0).map((root) => rm(root, { recursive: true, force: true }))));
@@ -47,6 +47,8 @@ describe("native release construction", () => {
       currentCells: [],
     };
     const artifact = await buildNativeRelease(root, snapshot);
+    const identity = await nativeReleaseIdentity(snapshot, await loadNativeReleaseCatalog(root));
+    expect(identity).toMatchObject({ releaseId: artifact.releaseId, inputHash: artifact.inputHash, inputBatchIds: artifact.inputBatchIds });
     expect(artifact.recipeCosts).toEqual(expect.arrayContaining([
       expect.objectContaining({ recipeSlug: "complete", status: "complete", batchCostMinor: 100, servingCostMinor: 50, detail: expect.objectContaining({ utilizedBatchCostMinor: 100, splitStoreCheckoutCostMinor: 200, bestSingleStoreCheckoutCostMinor: 200 }) }),
       expect.objectContaining({ recipeSlug: "incomplete", status: "incomplete", missingIngredients: ["Mystery"] }),

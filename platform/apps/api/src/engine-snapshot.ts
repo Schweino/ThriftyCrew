@@ -15,6 +15,7 @@ function modePredicate(mode: EngineSourceMode): string {
 }
 
 export async function readEngineSnapshotIdentity(env: WorkerEnv, mode: EngineSourceMode) {
+  const observedAt = new Date().toISOString();
   const configuration = await env.DB.prepare("SELECT id, content_hash FROM configuration_versions WHERE active = 1").first<{ id: string; content_hash: string }>();
   if (!configuration) throw new Error("No active engine configuration");
   const currentRelease = await env.DB.prepare("SELECT release_id FROM current_releases WHERE market_id = 'omaha'").first<{ release_id: string }>();
@@ -32,6 +33,7 @@ export async function readEngineSnapshotIdentity(env: WorkerEnv, mode: EngineSou
   const inputBatchIds = batches.results.map((batch) => batch.id).sort();
   const inputHash = await digestHex(stableJson({ configurationId: configuration.id, configurationHash: configuration.content_hash, mode, inputBatchIds }));
   return {
+    observedAt,
     mode,
     configurationId: configuration.id,
     currentReleaseId: currentRelease.release_id,
@@ -68,12 +70,17 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
             pv.taxonomy_path, p.external_key,
             o.basis_options_json,
             CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days,
-            EXISTS (
+            (EXISTS (
               SELECT 1 FROM known_wrong_rules k
                WHERE k.configuration_id = ?1 AND k.commodity_id = m.commodity_id
                  AND (k.store_location_id IS NULL OR k.store_location_id = p.store_location_id)
-                 AND (k.external_product_key = p.external_key OR k.normalized_name = pv.normalized_name)
-            ) AS known_wrong
+                 AND k.external_product_key = p.external_key
+            ) OR EXISTS (
+              SELECT 1 FROM known_wrong_rules k
+               WHERE k.configuration_id = ?1 AND k.commodity_id = m.commodity_id
+                 AND (k.store_location_id IS NULL OR k.store_location_id = p.store_location_id)
+                 AND k.normalized_name = pv.normalized_name
+            )) AS known_wrong
        FROM observations o
        JOIN capture_batches b ON b.id = o.batch_id
        JOIN capture_sources s ON s.id = b.source_id

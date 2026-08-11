@@ -68,6 +68,73 @@ export interface NativeReleaseArtifact {
   audit: Record<string, unknown>;
 }
 
+interface NativeReleaseCatalog {
+  ingredientDefinitions: IngredientDefinition[];
+  recipes: RecipeSpecification[];
+  recipeRuleDocument: { global_exclude?: string[]; commodities: RecipeCommodityRule[] };
+  recipeExtensions: { commodities: RecipeCommodityRule[] };
+  recipeAliases: Record<string, string>;
+  knownWrong: KnownWrongDocument;
+  recipeCatalogHash: string;
+  ingredientCatalogHash: string;
+  recipePricingConfigurationHash: string;
+}
+
+export async function loadNativeReleaseCatalog(incomeRoot: string): Promise<NativeReleaseCatalog> {
+  const recipeDirectory = path.join(incomeRoot, "meal-prep", "db", "recipes");
+  const configRoot = path.join(incomeRoot, "platform", "config");
+  const [ingredientBytes, recipeNames, recipeRuleBytes, recipeExtensionBytes, aliasBytes, knownWrongBytes] = await Promise.all([
+    readFile(path.join(incomeRoot, "meal-prep", "db", "ingredients.json"), "utf8"),
+    readdir(recipeDirectory),
+    readFile(path.join(configRoot, "recipe-commodities.json"), "utf8"),
+    readFile(path.join(configRoot, "recipe-commodity-extensions.json"), "utf8"),
+    readFile(path.join(configRoot, "recipe-commodity-aliases.json"), "utf8"),
+    readFile(path.join(configRoot, "known-wrong.json"), "utf8"),
+  ]);
+  const ingredientDefinitions = JSON.parse(ingredientBytes.replace(/^\uFEFF/, "")) as IngredientDefinition[];
+  const recipes = (await Promise.all(recipeNames.filter((name) => name.endsWith(".json")).sort().map(async (name) =>
+    JSON.parse((await readFile(path.join(recipeDirectory, name), "utf8")).replace(/^\uFEFF/, "")) as RecipeSpecification,
+  ))).sort((left, right) => left.slug.localeCompare(right.slug));
+  const recipeRuleDocument = JSON.parse(recipeRuleBytes.replace(/^\uFEFF/, "")) as NativeReleaseCatalog["recipeRuleDocument"];
+  const recipeExtensions = JSON.parse(recipeExtensionBytes.replace(/^\uFEFF/, "")) as NativeReleaseCatalog["recipeExtensions"];
+  const recipeAliases = JSON.parse(aliasBytes.replace(/^\uFEFF/, "")) as Record<string, string>;
+  const knownWrong = JSON.parse(knownWrongBytes.replace(/^\uFEFF/, "")) as KnownWrongDocument;
+  return {
+    ingredientDefinitions,
+    recipes,
+    recipeRuleDocument,
+    recipeExtensions,
+    recipeAliases,
+    knownWrong,
+    recipeCatalogHash: await digestHex(stableJson(recipes)),
+    ingredientCatalogHash: await digestHex(stableJson(ingredientDefinitions)),
+    recipePricingConfigurationHash: await digestHex(stableJson({ recipeRuleDocument, recipeExtensions, recipeAliases })),
+  };
+}
+
+export async function nativeReleaseIdentity(
+  snapshot: Pick<NativeEngineSnapshot, "mode" | "observedAt" | "configurationId" | "inputHash" | "inputBatchIds">,
+  catalog: NativeReleaseCatalog,
+) {
+  const generatedAt = snapshot.observedAt;
+  const weekOf = generatedAt.slice(0, 10);
+  const inputBatchIds = [...snapshot.inputBatchIds].sort();
+  const inputManifest = {
+    kind: "native-v3-release",
+    engineVersion: "native-v3.2.1-accuracy",
+    marketId: "omaha",
+    mode: "direct",
+    releaseDate: weekOf,
+    configurationId: snapshot.configurationId,
+    engineSnapshotHash: snapshot.inputHash,
+    recipeCatalogHash: catalog.recipeCatalogHash,
+    ingredientCatalogHash: catalog.ingredientCatalogHash,
+    recipePricingConfigurationHash: catalog.recipePricingConfigurationHash,
+  };
+  const inputHash = await digestHex(stableJson({ inputManifest, inputBatchIds }));
+  return { generatedAt, weekOf, inputBatchIds, inputManifest, inputHash, releaseId: `rel_native_${inputHash.slice(0, 20)}` };
+}
+
 function key(value: string): string {
   return value.trim().toLocaleLowerCase("en-US").replaceAll(/\s+/g, " ");
 }
@@ -105,51 +172,16 @@ function publicCell(cell: NativeReleaseCell): NativeReleaseArtifact["cells"][num
   return { commodityId: cell.commodityId, storeLocationId: cell.storeLocationId, status: "missing", isCrown: false, reason: cell.reason };
 }
 
-export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEngineSnapshot): Promise<NativeReleaseArtifact> {
+export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEngineSnapshot, suppliedCatalog?: NativeReleaseCatalog): Promise<NativeReleaseArtifact> {
   if (snapshot.mode !== "direct") throw new Error("native publication requires a direct-only immutable engine snapshot");
-  const recipeDirectory = path.join(incomeRoot, "meal-prep", "db", "recipes");
-  const configRoot = path.join(incomeRoot, "platform", "config");
-  const [ingredientBytes, recipeNames, recipeRuleBytes, recipeExtensionBytes, aliasBytes, knownWrongBytes] = await Promise.all([
-    readFile(path.join(incomeRoot, "meal-prep", "db", "ingredients.json"), "utf8"),
-    readdir(recipeDirectory),
-    readFile(path.join(configRoot, "recipe-commodities.json"), "utf8"),
-    readFile(path.join(configRoot, "recipe-commodity-extensions.json"), "utf8"),
-    readFile(path.join(configRoot, "recipe-commodity-aliases.json"), "utf8"),
-    readFile(path.join(configRoot, "known-wrong.json"), "utf8"),
-  ]);
-  const ingredientDefinitions = JSON.parse(ingredientBytes.replace(/^\uFEFF/, "")) as IngredientDefinition[];
-  const recipes = (await Promise.all(recipeNames.filter((name) => name.endsWith(".json")).sort().map(async (name) =>
-    JSON.parse((await readFile(path.join(recipeDirectory, name), "utf8")).replace(/^\uFEFF/, "")) as RecipeSpecification,
-  ))).sort((left, right) => left.slug.localeCompare(right.slug));
-  const recipeRuleDocument = JSON.parse(recipeRuleBytes.replace(/^\uFEFF/, "")) as { global_exclude?: string[]; commodities: RecipeCommodityRule[] };
-  const recipeExtensions = JSON.parse(recipeExtensionBytes.replace(/^\uFEFF/, "")) as { commodities: RecipeCommodityRule[] };
-  const recipeAliases = JSON.parse(aliasBytes.replace(/^\uFEFF/, "")) as Record<string, string>;
-  const knownWrong = JSON.parse(knownWrongBytes.replace(/^\uFEFF/, "")) as KnownWrongDocument;
+  const catalog = suppliedCatalog ?? await loadNativeReleaseCatalog(incomeRoot);
+  const { ingredientDefinitions, recipes, recipeRuleDocument, recipeExtensions, recipeAliases, knownWrong } = catalog;
   // Narrow recipe extensions precede broad legacy rules and carry their own
   // explicit exclusions, so they do not inherit the legacy global filter.
   const extensionIds = new Set(recipeExtensions.commodities.map((rule) => rule.id));
   const recipeRules = [...recipeExtensions.commodities, ...recipeRuleDocument.commodities];
   const recipeRuleIds = new Set(recipeRules.map((rule) => rule.id));
-  const recipeCatalogHash = await digestHex(stableJson(recipes));
-  const ingredientCatalogHash = await digestHex(stableJson(ingredientDefinitions));
-  const recipePricingConfigurationHash = await digestHex(stableJson({ recipeRuleDocument, recipeExtensions, recipeAliases }));
-  const generatedAt = snapshot.observedAt;
-  const weekOf = generatedAt.slice(0, 10);
-  const inputBatchIds = [...snapshot.inputBatchIds].sort();
-  const inputManifest = {
-    kind: "native-v3-release",
-    engineVersion: "native-v3.2.1-accuracy",
-    marketId: "omaha",
-    mode: "direct",
-    releaseDate: weekOf,
-    configurationId: snapshot.configurationId,
-    engineSnapshotHash: snapshot.inputHash,
-    recipeCatalogHash,
-    ingredientCatalogHash,
-    recipePricingConfigurationHash,
-  };
-  const inputHash = await digestHex(stableJson({ inputManifest, inputBatchIds }));
-  const releaseId = `rel_native_${inputHash.slice(0, 20)}`;
+  const { generatedAt, weekOf, inputBatchIds, inputManifest, inputHash, releaseId } = await nativeReleaseIdentity(snapshot, catalog);
 
   const nativeCells = buildNativeCells(snapshot);
   const cells = nativeCells.map(publicCell);

@@ -59,6 +59,14 @@ implementation.
   pagination accounting, deterministic anomaly/risk selection, and an independent targeted second pass.
   Local queue admission and the Worker both reproduce the R2-bound report; unresolved checks fail the
   `batch-browser-accuracy` guard beginning with the 2026-08-12 strict cycle.
+- Query-efficiency hardening: indexed known-wrong lookups split by stable identity channel, batch/product and
+  promoted-source indexes, keyset configuration recovery, and planner optimization after migration.
+- Exact-input work reuse: identical match runs return before writes, unchanged decisions do not update, and
+  an already-published native release is detected from its cheap immutable identity before loading candidates.
+- Public immutable payloads use explicit edge caching, strong content-hash ETags, conditional 304s and
+  release headers. Private member, internal and status routes remain `no-store`.
+- D1 insights are evaluated daily against Git-authored budgets; findings reconcile through one durable incident.
+  Browser queue drains are bounded so one PC task cannot consume an unbounded backlog window.
 
 ## Phase 2 judgment execution plane
 

@@ -1,13 +1,18 @@
 import { digestHex, stableJson } from "@thriftycrew/domain";
 import type { WorkerEnv } from "./env";
 
-async function pagedRows(env: WorkerEnv, sql: string, configurationId: string): Promise<Array<Record<string, unknown>>> {
+async function keysetRows(env: WorkerEnv, sql: string, configurationId: string): Promise<Array<Record<string, unknown>>> {
   const rows: Array<Record<string, unknown>> = [];
   const pageSize = 5_000;
-  for (let offset = 0; ; offset += pageSize) {
-    const page = await env.DB.prepare(`${sql} LIMIT ?2 OFFSET ?3`).bind(configurationId, pageSize, offset).all<Record<string, unknown>>();
+  let cursor = "";
+  for (;;) {
+    const page = await env.DB.prepare(`SELECT * FROM (${sql}) page WHERE page.id > ?2 ORDER BY page.id LIMIT ?3`)
+      .bind(configurationId, cursor, pageSize).all<Record<string, unknown>>();
     rows.push(...page.results);
     if (page.results.length < pageSize) return rows;
+    const next = page.results.at(-1)?.id;
+    if (typeof next !== "string" || next <= cursor) throw new Error("configuration archive keyset did not advance");
+    cursor = next;
   }
 }
 
@@ -27,17 +32,19 @@ export async function archiveConfiguration(env: WorkerEnv, configurationId: stri
     "SELECT id, source_commit, content_hash, expected_categories, expected_commodities, expected_rules, expected_known_wrong FROM configuration_versions WHERE id = ?1",
   ).bind(configurationId).first<Record<string, unknown>>();
   if (!configuration) throw new Error("configuration archive source does not exist");
+  const normalized = await env.DB.prepare(
+    "SELECT COUNT(*) AS rows FROM configuration_match_rules WHERE configuration_id = ?1",
+  ).bind(configurationId).first<{ rows: number }>();
+  const ruleSql = (normalized?.rows ?? 0) > 0
+    ? `SELECT definition.id, definition.commodity_id, definition.kind, definition.pattern, definition.reason, definition.priority
+         FROM configuration_match_rules member JOIN match_rule_definitions definition ON definition.id = member.definition_id
+        WHERE member.configuration_id = ?1`
+    : "SELECT id, commodity_id, kind, pattern, reason, priority FROM match_rules WHERE configuration_id = ?1";
   const [categories, commodities, rules, knownWrong] = await Promise.all([
-    pagedRows(env, "SELECT category.id, category.label, category.sort_order FROM configuration_categories member JOIN categories category ON category.id = member.category_id WHERE member.configuration_id = ?1 ORDER BY category.id", configurationId),
-    pagedRows(env, "SELECT id, label, basis_unit, category_id, active, band_min_micros, band_max_micros FROM commodities WHERE configuration_id = ?1 ORDER BY id", configurationId),
-    pagedRows(env, `SELECT * FROM (
-      SELECT id, commodity_id, kind, pattern, reason, priority FROM match_rules WHERE configuration_id = ?1
-      UNION ALL
-      SELECT definition.id, definition.commodity_id, definition.kind, definition.pattern, definition.reason, definition.priority
-        FROM configuration_match_rules member JOIN match_rule_definitions definition ON definition.id = member.definition_id
-       WHERE member.configuration_id = ?1
-    ) ORDER BY id`, configurationId),
-    pagedRows(env, "SELECT id, commodity_id, store_location_id, external_product_key, normalized_name, ruling, evidence FROM known_wrong_rules WHERE configuration_id = ?1 ORDER BY id", configurationId),
+    keysetRows(env, "SELECT category.id, category.label, category.sort_order FROM configuration_categories member JOIN categories category ON category.id = member.category_id WHERE member.configuration_id = ?1", configurationId),
+    keysetRows(env, "SELECT id, label, basis_unit, category_id, active, band_min_micros, band_max_micros FROM commodities WHERE configuration_id = ?1", configurationId),
+    keysetRows(env, ruleSql, configurationId),
+    keysetRows(env, "SELECT id, commodity_id, store_location_id, external_product_key, normalized_name, ruling, evidence FROM known_wrong_rules WHERE configuration_id = ?1", configurationId),
   ]);
   const body = new TextEncoder().encode(stableJson({ schema: "tc-configuration-archive-v1", configuration, categories, commodities, rules, knownWrong }));
   const sha256 = await digestHex(body);

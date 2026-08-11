@@ -80,6 +80,7 @@ import { handleGithubActionsWebhook } from "./github-recovery";
 import { acquireOperationLease, activeDeploymentBlockers, releaseOperationLease, renewOperationLease } from "./orchestration";
 import { archiveConfiguration, compactConfiguration } from "./configuration-archive";
 import { transitionReadiness } from "./transitions";
+import { cachedPublicJson, PublicJsonError, releaseEtag } from "./public-cache";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 export { D1RestoreDrillWorkflow } from "./restore-workflow";
@@ -188,6 +189,7 @@ app.use("/internal/configurations", requireIdentityRole(["engine", "operator"]))
 app.use("/internal/configurations/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/match-decisions", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/match-runs", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/match-runs/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/job-runs", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/job-runs/*", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/operational-alerts", requireIdentityRole(["capture", "engine", "operator"]));
@@ -398,24 +400,25 @@ app.post("/api/v2/events", zValidator("json", telemetryEventSchema), (context) =
 app.post("/v2/events", (context) => app.fetch(new Request(new URL("/api/v2/events", context.req.url), context.req.raw), context.env));
 
 app.get("/api/v2/board", async (context) => {
-  const row = await context.env.DB.prepare(
-    `SELECT r.id AS release_id, r.published_at, p.payload_json, p.object_key
+  return cachedPublicJson(context.req.raw, async () => {
+    const row = await context.env.DB.prepare(
+    `SELECT r.id AS release_id, r.published_at, p.payload_json, p.object_key, p.content_hash
        FROM current_releases c
        JOIN releases r ON r.id = c.release_id
        JOIN release_payloads p ON p.release_id = r.id AND p.kind = 'board'
       WHERE c.market_id = 'omaha'`,
-  ).first<{ release_id: string; published_at: string; payload_json: string; object_key: string | null }>();
-  if (!row) return context.json({ ok: false, error: "No published Omaha release" }, 404);
-  let board: unknown;
-  if (row.object_key) {
-    const object = await context.env.EVIDENCE.get(row.object_key);
-    if (!object) return context.json({ ok: false, error: "Published board payload is unavailable" }, 500);
-    board = await object.json();
-  } else {
-    board = JSON.parse(row.payload_json);
-  }
-  context.header("cache-control", "public, max-age=60, stale-while-revalidate=300");
-  return context.json({ ok: true, releaseId: row.release_id, publishedAt: row.published_at, board });
+    ).first<{ release_id: string; published_at: string; payload_json: string; object_key: string | null; content_hash: string }>();
+    if (!row) throw new PublicJsonError("No published Omaha release", 404);
+    const board = row.object_key
+      ? await context.env.EVIDENCE.get(row.object_key).then((object) => object?.json())
+      : JSON.parse(row.payload_json);
+    if (board === undefined) throw new PublicJsonError("Published board payload is unavailable", 500);
+    return {
+      body: { ok: true, releaseId: row.release_id, publishedAt: row.published_at, board },
+      etag: releaseEtag(row.content_hash),
+      releaseId: row.release_id,
+    };
+  });
 });
 
 app.get("/v2/board", (context) => context.redirect("/api/v2/board", 307));
@@ -424,18 +427,19 @@ async function currentPayload(env: WorkerEnv, kind: "board" | "feed" | "top5" | 
   releaseId: string;
   publishedAt: string;
   payload: unknown;
+  contentHash: string;
 } | null> {
   const row = await env.DB.prepare(
-    `SELECT r.id AS release_id, r.published_at, p.payload_json, p.object_key
+    `SELECT r.id AS release_id, r.published_at, p.payload_json, p.object_key, p.content_hash
        FROM current_releases c
        JOIN releases r ON r.id = c.release_id
        JOIN release_payloads p ON p.release_id = r.id AND p.kind = ?1
       WHERE c.market_id = 'omaha'`,
-  ).bind(kind).first<{ release_id: string; published_at: string; payload_json: string; object_key: string | null }>();
+  ).bind(kind).first<{ release_id: string; published_at: string; payload_json: string; object_key: string | null; content_hash: string }>();
   if (!row) return null;
   const payload = row.object_key ? await env.EVIDENCE.get(row.object_key).then((object) => object?.json()) : JSON.parse(row.payload_json);
   if (payload === undefined) throw new Error(`Published ${kind} payload is unavailable`);
-  return { releaseId: row.release_id, publishedAt: row.published_at, payload };
+  return { releaseId: row.release_id, publishedAt: row.published_at, payload, contentHash: row.content_hash };
 }
 
 app.get("/api/v2/releases/current", async (context) => {
@@ -450,29 +454,43 @@ app.get("/api/v2/releases/current", async (context) => {
 
 for (const kind of ["feed", "top5", "free_rotation", "recipes"] as const) {
   app.get(`/api/v2/${kind === "free_rotation" ? "free-rotation" : kind}`, async (context) => {
-    const current = await currentPayload(context.env, kind);
-    if (!current) return context.json({ ok: false, error: `No published ${kind} payload` }, 404);
-    context.header("cache-control", "public, max-age=60, stale-while-revalidate=300");
-    return context.json({ ok: true, ...current });
+    return cachedPublicJson(context.req.raw, async () => {
+      const current = await currentPayload(context.env, kind);
+      if (!current) throw new PublicJsonError(`No published ${kind} payload`, 404);
+      const { contentHash, ...publicPayload } = current;
+      return { body: { ok: true, ...publicPayload }, etag: releaseEtag(contentHash), releaseId: current.releaseId };
+    });
   });
 }
 
 app.get("/api/v2/board/:commodity", async (context) => {
-  const current = await currentPayload(context.env, "board");
-  if (!current) return context.json({ ok: false, error: "No published board payload" }, 404);
-  const board = current.payload as { commodities?: Array<{ id?: string }> };
-  const commodity = board.commodities?.find((item) => item.id === context.req.param("commodity"));
-  if (!commodity) return context.json({ ok: false, error: "Commodity not found" }, 404);
-  return context.json({ ok: true, releaseId: current.releaseId, publishedAt: current.publishedAt, commodity });
+  return cachedPublicJson(context.req.raw, async () => {
+    const current = await currentPayload(context.env, "board");
+    if (!current) throw new PublicJsonError("No published board payload", 404);
+    const board = current.payload as { commodities?: Array<{ id?: string }> };
+    const commodity = board.commodities?.find((item) => item.id === context.req.param("commodity"));
+    if (!commodity) throw new PublicJsonError("Commodity not found", 404);
+    return {
+      body: { ok: true, releaseId: current.releaseId, publishedAt: current.publishedAt, commodity },
+      etag: releaseEtag(current.contentHash),
+      releaseId: current.releaseId,
+    };
+  });
 });
 
 app.get("/api/v2/recipes/:slug", async (context) => {
-  const current = await currentPayload(context.env, "recipes");
-  if (!current) return context.json({ ok: false, error: "No published recipe payload" }, 404);
-  const payload = current.payload as { recipes?: Array<{ slug?: string }> };
-  const recipe = payload.recipes?.find((item) => item.slug === context.req.param("slug"));
-  if (!recipe) return context.json({ ok: false, error: "Recipe not found" }, 404);
-  return context.json({ ok: true, releaseId: current.releaseId, publishedAt: current.publishedAt, recipe });
+  return cachedPublicJson(context.req.raw, async () => {
+    const current = await currentPayload(context.env, "recipes");
+    if (!current) throw new PublicJsonError("No published recipe payload", 404);
+    const payload = current.payload as { recipes?: Array<{ slug?: string }> };
+    const recipe = payload.recipes?.find((item) => item.slug === context.req.param("slug"));
+    if (!recipe) throw new PublicJsonError("Recipe not found", 404);
+    return {
+      body: { ok: true, releaseId: current.releaseId, publishedAt: current.publishedAt, recipe },
+      etag: releaseEtag(current.contentHash),
+      releaseId: current.releaseId,
+    };
+  });
 });
 
 app.get("/api/v2/member/recipes/:slug", async (context) => {
@@ -695,13 +713,28 @@ app.put("/internal/match-decisions", zValidator("json", matchDecisionsChunkSchem
          decided_by = excluded.decided_by,
          reason = excluded.reason,
          decided_at = CURRENT_TIMESTAMP,
-         superseded_at = NULL`,
+         superseded_at = NULL
+       WHERE match_decisions.decided_by <> excluded.decided_by
+          OR match_decisions.reason <> excluded.reason
+          OR match_decisions.superseded_at IS NOT NULL`,
     ).bind(decisionId, decision.productId, decision.commodityId, decision.configurationId, decision.decidedBy, decision.reason));
   }
+  let superseded = 0;
+  let decisionWrites = 0;
   for (let offset = 0; offset < statements.length; offset += 90) {
-    await context.env.DB.batch(statements.slice(offset, offset + 90));
+    const results = await context.env.DB.batch(statements.slice(offset, offset + 90));
+    results.forEach((result, index) => {
+      if ((offset + index) % 2 === 0) superseded += result.meta.changes ?? 0;
+      else decisionWrites += result.meta.changes ?? 0;
+    });
   }
-  return context.json({ ok: true, accepted: decisions.length });
+  return context.json({
+    ok: true,
+    accepted: decisions.length,
+    decisionWrites,
+    superseded,
+    unchanged: Math.max(0, decisions.length - decisionWrites),
+  });
 });
 
 app.post("/internal/match-decisions/reconcile", zValidator("json", matchDecisionReconcileSchema), async (context) => {
@@ -808,6 +841,17 @@ app.get("/internal/capture-metrics", async (context) => {
       ORDER BY recorded_at DESC, source_id LIMIT ?1`,
   ).bind(limit).all();
   return context.json({ ok: true, metrics: metrics.results });
+});
+
+app.get("/internal/match-runs/:id", async (context) => {
+  const row = await context.env.DB.prepare(
+    `SELECT id, batch_id, configuration_id, input_hash, status, product_count, matched_count,
+            unmatched_count, collision_count, aisle_rejected_count, detail_json, created_at
+       FROM match_runs WHERE id = ?1`,
+  ).bind(context.req.param("id")).first<Record<string, unknown> & { detail_json: string }>();
+  if (!row) return context.json({ ok: false, found: false, error: "match run not found" }, 404);
+  const { detail_json: detailJson, ...run } = row;
+  return context.json({ ok: true, found: true, run: { ...run, detail: JSON.parse(detailJson) } });
 });
 
 app.post("/internal/match-runs", zValidator("json", matchRunSchema), async (context) => {
@@ -2949,6 +2993,24 @@ app.post("/internal/triage/:id/resolve", zValidator("json", triageResolveSchema)
       WHERE id = ?1`,
   ).bind(context.req.param("id"), body.status, body.planRef ?? null, stableJson(body.resolution)).run();
   return context.json({ ok: true, triageId: context.req.param("id"), status: body.status });
+});
+
+app.get("/internal/releases/:id", async (context) => {
+  const release = await context.env.DB.prepare(
+    "SELECT id, market_id, configuration_id, input_hash, state, validated_at, published_at FROM releases WHERE id = ?1",
+  ).bind(context.req.param("id")).first<Record<string, unknown>>();
+  if (!release) return context.json({ ok: false, found: false, error: "release not found" }, 404);
+  return context.json({ ok: true, found: true, release });
+});
+
+app.get("/internal/engine/snapshot-identity", async (context) => {
+  const requested = context.req.query("mode") ?? "direct";
+  if (!(["legacy", "direct", "all"] as const).includes(requested as EngineSourceMode)) return jsonError("engine mode must be legacy, direct, or all", 422);
+  try {
+    return context.json({ ok: true, ...await readEngineSnapshotIdentity(context.env, requested as EngineSourceMode) });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "engine snapshot identity failed", 422);
+  }
 });
 
 app.post("/internal/backups/checkpoint", async (context) => {

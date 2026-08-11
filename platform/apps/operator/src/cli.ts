@@ -5,7 +5,7 @@ import { deployConfiguration, ingestDirectCapture, MutationClient, publishNative
 import { buildCurrentBridge } from "@thriftycrew/daily/legacy";
 import { buildRegularCapture, type CaptureAttestation } from "@thriftycrew/daily/direct";
 import { evaluateSourceContract, type SourceContract } from "@thriftycrew/daily/source-contracts";
-import { buildNativeRelease } from "@thriftycrew/daily/native";
+import { buildNativeRelease, loadNativeReleaseCatalog, nativeReleaseIdentity } from "@thriftycrew/daily/native";
 import { digestHex, stableJson } from "@thriftycrew/domain";
 import { generateLegacyConfiguration } from "./config";
 import { buildNativeParityReport, compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot } from "@thriftycrew/engine";
@@ -156,14 +156,6 @@ async function matchBatch(client: MutationClient, batchId: string, reusableConte
       reason: `Authored first-match rule precedence${product.taxonomy_path ? `; shelf taxonomy examined: ${aisle.reason}` : "; no shelf taxonomy supplied"}`,
     });
   }
-  for (let offset = 0; offset < decisions.length; offset += 250) {
-    await client.request("/internal/match-decisions", { method: "PUT", json: { decisions: decisions.slice(offset, offset + 250) } });
-  }
-  await client.request("/internal/match-decisions/reconcile", { json: {
-    batchId,
-    configurationId: snapshot.configurationId,
-    retainedProductIds: decisions.map((decision) => decision.productId),
-  } });
   const inputMaterial = {
     batchId,
     sourceId: snapshot.sourceId,
@@ -189,7 +181,38 @@ async function matchBatch(client: MutationClient, batchId: string, reusableConte
       unmatchedExamples: unmatched.slice(0, 100),
       collisionExamples: collisions.slice(0, 100),
       aisleRejectedExamples: aisleRejected.slice(0, 100),
-    },
+    } as Record<string, unknown>,
+  };
+  const existing = await client.request(`/internal/match-runs/${encodeURIComponent(report.id)}`, { acceptStatuses: [404] }) as {
+    found?: boolean; run?: { input_hash?: string; status?: string };
+  };
+  if (existing.found) {
+    if (existing.run?.input_hash !== inputHash) throw new Error(`match run ${report.id} has a conflicting input hash`);
+    return { ok: existing.run.status === "passed", runId: report.id, status: existing.run.status, idempotent: true, reused: true, ...report };
+  }
+  let decisionWrites = 0;
+  let superseded = 0;
+  let unchanged = 0;
+  for (let offset = 0; offset < decisions.length; offset += 250) {
+    const result = await client.request("/internal/match-decisions", { method: "PUT", json: { decisions: decisions.slice(offset, offset + 250) } }) as {
+      decisionWrites?: number; superseded?: number; unchanged?: number;
+    };
+    decisionWrites += result.decisionWrites ?? 0;
+    superseded += result.superseded ?? 0;
+    unchanged += result.unchanged ?? 0;
+  }
+  const reconciliation = await client.request("/internal/match-decisions/reconcile", { json: {
+    batchId,
+    configurationId: snapshot.configurationId,
+    retainedProductIds: decisions.map((decision) => decision.productId),
+  } }) as { superseded?: number };
+  report.detail.efficiency = {
+    submitted: decisions.length,
+    decisionWrites,
+    superseded,
+    reconciledSuperseded: reconciliation.superseded ?? 0,
+    unchanged,
+    writeAvoidanceRatio: decisions.length === 0 ? 1 : unchanged / decisions.length,
   };
   const persisted = await client.request("/internal/match-runs", { method: "POST", json: report, acceptStatuses: [422] });
   return { ...persisted, ...report };
@@ -645,16 +668,30 @@ if (command === "status") {
   result = await client.request("/internal/engine/parity", { json: report, acceptStatuses: [422] });
 } else if (command === "engine" && (subcommand === "build-native" || subcommand === "publish-native")) {
   const client = await mutationClient();
-  const snapshot = await client.request("/internal/engine/snapshot?mode=direct") as unknown as NativeEngineSnapshot;
-  const artifact = await buildNativeRelease(incomeRoot, snapshot);
-  const outputArgument = arguments_.find((value: string) => value.endsWith(".json"));
-  if (outputArgument) await writeJson(cliPath(outputArgument), artifact);
-  if (Number(artifact.audit.top5Entries) !== 20 || Number(artifact.audit.rotationEntries) !== 20) {
-    throw new Error(`native release preflight requires exactly 20 complete ranked recipes; got ${String(artifact.audit.top5Entries)}`);
+  const identity = await client.request("/internal/engine/snapshot-identity?mode=direct") as unknown as Pick<NativeEngineSnapshot, "mode" | "observedAt" | "configurationId" | "inputHash" | "inputBatchIds">;
+  const catalog = await loadNativeReleaseCatalog(incomeRoot);
+  const expected = await nativeReleaseIdentity(identity, catalog);
+  if (subcommand === "publish-native") {
+    const existing = await client.request(`/internal/releases/${encodeURIComponent(expected.releaseId)}`, { acceptStatuses: [404] }) as {
+      found?: boolean; release?: { input_hash?: string; state?: string };
+    };
+    if (existing.found && existing.release?.state === "published") {
+      if (existing.release.input_hash !== expected.inputHash) throw new Error(`native release ${expected.releaseId} has a conflicting input hash`);
+      result = { ok: true, releaseId: expected.releaseId, inputHash: expected.inputHash, state: "published", idempotent: true, reused: true };
+    }
   }
-  result = subcommand === "build-native"
-    ? { ok: true, releaseId: artifact.releaseId, inputHash: artifact.inputHash, outputFile: outputArgument ? cliPath(outputArgument) : null, audit: artifact.audit }
-    : await publishNativeRelease(client, artifact);
+  if (result === undefined) {
+    const snapshot = await client.request("/internal/engine/snapshot?mode=direct") as unknown as NativeEngineSnapshot;
+    const artifact = await buildNativeRelease(incomeRoot, snapshot, catalog);
+    const outputArgument = arguments_.find((value: string) => value.endsWith(".json"));
+    if (outputArgument) await writeJson(cliPath(outputArgument), artifact);
+    if (Number(artifact.audit.top5Entries) !== 20 || Number(artifact.audit.rotationEntries) !== 20) {
+      throw new Error(`native release preflight requires exactly 20 complete ranked recipes; got ${String(artifact.audit.top5Entries)}`);
+    }
+    result = subcommand === "build-native"
+      ? { ok: true, releaseId: artifact.releaseId, inputHash: artifact.inputHash, outputFile: outputArgument ? cliPath(outputArgument) : null, audit: artifact.audit }
+      : await publishNativeRelease(client, artifact);
+  }
 } else if (command === "replay") {
   const artifact = await buildCurrentBridge(incomeRoot);
   result = await replayCurrentArtifact(await mutationClient(), artifact);
@@ -796,6 +833,8 @@ if (command === "status") {
     result = await enqueueCapture(root, cliPath(artifactFile), evidenceFiles.map(cliPath));
   } else if (action === "drain") {
     const client = await mutationClient();
+    const maxJobs = Number(process.env.TC_CAPTURE_QUEUE_MAX_JOBS_PER_DRAIN ?? 4);
+    if (!Number.isInteger(maxJobs) || maxJobs < 1 || maxJobs > 20) throw new Error("TC_CAPTURE_QUEUE_MAX_JOBS_PER_DRAIN must be an integer from 1 through 20");
     const drained = await drainCaptureQueue(root, async (job) => {
       const artifactBody = new Uint8Array(await readFile(job.artifactPath));
       const additionalEvidence: CaptureEvidenceInput[] = await Promise.all(job.evidencePaths.map(async (evidence) => ({
@@ -806,7 +845,7 @@ if (command === "status") {
       const ingestion = await ingestDirectCapture(client, job.artifact, artifactBody, additionalEvidence, { promote: false });
       if (!ingestion.ok) throw new PermanentCaptureError(`capture batch ${String(ingestion.batchId)} was rejected: ${stableJson(ingestion)}`);
       return ingestion;
-    });
+    }, { maxJobs });
     result = drained;
     if (!drained.ok) process.exitCode = 2;
   } else if (action === "status" || action === "watchdog") {
@@ -878,6 +917,20 @@ if (command === "status") {
   result = await commodityAdd(arguments_[0]);
 } else if (command === "recipe" && subcommand === "add") {
   result = await recipeAdd(arguments_[0]);
+} else if (command === "efficiency" && subcommand === "record") {
+  const file = arguments_[0];
+  if (!file) throw new Error("tc efficiency record requires a D1 efficiency report JSON file");
+  const report = JSON.parse((await readFile(cliPath(file), "utf8")).replace(/^\uFEFF/, "")) as {
+    ok?: boolean; period?: string; policyVersion?: number; findings?: Array<Record<string, unknown>>; queries?: Array<Record<string, unknown>>;
+  };
+  if (typeof report.ok !== "boolean" || !Array.isArray(report.findings)) throw new Error("D1 efficiency report is incomplete");
+  result = await (await mutationClient()).request("/internal/operational-alerts", { json: {
+    key: "d1-efficiency-budget",
+    title: report.ok ? "D1 efficiency budgets recovered" : `D1 efficiency exceeded ${report.findings.length} budget${report.findings.length === 1 ? "" : "s"}`,
+    status: report.ok ? "resolved" : "firing",
+    observedAt: new Date().toISOString(),
+    evidence: { period: report.period ?? "unknown", policyVersion: report.policyVersion ?? null, findings: report.findings.slice(0, 50), queries: (report.queries ?? []).slice(0, 10) },
+  } });
 } else if (command === "recipe" && subcommand === "suggest") {
   const file = arguments_[0];
   if (!file) throw new Error("tc recipe suggest requires a request JSON file");
@@ -912,7 +965,7 @@ if (command === "status") {
     usage: [
       "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy|archives|archive <id>",
       "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
-      "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>",
+      "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>", "tc efficiency record <report.json>",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
         "tc capture metrics [limit]", "tc capture session init|append|verification-plan|finalize|status",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog",

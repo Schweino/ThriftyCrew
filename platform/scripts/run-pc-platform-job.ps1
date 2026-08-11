@@ -1,6 +1,6 @@
 param(
   [Parameter(Mandatory=$true)]
-  [ValidateSet('daily-engine','family-fare-paced','accuracy-weekly','triage-daily','ghost-rotation-reconcile','restore-drill-quarterly')]
+  [ValidateSet('daily-engine','efficiency-daily','family-fare-paced','accuracy-weekly','triage-daily','ghost-rotation-reconcile','restore-drill-quarterly')]
   [string]$Job,
   [switch]$Force,
   [switch]$SelfTest
@@ -77,6 +77,19 @@ try {
         if (Test-Path -LiteralPath $globalLock) { Write-PcRuntimeLog $logFile 'daily engine owns the capture files; paced run standing down'; break }
         Invoke-Logged 'family-fare-capture' { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $incomeRoot 'grocery\pull-regular-familyfare.ps1') }
         Invoke-Logged 'family-fare-ingest' { & $pnpmPath tc capture ingest-current family-fare }
+      }
+      'efficiency-daily' {
+        $reportFile = Join-Path ([string]$config.logRoot) 'd1-efficiency-latest.json'
+        Write-PcRuntimeLog $logFile 'START efficiency-check'
+        $prior = $ErrorActionPreference
+        $ErrorActionPreference = 'Continue'
+        try { $reportOutput = & node (Join-Path $platformRoot 'scripts\d1-efficiency-report.mjs') 1d 2>&1; $reportExit = $LASTEXITCODE }
+        finally { $ErrorActionPreference = $prior }
+        foreach ($line in @($reportOutput)) { Write-PcRuntimeLog $logFile ("efficiency-check: {0}" -f $line) }
+        if ($reportExit -ne 0) { throw "efficiency-check failed with exit code $reportExit" }
+        @($reportOutput) -join [Environment]::NewLine | Set-Content -LiteralPath $reportFile -Encoding UTF8
+        Write-PcRuntimeLog $logFile 'DONE efficiency-check'
+        Invoke-Logged 'efficiency-incident-reconcile' { & $pnpmPath tc efficiency record $reportFile }
       }
       'accuracy-weekly' { Invoke-Logged 'accuracy-draw' { & $pnpmPath tc accuracy draw } }
       'triage-daily' { Invoke-Logged 'triage-run' { & $pnpmPath tc triage run } }

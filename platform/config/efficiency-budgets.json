@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "database": "tc-grocery-v3",
+  "defaultPeriod": "1d",
+  "queryLimit": 25,
+  "budgets": {
+    "averageRowsReadPerQuery": 5000000,
+    "averageDurationMs": 3000,
+    "totalRowsWrittenPerFingerprint": 500000
+  }
+}
+

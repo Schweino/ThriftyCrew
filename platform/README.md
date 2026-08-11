@@ -21,6 +21,7 @@ pnpm tc help
 pnpm tc config check
 pnpm tc run daily --dry
 TC_LOCAL_MUTATION_SECRET=... pnpm tc replay
+pnpm efficiency:check 1h
 ```
 
 The new Worker uses its own name (`tc-grocery-v3`) and isolated D1/R2/Analytics Engine bindings. It cannot overwrite the current
@@ -45,3 +46,7 @@ PC credentials are DPAPI-protected for the scheduled-task user and mirrored into
 secret; plaintext credentials never enter Git. Registered PC agents retain server-owned capability, evaluation,
 lease, fencing and budget enforcement. GitHub Actions is manual fallback only and receives a short-lived OIDC
 identity when explicitly invoked. Remote resources, routing, entitlements, and cutover remain explicit steps.
+
+`pnpm efficiency:check` fingerprints D1 query insights and reports read, duration, and write-amplification
+budget findings. The authoritative PC runtime records the daily result through the operational-alert endpoint,
+so one incident opens, updates, recovers, and closes without repeated-email fan-out.

@@ -9,14 +9,30 @@
       }
     },
     {
-      "id": "Archive nightly backups then expire",
+      "id": "Archive weekly D1 exports then expire",
       "enabled": true,
-      "conditions": {},
+      "conditions": { "prefix": "d1/" },
       "storageClassTransitions": [
         { "storageClass": "InfrequentAccess", "condition": { "type": "Age", "maxAge": 2592000 } }
       ],
       "deleteObjectsTransition": {
         "condition": { "type": "Age", "maxAge": 7776000 }
+      }
+    },
+    {
+      "id": "Expire hot recovery checkpoints",
+      "enabled": true,
+      "conditions": { "prefix": "d1-checkpoints/" },
+      "deleteObjectsTransition": {
+        "condition": { "type": "Age", "maxAge": 7776000 }
+      }
+    },
+    {
+      "id": "Expire restore staging fallback",
+      "enabled": true,
+      "conditions": { "prefix": "restore-" },
+      "deleteObjectsTransition": {
+        "condition": { "type": "Age", "maxAge": 604800 }
       }
     }
   ]
