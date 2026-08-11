@@ -36,13 +36,13 @@ export function controlPlaneProofPass(checks: ReadonlyArray<{ required: boolean;
   return checks.every((check) => !check.required || check.ok);
 }
 
-export async function runControlPlaneProof(env: WorkerEnv, scheduledTime: number): Promise<void> {
+export async function runControlPlaneProof(env: WorkerEnv, scheduledTime: number, force = false): Promise<void> {
   const observedAt = new Date(scheduledTime).toISOString();
   const day = observedAt.slice(0, 10);
-  const proofId = await deterministicId("control-plane-proof", day);
+  const proofId = await deterministicId("control-plane-proof", force ? observedAt : day);
   const existing = await env.DB.prepare("SELECT status FROM control_plane_proofs WHERE id = ?1").bind(proofId).first();
   if (existing) return;
-  const [configuration, release, hardGuards, recipeIssues, backup, orphanExecutions, capacity, browser] = await Promise.all([
+  const [configuration, release, hardGuards, invalidRankedRecipes, recipeSummary, backup, orphanExecutions, capacity, browser] = await Promise.all([
     env.DB.prepare(
       `SELECT version.id, version.content_hash, archive.status AS archive_status
          FROM configuration_versions version LEFT JOIN configuration_archives archive ON archive.configuration_id = version.id
@@ -60,10 +60,20 @@ export async function runControlPlaneProof(env: WorkerEnv, scheduledTime: number
        WHERE definition.severity = 'hard' AND result.status <> 'pass'`,
     ).first<{ count: number }>(),
     env.DB.prepare(
-      `SELECT COUNT(*) AS count FROM release_recipe_costs cost
-        JOIN current_releases current ON current.release_id = cost.release_id
-       WHERE cost.status <> 'complete'`,
-    ).first<{ count: number }>(),
+      `SELECT ranked.recipe_slug, ranked.surface
+         FROM (
+           SELECT top.recipe_slug, 'top5' AS surface FROM release_top5 top JOIN current_releases current ON current.release_id = top.release_id WHERE current.market_id = 'omaha'
+           UNION ALL
+           SELECT rotation.recipe_slug, 'free_rotation' AS surface FROM release_free_rotation rotation JOIN current_releases current ON current.release_id = rotation.release_id WHERE current.market_id = 'omaha' AND rotation.intended_visibility = 'public'
+         ) ranked
+         LEFT JOIN release_recipe_costs costs ON costs.release_id = (SELECT release_id FROM current_releases WHERE market_id = 'omaha') AND costs.recipe_slug = ranked.recipe_slug
+        WHERE costs.recipe_slug IS NULL OR costs.status <> 'complete'`,
+    ).all(),
+    env.DB.prepare(
+      `SELECT COUNT(*) AS recipes, SUM(CASE WHEN cost.status = 'complete' THEN 1 ELSE 0 END) AS complete,
+              SUM(CASE WHEN cost.status = 'incomplete' THEN 1 ELSE 0 END) AS incomplete
+         FROM release_recipe_costs cost JOIN current_releases current ON current.release_id = cost.release_id`,
+    ).first(),
     env.DB.prepare(
       `SELECT id, finished_at FROM backup_exports
         WHERE status = 'completed' AND finished_at >= datetime(?1, '-36 hours')
@@ -84,7 +94,7 @@ export async function runControlPlaneProof(env: WorkerEnv, scheduledTime: number
     { id: "configuration-archive", required: true, ok: configuration?.archive_status === "verified", detail: configuration ?? null },
     { id: "release-pointer", required: true, ok: Boolean(release && configuration && release.configuration_id === configuration.id), detail: release ?? null },
     { id: "hard-guards", required: true, ok: (hardGuards?.count ?? 1) === 0, detail: hardGuards ?? null },
-    { id: "recipe-costs", required: true, ok: (recipeIssues?.count ?? 1) === 0, detail: recipeIssues ?? null },
+    { id: "recipe-ranked-surfaces", required: true, ok: invalidRankedRecipes.results.length === 0, detail: { invalid: invalidRankedRecipes.results, summary: recipeSummary ?? null } },
     { id: "backup-rpo", required: true, ok: Boolean(backup), detail: backup ?? null },
     { id: "execution-fencing", required: true, ok: orphanExecutions.results.length === 0, detail: orphanExecutions.results },
     { id: "d1-capacity", required: true, ok: capacity?.status !== "critical", detail: capacity ?? null },

@@ -2963,7 +2963,7 @@ app.get("/internal/transitions/readiness", async (context) => {
 });
 
 app.post("/internal/control-plane/prove", async (context) => {
-  await runControlPlaneProof(context.env, Date.now());
+  await runControlPlaneProof(context.env, Date.now(), true);
   const proof = await context.env.DB.prepare("SELECT id, status, source_commit, checks_json, observed_at FROM control_plane_proofs ORDER BY observed_at DESC LIMIT 1").first<Record<string, unknown>>();
   return context.json({ ok: proof?.status === "pass", proof }, proof?.status === "pass" ? 200 : 422);
 });

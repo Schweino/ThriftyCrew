@@ -565,6 +565,20 @@ if (command === "status") {
   const limit = arguments_[0] ?? "5";
   if (!/^([1-9]|10)$/.test(limit)) throw new Error("tc job github-runs limit must be from 1 through 10");
   result = await (await mutationClient()).request(`/internal/jobs/github-runs?limit=${limit}`);
+} else if (command === "job" && subcommand === "reconcile") {
+  const [runId, requestedStatus, ...reasonParts] = arguments_;
+  if (!runId || !requestedStatus || !["completed", "failed", "timed_out", "cancelled"].includes(requestedStatus)) {
+    throw new Error("tc job reconcile requires a run id and completed|failed|timed_out|cancelled");
+  }
+  const finishedAt = new Date().toISOString();
+  result = await (await mutationClient()).request(`/internal/job-runs/${encodeURIComponent(runId)}`, { method: "PATCH", json: {
+    status: requestedStatus,
+    heartbeatAt: finishedAt,
+    finishedAt,
+    usage: { inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, cacheWriteTokens: 0, costMicrousd: 0 },
+    stats: { operatorReconciliation: true, reason: reasonParts.join(" ") || "external executor truth reconciled" },
+    ...(["failed", "timed_out"].includes(requestedStatus) ? { error: reasonParts.join(" ") || `external executor ended ${requestedStatus}` } : {}),
+  } });
 } else if (command === "job" && subcommand === "dispatch") {
   const job = arguments_[0];
   if (!job) throw new Error("tc job dispatch requires a job id");
