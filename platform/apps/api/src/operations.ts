@@ -12,9 +12,14 @@ export function scheduleGap(
   checkedAt: number,
   maxGapMinutes: number,
 ): { stale: boolean; ageMinutes: number | null; basis: "run" | "monitoring-grace" | "unknown" } {
-  const basis = latestAt ? "run" : monitoringStartedAt ? "monitoring-grace" : "unknown";
-  const parsed = Date.parse(latestAt ?? monitoringStartedAt ?? "");
-  if (!Number.isFinite(parsed)) return { stale: true, ageMinutes: null, basis };
+  const latestRun = Date.parse(latestAt ?? "");
+  const monitoringStart = Date.parse(monitoringStartedAt ?? "");
+  const hasRun = Number.isFinite(latestRun);
+  const hasMonitoringStart = Number.isFinite(monitoringStart);
+  if (!hasRun && !hasMonitoringStart) return { stale: true, ageMinutes: null, basis: "unknown" };
+  const useMonitoringGrace = hasMonitoringStart && (!hasRun || monitoringStart > latestRun);
+  const basis = useMonitoringGrace ? "monitoring-grace" : "run";
+  const parsed = useMonitoringGrace ? monitoringStart : latestRun;
   const ageMinutes = Math.max(0, Math.floor((checkedAt - parsed) / 60_000));
   return { stale: ageMinutes > maxGapMinutes, ageMinutes, basis };
 }

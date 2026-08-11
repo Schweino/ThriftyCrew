@@ -14,6 +14,7 @@ import { checkAgentRegistry, readAgentRegistry } from "./agents";
 import { browserCaptureCycleStatus, captureQueueStatus, defaultCaptureQueueRoot, drainCaptureQueue, enqueueCapture, PermanentCaptureError, reconcileCaptureQueueRemote, verifyCaptureQueueFilesystem } from "./capture-queue";
 import { findLatestRegularCapture, omahaDateKey, parseServerCaptureStore, readFreshRegularCapture, SERVER_CAPTURE_STORES } from "./current-captures";
 import { appendCaptureChunk, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession } from "./capture-session";
+import { agentJobRunFields } from "./job-run";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
@@ -528,14 +529,7 @@ if (command === "status") {
     executorRunId: process.env.GITHUB_SERVER_URL && process.env.GITHUB_REPOSITORY && process.env.GITHUB_RUN_ID
       ? `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
       : runId,
-    ...(process.env.TC_AGENT_ID ? {
-      agentId: process.env.TC_AGENT_ID,
-      promptHash: process.env.TC_AGENT_PROMPT_HASH,
-      modelId: process.env.TC_AGENT_MODEL,
-      ledgerMode: process.env.TC_AGENT_DIAGNOSTIC === "1" ? "diagnostic" : "normal",
-      mutationAuthorized: process.env.TC_AGENT_DIAGNOSTIC !== "1",
-      estimatedCostMicrousd: Number(process.env.TC_AGENT_ESTIMATED_COST_MICROUSD ?? "0"),
-    } : {}),
+    ...agentJobRunFields(process.env),
     input: { reason: process.env.TC_RECOVERY_REASON ?? "scheduled operation", ...(process.env.TC_AGENT_WORK_ITEM_ID ? { workItemId: process.env.TC_AGENT_WORK_ITEM_ID } : {}) },
   } });
 } else if (command === "job" && subcommand === "github-runs") {

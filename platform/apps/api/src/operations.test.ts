@@ -48,11 +48,24 @@ describe("schedule gap lifecycle", () => {
     });
   });
 
-  it("uses durable run evidence once it exists and fails closed without either timestamp", () => {
+  it("uses a newer monitoring start as warm-up after authority changes", () => {
     expect(scheduleGap("2026-08-10T08:00:00.000Z", "2026-08-10T11:00:00.000Z", checkedAt, 120)).toEqual({
-      stale: true,
-      ageMinutes: 240,
+      stale: false,
+      ageMinutes: 60,
+      basis: "monitoring-grace",
+    });
+  });
+
+  it("uses durable run evidence after warm-up and fails closed without a valid timestamp", () => {
+    expect(scheduleGap("2026-08-10T11:30:00.000Z", "2026-08-10T11:00:00.000Z", checkedAt, 120)).toEqual({
+      stale: false,
+      ageMinutes: 30,
       basis: "run",
+    });
+    expect(scheduleGap("invalid", "2026-08-10T11:00:00.000Z", checkedAt, 120)).toEqual({
+      stale: false,
+      ageMinutes: 60,
+      basis: "monitoring-grace",
     });
     expect(scheduleGap(null, null, checkedAt, 120)).toEqual({ stale: true, ageMinutes: null, basis: "unknown" });
   });
