@@ -668,6 +668,27 @@ export async function runLedgerWatchdog(env: WorkerEnv, scheduledTime: number): 
      VALUES (?1, 'ledger-watchdog', 'schedule', ?2, ?2, ?2, 'started', 'cloudflare:scheduled', '{}')
      ON CONFLICT(id) DO NOTHING`,
   ).bind(runId, scheduledFor).run();
+  const overdueExecutions = await env.DB.prepare(
+    `SELECT run.id, run.job, run.started_at, run.lease_resource, run.lease_fence, schedule.lease_minutes
+       FROM job_runs run JOIN job_schedules schedule ON schedule.job = run.job
+      WHERE run.status = 'started' AND run.id <> ?1
+        AND datetime(run.started_at, '+' || schedule.lease_minutes || ' minutes') <= datetime(?2)
+        AND NOT EXISTS (
+          SELECT 1 FROM operation_leases lease
+           WHERE lease.holder_id = run.id AND lease.fence = run.lease_fence
+             AND lease.released_at IS NULL AND lease.expires_at > ?2
+        )`,
+  ).bind(runId, scheduledFor).all<{ id: string; job: string; started_at: string; lease_resource: string | null; lease_fence: number | null; lease_minutes: number }>();
+  for (const overdue of overdueExecutions.results) {
+    await env.DB.prepare(
+      `UPDATE job_runs SET status = 'timed_out', heartbeat_at = ?2, finished_at = ?2,
+              error = 'execution exceeded its lease runtime without a current fence'
+        WHERE id = ?1 AND status = 'started'`,
+    ).bind(overdue.id, scheduledFor).run();
+    await raiseOperationalAlert(env, `job-run:${overdue.id}`, `Scheduled job ${overdue.job} timed out`, {
+      runId: overdue.id, job: overdue.job, startedAt: overdue.started_at, leaseMinutes: overdue.lease_minutes, checkedAt: scheduledFor,
+    }, { notification: "digest", deferMinutes: 15, observedAt: scheduledFor });
+  }
   const schedules = await env.DB.prepare(
     `SELECT s.job, s.max_gap_minutes, s.dispatch_on_gap, s.monitoring_started_at,
             MAX(COALESCE(r.heartbeat_at, r.finished_at, r.started_at, r.scheduled_for)) AS latest
@@ -703,7 +724,7 @@ export async function runLedgerWatchdog(env: WorkerEnv, scheduledTime: number): 
   await env.DB.prepare(
     `UPDATE job_runs SET status = 'completed', heartbeat_at = ?2, finished_at = ?2, stats_json = ?3
       WHERE id = ?1 AND status = 'started'`,
-  ).bind(runId, new Date().toISOString(), stableJson({ checked: schedules.results.length, stale })).run();
+  ).bind(runId, new Date().toISOString(), stableJson({ checked: schedules.results.length, stale, timedOut: overdueExecutions.results.map((run) => run.id) })).run();
 }
 
 export async function runBrowserCaptureSla(env: WorkerEnv, scheduledTime: number): Promise<void> {
