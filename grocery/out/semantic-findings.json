@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-10 08:58",
+    "generated":  "2026-08-11 06:11",
     "board":  "comparison-2026-08-10.json",
-    "sidecar_generated":  "2026-08-10 08:58:50",
+    "sidecar_generated":  "2026-08-11 06:11:53",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -10,11 +10,11 @@
                    },
     "examined":  {
                      "board_pairs":  2866,
-                     "corpus":  31196,
-                     "rule_invisible":  4822
+                     "corpus":  31259,
+                     "rule_invisible":  4846
                  },
     "identity_count":  0,
-    "coverage_count":  34,
+    "coverage_count":  31,
     "identity":  [
 
                  ],
@@ -75,8 +75,8 @@
                          "commodity":  "Bar Soap",
                          "store":  "Baker\u0027s",
                          "product":  "Caress Daily Silk Cleansing Bar, White Peach \u0026 Orange Blossom Moisturizing Body Soap",
-                         "cos":  0.675,
-                         "score":  0.954171,
+                         "cos":  0.6919,
+                         "score":  0.957096,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -267,36 +267,6 @@
                          "product":  "Kroger Iceberg Shredded Lettuce Bagged Salad BIG DEAL!",
                          "cos":  0.6779,
                          "score":  0.922294,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "dried-parsley",
-                         "commodity":  "Parsley (dried)",
-                         "store":  "Walmart",
-                         "product":  "Soeos Parsley Flakes, 2.1 oz (60g), Dried Parsley Leaves, Fresh Flavor and Aroma, Perfect for Seasoning, Garnishing, and Cooking",
-                         "cos":  0.6634,
-                         "score":  0.920791,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "turkey-lunchmeat",
-                         "commodity":  "Turkey (deli / sliced)",
-                         "store":  "Aldi",
-                         "product":  "Lunch Mate Honey Smoked Turkey Breast 16 OZ",
-                         "cos":  0.6989,
-                         "score":  0.915638,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "turkey-lunchmeat",
-                         "commodity":  "Turkey (deli / sliced)",
-                         "store":  "Aldi",
-                         "product":  "Deli Sliced Honey Turkey 8 OZ",
-                         "cos":  0.6661,
-                         "score":  0.915636,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {

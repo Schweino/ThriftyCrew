@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "triageId": "triage_80f2e2357c2aa4e1ba8601533d19d772",
+  "diagnosis": "The newest daily-engine recovery run passed repository verification and advanced through configuration deployment until PUT /internal/match-decisions returned 401 with the explicit production error GitHub OIDC token is expired. The run lasted beyond the short token lifetime. The client at apps/daily/src/client.ts:34-82 performs only proactive expiry-based refresh and has no authenticated retry after a server-confirmed expiry; apps/operator/src/cli.ts:27-54 supplies that provider. The existing test at apps/daily/src/client.test.ts:30-53 assumes the provider always returns a fresh token and never exercises a 401, so the deployed refresh path had a false-positive acceptance gap. Because authentication fails before the route handler, a single forced-refresh retry with a new timestamp and nonce can be safe and deterministic. No new release was published and rel_native_50f3f39fd758249c9542 remains current.",
+  "evidenceRefs": [
+    "production:/internal/triage/triage_80f2e2357c2aa4e1ba8601533d19d772/review",
+    "https://github.com/Schweino/SimpleMoneyPlaybook/actions/runs/31421425747",
+    "https://github.com/Schweino/SimpleMoneyPlaybook/actions/runs/31421425747/job/93563351109",
+    "platform/apps/daily/src/client.ts:34",
+    "platform/apps/daily/src/client.ts:64",
+    "platform/apps/daily/src/client.ts:78",
+    "platform/apps/daily/src/client.test.ts:30",
+    "platform/apps/operator/src/cli.ts:27",
+    ".github/workflows/platform-v3.yml:172"
+  ],
+  "blastRadius": {
+    "routes": [
+      "/internal/match-decisions"
+    ],
+    "releases": [],
+    "stores": [],
+    "commodities": [],
+    "recipes": []
+  },
+  "implementation": [
+    "In platform/apps/daily/src/client.ts:34-82, when and only when an oidcTokenProvider exists and the Worker returns 401 with the explicit expired-token authentication error, invalidate the cached token, request a fresh token, rebuild timestamp, nonce, canonical headers, and authorization, and retry the unchanged body exactly once.",
+    "Keep the retry below the route handler boundary: do not retry generic 401 responses, authorization denials, HMAC requests, or a second expired-token response. Because the first expired-token request is rejected during authentication, document why the one retry cannot duplicate a successful mutation.",
+    "In platform/apps/operator/src/cli.ts:27-54, ensure a forced provider call cannot return a process-pinned TC_OIDC_TOKEN and uses the Actions token endpoint for refreshable workflow identities; retain explicit fixed-token behavior only for callers that intentionally supply TC_OIDC_TOKEN.",
+    "Add regression coverage at platform/apps/daily/src/client.test.ts:30-53 for an expired-token 401 followed by success, and assert two different bearer tokens, timestamps, and nonces with an identical body hash plus no retry for other 401 responses."
+  ],
+  "verification": [
+    "Acceptance: a mocked long operation whose first authenticated response is 401 GitHub OIDC token is expired must request a second token and succeed once; a second 401 must surface immediately, and non-expiry 401 responses must never retry.",
+    "Acceptance: verify POST, PUT, PATCH, and GET bodies/headers are rebuilt correctly and the second request uses a new nonce so replay protection remains intact.",
+    "Run pnpm check and the full local D1/replay gate, deploy through the normal platform workflow, and execute daily-engine long enough to cross one token lifetime. Confirm /internal/match-decisions completes without an auth 401 and no duplicate match decisions are created.",
+    "Deployment check: require the recovery run to finish completed, publish only a fully guarded immutable release, and pass /internal/doctor plus public API/board smoke tests before treating the incident as recovered."
+  ],
+  "rollback": [
+    "Rollback the forced-refresh retry and redeploy the prior client if any non-expiry response retries, request bodies change, duplicate writes appear, or nonce replay errors increase.",
+    "After rollback, leave daily-engine failed closed and retain rel_native_50f3f39fd758249c9542 as the current release; do not bypass OIDC with a broader or long-lived production credential."
+  ],
+  "requiresOperator": false
+}

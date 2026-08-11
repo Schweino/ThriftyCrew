@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "triageId": "triage_785f9072a0c6c6ff22d55e7de3963a0d",
+  "diagnosis": "The post-publish reviewer claimed and executed its work item, but the model returned an empty rollback array. The registered triage-plan-v1 contract rejects that at packages/contracts/src/index.ts:792-810, and the GitHub log records schema validation failure specifically at rollback before the workflow's fail-fenced-work-item path. The production prompt at agents/post-publish-reviewer/prompt.md:3-5 asks for a typed plan and explicitly mentions diagnosis and verification for healthy reviews, but it does not explicitly require non-empty implementation and rollback arrays. The current evaluation corpus and evaluator at agents/evals/post-publish-reviewer.json:1 and apps/agents/src/eval.ts:42-83 grade a separate decision/evidence shape, so the passing execution evaluation could not detect this production output-contract failure. The current release rel_native_50f3f39fd758249c9542 therefore lacks this scheduled post-publish review result; the release itself was not mutated.",
+  "evidenceRefs": [
+    "production:/internal/triage/triage_785f9072a0c6c6ff22d55e7de3963a0d/review",
+    "https://github.com/Schweino/SimpleMoneyPlaybook/actions/runs/31419851494",
+    "https://github.com/Schweino/SimpleMoneyPlaybook/actions/runs/31419851494/job/93557675275#step:14:22",
+    "platform/agents/post-publish-reviewer/prompt.md:3",
+    "platform/agents/post-publish-reviewer/prompt.md:5",
+    "platform/packages/contracts/src/index.ts:792",
+    "platform/packages/contracts/src/index.ts:806",
+    "platform/apps/agents/src/eval.ts:42",
+    "platform/apps/agents/src/runner.ts:69"
+  ],
+  "blastRadius": {
+    "routes": [
+      "/api/v2/status"
+    ],
+    "releases": [
+      "rel_native_50f3f39fd758249c9542"
+    ],
+    "stores": [],
+    "commodities": [],
+    "recipes": []
+  },
+  "implementation": [
+    "Update platform/agents/post-publish-reviewer/prompt.md:3-5 to enumerate every triage-plan-v1 field and require at least one truthful implementation, verification, and rollback entry even for a healthy/no-change review; explicitly define the healthy rollback as retaining the current immutable release and reverting only the reviewer change if validation regresses.",
+    "Extend platform/apps/agents/src/eval.ts:42-83 and platform/agents/evals/post-publish-reviewer.json:1 so at least one production-shaped healthy status case is parsed with triagePlanSchema, including non-empty implementation, verification, rollback, and evidenceRefs arrays, instead of grading only the alternate decision/evidence shape.",
+    "Regenerate the prompt and execution hashes in platform/config/agents.json:23-50 through the authored agents-as-code path, record a passing live candidate evaluation for the new exact execution hash, and keep the failed work item retryable until the corrected execution completes."
+  ],
+  "verification": [
+    "Acceptance: run the post-publish reviewer against the recorded healthy /api/v2/status payload and validate its final output with triagePlanSchema; rollback, implementation, verification, and evidenceRefs must each contain at least one non-placeholder entry and triageId must equal rel_native_50f3f39fd758249c9542.",
+    "Acceptance: run missing-guard and Ghost-drift fixtures and prove they still produce evidence-grounded plans without inventing release, store, commodity, or recipe identifiers.",
+    "Run pnpm agents:check, pnpm agents:eval:fixtures, the live candidate evaluation for the new execution hash, and pnpm check before deployment.",
+    "Deployment check: deploy the registry/prompt change through the normal workflow, rerun or allow retry of the fenced post-publish work item, confirm it completes rather than enters retryable, and verify /api/v2/status still points to rel_native_50f3f39fd758249c9542 unless a separately guarded release has published."
+  ],
+  "rollback": [
+    "Rollback the prompt, evaluation corpus/evaluator, and generated registry hashes as one focused commit if the new execution produces worse or invalid reviews, then redeploy the prior registered execution without altering the immutable release.",
+    "After rollback, keep the work item retryable and confirm the fail-fenced-work-item and scheduled-ledger cleanup paths still complete; do not mark the review successful without a schema-valid artifact."
+  ],
+  "requiresOperator": false
+}
