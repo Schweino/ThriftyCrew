@@ -189,16 +189,28 @@ export async function captureNextDataVerificationChunk({ tab, store, targets, fi
   const verifications = [];
   for (let index = 0; index < targets.length; index += 1) {
     const target = targets[index];
-    const captured = await captureTerm(tab, store, target.query);
+    let captured = await captureTerm(tab, store, target.query);
+    let row = captured.rows.find((candidate) => candidate.id === target.productKey);
+    if (!captured.blocked && captured.term.outcome !== "blocked" && !row && normalize(target.name) !== normalize(target.query)) {
+      if (effectiveDelayMs > 0) await tab.playwright.waitForTimeout(effectiveDelayMs);
+      const exactNameCapture = await captureTerm(tab, store, target.name);
+      if (exactNameCapture.blocked || exactNameCapture.term.outcome === "blocked") captured = exactNameCapture;
+      else {
+        const exactNameRow = exactNameCapture.rows.find((candidate) => candidate.id === target.productKey);
+        if (exactNameRow) {
+          captured = exactNameCapture;
+          row = exactNameRow;
+        }
+      }
+    }
     const observedAt = new Date().toISOString();
     if (captured.blocked || captured.term.outcome === "blocked") {
       verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "blocked", reason: captured.term.reason || `${store} challenge detected during independent verification` });
       await atomicJson(file, { version: 2, phase: "verification", store, canary, verifications });
       break;
     }
-    const row = captured.rows.find((candidate) => candidate.id === target.productKey);
     if (!row) {
-      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "missing", reason: captured.term.reason || "target product was not present in the independently reloaded result envelope" });
+      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "missing", reason: captured.term.reason || "target product was absent from both the commodity and exact-name result envelopes" });
     } else {
       const truth = { ...row._capture, capturedAt: observedAt };
       verifications.push({

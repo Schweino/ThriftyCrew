@@ -155,6 +155,8 @@ location/mode, channels, and price semantics while the discovery hash separately
 If Fareway's product page disagrees with the discovery card (notably, some multipacks expose only a component-unit
 size), the adapter performs a fresh exact-product-name search and accepts only the exact product URL and complete
 card truth. It never normalizes away or guesses through the disagreement.
+Walmart and Sam's similarly use a paced exact-product-name search only when the independently reloaded commodity
+query no longer contains the planned item ID; both visible and structured channels must still agree.
 Append `version: 2`,
 `phase: verification` chunks containing the plan row/hash and a newly read complete truth record. A changed row
 must be recaptured as a new discovery result and replanned; missing, blocked, stale, copied, or disagreeing
