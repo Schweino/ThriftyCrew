@@ -92,6 +92,14 @@ export async function loadNativeReleaseCatalog(incomeRoot: string): Promise<Nati
     readFile(path.join(configRoot, "known-wrong.json"), "utf8"),
   ]);
   const ingredientDefinitions = JSON.parse(ingredientBytes.replace(/^\uFEFF/, "")) as IngredientDefinition[];
+  const ingredientKeys = new Set<string>();
+  for (const definition of ingredientDefinitions) {
+    const normalized = key(definition.item);
+    if (ingredientKeys.has(normalized)) {
+      throw new Error(`ingredient catalog contains a duplicate normalized item: ${definition.item}`);
+    }
+    ingredientKeys.add(normalized);
+  }
   const recipes = (await Promise.all(recipeNames.filter((name) => name.endsWith(".json")).sort().map(async (name) =>
     JSON.parse((await readFile(path.join(recipeDirectory, name), "utf8")).replace(/^\uFEFF/, "")) as RecipeSpecification,
   ))).sort((left, right) => left.slug.localeCompare(right.slug));

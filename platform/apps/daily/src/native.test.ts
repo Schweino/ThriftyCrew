@@ -9,6 +9,23 @@ const temporaryRoots: string[] = [];
 afterEach(async () => Promise.all(temporaryRoots.splice(0).map((root) => rm(root, { recursive: true, force: true }))));
 
 describe("native release construction", () => {
+  it("rejects duplicate normalized ingredient definitions instead of silently overwriting pricing metadata", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-native-duplicates-"));
+    temporaryRoots.push(root);
+    const recipeDirectory = path.join(root, "meal-prep", "db", "recipes");
+    const configDirectory = path.join(root, "platform", "config");
+    await mkdir(recipeDirectory, { recursive: true });
+    await mkdir(configDirectory, { recursive: true });
+    await Promise.all([
+      writeFile(path.join(root, "meal-prep", "db", "ingredients.json"), JSON.stringify([{ item: "Golden Raisins", bid: "golden-raisins" }, { item: " Golden  Raisins " }])),
+      writeFile(path.join(configDirectory, "recipe-commodities.json"), JSON.stringify({ commodities: [] })),
+      writeFile(path.join(configDirectory, "recipe-commodity-extensions.json"), JSON.stringify({ commodities: [] })),
+      writeFile(path.join(configDirectory, "recipe-commodity-aliases.json"), JSON.stringify({})),
+      writeFile(path.join(configDirectory, "known-wrong.json"), JSON.stringify({ entries: [] })),
+    ]);
+    await expect(loadNativeReleaseCatalog(root)).rejects.toThrow("duplicate normalized item");
+  });
+
   it("costs recipes from release crowns and excludes incomplete recipes from ranked surfaces", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "tc-native-"));
     temporaryRoots.push(root);
