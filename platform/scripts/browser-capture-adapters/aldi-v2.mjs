@@ -142,15 +142,18 @@ async function captureCanary(tab, screenshotSha256) {
   return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: LOCATION, priceMode: PRICE_MODE, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
 }
 
-export async function captureAldiChunk({ tab, terms, file, screenshotSha256 }) {
+export async function captureAldiChunk({ tab, terms, file, screenshotSha256, interTermDelayMs = 1_500 }) {
   if (!Array.isArray(terms) || terms.length < 1 || terms.length > 20) throw new Error("ALDI chunk requires 1-20 terms");
+  if (!Number.isInteger(interTermDelayMs) || interTermDelayMs < 0 || interTermDelayMs > 30_000) throw new Error("ALDI inter-term delay must be 0-30000ms");
   const canary = await captureCanary(tab, screenshotSha256);
   const results = [];
-  for (const query of terms) {
+  for (let index = 0; index < terms.length; index += 1) {
+    const query = terms[index];
     const captured = await captureTerm(tab, query);
     results.push(captured);
     await atomicJson(file, { version: 2, phase: "discovery", store: "aldi", canary, terms: results.map((result) => result.term), rows: results.flatMap((result) => result.rows) });
     if (captured.blocked) break;
+    if (index < terms.length - 1 && interTermDelayMs > 0) await tab.playwright.waitForTimeout(interTermDelayMs);
   }
   return { file, attempted: results.length, rows: results.reduce((total, result) => total + result.rows.length, 0), blocked: results.some((result) => result.blocked), rejected: results.filter((result) => result.term.outcome === "rejected").map((result) => ({ query: result.term.query, reason: result.term.reason })), empty: results.filter((result) => result.term.outcome === "empty").map((result) => result.term.query) };
 }
