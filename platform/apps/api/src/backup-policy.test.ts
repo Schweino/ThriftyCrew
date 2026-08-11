@@ -4,8 +4,8 @@ import { D1_EXPORT_POLL_STEP_CONFIG, d1ExportPollPayload, d1ExportTerminalError 
 describe("D1 export polling", () => {
   it("keeps polling long enough for an asynchronous export without exponential gaps", () => {
     expect(D1_EXPORT_POLL_STEP_CONFIG.retries).toEqual({
-      limit: 120,
-      delay: "15 seconds",
+      limit: 240,
+      delay: "1 minute",
       backoff: "constant",
     });
     expect(D1_EXPORT_POLL_STEP_CONFIG.timeout).toBe("2 minutes");

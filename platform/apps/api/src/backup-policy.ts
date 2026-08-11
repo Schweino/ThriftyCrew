@@ -1,7 +1,7 @@
 export const D1_EXPORT_POLL_STEP_CONFIG = {
   retries: {
-    limit: 120,
-    delay: "15 seconds",
+    limit: 240,
+    delay: "1 minute",
     backoff: "constant",
   },
   timeout: "2 minutes",
