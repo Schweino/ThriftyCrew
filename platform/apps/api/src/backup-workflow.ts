@@ -50,10 +50,11 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
     await this.env.DB.batch([
       this.env.DB.prepare(
         `INSERT INTO job_runs
-           (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, executor_run_id, actor_id, input_json)
-         VALUES (?1, 'd1-backup', 'schedule', ?2, ?2, ?2, 'started', ?3, 'cloudflare:workflow', '{}')
+           (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, executor_run_id, actor_id,
+            input_json, lease_resource, lease_fence)
+         VALUES (?1, 'd1-backup', 'schedule', ?2, ?2, ?2, 'started', ?3, 'cloudflare:workflow', '{}', ?4, ?5)
          ON CONFLICT(id) DO NOTHING`,
-      ).bind(runId, startedAt, event.instanceId),
+      ).bind(runId, startedAt, event.instanceId, lease.resource, lease.fence),
       this.env.DB.prepare(
         `INSERT INTO backup_exports (id, database_id, status)
          VALUES (?1, ?2, 'started') ON CONFLICT(id) DO NOTHING`,
