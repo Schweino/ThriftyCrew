@@ -161,19 +161,24 @@ async function captureTerm(tab, store, query) {
   return { blocked: false, term: { query, outcome: "rejected", rowCount: 0, attempts: 2, startedAt: instant, finishedAt: instant, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "error" }, reason: lastError || `${store} capture failed twice` }, rows: [] };
 }
 
-async function captureCanary(tab, store, screenshotSha256) {
+export async function captureNextDataCanary(tab, store, screenshotSha256) {
   const config = CONFIG[store];
-  const state = await tab.playwright.evaluate(() => ({
-    url: location.href,
-    body: document.body.innerText.slice(0, 2000),
-    challenge: /\/are-you-human|\/blocked|\/verify/i.test(location.pathname)
-      || /verify you are human|captcha|access denied|unusual traffic|robot or human|not a robot|403 error|request blocked|request could not be satisfied/i.test(`${document.title}\n${document.body.innerText}`),
-  }));
-  const pass = store === "sams"
-    ? /Pickup[\s\S]*Omaha Sam's Club/i.test(state.body)
-    : /Omaha L St Supercenter/i.test(state.body) && /12812 S 38TH St/i.test(state.body) && /fulfillment_method%3APickup/i.test(state.url);
-  if (state.challenge || !pass) throw new Error(`${store} Omaha/Pickup canary failed`);
-  return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: config.location, priceMode: config.priceMode, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
+  let state;
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    state = await tab.playwright.evaluate(() => ({
+      url: location.href,
+      body: document.body.innerText.slice(0, 2000),
+      challenge: /\/are-you-human|\/blocked|\/verify/i.test(location.pathname)
+        || /verify you are human|captcha|access denied|unusual traffic|robot or human|not a robot|403 error|request blocked|request could not be satisfied/i.test(`${document.title}\n${document.body.innerText}`),
+    }));
+    if (state.challenge) throw new Error(`${store} retailer block page detected; stop the lane without retrying or attempting a bypass`);
+    const pass = store === "sams"
+      ? /Pickup[\s\S]*Omaha Sam's Club/i.test(state.body)
+      : /Omaha L St Supercenter/i.test(state.body) && /12812 S 38TH St/i.test(state.body) && /fulfillment_method%3APickup/i.test(state.url);
+    if (pass) return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: config.location, priceMode: config.priceMode, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
+    if (attempt < 4) await tab.playwright.waitForTimeout(750);
+  }
+  throw new Error(`${store} Omaha/Pickup canary failed after waiting for the page to settle`);
 }
 
 export async function captureNextDataChunk({ tab, store, terms, file, screenshotSha256, interTermDelayMs }) {
@@ -182,7 +187,7 @@ export async function captureNextDataChunk({ tab, store, terms, file, screenshot
   const effectiveDelayMs = interTermDelayMs ?? (store === "sams" ? 2_000 : 0);
   if (!Array.isArray(terms) || terms.length < 1 || terms.length > maxTerms) throw new Error(`${store} chunk requires 1-${maxTerms} terms`);
   if (!Number.isInteger(effectiveDelayMs) || effectiveDelayMs < 0 || effectiveDelayMs > 30_000) throw new Error(`${store} inter-term delay must be 0-30000ms`);
-  const canary = await captureCanary(tab, store, screenshotSha256);
+  const canary = await captureNextDataCanary(tab, store, screenshotSha256);
   const results = [];
   for (let index = 0; index < terms.length; index += 1) {
     const query = terms[index];
@@ -201,7 +206,7 @@ export async function captureNextDataVerificationChunk({ tab, store, targets, fi
   const effectiveDelayMs = interTermDelayMs ?? (store === "sams" ? 2_000 : 0);
   if (!Array.isArray(targets) || targets.length < 1 || targets.length > maxTargets) throw new Error(`${store} verification chunk requires 1-${maxTargets} targets`);
   if (!Number.isInteger(effectiveDelayMs) || effectiveDelayMs < 0 || effectiveDelayMs > 30_000) throw new Error(`${store} verification inter-target delay must be 0-30000ms`);
-  const canary = await captureCanary(tab, store, screenshotSha256);
+  const canary = await captureNextDataCanary(tab, store, screenshotSha256);
   const verifications = [];
   for (let index = 0; index < targets.length; index += 1) {
     const target = targets[index];
