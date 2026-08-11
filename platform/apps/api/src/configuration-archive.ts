@@ -17,7 +17,11 @@ export async function archiveConfiguration(env: WorkerEnv, configurationId: stri
   ).bind(configurationId).first<{ object_key: string; byte_length: number; sha256: string; status: string }>();
   if (existing?.status === "verified") {
     try { return await verifyConfigurationArchive(env, configurationId, existing.object_key, existing.byte_length, existing.sha256); }
-    catch { /* Rewrite and reverify the source-of-truth snapshot below. */ }
+    catch (error) {
+      const compacted = await env.DB.prepare("SELECT configuration_id FROM configuration_compactions WHERE configuration_id = ?1").bind(configurationId).first();
+      if (compacted) throw new Error(`compacted configuration archive failed recovery verification: ${error instanceof Error ? error.message : "unknown verification failure"}`);
+      // An uncompacted D1 representation remains authoritative and can safely rewrite the damaged object.
+    }
   }
   const configuration = await env.DB.prepare(
     "SELECT id, source_commit, content_hash, expected_categories, expected_commodities, expected_rules, expected_known_wrong FROM configuration_versions WHERE id = ?1",

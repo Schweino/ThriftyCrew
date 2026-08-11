@@ -2933,13 +2933,28 @@ app.post("/internal/deployments/preflight", async (context) => {
     : null;
   if (!sourceCommit) return jsonError("deployment preflight requires a full git commit", 422);
   const checkedAt = new Date().toISOString();
-  const blockers = await activeDeploymentBlockers(context.env.DB, checkedAt);
   const id = await deterministicId("deployment-check", sourceCommit, checkedAt);
+  const deploymentLease = await acquireOperationLease(context.env.DB, {
+    resource: "control:deployment", holderId: id, ownerKind: "deployment", leaseMinutes: 15, now: checkedAt,
+    metadata: { sourceCommit, actorId: context.get("identity").agentId, deploymentSafe: true },
+  });
+  if (!deploymentLease) return jsonError("another deployment is already draining the control plane", 409);
+  const blockers = await activeDeploymentBlockers(context.env.DB, checkedAt);
+  if (blockers.length) await releaseOperationLease(context.env.DB, deploymentLease.resource, id, deploymentLease.fence, checkedAt);
   await context.env.DB.prepare(
     `INSERT INTO deployment_checks (id, source_commit, actor_id, status, blocker_count, blockers_json, checked_at)
      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)`,
   ).bind(id, sourceCommit, context.get("identity").agentId, blockers.length ? "blocked" : "clear", blockers.length, stableJson(blockers), checkedAt).run();
-  return context.json({ ok: blockers.length === 0, checkId: id, sourceCommit, checkedAt, blockers }, blockers.length ? 409 : 200);
+  return context.json({ ok: blockers.length === 0, checkId: id, sourceCommit, checkedAt, blockers, deploymentLease }, blockers.length ? 409 : 200);
+});
+
+app.post("/internal/deployments/complete", async (context) => {
+  const payload = await context.req.json().catch(() => ({})) as { checkId?: unknown; fence?: unknown; outcome?: unknown };
+  if (typeof payload.checkId !== "string" || typeof payload.fence !== "number" || !["deployed", "failed"].includes(String(payload.outcome))) {
+    return jsonError("deployment completion requires checkId, fence, and outcome", 422);
+  }
+  const released = await releaseOperationLease(context.env.DB, "control:deployment", payload.checkId, payload.fence);
+  return context.json({ ok: released, checkId: payload.checkId, outcome: payload.outcome, released }, released ? 200 : 409);
 });
 
 app.get("/internal/transitions/readiness", async (context) => {

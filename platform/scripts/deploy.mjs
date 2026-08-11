@@ -10,6 +10,7 @@ const commit = git.stdout.trim();
 if (!/^[a-f0-9]{40}$/.test(commit)) throw new Error("deployment commit is invalid");
 const wranglerCli = fileURLToPath(new URL("../bin/wrangler.js", import.meta.resolve("wrangler")));
 const deployArguments = process.argv.slice(2);
+let deploymentLease;
 
 function parseVars(source) {
   return Object.fromEntries(source.split(/\r?\n/).flatMap((line) => {
@@ -33,11 +34,10 @@ async function deploymentCredential() {
   throw new Error("safe deployment requires TC_LOCAL_MUTATION_SECRET or local-operator in .dev.vars");
 }
 
-async function signedPreflight(sourceCommit) {
+async function signedMutation(pathname, payload) {
   const { agentId, secret } = await deploymentCredential();
   const origin = process.env.TC_API_ORIGIN ?? "https://tc-grocery-v3.curly-unit-51a6.workers.dev";
-  const pathname = "/internal/deployments/preflight";
-  const body = JSON.stringify({ sourceCommit });
+  const body = JSON.stringify(payload);
   const bodyHash = createHash("sha256").update(body).digest("hex");
   const timestamp = new Date().toISOString();
   const nonce = `nonce_${randomUUID()}`;
@@ -55,27 +55,44 @@ async function signedPreflight(sourceCommit) {
 }
 
 if (!deployArguments.includes("--dry-run")) {
-  const { response, result } = await signedPreflight(commit);
+  const { response, result } = await signedMutation("/internal/deployments/preflight", { sourceCommit: commit });
   const bootstrap = process.env.TC_DEPLOY_PREFLIGHT_BOOTSTRAP === "1" && response.status === 404;
   if (!response.ok && !bootstrap) {
     console.error(JSON.stringify({ deploymentBlocked: true, httpStatus: response.status, ...result }));
     process.exit(75);
   }
   console.log(JSON.stringify(bootstrap ? { deploymentPreflight: "bootstrap" } : { deploymentPreflight: "clear", ...result }));
+  if (!bootstrap) deploymentLease = { checkId: result.checkId, fence: result.deploymentLease?.fence };
 }
 
 const deployed = spawnSync(process.execPath, [wranglerCli, "deploy", ...deployArguments, "--var", `DEPLOYED_COMMIT:${commit}`], {
   stdio: "inherit",
 });
-if (deployed.status !== 0) process.exit(deployed.status ?? 1);
+if (deployed.status !== 0) {
+  if (deploymentLease?.checkId && deploymentLease?.fence) {
+    await signedMutation("/internal/deployments/complete", { ...deploymentLease, outcome: "failed" }).catch(() => undefined);
+  }
+  process.exit(deployed.status ?? 1);
+}
 if (!deployArguments.includes("--dry-run")) {
   const endpoints = process.env.TC_DEPLOY_VERIFY_URLS
     ? process.env.TC_DEPLOY_VERIFY_URLS.split(",").map((value) => value.trim()).filter(Boolean)
     : DEFAULT_DEPLOYMENT_ENDPOINTS;
-  const verification = await waitForDeploymentConvergence({
-    expectedCommit: commit,
-    endpoints,
-    timeoutMs: Number(process.env.TC_DEPLOY_VERIFY_TIMEOUT_MS ?? 90_000),
-  });
-  console.log(JSON.stringify({ deploymentConverged: true, ...verification }));
+  let verification;
+  let verificationError;
+  try {
+    verification = await waitForDeploymentConvergence({
+      expectedCommit: commit,
+      endpoints,
+      timeoutMs: Number(process.env.TC_DEPLOY_VERIFY_TIMEOUT_MS ?? 90_000),
+    });
+    console.log(JSON.stringify({ deploymentConverged: true, ...verification }));
+  } catch (error) { verificationError = error; }
+  if (deploymentLease?.checkId && deploymentLease?.fence) {
+    const outcome = verificationError ? "failed" : "deployed";
+    const completion = await signedMutation("/internal/deployments/complete", { ...deploymentLease, outcome });
+    if (!completion.response.ok) throw new Error(`deployment drain lease was not released: ${JSON.stringify(completion.result)}`);
+    console.log(JSON.stringify({ deploymentDrainReleased: true, ...completion.result }));
+  }
+  if (verificationError) throw verificationError;
 }

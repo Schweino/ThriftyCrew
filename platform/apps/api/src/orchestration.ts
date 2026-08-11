@@ -51,6 +51,12 @@ export async function acquireOperationLease(
   },
 ): Promise<OperationLease | null> {
   const now = input.now ?? new Date().toISOString();
+  if (input.ownerKind !== "deployment") {
+    const deployment = await db.prepare(
+      "SELECT holder_id FROM operation_leases WHERE resource = 'control:deployment' AND released_at IS NULL AND expires_at > ?1",
+    ).bind(now).first();
+    if (deployment) return null;
+  }
   const expiresAt = leaseExpiry(now, input.leaseMinutes);
   const row = await db.prepare(
     `INSERT INTO operation_leases
@@ -118,4 +124,3 @@ export async function activeDeploymentBlockers(db: D1Database, now = new Date().
     catch { return true; }
   });
 }
-
