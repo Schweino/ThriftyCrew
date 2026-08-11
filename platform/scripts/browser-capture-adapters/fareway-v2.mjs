@@ -9,6 +9,12 @@ function normalize(value) {
   return String(value ?? "").trim().toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
 
+export function validatedRegularPrice(currentPriceMinor, candidateRegularPriceMinor) {
+  return Number.isInteger(candidateRegularPriceMinor) && candidateRegularPriceMinor > currentPriceMinor
+    ? candidateRegularPriceMinor
+    : undefined;
+}
+
 async function atomicJson(file, value) {
   await mkdir(path.dirname(file), { recursive: true });
   const temporary = `${file}.tmp`;
@@ -68,7 +74,10 @@ function buildRows(query, page, capturedAt) {
   return page.rows.map((row, resultIndex) => {
     const originalLine = row.lines.find((line) => /^Original Price:\s*\$/i.test(line));
     const originalMatch = originalLine?.match(/\$([0-9]+(?:\.[0-9]{1,2})?)/);
-    const regularPriceMinor = originalMatch ? Math.round(Number(originalMatch[1]) * 100) : undefined;
+    const regularPriceMinor = validatedRegularPrice(
+      row.priceMinor,
+      originalMatch ? Math.round(Number(originalMatch[1]) * 100) : undefined,
+    );
     const priceSemantics = {
       offerType: regularPriceMinor ? "sale" : "everyday",
       condition: "none",
@@ -255,13 +264,14 @@ async function captureProductDetail(tab, target) {
       if (page.url !== target.productKey) return { outcome: "missing", reason: `product detail redirected from ${target.productKey} to ${page.url}` };
       if (!page.name || !page.size || !Number.isInteger(page.priceMinor) || !page.current) throw new Error("product detail lacked exact name, size, or Current price label");
       const observedAt = new Date().toISOString();
+      const regularPriceMinor = validatedRegularPrice(page.priceMinor, page.regularPriceMinor);
       const priceSemantics = {
-        offerType: page.regularPriceMinor ? "sale" : "everyday",
+        offerType: regularPriceMinor ? "sale" : "everyday",
         condition: "none",
         unitPriceMinor: page.priceMinor,
         qualifyingQuantity: 1,
         totalPriceMinor: page.priceMinor,
-        ...(page.regularPriceMinor ? { regularPriceMinor: page.regularPriceMinor } : {}),
+        ...(regularPriceMinor ? { regularPriceMinor } : {}),
         ambiguity: false,
       };
       return {
