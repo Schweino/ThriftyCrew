@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { archivalCapacityStatus, controlPlaneProofPass, d1DatabaseFileSize, d1TimeTravelBookmark, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalDigestMemberKey, operationalIncidentIsNew, operationalNotificationDueAt, robustMonthlyGrowth, scheduleGap, weeklyFullExportDue } from "./operations";
+import { archivalCapacityStatus, controlPlaneProofPass, d1DatabaseFileSize, d1TimeTravelBookmark, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalDigestMemberKey, operationalIncidentIsNew, operationalNotificationDueAt, recoveryCheckpointTriggerKind, robustMonthlyGrowth, scheduleGap, weeklyFullExportDue } from "./operations";
 
 describe("archival capacity policy", () => {
   it("arms on projected exhaustion before the static percentage threshold", () => {
@@ -25,6 +25,11 @@ describe("cross-plane proof policy", () => {
 });
 
 describe("D1 recovery cadence", () => {
+  it("uses only trigger kinds accepted by the durable job ledger", () => {
+    expect(recoveryCheckpointTriggerKind(false)).toBe("schedule");
+    expect(recoveryCheckpointTriggerKind(true)).toBe("operator");
+  });
+
   it("reserves the blocking full export for Sunday at 01:30 America/Chicago", () => {
     expect(weeklyFullExportDue(Date.parse("2026-08-16T06:30:00.000Z"))).toBe(true);
     expect(weeklyFullExportDue(Date.parse("2026-08-16T09:30:00.000Z"))).toBe(false);

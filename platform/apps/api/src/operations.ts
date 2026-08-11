@@ -59,6 +59,10 @@ export async function d1TimeTravelBookmark(env: WorkerEnv): Promise<string> {
   return bookmark;
 }
 
+export function recoveryCheckpointTriggerKind(force: boolean): "operator" | "schedule" {
+  return force ? "operator" : "schedule";
+}
+
 export async function runD1RecoveryCheckpoint(env: WorkerEnv, scheduledTime: number, force = false): Promise<Record<string, unknown>> {
   const createdAt = new Date(scheduledTime).toISOString();
   const day = createdAt.slice(0, 10);
@@ -76,7 +80,7 @@ export async function runD1RecoveryCheckpoint(env: WorkerEnv, scheduledTime: num
        VALUES (?1, 'd1-recovery-checkpoint', ?2, ?3, ?3, ?3, 'started', 'cloudflare:scheduled', '{}')
        ON CONFLICT(id) DO UPDATE SET started_at = ?3, heartbeat_at = ?3, finished_at = NULL,
          status = 'started', error = NULL, stats_json = '{}'`,
-    ).bind(runId, force ? "manual" : "schedule", createdAt),
+    ).bind(runId, recoveryCheckpointTriggerKind(force), createdAt),
     env.DB.prepare(
       `INSERT INTO recovery_checkpoints
          (id, database_id, source_commit, status, created_at)
