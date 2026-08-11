@@ -159,3 +159,46 @@ export async function captureAldiChunk({ tab, terms, file, screenshotSha256, int
   }
   return { file, attempted: results.length, rows: results.reduce((total, result) => total + result.rows.length, 0), blocked: results.some((result) => result.blocked), rejected: results.filter((result) => result.term.outcome === "rejected").map((result) => ({ query: result.term.query, reason: result.term.reason })), empty: results.filter((result) => result.term.outcome === "empty").map((result) => result.term.query) };
 }
+
+export async function captureAldiVerificationChunk({ tab, targets, file, screenshotSha256, interTermDelayMs = DEFAULT_INTER_TERM_DELAY_MS }) {
+  if (!Array.isArray(targets) || targets.length < 1 || targets.length > MAX_TERMS_PER_CHUNK) throw new Error(`ALDI verification chunk requires 1-${MAX_TERMS_PER_CHUNK} targets`);
+  if (!Number.isInteger(interTermDelayMs) || interTermDelayMs < 0 || interTermDelayMs > 30_000) throw new Error("ALDI verification inter-target delay must be 0-30000ms");
+  const canary = await captureCanary(tab, screenshotSha256);
+  const verifications = [];
+  for (let index = 0; index < targets.length; index += 1) {
+    const target = targets[index];
+    const captured = await captureTerm(tab, target.query);
+    const observedAt = new Date().toISOString();
+    if (captured.blocked || captured.term.outcome === "blocked") {
+      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "blocked", reason: captured.term.reason || "ALDI challenge detected during independent verification" });
+      await atomicJson(file, { version: 2, phase: "verification", store: "aldi", canary, verifications });
+      break;
+    }
+    const row = captured.rows.find((candidate) => candidate.href === target.productKey);
+    if (!row) {
+      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "missing", reason: captured.term.reason || "target product was not present in the independently reloaded result envelope" });
+    } else {
+      const truth = { ...row._capture, capturedAt: observedAt };
+      verifications.push({
+        rowKey: target.rowKey,
+        discoveryHash: target.discoveryHash,
+        observedAt,
+        outcome: "observed",
+        productKey: row.href,
+        name: row.name,
+        sizeText: row.size,
+        purchasePriceMinor: Math.round(Number(String(row.prices).replace(/[^0-9.]/g, "")) * 100),
+        truth,
+      });
+    }
+    await atomicJson(file, { version: 2, phase: "verification", store: "aldi", canary, verifications });
+    if (index < targets.length - 1 && interTermDelayMs > 0) await tab.playwright.waitForTimeout(interTermDelayMs);
+  }
+  return {
+    file,
+    attempted: verifications.length,
+    observed: verifications.filter((item) => item.outcome === "observed").length,
+    missing: verifications.filter((item) => item.outcome === "missing").map((item) => item.rowKey),
+    blocked: verifications.some((item) => item.outcome === "blocked"),
+  };
+}

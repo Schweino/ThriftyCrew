@@ -215,3 +215,43 @@ export async function captureFarewayChunk({ tab, terms, file, screenshotSha256 }
     empty: results.filter((result) => result.term.outcome === "empty").map((result) => result.term.query),
   };
 }
+
+export async function captureFarewayVerificationChunk({ tab, targets, file, screenshotSha256 }) {
+  if (!Array.isArray(targets) || targets.length < 1 || targets.length > 20) throw new Error("Fareway verification chunk requires 1-20 targets");
+  const canary = await captureCanary(tab, screenshotSha256);
+  const verifications = [];
+  for (const target of targets) {
+    const captured = await captureTerm(tab, target.query);
+    const observedAt = new Date().toISOString();
+    if (captured.blocked || captured.term.outcome === "blocked") {
+      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "blocked", reason: captured.term.reason || "Fareway challenge detected during independent verification" });
+      await atomicJson(file, { version: 2, phase: "verification", store: "fareway", canary, verifications });
+      break;
+    }
+    const row = captured.rows.find((candidate) => candidate.url === target.productKey);
+    if (!row) {
+      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "missing", reason: captured.term.reason || "target product was not present in the independently reloaded result envelope" });
+    } else {
+      const truth = { ...row._capture, capturedAt: observedAt };
+      verifications.push({
+        rowKey: target.rowKey,
+        discoveryHash: target.discoveryHash,
+        observedAt,
+        outcome: "observed",
+        productKey: row.url,
+        name: row.name,
+        sizeText: row.size,
+        purchasePriceMinor: Math.round(Number(String(row.price).replace(/[^0-9.]/g, "")) * 100),
+        truth,
+      });
+    }
+    await atomicJson(file, { version: 2, phase: "verification", store: "fareway", canary, verifications });
+  }
+  return {
+    file,
+    attempted: verifications.length,
+    observed: verifications.filter((item) => item.outcome === "observed").length,
+    missing: verifications.filter((item) => item.outcome === "missing").map((item) => item.rowKey),
+    blocked: verifications.some((item) => item.outcome === "blocked"),
+  };
+}

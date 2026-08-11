@@ -67,6 +67,27 @@ export async function deterministicId(prefix: string, ...parts: string[]): Promi
 type CaptureAccuracyCandidate = Omit<BrowserCaptureAccuracyRow, "rowKey" | "discoveryHash" | "riskReasons" | "verificationRequired">;
 type CaptureAccuracyTerm = { outcome: string; rowCount: number; retrieval: { targetResultCount: number; loadedResultCount: number; availableResultCount?: number | undefined; hasMoreResults: boolean; termination: string } };
 
+const CAPTURE_QUERY_MODIFIERS = new Set([
+  "and", "with", "for", "pack", "count", "each",
+]);
+
+function captureWordStem(word: string): string {
+  if (word.length > 5 && word.endsWith("ies")) return `${word.slice(0, -3)}y`;
+  if (word.length > 5 && word.endsWith("oes")) return word.slice(0, -2);
+  if (word.length > 5 && word.endsWith("es")) return word.slice(0, -2);
+  if (word.length > 4 && word.endsWith("s") && !word.endsWith("ss")) return word.slice(0, -1);
+  return word;
+}
+
+function captureCandidateRelevanceScore(candidate: CaptureAccuracyCandidate): number {
+  const queryTokens = normalizeName(candidate.query).split(" ")
+    .filter((word) => word.length >= 3 && !CAPTURE_QUERY_MODIFIERS.has(word))
+    .map(captureWordStem);
+  if (queryTokens.length === 0) return 0;
+  const candidateTokens = new Set(normalizeName(`${candidate.name} ${candidate.taxonomyPath ?? ""}`).split(" ").map(captureWordStem));
+  return queryTokens.reduce((score, token) => score + Number(candidateTokens.has(token)), 0);
+}
+
 export function parseCapturePriceText(text: string): { unitPriceMinor: number; qualifyingQuantity: number; totalPriceMinor: number } | undefined {
   const normalized = text.toLowerCase().replace(/,/g, "").trim();
   const multi = normalized.match(/(?:^|\s)(\d+)\s*(?:\/|for)\s*\$?([0-9]+(?:\.[0-9]{1,2})?)(?=\s|$)/);
@@ -208,13 +229,18 @@ export async function buildBrowserCaptureAccuracy(
   terms: readonly CaptureAccuracyTerm[],
 ): Promise<BrowserCaptureAccuracy> {
   const cheapest = new Set<string>();
-  const byTerm = new Map<string, Array<{ index: number; price: number }>>();
+  const byTerm = new Map<string, Array<{ index: number; price: number; relevance: number }>>();
   candidates.forEach((row, index) => {
     const values = byTerm.get(row.termKey) ?? [];
-    values.push({ index, price: row.purchasePriceMinor });
+    values.push({ index, price: row.purchasePriceMinor, relevance: captureCandidateRelevanceScore(row) });
     byTerm.set(row.termKey, values);
   });
-  for (const values of byTerm.values()) cheapest.add(String(values.sort((left, right) => left.price - right.price || left.index - right.index)[0]?.index));
+  for (const values of byTerm.values()) {
+    const bestRelevance = Math.max(...values.map((value) => value.relevance));
+    const relevant = bestRelevance > 0 ? values.filter((value) => value.relevance === bestRelevance) : values;
+    const ranked = relevant.sort((left, right) => left.price - right.price || left.index - right.index);
+    cheapest.add(String(ranked[0]?.index));
+  }
   const duplicatePrices = new Map<string, Set<number>>();
   for (const row of candidates) {
     const values = duplicatePrices.get(row.productKey) ?? new Set<number>();

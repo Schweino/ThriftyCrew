@@ -26,7 +26,10 @@ Run the automation every day at 06:15 America/Chicago.
    - `DUE` (exit 1): capture only the source IDs listed in `due`. Thursday-Saturday are retry days.
 2. On Sunday, Monday, Tuesday, Thursday, Friday, and Saturday, when no weekly four-store capture is running,
    run `grocery/fareway-daily-due.ps1`. Capture Fareway only when it returns `DUE`; honor `FRESH` and `IDLE`.
-3. Never run two store sweeps concurrently in the shared Chrome profile.
+3. Store lanes may run concurrently in separate Chrome tabs because each retailer has independent navigation and
+   pacing state. Never run two lanes for the same store concurrently, and pause only the affected lane when it is
+   cooling down or blocked. A separate Chrome window is optional for operator visibility; it does not provide a
+   separate profile, network identity, or challenge budget.
 
 ## Rules shared by every store
 
@@ -45,7 +48,8 @@ Run the automation every day at 06:15 America/Chicago.
   ID, and Aldi/Fareway product URL.
 - Retry an ordinary empty/error once. If a human-verification wall survives one retry, do not evade it or solve
   a challenge. Run `grocery/notify-desktop.ps1 -Store <store> -Detail <progress> -AlsoEmail`, continue with another
-  store, and leave the affected source due for the next retry day.
+  store, and wait for `grocery/out/notify-ack-<store>.json`. The operator clears the wall in Chrome and clicks OK
+  on the Windows alert; that acknowledgment authorizes only a fresh canary check, never an automated bypass.
 - A current Omaha location/price-mode canary is required in every chunk. Bind at least one canary to the SHA-256
   of a proof screenshot so a retailer silently resetting fulfillment during a long sweep is detectable.
 - Record exact term outcomes, row counts, attempts, and time intervals. A challenge is `blocked`, never `empty`.
@@ -136,7 +140,11 @@ pnpm tc capture session verification-plan <session-directory> <verification-plan
 
 The plan includes likely lowest-price winners, a stable blind sample capped at 100 rows per store, produce/count risk
 on those likely winners, and every multi-buy/outlier/duplicate-price conflict. The blind-sample cap never suppresses
-an explicit risk target. Revisit each target with a fresh top-level navigation. Append `version: 2`,
+an explicit risk target. A likely winner is the cheapest candidate among the search results with the strongest
+query-token match; raw cheapest search position alone is insufficient. Revisit each target with a fresh top-level
+navigation using `captureAldiVerificationChunk`, `captureFarewayVerificationChunk`, or
+`captureNextDataVerificationChunk` from the store adapter. Each adapter atomically checkpoints the chunk and stops
+its lane on a challenge. Append `version: 2`,
 `phase: verification` chunks containing the plan row/hash and a newly read complete truth record. A changed row
 must be recaptured as a new discovery result and replanned; missing, blocked, stale, copied, or disagreeing
 verification cannot authorize publication.

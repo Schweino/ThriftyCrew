@@ -63,4 +63,32 @@ describe("source-specific capture-time parser contracts", () => {
     expect(accuracy.requiredVerificationRows).toBeGreaterThanOrEqual(100);
     expect(accuracy.requiredVerificationRows).toBeLessThanOrEqual(101);
   });
+
+  it("does not crown an irrelevant cheaper result as the likely query winner", async () => {
+    const makeCandidate = (index: number, productKey: string, name: string, purchasePriceMinor: number) => {
+      const truth = browserCaptureTruthSchema.parse({
+        capturedAt: "2026-08-12T12:00:00.000Z", pageUrl: "https://www.walmart.com/search?q=fresh%20garlic",
+        location: "Omaha L St Supercenter", priceMode: "Pickup", pageIndex: 0, resultIndex: index,
+        pageState: { pageType: "search_results", pageTitle: "fresh garlic - Walmart.com", query: "fresh garlic", resultRegionPresent: true, challengeDetected: false, currency: "USD", locale: "en-US", locationText: "Omaha L St Supercenter", fulfillmentText: "Pickup" },
+        visible: { rawText: `$${(purchasePriceMinor / 100).toFixed(2)}`, priceMinor: purchasePriceMinor, productName: name, productKey, priceSemantics: { offerType: "everyday", condition: "none", unitPriceMinor: purchasePriceMinor, qualifyingQuantity: 1, totalPriceMinor: purchasePriceMinor, ambiguity: false } },
+        structured: { rawText: String(purchasePriceMinor / 100), priceMinor: purchasePriceMinor, productName: name, productKey, priceSemantics: { offerType: "everyday", condition: "none", unitPriceMinor: purchasePriceMinor, qualifyingQuantity: 1, totalPriceMinor: purchasePriceMinor, ambiguity: false } },
+        parser: { status: "exact", rule: "next-data-price-lines" },
+      });
+      return { termKey: "fresh-garlic", query: "fresh garlic", productKey, name, sizeText: "1 each", taxonomyPath: "Food/Produce", purchasePriceMinor, truth };
+    };
+    const accuracy = await buildBrowserCaptureAccuracy("walmart", [
+      makeCandidate(0, "shallot", "Shallot", 75),
+      makeCandidate(1, "garlic-seasoning", "Garlic Seasoning", 99),
+      makeCandidate(2, "garlic", "Fresh Garlic Bulb", 149),
+    ], [], [{
+      outcome: "success", rowCount: 3,
+      retrieval: { targetResultCount: 3, loadedResultCount: 3, availableResultCount: 3, hasMoreResults: false, termination: "end-of-results" },
+    }]);
+    const shallot = accuracy.discoveryRows.find((row) => row.productKey === "shallot")!;
+    const seasoning = accuracy.discoveryRows.find((row) => row.productKey === "garlic-seasoning")!;
+    const garlic = accuracy.discoveryRows.find((row) => row.productKey === "garlic")!;
+    expect(shallot.riskReasons).not.toContain("likely-board-winner");
+    expect(seasoning.riskReasons).not.toContain("likely-board-winner");
+    expect(garlic.riskReasons).toContain("likely-board-winner");
+  });
 });

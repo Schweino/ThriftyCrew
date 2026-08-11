@@ -178,3 +178,49 @@ export async function captureNextDataChunk({ tab, store, terms, file, screenshot
   }
   return { file, attempted: results.length, rows: results.reduce((total, result) => total + result.rows.length, 0), blocked: results.some((result) => result.blocked), rejected: results.filter((result) => result.term.outcome === "rejected").map((result) => ({ query: result.term.query, reason: result.term.reason })), empty: results.filter((result) => result.term.outcome === "empty").map((result) => result.term.query) };
 }
+
+export async function captureNextDataVerificationChunk({ tab, store, targets, file, screenshotSha256, interTermDelayMs }) {
+  if (!CONFIG[store]) throw new Error("next-data verification adapter supports sams or walmart");
+  const maxTargets = store === "sams" ? 10 : 20;
+  const effectiveDelayMs = interTermDelayMs ?? (store === "sams" ? 2_000 : 0);
+  if (!Array.isArray(targets) || targets.length < 1 || targets.length > maxTargets) throw new Error(`${store} verification chunk requires 1-${maxTargets} targets`);
+  if (!Number.isInteger(effectiveDelayMs) || effectiveDelayMs < 0 || effectiveDelayMs > 30_000) throw new Error(`${store} verification inter-target delay must be 0-30000ms`);
+  const canary = await captureCanary(tab, store, screenshotSha256);
+  const verifications = [];
+  for (let index = 0; index < targets.length; index += 1) {
+    const target = targets[index];
+    const captured = await captureTerm(tab, store, target.query);
+    const observedAt = new Date().toISOString();
+    if (captured.blocked || captured.term.outcome === "blocked") {
+      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "blocked", reason: captured.term.reason || `${store} challenge detected during independent verification` });
+      await atomicJson(file, { version: 2, phase: "verification", store, canary, verifications });
+      break;
+    }
+    const row = captured.rows.find((candidate) => candidate.id === target.productKey);
+    if (!row) {
+      verifications.push({ rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "missing", reason: captured.term.reason || "target product was not present in the independently reloaded result envelope" });
+    } else {
+      const truth = { ...row._capture, capturedAt: observedAt };
+      verifications.push({
+        rowKey: target.rowKey,
+        discoveryHash: target.discoveryHash,
+        observedAt,
+        outcome: "observed",
+        productKey: row.id,
+        name: row.n,
+        sizeText: row.size,
+        purchasePriceMinor: priceMinor(row.lp),
+        truth,
+      });
+    }
+    await atomicJson(file, { version: 2, phase: "verification", store, canary, verifications });
+    if (index < targets.length - 1 && effectiveDelayMs > 0) await tab.playwright.waitForTimeout(effectiveDelayMs);
+  }
+  return {
+    file,
+    attempted: verifications.length,
+    observed: verifications.filter((item) => item.outcome === "observed").length,
+    missing: verifications.filter((item) => item.outcome === "missing").map((item) => item.rowKey),
+    blocked: verifications.some((item) => item.outcome === "blocked"),
+  };
+}
