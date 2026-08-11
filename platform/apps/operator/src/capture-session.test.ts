@@ -68,6 +68,18 @@ function verificationChunk(targets: Array<Record<string, unknown>>) {
 afterEach(async () => Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true }))));
 
 describe("resumable browser capture sessions", () => {
+  it("bounds status previews while retaining complete term counts", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-browser-session-"));
+    roots.push(root);
+    const worklist = path.join(root, "worklist.txt");
+    const directory = path.join(root, "session");
+    await writeFile(worklist, Array.from({ length: 25 }, (_, index) => `term ${index}`).join("\n"), "utf8");
+    await initializeCaptureSession("walmart", worklist, directory, "2026-08-12T15:00:00.000Z");
+    const status = await captureSessionStatus(directory) as { remainingTermCount: number; remainingTerms: unknown[]; remainingTermsTruncated: boolean };
+    expect(status).toMatchObject({ remainingTermCount: 25, remainingTermsTruncated: true });
+    expect(status.remainingTerms).toHaveLength(20);
+  });
+
   it("builds a rescue-first query-only worklist from the opposite generated TSV layouts", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "tc-browser-session-"));
     roots.push(root);

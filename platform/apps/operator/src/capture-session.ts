@@ -426,14 +426,21 @@ export async function captureSessionStatus(directory: string): Promise<Record<st
   const terms = finalizedTerms(draft, state.latest);
   const candidates = accuracyCandidates(draft, state);
   const accuracy = candidates.length ? await buildBrowserCaptureAccuracy(draft.store, candidates, state.verifications, terms) : null;
+  const remainingTerms = draft.worklist.filter((term) => !state.latest.has(term.query));
+  const retryTerms = draft.worklist.filter((term) => ["blocked", "rejected"].includes(state.latest.get(term.query)?.result.outcome ?? ""));
+  const previewLimit = 20;
   return {
     ok: true,
     sessionId: draft.sessionId,
     store: draft.store,
     expectedTerms: draft.worklist.length,
     attemptedTerms: state.latest.size,
-    remainingTerms: draft.worklist.filter((term) => !state.latest.has(term.query)),
-    retryTerms: draft.worklist.filter((term) => ["blocked", "rejected"].includes(state.latest.get(term.query)?.result.outcome ?? "")),
+    remainingTermCount: remainingTerms.length,
+    remainingTerms: remainingTerms.slice(0, previewLimit),
+    remainingTermsTruncated: remainingTerms.length > previewLimit,
+    retryTermCount: retryTerms.length,
+    retryTerms: retryTerms.slice(0, previewLimit),
+    retryTermsTruncated: retryTerms.length > previewLimit,
     chunks: draft.chunks.length,
     discoveryRows: candidates.length,
     verificationTargets: accuracy?.requiredVerificationRows ?? 0,
