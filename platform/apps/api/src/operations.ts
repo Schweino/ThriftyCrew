@@ -148,6 +148,10 @@ export function operationalIncidentIsNew(existingStatus: string | null | undefin
   return existingStatus === null || existingStatus === undefined || existingStatus === "resolved";
 }
 
+export function operationalDigestMemberKey(alertKey: string, notifyAfter: string): string {
+  return `${alertKey}@${notifyAfter}`;
+}
+
 export async function raiseOperationalAlert(
   env: WorkerEnv,
   alertKey: string,
@@ -202,8 +206,8 @@ export async function resolveOperationalAlert(
 ): Promise<{ triageId: string; resolved: boolean; idempotent: boolean; recoveryDelivery?: string }> {
   const triageId = await deterministicId("triage", "operational_alert", alertKey);
   const existing = await env.DB.prepare(
-    "SELECT status, updated_at FROM triage_items WHERE id = ?1 AND source_kind = 'operational_alert'",
-  ).bind(triageId).first<{ status: string; updated_at: string }>();
+    "SELECT status, updated_at, evidence_json FROM triage_items WHERE id = ?1 AND source_kind = 'operational_alert'",
+  ).bind(triageId).first<{ status: string; updated_at: string; evidence_json: string }>();
   if (!existing || existing.status === "resolved") return { triageId, resolved: Boolean(existing), idempotent: true };
   await env.DB.prepare(
     `UPDATE triage_items
@@ -213,11 +217,18 @@ export async function resolveOperationalAlert(
   ).bind(triageId, stableJson(evidence)).run();
   let recoveryDelivery: string | undefined;
   if (options.recoveryTitle) {
+    let digestMemberKey = "";
+    try {
+      const prior = JSON.parse(existing.evidence_json) as { _notification?: { notifyAfter?: unknown } };
+      if (typeof prior._notification?.notifyAfter === "string") {
+        digestMemberKey = operationalDigestMemberKey(alertKey, prior._notification.notifyAfter);
+      }
+    } catch { /* malformed legacy evidence has no digest membership key */ }
     const previouslyNotified = await env.DB.prepare(
       `SELECT 1 AS found FROM alert_deliveries
-        WHERE alert_key = ?1 AND status = 'delivered' AND created_at >= ?2
-          AND channel IN ('ops-alert', 'ops-digest-member') LIMIT 1`,
-    ).bind(alertKey, existing.updated_at).first<{ found: number }>();
+        WHERE status = 'delivered' AND channel IN ('ops-alert', 'ops-digest-member')
+          AND ((alert_key = ?1 AND created_at >= ?2) OR (?3 <> '' AND alert_key = ?3)) LIMIT 1`,
+    ).bind(alertKey, existing.updated_at, digestMemberKey).first<{ found: number }>();
     if (previouslyNotified) recoveryDelivery = await deliverAlert(env, `${alertKey}:recovered`, options.recoveryTitle, stableJson(evidence));
   }
   return { triageId, resolved: true, idempotent: false, ...(recoveryDelivery ? { recoveryDelivery } : {}) };
@@ -225,18 +236,22 @@ export async function resolveOperationalAlert(
 
 export async function flushOperationalAlertDigest(env: WorkerEnv, observedAt = new Date().toISOString()): Promise<{ due: number; delivery: string; membersRecorded: number }> {
   const due = await env.DB.prepare(
-    `SELECT t.id, t.source_ref, t.title, t.evidence_json
+    `SELECT t.id, t.source_ref, t.title, t.evidence_json,
+            json_extract(t.evidence_json, '$._notification.notifyAfter') AS notify_after
        FROM triage_items t
       WHERE t.source_kind = 'operational_alert' AND t.status <> 'resolved'
         AND json_extract(t.evidence_json, '$._notification.mode') = 'digest'
         AND json_extract(t.evidence_json, '$._notification.notifyAfter') <= ?1
         AND NOT EXISTS (
           SELECT 1 FROM alert_deliveries d
-           WHERE d.alert_key = t.source_ref AND d.channel IN ('ops-alert', 'ops-digest-member')
-             AND d.status = 'delivered' AND d.created_at >= t.updated_at
+           WHERE d.channel IN ('ops-alert', 'ops-digest-member') AND d.status = 'delivered'
+             AND (
+               d.alert_key = t.source_ref || '@' || json_extract(t.evidence_json, '$._notification.notifyAfter')
+               OR (d.alert_key = t.source_ref AND d.created_at >= datetime(json_extract(t.evidence_json, '$._notification.notifyAfter')))
+             )
         )
       ORDER BY t.created_at, t.id LIMIT 100`,
-  ).bind(observedAt).all<{ id: string; source_ref: string; title: string; evidence_json: string }>();
+  ).bind(observedAt).all<{ id: string; source_ref: string; title: string; evidence_json: string; notify_after: string }>();
   if (due.results.length === 0) return { due: 0, delivery: "suppressed", membersRecorded: 0 };
   const incidents = due.results.map((row) => {
     let evidence: Record<string, unknown> = {};
@@ -252,12 +267,13 @@ export async function flushOperationalAlertDigest(env: WorkerEnv, observedAt = n
   const delivery = await deliverAlert(env, digestKey, `ThriftyCrew alert digest: ${incidents.length} unresolved`, stableJson({ observedAt, incidents }));
   if (delivery !== "delivered") return { due: incidents.length, delivery, membersRecorded: 0 };
   for (const row of due.results) {
-    const memberId = await deterministicId("alert-digest-member", digestKey, row.source_ref);
+    const memberKey = operationalDigestMemberKey(row.source_ref, row.notify_after);
+    const memberId = await deterministicId("alert-digest-member", memberKey);
     await env.DB.prepare(
       `INSERT OR IGNORE INTO alert_deliveries
          (id, alert_key, channel, status, attempt, detail_json, finished_at)
        VALUES (?1, ?2, 'ops-digest-member', 'delivered', 1, ?3, CURRENT_TIMESTAMP)`,
-    ).bind(memberId, row.source_ref, stableJson({ digestKey, observedAt })).run();
+    ).bind(memberId, memberKey, stableJson({ digestKey, observedAt, sourceRef: row.source_ref, notifyAfter: row.notify_after })).run();
   }
   return { due: incidents.length, delivery, membersRecorded: incidents.length };
 }

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { d1DatabaseFileSize, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalIncidentIsNew, operationalNotificationDueAt, scheduleGap } from "./operations";
+import { d1DatabaseFileSize, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalDigestMemberKey, operationalIncidentIsNew, operationalNotificationDueAt, scheduleGap } from "./operations";
 import type { WorkerEnv } from "./env";
 
 const configuredEnv = {
@@ -34,6 +34,13 @@ describe("operational notification policy", () => {
     expect(operationalIncidentIsNew("resolved")).toBe(true);
     expect(operationalIncidentIsNew("open")).toBe(false);
     expect(operationalIncidentIsNew("needs_operator")).toBe(false);
+  });
+
+  it("keys digest acknowledgement to the incident deadline, not mutable triage timestamps", () => {
+    expect(operationalDigestMemberKey("schedule-gap:daily", "2026-08-10T14:15:00.000Z"))
+      .toBe("schedule-gap:daily@2026-08-10T14:15:00.000Z");
+    expect(operationalDigestMemberKey("schedule-gap:daily", "2026-08-11T14:15:00.000Z"))
+      .not.toBe(operationalDigestMemberKey("schedule-gap:daily", "2026-08-10T14:15:00.000Z"));
   });
 });
 
