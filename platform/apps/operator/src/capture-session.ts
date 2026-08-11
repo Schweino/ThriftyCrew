@@ -300,23 +300,35 @@ function csvValue(value: unknown): string {
   return /["|\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 }
 
-async function renderProjectedCapture(store: BrowserStore, rows: Array<Record<string, unknown>>, outputFile: string): Promise<string> {
+async function renderProjectedCapture(
+  store: BrowserStore,
+  rows: Array<Record<string, unknown>>,
+  outputFile: string,
+  worklist: DraftSession["worklist"],
+): Promise<string> {
+  const termKeyByQuery = new Map(worklist.map((term) => [term.query, term.termKey]));
   let output: string;
   if (store === "fareway") {
     const grouped = new Map<string, { id: string; term: string; candidates: Array<Record<string, unknown>> }>();
     for (const row of rows) {
-      const id = normalizedString(row.id);
       const term = normalizedString(row.term);
-      const key = `${id}\u001f${term}`;
-      const group = grouped.get(key) ?? { id, term, candidates: [] };
+      const id = termKeyByQuery.get(term);
+      if (!id) throw new Error(`fareway projected row refers to a query outside the finalized worklist: ${term || "(missing)"}`);
+      const group = grouped.get(id) ?? { id, term, candidates: [] };
       group.candidates.push(Object.fromEntries(STORE_COLUMNS.fareway.filter((column) => column !== "id" && column !== "term").map((column) => [column, normalizedString(row[column])])));
-      grouped.set(key, group);
+      grouped.set(id, group);
     }
     output = [...grouped.values()].map((group) => JSON.stringify(group)).join("\n") + "\n";
   }
   else {
     const columns = STORE_COLUMNS[store];
-    output = `${columns.join("|")}\n${rows.map((row) => columns.map((column) => csvValue(row[column])).join("|")).join("\n")}\n`;
+    output = `${columns.join("|")}\n${rows.map((row) => columns.map((column) => {
+      if (store !== "aldi" || column !== "id") return csvValue(row[column]);
+      const query = normalizedString(row.term);
+      const id = termKeyByQuery.get(query);
+      if (!id) throw new Error(`aldi projected row refers to a query outside the finalized worklist: ${query || "(missing)"}`);
+      return csvValue(id);
+    }).join("|")).join("\n")}\n`;
   }
   const temporary = `${outputFile}.tmp-${crypto.randomUUID()}`;
   await mkdir(path.dirname(outputFile), { recursive: true });
@@ -412,7 +424,7 @@ export async function finalizeCaptureSession(directory: string, projectedOutputF
   const mergedRows = draft.worklist.flatMap((term) => state.latest.get(term.query)?.rows ?? []);
   if (mergedRows.length === 0) throw new Error("capture session contains no projected product rows");
   const accuracy = await buildBrowserCaptureAccuracy(draft.store, accuracyCandidates(draft, state), state.verifications, terms);
-  const projectedCaptureSha256 = await renderProjectedCapture(draft.store, mergedRows, projectedOutputFile);
+  const projectedCaptureSha256 = await renderProjectedCapture(draft.store, mergedRows, projectedOutputFile, draft.worklist);
   const coverageMode: BrowserCaptureSessionV2["coverageMode"] = terms.every((term) => term.outcome === "success" || term.outcome === "empty") && accuracy.pass ? "full" : "partial";
   const manifestContent = {
     version: 2 as const,

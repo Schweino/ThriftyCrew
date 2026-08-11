@@ -65,6 +65,43 @@ function verificationChunk(targets: Array<Record<string, unknown>>) {
   };
 }
 
+function storefrontChunk(store: "aldi" | "fareway", query: string, minute: number) {
+  const observedAt = `2026-08-12T15:${String(minute).padStart(2, "0")}:00.000Z`;
+  const aldi = store === "aldi";
+  const location = aldi ? "ALDI - OLA 42 - Omaha" : "Omaha 17070 Audrey Street";
+  const productUrl = aldi
+    ? "https://www.aldi.us/store/aldi/products/35001-garlic-3-ct"
+    : "https://shop.fareway.com/store/fareway-meat-grocery/products/3253298-garlic-lb";
+  const name = "Fresh Garlic 3 ct";
+  const pageUrl = aldi ? `https://www.aldi.us/store/aldi/s?k=${query}` : `https://shop.fareway.com/store/fareway-meat-grocery/s?k=${query}`;
+  const truth = {
+    capturedAt: observedAt, pageUrl, location, priceMode: "In-Store",
+    pageIndex: 0, resultIndex: 0,
+    pageState: {
+      pageType: "search_results" as const, pageTitle: `${query} search`, query, resultRegionPresent: true as const,
+      challengeDetected: false as const, currency: "USD" as const, locale: "en-US", locationText: location,
+      fulfillmentText: "In-Store",
+    },
+    visible: { rawText: "Current price: $1.99", priceMinor: 199, productName: name, productKey: productUrl, sizeText: "3 ct", priceSemantics },
+    parser: { status: "exact" as const, rule: "current-price-label" },
+  };
+  return {
+    version: 2, phase: "discovery", store,
+    canary: {
+      observedAt, market: "Omaha", location, priceMode: "In-Store", evidenceUrl: pageUrl, screenshotSha256,
+      marketVerified: true, locationVerified: true, priceModeVerified: true,
+    },
+    terms: [{
+      query, outcome: "success", rowCount: 1, attempts: 1, startedAt: observedAt,
+      finishedAt: `2026-08-12T15:${String(minute + 1).padStart(2, "0")}:00.000Z`,
+      retrieval: { targetResultCount: 1, loadedResultCount: 1, availableResultCount: 1, pageCount: 1, hasMoreResults: false, termination: "end-of-results" },
+    }],
+    rows: [aldi
+      ? { id: "35001", term: query, name, prices: "$1.99", unit: "", size: "3 ct", href: productUrl, taxonomy_path: "Produce", _capture: truth }
+      : { id: "3253298", term: query, name, price: "$1.99", per: "", orig: "", unit: "", size: "3 ct", url: productUrl, taxonomy_path: "Produce", _capture: truth }],
+  };
+}
+
 afterEach(async () => Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true }))));
 
 describe("resumable browser capture sessions", () => {
@@ -131,6 +168,27 @@ describe("resumable browser capture sessions", () => {
     expect(manifest.canaries).toHaveLength(4);
     expect(await readFile(projected, "utf8")).toContain("Food/Dairy");
     expect(JSON.parse(await readFile(manifestFile, "utf8"))).toMatchObject({ contentHash: manifest.contentHash, projectedCaptureSha256: manifest.projectedCaptureSha256 });
+  });
+
+  it.each(["aldi", "fareway"] as const)("projects %s rows with the commodity id expected by the legacy builder", async (store) => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-browser-session-"));
+    roots.push(root);
+    const worklist = path.join(root, "worklist.tsv");
+    const directory = path.join(root, "session");
+    await writeFile(worklist, "fresh garlic\n", "utf8");
+    await initializeCaptureSession(store, worklist, directory, "2026-08-12T15:00:00.000Z");
+    const file = path.join(root, `${store}.json`);
+    await writeFile(file, JSON.stringify(storefrontChunk(store, "fresh garlic", 0)));
+    await appendCaptureChunk(directory, file);
+    const projected = path.join(root, store === "fareway" ? "capture.jsonl" : "capture.csv");
+    await finalizeCaptureSession(directory, projected, path.join(root, "manifest.json"), "2026-08-12T15:02:00.000Z");
+    const output = await readFile(projected, "utf8");
+    if (store === "fareway") {
+      expect(JSON.parse(output.trim())).toMatchObject({ id: "fresh-garlic", term: "fresh garlic", candidates: [{ name: "Fresh Garlic 3 ct" }] });
+    } else {
+      expect(output).toContain("id|term|name|prices");
+      expect(output).toContain("fresh-garlic|fresh garlic|Fresh Garlic 3 ct|$1.99");
+    }
   });
 
   it("rejects a chunk that cannot prove the required location", async () => {
