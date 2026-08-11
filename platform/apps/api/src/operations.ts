@@ -139,6 +139,10 @@ export function operationalNotificationDueAt(observedAt: string, deferMinutes: n
   return new Date(timestamp + deferMinutes * 60_000).toISOString();
 }
 
+export function operationalIncidentIsNew(existingStatus: string | null | undefined): boolean {
+  return existingStatus === null || existingStatus === undefined || existingStatus === "resolved";
+}
+
 export async function raiseOperationalAlert(
   env: WorkerEnv,
   alertKey: string,
@@ -148,20 +152,36 @@ export async function raiseOperationalAlert(
 ): Promise<{ triageId: string; delivery: string }> {
   const notification = options.notification ?? "immediate";
   const observedAt = options.observedAt ?? new Date().toISOString();
-  const storedEvidence = notification === "digest"
+  let storedEvidence = notification === "digest"
     ? { ...evidence, _notification: { mode: notification, notifyAfter: operationalNotificationDueAt(observedAt, options.deferMinutes ?? 15) } }
     : { ...evidence, ...(notification === "silent" ? { _notification: { mode: notification } } : {}) };
   const triageId = await deterministicId("triage", "operational_alert", alertKey);
+  const existing = await env.DB.prepare(
+    "SELECT status, evidence_json FROM triage_items WHERE id = ?1 AND source_kind = 'operational_alert'",
+  ).bind(triageId).first<{ status: string; evidence_json: string }>();
+  const newIncident = operationalIncidentIsNew(existing?.status);
+  if (!newIncident && notification === "digest" && existing?.evidence_json) {
+    try {
+      const prior = JSON.parse(existing.evidence_json) as Record<string, unknown>;
+      const priorNotification = prior._notification as Record<string, unknown> | undefined;
+      if (priorNotification?.mode === "digest" && typeof priorNotification.notifyAfter === "string") {
+        storedEvidence = { ...storedEvidence, _notification: { mode: "digest", notifyAfter: priorNotification.notifyAfter } };
+      }
+    } catch { /* malformed old evidence is replaced by the validated current shape */ }
+  }
   await env.DB.prepare(
     `INSERT INTO triage_items
        (id, source_kind, source_ref, severity, status, title, evidence_json)
      VALUES (?1, 'operational_alert', ?2, 'hard', 'open', ?3, ?4)
      ON CONFLICT(source_ref) DO UPDATE SET
        status = CASE WHEN triage_items.status = 'resolved' THEN 'open' ELSE triage_items.status END,
-       title = excluded.title, evidence_json = excluded.evidence_json, updated_at = CURRENT_TIMESTAMP,
-       resolved_at = NULL`,
+       title = excluded.title, evidence_json = excluded.evidence_json,
+       updated_at = CASE WHEN triage_items.status = 'resolved' THEN CURRENT_TIMESTAMP ELSE triage_items.updated_at END,
+       resolved_at = CASE WHEN triage_items.status = 'resolved' THEN NULL ELSE triage_items.resolved_at END`,
   ).bind(triageId, alertKey, title, stableJson(storedEvidence)).run();
-  const delivery = notification === "immediate" ? await deliverAlert(env, alertKey, title, stableJson(evidence)) : notification === "digest" ? "deferred" : "suppressed";
+  const delivery = notification === "immediate"
+    ? newIncident ? await deliverAlert(env, alertKey, title, stableJson(evidence)) : "suppressed"
+    : notification === "digest" ? "deferred" : "suppressed";
   return { triageId, delivery };
 }
 
@@ -342,7 +362,12 @@ async function dispatchPendingRegisteredAgents(env: WorkerEnv): Promise<void> {
   ).all<{ agent_id: string }>();
   for (const row of queued.results) {
     try {
-      await dispatchRegisteredAgent(env, row.agent_id);
+      const dispatch = await dispatchRegisteredAgent(env, row.agent_id);
+      await resolveOperationalAlert(env, `agent-dispatch:${row.agent_id}`, {
+        agentId: row.agent_id,
+        ...dispatch,
+        resolution: dispatch.dispatched ? "Registered agent dispatch succeeded." : "The authoritative execution plane does not require GitHub dispatch.",
+      });
     } catch (error) {
       await raiseOperationalAlert(env, `agent-dispatch:${row.agent_id}`, `Registered agent dispatch failed for ${row.agent_id}`, {
         agentId: row.agent_id,

@@ -11,6 +11,8 @@ to post by hand.
 | `build-demo-reel.ps1` | **How the page works.** A product demo of a live recipe page: serving control, the three pricing tabs, the "already have it, untick it" checkboxes. | On demand |
 | `build-demo-reel.ps1 -PinnedOverview` | **Pinned Page overview.** Leads with the annual takeout leak, tours the meal-prep library and one recipe end to end, then lightly introduces grocery search. | Pin to the Facebook Page |
 
+Install or repair the local daily task with `powershell -ExecutionPolicy Bypass -File .\install-daily-task.ps1`. The task wakes the PC, starts missed runs when the PC becomes available, and only writes local files for manual posting.
+
 ## The demo reel
 
 ```bash

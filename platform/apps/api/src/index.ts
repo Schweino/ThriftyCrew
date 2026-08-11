@@ -813,7 +813,13 @@ app.put("/internal/schedules/sync", zValidator("json", scheduleDocumentSchema), 
        proof = excluded.proof, dispatch_on_gap = excluded.dispatch_on_gap,
        lifecycle = excluded.lifecycle, authority_version = excluded.authority_version,
        retirement_gate = excluded.retirement_gate, workflow_file = excluded.workflow_file,
-       monitoring_started_at = COALESCE(job_schedules.monitoring_started_at, CURRENT_TIMESTAMP)`,
+       monitoring_started_at = CASE
+         WHEN job_schedules.authority_version <> excluded.authority_version
+           OR job_schedules.executor <> excluded.executor
+           OR job_schedules.cron <> excluded.cron
+           OR job_schedules.active <> excluded.active THEN CURRENT_TIMESTAMP
+         ELSE COALESCE(job_schedules.monitoring_started_at, CURRENT_TIMESTAMP)
+       END`,
   ).bind(
     schedule.id,
     schedule.cron,
@@ -876,6 +882,14 @@ app.put("/internal/agents/sync", zValidator("json", agentRegistrySchema), async 
   const placeholders = registry.agents.map((_, index) => `?${index + 1}`).join(", ");
   statements.push(context.env.DB.prepare(`UPDATE agent_registry SET active = 0 WHERE id NOT IN (${placeholders})`).bind(...registry.agents.map((agent) => agent.id)));
   await context.env.DB.batch(statements);
+  for (const agent of registry.agents.filter((candidate) => candidate.enabled && candidate.plane === "pc")) {
+    await resolveOperationalAlert(context.env, `agent-dispatch:${agent.id}`, {
+      agentId: agent.id,
+      plane: agent.plane,
+      registryVersion: registry.version,
+      resolution: "PC execution is authoritative; no GitHub dispatch is expected.",
+    });
+  }
   await recordAudit(context.env, context.get("identity"), "agents.sync", "agent_registry", `v${registry.version}`, "accepted", { agents: registry.agents.length, pricingEffectiveAt: registry.pricingEffectiveAt });
   return context.json({ ok: true, version: registry.version, agents: registry.agents.length });
 });
@@ -968,6 +982,11 @@ app.post("/internal/agent-work-items/:id/complete", zValidator("json", agentWork
     if (nextAgentId) {
       try {
         dispatch = await dispatchRegisteredAgent(context.env, nextAgentId);
+        await resolveOperationalAlert(context.env, `agent-dispatch:${nextAgentId}`, {
+          agentId: nextAgentId,
+          ...dispatch,
+          resolution: dispatch.dispatched ? "Registered agent dispatch succeeded." : "The authoritative execution plane does not require GitHub dispatch.",
+        });
       } catch (error) {
         dispatch = { dispatched: false, error: error instanceof Error ? error.message : "unknown dispatch failure" };
         await raiseOperationalAlert(context.env, `agent-dispatch:${nextAgentId}`, `Registered agent dispatch failed for ${nextAgentId}`, dispatch);

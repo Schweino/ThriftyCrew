@@ -11,6 +11,9 @@ with an enforcing fixture; prose by itself is not a safeguard.
 | Cat litter crowned as baking soda | Store shelf taxonomy is captured and aisle flips require evidence | `evaluateAisleEvidence` fixtures, `release-aisle-taxonomy` |
 | A previously adjudicated wrong product returns | Known-wrong rulings deploy with the configuration version | `release-known-wrong` |
 | A browser queue artifact predates a stricter top-level capture field | Pre-cutover compatibility may recover the value only from a unique, verified immutable attestation; post-cutover artifacts still fail closed | `capture-queue` legacy price-mode fixture |
+| One unresolved incident produces repeated email while its evidence timestamp changes | Alert keys notify once per open incident, preserve the original digest deadline, and rearm only after a recorded recovery | operational notification policy fixture |
+| D1 export polling exceeds the original retry window | Keep both `output_format: polling` and `current_bookmark` (the production API requires both despite a shorter documentation example) and allow a bounded 30-minute durable retry window | backup-policy fixture and live Workflow instance |
+| D1 reports a terminal export error during polling | Preserve the API's bounded diagnostic and stop retrying that terminal state; only the not-ready state consumes the durable polling window | live Workflow instance and API typecheck |
 | Rounded legacy unit prices fail exact native arithmetic | Legacy bridge alone receives a bounded 50-micro tolerance | domain arithmetic fixture, `release-basis` |
 | Required recipe ingredient disappears from the total | Incomplete recipes never enter price-ranked surfaces | bridge fixture, `release-recipe-completeness` |
 | Grocery moves while recipe/feed/rotation stays stale | All five payloads and release-owned counts validate before one pointer swap | `release-surface-counts` |

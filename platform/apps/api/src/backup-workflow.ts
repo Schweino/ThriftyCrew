@@ -1,14 +1,16 @@
 import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloudflare:workers";
+import { NonRetryableError } from "cloudflare:workflows";
 import { stableJson } from "@thriftycrew/domain";
 import { raiseOperationalAlert, resolveOperationalAlert } from "./operations";
 import type { WorkerEnv } from "./env";
-import { D1_EXPORT_POLL_STEP_CONFIG } from "./backup-policy";
+import { D1_EXPORT_POLL_STEP_CONFIG, d1ExportPollPayload } from "./backup-policy";
 
 interface BackupWorkflowPayload { trigger?: string; localDate?: string; forceReplica?: boolean }
 
 interface ExportResult {
   at_bookmark?: string;
   error?: string;
+  messages?: string[];
   status?: "complete" | "error";
   signed_url?: string;
   filename?: string;
@@ -58,8 +60,10 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
         return result.at_bookmark;
       });
       const stored = await step.do("download and store D1 export", D1_EXPORT_POLL_STEP_CONFIG, async () => {
-        const result = await exportRequest<ExportResult>(this.env, { output_format: "polling", current_bookmark: bookmark });
-        if (result.status === "error") throw new Error(result.error || "D1 export failed");
+        const result = await exportRequest<ExportResult>(this.env, d1ExportPollPayload(bookmark));
+        if (result.status === "error") {
+          throw new NonRetryableError(result.error || `D1 export failed: ${stableJson(result.messages ?? [])}`);
+        }
         const signedUrl = result.signed_url ?? result.result?.signed_url;
         const filename = result.filename ?? result.result?.filename;
         // Throwing here is intentional: Workflow step retries keep the export

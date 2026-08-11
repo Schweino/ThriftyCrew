@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { d1DatabaseFileSize, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalNotificationDueAt, scheduleGap } from "./operations";
+import { d1DatabaseFileSize, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalIncidentIsNew, operationalNotificationDueAt, scheduleGap } from "./operations";
 import type { WorkerEnv } from "./env";
 
 const configuredEnv = {
@@ -26,6 +26,14 @@ describe("operational notification policy", () => {
   it("rejects invalid digest timing evidence", () => {
     expect(() => operationalNotificationDueAt("not-a-date", 15)).toThrow(/invalid/);
     expect(() => operationalNotificationDueAt("2026-08-10T14:00:00.000Z", -1)).toThrow(/invalid/);
+  });
+
+  it("notifies once per open incident and rearms only after resolution", () => {
+    expect(operationalIncidentIsNew(undefined)).toBe(true);
+    expect(operationalIncidentIsNew(null)).toBe(true);
+    expect(operationalIncidentIsNew("resolved")).toBe(true);
+    expect(operationalIncidentIsNew("open")).toBe(false);
+    expect(operationalIncidentIsNew("needs_operator")).toBe(false);
   });
 });
 
