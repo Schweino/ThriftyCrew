@@ -22,8 +22,8 @@ function normalize(value) {
 }
 
 function priceMinor(value) {
-  const match = String(value ?? "").trim().match(/^\$([0-9]+(?:\.[0-9]{1,2})?)$/);
-  return match ? Math.round(Number(match[1]) * 100) : null;
+  const match = String(value ?? "").trim().match(/^\$([0-9][0-9,]*(?:\.[0-9]{1,2})?)$/);
+  return match ? Math.round(Number(match[1].replace(/,/g, "")) * 100) : null;
 }
 
 async function atomicJson(file, value) {
