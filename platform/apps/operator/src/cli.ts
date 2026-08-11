@@ -218,16 +218,33 @@ async function matchBatch(client: MutationClient, batchId: string, reusableConte
   return { ...persisted, ...report };
 }
 
-async function rematchPromotedBatches(client: MutationClient): Promise<{ ok: boolean; batches: Array<Record<string, unknown>> }> {
+async function rematchPromotedBatches(client: MutationClient, verbose = false): Promise<Record<string, unknown>> {
+  const startedAt = performance.now();
   const listed = await client.request("/internal/capture-batches/promoted") as { batches?: Array<{ id: string; source_id: string; captured_to: string }> };
   const context = await loadMatchContext();
   const batches: Array<Record<string, unknown>> = [];
+  const summary = { checked: 0, reused: 0, rebuilt: 0, failed: 0, products: 0, matched: 0, decisionWrites: 0, unchanged: 0 };
   for (const batch of listed.batches ?? []) {
     const matching = await matchBatch(client, batch.id, context);
-    if (matching.status !== "passed") throw new Error(`promoted batch ${batch.id} failed matching under the active configuration`);
+    summary.checked += 1;
+    summary.products += Number(matching.productCount ?? 0);
+    summary.matched += Number(matching.matchedCount ?? 0);
+    if (matching.reused) summary.reused += 1;
+    else summary.rebuilt += 1;
+    const efficiency = (matching.detail as { efficiency?: { decisionWrites?: number; unchanged?: number } } | undefined)?.efficiency;
+    summary.decisionWrites += Number(efficiency?.decisionWrites ?? 0);
+    summary.unchanged += Number(efficiency?.unchanged ?? 0);
+    if (matching.status !== "passed") {
+      summary.failed += 1;
+      throw new Error(`promoted batch ${batch.id} failed matching under the active configuration`);
+    }
     batches.push({ ...batch, matching });
   }
-  return { ok: true, batches };
+  return {
+    ok: true,
+    summary: { ...summary, elapsedMs: Math.round(performance.now() - startedAt) },
+    ...(verbose ? { batches } : {}),
+  };
 }
 
 async function commodityAdd(inputFile: string | undefined): Promise<unknown> {
@@ -659,6 +676,27 @@ if (command === "status") {
 } else if (command === "parity") {
   const artifact = await buildCurrentBridge(incomeRoot);
   result = { ok: artifact.audit.incompleteRecipes === 0 && artifact.audit.uncategorized.length === 0 && artifact.audit.multiplyCategorized.length === 0, audit: artifact.audit };
+} else if (command === "recipes" && subcommand === "gaps") {
+  const published = await publicGet("/api/v2/recipes") as {
+    releaseId?: string;
+    payload?: { recipes?: Array<{ slug: string; name: string; status: string; missingIngredients?: string[] }> };
+  };
+  const recipes = published.payload?.recipes ?? [];
+  const incomplete = recipes.filter((recipe) => recipe.status !== "complete");
+  const dependencyCounts = new Map<string, number>();
+  for (const recipe of incomplete) {
+    for (const ingredient of recipe.missingIngredients ?? []) {
+      dependencyCounts.set(ingredient, (dependencyCounts.get(ingredient) ?? 0) + 1);
+    }
+  }
+  result = {
+    ok: incomplete.length === 0,
+    releaseId: published.releaseId ?? null,
+    totals: { recipes: recipes.length, complete: recipes.length - incomplete.length, incomplete: incomplete.length },
+    dependencies: [...dependencyCounts].map(([ingredient, affectedRecipes]) => ({ ingredient, affectedRecipes }))
+      .sort((left, right) => right.affectedRecipes - left.affectedRecipes || left.ingredient.localeCompare(right.ingredient)),
+    recipes: incomplete.map((recipe) => ({ slug: recipe.slug, name: recipe.name, missingIngredients: recipe.missingIngredients ?? [] })),
+  };
 } else if (command === "engine" && subcommand === "parity") {
   const requestedMode = arguments_[0] ?? "legacy";
   if (!(["legacy", "direct", "all"] as const).includes(requestedMode as "legacy" | "direct" | "all")) throw new Error("tc engine parity mode must be legacy, direct, or all");
@@ -667,30 +705,50 @@ if (command === "status") {
   const report = buildNativeParityReport(snapshot);
   result = await client.request("/internal/engine/parity", { json: report, acceptStatuses: [422] });
 } else if (command === "engine" && (subcommand === "build-native" || subcommand === "publish-native")) {
+  const operationStartedAt = performance.now();
+  const performanceProfile: Record<string, number> = {};
   const client = await mutationClient();
+  let stageStartedAt = performance.now();
   const identity = await client.request("/internal/engine/snapshot-identity?mode=direct") as unknown as Pick<NativeEngineSnapshot, "mode" | "observedAt" | "configurationId" | "inputHash" | "inputBatchIds">;
+  performanceProfile.snapshotIdentityMs = Math.round(performance.now() - stageStartedAt);
+  stageStartedAt = performance.now();
   const catalog = await loadNativeReleaseCatalog(incomeRoot);
   const expected = await nativeReleaseIdentity(identity, catalog);
+  performanceProfile.localCatalogAndIdentityMs = Math.round(performance.now() - stageStartedAt);
   if (subcommand === "publish-native") {
+    stageStartedAt = performance.now();
     const existing = await client.request(`/internal/releases/${encodeURIComponent(expected.releaseId)}`, { acceptStatuses: [404] }) as {
       found?: boolean; release?: { input_hash?: string; state?: string };
     };
+    performanceProfile.existingReleasePreflightMs = Math.round(performance.now() - stageStartedAt);
     if (existing.found && existing.release?.state === "published") {
       if (existing.release.input_hash !== expected.inputHash) throw new Error(`native release ${expected.releaseId} has a conflicting input hash`);
-      result = { ok: true, releaseId: expected.releaseId, inputHash: expected.inputHash, state: "published", idempotent: true, reused: true };
+      performanceProfile.totalMs = Math.round(performance.now() - operationStartedAt);
+      result = { ok: true, releaseId: expected.releaseId, inputHash: expected.inputHash, state: "published", idempotent: true, reused: true, performance: performanceProfile };
     }
   }
   if (result === undefined) {
+    stageStartedAt = performance.now();
     const snapshot = await client.request("/internal/engine/snapshot?mode=direct") as unknown as NativeEngineSnapshot;
+    performanceProfile.snapshotFetchMs = Math.round(performance.now() - stageStartedAt);
+    stageStartedAt = performance.now();
     const artifact = await buildNativeRelease(incomeRoot, snapshot, catalog);
+    performanceProfile.nativeBuildMs = Math.round(performance.now() - stageStartedAt);
     const outputArgument = arguments_.find((value: string) => value.endsWith(".json"));
     if (outputArgument) await writeJson(cliPath(outputArgument), artifact);
     if (Number(artifact.audit.top5Entries) !== 20 || Number(artifact.audit.rotationEntries) !== 20) {
       throw new Error(`native release preflight requires exactly 20 complete ranked recipes; got ${String(artifact.audit.top5Entries)}`);
     }
-    result = subcommand === "build-native"
-      ? { ok: true, releaseId: artifact.releaseId, inputHash: artifact.inputHash, outputFile: outputArgument ? cliPath(outputArgument) : null, audit: artifact.audit }
-      : await publishNativeRelease(client, artifact);
+    if (subcommand === "build-native") {
+      performanceProfile.totalMs = Math.round(performance.now() - operationStartedAt);
+      result = { ok: true, releaseId: artifact.releaseId, inputHash: artifact.inputHash, outputFile: outputArgument ? cliPath(outputArgument) : null, audit: artifact.audit, performance: performanceProfile };
+    } else {
+      stageStartedAt = performance.now();
+      const publication = await publishNativeRelease(client, artifact);
+      performanceProfile.publishMs = Math.round(performance.now() - stageStartedAt);
+      performanceProfile.totalMs = Math.round(performance.now() - operationStartedAt);
+      result = { ...publication, performance: performanceProfile };
+    }
   }
 } else if (command === "replay") {
   const artifact = await buildCurrentBridge(incomeRoot);
@@ -818,7 +876,7 @@ if (command === "status") {
   }
   result = { ok: true, ready: ready.batches?.length ?? 0, promoted };
 } else if (command === "capture" && subcommand === "rematch-promoted") {
-  result = await rematchPromotedBatches(await mutationClient());
+  result = await rematchPromotedBatches(await mutationClient(), arguments_.includes("--verbose"));
 } else if (command === "capture" && subcommand === "abandon") {
   const batchId = arguments_[0];
   const reason = arguments_.slice(1).join(" ");

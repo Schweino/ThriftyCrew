@@ -1,4 +1,5 @@
 import { Hono, type MiddlewareHandler } from "hono";
+import { cache } from "cloudflare:workers";
 import { zValidator } from "@hono/zod-validator";
 import {
   accuracyDrawCreateSchema,
@@ -87,6 +88,20 @@ export { D1RestoreDrillWorkflow } from "./restore-workflow";
 
 type Bindings = { Bindings: WorkerEnv; Variables: { identity: MutationIdentity } };
 const app = new Hono<Bindings>();
+
+app.use("*", async (context, next) => {
+  await next();
+  const explicitlyCacheable = context.req.method === "GET" && (
+    context.req.path === "/api/v2/board"
+    || context.req.path.startsWith("/api/v2/board/")
+    || context.req.path === "/api/v2/feed"
+    || context.req.path === "/api/v2/top5"
+    || context.req.path === "/api/v2/free-rotation"
+    || context.req.path === "/api/v2/recipes"
+    || context.req.path.startsWith("/api/v2/recipes/")
+  );
+  if (!explicitlyCacheable) context.res.headers.set("cache-control", "no-store");
+});
 
 function jsonError(message: string, status: 400 | 401 | 403 | 404 | 409 | 422 | 500 | 502 = 400): Response {
   return Response.json({ ok: false, error: message }, { status });
@@ -2515,7 +2530,28 @@ app.post("/internal/releases/:id/publish", async (context) => {
      ON CONFLICT(market_id) DO UPDATE SET release_id = excluded.release_id, updated_at = CURRENT_TIMESTAMP`,
   ).bind(release.market_id, releaseId));
   await context.env.DB.batch(statements);
-  return context.json({ ok: true, releaseId, state: "published", previousReleaseId: current?.release_id ?? null });
+  let cachePurged = false;
+  let cachePurgeErrors: Array<{ code: number; message: string }> = [];
+  try {
+    const purge = await cache.purge({ tags: ["grocery-public"] });
+    cachePurged = purge.success;
+    cachePurgeErrors = purge.errors;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    cachePurgeErrors = [{ code: 0, message }];
+  }
+  try {
+    if (cachePurged) {
+      await resolveOperationalAlert(context.env, "public-cache-purge", { releaseId, purgedAt: new Date().toISOString() });
+    } else {
+      await raiseOperationalAlert(context.env, "public-cache-purge", "Published release cache purge failed", { releaseId, errors: cachePurgeErrors });
+    }
+  } catch (error) {
+    // Publication already committed atomically. Alert persistence must not turn
+    // that successful state change into a misleading 500/retry response.
+    console.error("public cache purge alert persistence failed", { releaseId, error: error instanceof Error ? error.message : String(error) });
+  }
+  return context.json({ ok: true, releaseId, state: "published", previousReleaseId: current?.release_id ?? null, cachePurged, cachePurgeErrors });
 });
 
 app.post("/internal/releases/:id/reject", async (context) => {

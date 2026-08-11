@@ -33,6 +33,34 @@ function chunks<T>(items: readonly T[], size: number): T[][] {
   return output;
 }
 
+type DirectObservation = DirectCaptureArtifact["observations"][number];
+
+export function deduplicateDirectObservations(observations: readonly DirectObservation[]): {
+  observations: DirectObservation[];
+  duplicatesAvoided: number;
+} {
+  const unique = new Map<string, { observation: DirectObservation; semantic: string }>();
+  for (const observation of observations) {
+    const versionIdentity = {
+      name: observation.name,
+      sizeText: observation.sizeText,
+      productUrl: observation.productUrl ?? null,
+      imageUrl: observation.imageUrl ?? null,
+      taxonomyPath: observation.taxonomyPath ?? null,
+      package: observation.package,
+      identity: observation.identity ?? null,
+    };
+    const key = stableJson([observation.externalProductKey, versionIdentity, observation.kind, observation.capturedAt]);
+    const semantic = stableJson(observation);
+    const prior = unique.get(key);
+    if (prior && prior.semantic !== semantic) {
+      throw new Error(`conflicting duplicate observation for ${observation.externalProductKey} at ${observation.capturedAt}`);
+    }
+    if (!prior) unique.set(key, { observation, semantic });
+  }
+  return { observations: [...unique.values()].map((entry) => entry.observation), duplicatesAvoided: observations.length - unique.size };
+}
+
 export class MutationClient {
   private cachedOidcToken: string | undefined;
   private oidcExpiresAt = 0;
@@ -119,6 +147,7 @@ export async function ingestDirectCapture(
   additionalEvidence: readonly CaptureEvidenceInput[] = [],
   options: { promote?: boolean } = {},
 ): Promise<Record<string, unknown>> {
+  const deduplicated = deduplicateDirectObservations(artifact.observations);
   const created = await client.request("/internal/capture-batches", { json: {
     sourceId: artifact.sourceId,
     coverageMode: artifact.coverageMode,
@@ -156,7 +185,7 @@ export async function ingestDirectCapture(
         },
       });
     }
-    for (const observationChunk of chunks(artifact.observations, 50)) {
+    for (const observationChunk of chunks(deduplicated.observations, 100)) {
       await client.request(`/internal/capture-batches/${batchId}/observations`, { json: { observations: observationChunk.map((observation) => ({ ...observation, evidenceObjectId: observation.evidenceObjectId ?? evidenceId })) } });
     }
     const sealed = await client.request(`/internal/capture-batches/${batchId}/seal`, { json: { terms: artifact.terms, evidenceManifestKey: evidenceId }, acceptStatuses: [422] });
@@ -164,14 +193,14 @@ export async function ingestDirectCapture(
     if (status === "rejected") return { ok: false, batchId, status, audit: artifact.audit, seal: sealed };
   }
   if (status === "validated" && options.promote === false) {
-    return { ok: true, batchId, status, evidenceId, evidenceIds, observations: artifact.observations.length, terms: artifact.terms.length, audit: artifact.audit, promotionPending: true };
+    return { ok: true, batchId, status, evidenceId, evidenceIds, observations: deduplicated.observations.length, duplicateObservationsAvoided: deduplicated.duplicatesAvoided, terms: artifact.terms.length, audit: artifact.audit, promotionPending: true };
   }
   if (status === "validated") {
     const promoted = await client.request(`/internal/capture-batches/${batchId}/promote`, { method: "POST" });
     status = String(promoted.status);
   }
   if (status !== "promoted") throw new Error(`direct capture ${batchId} is in unexpected state ${status}`);
-  return { ok: true, batchId, status, evidenceId, evidenceIds, observations: artifact.observations.length, terms: artifact.terms.length, audit: artifact.audit };
+  return { ok: true, batchId, status, evidenceId, evidenceIds, observations: deduplicated.observations.length, duplicateObservationsAvoided: deduplicated.duplicatesAvoided, terms: artifact.terms.length, audit: artifact.audit };
 }
 
 function configurationRuleCount(config: CurrentBridgeArtifact["configuration"]): number {

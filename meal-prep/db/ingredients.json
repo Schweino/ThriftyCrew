@@ -353,7 +353,14 @@
       "bulk":  true
   },
   {
-      "item":  "Bulgur Wheat"
+      "item":  "Bulgur Wheat",
+      "bid":  "bulgur-wheat",
+      "gpu":  28.3495,
+      "unit":  "oz",
+      "board":  "recipe",
+      "pantry_pkg_g":  907.2,
+      "pantry_pkg_label":  "32oz bag",
+      "bulk":  true
   },
   {
       "item":  "Butter",
@@ -1459,7 +1466,13 @@
       "bulk":  true
   },
   {
-      "item":  "Keto Bun"
+      "item":  "Keto Bun",
+      "bid":  "keto-bun",
+      "gpu":  50,
+      "unit":  "each",
+      "board":  "recipe",
+      "buy_pkg_g":  400,
+      "buy_pkg_label":  "8 buns"
   },
   {
       "item":  "Kidney Beans",
@@ -1471,7 +1484,13 @@
       "buy_pkg_label":  "can"
   },
   {
-      "item":  "Korean Rice Cakes"
+      "item":  "Korean Rice Cakes",
+      "bid":  "korean-rice-cakes",
+      "gpu":  28.3495,
+      "unit":  "oz",
+      "board":  "recipe",
+      "buy_pkg_g":  599.9,
+      "buy_pkg_label":  "21.16oz bag"
   },
   {
       "item":  "Lemon Juice",
@@ -2272,6 +2291,10 @@
   },
   {
       "item":  "Sumac",
+      "bid":  "sumac",
+      "gpu":  28.3495,
+      "unit":  "oz",
+      "board":  "recipe",
       "pantry_pkg_g":  227,
       "pantry_pkg_label":  "8oz jar (label capture)",
       "bulk":  true

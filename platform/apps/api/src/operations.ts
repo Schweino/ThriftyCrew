@@ -982,7 +982,9 @@ export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number,
   try {
     const [databaseBytes, observations, protectedRows, history] = await Promise.all([
       d1DatabaseFileSize(env),
-      env.DB.prepare("SELECT COUNT(*) AS count, MIN(captured_at) AS oldest FROM observations").first<{ count: number; oldest: string | null }>(),
+      env.DB.prepare(
+        "SELECT observation_count AS count, oldest_observation_at AS oldest FROM observation_statistics WHERE singleton = 1",
+      ).first<{ count: number; oldest: string | null }>(),
       env.DB.prepare("SELECT COUNT(DISTINCT observation_id) AS count FROM release_cells WHERE observation_id IS NOT NULL").first<{ count: number }>(),
       env.DB.prepare("SELECT database_bytes, observed_at FROM archival_forecasts ORDER BY observed_at DESC LIMIT 8").all<{ database_bytes: number; observed_at: string }>(),
     ]);

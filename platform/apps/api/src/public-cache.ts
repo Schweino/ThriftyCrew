@@ -27,7 +27,7 @@ function notModified(request: Request, response: Response): Response {
   const etag = response.headers.get("etag");
   if (!requested || !etag || !requested.split(",").map((value) => value.trim()).includes(etag)) return response;
   const headers = new Headers();
-  for (const name of ["etag", "cache-control", "x-release-id", "vary"]) {
+  for (const name of ["etag", "cache-control", "cache-tag", "x-release-id", "vary"]) {
     const value = response.headers.get(name);
     if (value) headers.set(name, value);
   }
@@ -62,6 +62,7 @@ export async function cachedPublicJson(request: Request, load: () => Promise<Pub
   const response = Response.json(value.body, {
     headers: {
       "cache-control": "public, max-age=60, stale-while-revalidate=300",
+      "cache-tag": `grocery-public,grocery-release-${value.releaseId}`,
       etag: value.etag,
       "x-release-id": value.releaseId,
     },

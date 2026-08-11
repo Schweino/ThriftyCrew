@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import type { DirectCaptureArtifact } from "@thriftycrew/contracts";
 import type { CurrentBridgeArtifact } from "./legacy";
-import { deployConfiguration, MutationClient, publishNativeRelease } from "./client";
+import { deduplicateDirectObservations, deployConfiguration, MutationClient, publishNativeRelease } from "./client";
 import type { NativeReleaseArtifact } from "./native";
 
 describe("configuration deployment", () => {
@@ -25,6 +26,30 @@ describe("configuration deployment", () => {
     });
     expect(request).toHaveBeenCalledTimes(1);
     expect(request).not.toHaveBeenCalledWith("/internal/doctor", expect.anything());
+  });
+});
+
+describe("direct capture observation deduplication", () => {
+  const observation = {
+    externalProductKey: "sku-1", name: "Test Product", sizeText: "16 oz", kind: "everyday",
+    currency: "USD", purchasePriceMinor: 299, purchaseQuantity: 1, packageCount: 1,
+    capturedBasisUnit: "oz", capturedBasisQtyMicros: 16_000_000,
+    normalizedBasisUnit: "oz", normalizedBasisQtyMicros: 16_000_000,
+    perUnitMicros: 186_875, rawPriceText: "$2.99", rawSizeText: "16 oz",
+    capturedAt: "2026-08-11T12:00:00.000Z", package: { count: 1, size: 16, unit: "oz" },
+    loyaltyRequired: false, membershipRequired: false,
+  } as DirectCaptureArtifact["observations"][number];
+
+  it("removes byte-equivalent deterministic observation retries", () => {
+    expect(deduplicateDirectObservations([observation, { ...observation }])).toEqual({
+      observations: [observation],
+      duplicatesAvoided: 1,
+    });
+  });
+
+  it("rejects conflicting prices that would share an observation id", () => {
+    expect(() => deduplicateDirectObservations([observation, { ...observation, purchasePriceMinor: 399 }]))
+      .toThrow("conflicting duplicate observation");
   });
 });
 

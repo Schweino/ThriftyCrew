@@ -14,6 +14,6 @@ describe("public release cache", () => {
     expect(response.status).toBe(304);
     expect(response.headers.get("etag")).toBe(etag);
     expect(response.headers.get("x-release-id")).toBe("release");
+    expect(response.headers.get("cache-tag")).toBe("grocery-public,grocery-release-release");
   });
 });
-

@@ -38,7 +38,14 @@ export async function insertObservations(
   observations: readonly ObservationInput[],
 ): Promise<{ accepted: number; ids: string[] }> {
   if (batch.status !== "open") throw new Error(`batch ${batch.id} is not open`);
-  const statements: D1PreparedStatement[] = [];
+  const productUpserts = new Map<string, { externalKey: string; firstSeenAt: string; lastSeenAt: string }>();
+  const versionUpserts = new Map<string, {
+    productId: string; name: string; normalizedName: string; sizeText: string;
+    productUrl: string | null; imageUrl: string | null; taxonomyPath: string | null;
+    packageJson: string; identityFingerprint: string | null; identityJson: string;
+    versionHash: string; firstSeenAt: string; lastSeenAt: string;
+  }>();
+  const observationStatements: D1PreparedStatement[] = [];
   const ids: string[] = [];
 
   for (const observation of observations) {
@@ -66,35 +73,30 @@ export async function insertObservations(
     const observationId = await deterministicId("obs", batch.id, versionId, observation.kind, observation.capturedAt);
     ids.push(observationId);
 
-    statements.push(db.prepare(
-      `INSERT INTO products (id, store_location_id, external_key, first_seen_at, last_seen_at)
-       VALUES (?1, ?2, ?3, ?4, ?4)
-       ON CONFLICT(store_location_id, external_key) DO UPDATE SET last_seen_at = excluded.last_seen_at`,
-    ).bind(productId, batch.store_location_id, observation.externalProductKey, observation.capturedAt));
-
-    statements.push(db.prepare(
-       `INSERT INTO product_versions
-         (id, product_id, name, normalized_name, size_text, product_url, image_url, taxonomy_path, package_json,
-          identity_fingerprint, identity_json, content_hash, first_seen_at, last_seen_at)
-       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?13)
-       ON CONFLICT(product_id, content_hash) DO UPDATE SET last_seen_at = excluded.last_seen_at`,
-    ).bind(
-      versionId,
+    const priorProduct = productUpserts.get(productId);
+    productUpserts.set(productId, {
+      externalKey: observation.externalProductKey,
+      firstSeenAt: priorProduct && priorProduct.firstSeenAt < observation.capturedAt ? priorProduct.firstSeenAt : observation.capturedAt,
+      lastSeenAt: priorProduct && priorProduct.lastSeenAt > observation.capturedAt ? priorProduct.lastSeenAt : observation.capturedAt,
+    });
+    const priorVersion = versionUpserts.get(versionId);
+    versionUpserts.set(versionId, {
       productId,
-      observation.name,
-      normalizeName(observation.name),
-      observation.sizeText,
-      observation.productUrl ?? null,
-      observation.imageUrl ?? null,
-      observation.taxonomyPath ?? null,
-      stableJson(observation.package),
-      observation.identity?.fingerprint ?? null,
-      stableJson(observation.identity ?? {}),
+      name: observation.name,
+      normalizedName: normalizeName(observation.name),
+      sizeText: observation.sizeText,
+      productUrl: observation.productUrl ?? null,
+      imageUrl: observation.imageUrl ?? null,
+      taxonomyPath: observation.taxonomyPath ?? null,
+      packageJson: stableJson(observation.package),
+      identityFingerprint: observation.identity?.fingerprint ?? null,
+      identityJson: stableJson(observation.identity ?? {}),
       versionHash,
-      observation.capturedAt,
-    ));
+      firstSeenAt: priorVersion && priorVersion.firstSeenAt < observation.capturedAt ? priorVersion.firstSeenAt : observation.capturedAt,
+      lastSeenAt: priorVersion && priorVersion.lastSeenAt > observation.capturedAt ? priorVersion.lastSeenAt : observation.capturedAt,
+    });
 
-    statements.push(db.prepare(
+    observationStatements.push(db.prepare(
       `INSERT OR IGNORE INTO observations
          (id, batch_id, product_version_id, term_key, kind, currency, purchase_price_minor, regular_price_minor,
           purchase_quantity, package_count, captured_basis_unit, captured_basis_qty_micros, normalized_basis_unit,
@@ -131,9 +133,34 @@ export async function insertObservations(
     ));
   }
 
+  const statements: D1PreparedStatement[] = [];
+  for (const [productId, product] of productUpserts) {
+    statements.push(db.prepare(
+      `INSERT INTO products (id, store_location_id, external_key, first_seen_at, last_seen_at)
+       VALUES (?1, ?2, ?3, ?4, ?5)
+       ON CONFLICT(store_location_id, external_key) DO UPDATE SET last_seen_at = excluded.last_seen_at
+       WHERE products.last_seen_at < excluded.last_seen_at`,
+    ).bind(productId, batch.store_location_id, product.externalKey, product.firstSeenAt, product.lastSeenAt));
+  }
+  for (const [versionId, version] of versionUpserts) {
+    statements.push(db.prepare(
+      `INSERT INTO product_versions
+        (id, product_id, name, normalized_name, size_text, product_url, image_url, taxonomy_path, package_json,
+         identity_fingerprint, identity_json, content_hash, first_seen_at, last_seen_at)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)
+       ON CONFLICT(product_id, content_hash) DO UPDATE SET last_seen_at = excluded.last_seen_at
+       WHERE product_versions.last_seen_at < excluded.last_seen_at`,
+    ).bind(
+      versionId, version.productId, version.name, version.normalizedName, version.sizeText,
+      version.productUrl, version.imageUrl, version.taxonomyPath, version.packageJson,
+      version.identityFingerprint, version.identityJson, version.versionHash,
+      version.firstSeenAt, version.lastSeenAt,
+    ));
+  }
+  statements.push(...observationStatements);
+
   // D1 batch calls have practical statement and payload ceilings. Keep the
-  // application contract independent of those ceilings by flushing bounded
-  // groups; an observation expands to three statements.
+  // application contract independent of those ceilings by flushing bounded groups.
   for (let offset = 0; offset < statements.length; offset += 90) {
     await db.batch(statements.slice(offset, offset + 90));
   }

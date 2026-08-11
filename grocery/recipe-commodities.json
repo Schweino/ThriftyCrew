@@ -1175,6 +1175,9 @@
                                             "apple\\s+cider",
                                             "reduction"
                                         ],
+                            "relax_global":  [
+                                                 "\\bwine\\b"
+                                             ],
                             "band_min":  0.05,
                             "band_max":  0.6,
                             "note":  "Excludes red-wine vinaigrette/dressing and other vinegar types (balsamic/white-wine/rice/cider)."

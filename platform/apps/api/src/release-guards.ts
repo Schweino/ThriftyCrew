@@ -91,21 +91,58 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
     { snapshotBatchCount: snapshotCount },
   ));
 
-  const aisleRows = await db.prepare(
-    `SELECT c.commodity_id, c.store_location_id, p.id AS product_id, pv.taxonomy_path
+  // Load the selected release projection once. Six guards consume this same
+  // bounded rowset; keeping it shared avoids repeatedly scanning and joining
+  // every priced release cell.
+  const selectedRows = await db.prepare(
+    `SELECT c.commodity_id, c.store_location_id, c.observation_id,
+            c.display_per_unit_micros, c.display_unit,
+            o.batch_id, o.captured_at, o.purchase_price_minor, o.per_unit_micros,
+            o.normalized_basis_unit, o.normalized_basis_qty_micros, o.raw_price_text,
+            p.id AS product_id, p.external_key, pv.normalized_name, pv.name, pv.size_text, pv.taxonomy_path,
+            s.capture_method,
+            CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days,
+            CAST(julianday(CURRENT_TIMESTAMP) - julianday(o.captured_at) AS INTEGER) AS age_days,
+            x.band_min_micros, x.band_max_micros,
+            EXISTS(
+              SELECT 1 FROM match_decisions aisle
+               WHERE aisle.product_id = p.id AND aisle.superseded_at IS NULL AND aisle.decided_by = 'aisle'
+            ) AS aisle_authoritative,
+            (
+              SELECT k.id FROM known_wrong_rules k
+               WHERE k.configuration_id = ?2 AND k.commodity_id = c.commodity_id
+                 AND (k.store_location_id IS NULL OR k.store_location_id = c.store_location_id)
+                 AND (k.external_product_key = p.external_key OR k.normalized_name = pv.normalized_name)
+               ORDER BY k.id LIMIT 1
+            ) AS known_wrong_rule_id
        FROM release_cells c
+       JOIN releases r ON r.id = c.release_id
        JOIN observations o ON o.id = c.observation_id
        JOIN product_versions pv ON pv.id = o.product_version_id
        JOIN products p ON p.id = pv.product_id
-       JOIN match_decisions m ON m.product_id = p.id AND m.superseded_at IS NULL AND m.decided_by = 'aisle'
-      WHERE c.release_id = ?1`,
-  ).bind(context.releaseId).all<{ commodity_id: string; store_location_id: string; product_id: string; taxonomy_path: string | null }>();
-  const aisleMissing = aisleRows.results.filter((row) => !row.taxonomy_path);
+       JOIN capture_batches b ON b.id = o.batch_id
+       JOIN capture_sources s ON s.id = b.source_id
+       JOIN commodities x ON x.id = c.commodity_id AND x.configuration_id = r.configuration_id
+      WHERE c.release_id = ?1 AND c.status = 'priced'
+      ORDER BY c.commodity_id, c.store_location_id`,
+  ).bind(context.releaseId, context.configurationId).all<{
+    commodity_id: string; store_location_id: string; observation_id: string;
+    display_per_unit_micros: number; display_unit: string; batch_id: string; captured_at: string;
+    purchase_price_minor: number; per_unit_micros: number; normalized_basis_unit: string;
+    normalized_basis_qty_micros: number; raw_price_text: string; product_id: string;
+    external_key: string; normalized_name: string; name: string; size_text: string;
+    taxonomy_path: string | null; capture_method: string; max_age_days: number; age_days: number;
+    band_min_micros: number | null; band_max_micros: number | null;
+    aisle_authoritative: number; known_wrong_rule_id: string | null;
+  }>();
+  const pricedCount = selectedRows.results.length;
+  const aisleRows = selectedRows.results.filter((row) => row.aisle_authoritative === 1);
+  const aisleMissing = aisleRows.filter((row) => !row.taxonomy_path);
   await upsertGuardResult(db, context.releaseId, result(
     "release-aisle-taxonomy",
     aisleMissing.length === 0,
-    aisleRows.results.length,
-    aisleRows.results.length,
+    aisleRows.length,
+    aisleRows.length,
     aisleMissing.map((row) => ({
       key: row.product_id,
       message: "Aisle-authoritative match has no captured taxonomy path",
@@ -228,69 +265,39 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
     { previousReleaseId: previous?.release_id ?? null },
   ));
 
-  const pricedCount = (await db.prepare("SELECT COUNT(*) AS count FROM release_cells WHERE release_id = ?1 AND status = 'priced'").bind(context.releaseId).first<CountRow>())?.count ?? 0;
-  const wrongRows = await db.prepare(
-    `SELECT c.commodity_id, c.store_location_id, o.id AS observation_id, p.external_key, pv.normalized_name, k.id AS rule_id
-       FROM release_cells c
-       JOIN observations o ON o.id = c.observation_id
-       JOIN product_versions pv ON pv.id = o.product_version_id
-       JOIN products p ON p.id = pv.product_id
-       JOIN known_wrong_rules k
-         ON k.configuration_id = ?2 AND k.commodity_id = c.commodity_id
-        AND (k.store_location_id IS NULL OR k.store_location_id = c.store_location_id)
-        AND (k.external_product_key = p.external_key OR k.normalized_name = pv.normalized_name)
-      WHERE c.release_id = ?1 AND c.status = 'priced'
-      ORDER BY c.commodity_id, c.store_location_id LIMIT 500`,
-  ).bind(context.releaseId, context.configurationId).all<{ commodity_id: string; store_location_id: string; observation_id: string; rule_id: string }>();
+  const wrongRows = selectedRows.results.filter((row) => row.known_wrong_rule_id !== null);
   await upsertGuardResult(db, context.releaseId, result(
     "release-known-wrong",
-    wrongRows.results.length === 0,
+    wrongRows.length === 0,
     pricedCount,
     pricedCount,
-    wrongRows.results.map((row) => ({
+    wrongRows.map((row) => ({
       key: `${row.commodity_id}:${row.store_location_id}`,
       message: "Selected observation is covered by a known-wrong ruling",
-      evidence: { observationId: row.observation_id, ruleId: row.rule_id },
+      evidence: { observationId: row.observation_id, ruleId: row.known_wrong_rule_id },
     })),
   ));
 
-  const basisRows = await db.prepare(
-    `SELECT c.commodity_id, c.store_location_id, o.id AS observation_id,
-            o.per_unit_micros,
-            ROUND((o.purchase_price_minor * 10000.0 * 1000000) / o.normalized_basis_qty_micros) AS expected_micros,
-            s.capture_method
-       FROM release_cells c
-       JOIN observations o ON o.id = c.observation_id
-       JOIN capture_batches b ON b.id = o.batch_id
-       JOIN capture_sources s ON s.id = b.source_id
-      WHERE c.release_id = ?1 AND c.status = 'priced'
-        AND ABS(o.per_unit_micros - ROUND((o.purchase_price_minor * 10000.0 * 1000000) / o.normalized_basis_qty_micros))
-            > CASE WHEN s.capture_method = 'legacy_bridge' THEN 50 ELSE 2 END
-      ORDER BY c.commodity_id, c.store_location_id LIMIT 500`,
-  ).bind(context.releaseId).all<{ commodity_id: string; store_location_id: string; observation_id: string; per_unit_micros: number; expected_micros: number; capture_method: string }>();
+  const basisRows = selectedRows.results.flatMap((row) => {
+    const expectedMicros = Math.round((row.purchase_price_minor * 10_000 * 1_000_000) / row.normalized_basis_qty_micros);
+    const tolerance = row.capture_method === "legacy_bridge" ? 50 : 2;
+    return Math.abs(row.per_unit_micros - expectedMicros) > tolerance ? [{ ...row, expected_micros: expectedMicros }] : [];
+  }).slice(0, 500);
   await upsertGuardResult(db, context.releaseId, result(
     "release-basis",
-    basisRows.results.length === 0,
+    basisRows.length === 0,
     pricedCount,
     pricedCount,
-    basisRows.results.map((row) => ({
+    basisRows.map((row) => ({
       key: `${row.commodity_id}:${row.store_location_id}`,
       message: "Displayed price does not agree with captured price and normalized package basis",
       evidence: { observationId: row.observation_id, displayedMicros: row.per_unit_micros, expectedMicros: row.expected_micros, captureMethod: row.capture_method },
     })),
   ));
 
-  const priceRows = await db.prepare(
-    `SELECT c.commodity_id, c.store_location_id, c.observation_id, c.display_per_unit_micros,
-            x.band_min_micros, x.band_max_micros
-       FROM release_cells c
-       JOIN releases r ON r.id = c.release_id
-       JOIN commodities x ON x.id = c.commodity_id AND x.configuration_id = r.configuration_id
-      WHERE c.release_id = ?1 AND c.status = 'priced'
-      ORDER BY c.commodity_id, c.store_location_id`,
-  ).bind(context.releaseId).all<{ commodity_id: string; store_location_id: string; observation_id: string; display_per_unit_micros: number; band_min_micros: number | null; band_max_micros: number | null }>();
-  const pricesByCommodity = new Map<string, typeof priceRows.results>();
-  for (const row of priceRows.results) {
+  const priceRows = selectedRows.results;
+  const pricesByCommodity = new Map<string, typeof priceRows>();
+  for (const row of priceRows) {
     const rows = pricesByCommodity.get(row.commodity_id) ?? [];
     rows.push(row);
     pricesByCommodity.set(row.commodity_id, rows);
@@ -336,24 +343,15 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
   await upsertGuardResult(db, context.releaseId, result(
     "release-price-plausibility",
     priceFindings.length === 0,
-    priceRows.results.length,
-    priceRows.results.length,
+    priceRows.length,
+    priceRows.length,
     priceFindings,
     { policy: "authored bands plus a hard 10x-below-median crown stop when at least three stores are priced" },
   ));
 
-  const packageRows = await db.prepare(
-    `SELECT c.commodity_id, c.store_location_id, o.id AS observation_id, o.purchase_price_minor,
-            o.normalized_basis_unit, o.normalized_basis_qty_micros, o.raw_price_text,
-            pv.name, pv.size_text
-       FROM release_cells c
-       JOIN observations o ON o.id = c.observation_id
-       JOIN product_versions pv ON pv.id = o.product_version_id
-      WHERE c.release_id = ?1 AND c.status = 'priced'
-      ORDER BY c.commodity_id, c.store_location_id`,
-  ).bind(context.releaseId).all<{ commodity_id: string; store_location_id: string; observation_id: string; purchase_price_minor: number; normalized_basis_unit: string; normalized_basis_qty_micros: number; raw_price_text: string; name: string; size_text: string }>();
+  const packageRows = selectedRows.results;
   const packageFindings: ReleaseGuardResult["findings"] = [];
-  for (const row of packageRows.results) {
+  for (const row of packageRows) {
     const normalizedName = row.name.toLowerCase();
     const simplePrice = row.raw_price_text.trim().replace(/,/g, "").match(/^\$?([0-9]+(?:\.[0-9]+)?)$/);
     if (simplePrice && Math.abs(Math.round(Number(simplePrice[1]) * 100) - row.purchase_price_minor) > 1) {
@@ -372,31 +370,18 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
   await upsertGuardResult(db, context.releaseId, result(
     "release-package-semantics",
     packageFindings.length === 0,
-    packageRows.results.length,
-    packageRows.results.length,
+    packageRows.length,
+    packageRows.length,
     packageFindings,
   ));
 
-  const staleRows = await db.prepare(
-    `SELECT c.commodity_id, c.store_location_id, o.id AS observation_id, o.captured_at,
-            CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days,
-            CAST(julianday(CURRENT_TIMESTAMP) - julianday(o.captured_at) AS INTEGER) AS age_days
-       FROM release_cells c
-       JOIN releases r ON r.id = c.release_id
-       JOIN observations o ON o.id = c.observation_id
-       JOIN capture_batches b ON b.id = o.batch_id
-       JOIN capture_sources s ON s.id = b.source_id
-      WHERE c.release_id = ?1 AND c.status = 'priced'
-        AND julianday(CURRENT_TIMESTAMP) - julianday(o.captured_at)
-            > CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER)
-      ORDER BY c.commodity_id, c.store_location_id LIMIT 500`,
-  ).bind(context.releaseId).all<{ commodity_id: string; store_location_id: string; observation_id: string; captured_at: string; max_age_days: number; age_days: number }>();
+  const staleRows = selectedRows.results.filter((row) => row.age_days > row.max_age_days).slice(0, 500);
   await upsertGuardResult(db, context.releaseId, result(
     "release-freshness",
-    staleRows.results.length === 0,
+    staleRows.length === 0,
     pricedCount,
     pricedCount,
-    staleRows.results.map((row) => ({
+    staleRows.map((row) => ({
       key: `${row.commodity_id}:${row.store_location_id}`,
       message: "Selected observation is older than its source freshness window",
       evidence: { observationId: row.observation_id, capturedAt: row.captured_at, ageDays: row.age_days, maxAgeDays: row.max_age_days },
