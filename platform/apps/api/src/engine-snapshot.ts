@@ -114,6 +114,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
             b.coverage_mode, b.captured_to, b.id AS batch_id, o.normalized_basis_unit,
             o.normalized_basis_qty_micros, o.purchase_price_minor,
             o.membership_required, o.loyalty_required, pv.name, pv.size_text, p.external_key,
+            o.basis_options_json,
             CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days
        FROM observations o
        JOIN capture_batches b ON b.id = o.batch_id
