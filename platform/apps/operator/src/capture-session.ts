@@ -395,6 +395,7 @@ export async function buildCaptureVerificationPlan(directory: string, outputFile
   const accuracy = await buildBrowserCaptureAccuracy(draft.store, accuracyCandidates(draft, state), state.verifications, terms);
   const targets = accuracy.discoveryRows.filter((row) => row.verificationRequired).map((row) => ({
     rowKey: row.rowKey, discoveryHash: row.discoveryHash, termKey: row.termKey, query: row.query,
+    discoveryCapturedAt: row.truth.capturedAt,
     productKey: row.productKey, name: row.name, sizeText: row.sizeText, purchasePriceMinor: row.purchasePriceMinor,
     pageUrl: row.truth.pageUrl, riskReasons: row.riskReasons,
   }));

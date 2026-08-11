@@ -151,8 +151,9 @@ position alone is insufficient. Revisit each target with a fresh top-level
 navigation using `captureAldiVerificationChunk`, `captureFarewayVerificationChunk`, or
 `captureNextDataVerificationChunk` from the store adapter. Each adapter atomically checkpoints the chunk and stops
 its lane on a challenge. On resume, a target counts as complete only when the latest observed verification matches
-both the plan's `rowKey` and current `discoveryHash`; a refreshed discovery row must never be skipped because an old
-verification shares its row key. Fareway performs this second pass on the exact first-party product-detail URL because its
+the plan's `rowKey` and current `discoveryHash`, and its `observedAt` is later than the target's
+`discoveryCapturedAt`. A refreshed discovery row must never be skipped because an old verification shares its row
+key or unchanged hash. Fareway performs this second pass on the exact first-party product-detail URL because its
 search envelope is volatile; verification equality compares product identity, normalized name/size, price,
 location/mode, channels, and price semantics while the discovery hash separately binds the planned discovery row.
 If Fareway's product page disagrees with the discovery card (notably, some multipacks expose only a component-unit

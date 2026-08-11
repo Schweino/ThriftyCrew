@@ -112,6 +112,10 @@ describe("resumable browser capture sessions", () => {
     await buildCaptureVerificationPlan(directory, planFile);
     const plan = JSON.parse(await readFile(planFile, "utf8")) as { targets: Array<Record<string, unknown>> };
     expect(plan.targets).toHaveLength(2);
+    expect(plan.targets).toEqual(expect.arrayContaining([
+      expect.objectContaining({ query: "milk", discoveryCapturedAt: "2026-08-12T15:00:00.000Z" }),
+      expect.objectContaining({ query: "eggs", discoveryCapturedAt: "2026-08-12T15:04:00.000Z" }),
+    ]));
     const verificationFile = path.join(root, "verification.json");
     await writeFile(verificationFile, JSON.stringify(verificationChunk(plan.targets)));
     await appendCaptureChunk(directory, verificationFile);
