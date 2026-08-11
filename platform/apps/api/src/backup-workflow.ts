@@ -127,7 +127,7 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
             WHERE id = ?1`,
         ).bind(runId, finishedAt, stableJson({ backupId, bookmark, ...stored, replica })),
       ]);
-      await resolveOperationalAlert(this.env, "d1-backup", { backupId, finishedAt, byteLength: stored.byteLength }, { recoveryTitle: "Nightly D1 backup recovered successfully" });
+      await resolveOperationalAlert(this.env, "d1-backup", { backupId, finishedAt, byteLength: stored.byteLength }, { recoveryTitle: "Weekly D1 full export recovered successfully" });
       await releaseOperationLease(this.env.DB, lease.resource, runId, lease.fence, finishedAt);
     } catch (error) {
       const finishedAt = new Date().toISOString();
@@ -144,7 +144,7 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
             WHERE backup_id = ?1 AND status = 'started'`,
         ).bind(backupId, finishedAt, stableJson({ error: message })),
       ]);
-      await raiseOperationalAlert(this.env, "d1-backup", "Nightly D1 backup failed", { backupId, failedAttempt: event.instanceId, error: message });
+      await raiseOperationalAlert(this.env, "d1-backup", "Weekly D1 full export failed", { backupId, failedAttempt: event.instanceId, error: message });
       await releaseOperationLease(this.env.DB, lease.resource, runId, lease.fence, finishedAt);
       throw error;
     }

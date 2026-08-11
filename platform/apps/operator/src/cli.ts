@@ -94,24 +94,36 @@ interface MatchProductRow {
   normalized_basis_qty_micros: number;
 }
 
-async function matchBatch(client: MutationClient, batchId: string): Promise<Record<string, unknown>> {
+interface MatchContext {
+  matcher: ReturnType<typeof compileProductMatcher>;
+  categoryByCommodity: Map<string, string>;
+  nonFoodFamilies: Set<string>;
+}
+
+async function loadMatchContext(): Promise<MatchContext> {
+  const commodities = JSON.parse(await readFile(path.join(platformRoot, "config", "commodities.json"), "utf8")) as Array<{ id: string; include?: string[]; exclude?: string[] }>;
+  const categoryDocument = JSON.parse((await readFile(path.join(platformRoot, "config", "categories.json"), "utf8")).replace(/^\uFEFF/, "")) as { categories: Array<{ key: string; commodities: string[] }> };
+  return {
+    categoryByCommodity: new Map(categoryDocument.categories.flatMap((category) => category.commodities.map((commodityId) => [commodityId, category.key] as const))),
+    nonFoodFamilies: new Set(["household", "personal", "baby", "pet"]),
+    matcher: compileProductMatcher(commodities.map((commodity, index) => ({
+      commodityId: commodity.id,
+      includes: commodity.include ?? [],
+      excludes: commodity.exclude ?? [],
+      // Preserve the production engine's documented first-match-wins semantics
+      // while making the precedence explicit and collision-testable.
+      priority: commodities.length - index,
+    }))),
+  };
+}
+
+async function matchBatch(client: MutationClient, batchId: string, reusableContext?: MatchContext): Promise<Record<string, unknown>> {
   const snapshot = await client.request(`/internal/capture-batches/${encodeURIComponent(batchId)}/products`) as unknown as Record<string, unknown> & {
     sourceId: string; status: string; configurationId: string; configurationHash: string; products: MatchProductRow[];
   };
   if (!Array.isArray(snapshot.products)) throw new Error("matching snapshot omitted products");
   if (!(snapshot.status === "promoted" || snapshot.status === "validated")) throw new Error(`batch ${batchId} cannot be matched from ${snapshot.status}`);
-  const commodities = JSON.parse(await readFile(path.join(platformRoot, "config", "commodities.json"), "utf8")) as Array<{ id: string; include?: string[]; exclude?: string[] }>;
-  const categoryDocument = JSON.parse((await readFile(path.join(platformRoot, "config", "categories.json"), "utf8")).replace(/^\uFEFF/, "")) as { categories: Array<{ key: string; commodities: string[] }> };
-  const categoryByCommodity = new Map(categoryDocument.categories.flatMap((category) => category.commodities.map((commodityId) => [commodityId, category.key] as const)));
-  const nonFoodFamilies = new Set(["household", "personal", "baby", "pet"]);
-  const matcher = compileProductMatcher(commodities.map((commodity, index) => ({
-    commodityId: commodity.id,
-    includes: commodity.include ?? [],
-    excludes: commodity.exclude ?? [],
-    // Preserve the production engine's documented first-match-wins semantics
-    // while making the precedence explicit and collision-testable.
-    priority: commodities.length - index,
-  })));
+  const { matcher, categoryByCommodity, nonFoodFamilies } = reusableContext ?? await loadMatchContext();
   const decisions: Array<{ productId: string; commodityId: string; configurationId: string; decidedBy: "rule" | "aisle"; reason: string }> = [];
   const unmatched: Array<Record<string, unknown>> = [];
   const collisions: Array<Record<string, unknown>> = [];
@@ -144,8 +156,8 @@ async function matchBatch(client: MutationClient, batchId: string): Promise<Reco
       reason: `Authored first-match rule precedence${product.taxonomy_path ? `; shelf taxonomy examined: ${aisle.reason}` : "; no shelf taxonomy supplied"}`,
     });
   }
-  for (let offset = 0; offset < decisions.length; offset += 100) {
-    await client.request("/internal/match-decisions", { method: "PUT", json: { decisions: decisions.slice(offset, offset + 100) } });
+  for (let offset = 0; offset < decisions.length; offset += 250) {
+    await client.request("/internal/match-decisions", { method: "PUT", json: { decisions: decisions.slice(offset, offset + 250) } });
   }
   await client.request("/internal/match-decisions/reconcile", { json: {
     batchId,
@@ -185,9 +197,10 @@ async function matchBatch(client: MutationClient, batchId: string): Promise<Reco
 
 async function rematchPromotedBatches(client: MutationClient): Promise<{ ok: boolean; batches: Array<Record<string, unknown>> }> {
   const listed = await client.request("/internal/capture-batches/promoted") as { batches?: Array<{ id: string; source_id: string; captured_to: string }> };
+  const context = await loadMatchContext();
   const batches: Array<Record<string, unknown>> = [];
   for (const batch of listed.batches ?? []) {
-    const matching = await matchBatch(client, batch.id);
+    const matching = await matchBatch(client, batch.id, context);
     if (matching.status !== "passed") throw new Error(`promoted batch ${batch.id} failed matching under the active configuration`);
     batches.push({ ...batch, matching });
   }
@@ -425,6 +438,8 @@ if (command === "status") {
   } });
 } else if (command === "backup" && subcommand === "trigger") {
   result = await (await mutationClient()).request(`/internal/backups/trigger${arguments_.includes("--replica") ? "?replica=1" : ""}`, { method: "POST" });
+} else if (command === "backup" && subcommand === "checkpoint") {
+  result = await (await mutationClient()).request("/internal/backups/checkpoint", { method: "POST" });
 } else if (command === "restore" && subcommand === "record") {
   const file = arguments_[0];
   if (!file) throw new Error("tc restore record requires a JSON evidence file");
@@ -896,7 +911,7 @@ if (command === "status") {
     ...(!isHelpRequest ? { error: `Unknown command: ${requestedCommand}` } : {}),
     usage: [
       "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy|archives|archive <id>",
-      "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
+      "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
       "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
         "tc capture metrics [limit]", "tc capture session init|append|verification-plan|finalize|status",

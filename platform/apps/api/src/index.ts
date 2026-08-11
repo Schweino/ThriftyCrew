@@ -62,7 +62,7 @@ import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
 import { evaluateReleaseIntegrity } from "./release-integrity";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation, runGhostClobberDrill } from "./ghost-reconciliation";
-import { dispatchGithubJob, dispatchRegisteredAgent, githubWorkflowRuns, jobStatusRequiresAlert, raiseOperationalAlert, recordAudit, resolveOperationalAlert, resolveRecoveredJobRunAlerts, runArchivalForecast, runControlPlaneProof, runScheduledOperations, scheduleGap } from "./operations";
+import { dispatchGithubJob, dispatchRegisteredAgent, githubWorkflowRuns, jobStatusRequiresAlert, raiseOperationalAlert, recordAudit, resolveOperationalAlert, resolveRecoveredJobRunAlerts, runArchivalForecast, runControlPlaneProof, runD1RecoveryCheckpoint, runScheduledOperations, scheduleGap } from "./operations";
 import { readEngineSnapshot, readEngineSnapshotIdentity, type EngineSnapshotProfile, type EngineSourceMode } from "./engine-snapshot";
 import { memberStatusHtml } from "./member-status";
 import { accrueMilestoneEvidence, milestoneEvidenceSummary } from "./milestone-evidence";
@@ -2924,6 +2924,12 @@ app.post("/internal/triage/:id/resolve", zValidator("json", triageResolveSchema)
       WHERE id = ?1`,
   ).bind(context.req.param("id"), body.status, body.planRef ?? null, stableJson(body.resolution)).run();
   return context.json({ ok: true, triageId: context.req.param("id"), status: body.status });
+});
+
+app.post("/internal/backups/checkpoint", async (context) => {
+  const result = await runD1RecoveryCheckpoint(context.env, Date.now(), true);
+  await recordAudit(context.env, context.get("identity"), "recovery.checkpoint", "recovery_checkpoint", String(result.checkpointId), "accepted", result);
+  return context.json(result, 201);
 });
 
 app.post("/internal/deployments/preflight", async (context) => {

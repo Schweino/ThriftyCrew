@@ -58,6 +58,9 @@ evidence and verified archive objects.
 
 - Migration `0016` is additive. `scripts/check-migrations.mjs` enforces forward expand/contract policy and
   requires a durable restore-proof reference before a future contract migration.
+- D1 Time Travel is the primary short-window recovery plane: a daily job records the current bookmark plus
+  release/configuration pointers in a content-addressed R2 manifest and verifies the full object after write.
+  Blocking SQL export runs weekly, not nightly, and exists for recovery beyond 30 days and independent portability.
 - `D1RestoreDrillWorkflow` selects the latest completed R2 SQL backup, creates an explicitly named scratch D1,
   imports it through Cloudflare's D1 import API, compares six core table counts and the current release ID/hash,
   records durable evidence and deletes only the exact scratch UUID.

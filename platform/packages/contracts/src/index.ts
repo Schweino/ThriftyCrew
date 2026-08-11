@@ -503,7 +503,7 @@ export const matchDecisionsChunkSchema = z.object({
     configurationId: nonEmptyId,
     decidedBy: z.enum(["rule", "aisle", "manual", "legacy_bridge"]),
     reason: z.string().min(1).max(2000),
-  })).min(1).max(100),
+  })).min(1).max(250),
 });
 
 export const matchDecisionReconcileSchema = z.object({

@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { CurrentBridgeArtifact } from "./legacy";
-import { deployConfiguration, MutationClient } from "./client";
+import { deployConfiguration, MutationClient, publishNativeRelease } from "./client";
+import type { NativeReleaseArtifact } from "./native";
 
 describe("configuration deployment", () => {
   it("reports an already-active configuration without laundering a temporary doctor failure", async () => {
@@ -24,6 +25,34 @@ describe("configuration deployment", () => {
     });
     expect(request).toHaveBeenCalledTimes(1);
     expect(request).not.toHaveBeenCalledWith("/internal/doctor", expect.anything());
+  });
+});
+
+describe("native release publication", () => {
+  it("treats a deterministic release published by a concurrent executor as idempotent success", async () => {
+    let releaseReads = 0;
+    const request = vi.fn(async (pathname: string) => {
+      if (pathname === "/internal/releases") {
+        releaseReads += 1;
+        return { ok: true, state: releaseReads === 1 ? "draft" : "published" };
+      }
+      throw new Error("PUT returned 409: release content is immutable in published state");
+    });
+    const artifact = {
+      releaseId: "rel_native_test",
+      marketId: "omaha",
+      configurationId: "cfg_test",
+      inputManifest: {},
+      inputBatchIds: [],
+      inputHash: "a".repeat(64),
+      cells: [], recipeCosts: [], freeRotation: [], top5: [], payloads: {},
+      audit: { commodities: 507, stores: 7 },
+    } as unknown as NativeReleaseArtifact;
+
+    await expect(publishNativeRelease({ request } as unknown as MutationClient, artifact)).resolves.toMatchObject({
+      ok: true, releaseId: "rel_native_test", state: "published", idempotent: true, concurrentPublication: true,
+    });
+    expect(releaseReads).toBe(2);
   });
 });
 

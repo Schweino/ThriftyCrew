@@ -1,4 +1,4 @@
-import { deterministicId, stableJson } from "@thriftycrew/domain";
+import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
 import type { MutationIdentity, WorkerEnv } from "./env";
 import { readBrowserCaptureSla } from "./browser-capture-sla";
 import { compactConfiguration } from "./configuration-archive";
@@ -36,13 +36,140 @@ export function controlPlaneProofPass(checks: ReadonlyArray<{ required: boolean;
   return checks.every((check) => !check.required || check.ok);
 }
 
+export function weeklyFullExportDue(scheduledTime: number): boolean {
+  const date = new Date(scheduledTime);
+  const parts = localScheduleParts(scheduledTime);
+  const weekday = new Intl.DateTimeFormat("en-US", { timeZone: "America/Chicago", weekday: "short" }).format(date);
+  return weekday === "Sun" && parts.hour === "01" && parts.minute === "30";
+}
+
+export async function d1TimeTravelBookmark(env: WorkerEnv): Promise<string> {
+  if (!env.D1_REST_API_TOKEN || !env.CLOUDFLARE_ACCOUNT_ID || !env.D1_DATABASE_ID) {
+    throw new Error("D1 Time Travel credentials are not configured");
+  }
+  const response = await fetch(
+    `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/d1/database/${env.D1_DATABASE_ID}/time_travel/bookmark`,
+    { headers: { authorization: `Bearer ${env.D1_REST_API_TOKEN}` } },
+  );
+  const body = await response.json() as { success?: boolean; errors?: unknown[]; result?: { bookmark?: string } };
+  const bookmark = body.result?.bookmark;
+  if (!response.ok || body.success !== true || !bookmark) {
+    throw new Error(`D1 Time Travel bookmark request failed with ${response.status}: ${stableJson(body.errors ?? [])}`);
+  }
+  return bookmark;
+}
+
+export async function runD1RecoveryCheckpoint(env: WorkerEnv, scheduledTime: number, force = false): Promise<Record<string, unknown>> {
+  const createdAt = new Date(scheduledTime).toISOString();
+  const day = createdAt.slice(0, 10);
+  const suffix = force ? `${day}-${crypto.randomUUID()}` : day;
+  const checkpointId = `checkpoint_${suffix}`;
+  const runId = `run_d1-recovery-checkpoint_${suffix}`;
+  const existing = await env.DB.prepare("SELECT status, bookmark, object_key, sha256 FROM recovery_checkpoints WHERE id = ?1")
+    .bind(checkpointId).first<{ status: string; bookmark: string | null; object_key: string | null; sha256: string | null }>();
+  if (existing?.status === "verified") return { ok: true, checkpointId, runId, ...existing, idempotent: true };
+
+  await env.DB.batch([
+    env.DB.prepare(
+      `INSERT INTO job_runs
+         (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, actor_id, input_json)
+       VALUES (?1, 'd1-recovery-checkpoint', ?2, ?3, ?3, ?3, 'started', 'cloudflare:scheduled', '{}')
+       ON CONFLICT(id) DO UPDATE SET started_at = ?3, heartbeat_at = ?3, finished_at = NULL,
+         status = 'started', error = NULL, stats_json = '{}'`,
+    ).bind(runId, force ? "manual" : "schedule", createdAt),
+    env.DB.prepare(
+      `INSERT INTO recovery_checkpoints
+         (id, database_id, source_commit, status, created_at)
+       VALUES (?1, ?2, ?3, 'started', ?4)
+       ON CONFLICT(id) DO UPDATE SET bookmark = NULL, release_id = NULL, configuration_id = NULL,
+         source_commit = excluded.source_commit, object_key = NULL, byte_length = NULL, sha256 = NULL,
+         status = 'started', created_at = excluded.created_at, verified_at = NULL, detail_json = '{}'`,
+    ).bind(checkpointId, env.D1_DATABASE_ID ?? "unconfigured", env.DEPLOYED_COMMIT ?? "unknown", createdAt),
+  ]);
+
+  try {
+    const [bookmark, current, latestFullExport] = await Promise.all([
+      d1TimeTravelBookmark(env),
+      env.DB.prepare(
+        `SELECT release.id AS release_id, release.configuration_id
+           FROM current_releases current JOIN releases release ON release.id = current.release_id
+          WHERE current.market_id = 'omaha'`,
+      ).first<{ release_id: string; configuration_id: string }>(),
+      env.DB.prepare(
+        `SELECT id, bookmark, object_key, byte_length, finished_at
+           FROM backup_exports WHERE status = 'completed'
+          ORDER BY finished_at DESC LIMIT 1`,
+      ).first<{ id: string; bookmark: string | null; object_key: string | null; byte_length: number | null; finished_at: string | null }>(),
+    ]);
+    if (!current) throw new Error("recovery checkpoint requires a current Omaha release");
+    const manifest = {
+      version: 1,
+      kind: "d1-time-travel-recovery-checkpoint",
+      databaseId: env.D1_DATABASE_ID,
+      bookmark,
+      capturedAt: createdAt,
+      sourceCommit: env.DEPLOYED_COMMIT ?? "unknown",
+      currentReleaseId: current.release_id,
+      activeConfigurationId: current.configuration_id,
+      latestFullExport: latestFullExport ? {
+        id: latestFullExport.id,
+        bookmark: latestFullExport.bookmark,
+        objectKey: latestFullExport.object_key,
+        byteLength: latestFullExport.byte_length,
+        finishedAt: latestFullExport.finished_at,
+      } : null,
+      recoveryPolicy: { timeTravelDays: 30, fullExportCadence: "weekly" },
+    };
+    const serialized = stableJson(manifest);
+    const sha256 = await digestHex(serialized);
+    const datePath = day.replaceAll("-", "/");
+    const objectKey = `d1-checkpoints/${datePath}/${sha256}.json`;
+    await env.BACKUPS.put(objectKey, serialized, {
+      httpMetadata: { contentType: "application/json" },
+      customMetadata: { sha256, bookmark, checkpointId, databaseId: env.D1_DATABASE_ID ?? "unknown" },
+    });
+    const stored = await env.BACKUPS.get(objectKey);
+    if (!stored) throw new Error("R2 recovery checkpoint was unavailable after write");
+    const storedText = await stored.text();
+    if (await digestHex(storedText) !== sha256 || storedText !== serialized) {
+      throw new Error("R2 recovery checkpoint failed full content verification");
+    }
+    const verifiedAt = new Date().toISOString();
+    await env.DB.batch([
+      env.DB.prepare(
+        `UPDATE recovery_checkpoints
+            SET bookmark = ?2, release_id = ?3, configuration_id = ?4, object_key = ?5,
+                byte_length = ?6, sha256 = ?7, status = 'verified', verified_at = ?8, detail_json = ?9
+          WHERE id = ?1`,
+      ).bind(checkpointId, bookmark, current.release_id, current.configuration_id, objectKey,
+        new TextEncoder().encode(serialized).byteLength, sha256, verifiedAt, stableJson({ latestFullExportId: latestFullExport?.id ?? null })),
+      env.DB.prepare(
+        `UPDATE job_runs SET status = 'completed', heartbeat_at = ?2, finished_at = ?2, stats_json = ?3 WHERE id = ?1`,
+      ).bind(runId, verifiedAt, stableJson({ checkpointId, bookmark, objectKey, sha256 })),
+    ]);
+    await resolveOperationalAlert(env, "d1-recovery-checkpoint", { checkpointId, bookmark, objectKey, verifiedAt }, { recoveryTitle: "Daily D1 recovery checkpoint recovered" });
+    return { ok: true, checkpointId, runId, bookmark, objectKey, sha256, verifiedAt, idempotent: false };
+  } catch (error) {
+    const finishedAt = new Date().toISOString();
+    const message = error instanceof Error ? error.message : "D1 recovery checkpoint failed";
+    await env.DB.batch([
+      env.DB.prepare("UPDATE recovery_checkpoints SET status = 'failed', verified_at = ?2, detail_json = ?3 WHERE id = ?1")
+        .bind(checkpointId, finishedAt, stableJson({ error: message })),
+      env.DB.prepare("UPDATE job_runs SET status = 'failed', heartbeat_at = ?2, finished_at = ?2, error = ?3 WHERE id = ?1")
+        .bind(runId, finishedAt, message),
+    ]);
+    await raiseOperationalAlert(env, "d1-recovery-checkpoint", "Daily D1 recovery checkpoint failed", { checkpointId, error: message }, { notification: "digest", deferMinutes: 15, observedAt: createdAt });
+    throw error;
+  }
+}
+
 export async function runControlPlaneProof(env: WorkerEnv, scheduledTime: number, force = false): Promise<void> {
   const observedAt = new Date(scheduledTime).toISOString();
   const day = observedAt.slice(0, 10);
   const proofId = await deterministicId("control-plane-proof", force ? observedAt : day);
   const existing = await env.DB.prepare("SELECT status FROM control_plane_proofs WHERE id = ?1").bind(proofId).first();
   if (existing) return;
-  const [configuration, release, hardGuards, invalidRankedRecipes, recipeSummary, backup, orphanExecutions, capacity, browser] = await Promise.all([
+  const [configuration, release, hardGuards, invalidRankedRecipes, recipeSummary, checkpoint, backup, orphanExecutions, capacity, browser] = await Promise.all([
     env.DB.prepare(
       `SELECT version.id, version.content_hash, archive.status AS archive_status
          FROM configuration_versions version LEFT JOIN configuration_archives archive ON archive.configuration_id = version.id
@@ -75,8 +202,13 @@ export async function runControlPlaneProof(env: WorkerEnv, scheduledTime: number
          FROM release_recipe_costs cost JOIN current_releases current ON current.release_id = cost.release_id`,
     ).first(),
     env.DB.prepare(
+      `SELECT id, bookmark, object_key, verified_at FROM recovery_checkpoints
+        WHERE status = 'verified' AND verified_at >= datetime(?1, '-36 hours')
+        ORDER BY verified_at DESC LIMIT 1`,
+    ).bind(observedAt).first<{ id: string; bookmark: string; object_key: string; verified_at: string }>(),
+    env.DB.prepare(
       `SELECT id, finished_at FROM backup_exports
-        WHERE status = 'completed' AND finished_at >= datetime(?1, '-36 hours')
+        WHERE status = 'completed' AND finished_at >= datetime(?1, '-8 days')
         ORDER BY finished_at DESC LIMIT 1`,
     ).bind(observedAt).first<{ id: string; finished_at: string }>(),
     env.DB.prepare(
@@ -95,7 +227,8 @@ export async function runControlPlaneProof(env: WorkerEnv, scheduledTime: number
     { id: "release-pointer", required: true, ok: Boolean(release && configuration && release.configuration_id === configuration.id), detail: release ?? null },
     { id: "hard-guards", required: true, ok: (hardGuards?.count ?? 1) === 0, detail: hardGuards ?? null },
     { id: "recipe-ranked-surfaces", required: true, ok: invalidRankedRecipes.results.length === 0, detail: { invalid: invalidRankedRecipes.results, summary: recipeSummary ?? null } },
-    { id: "backup-rpo", required: true, ok: Boolean(backup), detail: backup ?? null },
+    { id: "time-travel-checkpoint-rpo", required: true, ok: Boolean(checkpoint), detail: checkpoint ?? null },
+    { id: "weekly-full-export-rpo", required: true, ok: Boolean(backup), detail: backup ?? null },
     { id: "execution-fencing", required: true, ok: orphanExecutions.results.length === 0, detail: orphanExecutions.results },
     { id: "d1-capacity", required: true, ok: capacity?.status !== "critical", detail: capacity ?? null },
     { id: "browser-capture", required: browser.enforced && browser.deadlineExpired, ok: browser.ready, detail: browser },
@@ -897,7 +1030,8 @@ export async function runScheduledOperations(env: WorkerEnv, scheduledTime: numb
   const parts = localScheduleParts(scheduledTime);
   const localDate = `${parts.year}-${parts.month}-${parts.day}`;
   if (parts.minute === "00") await runBrowserCaptureSla(env, scheduledTime);
-  if (parts.hour === "04" && parts.minute === "30") {
+  if (parts.hour === "04" && parts.minute === "30") await runD1RecoveryCheckpoint(env, scheduledTime);
+  if (weeklyFullExportDue(scheduledTime)) {
     const instanceId = `d1-backup-${localDate}`;
     const recorded = await env.DB.prepare("SELECT id FROM backup_exports WHERE id = ?1")
       .bind(`backup_${instanceId}`).first();

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { archivalCapacityStatus, controlPlaneProofPass, d1DatabaseFileSize, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalDigestMemberKey, operationalIncidentIsNew, operationalNotificationDueAt, robustMonthlyGrowth, scheduleGap } from "./operations";
+import { archivalCapacityStatus, controlPlaneProofPass, d1DatabaseFileSize, d1TimeTravelBookmark, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalDigestMemberKey, operationalIncidentIsNew, operationalNotificationDueAt, robustMonthlyGrowth, scheduleGap, weeklyFullExportDue } from "./operations";
 
 describe("archival capacity policy", () => {
   it("arms on projected exhaustion before the static percentage threshold", () => {
@@ -21,6 +21,33 @@ describe("cross-plane proof policy", () => {
   it("fails only required checks", () => {
     expect(controlPlaneProofPass([{ required: true, ok: true }, { required: false, ok: false }])).toBe(true);
     expect(controlPlaneProofPass([{ required: true, ok: false }])).toBe(false);
+  });
+});
+
+describe("D1 recovery cadence", () => {
+  it("reserves the blocking full export for Sunday at 01:30 America/Chicago", () => {
+    expect(weeklyFullExportDue(Date.parse("2026-08-16T06:30:00.000Z"))).toBe(true);
+    expect(weeklyFullExportDue(Date.parse("2026-08-16T09:30:00.000Z"))).toBe(false);
+    expect(weeklyFullExportDue(Date.parse("2026-08-17T06:30:00.000Z"))).toBe(false);
+  });
+
+  it("retrieves the current Time Travel bookmark through the authorized REST API", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ success: true, result: { bookmark: "bookmark-123" } })));
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(d1TimeTravelBookmark({
+      D1_REST_API_TOKEN: "test-token",
+      CLOUDFLARE_ACCOUNT_ID: "account",
+      D1_DATABASE_ID: "database",
+    } as WorkerEnv)).resolves.toBe("bookmark-123");
+    expect(fetchMock.mock.calls[0]?.[0]).toContain("/accounts/account/d1/database/database/time_travel/bookmark");
+  });
+
+  it("fails closed when Time Travel credentials or a bookmark are unavailable", async () => {
+    await expect(d1TimeTravelBookmark({} as WorkerEnv)).rejects.toThrow("credentials");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ success: true, result: {} }))));
+    await expect(d1TimeTravelBookmark({
+      D1_REST_API_TOKEN: "x", CLOUDFLARE_ACCOUNT_ID: "a", D1_DATABASE_ID: "d",
+    } as WorkerEnv)).rejects.toThrow("bookmark request failed");
   });
 });
 import type { WorkerEnv } from "./env";
