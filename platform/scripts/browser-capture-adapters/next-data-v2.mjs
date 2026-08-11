@@ -26,6 +26,12 @@ function priceMinor(value) {
   return match ? Math.round(Number(match[1].replace(/,/g, "")) * 100) : null;
 }
 
+export function walmartPickupEligible(row) {
+  return row?.availabilityStatus === "IN_STOCK"
+    && Array.isArray(row.pickupStoreIds)
+    && row.pickupStoreIds.includes("5361");
+}
+
 async function atomicJson(file, value) {
   await mkdir(path.dirname(file), { recursive: true });
   const temporary = `${file}.tmp`;
@@ -51,6 +57,11 @@ async function readPage(tab) {
         taxonomy: String(item.category?.categoryPathId || item.departmentName || "").trim(),
         url: canonical.origin + canonical.pathname,
         imageUrl: String(item.imageInfo?.thumbnailUrl || "").trim(),
+        availabilityStatus: String(item.availabilityStatusV2?.value || "").trim().toUpperCase(),
+        pickupStoreIds: [...new Set((item.fulfillmentSummary || [])
+          .filter((option) => String(option?.fulfillment || "").toUpperCase() === "PICKUP")
+          .map((option) => String(option?.storeId || "").trim())
+          .filter(Boolean))],
       });
     }
     const visible = new Map();
@@ -122,15 +133,20 @@ async function captureTerm(tab, store, query) {
       for (let poll = 0; poll < 20; poll += 1) {
         await tab.playwright.waitForTimeout(poll === 0 ? 800 : 300);
         page = await readPage(tab);
-        if (page.challenge || page.rows.length || page.noResults) break;
+        if (store === "walmart") {
+          const rawRowCount = page.rows.length;
+          page.rows = page.rows.filter(walmartPickupEligible);
+          page.pickupFilteredEmpty = rawRowCount > 0 && page.rows.length === 0;
+        }
+        if (page.challenge || page.rows.length || page.noResults || page.pickupFilteredEmpty) break;
       }
       const finishedAt = new Date().toISOString();
       if (page?.challenge) return { blocked: true, term: { query, outcome: "blocked", rowCount: 0, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "blocked" }, reason: "Retailer challenge detected; sweep stopped without attempting to solve it." }, rows: [] };
       if (!page) throw new Error(`${store} page produced no readable state`);
       if (normalize(page.query) !== normalize(query)) throw new Error(`visible query mismatch: expected ${query}, saw ${page.query}`);
       if (page.rows.length === 0) {
-        if (!page.noResults) throw new Error("zero visible/structured agreements without an explicit no-results state");
-        return { blocked: false, term: { query, outcome: "empty", rowCount: 0, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "no-results" } }, rows: [] };
+        if (!page.noResults && !page.pickupFilteredEmpty) throw new Error("zero visible/structured agreements without an explicit no-results state");
+        return { blocked: false, term: { query, outcome: "empty", rowCount: 0, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "no-results" }, ...(page.pickupFilteredEmpty ? { reason: "all exact result agreements lacked in-stock pickup fulfillment at Walmart store 5361" } : {}) }, rows: [] };
       }
       if (page.rows.length < TARGET_RESULTS && page.hasMore) throw new Error("visible/structured agreement remained truncated below target depth while a continuation was present");
       if (page.rows.some((row) => priceMinor(row.linePrice) === null || !row.id || !row.name)) throw new Error("one or more agreed rows lacked an exact line price, retailer item ID, or name");
