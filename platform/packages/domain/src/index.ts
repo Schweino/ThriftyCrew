@@ -5,7 +5,10 @@ import type {
   BrowserCaptureTruth,
   BrowserCaptureVerification,
   ObservationInput,
+  PriceSemantics,
+  ProductIdentity,
 } from "@thriftycrew/contracts";
+import { CAPTURE_SEMANTICS_CUTOVER } from "@thriftycrew/contracts";
 
 const encoder = new TextEncoder();
 
@@ -64,12 +67,60 @@ export async function deterministicId(prefix: string, ...parts: string[]): Promi
 type CaptureAccuracyCandidate = Omit<BrowserCaptureAccuracyRow, "rowKey" | "discoveryHash" | "riskReasons" | "verificationRequired">;
 type CaptureAccuracyTerm = { outcome: string; rowCount: number; retrieval: { targetResultCount: number; loadedResultCount: number; availableResultCount?: number | undefined; hasMoreResults: boolean; termination: string } };
 
-function rawPriceMinor(text: string): number | undefined {
+export function parseCapturePriceText(text: string): { unitPriceMinor: number; qualifyingQuantity: number; totalPriceMinor: number } | undefined {
   const normalized = text.toLowerCase().replace(/,/g, "").trim();
-  const multi = normalized.match(/(?:^|\s)(\d+)\s*(?:\/|for)\s*\$?([0-9]+(?:\.[0-9]{1,2})?)(?:\s|$)/);
-  if (multi) return Math.round(Number(multi[2]) * 100 / Number(multi[1]));
-  const price = normalized.match(/\$?([0-9]+(?:\.[0-9]{1,2})?)/);
-  return price ? Math.round(Number(price[1]) * 100) : undefined;
+  const multi = normalized.match(/(?:^|\s)(\d+)\s*(?:\/|for)\s*\$?([0-9]+(?:\.[0-9]{1,2})?)(?=\s|$)/);
+  if (multi) {
+    const qualifyingQuantity = Number(multi[1]);
+    const totalPriceMinor = Math.round(Number(multi[2]) * 100);
+    if (!Number.isSafeInteger(qualifyingQuantity) || qualifyingQuantity <= 1 || !Number.isSafeInteger(totalPriceMinor)) return undefined;
+    const unitPriceMinor = Math.round(totalPriceMinor / qualifyingQuantity);
+    if (Math.abs(unitPriceMinor * qualifyingQuantity - totalPriceMinor) > 1) return undefined;
+    return { unitPriceMinor, qualifyingQuantity, totalPriceMinor };
+  }
+  const prices = [...normalized.matchAll(/\$?([0-9]+(?:\.[0-9]{1,2})?)/g)]
+    .filter((match) => match[0].includes("$") || /^\s*(?:current\s+price\s*:\s*)?\d+(?:\.\d{1,2})?\s*$/i.test(normalized));
+  if (prices.length !== 1) return undefined;
+  const unitPriceMinor = Math.round(Number(prices[0]![1]) * 100);
+  return Number.isSafeInteger(unitPriceMinor) ? { unitPriceMinor, qualifyingQuantity: 1, totalPriceMinor: unitPriceMinor } : undefined;
+}
+
+export async function expectedProductIdentityFingerprint(identity: Omit<ProductIdentity, "fingerprint" | "confidence">, name: string, sizeText: string): Promise<string> {
+  return digestHex(stableJson({
+    retailerProductId: identity.retailerProductId ?? null,
+    gtin: identity.gtin ?? null,
+    upc: identity.upc ?? null,
+    sku: identity.sku ?? null,
+    canonicalUrl: identity.canonicalUrl ?? null,
+    brand: normalizeName(identity.brand ?? ""),
+    name: normalizeName(name),
+    sizeText: normalizeName(sizeText),
+  }));
+}
+
+export async function productIdentityPass(externalProductKey: string, name: string, sizeText: string, identity: ProductIdentity): Promise<boolean> {
+  const stableChannels = [identity.retailerProductId, identity.gtin, identity.upc, identity.sku, identity.canonicalUrl].filter(Boolean).length;
+  const expectedConfidence: ProductIdentity["confidence"] = stableChannels >= 2 ? "strong" : stableChannels === 1 ? "moderate" : "weak";
+  const primary = identity.primaryType === "retailer_id" ? identity.retailerProductId
+    : identity.primaryType === "gtin" ? identity.gtin : identity.primaryType === "upc" ? identity.upc
+      : identity.primaryType === "sku" ? identity.sku : identity.primaryType === "canonical_url" ? identity.canonicalUrl : externalProductKey;
+  if (!primary || primary !== identity.primaryValue || identity.confidence !== expectedConfidence) return false;
+  if (identity.primaryType !== "canonical_url" && identity.primaryValue !== externalProductKey) return false;
+  const { fingerprint: _fingerprint, confidence: _confidence, ...input } = identity;
+  return identity.fingerprint === await expectedProductIdentityFingerprint(input, name, sizeText);
+}
+
+function priceSemanticsPass(store: BrowserCaptureStore, rawText: string, purchasePriceMinor: number, semantics: PriceSemantics | undefined): boolean {
+  if (!semantics || semantics.ambiguity !== false || semantics.unitPriceMinor !== purchasePriceMinor) return false;
+  const parsed = parseCapturePriceText(rawText);
+  if (!parsed || parsed.unitPriceMinor !== semantics.unitPriceMinor
+    || parsed.qualifyingQuantity !== semantics.qualifyingQuantity || parsed.totalPriceMinor !== semantics.totalPriceMinor) return false;
+  if (semantics.offerType === "multibuy" && (!semantics.condition.includes("quantity") || semantics.qualifyingQuantity <= 1)) return false;
+  if (semantics.condition.startsWith("loyalty") && semantics.offerType !== "loyalty") return false;
+  if (semantics.condition.startsWith("membership") && semantics.offerType !== "member") return false;
+  if (store === "sams" && (!semantics.condition.startsWith("membership") || semantics.offerType !== "member")) return false;
+  if (/\b(?:digital\s+coupon|with\s+card|loyalty)\b/i.test(rawText) && !semantics.condition.startsWith("loyalty")) return false;
+  return true;
 }
 
 function expectedBrowserLocation(store: BrowserCaptureStore, location: string, priceMode: string): boolean {
@@ -101,15 +152,23 @@ export function browserCaptureTruthPass(
   truth: BrowserCaptureTruth,
 ): boolean {
   const dualChannel = store === "walmart" || store === "sams";
+  const semanticsRequired = Date.parse(truth.capturedAt) >= Date.parse(CAPTURE_SEMANTICS_CUTOVER);
   const expectedRule = dualChannel ? "next-data-price-lines" : "current-price-label";
   if (truth.parser.status !== "exact" || truth.parser.rule !== expectedRule || !sourceHostPass(store, truth.pageUrl)) return false;
   if (!expectedBrowserLocation(store, truth.location, truth.priceMode)) return false;
-  if (truth.visible.priceMinor !== identity.purchasePriceMinor || rawPriceMinor(truth.visible.rawText) !== identity.purchasePriceMinor) return false;
+  if (truth.visible.priceMinor !== identity.purchasePriceMinor || parseCapturePriceText(truth.visible.rawText)?.unitPriceMinor !== identity.purchasePriceMinor) return false;
+  if (semanticsRequired && (!truth.pageState || !priceSemanticsPass(store, truth.visible.rawText, identity.purchasePriceMinor, truth.visible.priceSemantics))) return false;
+  if (truth.pageState && (normalizeName(truth.pageState.locationText) !== normalizeName(truth.location)
+    || !normalizeName(truth.pageState.fulfillmentText).includes(normalizeName(truth.priceMode))
+    || !/^en(?:-us)?$/i.test(truth.pageState.locale))) return false;
   if (normalizeName(truth.visible.productName) !== normalizeName(identity.name)) return false;
+  if (truth.visible.productKey !== undefined && truth.visible.productKey !== identity.productKey) return false;
   if (truth.visible.sizeText !== undefined && normalizeName(truth.visible.sizeText) !== normalizeName(identity.sizeText)) return false;
   if (dualChannel && !truth.structured) return false;
   if (truth.structured) {
-    if (truth.structured.priceMinor !== identity.purchasePriceMinor || rawPriceMinor(truth.structured.rawText) !== identity.purchasePriceMinor) return false;
+    if (truth.structured.priceMinor !== identity.purchasePriceMinor || parseCapturePriceText(truth.structured.rawText)?.unitPriceMinor !== identity.purchasePriceMinor) return false;
+    if (semanticsRequired && (!priceSemanticsPass(store, truth.structured.rawText, identity.purchasePriceMinor, truth.structured.priceSemantics)
+      || stableJson(truth.visible.priceSemantics) !== stableJson(truth.structured.priceSemantics))) return false;
     if (normalizeName(truth.structured.productName) !== normalizeName(identity.name)) return false;
     if (truth.structured.productKey !== identity.productKey) return false;
     if (truth.structured.sizeText !== undefined && normalizeName(truth.structured.sizeText) !== normalizeName(identity.sizeText)) return false;
@@ -127,6 +186,9 @@ function accuracyFingerprint(value: { productKey: string; name: string; sizeText
     priceMode: normalizeName(value.truth.priceMode),
     visible: [normalizeName(value.truth.visible.productName), value.truth.visible.priceMinor],
     structured: value.truth.structured ? [value.truth.structured.productKey, normalizeName(value.truth.structured.productName), value.truth.structured.priceMinor] : null,
+    priceSemantics: value.truth.visible.priceSemantics ?? null,
+    structuredPriceSemantics: value.truth.structured?.priceSemantics ?? null,
+    pageState: value.truth.pageState ?? null,
   };
 }
 
@@ -177,7 +239,8 @@ export async function buildBrowserCaptureAccuracy(
     if (!candidate.taxonomyPath) reasons.push("missing-taxonomy");
     if ((duplicatePrices.get(candidate.productKey)?.size ?? 0) > 1) reasons.push("duplicate-price-conflict");
     const verificationRequired = reasons.some((reason) => reason !== "missing-taxonomy");
-    if (!browserCaptureTruthPass(store, candidate, candidate.truth)) allTruthPass = false;
+    if (!browserCaptureTruthPass(store, candidate, candidate.truth)
+      || (candidate.truth.pageState?.pageType === "search_results" && normalizeName(candidate.truth.pageState.query ?? "") !== normalizeName(candidate.query))) allTruthPass = false;
     rows.push({ ...candidate, rowKey, discoveryHash, riskReasons: reasons, verificationRequired });
   }
   const rowMap = new Map(rows.map((row) => [row.rowKey, row]));
@@ -204,8 +267,9 @@ export async function buildBrowserCaptureAccuracy(
   const retrievalCompleteTerms = terms.filter(retrievalComplete).length;
   const anomalyRows = rows.filter((row) => row.riskReasons.includes("price-outlier") || row.riskReasons.includes("duplicate-price-conflict")).length;
   const relevantVerifications = verifications.filter((verification) => rowMap.has(verification.rowKey));
+  const policyVersion = rows.every((row) => Date.parse(row.truth.capturedAt) < Date.parse(CAPTURE_SEMANTICS_CUTOVER)) ? 1 : 2;
   return {
-    policyVersion: 1,
+    policyVersion,
     discoveryRows: rows,
     verifications: relevantVerifications,
     requiredVerificationRows,
@@ -214,6 +278,11 @@ export async function buildBrowserCaptureAccuracy(
     priceAgreementRows: rows.filter((row) => Boolean(row.truth.structured)).length,
     singleChannelRows: rows.filter((row) => !row.truth.structured).length,
     anomalyRows,
+    ...(policyVersion === 2 ? {
+      pageStateAttestedRows: rows.filter((row) => Boolean(row.truth.pageState)).length,
+      promotionSemanticsRows: rows.filter((row) => Boolean(row.truth.visible.priceSemantics)
+        && (!row.truth.structured || Boolean(row.truth.structured.priceSemantics))).length,
+    } : {}),
     retrievalCompleteTerms,
     pass: allTruthPass && matchedVerificationRows === requiredVerificationRows && retrievalCompleteTerms === terms.length,
   };

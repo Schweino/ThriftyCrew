@@ -26,8 +26,9 @@ describe("source-specific capture-time parser contracts", () => {
     const truth = browserCaptureTruthSchema.parse({
       capturedAt: "2026-08-12T12:00:00.000Z", pageUrl: "https://www.walmart.com/search?q=milk",
       location: "Omaha L St Supercenter", priceMode: "Pickup", pageIndex: 0, resultIndex: 0,
-      visible: { rawText: "$2.99", priceMinor: 299, productName: "Whole Milk" },
-      structured: { rawText: "2.99", priceMinor: 299, productName: "Whole Milk", productKey: "wm-milk" },
+      pageState: { pageType: "search_results", pageTitle: "milk - Walmart.com", query: "milk", resultRegionPresent: true, challengeDetected: false, currency: "USD", locale: "en-US", locationText: "Omaha L St Supercenter", fulfillmentText: "Pickup" },
+      visible: { rawText: "$2.99", priceMinor: 299, productName: "Whole Milk", priceSemantics: { offerType: "everyday", condition: "none", unitPriceMinor: 299, qualifyingQuantity: 1, totalPriceMinor: 299, ambiguity: false } },
+      structured: { rawText: "2.99", priceMinor: 299, productName: "Whole Milk", productKey: "wm-milk", priceSemantics: { offerType: "everyday", condition: "none", unitPriceMinor: 299, qualifyingQuantity: 1, totalPriceMinor: 299, ambiguity: false } },
       parser: { status: "exact", rule: "next-data-price-lines" },
     });
     const candidate = { termKey: "milk", query: "milk", productKey: "wm-milk", name: "Whole Milk", sizeText: "1 gal", taxonomyPath: "Food/Dairy", purchasePriceMinor: 299, truth };

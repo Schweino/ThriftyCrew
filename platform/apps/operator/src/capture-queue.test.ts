@@ -34,10 +34,14 @@ async function fixture(sourceId = "direct-walmart-browser", captureDate = "2026-
   const priceMode = store === "walmart" ? "pickup" : store === "sams" ? "club pickup" : "in-store";
   const pageUrl = store === "walmart" ? "https://www.walmart.com/search?q=eggs" : store === "sams" ? "https://www.samsclub.com/s/eggs" : store === "aldi" ? "https://www.aldi.us/results?q=eggs" : "https://shop.fareway.com/search?q=eggs";
   const dual = store === "walmart" || store === "sams";
+  const priceSemantics = store === "sams"
+    ? { offerType: "member" as const, condition: "membership" as const, unitPriceMinor: 199, qualifyingQuantity: 1, totalPriceMinor: 199, ambiguity: false as const }
+    : { offerType: "everyday" as const, condition: "none" as const, unitPriceMinor: 199, qualifyingQuantity: 1, totalPriceMinor: 199, ambiguity: false as const };
   const discoveryTruth = {
     capturedAt: `${captureDate}T15:01:00.000Z`, pageUrl, location, priceMode, pageIndex: 0, resultIndex: 0,
-    visible: { rawText: "$1.99", priceMinor: 199, productName: "Large Eggs", sizeText: "12 ct" },
-    ...(dual ? { structured: { rawText: "1.99", priceMinor: 199, productName: "Large Eggs", productKey: "123", sizeText: "12 ct" } } : {}),
+    pageState: { pageType: "search_results" as const, pageTitle: "eggs search", query: "eggs", resultRegionPresent: true as const, challengeDetected: false as const, currency: "USD" as const, locale: "en-US", locationText: location, fulfillmentText: priceMode },
+    visible: { rawText: "$1.99", priceMinor: 199, productName: "Large Eggs", sizeText: "12 ct", priceSemantics },
+    ...(dual ? { structured: { rawText: "1.99", priceMinor: 199, productName: "Large Eggs", productKey: "123", sizeText: "12 ct", priceSemantics } } : {}),
     parser: { status: "exact" as const, rule: dual ? "next-data-price-lines" as const : "current-price-label" as const },
   };
   const terms = [{

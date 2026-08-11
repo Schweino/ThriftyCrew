@@ -11,7 +11,7 @@ import {
   type BrowserCaptureStore,
   type BrowserCaptureVerification,
 } from "@thriftycrew/contracts";
-import { browserCaptureTruthPass, buildBrowserCaptureAccuracy, digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
+import { browserCaptureTruthPass, buildBrowserCaptureAccuracy, digestHex, normalizeName, parseCapturePriceText, stableJson } from "@thriftycrew/domain";
 
 const storeSchema = z.enum(["aldi", "fareway", "sams", "walmart"]);
 type BrowserStore = z.infer<typeof storeSchema>;
@@ -101,9 +101,9 @@ function projectedIdentity(store: BrowserStore, row: Record<string, unknown>): {
   const name = normalizedString(row[store === "walmart" || store === "sams" ? "n" : "name"]);
   const productKey = normalizedString(row[store === "aldi" ? "href" : store === "fareway" ? "url" : "id"]);
   const rawPrice = normalizedString(row[store === "aldi" ? "prices" : store === "fareway" ? "price" : "lp"]);
-  const match = rawPrice.replace(/,/g, "").match(/\$?([0-9]+(?:\.[0-9]{1,2})?)/);
-  if (!match) throw new Error(`${store} projected row price is not an exact decimal price: ${rawPrice || "(missing)"}`);
-  const purchasePriceMinor = Math.round(Number(match[1]) * 100);
+  const parsedPrice = parseCapturePriceText(rawPrice);
+  if (!parsedPrice) throw new Error(`${store} projected row price is not an exact unambiguous price: ${rawPrice || "(missing)"}`);
+  const purchasePriceMinor = parsedPrice.unitPriceMinor;
   if (!Number.isSafeInteger(purchasePriceMinor)) throw new Error(`${store} projected row price is outside the supported range`);
   const sizeText = normalizedString(row.size);
   const taxonomyPath = normalizedString(row.taxonomy_path) || undefined;

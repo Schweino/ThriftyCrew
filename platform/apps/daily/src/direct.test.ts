@@ -4,10 +4,12 @@ import { buildBrowserCaptureAccuracy, digestHex, stableJson } from "@thriftycrew
 
 async function walmartBrowserSession() {
   const screenshotSha256 = "a".repeat(64);
+  const priceSemantics = { offerType: "everyday" as const, condition: "none" as const, unitPriceMinor: 199, qualifyingQuantity: 1, totalPriceMinor: 199, ambiguity: false as const };
   const truth = {
     capturedAt: "2026-08-12T15:01:00.000Z", pageUrl: "https://www.walmart.com/search?q=eggs", location: "Omaha L St Supercenter", priceMode: "pickup", pageIndex: 0, resultIndex: 0,
-    visible: { rawText: "$1.99", priceMinor: 199, productName: "Eggs", sizeText: "dozen" },
-    structured: { rawText: "1.99", priceMinor: 199, productName: "Eggs", productKey: "wm-eggs", sizeText: "dozen" },
+    pageState: { pageType: "search_results" as const, pageTitle: "eggs - Walmart.com", query: "eggs", resultRegionPresent: true as const, challengeDetected: false as const, currency: "USD" as const, locale: "en-US", locationText: "Omaha L St Supercenter", fulfillmentText: "pickup" },
+    visible: { rawText: "$1.99", priceMinor: 199, productName: "Eggs", sizeText: "dozen", priceSemantics },
+    structured: { rawText: "1.99", priceMinor: 199, productName: "Eggs", productKey: "wm-eggs", sizeText: "dozen", priceSemantics },
     parser: { status: "exact" as const, rule: "next-data-price-lines" as const },
   };
   const terms = [{
@@ -60,9 +62,14 @@ describe("direct regular capture", () => {
     });
     expect(artifact.sourceId).toBe("direct-bakers-headless");
     expect(artifact.observations).toHaveLength(2);
-    expect(artifact.observations[0]).toMatchObject({ purchasePriceMinor: 289, normalizedBasisUnit: "lb", normalizedBasisQtyMicros: 1_000_000, perUnitMicros: 2_890_000, taxonomyPath: "Meat & Seafood/Meat" });
+    expect(artifact.observations[0]).toMatchObject({ purchasePriceMinor: 289, normalizedBasisUnit: "lb", normalizedBasisQtyMicros: 1_000_000, perUnitMicros: 2_890_000, taxonomyPath: "Meat & Seafood/Meat", identity: { primaryType: "retailer_id", confidence: "moderate" }, priceSemantics: { offerType: "everyday", condition: "none", unitPriceMinor: 289, totalPriceMinor: 289 } });
     expect(artifact.observations[1]).toMatchObject({ normalizedBasisUnit: "fl_oz", normalizedBasisQtyMicros: 24_000_000, packageCount: 2 });
     expect(artifact.audit).toMatchObject({ inputRows: 3, acceptedRows: 2, rejectedRows: 1 });
+    expect(artifact.sourceSchema).toMatchObject({ version: 1, contractFingerprint: expect.stringMatching(/^[a-f0-9]{64}$/), shapeFingerprint: expect.stringMatching(/^[a-f0-9]{64}$/), contractFields: { identity: ["product_id"], name: ["item"], price: ["current_price"], size: ["size"], captured_at: ["as_of"] } });
+  });
+
+  it("rejects a canonical URL whose embedded SKU disagrees with the retailer product id", async () => {
+    await expect(buildRegularCapture("walmart", { deals: [{ item: "Eggs", current_price: 1.99, size: "dozen", as_of: "2026-08-09", product_id: "123456", link_url: "https://www.walmart.com/ip/eggs/999999" }] })).rejects.toThrow("canonical URL product id 999999 disagrees");
   });
 
   it("accepts Freshop ea/pk package counts and canonicalizes date-only evidence before morning runs", async () => {

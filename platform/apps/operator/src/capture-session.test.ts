@@ -6,6 +6,11 @@ import { appendCaptureChunk, buildCaptureVerificationPlan, captureSessionStatus,
 
 const roots: string[] = [];
 const screenshotSha256 = "a".repeat(64);
+const priceSemantics = { offerType: "everyday" as const, condition: "none" as const, unitPriceMinor: 199, qualifyingQuantity: 1, totalPriceMinor: 199, ambiguity: false as const };
+
+function pageState(query: string) {
+  return { pageType: "search_results" as const, pageTitle: `${query} - Walmart.com`, query, resultRegionPresent: true as const, challengeDetected: false as const, currency: "USD" as const, locale: "en-US", locationText: "Omaha L St Supercenter", fulfillmentText: "pickup" };
+}
 
 function chunk(query: string, outcome: "success" | "blocked", attempts: number, minute: number) {
   const observedAt = `2026-08-12T15:${String(minute).padStart(2, "0")}:00.000Z`;
@@ -30,9 +35,9 @@ function chunk(query: string, outcome: "success" | "blocked", attempts: number, 
       q: query, n: `${query} product`, lp: "$1.99", up: "$0.10/oz", id: `${query}-id`, size: "12 ct", taxonomy_path: "Food/Dairy",
       _capture: {
         capturedAt: observedAt, pageUrl: `https://www.walmart.com/search?q=${query}`, location: "Omaha L St Supercenter", priceMode: "pickup",
-        pageIndex: 0, resultIndex: 0,
-        visible: { rawText: "$1.99", priceMinor: 199, productName: `${query} product`, sizeText: "12 ct" },
-        structured: { rawText: "1.99", priceMinor: 199, productName: `${query} product`, productKey: `${query}-id`, sizeText: "12 ct" },
+        pageIndex: 0, resultIndex: 0, pageState: pageState(query),
+        visible: { rawText: "$1.99", priceMinor: 199, productName: `${query} product`, sizeText: "12 ct", priceSemantics },
+        structured: { rawText: "1.99", priceMinor: 199, productName: `${query} product`, productKey: `${query}-id`, sizeText: "12 ct", priceSemantics },
         parser: { status: "exact", rule: "next-data-price-lines" },
       },
     }] : [],
@@ -51,9 +56,9 @@ function verificationChunk(targets: Array<Record<string, unknown>>) {
       rowKey: target.rowKey, discoveryHash: target.discoveryHash, observedAt, outcome: "observed",
       productKey: target.productKey, name: target.name, sizeText: target.sizeText, purchasePriceMinor: target.purchasePriceMinor,
       truth: {
-        capturedAt: observedAt, pageUrl: target.pageUrl, location: "Omaha L St Supercenter", priceMode: "pickup", pageIndex: 0, resultIndex: 0,
-        visible: { rawText: "$1.99", priceMinor: 199, productName: target.name, sizeText: target.sizeText },
-        structured: { rawText: "1.99", priceMinor: 199, productName: target.name, productKey: target.productKey, sizeText: target.sizeText },
+        capturedAt: observedAt, pageUrl: target.pageUrl, location: "Omaha L St Supercenter", priceMode: "pickup", pageIndex: 0, resultIndex: 0, pageState: pageState(String(target.query ?? "milk")),
+        visible: { rawText: "$1.99", priceMinor: 199, productName: target.name, sizeText: target.sizeText, priceSemantics },
+        structured: { rawText: "1.99", priceMinor: 199, productName: target.name, productKey: target.productKey, sizeText: target.sizeText, priceSemantics },
         parser: { status: "exact", rule: "next-data-price-lines" },
       },
     })),

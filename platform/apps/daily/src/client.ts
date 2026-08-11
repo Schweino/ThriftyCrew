@@ -126,6 +126,7 @@ export async function ingestDirectCapture(
     locationVerified: artifact.locationVerified,
     priceModeVerified: artifact.priceModeVerified,
     priceMode: artifact.priceMode,
+    ...(artifact.sourceSchema ? { sourceSchema: artifact.sourceSchema } : {}),
     idempotencyKey: artifact.idempotencyKey,
   } });
   const batchId = String(created.batchId);

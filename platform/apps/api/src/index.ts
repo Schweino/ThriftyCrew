@@ -52,6 +52,7 @@ import {
   telemetryEventSchema,
   triageResolveSchema,
   triagePlanSchema,
+  CAPTURE_SEMANTICS_CUTOVER,
 } from "@thriftycrew/contracts";
 import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
 import { GhostEntitlementProvider, type Entitlement } from "@thriftycrew/entitlements";
@@ -74,6 +75,7 @@ import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
 import { readBrowserCaptureSla } from "./browser-capture-sla";
 import { buildCaptureTermInserts } from "./capture-seal";
+import { assessProductHistory, assessSourceSchema, type ProductHistoryRow } from "./capture-semantic-guards";
 import { handleGithubActionsWebhook } from "./github-recovery";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
@@ -1730,8 +1732,9 @@ app.post("/internal/capture-batches", zValidator("json", captureBatchCreateSchem
   await context.env.DB.prepare(
     `INSERT INTO capture_batches
        (id, source_id, coverage_mode, captured_from, captured_to, valid_from, valid_to, expected_terms,
-        expected_pages, market_verified, location_verified, price_mode_verified, price_mode, agent_id, idempotency_key)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15)`,
+        expected_pages, market_verified, location_verified, price_mode_verified, price_mode, agent_id, idempotency_key,
+        source_contract_fingerprint, source_shape_fingerprint, source_schema_json)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18)`,
   ).bind(
     batchId,
     body.sourceId,
@@ -1748,6 +1751,9 @@ app.post("/internal/capture-batches", zValidator("json", captureBatchCreateSchem
     body.priceMode,
     identity.agentId,
     body.idempotencyKey,
+    body.sourceSchema?.contractFingerprint ?? null,
+    body.sourceSchema?.shapeFingerprint ?? null,
+    stableJson(body.sourceSchema ?? {}),
   ).run();
   return context.json({ ok: true, batchId, status: "open", idempotent: false }, 201);
 });
@@ -1903,7 +1909,66 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
       expectedTerms: batch.expected_terms,
     }, evidenceRows.results)
     : { pass: true, detail: { required: false }, metrics: null };
-  const status = identityPass && completePass && collapsePass && freshnessPass && browserEvidence.pass ? "validated" : "rejected";
+  const captureSemanticsRequired = batch.capture_method !== "legacy_bridge"
+    && Date.parse(batch.captured_to) >= Date.parse(CAPTURE_SEMANTICS_CUTOVER);
+  const priceSemantics = await context.env.DB.prepare(
+    `SELECT COUNT(*) AS eligible,
+            SUM(CASE WHEN json_extract(price_semantics_json, '$.ambiguity') = 0
+                      AND json_extract(price_semantics_json, '$.unitPriceMinor') = purchase_price_minor
+                      AND json_extract(price_semantics_json, '$.qualifyingQuantity') >= 1
+                      AND ABS(json_extract(price_semantics_json, '$.totalPriceMinor')
+                          - purchase_price_minor * json_extract(price_semantics_json, '$.qualifyingQuantity')) <= 1
+                     THEN 1 ELSE 0 END) AS examined
+       FROM observations WHERE batch_id = ?1`,
+  ).bind(batch.id).first<{ eligible: number; examined: number | null }>();
+  const priceSemanticsEligible = priceSemantics?.eligible ?? 0;
+  const priceSemanticsExamined = priceSemantics?.examined ?? 0;
+  const priceSemanticsPass = !captureSemanticsRequired || (priceSemanticsEligible > 0 && priceSemanticsExamined === priceSemanticsEligible);
+
+  const historyRows = await context.env.DB.prepare(
+    `WITH current_rows AS (
+       SELECT p.id AS product_id, p.external_key,
+              o.id AS current_observation_id, pv.name AS current_name, pv.size_text AS current_size_text,
+              o.per_unit_micros AS current_per_unit_micros, o.normalized_basis_unit AS current_basis_unit,
+              o.normalized_basis_qty_micros AS current_basis_qty_micros, pv.identity_json AS current_identity_json,
+              o.captured_at AS current_captured_at
+         FROM observations o JOIN product_versions pv ON pv.id = o.product_version_id
+         JOIN products p ON p.id = pv.product_id WHERE o.batch_id = ?1
+     ), prior_ranked AS (
+       SELECT pv.product_id, o.id AS prior_observation_id, pv.name AS prior_name, pv.size_text AS prior_size_text,
+              o.per_unit_micros AS prior_per_unit_micros, o.normalized_basis_unit AS prior_basis_unit,
+              o.normalized_basis_qty_micros AS prior_basis_qty_micros, pv.identity_json AS prior_identity_json,
+              o.captured_at AS prior_captured_at,
+              ROW_NUMBER() OVER (PARTITION BY pv.product_id ORDER BY o.captured_at DESC) AS history_rank
+         FROM observations o JOIN product_versions pv ON pv.id = o.product_version_id
+         JOIN capture_batches b ON b.id = o.batch_id
+        WHERE o.batch_id <> ?1 AND b.status IN ('validated','promoted','superseded')
+          AND pv.product_id IN (SELECT DISTINCT product_id FROM current_rows)
+          AND o.captured_at < (SELECT MAX(current_captured_at) FROM current_rows)
+     )
+     SELECT current_rows.product_id, current_rows.external_key, current_rows.current_observation_id,
+            current_rows.current_name, current_rows.current_size_text, current_rows.current_per_unit_micros,
+            current_rows.current_basis_unit, current_rows.current_basis_qty_micros, current_rows.current_identity_json,
+            prior_ranked.prior_observation_id, prior_ranked.prior_name, prior_ranked.prior_size_text,
+            prior_ranked.prior_per_unit_micros, prior_ranked.prior_basis_unit, prior_ranked.prior_basis_qty_micros,
+            prior_ranked.prior_identity_json
+       FROM current_rows LEFT JOIN prior_ranked ON prior_ranked.product_id = current_rows.product_id
+        AND prior_ranked.history_rank = 1 AND prior_ranked.prior_captured_at < current_rows.current_captured_at`,
+  ).bind(batch.id).all<ProductHistoryRow>();
+  const historyAssessment = assessProductHistory(historyRows.results);
+  const skuIdentityPass = !captureSemanticsRequired || historyAssessment.identityFindings.length === 0;
+  const changePointPass = !captureSemanticsRequired || historyAssessment.changePointFindings.length === 0;
+
+  const sourceSchemaRequired = captureSemanticsRequired && batch.capture_method !== "browser";
+  const priorSchema = sourceSchemaRequired ? await context.env.DB.prepare(
+    `SELECT source_contract_fingerprint FROM capture_batches
+      WHERE source_id = ?1 AND id <> ?2 AND status IN ('validated','promoted','superseded')
+        AND source_contract_fingerprint IS NOT NULL
+      ORDER BY captured_to DESC LIMIT 1`,
+  ).bind(batch.source_id, batch.id).first<{ source_contract_fingerprint: string }>() : null;
+  const schemaAssessment = assessSourceSchema(batch.source_contract_fingerprint, priorSchema?.source_contract_fingerprint ?? null, sourceSchemaRequired);
+  const status = identityPass && completePass && collapsePass && freshnessPass && browserEvidence.pass
+    && priceSemanticsPass && skuIdentityPass && changePointPass && schemaAssessment.pass ? "validated" : "rejected";
   // Capture terms are staged while the batch is still private/open. Run each packed
   // insert separately so a full catalog cannot make one D1 transaction exceed its
   // aggregate execution ceiling. The UPSERT makes a retry safe after any partial
@@ -1928,7 +1993,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
     `UPDATE capture_batches SET status = ?2, attempted_terms = ?3, successful_terms = ?4, empty_terms = ?5,
        rejected_terms = ?6, blocked_terms = ?7, captured_pages = ?8, evidence_manifest_key = ?9,
        validation_summary_json = ?10, sealed_at = CURRENT_TIMESTAMP WHERE id = ?1`,
-  ).bind(batch.id, status, attempted, successful, empty, rejected, blocked, capturedPages, body.evidenceManifestKey ?? null, stableJson({ identityPass, termEnvelopePass, pageEnvelopePass, collapsePass, freshnessPass, browserEvidencePass: browserEvidence.pass, browserEvidence: browserEvidence.detail, captureAgeMillis, maxAgeDays: batch.max_age_days, observationCount, predecessorBatchId: predecessor?.id ?? null, predecessorObservationCount: predecessor?.observation_count ?? null, collapseFloor })));
+  ).bind(batch.id, status, attempted, successful, empty, rejected, blocked, capturedPages, body.evidenceManifestKey ?? null, stableJson({ identityPass, termEnvelopePass, pageEnvelopePass, collapsePass, freshnessPass, browserEvidencePass: browserEvidence.pass, browserEvidence: browserEvidence.detail, priceSemanticsPass, skuIdentityPass, changePointPass, sourceSchemaPass: schemaAssessment.pass, sourceSchema: schemaAssessment.detail, captureAgeMillis, maxAgeDays: batch.max_age_days, observationCount, predecessorBatchId: predecessor?.id ?? null, predecessorObservationCount: predecessor?.observation_count ?? null, collapseFloor })));
   if (browserEvidence.metrics) {
     const metrics = browserEvidence.metrics;
     statements.push(context.env.DB.prepare(
@@ -1938,11 +2003,12 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
          blocked_terms, not_attempted_terms, retry_count, chunk_count, duration_ms,
          term_duration_p50_ms, term_duration_p95_ms, projected_rows, observation_count, taxonomy_rows,
          accuracy_policy_version, discovery_rows, required_verification_rows, matched_verification_rows,
-         unresolved_verification_rows, price_agreement_rows, single_channel_rows, anomaly_rows, retrieval_complete_terms
+         unresolved_verification_rows, price_agreement_rows, single_channel_rows, anomaly_rows, retrieval_complete_terms,
+         page_state_attested_rows, promotion_semantics_rows
        ) VALUES (
          ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10,
          ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20,
-         ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29
+         ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29, ?30, ?31
        )`,
     ).bind(
       batch.id, metrics.sessionId, metrics.sourceId, metrics.cycleStart, metrics.coverageMode,
@@ -1951,6 +2017,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
       metrics.termDurationP50Ms, metrics.termDurationP95Ms, metrics.projectedRows, observationCount, taxonomyRows,
       metrics.accuracyPolicyVersion, metrics.discoveryRows, metrics.requiredVerificationRows, metrics.matchedVerificationRows,
       metrics.unresolvedVerificationRows, metrics.priceAgreementRows, metrics.singleChannelRows, metrics.anomalyRows, metrics.retrievalCompleteTerms,
+      metrics.pageStateAttestedRows, metrics.promotionSemanticsRows,
     ));
   }
   for (const [guardId, pass, eligible, examined, detail] of [
@@ -1960,6 +2027,10 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
     ["batch-freshness", freshnessPass, 1, 1, { capturedTo: batch.captured_to, captureAgeMillis, maxAgeDays: batch.max_age_days }],
     ["batch-browser-evidence", browserEvidence.pass, batch.capture_method === "browser" ? 3 : 0, batch.capture_method === "browser" ? 3 : 0, browserEvidence.detail],
     ["batch-browser-accuracy", batch.capture_method !== "browser" || browserEvidence.detail.accuracyPass === true, batch.capture_method === "browser" ? 10 : 0, batch.capture_method === "browser" ? 10 : 0, browserEvidence.detail],
+    ["batch-price-semantics", priceSemanticsPass, captureSemanticsRequired ? priceSemanticsEligible : 0, captureSemanticsRequired ? priceSemanticsExamined : 0, { required: captureSemanticsRequired, eligible: priceSemanticsEligible, examined: priceSemanticsExamined }],
+    ["batch-sku-identity", skuIdentityPass, captureSemanticsRequired ? historyRows.results.length : 0, captureSemanticsRequired ? historyRows.results.length : 0, { required: captureSemanticsRequired, findingCount: historyAssessment.identityFindings.length, findings: historyAssessment.identityFindings.slice(0, 200) }],
+    ["batch-change-point", changePointPass, captureSemanticsRequired ? historyRows.results.length : 0, captureSemanticsRequired ? historyRows.results.length : 0, { required: captureSemanticsRequired, findingCount: historyAssessment.changePointFindings.length, findings: historyAssessment.changePointFindings.slice(0, 200) }],
+    ["batch-source-schema", schemaAssessment.pass, sourceSchemaRequired ? 1 : 0, sourceSchemaRequired ? 1 : 0, { ...schemaAssessment.detail, currentShapeFingerprint: batch.source_shape_fingerprint }],
   ] as const) {
     const resultId = await deterministicId("guard", batch.id, guardId);
     statements.push(context.env.DB.prepare(

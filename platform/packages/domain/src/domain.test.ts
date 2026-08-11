@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { assertObservationArithmetic, expectedPerUnitMicros, normalizeName, stableJson } from "./index";
+import { assertObservationArithmetic, expectedPerUnitMicros, expectedProductIdentityFingerprint, normalizeName, productIdentityPass, stableJson } from "./index";
 
 describe("domain invariants", () => {
   it("normalizes product identity without punctuation drift", () => {
@@ -41,5 +41,13 @@ describe("domain invariants", () => {
 
   it("matches JSON wire semantics for undefined values", () => {
     expect(stableJson({ kept: 1, omitted: undefined, array: [1, undefined] })).toBe('{"array":[1,null],"kept":1}');
+  });
+
+  it("rejects forged identity fingerprints and confidence inflation", async () => {
+    const base = { primaryType: "retailer_id" as const, primaryValue: "sku-1", retailerProductId: "sku-1", canonicalUrl: "https://retailer.example/ip/item/sku-1" };
+    const fingerprint = await expectedProductIdentityFingerprint(base, "Whole Milk", "1 gal");
+    expect(await productIdentityPass("sku-1", "Whole Milk", "1 gal", { ...base, confidence: "strong", fingerprint })).toBe(true);
+    expect(await productIdentityPass("sku-1", "Cat Litter", "40 lb", { ...base, confidence: "strong", fingerprint })).toBe(false);
+    expect(await productIdentityPass("sku-1", "Whole Milk", "1 gal", { ...base, confidence: "moderate", fingerprint })).toBe(false);
   });
 });

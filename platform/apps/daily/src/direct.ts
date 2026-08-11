@@ -1,5 +1,5 @@
-import { BROWSER_CAPTURE_ACCURACY_CUTOVER, browserCaptureSessionSchema, type BrowserCaptureSession, type DirectCaptureArtifact, type ObservationInput } from "@thriftycrew/contracts";
-import { buildBrowserCaptureAccuracy, digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
+import { BROWSER_CAPTURE_ACCURACY_CUTOVER, CAPTURE_SEMANTICS_CUTOVER, browserCaptureSessionSchema, type BrowserCaptureSession, type DirectCaptureArtifact, type ObservationInput, type PriceSemantics, type ProductIdentity, type SourceSchemaFingerprint } from "@thriftycrew/contracts";
+import { buildBrowserCaptureAccuracy, digestHex, expectedProductIdentityFingerprint, normalizeName, stableJson } from "@thriftycrew/domain";
 
 type StoreKey = "aldi" | "bakers" | "family-fare" | "fareway" | "hy-vee" | "sams" | "walmart";
 interface RegularDocument {
@@ -40,6 +40,12 @@ const HEADLESS_PRICE_MODE: Record<StoreKey, string> = {
 
 function stringValue(value: unknown): string | undefined {
   return typeof value === "string" && value.trim() ? value.trim() : undefined;
+}
+
+function identifierValue(value: unknown): string | undefined {
+  const text = stringValue(value);
+  if (text) return text;
+  return typeof value === "number" && Number.isSafeInteger(value) && value >= 0 ? String(value) : undefined;
 }
 
 function numberValue(value: unknown): number | undefined {
@@ -224,13 +230,79 @@ function authoredTermLedger(document: RegularDocument): DirectCaptureArtifact["t
 }
 
 async function externalKey(row: Record<string, unknown>, index: number): Promise<string> {
-  const direct = stringValue(row.product_id) ?? stringValue(row.item_id) ?? stringValue(row.sams_item_id) ?? stringValue(row.upc) ?? stringValue(row.sku) ?? safeUrl(row.canonical_url) ?? safeUrl(row.link_url);
+  const direct = identifierValue(row.product_id) ?? identifierValue(row.item_id) ?? identifierValue(row.sams_item_id) ?? identifierValue(row.upc) ?? identifierValue(row.sku) ?? safeUrl(row.canonical_url) ?? safeUrl(row.link_url);
   if (direct) return direct.slice(0, 300);
   const identity = {
     name: normalizeName(stringValue(row.item) ?? stringValue(row.name) ?? ""),
     size: normalizeName(stringValue(row.size_raw) ?? stringValue(row.size) ?? ""),
   };
   return `catalog-${(await digestHex(stableJson(identity))).slice(0, 32)}${identity.name ? "" : `-${index}`}`;
+}
+
+function digits(value: unknown): string | undefined {
+  const normalized = identifierValue(value)?.replace(/\D/g, "");
+  return normalized && /^\d{8,14}$/.test(normalized) ? normalized : undefined;
+}
+
+async function productIdentity(row: Record<string, unknown>, index: number, name: string, sizeText: string, store: StoreKey): Promise<ProductIdentity> {
+  const retailerProductId = (identifierValue(row.product_id) ?? identifierValue(row.item_id) ?? identifierValue(row.sams_item_id))?.slice(0, 300);
+  const gtin = digits(row.gtin) ?? digits(row.gtin13) ?? digits(row.gtin14);
+  const upc = digits(row.upc);
+  const sku = identifierValue(row.sku);
+  const canonicalUrl = safeUrl(row.canonical_url) ?? safeUrl(row.link_url);
+  const brand = stringValue(row.brand) ?? stringValue(row.brand_name);
+  const externalProductKey = await externalKey(row, index);
+  if ((store === "walmart" || store === "sams") && retailerProductId && canonicalUrl) {
+    const pathSegments = new URL(canonicalUrl).pathname.split("/").filter(Boolean);
+    const urlProductId = [...pathSegments].reverse().find((segment) => /^\d{5,}$/.test(segment));
+    if (urlProductId && urlProductId !== retailerProductId) throw new Error(`${store} canonical URL product id ${urlProductId} disagrees with retailer product id ${retailerProductId}`);
+  }
+  const primaryType: ProductIdentity["primaryType"] = retailerProductId ? "retailer_id" : gtin ? "gtin" : upc ? "upc" : sku ? "sku" : canonicalUrl ? "canonical_url" : "synthetic";
+  const primaryValue = primaryType === "canonical_url" ? canonicalUrl! : externalProductKey;
+  const stableChannels = [retailerProductId, gtin, upc, sku, canonicalUrl].filter(Boolean).length;
+  const confidence: ProductIdentity["confidence"] = stableChannels >= 2 ? "strong" : stableChannels === 1 ? "moderate" : "weak";
+  const fingerprintInput = { primaryType, primaryValue, ...(retailerProductId ? { retailerProductId } : {}), ...(gtin ? { gtin } : {}), ...(upc ? { upc } : {}), ...(sku ? { sku } : {}), ...(canonicalUrl ? { canonicalUrl } : {}), ...(brand ? { brand } : {}) };
+  return {
+    primaryType, primaryValue, ...(retailerProductId ? { retailerProductId } : {}), ...(gtin ? { gtin } : {}),
+    ...(upc ? { upc } : {}), ...(sku ? { sku } : {}), ...(canonicalUrl ? { canonicalUrl } : {}),
+    ...(brand ? { brand } : {}), confidence, fingerprint: await expectedProductIdentityFingerprint(fingerprintInput, name, sizeText),
+  };
+}
+
+function schemaType(value: unknown): "null" | "boolean" | "number" | "string" | "array" | "object" {
+  return value === null || value === undefined ? "null" : Array.isArray(value) ? "array" : typeof value as "boolean" | "number" | "string" | "object";
+}
+
+async function sourceSchemaFingerprint(rows: readonly Record<string, unknown>[], document: RegularDocument): Promise<SourceSchemaFingerprint> {
+  const observed = new Map<string, Set<ReturnType<typeof schemaType>>>();
+  for (const row of rows) for (const [field, value] of Object.entries(row)) {
+    const types = observed.get(field) ?? new Set<ReturnType<typeof schemaType>>();
+    types.add(schemaType(value));
+    observed.set(field, types);
+  }
+  const activePaths = (candidates: readonly string[]) => [...new Set(rows.flatMap((row) => candidates.find((field) => row[field] !== undefined && row[field] !== null && row[field] !== "") ?? []))].sort();
+  if (stringValue(document.generated)) observed.set("$document.generated", new Set(["string"]));
+  const identityPaths = activePaths(["product_id", "item_id", "sams_item_id", "upc", "gtin", "sku", "canonical_url", "link_url"]);
+  if (identityPaths.length === 0) observed.set("$derived.synthetic_identity", new Set(["string"]));
+  const contractFields = {
+    identity: identityPaths.length ? identityPaths : ["$derived.synthetic_identity"],
+    name: activePaths(["item", "name"]),
+    price: activePaths(["current_price", "ad_price"]),
+    size: activePaths(["size_raw", "size"]),
+    captured_at: activePaths(["as_of"]).concat(stringValue(document.generated) ? ["$document.generated"] : []),
+  };
+  for (const [logical, paths] of Object.entries(contractFields)) if (paths.length === 0) throw new Error(`accepted source rows do not expose a ${logical} field path`);
+  const fieldPaths = [...observed.keys()].sort();
+  const observedTypes = Object.fromEntries(fieldPaths.map((field) => [field, [...observed.get(field)!].sort()]));
+  const contractShape = Object.fromEntries(Object.entries(contractFields).map(([logical, paths]) => [logical, paths.map((field) => [field, observedTypes[field]?.filter((type) => type !== "null") ?? []])]));
+  return {
+    version: 1,
+    contractFingerprint: await digestHex(stableJson(contractShape)),
+    shapeFingerprint: await digestHex(stableJson(observedTypes)),
+    contractFields,
+    fieldPaths,
+    observedTypes,
+  };
 }
 
 function verifiedUnitPrice(value: unknown): { unit: ObservationInput["normalizedBasisUnit"]; perUnitMicros: number } | undefined {
@@ -285,6 +357,7 @@ export async function buildRegularCapture(
   const deals = Array.isArray(document.deals) ? document.deals : [];
   if (deals.length === 0) throw new Error("regular capture document has no deals");
   const observations: ObservationInput[] = [];
+  const acceptedSourceRows: Array<Record<string, unknown>> = [];
   const rejected: Array<{ index: number; reason: string }> = [];
   const buckets = new Map<string, { accepted: number; rejected: number }>();
   const sessionTerms = new Map(captureSession?.terms.map((term) => [term.termKey, term]) ?? []);
@@ -353,8 +426,22 @@ export async function buildRegularCapture(
     const normalizedBasisQtyMicros = storeUnitPrice
       ? Math.max(1, Math.round((purchasePriceMinor * 10_000 * 1_000_000) / storeUnitPrice.perUnitMicros))
       : parsedBasis.quantityMicros;
+    const identity = await productIdentity(row, index, name, sizeText, store);
+    const qualifyingQuantity = verifiedPerItemMultiBuy ? Number(priceMultiple) : 1;
+    const offerType: PriceSemantics["offerType"] = membershipRequired ? "member" : loyaltyRequired ? "loyalty"
+      : verifiedPerItemMultiBuy ? "multibuy" : row.marked_down === true ? "markdown"
+        : regularPriceMinor !== undefined && regularPriceMinor > purchasePriceMinor ? "sale" : "everyday";
+    const condition: PriceSemantics["condition"] = membershipRequired
+      ? (qualifyingQuantity > 1 ? "membership_quantity" : "membership")
+      : loyaltyRequired ? (qualifyingQuantity > 1 ? "loyalty_quantity" : "loyalty")
+        : qualifyingQuantity > 1 ? "quantity" : "none";
+    const priceSemantics: PriceSemantics = {
+      offerType, condition, unitPriceMinor: purchasePriceMinor, qualifyingQuantity,
+      totalPriceMinor: purchasePriceMinor * qualifyingQuantity,
+      ...(regularPriceMinor !== undefined ? { regularPriceMinor } : {}), ambiguity: false,
+    };
     observations.push({
-      externalProductKey: await externalKey(row, index), name, sizeText,
+      externalProductKey: await externalKey(row, index), identity, name, sizeText,
       ...(productUrl ? { productUrl } : {}),
       ...(safeUrl(row.image_url) ? { imageUrl: safeUrl(row.image_url)! } : {}),
       ...(taxonomy(row, store) ? { taxonomyPath: taxonomy(row, store)! } : {}),
@@ -372,19 +459,24 @@ export async function buildRegularCapture(
       perUnitMicros: Math.round((purchasePriceMinor * 10_000 * 1_000_000) / normalizedBasisQtyMicros),
       basisOptions: packageBasisOptions(sizeText, name, purchasePriceMinor),
       loyaltyRequired, membershipRequired, rawPriceText: stringValue(row.ad_price) ?? String(price), rawSizeText: sizeText,
-      capturedAt, sourcePayloadKey: `regular:${store}:${index}`,
+      capturedAt, sourcePayloadKey: `regular:${store}:${index}`, priceSemantics,
     });
+    acceptedSourceRows.push(row);
     count.accepted += 1;
   }
   if (observations.length === 0) throw new Error("no regular rows could be normalized");
   let truthBoundObservations = 0;
   if (captureSession?.version === 2) {
     for (const observation of observations) {
-      const match = captureSession.accuracy.discoveryRows.some((row) => row.termKey === observation.termKey
+      const match = captureSession.accuracy.discoveryRows.find((row) => row.termKey === observation.termKey
         && row.productKey === observation.externalProductKey
         && row.purchasePriceMinor === observation.purchasePriceMinor
         && normalizeName(row.name) === normalizeName(observation.name));
       if (!match) throw new Error(`normalized browser observation is not bound to exact capture truth: ${observation.termKey ?? "(no-term)"}/${observation.externalProductKey}`);
+      if (Date.parse(captureSession.finishedAt) >= Date.parse(CAPTURE_SEMANTICS_CUTOVER)) {
+        if (!match.truth.visible.priceSemantics || !match.truth.pageState) throw new Error("browser capture truth is missing required price semantics or page-state attestation");
+        observation.priceSemantics = match.truth.visible.priceSemantics;
+      }
       truthBoundObservations += 1;
     }
   }
@@ -413,13 +505,14 @@ export async function buildRegularCapture(
   const marketVerified = attestation?.marketVerified ?? headlessLocationVerified;
   const locationVerified = attestation?.locationVerified ?? headlessLocationVerified;
   const attestationHash = attestation ? await digestHex(stableJson(attestation)) : null;
-  const manifestHash = await digestHex(stableJson({ store, source: document.source, priceMode: attestation?.priceMode ?? document.price_mode, priceModeVerified, marketVerified, locationVerified, attestationHash, observations: observations.map((item) => [item.externalProductKey, item.capturedAt, item.perUnitMicros, item.basisOptions ?? []]) }));
+  const sourceSchema = await sourceSchemaFingerprint(acceptedSourceRows, document);
+  const manifestHash = await digestHex(stableJson({ semanticContractVersion: 1, store, source: document.source, priceMode: attestation?.priceMode ?? document.price_mode, priceModeVerified, marketVerified, locationVerified, attestationHash, sourceSchema: [sourceSchema.contractFingerprint, sourceSchema.shapeFingerprint], observations: observations.map((item) => [item.externalProductKey, item.capturedAt, item.perUnitMicros, item.basisOptions ?? [], item.identity?.fingerprint ?? null, item.priceSemantics ?? null]) }));
   const capturedFrom = captureSession?.startedAt ?? captured[0]!;
   const capturedTo = captureSession?.finishedAt ?? captured.at(-1)!;
   return {
     version: 1, sourceId: `direct-${store}-${captureClient}`, coverageMode, capturedFrom, capturedTo,
     expectedTerms: captureSession?.expectedTerms ?? terms.length, marketVerified, locationVerified, priceModeVerified, priceMode,
-    idempotencyKey: `regular-${store}-${capturedTo.slice(0, 10)}-${manifestHash.slice(0, 16)}`, terms, observations,
-    audit: { inputRows: deals.length, acceptedRows: observations.length, rejectedRows: rejected.length, rejectionReasons: Object.fromEntries([...new Set(rejected.map((item) => item.reason))].sort().map((reason) => [reason, rejected.filter((item) => item.reason === reason).length])), taxonomyRows: observations.filter((item) => item.taxonomyPath).length, truthBoundObservations, ...(captureSession ? { captureSession } : {}), ...(attestation ? { attestation, attestationHash } : {}) },
+    idempotencyKey: `regular-${store}-${capturedTo.slice(0, 10)}-${manifestHash.slice(0, 16)}`, sourceSchema, terms, observations,
+    audit: { inputRows: deals.length, acceptedRows: observations.length, rejectedRows: rejected.length, rejectionReasons: Object.fromEntries([...new Set(rejected.map((item) => item.reason))].sort().map((reason) => [reason, rejected.filter((item) => item.reason === reason).length])), taxonomyRows: observations.filter((item) => item.taxonomyPath).length, stableIdentityRows: observations.filter((item) => item.identity?.confidence !== "weak").length, identityStrongRows: observations.filter((item) => item.identity?.confidence === "strong").length, promotionSemanticsRows: observations.filter((item) => item.priceSemantics).length, sourceSchema, truthBoundObservations, ...(captureSession ? { captureSession } : {}), ...(attestation ? { attestation, attestationHash } : {}) },
   };
 }

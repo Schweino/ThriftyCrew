@@ -1,61 +1,73 @@
 {
-  "version": 1,
+  "version": 2,
   "cases": [
     {
-      "id": "aldi-current-price-label-clean",
-      "store": "aldi",
-      "expected": true,
+      "id": "aldi-current-price-label-clean", "store": "aldi", "expected": true,
       "identity": { "productKey": "https://www.aldi.us/product/milk", "name": "Whole Milk", "sizeText": "1 gal", "purchasePriceMinor": 299 },
-      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://www.aldi.us/results?q=milk", "location": "ALDI OLA 42 Omaha", "priceMode": "In-Store", "pageIndex": 0, "resultIndex": 0, "visible": { "rawText": "Current price: $2.99", "priceMinor": 299, "productName": "Whole Milk", "sizeText": "1 gal" }, "parser": { "status": "exact", "rule": "current-price-label" } }
+      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://www.aldi.us/results?q=milk", "location": "ALDI OLA 42 Omaha", "priceMode": "In-Store", "pageIndex": 0, "resultIndex": 0,
+        "pageState": { "pageType": "search_results", "pageTitle": "milk | ALDI", "query": "milk", "resultRegionPresent": true, "challengeDetected": false, "currency": "USD", "locale": "en-US", "locationText": "ALDI OLA 42 Omaha", "fulfillmentText": "In-Store" },
+        "visible": { "rawText": "Current price: $2.99", "priceMinor": 299, "productName": "Whole Milk", "sizeText": "1 gal", "priceSemantics": { "offerType": "everyday", "condition": "none", "unitPriceMinor": 299, "qualifyingQuantity": 1, "totalPriceMinor": 299, "ambiguity": false } },
+        "parser": { "status": "exact", "rule": "current-price-label" } }
     },
     {
-      "id": "aldi-glued-price-must-fire",
-      "store": "aldi",
-      "expected": false,
+      "id": "aldi-glued-price-must-fire", "store": "aldi", "expected": false,
       "identity": { "productKey": "https://www.aldi.us/product/milk", "name": "Whole Milk", "sizeText": "1 gal", "purchasePriceMinor": 299 },
-      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://www.aldi.us/results?q=milk", "location": "ALDI OLA 42 Omaha", "priceMode": "In-Store", "pageIndex": 0, "resultIndex": 0, "visible": { "rawText": "$29.90", "priceMinor": 2990, "productName": "Whole Milk", "sizeText": "1 gal" }, "parser": { "status": "exact", "rule": "current-price-label" } }
+      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://www.aldi.us/results?q=milk", "location": "ALDI OLA 42 Omaha", "priceMode": "In-Store", "pageIndex": 0, "resultIndex": 0,
+        "pageState": { "pageType": "search_results", "pageTitle": "milk | ALDI", "query": "milk", "resultRegionPresent": true, "challengeDetected": false, "currency": "USD", "locale": "en-US", "locationText": "ALDI OLA 42 Omaha", "fulfillmentText": "In-Store" },
+        "visible": { "rawText": "$29.90", "priceMinor": 2990, "productName": "Whole Milk", "sizeText": "1 gal", "priceSemantics": { "offerType": "everyday", "condition": "none", "unitPriceMinor": 2990, "qualifyingQuantity": 1, "totalPriceMinor": 2990, "ambiguity": false } },
+        "parser": { "status": "exact", "rule": "current-price-label" } }
     },
     {
-      "id": "fareway-multibuy-clean",
-      "store": "fareway",
-      "expected": true,
+      "id": "fareway-multibuy-clean", "store": "fareway", "expected": true,
       "identity": { "productKey": "https://shop.fareway.com/product/yogurt", "name": "Plain Yogurt", "sizeText": "6 oz", "purchasePriceMinor": 250 },
-      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://shop.fareway.com/search?q=yogurt", "location": "17070 Audrey Street, Omaha, NE 68136", "priceMode": "In-Store", "pageIndex": 0, "resultIndex": 0, "visible": { "rawText": "2 for $5.00", "priceMinor": 250, "productName": "Plain Yogurt", "sizeText": "6 oz" }, "parser": { "status": "exact", "rule": "current-price-label" } }
+      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://shop.fareway.com/search?q=yogurt", "location": "17070 Audrey Street, Omaha, NE 68136", "priceMode": "In-Store", "pageIndex": 0, "resultIndex": 0,
+        "pageState": { "pageType": "search_results", "pageTitle": "yogurt | Fareway", "query": "yogurt", "resultRegionPresent": true, "challengeDetected": false, "currency": "USD", "locale": "en-US", "locationText": "17070 Audrey Street, Omaha, NE 68136", "fulfillmentText": "In-Store" },
+        "visible": { "rawText": "2 for $5.00", "priceMinor": 250, "productName": "Plain Yogurt", "sizeText": "6 oz", "priceSemantics": { "offerType": "multibuy", "condition": "quantity", "unitPriceMinor": 250, "qualifyingQuantity": 2, "totalPriceMinor": 500, "ambiguity": false } },
+        "parser": { "status": "exact", "rule": "current-price-label" } }
     },
     {
-      "id": "fareway-wrong-location-must-fire",
-      "store": "fareway",
-      "expected": false,
+      "id": "fareway-wrong-location-must-fire", "store": "fareway", "expected": false,
       "identity": { "productKey": "https://shop.fareway.com/product/yogurt", "name": "Plain Yogurt", "sizeText": "6 oz", "purchasePriceMinor": 250 },
-      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://shop.fareway.com/search?q=yogurt", "location": "Lincoln, NE", "priceMode": "In-Store", "pageIndex": 0, "resultIndex": 0, "visible": { "rawText": "2 for $5.00", "priceMinor": 250, "productName": "Plain Yogurt", "sizeText": "6 oz" }, "parser": { "status": "exact", "rule": "current-price-label" } }
+      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://shop.fareway.com/search?q=yogurt", "location": "Lincoln, NE", "priceMode": "In-Store", "pageIndex": 0, "resultIndex": 0,
+        "pageState": { "pageType": "search_results", "pageTitle": "yogurt | Fareway", "query": "yogurt", "resultRegionPresent": true, "challengeDetected": false, "currency": "USD", "locale": "en-US", "locationText": "Lincoln, NE", "fulfillmentText": "In-Store" },
+        "visible": { "rawText": "2 for $5.00", "priceMinor": 250, "productName": "Plain Yogurt", "sizeText": "6 oz", "priceSemantics": { "offerType": "multibuy", "condition": "quantity", "unitPriceMinor": 250, "qualifyingQuantity": 2, "totalPriceMinor": 500, "ambiguity": false } },
+        "parser": { "status": "exact", "rule": "current-price-label" } }
     },
     {
-      "id": "sams-dual-channel-clean",
-      "store": "sams",
-      "expected": true,
+      "id": "sams-dual-channel-clean", "store": "sams", "expected": true,
       "identity": { "productKey": "sam-123", "name": "Large Eggs", "sizeText": "24 ct", "purchasePriceMinor": 598 },
-      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://www.samsclub.com/s/eggs", "location": "Omaha Club 13130 L St", "priceMode": "Club Pickup", "pageIndex": 0, "resultIndex": 0, "visible": { "rawText": "$5.98", "priceMinor": 598, "productName": "Large Eggs", "sizeText": "24 ct" }, "structured": { "rawText": "5.98", "priceMinor": 598, "productName": "Large Eggs", "productKey": "sam-123", "sizeText": "24 ct" }, "parser": { "status": "exact", "rule": "next-data-price-lines" } }
+      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://www.samsclub.com/s/eggs", "location": "Omaha Club 13130 L St", "priceMode": "Club Pickup", "pageIndex": 0, "resultIndex": 0,
+        "pageState": { "pageType": "search_results", "pageTitle": "eggs | Sam's Club", "query": "eggs", "resultRegionPresent": true, "challengeDetected": false, "currency": "USD", "locale": "en-US", "locationText": "Omaha Club 13130 L St", "fulfillmentText": "Club Pickup" },
+        "visible": { "rawText": "$5.98", "priceMinor": 598, "productName": "Large Eggs", "sizeText": "24 ct", "priceSemantics": { "offerType": "member", "condition": "membership", "unitPriceMinor": 598, "qualifyingQuantity": 1, "totalPriceMinor": 598, "ambiguity": false } },
+        "structured": { "rawText": "5.98", "priceMinor": 598, "productName": "Large Eggs", "productKey": "sam-123", "sizeText": "24 ct", "priceSemantics": { "offerType": "member", "condition": "membership", "unitPriceMinor": 598, "qualifyingQuantity": 1, "totalPriceMinor": 598, "ambiguity": false } },
+        "parser": { "status": "exact", "rule": "next-data-price-lines" } }
     },
     {
-      "id": "sams-identity-disagreement-must-fire",
-      "store": "sams",
-      "expected": false,
+      "id": "sams-identity-disagreement-must-fire", "store": "sams", "expected": false,
       "identity": { "productKey": "sam-123", "name": "Large Eggs", "sizeText": "24 ct", "purchasePriceMinor": 598 },
-      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://www.samsclub.com/s/eggs", "location": "Omaha Club 13130 L St", "priceMode": "Club Pickup", "pageIndex": 0, "resultIndex": 0, "visible": { "rawText": "$5.98", "priceMinor": 598, "productName": "Large Eggs", "sizeText": "24 ct" }, "structured": { "rawText": "5.98", "priceMinor": 598, "productName": "Large Eggs", "productKey": "sam-999", "sizeText": "24 ct" }, "parser": { "status": "exact", "rule": "next-data-price-lines" } }
+      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://www.samsclub.com/s/eggs", "location": "Omaha Club 13130 L St", "priceMode": "Club Pickup", "pageIndex": 0, "resultIndex": 0,
+        "pageState": { "pageType": "search_results", "pageTitle": "eggs | Sam's Club", "query": "eggs", "resultRegionPresent": true, "challengeDetected": false, "currency": "USD", "locale": "en-US", "locationText": "Omaha Club 13130 L St", "fulfillmentText": "Club Pickup" },
+        "visible": { "rawText": "$5.98", "priceMinor": 598, "productName": "Large Eggs", "sizeText": "24 ct", "priceSemantics": { "offerType": "member", "condition": "membership", "unitPriceMinor": 598, "qualifyingQuantity": 1, "totalPriceMinor": 598, "ambiguity": false } },
+        "structured": { "rawText": "5.98", "priceMinor": 598, "productName": "Large Eggs", "productKey": "sam-999", "sizeText": "24 ct", "priceSemantics": { "offerType": "member", "condition": "membership", "unitPriceMinor": 598, "qualifyingQuantity": 1, "totalPriceMinor": 598, "ambiguity": false } },
+        "parser": { "status": "exact", "rule": "next-data-price-lines" } }
     },
     {
-      "id": "walmart-dual-channel-clean",
-      "store": "walmart",
-      "expected": true,
+      "id": "walmart-dual-channel-clean", "store": "walmart", "expected": true,
       "identity": { "productKey": "wm-123", "name": "Fresh Lemons", "sizeText": "each", "purchasePriceMinor": 85 },
-      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://www.walmart.com/search?q=lemons", "location": "Omaha L St Supercenter 12850 L St", "priceMode": "Pickup", "pageIndex": 0, "resultIndex": 0, "visible": { "rawText": "$0.85", "priceMinor": 85, "productName": "Fresh Lemons", "sizeText": "each" }, "structured": { "rawText": "0.85", "priceMinor": 85, "productName": "Fresh Lemons", "productKey": "wm-123", "sizeText": "each" }, "parser": { "status": "exact", "rule": "next-data-price-lines" } }
+      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://www.walmart.com/search?q=lemons", "location": "Omaha L St Supercenter 12850 L St", "priceMode": "Pickup", "pageIndex": 0, "resultIndex": 0,
+        "pageState": { "pageType": "search_results", "pageTitle": "lemons - Walmart.com", "query": "lemons", "resultRegionPresent": true, "challengeDetected": false, "currency": "USD", "locale": "en-US", "locationText": "Omaha L St Supercenter 12850 L St", "fulfillmentText": "Pickup" },
+        "visible": { "rawText": "$0.85", "priceMinor": 85, "productName": "Fresh Lemons", "sizeText": "each", "priceSemantics": { "offerType": "everyday", "condition": "none", "unitPriceMinor": 85, "qualifyingQuantity": 1, "totalPriceMinor": 85, "ambiguity": false } },
+        "structured": { "rawText": "0.85", "priceMinor": 85, "productName": "Fresh Lemons", "productKey": "wm-123", "sizeText": "each", "priceSemantics": { "offerType": "everyday", "condition": "none", "unitPriceMinor": 85, "qualifyingQuantity": 1, "totalPriceMinor": 85, "ambiguity": false } },
+        "parser": { "status": "exact", "rule": "next-data-price-lines" } }
     },
     {
-      "id": "walmart-price-disagreement-must-fire",
-      "store": "walmart",
-      "expected": false,
+      "id": "walmart-price-disagreement-must-fire", "store": "walmart", "expected": false,
       "identity": { "productKey": "wm-123", "name": "Fresh Lemons", "sizeText": "each", "purchasePriceMinor": 85 },
-      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://www.walmart.com/search?q=lemons", "location": "Omaha L St Supercenter 12850 L St", "priceMode": "Pickup", "pageIndex": 0, "resultIndex": 0, "visible": { "rawText": "$0.85", "priceMinor": 85, "productName": "Fresh Lemons", "sizeText": "each" }, "structured": { "rawText": "1.85", "priceMinor": 185, "productName": "Fresh Lemons", "productKey": "wm-123", "sizeText": "each" }, "parser": { "status": "exact", "rule": "next-data-price-lines" } }
+      "truth": { "capturedAt": "2026-08-12T12:00:00.000Z", "pageUrl": "https://www.walmart.com/search?q=lemons", "location": "Omaha L St Supercenter 12850 L St", "priceMode": "Pickup", "pageIndex": 0, "resultIndex": 0,
+        "pageState": { "pageType": "search_results", "pageTitle": "lemons - Walmart.com", "query": "lemons", "resultRegionPresent": true, "challengeDetected": false, "currency": "USD", "locale": "en-US", "locationText": "Omaha L St Supercenter 12850 L St", "fulfillmentText": "Pickup" },
+        "visible": { "rawText": "$0.85", "priceMinor": 85, "productName": "Fresh Lemons", "sizeText": "each", "priceSemantics": { "offerType": "everyday", "condition": "none", "unitPriceMinor": 85, "qualifyingQuantity": 1, "totalPriceMinor": 85, "ambiguity": false } },
+        "structured": { "rawText": "1.85", "priceMinor": 185, "productName": "Fresh Lemons", "productKey": "wm-123", "sizeText": "each", "priceSemantics": { "offerType": "everyday", "condition": "none", "unitPriceMinor": 185, "qualifyingQuantity": 1, "totalPriceMinor": 185, "ambiguity": false } },
+        "parser": { "status": "exact", "rule": "next-data-price-lines" } }
     }
   ]
 }

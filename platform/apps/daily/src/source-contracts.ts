@@ -1,4 +1,4 @@
-import { BROWSER_CAPTURE_ACCURACY_CUTOVER, browserCaptureSessionSchema, type DirectCaptureArtifact } from "@thriftycrew/contracts";
+import { BROWSER_CAPTURE_ACCURACY_CUTOVER, CAPTURE_SEMANTICS_CUTOVER, browserCaptureSessionSchema, type DirectCaptureArtifact } from "@thriftycrew/contracts";
 
 export interface SourceContract {
   sourceId: string;
@@ -11,6 +11,10 @@ export interface SourceContract {
   requiredCaptureAccuracy?: boolean;
   minimumVerificationPercent?: number;
   requireDualPriceAgreement?: boolean;
+  requiredSourceSchema?: boolean;
+  minimumIdentityPercent?: number;
+  minimumPriceSemanticsPercent?: number;
+  minimumPageStatePercent?: number;
 }
 
 export interface SourceContractCheck {
@@ -39,6 +43,10 @@ export function evaluateSourceContract(artifact: DirectCaptureArtifact, contract
     ? Math.floor(session.accuracy.matchedVerificationRows * 100 / session.accuracy.requiredVerificationRows)
     : session?.accuracy.pass ? 100 : 0;
   const dualAgreementPass = !contract.requireDualPriceAgreement || Boolean(session && session.accuracy.priceAgreementRows === session.accuracy.discoveryRows.length);
+  const semanticAccuracyRequired = Date.parse(artifact.capturedTo) >= Date.parse(CAPTURE_SEMANTICS_CUTOVER);
+  const identityPercent = artifact.observations.length ? Math.floor(artifact.observations.filter((row) => row.identity && row.identity.confidence !== "weak").length * 100 / artifact.observations.length) : 0;
+  const priceSemanticsPercent = artifact.observations.length ? Math.floor(artifact.observations.filter((row) => Boolean(row.priceSemantics)).length * 100 / artifact.observations.length) : 0;
+  const pageStatePercent = session?.accuracy.discoveryRows.length ? Math.floor((session.accuracy.pageStateAttestedRows ?? 0) * 100 / session.accuracy.discoveryRows.length) : 0;
   const checks: SourceContractCheck[] = [
     { key: "minimum-rows", status: artifact.observations.length >= contract.minimumRows ? "pass" : "fail", detail: `${artifact.observations.length} rows; requires ${contract.minimumRows}` },
     { key: "term-completion", status: completionPercent >= contract.minimumTermCompletionPercent ? "pass" : "fail", detail: `${completionPercent}% complete; requires ${contract.minimumTermCompletionPercent}%` },
@@ -52,6 +60,10 @@ export function evaluateSourceContract(artifact: DirectCaptureArtifact, contract
     { key: "verification-coverage", status: !accuracyRequired || verificationPercent >= (contract.minimumVerificationPercent ?? 100) ? "pass" : "fail", detail: `${verificationPercent}% verified; requires ${contract.minimumVerificationPercent ?? 100}%` },
     { key: "pagination-completeness", status: !accuracyRequired || Boolean(session && session.accuracy.retrievalCompleteTerms === session.expectedTerms) ? "pass" : "fail", detail: `${session?.accuracy.retrievalCompleteTerms ?? 0}/${session?.expectedTerms ?? artifact.expectedTerms ?? 0} terms complete` },
     { key: "visible-structured-agreement", status: !accuracyRequired || dualAgreementPass ? "pass" : "fail", detail: session ? `${session.accuracy.priceAgreementRows}/${session.accuracy.discoveryRows.length} dual-channel rows` : "no v2 accuracy session" },
+    { key: "source-schema-fingerprint", status: !semanticAccuracyRequired || !contract.requiredSourceSchema || Boolean(artifact.sourceSchema) ? "pass" : "fail", detail: artifact.sourceSchema?.contractFingerprint ?? "not required or missing" },
+    { key: "sku-identity", status: !semanticAccuracyRequired || identityPercent >= (contract.minimumIdentityPercent ?? 100) ? "pass" : "fail", detail: `${identityPercent}% stable identity; requires ${contract.minimumIdentityPercent ?? 100}%` },
+    { key: "price-semantics", status: !semanticAccuracyRequired || priceSemanticsPercent >= (contract.minimumPriceSemanticsPercent ?? 100) ? "pass" : "fail", detail: `${priceSemanticsPercent}% explicit; requires ${contract.minimumPriceSemanticsPercent ?? 100}%` },
+    { key: "browser-page-state", status: !semanticAccuracyRequired || contract.minimumPageStatePercent === undefined || pageStatePercent >= contract.minimumPageStatePercent ? "pass" : "fail", detail: `${pageStatePercent}% attested; requires ${contract.minimumPageStatePercent ?? 0}%` },
   ];
   return { status: checks.every((check) => check.status === "pass") ? "pass" : "fail", checks };
 }

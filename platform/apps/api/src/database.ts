@@ -1,5 +1,5 @@
 import type { ObservationInput, RecipeCost, ReleaseCell, ReleaseCreate, ReleaseGuardResult } from "@thriftycrew/contracts";
-import { assertObservationArithmetic, deterministicId, digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
+import { assertObservationArithmetic, deterministicId, digestHex, normalizeName, productIdentityPass, stableJson } from "@thriftycrew/domain";
 
 export interface BatchRow {
   id: string;
@@ -17,6 +17,9 @@ export interface BatchRow {
   price_mode_verified: number;
   agent_id: string;
   max_age_days: number;
+  source_contract_fingerprint: string | null;
+  source_shape_fingerprint: string | null;
+  source_schema_json: string;
 }
 
 export async function findBatch(db: D1Database, batchId: string): Promise<BatchRow | null> {
@@ -43,6 +46,9 @@ export async function insertObservations(
     // places. Native capture contracts remain exact; the migration bridge gets
     // a bounded 50-micro tolerance (five hundred-thousandths of a dollar).
     assertObservationArithmetic(observation, batch.capture_method === "legacy_bridge" ? 50 : 2);
+    if (observation.identity && !await productIdentityPass(observation.externalProductKey, observation.name, observation.sizeText, observation.identity)) {
+      throw new Error(`observation ${observation.externalProductKey} has a forged or internally inconsistent product identity`);
+    }
     if (observation.capturedAt < batch.captured_from || observation.capturedAt > batch.captured_to) {
       throw new Error(`observation ${observation.externalProductKey} falls outside the batch capture interval`);
     }
@@ -54,6 +60,7 @@ export async function insertObservations(
       imageUrl: observation.imageUrl ?? null,
       taxonomyPath: observation.taxonomyPath ?? null,
       package: observation.package,
+      identity: observation.identity ?? null,
     }));
     const versionId = await deterministicId("pver", productId, versionHash);
     const observationId = await deterministicId("obs", batch.id, versionId, observation.kind, observation.capturedAt);
@@ -67,8 +74,9 @@ export async function insertObservations(
 
     statements.push(db.prepare(
        `INSERT INTO product_versions
-         (id, product_id, name, normalized_name, size_text, product_url, image_url, taxonomy_path, package_json, content_hash, first_seen_at, last_seen_at)
-       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?11)
+         (id, product_id, name, normalized_name, size_text, product_url, image_url, taxonomy_path, package_json,
+          identity_fingerprint, identity_json, content_hash, first_seen_at, last_seen_at)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?13)
        ON CONFLICT(product_id, content_hash) DO UPDATE SET last_seen_at = excluded.last_seen_at`,
     ).bind(
       versionId,
@@ -80,6 +88,8 @@ export async function insertObservations(
       observation.imageUrl ?? null,
       observation.taxonomyPath ?? null,
       stableJson(observation.package),
+      observation.identity?.fingerprint ?? null,
+      stableJson(observation.identity ?? {}),
       versionHash,
       observation.capturedAt,
     ));
@@ -89,8 +99,8 @@ export async function insertObservations(
          (id, batch_id, product_version_id, term_key, kind, currency, purchase_price_minor, regular_price_minor,
           purchase_quantity, package_count, captured_basis_unit, captured_basis_qty_micros, normalized_basis_unit,
           normalized_basis_qty_micros, per_unit_micros, basis_options_json, loyalty_required, membership_required, raw_price_text,
-          raw_size_text, captured_at, valid_from, valid_to, evidence_object_id, source_payload_key)
-       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24, ?25)`,
+          raw_size_text, captured_at, valid_from, valid_to, evidence_object_id, source_payload_key, price_semantics_json)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24, ?25, ?26)`,
     ).bind(
       observationId,
       batch.id,
@@ -117,6 +127,7 @@ export async function insertObservations(
       observation.validTo ?? null,
       observation.evidenceObjectId ?? null,
       observation.sourcePayloadKey ?? null,
+      stableJson(observation.priceSemantics ?? {}),
     ));
   }
 

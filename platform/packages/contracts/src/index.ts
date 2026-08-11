@@ -22,6 +22,15 @@ export const basisUnit = z.enum([
   "kg",
 ]);
 
+export const sourceSchemaFingerprintSchema = z.object({
+  version: z.literal(1),
+  contractFingerprint: sha256Hex,
+  shapeFingerprint: sha256Hex,
+  contractFields: z.record(z.string().min(1).max(100), z.array(z.string().min(1).max(300)).min(1).max(20)),
+  fieldPaths: z.array(z.string().min(1).max(300)).min(1).max(1000),
+  observedTypes: z.record(z.string().min(1).max(300), z.array(z.enum(["null", "boolean", "number", "string", "array", "object"])).min(1).max(6)),
+});
+
 export const captureBatchCreateSchema = z
   .object({
     sourceId: nonEmptyId,
@@ -36,6 +45,7 @@ export const captureBatchCreateSchema = z
     locationVerified: z.boolean(),
     priceModeVerified: z.boolean(),
     priceMode: z.string().trim().min(1).max(100),
+    sourceSchema: sourceSchemaFingerprintSchema.optional(),
     idempotencyKey: nonEmptyId,
   })
   .superRefine((value, context) => {
@@ -60,6 +70,64 @@ export const captureTermSchema = z.object({
 
 export const browserCaptureStore = z.enum(["aldi", "fareway", "sams", "walmart"]);
 export const BROWSER_CAPTURE_ACCURACY_CUTOVER = "2026-08-12T05:00:00.000Z";
+export const CAPTURE_SEMANTICS_CUTOVER = "2026-08-12T05:00:00.000Z";
+
+export const productIdentitySchema = z.object({
+  primaryType: z.enum(["retailer_id", "gtin", "upc", "sku", "canonical_url", "synthetic"]),
+  primaryValue: z.string().trim().min(1).max(3000),
+  retailerProductId: z.string().trim().min(1).max(300).optional(),
+  gtin: z.string().regex(/^\d{8,14}$/).optional(),
+  upc: z.string().regex(/^\d{8,14}$/).optional(),
+  sku: z.string().trim().min(1).max(300).optional(),
+  canonicalUrl: z.url().max(3000).optional(),
+  brand: z.string().trim().min(1).max(500).optional(),
+  confidence: z.enum(["strong", "moderate", "weak"]),
+  fingerprint: sha256Hex,
+});
+
+export const priceSemanticsSchema = z.object({
+  offerType: z.enum(["everyday", "sale", "markdown", "multibuy", "loyalty", "member"]),
+  condition: z.enum(["none", "quantity", "loyalty", "membership", "loyalty_quantity", "membership_quantity"]),
+  unitPriceMinor: z.number().int().nonnegative().max(10_000_000),
+  qualifyingQuantity: z.number().int().positive().max(10_000).default(1),
+  totalPriceMinor: z.number().int().nonnegative().max(100_000_000),
+  regularPriceMinor: z.number().int().nonnegative().max(100_000_000).optional(),
+  validFrom: isoDateTime.optional(),
+  validTo: isoDateTime.optional(),
+  ambiguity: z.literal(false),
+}).superRefine((value, context) => {
+  if (Math.abs(value.unitPriceMinor * value.qualifyingQuantity - value.totalPriceMinor) > 1) {
+    context.addIssue({ code: "custom", path: ["totalPriceMinor"], message: "must equal unit price times qualifying quantity" });
+  }
+  if (value.condition.includes("quantity") && value.qualifyingQuantity <= 1) {
+    context.addIssue({ code: "custom", path: ["qualifyingQuantity"], message: "quantity promotions require more than one item" });
+  }
+  if (value.qualifyingQuantity > 1 && !value.condition.includes("quantity")) {
+    context.addIssue({ code: "custom", path: ["condition"], message: "multi-item offers must preserve their quantity condition" });
+  }
+  if (value.regularPriceMinor !== undefined && value.regularPriceMinor < value.unitPriceMinor) {
+    context.addIssue({ code: "custom", path: ["regularPriceMinor"], message: "cannot be lower than unit price" });
+  }
+  if (value.validFrom && value.validTo && value.validTo < value.validFrom) {
+    context.addIssue({ code: "custom", path: ["validTo"], message: "must not precede validFrom" });
+  }
+});
+
+export const browserPageStateSchema = z.object({
+  pageType: z.enum(["search_results", "product_detail"]),
+  pageTitle: z.string().trim().min(1).max(1000),
+  query: z.string().trim().min(1).max(500).optional(),
+  resultRegionPresent: z.literal(true),
+  challengeDetected: z.literal(false),
+  currency: z.literal("USD"),
+  locale: z.string().trim().min(2).max(50),
+  locationText: z.string().trim().min(1).max(500),
+  fulfillmentText: z.string().trim().min(1).max(300),
+}).superRefine((value, context) => {
+  if (value.pageType === "search_results" && !value.query) {
+    context.addIssue({ code: "custom", path: ["query"], message: "search result page state requires its visible query" });
+  }
+});
 
 export const browserCapturePriceChannelSchema = z.object({
   rawText: z.string().trim().min(1).max(500),
@@ -67,6 +135,7 @@ export const browserCapturePriceChannelSchema = z.object({
   productName: z.string().trim().min(1).max(1000),
   productKey: z.string().trim().min(1).max(300).optional(),
   sizeText: z.string().trim().max(500).optional(),
+  priceSemantics: priceSemanticsSchema.optional(),
 });
 
 export const browserCaptureRetrievalSchema = z.object({
@@ -98,6 +167,7 @@ export const browserCaptureTruthSchema = z.object({
   priceMode: z.string().trim().min(1).max(100),
   pageIndex: z.number().int().nonnegative().max(500),
   resultIndex: z.number().int().nonnegative().max(10_000),
+  pageState: browserPageStateSchema.optional(),
   visible: browserCapturePriceChannelSchema,
   structured: browserCapturePriceChannelSchema.optional(),
   parser: z.object({
@@ -147,7 +217,7 @@ export const browserCaptureVerificationSchema = z.object({
 });
 
 export const browserCaptureAccuracySchema = z.object({
-  policyVersion: z.literal(1),
+  policyVersion: z.union([z.literal(1), z.literal(2)]),
   discoveryRows: z.array(browserCaptureAccuracyRowSchema).min(1).max(100_000),
   verifications: z.array(browserCaptureVerificationSchema).max(100_000),
   requiredVerificationRows: z.number().int().nonnegative(),
@@ -156,6 +226,8 @@ export const browserCaptureAccuracySchema = z.object({
   priceAgreementRows: z.number().int().nonnegative(),
   singleChannelRows: z.number().int().nonnegative(),
   anomalyRows: z.number().int().nonnegative(),
+  pageStateAttestedRows: z.number().int().nonnegative().optional(),
+  promotionSemanticsRows: z.number().int().nonnegative().optional(),
   retrievalCompleteTerms: z.number().int().nonnegative(),
   pass: z.boolean(),
 });
@@ -284,6 +356,7 @@ export const observationInputSchema = z
     imageUrl: z.url().max(3000).optional(),
     taxonomyPath: z.string().min(1).max(3000).optional(),
     package: z.record(z.string(), z.unknown()).default({}),
+    identity: productIdentitySchema.optional(),
     termKey: nonEmptyId.optional(),
     kind: observationKind,
     currency: z.string().length(3).regex(/^[A-Z]{3}$/).default("USD"),
@@ -311,6 +384,7 @@ export const observationInputSchema = z
     validTo: isoDateTime.optional(),
     evidenceObjectId: nonEmptyId.optional(),
     sourcePayloadKey: z.string().max(1000).optional(),
+    priceSemantics: priceSemanticsSchema.optional(),
   })
   .superRefine((value, context) => {
     if (value.regularPriceMinor !== undefined && value.regularPriceMinor < value.purchasePriceMinor) {
@@ -318,6 +392,12 @@ export const observationInputSchema = z
     }
     if (value.validFrom && value.validTo && value.validTo < value.validFrom) {
       context.addIssue({ code: "custom", path: ["validTo"], message: "must not precede validFrom" });
+    }
+    if (value.identity && value.identity.primaryValue !== value.externalProductKey && value.identity.primaryType !== "canonical_url") {
+      context.addIssue({ code: "custom", path: ["identity", "primaryValue"], message: "must agree with externalProductKey" });
+    }
+    if (value.priceSemantics && value.priceSemantics.unitPriceMinor !== value.purchasePriceMinor) {
+      context.addIssue({ code: "custom", path: ["priceSemantics", "unitPriceMinor"], message: "must agree with purchasePriceMinor" });
     }
   });
 
@@ -349,6 +429,7 @@ export const directCaptureArtifactSchema = z.object({
   priceModeVerified: z.boolean(),
   priceMode: z.string().trim().min(1).max(100),
   idempotencyKey: nonEmptyId,
+  sourceSchema: sourceSchemaFingerprintSchema.optional(),
   terms: z.array(captureTermSchema).max(2000),
   observations: z.array(observationInputSchema).min(1).max(100_000),
   evidence: z.object({
@@ -1061,6 +1142,10 @@ export type BrowserCaptureAccuracyRow = z.infer<typeof browserCaptureAccuracyRow
 export type BrowserCaptureStore = z.infer<typeof browserCaptureStore>;
 export type BrowserCaptureTruth = z.infer<typeof browserCaptureTruthSchema>;
 export type BrowserCaptureVerification = z.infer<typeof browserCaptureVerificationSchema>;
+export type BrowserPageState = z.infer<typeof browserPageStateSchema>;
+export type PriceSemantics = z.infer<typeof priceSemanticsSchema>;
+export type ProductIdentity = z.infer<typeof productIdentitySchema>;
+export type SourceSchemaFingerprint = z.infer<typeof sourceSchemaFingerprintSchema>;
 export type EngineParityReport = z.infer<typeof engineParityReportSchema>;
 export type RestoreDrillRecord = z.infer<typeof restoreDrillRecordSchema>;
 export type RestoreDrillCleanup = z.infer<typeof restoreDrillCleanupSchema>;

@@ -96,6 +96,8 @@ export interface BrowserCaptureMetricSummary {
   singleChannelRows: number;
   anomalyRows: number;
   retrievalCompleteTerms: number;
+  pageStateAttestedRows: number;
+  promotionSemanticsRows: number;
 }
 
 function percentile(values: readonly number[], percentileValue: number): number {
@@ -134,6 +136,8 @@ export function summarizeBrowserCaptureSession(session: BrowserCaptureSession): 
     singleChannelRows: session.version === 2 ? session.accuracy.singleChannelRows : 0,
     anomalyRows: session.version === 2 ? session.accuracy.anomalyRows : 0,
     retrievalCompleteTerms: session.version === 2 ? session.accuracy.retrievalCompleteTerms : 0,
+    pageStateAttestedRows: session.version === 2 ? session.accuracy.pageStateAttestedRows ?? 0 : 0,
+    promotionSemanticsRows: session.version === 2 ? session.accuracy.promotionSemanticsRows ?? 0 : 0,
   };
 }
 
