@@ -129,7 +129,7 @@ export async function nativeReleaseIdentity(
   const inputBatchIds = [...snapshot.inputBatchIds].sort();
   const inputManifest = {
     kind: "native-v3-release",
-    engineVersion: "native-v3.2.1-accuracy",
+    engineVersion: "native-v3.2.2-source-identity",
     marketId: "omaha",
     mode: "direct",
     releaseDate: weekOf,
