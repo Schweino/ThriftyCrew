@@ -27,7 +27,7 @@
                  "protein":  29,
                  "carbs":  66,
                  "fat":  22,
-                 "cost_ps":  "3.70"
+                 "cost_ps":  "3.75"
              },
     "intro_html":  "This is Tuscan peasant cooking, which is to say it was designed from the start to feed a lot of people for very little. Hot Italian sausage, cannellini beans, tomatoes, potatoes and kale in a broth that thickens itself as the beans break down. It carries {{protein}} grams of protein at about ${{cost_ps}} (at everyday cost), and the source notes it freezes for two months.",
     "ingredients_display":  [
@@ -251,7 +251,7 @@
                  "prepTime":  "PT20M",
                  "cookTime":  "PT50M",
                  "totalTime":  "PT1H10M",
-                 "costPerServing":  3.70,
+                 "costPerServing":  3.75,
                  "recipeIngredient":  [
                                           "Olive Oil, 4.75 tbsp (64 g)",
                                           "Hot Italian Sausage, 2.25 lb (1072 g)",
