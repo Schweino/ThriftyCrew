@@ -2,7 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const DEFAULT_DEPLOYMENT_ENDPOINTS = [
-  "https://tc-grocery-v3.curly-unit-51a6.workers.dev/api/v2/status",
+  "https://tc-grocery-public.curly-unit-51a6.workers.dev/api/v2/status",
   "https://www.thriftycrew.com/api/v2/status",
 ];
 

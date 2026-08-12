@@ -17,6 +17,18 @@ $clientConfig = Join-Path $env:LOCALAPPDATA 'ThriftyCrew\grocery-v3\pc-capture-c
 if (-not (Test-Path -LiteralPath $clientConfig)) { throw "V3 browser capture client is not installed: $clientConfig" }
 $config = Get-Content -LiteralPath $clientConfig -Raw -Encoding UTF8 | ConvertFrom-Json
 
+function Invoke-CaptureController([string]$Pathname, [hashtable]$Body) {
+  $pipe = [IO.Pipes.NamedPipeClientStream]::new('.', 'ThriftyCrew.GroceryV3.CaptureController', [IO.Pipes.PipeDirection]::InOut, [IO.Pipes.PipeOptions]::Asynchronous)
+  try {
+    $pipe.Connect(750)
+    $writer = [IO.StreamWriter]::new($pipe, [Text.UTF8Encoding]::new($false), 1024, $true)
+    $reader = [IO.StreamReader]::new($pipe, [Text.UTF8Encoding]::new($false), $false, 1024, $true)
+    $writer.AutoFlush = $true
+    $writer.WriteLine((@{ token = [string]$config.controllerToken; pathname = $Pathname; body = $Body } | ConvertTo-Json -Compress -Depth 5))
+    return ($reader.ReadLine() | ConvertFrom-Json)
+  } finally { $pipe.Dispose() }
+}
+
 $regularPath = (Resolve-Path -LiteralPath $RegularFile).Path
 $sessionPath = (Resolve-Path -LiteralPath $SessionManifest).Path
 $rawCapturePath = (Resolve-Path -LiteralPath $RawCapture).Path
@@ -99,9 +111,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "V3 artifact validation failed for $Store" }
     & $pnpmPath 'tc' 'capture' 'queue' 'enqueue' $artifactFile @screenshots $rawEvidenceFile $sessionEvidenceFile
     if ($LASTEXITCODE -ne 0) { throw "V3 queue enqueue failed for $Store" }
-    try {
-      Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:43763/v1/queue/wake' -ContentType 'application/json' -Body ('{"store":"' + $Store + '"}') -TimeoutSec 2 | Out-Null
-    } catch { Write-Verbose 'Persistent capture controller is not running; the scheduled queue client will drain the job.' }
+    try { Invoke-CaptureController '/v1/queue/wake' @{ store = $Store } | Out-Null }
+    catch { Write-Verbose 'Persistent capture controller is not running; the scheduled queue client will drain the job.' }
   } finally {
     Pop-Location
   }

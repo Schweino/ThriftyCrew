@@ -55,6 +55,12 @@ the Worker validates and finalizes it before the object becomes evidence.
     promotion proof and configuration compaction must honor that immutable pin rather than reread active state.
 33. A direct-upload retry never revives an expired URL or overwrites an earlier attempt. Each renewal receives
     a new object key; Cloudflare deletes only expired/rejected keys not referenced by finalized evidence.
+34. Immutable configuration recovery includes matcher precedence and can rehydrate compacted rules before
+    activation; capture matching compiles from the verified content-addressed archive pinned at seal time.
+35. The one local capture journal is checkpointed off-PC only as authenticated encryption under a
+    DPAPI-protected key, and restoration must verify ciphertext, plaintext and SQLite integrity before use.
+36. The public Worker has no privileged bindings. D1, R2, workflow and operational secrets exist only on the
+    unrouted control Worker reached through a Cloudflare service binding.
 
 ## Migration calendar and retirement
 

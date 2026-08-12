@@ -1,6 +1,7 @@
 import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
 import { compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily } from "@thriftycrew/engine";
 import type { WorkerEnv } from "./env";
+import { archiveConfiguration, verifyConfigurationArchive } from "./configuration-archive";
 
 interface ProductRow {
   product_id: string;
@@ -9,12 +10,46 @@ interface ProductRow {
   taxonomy_path: string | null;
 }
 
-interface RuleRow {
-  commodity_id: string;
-  category_id: string | null;
-  match_priority: number;
-  kind: "include" | "exclude";
-  pattern: string;
+interface MatcherDefinition {
+  commodityId: string;
+  includes: string[];
+  excludes: string[];
+  priority: number;
+  categoryId: string | null;
+}
+
+const matcherCache = new Map<string, { matcher: ReturnType<typeof compileProductMatcher>; definitions: Map<string, MatcherDefinition> }>();
+
+async function configurationMatcher(env: WorkerEnv, configurationId: string, configurationHash: string) {
+  const cached = matcherCache.get(configurationHash);
+  if (cached) return cached;
+  await archiveConfiguration(env, configurationId);
+  const archive = await env.DB.prepare(
+    "SELECT object_key, byte_length, sha256 FROM configuration_archives WHERE configuration_id = ?1 AND status = 'verified'",
+  ).bind(configurationId).first<{ object_key: string; byte_length: number; sha256: string }>();
+  if (!archive) throw new Error(`configuration ${configurationId} has no verified matcher archive`);
+  const verified = await verifyConfigurationArchive(env, configurationId, archive.object_key, archive.byte_length, archive.sha256);
+  if (verified.schemaVersion !== 2 || verified.payload.configuration.content_hash !== configurationHash) {
+    throw new Error(`configuration ${configurationId} matcher archive does not match its seal-time content hash`);
+  }
+  const commodities = new Map(verified.payload.commodities.map((commodity) => [String(commodity.id), commodity]));
+  const definitions = new Map<string, MatcherDefinition>();
+  for (const rule of verified.payload.rules) {
+    const commodity = commodities.get(rule.commodity_id);
+    if (!commodity) throw new Error(`configuration matcher rule references missing commodity ${rule.commodity_id}`);
+    const definition = definitions.get(rule.commodity_id) ?? {
+      commodityId: rule.commodity_id,
+      includes: [], excludes: [],
+      priority: Number(commodity.match_priority ?? 0),
+      categoryId: typeof commodity.category_id === "string" ? commodity.category_id : null,
+    };
+    (rule.kind === "include" ? definition.includes : definition.excludes).push(rule.pattern);
+    definitions.set(rule.commodity_id, definition);
+  }
+  const result = { matcher: compileProductMatcher([...definitions.values()]), definitions };
+  matcherCache.clear();
+  matcherCache.set(configurationHash, result);
+  return result;
 }
 
 export interface CaptureConfigurationPin {
@@ -48,26 +83,7 @@ export async function runCloudCaptureMatch(env: WorkerEnv, batchId: string, pin:
     )
     SELECT product_id, name, normalized_name, taxonomy_path FROM ranked WHERE ordinal = 1 ORDER BY product_id
   `).bind(batchId).all<ProductRow>();
-  const rules = await env.DB.prepare(`
-    SELECT c.id AS commodity_id, c.category_id, c.match_priority, r.kind, r.pattern
-      FROM commodities c
-      JOIN (
-        SELECT configuration_id, commodity_id, kind, pattern FROM match_rules
-        UNION ALL
-        SELECT membership.configuration_id, definition.commodity_id, definition.kind, definition.pattern
-          FROM configuration_match_rules membership
-          JOIN match_rule_definitions definition ON definition.id = membership.definition_id
-      ) r ON r.configuration_id = c.configuration_id AND r.commodity_id = c.id
-     WHERE c.configuration_id = ?1 AND c.active = 1
-     ORDER BY c.match_priority DESC, c.id, r.kind, r.pattern
-  `).bind(configuration.id).all<RuleRow>();
-  const definitions = new Map<string, { commodityId: string; includes: string[]; excludes: string[]; priority: number; categoryId: string | null }>();
-  for (const rule of rules.results) {
-    const definition = definitions.get(rule.commodity_id) ?? { commodityId: rule.commodity_id, includes: [], excludes: [], priority: rule.match_priority, categoryId: rule.category_id };
-    (rule.kind === "include" ? definition.includes : definition.excludes).push(rule.pattern);
-    definitions.set(rule.commodity_id, definition);
-  }
-  const matcher = compileProductMatcher([...definitions.values()]);
+  const { matcher, definitions } = await configurationMatcher(env, configuration.id, configuration.content_hash);
   const decisions: Array<{ productId: string; commodityId: string; decidedBy: "rule" | "aisle"; reason: string }> = [];
   const unmatched: Array<Record<string, unknown>> = [];
   const collisions: Array<Record<string, unknown>> = [];
@@ -106,14 +122,14 @@ export async function runCloudCaptureMatch(env: WorkerEnv, batchId: string, pin:
   const statements: D1PreparedStatement[] = [];
   for (const decision of decisions) {
     const decisionId = await deterministicId("match", configuration.id, decision.productId, decision.commodityId);
-    statements.push(env.DB.prepare(`UPDATE match_decisions SET superseded_at = CURRENT_TIMESTAMP
-      WHERE product_id = ?1 AND superseded_at IS NULL AND (configuration_id <> ?2 OR commodity_id <> ?3)`)
-      .bind(decision.productId, configuration.id, decision.commodityId));
     statements.push(env.DB.prepare(`INSERT INTO match_decisions
       (id, product_id, commodity_id, configuration_id, decided_by, reason)
       VALUES (?1, ?2, ?3, ?4, ?5, ?6)
       ON CONFLICT(id) DO UPDATE SET decided_by = excluded.decided_by, reason = excluded.reason,
-        decided_at = CURRENT_TIMESTAMP, superseded_at = NULL`)
+        decided_at = CURRENT_TIMESTAMP, superseded_at = NULL
+      WHERE match_decisions.decided_by <> excluded.decided_by
+         OR match_decisions.reason <> excluded.reason
+         OR match_decisions.superseded_at IS NOT NULL`)
       .bind(decisionId, decision.productId, decision.commodityId, configuration.id, decision.decidedBy, decision.reason));
   }
   for (let offset = 0; offset < statements.length; offset += 80) await env.DB.batch(statements.slice(offset, offset + 80));
@@ -122,8 +138,12 @@ export async function runCloudCaptureMatch(env: WorkerEnv, batchId: string, pin:
       AND product_id IN (
         SELECT DISTINCT p.id FROM observations o JOIN product_versions pv ON pv.id = o.product_version_id
         JOIN products p ON p.id = pv.product_id WHERE o.batch_id = ?1
-      ) AND product_id NOT IN (SELECT value FROM json_each(?3))`)
-    .bind(batchId, configuration.id, stableJson(decisions.map((decision) => decision.productId))).run();
+      ) AND NOT EXISTS (
+        SELECT 1 FROM json_each(?3) desired
+         WHERE json_extract(desired.value, '$[0]') = match_decisions.product_id
+           AND json_extract(desired.value, '$[1]') = match_decisions.commodity_id
+      )`)
+    .bind(batchId, configuration.id, stableJson(decisions.map((decision) => [decision.productId, decision.commodityId]))).run();
   const status = collisions.length === 0 ? "passed" as const : "failed" as const;
   const detail = {
     sourceId: batch.source_id, executionPlane: "cloud-capture-workflow", precedence: "authored commodity match_priority",

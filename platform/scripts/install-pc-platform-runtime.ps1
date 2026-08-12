@@ -1,5 +1,6 @@
 param(
-  [string]$ApiOrigin = 'https://tc-grocery-v3.curly-unit-51a6.workers.dev',
+  [string]$ApiOrigin = 'https://tc-grocery-public.curly-unit-51a6.workers.dev',
+  [string]$NodeRuntimeDirectory = (Join-Path $env:LOCALAPPDATA 'ThriftyCrew\runtime\node-v24.18.1-win-x64'),
   [switch]$SkipRemoteSecret,
   [switch]$Uninstall
 )
@@ -39,10 +40,11 @@ $knownKeys = $mutationLine.Substring($mutationLine.IndexOf('=') + 1) | ConvertFr
 $operatorRecord = $knownKeys.PSObject.Properties['local-operator']
 if (-not $operatorRecord -or $operatorRecord.Value.role -ne 'operator') { throw 'local-operator is missing or is not an operator credential' }
 
-$pnpmCommand = Get-Command pnpm -ErrorAction Stop
-$nodeCommand = Get-Command node -ErrorAction Stop
-$pnpmPath = $pnpmCommand.Source
-$runtimePath = @((Split-Path -Parent $nodeCommand.Source), (Split-Path -Parent $pnpmPath)) | Select-Object -Unique
+$nodeExecutable = Join-Path $NodeRuntimeDirectory 'node.exe'
+$pnpmPath = Join-Path $NodeRuntimeDirectory 'pnpm.cmd'
+if (-not (Test-Path -LiteralPath $nodeExecutable) -or (& $nodeExecutable --version).Trim() -ne 'v24.18.1') { throw 'pinned Node v24.18.1 is missing; run scripts/install-node-runtime.ps1' }
+if (-not (Test-Path -LiteralPath $pnpmPath)) { throw 'pinned pnpm 11.16.0 is missing; run scripts/install-node-runtime.ps1' }
+$runtimePath = @($NodeRuntimeDirectory)
 $agents = (Get-Content -LiteralPath (Join-Path $platformRoot 'config\agents.json') -Raw | ConvertFrom-Json).agents | Where-Object { $_.enabled -and $_.plane -eq 'pc' }
 if (@($agents).Count -eq 0) { throw 'no enabled PC agents exist in config/agents.json' }
 

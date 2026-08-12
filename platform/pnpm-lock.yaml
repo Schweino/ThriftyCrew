@@ -99,6 +99,8 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
 
+  apps/public: {}
+
   apps/site:
     dependencies:
       '@astrojs/check':

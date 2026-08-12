@@ -11,7 +11,9 @@ import { generateLegacyConfiguration } from "./config";
 import { buildNativeParityReport, compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot } from "@thriftycrew/engine";
 import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
 import { checkAgentRegistry, readAgentRegistry } from "./agents";
-import { browserCaptureCycleStatus, captureQueueStatus, compactPromotedCaptureQueue, defaultCaptureQueueRoot, drainCaptureQueue, enqueueCapture, markCaptureEvidenceUploaded, PermanentCaptureError, readCaptureQueueEvidence, reconcileCaptureQueueRemote, verifyCaptureQueueFilesystem } from "./capture-queue";
+import { browserCaptureCycleStatus, captureQueueStatus, compactPromotedCaptureQueue, defaultCaptureQueueRoot, enqueueCapture, reconcileCaptureQueueRemote, verifyCaptureQueueFilesystem } from "./capture-queue";
+import { drainBrowserCaptureQueue } from "./capture-drainer";
+import { checkpointCaptureJournal, restoreCaptureJournal } from "./capture-journal-checkpoint";
 import { findLatestRegularCapture, omahaDateKey, parseServerCaptureStore, readFreshRegularCapture, SERVER_CAPTURE_STORES } from "./current-captures";
 import { appendCaptureChunk, buildCaptureSessionWorklist, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession } from "./capture-session";
 import { agentJobRunFields } from "./job-run";
@@ -906,32 +908,7 @@ if (command === "status") {
   } else if (action === "drain") {
     const client = await mutationClient();
     const maxJobs = Number(process.env.TC_CAPTURE_QUEUE_MAX_JOBS_PER_DRAIN ?? 4);
-    if (!Number.isInteger(maxJobs) || maxJobs < 1 || maxJobs > 20) throw new Error("TC_CAPTURE_QUEUE_MAX_JOBS_PER_DRAIN must be an integer from 1 through 20");
-    const drained = await drainCaptureQueue(root, async (job) => {
-      const artifactBody = job.artifactBody;
-      const additionalEvidence: CaptureEvidenceInput[] = await Promise.all(job.evidencePaths.map(async (evidence) => {
-        const source = await readCaptureQueueEvidence(job, evidence);
-        // Formatting whitespace is not evidence. Canonicalize the very large session JSON before transport;
-        // its internal contentHash and schema still bind the exact parsed document, while R2/Worker memory
-        // no longer pays for tens of MiB of indentation.
-        const body = evidence.kind === "manifest"
-          ? new TextEncoder().encode(JSON.stringify(JSON.parse(new TextDecoder().decode(source).replace(/^\uFEFF/, ""))))
-          : source;
-        return { body, kind: evidence.kind, contentType: evidence.contentType };
-      }));
-      const ingestion = await ingestDirectCapture(client, job.artifact, artifactBody, additionalEvidence, {
-        promote: false,
-        directEvidenceUpload: true,
-        ...(job.manifest.browserEvidenceAttestation ? { browserEvidenceAttestation: job.manifest.browserEvidenceAttestation } : {}),
-        uploadedEvidenceSha256: new Set((job.manifest.uploadedEvidence ?? []).map((entry) => entry.sha256)),
-        onEvidenceUploaded: async ({ sha256, evidenceId }) => markCaptureEvidenceUploaded(job, { sha256, evidenceId }),
-      });
-      if (!ingestion.ok) {
-        const seal = ingestion.seal as Record<string, unknown> | undefined;
-        throw new PermanentCaptureError(`capture batch ${String(ingestion.batchId)} was rejected (${String(seal?.status ?? ingestion.status ?? "unknown")}): ${String(seal?.error ?? "capture guards failed")}`);
-      }
-      return ingestion;
-    }, { maxJobs });
+    const drained = await drainBrowserCaptureQueue(client, root, maxJobs);
     result = drained;
     if (!drained.ok) process.exitCode = 2;
   } else if (action === "compact") {
@@ -976,6 +953,11 @@ if (command === "status") {
   } else {
     throw new Error("tc capture queue requires enqueue, drain, status, watchdog, or compact");
   }
+} else if (command === "capture" && subcommand === "journal") {
+  const action = arguments_[0];
+  if (action === "checkpoint") result = await checkpointCaptureJournal();
+  else if (action === "restore") result = await restoreCaptureJournal(arguments_.includes("--force"));
+  else throw new Error("tc capture journal requires checkpoint or restore [--force]");
 } else if (command === "match" && subcommand === "batch") {
   const batchId = arguments_[0];
   if (!batchId) throw new Error("tc match batch requires a capture batch id");
@@ -1057,7 +1039,7 @@ if (command === "status") {
       "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>", "tc efficiency record <report.json>",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
         "tc capture metrics [limit]", "tc capture session worklist|init|append|verification-plan|finalize|status",
-      "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog",
+      "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog", "tc capture journal checkpoint|restore [--force]",
       "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|rematch-promoted|abandon <batch-id> <reason>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",
       "tc sentinel latest [bakers family-fare hy-vee]",

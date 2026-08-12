@@ -12,15 +12,33 @@ $clientDir = Join-Path $env:LOCALAPPDATA 'ThriftyCrew\grocery-v3'
 $configFile = Join-Path $clientDir 'pc-capture-client.json'
 if (-not (Test-Path -LiteralPath $configFile)) { throw "PC capture client is not installed: $configFile is missing" }
 $config = Get-Content -LiteralPath $configFile -Raw | ConvertFrom-Json
+
+function Invoke-CaptureController([string]$Pathname, [hashtable]$Body) {
+  $pipe = [IO.Pipes.NamedPipeClientStream]::new('.', 'ThriftyCrew.GroceryV3.CaptureController', [IO.Pipes.PipeDirection]::InOut, [IO.Pipes.PipeOptions]::Asynchronous)
+  try {
+    $pipe.Connect(750)
+    $writer = [IO.StreamWriter]::new($pipe, [Text.UTF8Encoding]::new($false), 1024, $true)
+    $reader = [IO.StreamReader]::new($pipe, [Text.UTF8Encoding]::new($false), $false, 1024, $true)
+    $writer.AutoFlush = $true
+    $writer.WriteLine((@{ token = [string]$config.controllerToken; pathname = $Pathname; body = $Body } | ConvertTo-Json -Compress -Depth 5))
+    return ($reader.ReadLine() | ConvertFrom-Json)
+  } finally { $pipe.Dispose() }
+}
 $secure = ConvertTo-SecureString ([string]$config.encryptedSecret)
 $pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
 try { $tcSecret = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer) }
 finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer) }
+$journalSecure = ConvertTo-SecureString ([string]$config.encryptedJournalKey)
+$journalPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($journalSecure)
+try { $tcJournalKey = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($journalPointer) }
+finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($journalPointer) }
 
 $env:TC_LOCAL_MUTATION_SECRET = $tcSecret
 $env:TC_AGENT_ID = [string]$config.agentId
 $env:TC_API_ORIGIN = [string]$config.apiOrigin
 $env:TC_CAPTURE_QUEUE = [string]$config.queueRoot
+$env:TC_CAPTURE_JOURNAL = Join-Path $clientDir 'capture-journal.sqlite'
+$env:TC_CAPTURE_JOURNAL_KEY = $tcJournalKey
 $logRoot = Join-Path $clientDir 'logs'
 New-Item -ItemType Directory -Path $logRoot -Force | Out-Null
 $runId = '{0}-{1}' -f (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ'), ([guid]::NewGuid().ToString('N').Substring(0,8))
@@ -63,7 +81,7 @@ $finalExit = 0
 if ($Mode -eq 'Drain' -or $Mode -eq 'Cycle') {
   $controllerAccepted = $false
   try {
-    $controller = Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:43763/v1/queue/wake' -ContentType 'application/json' -Body '{"reason":"pc-client"}' -TimeoutSec 2
+    $controller = Invoke-CaptureController '/v1/queue/wake' @{ reason = 'pc-client' }
     $controllerAccepted = $controller.accepted -eq $true
   } catch { $controllerAccepted = $false }
   if (-not $controllerAccepted) {

@@ -36,22 +36,31 @@ async function deploymentCredential() {
 
 async function signedMutation(pathname, payload) {
   const { agentId, secret } = await deploymentCredential();
-  const origin = process.env.TC_API_ORIGIN ?? "https://tc-grocery-v3.curly-unit-51a6.workers.dev";
   const body = JSON.stringify(payload);
   const bodyHash = createHash("sha256").update(body).digest("hex");
   const timestamp = new Date().toISOString();
   const nonce = `nonce_${randomUUID()}`;
   const canonical = [timestamp, nonce, "POST", pathname, bodyHash].join("\n");
-  const response = await fetch(new URL(pathname, origin), {
-    method: "POST",
-    headers: {
-      "content-type": "application/json", "x-tc-agent": agentId, "x-tc-timestamp": timestamp,
-      "x-tc-nonce": nonce, "x-tc-signature": createHmac("sha256", secret).update(canonical).digest("hex"),
-    },
-    body,
-  });
-  const result = await response.json().catch(() => ({ ok: false, error: "non-JSON preflight response" }));
-  return { response, result };
+  const origins = process.env.TC_API_ORIGIN
+    ? [process.env.TC_API_ORIGIN]
+    : ["https://tc-grocery-public.curly-unit-51a6.workers.dev", "https://tc-grocery-v3.curly-unit-51a6.workers.dev"];
+  let lastError;
+  for (const origin of origins) {
+    try {
+      const response = await fetch(new URL(pathname, origin), {
+        method: "POST",
+        headers: {
+          "content-type": "application/json", "x-tc-agent": agentId, "x-tc-timestamp": timestamp,
+          "x-tc-nonce": nonce, "x-tc-signature": createHmac("sha256", secret).update(canonical).digest("hex"),
+        },
+        body,
+      });
+      const result = await response.json().catch(() => ({ ok: false, error: "non-JSON preflight response" }));
+      if (response.status !== 404 && response.status !== 530) return { response, result };
+      lastError = new Error(`${origin} returned ${response.status}`);
+    } catch (error) { lastError = error; }
+  }
+  throw lastError ?? new Error("no deployment control endpoint is reachable");
 }
 
 if (!deployArguments.includes("--dry-run")) {
@@ -65,14 +74,32 @@ if (!deployArguments.includes("--dry-run")) {
   if (!bootstrap) deploymentLease = { checkId: result.checkId, fence: result.deploymentLease?.fence };
 }
 
-const deployed = spawnSync(process.execPath, [wranglerCli, "deploy", ...deployArguments, "--var", `DEPLOYED_COMMIT:${commit}`], {
+const dryRun = deployArguments.includes("--dry-run");
+if (!dryRun) {
+  const gatewayExists = await fetch("https://tc-grocery-public.curly-unit-51a6.workers.dev/api/v2/status", { signal: AbortSignal.timeout(10_000) })
+    .then((response) => response.ok).catch(() => false);
+  if (!gatewayExists) {
+    const bootstrap = spawnSync(process.execPath, [wranglerCli, "deploy", "--config", "wrangler.public-bootstrap.jsonc", "--var", "APP_ENV:production", "--var", `DEPLOYED_COMMIT:${commit}`], { stdio: "inherit" });
+    if (bootstrap.status !== 0) process.exit(bootstrap.status ?? 1);
+  }
+}
+const controlDeployed = spawnSync(process.execPath, [wranglerCli, "deploy", "--config", "wrangler.jsonc", ...deployArguments, "--var", `DEPLOYED_COMMIT:${commit}`], {
   stdio: "inherit",
 });
-if (deployed.status !== 0) {
+if (controlDeployed.status !== 0) {
   if (deploymentLease?.checkId && deploymentLease?.fence) {
     await signedMutation("/internal/deployments/complete", { ...deploymentLease, outcome: "failed" }).catch(() => undefined);
   }
-  process.exit(deployed.status ?? 1);
+  process.exit(controlDeployed.status ?? 1);
+}
+const publicDeployed = spawnSync(process.execPath, [wranglerCli, "deploy", "--config", "wrangler.public.jsonc", ...deployArguments, "--var", "APP_ENV:production", "--var", `DEPLOYED_COMMIT:${commit}`], {
+  stdio: "inherit",
+});
+if (publicDeployed.status !== 0) {
+  if (deploymentLease?.checkId && deploymentLease?.fence) {
+    await signedMutation("/internal/deployments/complete", { ...deploymentLease, outcome: "failed" }).catch(() => undefined);
+  }
+  process.exit(publicDeployed.status ?? 1);
 }
 if (!deployArguments.includes("--dry-run")) {
   const endpoints = process.env.TC_DEPLOY_VERIFY_URLS

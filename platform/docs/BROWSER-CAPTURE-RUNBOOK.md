@@ -197,8 +197,14 @@ validates the V3 artifact, and atomically enqueues all three evidence classes. I
 dimensions are checked locally and again by the Worker. The at-logon capture controller owns a SQLite WAL
 journal, enforces at most two distinct concurrent store lanes, and drains on startup, wake events, and a
 five-minute fallback interval. A single-instance per-user supervisor restarts it with bounded backoff after an
-unexpected exit, without requiring administrator rights. Adapter reads use one append-only streaming protocol; compact JSON is a recovery
-mirror. The drainer sends bounded, compressed product shards straight to R2 with a 15-minute one-object URL
+unexpected exit, without requiring administrator rights. Controller commands use a per-user authenticated
+Windows named pipe; no loopback HTTP listener is opened. Queue, capture-session, planner, lane and controller
+state share one SQLite authority. After each drain, the Node 24.18.1 controller serializes a consistent SQLite
+image, compresses it, encrypts it with a DPAPI-protected AES-256-GCM key, and stores a verified private R2
+checkpoint. Use `pnpm tc capture journal checkpoint` for an explicit checkpoint. Disaster recovery is
+`pnpm tc capture journal restore` on an empty target, or `restore --force` to preserve the current database as
+a timestamped backup before replacement and SQLite integrity verification. Adapter reads use one append-only
+streaming protocol; compact JSON is a recovery mirror. The drainer sends bounded, compressed product shards straight to R2 with a 15-minute one-object URL
 whose content type, MD5, SHA-256 metadata, evidence ID, and upload session are signed. Per-object receipts make
 interrupted uploads resumable. A retry reuses a still-healthy URL, but an expired or rejected attempt always gets
 a new immutable object key; Cloudflare expires stale attempts and removes only unreferenced orphan keys after a
@@ -214,6 +220,14 @@ full term ledger, not merely that browser files or local upload receipts exist. 
 consumes already-promoted browser truth and publishes only if every hard guard passes. On failure,
 leave the last good release live and report the exact store, attempted terms, captured rows, screenshots, queue
 state, and whether operator action is required.
+
+Install the pinned runtime before installing or refreshing the client:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File platform/scripts/install-node-runtime.ps1
+powershell -ExecutionPolicy Bypass -File platform/scripts/install-pc-capture-client.ps1
+powershell -ExecutionPolicy Bypass -File platform/scripts/install-pc-capture-controller.ps1 -StartNow
+```
 
 ## Independent remote SLA
 

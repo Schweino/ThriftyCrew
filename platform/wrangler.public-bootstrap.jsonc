@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tc-grocery-public",
+  "main": "apps/public/src/index.ts",
+  "workers_dev": true,
+  "compatibility_date": "2026-08-11",
+  "services": [
+    { "binding": "CONTROL", "service": "tc-grocery-v3" }
+  ],
+  "vars": {
+    "APP_ENV": "production"
+  }
+}

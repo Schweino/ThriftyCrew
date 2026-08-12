@@ -2,14 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "tc-grocery-v3",
   "main": "apps/api/src/index.ts",
-  "workers_dev": true,
-  "routes": [
-    { "pattern": "www.thriftycrew.com/api/v2/*", "zone_name": "thriftycrew.com" },
-    { "pattern": "www.thriftycrew.com/v2/*", "zone_name": "thriftycrew.com" },
-    { "pattern": "www.thriftycrew.com/member-status*", "zone_name": "thriftycrew.com" },
-    { "pattern": "www.thriftycrew.com/member-status/*", "zone_name": "thriftycrew.com" },
-    { "pattern": "www.thriftycrew.com/v3-member-status*", "zone_name": "thriftycrew.com" }
-  ],
+  "workers_dev": false,
   "compatibility_date": "2026-08-11",
   "compatibility_flags": ["nodejs_compat"],
   "cache": {
@@ -78,7 +71,7 @@
   ],
   "vars": {
     "APP_ENV": "production",
-    "PUBLIC_ORIGIN": "https://tc-grocery-v3.curly-unit-51a6.workers.dev",
+    "PUBLIC_ORIGIN": "https://tc-grocery-public.curly-unit-51a6.workers.dev",
     "GHOST_ADMIN_ORIGIN": "https://map-to-success.ghost.io",
     "GHOST_PUBLIC_ORIGIN": "https://www.thriftycrew.com",
     "GITHUB_OIDC_AUDIENCE": "tc-grocery-v3",

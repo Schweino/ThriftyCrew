@@ -1,7 +1,8 @@
 param(
-  [string]$ApiOrigin = 'https://tc-grocery-v3.curly-unit-51a6.workers.dev',
+  [string]$ApiOrigin = 'https://tc-grocery-public.curly-unit-51a6.workers.dev',
   [string]$AgentId = 'pc-browser-capture',
   [string]$TaskName = 'ThriftyCrew V3 Browser Capture Client',
+  [string]$NodeRuntimeDirectory = (Join-Path $env:LOCALAPPDATA 'ThriftyCrew\runtime\node-v24.18.1-win-x64'),
   [switch]$Uninstall
 )
 $ErrorActionPreference = 'Stop'
@@ -22,11 +23,22 @@ $mutationLine = Get-Content -LiteralPath $devVars | Where-Object { $_ -match '^M
 if (-not $mutationLine) { throw 'MUTATION_KEYS is missing from platform/.dev.vars' }
 $keyRecords = ($mutationLine.Substring($mutationLine.IndexOf('=') + 1) | ConvertFrom-Json)
 
-$rng = [Security.Cryptography.RandomNumberGenerator]::Create()
-$bytes = New-Object byte[] 32
-$rng.GetBytes($bytes)
-$rng.Dispose()
-$secret = [Convert]::ToBase64String($bytes)
+function New-RandomKey {
+  $random = [Security.Cryptography.RandomNumberGenerator]::Create()
+  try { $buffer = New-Object byte[] 32; $random.GetBytes($buffer); return [Convert]::ToBase64String($buffer) }
+  finally { $random.Dispose() }
+}
+function Unprotect-Secret([string]$Ciphertext) {
+  $secureValue = ConvertTo-SecureString $Ciphertext
+  $secretPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureValue)
+  try { return [Runtime.InteropServices.Marshal]::PtrToStringBSTR($secretPointer) }
+  finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($secretPointer) }
+}
+$existingConfiguration = if (Test-Path -LiteralPath $configFile) { Get-Content -LiteralPath $configFile -Raw | ConvertFrom-Json } else { $null }
+$sameIdentity = $existingConfiguration -and [string]$existingConfiguration.agentId -eq $AgentId
+$secret = if ($sameIdentity -and $existingConfiguration.encryptedSecret) { Unprotect-Secret ([string]$existingConfiguration.encryptedSecret) } else { New-RandomKey }
+$controllerToken = if ($sameIdentity -and [string]$existingConfiguration.controllerToken) { [string]$existingConfiguration.controllerToken } else { New-RandomKey }
+$journalKey = if ($sameIdentity -and $existingConfiguration.encryptedJournalKey) { Unprotect-Secret ([string]$existingConfiguration.encryptedJournalKey) } else { New-RandomKey }
 $browserSources = @(
   'direct-aldi-browser',
   'direct-fareway-browser',
@@ -37,10 +49,13 @@ $record = [pscustomobject]@{ secret = $secret; role = 'capture'; sourceIds = $br
 $keyRecords | Add-Member -NotePropertyName $AgentId -NotePropertyValue $record -Force
 $remoteSecret = $keyRecords | ConvertTo-Json -Depth 8 -Compress
 
-$pnpmCommand = Get-Command pnpm -ErrorAction Stop
-$pnpmPath = $pnpmCommand.Source
-$nodeCommand = Get-Command node -ErrorAction Stop
-$runtimePath = @((Split-Path -Parent $nodeCommand.Source), (Split-Path -Parent $pnpmPath)) | Select-Object -Unique
+$nodeExecutable = Join-Path $NodeRuntimeDirectory 'node.exe'
+if (-not (Test-Path -LiteralPath $nodeExecutable)) { throw "pinned Node runtime is missing: $nodeExecutable; run scripts/install-node-runtime.ps1" }
+$nodeVersion = (& $nodeExecutable --version).Trim()
+if ($nodeVersion -ne 'v24.18.1') { throw "capture runtime must be Node v24.18.1, found $nodeVersion" }
+$pnpmPath = Join-Path $NodeRuntimeDirectory 'pnpm.cmd'
+if (-not (Test-Path -LiteralPath $pnpmPath)) { throw "pinned pnpm runtime is missing: $pnpmPath; run scripts/install-node-runtime.ps1" }
+$runtimePath = @($NodeRuntimeDirectory)
 Push-Location $platformRoot
 try {
   $remoteSecret | & $pnpmPath exec wrangler secret put MUTATION_KEYS
@@ -50,8 +65,9 @@ try {
 New-Item -ItemType Directory -Path $clientDir -Force | Out-Null
 New-Item -ItemType Directory -Path $queueRoot -Force | Out-Null
 $encryptedSecret = ConvertFrom-SecureString (ConvertTo-SecureString $secret -AsPlainText -Force)
+$encryptedJournalKey = ConvertFrom-SecureString (ConvertTo-SecureString $journalKey -AsPlainText -Force)
 $configuration = [ordered]@{
-  version = 1
+  version = 3
   agentId = $AgentId
   apiOrigin = $ApiOrigin
   queueRoot = $queueRoot
@@ -59,10 +75,19 @@ $configuration = [ordered]@{
   pnpmPath = $pnpmPath
   runtimePath = $runtimePath
   encryptedSecret = $encryptedSecret
+  encryptedJournalKey = $encryptedJournalKey
+  controllerToken = $controllerToken
+  nodeVersion = $nodeVersion
   installedAt = (Get-Date).ToUniversalTime().ToString('o')
   sourceIds = $browserSources
 }
 $configuration | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $configFile -Encoding UTF8
+$acl = New-Object Security.AccessControl.FileSecurity
+$acl.SetAccessRuleProtection($true, $false)
+$currentUser = [Security.Principal.WindowsIdentity]::GetCurrent().User
+$acl.AddAccessRule((New-Object Security.AccessControl.FileSystemAccessRule($currentUser, 'FullControl', 'Allow')))
+$acl.AddAccessRule((New-Object Security.AccessControl.FileSystemAccessRule('SYSTEM', 'FullControl', 'Allow')))
+Set-Acl -LiteralPath $configFile -AclObject $acl
 
 $launcher = Join-Path $platformRoot 'scripts\run-pc-capture-client-hidden.vbs'
 $actionArguments = "//B //NoLogo `"$launcher`" -Mode Cycle"

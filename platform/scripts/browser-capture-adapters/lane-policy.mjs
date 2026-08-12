@@ -1,4 +1,5 @@
 import { acquireLaneLease, readLaneState, releaseLaneLease, writeLaneState } from "./capture-journal.mjs";
+import { captureControllerRequest } from "../capture-controller-client.mjs";
 
 const DEFAULTS = {
   aldi: { maxTerms: 3, minimumDelayMs: 5_000 },
@@ -7,20 +8,9 @@ const DEFAULTS = {
   walmart: { maxTerms: 5, minimumDelayMs: 1_500 },
 };
 
-const DEFAULT_CONTROLLER_ORIGIN = "http://127.0.0.1:43763";
-
 async function controllerRequest(pathname, init = {}, environment = process.env) {
-  const origin = environment.TC_CAPTURE_CONTROLLER_ORIGIN ?? DEFAULT_CONTROLLER_ORIGIN;
-  if (origin === "disabled") return null;
-  try {
-    const response = await fetch(`${origin.replace(/\/$/, "")}${pathname}`, {
-      ...init,
-      signal: AbortSignal.timeout(750),
-      headers: { "content-type": "application/json", ...(init.headers || {}) },
-    });
-    const body = await response.json().catch(() => ({}));
-    return { ...body, controllerReachable: true, controllerAccepted: response.ok };
-  } catch { return null; }
+  const body = typeof init.body === "string" ? JSON.parse(init.body) : {};
+  return captureControllerRequest(pathname, body, environment, 750);
 }
 
 export async function browserLanePolicy(store, now = new Date(), environment = process.env) {

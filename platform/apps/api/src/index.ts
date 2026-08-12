@@ -79,12 +79,12 @@ import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
 import { readBrowserCaptureSla } from "./browser-capture-sla";
 import { buildCaptureTermInserts } from "./capture-seal";
-import { createDirectEvidenceUpload } from "./capture-direct-upload";
+import { createDirectEvidenceUpload, createDirectObjectDownload } from "./capture-direct-upload";
 import { issueCaptureUploadAttempt, type CaptureUploadAttempt } from "./capture-upload-attempts";
 import { assessProductHistory, assessSourceSchema, type ProductHistoryRow } from "./capture-semantic-guards";
 import { handleGithubActionsWebhook } from "./github-recovery";
 import { acquireOperationLease, activeDeploymentBlockers, releaseOperationLease, renewOperationLease } from "./orchestration";
-import { archiveConfiguration, compactConfiguration } from "./configuration-archive";
+import { archiveConfiguration, compactConfiguration, rehydrateConfiguration } from "./configuration-archive";
 import { transitionReadiness } from "./transitions";
 import { cachedPublicJson, PublicJsonError, releaseEtag } from "./public-cache";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
@@ -206,6 +206,8 @@ app.use("/internal/*", requireRegisteredAgentScope());
 app.use("/internal/capture-batches", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/capture-batches/*", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/capture-metrics", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/capture-journal-checkpoints", requireIdentityRole(["capture", "operator"]));
+app.use("/internal/capture-journal-checkpoints/*", requireIdentityRole(["capture", "operator"]));
 app.use("/internal/configurations", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/configurations/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/match-decisions", requireIdentityRole(["engine", "operator"]));
@@ -669,6 +671,7 @@ app.put("/internal/configurations/:id/known-wrong", zValidator("json", configura
 
 app.post("/internal/configurations/:id/activate", async (context) => {
   const configurationId = context.req.param("id");
+  await rehydrateConfiguration(context.env, configurationId, context.get("identity").agentId);
   const row = await context.env.DB.prepare(
     `SELECT v.expected_categories, v.expected_commodities, v.expected_rules, v.expected_known_wrong,
              (SELECT COUNT(*) FROM configuration_categories c WHERE c.configuration_id = v.id) AS categories,
@@ -699,6 +702,15 @@ app.post("/internal/configurations/:id/archive", async (context) => {
   const configurationId = context.req.param("id");
   const archive = await archiveConfiguration(context.env, configurationId);
   return context.json({ ok: true, configurationId, archive });
+});
+
+app.post("/internal/configurations/:id/rehydrate", async (context) => {
+  try {
+    const result = await rehydrateConfiguration(context.env, context.req.param("id"), context.get("identity").agentId);
+    return context.json({ ok: true, ...result });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "configuration rehydration failed", 409);
+  }
 });
 
 app.get("/internal/configurations/archives", async (context) => {
@@ -2009,6 +2021,112 @@ app.post("/internal/capture-batches/:id/observations", zValidator("json", observ
   } catch (error) {
     return jsonError(error instanceof Error ? error.message : "observation insert failed", 422);
   }
+});
+
+app.put("/internal/capture-journal-checkpoints", async (context) => {
+  const identity = context.get("identity");
+  const ciphertextSha256 = context.req.header("x-content-sha256") ?? "";
+  const plaintextSha256 = context.req.header("x-journal-plaintext-sha256") ?? "";
+  const schemaText = context.req.header("x-journal-schema") ?? "";
+  const createdAt = context.req.header("x-checkpoint-created-at") ?? "";
+  if (!/^[a-f0-9]{64}$/.test(ciphertextSha256) || !/^[a-f0-9]{64}$/.test(plaintextSha256)) {
+    return jsonError("journal checkpoint hashes must be lowercase SHA-256 hex", 422);
+  }
+  if (!/^[1-9][0-9]*$/.test(schemaText)) return jsonError("journal schema must be a positive integer", 422);
+  const journalSchema = Number(schemaText);
+  const createdTime = Date.parse(createdAt);
+  if (!Number.isFinite(createdTime) || Math.abs(Date.now() - createdTime) > 24 * 60 * 60_000) {
+    return jsonError("checkpoint creation time must be within 24 hours of ingestion", 422);
+  }
+  const bytes = new Uint8Array(await context.req.arrayBuffer());
+  if (bytes.byteLength < 32 || bytes.byteLength > 25 * 1024 * 1024) return jsonError("encrypted journal checkpoint must be 32 bytes through 25 MiB", 422);
+  if (await digestHex(bytes) !== ciphertextSha256) return jsonError("journal checkpoint ciphertext hash does not match content", 422);
+  const checkpointId = deterministicId("capture-journal-checkpoint", identity.agentId, plaintextSha256);
+  const existing = await context.env.DB.prepare(
+    "SELECT object_key, ciphertext_sha256, byte_length, created_at FROM capture_journal_checkpoints WHERE id = ?1",
+  ).bind(checkpointId).first<{ object_key: string; ciphertext_sha256: string; byte_length: number; created_at: string }>();
+  if (existing) {
+    const object = await context.env.EVIDENCE.head(existing.object_key);
+    if (object && object.size === existing.byte_length && object.customMetadata?.ciphertextsha256 === existing.ciphertext_sha256) {
+      return context.json({ ok: true, checkpointId, objectKey: existing.object_key, createdAt: existing.created_at, idempotent: true });
+    }
+    const repairedAt = new Date().toISOString();
+    await context.env.EVIDENCE.put(existing.object_key, bytes, {
+      httpMetadata: { contentType: "application/vnd.thriftycrew.capture-journal+encrypted" },
+      customMetadata: { ciphertextsha256: ciphertextSha256, plaintextsha256: plaintextSha256, journalschema: schemaText, agentid: identity.agentId },
+    });
+    const repaired = await context.env.EVIDENCE.head(existing.object_key);
+    if (!repaired || repaired.size !== bytes.byteLength || repaired.customMetadata?.ciphertextsha256 !== ciphertextSha256) {
+      return jsonError("journal checkpoint repair could not be verified after R2 storage", 502);
+    }
+    await context.env.DB.prepare(
+      `UPDATE capture_journal_checkpoints SET ciphertext_sha256 = ?2, byte_length = ?3, verified_at = ?4 WHERE id = ?1`,
+    ).bind(checkpointId, ciphertextSha256, bytes.byteLength, repairedAt).run();
+    return context.json({ ok: true, checkpointId, objectKey: existing.object_key, createdAt: existing.created_at, repairedAt, idempotent: true, repaired: true });
+  }
+  const safeTime = new Date(createdTime).toISOString().replace(/[:.]/g, "-");
+  const objectKey = `capture-journals/${encodeURIComponent(identity.agentId)}/${safeTime}-${plaintextSha256.slice(0, 16)}.tcj`;
+  await context.env.EVIDENCE.put(objectKey, bytes, {
+    httpMetadata: { contentType: "application/vnd.thriftycrew.capture-journal+encrypted" },
+    customMetadata: { ciphertextsha256: ciphertextSha256, plaintextsha256: plaintextSha256, journalschema: schemaText, agentid: identity.agentId },
+  });
+  const stored = await context.env.EVIDENCE.head(objectKey);
+  if (!stored || stored.size !== bytes.byteLength || stored.customMetadata?.ciphertextsha256 !== ciphertextSha256) {
+    await context.env.EVIDENCE.delete(objectKey);
+    return jsonError("journal checkpoint could not be verified after R2 storage", 502);
+  }
+  const verifiedAt = new Date().toISOString();
+  await context.env.DB.prepare(
+    `INSERT INTO capture_journal_checkpoints
+       (id, agent_id, object_key, ciphertext_sha256, plaintext_sha256, byte_length, journal_schema, created_at, verified_at)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)`,
+  ).bind(checkpointId, identity.agentId, objectKey, ciphertextSha256, plaintextSha256, bytes.byteLength, journalSchema, new Date(createdTime).toISOString(), verifiedAt).run();
+  const expired = await context.env.DB.prepare(
+    `SELECT id, object_key FROM capture_journal_checkpoints
+      WHERE agent_id = ?1 AND created_at < datetime('now', '-30 days') ORDER BY created_at ASC LIMIT 25`,
+  ).bind(identity.agentId).all<{ id: string; object_key: string }>();
+  if (expired.results.length > 0) {
+    await Promise.all(expired.results.map((row) => context.env.EVIDENCE.delete(row.object_key)));
+    await context.env.DB.prepare(
+      `DELETE FROM capture_journal_checkpoints
+        WHERE agent_id = ?1 AND created_at < datetime('now', '-30 days')`,
+    ).bind(identity.agentId).run();
+  }
+  return context.json({ ok: true, checkpointId, objectKey, createdAt: new Date(createdTime).toISOString(), verifiedAt, idempotent: false }, 201);
+});
+
+app.get("/internal/capture-journal-checkpoints/latest", async (context) => {
+  const identity = context.get("identity");
+  const requestedAgentId = context.req.query("agentId");
+  if (requestedAgentId && identity.role !== "operator" && requestedAgentId !== identity.agentId) {
+    return jsonError("a capture agent may only restore its own journal", 403);
+  }
+  const agentId = identity.role === "operator" && requestedAgentId ? requestedAgentId : identity.agentId;
+  const checkpoint = await context.env.DB.prepare(
+    `SELECT id, object_key, ciphertext_sha256, plaintext_sha256, byte_length, journal_schema, created_at, verified_at
+       FROM capture_journal_checkpoints WHERE agent_id = ?1 ORDER BY created_at DESC LIMIT 1`,
+  ).bind(agentId).first<{ id: string; object_key: string; ciphertext_sha256: string; plaintext_sha256: string; byte_length: number; journal_schema: number; created_at: string; verified_at: string }>();
+  if (!checkpoint) return jsonError("no capture journal checkpoint exists", 404);
+  const object = await context.env.EVIDENCE.head(checkpoint.object_key);
+  if (!object || object.size !== checkpoint.byte_length || object.customMetadata?.ciphertextsha256 !== checkpoint.ciphertext_sha256) {
+    return jsonError("latest journal checkpoint is missing or failed R2 metadata verification", 502);
+  }
+  const download = await createDirectObjectDownload(context.env, checkpoint.object_key);
+  return context.json({
+    ok: true,
+    checkpoint: {
+      id: checkpoint.id,
+      agentId,
+      ciphertextSha256: checkpoint.ciphertext_sha256,
+      plaintextSha256: checkpoint.plaintext_sha256,
+      byteLength: checkpoint.byte_length,
+      journalSchema: checkpoint.journal_schema,
+      createdAt: checkpoint.created_at,
+      verifiedAt: checkpoint.verified_at,
+      downloadUrl: download.url,
+      downloadExpiresIn: download.expiresIn,
+    },
+  });
 });
 
 app.post("/internal/capture-batches/:id/evidence-upload-sessions", zValidator("json", captureEvidenceUploadSessionSchema), async (context) => {
