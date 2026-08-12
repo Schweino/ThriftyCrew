@@ -3766,8 +3766,13 @@ app.post("/internal/releases/:id/recipe-bundles", async (context) => {
   const release = await context.env.DB.prepare("SELECT id, state FROM releases WHERE id = ?1").bind(context.req.param("id")).first<{ id: string; state: string }>();
   if (!release) return jsonError("release not found", 404);
   if (!['draft', 'validating'].includes(release.state)) return jsonError(`release recipe bundles are immutable in ${release.state} state`, 409);
-  const result = await buildReleaseRecipeBundles(context.env, context.req.param("id"), context.req.query("after") ?? "", 40);
-  return context.json({ ok: true, releaseId: context.req.param("id"), ...result });
+  try {
+    const result = await buildReleaseRecipeBundles(context.env, context.req.param("id"), context.req.query("after") ?? "", 40);
+    return context.json({ ok: true, releaseId: context.req.param("id"), ...result });
+  } catch (error) {
+    console.error("release recipe bundle build failed", { releaseId: context.req.param("id"), after: context.req.query("after") ?? "", error });
+    return jsonError(error instanceof Error ? error.message : "release recipe bundle build failed", 500);
+  }
 });
 
 app.put("/internal/releases/:id/guards", zValidator("json", releaseGuardResultSchema), async (context) => {
