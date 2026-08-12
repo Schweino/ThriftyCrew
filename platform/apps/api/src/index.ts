@@ -2103,7 +2103,7 @@ SELECT id AS duplicate_id, canonical_id, semantic_key, captured_at
 app.post("/internal/canonical-cleanup/plan", zValidator("json", canonicalCleanupPlanSchema), async (context) => {
   const body = context.req.valid("json");
   const [candidates, protectedRows] = await Promise.all([
-    context.env.DB.prepare(canonicalDuplicateCandidatesSql).bind(body.maximumRows, 1_000).all<{ duplicate_id: string; canonical_id: string; semantic_key: string; captured_at: string }>(),
+    context.env.DB.prepare(canonicalDuplicateCandidatesSql).bind(body.maximumRows, 25).all<{ duplicate_id: string; canonical_id: string; semantic_key: string; captured_at: string }>(),
     context.env.DB.prepare("SELECT DISTINCT observation_id FROM release_cells WHERE observation_id IS NOT NULL ORDER BY observation_id").all<{ observation_id: string }>(),
   ]);
   const protectedRefsHash = await digestHex(stableJson(protectedRows.results.map((row) => row.observation_id)));
