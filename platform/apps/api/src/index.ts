@@ -3711,7 +3711,6 @@ app.post("/internal/releases/:id/validate", async (context) => {
     detail: { incompleteRecipes: recipeStats?.incomplete ?? 0, policy: "incomplete recipes remain auditable and are excluded from ranked/public surfaces" },
   });
   await evaluateReleaseIntegrity(context.env, releaseId);
-  await evaluateNotBlindGuard(context.env.DB, releaseId);
   const manifestKind = String((JSON.parse(releaseIdentity.input_manifest_json) as Record<string, unknown>).kind ?? "");
   if (manifestKind !== "legacy-current-bridge") {
     const [graph, graphNodes, scenarios] = await Promise.all([
@@ -3737,6 +3736,7 @@ app.post("/internal/releases/:id/validate", async (context) => {
       detail: { scenarioKinds: ["utilized", "register-checkout", "non-member-checkout", "everyday-baseline", "selected-store-checkout"] },
     });
   }
+  await evaluateNotBlindGuard(context.env.DB, releaseId);
   const missingHard = await context.env.DB.prepare(
     `SELECT d.id
        FROM guard_definitions d

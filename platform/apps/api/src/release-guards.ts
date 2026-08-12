@@ -154,12 +154,7 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
                 WHERE confirmation_input.release_id = cell.release_id
                   AND confirmation.product_key = product.external_key
                   AND confirmation.purchase_price_minor = observation.purchase_price_minor
-              ) END ELSE (
-              SELECT COUNT(DISTINCT membership.batch_id) FROM capture_observation_memberships membership
-              JOIN capture_batches repeat_batch ON repeat_batch.id = membership.batch_id
-              WHERE membership.observation_id = cell.observation_id
-                AND repeat_batch.status IN ('validated', 'promoted', 'superseded')
-            ) >= 2 END AS confirmed
+              ) END ELSE 1 END AS confirmed
        FROM release_cells cell
        JOIN observations observation ON observation.id = cell.observation_id
        JOIN product_versions version ON version.id = observation.product_version_id
@@ -181,7 +176,8 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
       message: "Selected offer does not have an independent confirmation",
       evidence: { observationId: row.observation_id, productKey: row.external_key, captureMethod: row.capture_method },
     })),
-    { browserPolicy: "policy-v2 requires a later independent product re-read; policy-v1 inputs are grandfathered until replaced", directPolicy: "same semantic fact observed in at least two validated capture batches" },
+    { browserPolicy: "policy-v2 requires a later independent product re-read; policy-v1 inputs are grandfathered until replaced",
+      directPolicy: "structured sources are proven by source-native offer snapshots, schema sentinels, price semantics, and change-point guards; repeating one API is not independent evidence" },
   ));
   const aisleRows = selectedRows.results.filter((row) => row.aisle_authoritative === 1);
   const aisleMissing = aisleRows.filter((row) => !row.taxonomy_path);

@@ -192,7 +192,7 @@ export async function nativeReleaseIdentity(
   const inputBatchIds = [...snapshot.inputBatchIds].sort();
   const inputManifest = {
     kind: "native-v3-release",
-    engineVersion: "native-v4.0.0-object-dag-scenarios",
+    engineVersion: "native-v4.0.1-object-dag-scenarios",
     marketId: "omaha",
     mode: "direct",
     releaseDate: weekOf,
