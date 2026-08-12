@@ -1143,6 +1143,8 @@ if (command === "status") {
   }
   if (!releaseId) throw new Error("tc recipe bundles could not resolve the current release id");
   result = await client.request(`/internal/releases/${encodeURIComponent(releaseId)}/recipe-bundles`, { method: "POST" });
+} else if (command === "cache" && subcommand === "purge") {
+  result = await (await mutationClient()).request("/internal/cache/purge", { method: "POST" });
 } else if (command === "efficiency" && subcommand === "record") {
   const file = arguments_[0];
   if (!file) throw new Error("tc efficiency record requires a D1 efficiency report JSON file");
@@ -1191,7 +1193,7 @@ if (command === "status") {
     usage: [
       "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy|archives|archive <id>",
       "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>|execute <manifest> <sha256>", "tc storage migrate-releases", "tc cleanup index|plan [--execute]|export <run> <json>|upload <run> <parquet>|execute <run> <sha256>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
-      "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>", "tc efficiency record <report.json>", "tc recipe bundles [release-id]",
+      "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>", "tc efficiency record <report.json>", "tc recipe bundles [release-id]", "tc cache purge",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
         "tc capture metrics [limit]", "tc capture coordinator status|next|heartbeat|fail|challenge|resolve", "tc capture session worklist|init|append|evidence|verification-plan|finalize|status",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog", "tc capture journal checkpoint|restore [--force]",

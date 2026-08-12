@@ -252,12 +252,19 @@ app.use("/internal/triage", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/triage/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/doctor", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/deployments/*", requireIdentityRole(["operator"]));
+app.use("/internal/cache/*", requireIdentityRole(["operator"]));
 app.use("/internal/transitions/*", requireIdentityRole(["operator"]));
 app.use("/internal/control-plane/*", requireIdentityRole(["operator"]));
 app.use("/internal/engine/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/drills/*", requireIdentityRole(["operator"]));
 
 app.post("/webhooks/github/actions", (context) => handleGithubActionsWebhook(context.req.raw, context.env, context.executionCtx));
+
+app.post("/internal/cache/purge", async (context) => {
+  const result = await cache.purge({ tags: ["grocery-public"], pathPrefixes: ["/api/v2/"] });
+  await recordAudit(context.env, context.get("identity"), "public_cache.purge", "cache", "grocery-public", result.success ? "accepted" : "failed", { success: result.success, errors: result.errors });
+  return context.json({ ok: result.success, ...result }, result.success ? 200 : 502);
+});
 
 app.get("/api/v2/status", async (context) => {
   const checkedAt = new Date();
