@@ -1,4 +1,4 @@
-param([int]$MaximumPasses = 100)
+param([int]$MaximumPasses = 1000)
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'pc-runtime-lib.ps1')
 $config = Read-PcRuntimeConfig
