@@ -36,12 +36,18 @@ function chunks<T>(items: readonly T[], size: number): T[][] {
   return output;
 }
 
-async function buildRecipeBundles(client: MutationClient, releaseId: string): Promise<void> {
+async function buildRecipeBundles(client: MutationClient, releaseId: string): Promise<{ pages: number; recipes: number; bytes: number; uploadedObjects: number; reusedObjects: number }> {
   let afterRecipe = "";
+  const stats = { pages: 0, recipes: 0, bytes: 0, uploadedObjects: 0, reusedObjects: 0 };
   while (true) {
     const response = await client.request(`/internal/releases/${releaseId}/recipe-bundles${afterRecipe ? `?after=${encodeURIComponent(afterRecipe)}` : ""}`, { method: "POST" });
+    stats.pages += 1;
+    stats.recipes += Number(response.count ?? 0);
+    stats.bytes += Number(response.bytes ?? 0);
+    stats.uploadedObjects += Number(response.uploadedObjects ?? 0);
+    stats.reusedObjects += Number(response.reusedObjects ?? 0);
     afterRecipe = typeof response.next === "string" ? response.next : "";
-    if (!afterRecipe) return;
+    if (!afterRecipe) return stats;
   }
 }
 
@@ -660,10 +666,10 @@ export async function publishNativeRelease(client: MutationClient, artifact: Nat
     await client.request(`/internal/releases/${artifact.releaseId}/graph-finalize`, { json: {
       parentReleaseId: artifact.graph.parentReleaseId, dependencyHash: artifact.graph.dependencyHash,
     } });
-    await buildRecipeBundles(client, artifact.releaseId);
+    const recipeBundles = await buildRecipeBundles(client, artifact.releaseId);
     const validation = await client.request(`/internal/releases/${artifact.releaseId}/validate`, { method: "POST", acceptStatuses: [422] });
     const publication = validation.ok ? await client.request(`/internal/releases/${artifact.releaseId}/publish`, { method: "POST" }) : null;
-    return { ok: Boolean(validation.ok && publication?.ok), releaseId: artifact.releaseId, inputHash: artifact.inputHash, validation, publication, audit: artifact.audit };
+    return { ok: Boolean(validation.ok && publication?.ok), releaseId: artifact.releaseId, inputHash: artifact.inputHash, validation, publication, recipeBundles, audit: artifact.audit };
   } catch (error) {
     // A second executor can observe `draft` just before the first executor
     // publishes. Re-read the deterministic release identity so that completed
