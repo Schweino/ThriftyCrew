@@ -84,12 +84,9 @@ $configuration = [ordered]@{
   sourceIds = $browserSources
 }
 $configuration | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $configFile -Encoding UTF8
-$acl = New-Object Security.AccessControl.FileSecurity
-$acl.SetAccessRuleProtection($true, $false)
-$currentUser = [Security.Principal.WindowsIdentity]::GetCurrent().User
-$acl.AddAccessRule((New-Object Security.AccessControl.FileSystemAccessRule($currentUser, 'FullControl', 'Allow')))
-$acl.AddAccessRule((New-Object Security.AccessControl.FileSystemAccessRule('SYSTEM', 'FullControl', 'Allow')))
-Set-Acl -LiteralPath $configFile -AclObject $acl
+$currentUserName = [Security.Principal.WindowsIdentity]::GetCurrent().Name
+& icacls.exe $configFile '/inheritance:r' '/grant:r' "${currentUserName}:(F)" '*S-1-5-18:(F)' | Out-Null
+if ($LASTEXITCODE -ne 0) { throw 'capture client configuration ACL could not be restricted' }
 
 $launcher = Join-Path $platformRoot 'scripts\run-pc-capture-client-hidden.vbs'
 $actionArguments = "//B //NoLogo `"$launcher`" -Mode Cycle"
