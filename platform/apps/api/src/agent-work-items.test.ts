@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { z } from "zod";
+import { recipeSourceCandidatesSchema } from "@thriftycrew/contracts";
 import { assertRecipeChainContinuity, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
 
 const candidate = {
@@ -98,6 +100,17 @@ describe("agent output boundary", () => {
   it("fences recipe source output to its request", () => {
     const sourceOutput = { requestId: "request_other", candidates: [candidate], rejectedSources: [], searchSummary: "One verified source was accepted." };
     expect(() => validateAgentOutput("recipe-source-candidates-v1", sourceOutput, "request_expected", "recipe-sourcer")).toThrow(/different request/);
+  });
+
+  it("keeps recipe source URLs strict without emitting an unsupported uri format", () => {
+    const jsonSchema = JSON.stringify(z.toJSONSchema(recipeSourceCandidatesSchema));
+    expect(jsonSchema).not.toContain('"format":"uri"');
+    expect(() => recipeSourceCandidatesSchema.parse({
+      requestId: "request_one",
+      candidates: [{ ...candidate, sourceUrl: "not-a-url" }],
+      rejectedSources: [],
+      searchSummary: "One source candidate was evaluated.",
+    })).toThrow(/valid URL/);
   });
 
   it("requires a dedup decision for every sourced candidate", () => {

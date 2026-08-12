@@ -950,11 +950,20 @@ const recipeSourceIngredientSchema = z.object({
   quantityText: z.string().trim().min(1).max(300),
 });
 
+const recipeHttpUrl = z.string().trim().min(8).max(3000).superRefine((value, context) => {
+  try {
+    const parsed = new URL(value);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") context.addIssue({ code: "custom", message: "must use http or https" });
+  } catch {
+    context.addIssue({ code: "custom", message: "must be a valid URL" });
+  }
+});
+
 export const recipeSourceCandidateSchema = z.object({
   id: nonEmptyId,
   title: z.string().trim().min(4).max(300),
   proposedSlug: nonEmptyId,
-  sourceUrl: z.url().max(3000),
+  sourceUrl: recipeHttpUrl,
   accessedAt: isoDateTime,
   sourceServings: z.number().int().min(1).max(100).nullable(),
   cuisine: z.string().trim().min(2).max(160),
@@ -990,7 +999,7 @@ export const contentItemSchema = z.object({
     usesCommodityIds: z.array(nonEmptyId).max(100),
   })).min(2).max(100),
   provenance: z.array(z.object({
-    url: z.url().max(3000),
+    url: recipeHttpUrl,
     accessedAt: isoDateTime,
   })).min(1).max(50),
 });
@@ -1031,7 +1040,7 @@ export const recipeSourceCandidatesSchema = z.object({
   requestId: nonEmptyId,
   candidates: z.array(recipeSourceCandidateSchema).max(50),
   rejectedSources: z.array(z.object({
-    sourceUrl: z.url().max(3000),
+    sourceUrl: recipeHttpUrl,
     reason: z.string().trim().min(5).max(1000),
   })).max(100),
   searchSummary: z.string().trim().min(10).max(3000),
