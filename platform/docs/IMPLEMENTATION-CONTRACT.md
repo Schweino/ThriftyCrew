@@ -51,6 +51,10 @@ the Worker validates and finalizes it before the object becomes evidence.
     recovery artifacts, not competing state authorities.
 31. A validated browser batch is matched and promoted by its Cloudflare Workflow. The PC does not need to
     remain online after seal, and failed incomplete pipelines are redispatched by Cloudflare cron.
+32. Browser seal pins the exact configuration ID and content hash. Validation retries, cloud matching,
+    promotion proof and configuration compaction must honor that immutable pin rather than reread active state.
+33. A direct-upload retry never revives an expired URL or overwrites an earlier attempt. Each renewal receives
+    a new object key; Cloudflare deletes only expired/rejected keys not referenced by finalized evidence.
 
 ## Migration calendar and retirement
 

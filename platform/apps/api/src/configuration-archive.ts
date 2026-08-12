@@ -94,7 +94,7 @@ export async function verifyConfigurationArchive(
 }
 
 export async function compactConfiguration(env: WorkerEnv, configurationId: string, actorId: string): Promise<Record<string, unknown>> {
-  const [active, rollback] = await Promise.all([
+  const [active, rollback, capturePipeline] = await Promise.all([
     env.DB.prepare("SELECT id FROM configuration_versions WHERE active = 1").first<{ id: string }>(),
     env.DB.prepare(
       `SELECT release.configuration_id AS id FROM releases release
@@ -102,8 +102,13 @@ export async function compactConfiguration(env: WorkerEnv, configurationId: stri
           AND release.configuration_id <> COALESCE((SELECT id FROM configuration_versions WHERE active = 1), '')
         ORDER BY release.published_at DESC LIMIT 1`,
     ).first<{ id: string }>(),
+    env.DB.prepare(
+      `SELECT batch_id FROM capture_validation_jobs
+        WHERE configuration_id = ?1 AND pipeline_completed_at IS NULL LIMIT 1`,
+    ).bind(configurationId).first<{ batch_id: string }>(),
   ]);
   if (configurationId === active?.id || configurationId === rollback?.id) throw new Error("active and immediate rollback configurations cannot be compacted");
+  if (capturePipeline) throw new Error(`configuration is pinned by incomplete capture pipeline ${capturePipeline.batch_id}`);
   const archive = await env.DB.prepare(
     "SELECT object_key, byte_length, sha256, status FROM configuration_archives WHERE configuration_id = ?1",
   ).bind(configurationId).first<{ object_key: string; byte_length: number; sha256: string; status: string }>();

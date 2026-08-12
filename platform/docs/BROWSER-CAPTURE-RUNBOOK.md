@@ -200,8 +200,11 @@ five-minute fallback interval. A single-instance per-user supervisor restarts it
 unexpected exit, without requiring administrator rights. Adapter reads use one append-only streaming protocol; compact JSON is a recovery
 mirror. The drainer sends bounded, compressed product shards straight to R2 with a 15-minute one-object URL
 whose content type, MD5, SHA-256 metadata, evidence ID, and upload session are signed. Per-object receipts make
-interrupted uploads resumable. Browser seal returns `202`; a Cloudflare Workflow validates, matches, and promotes
-under durable retries, and Cloudflare cron redispatches failed incomplete pipelines. After remote promotion and
+interrupted uploads resumable. A retry reuses a still-healthy URL, but an expired or rejected attempt always gets
+a new immutable object key; Cloudflare expires stale attempts and removes only unreferenced orphan keys after a
+one-hour grace period. Browser seal returns `202` and pins the active configuration ID plus content hash; a
+Cloudflare Workflow validates, matches, and promotes against that exact pin under durable retries, and Cloudflare
+cron redispatches failed incomplete pipelines. After remote promotion and
 passed matching, the watchdog compresses the local artifact/evidence into a hash-verified recovery bundle and
 retires the originals. Run the queue watchdog at the end. Do not call
 `capture promote-ready-browser` from the PC automation; the cloud event pipeline owns matching and promotion.

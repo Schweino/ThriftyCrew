@@ -2,6 +2,7 @@ import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
 import type { MutationIdentity, WorkerEnv } from "./env";
 import { readBrowserCaptureSla } from "./browser-capture-sla";
 import { compactConfiguration } from "./configuration-archive";
+import { cleanupCaptureUploadAttempts, type CaptureUploadCleanupResult } from "./capture-upload-attempts";
 
 export function jobStatusRequiresAlert(status: string): boolean {
   return status === "failed" || status === "timed_out" || status === "missed";
@@ -270,6 +271,10 @@ export async function runConfigurationLifecycle(env: WorkerEnv, scheduledTime: n
         JOIN configuration_archives archive ON archive.configuration_id = version.id AND archive.status = 'verified'
        WHERE version.active = 0
          AND NOT EXISTS (SELECT 1 FROM configuration_compactions compacted WHERE compacted.configuration_id = version.id)
+         AND NOT EXISTS (
+           SELECT 1 FROM capture_validation_jobs capture
+            WHERE capture.configuration_id = version.id AND capture.pipeline_completed_at IS NULL
+         )
          AND version.id <> COALESCE((
            SELECT release.configuration_id FROM releases release
             WHERE release.state IN ('published','superseded')
@@ -1004,6 +1009,28 @@ export async function resumeFailedCapturePipelines(env: WorkerEnv, scheduledTime
   return resumed;
 }
 
+export async function runCaptureUploadCleanup(env: WorkerEnv, scheduledTime: number): Promise<CaptureUploadCleanupResult | null> {
+  try {
+    const result = await cleanupCaptureUploadAttempts(env, scheduledTime, 25);
+    if (result.failed.length > 0) {
+      await raiseOperationalAlert(env, "capture-upload-gc", "Direct capture upload cleanup could not delete every orphan", {
+        checkedAt: new Date(scheduledTime).toISOString(), ...result,
+      }, { notification: "digest", deferMinutes: 15, observedAt: new Date(scheduledTime).toISOString() });
+    } else {
+      await resolveOperationalAlert(env, "capture-upload-gc", {
+        checkedAt: new Date(scheduledTime).toISOString(), ...result,
+      }, { recoveryTitle: "Direct capture upload cleanup recovered" });
+    }
+    return result;
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error);
+    await raiseOperationalAlert(env, "capture-upload-gc", "Direct capture upload cleanup failed", {
+      checkedAt: new Date(scheduledTime).toISOString(), detail,
+    }, { notification: "digest", deferMinutes: 15, observedAt: new Date(scheduledTime).toISOString() });
+    return null;
+  }
+}
+
 export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number, force = false): Promise<void> {
   const observedAt = new Date(scheduledTime).toISOString();
   const runId = await deterministicId("run", "archival-forecast-daily", force ? observedAt : observedAt.slice(0, 10));
@@ -1084,6 +1111,7 @@ function localScheduleParts(scheduledTime: number): Record<string, string> {
 export async function runScheduledOperations(env: WorkerEnv, scheduledTime: number): Promise<void> {
   await runLedgerWatchdog(env, scheduledTime);
   await resumeFailedCapturePipelines(env, scheduledTime);
+  await runCaptureUploadCleanup(env, scheduledTime);
   await dispatchPendingRegisteredAgents(env);
   await flushOperationalAlertDigest(env, new Date(scheduledTime).toISOString());
   const parts = localScheduleParts(scheduledTime);

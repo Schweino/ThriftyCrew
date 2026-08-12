@@ -80,6 +80,7 @@ import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./ev
 import { readBrowserCaptureSla } from "./browser-capture-sla";
 import { buildCaptureTermInserts } from "./capture-seal";
 import { createDirectEvidenceUpload } from "./capture-direct-upload";
+import { issueCaptureUploadAttempt, type CaptureUploadAttempt } from "./capture-upload-attempts";
 import { assessProductHistory, assessSourceSchema, type ProductHistoryRow } from "./capture-semantic-guards";
 import { handleGithubActionsWebhook } from "./github-recovery";
 import { acquireOperationLease, activeDeploymentBlockers, releaseOperationLease, renewOperationLease } from "./orchestration";
@@ -841,7 +842,8 @@ app.get("/internal/capture-batches/:id/status", async (context) => {
   ).bind(batch.id).all<{ kind: string; count: number }>();
   const validation = await context.env.DB.prepare(
     `SELECT workflow_instance_id, status, attempts, result_status, pipeline_stage, match_run_id,
-            promoted_at, pipeline_completed_at, error, created_at, started_at, completed_at
+            configuration_id, configuration_hash, promoted_at, pipeline_completed_at, error,
+            created_at, started_at, completed_at
        FROM capture_validation_jobs WHERE batch_id = ?1`,
   ).bind(batch.id).first<Record<string, unknown>>();
   return context.json({
@@ -2025,27 +2027,22 @@ app.post("/internal/capture-batches/:id/evidence-upload-sessions", zValidator("j
     if (existingEvidence.sha256 !== body.sha256 || existingEvidence.byte_length !== body.byteLength) return jsonError("evidence id already exists with different content", 409);
     return context.json({ ok: true, evidenceId: body.id, objectKey: existingEvidence.object_key, finalized: true, idempotent: true });
   }
-  const uploadSessionId = await deterministicId("capture-upload", batch.id, body.id, body.sha256);
-  const objectKey = `batches/${batch.id}/${body.id}`;
-  const expiresAt = new Date(Date.now() + 15 * 60_000).toISOString();
-  const existing = await context.env.DB.prepare(
-    `SELECT expected_sha256, expected_md5, expected_bytes, status, expires_at FROM capture_evidence_upload_sessions
-      WHERE id = ?1 AND batch_id = ?2`,
-  ).bind(uploadSessionId, batch.id).first<{ expected_sha256: string; expected_md5: string; expected_bytes: number; status: string; expires_at: string }>();
-  if (existing && (existing.expected_sha256 !== body.sha256 || existing.expected_md5 !== body.contentMd5 || existing.expected_bytes !== body.byteLength)) return jsonError("upload session is bound to different evidence", 409);
-  await context.env.DB.prepare(
-    `INSERT INTO capture_evidence_upload_sessions
-       (id, batch_id, requested_by, evidence_id, object_key, kind, content_type, expected_sha256, expected_md5, expected_bytes, expires_at)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)
-     ON CONFLICT(id) DO UPDATE SET
-       expires_at = CASE WHEN capture_evidence_upload_sessions.status = 'issued' THEN excluded.expires_at ELSE capture_evidence_upload_sessions.expires_at END`,
-  ).bind(uploadSessionId, batch.id, identity.agentId, body.id, objectKey, body.kind, body.contentType, body.sha256, body.contentMd5, body.byteLength, expiresAt).run();
-  if (existing?.status === "finalized") return context.json({ ok: true, uploadSessionId, evidenceId: body.id, objectKey, finalized: true, idempotent: true });
+  let attempt: CaptureUploadAttempt;
+  try {
+    attempt = await issueCaptureUploadAttempt(context.env, {
+      batchId: batch.id, requestedBy: identity.agentId, evidenceId: body.id, kind: body.kind,
+      contentType: body.contentType, sha256: body.sha256, contentMd5: body.contentMd5, byteLength: body.byteLength,
+    });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "direct evidence upload attempt could not be issued", 409);
+  }
+  if (attempt.status === "finalized") return jsonError("finalized upload attempt is missing its authoritative evidence record", 409);
+  const expiresSeconds = Math.max(60, Math.floor((Date.parse(attempt.expires_at) - Date.now()) / 1000));
   const upload = await createDirectEvidenceUpload(context.env, {
-    uploadSessionId, objectKey, evidenceId: body.id, kind: body.kind,
-    contentType: body.contentType, sha256: body.sha256, contentMd5: body.contentMd5, expiresSeconds: 900,
+    uploadSessionId: attempt.id, objectKey: attempt.object_key, evidenceId: body.id, kind: body.kind,
+    contentType: body.contentType, sha256: body.sha256, contentMd5: body.contentMd5, expiresSeconds,
   });
-  return context.json({ ok: true, uploadSessionId, evidenceId: body.id, objectKey, expiresAt, ...upload }, 201);
+  return context.json({ ok: true, uploadSessionId: attempt.id, evidenceId: body.id, objectKey: attempt.object_key, attemptNumber: attempt.attempt_number, expiresAt: attempt.expires_at, ...upload }, 201);
 });
 
 app.post("/internal/capture-batches/:id/evidence-upload-sessions/finalize", zValidator("json", captureEvidenceUploadFinalizeSchema), async (context) => {
@@ -2060,7 +2057,7 @@ app.post("/internal/capture-batches/:id/evidence-upload-sessions/finalize", zVal
   const upload = await context.env.DB.prepare(
     `SELECT id, requested_by, evidence_id, object_key, kind, content_type, expected_sha256,
             expected_bytes, status, expires_at
-       FROM capture_evidence_upload_sessions WHERE id = ?1 AND batch_id = ?2`,
+       FROM capture_evidence_upload_attempts WHERE id = ?1 AND batch_id = ?2`,
   ).bind(body.uploadSessionId, batch.id).first<{
     id: string; requested_by: string; evidence_id: string; object_key: string; kind: string; content_type: string;
     expected_sha256: string; expected_bytes: number; status: string; expires_at: string;
@@ -2069,7 +2066,7 @@ app.post("/internal/capture-batches/:id/evidence-upload-sessions/finalize", zVal
   if (upload.requested_by !== identity.agentId && identity.role !== "operator") return jsonError("upload session belongs to another agent", 403);
   if (upload.status === "finalized") return context.json({ ok: true, uploadSessionId: upload.id, evidenceId: upload.evidence_id, objectKey: upload.object_key, idempotent: true });
   if (Date.parse(upload.expires_at) < Date.now()) {
-    await context.env.DB.prepare("UPDATE capture_evidence_upload_sessions SET status = 'expired' WHERE id = ?1").bind(upload.id).run();
+    await context.env.DB.prepare("UPDATE capture_evidence_upload_attempts SET status = 'expired' WHERE id = ?1").bind(upload.id).run();
     return jsonError("direct evidence upload session expired", 409);
   }
   const object = await context.env.EVIDENCE.head(upload.object_key);
@@ -2080,14 +2077,17 @@ app.post("/internal/capture-batches/:id/evidence-upload-sessions/finalize", zVal
     && metadata.evidenceid === upload.evidence_id
     && metadata.uploadsessionid === upload.id;
   if (object.size !== upload.expected_bytes || !metadataPass) {
-    await context.env.DB.prepare("UPDATE capture_evidence_upload_sessions SET status = 'rejected' WHERE id = ?1").bind(upload.id).run();
+    await context.env.DB.prepare("UPDATE capture_evidence_upload_attempts SET status = 'rejected' WHERE id = ?1").bind(upload.id).run();
     return jsonError("direct evidence object metadata or length does not match the signed upload session", 422);
   }
   if (upload.kind === "screenshot") {
     const screenshot = await context.env.EVIDENCE.get(upload.object_key);
     if (!screenshot) return jsonError("direct screenshot evidence disappeared during finalization", 409);
     try { validateScreenshotEvidence(new Uint8Array(await screenshot.arrayBuffer()), upload.content_type); }
-    catch (error) { return jsonError(error instanceof Error ? error.message : "invalid screenshot evidence", 422); }
+    catch (error) {
+      await context.env.DB.prepare("UPDATE capture_evidence_upload_attempts SET status = 'rejected' WHERE id = ?1").bind(upload.id).run();
+      return jsonError(error instanceof Error ? error.message : "invalid screenshot evidence", 422);
+    }
   }
   await context.env.DB.batch([
     context.env.DB.prepare(
@@ -2095,7 +2095,7 @@ app.post("/internal/capture-batches/:id/evidence-upload-sessions/finalize", zVal
        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)`,
     ).bind(upload.evidence_id, batch.id, upload.object_key, upload.kind, upload.content_type, upload.expected_bytes, upload.expected_sha256),
     context.env.DB.prepare(
-      "UPDATE capture_evidence_upload_sessions SET status = 'finalized', finalized_at = CURRENT_TIMESTAMP WHERE id = ?1",
+      "UPDATE capture_evidence_upload_attempts SET status = 'finalized', finalized_at = CURRENT_TIMESTAMP WHERE id = ?1",
     ).bind(upload.id),
   ]);
   return context.json({ ok: true, uploadSessionId: upload.id, evidenceId: upload.evidence_id, objectKey: upload.object_key }, 201);
@@ -2168,14 +2168,22 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
     if (!workflowHeader) {
       const sealJson = stableJson(body);
       const prior = await context.env.DB.prepare(
-        "SELECT seal_json, status, result_status, attempts, workflow_instance_id FROM capture_validation_jobs WHERE batch_id = ?1",
-      ).bind(batch.id).first<{ seal_json: string; status: string; result_status: string | null; attempts: number; workflow_instance_id: string }>();
+        `SELECT seal_json, status, result_status, attempts, workflow_instance_id, configuration_id, configuration_hash
+           FROM capture_validation_jobs WHERE batch_id = ?1`,
+      ).bind(batch.id).first<{ seal_json: string; status: string; result_status: string | null; attempts: number; workflow_instance_id: string; configuration_id: string | null; configuration_hash: string | null }>();
       if (prior && prior.seal_json !== sealJson) return jsonError("capture validation job is already bound to different seal content", 409);
       if (!prior) {
+        const configuration = await context.env.DB.prepare(
+          "SELECT id, content_hash FROM configuration_versions WHERE active = 1",
+        ).first<{ id: string; content_hash: string }>();
+        if (!configuration) return jsonError("active configuration not found", 422);
         await context.env.DB.prepare(
-          `INSERT INTO capture_validation_jobs (batch_id, workflow_instance_id, requested_by, seal_json, status)
-           VALUES (?1, ?2, ?3, ?4, 'pending')`,
-        ).bind(batch.id, workflowInstanceId, identity.agentId, sealJson).run();
+          `INSERT INTO capture_validation_jobs
+             (batch_id, workflow_instance_id, requested_by, seal_json, status, configuration_id, configuration_hash)
+           VALUES (?1, ?2, ?3, ?4, 'pending', ?5, ?6)`,
+        ).bind(batch.id, workflowInstanceId, identity.agentId, sealJson, configuration.id, configuration.content_hash).run();
+      } else if (!prior.configuration_id || !prior.configuration_hash) {
+        return jsonError("capture validation job is missing its seal-time configuration pin", 409);
       } else if (prior.status === "failed") {
         workflowInstanceId = `${workflowInstanceId.slice(0, 80)}-retry-${prior.attempts + 1}`;
         await context.env.DB.prepare(

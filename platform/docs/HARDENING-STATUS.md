@@ -140,5 +140,9 @@ may deploy while those counters accrue, but no transition executor is retired ea
   The PC never receives an R2 credential: the Worker issues a 15-minute URL bound to one object, identity,
   content type, MD5, SHA-256 metadata and expected byte length, then independently finalizes R2 truth into D1.
 - Seal is the handoff boundary. Cloudflare Workflow validates, runs the authored matcher and aisle second
-  opinion, promotes passed batches, and records each stage. Cron redispatches transiently failed incomplete
+  opinion against the configuration ID/hash pinned at seal, promotes only the exact passed match run, and records
+  each stage. Configuration compaction cannot remove a ruleset held by an incomplete pipeline. Cron redispatches transiently failed incomplete
   pipelines, so PC uptime is no longer part of validation, matching or promotion correctness.
+- Direct evidence upload uses immutable renewable attempts. A healthy attempt is idempotently reused; expiry or
+  rejection creates a new object key. Cloudflare marks stale attempts and deletes only exact R2 keys that have
+  remained terminal for one hour and are absent from `evidence_objects`, with a bounded 25-object pass.

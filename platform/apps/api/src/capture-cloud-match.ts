@@ -17,11 +17,26 @@ interface RuleRow {
   pattern: string;
 }
 
-export async function runCloudCaptureMatch(env: WorkerEnv, batchId: string): Promise<{ status: "passed" | "failed"; runId: string; matched: number; products: number }> {
+export interface CaptureConfigurationPin {
+  configurationId: string;
+  configurationHash: string;
+}
+
+export async function assertCaptureConfigurationPin(env: WorkerEnv, pin: CaptureConfigurationPin): Promise<void> {
+  const configuration = await env.DB.prepare(
+    "SELECT content_hash FROM configuration_versions WHERE id = ?1",
+  ).bind(pin.configurationId).first<{ content_hash: string }>();
+  if (!configuration) throw new Error(`pinned configuration ${pin.configurationId} is missing`);
+  if (configuration.content_hash !== pin.configurationHash) {
+    throw new Error(`pinned configuration ${pin.configurationId} content hash changed`);
+  }
+}
+
+export async function runCloudCaptureMatch(env: WorkerEnv, batchId: string, pin: CaptureConfigurationPin): Promise<{ status: "passed" | "failed"; runId: string; matched: number; products: number }> {
   const batch = await env.DB.prepare("SELECT id, source_id, status FROM capture_batches WHERE id = ?1").bind(batchId).first<{ id: string; source_id: string; status: string }>();
   if (!batch || !["validated", "promoted", "superseded"].includes(batch.status)) throw new Error(`capture ${batchId} cannot be cloud-matched from ${batch?.status ?? "missing"}`);
-  const configuration = await env.DB.prepare("SELECT id, content_hash FROM configuration_versions WHERE active = 1").first<{ id: string; content_hash: string }>();
-  if (!configuration) throw new Error("active configuration is missing");
+  await assertCaptureConfigurationPin(env, pin);
+  const configuration = { id: pin.configurationId, content_hash: pin.configurationHash };
   const products = await env.DB.prepare(`
     WITH ranked AS (
       SELECT p.id AS product_id, pv.name, pv.normalized_name, pv.taxonomy_path,
@@ -129,12 +144,14 @@ export async function runCloudCaptureMatch(env: WorkerEnv, batchId: string): Pro
   return { status, runId, matched: decisions.length, products: products.results.length };
 }
 
-export async function promoteCloudMatchedCapture(env: WorkerEnv, batchId: string): Promise<"promoted" | "superseded"> {
+export async function promoteCloudMatchedCapture(env: WorkerEnv, batchId: string, matchRunId: string, configurationId: string): Promise<"promoted" | "superseded"> {
   const batch = await env.DB.prepare("SELECT source_id, status FROM capture_batches WHERE id = ?1").bind(batchId).first<{ source_id: string; status: string }>();
   if (!batch) throw new Error(`capture ${batchId} is missing`);
   if (batch.status === "promoted" || batch.status === "superseded") return batch.status;
   if (batch.status !== "validated") throw new Error(`capture ${batchId} cannot promote from ${batch.status}`);
-  const matching = await env.DB.prepare("SELECT status FROM match_runs WHERE batch_id = ?1 ORDER BY created_at DESC LIMIT 1").bind(batchId).first<{ status: string }>();
+  const matching = await env.DB.prepare(
+    "SELECT status FROM match_runs WHERE id = ?1 AND batch_id = ?2 AND configuration_id = ?3",
+  ).bind(matchRunId, batchId, configurationId).first<{ status: string }>();
   if (matching?.status !== "passed") throw new Error(`capture ${batchId} does not have passed matching`);
   const previous = await env.DB.prepare("SELECT id FROM capture_batches WHERE source_id = ?1 AND status = 'promoted' AND id <> ?2").bind(batch.source_id, batchId).all<{ id: string }>();
   const statements = previous.results.map((row) => env.DB.prepare("UPDATE capture_batches SET status = 'superseded' WHERE id = ?1 AND status = 'promoted'").bind(row.id));

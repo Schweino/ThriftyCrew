@@ -65,13 +65,20 @@ export class CaptureValidationWorkflow extends WorkflowEntrypoint<WorkerEnv, Cap
       });
       if (validationStatus === "validated") {
         const matching = await step.do("match immutable capture products", { retries: { limit: 4, delay: "10 seconds", backoff: "exponential" }, timeout: "5 minutes" }, async () => {
-          const result = await runCloudCaptureMatch(this.env, batchId);
+          const pin = await this.env.DB.prepare(
+            `SELECT configuration_id, configuration_hash FROM capture_validation_jobs WHERE batch_id = ?1`,
+          ).bind(batchId).first<{ configuration_id: string | null; configuration_hash: string | null }>();
+          if (!pin?.configuration_id || !pin.configuration_hash) throw new Error(`capture validation job ${batchId} has no configuration pin`);
+          const result = await runCloudCaptureMatch(this.env, batchId, {
+            configurationId: pin.configuration_id,
+            configurationHash: pin.configuration_hash,
+          });
           await this.env.DB.prepare("UPDATE capture_validation_jobs SET pipeline_stage = 'matching', match_run_id = ?2 WHERE batch_id = ?1").bind(batchId, result.runId).run();
-          return result;
+          return { ...result, configurationId: pin.configuration_id };
         });
         if (matching.status === "passed") {
           await step.do("promote matched capture", { retries: { limit: 4, delay: "10 seconds", backoff: "exponential" }, timeout: "2 minutes" }, async () => {
-            const promoted = await promoteCloudMatchedCapture(this.env, batchId);
+            const promoted = await promoteCloudMatchedCapture(this.env, batchId, matching.runId, matching.configurationId);
             await this.env.DB.prepare(`UPDATE capture_validation_jobs SET pipeline_stage = 'completed',
               promoted_at = CURRENT_TIMESTAMP, pipeline_completed_at = CURRENT_TIMESTAMP WHERE batch_id = ?1`).bind(batchId).run();
             return promoted;
