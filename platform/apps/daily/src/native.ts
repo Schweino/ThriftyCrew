@@ -192,7 +192,7 @@ export async function nativeReleaseIdentity(
   const inputBatchIds = [...snapshot.inputBatchIds].sort();
   const inputManifest = {
     kind: "native-v3-release",
-    engineVersion: "native-v4.0.2-checkout-optimized-scenarios",
+    engineVersion: "native-v4.0.3-separated-utilized-checkout-sources",
     marketId: "omaha",
     mode: "direct",
     releaseDate: weekOf,
@@ -459,7 +459,7 @@ export async function buildNativeRelease(
         ?? commodityByLabel.get(key(scaler?.canon ?? ingredient.item));
     };
     const incrementalDependencyHash = await digestHex(stableJson({
-      version: "recipe-cost-dag-v2-checkout-optimized", recipe, configurationId: snapshot.configurationId,
+      version: "recipe-cost-dag-v3-separated-utilized-checkout-sources", recipe, configurationId: snapshot.configurationId,
       pricingConfigurationHash: catalog.recipePricingConfigurationHash,
       conversionRegistryHash: catalog.conversionRegistryHash,
       ingredients: (recipe.ingredients_grams ?? []).map((ingredient) => {
@@ -570,10 +570,13 @@ export async function buildNativeRelease(
         item: ingredient.item,
         grams: grams!,
         commodityId: commodityId!,
-        observationId: checkout.option.observationId,
-        store: storeById.get(checkout.option.storeLocationId)?.store_name ?? checkout.option.storeLocationId,
-        perUnitMicros: checkout.option.displayPerUnitMicros,
-        basisUnit: checkout.option.displayUnit,
+        // The unqualified source fields are the immutable authority for the
+        // utilized-food-cost arithmetic. Checkout has a separate source because
+        // the cheapest package to buy need not have the cheapest unit price.
+        observationId: crown!.observationId,
+        store: storeById.get(crown!.storeLocationId)?.store_name ?? crown!.storeLocationId,
+        perUnitMicros: crown!.displayPerUnitMicros,
+        basisUnit: crown!.displayUnit,
         gpu: gpu!,
         gpuSource: conversion?.source === "recipe-scaler-exception" ? "recipe-scaler" : "ingredient-definition",
         scalerGpu: asNumber(scaler?.gpu) ?? null,
@@ -590,21 +593,37 @@ export async function buildNativeRelease(
         packageCount: checkout.costs.packages,
         variableWeight: checkout.costs.variableWeight,
         packageBasisUnits: checkout.costs.packageBasisUnits,
-        sourcePurchasePriceMinor: checkout.option.raw.purchase_price_minor ?? null,
-        sourceNormalizedBasisUnit: checkout.option.raw.normalized_basis_unit,
-        sourceNormalizedBasisQtyMicros: checkout.option.raw.normalized_basis_qty_micros ?? null,
-        membershipRequired: checkout.option.raw.membership_required === 1 || storeById.get(checkout.option.storeLocationId)?.membership_required === 1,
-        loyaltyRequired: checkout.option.raw.loyalty_required === 1,
+        sourcePurchasePriceMinor: crown!.raw.purchase_price_minor ?? null,
+        sourceNormalizedBasisUnit: crown!.raw.normalized_basis_unit,
+        sourceNormalizedBasisQtyMicros: crown!.raw.normalized_basis_qty_micros ?? null,
+        membershipRequired: crown!.raw.membership_required === 1 || storeById.get(crown!.storeLocationId)?.membership_required === 1,
+        loyaltyRequired: crown!.raw.loyalty_required === 1,
+        checkoutObservationId: checkout.option.observationId,
+        checkoutStoreLocationId: checkout.option.storeLocationId,
+        checkoutStore: storeById.get(checkout.option.storeLocationId)?.store_name ?? checkout.option.storeLocationId,
+        checkoutPerUnitMicros: checkout.option.displayPerUnitMicros,
+        checkoutBasisUnit: checkout.option.displayUnit,
+        checkoutSourcePurchasePriceMinor: checkout.option.raw.purchase_price_minor ?? null,
+        checkoutSourceNormalizedBasisUnit: checkout.option.raw.normalized_basis_unit,
+        checkoutSourceNormalizedBasisQtyMicros: checkout.option.raw.normalized_basis_qty_micros ?? null,
+        checkoutPackageBasisUnits: checkout.costs.packageBasisUnits,
+        checkoutVariableWeight: checkout.costs.variableWeight,
+        checkoutProductUrl: checkout.option.raw.product_url ?? null,
+        checkoutMembershipRequired: checkout.option.raw.membership_required === 1 || storeById.get(checkout.option.storeLocationId)?.membership_required === 1,
+        checkoutLoyaltyRequired: checkout.option.raw.loyalty_required === 1,
         nonMemberObservationId: nonMemberCheckout?.option.observationId ?? null,
         nonMemberPurchaseCostMinor: nonMemberCheckout?.costs.checkoutMinor ?? null,
         nonMemberUtilizedCostMinor: nonMemberUtilized ? optionCosts(nonMemberUtilized, requiredBasisUnits).utilizedMinor : null,
         everydayObservationId: everydayCheckout?.option.observationId ?? null,
         everydayStoreLocationId: everydayCheckout?.option.storeLocationId ?? null,
+        everydayStore: everydayCheckout ? (storeById.get(everydayCheckout.option.storeLocationId)?.store_name ?? everydayCheckout.option.storeLocationId) : null,
         everydayPerUnitMicros: everydayCheckout?.option.displayPerUnitMicros ?? null,
+        everydayBasisUnit: everydayCheckout?.option.displayUnit ?? null,
         everydayPurchaseCostMinor: everydayCheckout?.costs.checkoutMinor ?? null,
         everydaySourcePurchasePriceMinor: everydayCheckout?.option.raw.purchase_price_minor ?? null,
         everydayPackageBasisUnits: everydayCheckout?.costs.packageBasisUnits ?? null,
         everydayVariableWeight: everydayCheckout?.costs.variableWeight ?? null,
+        everydayProductUrl: everydayCheckout?.option.raw.product_url ?? null,
         storeOptions: Object.fromEntries(options.map((option) => {
           const optionCost = optionCosts(option, requiredBasisUnits);
           return [option.storeLocationId, {
@@ -612,6 +631,7 @@ export async function buildNativeRelease(
             observationId: option.observationId, perUnitMicros: option.displayPerUnitMicros,
             purchasePriceMinor: option.raw.purchase_price_minor ?? null,
             packageBasisUnits: optionCost.packageBasisUnits, variableWeight: optionCost.variableWeight,
+            basisUnit: option.displayUnit, productUrl: option.raw.product_url ?? null,
             membershipRequired: option.raw.membership_required === 1 || storeById.get(option.storeLocationId)?.membership_required === 1,
             loyaltyRequired: option.raw.loyalty_required === 1,
           }];

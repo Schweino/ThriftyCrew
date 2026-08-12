@@ -86,6 +86,13 @@ describe("native release construction", () => {
     const board = artifact.payloads.board as { commodities: Array<{ stores: Array<{ observationId: string; membership: boolean; member_label: string }> }> };
     expect(board.commodities[0]?.stores[0]).toMatchObject({ observationId: "obs", membership: true, member_label: "Membership required" });
     const complete = artifact.recipeCosts.find((cost) => cost.recipeSlug === "complete")!;
+    expect(complete.detail.ingredients).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        observationId: "bulk-obs", utilizedObservationId: "bulk-obs",
+        checkoutObservationId: "obs", checkoutStoreLocationId: "store",
+        utilizedCostMinor: 95, purchaseCostMinor: 200,
+      }),
+    ]));
     expect(complete.detail.scenarios).toEqual(expect.objectContaining({
       utilized: expect.objectContaining({ status: "complete", batchCostMinor: 95 }),
       registerCheckout: expect.objectContaining({ status: "complete", batchCostMinor: 200 }),

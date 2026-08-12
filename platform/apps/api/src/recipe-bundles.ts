@@ -68,16 +68,25 @@ export async function buildReleaseRecipeBundles(
       if (!commodityId || ingredient.status !== "priced") return [];
       return [[commodityId, {
         current: {
-          observationId: ingredient.observationId ?? null, perUnitMicros: ingredient.perUnitMicros ?? null,
-          purchasePriceMinor: ingredient.sourcePurchasePriceMinor ?? null, packageBasisUnits: ingredient.packageBasisUnits ?? null,
-          variableWeight: ingredient.variableWeight === true,
+          observationId: ingredient.checkoutObservationId ?? ingredient.observationId ?? null,
+          storeLocationId: ingredient.checkoutStoreLocationId ?? null,
+          store: ingredient.checkoutStore ?? ingredient.store ?? null,
+          perUnitMicros: ingredient.checkoutPerUnitMicros ?? ingredient.perUnitMicros ?? null,
+          unit: ingredient.checkoutBasisUnit ?? ingredient.basisUnit ?? null,
+          purchasePriceMinor: ingredient.checkoutSourcePurchasePriceMinor ?? ingredient.sourcePurchasePriceMinor ?? null,
+          packageBasisUnits: ingredient.checkoutPackageBasisUnits ?? ingredient.packageBasisUnits ?? null,
+          variableWeight: ingredient.checkoutVariableWeight === true || (ingredient.checkoutVariableWeight === undefined && ingredient.variableWeight === true),
+          url: ingredient.checkoutProductUrl ?? null,
         },
         everyday: {
           observationId: ingredient.everydayObservationId ?? null, storeLocationId: ingredient.everydayStoreLocationId ?? null,
+          store: ingredient.everydayStore ?? null,
           perUnitMicros: ingredient.everydayPerUnitMicros ?? null,
+          unit: ingredient.everydayBasisUnit ?? null,
           purchasePriceMinor: ingredient.everydaySourcePurchasePriceMinor ?? null,
           packageBasisUnits: ingredient.everydayPackageBasisUnits ?? null,
           variableWeight: ingredient.everydayVariableWeight === true,
+          url: ingredient.everydayProductUrl ?? null,
         },
         stores: ingredient.storeOptions ?? {},
       }]];

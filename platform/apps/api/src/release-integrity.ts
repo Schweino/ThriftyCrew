@@ -79,24 +79,32 @@ export async function evaluateReleaseIntegrity(env: WorkerEnv, releaseId: string
     for (const [index, ingredient] of priced.entries()) {
       const observationId = String(ingredient.observationId ?? "");
       const observation = observations.get(observationId);
+      const checkoutObservationId = String(ingredient.checkoutObservationId ?? observationId);
+      const checkoutObservation = observations.get(checkoutObservationId);
       const grams = Number(ingredient.grams);
       const gpu = Number(ingredient.gpu);
       const perUnitMicros = Number(ingredient.perUnitMicros);
       const declaredGpu = ingredient.gpuSource === "recipe-scaler" ? Number(ingredient.scalerGpu) : Number(ingredient.definitionGpu);
       const expectedUtilized = Math.round(perUnitMicros * (grams / gpu) / 10_000);
-      const sourcePurchasePriceMinor = Number(ingredient.sourcePurchasePriceMinor);
-      const packageBasisUnits = sourcePurchasePriceMinor * 10_000 / perUnitMicros;
-      const expectedPackages = ingredient.variableWeight === true ? 0 : Math.max(1, Math.ceil((grams / gpu) / packageBasisUnits - 1e-9));
-      const expectedCheckout = ingredient.variableWeight === true
-        ? expectedUtilized
-        : sourcePurchasePriceMinor * expectedPackages;
+      const checkoutPerUnitMicros = Number(ingredient.checkoutPerUnitMicros ?? perUnitMicros);
+      const checkoutPurchasePriceMinor = Number(ingredient.checkoutSourcePurchasePriceMinor ?? ingredient.sourcePurchasePriceMinor);
+      const checkoutPackageBasisUnits = checkoutPurchasePriceMinor * 10_000 / checkoutPerUnitMicros;
+      const checkoutVariableWeight = ingredient.checkoutVariableWeight === true || (ingredient.checkoutVariableWeight === undefined && ingredient.variableWeight === true);
+      const expectedPackages = checkoutVariableWeight ? 0 : Math.max(1, Math.ceil((grams / gpu) / checkoutPackageBasisUnits - 1e-9));
+      const expectedCheckout = checkoutVariableWeight
+        ? Math.round(checkoutPerUnitMicros * (grams / gpu) / 10_000)
+        : checkoutPurchasePriceMinor * expectedPackages;
       if (!observation || gpu !== declaredGpu || !Number.isFinite(expectedUtilized) || !Number.isFinite(expectedPackages) || expectedUtilized !== Number(ingredient.utilizedCostMinor)
         || expectedCheckout !== Number(ingredient.purchaseCostMinor)
         || expectedPackages !== Number(ingredient.packageCount)
         || observation.purchase_price_minor !== Number(ingredient.sourcePurchasePriceMinor)
         || observation.normalized_basis_unit !== ingredient.sourceNormalizedBasisUnit
-        || observation.normalized_basis_qty_micros !== Number(ingredient.sourceNormalizedBasisQtyMicros)) {
-        arithmeticFindings.push({ key: `line:${cost.recipe_slug}:${index}`, message: "Recipe ingredient line is not reproducible from its immutable source observation", evidence: { observationId, expectedUtilizedMinor: expectedUtilized, expectedCheckoutMinor: expectedCheckout, ingredient, sourceObservation: observation ?? null } });
+        || observation.normalized_basis_qty_micros !== Number(ingredient.sourceNormalizedBasisQtyMicros)
+        || !checkoutObservation
+        || checkoutObservation.purchase_price_minor !== checkoutPurchasePriceMinor
+        || checkoutObservation.normalized_basis_unit !== (ingredient.checkoutSourceNormalizedBasisUnit ?? ingredient.sourceNormalizedBasisUnit)
+        || checkoutObservation.normalized_basis_qty_micros !== Number(ingredient.checkoutSourceNormalizedBasisQtyMicros ?? ingredient.sourceNormalizedBasisQtyMicros)) {
+        arithmeticFindings.push({ key: `line:${cost.recipe_slug}:${index}`, message: "Recipe ingredient line is not reproducible from its immutable utilized and checkout source observations", evidence: { observationId, checkoutObservationId, expectedUtilizedMinor: expectedUtilized, expectedCheckoutMinor: expectedCheckout, ingredient, sourceObservation: observation ?? null, checkoutSourceObservation: checkoutObservation ?? null } });
       }
       if (!releaseRegistry?.content_hash || ingredient.conversionRegistryHash !== releaseRegistry.content_hash
         || typeof ingredient.conversionId !== "string" || !ingredient.conversionId
