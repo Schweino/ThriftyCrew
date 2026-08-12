@@ -2074,16 +2074,19 @@ app.post("/internal/canonical-cleanup/index", async (context) => {
   return context.json({ ok: true, indexed: rows.results.length, nextCursor: rows.results.at(-1)?.id ?? after });
 });
 
-const canonicalDuplicateCandidatesSql = `WITH membership_latest AS (
-  SELECT observation_id, MAX(observed_at) AS newest_at
-    FROM capture_observation_memberships GROUP BY observation_id
+const canonicalDuplicateCandidatesSql = `WITH duplicate_keys AS (
+  SELECT semantic_hash
+    FROM observation_fingerprints
+   GROUP BY semantic_hash HAVING COUNT(*) > 1
+   ORDER BY semantic_hash LIMIT ?2
 ), base AS (
   SELECT o.id, o.captured_at, fingerprint.semantic_hash AS semantic_key,
          EXISTS(SELECT 1 FROM release_cells rc WHERE rc.observation_id = o.id) AS protected,
-         COALESCE(latest.newest_at, o.captured_at) AS newest_at
-    FROM observations o
-    JOIN observation_fingerprints fingerprint ON fingerprint.observation_id = o.id
-    LEFT JOIN membership_latest latest ON latest.observation_id = o.id
+         COALESCE((SELECT MAX(member.observed_at) FROM capture_observation_memberships member
+                    WHERE member.observation_id = o.id), o.captured_at) AS newest_at
+    FROM duplicate_keys duplicate
+    JOIN observation_fingerprints fingerprint ON fingerprint.semantic_hash = duplicate.semantic_hash
+    JOIN observations o ON o.id = fingerprint.observation_id
 ), ranked AS (
   SELECT *, FIRST_VALUE(id) OVER (
     PARTITION BY semantic_key ORDER BY protected DESC, newest_at DESC, id
@@ -2100,7 +2103,7 @@ SELECT id AS duplicate_id, canonical_id, semantic_key, captured_at
 app.post("/internal/canonical-cleanup/plan", zValidator("json", canonicalCleanupPlanSchema), async (context) => {
   const body = context.req.valid("json");
   const [candidates, protectedRows] = await Promise.all([
-    context.env.DB.prepare(canonicalDuplicateCandidatesSql).bind(body.maximumRows).all<{ duplicate_id: string; canonical_id: string; semantic_key: string; captured_at: string }>(),
+    context.env.DB.prepare(canonicalDuplicateCandidatesSql).bind(body.maximumRows, 1_000).all<{ duplicate_id: string; canonical_id: string; semantic_key: string; captured_at: string }>(),
     context.env.DB.prepare("SELECT DISTINCT observation_id FROM release_cells WHERE observation_id IS NOT NULL ORDER BY observation_id").all<{ observation_id: string }>(),
   ]);
   const protectedRefsHash = await digestHex(stableJson(protectedRows.results.map((row) => row.observation_id)));
