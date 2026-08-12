@@ -96,22 +96,38 @@ function database(file = captureJournalPath()) {
 
 export function upsertQueueJournalJob(job, file) {
   const db = database(file);
+  let parsedManifest;
+  let durableManifestJson = job.manifestJson;
+  try {
+    parsedManifest = JSON.parse(job.manifestJson);
+    if (parsedManifest.receipt && typeof parsedManifest.receipt === "object") {
+      const receipt = { ...parsedManifest.receipt };
+      delete receipt.remoteCheckedAt;
+      durableManifestJson = JSON.stringify({ ...parsedManifest, receipt });
+    }
+  } catch { /* malformed manifests are surfaced by the queue validator */ }
   db.prepare(`INSERT INTO queue_jobs
     (id, directory, source_id, status, enqueued_at, next_attempt_at, manifest_json, updated_at)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     ON CONFLICT(id) DO UPDATE SET directory=excluded.directory, source_id=excluded.source_id, status=excluded.status,
       enqueued_at=excluded.enqueued_at, next_attempt_at=excluded.next_attempt_at,
-      manifest_json=excluded.manifest_json, updated_at=excluded.updated_at`)
-    .run(job.id, job.directory, job.sourceId, job.status, job.enqueuedAt, job.nextAttemptAt, job.manifestJson, new Date().toISOString());
+      manifest_json=excluded.manifest_json, updated_at=excluded.updated_at
+    WHERE queue_jobs.directory IS NOT excluded.directory OR queue_jobs.source_id IS NOT excluded.source_id
+      OR queue_jobs.status IS NOT excluded.status OR queue_jobs.enqueued_at IS NOT excluded.enqueued_at
+      OR queue_jobs.next_attempt_at IS NOT excluded.next_attempt_at OR queue_jobs.manifest_json IS NOT excluded.manifest_json`)
+    .run(job.id, job.directory, job.sourceId, job.status, job.enqueuedAt, job.nextAttemptAt, durableManifestJson, new Date().toISOString());
   try {
-    const manifest = JSON.parse(job.manifestJson);
+    const manifest = parsedManifest ?? JSON.parse(job.manifestJson);
     const summary = manifest.captureSummary;
     if (summary?.capturedTo && summary?.coverageMode) {
       const remote = manifest.receipt?.remote;
       db.prepare(`INSERT INTO capture_source_state
         (job_id, source_id, captured_to, coverage_mode, local_status, remote_status, match_status, enqueued_at, updated_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(job_id) DO UPDATE SET local_status=excluded.local_status,
-        remote_status=excluded.remote_status, match_status=excluded.match_status, updated_at=excluded.updated_at`)
+        remote_status=excluded.remote_status, match_status=excluded.match_status, updated_at=excluded.updated_at
+        WHERE capture_source_state.local_status IS NOT excluded.local_status
+          OR capture_source_state.remote_status IS NOT excluded.remote_status
+          OR capture_source_state.match_status IS NOT excluded.match_status`)
         .run(job.id, job.sourceId, summary.capturedTo, summary.coverageMode, job.status, remote?.status ?? null,
           remote?.matching?.status ?? null, job.enqueuedAt, new Date().toISOString());
     }
