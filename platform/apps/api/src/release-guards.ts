@@ -147,13 +147,14 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
   const confirmationRows = await db.prepare(
     `SELECT cell.commodity_id, cell.store_location_id, cell.observation_id, source.capture_method,
             product.external_key,
-            CASE WHEN source.capture_method = 'browser' THEN EXISTS(
-              SELECT 1 FROM release_input_batches confirmation_input
-              JOIN capture_offer_confirmations confirmation ON confirmation.batch_id = confirmation_input.batch_id
-              WHERE confirmation_input.release_id = cell.release_id
-                AND confirmation.product_key = product.external_key
-                AND confirmation.purchase_price_minor = observation.purchase_price_minor
-            ) ELSE (
+            CASE WHEN source.capture_method = 'browser' THEN
+              CASE WHEN COALESCE(browser_metric.accuracy_policy_version, 0) < 2 THEN 1 ELSE EXISTS(
+                SELECT 1 FROM release_input_batches confirmation_input
+                JOIN capture_offer_confirmations confirmation ON confirmation.batch_id = confirmation_input.batch_id
+                WHERE confirmation_input.release_id = cell.release_id
+                  AND confirmation.product_key = product.external_key
+                  AND confirmation.purchase_price_minor = observation.purchase_price_minor
+              ) END ELSE (
               SELECT COUNT(DISTINCT membership.batch_id) FROM capture_observation_memberships membership
               JOIN capture_batches repeat_batch ON repeat_batch.id = membership.batch_id
               WHERE membership.observation_id = cell.observation_id
@@ -165,6 +166,7 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
        JOIN products product ON product.id = version.product_id
        JOIN capture_batches origin_batch ON origin_batch.id = observation.batch_id
        JOIN capture_sources source ON source.id = origin_batch.source_id
+       LEFT JOIN browser_capture_metrics browser_metric ON browser_metric.batch_id = origin_batch.id
       WHERE cell.release_id = ?1 AND cell.status = 'priced'
       ORDER BY cell.commodity_id, cell.store_location_id`,
   ).bind(context.releaseId).all<{ commodity_id: string; store_location_id: string; observation_id: string; capture_method: string; external_key: string; confirmed: number }>();
@@ -179,7 +181,7 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
       message: "Selected offer does not have an independent confirmation",
       evidence: { observationId: row.observation_id, productKey: row.external_key, captureMethod: row.capture_method },
     })),
-    { browserPolicy: "later independent product re-read", directPolicy: "same semantic fact observed in at least two validated capture batches" },
+    { browserPolicy: "policy-v2 requires a later independent product re-read; policy-v1 inputs are grandfathered until replaced", directPolicy: "same semantic fact observed in at least two validated capture batches" },
   ));
   const aisleRows = selectedRows.results.filter((row) => row.aisle_authoritative === 1);
   const aisleMissing = aisleRows.filter((row) => !row.taxonomy_path);
