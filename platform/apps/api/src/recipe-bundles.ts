@@ -87,6 +87,35 @@ export async function buildReleaseRecipeBundles(env: WorkerEnv, releaseId: strin
   return { count: writes.length, bytes: writes.reduce((sum, write) => sum + write.bytes.byteLength, 0) };
 }
 
+export async function buildReleaseRecipeDetailArchive(env: WorkerEnv, releaseId: string): Promise<{ count: number; bytes: number }> {
+  const costs = await env.DB.prepare(
+    "SELECT recipe_slug, detail_json FROM release_recipe_costs WHERE release_id = ?1 ORDER BY recipe_slug",
+  ).bind(releaseId).all<{ recipe_slug: string; detail_json: string }>();
+  const recipes: Record<string, unknown> = {};
+  for (const cost of costs.results) recipes[cost.recipe_slug] = JSON.parse(cost.detail_json);
+  const serialized = stableJson({ version: 1, releaseId, recipes });
+  const hash = await digestHex(serialized);
+  const bytes = new TextEncoder().encode(serialized);
+  const key = `recipe-cost-detail-archives/${hash}.json`;
+  await env.EVIDENCE.put(key, bytes, {
+    httpMetadata: { contentType: "application/json; charset=utf-8" },
+    customMetadata: { sha256: hash, kind: "recipe-cost-detail-archive", releaseId },
+  });
+  const stored = await env.EVIDENCE.head(key);
+  if (!stored || stored.size !== bytes.byteLength || stored.customMetadata?.sha256 !== hash) {
+    throw new Error(`recipe detail archive verification failed for ${releaseId}`);
+  }
+  const statements = costs.results.map((cost) => env.DB.prepare(
+    `INSERT INTO recipe_cost_detail_objects
+       (release_id, recipe_slug, content_hash, object_key, byte_length, verified_at)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6) ON CONFLICT(release_id, recipe_slug) DO UPDATE SET
+       content_hash = excluded.content_hash, object_key = excluded.object_key,
+       byte_length = excluded.byte_length, verified_at = excluded.verified_at`,
+  ).bind(releaseId, cost.recipe_slug, hash, key, bytes.byteLength, new Date().toISOString()));
+  for (let offset = 0; offset < statements.length; offset += 80) await env.DB.batch(statements.slice(offset, offset + 80));
+  return { count: costs.results.length, bytes: bytes.byteLength };
+}
+
 export async function compactReleaseRecipeDetails(env: WorkerEnv, releaseId: string): Promise<{ releaseId: string; compacted: number; bytesReleased: number }> {
   const release = await env.DB.prepare("SELECT state FROM releases WHERE id = ?1").bind(releaseId).first<{ state: string }>();
   if (!release) throw new Error(`release ${releaseId} does not exist`);
@@ -98,16 +127,16 @@ export async function compactReleaseRecipeDetails(env: WorkerEnv, releaseId: str
        JOIN release_recipe_costs costs ON costs.release_id = detail.release_id AND costs.recipe_slug = detail.recipe_slug
       WHERE detail.release_id = ?1 AND detail.compacted_at IS NULL ORDER BY detail.recipe_slug`,
   ).bind(releaseId).all<{ recipe_slug: string; content_hash: string; object_key: string; byte_length: number; detail_json: string }>();
-  const verified: typeof rows.results = [];
-  for (let offset = 0; offset < rows.results.length; offset += 20) {
-    const chunk = rows.results.slice(offset, offset + 20);
+  const uniqueObjects = [...new Map(rows.results.map((row) => [row.object_key, row])).values()];
+  for (let offset = 0; offset < uniqueObjects.length; offset += 20) {
+    const chunk = uniqueObjects.slice(offset, offset + 20);
     const heads = await Promise.all(chunk.map((row) => env.EVIDENCE.head(row.object_key)));
     heads.forEach((head, index) => {
       const row = chunk[index]!;
       if (!head || head.size !== row.byte_length || head.customMetadata?.sha256 !== row.content_hash) throw new Error(`recipe detail object verification failed for ${releaseId}/${row.recipe_slug}`);
-      verified.push(row);
     });
   }
+  const verified = rows.results;
   const now = new Date().toISOString();
   const statements = verified.flatMap((row) => [env.DB.prepare(
     `UPDATE release_recipe_costs SET detail_json = ?3

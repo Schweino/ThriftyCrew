@@ -82,7 +82,7 @@ import { claimAgentWorkItem, completeAgentWorkItem, failAgentWorkItem } from "./
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
-import { buildReleaseRecipeBundles, compactReleaseRecipeDetails, readCurrentRecipeBundle } from "./recipe-bundles";
+import { buildReleaseRecipeBundles, buildReleaseRecipeDetailArchive, compactReleaseRecipeDetails, readCurrentRecipeBundle } from "./recipe-bundles";
 import { backfillProductEntities, backfillReleaseReasons, buildProductEntitySuggestions } from "./data-maintenance";
 import { readBrowserCaptureSla } from "./browser-capture-sla";
 import { buildCaptureTermInserts } from "./capture-seal";
@@ -2522,7 +2522,7 @@ app.post("/internal/maintenance/architecture", async (context) => {
     if (action === "entity-suggestions") return context.json({ ok: true, action, ...(await buildProductEntitySuggestions(context.env, limit)) });
     const releaseId = String(body.releaseId ?? "");
     if (!releaseId) return jsonError("recipe detail maintenance requires releaseId", 422);
-    if (action === "recipe-detail-build") return context.json({ ok: true, action, releaseId, ...(await buildReleaseRecipeBundles(context.env, releaseId)) });
+    if (action === "recipe-detail-build") return context.json({ ok: true, action, releaseId, ...(await buildReleaseRecipeDetailArchive(context.env, releaseId)) });
     if (action === "recipe-detail-compact") return context.json({ ok: true, action, ...(await compactReleaseRecipeDetails(context.env, releaseId)) });
     return jsonError("unsupported architecture maintenance action", 422);
   } catch (error) {
