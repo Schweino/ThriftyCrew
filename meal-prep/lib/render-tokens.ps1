@@ -59,6 +59,41 @@ function Expand-SpecProse { param($Spec)
   return $Spec
 }
 
+# Ghost owns recipe prose, never grocery-price authority. Replace this recipe's
+# old static cost token with a live hydration target in HTML fields, and remove
+# it from non-hydratable metadata. The $1 membership sentence is intentionally
+# untouched because it is not a grocery price and does not equal stat.cost_ps.
+function Move-SpecPriceToReleaseHydration { param($Spec)
+  $cost = [string]$Spec.stat.cost_ps
+  if ([string]::IsNullOrEmpty($cost)) { return $Spec }
+  $pattern = '\$' + [regex]::Escape($cost)
+  $markup = '<span data-tc-live-price>current release price loading</span>'
+  foreach ($k in $script:TOKEN_FIELDS) {
+    $v = [string]$Spec.$k
+    if ($v) { $Spec.$k = [regex]::Replace($v, $pattern, $markup) }
+  }
+  if ($Spec.head -and $Spec.head.PSObject.Properties['description']) {
+    $description = [string]$Spec.head.description
+    $priceClause = '\s+for about ' + $pattern + '\s+(?:a|per)\s+[^.]+\.?'
+    $description = [regex]::Replace($description, $priceClause, '.')
+    $Spec.head.description = Remove-GhostStaticCurrencyClaims ([regex]::Replace($description, $pattern, 'live promoted-release pricing'))
+  }
+  return $Spec
+}
+
+function Remove-GhostStaticCurrencyClaims { param([string]$Text)
+  if ([string]::IsNullOrEmpty($Text) -or $Text -notmatch '\$\d') { return $Text }
+  $membership = '__TC_MEMBERSHIP_PRICE__'
+  $out = $Text.Replace('$1 a month', $membership)
+  $amount = '\$\d+(?:\.\d+)?'
+  $out = [regex]::Replace($out, $amount + '\s*(?:to|[-–])\s*' + $amount, 'far more')
+  $out = [regex]::Replace($out, '(?i)(?:roughly|around|about|near)\s+' + $amount, 'substantially')
+  $out = [regex]::Replace($out, '(?i)under\s+' + $amount, 'on a strong sale')
+  $out = [regex]::Replace($out, '(?i)' + $amount + '\s+or more', 'far more')
+  $out = [regex]::Replace($out, $amount, 'restaurant-priced')
+  return $out.Replace($membership, '$1 a month')
+}
+
 if ($SelfTest) {
   $f = 0
   function T($m, $c, $g) { if ($c) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $g); $script:f++ } }
@@ -87,6 +122,14 @@ if ($SelfTest) {
   T 'Expand-SpecProse expands all four prose fields + head.description' `
     ($e.intro_html -eq 'x 57g' -and $e.portion_html -eq '610 cal' -and $e.upsell_html -eq '$3.58 a bowl' -and $e.head.description -eq 'about $3.58 each') `
     ($e.head.description)
+
+  $h = Move-SpecPriceToReleaseHydration $e
+  T 'Ghost prose price becomes a live release hydration target while membership pricing is untouched' `
+    ($h.upsell_html -eq '<span data-tc-live-price>current release price loading</span> a bowl' -and $h.head.description -notmatch '\$3\.58') `
+    ($h.upsell_html + ' / ' + $h.head.description)
+  T 'non-release currency claims become qualitative while membership pricing remains' `
+    ((Remove-GhostStaticCurrencyClaims 'runs $14 to $17, saves around $12, members pay $1 a month') -eq 'runs far more, saves substantially, members pay $1 a month') `
+    (Remove-GhostStaticCurrencyClaims 'runs $14 to $17, saves around $12, members pay $1 a month')
 
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }

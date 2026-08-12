@@ -36,7 +36,7 @@ $restartDelaySeconds = 2
 while ($true) {
   $controllerStartedAt = Get-Date
   Push-Location ([string]$config.platformRoot)
-  try { & $nodePath '--import' 'tsx' 'apps/operator/src/capture-controller.ts' }
+  try { & $nodePath '--import' 'tsx' 'apps/capture-service/src/index.ts' }
   finally { Pop-Location }
   $exitCode = $LASTEXITCODE
   $runtimeSeconds = [Math]::Max(0, ((Get-Date) - $controllerStartedAt).TotalSeconds)

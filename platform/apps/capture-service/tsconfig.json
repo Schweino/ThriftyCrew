@@ -1,0 +1,5 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "types": ["node"] },
+  "include": ["src/**/*.ts", "../operator/src/capture-controller.ts", "../../scripts/**/*.d.mts"]
+}

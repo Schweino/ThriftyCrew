@@ -3,6 +3,7 @@ import path from "node:path";
 import type { RecipeCost } from "@thriftycrew/contracts";
 import { digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 import { buildNativeCells, candidatePriceForUnit, convertUnitPriceMicros, selectWinner, sourceNativeSizeConflict, type NativeEngineSnapshot, type NativeReleaseCell } from "@thriftycrew/engine";
+import { buildContentAddressedReleaseGraph, type ContentAddressedReleaseGraph } from "./release-graph";
 
 interface IngredientDefinition {
   item: string;
@@ -85,6 +86,7 @@ export interface NativeReleaseArtifact {
   freeRotation: Array<{ recipeSlug: string; intendedVisibility: "public"; protein: string; rank: number }>;
   payloads: Record<"board" | "feed" | "top5" | "free_rotation" | "recipes", unknown>;
   audit: Record<string, unknown>;
+  graph: ContentAddressedReleaseGraph;
 }
 
 interface NativeReleaseCatalog {
@@ -190,7 +192,7 @@ export async function nativeReleaseIdentity(
   const inputBatchIds = [...snapshot.inputBatchIds].sort();
   const inputManifest = {
     kind: "native-v3-release",
-    engineVersion: "native-v3.2.3-source-identity",
+    engineVersion: "native-v4.0.0-object-dag-scenarios",
     marketId: "omaha",
     mode: "direct",
     releaseDate: weekOf,
@@ -248,7 +250,12 @@ function publicCell(cell: NativeReleaseCell): NativeReleaseArtifact["cells"][num
   return { commodityId: cell.commodityId, storeLocationId: cell.storeLocationId, status: "missing", isCrown: false, reason: cell.reason };
 }
 
-export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEngineSnapshot, suppliedCatalog?: NativeReleaseCatalog): Promise<NativeReleaseArtifact> {
+export async function buildNativeRelease(
+  incomeRoot: string,
+  snapshot: NativeEngineSnapshot,
+  suppliedCatalog?: NativeReleaseCatalog,
+  previousGraph?: ContentAddressedReleaseGraph,
+): Promise<NativeReleaseArtifact> {
   if (snapshot.mode !== "direct") throw new Error("native publication requires a direct-only immutable engine snapshot");
   const catalog = suppliedCatalog ?? await loadNativeReleaseCatalog(incomeRoot);
   const { ingredientDefinitions, recipes, recipeRuleDocument, recipeExtensions, recipeAliases, knownWrong } = catalog;
@@ -259,7 +266,43 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
   const recipeRuleIds = new Set(recipeRules.map((rule) => rule.id));
   const { generatedAt, weekOf, inputBatchIds, inputManifest, inputHash, releaseId } = await nativeReleaseIdentity(snapshot, catalog);
 
-  const nativeCells = buildNativeCells(snapshot);
+  const previousCells = new Map((previousGraph?.nodes ?? []).filter((item) => item.kind === "cell").map((item) => [item.key, item]));
+  const rawCandidateById = new Map(snapshot.candidates.map((candidate) => [candidate.observation_id, candidate]));
+  const nativeCells: NativeReleaseCell[] = [];
+  let incrementallyReusedCells = 0;
+  for (const commodity of snapshot.commodities) {
+    const dependencyHash = await digestHex(stableJson({
+      version: "commodity-store-cell-dag-v1", weekOf, configurationId: snapshot.configurationId, commodity,
+      candidates: snapshot.candidates.filter((candidate) => candidate.commodity_id === commodity.id).map((candidate) => ({
+        observationId: candidate.observation_id, storeLocationId: candidate.store_location_id,
+        perUnitMicros: candidate.per_unit_micros, basisUnit: candidate.normalized_basis_unit,
+        basisOptions: candidate.basis_options_json ?? null, capturedAt: candidate.captured_at,
+        validTo: candidate.valid_to, coverageMode: candidate.coverage_mode, capturedTo: candidate.captured_to,
+        knownWrong: candidate.known_wrong, maxAgeDays: candidate.max_age_days ?? null,
+        name: candidate.name ?? null, sizeText: candidate.size_text ?? null,
+      })),
+    }));
+    const prior = snapshot.stores.map((store) => previousCells.get(`${commodity.id}\u001f${store.id}`));
+    const reusable = prior.every((item) => item?.dependencyHash === dependencyHash && item.payload && typeof item.payload === "object" && !Array.isArray(item.payload));
+    if (reusable) {
+      for (const item of prior) {
+        const payload = item!.payload as NativeReleaseArtifact["cells"][number];
+        nativeCells.push({
+          commodityId: payload.commodityId, storeLocationId: payload.storeLocationId,
+          observationId: payload.observationId ?? null, status: payload.status === "priced" ? "priced" : "missing",
+          isCrown: payload.isCrown, displayPerUnitMicros: payload.displayPerUnitMicros ?? null,
+          displayUnit: payload.displayUnit ?? null,
+          winner: payload.observationId ? rawCandidateById.get(payload.observationId) ?? null : null,
+          reason: { ...payload.reason, incrementalDependencyHash: dependencyHash, incrementallyReused: true },
+        });
+        incrementallyReusedCells += 1;
+      }
+      continue;
+    }
+    for (const cell of buildNativeCells({ ...snapshot, commodities: [commodity] })) {
+      nativeCells.push({ ...cell, reason: { ...cell.reason, incrementalDependencyHash: dependencyHash } });
+    }
+  }
   const cells = nativeCells.map(publicCell);
   const commodityById = new Map(snapshot.commodities.map((commodity) => [commodity.id, commodity]));
   const storeById = new Map(snapshot.stores.map((store) => [store.id, store]));
@@ -373,19 +416,77 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
   const optionCosts = (option: PricedRecipeOption, requiredBasisUnits: number) => {
     const utilizedMinor = moneyMinor(option.displayPerUnitMicros, requiredBasisUnits);
     const purchasePriceMinor = option.raw.purchase_price_minor;
-    if (!purchasePriceMinor || purchasePriceMinor <= 0) return { utilizedMinor, checkoutMinor: utilizedMinor, packages: 0, variableWeight: true };
+    if (!purchasePriceMinor || purchasePriceMinor <= 0) return { utilizedMinor, checkoutMinor: utilizedMinor, packages: 0, variableWeight: true, packageBasisUnits: null };
     const packageBasisUnits = purchasePriceMinor * 10_000 / option.displayPerUnitMicros;
     const rawSize = option.raw.size_text?.trim().toLowerCase() ?? "";
     const variableWeight = ((option.raw.normalized_basis_qty_micros ?? 0) === 1_000_000 && ["lb", "per lb", "oz", "per oz"].includes(rawSize)) || /\bpriced\s+per\s+(?:pound|lb|oz)\b/i.test(option.raw.name ?? "");
     const packages = variableWeight ? 0 : Math.max(1, Math.ceil(requiredBasisUnits / packageBasisUnits - 1e-9));
-    return { utilizedMinor, checkoutMinor: variableWeight ? utilizedMinor : purchasePriceMinor * packages, packages, variableWeight };
+    return { utilizedMinor, checkoutMinor: variableWeight ? utilizedMinor : purchasePriceMinor * packages, packages, variableWeight, packageBasisUnits };
   };
 
   const recipeCosts: RecipeCost[] = [];
   const recipePayload: Array<Record<string, unknown>> = [];
+  const previousRecipes = new Map((previousGraph?.nodes ?? []).filter((item) => item.kind === "recipe").map((item) => [item.key, item]));
+  const appendRecipePayload = (recipe: RecipeSpecification, cost: RecipeCost) => {
+    recipePayload.push({
+      slug: recipe.slug, name: recipe.name, protein: recipe.protein ?? null, visibility: recipe.visibility ?? "paid",
+      servings: recipe.servings, calories: recipe.stat?.cal ?? null, status: cost.status,
+      servingCostMinor: cost.servingCostMinor ?? null, batchCostMinor: cost.batchCostMinor ?? null,
+      utilizedBatchCostMinor: cost.detail.utilizedBatchCostMinor ?? null,
+      splitStoreCheckoutCostMinor: cost.detail.splitStoreCheckoutCostMinor ?? null,
+      nonMemberSplitStoreCheckoutCostMinor: cost.detail.nonMemberSplitStoreCheckoutCostMinor ?? null,
+      nonMemberUtilizedBatchCostMinor: cost.detail.nonMemberUtilizedBatchCostMinor ?? null,
+      nonMemberServingCostMinor: cost.detail.nonMemberServingCostMinor ?? null,
+      bestSingleStoreCheckoutCostMinor: cost.detail.bestSingleStoreCheckoutCostMinor ?? null,
+      bestSingleStore: cost.detail.bestSingleStore ?? null,
+      bestNonMemberSingleStoreCheckoutCostMinor: cost.detail.bestNonMemberSingleStoreCheckoutCostMinor ?? null,
+      bestNonMemberSingleStore: cost.detail.bestNonMemberSingleStore ?? null,
+      scenarios: cost.detail.scenarios,
+      missingIngredients: cost.missingIngredients,
+    });
+  };
   const missingFrequency = new Map<string, number>();
+  let incrementallyReusedRecipes = 0;
   for (const recipe of recipes) {
     const scalerByName = new Map((recipe.scaler?.ing ?? []).map((item) => [key(item.item), item]));
+    const resolveCommodity = (ingredient: RecipeIngredient) => {
+      const scaler = scalerByName.get(key(ingredient.item));
+      const definition = ingredientByName.get(key(scaler?.canon ?? ingredient.item)) ?? ingredientByName.get(key(ingredient.item));
+      const requestedBids = [...new Set([scaler?.bid, definition?.bid].filter((value): value is string => Boolean(value)))];
+      const aliasedBids = requestedBids.map((bid) => recipeAliases[bid]).filter((bid): bid is string => Boolean(bid));
+      return requestedBids.find((bid) => commodityById.has(bid) || recipeRuleIds.has(bid))
+        ?? aliasedBids.find((bid) => commodityById.has(bid) || recipeRuleIds.has(bid))
+        ?? commodityByLabel.get(key(scaler?.canon ?? ingredient.item));
+    };
+    const incrementalDependencyHash = await digestHex(stableJson({
+      version: "recipe-cost-dag-v1", recipe, configurationId: snapshot.configurationId,
+      pricingConfigurationHash: catalog.recipePricingConfigurationHash,
+      conversionRegistryHash: catalog.conversionRegistryHash,
+      ingredients: (recipe.ingredients_grams ?? []).map((ingredient) => {
+        const commodityId = resolveCommodity(ingredient);
+        return {
+          item: ingredient.item, grams: ingredient.grams, commodityId: commodityId ?? null,
+          conversion: catalog.conversionRegistry.get(`${recipe.slug}|${key(ingredient.item)}`) ?? null,
+          options: (commodityId ? (boardOptionsByCommodity.get(commodityId) ?? recipeOptionsByCommodity.get(commodityId) ?? []) : []).map((option) => ({
+            observationId: option.observationId, storeLocationId: option.storeLocationId,
+            displayPerUnitMicros: option.displayPerUnitMicros, displayUnit: option.displayUnit,
+            purchasePriceMinor: option.raw.purchase_price_minor ?? null, regularPriceMinor: option.raw.regular_price_minor ?? null,
+            kind: option.raw.kind ?? null, membershipRequired: option.raw.membership_required ?? 0,
+            loyaltyRequired: option.raw.loyalty_required ?? 0, sizeText: option.raw.size_text ?? null,
+          })),
+        };
+      }),
+    }));
+    const previous = previousRecipes.get(recipe.slug);
+    if (previous?.dependencyHash === incrementalDependencyHash && previous.payload && typeof previous.payload === "object" && !Array.isArray(previous.payload)) {
+      const reused = previous.payload as RecipeCost;
+      if (reused.recipeSlug === recipe.slug && (reused.status === "complete" || reused.status === "incomplete" || reused.status === "held")) {
+        recipeCosts.push(reused);
+        appendRecipePayload(recipe, reused);
+        incrementallyReusedRecipes += 1;
+        continue;
+      }
+    }
     const ingredientDetails: Array<Record<string, unknown>> = [];
     const missingIngredients: string[] = [];
     let utilizedBatchMinor = 0;
@@ -393,22 +494,28 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
     let nonMemberSplitStoreCheckoutMinor = 0;
     let nonMemberUtilizedBatchMinor = 0;
     let nonMemberMissing = false;
+    let everydayBaselineCheckoutMinor = 0;
+    let everydayBaselineUtilizedMinor = 0;
+    let everydayMissing = false;
     const singleStoreCheckout = new Map(snapshot.stores.map((store) => [store.id, { total: 0, missing: [] as string[] }]));
     const nonMemberSingleStoreCheckout = new Map(snapshot.stores.filter((store) => store.membership_required !== 1).map((store) => [store.id, { total: 0, missing: [] as string[] }]));
     for (const ingredient of recipe.ingredients_grams ?? []) {
       const scaler = scalerByName.get(key(ingredient.item));
       const definition = ingredientByName.get(key(scaler?.canon ?? ingredient.item)) ?? ingredientByName.get(key(ingredient.item));
-      const requestedBids = [...new Set([scaler?.bid, definition?.bid].filter((value): value is string => Boolean(value)))];
-      const aliasedBids = requestedBids.map((bid) => recipeAliases[bid]).filter((bid): bid is string => Boolean(bid));
-      const resolvedBid = requestedBids.find((bid) => commodityById.has(bid) || recipeRuleIds.has(bid))
-        ?? aliasedBids.find((bid) => commodityById.has(bid) || recipeRuleIds.has(bid));
-      const commodityId = resolvedBid ?? commodityByLabel.get(key(scaler?.canon ?? ingredient.item));
+      const commodityId = resolveCommodity(ingredient);
       const conversion = catalog.conversionRegistry.get(`${recipe.slug}|${key(ingredient.item)}`);
       const gpu = conversion?.gramsPerBasisUnit;
       const grams = asNumber(ingredient.grams);
       const options = commodityId ? (boardOptionsByCommodity.get(commodityId) ?? recipeOptionsByCommodity.get(commodityId) ?? []) : [];
       const crown = [...options].sort((left, right) => left.displayPerUnitMicros - right.displayPerUnitMicros || left.storeLocationId.localeCompare(right.storeLocationId))[0];
       const nonMemberOptions = options.filter((option) => option.raw.membership_required !== 1 && option.raw.loyalty_required !== 1 && storeById.get(option.storeLocationId)?.membership_required !== 1);
+      const everydayOptions = options.flatMap((option) => {
+        const purchase = option.raw.purchase_price_minor ?? 0;
+        const regular = option.raw.regular_price_minor ?? (option.raw.kind === "everyday" ? purchase : 0);
+        if (purchase <= 0 || regular <= 0 || option.raw.membership_required === 1 || option.raw.loyalty_required === 1
+          || storeById.get(option.storeLocationId)?.membership_required === 1) return [];
+        return [{ ...option, displayPerUnitMicros: Math.round(option.displayPerUnitMicros * regular / purchase), raw: { ...option.raw, purchase_price_minor: regular } }];
+      });
       const missing: string[] = [];
       if (!commodityId) missing.push("commodity-mapping");
       if (!gpu) missing.push("grams-per-basis-unit");
@@ -425,6 +532,8 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
       const selectedCosts = optionCosts(crown!, requiredBasisUnits);
       const nonMember = [...nonMemberOptions].sort((left, right) => left.displayPerUnitMicros - right.displayPerUnitMicros || left.storeLocationId.localeCompare(right.storeLocationId))[0];
       const nonMemberCosts = nonMember ? optionCosts(nonMember, requiredBasisUnits) : null;
+      const everyday = [...everydayOptions].sort((left, right) => left.displayPerUnitMicros - right.displayPerUnitMicros || left.storeLocationId.localeCompare(right.storeLocationId))[0];
+      const everydayCosts = everyday ? optionCosts(everyday, requiredBasisUnits) : null;
       utilizedBatchMinor += selectedCosts.utilizedMinor;
       splitStoreCheckoutMinor += selectedCosts.checkoutMinor;
       if (nonMemberCosts) {
@@ -432,6 +541,10 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
         nonMemberUtilizedBatchMinor += nonMemberCosts.utilizedMinor;
       }
       else nonMemberMissing = true;
+      if (everydayCosts) {
+        everydayBaselineCheckoutMinor += everydayCosts.checkoutMinor;
+        everydayBaselineUtilizedMinor += everydayCosts.utilizedMinor;
+      } else everydayMissing = true;
       for (const [storeId, accumulator] of singleStoreCheckout) {
         const storeOption = options.find((option) => option.storeLocationId === storeId);
         if (!storeOption) accumulator.missing.push(ingredient.item);
@@ -462,6 +575,7 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
         purchaseCostMinor: selectedCosts.checkoutMinor,
         packageCount: selectedCosts.packages,
         variableWeight: selectedCosts.variableWeight,
+        packageBasisUnits: selectedCosts.packageBasisUnits,
         sourcePurchasePriceMinor: crown!.raw.purchase_price_minor ?? null,
         sourceNormalizedBasisUnit: crown!.raw.normalized_basis_unit,
         sourceNormalizedBasisQtyMicros: crown!.raw.normalized_basis_qty_micros ?? null,
@@ -470,6 +584,24 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
         nonMemberObservationId: nonMember?.observationId ?? null,
         nonMemberPurchaseCostMinor: nonMemberCosts?.checkoutMinor ?? null,
         nonMemberUtilizedCostMinor: nonMemberCosts?.utilizedMinor ?? null,
+        everydayObservationId: everyday?.observationId ?? null,
+        everydayStoreLocationId: everyday?.storeLocationId ?? null,
+        everydayPerUnitMicros: everyday?.displayPerUnitMicros ?? null,
+        everydayPurchaseCostMinor: everydayCosts?.checkoutMinor ?? null,
+        everydaySourcePurchasePriceMinor: everyday?.raw.purchase_price_minor ?? null,
+        everydayPackageBasisUnits: everydayCosts?.packageBasisUnits ?? null,
+        everydayVariableWeight: everydayCosts?.variableWeight ?? null,
+        storeOptions: Object.fromEntries(options.map((option) => {
+          const optionCost = optionCosts(option, requiredBasisUnits);
+          return [option.storeLocationId, {
+            store: storeById.get(option.storeLocationId)?.store_name ?? option.storeLocationId,
+            observationId: option.observationId, perUnitMicros: option.displayPerUnitMicros,
+            purchasePriceMinor: option.raw.purchase_price_minor ?? null,
+            packageBasisUnits: optionCost.packageBasisUnits, variableWeight: optionCost.variableWeight,
+            membershipRequired: option.raw.membership_required === 1 || storeById.get(option.storeLocationId)?.membership_required === 1,
+            loyaltyRequired: option.raw.loyalty_required === 1,
+          }];
+        })),
         packageLabel: definition?.bulk ? definition?.pantry_pkg_label : definition?.buy_pkg_label,
         pantry: Boolean(definition!.bulk),
         status: "priced",
@@ -481,6 +613,38 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
     const bestSingleStore = completeSingleStores[0];
     const completeNonMemberSingleStores = [...nonMemberSingleStoreCheckout.entries()].filter(([, value]) => value.missing.length === 0).sort((left, right) => left[1].total - right[1].total || left[0].localeCompare(right[0]));
     const bestNonMemberSingleStore = completeNonMemberSingleStores[0];
+    const scenarios = {
+      utilized: {
+        status: complete ? "complete" : "incomplete", batchCostMinor: complete ? utilizedBatchMinor : null,
+        servingCostMinor: complete ? Math.round(utilizedBatchMinor / recipe.servings) : null,
+        missingIngredients: [...new Set(missingIngredients)].sort(),
+      },
+      registerCheckout: {
+        status: complete ? "complete" : "incomplete", batchCostMinor: complete ? splitStoreCheckoutMinor : null,
+        servingCostMinor: complete ? Math.round(splitStoreCheckoutMinor / recipe.servings) : null,
+        missingIngredients: [...new Set(missingIngredients)].sort(),
+      },
+      nonMemberCheckout: {
+        status: complete && !nonMemberMissing ? "complete" : "incomplete",
+        batchCostMinor: complete && !nonMemberMissing ? nonMemberSplitStoreCheckoutMinor : null,
+        servingCostMinor: complete && !nonMemberMissing ? Math.round(nonMemberSplitStoreCheckoutMinor / recipe.servings) : null,
+        missingIngredients: nonMemberMissing ? ["non-member price unavailable"] : [...new Set(missingIngredients)].sort(),
+      },
+      everydayBaseline: {
+        status: complete && !everydayMissing ? "complete" : "incomplete",
+        batchCostMinor: complete && !everydayMissing ? everydayBaselineCheckoutMinor : null,
+        utilizedBatchCostMinor: complete && !everydayMissing ? everydayBaselineUtilizedMinor : null,
+        servingCostMinor: complete && !everydayMissing ? Math.round(everydayBaselineCheckoutMinor / recipe.servings) : null,
+        missingIngredients: everydayMissing ? ["everyday non-promotional price unavailable"] : [...new Set(missingIngredients)].sort(),
+      },
+      selectedStoreCheckout: Object.fromEntries([...singleStoreCheckout].map(([storeId, value]) => [storeId, {
+        storeLocationId: storeId, store: storeById.get(storeId)?.store_name ?? storeId,
+        status: value.missing.length === 0 ? "complete" : "incomplete",
+        batchCostMinor: value.missing.length === 0 ? value.total : null,
+        servingCostMinor: value.missing.length === 0 ? Math.round(value.total / recipe.servings) : null,
+        missingIngredients: [...new Set(value.missing)].sort(),
+      }])),
+    };
     const cost: RecipeCost = {
       recipeSlug: recipe.slug,
       status: complete ? "complete" : "incomplete",
@@ -504,6 +668,8 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
         bestNonMemberSingleStoreLocationId: complete && bestNonMemberSingleStore ? bestNonMemberSingleStore[0] : null,
         bestNonMemberSingleStore: complete && bestNonMemberSingleStore ? storeById.get(bestNonMemberSingleStore[0])?.store_name ?? bestNonMemberSingleStore[0] : null,
         singleStoreCoverage: Object.fromEntries([...singleStoreCheckout].map(([storeId, value]) => [storeId, { checkoutCostMinor: value.missing.length === 0 ? value.total : null, missingIngredients: value.missing }])),
+        scenarios,
+        incrementalDependencyHash,
         pantryAddMinor: complete ? Math.max(0, splitStoreCheckoutMinor - utilizedBatchMinor) : null,
         firstRunMinor: complete ? splitStoreCheckoutMinor : null,
         ingredientCount: recipe.ingredients_grams?.length ?? 0,
@@ -511,27 +677,7 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
       },
     };
     recipeCosts.push(cost);
-    recipePayload.push({
-      slug: recipe.slug,
-      name: recipe.name,
-      protein: recipe.protein ?? null,
-      visibility: recipe.visibility ?? "paid",
-      servings: recipe.servings,
-      calories: recipe.stat?.cal ?? null,
-      status: cost.status,
-      servingCostMinor: cost.servingCostMinor ?? null,
-      batchCostMinor: cost.batchCostMinor ?? null,
-      utilizedBatchCostMinor: cost.detail.utilizedBatchCostMinor ?? null,
-      splitStoreCheckoutCostMinor: cost.detail.splitStoreCheckoutCostMinor ?? null,
-      nonMemberSplitStoreCheckoutCostMinor: cost.detail.nonMemberSplitStoreCheckoutCostMinor ?? null,
-      nonMemberUtilizedBatchCostMinor: cost.detail.nonMemberUtilizedBatchCostMinor ?? null,
-      nonMemberServingCostMinor: cost.detail.nonMemberServingCostMinor ?? null,
-      bestSingleStoreCheckoutCostMinor: cost.detail.bestSingleStoreCheckoutCostMinor ?? null,
-      bestSingleStore: cost.detail.bestSingleStore ?? null,
-      bestNonMemberSingleStoreCheckoutCostMinor: cost.detail.bestNonMemberSingleStoreCheckoutCostMinor ?? null,
-      bestNonMemberSingleStore: cost.detail.bestNonMemberSingleStore ?? null,
-      missingIngredients: cost.missingIngredients,
-    });
+    appendRecipePayload(recipe, cost);
   }
 
   const costBySlug = new Map(recipeCosts.map((cost) => [cost.recipeSlug, cost]));
@@ -638,6 +784,17 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
     free_rotation: rotationPayload,
   };
   const incomplete = recipeCosts.filter((cost) => cost.status === "incomplete");
+  const payloads = {
+    board: boardPayload,
+    feed: feedPayload,
+    top5: top5Payload,
+    free_rotation: rotationPayload,
+    recipes: { version: 3, releaseId, generatedAt, recipes: recipePayload },
+  };
+  const graph = await buildContentAddressedReleaseGraph({
+    parentReleaseId: snapshot.currentReleaseId || null, inputHash, configurationId: snapshot.configurationId,
+    cells, recipeCosts, payloads, top5, freeRotation,
+  });
   return {
     version: 3,
     marketId: "omaha",
@@ -652,13 +809,8 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
     recipeCosts,
     top5,
     freeRotation,
-    payloads: {
-      board: boardPayload,
-      feed: feedPayload,
-      top5: top5Payload,
-      free_rotation: rotationPayload,
-      recipes: { version: 3, releaseId, generatedAt, recipes: recipePayload },
-    },
+    payloads,
+    graph,
     audit: {
       mode: snapshot.mode,
       inputBatchCount: inputBatchIds.length,
@@ -666,9 +818,13 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
       stores: snapshot.stores.length,
       pricedCells: cells.filter((cell) => cell.status === "priced").length,
       missingCells: cells.filter((cell) => cell.status === "missing").length,
+      incrementallyReusedCells,
+      recalculatedCells: cells.length - incrementallyReusedCells,
       authoredRecipes: recipes.length,
       completeRecipes: recipeCosts.length - incomplete.length,
       incompleteRecipes: incomplete.length,
+      incrementallyReusedRecipes,
+      recalculatedRecipes: recipes.length - incrementallyReusedRecipes,
       recipePricingCommodities: recipeRules.length,
       pricedRecipeCommodities: recipeCrownByCommodity.size,
       unpricedRecipeCommodities: recipeRules.filter((rule) => !recipeCrownByCommodity.has(rule.id)).map((rule) => ({ id: rule.id, ...recipeRuleStats.get(rule.id)! })),

@@ -1,0 +1,34 @@
+{
+  "rules": [
+    {
+      "id": "Default Multipart Abort Rule",
+      "enabled": true,
+      "conditions": {},
+      "abortMultipartUploadsTransition": { "condition": { "type": "Age", "maxAge": 604800 } }
+    },
+    {
+      "id": "Move immutable observation lake to infrequent access",
+      "enabled": true,
+      "conditions": { "prefix": "observations/schema=1/" },
+      "storageClassTransitions": [
+        { "storageClass": "InfrequentAccess", "condition": { "type": "Age", "maxAge": 2592000 } }
+      ]
+    },
+    {
+      "id": "Move immutable release history to infrequent access",
+      "enabled": true,
+      "conditions": { "prefix": "release-manifests/schema=1/" },
+      "storageClassTransitions": [
+        { "storageClass": "InfrequentAccess", "condition": { "type": "Age", "maxAge": 2592000 } }
+      ]
+    },
+    {
+      "id": "Move content addressed release nodes to infrequent access",
+      "enabled": true,
+      "conditions": { "prefix": "release-nodes/schema=1/" },
+      "storageClassTransitions": [
+        { "storageClass": "InfrequentAccess", "condition": { "type": "Age", "maxAge": 2592000 } }
+      ]
+    }
+  ]
+}

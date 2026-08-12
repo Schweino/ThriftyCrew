@@ -8,7 +8,7 @@
 #     "Estimated Everyday Cost" section) are REPLACED by ONE tabbed section "What This Batch Costs":
 #     Customized pricing (DEFAULT: whole-package at cheapest, uncheck-what-you-own) | Everyday cost |
 #     Current cheapest pricing. ALL tabs price WHOLE packages (ceil packages needed, min 1).
-#   * Payload v2 adds pkg_g (package grams) / pkg_p (everyday whole-package price) / pkg_l (label)
+#   * Payload carries physical package metadata only; all prices hydrate from the promoted release.
 #     per ingredient, enriched from the run's recipes-costed.json lines (-CostedFile).
 #
 # 2026-07-31 ELITE LAYER (income\design\design-elite-layer-2026-07-31.md), all inside ONE build wave
@@ -48,6 +48,9 @@ $spec = Get-Content $SpecFile -Raw | ConvertFrom-Json
 # still holding plain literals passes through untouched (expansion is a no-op without tokens).
 . (Join-Path $here '..\lib\render-tokens.ps1')
 $spec = Expand-SpecProse $spec
+$spec = Move-SpecPriceToReleaseHydration $spec
+$staticRecipeCost = [string]$spec.stat.cost_ps
+$staticRecipeCostPattern = if($staticRecipeCost){ '\$' + [regex]::Escape($staticRecipeCost) } else { '(?!)' }
 $utf8 = New-Object Text.UTF8Encoding($false)
 . (Join-Path $here '..\..\lib\design-tokens.ps1')
 
@@ -93,7 +96,7 @@ foreach($dl in $spec.ingredients_display){
   $dispNames += $m.Groups[1].Value
 }
 $ingParts = @()
-$compRows = @()      # build-time cost anatomy: {name; cost} at BASE servings, everyday whole-package
+$compRows = @()      # build-time ingredient-weight anatomy; never a price authority
 $bidHave = 0; $bidMiss = @()
 $di = -1
 foreach($ing in $spec.scaler.ing){
@@ -101,24 +104,21 @@ foreach($ing in $spec.scaler.ing){
   $key = if($ing.PSObject.Properties.Name -contains 'canon' -and $ing.canon){ $ing.canon } else { $ing.item }
   $cl = $clines[$key]
   if(-not $cl){ throw ("no costed line for scaler item '{0}' (slug {1})" -f $key, $spec.slug) }
-  # package size + price come straight from the cost engine (pkg_g is the exact grams the engine rounds
+  # Package size comes from the recipe specification (pkg_g is the exact grams the engine rounds
   # on, drained-adjusted; NOT parsed from the freeform label). Buy item -> buy_*; bulk staple -> starter_*.
   $n = if($cl.buy_n){ [int]$cl.buy_n } else { [int]$cl.starter_n }
-  $c = if($cl.buy_cost){ [double]$cl.buy_cost } else { [double]$cl.starter_cost }
   $lbl = if($cl.pkg){ [string]$cl.pkg } else { [string]$cl.starter_pkg }
   $pkgG = if($cl.pkg_g){ [double]$cl.pkg_g } else { [double]$cl.starter_pkg_g }
-  if($n -lt 1 -or $c -le 0 -or -not $lbl -or $null -eq $pkgG -or $pkgG -le 0){ throw ("no whole-package data for '{0}' (slug {1}): n=$n c=$c lbl='$lbl' pkg_g=$pkgG" -f $key, $spec.slug) }
+  if($n -lt 1 -or -not $lbl -or $null -eq $pkgG -or $pkgG -le 0){ throw ("no whole-package data for '{0}' (slug {1}): n=$n lbl='$lbl' pkg_g=$pkgG" -f $key, $spec.slug) }
   # self-test: mirror the engine's own ceil(-0.02) - it must reproduce the engine's package count at base
   $chk = [math]::Max(1,[math]::Ceiling([double]$ing.grams / $pkgG - 0.02))
   if($chk -ne $n){ throw ("{0} ({1}): ceil({2}g/{3}g)={4} != engine {5} - pkg_g/buy_n disagree" -f $key,$spec.slug,$ing.grams,$pkgG,$chk,$n) }
-  $pkgP = [math]::Round($c / $n, 4)
   $p = '{"item":"' + ($ing.item -replace '"','\"') + '","disp":"' + ($dispNames[$di] -replace '"','\"') + '","grams":' + [int]$ing.grams + ',"buy":"' + ($ing.buy -replace '"','\"') + '"'
   if($ing.PSObject.Properties.Name -contains 'bid' -and $ing.bid){ $p += ',"bid":"' + $ing.bid + '","gpu":' + $ing.gpu; $bidHave++ } else { $bidMiss += [string]$ing.item }
-  $p += ',"pkg_g":' + $pkgG + ',"pkg_p":' + $pkgP + ',"pkg_l":"' + ($lbl -replace '"','\"') + '"}'
+  $p += ',"pkg_g":' + $pkgG + ',"pkg_l":"' + ($lbl -replace '"','\"') + '"}'
   $ingParts += $p
-  # THE SAME NUMBER THE CHECKLIST SHOWS: packages needed at base x everyday package price. The composition
-  # bar is that array normalized, never a parallel sum, so the bar and the receipt can never disagree.
-  $compRows += [pscustomobject]@{ name = [string]$ing.item; cost = ([double]$n * $pkgP) }
+  # Composition is physical ingredient mass, not a hidden second pricing model.
+  $compRows += [pscustomobject]@{ name = [string]$ing.item; cost = [double]$ing.grams }
 }
 $scalerData = '{"slug":"' + $spec.slug + '","base":14,"ing":[' + ($ingParts -join ',') + ']}'
 $bidCoverage = if(@($spec.scaler.ing).Count -gt 0){ [double]$bidHave / @($spec.scaler.ing).Count } else { 0 }
@@ -204,7 +204,7 @@ function Build-Related($spec){
   $cards = ''
   foreach($p in $picks){
     $badge = if($p.free){ "<span class='smp-rel-free'>Free this week</span>" } else { "<span class='smp-rel-cui'>" + (Enc2 $p.cuisine) + "</span>" }
-    $cards += "<a class='smp-rel-card' href='" + $SiteBase + "/" + $p.slug + "/'>" + $badge + "<strong>" + (Enc2 $p.name) + "</strong><span class='smp-rel-m'>" + $p.cal + " cal &middot; " + $p.pro + "g protein</span><span class='smp-rel-p'>$" + ('{0:N2}' -f $p.cost) + " <em>a serving</em></span></a>"
+    $cards += "<a class='smp-rel-card' href='" + $SiteBase + "/" + $p.slug + "/'>" + $badge + "<strong>" + (Enc2 $p.name) + "</strong><span class='smp-rel-m'>" + $p.cal + " cal &middot; " + $p.pro + "g protein</span><span class='smp-rel-p'><em>Current price loads on the recipe page</em></span></a>"
   }
   return "<div class='smp-rel'><span class='smp-rel-eyebrow'>Keep going</span><h2 class='smp-rel-h'>Three more for this week</h2><div class='smp-rel-grid'>" + $cards + "</div></div>"
 }
@@ -247,7 +247,7 @@ if($spec.PSObject.Properties.Name -contains 'credit_html' -and $spec.credit_html
 }
 $L.Add($scalerBlock)
 $st = $spec.stat
-$L.Add(('<p class="smp-stat"><strong>Makes 14 servings &middot; ~{0} cal &middot; {1}g protein &middot; {2}g carbs &middot; {3}g fat &middot; ~${4} per serving (at everyday cost).</strong></p>' -f $st.cal,$st.protein,$st.carbs,$st.fat,$st.cost_ps))
+$L.Add(('<p class="smp-stat"><strong>Makes 14 servings &middot; ~{0} cal &middot; {1}g protein &middot; {2}g carbs &middot; {3}g fat &middot; <span data-tc-live-price>current price loading</span>.</strong></p>' -f $st.cal,$st.protein,$st.carbs,$st.fat))
 $L.Add('')
 # JUMP NAV: these are 10-minute-read pages and cooks arrive mid-task. Cook mode is a button, not a link,
 # because it builds itself from the Make It list at tap time (zero nodes until asked).
@@ -262,7 +262,7 @@ $L.Add('</ul>')
 $L.Add('')
 # ---- combined cost section (the widget script in the scaler block fills it) ----
 $L.Add('<div class="smp-ct"><h2 id="smp-cost">What This Batch Costs</h2>')
-$L.Add('<p class="smp-ct-why"><em>' + $spec.cost_note_html + '</em></p>')
+$L.Add('<p class="smp-ct-why"><em>Every price below hydrates from one promoted grocery release. Ghost stores the recipe narrative only.</em></p>')
 if($compHtml){ $L.Add($compHtml) }
 $L.Add('<p class="smp-ct-save" hidden></p>')
 $L.Add('<div class="smp-ct-btns"><button type="button" class="smp-ct-btn on" data-t="custom">Customized pricing</button><button type="button" class="smp-ct-btn" data-t="everyday">Everyday cost</button><button type="button" class="smp-ct-btn" data-t="cheapest">Current cheapest pricing</button></div>')
@@ -307,7 +307,7 @@ $L.Add('<p><em>' + $spec.upsell_html + '</em></p>')
 # The sticky mini-scaler lives at the end of the body so it is never inside a transformed ancestor
 # (a transform on an ancestor makes position:fixed resolve against it, which would park the pill mid-page).
 $L.Add('<div class="smp-mini" aria-hidden="false"><span class="smp-mini-l">servings</span><button type="button" class="smp-mini-dn" aria-label="One fewer serving">&minus;</button><button type="button" class="smp-mini-n" aria-label="Servings, tap for the full control">14</button><button type="button" class="smp-mini-up" aria-label="One more serving">+</button></div>')
-$body = $L -join "`n"
+$body = Remove-GhostStaticCurrencyClaims ($L -join "`n")
 
 # ---- build-time self-checks (the elite-layer rule: enforced by a grep, not by a comment) ----
 $navyBad = Test-TcNavyAdjacency -Html $body
@@ -318,7 +318,7 @@ foreach($mk in @('smp-sc-data','smp-ct-list','smp-ct-btn','smp-ing','smp-mi','sm
   if($body -notmatch [regex]::Escape($mk)){ throw ("lost required hook '" + $mk + "' in " + $spec.slug) }
 }
 
-# ---------- head JSON-LD (unchanged shape; costPerServing comes from the spec) ----------
+# ---------- head JSON-LD (nutrition and narrative only; no price authority) ----------
 $slugUrl = "$SiteBase/$($spec.slug)/"
 $steps = @()
 $i = 0
@@ -337,7 +337,6 @@ $recipe = [ordered]@{
   recipeCategory = 'Meal Prep'
   recipeCuisine  = $spec.cuisine
   recipeYield    = '14 servings'
-  costPerServing = [double]$spec.head.costPerServing
   keywords       = $spec.head.keywords
   nutrition      = [ordered]@{
     '@type'='NutritionInformation'; servingSize='1 bowl'
@@ -359,6 +358,13 @@ $paywall = [ordered]@{ '@context'='https://schema.org'; '@type'='Article'; isAcc
   mainEntityOfPage=$slugUrl; headline=$spec.name }
 $paywallJson = $paywall | ConvertTo-Json -Depth 6 -Compress
 $head = "<script type=`"application/ld+json`">`n" + $recipeJson + "`n</script>`n<script type=`"application/ld+json`">`n" + $paywallJson + "`n</script>`n"
+if($staticRecipeCost -and ($body -match $staticRecipeCostPattern -or $head -match $staticRecipeCostPattern)){
+  throw ("static recipe price escaped promoted-release hydration for " + $spec.slug)
+}
+$nonMembershipBody = $body.Replace('$1 a month','')
+if($nonMembershipBody -match '\$\d' -or $head -match '\$\d'){
+  throw ("non-authoritative numeric price escaped Ghost narrative cleanup for " + $spec.slug)
+}
 
 if(-not (Test-Path $OutDir)){ New-Item -ItemType Directory -Force $OutDir | Out-Null }
 [IO.File]::WriteAllText((Join-Path $OutDir ($spec.slug + '.body.html')), $body, $utf8)

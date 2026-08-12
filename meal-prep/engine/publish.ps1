@@ -47,6 +47,7 @@ foreach($slug in $Slugs){
   # this spec's own stat, and the change-gate hash is computed over the EXPANDED text - identical numbers
   # mean an identical hash, so the token migration itself republishes nothing.
   $spec = Expand-SpecProse $spec
+  $spec = Move-SpecPriceToReleaseHydration $spec
   $body = [IO.File]::ReadAllText((Join-Path $root "db\built\$slug.body.html"), [Text.Encoding]::UTF8)
   $head = [IO.File]::ReadAllText((Join-Path $root "db\built\$slug.head.html"), [Text.Encoding]::UTF8)
   $desc = [string]$spec.head.description

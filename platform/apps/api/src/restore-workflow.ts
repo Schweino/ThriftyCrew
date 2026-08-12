@@ -1,494 +1,134 @@
 import { WorkflowEntrypoint, type WorkflowEvent, type WorkflowStep } from "cloudflare:workers";
-import { stableJson } from "@thriftycrew/domain";
+import { NonRetryableError } from "cloudflare:workflows";
+import { digestHex, stableJson } from "@thriftycrew/domain";
 import { raiseOperationalAlert, resolveOperationalAlert } from "./operations";
-import { isMissingMultipartUploadError } from "./restore-cleanup";
-import { padRestoreMultipartPart, RESTORE_SOURCE_PART_BYTES, restoreIncidentKey } from "./restore-policy";
 import type { WorkerEnv } from "./env";
 import { acquireOperationLease, releaseOperationLease } from "./orchestration";
-import {
-  RESTORE_COUNT_TABLES,
-  countSqlInsertLines,
-  emptyRestoreCounts,
-  hasUtf8LineExceeding,
-  homogeneousSqlInsertTable,
-  inspectSqlInsert,
-  normalizeCaptureBatchLine,
-  restoreChunkNeedsOversizedScan,
-  summarizeHomogeneousSqlInsertChunk,
-  utf8LengthExceeds,
-  type RestoreCountTable,
-} from "./restore-normalization";
 
-interface RestoreWorkflowPayload { trigger?: string }
-interface ApiEnvelope<T> { success?: boolean; errors?: unknown[]; result?: T }
-interface D1QueryResult<T> { success?: boolean; error?: string; results?: T[] }
+interface RestoreWorkflowPayload { trigger?: string; backupId?: string }
 
-async function sha256Hex(bytes: ArrayBuffer | Uint8Array): Promise<string> {
-  const normalized = bytes instanceof Uint8Array ? Uint8Array.from(bytes).buffer : bytes;
-  const digest = await crypto.subtle.digest("SHA-256", normalized);
-  return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+interface RecoveryManifest {
+  version: number;
+  kind: string;
+  createdAt: string;
+  bookmark: string;
+  releaseRoots: Array<{ release_id: string; root_hash: string; object_key: string }>;
+  observationLake: {
+    prefix: string;
+    partitionCount: number;
+    catalogHash: string;
+    partitions: Array<{ batch_id: string; content_hash: string; object_key: string; row_count: number; byte_length: number }>;
+    latestBySource: Array<{ content_hash: string; object_key: string }>;
+  };
 }
 
-async function cloudflare<T>(env: WorkerEnv, pathname: string, init: RequestInit = {}): Promise<T> {
-  if (!env.D1_REST_API_TOKEN || !env.CLOUDFLARE_ACCOUNT_ID) throw new Error("D1 restore credentials are not configured");
-  const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}${pathname}`, {
-    ...init,
-    headers: { authorization: `Bearer ${env.D1_REST_API_TOKEN}`, "content-type": "application/json", ...(init.headers ?? {}) },
+async function currentBookmark(env: WorkerEnv): Promise<string> {
+  if (!env.D1_REST_API_TOKEN || !env.CLOUDFLARE_ACCOUNT_ID || !env.D1_DATABASE_ID) throw new Error("D1 Time Travel credentials are not configured");
+  const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/d1/database/${env.D1_DATABASE_ID}/time_travel/bookmark`, {
+    headers: { authorization: `Bearer ${env.D1_REST_API_TOKEN}` },
   });
-  const body = await response.json() as ApiEnvelope<T>;
-  if (!response.ok || body.success !== true || body.result === undefined) throw new Error(`Cloudflare ${pathname} returned ${response.status}: ${stableJson(body.errors ?? [])}`);
-  return body.result;
-}
-
-async function queryScratch<T>(env: WorkerEnv, databaseId: string, sql: string): Promise<T[]> {
-  const result = await cloudflare<Array<D1QueryResult<T>>>(env, `/d1/database/${databaseId}/query`, { method: "POST", body: JSON.stringify({ sql }) });
-  if (result[0]?.success === false) throw new Error(result[0].error ?? "scratch D1 query failed");
-  return result[0]?.results ?? [];
-}
-
-async function executeScratch(env: WorkerEnv, databaseId: string, sql: string, params: Array<string | null>): Promise<void> {
-  const result = await cloudflare<Array<D1QueryResult<unknown>>>(env, `/d1/database/${databaseId}/query`, {
-    method: "POST",
-    body: JSON.stringify({ sql, params }),
-  });
-  if (result[0]?.success === false) throw new Error(result[0].error ?? "scratch D1 mutation failed");
-}
-
-function quoteIdentifier(value: string): string {
-  if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(value)) throw new Error(`unsafe SQL identifier in restore dump: ${value}`);
-  return `"${value}"`;
+  const body = await response.json() as { success?: boolean; result?: { bookmark?: string }; errors?: unknown[] };
+  if (!response.ok || body.success !== true || !body.result?.bookmark) throw new Error(`D1 bookmark verification failed: ${stableJson(body.errors ?? [])}`);
+  return body.result.bookmark;
 }
 
 export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, RestoreWorkflowPayload> {
   override async run(event: WorkflowEvent<RestoreWorkflowPayload>, step: WorkflowStep): Promise<void> {
-    const startedAt = new Date().toISOString();
     const drillId = `restore_${event.instanceId}`;
     const runId = `run_${event.instanceId}`;
-    const incidentKey = restoreIncidentKey(event.instanceId);
-    const recoveryObjectPrefix = `restore-recovery/${event.instanceId}/`;
+    const incidentKey = "d1-restore-drill";
+    const startedAt = new Date().toISOString();
     const lease = await acquireOperationLease(this.env.DB, {
-      resource: "workflow:d1-maintenance", holderId: runId, ownerKind: "workflow", leaseMinutes: 1_440, now: startedAt,
-      metadata: { job: "restore-drill-quarterly", workflowInstance: event.instanceId, deploymentSafe: false },
+      resource: "workflow:d1-maintenance", holderId: runId, ownerKind: "workflow", leaseMinutes: 30, now: startedAt,
+      metadata: { job: "d1-restore-drill", workflowInstance: event.instanceId, mode: "non-destructive-manifest-verification", deploymentSafe: true },
     });
-    if (!lease) throw new Error("another D1 maintenance workflow is active");
-    let scratchDatabaseId: string | null = null;
+    if (!lease) throw new NonRetryableError("another D1 maintenance workflow is active");
     let backupId = "unknown";
-    let dumpSha256 = "0".repeat(64);
-    let normalizedObjectKey: string | null = null;
-    let normalizedStagingObjectKey: string | null = null;
-    let normalizedMultipartUploadId: string | null = null;
-    let normalizedMultipartCompleted = false;
-    await this.env.DB.prepare(
-      `INSERT INTO job_runs (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, executor_run_id, actor_id, input_json)
-       VALUES (?1, 'restore-drill-quarterly', 'schedule', ?2, ?2, ?2, 'started', ?3, 'cloudflare:restore-workflow', '{}')
-       ON CONFLICT(id) DO NOTHING`,
-    ).bind(runId, startedAt, event.instanceId).run();
+    let manifestHash = "0".repeat(64);
     try {
-      const backup = await step.do("select latest completed backup", async () => {
-        const row = await this.env.DB.prepare(
-          "SELECT id, object_key FROM backup_exports WHERE status = 'completed' AND object_key IS NOT NULL ORDER BY finished_at DESC LIMIT 1",
-        ).first<{ id: string; object_key: string }>();
-        if (!row) throw new Error("no completed D1 backup is available");
+      await this.env.DB.prepare(
+        `INSERT INTO job_runs
+           (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, executor_run_id, actor_id,
+            input_json, lease_resource, lease_fence)
+         VALUES (?1, 'd1-restore-drill', 'schedule', ?2, ?2, ?2, 'started', ?3, 'cloudflare:workflow', ?4, ?5, ?6)
+         ON CONFLICT(id) DO NOTHING`,
+      ).bind(runId, startedAt, event.instanceId, stableJson({ mode: "non-destructive-manifest-verification" }), lease.resource, lease.fence).run();
+      const selected = await step.do("select lake recovery manifest", async () => {
+        const row = event.payload.backupId
+          ? await this.env.DB.prepare(
+            `SELECT backup.id AS backup_id, lake.object_key, lake.content_hash, lake.bookmark, lake.created_at
+               FROM backup_exports backup JOIN lake_backup_manifests lake ON json_extract(backup.detail_json, '$.manifestId') = lake.id
+              WHERE backup.id = ?1 AND backup.status = 'completed' AND lake.status = 'completed'`,
+          ).bind(event.payload.backupId).first<{ backup_id: string; object_key: string; content_hash: string; bookmark: string; created_at: string }>()
+          : await this.env.DB.prepare(
+            `SELECT backup.id AS backup_id, lake.object_key, lake.content_hash, lake.bookmark, lake.created_at
+               FROM lake_backup_manifests lake JOIN backup_exports backup ON json_extract(backup.detail_json, '$.manifestId') = lake.id
+              WHERE backup.status = 'completed' AND lake.status = 'completed' ORDER BY lake.created_at DESC LIMIT 1`,
+          ).first<{ backup_id: string; object_key: string; content_hash: string; bookmark: string; created_at: string }>();
+        if (!row) throw new Error("no completed lake recovery manifest is available");
         return row;
       });
-      backupId = backup.id;
-      const dump = await step.do("inspect exact R2 backup", async () => {
-        const object = await this.env.BACKUPS.head(backup.object_key);
-        if (!object) throw new Error(`backup object ${backup.object_key} is missing`);
-        return { etag: object.etag.replaceAll('"', ""), length: object.size };
-      });
-      const hashChunkBytes = 4 * 1024 * 1024;
-      const chunkHashes: string[] = [];
-      for (let offset = 0, index = 0; offset < dump.length; offset += hashChunkBytes, index += 1) {
-        const length = Math.min(hashChunkBytes, dump.length - offset);
-        const hash = await step.do(`hash R2 backup chunk ${index}`, async () => {
-          const object = await this.env.BACKUPS.get(backup.object_key, { range: { offset, length } });
-          if (!object?.body) throw new Error(`backup object ${backup.object_key} chunk ${index} is unreadable`);
-          const bytes = await object.arrayBuffer();
-          if (bytes.byteLength !== length) throw new Error(`backup object ${backup.object_key} chunk ${index} has the wrong length`);
-          return sha256Hex(bytes);
-        });
-        chunkHashes.push(hash);
-      }
-      const hashScheme = "sha256-merkle-r2-v1";
-      dumpSha256 = await sha256Hex(new TextEncoder().encode(stableJson({ hashScheme, objectKey: backup.object_key, etag: dump.etag, length: dump.length, hashChunkBytes, chunkHashes })));
-      normalizedObjectKey = `restore-normalized/${event.instanceId}/${backup.id}/${dumpSha256}.sql`;
-      normalizedStagingObjectKey = `restore-normalized-staging/${event.instanceId}/${backup.id}/${dumpSha256}.multipart.sql`;
-      const multipart = await step.do("create normalized restore multipart upload", async () => {
-        const upload = await this.env.BACKUPS.createMultipartUpload(normalizedStagingObjectKey!, {
-          httpMetadata: { contentType: "application/sql" },
-          customMetadata: { sourceObjectKey: backup.object_key, sourceDumpSha256: dumpSha256 },
-        });
-        return { uploadId: upload.uploadId };
-      });
-      normalizedMultipartUploadId = multipart.uploadId;
-      const statementLimitBytes = 90_000;
-      const targetPartBytes = RESTORE_SOURCE_PART_BYTES;
-      const boundarySearchBytes = 512 * 1024;
-      const expectedCounts = emptyRestoreCounts();
-      const releaseHashes: Record<string, string> = {};
-      const recoveryObjectKeys: string[] = [];
-      let recoveryRowCount = 0;
-      const deferredUpdates: string[] = [];
-      const uploadedParts: Array<{ partNumber: number; etag: string }> = [];
-      let currentReleaseId: string | null = null;
-      let normalizedByteLength = 0;
-      let sourceOffset = 0;
-      for (let partNumber = 1; sourceOffset < dump.length; partNumber += 1) {
-        const remaining = dump.length - sourceOffset;
-        const nominalEnd = Math.min(sourceOffset + targetPartBytes, dump.length);
-        const part = await step.do(`normalize and upload restore part ${partNumber}`, {
-          retries: { limit: 2, delay: "30 seconds", backoff: "constant" },
-          timeout: "10 minutes",
-        }, async () => {
-          let sourceEnd = nominalEnd;
-          if (sourceEnd < dump.length) {
-            const searchLength = Math.min(boundarySearchBytes, dump.length - sourceEnd);
-            const boundary = await this.env.BACKUPS.get(backup.object_key, { range: { offset: sourceEnd, length: searchLength } });
-            if (!boundary?.body) throw new Error("backup object is unreadable while locating a multipart line boundary");
-            const boundaryBytes = new Uint8Array(await boundary.arrayBuffer());
-            const newline = boundaryBytes.indexOf(10);
-            if (newline < 0) throw new Error(`restore SQL line exceeds ${boundarySearchBytes} boundary-search bytes`);
-            sourceEnd += newline + 1;
-          }
-          const object = await this.env.BACKUPS.get(backup.object_key, { range: { offset: sourceOffset, length: sourceEnd - sourceOffset } });
-          if (!object?.body) throw new Error(`backup object part ${partNumber} is unreadable`);
-          const bytes = await object.arrayBuffer();
-          if (bytes.byteLength !== sourceEnd - sourceOffset) throw new Error(`backup object part ${partNumber} has the wrong length`);
-          const sourceBytes = new Uint8Array(bytes);
-          const text = new TextDecoder("utf-8", { fatal: true }).decode(sourceBytes);
-          const isLastPart = sourceEnd === dump.length;
-          const needsSemanticNormalization = text.includes('INSERT INTO "capture_batches"')
-            || text.includes('INSERT INTO "releases"')
-            || text.includes('INSERT INTO "current_releases"')
-            || (isLastPart && deferredUpdates.length > 0);
-          // D1 exports table blocks together. Release payload JSON is the only authored column large enough
-          // to exceed the import statement ceiling; ordinary row blocks stay on the byte-preserving path.
-          const hasOversizedStatement = restoreChunkNeedsOversizedScan(text)
-            && hasUtf8LineExceeding(text, statementLimitBytes);
-          if (!needsSemanticNormalization && !hasOversizedStatement) {
-            const partCounts = emptyRestoreCounts();
-            const homogeneousTable = homogeneousSqlInsertTable(text);
-            if (homogeneousTable && RESTORE_COUNT_TABLES.includes(homogeneousTable as RestoreCountTable)) {
-              const homogeneous = summarizeHomogeneousSqlInsertChunk(text);
-              if (!homogeneous) throw new Error("homogeneous restore partition changed during row counting");
-              partCounts[homogeneousTable as RestoreCountTable] = homogeneous.rows;
-            } else if (!homogeneousTable) {
-              for (const table of RESTORE_COUNT_TABLES) partCounts[table] = countSqlInsertLines(text, table);
-            }
-            const outputBytes = isLastPart ? sourceBytes : padRestoreMultipartPart(sourceBytes);
-            const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey!, multipart.uploadId);
-            const uploaded = await upload.uploadPart(partNumber, outputBytes);
-            return {
-              sourceEnd,
-              byteLength: outputBytes.byteLength,
-              uploaded,
-              counts: partCounts,
-              releaseHashes: {},
-              currentReleaseId: null,
-              recoveryObjectKeys: [],
-              recoveryRowCount: 0,
-              deferredUpdates: [],
-            };
-          }
-          const hasTrailingNewline = text.endsWith("\n");
-          const lines = text.split("\n");
-          if (hasTrailingNewline) lines.pop();
-          const partCounts = emptyRestoreCounts();
-          const partReleaseHashes: Record<string, string> = {};
-          const partRecoveryObjectKeys: string[] = [];
-          const partRecoveryLines: string[] = [];
-          const partDeferredUpdates: string[] = [];
-          let partCurrentReleaseId: string | null = null;
-          const outputParts: string[] = [];
-          for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
-            const line = lines[lineIndex]!;
-            const table = line.match(/^INSERT INTO "([^"]+)"/)?.[1];
-            if (table && RESTORE_COUNT_TABLES.includes(table as RestoreCountTable)) partCounts[table as RestoreCountTable] += 1;
-            const oversized = utf8LengthExceeds(line, statementLimitBytes);
-            const needsParsedValues = table === "releases" || table === "current_releases";
-            const insert = needsParsedValues ? inspectSqlInsert(line) : null;
-            if (insert) {
-              const record = Object.fromEntries(insert.columns.map((column, index) => [column, insert.values[index]]));
-              if (insert.table === "current_releases" && record.market_id === "omaha" && typeof record.release_id === "string") partCurrentReleaseId = record.release_id;
-              if (insert.table === "releases" && typeof record.id === "string" && typeof record.input_hash === "string") partReleaseHashes[record.id] = record.input_hash;
-            }
-            if (oversized) {
-              if (!table) throw new Error("oversized non-INSERT statement cannot be normalized");
-              partRecoveryLines.push(line);
-              outputParts.push(`-- oversized INSERT for ${table} restored through parameter binding\n`);
-              continue;
-            }
-            const adjusted = table === "capture_batches" ? normalizeCaptureBatchLine(line) : { line };
-            if (adjusted.deferredUpdate) partDeferredUpdates.push(adjusted.deferredUpdate);
-            outputParts.push(adjusted.line);
-            if (hasTrailingNewline || lineIndex < lines.length - 1) outputParts.push("\n");
-          }
-          const allDeferredUpdates = [...deferredUpdates, ...partDeferredUpdates];
-          if (isLastPart && allDeferredUpdates.length > 0) {
-            if (outputParts.at(-1) !== "\n") outputParts.push("\n");
-            outputParts.push(`${allDeferredUpdates.join("\n")}\n`);
-          }
-          if (partRecoveryLines.length > 0) {
-            const recoveryObjectKey = `${recoveryObjectPrefix}${partNumber}.sql`;
-            const storedRecovery = await this.env.BACKUPS.put(recoveryObjectKey, partRecoveryLines.join("\n"), { httpMetadata: { contentType: "application/sql" } });
-            if (!storedRecovery) throw new Error(`oversized recovery object ${recoveryObjectKey} was not stored`);
-            partRecoveryObjectKeys.push(recoveryObjectKey);
-          }
-          const output = outputParts.join("");
-          const encoder = new TextEncoder();
-          const encodedOutput = encoder.encode(output);
-          let outputBytes = encodedOutput;
-          if (!isLastPart) {
-            outputBytes = padRestoreMultipartPart(encodedOutput);
-          }
-          const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey!, multipart.uploadId);
-          const uploaded = await upload.uploadPart(partNumber, outputBytes);
-          return { sourceEnd, byteLength: outputBytes.byteLength, uploaded, counts: partCounts, releaseHashes: partReleaseHashes, currentReleaseId: partCurrentReleaseId, recoveryObjectKeys: partRecoveryObjectKeys, recoveryRowCount: partRecoveryLines.length, deferredUpdates: partDeferredUpdates };
-        });
-        sourceOffset = part.sourceEnd;
-        normalizedByteLength += part.byteLength;
-        uploadedParts.push(part.uploaded);
-        for (const table of RESTORE_COUNT_TABLES) expectedCounts[table] += part.counts[table];
-        Object.assign(releaseHashes, part.releaseHashes);
-        if (part.currentReleaseId) currentReleaseId = part.currentReleaseId;
-        recoveryObjectKeys.push(...part.recoveryObjectKeys);
-        recoveryRowCount += part.recoveryRowCount;
-        deferredUpdates.push(...part.deferredUpdates);
-      }
-      const completedMultipart = await step.do("complete normalized restore multipart upload", async () => {
-        const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey!, multipart.uploadId);
-        const object = await upload.complete(uploadedParts);
-        return { etag: object.etag.replaceAll('"', ""), length: object.size };
-      });
-      normalizedMultipartCompleted = true;
-      if (completedMultipart.length !== normalizedByteLength) throw new Error("completed normalized restore object has the wrong byte length");
-      const materialized = await step.do("materialize normalized restore with content MD5", async () => {
-        const staging = await this.env.BACKUPS.get(normalizedStagingObjectKey!);
-        if (!staging?.body || staging.size !== normalizedByteLength) throw new Error("normalized multipart staging object is missing or has the wrong length");
-        const object = await this.env.BACKUPS.put(normalizedObjectKey!, staging.body, {
-          httpMetadata: { contentType: "application/sql" },
-          customMetadata: { sourceObjectKey: backup.object_key, sourceDumpSha256: dumpSha256 },
-        });
-        if (!object || object.size !== normalizedByteLength) throw new Error("materialized normalized restore object has the wrong length");
-        const etag = object.etag.replaceAll('"', "");
-        if (!/^[a-f0-9]{32}$/i.test(etag)) throw new Error("materialized normalized restore object did not receive a content MD5 ETag");
-        return { etag, length: object.size };
-      });
-      await step.do("delete normalized multipart staging object", async () => {
-        await this.env.BACKUPS.delete(normalizedStagingObjectKey!);
-        return true;
-      });
-      const expectedRelease = currentReleaseId ? { id: currentReleaseId, inputHash: releaseHashes[currentReleaseId] } : null;
-      if (!expectedRelease?.inputHash) throw new Error("backup dump omitted the current Omaha release or its input hash");
-      const normalized = { objectKey: normalizedObjectKey, ...materialized, deferredSupersessionUpdates: deferredUpdates.length, statementLimitBytes, recoveryRowCount, expectedCounts, expectedRelease };
-      const scratch = await step.do("create isolated scratch D1", async () => cloudflare<{ uuid?: string }>(this.env, "/d1/database", {
-        method: "POST",
-        body: JSON.stringify({ name: `tc-grocery-v3-restore-${startedAt.slice(0, 10).replaceAll("-", "")}-${event.instanceId.slice(-8)}`, primary_location_hint: "wnam", read_replication: { mode: "disabled" } }),
-      }));
-      if (!scratch.uuid) throw new Error("scratch D1 creation omitted its UUID");
-      scratchDatabaseId = scratch.uuid;
-      await this.env.DB.prepare(
-        `INSERT INTO restore_drills (id, backup_id, scratch_database_id, dump_sha256, status, started_at, evidence_json)
-         VALUES (?1, ?2, ?3, ?4, 'started', ?5, ?6)
-         ON CONFLICT(id) DO UPDATE SET
-           backup_id = excluded.backup_id,
-           scratch_database_id = excluded.scratch_database_id,
-           dump_sha256 = excluded.dump_sha256,
-           status = 'started',
-           started_at = excluded.started_at,
-           finished_at = NULL,
-           evidence_json = excluded.evidence_json`,
-      ).bind(drillId, backupId, scratchDatabaseId, dumpSha256, startedAt, stableJson({
-        objectKey: backup.object_key,
-        byteLength: dump.length,
-        etag: dump.etag,
-        hashScheme,
-        hashChunkBytes,
-        chunkCount: chunkHashes.length,
-        normalized: {
-          objectKey: normalized.objectKey,
-          etag: normalized.etag,
-          length: normalized.length,
-          deferredSupersessionUpdates: normalized.deferredSupersessionUpdates,
-          statementLimitBytes: normalized.statementLimitBytes,
-          recoveryRows: normalized.recoveryRowCount,
-          expectedCounts: normalized.expectedCounts,
-          expectedRelease: normalized.expectedRelease,
-        },
-        trigger: event.payload.trigger ?? "scheduled",
-      })).run();
-      const initialized = await step.do("initialize scratch import", async () => cloudflare<{ upload_url?: string; filename?: string }>(this.env, `/d1/database/${scratchDatabaseId}/import`, {
-        method: "POST", body: JSON.stringify({ action: "init", etag: normalized.etag }),
-      }));
-      if (!initialized.upload_url || !initialized.filename) throw new Error("D1 import initialization omitted upload metadata");
-      await step.do("upload backup to scratch import", async () => {
-        const object = await this.env.BACKUPS.get(normalized.objectKey);
-        if (!object?.body) throw new Error(`normalized restore object ${normalized.objectKey} is unreadable during upload`);
-        const etag = object.etag.replaceAll('"', "");
-        if (etag !== normalized.etag || object.size !== normalized.length) throw new Error("normalized restore object changed between creation and upload");
-        const response = await fetch(initialized.upload_url!, { method: "PUT", body: object.body });
-        if (!response.ok) throw new Error(`scratch import upload returned ${response.status}`);
-        const uploadedEtag = response.headers.get("etag")?.replaceAll('"', "");
-        if (uploadedEtag !== normalized.etag) throw new Error(`scratch import upload ETag mismatch: expected ${normalized.etag}, received ${uploadedEtag ?? "none"}`);
-        return { etag: uploadedEtag };
-      });
-      const ingested = await step.do("start scratch import", {
-        retries: { limit: 2, delay: "30 seconds", backoff: "constant" },
-        timeout: "30 minutes",
-      }, async () => cloudflare<{ at_bookmark?: string; status?: string; error?: string }>(this.env, `/d1/database/${scratchDatabaseId}/import`, {
-        method: "POST", body: JSON.stringify({ action: "ingest", etag: normalized.etag, filename: initialized.filename }),
-      }));
-      if (!ingested.at_bookmark) throw new Error("scratch import omitted polling bookmark");
-      if (ingested.status === "error") throw new Error(ingested.error ?? "scratch import failed before polling");
-      let completed = ingested;
-      for (let attempt = 0; attempt < 30 && completed.status !== "complete"; attempt += 1) {
-        await step.sleep(`wait for scratch import ${attempt}`, "10 seconds");
-        const polled = await step.do(`poll scratch import ${attempt}`, async () => cloudflare<{ at_bookmark?: string; status?: string; error?: string; result?: { final_bookmark?: string } }>(this.env, `/d1/database/${scratchDatabaseId}/import`, {
-          method: "POST", body: JSON.stringify({ action: "poll", current_bookmark: ingested.at_bookmark }),
-        }));
-        if (!polled) throw new Error("scratch import poll returned no status");
-        if (polled.error === "Not currently importing anything.") {
-          completed = { ...polled, status: "complete" };
-          break;
+      backupId = selected.backup_id;
+      manifestHash = selected.content_hash;
+      const evidence = await step.do("verify Time Travel and immutable R2 roots", async () => {
+        const [primary, replica, bookmarkNow] = await Promise.all([
+          this.env.BACKUPS.get(selected.object_key), this.env.BACKUPS_SECONDARY.get(selected.object_key), currentBookmark(this.env),
+        ]);
+        if (!primary || !replica) throw new Error("primary or secondary recovery manifest is missing");
+        const [primaryText, replicaText] = await Promise.all([primary.text(), replica.text()]);
+        if (await digestHex(primaryText) !== selected.content_hash || await digestHex(replicaText) !== selected.content_hash || primaryText !== replicaText) {
+          throw new Error("recovery manifest hash or replica parity failed");
         }
-        if (polled.error && polled.error !== '{"D1_RESET_DO":true}') throw new Error(polled.error);
-        completed = polled;
-        if (completed.status === "error") throw new Error(completed.error ?? "scratch import failed");
-      }
-      if (completed.status !== "complete") throw new Error("scratch import did not complete within five minutes");
-      let restoredRecoveryRows = 0;
-      for (let objectIndex = 0; objectIndex < recoveryObjectKeys.length; objectIndex += 1) {
-        const restored = await step.do(`restore oversized recovery batch ${objectIndex}`, { timeout: "10 minutes" }, async () => {
-          const objectKey = recoveryObjectKeys[objectIndex]!;
-          const object = await this.env.BACKUPS.get(objectKey);
-          if (!object?.body) throw new Error(`oversized recovery object ${objectKey} is missing`);
-          const statements = (await object.text()).split("\n").filter(Boolean);
-          for (let rowIndex = 0; rowIndex < statements.length; rowIndex += 1) {
-            const row = inspectSqlInsert(statements[rowIndex]!);
-            if (!row) throw new Error(`oversized recovery statement ${objectIndex}:${rowIndex} is not a supported INSERT`);
-            const placeholders = row.values.map((_, valueIndex) => `?${valueIndex + 1}`).join(", ");
-            const sql = `INSERT INTO ${quoteIdentifier(row.table)} (${row.columns.map(quoteIdentifier).join(", ")}) VALUES (${placeholders})`;
-            await executeScratch(this.env, scratchDatabaseId!, sql, row.values);
-          }
-          return { rows: statements.length };
-        });
-        restoredRecoveryRows += restored.rows;
-      }
-      if (restoredRecoveryRows !== normalized.recoveryRowCount) throw new Error(`oversized recovery row count mismatch: expected ${normalized.recoveryRowCount}, restored ${restoredRecoveryRows}`);
-      const comparisons: Record<RestoreCountTable, { expected: number; scratch: number; liveAtVerification: number }> = {} as Record<RestoreCountTable, { expected: number; scratch: number; liveAtVerification: number }>;
-      for (const table of RESTORE_COUNT_TABLES) {
-        const live = await this.env.DB.prepare(`SELECT COUNT(*) AS count FROM ${table}`).first<{ count: number }>();
-        const restored = await queryScratch<{ count: number }>(this.env, scratchDatabaseId, `SELECT COUNT(*) AS count FROM ${table}`);
-        comparisons[table] = {
-          expected: normalized.expectedCounts[table],
-          scratch: restored[0]?.count ?? -1,
-          liveAtVerification: live?.count ?? -1,
-        };
-      }
-      const liveRelease = await this.env.DB.prepare(
-        `SELECT r.id, r.input_hash FROM current_releases c JOIN releases r ON r.id = c.release_id WHERE c.market_id = 'omaha'`,
-      ).first<{ id: string; input_hash: string }>();
-      const scratchRelease = (await queryScratch<{ id: string; input_hash: string }>(this.env, scratchDatabaseId,
-        `SELECT r.id, r.input_hash FROM current_releases c JOIN releases r ON r.id = c.release_id WHERE c.market_id = 'omaha'`))[0];
-      const countsMatch = Object.values(comparisons).every((value) => value.expected === value.scratch);
-      const releaseMatches = Boolean(scratchRelease && normalized.expectedRelease.id === scratchRelease.id && normalized.expectedRelease.inputHash === scratchRelease.input_hash);
-      if (!countsMatch || !releaseMatches) throw new Error(`scratch restore verification failed: ${stableJson({ comparisons, expectedRelease: normalized.expectedRelease, scratchRelease, liveRelease })}`);
+        const manifest = JSON.parse(primaryText) as RecoveryManifest;
+        if (manifest.version !== 1 || manifest.kind !== "grocery-lake-recovery-manifest" || manifest.bookmark !== selected.bookmark) throw new Error("recovery manifest contract is invalid");
+        const manifestAge = Date.now() - Date.parse(manifest.createdAt);
+        if (!Number.isFinite(manifestAge) || manifestAge < 0 || manifestAge > 30 * 24 * 60 * 60 * 1000) {
+          throw new Error("recovery manifest bookmark is outside Paid Time Travel retention");
+        }
+        if (!Array.isArray(manifest.observationLake.partitions)
+          || manifest.observationLake.partitions.length !== manifest.observationLake.partitionCount) throw new Error("recovery manifest partition catalog is incomplete");
+        const catalogHash = await digestHex(stableJson(manifest.observationLake.partitions.map((item) => [
+          item.batch_id, item.content_hash, item.object_key, item.row_count, item.byte_length,
+        ])));
+        if (catalogHash !== manifest.observationLake.catalogHash) throw new Error("recovery manifest partition catalog hash failed");
+        const requiredObjects = [...manifest.releaseRoots.map((item) => ({ hash: item.root_hash, key: item.object_key })),
+          ...manifest.observationLake.partitions.map((item) => ({ hash: item.content_hash, key: item.object_key }))];
+        const verified = [];
+        for (let offset = 0; offset < requiredObjects.length; offset += 50) {
+          const group = await Promise.all(requiredObjects.slice(offset, offset + 50).map(async (item) => {
+            const object = await this.env.ARCHIVE.head(item.key);
+            if (!object || object.customMetadata?.sha256 !== item.hash) throw new Error(`immutable recovery object is missing or corrupt: ${item.key}`);
+            return item.key;
+          }));
+          verified.push(...group);
+        }
+        return { bookmark: manifest.bookmark, currentBookmark: bookmarkNow, releaseRoots: manifest.releaseRoots.length,
+          partitions: manifest.observationLake.partitionCount,
+          verifiedObjects: verified.length, catalogHash: manifest.observationLake.catalogHash };
+      });
       const finishedAt = new Date().toISOString();
       await this.env.DB.batch([
-        this.env.DB.prepare("UPDATE restore_drills SET status = 'passed', finished_at = ?2, evidence_json = ?3 WHERE id = ?1")
-          .bind(drillId, finishedAt, stableJson({ comparisons, expectedRelease: normalized.expectedRelease, scratchRelease, liveRelease, byteLength: dump.length, etag: dump.etag, hashScheme, hashChunkBytes, chunkCount: chunkHashes.length, normalizedObjectKey: normalized.objectKey, normalizedEtag: normalized.etag, normalizedByteLength: normalized.length, deferredSupersessionUpdates: normalized.deferredSupersessionUpdates, statementLimitBytes: normalized.statementLimitBytes, recoveredOversizedRows: normalized.recoveryRowCount, comparisonBasis: "dump-stream-counts+dump-release-pointer", importStatus: completed.status })),
+        this.env.DB.prepare(
+          `INSERT INTO restore_drills (id, backup_id, scratch_database_id, dump_sha256, status, started_at, finished_at, evidence_json)
+           VALUES (?1, ?2, 'r2-lake-manifest-verification', ?3, 'passed', ?4, ?5, ?6)`,
+        ).bind(drillId, backupId, manifestHash, startedAt, finishedAt, stableJson({ mode: "non-destructive-manifest-verification", ...evidence })),
         this.env.DB.prepare("UPDATE job_runs SET status = 'completed', heartbeat_at = ?2, finished_at = ?2, stats_json = ?3 WHERE id = ?1")
-          .bind(runId, finishedAt, stableJson({ drillId, backupId, scratchDatabaseId, comparisons })),
+          .bind(runId, finishedAt, stableJson({ drillId, backupId, ...evidence })),
       ]);
-      const recoveryEvidence = { drillId, backupId, recoveredBy: event.instanceId, finishedAt };
-      await resolveOperationalAlert(this.env, incidentKey, recoveryEvidence, { recoveryTitle: "Quarterly D1 restore recovered successfully" });
-      await this.env.DB.prepare(
-        `UPDATE triage_items SET status = 'resolved', resolution_json = ?2, resolved_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
-          WHERE source_kind = 'operational_alert' AND source_ref LIKE ?1 AND status <> 'resolved'`,
-      ).bind(`${incidentKey}-a%`, stableJson(recoveryEvidence)).run();
+      await resolveOperationalAlert(this.env, incidentKey, { drillId, backupId, finishedAt, ...evidence }, { recoveryTitle: "R2 lake and D1 Time Travel recovery drill passed" });
     } catch (error) {
       const message = error instanceof Error ? error.message : "unknown restore drill failure";
       const finishedAt = new Date().toISOString();
-      if (backupId !== "unknown" && scratchDatabaseId) {
-        await this.env.DB.prepare(
-          `INSERT INTO restore_drills (id, backup_id, scratch_database_id, dump_sha256, status, started_at, finished_at, evidence_json)
-           VALUES (?1, ?2, ?3, ?4, 'failed', ?5, ?6, ?7)
-           ON CONFLICT(id) DO UPDATE SET status = 'failed', finished_at = excluded.finished_at, evidence_json = excluded.evidence_json`,
-        ).bind(drillId, backupId, scratchDatabaseId, dumpSha256, startedAt, finishedAt, stableJson({ error: message })).run();
-      }
-      await this.env.DB.prepare("UPDATE job_runs SET status = 'failed', heartbeat_at = ?2, finished_at = ?2, error = ?3 WHERE id = ?1")
-        .bind(runId, finishedAt, message).run();
-      await raiseOperationalAlert(
-        this.env,
-        incidentKey,
-        "Quarterly D1 restore drill failed",
-        { drillId, backupId, scratchDatabaseId, failedAttempt: event.instanceId, trigger: event.payload.trigger ?? "scheduled", error: message },
-        event.payload.trigger === "operator-forced" ? { notification: "digest", deferMinutes: 15 } : {},
-      );
+      if (backupId !== "unknown") await this.env.DB.prepare(
+        `INSERT INTO restore_drills (id, backup_id, scratch_database_id, dump_sha256, status, started_at, finished_at, evidence_json)
+         VALUES (?1, ?2, 'r2-lake-manifest-verification', ?3, 'failed', ?4, ?5, ?6)
+         ON CONFLICT(id) DO UPDATE SET status = 'failed', finished_at = excluded.finished_at, evidence_json = excluded.evidence_json`,
+      ).bind(drillId, backupId, manifestHash, startedAt, finishedAt, stableJson({ error: message })).run();
+      await this.env.DB.prepare("UPDATE job_runs SET status = 'failed', heartbeat_at = ?2, finished_at = ?2, error = ?3 WHERE id = ?1").bind(runId, finishedAt, message).run();
+      await raiseOperationalAlert(this.env, incidentKey, "R2 lake and D1 Time Travel recovery drill failed", { drillId, backupId, error: message });
       throw error;
     } finally {
       await releaseOperationLease(this.env.DB, lease.resource, runId, lease.fence);
-      if (scratchDatabaseId) {
-        try {
-          await step.do("delete exact scratch D1", async () => {
-            await cloudflare<null>(this.env, `/d1/database/${scratchDatabaseId}`, { method: "DELETE" });
-            return true;
-          });
-          await resolveOperationalAlert(this.env, `restore-scratch-cleanup:${scratchDatabaseId}`, { scratchDatabaseId, status: "deleted" });
-        } catch (error) {
-          await raiseOperationalAlert(this.env, `restore-scratch-cleanup:${scratchDatabaseId}`, "Restore drill scratch database cleanup failed", { scratchDatabaseId, error: error instanceof Error ? error.message : "unknown cleanup failure" }, { notification: "digest", deferMinutes: 30 });
-        }
-      }
-      if (normalizedStagingObjectKey && normalizedMultipartUploadId && !normalizedMultipartCompleted) {
-        try {
-          await step.do("abort exact normalized restore multipart upload", async () => {
-            const upload = this.env.BACKUPS.resumeMultipartUpload(normalizedStagingObjectKey!, normalizedMultipartUploadId!);
-            try {
-              await upload.abort();
-              return { absent: false };
-            } catch (error) {
-              if (isMissingMultipartUploadError(error)) return { absent: true };
-              throw error;
-            }
-          });
-          await resolveOperationalAlert(this.env, `restore-multipart-cleanup:${normalizedMultipartUploadId}`, { normalizedObjectKey, normalizedMultipartUploadId, status: "absent-or-aborted" });
-        } catch (error) {
-          await raiseOperationalAlert(this.env, `restore-multipart-cleanup:${normalizedMultipartUploadId}`, "Normalized restore multipart cleanup failed", { normalizedObjectKey, normalizedMultipartUploadId, error: error instanceof Error ? error.message : "unknown cleanup failure" }, { notification: "digest", deferMinutes: 30 });
-        }
-      }
-      if (normalizedObjectKey) {
-        try {
-          await step.do("delete exact normalized restore object", async () => {
-            await this.env.BACKUPS.delete(normalizedObjectKey!);
-            return true;
-          });
-          await resolveOperationalAlert(this.env, `restore-normalized-cleanup:${normalizedObjectKey}`, { normalizedObjectKey, status: "deleted" });
-        } catch (error) {
-          await raiseOperationalAlert(this.env, `restore-normalized-cleanup:${normalizedObjectKey}`, "Normalized restore object cleanup failed", { normalizedObjectKey, error: error instanceof Error ? error.message : "unknown cleanup failure" }, { notification: "digest", deferMinutes: 30 });
-        }
-      }
-      if (normalizedStagingObjectKey) {
-        try {
-          await step.do("delete exact normalized staging object", async () => {
-            await this.env.BACKUPS.delete(normalizedStagingObjectKey!);
-            return true;
-          });
-          await resolveOperationalAlert(this.env, `restore-normalized-staging-cleanup:${normalizedStagingObjectKey}`, { normalizedStagingObjectKey, status: "deleted" });
-        } catch (error) {
-          await raiseOperationalAlert(this.env, `restore-normalized-staging-cleanup:${normalizedStagingObjectKey}`, "Normalized restore staging object cleanup failed", { normalizedStagingObjectKey, error: error instanceof Error ? error.message : "unknown cleanup failure" }, { notification: "digest", deferMinutes: 30 });
-        }
-      }
-      try {
-        await step.do("delete exact recovery staging objects", async () => {
-          const listed = await this.env.BACKUPS.list({ prefix: recoveryObjectPrefix, limit: 1000 });
-          if (listed.objects.length > 0) await this.env.BACKUPS.delete(listed.objects.map((object) => object.key));
-          return { deleted: listed.objects.length };
-        });
-        await resolveOperationalAlert(this.env, `restore-recovery-cleanup:${event.instanceId}`, { recoveryObjectPrefix, status: "deleted" });
-      } catch (error) {
-        await raiseOperationalAlert(this.env, `restore-recovery-cleanup:${event.instanceId}`, "Restore recovery staging cleanup failed", { recoveryObjectPrefix, error: error instanceof Error ? error.message : "unknown cleanup failure" }, { notification: "digest", deferMinutes: 30 });
-      }
     }
   }
 }

@@ -148,9 +148,9 @@ h2[id]{scroll-margin-top:84px}
 if(window.__smpScaler2)return; window.__smpScaler2=1;
 // Fetch only this recipe's content-addressed price slice. The legacy feed is a
 // rollback path during migration, never the normal 500-recipe page payload.
-var SMPLEGACY='https://feed.thriftycrew.com/smp-feed.json',SMPRECIPE=(location.pathname||'').replace(/^\/+|\/+$/g,'').split('/').pop()||'recipe';
+var SMPRECIPE=(location.pathname||'').replace(/^\/+|\/+$/g,'').split('/').pop()||'recipe';
 var SMPFEED='https://www.thriftycrew.com/api/v2/recipe-feed/'+encodeURIComponent(SMPRECIPE),smpFeedP=null,feedData=null,feedFailed=false;
-function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){if(r.ok)return r.json();return fetch(SMPLEGACY).then(function(x){return x.ok?x.json():null;});}).catch(function(){return null;}); } return smpFeedP; }
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
 function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
 // Scale ONLY the leading quantity, and understand fractions while doing it.
 // The old version multiplied every number in the string, which broke two ways the moment a reader touched
@@ -199,14 +199,20 @@ function init(box){
   function pkgs(it,nn){ return Math.max(1,Math.ceil(it.grams*(nn/data.base)/it.pkg_g - 0.02)); }
   function pkgLabel(it,k){ if(it.pkg_l==='lb'){return k+' lb';} if(it.pkg_l==='head'){return k+(k>1?' heads':' head');} if(k===1){return '1 '+it.pkg_l;} return k+' × '+it.pkg_l; }
   function price(it,nn,basis){
-    var k=pkgs(it,nn), ev=k*it.pkg_p;
-    if(basis==='everyday'){ return {cost:ev,live:false,k:k}; }
+    var inputs=(feedData&&feedData.pricing_inputs&&it.bid)?feedData.pricing_inputs[it.bid]:null;
+    var source=inputs?(basis==='everyday'?inputs.everyday:inputs.current):null;
+    var required=(it.gpu>0)?it.grams*(nn/data.base)/it.gpu:0;
+    if(!source||!(source.perUnitMicros>0)||!(required>0)) return {cost:null,live:false,k:0,unavailable:true};
+    var variable=source.variableWeight===true, packageBasis=Number(source.packageBasisUnits)||0;
+    var k=variable?0:(packageBasis>0?Math.max(1,Math.ceil(required/packageBasis-1e-9)):0);
+    var cost=variable?(source.perUnitMicros/1000000)*required:((source.purchasePriceMinor>0&&k>0)?source.purchasePriceMinor*k/100:null);
+    if(!(cost>=0)) return {cost:null,live:false,k:k,unavailable:true};
+    if(basis==='everyday'){ return {cost:cost,live:true,k:k,variable:variable}; }
     var e=(feedData&&feedData.ingredients&&it.bid)?feedData.ingredients[it.bid]:null;
-    if(e&&e.cheapest>0&&it.gpu>0){ return {cost:k*(it.pkg_g/it.gpu)*e.cheapest,live:true,k:k,store:e.store,url:e.url,unit:e.unit,up:e.cheapest,sale:e.type==='sale',cn:e.n}; }
-    return {cost:ev,live:false,k:k,fallback:true};
+    return {cost:cost,live:true,k:k,variable:variable,store:e&&e.store,url:e&&e.url,unit:e&&e.unit,up:e&&e.cheapest,sale:e&&e.type==='sale',cn:e&&e.n};
   }
   function totalAt(nn,basis,skipRemoved){
-    var t=0; data.ing.forEach(function(it,i){ if(skipRemoved&&removed[i])return; t+=price(it,nn,basis).cost; }); return t;
+    var t=0,complete=true; data.ing.forEach(function(it,i){ if(skipRemoved&&removed[i])return; var p=price(it,nn,basis); if(p.cost===null){complete=false;}else{t+=p.cost;} }); return complete?t:null;
   }
   function renderIngredients(){
     // No duplicate list in the scaler box: the recipe's own Ingredients section IS the scaled view.
@@ -230,17 +236,18 @@ function init(box){
     var el=document.querySelector('.smp-ct-save'); if(!el) return;
     if(!feedData){ el.hidden=true; return; }
     var nn=nServ(), ev=totalAt(nn,'everyday',false), ch=totalAt(nn,'cheapest',false), d=ev-ch;
-    if(!(d>=1)){ el.hidden=true; return; }
+    if(ev===null||ch===null||!(d>=1)){ el.hidden=true; return; }
     el.innerHTML='Shopping this batch at each ingredient’s cheapest store saves <b>'+money(d)+'</b> versus everyday prices this week. That is the difference between the two tabs below, nothing else.';
     el.hidden=false;
   }
   function renderTabs(anim){
     if(!ct) return;
-    var nn=nServ(), html='', tot=0, own=0;
+    var nn=nServ(), html='', tot=0, own=0, complete=true;
     var basis=(tab==='everyday')?'everyday':'cheapest';
     data.ing.forEach(function(it,i){
       var p=price(it,nn,basis);
       var inc=!(tab==='custom'&&removed[i]);
+      if(p.cost===null){ complete=false; html+='<li><span>'+esc(it.item)+'</span><span class="smp-ct-r">Price unavailable in this release</span></li>'; return; }
       if(inc){ tot+=p.cost; } else { own+=p.cost; }
       var left, right, qty='<span class="smp-ct-qty">'+pkgLabel(it,p.k)+'</span> ';
       if(tab==='custom'){ left='<label class="smp-ct-ck"><input type="checkbox" data-i="'+i+'"'+(inc?' checked':'')+'> <span>'+esc(it.item)+(p.sale?'<span class="smp-sc-saletag">sale</span>':'')+'</span></label>'; }
@@ -261,12 +268,12 @@ function init(box){
       html+='<li'+((tab==='custom'&&!inc)?' class="smp-ct-off"':'')+'>'+left+'<span class="smp-ct-r">'+right+'</span></li>';
     });
     var lbl = (tab==='custom')?'Your shopping total':((tab==='everyday')?'Everyday register total':'Register total at the cheapest stores');
-    html+='<li class="smp-cp-total"><span><b>'+lbl+', '+nn+' servings</b></span><span class="smp-ct-r"><b class="smp-cp-tot smp-ct-grand">'+money((lastTotal===null||rm())?tot:lastTotal)+'</b> <span class="smp-cp-un">about '+money(nn>0?tot/nn:0)+' a serving</span></span></li>';
+    html+='<li class="smp-cp-total"><span><b>'+lbl+', '+nn+' servings</b></span><span class="smp-ct-r"><b class="smp-cp-tot smp-ct-grand">'+(complete?money((lastTotal===null||rm())?tot:lastTotal):'Unavailable')+'</b> <span class="smp-cp-un">'+(complete?('about '+money(nn>0?tot/nn:0)+' a serving'):'one or more release prices are missing')+'</span></span></li>';
     ct.querySelector('.smp-ct-list').innerHTML=html;
     // roll the total down (or up) instead of snapping, but only when a real number preceded it
     var grand=ct.querySelector('.smp-ct-grand');
-    if(grand){ if(anim&&lastTotal!==null&&lastTotal!==tot){ tween(grand,lastTotal,tot); } else { grand.textContent=money(tot); } }
-    lastTotal=tot;
+    if(grand&&complete){ if(anim&&lastTotal!==null&&lastTotal!==tot){ tween(grand,lastTotal,tot); } else { grand.textContent=money(tot); } }
+    lastTotal=complete?tot:null;
     // "Already in your kitchen" accumulates what unchecking has paid you back
     var kit=ct.querySelector('.smp-rc-kitchen');
     if(kit){ if(tab==='custom'&&own>0.005){ kit.textContent='Already in your kitchen: '+money(own); kit.hidden=false; } else { kit.hidden=true; } }
@@ -307,13 +314,13 @@ function init(box){
         // CLAIM THE CELL ONCE. The first pass relabels this cell, so a later pass can no longer find it by
         // its original wording; the flag is how the post-feed update reaches the number it already wrote.
         // (Without it the band froze at the pre-feed everyday figure and quietly contradicted the receipt.)
-        if((s.hasAttribute('data-tc-ps') || /per serving/i.test(l)) && t>0){
+        if((s.hasAttribute('data-tc-ps') || /per serving/i.test(l)) && t!==null&&t>0){
           s.setAttribute('data-tc-ps','1');
           b.textContent='$'+(t/nn).toFixed(2);
           var extra=s.querySelector('.smp-stat-ev');
           // Two numbers ONLY when there are genuinely two. Pre-feed, or for a recipe with no live prices,
           // cheapest IS everyday, and printing the same figure twice under two labels invents a comparison.
-          if(Math.abs(ev-t) >= 0.01*nn){
+          if(ev!==null&&Math.abs(ev-t) >= 0.01*nn){
             lEl.textContent='cheapest this week';
             if(!extra){ extra=document.createElement('div'); extra.className='smp-stat-ev'; extra.style.cssText='font-size:.82em;opacity:.8;margin-top:2px;font-variant-numeric:tabular-nums'; s.appendChild(extra); }
             extra.textContent='$'+(ev/nn).toFixed(2)+' everyday';
@@ -330,9 +337,8 @@ function init(box){
     try{
       var nn2=nServ(), tev=totalAt(nn2,'everyday',false);
       var stat=document.querySelector('.smp-stat');
-      if(stat){ stat.innerHTML=stat.innerHTML
-        .replace(/Makes \d+ servings/,'Makes '+nn2+' servings')
-        .replace(/~\$\d+(?:\.\d+)? per serving/,'~$'+(tev/nn2).toFixed(2)+' per serving'); }
+      if(stat&&tev!==null){ stat.innerHTML=stat.innerHTML.replace(/Makes \d+ servings/,'Makes '+nn2+' servings');
+        [].slice.call(document.querySelectorAll('[data-tc-live-price]')).forEach(function(live){live.textContent='~$'+(tev/nn2).toFixed(2);}); }
       var por=document.querySelector('.smp-portion');
       if(por){ por.innerHTML=por.innerHTML.replace(/divide by \d+/,'divide by '+nn2); }
       var mn=document.querySelector('.smp-mini-n'); if(mn) mn.textContent=String(nn2);
@@ -385,12 +391,16 @@ function init(box){
   function basket(){ var out=[]; data.ing.forEach(function(it,i){ if(!removed[i]) out.push(it); }); return out; }
   function feedOf(it){ return (feedData&&feedData.ingredients&&it.bid)?feedData.ingredients[it.bid]:null; }
   function priceAtStores(it,nn,sel){
-    var k=pkgs(it,nn), e=feedOf(it), best=null, bs=null, s;
-    if(e&&e.stores&&it.gpu>0){
-      for(s in e.stores){ if(sel[s]&&e.stores[s]>0&&(best===null||e.stores[s]<best)){ best=e.stores[s]; bs=s; } }
-    }
-    if(bs){ return {k:k,cost:k*(it.pkg_g/it.gpu)*best,store:bs,up:best,unit:e.unit}; }
-    return {k:k,cost:k*it.pkg_p,store:null};
+    var inputs=(feedData&&feedData.pricing_inputs&&it.bid)?feedData.pricing_inputs[it.bid]:null;
+    var required=(it.gpu>0)?it.grams*(nn/data.base)/it.gpu:0,best=null,bs=null,bp=null,sid;
+    if(inputs&&inputs.stores&&required>0){ for(sid in inputs.stores){ var x=inputs.stores[sid],name=x.store||sid;
+      if(!sel[name]||!(x.perUnitMicros>0))continue;
+      var packageBasis=Number(x.packageBasisUnits)||0,k=x.variableWeight?0:(packageBasis>0?Math.max(1,Math.ceil(required/packageBasis-1e-9)):0);
+      var cost=x.variableWeight?(x.perUnitMicros/1000000)*required:((x.purchasePriceMinor>0&&k>0)?x.purchasePriceMinor*k/100:null);
+      if(cost!==null&&(best===null||cost<best)){best=cost;bs=name;bp={k:k,up:x.perUnitMicros/1000000};}
+    }}
+    if(bs){ return {k:bp.k,cost:best,store:bs,up:bp.up,unit:(feedOf(it)||{}).unit}; }
+    return {k:0,cost:null,store:null};
   }
   function storeUniverse(items){
     var seen={},list=[],s;
@@ -415,33 +425,33 @@ function init(box){
     return a.slice(0,-1).join(', ')+' or '+a[a.length-1];
   }
   function groupBasket(items,nn,sel){
-    var g={}, order=[], tot=0, idx=Object.keys(SMPHUE);
+    var g={}, order=[], tot=0, complete=true, idx=Object.keys(SMPHUE);
     items.forEach(function(it){
       var p=priceAtStores(it,nn,sel), key=p.store||'|any';
       if(!g[key]){ g[key]=[]; order.push(key); }
       g[key].push({name:it.item,pkg:pkgLabel(it,p.k),cost:p.cost,up:p.up,unit:p.unit,at:(p.store?null:carriedAt(it))});
-      tot+=p.cost;
+      if(p.cost!==null)tot+=p.cost; else complete=false;
     });
     order.sort(function(a,b){
       var ia=(a==='|any')?99:idx.indexOf(a), ib=(b==='|any')?99:idx.indexOf(b);
       if(ia<0)ia=90; if(ib<0)ib=90; return ia-ib;
     });
-    return {groups:g,order:order,total:tot};
+    return {groups:g,order:order,total:complete?tot:null,complete:complete};
   }
   function printList(items,nn,sel){
     var r=groupBasket(items,nn,sel), secs='';
     r.order.forEach(function(key){
       var rows=r.groups[key], sub=0, li='';
       rows.forEach(function(x){
-        sub+=x.cost;
+        if(x.cost!==null)sub+=x.cost;
         // On the Any-store rows, print WHO has it. This is the line the reader is holding in the aisle, so
         // "we could not price this at your stores" is worth less than "Hy-Vee or Baker's has it".
         var at=(x.at&&x.at.length)?(' <em>at '+esc(nameList(x.at))+'</em>'):(x.at?' <em>not price-tracked</em>':'');
-        li+='<li><span class="bx"></span><span class="nm">'+esc(x.name)+at+'</span><span class="pk">'+esc(x.pkg)+'</span><span class="pr">'+money(x.cost)+'</span></li>';
+        li+='<li><span class="bx"></span><span class="nm">'+esc(x.name)+at+'</span><span class="pk">'+esc(x.pkg)+'</span><span class="pr">'+(x.cost===null?'Unavailable':money(x.cost))+'</span></li>';
       });
       var head=(key==='|any')?'Any store':key;
       var note=(key==='|any')?' <em>(not at the stores you picked &mdash; priced at the everyday shelf price)</em>':'';
-      secs+='<h3>'+esc(head)+' <span>'+rows.length+' item'+(rows.length===1?'':'s')+' &middot; '+money(sub)+'</span></h3>'+note+'<ul class="sl">'+li+'</ul>';
+      secs+='<h3>'+esc(head)+' <span>'+rows.length+' item'+(rows.length===1?'':'s')+' &middot; '+(rows.some(function(x){return x.cost===null;})?'Incomplete':money(sub))+'</span></h3>'+note+'<ul class="sl">'+li+'</ul>';
     });
     var own=[]; data.ing.forEach(function(it,i){ if(removed[i]) own.push(it.item); });
     var ownHtml=own.length?'<p class="own"><b>Already in your kitchen (not on the list):</b> '+esc(own.join(', '))+'</p>':'';
@@ -501,7 +511,7 @@ function init(box){
       +(macros?('<p class="pm">'+esc(macros)+'</p>'):'')
       +'<p class="pn">'+wk+'Whole packages, before tax. Estimates, not quotes.</p>'
       +'<h2>Shopping list</h2>'
-      +(r.order.length?(secs+'<p class="tot"><span>Estimated total</span><span>'+money(r.total)+'</span></p>'):'<p class="own">Nothing to buy: every ingredient is ticked off as already in your kitchen.</p>')
+      +(r.order.length?(secs+'<p class="tot"><span>Estimated total</span><span>'+(r.complete?money(r.total):'Unavailable: one or more prices are missing')+'</span></p>'):'<p class="own">Nothing to buy: every ingredient is ticked off as already in your kitchen.</p>')
       +ownHtml
       +(ing?('<h2>Ingredients, '+nn+' servings</h2><ul class="ing">'+ing+'</ul>'):'')
       +(steps?('<h2>Make It</h2><ol>'+steps+'</ol>'):'')
@@ -548,7 +558,7 @@ function init(box){
       ? 'Every ingredient above is unticked, so there is nothing to buy. Tick something back on in Customized pricing and the list fills in. You can still print the recipe.'
       : (stores.length
         ? 'Tick the stores you will actually walk into. Every ingredient gets priced at the cheapest of those, and the list prints split by store.'
-        : 'We have no live store prices for this batch right now, so the list prints at everyday shelf prices.');
+        : 'We have no verified store prices for this batch right now, so the list marks prices unavailable.');
     ov.innerHTML='<div class="smp-stsheet"><div class="smp-sthd"><b>Where are you shopping?</b><button type="button" class="smp-stx" aria-label="Close">Close</button></div>'
       +'<div class="smp-stbody"><p class="smp-stsub">'+lead+'</p>'+rows+'<p class="smp-stsum"></p>'
       +'<p class="smp-stnote">Prices are this week&rsquo;s verified shelf prices in Omaha, for whole packages, before tax. Estimates, not quotes.</p></div>'
@@ -559,11 +569,11 @@ function init(box){
       var r=groupBasket(items,nn,sel), used=0, miss=[];
       r.order.forEach(function(k){ if(k==='|any'){ miss=r.groups[k]; } else { used++; } });
       var un=miss.length;
-      var txt='Your list: <b>'+money(r.total)+'</b> for '+items.length+' item'+(items.length===1?'':'s')+(used?(' across '+used+' store'+(used===1?'':'s')):'')+'.';
+      var txt='Your list: <b>'+(r.complete?money(r.total):'price unavailable')+'</b> for '+items.length+' item'+(items.length===1?'':'s')+(used?(' across '+used+' store'+(used===1?'':'s')):'')+'.';
       if(un){
         // NAME them. "1 item is not carried" tells the reader nothing they can act on; the item and the
         // store that has it turns it into a decision - tick one more store, or accept the everyday price.
-        txt+=' '+un+' item'+(un===1?'':'s')+' below '+(un===1?'is':'are')+' not at those stores, so '+(un===1?'it prints':'they print')+' under &ldquo;Any store&rdquo; at the everyday price:';
+        txt+=' '+un+' item'+(un===1?'':'s')+' below '+(un===1?'is':'are')+' not priced at those stores, so '+(un===1?'it is':'they are')+' marked unavailable:';
         txt+='<ul class="smp-stmiss">';
         miss.slice(0,8).forEach(function(m){
           txt+='<li>'+esc(m.name)+' <span>'+(m.at&&m.at.length?('at '+esc(nameList(m.at))):'no store price tracked yet')+'</span></li>';

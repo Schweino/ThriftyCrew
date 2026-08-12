@@ -79,6 +79,23 @@ describe("native release construction", () => {
     expect((artifact.payloads.feed as { recipes: Record<string, unknown> }).recipes).not.toHaveProperty("incomplete");
     const board = artifact.payloads.board as { commodities: Array<{ stores: Array<{ observationId: string; membership: boolean; member_label: string }> }> };
     expect(board.commodities[0]?.stores[0]).toMatchObject({ observationId: "obs", membership: true, member_label: "Membership required" });
+    const complete = artifact.recipeCosts.find((cost) => cost.recipeSlug === "complete")!;
+    expect(complete.detail.scenarios).toEqual(expect.objectContaining({
+      utilized: expect.objectContaining({ status: "complete", batchCostMinor: 100 }),
+      registerCheckout: expect.objectContaining({ status: "complete", batchCostMinor: 200 }),
+      nonMemberCheckout: expect.objectContaining({ status: "incomplete" }),
+      everydayBaseline: expect.objectContaining({ status: "incomplete" }),
+      selectedStoreCheckout: expect.objectContaining({ store: expect.objectContaining({ status: "complete", batchCostMinor: 200 }) }),
+    }));
+    expect(artifact.graph.nodes.filter((node) => node.kind === "cell")).toHaveLength(1);
+    expect(artifact.graph.nodes.filter((node) => node.kind === "recipe")).toHaveLength(3);
+    const unchanged = await buildNativeRelease(root, snapshot, undefined, artifact.graph);
+    expect(unchanged.audit).toMatchObject({ incrementallyReusedCells: 1, recalculatedCells: 0, incrementallyReusedRecipes: 3, recalculatedRecipes: 0 });
+    const changed = await buildNativeRelease(root, {
+      ...snapshot,
+      candidates: snapshot.candidates.map((candidate) => ({ ...candidate, per_unit_micros: 2_200_000, purchase_price_minor: 220 })),
+    }, undefined, artifact.graph);
+    expect(changed.audit).toMatchObject({ incrementallyReusedCells: 0, recalculatedCells: 1, incrementallyReusedRecipes: 2, recalculatedRecipes: 1 });
   });
 
   it("prices the strict specialty rules and rejects their common false-positive traps", async () => {

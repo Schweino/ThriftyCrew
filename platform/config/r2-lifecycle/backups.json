@@ -1,6 +1,17 @@
 {
   "rules": [
     {
+      "id": "Retain recovery manifests",
+      "enabled": true,
+      "conditions": { "prefix": "lake-manifests/" },
+      "storageClassTransitions": [
+        { "storageClass": "InfrequentAccess", "condition": { "type": "Age", "maxAge": 2592000 } }
+      ],
+      "deleteObjectsTransition": {
+        "condition": { "type": "Age", "maxAge": 31536000 }
+      }
+    },
+    {
       "id": "Default Multipart Abort Rule",
       "enabled": true,
       "conditions": {},

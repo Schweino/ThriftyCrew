@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { archivalCapacityStatus, archivalGrowthProjectionReliable, controlPlaneProofPass, d1DatabaseFileSize, d1TimeTravelBookmark, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalDigestMemberKey, operationalIncidentIsNew, operationalNotificationDueAt, recoveryCheckpointTriggerKind, resumeFailedCapturePipelines, robustMonthlyGrowth, scheduleGap, weeklyFullExportDue } from "./operations";
+import { archivalCapacityStatus, archivalGrowthProjectionReliable, controlPlaneProofPass, d1DatabaseFileSize, d1TimeTravelBookmark, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalDigestMemberKey, operationalIncidentIsNew, operationalNotificationDueAt, recoveryCheckpointTriggerKind, resumeFailedCapturePipelines, robustMonthlyGrowth, scheduleGap, weeklyRecoveryManifestDue } from "./operations";
 
 describe("archival capacity policy", () => {
   it("arms on projected exhaustion before the static percentage threshold", () => {
@@ -40,10 +40,10 @@ describe("D1 recovery cadence", () => {
     expect(recoveryCheckpointTriggerKind(true)).toBe("operator");
   });
 
-  it("reserves the blocking full export for Sunday at 01:30 America/Chicago", () => {
-    expect(weeklyFullExportDue(Date.parse("2026-08-16T06:30:00.000Z"))).toBe(true);
-    expect(weeklyFullExportDue(Date.parse("2026-08-16T09:30:00.000Z"))).toBe(false);
-    expect(weeklyFullExportDue(Date.parse("2026-08-17T06:30:00.000Z"))).toBe(false);
+  it("schedules the lightweight recovery manifest for Sunday at 01:30 America/Chicago", () => {
+    expect(weeklyRecoveryManifestDue(Date.parse("2026-08-16T06:30:00.000Z"))).toBe(true);
+    expect(weeklyRecoveryManifestDue(Date.parse("2026-08-16T09:30:00.000Z"))).toBe(false);
+    expect(weeklyRecoveryManifestDue(Date.parse("2026-08-17T06:30:00.000Z"))).toBe(false);
   });
 
   it("retrieves the current Time Travel bookmark through the authorized REST API", async () => {

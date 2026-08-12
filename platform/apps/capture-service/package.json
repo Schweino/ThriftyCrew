@@ -1,0 +1,17 @@
+{
+  "name": "@thriftycrew/capture-service",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@thriftycrew/contracts": "workspace:*",
+    "@thriftycrew/daily": "workspace:*",
+    "@thriftycrew/domain": "workspace:*",
+    "zod": "4.4.3"
+  }
+}

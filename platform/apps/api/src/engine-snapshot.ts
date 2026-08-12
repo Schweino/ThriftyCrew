@@ -94,7 +94,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
   const candidatesRequest = env.DB.prepare(
     `SELECT o.id AS observation_id, m.commodity_id, p.store_location_id, o.per_unit_micros,
             member.observed_at AS captured_at, o.valid_to, b.coverage_mode, b.captured_to, b.id AS batch_id,
-            o.normalized_basis_unit, o.normalized_basis_qty_micros, o.purchase_price_minor,
+            o.normalized_basis_unit, o.normalized_basis_qty_micros, o.purchase_price_minor, o.regular_price_minor, o.kind,
             o.purchase_quantity, o.package_count, pv.size_text,
             o.membership_required, o.loyalty_required, o.raw_price_text, pv.name, pv.normalized_name, pv.product_url,
             pv.taxonomy_path, p.external_key,
@@ -113,7 +113,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
   const rawCandidatesRequest = snapshotIncludesRawCandidates(profile) ? env.DB.prepare(
     `SELECT o.id AS observation_id, p.store_location_id, o.per_unit_micros, member.observed_at AS captured_at, o.valid_to,
             b.coverage_mode, b.captured_to, b.id AS batch_id, o.normalized_basis_unit,
-            o.normalized_basis_qty_micros, o.purchase_price_minor,
+            o.normalized_basis_qty_micros, o.purchase_price_minor, o.regular_price_minor, o.kind,
             o.membership_required, o.loyalty_required, pv.name, pv.size_text, p.external_key,
             o.basis_options_json,
             CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days

@@ -45,7 +45,7 @@ export function controlPlaneProofPass(checks: ReadonlyArray<{ required: boolean;
   return checks.every((check) => !check.required || check.ok);
 }
 
-export function weeklyFullExportDue(scheduledTime: number): boolean {
+export function weeklyRecoveryManifestDue(scheduledTime: number): boolean {
   const date = new Date(scheduledTime);
   const parts = localScheduleParts(scheduledTime);
   const weekday = new Intl.DateTimeFormat("en-US", { timeZone: "America/Chicago", weekday: "short" }).format(date);
@@ -1137,7 +1137,7 @@ export async function runScheduledOperations(env: WorkerEnv, scheduledTime: numb
   const localDate = `${parts.year}-${parts.month}-${parts.day}`;
   if (parts.minute === "00") await runBrowserCaptureSla(env, scheduledTime);
   if (parts.hour === "04" && parts.minute === "30") await runD1RecoveryCheckpoint(env, scheduledTime);
-  if (weeklyFullExportDue(scheduledTime)) {
+  if (weeklyRecoveryManifestDue(scheduledTime)) {
     const instanceId = `d1-backup-${localDate}`;
     const recorded = await env.DB.prepare("SELECT id FROM backup_exports WHERE id = ?1")
       .bind(`backup_${instanceId}`).first();

@@ -65,6 +65,7 @@ CREATE TABLE release_graph_nodes (
   node_key TEXT NOT NULL,
   dependency_hash TEXT NOT NULL CHECK (length(dependency_hash) = 64),
   content_hash TEXT NOT NULL REFERENCES object_store_objects(content_hash),
+  payload_json TEXT NOT NULL CHECK (json_valid(payload_json)),
   reused_from_release_id TEXT REFERENCES releases(id),
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (release_id, node_kind, node_key)
@@ -91,6 +92,20 @@ CREATE TABLE current_recipe_scenarios (
 
 CREATE INDEX current_recipe_scenarios_release
   ON current_recipe_scenarios(release_id, recipe_slug);
+
+CREATE TABLE release_recipe_scenarios (
+  release_id TEXT NOT NULL REFERENCES releases(id),
+  recipe_slug TEXT NOT NULL,
+  scenario_kind TEXT NOT NULL CHECK (scenario_kind IN ('utilized', 'register-checkout', 'non-member-checkout', 'everyday-baseline', 'selected-store-checkout')),
+  store_location_key TEXT NOT NULL DEFAULT '',
+  status TEXT NOT NULL CHECK (status IN ('complete', 'incomplete')),
+  batch_cost_minor INTEGER,
+  serving_cost_minor INTEGER,
+  missing_ingredients_json TEXT NOT NULL DEFAULT '[]' CHECK (json_valid(missing_ingredients_json)),
+  content_hash TEXT NOT NULL CHECK (length(content_hash) = 64),
+  PRIMARY KEY (release_id, recipe_slug, scenario_kind, store_location_key),
+  CHECK ((status = 'complete' AND batch_cost_minor IS NOT NULL) OR status = 'incomplete')
+) STRICT;
 
 CREATE TABLE lake_backup_manifests (
   id TEXT PRIMARY KEY,

@@ -515,20 +515,42 @@ app.get("/api/v2/board/:commodity", async (context) => {
 
 app.get("/api/v2/recipes/:slug", async (context) => {
   return cachedPublicJson(context.req.raw, async () => {
-    const bundled = await readCurrentRecipeBundle(context.env, context.req.param("slug"));
+    const slug = context.req.param("slug");
+    const scenarioRows = await context.env.DB.prepare(
+      `SELECT scenario_kind, store_location_key, status, batch_cost_minor, serving_cost_minor,
+              missing_ingredients_json, content_hash
+         FROM current_recipe_scenarios WHERE market_id = 'omaha' AND recipe_slug = ?1
+        ORDER BY scenario_kind, store_location_key`,
+    ).bind(slug).all<{ scenario_kind: string; store_location_key: string; status: string; batch_cost_minor: number | null; serving_cost_minor: number | null; missing_ingredients_json: string; content_hash: string }>();
+    const scenarios: Record<string, unknown> = {};
+    for (const row of scenarioRows.results) {
+      const value = { status: row.status, batchCostMinor: row.batch_cost_minor, servingCostMinor: row.serving_cost_minor, missingIngredients: JSON.parse(row.missing_ingredients_json) };
+      if (row.scenario_kind === "selected-store-checkout") {
+        const selected = scenarios.selectedStoreCheckout && typeof scenarios.selectedStoreCheckout === "object" ? scenarios.selectedStoreCheckout as Record<string, unknown> : {};
+        selected[row.store_location_key] = value;
+        scenarios.selectedStoreCheckout = selected;
+      } else {
+        const key = row.scenario_kind.replace(/-([a-z])/g, (_, letter: string) => letter.toUpperCase());
+        scenarios[key] = value;
+      }
+    }
+    const scenarioHash = await digestHex(stableJson(scenarioRows.results.map((row) => row.content_hash)));
+    const bundled = await readCurrentRecipeBundle(context.env, slug);
+    const bundledRecipe = bundled?.bundle.recipe && typeof bundled.bundle.recipe === "object" && !Array.isArray(bundled.bundle.recipe)
+      ? bundled.bundle.recipe as Record<string, unknown> : {};
     if (bundled) return {
-      body: { ok: true, releaseId: bundled.releaseId, publishedAt: bundled.publishedAt, recipe: bundled.bundle.recipe },
-      etag: releaseEtag(bundled.contentHash),
+      body: { ok: true, releaseId: bundled.releaseId, publishedAt: bundled.publishedAt, recipe: { ...bundledRecipe, scenarios } },
+      etag: releaseEtag(await digestHex(`${bundled.contentHash}:${scenarioHash}`)),
       releaseId: bundled.releaseId,
     };
     const current = await currentPayload(context.env, "recipes");
     if (!current) throw new PublicJsonError("No published recipe payload", 404);
     const payload = current.payload as { recipes?: Array<{ slug?: string }> };
-    const recipe = payload.recipes?.find((item) => item.slug === context.req.param("slug"));
+    const recipe = payload.recipes?.find((item) => item.slug === slug);
     if (!recipe) throw new PublicJsonError("Recipe not found", 404);
     return {
-      body: { ok: true, releaseId: current.releaseId, publishedAt: current.publishedAt, recipe },
-      etag: releaseEtag(current.contentHash),
+      body: { ok: true, releaseId: current.releaseId, publishedAt: current.publishedAt, recipe: { ...recipe, scenarios } },
+      etag: releaseEtag(await digestHex(`${current.contentHash}:${scenarioHash}`)),
       releaseId: current.releaseId,
     };
   });
@@ -1902,8 +1924,8 @@ app.post("/internal/archival/forecast/run", async (context) => {
 
 app.post("/internal/archival/plan", zValidator("json", archivePlanSchema), async (context) => {
   const body = context.req.valid("json");
-  const minimumCutoff = Date.now() - 90 * 24 * 60 * 60 * 1000;
-  if (Date.parse(body.cutoffAt) > minimumCutoff) return jsonError("archive cutoff must retain at least 90 days of hot observations", 422);
+  const minimumCutoff = Date.now() - 14 * 24 * 60 * 60 * 1000;
+  if (Date.parse(body.cutoffAt) > minimumCutoff) return jsonError("archive cutoff must retain at least 14 days of hot observations", 422);
   const forecast = await context.env.DB.prepare("SELECT status, usage_percent_millis FROM archival_forecasts ORDER BY observed_at DESC LIMIT 1")
     .first<{ status: string; usage_percent_millis: number }>();
   const rows = await context.env.DB.prepare(
@@ -1911,6 +1933,11 @@ app.post("/internal/archival/plan", zValidator("json", archivePlanSchema), async
        FROM observations o
       WHERE o.captured_at < ?1
         AND NOT EXISTS (SELECT 1 FROM release_cells rc WHERE rc.observation_id = o.id)
+        AND NOT EXISTS (
+          SELECT 1 FROM capture_observation_memberships membership
+          JOIN capture_batches active_batch ON active_batch.id = membership.batch_id
+          WHERE membership.observation_id = o.id AND active_batch.status = 'promoted'
+        )
         AND NOT EXISTS (SELECT 1 FROM archive_manifest_observations amo WHERE amo.observation_id = o.id)
       ORDER BY o.captured_at, o.id
       LIMIT ?2`,
@@ -1929,7 +1956,7 @@ app.post("/internal/archival/plan", zValidator("json", archivePlanSchema), async
   const statements: D1PreparedStatement[] = [context.env.DB.prepare(
     `INSERT INTO archive_manifests (id, cutoff_at, format, row_count, status, protected_refs_hash, detail_json)
      VALUES (?1, ?2, 'parquet', ?3, 'planned', ?4, ?5)`,
-  ).bind(manifestId, body.cutoffAt, ids.length, protectedRefsHash, stableJson({ forecast, retentionDays: 90 }))];
+  ).bind(manifestId, body.cutoffAt, ids.length, protectedRefsHash, stableJson({ forecast, retentionDays: 14, storageAuthority: "r2-parquet" }))];
   for (let offset = 0; offset < ids.length; offset += 500) statements.push(context.env.DB.prepare(
     `INSERT INTO archive_manifest_observations (manifest_id, observation_id)
      SELECT ?1, value FROM json_each(?2)`,
@@ -1972,15 +1999,54 @@ app.put("/internal/archival/:id/parquet", async (context) => {
     && new TextDecoder().decode(bytes.slice(-4)) === "PAR1";
   if (!parquetMagic) return jsonError("archive object is not a complete Parquet file", 422);
   const sha256 = await digestHex(bytes);
-  const objectKey = `observations/${new Date().toISOString().slice(0, 10).replaceAll("-", "/")}/${manifest.id}.parquet`;
+  const partitionDate = new Date().toISOString().slice(0, 10);
+  const objectKey = `observations/schema=1/store=multi/date=${partitionDate}/source=historical-backfill/${manifest.id}-${sha256}.parquet`;
   await context.env.ARCHIVE.put(objectKey, body, { httpMetadata: { contentType: "application/vnd.apache.parquet" }, customMetadata: { manifestId: manifest.id, sha256, rows: String(manifest.row_count) } });
   const stored = await context.env.ARCHIVE.head(objectKey);
   if (!stored || stored.size !== bytes.byteLength) return jsonError("archive object failed post-write size verification", 500);
-  await context.env.DB.prepare(
-    "UPDATE archive_manifests SET object_key = ?2, byte_length = ?3, sha256 = ?4, status = 'verified', verified_at = CURRENT_TIMESTAMP WHERE id = ?1",
-  ).bind(manifest.id, objectKey, stored.size, sha256).run();
+  await context.env.DB.batch([
+    context.env.DB.prepare(
+      "UPDATE archive_manifests SET object_key = ?2, byte_length = ?3, sha256 = ?4, status = 'verified', verified_at = CURRENT_TIMESTAMP WHERE id = ?1",
+    ).bind(manifest.id, objectKey, stored.size, sha256),
+    context.env.DB.prepare(
+      `INSERT OR IGNORE INTO object_store_objects
+         (content_hash, object_key, object_kind, format, byte_length, row_count, schema_version, verified_at)
+       VALUES (?1, ?2, 'observation-partition', 'parquet', ?3, ?4, 1, CURRENT_TIMESTAMP)`,
+    ).bind(sha256, objectKey, stored.size, manifest.row_count),
+  ]);
   await recordAudit(context.env, context.get("identity"), "archive.verify", "archive_manifest", manifest.id, "accepted", { objectKey, byteLength: stored.size, sha256, rowCount: manifest.row_count });
   return context.json({ ok: true, manifestId: manifest.id, status: "verified", objectKey, byteLength: stored.size, sha256 });
+});
+
+app.get("/internal/engine/current-release-graph", async (context) => {
+  const marketId = context.req.query("marketId") ?? "omaha";
+  const afterKind = context.req.query("afterKind") ?? "";
+  const afterKey = context.req.query("afterKey") ?? "";
+  const current = await context.env.DB.prepare(
+    `SELECT current.release_id, graph.dependency_hash
+       FROM current_releases current LEFT JOIN release_graphs graph ON graph.release_id = current.release_id
+      WHERE current.market_id = ?1`,
+  ).bind(marketId).first<{ release_id: string; dependency_hash: string | null }>();
+  if (!current) return jsonError("current release graph not found", 404);
+  const rows = await context.env.DB.prepare(
+    `SELECT node_kind, node_key, dependency_hash, content_hash, payload_json
+       FROM release_graph_nodes
+      WHERE release_id = ?1 AND node_kind IN ('cell', 'recipe')
+        AND (?2 = '' OR node_kind > ?2 OR (node_kind = ?2 AND node_key > ?3))
+      ORDER BY node_kind, node_key LIMIT 100`,
+  ).bind(current.release_id, afterKind, afterKey).all<{
+    node_kind: "cell" | "recipe"; node_key: string; dependency_hash: string; content_hash: string; payload_json: string;
+  }>();
+  const nodes = await Promise.all(rows.results.map(async (row) => {
+    const payload = JSON.parse(row.payload_json) as unknown;
+    if (await digestHex(stableJson(payload)) !== row.content_hash) throw new Error(`current release node cache is corrupt: ${row.node_key}`);
+    return { kind: row.node_kind, key: row.node_key, dependencyHash: row.dependency_hash,
+      contentHash: row.content_hash, payload };
+  }));
+  const last = rows.results.at(-1);
+  return context.json({ ok: true, version: 1, parentReleaseId: current.release_id,
+    dependencyHash: current.dependency_hash ?? "0".repeat(64), nodes,
+    next: rows.results.length === 100 && last ? { kind: last.node_kind, key: last.node_key } : null });
 });
 
 app.post("/internal/archival/:id/execute", zValidator("json", canonicalCleanupExecuteSchema), async (context) => {
@@ -2530,6 +2596,178 @@ app.post("/internal/maintenance/architecture", async (context) => {
   }
 });
 
+app.get("/internal/storage/releases", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may inspect immutable release migration state", 403);
+  const rows = await context.env.DB.prepare(
+    `SELECT release.id, release.state, release.created_at, graph.root_hash,
+            CASE WHEN current.release_id IS NULL THEN 0 ELSE 1 END AS is_current
+       FROM releases release
+       LEFT JOIN release_graphs graph ON graph.release_id = release.id
+       LEFT JOIN current_releases current ON current.release_id = release.id
+      ORDER BY release.created_at`,
+  ).all<{ id: string; state: string; created_at: string; root_hash: string | null; is_current: number }>();
+  return context.json({ ok: true, releases: rows.results });
+});
+
+app.post("/internal/storage/backfill-release/:id", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may backfill immutable release history", 403);
+  const releaseId = context.req.param("id");
+  const release = await context.env.DB.prepare(
+    "SELECT id, market_id, input_hash, created_at FROM releases WHERE id = ?1",
+  ).bind(releaseId).first<{ id: string; market_id: string; input_hash: string; created_at: string }>();
+  if (!release) return jsonError("release not found", 404);
+  const existing = await context.env.DB.prepare("SELECT root_hash, object_key, node_count FROM release_graphs WHERE release_id = ?1")
+    .bind(releaseId).first<{ root_hash: string; object_key: string; node_count: number }>();
+  if (existing) return context.json({ ok: true, releaseId, ...existing, idempotent: true });
+  const [cells, costs, payloadRows, top5, rotation, parent, current] = await Promise.all([
+    context.env.DB.prepare(
+      `SELECT commodity_id, store_location_id, observation_id, status, is_crown, display_per_unit_micros, display_unit, reason_json
+         FROM release_cells_with_reasons WHERE release_id = ?1 ORDER BY commodity_id, store_location_id`,
+    ).bind(releaseId).all<Record<string, unknown>>(),
+    context.env.DB.prepare(
+      `SELECT cost.recipe_slug, cost.status, cost.batch_cost_minor, cost.serving_cost_minor, cost.servings,
+              cost.missing_ingredients_json, cost.detail_json, detail.object_key AS detail_object_key
+         FROM release_recipe_costs cost LEFT JOIN recipe_cost_detail_objects detail
+           ON detail.release_id = cost.release_id AND detail.recipe_slug = cost.recipe_slug
+        WHERE cost.release_id = ?1 ORDER BY cost.recipe_slug`,
+    ).bind(releaseId).all<Record<string, unknown>>(),
+    context.env.DB.prepare("SELECT kind, payload_json, object_key FROM release_payloads WHERE release_id = ?1 ORDER BY kind")
+      .bind(releaseId).all<{ kind: string; payload_json: string; object_key: string | null }>(),
+    context.env.DB.prepare("SELECT protein, rank, recipe_slug, serving_cost_minor FROM release_top5 WHERE release_id = ?1 ORDER BY protein, rank")
+      .bind(releaseId).all<Record<string, unknown>>(),
+    context.env.DB.prepare("SELECT recipe_slug, intended_visibility, protein, rank FROM release_free_rotation WHERE release_id = ?1 ORDER BY protein, rank, recipe_slug")
+      .bind(releaseId).all<Record<string, unknown>>(),
+    context.env.DB.prepare("SELECT id FROM releases WHERE market_id = ?1 AND created_at < ?2 ORDER BY created_at DESC LIMIT 1")
+      .bind(release.market_id, release.created_at).first<{ id: string }>(),
+    context.env.DB.prepare("SELECT release_id FROM current_releases WHERE market_id = ?1").bind(release.market_id).first<{ release_id: string }>(),
+  ]);
+  const nodes: Array<{ kind: string; key: string; dependencyHash: string; contentHash: string; payload: unknown; objectKey: string; bytes: Uint8Array }> = [];
+  const addNode = async (kind: string, key: string, payload: unknown) => {
+    const serialized = stableJson(payload);
+    const contentHash = await digestHex(serialized);
+    const dependencyHash = await digestHex(stableJson({ version: "historical-backfill-v1", kind, key, contentHash }));
+    nodes.push({ kind, key, dependencyHash, contentHash, payload,
+      objectKey: `release-nodes/schema=1/kind=${kind}/prefix=${contentHash.slice(0, 2)}/${contentHash}.json`,
+      bytes: new TextEncoder().encode(serialized) });
+  };
+  const historicalRecipes: Array<Record<string, unknown>> = [];
+  for (const row of costs.results) {
+    let detail = JSON.parse(String(row.detail_json)) as Record<string, unknown>;
+    if (detail.archived === true && row.detail_object_key) {
+      const object = await context.env.EVIDENCE.get(String(row.detail_object_key));
+      if (object) detail = await object.json<Record<string, unknown>>();
+    }
+    historicalRecipes.push({
+      recipeSlug: row.recipe_slug, status: row.status, batchCostMinor: row.batch_cost_minor,
+      servingCostMinor: row.serving_cost_minor, servings: row.servings,
+      missingIngredients: JSON.parse(String(row.missing_ingredients_json)), detail,
+    });
+  }
+  const historicalPayloads: Record<string, unknown> = {};
+  for (const row of payloadRows.results) {
+    const payload = row.object_key ? await context.env.EVIDENCE.get(row.object_key).then((object) => object?.json()) : JSON.parse(row.payload_json);
+    if (payload !== undefined) historicalPayloads[row.kind] = payload;
+  }
+  // Existing releases predate the DAG. Preserve each as one content-addressed
+  // snapshot node so the cutover is bounded to two R2 operations per release.
+  // Every newly-built release is granular and copy-on-write.
+  await addNode("payload", "historical-snapshot", {
+    version: 1,
+    releaseId,
+    cells: cells.results,
+    recipes: historicalRecipes,
+    payloads: historicalPayloads,
+    top5: top5.results,
+    freeRotation: rotation.results,
+  });
+  nodes.sort((left, right) => left.kind.localeCompare(right.kind) || left.key.localeCompare(right.key));
+  for (let offset = 0; offset < nodes.length; offset += 25) await Promise.all(nodes.slice(offset, offset + 25).map(async (node) => {
+    if (!await context.env.ARCHIVE.head(node.objectKey)) await context.env.ARCHIVE.put(node.objectKey, node.bytes, {
+      httpMetadata: { contentType: "application/json; charset=utf-8" }, customMetadata: { sha256: node.contentHash, schema: "release-node-v1", kind: node.kind },
+    });
+    const stored = await context.env.ARCHIVE.head(node.objectKey);
+    if (!stored || stored.size !== node.bytes.byteLength || stored.customMetadata?.sha256 !== node.contentHash) throw new Error(`historical release node failed verification: ${node.kind}/${node.key}`);
+  }));
+  const dependencyHash = await digestHex(stableJson(nodes.map((node) => [node.kind, node.key, node.dependencyHash])));
+  const manifest = { version: 1, releaseId, parentReleaseId: parent?.id ?? null, inputHash: release.input_hash, dependencyHash,
+    nodes: nodes.map((node) => ({ kind: node.kind, key: node.key, dependencyHash: node.dependencyHash, contentHash: node.contentHash })) };
+  const manifestText = stableJson(manifest);
+  const rootHash = await digestHex(manifestText);
+  const manifestBytes = new TextEncoder().encode(manifestText);
+  const objectKey = `release-manifests/schema=1/market=${release.market_id}/${releaseId}-${rootHash}.json`;
+  await context.env.ARCHIVE.put(objectKey, manifestBytes, {
+    httpMetadata: { contentType: "application/json; charset=utf-8" }, customMetadata: { sha256: rootHash, schema: "release-manifest-v1", releaseId },
+  });
+  const statements: D1PreparedStatement[] = nodes.flatMap((node) => [context.env.DB.prepare(
+    `INSERT OR IGNORE INTO object_store_objects
+       (content_hash, object_key, object_kind, format, byte_length, schema_version, verified_at)
+     VALUES (?1, ?2, 'release-node', 'json', ?3, 1, CURRENT_TIMESTAMP)`,
+  ).bind(node.contentHash, node.objectKey, node.bytes.byteLength)]);
+  statements.push(context.env.DB.prepare(
+    `INSERT OR IGNORE INTO object_store_objects
+       (content_hash, object_key, object_kind, format, byte_length, row_count, schema_version, verified_at)
+     VALUES (?1, ?2, 'release-manifest', 'json', ?3, ?4, 1, CURRENT_TIMESTAMP)`,
+  ).bind(rootHash, objectKey, manifestBytes.byteLength, nodes.length));
+  statements.push(context.env.DB.prepare(
+    `INSERT INTO release_graphs
+       (release_id, parent_release_id, root_hash, object_key, node_count, changed_node_count, reused_node_count, dependency_hash, byte_length, finalized_at)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?5, 0, ?6, ?7, CURRENT_TIMESTAMP)`,
+  ).bind(releaseId, parent?.id ?? null, rootHash, objectKey, nodes.length, dependencyHash, manifestBytes.byteLength));
+  if (current?.release_id === releaseId) for (const node of nodes) statements.push(context.env.DB.prepare(
+    `INSERT OR REPLACE INTO release_graph_nodes
+       (release_id, node_kind, node_key, dependency_hash, content_hash, payload_json)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6)`,
+  ).bind(releaseId, node.kind, node.key, node.dependencyHash, node.contentHash,
+    new TextDecoder().decode(node.bytes)));
+  for (let offset = 0; offset < statements.length; offset += 80) await context.env.DB.batch(statements.slice(offset, offset + 80));
+  return context.json({ ok: true, releaseId, rootHash, objectKey, nodes: nodes.length, current: current?.release_id === releaseId, idempotent: false });
+});
+
+app.post("/internal/storage/compact-releases", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may compact historical release projections", 403);
+  const releases = await context.env.DB.prepare(
+    `SELECT release.id FROM releases release JOIN release_graphs graph ON graph.release_id = release.id
+      WHERE release.state IN ('superseded', 'rejected')
+        AND (EXISTS (SELECT 1 FROM release_cells cell WHERE cell.release_id = release.id)
+          OR EXISTS (SELECT 1 FROM release_recipe_costs cost WHERE cost.release_id = release.id)
+          OR EXISTS (SELECT 1 FROM release_payloads payload WHERE payload.release_id = release.id))
+      ORDER BY release.created_at LIMIT 5`,
+  ).all<{ id: string }>();
+  const results = [];
+  for (const release of releases.results) {
+    const before = await context.env.DB.prepare(
+      `SELECT (SELECT COUNT(*) FROM release_cells WHERE release_id = ?1) AS cells,
+              (SELECT COUNT(*) FROM release_recipe_costs WHERE release_id = ?1) AS recipes`,
+    ).bind(release.id).first<{ cells: number; recipes: number }>();
+    await context.env.DB.batch([
+      context.env.DB.prepare("DELETE FROM recipe_cost_detail_objects WHERE release_id = ?1").bind(release.id),
+      context.env.DB.prepare("DELETE FROM release_recipe_payloads WHERE release_id = ?1").bind(release.id),
+      context.env.DB.prepare("DELETE FROM release_recipe_scenarios WHERE release_id = ?1").bind(release.id),
+      context.env.DB.prepare("DELETE FROM release_recipe_costs WHERE release_id = ?1").bind(release.id),
+      context.env.DB.prepare("DELETE FROM release_top5 WHERE release_id = ?1").bind(release.id),
+      context.env.DB.prepare("DELETE FROM release_free_rotation WHERE release_id = ?1").bind(release.id),
+      context.env.DB.prepare("DELETE FROM release_payloads WHERE release_id = ?1").bind(release.id),
+      context.env.DB.prepare(
+        `DELETE FROM release_cells WHERE release_id = ?1
+          AND NOT EXISTS (SELECT 1 FROM accuracy_draw_cells sample
+                           WHERE sample.release_id = release_cells.release_id
+                             AND sample.commodity_id = release_cells.commodity_id
+                             AND sample.store_location_id = release_cells.store_location_id)`,
+      ).bind(release.id),
+      context.env.DB.prepare("DELETE FROM release_graph_nodes WHERE release_id = ?1").bind(release.id),
+    ]);
+    results.push({ releaseId: release.id, cells: before?.cells ?? 0, recipes: before?.recipes ?? 0 });
+  }
+  await context.env.DB.prepare(
+    "DELETE FROM release_reason_blobs WHERE NOT EXISTS (SELECT 1 FROM release_cells cell WHERE cell.reason_hash = release_reason_blobs.content_hash)",
+  ).run();
+  const remaining = await context.env.DB.prepare(
+    `SELECT COUNT(*) AS count FROM releases release
+      WHERE release.state IN ('superseded', 'rejected') AND NOT EXISTS (SELECT 1 FROM release_graphs graph WHERE graph.release_id = release.id)`,
+  ).first<{ count: number }>();
+  return context.json({ ok: true, compacted: results, historicalReleasesWithoutGraph: remaining?.count ?? 0 });
+});
+
 app.post("/internal/capture-batches/:id/evidence-upload-sessions", zValidator("json", captureEvidenceUploadSessionSchema), async (context) => {
   const batch = await findBatch(context.env.DB, context.req.param("id"));
   if (!batch) return jsonError("capture batch not found", 404);
@@ -2669,6 +2907,63 @@ app.put("/internal/capture-batches/:id/evidence", async (context) => {
   return context.json({ ok: true, evidenceId: metadataResult.data.id, objectKey }, 201);
 });
 
+app.put("/internal/capture-batches/:id/observation-partition", async (context) => {
+  const batch = await findBatch(context.env.DB, context.req.param("id"));
+  if (!batch) return jsonError("capture batch not found", 404);
+  const identity = context.get("identity");
+  const engineOwnedCapture = identity.role === "engine" && engineMayWriteCaptureSource(batch.source_id, batch.capture_method);
+  if (identity.role !== "capture" && identity.role !== "operator" && !engineOwnedCapture) return jsonError("mutation role is not authorized for capture partitions", 403);
+  if (batch.agent_id !== identity.agentId && identity.role !== "operator") return jsonError("batch belongs to another agent", 403);
+  if (batch.status !== "open") return jsonError("observation partitions can only be added to an open batch", 409);
+  const expectedHash = context.req.header("x-content-sha256") ?? "";
+  const rowCount = Number(context.req.header("x-row-count"));
+  const minObservedAt = context.req.header("x-min-observed-at") ?? "";
+  const maxObservedAt = context.req.header("x-max-observed-at") ?? "";
+  const schemaVersion = Number(context.req.header("x-schema-version"));
+  if (!/^[a-f0-9]{64}$/.test(expectedHash) || !Number.isSafeInteger(rowCount) || rowCount <= 0
+    || schemaVersion !== 1 || !Number.isFinite(Date.parse(minObservedAt)) || !Number.isFinite(Date.parse(maxObservedAt))
+    || minObservedAt < batch.captured_from || maxObservedAt > batch.captured_to || maxObservedAt < minObservedAt) {
+    return jsonError("observation partition metadata is invalid or outside the batch interval", 422);
+  }
+  const bytes = new Uint8Array(await context.req.arrayBuffer());
+  const parquetMagic = bytes.length >= 8 && new TextDecoder().decode(bytes.slice(0, 4)) === "PAR1"
+    && new TextDecoder().decode(bytes.slice(-4)) === "PAR1";
+  if (!parquetMagic) return jsonError("observation partition is not a complete Parquet file", 422);
+  const actualHash = await digestHex(bytes);
+  if (actualHash !== expectedHash) return jsonError("observation partition hash does not match content", 422);
+  const existing = await context.env.DB.prepare(
+    `SELECT partition.content_hash, object.object_key
+       FROM observation_partitions partition JOIN object_store_objects object ON object.content_hash = partition.content_hash
+      WHERE partition.batch_id = ?1`,
+  ).bind(batch.id).first<{ content_hash: string; object_key: string }>();
+  if (existing) {
+    if (existing.content_hash !== actualHash) return jsonError("capture batch already has a different immutable observation partition", 409);
+    return context.json({ ok: true, batchId: batch.id, objectKey: existing.object_key, sha256: actualHash, idempotent: true });
+  }
+  const partitionDate = minObservedAt.slice(0, 10);
+  const objectKey = `observations/schema=1/store=${encodeURIComponent(batch.store_location_id)}/date=${partitionDate}/source=${encodeURIComponent(batch.source_id)}/${batch.id}-${actualHash}.parquet`;
+  const object = await context.env.ARCHIVE.head(objectKey);
+  if (!object) await context.env.ARCHIVE.put(objectKey, bytes, {
+    httpMetadata: { contentType: "application/vnd.apache.parquet" },
+    customMetadata: { sha256: actualHash, rows: String(rowCount), schema: "grocery-observation-v1", batchId: batch.id },
+  });
+  const stored = await context.env.ARCHIVE.head(objectKey);
+  if (!stored || stored.size !== bytes.byteLength || stored.customMetadata?.sha256 !== actualHash) return jsonError("observation partition failed post-write verification", 500);
+  await context.env.DB.batch([
+    context.env.DB.prepare(
+      `INSERT OR IGNORE INTO object_store_objects
+         (content_hash, object_key, object_kind, format, byte_length, row_count, schema_version, verified_at)
+       VALUES (?1, ?2, 'observation-partition', 'parquet', ?3, ?4, 1, CURRENT_TIMESTAMP)`,
+    ).bind(actualHash, objectKey, stored.size, rowCount),
+    context.env.DB.prepare(
+      `INSERT INTO observation_partitions
+         (batch_id, source_id, store_location_id, partition_date, content_hash, row_count, min_observed_at, max_observed_at)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)`,
+    ).bind(batch.id, batch.source_id, batch.store_location_id, partitionDate, actualHash, rowCount, minObservedAt, maxObservedAt),
+  ]);
+  return context.json({ ok: true, batchId: batch.id, objectKey, sha256: actualHash, byteLength: stored.size, rowCount }, 201);
+});
+
 app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSealSchema), async (context) => {
   const batch = await findBatch(context.env.DB, context.req.param("id"));
   if (!batch) return jsonError("capture batch not found", 404);
@@ -2679,6 +2974,18 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   if (identity.sourceIds && !identity.sourceIds.includes(batch.source_id)) return jsonError("agent is not authorized for this capture source", 403);
   if (batch.status !== "open") return jsonError("batch is already sealed", 409);
   const body = context.req.valid("json");
+  let parquetPartitionRows: number | null = null;
+  if (batch.capture_method !== "legacy_bridge") {
+    const partition = await context.env.DB.prepare(
+      "SELECT row_count FROM observation_partitions WHERE batch_id = ?1",
+    ).bind(batch.id).first<{ row_count: number }>();
+    if (!partition) return jsonError("capture cannot seal before its immutable Parquet observation partition is verified", 422);
+    parquetPartitionRows = partition.row_count;
+    const hotRows = await context.env.DB.prepare(
+      "SELECT COUNT(*) AS count FROM capture_batch_observations WHERE batch_id = ?1",
+    ).bind(batch.id).first<{ count: number }>();
+    if (partition.row_count !== (hotRows?.count ?? 0)) return jsonError("Parquet partition row count does not match the canonical capture batch", 422);
+  }
   if (new Set(body.terms.map((term) => term.termKey)).size !== body.terms.length) return jsonError("capture term keys must be unique", 422);
   if (new Set(body.terms.map((term) => term.ordinal)).size !== body.terms.length) return jsonError("capture term ordinals must be unique", 422);
   if (batch.capture_method === "browser") {
@@ -2744,6 +3051,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   const observationCount = (await context.env.DB.prepare(
     "SELECT COUNT(*) AS count FROM capture_batch_observations WHERE batch_id = ?1",
   ).bind(batch.id).first<{ count: number }>())?.count ?? 0;
+  const parquetPartitionPass = batch.capture_method === "legacy_bridge" || parquetPartitionRows === observationCount;
   const taxonomyRows = batch.capture_method === "browser"
     ? (await context.env.DB.prepare(
       `SELECT COUNT(*) AS count
@@ -2891,7 +3199,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
       ORDER BY captured_to DESC LIMIT 1`,
   ).bind(batch.source_id, batch.id).first<{ source_contract_fingerprint: string }>() : null;
   const schemaAssessment = assessSourceSchema(batch.source_contract_fingerprint, priorSchema?.source_contract_fingerprint ?? null, sourceSchemaRequired);
-  const status = identityPass && completePass && collapsePass && freshnessPass && browserEvidence.pass
+  const status = identityPass && completePass && collapsePass && freshnessPass && browserEvidence.pass && parquetPartitionPass
     && priceSemanticsPass && offerSnapshotPass && skuIdentityPass && changePointPass && schemaAssessment.pass ? "validated" : "rejected";
   // Capture terms are staged while the batch is still private/open. Run each packed
   // insert separately so a full catalog cannot make one D1 transaction exceed its
@@ -2917,7 +3225,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
     `UPDATE capture_batches SET status = ?2, attempted_terms = ?3, successful_terms = ?4, empty_terms = ?5,
        rejected_terms = ?6, blocked_terms = ?7, captured_pages = ?8, evidence_manifest_key = ?9,
        validation_summary_json = ?10, sealed_at = CURRENT_TIMESTAMP WHERE id = ?1`,
-  ).bind(batch.id, status, attempted, successful, empty, rejected, blocked, capturedPages, body.evidenceManifestKey ?? null, stableJson({ identityPass, termEnvelopePass, pageEnvelopePass, collapsePass, freshnessPass, browserEvidencePass: browserEvidence.pass, browserEvidence: browserEvidence.detail, priceSemanticsPass, offerSnapshotPass, skuIdentityPass, changePointPass, sourceSchemaPass: schemaAssessment.pass, sourceSchema: schemaAssessment.detail, captureAgeMillis, maxAgeDays: batch.max_age_days, observationCount, predecessorBatchId: predecessor?.id ?? null, predecessorObservationCount: predecessor?.observation_count ?? null, collapseFloor })));
+  ).bind(batch.id, status, attempted, successful, empty, rejected, blocked, capturedPages, body.evidenceManifestKey ?? null, stableJson({ identityPass, termEnvelopePass, pageEnvelopePass, collapsePass, freshnessPass, parquetPartitionPass, browserEvidencePass: browserEvidence.pass, browserEvidence: browserEvidence.detail, priceSemanticsPass, offerSnapshotPass, skuIdentityPass, changePointPass, sourceSchemaPass: schemaAssessment.pass, sourceSchema: schemaAssessment.detail, captureAgeMillis, maxAgeDays: batch.max_age_days, observationCount, predecessorBatchId: predecessor?.id ?? null, predecessorObservationCount: predecessor?.observation_count ?? null, collapseFloor })));
   if (browserEvidence.metrics) {
     const metrics = browserEvidence.metrics;
     statements.push(context.env.DB.prepare(
@@ -2965,6 +3273,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
     }
   }
   for (const [guardId, pass, eligible, examined, detail] of [
+    ["batch-parquet-partition", parquetPartitionPass, batch.capture_method === "legacy_bridge" ? 0 : observationCount, batch.capture_method === "legacy_bridge" ? 0 : (parquetPartitionRows ?? 0), { required: batch.capture_method !== "legacy_bridge", rows: parquetPartitionRows }],
     ["batch-location", identityPass, 3, 3, {}],
     ["batch-completeness", completePass, (batch.expected_terms ?? 0) + (batch.expected_pages ?? 0), attempted + capturedPages, {}],
     ["batch-collapse", collapsePass, predecessor ? 2 : 0, predecessor ? 2 : 0, { observationCount, predecessorBatchId: predecessor?.id ?? null, predecessorObservationCount: predecessor?.observation_count ?? null, collapseFloor }],
@@ -3102,6 +3411,116 @@ app.put("/internal/releases/:id/cells", zValidator("json", releaseCellsChunkSche
   return context.json({ ok: true, accepted: context.req.valid("json").cells.length });
 });
 
+app.put("/internal/releases/:id/graph-nodes", async (context) => {
+  const releaseId = context.req.param("id");
+  const stateError = await requireDraftRelease(context.env.DB, releaseId);
+  if (stateError) return stateError;
+  const body = await context.req.json<{ nodes?: unknown[] }>().catch(() => ({} as { nodes?: unknown[] }));
+  if (!Array.isArray(body.nodes) || body.nodes.length < 1 || body.nodes.length > 25) return jsonError("release graph node chunk must contain 1-25 nodes", 422);
+  const current = await context.env.DB.prepare(
+    `SELECT current.release_id FROM current_releases current
+       JOIN releases draft ON draft.market_id = current.market_id WHERE draft.id = ?1`,
+  ).bind(releaseId).first<{ release_id: string }>();
+  const prepared: Array<{ kind: string; key: string; dependencyHash: string; contentHash: string; bytes: Uint8Array; objectKey: string; reusedFrom: string | null }> = [];
+  for (const raw of body.nodes) {
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return jsonError("release graph node is invalid", 422);
+    const value = raw as Record<string, unknown>;
+    const kind = String(value.kind ?? "");
+    const key = String(value.key ?? "");
+    const dependencyHash = String(value.dependencyHash ?? "");
+    const contentHash = String(value.contentHash ?? "");
+    if (!/^(cell|recipe|payload|top5|free-rotation)$/.test(kind) || !key || key.length > 500
+      || !/^[a-f0-9]{64}$/.test(dependencyHash) || !/^[a-f0-9]{64}$/.test(contentHash)) return jsonError("release graph node identity is invalid", 422);
+    const serialized = stableJson(value.payload);
+    if (await digestHex(serialized) !== contentHash) return jsonError(`release graph node content hash mismatch: ${kind}/${key}`, 422);
+    const bytes = new TextEncoder().encode(serialized);
+    const objectKey = `release-nodes/schema=1/kind=${kind}/prefix=${contentHash.slice(0, 2)}/${contentHash}.json`;
+    const prior = current ? await context.env.DB.prepare(
+      `SELECT release_id FROM release_graph_nodes
+        WHERE release_id = ?1 AND node_kind = ?2 AND node_key = ?3 AND dependency_hash = ?4 AND content_hash = ?5`,
+    ).bind(current.release_id, kind, key, dependencyHash, contentHash).first<{ release_id: string }>() : null;
+    prepared.push({ kind, key, dependencyHash, contentHash, bytes, objectKey, reusedFrom: prior?.release_id ?? null });
+  }
+  await Promise.all(prepared.map(async (item) => {
+    if (await context.env.ARCHIVE.head(item.objectKey)) return;
+    await context.env.ARCHIVE.put(item.objectKey, item.bytes, {
+      httpMetadata: { contentType: "application/json; charset=utf-8" },
+      customMetadata: { sha256: item.contentHash, schema: "release-node-v1", kind: item.kind },
+    });
+  }));
+  const statements: D1PreparedStatement[] = [];
+  for (const item of prepared) {
+    const stored = await context.env.ARCHIVE.head(item.objectKey);
+    if (!stored || stored.size !== item.bytes.byteLength || stored.customMetadata?.sha256 !== item.contentHash) return jsonError(`release graph node failed verification: ${item.kind}/${item.key}`, 500);
+    statements.push(context.env.DB.prepare(
+      `INSERT OR IGNORE INTO object_store_objects
+         (content_hash, object_key, object_kind, format, byte_length, schema_version, verified_at)
+       VALUES (?1, ?2, 'release-node', 'json', ?3, 1, CURRENT_TIMESTAMP)`,
+    ).bind(item.contentHash, item.objectKey, stored.size));
+    statements.push(context.env.DB.prepare(
+      `INSERT INTO release_graph_nodes
+         (release_id, node_kind, node_key, dependency_hash, content_hash, payload_json, reused_from_release_id)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+       ON CONFLICT(release_id, node_kind, node_key) DO UPDATE SET
+         dependency_hash = excluded.dependency_hash, content_hash = excluded.content_hash,
+         payload_json = excluded.payload_json, reused_from_release_id = excluded.reused_from_release_id`,
+    ).bind(releaseId, item.kind, item.key, item.dependencyHash, item.contentHash,
+      new TextDecoder().decode(item.bytes), item.reusedFrom));
+  }
+  await context.env.DB.batch(statements);
+  return context.json({ ok: true, accepted: prepared.length, reused: prepared.filter((item) => item.reusedFrom).length });
+});
+
+app.post("/internal/releases/:id/graph-finalize", async (context) => {
+  const releaseId = context.req.param("id");
+  const stateError = await requireDraftRelease(context.env.DB, releaseId);
+  if (stateError) return stateError;
+  const body = await context.req.json<Record<string, unknown>>().catch(() => ({} as Record<string, unknown>));
+  const dependencyHash = String(body.dependencyHash ?? "");
+  const parentReleaseId = body.parentReleaseId ? String(body.parentReleaseId) : null;
+  if (!/^[a-f0-9]{64}$/.test(dependencyHash)) return jsonError("release graph dependency hash is invalid", 422);
+  const release = await context.env.DB.prepare("SELECT market_id, input_hash FROM releases WHERE id = ?1").bind(releaseId).first<{ market_id: string; input_hash: string }>();
+  if (!release) return jsonError("release not found", 404);
+  const current = await context.env.DB.prepare("SELECT release_id FROM current_releases WHERE market_id = ?1").bind(release.market_id).first<{ release_id: string }>();
+  if ((current?.release_id ?? null) !== parentReleaseId) return jsonError("release graph parent is no longer the promoted release", 409);
+  const rows = await context.env.DB.prepare(
+    `SELECT node_kind, node_key, dependency_hash, content_hash, reused_from_release_id
+       FROM release_graph_nodes WHERE release_id = ?1 ORDER BY node_kind, node_key`,
+  ).bind(releaseId).all<{ node_kind: string; node_key: string; dependency_hash: string; content_hash: string; reused_from_release_id: string | null }>();
+  if (rows.results.length === 0) return jsonError("release graph has no nodes", 422);
+  const manifest = { version: 1, releaseId, parentReleaseId, inputHash: release.input_hash, dependencyHash, nodes: rows.results.map((row) => ({
+    kind: row.node_kind, key: row.node_key, dependencyHash: row.dependency_hash, contentHash: row.content_hash,
+  })) };
+  const serialized = stableJson(manifest);
+  const rootHash = await digestHex(serialized);
+  const bytes = new TextEncoder().encode(serialized);
+  const objectKey = `release-manifests/schema=1/market=${release.market_id}/${releaseId}-${rootHash}.json`;
+  await context.env.ARCHIVE.put(objectKey, bytes, {
+    httpMetadata: { contentType: "application/json; charset=utf-8" },
+    customMetadata: { sha256: rootHash, schema: "release-manifest-v1", releaseId },
+  });
+  const stored = await context.env.ARCHIVE.head(objectKey);
+  if (!stored || stored.size !== bytes.byteLength || stored.customMetadata?.sha256 !== rootHash) return jsonError("release graph manifest failed post-write verification", 500);
+  const reused = rows.results.filter((row) => row.reused_from_release_id).length;
+  await context.env.DB.batch([
+    context.env.DB.prepare(
+      `INSERT OR IGNORE INTO object_store_objects
+         (content_hash, object_key, object_kind, format, byte_length, row_count, schema_version, verified_at)
+       VALUES (?1, ?2, 'release-manifest', 'json', ?3, ?4, 1, CURRENT_TIMESTAMP)`,
+    ).bind(rootHash, objectKey, stored.size, rows.results.length),
+    context.env.DB.prepare(
+      `INSERT INTO release_graphs
+         (release_id, parent_release_id, root_hash, object_key, node_count, changed_node_count, reused_node_count, dependency_hash, byte_length, finalized_at)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, CURRENT_TIMESTAMP)
+       ON CONFLICT(release_id) DO UPDATE SET root_hash = excluded.root_hash, object_key = excluded.object_key,
+         node_count = excluded.node_count, changed_node_count = excluded.changed_node_count,
+         reused_node_count = excluded.reused_node_count, dependency_hash = excluded.dependency_hash,
+         byte_length = excluded.byte_length, finalized_at = excluded.finalized_at`,
+    ).bind(releaseId, parentReleaseId, rootHash, objectKey, rows.results.length, rows.results.length - reused, reused, dependencyHash, stored.size),
+  ]);
+  return context.json({ ok: true, releaseId, rootHash, objectKey, nodes: rows.results.length, changed: rows.results.length - reused, reused });
+});
+
 app.put("/internal/releases/:id/recipe-costs", zValidator("json", recipeCostsChunkSchema), async (context) => {
   const stateError = await requireDraftRelease(context.env.DB, context.req.param("id"));
   if (stateError) return stateError;
@@ -3190,8 +3609,8 @@ app.post("/internal/releases/:id/validate", async (context) => {
   const summary = JSON.parse(release.summary_json) as { expectedCommodities: number; expectedStores: number; expectedRecipes: number; expectedFreeRotation?: number };
   const expectedFreeRotation = summary.expectedFreeRotation ?? 0;
   const releaseIdentity = await context.env.DB.prepare(
-    "SELECT configuration_id, market_id FROM releases WHERE id = ?1",
-  ).bind(releaseId).first<{ configuration_id: string; market_id: string }>();
+    "SELECT configuration_id, market_id, input_manifest_json FROM releases WHERE id = ?1",
+  ).bind(releaseId).first<{ configuration_id: string; market_id: string; input_manifest_json: string }>();
   if (!releaseIdentity) return jsonError("release not found", 404);
   await buildReleaseRecipeBundles(context.env, releaseId);
   const [cellStats, recipeStats, payloadStats, invalidCellStats, rotationStats, top5Stats, invalidRankedRecipes] = await Promise.all([
@@ -3256,14 +3675,40 @@ app.post("/internal/releases/:id/validate", async (context) => {
   });
   await evaluateReleaseIntegrity(context.env, releaseId);
   await evaluateNotBlindGuard(context.env.DB, releaseId);
+  const manifestKind = String((JSON.parse(releaseIdentity.input_manifest_json) as Record<string, unknown>).kind ?? "");
+  if (manifestKind !== "legacy-current-bridge") {
+    const [graph, graphNodes, scenarios] = await Promise.all([
+      context.env.DB.prepare("SELECT node_count, changed_node_count, reused_node_count FROM release_graphs WHERE release_id = ?1").bind(releaseId).first<{ node_count: number; changed_node_count: number; reused_node_count: number }>(),
+      context.env.DB.prepare("SELECT COUNT(*) AS count FROM release_graph_nodes WHERE release_id = ?1").bind(releaseId).first<{ count: number }>(),
+      context.env.DB.prepare("SELECT COUNT(*) AS count FROM release_recipe_scenarios WHERE release_id = ?1").bind(releaseId).first<{ count: number }>(),
+    ]);
+    const expectedGraphNodes = expectedCellRows + summary.expectedRecipes + 7;
+    const graphPass = graph?.node_count === expectedGraphNodes && graphNodes?.count === expectedGraphNodes
+      && (graph.changed_node_count + graph.reused_node_count === graph.node_count);
+    await upsertGuardResult(context.env.DB, releaseId, {
+      guardId: "release-object-graph", status: graphPass ? "pass" : "fail", eligibleCount: expectedGraphNodes,
+      examinedCount: Math.min(expectedGraphNodes, graphNodes?.count ?? 0),
+      findings: graphPass ? [] : [{ key: "release-graph-incomplete", message: "Content-addressed release graph is incomplete", evidence: { graph, graphNodes, expectedGraphNodes } }],
+      detail: { graph },
+    });
+    const expectedScenarios = summary.expectedRecipes * (4 + summary.expectedStores);
+    const scenarioPass = scenarios?.count === expectedScenarios;
+    await upsertGuardResult(context.env.DB, releaseId, {
+      guardId: "release-recipe-scenarios", status: scenarioPass ? "pass" : "fail", eligibleCount: expectedScenarios,
+      examinedCount: Math.min(expectedScenarios, scenarios?.count ?? 0),
+      findings: scenarioPass ? [] : [{ key: "recipe-scenario-count", message: "First-class recipe scenarios are incomplete", evidence: { actual: scenarios?.count ?? 0, expected: expectedScenarios } }],
+      detail: { scenarioKinds: ["utilized", "register-checkout", "non-member-checkout", "everyday-baseline", "selected-store-checkout"] },
+    });
+  }
   const missingHard = await context.env.DB.prepare(
     `SELECT d.id
        FROM guard_definitions d
        LEFT JOIN guard_results r ON r.guard_id = d.id AND r.release_id = ?1
       WHERE d.active = 1 AND d.scope = 'release' AND d.severity = 'hard'
         AND (r.id IS NULL OR r.status <> 'pass')
+        AND (?2 <> 'legacy-current-bridge' OR d.id NOT IN ('release-object-graph', 'release-recipe-scenarios'))
       ORDER BY d.id`,
-  ).bind(releaseId).all<{ id: string }>();
+  ).bind(releaseId, manifestKind).all<{ id: string }>();
   const valid = missingHard.results.length === 0;
   await context.env.DB.prepare(
     "UPDATE releases SET state = ?2, validated_at = CASE WHEN ?2 = 'validated' THEN CURRENT_TIMESTAMP ELSE NULL END WHERE id = ?1",
@@ -3289,12 +3734,50 @@ app.post("/internal/releases/:id/publish", async (context) => {
   const current = await context.env.DB.prepare("SELECT release_id FROM current_releases WHERE market_id = ?1").bind(release.market_id).first<{ release_id: string }>();
   const statements: D1PreparedStatement[] = [];
   if (current && current.release_id !== releaseId) statements.push(context.env.DB.prepare("UPDATE releases SET state = 'superseded' WHERE id = ?1 AND state = 'published'").bind(current.release_id));
+  statements.push(context.env.DB.prepare("DELETE FROM current_recipe_scenarios WHERE market_id = ?1").bind(release.market_id));
+  statements.push(context.env.DB.prepare(
+    `INSERT INTO current_recipe_scenarios
+       (market_id, release_id, recipe_slug, scenario_kind, store_location_key, status, batch_cost_minor,
+        serving_cost_minor, missing_ingredients_json, content_hash, updated_at)
+     SELECT ?1, release_id, recipe_slug, scenario_kind, store_location_key, status, batch_cost_minor,
+            serving_cost_minor, missing_ingredients_json, content_hash, CURRENT_TIMESTAMP
+       FROM release_recipe_scenarios WHERE release_id = ?2`,
+  ).bind(release.market_id, releaseId));
   statements.push(context.env.DB.prepare("UPDATE releases SET state = 'published', published_at = CURRENT_TIMESTAMP WHERE id = ?1 AND state = 'validated'").bind(releaseId));
   statements.push(context.env.DB.prepare(
     `INSERT INTO current_releases (market_id, release_id, updated_at) VALUES (?1, ?2, CURRENT_TIMESTAMP)
      ON CONFLICT(market_id) DO UPDATE SET release_id = excluded.release_id, updated_at = CURRENT_TIMESTAMP`,
   ).bind(release.market_id, releaseId));
   await context.env.DB.batch(statements);
+  if (current && current.release_id !== releaseId) {
+    try {
+      await context.env.DB.batch([
+        context.env.DB.prepare("DELETE FROM recipe_cost_detail_objects WHERE release_id = ?1").bind(current.release_id),
+        context.env.DB.prepare("DELETE FROM release_recipe_payloads WHERE release_id = ?1").bind(current.release_id),
+        context.env.DB.prepare("DELETE FROM release_recipe_scenarios WHERE release_id = ?1").bind(current.release_id),
+        context.env.DB.prepare("DELETE FROM release_recipe_costs WHERE release_id = ?1").bind(current.release_id),
+        context.env.DB.prepare("DELETE FROM release_top5 WHERE release_id = ?1").bind(current.release_id),
+        context.env.DB.prepare("DELETE FROM release_free_rotation WHERE release_id = ?1").bind(current.release_id),
+        context.env.DB.prepare("DELETE FROM release_payloads WHERE release_id = ?1").bind(current.release_id),
+        context.env.DB.prepare(
+          `DELETE FROM release_cells WHERE release_id = ?1
+            AND NOT EXISTS (SELECT 1 FROM accuracy_draw_cells sample
+                             WHERE sample.release_id = release_cells.release_id
+                               AND sample.commodity_id = release_cells.commodity_id
+                               AND sample.store_location_id = release_cells.store_location_id)`,
+        ).bind(current.release_id),
+        context.env.DB.prepare("DELETE FROM release_graph_nodes WHERE release_id = ?1").bind(current.release_id),
+      ]);
+      await context.env.DB.prepare(
+        `DELETE FROM release_reason_blobs WHERE NOT EXISTS
+          (SELECT 1 FROM release_cells cell WHERE cell.reason_hash = release_reason_blobs.content_hash)`,
+      ).run();
+    } catch (error) {
+      await raiseOperationalAlert(context.env, `release-projection-compaction:${current.release_id}`, "Superseded hot release projection compaction failed", {
+        releaseId, previousReleaseId: current.release_id, error: error instanceof Error ? error.message : String(error),
+      }, { notification: "digest", deferMinutes: 30 });
+    }
+  }
   let cachePurged = false;
   let cachePurgeErrors: Array<{ code: number; message: string }> = [];
   try {
@@ -3490,7 +3973,7 @@ app.post("/internal/triage/reconcile", async (context) => {
   ).first<{ backup_id: string; replica_id: string }>();
   const failedBackupItems = await context.env.DB.prepare(
     `SELECT id FROM triage_items
-      WHERE source_kind = 'operational_alert' AND title IN ('Nightly D1 backup failed', 'Weekly D1 full export failed')
+      WHERE source_kind = 'operational_alert' AND title IN ('Nightly D1 backup failed', 'Weekly D1 full export failed', 'D1 Time Travel and R2 lake manifest backup failed')
         AND status <> 'resolved' ORDER BY created_at, id`,
   ).all<{ id: string }>();
   const recoveredBackups = backupRecovery
@@ -3567,7 +4050,7 @@ app.post("/internal/triage/reconcile", async (context) => {
   const restoreFailures = await context.env.DB.prepare(
     `SELECT id, source_ref FROM triage_items
       WHERE source_kind = 'operational_alert'
-        AND title = 'Quarterly D1 restore drill failed'
+        AND title IN ('Quarterly D1 restore drill failed', 'R2 lake and D1 Time Travel recovery drill failed')
         AND status <> 'resolved'
       ORDER BY created_at DESC, id DESC`,
   ).all<{ id: string; source_ref: string }>();

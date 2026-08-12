@@ -355,7 +355,8 @@ export async function ingestDirectCapture(
       const versionId = await deterministicId("pver", productId, versionHash);
       return { observation, productId, versionId, observationId: (await semanticObservationId(artifact.sourceId, versionId, observation)).id };
     }));
-    const partition = await buildObservationParquet(planned.map((item) => ({
+    const partitionFacts = [...new Map(planned.map((item) => [item.observationId, item])).values()];
+    const partition = await buildObservationParquet(partitionFacts.map((item) => ({
       observationId: item.observationId, productId: item.productId, productVersionId: item.versionId,
       sourceId: artifact.sourceId, storeLocationId, batchId, observation: item.observation,
     })));
@@ -643,6 +644,12 @@ export async function publishNativeRelease(client: MutationClient, artifact: Nat
       const wirePayload: unknown = JSON.parse(JSON.stringify(payload));
       await client.request(`/internal/releases/${artifact.releaseId}/payload`, { method: "PUT", json: { kind, payload: wirePayload, contentHash: await digestHex(stableJson(wirePayload)) } });
     }
+    for (const nodeChunk of chunks(artifact.graph.nodes, 25)) {
+      await client.request(`/internal/releases/${artifact.releaseId}/graph-nodes`, { method: "PUT", json: { nodes: nodeChunk } });
+    }
+    await client.request(`/internal/releases/${artifact.releaseId}/graph-finalize`, { json: {
+      parentReleaseId: artifact.graph.parentReleaseId, dependencyHash: artifact.graph.dependencyHash,
+    } });
     const validation = await client.request(`/internal/releases/${artifact.releaseId}/validate`, { method: "POST", acceptStatuses: [422] });
     const publication = validation.ok ? await client.request(`/internal/releases/${artifact.releaseId}/publish`, { method: "POST" }) : null;
     return { ok: Boolean(validation.ok && publication?.ok), releaseId: artifact.releaseId, inputHash: artifact.inputHash, validation, publication, audit: artifact.audit };

@@ -291,7 +291,7 @@ export async function insertReleaseCells(db: D1Database, releaseId: string, cell
 }
 
 export async function insertRecipeCosts(db: D1Database, releaseId: string, costs: readonly RecipeCost[]): Promise<void> {
-  const statements = costs.map((cost) => db.prepare(
+  const statements: D1PreparedStatement[] = costs.map((cost) => db.prepare(
     `INSERT INTO release_recipe_costs
        (release_id, recipe_slug, status, batch_cost_minor, serving_cost_minor, servings, missing_ingredients_json, detail_json)
      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
@@ -312,6 +312,40 @@ export async function insertRecipeCosts(db: D1Database, releaseId: string, costs
     stableJson(cost.missingIngredients),
     stableJson(cost.detail),
   ));
+  const scenarioKinds = [
+    ["utilized", "utilized"], ["registerCheckout", "register-checkout"],
+    ["nonMemberCheckout", "non-member-checkout"], ["everydayBaseline", "everyday-baseline"],
+  ] as const;
+  for (const cost of costs) {
+    const detail = cost.detail as Record<string, unknown>;
+    const scenarios = detail.scenarios && typeof detail.scenarios === "object" && !Array.isArray(detail.scenarios)
+      ? detail.scenarios as Record<string, unknown> : {};
+    const addScenario = async (scenarioKind: string, storeKey: string, value: unknown) => {
+      if (!value || typeof value !== "object" || Array.isArray(value)) return;
+      const scenario = value as Record<string, unknown>;
+      const status = scenario.status === "complete" ? "complete" : "incomplete";
+      const batchCost = typeof scenario.batchCostMinor === "number" && Number.isSafeInteger(scenario.batchCostMinor) ? scenario.batchCostMinor : null;
+      const servingCost = typeof scenario.servingCostMinor === "number" && Number.isSafeInteger(scenario.servingCostMinor) ? scenario.servingCostMinor : null;
+      const missing = Array.isArray(scenario.missingIngredients) ? scenario.missingIngredients.filter((item): item is string => typeof item === "string") : [];
+      const contentHash = await digestHex(stableJson({ releaseId, recipeSlug: cost.recipeSlug, scenarioKind, storeKey, status, batchCost, servingCost, missing }));
+      statements.push(db.prepare(
+        `INSERT INTO release_recipe_scenarios
+           (release_id, recipe_slug, scenario_kind, store_location_key, status, batch_cost_minor, serving_cost_minor, missing_ingredients_json, content_hash)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
+         ON CONFLICT(release_id, recipe_slug, scenario_kind, store_location_key) DO UPDATE SET
+           status = excluded.status, batch_cost_minor = excluded.batch_cost_minor,
+           serving_cost_minor = excluded.serving_cost_minor, missing_ingredients_json = excluded.missing_ingredients_json,
+           content_hash = excluded.content_hash`,
+      ).bind(releaseId, cost.recipeSlug, scenarioKind, storeKey, status, batchCost, servingCost, stableJson(missing), contentHash));
+    };
+    for (const [sourceKey, targetKind] of scenarioKinds) await addScenario(targetKind, "", scenarios[sourceKey]);
+    const selected = scenarios.selectedStoreCheckout;
+    if (selected && typeof selected === "object" && !Array.isArray(selected)) {
+      for (const [storeKey, value] of Object.entries(selected as Record<string, unknown>).sort(([left], [right]) => left.localeCompare(right))) {
+        await addScenario("selected-store-checkout", storeKey, value);
+      }
+    }
+  }
   for (let offset = 0; offset < statements.length; offset += 90) {
     await db.batch(statements.slice(offset, offset + 90));
   }

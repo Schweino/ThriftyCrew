@@ -6,6 +6,7 @@ import { buildCurrentBridge } from "@thriftycrew/daily/legacy";
 import { buildRegularCapture, type CaptureAttestation } from "@thriftycrew/daily/direct";
 import { evaluateSourceContract, type SourceContract } from "@thriftycrew/daily/source-contracts";
 import { buildNativeRelease, loadNativeReleaseCatalog, nativeReleaseIdentity } from "@thriftycrew/daily/native";
+import type { ContentAddressedReleaseGraph } from "@thriftycrew/daily/release-graph";
 import { digestHex, stableJson } from "@thriftycrew/domain";
 import { generateLegacyConfiguration } from "./config";
 import { buildNativeParityReport, compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot } from "@thriftycrew/engine";
@@ -65,6 +66,29 @@ async function mutationClient(): Promise<MutationClient> {
       return refreshed;
     } } : { secret }),
   });
+}
+
+async function loadCurrentReleaseGraph(client: MutationClient): Promise<ContentAddressedReleaseGraph | undefined> {
+  const nodes: ContentAddressedReleaseGraph["nodes"] = [];
+  let afterKind = "";
+  let afterKey = "";
+  let header: { parentReleaseId: string | null; dependencyHash: string } | null = null;
+  while (true) {
+    const query = new URLSearchParams({ marketId: "omaha" });
+    if (afterKind) { query.set("afterKind", afterKind); query.set("afterKey", afterKey); }
+    const page = await client.request(`/internal/engine/current-release-graph?${query}`, { acceptStatuses: [404] }) as unknown as {
+      httpStatus?: number; parentReleaseId: string | null; dependencyHash: string;
+      nodes?: ContentAddressedReleaseGraph["nodes"]; next?: { kind: string; key: string } | null;
+    };
+    if (page.httpStatus === 404) return undefined;
+    header ??= { parentReleaseId: page.parentReleaseId, dependencyHash: page.dependencyHash };
+    nodes.push(...(page.nodes ?? []));
+    if (!page.next) break;
+    afterKind = page.next.kind;
+    afterKey = page.next.key;
+  }
+  return { version: 1, parentReleaseId: header?.parentReleaseId ?? null,
+    dependencyHash: header?.dependencyHash ?? "0".repeat(64), nodes };
 }
 
 async function publicGet(pathname: string): Promise<unknown> {
@@ -497,8 +521,8 @@ if (command === "status") {
   if (!file) throw new Error("tc restore cleanup requires a JSON cleanup-evidence file");
   result = await (await mutationClient()).request("/internal/restore-drills/cleanup", { json: JSON.parse(await readFile(cliPath(file), "utf8")) });
 } else if (command === "archive" && subcommand === "plan") {
-  // Keep one full day of safety behind the API's moving 90-day hot-retention boundary.
-  const cutoffAt = arguments_.find((value: string) => !value.startsWith("--")) ?? new Date(Date.now() - 91 * 24 * 60 * 60 * 1000).toISOString();
+  // Keep one full day of safety behind the API's 14-day hot-index boundary.
+  const cutoffAt = arguments_.find((value: string) => !value.startsWith("--")) ?? new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString();
   result = await (await mutationClient()).request("/internal/archival/plan", { json: { cutoffAt, dryRun: !arguments_.includes("--execute"), maximumRows: 10000 }, acceptStatuses: [409, 422] });
 } else if (command === "archive" && subcommand === "forecast") {
   result = await (await mutationClient()).request("/internal/archival/forecast/run", { method: "POST" });
@@ -516,6 +540,24 @@ if (command === "status") {
   const [manifestId, archiveSha256] = arguments_;
   if (!manifestId || !archiveSha256) throw new Error("tc archive execute requires a manifest id and verified archive SHA-256");
   result = await (await mutationClient()).request(`/internal/archival/${encodeURIComponent(manifestId)}/execute`, { json: { archiveSha256 } });
+} else if (command === "storage" && subcommand === "migrate-releases") {
+  const client = await mutationClient();
+  const inventory = await client.request("/internal/storage/releases") as unknown as {
+    releases: Array<{ id: string; root_hash: string | null }>;
+  };
+  const backfilled: Array<Record<string, unknown>> = [];
+  for (const release of inventory.releases.filter((item) => !item.root_hash)) {
+    backfilled.push(await client.request(`/internal/storage/backfill-release/${encodeURIComponent(release.id)}`, { method: "POST" }) as Record<string, unknown>);
+  }
+  const compacted: Array<Record<string, unknown>> = [];
+  while (true) {
+    const page = await client.request("/internal/storage/compact-releases", { method: "POST" }) as unknown as {
+      compacted: Array<Record<string, unknown>>;
+    };
+    compacted.push(...page.compacted);
+    if (page.compacted.length === 0) break;
+  }
+  result = { ok: true, releases: inventory.releases.length, backfilled: backfilled.length, compacted };
 } else if (command === "cleanup" && subcommand === "plan") {
   result = await (await mutationClient()).request("/internal/canonical-cleanup/plan", { json: { dryRun: !arguments_.includes("--execute"), maximumRows: 10000 }, acceptStatuses: [422] });
 } else if (command === "cleanup" && subcommand === "index") {
@@ -784,10 +826,13 @@ if (command === "status") {
   }
   if (result === undefined) {
     stageStartedAt = performance.now();
-    const snapshot = await client.request("/internal/engine/snapshot?mode=direct") as unknown as NativeEngineSnapshot;
+    const [snapshot, previousGraph] = await Promise.all([
+      client.request("/internal/engine/snapshot?mode=direct") as Promise<unknown> as Promise<NativeEngineSnapshot>,
+      loadCurrentReleaseGraph(client),
+    ]);
     performanceProfile.snapshotFetchMs = Math.round(performance.now() - stageStartedAt);
     stageStartedAt = performance.now();
-    const artifact = await buildNativeRelease(incomeRoot, snapshot, catalog);
+    const artifact = await buildNativeRelease(incomeRoot, snapshot, catalog, previousGraph);
     performanceProfile.nativeBuildMs = Math.round(performance.now() - stageStartedAt);
     const outputArgument = arguments_.find((value: string) => value.endsWith(".json"));
     if (outputArgument) await writeJson(cliPath(outputArgument), artifact);
@@ -1145,7 +1190,7 @@ if (command === "status") {
     ...(!isHelpRequest ? { error: `Unknown command: ${requestedCommand}` } : {}),
     usage: [
       "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy|archives|archive <id>",
-      "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>|execute <manifest> <sha256>", "tc cleanup index|plan [--execute]|export <run> <json>|upload <run> <parquet>|execute <run> <sha256>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
+      "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>|execute <manifest> <sha256>", "tc storage migrate-releases", "tc cleanup index|plan [--execute]|export <run> <json>|upload <run> <parquet>|execute <run> <sha256>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
       "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>", "tc efficiency record <report.json>", "tc recipe bundles [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
         "tc capture metrics [limit]", "tc capture coordinator status|next|heartbeat|fail|challenge|resolve", "tc capture session worklist|init|append|evidence|verification-plan|finalize|status",

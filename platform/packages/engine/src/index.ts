@@ -211,6 +211,7 @@ export interface NativeEngineSnapshot {
     captured_at: string; valid_to: string | null; coverage_mode: WinnerCandidate["batchCoverageMode"];
     captured_to: string; normalized_basis_unit: string; known_wrong: number;
     purchase_price_minor?: number; purchase_quantity?: number; package_count?: number;
+    kind?: "sale" | "everyday" | "markdown" | "member"; regular_price_minor?: number | null;
     normalized_basis_qty_micros?: number; membership_required?: number; loyalty_required?: number;
     raw_price_text?: string | null; name?: string; product_url?: string | null; taxonomy_path?: string | null;
     external_key?: string; size_text?: string | null; batch_id?: string;
@@ -221,6 +222,7 @@ export interface NativeEngineSnapshot {
     observation_id: string; store_location_id: string; per_unit_micros: number; captured_at: string;
     valid_to: string | null; coverage_mode: WinnerCandidate["batchCoverageMode"]; captured_to: string;
     normalized_basis_unit: string; purchase_price_minor?: number; purchase_quantity?: number;
+    kind?: "sale" | "everyday" | "markdown" | "member"; regular_price_minor?: number | null;
     package_count?: number; normalized_basis_qty_micros?: number; membership_required?: number;
     loyalty_required?: number; raw_price_text?: string | null; name: string; normalized_name?: string;
     product_url?: string | null; taxonomy_path?: string | null; external_key?: string; size_text?: string | null;

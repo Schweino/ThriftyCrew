@@ -69,6 +69,21 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
 
+  apps/capture-service:
+    dependencies:
+      '@thriftycrew/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+      '@thriftycrew/daily':
+        specifier: workspace:*
+        version: link:../daily
+      '@thriftycrew/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
+      zod:
+        specifier: 4.4.3
+        version: 4.4.3
+
   apps/daily:
     dependencies:
       '@thriftycrew/contracts':

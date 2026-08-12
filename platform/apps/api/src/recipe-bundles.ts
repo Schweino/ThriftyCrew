@@ -57,6 +57,25 @@ export async function buildReleaseRecipeBundles(env: WorkerEnv, releaseId: strin
     const commodityIds = [...new Set(array(detail.ingredients).map((ingredient) => ingredient.commodityId)
       .filter((value): value is string => typeof value === "string" && value.length > 0))].sort();
     const ingredients = recipeFeedIngredients(allIngredients, commodityIds);
+    const pricingInputs = Object.fromEntries(array(detail.ingredients).flatMap((ingredient) => {
+      const commodityId = typeof ingredient.commodityId === "string" ? ingredient.commodityId : null;
+      if (!commodityId || ingredient.status !== "priced") return [];
+      return [[commodityId, {
+        current: {
+          observationId: ingredient.observationId ?? null, perUnitMicros: ingredient.perUnitMicros ?? null,
+          purchasePriceMinor: ingredient.sourcePurchasePriceMinor ?? null, packageBasisUnits: ingredient.packageBasisUnits ?? null,
+          variableWeight: ingredient.variableWeight === true,
+        },
+        everyday: {
+          observationId: ingredient.everydayObservationId ?? null, storeLocationId: ingredient.everydayStoreLocationId ?? null,
+          perUnitMicros: ingredient.everydayPerUnitMicros ?? null,
+          purchasePriceMinor: ingredient.everydaySourcePurchasePriceMinor ?? null,
+          packageBasisUnits: ingredient.everydayPackageBasisUnits ?? null,
+          variableWeight: ingredient.everydayVariableWeight === true,
+        },
+        stores: ingredient.storeOptions ?? {},
+      }]];
+    }));
     const feed = {
       version: feedPayload.version,
       release_id: feedPayload.release_id,
@@ -66,6 +85,8 @@ export async function buildReleaseRecipeBundles(env: WorkerEnv, releaseId: strin
       recipe_count: feedRecipes[cost.recipe_slug] ? 1 : 0,
       board_item_count: Object.keys(ingredients).length,
       ingredients,
+      pricing_inputs: pricingInputs,
+      scenarios: detail.scenarios ?? {},
       recipes: feedRecipes[cost.recipe_slug] ? { [cost.recipe_slug]: feedRecipes[cost.recipe_slug] } : {},
     };
     const serialized = stableJson({ version: 1, releaseId, slug: cost.recipe_slug, recipe, feed });
