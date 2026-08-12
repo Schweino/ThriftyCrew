@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "triageId": "triage_0d4b854e86340cc256c34e5a7c83ceb7",
+  "diagnosis": "The authoritative local daily-engine run run_daily-engine_pc-1786468021584 started at 2026-08-11T17:07:03Z and was externally reconciled as failed at 18:31:05Z after Windows Task Scheduler returned 0xC000013A and no process remained. The local platform log proves configuration deployment, Bakers capture, and Family Fare capture completed, then records START hy-vee-capture with no DONE, capture-ingest, native-publish, or ledger-finish; the existing Hy-Vee output predates this run, so the interrupted run published no partial capture or release. The installed task XML has StopIfGoingOnBatteries=true and DisallowStartIfOnBatteries=true because scripts/install-pc-platform-runtime.ps1:111-120 does not opt the three-hour authoritative pipeline out of the Windows defaults. A power transition can therefore terminate the run with the observed status, but the Task Scheduler Operational channel is disabled, so battery stop versus a manual or other external stop cannot be proven retrospectively. Observability is additionally weak because scripts/run-pc-platform-job.ps1:36-43 buffers a child command's complete output before logging it, leaving no durable Hy-Vee progress after START. The current release rel_native_cf4474d1e3965099cf85 predates the failed run and remained current.",
+  "evidenceRefs": [
+    "production:/api/v2/status@2026-08-11T19:03:02.862Z",
+    "production:/internal/triage/triage_0d4b854e86340cc256c34e5a7c83ceb7/review",
+    "production:job-run/run_daily-engine_pc-1786468021584",
+    "local:TaskScheduler/ThriftyCrew V3 Daily Engine/LastTaskResult=0xC000013A",
+    "local:TaskScheduler/ThriftyCrew V3 Daily Engine/StopIfGoingOnBatteries=true",
+    "local:platform-daily-engine.log@2026-08-11T12:07:01-12:23:21-05:00",
+    "platform/scripts/install-pc-platform-runtime.ps1:111",
+    "platform/scripts/install-pc-platform-runtime.ps1:113",
+    "platform/scripts/install-pc-platform-runtime.ps1:120",
+    "platform/scripts/run-pc-platform-job.ps1:36",
+    "platform/scripts/run-pc-platform-job.ps1:40",
+    "platform/scripts/run-pc-platform-job.ps1:67",
+    "platform/scripts/run-pc-platform-job.ps1:68",
+    "grocery/pull-regular-hyvee.ps1:60",
+    "grocery/pull-regular-hyvee.ps1:72",
+    "grocery/pull-regular-hyvee.ps1:239",
+    "grocery/pull-regular-hyvee.ps1:257"
+  ],
+  "blastRadius": {
+    "routes": [
+      "/internal/job-runs",
+      "/internal/job-runs/:id"
+    ],
+    "releases": [],
+    "stores": [
+      "hy-vee-omaha-01"
+    ],
+    "commodities": [],
+    "recipes": []
+  },
+  "implementation": [
+    "After the operator chooses the intended AC/battery policy, update platform/scripts/install-pc-platform-runtime.ps1:111-120 so Register-PcTask accepts an explicit power policy and the three-hour ThriftyCrew V3 Daily Engine task is registered with the selected, reviewable settings; if uninterrupted authoritative execution is selected, pass -AllowStartIfOnBatteries and -DontStopIfGoingOnBatteries instead of inheriting the current stop-on-battery defaults.",
+    "In platform/scripts/run-pc-platform-job.ps1:36-43, stream each child output line to Write-PcRuntimeLog while the child runs and preserve its native exit code, so the last completed Hy-Vee request/progress marker survives an external termination instead of leaving only START hy-vee-capture.",
+    "Add a read-only PC runtime verification script under platform/scripts that exports each registered V3 task and fails when its ExecutionTimeLimit, MultipleInstancesPolicy, or explicit power policy differs from repository authority; include the daily-engine 180-minute and chosen battery-policy assertions in the normal operator installation verification.",
+    "Do not retry, ingest, or publish from the interrupted workspace. A recovery must start a new fenced daily-engine run and reuse only immutable or independently validated inputs through the existing pipeline."
+  ],
+  "verification": [
+    "Acceptance: a deterministic scheduled-task settings test must prove the generated Daily Engine XML contains ExecutionTimeLimit PT3H, MultipleInstancesPolicy IgnoreNew, and the exact operator-approved DisallowStartIfOnBatteries/StopIfGoingOnBatteries values; a fixture with either power flag inverted must fail.",
+    "Acceptance: run the launcher against a test child that emits two lines and then exits nonzero; both lines must be durable before process exit, the launcher must preserve the nonzero result, and the job ledger must finish failed rather than remain started. Terminate a second test child externally and prove its last progress line remains in the log for reconciliation.",
+    "Acceptance: rerun grocery/pull-regular-hyvee.ps1 with a controlled slow or failing endpoint fixture and verify the 14-minute cap, per-request timeout, carry-forward semantics, and output completeness still fail closed; do not weaken price, size, or freshness guards to shorten the run.",
+    "Deployment check: run pnpm check, reinstall the PC runtime through the reviewed installer, export and inspect the registered Daily Engine task, then start one new fenced daily-engine recovery. Require config-deploy, all three captures, capture-ingest, browser-promotion, native-publish, Ghost reconciliation, direct parity, evidence accrual, and job-ledger-finish to log DONE before considering recovery complete.",
+    "Deployment check: confirm /api/v2/status reports the new daily-engine run completed, the current release changes only to a fully guarded immutable release, and /internal/doctor plus public API/board smoke checks pass. Preserve run_daily-engine_pc-1786468021584 and its evidence unchanged for audit."
+  ],
+  "rollback": [
+    "If the selected power policy causes unacceptable battery drain, sleep interference, or duplicate scheduling, restore the prior explicit policy values and reinstall only the affected scheduled task; do not delete the durable failed run or its triage evidence.",
+    "If streamed logging changes exit-code propagation or leaks request payloads, revert the logging change, retain redaction at the existing operator boundary, and redeploy the previous launcher before the next scheduled run.",
+    "After rollback, export the task to prove its settings match the restored repository authority, confirm rel_native_cf4474d1e3965099cf85 or a later fully guarded release remains current, and leave daily-engine failed closed until a fresh complete run succeeds."
+  ],
+  "requiresOperator": true,
+  "operatorReason": "Task Scheduler history was disabled, so the evidence cannot distinguish a battery-triggered stop from a manual or other external termination. An operator must choose whether this three-hour local publisher is allowed to start and continue on battery, balancing continuity against battery drain, before the scheduler policy is changed."
+}

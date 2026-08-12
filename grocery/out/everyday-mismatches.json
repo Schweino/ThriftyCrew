@@ -78,19 +78,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "canned-black-beans",
-        "store":  "Walmart",
-        "unit":  "oz",
-        "board":  0.0613,
-        "link":  0.0734,
-        "ratio":  1.2,
-        "price":  13.22,
-        "size":  "180 oz",
-        "boardItem":  "(12 pack) Great Value Organic Black Beans, Canned, 15 oz",
-        "linkItem":  "(12 pack) Great Value Organic Black Beans, Canned, 15 oz",
-        "board_src":  "main"
-    },
-    {
         "id":  "canned-chicken",
         "store":  "Aldi",
         "unit":  "oz",
@@ -156,19 +143,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "frosting",
-        "store":  "Walmart",
-        "unit":  "oz",
-        "board":  0.11,
-        "link":  0.1212,
-        "ratio":  1.1,
-        "price":  15.52,
-        "size":  "128 oz",
-        "boardItem":  "(8 pack) Pillsbury Creamy Supreme Vanilla Frosting, 16 oz Tub",
-        "linkItem":  "(8 pack) Pillsbury Creamy Supreme Vanilla Frosting, 16 oz Tub",
-        "board_src":  "main"
-    },
-    {
         "id":  "chicken-nuggets",
         "store":  "Aldi",
         "unit":  "oz",
@@ -218,32 +192,6 @@
         "size":  "2.5 oz",
         "boardItem":  "That\u0027s Smart Ground Cinnamon",
         "linkItem":  "That\u0027s Smart Ground Cinnamon",
-        "board_src":  "main"
-    },
-    {
-        "id":  "ground-pork",
-        "store":  "Walmart",
-        "unit":  "lb",
-        "board":  3.9467,
-        "link":  3.4133,
-        "ratio":  0.86,
-        "price":  5.12,
-        "size":  "1.5 lb",
-        "boardItem":  "Tyson All Natural 85% Lean/15% Fat Ground Pork, 1.5 lb Tray",
-        "linkItem":  "Tyson All Natural 85% Lean/15% Fat Ground Pork, 1.5 lb Tray",
-        "board_src":  "main"
-    },
-    {
-        "id":  "italian-seasoning",
-        "store":  "Walmart",
-        "unit":  "oz",
-        "board":  1.06,
-        "link":  0.89,
-        "ratio":  0.84,
-        "price":  1.78,
-        "size":  "2 oz",
-        "boardItem":  "Great Value Italian Seasoning, 2 oz",
-        "linkItem":  "Great Value Italian Seasoning, 2 oz",
         "board_src":  "main"
     },
     {
@@ -390,16 +338,42 @@
         "board_src":  "main"
     },
     {
+        "id":  "sweet-corn",
+        "store":  "Walmart",
+        "unit":  "each",
+        "board":  0.87,
+        "link":  0.7425,
+        "ratio":  0.85,
+        "price":  2.97,
+        "size":  "4 count",
+        "boardItem":  "Fresh Sweet Corn on the Cob, 4 Count",
+        "linkItem":  "Fresh Sweet Corn on the Cob, 4 Count",
+        "board_src":  "main"
+    },
+    {
         "id":  "tartar-sauce",
         "store":  "Walmart",
         "unit":  "floz",
-        "board":  0.1367,
-        "link":  0.1267,
-        "ratio":  0.93,
-        "price":  1.52,
+        "board":  0.1267,
+        "link":  0.1367,
+        "ratio":  1.08,
+        "price":  1.64,
         "size":  "12 fl oz",
         "boardItem":  "Great Value Tartar Sauce, 12 fl oz",
         "linkItem":  "Great Value Tartar Sauce, 12 fl oz",
+        "board_src":  "main"
+    },
+    {
+        "id":  "toaster-pastries",
+        "store":  "Walmart",
+        "unit":  "each",
+        "board":  0.1692,
+        "link":  0.1883,
+        "ratio":  1.11,
+        "price":  2.26,
+        "size":  "12 ct",
+        "boardItem":  "Great Value Frosted Chocolate Fudge Toasted Pastries, 20.3 oz, 12 Count",
+        "linkItem":  "Great Value Frosted Cherry Toaster Pastries",
         "board_src":  "main"
     },
     {

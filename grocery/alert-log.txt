@@ -175,3 +175,42 @@
 [2026-08-11T09:08:05] SENT 'Grocery page HELD (coverage) - 2026-08-11' -> schweino68@gmail.com (id 19ff126e1d2fec88)
 [2026-08-11T09:08:08] QUEUE ABSORBED into open item 2026-08-07-fb1fee (day 4 of this condition, count now 9) - no new id minted
 [2026-08-11T09:08:08] SUPPRESSED (already sent this type today) 'Grocery: Walmart full capture aging - 2026-08-11' [type: grocery walmart full capture aging]
+[2026-08-11T09:11:44] QUEUE ABSORBED into open item 2026-08-09-e547d0 (day 2 of this condition, count now 3) - no new id minted
+[2026-08-11T09:11:45] SENT 'smp-feed edge did not pick up today's push - 2026-08-11' -> schweino68@gmail.com (id 19ff12a3d195b097)
+[2026-08-11T12:47:12] SENT 'ThriftyCrew V3 local agent cycle failed: PostPublish' -> schweino68@gmail.com (id 19ff1ef7a927924b)
+[2026-08-11T13:57:11] SENT 'ThriftyCrew V3 local agent cycle failed: Triage' -> schweino68@gmail.com (id 19ff22f8df8f8b4d)
+[2026-08-12T01:09:04] SENT 'ThriftyCrew V3 local agent cycle failed: Accuracy' -> schweino68@gmail.com (id 19ff496add434b04)
+[2026-08-12T01:09:47] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Accuracy' [type: thriftycrew v local agent cycle failed accuracy]
+[2026-08-12T01:11:28] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Accuracy' [type: thriftycrew v local agent cycle failed accuracy]
+[2026-08-12T01:12:27] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Accuracy' [type: thriftycrew v local agent cycle failed accuracy]
+[2026-08-12T01:14:54] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Accuracy' [type: thriftycrew v local agent cycle failed accuracy]
+[2026-08-12T01:16:03] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Accuracy' [type: thriftycrew v local agent cycle failed accuracy]
+[2026-08-12T03:17:35] QUEUE ABSORBED into open item 2026-08-11-35684e (day 1 of this condition, count now 2) - no new id minted
+[2026-08-12T03:17:36] SENT 'ThriftyCrew V3 local job failed: family-fare-paced' -> schweino68@gmail.com (id 19ff50c584af9e6c)
+[2026-08-12T06:11:04] QUEUE ABSORBED into open item 2026-08-07-9d0317 (day 5 of this condition, count now 6) - no new id minted
+[2026-08-12T06:11:05] SENT 'Grocery: 11 store(s) dropped from a commodity they carry - 2026-08-12' -> schweino68@gmail.com (id 19ff5ab2be118371)
+[2026-08-12T06:13:42] QUEUE ABSORBED into open item 2026-08-07-cac5f3 (day 5 of this condition, count now 9) - no new id minted
+[2026-08-12T06:13:43] SENT 'Grocery: semantic sweep found 41 product(s) no rule can see - 2026-08-12' -> schweino68@gmail.com (id 19ff5ad93ae5eff9)
+[2026-08-12T06:13:44] QUEUE ABSORBED into open item 2026-08-07-323328 (day 5 of this condition, count now 3) - no new id minted
+[2026-08-12T06:13:45] SENT 'Grocery: 3 board cell(s) sit in the wrong store department - 2026-08-12' -> schweino68@gmail.com (id 19ff5ad9a126bf6a)
+[2026-08-12T06:15:18] QUEUE ABSORBED into open item 2026-08-07-79b768 (day 5 of this condition, count now 8) - no new id minted
+[2026-08-12T06:15:19] SENT 'Grocery matching soundness - review needed' -> schweino68@gmail.com (id 19ff5af0a95a943d)
+[2026-08-12T06:17:06] QUEUE ABSORBED into open item 2026-08-09-92a805 (day 3 of this condition, count now 3) - no new id minted
+[2026-08-12T06:17:07] SENT 'Grocery: 3 on-sale item(s) have no everyday fallback - 2026-08-12' -> schweino68@gmail.com (id 19ff5b0b1b520316)
+[2026-08-12T06:17:23] QUEUE ABSORBED into open item 2026-08-09-3e7a0c (day 3 of this condition, count now 2) - no new id minted
+[2026-08-12T06:17:24] SENT 'Recipe pricing: 4 unpriced ingredient line(s)' -> schweino68@gmail.com (id 19ff5b0f2fff43e6)
+[2026-08-12T06:17:30] QUEUE ABSORBED into open item 2026-08-09-e8ea1d (day 3 of this condition, count now 6) - no new id minted
+[2026-08-12T06:17:31] SENT 'Recipe db drift (index vs specs)' -> schweino68@gmail.com (id 19ff5b10c9e78ade)
+[2026-08-12T06:17:59] BODY THIN on 'Database constraint refused a write' - the queue entry carries no store, commodity or number, so it cannot be classified without hunting the data. Fix the caller to include the identifying rows.
+[2026-08-12T06:18:00] SENT 'Database constraint refused a write' -> schweino68@gmail.com (id 19ff5b180a846730)
+[2026-08-12T06:18:03] SENT 'A write broke cross-store integrity' -> schweino68@gmail.com (id 19ff5b18beb49b69)
+[2026-08-12T06:18:06] QUEUE BODY UPGRADED on 2026-08-09-817ca5 (486 -> 957 chars) - a later occurrence carried fuller evidence
+[2026-08-12T06:18:06] QUEUE ABSORBED into open item 2026-08-09-817ca5 (day 3 of this condition, count now 8) - no new id minted
+[2026-08-12T06:18:07] SENT 'Board prices aging inside a fresh file' -> schweino68@gmail.com (id 19ff5b19bda15934)
+[2026-08-12T06:18:11] SENT 'Recipe cards: 489 moved, over the daily cap' -> schweino68@gmail.com (id 19ff5b1ab822ed79)
+[2026-08-12T06:20:32] QUEUE ABSORBED into open item 2026-08-07-058ac6 (day 5 of this condition, count now 6) - no new id minted
+[2026-08-12T06:20:32] SENT 'Grocery: 12 NEW price flag(s) - 2026-08-12' -> schweino68@gmail.com (id 19ff5b3d43531386)
+[2026-08-12T06:21:16] QUEUE ABSORBED into open item 2026-08-10-740129 (day 2 of this condition, count now 3) - no new id minted
+[2026-08-12T06:21:17] SENT 'Grocery: GUARDS FAILED - board not published - 2026-08-12' -> schweino68@gmail.com (id 19ff5b48267c6341)
+[2026-08-12T06:21:22] QUEUE ABSORBED into open item 2026-08-07-fb1fee (day 5 of this condition, count now 10) - no new id minted
+[2026-08-12T06:21:23] SENT 'Grocery: Walmart full capture aging - 2026-08-12' -> schweino68@gmail.com (id 19ff5b499c8b9f70)

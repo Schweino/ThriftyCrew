@@ -80,6 +80,12 @@ importers:
       '@thriftycrew/engine':
         specifier: workspace:*
         version: link:../../packages/engine
+      hyparquet:
+        specifier: ^1.28.1
+        version: 1.28.1
+      hyparquet-writer:
+        specifier: ^0.16.6
+        version: 0.16.6
 
   apps/operator:
     dependencies:
@@ -1498,6 +1504,12 @@ packages:
   http-errors@2.0.1:
     resolution: {integrity: sha512-4FbRdAX+bSdmo4AUFuS0WNiPz8NgFt+r8ThgNWmlrjQjt1Q7ZR9+zTlce2859x4KSXrwIsaeTqDoKQmtP8pLmQ==}
     engines: {node: '>= 0.8'}
+
+  hyparquet-writer@0.16.6:
+    resolution: {integrity: sha512-KK3FhIf/yPhDi63rAEV6Di9tLZXDGYqXcOMVS2Ssm5zerEkrfc71REfGCFcEKtiiATGzd9kq5uWcy8JeCapQVQ==}
+
+  hyparquet@1.28.1:
+    resolution: {integrity: sha512-04PlyhYZpNDVaOjJNX4SP00beWf9Y9vXEOEQXSMFqVQNzxGxTmsJOQgBjar8VzLpT6E2kxNiWKL539e1dHcOVA==}
 
   iconv-lite@0.7.3:
     resolution: {integrity: sha512-IKXpvIzjnC9XTAUbVBcMfGS0EPaIXtW6v+zr+RRp+hqULEpo0owZax6wyRwPOJbWbzjYspQwusTsfVr0ifh4uQ==}
@@ -3932,6 +3944,12 @@ snapshots:
       statuses: 2.0.2
       toidentifier: 1.0.1
     optional: true
+
+  hyparquet-writer@0.16.6:
+    dependencies:
+      hyparquet: 1.28.1
+
+  hyparquet@1.28.1: {}
 
   iconv-lite@0.7.3:
     dependencies:

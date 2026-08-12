@@ -19,6 +19,8 @@
   "dependencies": {
     "@thriftycrew/contracts": "workspace:*",
     "@thriftycrew/domain": "workspace:*",
-    "@thriftycrew/engine": "workspace:*"
+    "@thriftycrew/engine": "workspace:*",
+    "hyparquet": "^1.28.1",
+    "hyparquet-writer": "^0.16.6"
   }
 }

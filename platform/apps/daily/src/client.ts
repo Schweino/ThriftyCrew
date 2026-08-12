@@ -4,6 +4,7 @@ import { gzipSync } from "node:zlib";
 import type { CurrentBridgeArtifact } from "./legacy";
 import type { NativeReleaseArtifact } from "./native";
 import { browserCaptureSessionSchema, type BrowserCaptureSealAttestation, type DirectCaptureArtifact } from "@thriftycrew/contracts";
+import { buildObservationParquet } from "./parquet";
 
 const encoder = new TextEncoder();
 
@@ -352,8 +353,20 @@ export async function ingestDirectCapture(
       const productId = await deterministicId("prod", storeLocationId, observation.externalProductKey);
       const versionHash = await digestHex(stableJson(semanticProductVersion(observation)));
       const versionId = await deterministicId("pver", productId, versionHash);
-      return { observation, observationId: (await semanticObservationId(artifact.sourceId, versionId, observation)).id };
+      return { observation, productId, versionId, observationId: (await semanticObservationId(artifact.sourceId, versionId, observation)).id };
     }));
+    const partition = await buildObservationParquet(planned.map((item) => ({
+      observationId: item.observationId, productId: item.productId, productVersionId: item.versionId,
+      sourceId: artifact.sourceId, storeLocationId, batchId, observation: item.observation,
+    })));
+    await client.request(`/internal/capture-batches/${batchId}/observation-partition`, {
+      method: "PUT", body: partition.bytes,
+      headers: {
+        "content-type": "application/vnd.apache.parquet", "x-content-sha256": partition.sha256,
+        "x-row-count": String(partition.rows), "x-min-observed-at": partition.minObservedAt,
+        "x-max-observed-at": partition.maxObservedAt, "x-schema-version": String(partition.schemaVersion),
+      },
+    });
     const existingIds = new Set<string>();
     for (const idChunk of chunks([...new Set(planned.map((item) => item.observationId))], 250)) {
       const probe = await client.request(`/internal/capture-batches/${batchId}/observations/existing`, { json: { observationIds: idChunk } });
