@@ -1,6 +1,5 @@
 import { browserLanePolicy, recordBrowserLaneResult, withBrowserStoreLane } from "./lane-policy.mjs";
 import { checkpointAdapterChunk } from "./adapter-protocol.mjs";
-import { packageSizeFromName } from "./next-data-v2.mjs";
 
 const LOCATION = "ALDI - OLA 42 - Omaha";
 const PRICE_MODE = "In-Store";
@@ -62,10 +61,10 @@ async function readPage(tab) {
 
 function buildRows(query, page, capturedAt) {
   return page.rows.map((row, resultIndex) => {
-    // ALDI cards have occasionally exposed a neighboring merchandising line as
-    // the trailing size. When the official product name itself carries an exact
-    // package suffix, bind that source-native value to the offer instead.
-    const size = packageSizeFromName(row.name) || row.size;
+    // The title may end in a count while the adjacent source-native card field
+    // carries package weight (for example, 12-count string cheese / 12 oz).
+    // Keep the card's dedicated size field rather than substituting title text.
+    const size = row.size;
     const originalLine = row.lines.find((line) => /^Original Price:\s*\$/i.test(line));
     const originalMatch = originalLine?.match(/\$([0-9]+(?:\.[0-9]{1,2})?)/);
     const regularPriceMinor = originalMatch ? Math.round(Number(originalMatch[1]) * 100) : undefined;

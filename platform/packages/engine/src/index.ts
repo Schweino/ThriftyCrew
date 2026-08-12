@@ -264,7 +264,21 @@ export function sourceNativeSizeConflict(name: string | undefined, sizeText: str
   if (!name || !sizeText) return false;
   const named = exactPackageMeasure(name, true);
   const captured = exactPackageMeasure(sizeText, false);
-  return Boolean(named && captured && named.unit === captured.unit && Math.abs(named.quantity - captured.quantity) > 1e-9);
+  if (!named || !captured || named.unit !== captured.unit) return false;
+  const difference = Math.abs(named.quantity - captured.quantity);
+  if (difference <= 1e-9 || difference / Math.max(named.quantity, captured.quantity) <= 0.02) return false;
+  // Some legacy source projections stripped a decimal point from the product
+  // title while retaining it in the dedicated size field (35 OZ / 3.5 oz).
+  const ratio = Math.max(named.quantity, captured.quantity) / Math.min(named.quantity, captured.quantity);
+  if ([10, 100].some((factor) => Math.abs(ratio - factor) <= 1e-9)) return false;
+  // Marketplace multipacks commonly end the title with the per-item measure
+  // while the package field records total checkout quantity.
+  const pack = name.match(/(?:^|[\s(])(\d+)\s*(?:pack|pk)\b/i);
+  if (pack && Math.abs(named.quantity * Number(pack[1]) - captured.quantity) <= 1e-9) return false;
+  // Variable-weight titles publish a range while the offer carries the exact
+  // weighed package. The final range endpoint is not a conflicting package.
+  if (/\d+(?:\.\d+)?\s*[-–]\s*\d+(?:\.\d+)?\s*(?:fl\.?\s*oz\.?|oz\.?|lb\.?|ct|count)\s*$/i.test(name.trim())) return false;
+  return true;
 }
 
 export function candidateBasisOptions(candidate: {

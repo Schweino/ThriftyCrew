@@ -96,6 +96,10 @@ describe("winner selection", () => {
     expect(sourceNativeSizeConflict("Happy Farms String Cheese 10 OZ", "12 oz")).toBe(true);
     expect(sourceNativeSizeConflict("Happy Farms String Cheese 10 OZ", "10 oz")).toBe(false);
     expect(sourceNativeSizeConflict("Dual Label 12 oz (340 g)", "12 oz")).toBe(false);
+    expect(sourceNativeSizeConflict("Stonemill Cajun Seasoning 35 OZ", "3.5 oz")).toBe(false);
+    expect(sourceNativeSizeConflict("(4 pack) Cake Mix, 15.25 oz", "61 oz")).toBe(false);
+    expect(sourceNativeSizeConflict("Ribeye Steak, 0.9 - 1.6 lb", "1.1 lb")).toBe(false);
+    expect(sourceNativeSizeConflict("Oyster Sauce, 20.20 fl oz", "19.989 fl oz")).toBe(false);
     const result = selectWinner([
       { observationId: "conflict", commodityId: "string-cheese", storeLocationId: "aldi", perUnitMicros: 1, capturedAt: "2026-08-12T11:00:00.000Z", batchCapturedTo: "2026-08-12T11:00:00.000Z", batchCoverageMode: "full", sourceIdentityConflict: true },
       { observationId: "sound", commodityId: "string-cheese", storeLocationId: "aldi", perUnitMicros: 2, capturedAt: "2026-08-12T11:00:00.000Z", batchCapturedTo: "2026-08-12T11:00:00.000Z", batchCoverageMode: "full" },
