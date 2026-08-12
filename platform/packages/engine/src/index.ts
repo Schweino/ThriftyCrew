@@ -205,6 +205,7 @@ export interface NativeEngineSnapshot {
   inputHash: string;
   inputBatchIds: string[];
   rawCandidateEncoding?: "full" | "unmatched-only" | "omitted";
+  transportEncoding?: "json-rows-v1" | "tuples-v1";
   transportBytes?: number;
   commodities: Array<{ id: string; label: string; basis_unit: WinnerCandidate["commodityId"] extends string ? string : never; category_id: string; category_label?: string; sort_order?: number; band_min_micros?: number | null; band_max_micros?: number | null }>;
   stores: Array<{ id: string; store_name: string; display_name?: string; membership_required?: number }>;
@@ -274,7 +275,7 @@ export function decodeNativeEngineSnapshot(snapshot: NativeEngineSnapshot | Tupl
   const { candidateEncoding: _encoding, candidateColumns: _columns, matchedCandidateRows, unmatchedCandidateRows,
     transportBytes, ...rest } = snapshot;
   return { ...rest, candidates: matchedCandidateRows.map(object), rawCandidates: unmatchedCandidateRows.map(object),
-    rawCandidateEncoding: rest.rawCandidateEncoding ?? "unmatched-only", transportBytes } as NativeEngineSnapshot;
+    rawCandidateEncoding: rest.rawCandidateEncoding ?? "unmatched-only", transportEncoding: "tuples-v1", transportBytes } as NativeEngineSnapshot;
 }
 
 export interface NativeReleaseCell {

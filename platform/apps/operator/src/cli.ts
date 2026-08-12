@@ -864,7 +864,7 @@ if (command === "status") {
       await client.request("/internal/engine/measurements", { json: {
         releaseId: artifact.releaseId,
         inputHash: artifact.inputHash,
-        encoding: snapshot.rawCandidateEncoding ?? "full",
+        encoding: snapshot.transportEncoding ?? "json-rows-v1",
         matchedCandidates: snapshot.candidates.length,
         unmatchedCandidates: snapshot.rawCandidates?.length ?? 0,
         responseBytes: performanceProfile.snapshotResponseBytes,

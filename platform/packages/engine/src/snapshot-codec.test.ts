@@ -16,5 +16,6 @@ describe("engine snapshot tuple transport", () => {
     const decoded = decodeNativeEngineSnapshot(encodeNativeEngineSnapshotCandidates(snapshot));
     expect(decoded.candidates[0]!).toMatchObject(snapshot.candidates[0]!);
     expect(decoded.rawCandidates?.[0]).toMatchObject(snapshot.rawCandidates[0]!);
+    expect(decoded.transportEncoding).toBe("tuples-v1");
   });
 });
