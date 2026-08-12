@@ -1928,10 +1928,11 @@ app.post("/internal/archival/plan", zValidator("json", archivePlanSchema), async
     `INSERT INTO archive_manifests (id, cutoff_at, format, row_count, status, protected_refs_hash, detail_json)
      VALUES (?1, ?2, 'parquet', ?3, 'planned', ?4, ?5)`,
   ).bind(manifestId, body.cutoffAt, ids.length, protectedRefsHash, stableJson({ forecast, retentionDays: 90 }))];
-  for (const observationId of ids) statements.push(context.env.DB.prepare(
-    "INSERT INTO archive_manifest_observations (manifest_id, observation_id) VALUES (?1, ?2)",
-  ).bind(manifestId, observationId));
-  for (let offset = 0; offset < statements.length; offset += 80) await context.env.DB.batch(statements.slice(offset, offset + 80));
+  for (let offset = 0; offset < ids.length; offset += 500) statements.push(context.env.DB.prepare(
+    `INSERT INTO archive_manifest_observations (manifest_id, observation_id)
+     SELECT ?1, value FROM json_each(?2)`,
+  ).bind(manifestId, stableJson(ids.slice(offset, offset + 500))));
+  await context.env.DB.batch(statements);
   return context.json({ ok: true, dryRun: false, manifestId, ...result }, 201);
 });
 
@@ -2130,10 +2131,13 @@ app.post("/internal/canonical-cleanup/plan", zValidator("json", canonicalCleanup
     `INSERT INTO canonical_cleanup_runs (id, status, row_count, protected_refs_hash, detail_json)
      VALUES (?1, 'planned', ?2, ?3, ?4) ON CONFLICT(id) DO NOTHING`,
   ).bind(runId, candidates.results.length, protectedRefsHash, stableJson({ semanticPolicy: "canonical-offer-v1" }))];
-  for (const row of candidates.results) statements.push(context.env.DB.prepare(
-    "INSERT OR IGNORE INTO canonical_cleanup_rows (run_id, duplicate_observation_id, canonical_observation_id, semantic_key) VALUES (?1, ?2, ?3, ?4)",
-  ).bind(runId, row.duplicate_id, row.canonical_id, row.semantic_key));
-  for (let offset = 0; offset < statements.length; offset += 80) await context.env.DB.batch(statements.slice(offset, offset + 80));
+  for (let offset = 0; offset < candidates.results.length; offset += 400) statements.push(context.env.DB.prepare(
+    `INSERT OR IGNORE INTO canonical_cleanup_rows
+       (run_id, duplicate_observation_id, canonical_observation_id, semantic_key)
+     SELECT ?1, json_extract(value, '$.duplicate_id'), json_extract(value, '$.canonical_id'), json_extract(value, '$.semantic_key')
+       FROM json_each(?2)`,
+  ).bind(runId, stableJson(candidates.results.slice(offset, offset + 400))));
+  await context.env.DB.batch(statements);
   return context.json({ ok: true, dryRun: false, runId, ...summary }, 201);
 });
 
