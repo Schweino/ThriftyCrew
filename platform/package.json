@@ -24,6 +24,8 @@
     "deploy:verify:selftest": "node scripts/verify-deployment.mjs --self-test",
     "efficiency:check": "node scripts/d1-efficiency-report.mjs",
     "efficiency:check:selftest": "node scripts/d1-efficiency-report.mjs --self-test",
+    "codex:runtime:install": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-codex-node-override.ps1",
+    "codex:runtime:check": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-codex-node-override.ps1 -CheckOnly",
     "restore:prepare": "node scripts/prepare-d1-restore.mjs",
     "restore:rows": "node scripts/restore-d1-recovery-rows.mjs",
     "db:migrate:local": "wrangler d1 migrations apply tc-grocery-v3 --local",

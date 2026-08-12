@@ -6,9 +6,10 @@ grocery configuration is the exception: `config/` is the single source and gener
 
 ## Runtime
 
-- Production and authoritative local automation: Node 22
+- Production and authoritative local automation: Node 24.16+
 - Package manager: pnpm 11.16.0
-- Local development may use a newer Node release, but CI is the compatibility authority.
+- Codex Desktop on Windows uses the verified command override installed by
+  `scripts/install-codex-node-override.ps1`; rerun its check after a Codex runtime update.
 
 ## Commands
 
