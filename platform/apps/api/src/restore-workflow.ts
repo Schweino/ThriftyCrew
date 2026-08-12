@@ -4,6 +4,7 @@ import { digestHex, stableJson } from "@thriftycrew/domain";
 import { raiseOperationalAlert, resolveOperationalAlert } from "./operations";
 import type { WorkerEnv } from "./env";
 import { acquireOperationLease, releaseOperationLease } from "./orchestration";
+import { readVerifiedReleaseManifest, verifyHashedObject, verifyReleaseNodeChunk, type ReleaseRecoveryRoot } from "./restore-transitive";
 
 interface RestoreWorkflowPayload { trigger?: string; backupId?: string }
 
@@ -12,7 +13,7 @@ interface RecoveryManifest {
   kind: string;
   createdAt: string;
   bookmark: string;
-  releaseRoots: Array<{ release_id: string; root_hash: string; object_key: string }>;
+  releaseRoots: ReleaseRecoveryRoot[];
   observationLake: {
     prefix: string;
     partitionCount: number;
@@ -20,6 +21,13 @@ interface RecoveryManifest {
     partitions: Array<{ batch_id: string; content_hash: string; object_key: string; row_count: number; byte_length: number }>;
     latestBySource: Array<{ content_hash: string; object_key: string }>;
   };
+  immutableObjects?: Array<{
+    bucket: "archive" | "evidence";
+    object_kind: string;
+    object_key: string;
+    content_hash: string;
+    byte_length: number;
+  }>;
 }
 
 async function currentBookmark(env: WorkerEnv): Promise<string> {
@@ -70,7 +78,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
       });
       backupId = selected.backup_id;
       manifestHash = selected.content_hash;
-      const evidence = await step.do("verify Time Travel and immutable R2 roots", async () => {
+      const baseEvidence = await step.do("verify Time Travel and recovery manifest replicas", async () => {
         const [primary, replica, bookmarkNow] = await Promise.all([
           this.env.BACKUPS.get(selected.object_key), this.env.BACKUPS_SECONDARY.get(selected.object_key), currentBookmark(this.env),
         ]);
@@ -80,7 +88,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           throw new Error("recovery manifest hash or replica parity failed");
         }
         const manifest = JSON.parse(primaryText) as RecoveryManifest;
-        if (manifest.version !== 1 || manifest.kind !== "grocery-lake-recovery-manifest" || manifest.bookmark !== selected.bookmark) throw new Error("recovery manifest contract is invalid");
+        if (![1, 2].includes(manifest.version) || manifest.kind !== "grocery-lake-recovery-manifest" || manifest.bookmark !== selected.bookmark) throw new Error("recovery manifest contract is invalid");
         const manifestAge = Date.now() - Date.parse(manifest.createdAt);
         if (!Number.isFinite(manifestAge) || manifestAge < 0 || manifestAge > 30 * 24 * 60 * 60 * 1000) {
           throw new Error("recovery manifest bookmark is outside Paid Time Travel retention");
@@ -91,21 +99,45 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
           item.batch_id, item.content_hash, item.object_key, item.row_count, item.byte_length,
         ])));
         if (catalogHash !== manifest.observationLake.catalogHash) throw new Error("recovery manifest partition catalog hash failed");
-        const requiredObjects = [...manifest.releaseRoots.map((item) => ({ hash: item.root_hash, key: item.object_key })),
-          ...manifest.observationLake.partitions.map((item) => ({ hash: item.content_hash, key: item.object_key }))];
-        const verified = [];
-        for (let offset = 0; offset < requiredObjects.length; offset += 50) {
-          const group = await Promise.all(requiredObjects.slice(offset, offset + 50).map(async (item) => {
-            const object = await this.env.ARCHIVE.head(item.key);
-            if (!object || object.customMetadata?.sha256 !== item.hash) throw new Error(`immutable recovery object is missing or corrupt: ${item.key}`);
-            return item.key;
-          }));
-          verified.push(...group);
-        }
-        return { bookmark: manifest.bookmark, currentBookmark: bookmarkNow, releaseRoots: manifest.releaseRoots.length,
-          partitions: manifest.observationLake.partitionCount,
-          verifiedObjects: verified.length, catalogHash: manifest.observationLake.catalogHash };
+        return { manifest, currentBookmark: bookmarkNow };
       });
+      const manifest = baseEvidence.manifest;
+      let verifiedObjects = 0;
+      for (const root of manifest.releaseRoots) {
+        const releaseManifest = await step.do(`verify release root ${root.release_id}`, () => readVerifiedReleaseManifest(this.env, root));
+        verifiedObjects += 1;
+        for (let offset = 0; offset < releaseManifest.nodes.length; offset += 40) {
+          const nodes = releaseManifest.nodes.slice(offset, offset + 40);
+          verifiedObjects += await step.do(`verify release nodes ${root.release_id} ${offset}`, () => verifyReleaseNodeChunk(this.env, root.release_id, nodes));
+        }
+      }
+      for (let offset = 0; offset < manifest.observationLake.partitions.length; offset += 50) {
+        const partitions = manifest.observationLake.partitions.slice(offset, offset + 50);
+        await step.do(`verify observation partitions ${offset}`, async () => {
+          await Promise.all(partitions.map(async (item) => {
+            const object = await this.env.ARCHIVE.head(item.object_key);
+            if (!object || object.size !== item.byte_length || object.customMetadata?.sha256 !== item.content_hash) {
+              throw new Error(`immutable observation partition is missing or corrupt: ${item.object_key}`);
+            }
+          }));
+        });
+        verifiedObjects += partitions.length;
+      }
+      const immutableObjects = manifest.immutableObjects ?? [];
+      for (let offset = 0; offset < immutableObjects.length; offset += 40) {
+        const objects = immutableObjects.slice(offset, offset + 40);
+        await step.do(`verify immutable release objects ${offset}`, async () => {
+          await Promise.all(objects.map((item) => verifyHashedObject(
+            item.bucket === "archive" ? this.env.ARCHIVE : this.env.EVIDENCE,
+            item.object_key, item.content_hash, item.byte_length,
+          )));
+        });
+        verifiedObjects += objects.length;
+      }
+      const evidence = { bookmark: manifest.bookmark, currentBookmark: baseEvidence.currentBookmark, releaseRoots: manifest.releaseRoots.length,
+        partitions: manifest.observationLake.partitionCount,
+        immutableObjects: immutableObjects.length, verifiedObjects, transitive: manifest.version >= 2,
+        catalogHash: manifest.observationLake.catalogHash };
       const finishedAt = new Date().toISOString();
       await this.env.DB.batch([
         this.env.DB.prepare(

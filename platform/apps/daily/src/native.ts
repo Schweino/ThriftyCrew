@@ -317,12 +317,15 @@ export async function buildNativeRelease(
     relaxed: new Set(rule.relax_global ?? []),
     applyGlobal: !extensionIds.has(rule.id),
   }));
-  const rawByObservation = new Map((snapshot.rawCandidates ?? []).map((candidate) => [candidate.observation_id, candidate]));
   type RawCandidate = NonNullable<NativeEngineSnapshot["rawCandidates"]>[number];
+  const rawCandidatePool: RawCandidate[] = snapshot.rawCandidateEncoding === "unmatched-only"
+    ? [...snapshot.candidates, ...(snapshot.rawCandidates ?? [])] as RawCandidate[]
+    : (snapshot.rawCandidates ?? []);
+  const rawByObservation = new Map(rawCandidatePool.map((candidate) => [candidate.observation_id, candidate]));
   const recipeCandidates = new Map<string, Array<{ raw: RawCandidate; convertedMicros: number }>>();
   const recipeRuleStats = new Map(recipeRules.map((rule) => [rule.id, { includeHits: 0, globalBlocked: 0, excluded: 0, incompatibleUnits: 0, outOfBand: 0, accepted: 0, samples: [] as Array<Record<string, unknown>> }]));
-  const recipeMatchingAudit = { rawProducts: snapshot.rawCandidates?.length ?? 0, matched: 0, outOfBand: 0, incompatibleUnits: 0, globallyBlocked: 0 };
-  for (const raw of snapshot.rawCandidates ?? []) {
+  const recipeMatchingAudit = { rawProducts: rawCandidatePool.length, matched: 0, outOfBand: 0, incompatibleUnits: 0, globallyBlocked: 0 };
+  for (const raw of rawCandidatePool) {
     const rawText = raw.name.toLocaleLowerCase("en-US");
     const includeVariant = rawText.replace(/,?\s*priced per\s+\w+/g, "").replace(/\band\b/g, " ").replace(/\s{2,}/g, " ").trim();
     const globalHits = compiledGlobal.filter((pattern) => pattern.expression.test(rawText));

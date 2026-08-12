@@ -8,6 +8,16 @@ export function snapshotIncludesRawCandidates(profile: EngineSnapshotProfile): b
   return profile === "release";
 }
 
+export function partitionSnapshotCandidateRows<T extends { commodity_id?: unknown }>(rows: readonly T[], includeRaw: boolean) {
+  const candidates: T[] = [];
+  const unmatchedRawCandidates: T[] = [];
+  for (const row of rows) {
+    if (row.commodity_id !== null && row.commodity_id !== undefined && String(row.commodity_id) !== "") candidates.push(row);
+    else if (includeRaw) unmatchedRawCandidates.push(row);
+  }
+  return { candidates, unmatchedRawCandidates };
+}
+
 function modePredicate(mode: EngineSourceMode): string {
   if (mode === "legacy") return "s.capture_method = 'legacy_bridge'";
   if (mode === "direct") return "s.capture_method <> 'legacy_bridge'";
@@ -90,8 +100,9 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
   ).all<{ id: string; source_id: string; coverage_mode: string; captured_to: string; capture_method: string }>();
   if (batches.results.length === 0) throw new Error(`No promoted ${mode} capture batches`);
   const placeholders = batches.results.map((_, index) => `?${index + 2}`).join(",");
-  const rawPlaceholders = batches.results.map((_, index) => `?${index + 1}`).join(",");
-  const candidatesRequest = env.DB.prepare(
+  const includeRaw = snapshotIncludesRawCandidates(profile);
+  const matchJoin = includeRaw ? "LEFT JOIN" : "JOIN";
+  const candidateFactsRequest = env.DB.prepare(
     `SELECT o.id AS observation_id, m.commodity_id, p.store_location_id, o.per_unit_micros,
             member.observed_at AS captured_at, o.valid_to, b.coverage_mode, b.captured_to, b.id AS batch_id,
             o.normalized_basis_unit, o.normalized_basis_qty_micros, o.purchase_price_minor, o.regular_price_minor, o.kind,
@@ -106,29 +117,12 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
        JOIN capture_sources s ON s.id = b.source_id
        JOIN product_versions pv ON pv.id = o.product_version_id
        JOIN products p ON p.id = pv.product_id
-       JOIN match_decisions m ON m.product_id = p.id AND m.configuration_id = ?1 AND m.superseded_at IS NULL
+       ${matchJoin} match_decisions m ON m.product_id = p.id AND m.configuration_id = ?1 AND m.superseded_at IS NULL
       WHERE member.batch_id IN (${placeholders})
-      ORDER BY m.commodity_id, p.store_location_id, o.per_unit_micros, o.id`,
-  ).bind(configuration.id, ...batches.results.map((batch) => batch.id)).all();
-  const rawCandidatesRequest = snapshotIncludesRawCandidates(profile) ? env.DB.prepare(
-    `SELECT o.id AS observation_id, p.store_location_id, o.per_unit_micros, member.observed_at AS captured_at, o.valid_to,
-            b.coverage_mode, b.captured_to, b.id AS batch_id, o.normalized_basis_unit,
-            o.normalized_basis_qty_micros, o.purchase_price_minor, o.regular_price_minor, o.kind,
-            o.membership_required, o.loyalty_required, pv.name, pv.size_text, p.external_key,
-            o.basis_options_json,
-            CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days
-       FROM capture_batch_observations member
-       JOIN observations o ON o.id = member.observation_id
-       JOIN capture_batches b ON b.id = member.batch_id
-       JOIN capture_sources s ON s.id = b.source_id
-       JOIN product_versions pv ON pv.id = o.product_version_id
-       JOIN products p ON p.id = pv.product_id
-      WHERE member.batch_id IN (${rawPlaceholders})
       ORDER BY p.store_location_id, o.per_unit_micros, o.id`,
-  ).bind(...batches.results.map((batch) => batch.id)).all() : { results: [] };
-  const [candidates, rawCandidates, commodities, stores, currentCells, knownWrongRules] = await Promise.all([
-    candidatesRequest,
-    rawCandidatesRequest,
+  ).bind(configuration.id, ...batches.results.map((batch) => batch.id)).all();
+  const [candidateFacts, commodities, stores, currentCells, knownWrongRules] = await Promise.all([
+    candidateFactsRequest,
     env.DB.prepare(
       `SELECT c.id, c.label, c.basis_unit, c.category_id, c.band_min_micros, c.band_max_micros, cat.label AS category_label, cat.sort_order
          FROM commodities c LEFT JOIN categories cat ON cat.id = c.category_id
@@ -149,8 +143,9 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
          FROM known_wrong_rules WHERE configuration_id = ?1 ORDER BY commodity_id, id`,
     ).bind(configuration.id).all<KnownWrongLookupRule>(),
   ]);
+  const partitioned = partitionSnapshotCandidateRows(candidateFacts.results as Array<Record<string, unknown> & { commodity_id?: unknown }>, includeRaw);
   const markedCandidates = markKnownWrongCandidates(
-    candidates.results as Array<Record<string, unknown> & { commodity_id: unknown; store_location_id: unknown; external_key: unknown }>,
+    partitioned.candidates as Array<Record<string, unknown> & { commodity_id: unknown; store_location_id: unknown; external_key: unknown }>,
     knownWrongRules.results,
   );
   const inputBatchIds = batches.results.map((batch) => batch.id).sort();
@@ -167,7 +162,8 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
     commodities: commodities.results,
     stores: stores.results,
     candidates: markedCandidates,
-    rawCandidates: rawCandidates.results,
+    rawCandidateEncoding: includeRaw ? "unmatched-only" : "omitted",
+    rawCandidates: partitioned.unmatchedRawCandidates,
     currentCells: currentCells.results,
   };
 }

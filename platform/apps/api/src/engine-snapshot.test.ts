@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { markKnownWrongCandidates } from "./engine-snapshot";
+import { markKnownWrongCandidates, partitionSnapshotCandidateRows } from "./engine-snapshot";
 
 describe("engine snapshot known-wrong projection", () => {
   it("applies global and store-specific rulings without a correlated database scan", () => {
@@ -22,5 +22,19 @@ describe("engine snapshot known-wrong projection", () => {
       ["scoped-miss", 0],
       ["other-commodity", 0],
     ]);
+  });
+});
+
+describe("engine snapshot compact raw encoding", () => {
+  it("sends matched rows once and retains every unmatched recipe candidate", () => {
+    const rows = [
+      { observation_id: "matched", commodity_id: "milk" },
+      { observation_id: "unmatched", commodity_id: null },
+    ];
+    expect(partitionSnapshotCandidateRows(rows, true)).toEqual({
+      candidates: [rows[0]],
+      unmatchedRawCandidates: [rows[1]],
+    });
+    expect(partitionSnapshotCandidateRows(rows, false)).toEqual({ candidates: [rows[0]], unmatchedRawCandidates: [] });
   });
 });

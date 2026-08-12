@@ -94,6 +94,8 @@ import { acquireOperationLease, activeDeploymentBlockers, releaseOperationLease,
 import { archiveConfiguration, compactConfiguration, rehydrateConfiguration } from "./configuration-archive";
 import { transitionReadiness } from "./transitions";
 import { cachedPublicJson, PublicJsonError, releaseEtag } from "./public-cache";
+import { assertRetentionCandidatesStillUnprotected, readRetentionCandidates, readRetentionProtections, summarizeRetentionProtections } from "./retention";
+import { planR2GarbageCollection, sweepR2GarbageCollection } from "./r2-gc";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 export { D1RestoreDrillWorkflow } from "./restore-workflow";
@@ -1935,39 +1937,27 @@ app.post("/internal/archival/forecast/run", async (context) => {
 
 app.post("/internal/archival/plan", zValidator("json", archivePlanSchema), async (context) => {
   const body = context.req.valid("json");
-  const minimumCutoff = Date.now() - 14 * 24 * 60 * 60 * 1000;
-  if (Date.parse(body.cutoffAt) > minimumCutoff) return jsonError("archive cutoff must retain at least 14 days of hot observations", 422);
+  const minimumCutoff = Date.now() - 24 * 60 * 60 * 1000;
+  if (Date.parse(body.cutoffAt) > minimumCutoff) return jsonError("archive cutoff must retain a 24 hour ingestion safety window", 422);
   const forecast = await context.env.DB.prepare("SELECT status, usage_percent_millis FROM archival_forecasts ORDER BY observed_at DESC LIMIT 1")
     .first<{ status: string; usage_percent_millis: number }>();
-  const rows = await context.env.DB.prepare(
-    `SELECT o.id
-       FROM observations o
-      WHERE o.captured_at < ?1
-        AND NOT EXISTS (SELECT 1 FROM release_cells rc WHERE rc.observation_id = o.id)
-        AND NOT EXISTS (
-          SELECT 1 FROM capture_observation_memberships membership
-          JOIN capture_batches active_batch ON active_batch.id = membership.batch_id
-          WHERE membership.observation_id = o.id AND active_batch.status = 'promoted'
-        )
-        AND NOT EXISTS (SELECT 1 FROM archive_manifest_observations amo WHERE amo.observation_id = o.id)
-      ORDER BY o.captured_at, o.id
-      LIMIT ?2`,
-  ).bind(body.cutoffAt, body.maximumRows).all<{ id: string }>();
-  const ids = rows.results.map((row) => row.id);
-  const protectedRows = await context.env.DB.prepare(
-    `SELECT DISTINCT o.id FROM observations o JOIN release_cells rc ON rc.observation_id = o.id
-      WHERE o.captured_at < ?1 ORDER BY o.id`,
-  ).bind(body.cutoffAt).all<{ id: string }>();
-  const protectedCount = protectedRows.results.length;
-  const protectedRefsHash = await digestHex(stableJson({ cutoffAt: body.cutoffAt, observationIds: protectedRows.results.map((row) => row.id) }));
-  const result = { cutoffAt: body.cutoffAt, candidates: ids.length, protectedCount, protectedRefsHash, forecast: forecast ?? null };
+  const [ids, protectedRows] = await Promise.all([
+    readRetentionCandidates(context.env.DB, body.cutoffAt, body.maximumRows),
+    readRetentionProtections(context.env.DB, body.cutoffAt),
+  ]);
+  const protection = summarizeRetentionProtections(protectedRows);
+  const protectedRefsHash = await digestHex(stableJson({ cutoffAt: body.cutoffAt, protectedRows }));
+  const result = { cutoffAt: body.cutoffAt, candidates: ids.length, ...protection, protectedRefsHash, forecast: forecast ?? null };
   if (body.dryRun) return context.json({ ok: true, dryRun: true, ...result });
   if (!ids.length) return jsonError("archive plan has no eligible observations", 422);
   const manifestId = await deterministicId("archive-manifest", body.cutoffAt, protectedRefsHash, ...ids);
   const statements: D1PreparedStatement[] = [context.env.DB.prepare(
     `INSERT INTO archive_manifests (id, cutoff_at, format, row_count, status, protected_refs_hash, detail_json)
      VALUES (?1, ?2, 'parquet', ?3, 'planned', ?4, ?5)`,
-  ).bind(manifestId, body.cutoffAt, ids.length, protectedRefsHash, stableJson({ forecast, retentionDays: 14, storageAuthority: "r2-parquet" }))];
+  ).bind(manifestId, body.cutoffAt, ids.length, protectedRefsHash, stableJson({
+    forecast, safetyWindowHours: 24, selection: "dependency-aware-v2", protection: protection.byReason,
+    storageAuthority: "r2-parquet",
+  }))];
   for (let offset = 0; offset < ids.length; offset += 500) statements.push(context.env.DB.prepare(
     `INSERT INTO archive_manifest_observations (manifest_id, observation_id)
      SELECT ?1, value FROM json_each(?2)`,
@@ -2029,6 +2019,38 @@ app.put("/internal/archival/:id/parquet", async (context) => {
   return context.json({ ok: true, manifestId: manifest.id, status: "verified", objectKey, byteLength: stored.size, sha256 });
 });
 
+app.post("/internal/engine/measurements", async (context) => {
+  const body = await context.req.json<Record<string, unknown>>().catch(() => ({} as Record<string, unknown>));
+  const releaseId = String(body.releaseId ?? "");
+  const inputHash = String(body.inputHash ?? "");
+  const encoding = String(body.encoding ?? "");
+  const integers = ["matchedCandidates", "unmatchedCandidates", "responseBytes", "snapshotFetchMs", "nativeBuildMs", "publishMs", "totalMs"] as const;
+  if (!releaseId || !/^[a-f0-9]{64}$/.test(inputHash) || !["full", "unmatched-only", "omitted"].includes(encoding)) {
+    return jsonError("engine measurement identity is invalid", 422);
+  }
+  const values = Object.fromEntries(integers.map((key) => [key, Number(body[key])])) as Record<(typeof integers)[number], number>;
+  if (integers.some((key) => !Number.isInteger(values[key]) || (values[key] ?? -1) < 0)) return jsonError("engine measurement values must be non-negative integers", 422);
+  const release = await context.env.DB.prepare("SELECT id, input_hash FROM releases WHERE id = ?1").bind(releaseId).first<{ id: string; input_hash: string }>();
+  if (!release || release.input_hash !== inputHash) return jsonError("engine measurement does not identify a persisted release", 409);
+  const id = await deterministicId("engine-snapshot-measurement", releaseId, inputHash, String(values.totalMs));
+  await context.env.DB.prepare(
+    `INSERT OR IGNORE INTO engine_snapshot_measurements
+       (id, input_hash, release_id, encoding, matched_candidates, unmatched_candidates, response_bytes,
+        snapshot_fetch_ms, native_build_ms, publish_ms, total_ms, detail_json)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)`,
+  ).bind(id, inputHash, releaseId, encoding, values.matchedCandidates, values.unmatchedCandidates, values.responseBytes,
+    values.snapshotFetchMs, values.nativeBuildMs, values.publishMs, values.totalMs,
+    stableJson({ profile: "ordinary-incremental-release", source: "tc-engine-publish-native" })).run();
+  return context.json({ ok: true, measurementId: id });
+});
+
+app.get("/internal/engine/measurements", async (context) => {
+  const rows = await context.env.DB.prepare(
+    "SELECT * FROM engine_snapshot_measurements ORDER BY measured_at DESC LIMIT 25",
+  ).all();
+  return context.json({ ok: true, measurements: rows.results });
+});
+
 app.get("/internal/engine/current-release-graph", async (context) => {
   const marketId = context.req.query("marketId") ?? "omaha";
   const afterKind = context.req.query("afterKind") ?? "";
@@ -2077,17 +2099,21 @@ app.post("/internal/archival/:id/execute", zValidator("json", canonicalCleanupEx
   if (!stored || stored.size !== manifest.byte_length || stored.customMetadata?.sha256 !== manifest.sha256) {
     return jsonError("verified archive object is no longer intact", 409);
   }
-  const protectedRows = await context.env.DB.prepare(
-    `SELECT DISTINCT o.id FROM observations o JOIN release_cells rc ON rc.observation_id = o.id
-      WHERE o.captured_at < ?1 ORDER BY o.id`,
-  ).bind(manifest.cutoff_at).all<{ id: string }>();
-  const protectedRefsHash = await digestHex(stableJson({ cutoffAt: manifest.cutoff_at, observationIds: protectedRows.results.map((row) => row.id) }));
+  const protectedRows = await readRetentionProtections(context.env.DB, manifest.cutoff_at);
+  const protectedRefsHash = await digestHex(stableJson({ cutoffAt: manifest.cutoff_at, protectedRows }));
   if (protectedRefsHash !== manifest.protected_refs_hash) return jsonError("release references changed after archive planning", 409);
+  const archivedIds = await context.env.DB.prepare(
+    "SELECT observation_id FROM archive_manifest_observations WHERE manifest_id = ?1 ORDER BY observation_id",
+  ).bind(manifest.id).all<{ observation_id: string }>();
+  try {
+    await assertRetentionCandidatesStillUnprotected(context.env, manifest.cutoff_at, archivedIds.results.map((row) => row.observation_id));
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "archive candidates gained a protected dependency", 409);
+  }
   const invalid = await context.env.DB.prepare(
     `SELECT COUNT(*) AS count FROM archive_manifest_observations archived
       WHERE archived.manifest_id = ?1 AND (
-        EXISTS(SELECT 1 FROM release_cells cell WHERE cell.observation_id = archived.observation_id)
-        OR NOT EXISTS(SELECT 1 FROM observations current WHERE current.id = archived.observation_id)
+        NOT EXISTS(SELECT 1 FROM observations current WHERE current.id = archived.observation_id)
       )`,
   ).bind(manifest.id).first<{ count: number }>();
   if ((invalid?.count ?? 0) > 0) return jsonError("archive candidates gained a protected reference or are no longer present", 409);
@@ -2618,6 +2644,34 @@ app.get("/internal/storage/releases", async (context) => {
       ORDER BY release.created_at`,
   ).all<{ id: string; state: string; created_at: string; root_hash: string | null; is_current: number }>();
   return context.json({ ok: true, releases: rows.results });
+});
+
+app.post("/internal/storage/gc/plan", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may plan R2 garbage collection", 403);
+  const body = await context.req.json<Record<string, unknown>>().catch(() => ({} as Record<string, unknown>));
+  const graceDays = Number(body.graceDays ?? 7);
+  const maximumObjects = Number(body.maximumObjects ?? 500);
+  if (!Number.isInteger(graceDays) || graceDays < 2 || graceDays > 90) return jsonError("R2 garbage collection graceDays must be 2-90", 422);
+  if (!Number.isInteger(maximumObjects) || maximumObjects < 1 || maximumObjects > 2_000) return jsonError("R2 garbage collection maximumObjects must be 1-2000", 422);
+  try {
+    const result = await planR2GarbageCollection(context.env, { graceDays, maximumObjects, execute: body.execute === true });
+    await recordAudit(context.env, context.get("identity"), "storage.gc.plan", "r2_gc_run", result.runId, "accepted", result);
+    return context.json(result, body.execute === true ? 201 : 200);
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "R2 garbage collection planning failed", 422);
+  }
+});
+
+app.post("/internal/storage/gc/:id/sweep", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may sweep R2 garbage collection", 403);
+  const body = await context.req.json<Record<string, unknown>>().catch(() => ({} as Record<string, unknown>));
+  try {
+    const result = await sweepR2GarbageCollection(context.env, context.req.param("id"), body.execute === true);
+    await recordAudit(context.env, context.get("identity"), "storage.gc.sweep", "r2_gc_run", context.req.param("id"), "accepted", result);
+    return context.json(result);
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "R2 garbage collection sweep failed", 409);
+  }
 });
 
 app.post("/internal/storage/backfill-release/:id", async (context) => {

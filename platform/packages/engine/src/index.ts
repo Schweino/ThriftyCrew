@@ -204,6 +204,7 @@ export interface NativeEngineSnapshot {
   currentReleaseId: string;
   inputHash: string;
   inputBatchIds: string[];
+  rawCandidateEncoding?: "full" | "unmatched-only" | "omitted";
   commodities: Array<{ id: string; label: string; basis_unit: WinnerCandidate["commodityId"] extends string ? string : never; category_id: string; category_label?: string; sort_order?: number; band_min_micros?: number | null; band_max_micros?: number | null }>;
   stores: Array<{ id: string; store_name: string; display_name?: string; membership_required?: number }>;
   candidates: Array<{
@@ -213,7 +214,7 @@ export interface NativeEngineSnapshot {
     purchase_price_minor?: number; purchase_quantity?: number; package_count?: number;
     kind?: "sale" | "everyday" | "markdown" | "member"; regular_price_minor?: number | null;
     normalized_basis_qty_micros?: number; membership_required?: number; loyalty_required?: number;
-    raw_price_text?: string | null; name?: string; product_url?: string | null; taxonomy_path?: string | null;
+    raw_price_text?: string | null; name?: string; normalized_name?: string; product_url?: string | null; taxonomy_path?: string | null;
     external_key?: string; size_text?: string | null; batch_id?: string;
     max_age_days?: number;
     basis_options_json?: string;

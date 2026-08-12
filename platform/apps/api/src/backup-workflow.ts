@@ -42,12 +42,12 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
     try {
       const bookmark = await step.do("capture D1 Time Travel bookmark", () => currentBookmark(this.env));
       const catalog = await step.do("build immutable lake recovery catalog", async () => {
-        const [releases, partitions, configuration, schema] = await Promise.all([
+        const [releases, partitions, configuration, immutableObjects, schema] = await Promise.all([
           this.env.DB.prepare(
-            `SELECT current.market_id, current.release_id, graph.root_hash, graph.object_key
+            `SELECT current.market_id, current.release_id, graph.root_hash, graph.object_key, graph.node_count
                FROM current_releases current JOIN release_graphs graph ON graph.release_id = current.release_id
               ORDER BY current.market_id`,
-          ).all<{ market_id: string; release_id: string; root_hash: string; object_key: string }>(),
+          ).all<{ market_id: string; release_id: string; root_hash: string; object_key: string; node_count: number }>(),
           this.env.DB.prepare(
             `SELECT COALESCE(partition.batch_id, object.content_hash) AS batch_id,
                     COALESCE(partition.source_id, 'historical-backfill') AS source_id,
@@ -59,13 +59,33 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
               ORDER BY partition_date, source_id, batch_id`,
           ).all<{ batch_id: string; source_id: string; partition_date: string; content_hash: string; object_key: string; row_count: number; byte_length: number }>(),
           this.env.DB.prepare("SELECT id, content_hash FROM configuration_versions WHERE active = 1").first<{ id: string; content_hash: string }>(),
+          this.env.DB.prepare(
+            `SELECT DISTINCT bucket, object_kind, object_key, content_hash, byte_length FROM (
+               SELECT 'archive' AS bucket, 'configuration' AS object_kind, archive.object_key,
+                      archive.sha256 AS content_hash, archive.byte_length
+                 FROM configuration_versions configuration
+                 JOIN configuration_archives archive ON archive.configuration_id = configuration.id
+                WHERE configuration.active = 1 AND archive.status = 'verified'
+               UNION ALL
+               SELECT 'evidence', 'release-payload', payload.object_key, payload.content_hash, payload.byte_length
+                 FROM current_releases current JOIN release_payloads payload ON payload.release_id = current.release_id
+                WHERE payload.object_key IS NOT NULL
+               UNION ALL
+               SELECT 'evidence', 'recipe-bundle', payload.object_key, payload.content_hash, payload.byte_length
+                 FROM current_releases current JOIN release_recipe_payloads payload ON payload.release_id = current.release_id
+               UNION ALL
+               SELECT 'evidence', 'recipe-cost-detail', detail.object_key, detail.content_hash, detail.byte_length
+                 FROM current_releases current JOIN recipe_cost_detail_objects detail ON detail.release_id = current.release_id
+             ) ORDER BY bucket, object_kind, object_key`,
+          ).all<{ bucket: "archive" | "evidence"; object_kind: string; object_key: string; content_hash: string; byte_length: number }>(),
           this.env.DB.prepare("SELECT MAX(id) AS latest FROM d1_migrations").first<{ latest: number | null }>().catch(() => ({ latest: null })),
         ]);
         if (!configuration) throw new Error("active configuration is absent from recovery catalog");
         if (releases.results.length === 0) throw new Error("current release graph is absent from recovery catalog");
+        if (!immutableObjects.results.some((item) => item.object_kind === "configuration")) throw new Error("active configuration archive is absent from recovery catalog");
         const partitionCatalogHash = await digestHex(stableJson(partitions.results.map((item) => [item.batch_id, item.content_hash, item.object_key, item.row_count, item.byte_length])));
         return {
-          version: 1, kind: "grocery-lake-recovery-manifest", createdAt: new Date().toISOString(), bookmark,
+          version: 2, kind: "grocery-lake-recovery-manifest", createdAt: new Date().toISOString(), bookmark,
           databaseId: this.env.D1_DATABASE_ID, timeTravelRetentionDays: 30,
           configuration, schemaMigration: schema?.latest ?? null,
           releaseRoots: releases.results,
@@ -77,6 +97,7 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
             partitions: partitions.results,
             latestBySource: Object.values(Object.fromEntries(partitions.results.map((item) => [item.source_id, item]))),
           },
+          immutableObjects: immutableObjects.results,
           rebuild: { hotIndex: "scan observation Parquet partitions then promote manifest release roots", releaseGraphPrefix: "release-manifests/schema=1/" },
         };
       });
@@ -86,7 +107,7 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
         const bytes = new TextEncoder().encode(serialized);
         const date = catalog.createdAt.slice(0, 10).replaceAll("-", "/");
         const objectKey = `lake-manifests/${date}/${manifestId}-${hash}.json`;
-        const options = { httpMetadata: { contentType: "application/json; charset=utf-8" }, customMetadata: { sha256: hash, bookmark, schema: "grocery-lake-recovery-v1" } };
+        const options = { httpMetadata: { contentType: "application/json; charset=utf-8" }, customMetadata: { sha256: hash, bookmark, schema: "grocery-lake-recovery-v2" } };
         await Promise.all([this.env.BACKUPS.put(objectKey, bytes, options), this.env.BACKUPS_SECONDARY.put(objectKey, bytes, options)]);
         const [primary, replica] = await Promise.all([this.env.BACKUPS.head(objectKey), this.env.BACKUPS_SECONDARY.head(objectKey)]);
         if (!primary || !replica || primary.size !== bytes.byteLength || replica.size !== bytes.byteLength
@@ -108,7 +129,8 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
            VALUES (?1, ?2, 'tc-grocery-v3-backups-secondary', ?3, ?4, ?5, 'completed', ?6)`,
         ).bind(`replica_${event.instanceId}`, backupId, stored.objectKey, stored.byteLength, stored.replicaEtag, finishedAt),
         this.env.DB.prepare("UPDATE job_runs SET status = 'completed', heartbeat_at = ?2, finished_at = ?2, stats_json = ?3 WHERE id = ?1")
-          .bind(runId, finishedAt, stableJson({ backupId, manifestId, bookmark, ...stored, partitions: catalog.observationLake.partitionCount })),
+          .bind(runId, finishedAt, stableJson({ backupId, manifestId, bookmark, ...stored, partitions: catalog.observationLake.partitionCount,
+            releaseRoots: catalog.releaseRoots.length, immutableObjects: catalog.immutableObjects.length })),
       ]);
       await resolveOperationalAlert(this.env, "d1-backup", { backupId, manifestId, finishedAt }, { recoveryTitle: "D1 Time Travel and R2 lake manifest backup recovered" });
     } catch (error) {

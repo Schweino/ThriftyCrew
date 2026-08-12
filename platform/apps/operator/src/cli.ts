@@ -521,8 +521,8 @@ if (command === "status") {
   if (!file) throw new Error("tc restore cleanup requires a JSON cleanup-evidence file");
   result = await (await mutationClient()).request("/internal/restore-drills/cleanup", { json: JSON.parse(await readFile(cliPath(file), "utf8")) });
 } else if (command === "archive" && subcommand === "plan") {
-  // Keep one full day of safety behind the API's 14-day hot-index boundary.
-  const cutoffAt = arguments_.find((value: string) => !value.startsWith("--")) ?? new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString();
+  // Keep one full extra day behind the API's 24-hour ingestion window.
+  const cutoffAt = arguments_.find((value: string) => !value.startsWith("--")) ?? new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString();
   result = await (await mutationClient()).request("/internal/archival/plan", { json: { cutoffAt, dryRun: !arguments_.includes("--execute"), maximumRows: 10000 }, acceptStatuses: [409, 422] });
 } else if (command === "archive" && subcommand === "forecast") {
   result = await (await mutationClient()).request("/internal/archival/forecast/run", { method: "POST" });
@@ -558,6 +558,17 @@ if (command === "status") {
     if (page.compacted.length === 0) break;
   }
   result = { ok: true, releases: inventory.releases.length, backfilled: backfilled.length, compacted };
+} else if (command === "storage" && subcommand === "gc-plan") {
+  const graceDays = Number(arguments_.find((value: string) => /^\d+$/.test(value)) ?? "7");
+  result = await (await mutationClient()).request("/internal/storage/gc/plan", {
+    json: { graceDays, maximumObjects: 500, execute: arguments_.includes("--execute") }, acceptStatuses: [422],
+  });
+} else if (command === "storage" && subcommand === "gc-sweep") {
+  const runId = arguments_.find((value: string) => !value.startsWith("--"));
+  if (!runId) throw new Error("tc storage gc-sweep requires a run id");
+  result = await (await mutationClient()).request(`/internal/storage/gc/${encodeURIComponent(runId)}/sweep`, {
+    json: { execute: arguments_.includes("--execute") }, acceptStatuses: [409],
+  });
 } else if (command === "cleanup" && subcommand === "plan") {
   result = await (await mutationClient()).request("/internal/canonical-cleanup/plan", { json: { dryRun: !arguments_.includes("--execute"), maximumRows: 10000 }, acceptStatuses: [422] });
 } else if (command === "cleanup" && subcommand === "index") {
@@ -831,6 +842,7 @@ if (command === "status") {
       loadCurrentReleaseGraph(client),
     ]);
     performanceProfile.snapshotFetchMs = Math.round(performance.now() - stageStartedAt);
+    performanceProfile.snapshotResponseBytes = new TextEncoder().encode(stableJson(snapshot)).byteLength;
     stageStartedAt = performance.now();
     const artifact = await buildNativeRelease(incomeRoot, snapshot, catalog, previousGraph);
     performanceProfile.nativeBuildMs = Math.round(performance.now() - stageStartedAt);
@@ -848,6 +860,18 @@ if (command === "status") {
       performanceProfile.publishMs = Math.round(performance.now() - stageStartedAt);
       performanceProfile.totalMs = Math.round(performance.now() - operationStartedAt);
       result = { ...publication, performance: performanceProfile };
+      await client.request("/internal/engine/measurements", { json: {
+        releaseId: artifact.releaseId,
+        inputHash: artifact.inputHash,
+        encoding: snapshot.rawCandidateEncoding ?? "full",
+        matchedCandidates: snapshot.candidates.length,
+        unmatchedCandidates: snapshot.rawCandidates?.length ?? 0,
+        responseBytes: performanceProfile.snapshotResponseBytes,
+        snapshotFetchMs: performanceProfile.snapshotFetchMs,
+        nativeBuildMs: performanceProfile.nativeBuildMs,
+        publishMs: performanceProfile.publishMs,
+        totalMs: performanceProfile.totalMs,
+      } });
     }
   }
 } else if (command === "replay") {
@@ -1192,7 +1216,7 @@ if (command === "status") {
     ...(!isHelpRequest ? { error: `Unknown command: ${requestedCommand}` } : {}),
     usage: [
       "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy|archives|archive <id>",
-      "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>|execute <manifest> <sha256>", "tc storage migrate-releases", "tc cleanup index|plan [--execute]|export <run> <json>|upload <run> <parquet>|execute <run> <sha256>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
+      "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>|execute <manifest> <sha256>", "tc storage migrate-releases|gc-plan [days] [--execute]|gc-sweep <run> [--execute]", "tc cleanup index|plan [--execute]|export <run> <json>|upload <run> <parquet>|execute <run> <sha256>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
       "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>", "tc efficiency record <report.json>", "tc recipe bundles [release-id]", "tc cache purge",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
         "tc capture metrics [limit]", "tc capture coordinator status|next|heartbeat|fail|challenge|resolve", "tc capture session worklist|init|append|evidence|verification-plan|finalize|status",
