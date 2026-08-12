@@ -523,7 +523,7 @@ if (command === "status") {
   let indexed = 0;
   let secondPass = false;
   while (true) {
-    const page = await client.request(`/internal/canonical-cleanup/index?after=${encodeURIComponent(cursor)}`) as unknown as { indexed: number; nextCursor: string };
+    const page = await client.request(`/internal/canonical-cleanup/index?after=${encodeURIComponent(cursor)}`, { method: "POST" }) as unknown as { indexed: number; nextCursor: string };
     indexed += page.indexed;
     if (page.indexed > 0) { cursor = page.nextCursor; continue; }
     if (!secondPass && cursor) { cursor = ""; secondPass = true; continue; }
