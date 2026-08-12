@@ -47,6 +47,7 @@ export async function insertObservations(
   }>();
   const observationStatements: D1PreparedStatement[] = [];
   const semanticKeyStatements: D1PreparedStatement[] = [];
+  const fingerprintStatements: D1PreparedStatement[] = [];
   const membershipStatements: D1PreparedStatement[] = [];
   const ids: string[] = [];
 
@@ -134,6 +135,9 @@ export async function insertObservations(
     semanticKeyStatements.push(db.prepare(
       `INSERT OR IGNORE INTO observation_semantic_keys (semantic_hash, observation_id) VALUES (?1, ?2)`,
     ).bind(semanticObservation.hash, observationId));
+    fingerprintStatements.push(db.prepare(
+      `INSERT OR IGNORE INTO observation_fingerprints (observation_id, semantic_hash) VALUES (?1, ?2)`,
+    ).bind(observationId, semanticObservation.hash));
     membershipStatements.push(db.prepare(
       `INSERT INTO capture_observation_memberships
          (batch_id, observation_id, term_key, observed_at, source_payload_key, evidence_object_id, provenance_json, carried)
@@ -179,7 +183,7 @@ export async function insertObservations(
       version.firstSeenAt, version.lastSeenAt,
     ));
   }
-  statements.push(...observationStatements, ...semanticKeyStatements, ...membershipStatements);
+  statements.push(...observationStatements, ...semanticKeyStatements, ...fingerprintStatements, ...membershipStatements);
 
   // D1 batch calls have practical statement and payload ceilings. Keep the
   // application contract independent of those ceilings by flushing bounded groups.

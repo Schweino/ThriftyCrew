@@ -63,7 +63,7 @@ import {
   OFFER_SNAPSHOT_CUTOVER,
 } from "@thriftycrew/contracts";
 import { decodeEvidenceUpload } from "./evidence-upload";
-import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
+import { deterministicId, digestHex, semanticObservationId, semanticProductVersion, stableJson } from "@thriftycrew/domain";
 import { GhostEntitlementProvider, type Entitlement } from "@thriftycrew/entitlements";
 import { authenticateMutation } from "./auth";
 import { createRelease, findBatch, insertObservations, insertRecipeCosts, insertReleaseCells, upsertGuardResult } from "./database";
@@ -2016,6 +2016,7 @@ app.post("/internal/archival/:id/execute", zValidator("json", canonicalCleanupEx
     context.env.DB.prepare("INSERT OR REPLACE INTO maintenance_leases (kind, run_id, expires_at) VALUES ('verified-archive', ?1, ?2)").bind(manifest.id, expiresAt),
     context.env.DB.prepare("DELETE FROM capture_observation_memberships WHERE observation_id IN (SELECT observation_id FROM archive_manifest_observations WHERE manifest_id = ?1)").bind(manifest.id),
     context.env.DB.prepare("DELETE FROM observation_semantic_keys WHERE observation_id IN (SELECT observation_id FROM archive_manifest_observations WHERE manifest_id = ?1)").bind(manifest.id),
+    context.env.DB.prepare("DELETE FROM observation_fingerprints WHERE observation_id IN (SELECT observation_id FROM archive_manifest_observations WHERE manifest_id = ?1)").bind(manifest.id),
     context.env.DB.prepare("DELETE FROM observations WHERE id IN (SELECT observation_id FROM archive_manifest_observations WHERE manifest_id = ?1)").bind(manifest.id),
     context.env.DB.prepare("DELETE FROM product_versions WHERE NOT EXISTS (SELECT 1 FROM observations o WHERE o.product_version_id = product_versions.id)"),
     context.env.DB.prepare("DELETE FROM maintenance_leases WHERE kind = 'verified-archive' AND run_id = ?1").bind(manifest.id),
@@ -2027,24 +2028,62 @@ app.post("/internal/archival/:id/execute", zValidator("json", canonicalCleanupEx
   return context.json({ ok: true, manifestId: manifest.id, status: "completed", removedFacts: manifest.row_count, idempotent: false });
 });
 
-const canonicalDuplicateCandidatesSql = `WITH base AS (
-  SELECT o.id, o.captured_at,
+app.post("/internal/canonical-cleanup/index", async (context) => {
+  const after = context.req.query("after") ?? "";
+  const rows = await context.env.DB.prepare(
+    `SELECT o.id, origin.source_id, pv.product_id, pv.name, pv.size_text, pv.product_url,
+            pv.taxonomy_path, pv.identity_json, o.kind, o.currency, o.purchase_price_minor,
+            o.regular_price_minor, o.purchase_quantity, o.package_count, o.captured_basis_unit,
+            o.captured_basis_qty_micros, o.normalized_basis_unit, o.normalized_basis_qty_micros,
+            o.per_unit_micros, o.basis_options_json, o.loyalty_required, o.membership_required,
+            o.raw_price_text, o.raw_size_text, o.valid_from, o.valid_to, o.price_semantics_json,
+            o.offer_snapshot_json
+       FROM observations o
+       JOIN product_versions pv ON pv.id = o.product_version_id
+       JOIN capture_batches origin ON origin.id = o.batch_id
+       LEFT JOIN observation_fingerprints fingerprint ON fingerprint.observation_id = o.id
+      WHERE fingerprint.observation_id IS NULL AND o.id > ?1
+      ORDER BY o.id LIMIT 500`,
+  ).bind(after).all<Record<string, unknown>>();
+  const statements: D1PreparedStatement[] = [];
+  for (const row of rows.results) {
+    const identity = JSON.parse(String(row.identity_json ?? "{}")) as { brand?: string };
+    const canonicalVersionHash = await digestHex(stableJson(semanticProductVersion({
+      name: String(row.name), sizeText: String(row.size_text), productUrl: row.product_url ? String(row.product_url) : undefined,
+      taxonomyPath: row.taxonomy_path ? String(row.taxonomy_path) : undefined, identity,
+    })));
+    const canonicalVersionId = await deterministicId("pver", String(row.product_id), canonicalVersionHash);
+    const semantic = await semanticObservationId(String(row.source_id), canonicalVersionId, {
+      kind: String(row.kind), currency: String(row.currency), purchasePriceMinor: Number(row.purchase_price_minor),
+      ...(row.regular_price_minor === null ? {} : { regularPriceMinor: Number(row.regular_price_minor) }),
+      purchaseQuantity: Number(row.purchase_quantity), packageCount: Number(row.package_count),
+      capturedBasisUnit: String(row.captured_basis_unit), capturedBasisQtyMicros: Number(row.captured_basis_qty_micros),
+      normalizedBasisUnit: String(row.normalized_basis_unit), normalizedBasisQtyMicros: Number(row.normalized_basis_qty_micros),
+      perUnitMicros: Number(row.per_unit_micros), basisOptions: JSON.parse(String(row.basis_options_json)),
+      loyaltyRequired: Number(row.loyalty_required) === 1, membershipRequired: Number(row.membership_required) === 1,
+      rawPriceText: String(row.raw_price_text), rawSizeText: String(row.raw_size_text),
+      ...(row.valid_from === null ? {} : { validFrom: String(row.valid_from) }),
+      ...(row.valid_to === null ? {} : { validTo: String(row.valid_to) }),
+      priceSemantics: JSON.parse(String(row.price_semantics_json)), offerSnapshot: JSON.parse(String(row.offer_snapshot_json)),
+    });
+    statements.push(context.env.DB.prepare(
+      "INSERT OR IGNORE INTO observation_fingerprints (observation_id, semantic_hash) VALUES (?1, ?2)",
+    ).bind(String(row.id), semantic.hash));
+  }
+  for (let offset = 0; offset < statements.length; offset += 90) await context.env.DB.batch(statements.slice(offset, offset + 90));
+  return context.json({ ok: true, indexed: rows.results.length, nextCursor: rows.results.at(-1)?.id ?? after });
+});
+
+const canonicalDuplicateCandidatesSql = `WITH membership_latest AS (
+  SELECT observation_id, MAX(observed_at) AS newest_at
+    FROM capture_observation_memberships GROUP BY observation_id
+), base AS (
+  SELECT o.id, o.captured_at, fingerprint.semantic_hash AS semantic_key,
          EXISTS(SELECT 1 FROM release_cells rc WHERE rc.observation_id = o.id) AS protected,
-         COALESCE((SELECT MAX(member.observed_at) FROM capture_observation_memberships member WHERE member.observation_id = o.id), o.captured_at) AS newest_at,
-         json_array(
-           origin.source_id, p.id, pv.normalized_name, lower(trim(pv.size_text)),
-           CASE WHEN instr(COALESCE(pv.product_url,''), '?') > 0 THEN substr(pv.product_url, 1, instr(pv.product_url, '?') - 1) ELSE COALESCE(pv.product_url,'') END,
-           lower(trim(COALESCE(pv.taxonomy_path,''))), lower(trim(COALESCE(json_extract(pv.identity_json, '$.brand'),''))),
-           o.kind, o.currency, o.purchase_price_minor, o.regular_price_minor, o.purchase_quantity, o.package_count,
-           o.captured_basis_unit, o.captured_basis_qty_micros, o.normalized_basis_unit, o.normalized_basis_qty_micros,
-           o.per_unit_micros, json(o.basis_options_json), o.loyalty_required, o.membership_required,
-           trim(o.raw_price_text), trim(o.raw_size_text), o.valid_from, o.valid_to, json(o.price_semantics_json),
-           json_remove(o.offer_snapshot_json, '$.observedAt'), o.availability_status, o.fulfillment_mode, o.seller_name
-         ) AS semantic_key
+         COALESCE(latest.newest_at, o.captured_at) AS newest_at
     FROM observations o
-    JOIN product_versions pv ON pv.id = o.product_version_id
-    JOIN products p ON p.id = pv.product_id
-    JOIN capture_batches origin ON origin.id = o.batch_id
+    JOIN observation_fingerprints fingerprint ON fingerprint.observation_id = o.id
+    LEFT JOIN membership_latest latest ON latest.observation_id = o.id
 ), ranked AS (
   SELECT *, FIRST_VALUE(id) OVER (
     PARTITION BY semantic_key ORDER BY protected DESC, newest_at DESC, id
@@ -2157,6 +2196,7 @@ app.post("/internal/canonical-cleanup/:id/execute", zValidator("json", canonical
     ).bind(run.id),
     context.env.DB.prepare("DELETE FROM capture_observation_memberships WHERE observation_id IN (SELECT duplicate_observation_id FROM canonical_cleanup_rows WHERE run_id = ?1)").bind(run.id),
     context.env.DB.prepare("DELETE FROM observation_semantic_keys WHERE observation_id IN (SELECT duplicate_observation_id FROM canonical_cleanup_rows WHERE run_id = ?1)").bind(run.id),
+    context.env.DB.prepare("DELETE FROM observation_fingerprints WHERE observation_id IN (SELECT duplicate_observation_id FROM canonical_cleanup_rows WHERE run_id = ?1)").bind(run.id),
     context.env.DB.prepare("DELETE FROM observations WHERE id IN (SELECT duplicate_observation_id FROM canonical_cleanup_rows WHERE run_id = ?1)").bind(run.id),
     context.env.DB.prepare("DELETE FROM product_versions WHERE NOT EXISTS (SELECT 1 FROM observations o WHERE o.product_version_id = product_versions.id)"),
     context.env.DB.prepare("DELETE FROM maintenance_leases WHERE kind = 'canonical-cleanup' AND run_id = ?1").bind(run.id),
