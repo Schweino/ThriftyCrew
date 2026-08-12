@@ -3,6 +3,7 @@
   "name": "tc-grocery-v3",
   "main": "apps/api/src/index.ts",
   "workers_dev": false,
+  "routes": [],
   "compatibility_date": "2026-08-11",
   "compatibility_flags": ["nodejs_compat"],
   "cache": {
