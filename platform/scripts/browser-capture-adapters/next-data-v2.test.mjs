@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
-import { captureNextDataCanary, packageSizeFromName, parseNextDataOfferItem, pickupEligible, sourcePriceSemantics, walmartPickupEligible } from "./next-data-v2.mjs";
+import { buildNextDataRows, buildNextDataSuccess, captureNextDataCanary, packageSizeFromName, parseNextDataOfferItem, pickupEligible, sourcePriceSemantics, walmartPickupEligible } from "./next-data-v2.mjs";
 
 describe("Walmart pickup eligibility", () => {
   it("requires in-stock pickup at the configured Omaha store", () => {
@@ -31,6 +31,11 @@ describe("source-native offer parsing", () => {
     expect(packageSizeFromName("McCormick Pure Vanilla Extract, 1.0 fl oz Box")).toBe("1.0 fl oz");
     expect(packageSizeFromName("Sam's Zero Sugar Cola Soda, 2 Liter Bottle")).toBe("2 l");
     expect(packageSizeFromName("Maruchan Instant Lunch Ramen Noodles, Chicken Flavor, 2.25 oz Cup")).toBe("2.25 oz");
+    expect(packageSizeFromName('The Cheesecake Factory Famous "Brown Bread", 18.7 oz, Kosher Rye Bread, Bag')).toBe("18.7 oz");
+    expect(packageSizeFromName("Dave's Killer Bread, 20.5 oz Loaf")).toBe("20.5 oz");
+    expect(packageSizeFromName("Jimmy Dean Turkey Sausage Patties 24 ct.")).toBe("24 ct");
+    expect(packageSizeFromName("Member's Mark Tilapia Fillet, priced per pound")).toBe("");
+    expect(packageSizeFromName("Lobster Tails, 4 ct., priced per pound")).toBe("");
   });
 
   it("preserves promotion conditions instead of labeling every price everyday", () => {
@@ -41,6 +46,25 @@ describe("source-native offer parsing", () => {
   it("requires in-stock pickup at the retailer's configured location", () => {
     expect(pickupEligible({ availabilityStatus: "IN_STOCK", pickupStoreIds: ["8146"] }, "8146")).toBe(true);
     expect(pickupEligible({ availabilityStatus: "IN_STOCK", pickupStoreIds: ["6279"] }, "8146")).toBe(false);
+  });
+
+  it("records an unpriceable retailer row without discarding exact rows from the term", () => {
+    const capturedAt = "2026-08-12T19:00:00.000Z";
+    const base = { linePrice: "$4.25", unitPrice: "", wasPrice: "", priceDisplayCondition: "", savings: "", memberPriceString: "", promotionText: "", taxonomy: "0:1", url: "https://www.samsclub.com/p/item", imageUrl: "", availabilityStatus: "IN_STOCK", availabilityText: "In stock", offerId: "offer", sellerName: "Sam's Club", pickupStoreIds: ["8146"] };
+    const result = buildNextDataRows("sams", "turkey", {
+      url: "https://www.samsclub.com/s/turkey", title: "Turkey", query: "turkey", locale: "en-US",
+      rows: [{ ...base, id: "exact", name: "Turkey Breast, 2 lb Bag", visiblePrice: "$4.25" }, { ...base, id: "missing-size", name: "Premium Carved Turkey Breast", visiblePrice: "$4.25" }],
+    }, capturedAt);
+    expect(result.rows).toHaveLength(1);
+    expect(result.rows[0]).toMatchObject({ id: "exact", size: "2 lb" });
+    expect(result.excludedResults).toEqual([{ productKey: "missing-size", name: "Premium Carved Turkey Breast", reason: "source-native package size is not exact" }]);
+  });
+
+  it("completes an all-excluded search without fabricating an observation or retrying it", () => {
+    const built = { rows: [], excludedResults: [{ productKey: "missing-size", name: "Premium Turkey", reason: "source-native package size is not exact" }] };
+    expect(buildNextDataSuccess("turkey", { hasMore: false }, built, { attempts: 1, startedAt: "2026-08-12T19:00:00.000Z", finishedAt: "2026-08-12T19:00:01.000Z" })).toMatchObject({
+      blocked: false, rows: [], term: { outcome: "success", rowCount: 0, retrieval: { loadedResultCount: 0, availableResultCount: 0 }, excludedResults: built.excludedResults },
+    });
   });
 });
 

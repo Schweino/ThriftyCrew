@@ -66,6 +66,11 @@ export const captureTermSchema = z.object({
   outcome: captureTermOutcome,
   rowCount: z.number().int().nonnegative(),
   reason: z.string().max(1000).optional(),
+  excludedResults: z.array(z.object({
+    productKey: z.string().trim().min(1).max(300),
+    name: z.string().trim().min(1).max(1000),
+    reason: z.string().trim().min(1).max(1000),
+  })).max(200).optional(),
 });
 
 export const browserCaptureStore = z.enum(["aldi", "fareway", "sams", "walmart"]);

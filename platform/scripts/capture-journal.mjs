@@ -450,15 +450,23 @@ export function leaseCaptureWork(owner, requestedStore, now = new Date(), ttlMs 
     db.prepare(`UPDATE capture_work_units SET status = 'queued', lease_owner = NULL, lease_expires_at = NULL,
       available_at = ?, updated_at = ? WHERE status = 'leased' AND lease_expires_at <= ?`)
       .run(nowMs, now.toISOString(), nowMs);
+    // Executor rows are capacity reservations, not independent leases. A
+    // controller restart can outlive the work lease's in-memory finally
+    // handler, so remove any executor that no longer owns leased work before
+    // enforcing the two-store concurrency ceiling.
+    db.prepare(`DELETE FROM capture_executors WHERE NOT EXISTS (
+      SELECT 1 FROM capture_work_units work
+      WHERE work.lease_owner = capture_executors.owner AND work.status = 'leased'
+    )`).run();
     db.prepare("DELETE FROM capture_executors WHERE last_heartbeat_at <= ?").run(nowMs - 10 * 60_000);
     const candidates = db.prepare(`SELECT work.* FROM capture_work_units work
       WHERE work.status = 'queued' AND work.available_at <= ?
         AND (? IS NULL OR work.store = ?)
         AND NOT EXISTS (SELECT 1 FROM capture_challenges c WHERE c.store = work.store AND c.status IN ('open', 'acknowledged'))
         AND NOT EXISTS (SELECT 1 FROM capture_executors active WHERE active.store = work.store)
-        AND ((SELECT COUNT(DISTINCT store) FROM capture_executors) < 2
+        AND ((SELECT COUNT(DISTINCT store) FROM capture_executors) < 4
           OR EXISTS (SELECT 1 FROM capture_executors active WHERE active.store = work.store))
-      ORDER BY work.priority DESC, work.available_at, work.ordinal LIMIT 16`).all(nowMs, requestedStore || null, requestedStore || null);
+      ORDER BY CASE WHEN work.attempts = 0 THEN 0 ELSE 1 END, work.priority DESC, work.available_at, work.ordinal LIMIT 16`).all(nowMs, requestedStore || null, requestedStore || null);
     let selected;
     let retryAt;
     for (const candidate of candidates) {
@@ -470,8 +478,13 @@ export function leaseCaptureWork(owner, requestedStore, now = new Date(), ttlMs 
     const count = Math.max(1, Math.min(5, Number(requestedCount) || 1));
     const selectedBatch = db.prepare(`SELECT * FROM capture_work_units
       WHERE status = 'queued' AND available_at <= ? AND store = ? AND session_directory = ? AND phase = ?
-      ORDER BY priority DESC, available_at, ordinal LIMIT ?`).all(nowMs, selected.store, selected.session_directory, selected.phase, count);
+      ORDER BY CASE WHEN attempts = 0 THEN 0 ELSE 1 END, priority DESC, available_at, ordinal LIMIT ?`).all(nowMs, selected.store, selected.session_directory, selected.phase, count);
     const expiresAt = nowMs + Math.max(30_000, Math.min(ttlMs, 30 * 60_000));
+    // A work candidate can only be selected when its store has no active
+    // executor. Any adapter lane left for that store is therefore orphaned
+    // (most commonly after a controller restart) and must not block the new
+    // fenced executor for the remainder of the adapter's 15-minute TTL.
+    db.prepare("DELETE FROM lane_leases WHERE store = ?").run(selected.store);
     const lease = db.prepare(`UPDATE capture_work_units SET status = 'leased', lease_owner = ?, lease_expires_at = ?,
       attempts = attempts + 1, updated_at = ? WHERE id = ? AND status = 'queued'`);
     for (const work of selectedBatch) lease.run(owner, expiresAt, now.toISOString(), work.id);
@@ -635,7 +648,7 @@ export function acquireControllerLane(store, owner, now = new Date(), ttlMs = 15
     const existing = db.prepare("SELECT owner FROM lane_leases WHERE store = ?").get(store);
     if (existing && existing.owner !== owner) { db.exec("ROLLBACK"); return { acquired: false, reason: "store-active" }; }
     const active = Number(db.prepare("SELECT COUNT(*) AS count FROM lane_leases").get().count);
-    if (!existing && active >= 2) { db.exec("ROLLBACK"); return { acquired: false, reason: "controller-capacity" }; }
+    if (!existing && active >= 4) { db.exec("ROLLBACK"); return { acquired: false, reason: "controller-capacity" }; }
     db.prepare(`INSERT INTO lane_leases (store, owner, expires_at, acquired_at) VALUES (?, ?, ?, ?)
       ON CONFLICT(store) DO UPDATE SET owner=excluded.owner, expires_at=excluded.expires_at, acquired_at=excluded.acquired_at`)
       .run(store, owner, now.getTime() + ttlMs, now.toISOString());

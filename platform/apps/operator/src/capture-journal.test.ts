@@ -10,6 +10,7 @@ import {
   captureCoordinatorStatus,
   commitSessionChunk,
   completeSessionWorkUnits,
+  failCaptureWork,
   heartbeatCaptureWork,
   leaseCaptureWork,
   openCaptureChallenge,
@@ -117,6 +118,65 @@ describe("unified persistent capture journal", () => {
     expect(leased.work.unitKey).toBe("term-0");
     expect(leased.works.map((work) => work.payload.query)).toEqual(["term 0", "term 1", "term 2", "term 3", "term 4"]);
     expect(leaseCaptureWork("other", "walmart", new Date(started.getTime() + 5_000), 60_000, file, 2)).toMatchObject({ acquired: false });
+  });
+
+  it("reclaims expired executors before applying the global store-capacity limit", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-capture-expired-executors-"));
+    roots.push(root);
+    const file = path.join(root, "capture-journal.sqlite");
+    const started = new Date("2026-08-12T12:00:00.000Z");
+    for (const store of ["walmart", "aldi", "fareway"] as const) {
+      const directory = path.join(root, store);
+      upsertSessionJournal(directory, { sessionId: `session-${store}`, store, chunks: [] }, file);
+      replaceSessionWorkUnits(directory, store, "discovery", [{ key: `${store}-term`, ordinal: 0, payload: { query: `${store} term` } }], started.toISOString(), file);
+    }
+    expect(leaseCaptureWork("expired-walmart", "walmart", started, 30_000, file)).toMatchObject({ acquired: true });
+    expect(leaseCaptureWork("expired-aldi", "aldi", started, 30_000, file)).toMatchObject({ acquired: true });
+    expect(leaseCaptureWork("fareway-after-expiry", "fareway", new Date(started.getTime() + 31_000), 30_000, file)).toMatchObject({ acquired: true });
+    expect((captureCoordinatorStatus(file) as { executors: Array<{ owner: string }> }).executors.map((executor) => executor.owner)).toEqual(["fareway-after-expiry"]);
+  });
+
+  it("fences an orphan adapter lane when new coordinator work is leased", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-capture-orphan-lane-"));
+    roots.push(root);
+    const file = path.join(root, "capture-journal.sqlite");
+    const environment = { ...process.env, TC_CAPTURE_JOURNAL: file };
+    const started = new Date("2026-08-12T12:00:00.000Z");
+    const directory = path.join(root, "aldi");
+    upsertSessionJournal(directory, { sessionId: "session-aldi", store: "aldi", chunks: [] }, file);
+    replaceSessionWorkUnits(directory, "aldi", "discovery", [{ key: "eggs", ordinal: 0, payload: { query: "eggs" } }], started.toISOString(), file);
+    expect(acquireControllerLane("aldi", "orphan-adapter", started, 15 * 60_000, environment)).toMatchObject({ acquired: true });
+    expect(leaseCaptureWork("new-executor", "aldi", new Date(started.getTime() + 1_000), 60_000, file)).toMatchObject({ acquired: true });
+    expect(acquireControllerLane("aldi", "new-adapter", new Date(started.getTime() + 2_000), 15 * 60_000, environment)).toMatchObject({ acquired: true });
+  });
+
+  it("does not let a retryable failure starve untouched store work", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-capture-retry-order-"));
+    roots.push(root);
+    const file = path.join(root, "capture-journal.sqlite");
+    const directory = path.join(root, "sams");
+    const started = new Date("2026-08-12T12:00:00.000Z");
+    upsertSessionJournal(directory, { sessionId: "session-sams", store: "sams", chunks: [] }, file);
+    replaceSessionWorkUnits(directory, "sams", "discovery", ["first", "second", "third"].map((key, ordinal) => ({ key, ordinal, priority: 100 - ordinal, payload: { query: key } })), started.toISOString(), file);
+    const first = leaseCaptureWork("retry-executor", "sams", started, 60_000, file) as { work: { id: string; unitKey: string } };
+    expect(first.work.unitKey).toBe("first");
+    failCaptureWork("retry-executor", first.work.id, "temporary retailer rejection", new Date(started.getTime() + 1_000), file);
+    const next = leaseCaptureWork("fresh-executor", "sams", new Date(started.getTime() + 4_000), 60_000, file) as { work: { unitKey: string } };
+    expect(next.work.unitKey).toBe("second");
+  });
+
+  it("permits one isolated lane for each of the four browser retailers", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-capture-four-store-capacity-"));
+    roots.push(root);
+    const file = path.join(root, "capture-journal.sqlite");
+    const started = new Date("2026-08-12T12:00:00.000Z");
+    for (const store of ["aldi", "fareway", "sams", "walmart"] as const) {
+      const directory = path.join(root, store);
+      upsertSessionJournal(directory, { sessionId: `session-${store}`, store, chunks: [] }, file);
+      replaceSessionWorkUnits(directory, store, "discovery", [{ key: `${store}-term`, ordinal: 0, payload: { query: `${store} term` } }], started.toISOString(), file);
+      expect(leaseCaptureWork(`executor-${store}`, store, started, 60_000, file)).toMatchObject({ acquired: true });
+    }
+    expect((captureCoordinatorStatus(file) as { executors: Array<{ store: string }> }).executors).toHaveLength(4);
   });
 
   it("answers weekly browser freshness from journaled queue truth without scanning artifact files", async () => {

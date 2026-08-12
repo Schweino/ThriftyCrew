@@ -47,15 +47,22 @@ export function pickupEligible(row, locationId) {
 
 export function packageSizeFromName(name) {
   const text = String(name ?? "").replace(/\s+/g, " ").trim();
-  const packageSuffix = "(?:box|bottle|can|jar|bag|carton|pouch|package|tub|tray|cup)";
   const unit = (value) => value.toLowerCase().replace(/\./g, "").replace(/\s+/g, " ").replace(/^gallons?$/, "gal").replace(/^liters?$/, "l");
-  const pack = text.match(new RegExp(`(?:^|[,;(]\\s*)([0-9]+(?:\\.[0-9]+)?)\\s*(fl\\.?\\s*oz\\.?|oz\\.?|lb\\.?|g|kg|ml|l|liters?|gal(?:lon)?s?|qt|pt)\\s*[,;]?\\s*(\\d+)\\s*(?:pk|pack|ct)\\.?(?:\\s+${packageSuffix})?\\s*\\)?\\s*$`, "i"));
-  if (pack) return `${pack[3]} x ${pack[1]} ${unit(pack[2])}`;
-  const count = text.match(/(?:^|[,;(]\s*)(\d+)\s*(?:pk|pack|ct|count)\.?\s*\)?\s*$/i);
-  if (count) return `${count[1]} ct`;
-  const quantity = text.match(new RegExp(`(?:^|[,;(]\\s*|\\s+)([0-9]+(?:\\.[0-9]+)?)\\s*(fl\\.?\\s*oz\\.?|oz\\.?|lb\\.?|g|kg|ml|l|liters?|gal(?:lon)?s?|qt|pt)\\.?(?:\\s+${packageSuffix})?\\s*\\)?\\s*$`, "i"));
-  if (quantity) return `${quantity[1]} ${unit(quantity[2])}`;
-  const word = text.match(/(?:^|[,;(]\s*)(half\s+gallon|gallon|dozen|each)\s*\)?\s*$/i);
+  const unitPattern = "fl\\.?\\s*oz\\.?|oz\\.?|lb\\.?|g|kg|ml|l|liters?|gal(?:lon)?s?|qt|pt";
+  // Retailer titles commonly put merchandising descriptors after the size
+  // ("18 oz, Rye Bread, Bag"). Select the final source-native quantity/unit
+  // token instead of requiring it to be the final title suffix.
+  const packs = [...text.matchAll(new RegExp(`([0-9]+(?:\\.[0-9]+)?)\\s*(${unitPattern})\\s*[,;]?\\s*(\\d+)\\s*(?:pk|pack|ct)\\.?`, "ig"))];
+  if (packs.length) { const pack = packs.at(-1); return `${pack[3]} x ${pack[1]} ${unit(pack[2])}`; }
+  const quantities = [...text.matchAll(new RegExp(`(?:^|[^a-z0-9])([0-9]+(?:\\.[0-9]+)?)\\s*(${unitPattern})(?=$|[^a-z])`, "ig"))];
+  if (quantities.length) { const quantity = quantities.at(-1); return `${quantity[1]} ${unit(quantity[2])}`; }
+  // A count paired with "priced per pound" is not a checkout package size;
+  // preserving it as a count would misstate variable-weight price semantics.
+  if (!/priced\s+per\s+(?:pound|lb)/i.test(text)) {
+    const counts = [...text.matchAll(/(?:^|[^a-z0-9])(\d+)\s*(?:pk|pack|ct|count)\.?(?=$|[^a-z])/ig)];
+    if (counts.length) return `${counts.at(-1)[1]} ct`;
+  }
+  const word = text.match(/(?:^|[,;(]\s*)(half\s+gallon|gallon|dozen|each)(?=$|[^a-z])/i);
   if (word) return word[1].toLowerCase() === "half gallon" ? "0.5 gal" : word[1].toLowerCase() === "gallon" ? "1 gal" : word[1].toLowerCase();
   return "";
 }
@@ -166,21 +173,24 @@ async function readPage(tab) {
   return page;
 }
 
-function buildRows(store, query, page, capturedAt) {
+export function buildNextDataRows(store, query, page, capturedAt) {
   const config = CONFIG[store];
-  return page.rows.map((row, resultIndex) => {
-    const purchasePriceMinor = priceMinor(row.linePrice);
-    const size = packageSizeFromName(row.name);
-    if (!size) throw new Error(`source-native package size is not exact for ${row.id}`);
-    const priceSemantics = sourcePriceSemantics(store, row);
-    const offer = {
+  const rows = [];
+  const excludedResults = [];
+  for (const [resultIndex, row] of page.rows.entries()) {
+    try {
+      const purchasePriceMinor = priceMinor(row.linePrice);
+      const size = packageSizeFromName(row.name);
+      if (!size) throw new Error("source-native package size is not exact");
+      const priceSemantics = sourcePriceSemantics(store, row);
+      const offer = {
       version: 1, retailerProductId: row.id, ...(row.offerId ? { offerId: row.offerId } : {}), productName: row.name,
       sizeText: size, rawPriceText: row.linePrice, purchasePriceMinor, ...(row.unitPrice ? { unitPriceText: row.unitPrice } : {}),
       ...(row.sellerName ? { sellerName: row.sellerName } : {}),
       availability: { status: "in_stock", ...(row.availabilityText ? { rawText: row.availabilityText } : {}), fulfillmentMode: "pickup", locationId: config.locationId, eligible: true },
       priceSemantics, observedAt: capturedAt, sourceUrl: row.url,
     };
-    const truth = {
+      const truth = {
       capturedAt,
       pageUrl: page.url,
       location: config.location,
@@ -193,8 +203,27 @@ function buildRows(store, query, page, capturedAt) {
       offer,
       parser: { status: "exact", rule: "next-data-price-lines", notes: "Visible product-card price agrees with the projected __NEXT_DATA__ linePrice for the same retailer item ID." },
     };
-    return { q: query, n: row.name, lp: row.linePrice, up: row.unitPrice, id: row.id, size, taxonomy_path: row.taxonomy, url: row.url, image_url: row.imageUrl, _capture: truth };
-  });
+      rows.push({ q: query, n: row.name, lp: row.linePrice, up: row.unitPrice, id: row.id, size, taxonomy_path: row.taxonomy, url: row.url, image_url: row.imageUrl, _capture: truth });
+    } catch (error) {
+      excludedResults.push({ productKey: row.id, name: row.name, reason: String(error?.message || error) });
+    }
+  }
+  return { rows, excludedResults };
+}
+
+export function buildNextDataSuccess(query, page, built, { attempts, startedAt, finishedAt }) {
+  const reason = built.excludedResults.length
+    ? `${built.excludedResults.length} retailer result(s) explicitly excluded from pricing`
+    : undefined;
+  return {
+    blocked: false,
+    term: {
+      query, outcome: "success", rowCount: built.rows.length, attempts, startedAt, finishedAt,
+      retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: built.rows.length, availableResultCount: built.rows.length, pageCount: 1, hasMoreResults: page.hasMore, termination: page.hasMore ? "target-depth" : "end-of-results" },
+      ...(reason ? { reason, excludedResults: built.excludedResults } : {}),
+    },
+    rows: built.rows,
+  };
 }
 
 async function captureTerm(tab, store, query) {
@@ -225,8 +254,8 @@ async function captureTerm(tab, store, query) {
       }
       if (page.rows.length < TARGET_RESULTS && page.hasMore) throw new Error("visible/structured agreement remained truncated below target depth while a continuation was present");
       if (page.rows.some((row) => priceMinor(row.linePrice) === null || !row.id || !row.name)) throw new Error("one or more agreed rows lacked an exact line price, retailer item ID, or name");
-      const rows = buildRows(store, query, page, finishedAt);
-      return { blocked: false, term: { query, outcome: "success", rowCount: rows.length, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: rows.length, pageCount: 1, hasMoreResults: page.hasMore, termination: page.hasMore ? "target-depth" : "end-of-results" } }, rows };
+      const built = buildNextDataRows(store, query, page, finishedAt);
+      return buildNextDataSuccess(query, page, built, { attempts, startedAt, finishedAt });
     } catch (error) {
       lastError = String(error?.message || error);
       if (attempts < 2) await tab.playwright.waitForTimeout(500);

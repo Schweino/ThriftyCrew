@@ -38,6 +38,13 @@ async function log(event: string, detail: Record<string, unknown> = {}): Promise
   await Promise.all(logs.slice(14).map((entry) => rm(path.join(logRoot, entry.name), { force: true })));
 }
 
+for (const [event, source] of [["uncaught-exception", "uncaughtException"], ["unhandled-rejection", "unhandledRejection"]] as const) {
+  process.on(source, (error: unknown) => {
+    const detail = error instanceof Error ? `${error.message}\n${error.stack ?? ""}` : String(error);
+    void log(event, { detail }).finally(() => process.exit(1));
+  });
+}
+
 async function checkpoint(reason: string): Promise<void> {
   try {
     const result = await checkpointCaptureJournal();
@@ -168,6 +175,12 @@ async function dispatch(pathname: string, body: Record<string, unknown>): Promis
 const server = net.createServer((socket) => {
   let input = "";
   let handled = false;
+  // Named-pipe clients use bounded request deadlines and may disconnect while
+  // a durable commit/checkpoint is still finishing. EPIPE is a client-lifetime
+  // event, not a daemon-fatal condition.
+  socket.on("error", (error) => {
+    void log("client-socket-error", { code: (error as NodeJS.ErrnoException).code ?? "unknown", detail: error.message });
+  });
   socket.setTimeout(2_000, () => socket.destroy());
   socket.on("data", async (chunk) => {
     if (handled) return;

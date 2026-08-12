@@ -35,6 +35,11 @@ const discoveryChunkSchema = z.object({
     finishedAt: z.iso.datetime({ offset: true }),
     retrieval: browserCaptureRetrievalSchema,
     reason: z.string().trim().min(1).max(1000).optional(),
+    excludedResults: z.array(z.object({
+      productKey: z.string().trim().min(1).max(300),
+      name: z.string().trim().min(1).max(1000),
+      reason: z.string().trim().min(1).max(1000),
+    })).max(200).optional(),
   })).min(1).max(20),
   rows: z.array(z.record(z.string(), z.unknown())).max(10_000),
 });
@@ -498,6 +503,7 @@ function finalizedTerms(draft: DraftSession, latest: LoadedSessionState["latest"
       termKey: term.termKey, query: term.query, ordinal: term.ordinal, outcome: captured.outcome, rowCount: captured.rowCount,
       attempts: captured.attempts, startedAt: captured.startedAt, finishedAt: captured.finishedAt, retrieval: captured.retrieval,
       ...(captured.reason ? { reason: captured.reason } : {}),
+      ...(captured.excludedResults?.length ? { excludedResults: captured.excludedResults } : {}),
     } : {
       termKey: term.termKey, query: term.query, ordinal: term.ordinal, outcome: "not_attempted" as const, rowCount: 0, attempts: 0,
       startedAt: draft.startedAt, finishedAt: draft.startedAt, reason: "term was not attempted before finalization",

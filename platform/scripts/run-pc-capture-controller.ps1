@@ -35,8 +35,13 @@ if (-not $nodePath -or -not (Test-Path -LiteralPath $nodePath)) { throw 'pinned 
 $restartDelaySeconds = 2
 while ($true) {
   $controllerStartedAt = Get-Date
+  $controllerOutputLog = Join-Path $clientDir 'logs\capture-controller-process.log'
+  New-Item -ItemType Directory -Path (Split-Path -Parent $controllerOutputLog) -Force | Out-Null
+  if ((Test-Path -LiteralPath $controllerOutputLog) -and (Get-Item -LiteralPath $controllerOutputLog).Length -gt 2MB) {
+    Move-Item -LiteralPath $controllerOutputLog -Destination ($controllerOutputLog + '.previous') -Force
+  }
   Push-Location ([string]$config.platformRoot)
-  try { & $nodePath '--import' 'tsx' 'apps/capture-service/src/index.ts' }
+  try { & $nodePath '--import' 'tsx' 'apps/capture-service/src/index.ts' *>> $controllerOutputLog }
   finally { Pop-Location }
   $exitCode = $LASTEXITCODE
   $runtimeSeconds = [Math]::Max(0, ((Get-Date) - $controllerStartedAt).TotalSeconds)

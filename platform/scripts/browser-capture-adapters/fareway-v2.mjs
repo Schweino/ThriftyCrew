@@ -68,8 +68,15 @@ async function readPage(tab) {
   });
 }
 
-function buildRows(query, page, capturedAt) {
-  return page.rows.map((row, resultIndex) => {
+export function buildFarewayRows(query, page, capturedAt) {
+  const rows = [];
+  const excludedResults = [];
+  page.rows.forEach((row, resultIndex) => {
+    try {
+      if (!row.name) throw new Error("source-native product name is not exact");
+      if (!row.id || !row.href) throw new Error("source-native product identity is not exact");
+      if (!Number.isInteger(row.priceMinor)) throw new Error("source-native current price is not exact");
+      if (!String(row.size ?? "").trim()) throw new Error("source-native package size is not exact");
     const originalLine = row.lines.find((line) => /^Original Price:\s*\$/i.test(line));
     const originalMatch = originalLine?.match(/\$([0-9]+(?:\.[0-9]{1,2})?)/);
     const regularPriceMinor = validatedRegularPrice(
@@ -88,7 +95,7 @@ function buildRows(query, page, capturedAt) {
     const availabilityText = row.lines.find((line) => /^(?:many in stock|in stock|low stock|only \d+ left)$/i.test(line)) || "";
     const inStock = /in stock|only \d+ left/i.test(availabilityText);
     const offer = { version: 1, retailerProductId: row.href, productName: row.name, sizeText: row.size, rawPriceText: row.current, purchasePriceMinor: row.priceMinor, availability: { status: inStock ? "in_stock" : "unknown", ...(availabilityText ? { rawText: availabilityText } : {}), fulfillmentMode: "in_store", eligible: inStock }, priceSemantics, observedAt: capturedAt, sourceUrl: row.href };
-    return {
+      rows.push({
       id: row.id,
       term: query,
       name: row.name,
@@ -132,8 +139,12 @@ function buildRows(query, page, capturedAt) {
           notes: "Fareway visible Current price label; exact Omaha store and In-Store mode verified by the chunk canary.",
         },
       },
-    };
+      });
+    } catch (error) {
+      excludedResults.push({ productKey: String(row.id || row.href || `result-${resultIndex}`), name: String(row.name || "Unnamed retailer result"), reason: String(error?.message || error) });
+    }
   });
+  return { rows, excludedResults };
 }
 
 async function captureTerm(tab, query) {
@@ -179,12 +190,13 @@ async function captureTerm(tab, query) {
         return { blocked: false, term: { query, outcome: "empty", rowCount: 0, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount, hasMoreResults: false, termination: "no-results" } }, rows: [] };
       }
       if (page.rows.length < TARGET_RESULTS && page.hasMore) throw new Error("pagination remained truncated below target depth");
-      if (page.rows.some((row) => !row.name || !row.id || !Number.isInteger(row.priceMinor))) throw new Error("one or more Fareway cards lacked exact identity/name/current price");
-      const rows = buildRows(query, page, finishedAt);
+      const built = buildFarewayRows(query, page, finishedAt);
+      if (built.rows.length === 0) throw new Error(`all ${built.excludedResults.length} result rows failed exact offer projection`);
       return {
         blocked: false,
-        term: { query, outcome: "success", rowCount: rows.length, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: rows.length, pageCount, hasMoreResults: page.hasMore, termination: page.hasMore ? "target-depth" : "end-of-results" } },
-        rows,
+        term: { query, outcome: "success", rowCount: built.rows.length, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: built.rows.length, availableResultCount: built.rows.length, pageCount, hasMoreResults: page.hasMore, termination: page.hasMore ? "target-depth" : "end-of-results" },
+          ...(built.excludedResults.length ? { reason: `${built.excludedResults.length} retailer result(s) explicitly excluded from pricing`, excludedResults: built.excludedResults } : {}) },
+        rows: built.rows,
       };
     } catch (error) {
       lastError = String(error?.message || error);

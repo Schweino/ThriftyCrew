@@ -205,6 +205,24 @@ describe("resumable browser capture sessions", () => {
     }
   });
 
+  it("accepts an exact storefront result while retaining an explicitly excluded sibling row", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-browser-session-"));
+    roots.push(root);
+    const worklist = path.join(root, "worklist.txt");
+    const directory = path.join(root, "session");
+    await writeFile(worklist, "excluded garlic\n", "utf8");
+    await initializeCaptureSession("aldi", worklist, directory, "2026-08-12T16:00:00.000Z");
+    const base = storefrontChunk("aldi", "excluded garlic", 0);
+    const value = { ...base, terms: base.terms.map((term) => ({ ...term,
+      reason: "1 retailer result explicitly excluded from pricing",
+      excludedResults: [{ productKey: "35002", name: "Loose garlic", reason: "source-native package size is not exact" }],
+    })) };
+    const file = path.join(root, "aldi-exclusion.json");
+    await writeFile(file, JSON.stringify(value));
+    await expect(appendCaptureChunk(directory, file)).resolves.toMatchObject({ terms: 1, rows: 1 });
+    expect(await captureSessionStatus(directory)).toMatchObject({ attemptedTerms: 1, retrievalCompleteTerms: 1, sourceTruthFailureCount: 0 });
+  });
+
   it("rejects a chunk that cannot prove the required location", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "tc-browser-session-"));
     roots.push(root);
