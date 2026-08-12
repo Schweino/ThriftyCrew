@@ -227,14 +227,26 @@ function init(box){
     data.ing.forEach(function(it){ html+='<li><strong>'+esc(it.disp||it.item)+':</strong> '+scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'')+'</li>'; });
     ingUl.innerHTML=html;
   }
-  // THE COMPOSITION BAR follows the same package prices as the checklist. Owned (unchecked) ingredients
-  // go gray rather than disappearing, so the shape of the bill stays readable while you subtract from it.
+  // THE COMPOSITION BAR is rebuilt from the promoted release, never trusted from
+  // the authored Ghost snapshot. If any ingredient is unavailable, hiding the
+  // chart is more truthful than presenting percentages for a partial bill.
   function renderComp(){
-    var bar=document.querySelector('.smp-comp-bar'); if(!bar) return;
-    bar.querySelectorAll('i').forEach(function(seg){
-      var i=seg.getAttribute('data-i');
-      seg.classList.toggle('is-own', tab==='custom' && !!removed[i]);
+    var comp=document.querySelector('.smp-comp'),bar=document.querySelector('.smp-comp-bar'); if(!comp||!bar) return;
+    var basis=(tab==='everyday')?'everyday':'cheapest',nn=nServ(),parts=[],total=0,complete=!!feedData;
+    data.ing.forEach(function(it,i){ var p=price(it,nn,basis); if(p.cost===null){complete=false;return;} parts.push({i:i,item:it.item,cost:p.cost}); total+=p.cost; });
+    if(!complete||!(total>0)){ comp.hidden=true; return; }
+    parts.sort(function(a,b){return b.cost-a.cost||a.i-b.i;});
+    var colors=['#E2A43C','#1E3A5F','#5b7fa6'],html='',key='',rest=0;
+    parts.forEach(function(part,rank){ var pct=100*part.cost/total,color=colors[rank]||'#c3ccd8'; if(rank>2)rest+=pct;
+      html+='<i data-i="'+part.i+'" style="width:'+pct.toFixed(3)+'%;background:'+color+'" title="'+esc(part.item)+': '+Math.round(pct)+'%"'+((tab==='custom'&&removed[part.i])?' class="is-own"':'')+'></i>';
+      if(rank<3)key+='<span><i style="background:'+color+'"></i>'+esc(part.item)+' '+Math.round(pct)+'%</span>';
     });
+    if(rest>0)key+='<span><i style="background:#c3ccd8"></i>everything else '+Math.round(rest)+'%</span>';
+    bar.innerHTML=html; bar.setAttribute('aria-label','Share of the current promoted-release batch cost by ingredient');
+    var keyEl=comp.querySelector('.smp-comp-key'),pay=comp.querySelector('.smp-comp-pay');
+    if(keyEl)keyEl.innerHTML=key;
+    if(pay)pay.textContent='Cost shares use the same current promoted-release whole-package prices shown below.';
+    comp.hidden=false;
   }
   // THE SAVINGS DELTA. One computed sentence, the subtraction of two totals the widget already has.
   // Suppressed under a dollar: a 40-cent "saving" is noise pretending to be news.
