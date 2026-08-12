@@ -49,6 +49,7 @@ export function wilsonInterval(successes: number, total: number, z = 1.959963984
 }
 
 export async function createAccuracyDraw(db: D1Database, input: AccuracyDrawCreate): Promise<{ drawId: string; sampled: number; idempotent: boolean }> {
+  const dailyRevalidation = input.protocolVersion === "winner-challenger-v1";
   const sameProtocolDraw = await db.prepare(
     `SELECT id, sampled_count FROM accuracy_draws
       WHERE market_id = ?1 AND seed = ?2 AND protocol_version = ?3`,
@@ -96,28 +97,34 @@ export async function createAccuracyDraw(db: D1Database, input: AccuracyDrawCrea
        SELECT c.commodity_id, c.store_location_id, c.observation_id, c.is_crown,
               c.display_per_unit_micros, c.reason_json,
               COUNT(*) OVER (PARTITION BY c.commodity_id) AS stores,
-              AVG(c.display_per_unit_micros) OVER (PARTITION BY c.commodity_id) AS mean_price
+              AVG(c.display_per_unit_micros) OVER (PARTITION BY c.commodity_id) AS mean_price,
+              ROW_NUMBER() OVER (PARTITION BY c.commodity_id ORDER BY c.display_per_unit_micros, c.store_location_id) AS price_rank
          FROM release_cells c WHERE c.release_id = ?1 AND c.status = 'priced'
      )
      SELECT *, CASE WHEN is_crown = 1 THEN 50 ELSE 0 END
+          + CASE WHEN price_rank = 2 THEN 40 ELSE 0 END
           + CASE WHEN COALESCE(json_extract(reason_json, '$.basisSource'), 'normalized') <> 'normalized' THEN 100 ELSE 0 END
           + CASE WHEN mean_price > 0 AND display_per_unit_micros * 5 < mean_price THEN 200 ELSE 0 END AS risk_score
        FROM priced
-      WHERE is_crown = 1 OR COALESCE(json_extract(reason_json, '$.basisSource'), 'normalized') <> 'normalized'
+      WHERE price_rank <= 2 OR COALESCE(json_extract(reason_json, '$.basisSource'), 'normalized') <> 'normalized'
          OR (mean_price > 0 AND display_per_unit_micros * 5 < mean_price)
-      ORDER BY risk_score DESC, commodity_id, store_location_id LIMIT 25`,
-  ).bind(current.release_id).all<{ commodity_id: string; store_location_id: string; observation_id: string; is_crown: number; display_per_unit_micros: number; reason_json: string; stores: number; mean_price: number; risk_score: number }>();
+      ORDER BY risk_score DESC, commodity_id, store_location_id LIMIT 1200`,
+  ).bind(current.release_id).all<{ commodity_id: string; store_location_id: string; observation_id: string; is_crown: number; display_per_unit_micros: number; reason_json: string; stores: number; mean_price: number; price_rank: number; risk_score: number }>();
+  const riskBoardRanked = await Promise.all(riskBoard.results.map(async (row) => ({ row, score: await digestHex(`${input.seed}\u001fboard-risk\u001f${row.commodity_id}\u001f${row.price_rank}\u001f${row.store_location_id}`) })));
+  const selectedRiskBoard = dailyRevalidation
+    ? riskBoardRanked.sort((left, right) => left.score.localeCompare(right.score)).slice(0, 100).map((item) => item.row)
+    : riskBoard.results.filter((row) => row.risk_score >= 50).slice(0, 25);
   let riskOrdinal = 0;
-  for (const row of riskBoard.results) {
+  for (const row of selectedRiskBoard) {
     const id = await deterministicId("accuracy-risk", drawId, "board", String(riskOrdinal));
     statements.push(db.prepare(
       `INSERT INTO accuracy_risk_samples
          (id, draw_id, ordinal, lane, risk_kind, risk_score, release_id, commodity_id, store_location_id, observation_id, evidence_json)
        VALUES (?1, ?2, ?3, 'board', ?4, ?5, ?6, ?7, ?8, ?9, ?10)`,
-    ).bind(id, drawId, riskOrdinal, row.risk_score >= 200 ? "extreme-price" : row.risk_score >= 100 ? "derived-basis" : "crown", row.risk_score, current.release_id, row.commodity_id, row.store_location_id, row.observation_id, stableJson({ isCrown: row.is_crown === 1, displayPerUnitMicros: row.display_per_unit_micros, comparedStores: row.stores, meanPriceMicros: row.mean_price, reason: JSON.parse(row.reason_json) })));
+    ).bind(id, drawId, riskOrdinal, row.risk_score >= 200 ? "extreme-price" : row.risk_score >= 100 ? "derived-basis" : row.price_rank === 2 ? "challenger" : "crown", row.risk_score, current.release_id, row.commodity_id, row.store_location_id, row.observation_id, stableJson({ revalidation: dailyRevalidation, priceRank: row.price_rank, isCrown: row.is_crown === 1, displayPerUnitMicros: row.display_per_unit_micros, comparedStores: row.stores, meanPriceMicros: row.mean_price, reason: JSON.parse(row.reason_json) })));
     riskOrdinal += 1;
   }
-  const riskRecipes = await db.prepare(
+  const riskRecipes = dailyRevalidation ? { results: [] as Array<{ recipe_slug: string; status: string; batch_cost_minor: number | null; serving_cost_minor: number | null; risk_score: number; protein: string | null; rank: number | null }> } : await db.prepare(
     `SELECT costs.recipe_slug, costs.status, costs.batch_cost_minor, costs.serving_cost_minor,
             CASE WHEN ranked.recipe_slug IS NOT NULL THEN 200 WHEN costs.status <> 'complete' THEN 100 ELSE 25 END AS risk_score,
             ranked.protein, ranked.rank
@@ -135,7 +142,7 @@ export async function createAccuracyDraw(db: D1Database, input: AccuracyDrawCrea
     ).bind(id, drawId, riskOrdinal, row.protein ? "top5-recipe" : "incomplete-recipe", row.risk_score, current.release_id, row.recipe_slug, stableJson({ status: row.status, batchCostMinor: row.batch_cost_minor, servingCostMinor: row.serving_cost_minor, protein: row.protein, rank: row.rank })));
     riskOrdinal += 1;
   }
-  const completeRecipePool = await db.prepare(
+  const completeRecipePool = dailyRevalidation ? { results: [] as Array<{ recipe_slug: string; batch_cost_minor: number; serving_cost_minor: number }> } : await db.prepare(
     `SELECT costs.recipe_slug, costs.batch_cost_minor, costs.serving_cost_minor
        FROM release_recipe_costs costs
       WHERE costs.release_id = ?1 AND costs.status = 'complete'
@@ -238,7 +245,8 @@ export async function recordAccuracyVerdicts(db: D1Database, input: AccuracyVerd
     await triageAccuracyVerdict(db, input.drawId, "risk", verdict.ordinal, verdict.verdict, verdict.evidence);
   }
   const count = (await db.prepare("SELECT COUNT(*) AS count FROM operator_verdicts WHERE draw_id = ?1").bind(input.drawId).first<{ count: number }>())?.count ?? 0;
-  const completed = count === draw.sampled_count;
+  const riskCounts = await db.prepare("SELECT COUNT(*) AS sampled, COUNT(verdict) AS reviewed FROM accuracy_risk_samples WHERE draw_id = ?1").bind(input.drawId).first<{ sampled: number; reviewed: number }>();
+  const completed = count === draw.sampled_count && (riskCounts?.reviewed ?? 0) === (riskCounts?.sampled ?? 0);
   if (completed) {
     await db.prepare("UPDATE accuracy_draws SET status = 'completed', completed_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(input.drawId).run();
   }

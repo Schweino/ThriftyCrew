@@ -1,4 +1,4 @@
-import { BROWSER_CAPTURE_ACCURACY_CUTOVER, CAPTURE_SEMANTICS_CUTOVER, browserCaptureSessionSchema, type DirectCaptureArtifact } from "@thriftycrew/contracts";
+import { BROWSER_CAPTURE_ACCURACY_CUTOVER, CAPTURE_SEMANTICS_CUTOVER, OFFER_SNAPSHOT_CUTOVER, browserCaptureSessionSchema, type DirectCaptureArtifact } from "@thriftycrew/contracts";
 
 export interface SourceContract {
   sourceId: string;
@@ -15,6 +15,9 @@ export interface SourceContract {
   minimumIdentityPercent?: number;
   minimumPriceSemanticsPercent?: number;
   minimumPageStatePercent?: number;
+  requiredAuthoritativeWorklist?: boolean;
+  minimumOfferSnapshotPercent?: number;
+  minimumAvailableOfferPercent?: number;
 }
 
 export interface SourceContractCheck {
@@ -47,6 +50,10 @@ export function evaluateSourceContract(artifact: DirectCaptureArtifact, contract
   const identityPercent = artifact.observations.length ? Math.floor(artifact.observations.filter((row) => row.identity && row.identity.confidence !== "weak").length * 100 / artifact.observations.length) : 0;
   const priceSemanticsPercent = artifact.observations.length ? Math.floor(artifact.observations.filter((row) => Boolean(row.priceSemantics)).length * 100 / artifact.observations.length) : 0;
   const pageStatePercent = session?.accuracy.discoveryRows.length ? Math.floor((session.accuracy.pageStateAttestedRows ?? 0) * 100 / session.accuracy.discoveryRows.length) : 0;
+  const offerRequired = Date.parse(artifact.capturedTo) >= Date.parse(OFFER_SNAPSHOT_CUTOVER);
+  const offerSnapshotPercent = artifact.observations.length ? Math.floor(artifact.observations.filter((row) => Boolean(row.offerSnapshot)).length * 100 / artifact.observations.length) : 0;
+  const availableOfferPercent = artifact.observations.length ? Math.floor(artifact.observations.filter((row) => row.offerSnapshot?.availability.eligible === true).length * 100 / artifact.observations.length) : 0;
+  const authoritativeWorklist = artifact.audit.termAuthority === "source-worklist" || artifact.audit.termAuthority === "browser-session-worklist";
   const checks: SourceContractCheck[] = [
     { key: "minimum-rows", status: artifact.observations.length >= contract.minimumRows ? "pass" : "fail", detail: `${artifact.observations.length} rows; requires ${contract.minimumRows}` },
     { key: "term-completion", status: completionPercent >= contract.minimumTermCompletionPercent ? "pass" : "fail", detail: `${completionPercent}% complete; requires ${contract.minimumTermCompletionPercent}%` },
@@ -64,6 +71,9 @@ export function evaluateSourceContract(artifact: DirectCaptureArtifact, contract
     { key: "sku-identity", status: !semanticAccuracyRequired || identityPercent >= (contract.minimumIdentityPercent ?? 100) ? "pass" : "fail", detail: `${identityPercent}% stable identity; requires ${contract.minimumIdentityPercent ?? 100}%` },
     { key: "price-semantics", status: !semanticAccuracyRequired || priceSemanticsPercent >= (contract.minimumPriceSemanticsPercent ?? 100) ? "pass" : "fail", detail: `${priceSemanticsPercent}% explicit; requires ${contract.minimumPriceSemanticsPercent ?? 100}%` },
     { key: "browser-page-state", status: !semanticAccuracyRequired || contract.minimumPageStatePercent === undefined || pageStatePercent >= contract.minimumPageStatePercent ? "pass" : "fail", detail: `${pageStatePercent}% attested; requires ${contract.minimumPageStatePercent ?? 0}%` },
+    { key: "authoritative-worklist", status: !contract.requiredAuthoritativeWorklist || authoritativeWorklist ? "pass" : "fail", detail: String(artifact.audit.termAuthority ?? "missing") },
+    { key: "offer-snapshot", status: !offerRequired || offerSnapshotPercent >= (contract.minimumOfferSnapshotPercent ?? 100) ? "pass" : "fail", detail: `${offerSnapshotPercent}% source-native snapshots; requires ${contract.minimumOfferSnapshotPercent ?? 100}%` },
+    { key: "offer-availability", status: !offerRequired || contract.minimumAvailableOfferPercent === undefined || availableOfferPercent >= contract.minimumAvailableOfferPercent ? "pass" : "fail", detail: `${availableOfferPercent}% explicitly eligible; requires ${contract.minimumAvailableOfferPercent ?? 0}%` },
   ];
   return { status: checks.every((check) => check.status === "pass") ? "pass" : "fail", checks };
 }

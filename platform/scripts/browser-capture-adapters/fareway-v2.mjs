@@ -85,6 +85,9 @@ function buildRows(query, page, capturedAt) {
       ...(regularPriceMinor ? { regularPriceMinor } : {}),
       ambiguity: false,
     };
+    const availabilityText = row.lines.find((line) => /^(?:many in stock|in stock|low stock|only \d+ left)$/i.test(line)) || "";
+    const inStock = /in stock|only \d+ left/i.test(availabilityText);
+    const offer = { version: 1, retailerProductId: row.href, productName: row.name, sizeText: row.size, rawPriceText: row.current, purchasePriceMinor: row.priceMinor, availability: { status: inStock ? "in_stock" : "unknown", ...(availabilityText ? { rawText: availabilityText } : {}), fulfillmentMode: "in_store", eligible: inStock }, priceSemantics, observedAt: capturedAt, sourceUrl: row.href };
     return {
       id: row.id,
       term: query,
@@ -96,6 +99,8 @@ function buildRows(query, page, capturedAt) {
       size: row.size,
       url: row.href,
       taxonomy_path: row.taxonomy,
+      availability_status: inStock ? "in_stock" : "unknown",
+      fulfillment_mode: "in_store",
       _capture: {
         capturedAt,
         pageUrl: page.url,
@@ -122,6 +127,7 @@ function buildRows(query, page, capturedAt) {
           sizeText: row.size,
           priceSemantics,
         },
+        offer,
         parser: {
           status: "exact",
           rule: "current-price-label",
@@ -272,6 +278,7 @@ async function captureProductDetail(tab, target) {
         ...(regularPriceMinor ? { regularPriceMinor } : {}),
         ambiguity: false,
       };
+      const offer = { version: 1, retailerProductId: page.url, productName: page.name, sizeText: page.size, rawPriceText: page.current, purchasePriceMinor: page.priceMinor, availability: { status: "unknown", fulfillmentMode: "in_store", eligible: false }, priceSemantics, observedAt, sourceUrl: page.url };
       return {
         outcome: "observed",
         observedAt,
@@ -304,6 +311,7 @@ async function captureProductDetail(tab, target) {
             sizeText: page.size,
             priceSemantics,
           },
+          offer,
           parser: {
             status: "exact",
             rule: "current-price-label",

@@ -13,6 +13,8 @@
     ,{ "name": "ThriftyCrew V3 Family Fare Paced",  "max_age_hours": 6, "why": "local three-hour Freshop pacing into the V3 capture ledger", "allow_pending": true }
     ,{ "name": "ThriftyCrew V3 Accuracy Weekly",     "max_age_hours": 192, "why": "weekly deterministic blind accuracy draw", "allow_pending": true }
     ,{ "name": "ThriftyCrew V3 Accuracy Agent",      "max_age_hours": 192, "why": "weekly local registered accuracy verdict agent", "allow_pending": true }
+    ,{ "name": "ThriftyCrew V3 Accuracy Revalidation Daily", "max_age_hours": 30, "why": "daily deterministic crown/challenger revalidation draw", "allow_pending": true }
+    ,{ "name": "ThriftyCrew V3 Accuracy Revalidation Agent", "max_age_hours": 30, "why": "daily independent crown/challenger verdict agent", "allow_pending": true }
     ,{ "name": "ThriftyCrew V3 Triage Daily",        "max_age_hours": 30, "why": "daily deterministic triage seeding and reconciliation", "allow_pending": true }
     ,{ "name": "ThriftyCrew V3 Ghost Reconcile",     "max_age_hours": 30, "why": "daily Ghost intent-versus-truth reconciliation", "allow_pending": true }
     ,{ "name": "ThriftyCrew V3 Source Sentinel",     "max_age_hours": 30, "why": "daily local registered source-contract investigator", "allow_pending": true }

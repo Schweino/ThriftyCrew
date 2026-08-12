@@ -71,6 +71,7 @@ export const captureTermSchema = z.object({
 export const browserCaptureStore = z.enum(["aldi", "fareway", "sams", "walmart"]);
 export const BROWSER_CAPTURE_ACCURACY_CUTOVER = "2026-08-12T05:00:00.000Z";
 export const CAPTURE_SEMANTICS_CUTOVER = "2026-08-12T05:00:00.000Z";
+export const OFFER_SNAPSHOT_CUTOVER = "2026-08-13T05:00:00.000Z";
 
 export const productIdentitySchema = z.object({
   primaryType: z.enum(["retailer_id", "gtin", "upc", "sku", "canonical_url", "synthetic"]),
@@ -136,6 +137,36 @@ export const browserCapturePriceChannelSchema = z.object({
   productKey: z.string().trim().min(1).max(300).optional(),
   sizeText: z.string().trim().max(500).optional(),
   priceSemantics: priceSemanticsSchema.optional(),
+  unitPriceText: z.string().trim().min(1).max(300).optional(),
+});
+
+export const offerSnapshotSchema = z.object({
+  version: z.literal(1),
+  retailerProductId: z.string().trim().min(1).max(300),
+  offerId: z.string().trim().min(1).max(500).optional(),
+  productName: z.string().trim().min(1).max(1000),
+  sizeText: z.string().trim().min(1).max(500),
+  rawPriceText: z.string().trim().min(1).max(500),
+  purchasePriceMinor: z.number().int().nonnegative().max(10_000_000),
+  unitPriceText: z.string().trim().min(1).max(300).optional(),
+  sellerName: z.string().trim().min(1).max(500).optional(),
+  availability: z.object({
+    status: z.enum(["in_stock", "out_of_stock", "limited", "unknown"]),
+    rawText: z.string().trim().min(1).max(500).optional(),
+    fulfillmentMode: z.enum(["pickup", "delivery", "shipping", "in_store", "unknown"]),
+    locationId: z.string().trim().min(1).max(300).optional(),
+    eligible: z.boolean(),
+  }),
+  priceSemantics: priceSemanticsSchema,
+  observedAt: isoDateTime,
+  sourceUrl: z.url().max(3000),
+}).superRefine((value, context) => {
+  if (value.priceSemantics.unitPriceMinor !== value.purchasePriceMinor) {
+    context.addIssue({ code: "custom", path: ["priceSemantics", "unitPriceMinor"], message: "must agree with purchasePriceMinor" });
+  }
+  if (value.availability.eligible && value.availability.status !== "in_stock") {
+    context.addIssue({ code: "custom", path: ["availability", "eligible"], message: "eligible offers must be in stock" });
+  }
 });
 
 export const browserCaptureRetrievalSchema = z.object({
@@ -170,6 +201,7 @@ export const browserCaptureTruthSchema = z.object({
   pageState: browserPageStateSchema.optional(),
   visible: browserCapturePriceChannelSchema,
   structured: browserCapturePriceChannelSchema.optional(),
+  offer: offerSnapshotSchema.optional(),
   parser: z.object({
     status: z.literal("exact"),
     rule: z.enum(["current-price-label", "next-data-price-lines"]),
@@ -416,6 +448,7 @@ export const observationInputSchema = z
     evidenceObjectId: nonEmptyId.optional(),
     sourcePayloadKey: z.string().max(1000).optional(),
     priceSemantics: priceSemanticsSchema.optional(),
+    offerSnapshot: offerSnapshotSchema.optional(),
   })
   .superRefine((value, context) => {
     if (value.regularPriceMinor !== undefined && value.regularPriceMinor < value.purchasePriceMinor) {
@@ -429,6 +462,11 @@ export const observationInputSchema = z
     }
     if (value.priceSemantics && value.priceSemantics.unitPriceMinor !== value.purchasePriceMinor) {
       context.addIssue({ code: "custom", path: ["priceSemantics", "unitPriceMinor"], message: "must agree with purchasePriceMinor" });
+    }
+    if (value.offerSnapshot) {
+      if (value.offerSnapshot.retailerProductId !== value.externalProductKey) context.addIssue({ code: "custom", path: ["offerSnapshot", "retailerProductId"], message: "must agree with externalProductKey" });
+      if (value.offerSnapshot.purchasePriceMinor !== value.purchasePriceMinor) context.addIssue({ code: "custom", path: ["offerSnapshot", "purchasePriceMinor"], message: "must agree with purchasePriceMinor" });
+      if (value.offerSnapshot.sizeText !== value.sizeText) context.addIssue({ code: "custom", path: ["offerSnapshot", "sizeText"], message: "must agree with sizeText" });
     }
   });
 
@@ -1247,6 +1285,7 @@ export type BrowserCaptureTruth = z.infer<typeof browserCaptureTruthSchema>;
 export type BrowserCaptureVerification = z.infer<typeof browserCaptureVerificationSchema>;
 export type BrowserPageState = z.infer<typeof browserPageStateSchema>;
 export type PriceSemantics = z.infer<typeof priceSemanticsSchema>;
+export type OfferSnapshot = z.infer<typeof offerSnapshotSchema>;
 export type ProductIdentity = z.infer<typeof productIdentitySchema>;
 export type SourceSchemaFingerprint = z.infer<typeof sourceSchemaFingerprintSchema>;
 export type EngineParityReport = z.infer<typeof engineParityReportSchema>;

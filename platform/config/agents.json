@@ -116,7 +116,7 @@
       "enabled": true,
       "plane": "pc",
       "promptFile": "agents/accuracy-headless/prompt.md",
-      "promptSha256": "e2a1cee6b582a26faa2c9a45b850409072707b5a2f6cca5899718cb3631e1900",
+      "promptSha256": "9fb5df54c0367d5926f46186ffcd9ba8e62907298bedf20590e768fd561aed43",
       "provider": "openai",
       "model": "gpt-5.6-terra",
       "fallbackModel": "gpt-5.6-luna",
@@ -126,7 +126,7 @@
       "criticality": "safety",
       "workflowFile": ".github/workflows/agent-accuracy-headless.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "58150de008ac64fe29088572c854b3c0fb9546e7706ef8ef2b8a41065d17d0b3",
+      "executionConfigHash": "a00c1b0c843cf4f9804f2ac6d1a3b52b11cb8e5b02293e456f143aa00d0f3679",
       "capabilities": [
         "read:evidence",
         "search:web",

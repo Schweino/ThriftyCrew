@@ -253,7 +253,12 @@ $multRefused = 0; $multDescriptive = 0
 $capSkipped = 0
 $capWarned = $false
 $sizeConflicts = New-Object System.Collections.Generic.List[string]
+$captureTerms = New-Object System.Collections.ArrayList
+$workOrdinal = 0
 foreach ($w in $work) {
+  $workKey = ('product-{0:d4}-{1}' -f $workOrdinal, $(if ([int]$w.pid -gt 0) { [string][int]$w.pid } else { 'unidentified' }))
+  $asked = $false
+  $workReason = ''
   $overCap = (((Get-Date) - $startT).TotalMinutes -gt $MAXMIN)
   # Warn ONCE. This used to sit bare inside the loop, so it re-fired for every remaining product - hundreds
   # of identical lines that say nothing about scale, which is its own kind of silence.
@@ -266,7 +271,9 @@ foreach ($w in $work) {
   if ($w.pid -gt 0) {
     if ($overCap) { $capSkipped++ }
     else {
+      $asked = $true
       $got = Get-HyVeeStoreProduct ([int]$w.pid)
+      if (-not $got) { $workReason = 'store product lookup returned no usable offer' }
       Start-Sleep -Milliseconds 120
     }
   }
@@ -343,6 +350,7 @@ foreach ($w in $work) {
           }
           if (-not $ok) {
             $mismatch++
+            $workReason = 'source product size conflicts with the worklist variant'
             [void]$sizeConflicts.Add(('{0}  ours=[{1}] hy-vee=[{2}]  qty {3} vs {4}  (productId {5})' -f $w.name, $size, $theirSize, [math]::Round($ourQty,2), [math]::Round($theirQty,2), $w.pid))
             $got = $null   # refuse the refresh; fall through to "could not re-verify"
           }
@@ -394,6 +402,8 @@ foreach ($w in $work) {
         if ($null -ne $base) { $row['base_price'] = $base }
         if ($isDown) { $row['marked_down'] = $true }
         [void]$deals.Add($row)
+        [void]$captureTerms.Add([ordered]@{ term=$workKey; ordinal=$workOrdinal; outcome='success'; row_count=1 })
+        $workOrdinal++
         $fresh++
         continue
       }
@@ -411,6 +421,14 @@ foreach ($w in $work) {
     [void]$deals.Add($row)
     $stale++
   } else { $fail++ }
+  if (-not $asked) {
+    $reason = if ($overCap) { 'wall-clock cap before request' } elseif ([int]$w.pid -le 0) { 'worklist product has no retailer product id' } else { 'request not attempted' }
+    [void]$captureTerms.Add([ordered]@{ term=$workKey; ordinal=$workOrdinal; outcome='not_attempted'; row_count=0; reason=$reason })
+  } else {
+    if (-not $workReason) { $workReason = 'source offer could not be verified' }
+    [void]$captureTerms.Add([ordered]@{ term=$workKey; ordinal=$workOrdinal; outcome='rejected'; row_count=0; reason=$workReason })
+  }
+  $workOrdinal++
 }
 
 Write-Output ("Hy-Vee: " + $fresh + " refreshed today (" + $markdown + " marked down), " + $newProd + " newly priced, " + $stale + " not re-verified, " + $mismatch + " REFUSED (productId is a different size than our row), " + $capSkipped + " never asked (wall-clock cap), " + $fail + " failed")
@@ -467,6 +485,7 @@ if ((-not $Quick) -and $prevMax -gt 100 -and $deals.Count -lt ($prevMax * 0.5)) 
 $file = if ($Quick) { Join-Path $OutDir 'hyvee-quick-test.json' } else { Join-Path $regDir ("hyvee-regular-$todayS.json") }
 $out = [ordered]@{
   store='Hy-Vee'; week_of=$todayS; price_type='everyday'; price_mode='in-store'; mode_verified=$todayS
+  coverage_mode='partial'
   source='Hy-Vee Aisles Online GraphQL storeProducts.price - the CURRENT shelf price at storeId 1465 (Omaha #01). NOT basePrice (the regular price) and NOT ssrPricing (a different store).'
   size_policy='sizes are OUR verified ones, not Hy-Vee''s - their size field mixes totals, single units of a multipack, and mislabelled units'
   # cap_skipped is ADDITIVE and sits beside the counts that were already here. Every consumer of this file
@@ -476,6 +495,7 @@ $out = [ordered]@{
   # to die.
   deal_count=$deals.Count; refreshed_today=$fresh; marked_down=$markdown; newly_priced=$newProd; not_reverified=$stale; cap_skipped=$capSkipped; failed=$fail
   multiple_descriptive=$multDescriptive; multiple_refused=$multRefused
+  capture_terms=$captureTerms.ToArray()
   deals=$deals.ToArray()
 }
 ($out | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8

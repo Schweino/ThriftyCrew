@@ -42,7 +42,8 @@ async function readPage(tab) {
       const taxonomy = trailing.slice(1).find((line) => !/^(?:many in stock|in stock|low stock|only \d+ left|add)$/i.test(line)) || "";
       const url = new URL(card.href);
       const idMatch = url.pathname.match(/\/products\/(\d+)(?:-|$)/);
-      candidates.push({ name, current, priceMinor: priceMatch ? Math.round(Number(priceMatch[1]) * 100) : null, size, taxonomy, href: url.origin + url.pathname, id: idMatch?.[1] || url.pathname.split("/").pop() || "", lines });
+      const availabilityText = lines.find((line) => /^(?:many in stock|in stock|low stock|only \d+ left)$/i.test(line)) || "";
+      candidates.push({ name, current, priceMinor: priceMatch ? Math.round(Number(priceMatch[1]) * 100) : null, size, taxonomy, href: url.origin + url.pathname, id: idMatch?.[1] || url.pathname.split("/").pop() || "", lines, availabilityText });
     }
     const seen = new Set();
     return {
@@ -64,6 +65,8 @@ function buildRows(query, page, capturedAt) {
     const originalMatch = originalLine?.match(/\$([0-9]+(?:\.[0-9]{1,2})?)/);
     const regularPriceMinor = originalMatch ? Math.round(Number(originalMatch[1]) * 100) : undefined;
     const priceSemantics = { offerType: regularPriceMinor ? "sale" : "everyday", condition: "none", unitPriceMinor: row.priceMinor, qualifyingQuantity: 1, totalPriceMinor: row.priceMinor, ...(regularPriceMinor ? { regularPriceMinor } : {}), ambiguity: false };
+    const inStock = /in stock|only \d+ left/i.test(row.availabilityText);
+    const offer = { version: 1, retailerProductId: row.href, productName: row.name, sizeText: row.size, rawPriceText: row.current, purchasePriceMinor: row.priceMinor, availability: { status: inStock ? "in_stock" : "unknown", ...(row.availabilityText ? { rawText: row.availabilityText } : {}), fulfillmentMode: "in_store", eligible: inStock }, priceSemantics, observedAt: capturedAt, sourceUrl: row.href };
     return {
       id: row.id,
       term: query,
@@ -73,6 +76,8 @@ function buildRows(query, page, capturedAt) {
       size: row.size,
       href: row.href,
       taxonomy_path: row.taxonomy,
+      availability_status: inStock ? "in_stock" : "unknown",
+      fulfillment_mode: "in_store",
       _capture: {
         capturedAt,
         pageUrl: page.url,
@@ -82,6 +87,7 @@ function buildRows(query, page, capturedAt) {
         resultIndex,
         pageState: { pageType: "search_results", pageTitle: page.title, query: page.query, resultRegionPresent: true, challengeDetected: false, currency: "USD", locale: page.locale, locationText: LOCATION, fulfillmentText: PRICE_MODE },
         visible: { rawText: row.current, priceMinor: row.priceMinor, productName: row.name, productKey: row.href, sizeText: row.size, priceSemantics },
+        offer,
         parser: { status: "exact", rule: "current-price-label", notes: "ALDI visible Current price label; OLA 42 Omaha and In-Store mode verified by the chunk canary." },
       },
     };

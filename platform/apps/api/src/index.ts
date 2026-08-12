@@ -56,6 +56,7 @@ import {
   triageResolveSchema,
   triagePlanSchema,
   CAPTURE_SEMANTICS_CUTOVER,
+  OFFER_SNAPSHOT_CUTOVER,
 } from "@thriftycrew/contracts";
 import { decodeEvidenceUpload } from "./evidence-upload";
 import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
@@ -2401,6 +2402,38 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   const priceSemanticsExamined = priceSemantics?.examined ?? 0;
   const priceSemanticsPass = !captureSemanticsRequired || (priceSemanticsEligible > 0 && priceSemanticsExamined === priceSemanticsEligible);
 
+  // Producers validate this shape before upload, but the seal owns the trust
+  // boundary. Re-read the immutable rows and prove that source-native offer
+  // identity, price, size, timestamp, and denormalized availability agree with
+  // the canonical observation before the batch can become visible.
+  const offerSnapshotRequired = batch.capture_method !== "legacy_bridge"
+    && Date.parse(batch.captured_to) >= Date.parse(OFFER_SNAPSHOT_CUTOVER);
+  const offerSnapshots = await context.env.DB.prepare(
+    `SELECT COUNT(*) AS eligible,
+            SUM(CASE WHEN json_extract(o.offer_snapshot_json, '$.version') = 1
+                      AND json_extract(o.offer_snapshot_json, '$.retailerProductId') = p.external_key
+                      AND json_extract(o.offer_snapshot_json, '$.productName') = pv.name
+                      AND json_extract(o.offer_snapshot_json, '$.sizeText') = pv.size_text
+                      AND TRIM(json_extract(o.offer_snapshot_json, '$.sizeText')) <> ''
+                      AND json_extract(o.offer_snapshot_json, '$.purchasePriceMinor') = o.purchase_price_minor
+                      AND json_extract(o.offer_snapshot_json, '$.priceSemantics.unitPriceMinor') = o.purchase_price_minor
+                      AND json_extract(o.offer_snapshot_json, '$.observedAt') = o.captured_at
+                      AND LENGTH(TRIM(json_extract(o.offer_snapshot_json, '$.rawPriceText'))) > 0
+                      AND LENGTH(TRIM(json_extract(o.offer_snapshot_json, '$.sourceUrl'))) > 0
+                      AND json_extract(o.offer_snapshot_json, '$.availability.status') = o.availability_status
+                      AND json_extract(o.offer_snapshot_json, '$.availability.fulfillmentMode') = o.fulfillment_mode
+                      AND (o.seller_name IS NULL OR json_extract(o.offer_snapshot_json, '$.sellerName') = o.seller_name)
+                     THEN 1 ELSE 0 END) AS examined
+       FROM observations o
+       JOIN product_versions pv ON pv.id = o.product_version_id
+       JOIN products p ON p.id = pv.product_id
+      WHERE o.batch_id = ?1`,
+  ).bind(batch.id).first<{ eligible: number; examined: number | null }>();
+  const offerSnapshotEligible = offerSnapshots?.eligible ?? 0;
+  const offerSnapshotExamined = offerSnapshots?.examined ?? 0;
+  const offerSnapshotPass = !offerSnapshotRequired
+    || (offerSnapshotEligible > 0 && offerSnapshotExamined === offerSnapshotEligible);
+
   const historyRows = await context.env.DB.prepare(
     `WITH current_rows AS (
        SELECT p.id AS product_id, p.external_key,
@@ -2444,7 +2477,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   ).bind(batch.source_id, batch.id).first<{ source_contract_fingerprint: string }>() : null;
   const schemaAssessment = assessSourceSchema(batch.source_contract_fingerprint, priorSchema?.source_contract_fingerprint ?? null, sourceSchemaRequired);
   const status = identityPass && completePass && collapsePass && freshnessPass && browserEvidence.pass
-    && priceSemanticsPass && skuIdentityPass && changePointPass && schemaAssessment.pass ? "validated" : "rejected";
+    && priceSemanticsPass && offerSnapshotPass && skuIdentityPass && changePointPass && schemaAssessment.pass ? "validated" : "rejected";
   // Capture terms are staged while the batch is still private/open. Run each packed
   // insert separately so a full catalog cannot make one D1 transaction exceed its
   // aggregate execution ceiling. The UPSERT makes a retry safe after any partial
@@ -2469,7 +2502,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
     `UPDATE capture_batches SET status = ?2, attempted_terms = ?3, successful_terms = ?4, empty_terms = ?5,
        rejected_terms = ?6, blocked_terms = ?7, captured_pages = ?8, evidence_manifest_key = ?9,
        validation_summary_json = ?10, sealed_at = CURRENT_TIMESTAMP WHERE id = ?1`,
-  ).bind(batch.id, status, attempted, successful, empty, rejected, blocked, capturedPages, body.evidenceManifestKey ?? null, stableJson({ identityPass, termEnvelopePass, pageEnvelopePass, collapsePass, freshnessPass, browserEvidencePass: browserEvidence.pass, browserEvidence: browserEvidence.detail, priceSemanticsPass, skuIdentityPass, changePointPass, sourceSchemaPass: schemaAssessment.pass, sourceSchema: schemaAssessment.detail, captureAgeMillis, maxAgeDays: batch.max_age_days, observationCount, predecessorBatchId: predecessor?.id ?? null, predecessorObservationCount: predecessor?.observation_count ?? null, collapseFloor })));
+  ).bind(batch.id, status, attempted, successful, empty, rejected, blocked, capturedPages, body.evidenceManifestKey ?? null, stableJson({ identityPass, termEnvelopePass, pageEnvelopePass, collapsePass, freshnessPass, browserEvidencePass: browserEvidence.pass, browserEvidence: browserEvidence.detail, priceSemanticsPass, offerSnapshotPass, skuIdentityPass, changePointPass, sourceSchemaPass: schemaAssessment.pass, sourceSchema: schemaAssessment.detail, captureAgeMillis, maxAgeDays: batch.max_age_days, observationCount, predecessorBatchId: predecessor?.id ?? null, predecessorObservationCount: predecessor?.observation_count ?? null, collapseFloor })));
   if (browserEvidence.metrics) {
     const metrics = browserEvidence.metrics;
     statements.push(context.env.DB.prepare(
@@ -2508,6 +2541,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
     ["batch-browser-evidence", browserEvidence.pass, batch.capture_method === "browser" ? 3 : 0, batch.capture_method === "browser" ? 3 : 0, browserEvidence.detail],
     ["batch-browser-accuracy", batch.capture_method !== "browser" || browserEvidence.detail.accuracyPass === true, batch.capture_method === "browser" ? 10 : 0, batch.capture_method === "browser" ? 10 : 0, browserEvidence.detail],
     ["batch-price-semantics", priceSemanticsPass, captureSemanticsRequired ? priceSemanticsEligible : 0, captureSemanticsRequired ? priceSemanticsExamined : 0, { required: captureSemanticsRequired, eligible: priceSemanticsEligible, examined: priceSemanticsExamined }],
+    ["batch-offer-snapshot", offerSnapshotPass, offerSnapshotRequired ? offerSnapshotEligible : 0, offerSnapshotRequired ? offerSnapshotExamined : 0, { required: offerSnapshotRequired, eligible: offerSnapshotEligible, examined: offerSnapshotExamined }],
     ["batch-sku-identity", skuIdentityPass, captureSemanticsRequired ? historyRows.results.length : 0, captureSemanticsRequired ? historyRows.results.length : 0, { required: captureSemanticsRequired, findingCount: historyAssessment.identityFindings.length, findings: historyAssessment.identityFindings.slice(0, 200) }],
     ["batch-change-point", changePointPass, captureSemanticsRequired ? historyRows.results.length : 0, captureSemanticsRequired ? historyRows.results.length : 0, { required: captureSemanticsRequired, findingCount: historyAssessment.changePointFindings.length, findings: historyAssessment.changePointFindings.slice(0, 200) }],
     ["batch-source-schema", schemaAssessment.pass, sourceSchemaRequired ? 1 : 0, sourceSchemaRequired ? 1 : 0, { ...schemaAssessment.detail, currentShapeFingerprint: batch.source_shape_fingerprint }],

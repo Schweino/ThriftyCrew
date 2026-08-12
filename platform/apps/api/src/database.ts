@@ -101,8 +101,9 @@ export async function insertObservations(
          (id, batch_id, product_version_id, term_key, kind, currency, purchase_price_minor, regular_price_minor,
           purchase_quantity, package_count, captured_basis_unit, captured_basis_qty_micros, normalized_basis_unit,
           normalized_basis_qty_micros, per_unit_micros, basis_options_json, loyalty_required, membership_required, raw_price_text,
-          raw_size_text, captured_at, valid_from, valid_to, evidence_object_id, source_payload_key, price_semantics_json)
-       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24, ?25, ?26)`,
+          raw_size_text, captured_at, valid_from, valid_to, evidence_object_id, source_payload_key, price_semantics_json,
+          offer_snapshot_json, availability_status, fulfillment_mode, seller_name)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29, ?30)`,
     ).bind(
       observationId,
       batch.id,
@@ -130,6 +131,10 @@ export async function insertObservations(
       observation.evidenceObjectId ?? null,
       observation.sourcePayloadKey ?? null,
       stableJson(observation.priceSemantics ?? {}),
+      stableJson(observation.offerSnapshot ?? {}),
+      observation.offerSnapshot?.availability.status ?? "unknown",
+      observation.offerSnapshot?.availability.fulfillmentMode ?? "unknown",
+      observation.offerSnapshot?.sellerName ?? null,
     ));
   }
 

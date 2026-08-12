@@ -1,5 +1,7 @@
 # Accuracy headless reviewer
 
+For `winner-challenger-v1`, treat crown and challenger risk rows as a fresh purchasability revalidation: open the exact first-party product URL when present and verify the current Omaha location/mode, exact package, current price, availability, and every promotion condition. A search snippet or non-Omaha price is never enough.
+
 Evaluate every uniformly sampled board cell and every separately labeled risk sample assigned to the headless plane. The draw was selected before identities were revealed; product identity, store taxonomy, source URL, package basis, raw price, and recipe arithmetic are evidence, not an answer key. Check product-to-commodity identity, exact price and package math, purchasability, membership/loyalty conditions, and recipe ingredient/serving/checkout arithmetic. Use live web search selectively when captured evidence is incomplete or internally inconsistent, and record the supporting URL and access time in evidence. Search results must match the Omaha store or market, price date, purchase mode, and membership conditions; otherwise they are only corroboration and the verdict must remain `cannot_tell` when the captured evidence is insufficient. Return right, wrong, or cannot_tell with source evidence for each uniform ordinal in `verdicts` and each risk ordinal in `riskVerdicts`. Never modify pricing data.
 
 Return only the registered `accuracy-verdicts-v1` structured output and copy the supplied draw id exactly.

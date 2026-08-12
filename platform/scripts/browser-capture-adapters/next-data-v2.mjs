@@ -5,6 +5,7 @@ const TARGET_RESULTS = 25;
 const CONFIG = {
   sams: {
     location: "Omaha Sam's Club",
+    locationId: "8146",
     priceMode: "Pickup",
     url: (query) => `https://www.samsclub.com/s/${encodeURIComponent(query)}`,
     host: "https://www.samsclub.com",
@@ -14,6 +15,7 @@ const CONFIG = {
     priceMode: "Pickup",
     url: (query) => `https://www.walmart.com/search?q=${encodeURIComponent(query)}&facet=fulfillment_method%3APickup`,
     host: "https://www.walmart.com",
+    locationId: "5361",
   },
 };
 
@@ -37,8 +39,74 @@ export function walmartPickupEligible(row) {
     && row.pickupStoreIds.includes("5361");
 }
 
+export function pickupEligible(row, locationId) {
+  return row?.availabilityStatus === "IN_STOCK"
+    && Array.isArray(row.pickupStoreIds)
+    && row.pickupStoreIds.includes(String(locationId));
+}
+
+export function packageSizeFromName(name) {
+  const text = String(name ?? "").replace(/\s+/g, " ").trim();
+  const pack = text.match(/(?:^|[,;(]\s*)([0-9]+(?:\.[0-9]+)?)\s*(fl\.?\s*oz\.?|oz\.?|lb\.?|g|kg|ml|l|gal(?:lon)?s?|qt|pt)\s*[,;]?\s*(\d+)\s*(?:pk|pack|ct)\.?\s*\)?\s*$/i);
+  if (pack) return `${pack[3]} x ${pack[1]} ${pack[2].toLowerCase().replace(/\./g, "").replace(/\s+/g, " ")}`;
+  const count = text.match(/(?:^|[,;(]\s*)(\d+)\s*(?:pk|pack|ct|count)\.?\s*\)?\s*$/i);
+  if (count) return `${count[1]} ct`;
+  const quantity = text.match(/(?:^|[,;(]\s*)([0-9]+(?:\.[0-9]+)?)\s*(fl\.?\s*oz\.?|oz\.?|lb\.?|g|kg|ml|l|gal(?:lon)?s?|qt|pt)\.?\s*\)?\s*$/i);
+  if (quantity) return `${quantity[1]} ${quantity[2].toLowerCase().replace(/\./g, "").replace(/\s+/g, " ").replace(/^gallons?$/, "gal")}`;
+  const word = text.match(/(?:^|[,;(]\s*)(half\s+gallon|gallon|dozen|each)\s*\)?\s*$/i);
+  if (word) return word[1].toLowerCase() === "half gallon" ? "0.5 gal" : word[1].toLowerCase() === "gallon" ? "1 gal" : word[1].toLowerCase();
+  return "";
+}
+
+export function sourcePriceSemantics(store, row) {
+  const purchasePriceMinor = priceMinor(row.linePrice);
+  const promotionText = [row.promotionText, row.priceDisplayCondition, row.savings, row.memberPriceString].filter(Boolean).join(" | ");
+  const multi = promotionText.match(/\b(\d+)\s*(?:for|\/)\s*\$?([0-9]+(?:\.[0-9]{1,2})?)\b/i);
+  const quantity = multi ? Number(multi[1]) : 1;
+  const advertisedTotal = multi ? Math.round(Number(multi[2]) * 100) : purchasePriceMinor * quantity;
+  if (multi && Math.abs(advertisedTotal - purchasePriceMinor * quantity) > 1) throw new Error("source promotion total does not agree with the captured unit price");
+  const loyalty = /rewards?|loyalty|digital coupon|with card/i.test(promotionText);
+  const membership = store === "sams" || /member price|membership/i.test(promotionText);
+  const was = priceMinor(row.wasPrice);
+  const discounted = was !== null && was > purchasePriceMinor;
+  const offerType = quantity > 1 ? "multibuy" : loyalty ? "loyalty" : membership ? "member" : discounted ? "sale" : "everyday";
+  const condition = loyalty ? (quantity > 1 ? "loyalty_quantity" : "loyalty") : membership ? (quantity > 1 ? "membership_quantity" : "membership") : quantity > 1 ? "quantity" : "none";
+  return { offerType, condition, unitPriceMinor: purchasePriceMinor, qualifyingQuantity: quantity, totalPriceMinor: advertisedTotal, ...(discounted ? { regularPriceMinor: was } : {}), ambiguity: false };
+}
+
+export function parseNextDataOfferItem(item, origin = "https://www.walmart.com") {
+  const id = String(item?.usItemId || item?.id || "").trim();
+  if (!id) return null;
+  const canonical = new URL(item.canonicalUrl || `/ip/item/${id}`, origin);
+  return {
+    id,
+    name: String(item.name || "").trim(),
+    linePrice: String(item.priceInfo?.linePrice || item.priceInfo?.itemPrice || "").trim(),
+    unitPrice: String(item.priceInfo?.unitPrice || "").trim(),
+    wasPrice: String(item.priceInfo?.wasPrice || "").trim(),
+    priceDisplayCondition: String(item.priceInfo?.priceDisplayCondition || "").trim(),
+    savings: String(item.priceInfo?.savings || "").trim(),
+    memberPriceString: String(item.priceInfo?.memberPriceString || "").trim(),
+    promotionText: [item.promotionMessages, item.promoData, item.promoDiscount, item.badges].map((value) => {
+      if (value == null) return "";
+      try { return JSON.stringify(value); } catch { return ""; }
+    }).join(" | "),
+    taxonomy: String(item.category?.categoryPathId || item.departmentName || "").trim(),
+    url: canonical.origin + canonical.pathname,
+    imageUrl: String(item.imageInfo?.thumbnailUrl || "").trim(),
+    availabilityStatus: String(item.availabilityStatusV2?.value || "").trim().toUpperCase(),
+    availabilityText: String(item.availabilityStatusV2?.display || item.availabilityStatusDisplayValue || "").trim(),
+    offerId: String(item.offerId || "").trim(),
+    sellerName: String(item.sellerName || "").trim(),
+    pickupStoreIds: [...new Set((item.fulfillmentSummary || [])
+      .filter((option) => String(option?.fulfillment || "").toUpperCase() === "PICKUP")
+      .map((option) => String(option?.storeId || "").trim())
+      .filter(Boolean))],
+  };
+}
+
 async function readPage(tab) {
-  return tab.playwright.evaluate(() => {
+  const page = await tab.playwright.evaluate(() => {
     const body = document.body.innerText;
     const data = JSON.parse(document.querySelector("#__NEXT_DATA__")?.textContent || "{}");
     const stacked = (data?.props?.pageProps?.initialData?.searchResult?.itemStacks || []).flatMap((stack) => [...(stack.items || []), ...(stack.itemsV2 || [])]);
@@ -46,20 +114,13 @@ async function readPage(tab) {
     for (const item of stacked) {
       const id = String(item?.usItemId || "").trim();
       if (!id || structured.has(id)) continue;
-      const canonical = new URL(item.canonicalUrl || `/ip/item/${id}`, location.origin);
       structured.set(id, {
-        id,
-        name: String(item.name || "").trim(),
-        linePrice: String(item.priceInfo?.linePrice || item.priceInfo?.itemPrice || "").trim(),
-        unitPrice: String(item.priceInfo?.unitPrice || "").trim(),
-        taxonomy: String(item.category?.categoryPathId || item.departmentName || "").trim(),
-        url: canonical.origin + canonical.pathname,
-        imageUrl: String(item.imageInfo?.thumbnailUrl || "").trim(),
-        availabilityStatus: String(item.availabilityStatusV2?.value || "").trim().toUpperCase(),
-        pickupStoreIds: [...new Set((item.fulfillmentSummary || [])
-          .filter((option) => String(option?.fulfillment || "").toUpperCase() === "PICKUP")
-          .map((option) => String(option?.storeId || "").trim())
-          .filter(Boolean))],
+        usItemId: item.usItemId, id: item.id, name: item.name, canonicalUrl: item.canonicalUrl,
+        priceInfo: item.priceInfo, category: item.category, departmentName: item.departmentName,
+        imageInfo: item.imageInfo, availabilityStatusV2: item.availabilityStatusV2,
+        availabilityStatusDisplayValue: item.availabilityStatusDisplayValue, offerId: item.offerId,
+        sellerName: item.sellerName, fulfillmentSummary: item.fulfillmentSummary,
+        promotionMessages: item.promotionMessages, promoData: item.promoData, promoDiscount: item.promoDiscount, badges: item.badges,
       });
     }
     const visible = new Map();
@@ -75,12 +136,15 @@ async function readPage(tab) {
     }
     const rows = [];
     for (const item of structured.values()) {
-      const visibleText = visible.get(item.id);
-      if (!visibleText || !item.name || !item.linePrice) continue;
+      const id = String(item.usItemId || item.id || "");
+      const name = String(item.name || "").trim();
+      const linePrice = String(item.priceInfo?.linePrice || item.priceInfo?.itemPrice || "").trim();
+      const visibleText = visible.get(id);
+      if (!visibleText || !name || !linePrice) continue;
       const normalizedVisible = visibleText.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-      const normalizedName = item.name.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-      if (!visibleText.includes(item.linePrice) || !normalizedVisible.includes(normalizedName)) continue;
-      rows.push({ ...item, visiblePrice: item.linePrice });
+      const normalizedName = name.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+      if (!visibleText.includes(linePrice) || !normalizedVisible.includes(normalizedName)) continue;
+      rows.push({ item, visiblePrice: linePrice });
     }
     const query = document.querySelector('input[type="search"], input[role="searchbox"]')?.value || new URL(location.href).searchParams.get("q") || "";
     return {
@@ -95,15 +159,25 @@ async function readPage(tab) {
       rows,
     };
   });
+  const origin = new URL(page.url).origin;
+  page.rows = page.rows.map(({ item, visiblePrice }) => ({ ...parseNextDataOfferItem(item, origin), visiblePrice })).filter((item) => item.id);
+  return page;
 }
 
 function buildRows(store, query, page, capturedAt) {
   const config = CONFIG[store];
   return page.rows.map((row, resultIndex) => {
     const purchasePriceMinor = priceMinor(row.linePrice);
-    const priceSemantics = store === "sams"
-      ? { offerType: "member", condition: "membership", unitPriceMinor: purchasePriceMinor, qualifyingQuantity: 1, totalPriceMinor: purchasePriceMinor, ambiguity: false }
-      : { offerType: "everyday", condition: "none", unitPriceMinor: purchasePriceMinor, qualifyingQuantity: 1, totalPriceMinor: purchasePriceMinor, ambiguity: false };
+    const size = packageSizeFromName(row.name);
+    if (!size) throw new Error(`source-native package size is not exact for ${row.id}`);
+    const priceSemantics = sourcePriceSemantics(store, row);
+    const offer = {
+      version: 1, retailerProductId: row.id, ...(row.offerId ? { offerId: row.offerId } : {}), productName: row.name,
+      sizeText: size, rawPriceText: row.linePrice, purchasePriceMinor, ...(row.unitPrice ? { unitPriceText: row.unitPrice } : {}),
+      ...(row.sellerName ? { sellerName: row.sellerName } : {}),
+      availability: { status: "in_stock", ...(row.availabilityText ? { rawText: row.availabilityText } : {}), fulfillmentMode: "pickup", locationId: config.locationId, eligible: true },
+      priceSemantics, observedAt: capturedAt, sourceUrl: row.url,
+    };
     const truth = {
       capturedAt,
       pageUrl: page.url,
@@ -112,11 +186,12 @@ function buildRows(store, query, page, capturedAt) {
       pageIndex: 0,
       resultIndex,
       pageState: { pageType: "search_results", pageTitle: page.title, query: page.query, resultRegionPresent: true, challengeDetected: false, currency: "USD", locale: page.locale, locationText: config.location, fulfillmentText: config.priceMode },
-      visible: { rawText: row.visiblePrice, priceMinor: purchasePriceMinor, productName: row.name, productKey: row.id, sizeText: "", priceSemantics },
-      structured: { rawText: row.linePrice, priceMinor: purchasePriceMinor, productName: row.name, productKey: row.id, sizeText: "", priceSemantics },
+      visible: { rawText: row.visiblePrice, priceMinor: purchasePriceMinor, productName: row.name, productKey: row.id, sizeText: size, priceSemantics },
+      structured: { rawText: row.linePrice, priceMinor: purchasePriceMinor, productName: row.name, productKey: row.id, sizeText: size, ...(row.unitPrice ? { unitPriceText: row.unitPrice } : {}), priceSemantics },
+      offer,
       parser: { status: "exact", rule: "next-data-price-lines", notes: "Visible product-card price agrees with the projected __NEXT_DATA__ linePrice for the same retailer item ID." },
     };
-    return { q: query, n: row.name, lp: row.linePrice, up: row.unitPrice, id: row.id, size: "", taxonomy_path: row.taxonomy, url: row.url, image_url: row.imageUrl, _capture: truth };
+    return { q: query, n: row.name, lp: row.linePrice, up: row.unitPrice, id: row.id, size, taxonomy_path: row.taxonomy, url: row.url, image_url: row.imageUrl, availability_status: "in_stock", fulfillment_mode: "pickup", seller_name: row.sellerName, offer_id: row.offerId, _capture: truth };
   });
 }
 
@@ -131,9 +206,9 @@ async function captureTerm(tab, store, query) {
       for (let poll = 0; poll < 20; poll += 1) {
         await tab.playwright.waitForTimeout(poll === 0 ? 800 : 300);
         page = await readPage(tab);
-        if (store === "walmart") {
+        if (store === "walmart" || store === "sams") {
           const rawRowCount = page.rows.length;
-          page.rows = page.rows.filter(walmartPickupEligible);
+          page.rows = page.rows.filter((row) => pickupEligible(row, config.locationId));
           page.pickupFilteredEmpty = rawRowCount > 0 && page.rows.length === 0;
         }
         if (page.challenge || page.rows.length || page.noResults || page.pickupFilteredEmpty) break;
@@ -144,7 +219,7 @@ async function captureTerm(tab, store, query) {
       if (normalize(page.query) !== normalize(query)) throw new Error(`visible query mismatch: expected ${query}, saw ${page.query}`);
       if (page.rows.length === 0) {
         if (!page.noResults && !page.pickupFilteredEmpty) throw new Error("zero visible/structured agreements without an explicit no-results state");
-        return { blocked: false, term: { query, outcome: "empty", rowCount: 0, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "no-results" }, ...(page.pickupFilteredEmpty ? { reason: "all exact result agreements lacked in-stock pickup fulfillment at Walmart store 5361" } : {}) }, rows: [] };
+        return { blocked: false, term: { query, outcome: "empty", rowCount: 0, attempts, startedAt, finishedAt, retrieval: { targetResultCount: TARGET_RESULTS, loadedResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "no-results" }, ...(page.pickupFilteredEmpty ? { reason: `all exact result agreements lacked in-stock pickup fulfillment at ${store} location ${config.locationId}` } : {}) }, rows: [] };
       }
       if (page.rows.length < TARGET_RESULTS && page.hasMore) throw new Error("visible/structured agreement remained truncated below target depth while a continuation was present");
       if (page.rows.some((row) => priceMinor(row.linePrice) === null || !row.id || !row.name)) throw new Error("one or more agreed rows lacked an exact line price, retailer item ID, or name");

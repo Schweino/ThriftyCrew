@@ -1006,6 +1006,10 @@ if (command === "status") {
   result = direct.success
     ? { ok: true, kind: "direct-capture", sourceId: direct.data.sourceId, observations: direct.data.observations.length, terms: direct.data.terms.length, audit: direct.data.audit }
     : { ok: true, kind: "observation-chunk", observations: observationChunkSchema.parse(Array.isArray(parsed) ? { observations: parsed } : parsed).observations.length };
+} else if (command === "accuracy" && subcommand === "revalidate") {
+  const revalidationNow = new Date();
+  const due = new Date(revalidationNow.getTime() + 12 * 60 * 60 * 1000);
+  result = await (await mutationClient()).request("/internal/accuracy/draws", { json: { marketId: "omaha", seed: `revalidate-${revalidationNow.toISOString().slice(0, 10)}`, protocolVersion: "winner-challenger-v1", sampleSize: 1, dueAt: due.toISOString() } });
 } else if (command === "accuracy" && subcommand === "draw") {
   const now = new Date();
   const due = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -1077,7 +1081,7 @@ if (command === "status") {
         "tc capture metrics [limit]", "tc capture coordinator status|next|heartbeat|fail|challenge|resolve", "tc capture session worklist|init|append|evidence|verification-plan|finalize|status",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog", "tc capture journal checkpoint|restore [--force]",
       "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|rematch-promoted|abandon <batch-id> <reason>",
-      "tc accuracy draw [seed]", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",
+      "tc accuracy draw [seed]|revalidate", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",
       "tc sentinel latest [bakers family-fare hy-vee]",
       "tc match batch <batch-id>", "tc commodity add <file>", "tc recipe add <file>",
     ],

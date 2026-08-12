@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "note": "Sanitized first-party __NEXT_DATA__ search-result fragments observed in Omaha on 2026-08-12. Tracking, session, and unrelated fields removed.",
+  "cases": [
+    {
+      "id": "walmart-in-stock-pickup-clean",
+      "store": "walmart",
+      "origin": "https://www.walmart.com",
+      "item": {
+        "usItemId": "10450114",
+        "name": "Great Value Whole Vitamin D Milk, Gallon",
+        "canonicalUrl": "/ip/great-value-whole-milk/10450114",
+        "priceInfo": { "linePrice": "$2.87", "unitPrice": "2.2 ¢/fl oz", "wasPrice": "", "priceDisplayCondition": "" },
+        "departmentName": "Food",
+        "availabilityStatusV2": { "display": "In stock", "value": "IN_STOCK" },
+        "offerId": "SANITIZED-WM-OFFER",
+        "sellerName": "Walmart.com",
+        "fulfillmentSummary": [{ "fulfillment": "PICKUP", "storeId": "5361", "fulfillmentMethods": ["SCHEDULED"] }]
+      },
+      "expect": { "size": "1 gal", "priceMinor": 287, "unitPrice": "2.2 ¢/fl oz", "pickupLocation": "5361", "eligible": true }
+    },
+    {
+      "id": "sams-multipack-pickup-clean",
+      "store": "sams",
+      "origin": "https://www.samsclub.com",
+      "item": {
+        "usItemId": "13901607733",
+        "name": "Silk Unsweetened Original Almond, 64 fl. oz., 3 pk.",
+        "canonicalUrl": "/p/silk-almond-milk/prod-sanitized",
+        "priceInfo": { "linePrice": "$8.83", "unitPrice": "$0.05/foz", "wasPrice": "", "priceDisplayCondition": "" },
+        "departmentName": "Grocery",
+        "availabilityStatusV2": { "display": "In stock", "value": "IN_STOCK" },
+        "offerId": "SANITIZED-SAMS-OFFER",
+        "fulfillmentSummary": [{ "fulfillment": "PICKUP", "storeId": "8146" }, { "fulfillment": "DELIVERY", "storeId": "8146" }]
+      },
+      "expect": { "size": "3 x 64 fl oz", "priceMinor": 883, "unitPrice": "$0.05/foz", "pickupLocation": "8146", "eligible": true }
+    },
+    {
+      "id": "sams-shipping-only-must-fire",
+      "store": "sams",
+      "origin": "https://www.samsclub.com",
+      "item": {
+        "usItemId": "13744367975",
+        "name": "Silk Unsweetened Almond Milk, 32 fl. oz., 6 pk.",
+        "canonicalUrl": "/p/silk-almond/prod-sanitized-shipping",
+        "priceInfo": { "linePrice": "$11.18", "unitPrice": "$0.06/foz" },
+        "availabilityStatusV2": { "display": "In stock", "value": "IN_STOCK" },
+        "fulfillmentSummary": [{ "fulfillment": "SHIPPING", "storeId": "6279" }]
+      },
+      "expect": { "size": "6 x 32 fl oz", "priceMinor": 1118, "unitPrice": "$0.06/foz", "pickupLocation": "8146", "eligible": false }
+    }
+  ]
+}

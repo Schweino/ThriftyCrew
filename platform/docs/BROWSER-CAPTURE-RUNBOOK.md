@@ -59,7 +59,10 @@ Run the automation every day at 06:15 America/Chicago.
   is never complete.
 - Every accepted discovery row retains an internal truth record with page URL and position, capture instant,
   location/mode, raw visible price/name/size, parsed integer cents, and exact parser rule. Walmart and Sam's also
-  require the independently read structured product key/name/size/price, and both channels must agree.
+  require the independently read structured product key/name/size/price, and both channels must agree. Every accepted
+  row also binds a source-native offer snapshot: product/offer identity, non-empty package size, raw checkout and unit
+  price, seller, promotion conditions, exact URL/time, and availability/fulfillment evidence. Walmart requires in-stock
+  pickup at store 5361; Sam's requires in-stock pickup at Omaha club 8146. Shipping-only Sam's rows never enter pricing.
 - Never guess a decimal, glue split visual nodes, repair a product identity, or silently discard an ambiguous
   loaded result. The chunk validator fails accepted rows it cannot reproduce exactly.
 - Capture first-party taxonomy/department/category fields when present. Leave taxonomy blank when unavailable;

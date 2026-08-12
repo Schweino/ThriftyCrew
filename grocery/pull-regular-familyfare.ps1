@@ -498,6 +498,8 @@ if (Test-Path $ledgerFile) {
   } catch { Write-Warning ('Family Fare: term ledger unreadable, starting a fresh one (expiries classify as unknown until it warms up): ' + $_.Exception.Message) }
 }
 $termSuccess = @{}
+$termAttempted = @{}
+$termDeferred = @{}
 
 $empty = New-Object System.Collections.Generic.List[string]
 # GIVE UP WHEN THE API IS CLEARLY REFUSING US, instead of spending the whole budget proving it.
@@ -511,8 +513,9 @@ $ABORT_EMPTY_RUN = 60      # sustained refusal after we had been getting data
 $ABORT_COLD_START = 30     # refused from the very first term - nothing has EVER come back this run
 $streak = 0; $emptyRun = 0; $aborted = $false; $lastSuccessRot = -1
 for ($i = 0; $i -lt $termList.Count; $i++) {
-  if (Over-Cap) { for ($j = $i; $j -lt $termList.Count; $j++) { $empty.Add($termList[$j]) }; Write-Output 'Family Fare: wall-clock cap hit in main pass; remaining terms deferred to recovery'; break }
+  if (Over-Cap) { for ($j = $i; $j -lt $termList.Count; $j++) { $empty.Add($termList[$j]); $termDeferred[$termList[$j]] = 'wall-clock cap before request' }; Write-Output 'Family Fare: wall-clock cap hit in main pass; remaining terms deferred to recovery'; break }
   $term = $termList[$i]
+  $termAttempted[$term] = $true
   $queries = @($term); if ($supplemental.ContainsKey($term)) { $queries += $supplemental[$term] }
   $items = @(); foreach ($q in $queries) { $items += (Get-FreshopItems $q) }
   Start-Sleep -Milliseconds 200
@@ -520,7 +523,7 @@ for ($i = 0; $i -lt $termList.Count; $i++) {
     $empty.Add($term); $streak++; $emptyRun++
     $limit = if (@($script:deals).Count -eq 0) { $ABORT_COLD_START } else { $ABORT_EMPTY_RUN }
     if ($emptyRun -ge $limit) {
-      for ($j = $i + 1; $j -lt $termList.Count; $j++) { $empty.Add($termList[$j]) }
+      for ($j = $i + 1; $j -lt $termList.Count; $j++) { $empty.Add($termList[$j]); $termDeferred[$termList[$j]] = 'API refusal abort before request' }
       $apiSay = if ($script:apiStatus -and $script:apiStatus.Count) { ' API said: ' + (($script:apiStatus.GetEnumerator() | Sort-Object Value -Descending | ForEach-Object { "$($_.Key) x$($_.Value)" }) -join ', ') + '.' } else { ' API returned 200 with zero items (terms genuinely not carried, NOT a refusal).' }
       Write-Output ("Family Fare: ABORTING - " + $emptyRun + " consecutive empty terms" + $(if (@($script:deals).Count -eq 0) { ' from the first request (hard shutout)' } else { ' after ' + @($script:deals).Count + ' rows' }) + "." + $apiSay + " Continuing would burn time for nothing and push the limit out further. Carrying forward and writing what we have.")
       $aborted = $true
@@ -555,7 +558,8 @@ while (-not $aborted -and $empty.Count -gt 0 -and $pass -lt 2 -and -not (Over-Ca
   Start-Sleep -Seconds 20
   $still = New-Object System.Collections.Generic.List[string]
   foreach ($term in $empty) {
-    if (Over-Cap) { $still.Add($term); continue }
+    if (Over-Cap) { $still.Add($term); $termDeferred[$term] = 'wall-clock cap before recovery request'; continue }
+    $termAttempted[$term] = $true
     $items = Get-FreshopItems $term; Start-Sleep -Milliseconds 250
     if (@($items).Count -eq 0) { $still.Add($term) } else { $termSuccess[$term] = $todayS; Ingest-Items $items $term }
   }
@@ -689,7 +693,25 @@ if ($prevF) {
 }
 $deals = $rows.ToArray()
 
-$out = [ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; price_mode='pickup'; mode_verified=$todayS; source='Freshop catalog base_price (store_id 6401, Omaha), NOT Instacart'; deal_count=@($deals).Count; fresh_count=(@($deals).Count - $carried); carried_count=$carried; expired_count=$expired; expired_starved=$expStarved; expired_churn=$expChurn; expired_unknown=$expUnknown; max_carry_days=$MaxCarryDays; empty_terms=@($empty); deals=$deals }
+# AUTHORITATIVE WORKLIST LEDGER. This is the actual rotated search worklist, not buckets inferred from
+# whatever rows happened to survive normalization. A zero-result Freshop response is deliberately
+# "rejected", not "empty": the endpoint uses the same shape for a genuine miss and a throttled refusal.
+# Only a returned product proves success; a term never requested is explicitly not_attempted.
+$captureTerms = New-Object System.Collections.ArrayList
+for ($termOrdinal = 0; $termOrdinal -lt $termList.Count; $termOrdinal++) {
+  $ct = [string]$termList[$termOrdinal]
+  $rowCount = @($deals | Where-Object { [string]$_.found_by_term -eq $ct -and -not $_.carried_forward }).Count
+  if ($termSuccess.ContainsKey($ct)) {
+    [void]$captureTerms.Add([ordered]@{ term=$ct; ordinal=$termOrdinal; outcome='success'; row_count=$rowCount })
+  } elseif ($termAttempted.ContainsKey($ct)) {
+    [void]$captureTerms.Add([ordered]@{ term=$ct; ordinal=$termOrdinal; outcome='rejected'; row_count=0; reason='request returned no product rows; Freshop does not distinguish a true empty from throttle refusal' })
+  } else {
+    $reason = if ($termDeferred.ContainsKey($ct)) { [string]$termDeferred[$ct] } else { 'not reached in this bounded rotation window' }
+    [void]$captureTerms.Add([ordered]@{ term=$ct; ordinal=$termOrdinal; outcome='not_attempted'; row_count=0; reason=$reason })
+  }
+}
+
+$out = [ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; price_mode='pickup'; mode_verified=$todayS; coverage_mode='partial'; source='Freshop catalog base_price (store_id 6401, Omaha), NOT Instacart'; deal_count=@($deals).Count; fresh_count=(@($deals).Count - $carried); carried_count=$carried; expired_count=$expired; expired_starved=$expStarved; expired_churn=$expChurn; expired_unknown=$expUnknown; max_carry_days=$MaxCarryDays; empty_terms=@($empty); capture_terms=$captureTerms.ToArray(); deals=$deals }
 
 # THE ONE WRITE THIS RUN EXISTS TO PRODUCE. Atomic, retried, and NON-FATAL - see Write-FfJsonAtomic. Under the
 # old bare Set-Content this line threw at 2026-08-02T07:06:41 and took 686 rows of purchases down with it,

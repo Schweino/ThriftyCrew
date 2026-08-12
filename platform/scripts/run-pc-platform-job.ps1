@@ -1,6 +1,6 @@
 param(
   [Parameter(Mandatory=$true)]
-  [ValidateSet('daily-engine','efficiency-daily','family-fare-paced','accuracy-weekly','triage-daily','ghost-rotation-reconcile','restore-drill-quarterly')]
+  [ValidateSet('daily-engine','efficiency-daily','family-fare-paced','accuracy-weekly','accuracy-revalidation-daily','triage-daily','ghost-rotation-reconcile','restore-drill-quarterly')]
   [string]$Job,
   [switch]$Force,
   [switch]$SelfTest
@@ -92,6 +92,7 @@ try {
         Invoke-Logged 'efficiency-incident-reconcile' { & $pnpmPath tc efficiency record $reportFile }
       }
       'accuracy-weekly' { Invoke-Logged 'accuracy-draw' { & $pnpmPath tc accuracy draw } }
+      'accuracy-revalidation-daily' { Invoke-Logged 'accuracy-revalidation' { & $pnpmPath tc accuracy revalidate } }
       'triage-daily' { Invoke-Logged 'triage-run' { & $pnpmPath tc triage run } }
       'ghost-rotation-reconcile' { Invoke-Logged 'ghost-reconcile' { & $pnpmPath tc ghost reconcile } }
       'restore-drill-quarterly' { Invoke-Logged 'restore-trigger' { & $pnpmPath tc restore trigger } }

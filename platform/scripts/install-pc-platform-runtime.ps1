@@ -16,6 +16,8 @@ $taskNames = @(
   'ThriftyCrew V3 Family Fare Paced',
   'ThriftyCrew V3 Accuracy Weekly',
   'ThriftyCrew V3 Accuracy Agent',
+  'ThriftyCrew V3 Accuracy Revalidation Daily',
+  'ThriftyCrew V3 Accuracy Revalidation Agent',
   'ThriftyCrew V3 Triage Daily',
   'ThriftyCrew V3 Ghost Reconcile',
   'ThriftyCrew V3 Source Sentinel',
@@ -126,6 +128,8 @@ Register-PcTask 'ThriftyCrew V3 Efficiency Budget' $platformLauncher '-Job effic
 Register-PcTask 'ThriftyCrew V3 Family Fare Paced' $platformLauncher '-Job family-fare-paced' (New-ScheduledTaskTrigger -Once -At $familyFareStart -RepetitionInterval (New-TimeSpan -Hours 3)) 60 'Authoritative local three-hour Family Fare capture pacing.'
 Register-PcTask 'ThriftyCrew V3 Accuracy Weekly' $platformLauncher '-Job accuracy-weekly' (New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday -At '3:17 PM') 30 'Weekly deterministic blind accuracy draw.'
 Register-PcTask 'ThriftyCrew V3 Accuracy Agent' $agentLauncher '-Cycle Accuracy -MaxItems 1' (New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday -At '3:30 PM') 90 'Weekly local registered accuracy verdict agent.'
+Register-PcTask 'ThriftyCrew V3 Accuracy Revalidation Daily' $platformLauncher '-Job accuracy-revalidation-daily' (New-ScheduledTaskTrigger -Daily -At '10:17 AM') 30 'Daily deterministic winner/challenger revalidation draw.'
+Register-PcTask 'ThriftyCrew V3 Accuracy Revalidation Agent' $agentLauncher '-Cycle Accuracy -MaxItems 1' (New-ScheduledTaskTrigger -Daily -At '10:30 AM') 90 'Daily local registered winner/challenger revalidation agent.'
 Register-PcTask 'ThriftyCrew V3 Triage Daily' $platformLauncher '-Job triage-daily' (New-ScheduledTaskTrigger -Daily -At '1:37 PM') 45 'Daily deterministic triage queue seeding.'
 Register-PcTask 'ThriftyCrew V3 Triage Agents' $agentLauncher '-Cycle Triage -MaxItems 6' (New-ScheduledTaskTrigger -Daily -At '1:57 PM') 240 'Bounded local reviewer-to-developer triage drain.'
 Register-PcTask 'ThriftyCrew V3 Post Publish Review' $agentLauncher '-Cycle PostPublish -MaxItems 1' (New-ScheduledTaskTrigger -Daily -At '12:47 PM') 90 'Daily local post-publish review.'
