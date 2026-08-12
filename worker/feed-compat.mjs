@@ -18,10 +18,10 @@ export function unwrapPromotedFeed(value) {
 
 export async function fetchPromotedFeed(env, fetchImpl = fetch) {
   const url = env.PROMOTED_FEED_URL || DEFAULT_PROMOTED_FEED_URL;
-  const response = await fetchImpl(url, {
-    headers: { Accept: "application/json" },
-    cf: { cacheEverything: true, cacheTtl: 60 },
-  });
+  const request = new Request(url, { headers: { Accept: "application/json" } });
+  const response = env.PUBLIC_API
+    ? await env.PUBLIC_API.fetch(request)
+    : await fetchImpl(request, { cf: { cacheEverything: true, cacheTtl: 60 } });
   if (!response.ok) throw new Error(`promoted feed returned ${response.status}`);
   return unwrapPromotedFeed(await response.json());
 }

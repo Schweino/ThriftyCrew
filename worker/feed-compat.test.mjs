@@ -49,6 +49,21 @@ test("carries legacy recipe aliases forward using current promoted prices", () =
   assert.equal(result.ingredient_count, 2);
 });
 
+test("prefers the private service binding over a public same-zone fetch", async () => {
+  let publicFetchCalled = false;
+  const env = {
+    PUBLIC_API: { fetch: async () => Response.json({ ok: true, releaseId: "rel_current", payload }) },
+    ASSETS: { fetch: async () => Response.json({ ingredients: {} }) },
+  };
+  const response = await serveCompatibleFeed(
+    new Request("https://feed.example/smp-feed.json"),
+    env,
+    async () => { publicFetchCalled = true; throw new Error("public fetch must not run"); },
+  );
+  assert.equal(response.headers.get("x-tc-feed-source"), "v3-promoted-release");
+  assert.equal(publicFetchCalled, false);
+});
+
 test("falls back to the last static feed when the promoted endpoint is unavailable", async () => {
   const env = {
     ASSETS: {
