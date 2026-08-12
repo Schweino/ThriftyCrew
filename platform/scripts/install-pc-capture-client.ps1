@@ -74,6 +74,7 @@ $configuration = [ordered]@{
   queueRoot = $queueRoot
   platformRoot = $platformRoot
   pnpmPath = $pnpmPath
+  nodePath = $nodeExecutable
   runtimePath = $runtimePath
   encryptedSecret = $encryptedSecret
   encryptedJournalKey = $encryptedJournalKey

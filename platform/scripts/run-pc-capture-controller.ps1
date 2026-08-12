@@ -30,10 +30,12 @@ if ($env:TC_CAPTURE_CONTROLLER_TOKEN.Length -lt 32) { throw 'PC capture controll
 $env:NODE_OPTIONS = (($env:NODE_OPTIONS, '--disable-warning=ExperimentalWarning') -join ' ').Trim()
 $runtimePath = @($config.runtimePath | ForEach-Object { [string]$_ })
 if ($runtimePath.Count -gt 0) { $env:Path = (($runtimePath -join [IO.Path]::PathSeparator) + [IO.Path]::PathSeparator + $env:Path) }
+$nodePath = if ($config.nodePath) { [string]$config.nodePath } elseif ($runtimePath.Count -gt 0) { Join-Path $runtimePath[0] 'node.exe' } else { '' }
+if (-not $nodePath -or -not (Test-Path -LiteralPath $nodePath)) { throw 'pinned capture controller node.exe is missing' }
 $restartDelaySeconds = 2
 while ($true) {
   Push-Location ([string]$config.platformRoot)
-  try { & ([string]$config.pnpmPath) 'exec' 'tsx' 'apps/operator/src/capture-controller.ts' }
+  try { & $nodePath '--import' 'tsx' 'apps/operator/src/capture-controller.ts' }
   finally { Pop-Location }
   $exitCode = $LASTEXITCODE
   $supervisorLog = Join-Path $clientDir 'logs\capture-controller-supervisor.log'

@@ -2041,7 +2041,7 @@ app.put("/internal/capture-journal-checkpoints", async (context) => {
   const bytes = new Uint8Array(await context.req.arrayBuffer());
   if (bytes.byteLength < 32 || bytes.byteLength > 25 * 1024 * 1024) return jsonError("encrypted journal checkpoint must be 32 bytes through 25 MiB", 422);
   if (await digestHex(bytes) !== ciphertextSha256) return jsonError("journal checkpoint ciphertext hash does not match content", 422);
-  const checkpointId = deterministicId("capture-journal-checkpoint", identity.agentId, plaintextSha256);
+  const checkpointId = await deterministicId("capture-journal-checkpoint", identity.agentId, plaintextSha256);
   const existing = await context.env.DB.prepare(
     "SELECT object_key, ciphertext_sha256, byte_length, created_at FROM capture_journal_checkpoints WHERE id = ?1",
   ).bind(checkpointId).first<{ object_key: string; ciphertext_sha256: string; byte_length: number; created_at: string }>();
