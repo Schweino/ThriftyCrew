@@ -196,7 +196,8 @@ The wrapper verifies that the raw capture, manifest, and screenshot hashes bind 
 validates the V3 artifact, and atomically enqueues all three evidence classes. Image magic bytes and minimum
 dimensions are checked locally and again by the Worker. The at-logon capture controller owns a SQLite WAL
 journal, enforces at most two distinct concurrent store lanes, and drains on startup, wake events, and a
-five-minute fallback interval. Adapter reads use one append-only streaming protocol; compact JSON is a recovery
+five-minute fallback interval. A single-instance per-user supervisor restarts it with bounded backoff after an
+unexpected exit, without requiring administrator rights. Adapter reads use one append-only streaming protocol; compact JSON is a recovery
 mirror. The drainer sends bounded, compressed product shards straight to R2 with a 15-minute one-object URL
 whose content type, MD5, SHA-256 metadata, evidence ID, and upload session are signed. Per-object receipts make
 interrupted uploads resumable. Browser seal returns `202`; a Cloudflare Workflow validates, matches, and promotes
