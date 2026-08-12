@@ -2668,6 +2668,24 @@ app.post("/internal/storage/backfill-release/:id", async (context) => {
     const payload = row.object_key ? await context.env.EVIDENCE.get(row.object_key).then((object) => object?.json()) : JSON.parse(row.payload_json);
     if (payload !== undefined) historicalPayloads[row.kind] = payload;
   }
+  if (Object.keys(historicalPayloads).length === 0) {
+    // A prior projection compactor may have removed D1 payload pointers before
+    // the object-graph cutover. The content-addressed R2 payloads remain and
+    // are sufficient to recover the public historical release snapshot.
+    const prefix = `releases/${releaseId}/`;
+    let cursor: string | undefined;
+    do {
+      const listed = await context.env.EVIDENCE.list({ prefix, limit: 1000, ...(cursor ? { cursor } : {}) });
+      for (const object of listed.objects) {
+        const suffix = object.key.slice(prefix.length);
+        const match = suffix.match(/^([^/]+)-[a-f0-9]{64}\.json$/);
+        if (!match) continue;
+        const payload = await context.env.EVIDENCE.get(object.key).then((value) => value?.json());
+        if (payload !== undefined) historicalPayloads[match[1]!] = payload;
+      }
+      cursor = listed.truncated ? listed.cursor : undefined;
+    } while (cursor);
+  }
   // Existing releases predate the DAG. Preserve each as one content-addressed
   // snapshot node so the cutover is bounded to two R2 operations per release.
   // Every newly-built release is granular and copy-on-write.
@@ -3423,7 +3441,7 @@ app.put("/internal/releases/:id/graph-nodes", async (context) => {
   ).bind(releaseId).first<{ release_id: string }>();
   const prepared: Array<{
     kind: string; key: string; dependencyHash: string; contentHash: string; bytes: Uint8Array;
-    objectKey: string; reusedFrom: string | null; alreadyStored: boolean;
+    objectKey: string; reusedFrom: string | null; alreadyStored: boolean; globallyStored: boolean;
   }> = [];
   for (const raw of body.nodes) {
     if (!raw || typeof raw !== "object" || Array.isArray(raw)) return jsonError("release graph node is invalid", 422);
@@ -3438,7 +3456,8 @@ app.put("/internal/releases/:id/graph-nodes", async (context) => {
     if (await digestHex(serialized) !== contentHash) return jsonError(`release graph node content hash mismatch: ${kind}/${key}`, 422);
     const bytes = new TextEncoder().encode(serialized);
     const objectKey = `release-nodes/schema=1/kind=${kind}/prefix=${contentHash.slice(0, 2)}/${contentHash}.json`;
-    prepared.push({ kind, key, dependencyHash, contentHash, bytes, objectKey, reusedFrom: null, alreadyStored: false });
+    prepared.push({ kind, key, dependencyHash, contentHash, bytes, objectKey,
+      reusedFrom: null, alreadyStored: false, globallyStored: false });
   }
   const requested = stableJson(prepared.map((item) => ({
     kind: item.kind, key: item.key, dependencyHash: item.dependencyHash, contentHash: item.contentHash,
@@ -3469,7 +3488,13 @@ app.put("/internal/releases/:id/graph-nodes", async (context) => {
     item.alreadyStored = match?.scope === "draft";
     item.reusedFrom = match?.scope === "prior" ? match.release_id : null;
   }
-  await Promise.all(prepared.filter((item) => !item.alreadyStored && !item.reusedFrom).map(async (item) => {
+  const globalObjects = await context.env.DB.prepare(
+    `SELECT content_hash FROM object_store_objects
+      WHERE content_hash IN (SELECT value FROM json_each(?1))`,
+  ).bind(stableJson(prepared.map((item) => item.contentHash))).all<{ content_hash: string }>();
+  const globallyStored = new Set(globalObjects.results.map((item) => item.content_hash));
+  for (const item of prepared) item.globallyStored = globallyStored.has(item.contentHash);
+  await Promise.all(prepared.filter((item) => !item.alreadyStored && !item.reusedFrom && !item.globallyStored).map(async (item) => {
     if (await context.env.ARCHIVE.head(item.objectKey)) return;
     await context.env.ARCHIVE.put(item.objectKey, item.bytes, {
       httpMetadata: { contentType: "application/json; charset=utf-8" },
@@ -3478,7 +3503,7 @@ app.put("/internal/releases/:id/graph-nodes", async (context) => {
   }));
   const statements: D1PreparedStatement[] = [];
   for (const item of prepared) {
-    if (!item.alreadyStored && !item.reusedFrom) {
+    if (!item.alreadyStored && !item.reusedFrom && !item.globallyStored) {
       const stored = await context.env.ARCHIVE.head(item.objectKey);
       if (!stored || stored.size !== item.bytes.byteLength || stored.customMetadata?.sha256 !== item.contentHash) return jsonError(`release graph node failed verification: ${item.kind}/${item.key}`, 500);
       statements.push(context.env.DB.prepare(
@@ -3500,7 +3525,8 @@ app.put("/internal/releases/:id/graph-nodes", async (context) => {
   await context.env.DB.batch(statements);
   return context.json({ ok: true, accepted: prepared.length,
     reused: prepared.filter((item) => item.reusedFrom).length,
-    resumed: prepared.filter((item) => item.alreadyStored).length });
+    resumed: prepared.filter((item) => item.alreadyStored).length,
+    contentAddressedHits: prepared.filter((item) => item.globallyStored).length });
 });
 
 app.post("/internal/releases/:id/graph-finalize", async (context) => {
@@ -3787,7 +3813,15 @@ app.post("/internal/releases/:id/publish", async (context) => {
   ).bind(release.market_id, releaseId));
   await context.env.DB.batch(statements);
   if (current && current.release_id !== releaseId) {
-    try {
+    const historicalRoot = await context.env.DB.prepare(
+      "SELECT root_hash FROM release_graphs WHERE release_id = ?1",
+    ).bind(current.release_id).first<{ root_hash: string }>();
+    if (!historicalRoot) {
+      await raiseOperationalAlert(context.env, `release-projection-compaction:${current.release_id}`,
+        "Superseded release projection retained until immutable history is verified",
+        { releaseId, previousReleaseId: current.release_id, reason: "release graph is absent" },
+        { notification: "digest", deferMinutes: 30 });
+    } else try {
       await context.env.DB.batch([
         context.env.DB.prepare("DELETE FROM recipe_cost_detail_objects WHERE release_id = ?1").bind(current.release_id),
         context.env.DB.prepare("DELETE FROM release_recipe_payloads WHERE release_id = ?1").bind(current.release_id),
