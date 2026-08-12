@@ -15,7 +15,7 @@ import {
 import { browserCaptureTruthPass, buildBrowserCaptureAccuracy, digestHex, normalizeName, parseCapturePriceText, stableJson } from "@thriftycrew/domain";
 import { compileProductMatcher } from "@thriftycrew/engine";
 import { captureAdapterManifest, validateCaptureAdapterManifest, type CaptureAdapterManifest } from "../../../scripts/browser-capture-adapters/adapter-registry.mjs";
-import { commitSessionChunk, completeSessionWorkUnits, readCatalogQueryStats, readPlannerJournal, readSessionJournal, readSessionPayload, replaceCatalogSnapshot, replacePlannerJournal, replaceSessionWorkUnits, sessionEvidence, setCaptureSessionPhase, storeSessionEvidence, upsertSessionJournal } from "./capture-journal";
+import { abandonCaptureSessionWork, commitSessionChunk, completeSessionWorkUnits, readCatalogQueryStats, readPlannerJournal, readSessionJournal, readSessionPayload, replaceCatalogSnapshot, replacePlannerJournal, replaceSessionWorkUnits, sessionEvidence, setCaptureSessionPhase, storeSessionEvidence, upsertSessionJournal } from "./capture-journal";
 
 const storeSchema = z.enum(["aldi", "fareway", "sams", "walmart"]);
 type BrowserStore = z.infer<typeof storeSchema>;
@@ -328,7 +328,8 @@ export async function initializeCaptureSession(storeInput: string, worklistFile:
     return { termKey: key, query, ordinal };
   });
   const worklistHash = await digestHex(stableJson(terms));
-  const sessionId = `browser-${store}-${startedAt.slice(0, 10)}-${worklistHash.slice(0, 12)}`;
+  const adapter = validateCaptureAdapterManifest(await captureAdapterManifest(store));
+  const sessionId = `browser-${store}-${startedAt.slice(0, 10)}-${worklistHash.slice(0, 12)}-${adapter.sha256.slice(0, 10)}`;
   let plannerHistoryFile: string | undefined;
   let plannerHistoryNamespace: string | undefined;
   try {
@@ -336,12 +337,14 @@ export async function initializeCaptureSession(storeInput: string, worklistFile:
     if (typeof document.planner?.historyFile === "string") plannerHistoryFile = path.resolve(document.planner.historyFile);
     if (typeof document.planner?.historyNamespace === "string") plannerHistoryNamespace = document.planner.historyNamespace;
   } catch { /* plain-text worklists have no planner history */ }
-  const adapter = validateCaptureAdapterManifest(await captureAdapterManifest(store));
   const draft: DraftSession = { version: 2, sessionId, store, sourceId: SOURCE_IDS[store], worklist: keyed, worklistHash, startedAt, adapter, chunks: [], ...(plannerHistoryFile ? { plannerHistoryFile } : {}), ...(plannerHistoryNamespace ? { plannerHistoryNamespace } : {}) };
   await mkdir(path.join(directory, "chunks"), { recursive: true });
   try {
     const existing = await loadDraft(directory);
     if (existing.store !== draft.store || existing.sourceId !== draft.sourceId || existing.worklistHash !== draft.worklistHash) throw new Error(`capture session directory already belongs to ${existing.sessionId}`);
+    if (existing.adapter?.id !== adapter.id || existing.adapter?.version !== adapter.version || existing.adapter?.sha256 !== adapter.sha256) {
+      throw new Error(`capture session ${existing.sessionId} is bound to adapter ${existing.adapter?.sha256 ?? "missing"}; abandon it and initialize a new directory for ${adapter.sha256}`);
+    }
     replaceSessionWorkUnits(directory, store, "discovery", existing.worklist.map((term) => ({
       key: term.query, ordinal: term.ordinal, priority: existing.worklist.length - term.ordinal,
       payload: { termKey: term.termKey, query: term.query, ...(existing.adapter ? { adapter: { id: existing.adapter.id, version: existing.adapter.version, sha256: existing.adapter.sha256 } } : {}) },
@@ -360,6 +363,11 @@ export async function initializeCaptureSession(storeInput: string, worklistFile:
     payload: { termKey: term.termKey, query: term.query, adapter: { id: adapter.id, version: adapter.version, sha256: adapter.sha256 } },
   })), startedAt);
   return draft;
+}
+
+export async function abandonCaptureSession(directory: string, reason: string): Promise<Record<string, unknown>> {
+  const draft = await loadDraft(directory);
+  return { ok: true, store: draft.store, ...(abandonCaptureSessionWork(directory, reason) as Record<string, unknown>) };
 }
 
 export async function appendCaptureChunk(directory: string, chunkFile: string): Promise<{ id: string; idempotent: boolean; terms: number; rows: number }> {

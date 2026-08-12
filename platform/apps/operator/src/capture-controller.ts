@@ -93,7 +93,8 @@ async function dispatch(pathname: string, body: Record<string, unknown>): Promis
   if (pathname === "/v1/work/next") {
     const owner = String(body.owner ?? "").trim();
     if (!owner) return { status: 422, body: { ok: false, error: "work owner is required" } };
-    const result = leaseCaptureWork(owner, body.store ? String(body.store) : undefined, new Date(), Number(body.ttlMs) || 5 * 60_000);
+    const result = leaseCaptureWork(owner, body.store ? String(body.store) : undefined, new Date(), Number(body.ttlMs) || 5 * 60_000, undefined,
+      Math.max(1, Math.min(5, Number(body.count) || 1)));
     await log("work-next", { owner, store: body.store, ...result });
     return { status: result.acquired ? 200 : 204, body: { ok: true, ...result } };
   }

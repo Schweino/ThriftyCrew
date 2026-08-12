@@ -49,7 +49,7 @@ export async function buildReleaseRecipeBundles(
     releasePayload(env, releaseId, "feed"),
     env.DB.prepare(
       "SELECT recipe_slug, detail_json FROM release_recipe_costs WHERE release_id = ?1 AND recipe_slug > ?2 ORDER BY recipe_slug LIMIT ?3",
-    ).bind(releaseId, afterSlug, Math.max(1, Math.min(40, limit))).all<{ recipe_slug: string; detail_json: string }>(),
+    ).bind(releaseId, afterSlug, Math.max(1, Math.min(100, limit))).all<{ recipe_slug: string; detail_json: string }>(),
   ]);
   const recipes = array(recipesPayload.recipes);
   const recipeBySlug = new Map(recipes.map((recipe) => [String(recipe.slug), recipe]));
@@ -149,7 +149,7 @@ export async function buildReleaseRecipeBundles(
   for (let offset = 0; offset < statements.length; offset += 80) await env.DB.batch(statements.slice(offset, offset + 80));
   return { count: writes.length, bytes: writes.reduce((sum, write) => sum + write.bytes.byteLength, 0),
     uploadedObjects: uploads.length, reusedObjects: writes.length * 2 - uploads.length,
-    next: writes.length === Math.max(1, Math.min(40, limit)) ? writes.at(-1)!.slug : null };
+    next: writes.length === Math.max(1, Math.min(100, limit)) ? writes.at(-1)!.slug : null };
 }
 
 export function hydrateReleaseRecipeBundle(bundle: Record<string, unknown>, releaseId: string, publishedAt: string, weekOf: string): Record<string, unknown> {

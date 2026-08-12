@@ -16,7 +16,7 @@ import { browserCaptureCycleStatus, captureQueueStatus, compactPromotedCaptureQu
 import { drainBrowserCaptureQueue } from "./capture-drainer";
 import { checkpointCaptureJournal, restoreCaptureJournal } from "./capture-journal-checkpoint";
 import { findLatestRegularCapture, omahaDateKey, parseServerCaptureStore, readFreshRegularCapture, SERVER_CAPTURE_STORES } from "./current-captures";
-import { appendCaptureChunk, buildCaptureSessionWorklist, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession, retainCaptureSessionEvidence } from "./capture-session";
+import { abandonCaptureSession, appendCaptureChunk, buildCaptureSessionWorklist, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession, retainCaptureSessionEvidence } from "./capture-session";
 import { captureControllerRequest } from "../../../scripts/capture-controller-client.mjs";
 import { catalogRefreshPlan } from "./capture-journal";
 import { agentJobRunFields } from "./job-run";
@@ -806,8 +806,8 @@ if (command === "status") {
       cacheWriteTokens: usage.cacheWriteTokens ?? 0,
       costMicrousd: usage.costMicrousd ?? 0,
     },
-    stats: { githubJobStatus: requested },
-    ...(status === "failed" ? { error: `GitHub recovery job ended with ${requested}` } : {}),
+    stats: { executorStatus: requested, executionPlane: process.env.GITHUB_RUN_ID ? "github-actions" : "pc" },
+    ...(status === "failed" ? { error: `${process.env.GITHUB_RUN_ID ? "GitHub Actions" : "PC"} job execution ended with ${requested}` } : {}),
   } });
 } else if (command === "ghost" && subcommand === "reconcile") {
   const requestedRelease = arguments_[0];
@@ -828,6 +828,8 @@ if (command === "status") {
   };
   const recipes = published.payload?.recipes ?? [];
   const incomplete = recipes.filter((recipe) => recipe.status !== "complete");
+  const held = incomplete.filter((recipe) => recipe.status === "held");
+  const unresolved = incomplete.filter((recipe) => recipe.status !== "held");
   const dependencyCounts = new Map<string, number>();
   for (const recipe of incomplete) {
     for (const ingredient of recipe.missingIngredients ?? []) {
@@ -837,10 +839,20 @@ if (command === "status") {
   result = {
     ok: incomplete.length === 0,
     releaseId: published.releaseId ?? null,
-    totals: { recipes: recipes.length, complete: recipes.length - incomplete.length, incomplete: incomplete.length },
+    totals: {
+      recipes: recipes.length,
+      complete: recipes.length - incomplete.length,
+      held: held.length,
+      incomplete: unresolved.length,
+    },
     dependencies: [...dependencyCounts].map(([ingredient, affectedRecipes]) => ({ ingredient, affectedRecipes }))
       .sort((left, right) => right.affectedRecipes - left.affectedRecipes || left.ingredient.localeCompare(right.ingredient)),
-    recipes: incomplete.map((recipe) => ({ slug: recipe.slug, name: recipe.name, missingIngredients: recipe.missingIngredients ?? [] })),
+    recipes: incomplete.map((recipe) => ({
+      slug: recipe.slug,
+      name: recipe.name,
+      status: recipe.status,
+      missingIngredients: recipe.missingIngredients ?? [],
+    })),
   };
 } else if (command === "engine" && subcommand === "parity") {
   const requestedMode = arguments_[0] ?? "legacy";
@@ -927,9 +939,11 @@ if (command === "status") {
   };
   if (action === "status") result = await request("/v1/coordinator/status");
   else if (action === "next") {
-    const [owner, store] = coordinatorArguments;
+    const [owner, store, countText] = coordinatorArguments;
     if (!owner) throw new Error("tc capture coordinator next requires an executor owner");
-    result = await request("/v1/work/next", { owner, ...(store ? { store } : {}) });
+    const count = countText === undefined ? 1 : Number.parseInt(countText, 10);
+    if (!Number.isInteger(count) || count < 1 || count > 5) throw new Error("tc capture coordinator next count must be between 1 and 5");
+    result = await request("/v1/work/next", { owner, count, ...(store ? { store } : {}) });
   } else if (action === "heartbeat") {
     const [owner, workId] = coordinatorArguments;
     if (!owner || !workId) throw new Error("tc capture coordinator heartbeat requires owner and work ID");
@@ -986,6 +1000,10 @@ if (command === "status") {
     const [directory] = sessionArguments;
     if (!directory) throw new Error("tc capture session status requires a session directory");
     result = await captureSessionStatus(cliPath(directory));
+  } else if (action === "abandon") {
+    const [directory, ...reasonParts] = sessionArguments;
+    if (!directory || reasonParts.length === 0) throw new Error("tc capture session abandon requires a session directory and reason");
+    result = await abandonCaptureSession(cliPath(directory), reasonParts.join(" "));
   } else if (action === "verification-plan") {
     const [directory, outputFile] = sessionArguments;
     if (!directory || !outputFile) throw new Error("tc capture session verification-plan requires a session directory and output JSON");

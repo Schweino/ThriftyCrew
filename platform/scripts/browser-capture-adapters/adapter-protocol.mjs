@@ -59,7 +59,7 @@ export async function checkpointAdapterChunk(file, chunk, previousCount = 0, ses
     const commitFile = `${file}.controller-${crypto.randomUUID()}.json`;
     await writeFile(commitFile, `${JSON.stringify(delta)}\n`, "utf8");
     try {
-      controllerCommit = await captureControllerRequest("/v1/sessions/commit-file", { directory: path.resolve(sessionDirectory), chunkFile: path.resolve(commitFile) }, process.env, 30_000);
+      controllerCommit = await captureControllerRequest("/v1/sessions/commit-file", { directory: path.resolve(sessionDirectory), chunkFile: path.resolve(commitFile) }, process.env, 30_000, true);
       if (!controllerCommit) throw new Error("persistent capture controller is unavailable for atomic adapter commit");
       if (controllerCommit.ok !== true) throw new Error(String(controllerCommit.error ?? "capture controller rejected adapter result"));
     } finally { await rm(commitFile, { force: true }); }

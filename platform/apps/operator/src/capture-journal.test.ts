@@ -100,6 +100,25 @@ describe("unified persistent capture journal", () => {
     completeSessionWorkUnits(directory, "discovery", ["milk"], "chunk-def", file);
   });
 
+  it("leases an ordered bounded store-local adapter batch under one lane owner", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-capture-batch-lease-"));
+    roots.push(root);
+    const file = path.join(root, "capture-journal.sqlite");
+    const directory = path.join(root, "session");
+    const started = new Date("2026-08-12T12:00:00.000Z");
+    upsertSessionJournal(directory, { sessionId: "session", store: "walmart", chunks: [] }, file);
+    replaceSessionWorkUnits(directory, "walmart", "discovery", Array.from({ length: 7 }, (_, ordinal) => ({
+      key: `term-${ordinal}`, ordinal, payload: { query: `term ${ordinal}` },
+    })), started.toISOString(), file);
+    const leased = leaseCaptureWork("executor-batch", "walmart", started, 5 * 60_000, file, 5) as {
+      acquired: boolean; work: { unitKey: string }; works: Array<{ unitKey: string; payload: { query: string } }>;
+    };
+    expect(leased.acquired).toBe(true);
+    expect(leased.work.unitKey).toBe("term-0");
+    expect(leased.works.map((work) => work.payload.query)).toEqual(["term 0", "term 1", "term 2", "term 3", "term 4"]);
+    expect(leaseCaptureWork("other", "walmart", new Date(started.getTime() + 5_000), 60_000, file, 2)).toMatchObject({ acquired: false });
+  });
+
   it("answers weekly browser freshness from journaled queue truth without scanning artifact files", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "tc-capture-due-journal-"));
     roots.push(root);

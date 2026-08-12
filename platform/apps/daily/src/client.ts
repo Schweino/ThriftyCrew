@@ -36,11 +36,21 @@ function chunks<T>(items: readonly T[], size: number): T[][] {
   return output;
 }
 
+async function mapConcurrent<T>(items: readonly T[], concurrency: number, work: (item: T) => Promise<void>): Promise<void> {
+  let cursor = 0;
+  await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, async () => {
+    while (cursor < items.length) {
+      const item = items[cursor++];
+      if (item !== undefined) await work(item);
+    }
+  }));
+}
+
 async function buildRecipeBundles(client: MutationClient, releaseId: string): Promise<{ pages: number; recipes: number; bytes: number; uploadedObjects: number; reusedObjects: number }> {
   let afterRecipe = "";
   const stats = { pages: 0, recipes: 0, bytes: 0, uploadedObjects: 0, reusedObjects: 0 };
   while (true) {
-    const response = await client.request(`/internal/releases/${releaseId}/recipe-bundles${afterRecipe ? `?after=${encodeURIComponent(afterRecipe)}` : ""}`, { method: "POST" });
+    const response = await client.request(`/internal/releases/${releaseId}/recipe-bundles${afterRecipe ? `?after=${encodeURIComponent(afterRecipe)}` : ""}`, { method: "POST", retrySafe: true });
     stats.pages += 1;
     stats.recipes += Number(response.count ?? 0);
     stats.bytes += Number(response.bytes ?? 0);
@@ -87,7 +97,7 @@ export class MutationClient {
     return this.cachedOidcToken;
   }
 
-  async request(pathname: string, init: { method?: string; json?: unknown; body?: Uint8Array; headers?: HeadersInit; acceptStatuses?: number[] } = {}): Promise<ApiResult> {
+  async request(pathname: string, init: { method?: string; json?: unknown; body?: Uint8Array; headers?: HeadersInit; acceptStatuses?: number[]; retrySafe?: boolean } = {}): Promise<ApiResult> {
     const method = init.method ?? (init.json === undefined && init.body === undefined ? "GET" : "POST");
     const body = init.body ?? (init.json === undefined ? new Uint8Array() : encoder.encode(JSON.stringify(init.json)));
     const bodyHash = await digestHex(body);
@@ -121,13 +131,32 @@ export class MutationClient {
       }
       return { response, result };
     };
-    let { response, result } = await send();
-    // Authentication rejects an expired bearer before the route handler, so
-    // rebuilding the envelope and retrying the unchanged body once cannot
-    // duplicate a successful mutation.
-    if (response.status === 401 && result.error === "GitHub OIDC token is expired" && this.options.oidcTokenProvider) {
-      ({ response, result } = await send(true));
+    const retryable = init.retrySafe === true || method === "GET" || method === "PUT";
+    const attempts = retryable ? 4 : 1;
+    let response: Response | undefined;
+    let result: ApiResult = { ok: false, error: "request was not attempted" };
+    let lastNetworkError: unknown;
+    for (let attempt = 1; attempt <= attempts; attempt += 1) {
+      try {
+        ({ response, result } = await send());
+        // Authentication rejects an expired bearer before the route handler,
+        // so rebuilding the envelope and retrying the unchanged body once
+        // cannot duplicate a successful mutation.
+        if (response.status === 401 && result.error === "GitHub OIDC token is expired" && this.options.oidcTokenProvider) {
+          ({ response, result } = await send(true));
+        }
+        if (!([429, 500, 502, 503, 504].includes(response.status)) || attempt === attempts) break;
+      } catch (error) {
+        lastNetworkError = error;
+        if (attempt === attempts) throw error;
+      }
+      const retryAfter = Number(response?.headers.get("retry-after") ?? "0");
+      const delay = Number.isFinite(retryAfter) && retryAfter > 0
+        ? Math.min(10_000, retryAfter * 1_000)
+        : Math.min(5_000, 250 * 2 ** (attempt - 1)) + Math.floor(Math.random() * 150);
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
+    if (!response) throw lastNetworkError instanceof Error ? lastNetworkError : new Error(`${method} ${pathname} failed before receiving a response`);
     if (!response.ok && !init.acceptStatuses?.includes(response.status)) {
       const detail = typeof result.error === "string" ? result.error : stableJson(result);
       throw new Error(`${method} ${pathname} returned ${response.status}: ${detail}`);
@@ -655,24 +684,31 @@ export async function publishNativeRelease(client: MutationClient, artifact: Nat
   try {
     const checkpoint = await client.request(`/internal/releases/${artifact.releaseId}`) as { progress?: { graph_finalized?: number | boolean } };
     if (!checkpoint.progress?.graph_finalized) {
-      for (const cellChunk of chunks(artifact.cells, 200)) await client.request(`/internal/releases/${artifact.releaseId}/cells`, { method: "PUT", json: { cells: cellChunk } });
-      for (const costChunk of chunks(artifact.recipeCosts, 200)) await client.request(`/internal/releases/${artifact.releaseId}/recipe-costs`, { method: "PUT", json: { costs: costChunk } });
-      await client.request(`/internal/releases/${artifact.releaseId}/free-rotation`, { method: "PUT", json: { entries: artifact.freeRotation } });
-      await client.request(`/internal/releases/${artifact.releaseId}/top5`, { method: "PUT", json: { entries: artifact.top5 } });
-      for (const [kind, payload] of Object.entries(artifact.payloads)) {
+      await mapConcurrent(chunks(artifact.cells, 200), 3, async (cellChunk) => {
+        await client.request(`/internal/releases/${artifact.releaseId}/cells`, { method: "PUT", json: { cells: cellChunk } });
+      });
+      await mapConcurrent(chunks(artifact.recipeCosts, 200), 3, async (costChunk) => {
+        await client.request(`/internal/releases/${artifact.releaseId}/recipe-costs`, { method: "PUT", json: { costs: costChunk } });
+      });
+      const payloadWrites = Object.entries(artifact.payloads).map(async ([kind, payload]) => {
         const wirePayload: unknown = JSON.parse(JSON.stringify(payload));
         await client.request(`/internal/releases/${artifact.releaseId}/payload`, { method: "PUT", json: { kind, payload: wirePayload, contentHash: await digestHex(stableJson(wirePayload)) } });
-      }
-      for (const nodeChunk of chunks(artifact.graph.nodes, 40)) {
+      });
+      await Promise.all([
+        client.request(`/internal/releases/${artifact.releaseId}/free-rotation`, { method: "PUT", json: { entries: artifact.freeRotation } }),
+        client.request(`/internal/releases/${artifact.releaseId}/top5`, { method: "PUT", json: { entries: artifact.top5 } }),
+        ...payloadWrites,
+      ]);
+      await mapConcurrent(chunks(artifact.graph.nodes, 100), 3, async (nodeChunk) => {
         await client.request(`/internal/releases/${artifact.releaseId}/graph-nodes`, { method: "PUT", json: { nodes: nodeChunk } });
-      }
-      await client.request(`/internal/releases/${artifact.releaseId}/graph-finalize`, { json: {
+      });
+      await client.request(`/internal/releases/${artifact.releaseId}/graph-finalize`, { retrySafe: true, json: {
         parentReleaseId: artifact.graph.parentReleaseId, dependencyHash: artifact.graph.dependencyHash,
       } });
     }
     const recipeBundles = await buildRecipeBundles(client, artifact.releaseId);
-    const validation = await client.request(`/internal/releases/${artifact.releaseId}/validate`, { method: "POST", acceptStatuses: [422] });
-    const publication = validation.ok ? await client.request(`/internal/releases/${artifact.releaseId}/publish`, { method: "POST" }) : null;
+    const validation = await client.request(`/internal/releases/${artifact.releaseId}/validate`, { method: "POST", retrySafe: true, acceptStatuses: [422] });
+    const publication = validation.ok ? await client.request(`/internal/releases/${artifact.releaseId}/publish`, { method: "POST", retrySafe: true }) : null;
     return { ok: Boolean(validation.ok && publication?.ok), releaseId: artifact.releaseId, inputHash: artifact.inputHash, validation, publication, recipeBundles, audit: artifact.audit };
   } catch (error) {
     // A second executor can observe `draft` just before the first executor

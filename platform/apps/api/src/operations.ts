@@ -1,7 +1,7 @@
 import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
 import type { MutationIdentity, WorkerEnv } from "./env";
 import { readBrowserCaptureSla } from "./browser-capture-sla";
-import { compactConfiguration } from "./configuration-archive";
+import { compactConfiguration, compactConfigurationDecisions } from "./configuration-archive";
 import { cleanupCaptureUploadAttempts, type CaptureUploadCleanupResult } from "./capture-upload-attempts";
 
 export function jobStatusRequiresAlert(status: string): boolean {
@@ -285,10 +285,19 @@ export async function runConfigurationLifecycle(env: WorkerEnv, scheduledTime: n
     ).all<{ id: string }>();
     const compacted: Array<Record<string, unknown>> = [];
     for (const candidate of candidates.results) compacted.push(await compactConfiguration(env, candidate.id, "cloudflare:scheduled"));
+    const decisionCandidates = await env.DB.prepare(
+      `SELECT DISTINCT decision.configuration_id AS id FROM match_decisions decision
+        JOIN configuration_compactions compacted ON compacted.configuration_id = decision.configuration_id
+        LEFT JOIN configuration_decision_archives archived ON archived.configuration_id = decision.configuration_id
+       WHERE archived.configuration_id IS NULL
+       ORDER BY decision.configuration_id LIMIT 3`,
+    ).all<{ id: string }>();
+    const decisionCompactions: Array<Record<string, unknown>> = [];
+    for (const candidate of decisionCandidates.results) decisionCompactions.push(await compactConfigurationDecisions(env, candidate.id));
     const finishedAt = new Date().toISOString();
     await env.DB.prepare("UPDATE job_runs SET status = 'completed', heartbeat_at = ?2, finished_at = ?2, stats_json = ?3 WHERE id = ?1")
-      .bind(runId, finishedAt, stableJson({ candidates: candidates.results.length, compacted })).run();
-    await resolveOperationalAlert(env, "configuration-lifecycle", { runId, compacted });
+      .bind(runId, finishedAt, stableJson({ candidates: candidates.results.length, compacted, decisionCompactions })).run();
+    await resolveOperationalAlert(env, "configuration-lifecycle", { runId, compacted, decisionCompactions });
   } catch (error) {
     const message = error instanceof Error ? error.message : "configuration lifecycle failed";
     const finishedAt = new Date().toISOString();

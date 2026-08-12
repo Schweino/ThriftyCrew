@@ -39,6 +39,12 @@ interface KnownWrongDocument {
   entries?: Array<{ commodity?: string; store?: string; names?: string[]; product_id?: string; reversed_on?: string; reversed_by?: string }>;
 }
 
+interface RecipePriceUnavailableDocument {
+  version: 1;
+  policy: "hold-without-estimate";
+  entries: Array<{ commodityId: string; reviewedAt: string; reason: string; retryTerms: string[] }>;
+}
+
 interface PricedRecipeOption {
   commodityId: string;
   storeLocationId: string;
@@ -96,6 +102,7 @@ interface NativeReleaseCatalog {
   recipeExtensions: { commodities: RecipeCommodityRule[] };
   recipeAliases: Record<string, string>;
   knownWrong: KnownWrongDocument;
+  recipePriceUnavailable: RecipePriceUnavailableDocument;
   recipeCatalogHash: string;
   ingredientCatalogHash: string;
   recipePricingConfigurationHash: string;
@@ -109,7 +116,7 @@ interface NativeReleaseCatalog {
 export async function loadNativeReleaseCatalog(incomeRoot: string): Promise<NativeReleaseCatalog> {
   const recipeDirectory = path.join(incomeRoot, "meal-prep", "db", "recipes");
   const configRoot = path.join(incomeRoot, "platform", "config");
-  const [ingredientBytes, recipeNames, recipeRuleBytes, recipeExtensionBytes, aliasBytes, knownWrongBytes, conversionPolicyBytes] = await Promise.all([
+  const [ingredientBytes, recipeNames, recipeRuleBytes, recipeExtensionBytes, aliasBytes, knownWrongBytes, conversionPolicyBytes, unavailableBytes] = await Promise.all([
     readFile(path.join(incomeRoot, "meal-prep", "db", "ingredients.json"), "utf8"),
     readdir(recipeDirectory),
     readFile(path.join(configRoot, "recipe-commodities.json"), "utf8"),
@@ -117,6 +124,7 @@ export async function loadNativeReleaseCatalog(incomeRoot: string): Promise<Nati
     readFile(path.join(configRoot, "recipe-commodity-aliases.json"), "utf8"),
     readFile(path.join(configRoot, "known-wrong.json"), "utf8"),
     readFile(path.join(configRoot, "ingredient-conversion-policy.json"), "utf8"),
+    readFile(path.join(configRoot, "recipe-price-unavailable.json"), "utf8"),
   ]);
   const ingredientDefinitions = JSON.parse(ingredientBytes.replace(/^\uFEFF/, "")) as IngredientDefinition[];
   const ingredientKeys = new Set<string>();
@@ -135,7 +143,13 @@ export async function loadNativeReleaseCatalog(incomeRoot: string): Promise<Nati
   const recipeAliases = JSON.parse(aliasBytes.replace(/^\uFEFF/, "")) as Record<string, string>;
   const knownWrong = JSON.parse(knownWrongBytes.replace(/^\uFEFF/, "")) as KnownWrongDocument;
   const conversionPolicy = JSON.parse(conversionPolicyBytes.replace(/^\uFEFF/, "")) as IngredientConversionPolicy;
+  const recipePriceUnavailable = JSON.parse(unavailableBytes.replace(/^\uFEFF/, "")) as RecipePriceUnavailableDocument;
   if (conversionPolicy.version !== 1 || !Number.isFinite(conversionPolicy.requirements?.maximumExceptionRatio)) throw new Error("ingredient conversion policy is invalid");
+  if (recipePriceUnavailable.version !== 1 || recipePriceUnavailable.policy !== "hold-without-estimate"
+    || !Array.isArray(recipePriceUnavailable.entries) || new Set(recipePriceUnavailable.entries.map((entry) => entry.commodityId)).size !== recipePriceUnavailable.entries.length
+    || recipePriceUnavailable.entries.some((entry) => !entry.commodityId || !entry.reason || !/^\d{4}-\d{2}-\d{2}$/.test(entry.reviewedAt) || entry.retryTerms.length === 0)) {
+    throw new Error("recipe unavailable-price policy is invalid");
+  }
   const definitionByName = new Map(ingredientDefinitions.map((definition) => [key(definition.item), definition]));
   const conversionEntries: IngredientConversionEntry[] = [];
   for (const recipe of recipes) {
@@ -172,9 +186,10 @@ export async function loadNativeReleaseCatalog(incomeRoot: string): Promise<Nati
     recipeExtensions,
     recipeAliases,
     knownWrong,
+    recipePriceUnavailable,
     recipeCatalogHash: await digestHex(stableJson(recipes)),
     ingredientCatalogHash: await digestHex(stableJson(ingredientDefinitions)),
-    recipePricingConfigurationHash: await digestHex(stableJson({ recipeRuleDocument, recipeExtensions, recipeAliases })),
+    recipePricingConfigurationHash: await digestHex(stableJson({ recipeRuleDocument, recipeExtensions, recipeAliases, recipePriceUnavailable })),
     conversionPolicy,
     conversionPolicyHash: await digestHex(stableJson(conversionPolicy)),
     conversionRegistryHash,
@@ -192,7 +207,7 @@ export async function nativeReleaseIdentity(
   const inputBatchIds = [...snapshot.inputBatchIds].sort();
   const inputManifest = {
     kind: "native-v3-release",
-    engineVersion: "native-v4.1.0-r2-sharded-snapshot",
+    engineVersion: "native-v4.2.0-incremental-cell-dag",
     marketId: "omaha",
     mode: "direct",
     releaseDate: weekOf,
@@ -258,12 +273,13 @@ export async function buildNativeRelease(
 ): Promise<NativeReleaseArtifact> {
   if (snapshot.mode !== "direct") throw new Error("native publication requires a direct-only immutable engine snapshot");
   const catalog = suppliedCatalog ?? await loadNativeReleaseCatalog(incomeRoot);
-  const { ingredientDefinitions, recipes, recipeRuleDocument, recipeExtensions, recipeAliases, knownWrong } = catalog;
+  const { ingredientDefinitions, recipes, recipeRuleDocument, recipeExtensions, recipeAliases, knownWrong, recipePriceUnavailable } = catalog;
   // Narrow recipe extensions precede broad legacy rules and carry their own
   // explicit exclusions, so they do not inherit the legacy global filter.
   const extensionIds = new Set(recipeExtensions.commodities.map((rule) => rule.id));
   const recipeRules = [...recipeExtensions.commodities, ...recipeRuleDocument.commodities];
   const recipeRuleIds = new Set(recipeRules.map((rule) => rule.id));
+  const unavailableByCommodity = new Map(recipePriceUnavailable.entries.map((entry) => [entry.commodityId, entry]));
   const { generatedAt, weekOf, inputBatchIds, inputManifest, inputHash, releaseId } = await nativeReleaseIdentity(snapshot, catalog);
 
   const previousCells = new Map((previousGraph?.nodes ?? []).filter((item) => item.kind === "cell").map((item) => [item.key, item]));
@@ -271,22 +287,31 @@ export async function buildNativeRelease(
   const nativeCells: NativeReleaseCell[] = [];
   let incrementallyReusedCells = 0;
   for (const commodity of snapshot.commodities) {
-    const dependencyHash = await digestHex(stableJson({
-      version: "commodity-store-cell-dag-v1", weekOf, configurationId: snapshot.configurationId, commodity,
-      candidates: snapshot.candidates.filter((candidate) => candidate.commodity_id === commodity.id).map((candidate) => ({
-        observationId: candidate.observation_id, storeLocationId: candidate.store_location_id,
-        perUnitMicros: candidate.per_unit_micros, basisUnit: candidate.normalized_basis_unit,
-        basisOptions: candidate.basis_options_json ?? null, capturedAt: candidate.captured_at,
-        validTo: candidate.valid_to, coverageMode: candidate.coverage_mode, capturedTo: candidate.captured_to,
-        knownWrong: candidate.known_wrong, maxAgeDays: candidate.max_age_days ?? null,
-        name: candidate.name ?? null, sizeText: candidate.size_text ?? null,
-      })),
-    }));
-    const prior = snapshot.stores.map((store) => previousCells.get(`${commodity.id}\u001f${store.id}`));
-    const reusable = prior.every((item) => item?.dependencyHash === dependencyHash && item.payload && typeof item.payload === "object" && !Array.isArray(item.payload));
-    if (reusable) {
-      for (const item of prior) {
-        const payload = item!.payload as NativeReleaseArtifact["cells"][number];
+    for (const store of snapshot.stores) {
+      const storeCandidates = snapshot.candidates
+        .filter((candidate) => candidate.commodity_id === commodity.id && candidate.store_location_id === store.id)
+        .sort((left, right) => left.observation_id.localeCompare(right.observation_id));
+      const observedAtMillis = Date.parse(snapshot.observedAt);
+      const dependencyHash = await digestHex(stableJson({
+        version: "commodity-store-cell-dag-v2", commodity, storeLocationId: store.id,
+        candidates: storeCandidates.map((candidate) => ({
+          observationId: candidate.observation_id,
+          perUnitMicros: candidate.per_unit_micros, basisUnit: candidate.normalized_basis_unit,
+          basisOptions: candidate.basis_options_json ?? null, capturedAt: candidate.captured_at,
+          validTo: candidate.valid_to, coverageMode: candidate.coverage_mode, capturedTo: candidate.captured_to,
+          knownWrong: candidate.known_wrong, maxAgeDays: candidate.max_age_days ?? null,
+          name: candidate.name ?? null, sizeText: candidate.size_text ?? null,
+          // Time is an input only when it changes eligibility. This avoids a
+          // daily full rebuild while still invalidating a cell at the exact
+          // release where an offer expires or a capture becomes stale.
+          expired: Boolean(candidate.valid_to && candidate.valid_to < snapshot.observedAt),
+          stale: candidate.max_age_days === undefined ? false
+            : Date.parse(candidate.captured_at) < observedAtMillis - candidate.max_age_days * 86_400_000,
+        })),
+      }));
+      const prior = previousCells.get(`${commodity.id}\u001f${store.id}`);
+      if (prior?.dependencyHash === dependencyHash && prior.payload && typeof prior.payload === "object" && !Array.isArray(prior.payload)) {
+        const payload = prior.payload as NativeReleaseArtifact["cells"][number];
         nativeCells.push({
           commodityId: payload.commodityId, storeLocationId: payload.storeLocationId,
           observationId: payload.observationId ?? null, status: payload.status === "priced" ? "priced" : "missing",
@@ -296,12 +321,22 @@ export async function buildNativeRelease(
           reason: { ...payload.reason, incrementalDependencyHash: dependencyHash, incrementallyReused: true },
         });
         incrementallyReusedCells += 1;
+        continue;
       }
-      continue;
-    }
-    for (const cell of buildNativeCells({ ...snapshot, commodities: [commodity] })) {
+      const cell = buildNativeCells({ ...snapshot, commodities: [commodity], stores: [store], candidates: storeCandidates })[0];
+      if (!cell) throw new Error(`native cell build omitted ${commodity.id}/${store.id}`);
       nativeCells.push({ ...cell, reason: { ...cell.reason, incrementalDependencyHash: dependencyHash } });
     }
+  }
+  // Crown is a commodity-level presentation edge. Recompute it after the
+  // store-local nodes are reused/rebuilt so a changed store can move the crown
+  // without invalidating the other stores' pricing decisions.
+  for (const cell of nativeCells) cell.isCrown = false;
+  for (const commodity of snapshot.commodities) {
+    const crown = nativeCells
+      .filter((cell) => cell.commodityId === commodity.id && cell.status === "priced")
+      .sort((left, right) => left.displayPerUnitMicros! - right.displayPerUnitMicros! || left.storeLocationId.localeCompare(right.storeLocationId))[0];
+    if (crown) crown.isCrown = true;
   }
   const cells = nativeCells.map(publicCell);
   const commodityById = new Map(snapshot.commodities.map((commodity) => [commodity.id, commodity]));
@@ -462,7 +497,7 @@ export async function buildNativeRelease(
         ?? commodityByLabel.get(key(scaler?.canon ?? ingredient.item));
     };
     const incrementalDependencyHash = await digestHex(stableJson({
-      version: "recipe-cost-dag-v3-separated-utilized-checkout-sources", recipe, configurationId: snapshot.configurationId,
+      version: "recipe-cost-dag-v4-semantic-inputs", recipe,
       pricingConfigurationHash: catalog.recipePricingConfigurationHash,
       conversionRegistryHash: catalog.conversionRegistryHash,
       ingredients: (recipe.ingredients_grams ?? []).map((ingredient) => {
@@ -492,6 +527,7 @@ export async function buildNativeRelease(
     }
     const ingredientDetails: Array<Record<string, unknown>> = [];
     const missingIngredients: string[] = [];
+    const missingTreatments: Array<{ item: string; commodityId: string | null; reasons: string[]; unavailable: RecipePriceUnavailableDocument["entries"][number] | null }> = [];
     let utilizedBatchMinor = 0;
     let splitStoreCheckoutMinor = 0;
     let nonMemberSplitStoreCheckoutMinor = 0;
@@ -528,7 +564,10 @@ export async function buildNativeRelease(
         for (const accumulator of [...singleStoreCheckout.values(), ...nonMemberSingleStoreCheckout.values()]) accumulator.missing.push(ingredient.item);
         missingIngredients.push(ingredient.item);
         missingFrequency.set(`${ingredient.item}: ${missing.join(",")}`, (missingFrequency.get(`${ingredient.item}: ${missing.join(",")}`) ?? 0) + 1);
-        ingredientDetails.push({ item: ingredient.item, grams: ingredient.grams, commodityId: commodityId ?? null, status: "missing", reasons: missing });
+        const unavailable = commodityId ? unavailableByCommodity.get(commodityId) ?? null : null;
+        missingTreatments.push({ item: ingredient.item, commodityId: commodityId ?? null, reasons: missing, unavailable });
+        ingredientDetails.push({ item: ingredient.item, grams: ingredient.grams, commodityId: commodityId ?? null, status: unavailable && missing.length === 1 && missing[0] === "priced-release-cell" ? "unavailable" : "missing", reasons: missing,
+          ...(unavailable ? { unavailableTreatment: unavailable } : {}) });
         continue;
       }
       const requiredBasisUnits = grams! / gpu!;
@@ -645,6 +684,8 @@ export async function buildNativeRelease(
       });
     }
     const complete = missingIngredients.length === 0 && (recipe.ingredients_grams?.length ?? 0) > 0;
+    const explicitlyUnavailable = !complete && missingTreatments.length > 0
+      && missingTreatments.every((item) => item.unavailable && item.reasons.length === 1 && item.reasons[0] === "priced-release-cell");
     const servingCostMinor = complete ? Math.round(utilizedBatchMinor / recipe.servings) : undefined;
     const completeSingleStores = [...singleStoreCheckout.entries()].filter(([, value]) => value.missing.length === 0).sort((left, right) => left[1].total - right[1].total || left[0].localeCompare(right[0]));
     const bestSingleStore = completeSingleStores[0];
@@ -684,7 +725,7 @@ export async function buildNativeRelease(
     };
     const cost: RecipeCost = {
       recipeSlug: recipe.slug,
-      status: complete ? "complete" : "incomplete",
+      status: complete ? "complete" : explicitlyUnavailable ? "held" : "incomplete",
       ...(complete ? { batchCostMinor: utilizedBatchMinor, servingCostMinor } : {}),
       servings: recipe.servings,
       missingIngredients: [...new Set(missingIngredients)].sort(),
@@ -711,6 +752,10 @@ export async function buildNativeRelease(
         firstRunMinor: complete ? splitStoreCheckoutMinor : null,
         ingredientCount: recipe.ingredients_grams?.length ?? 0,
         ingredients: ingredientDetails,
+        ...(explicitlyUnavailable ? { unavailablePricing: { policy: recipePriceUnavailable.policy, ingredients: missingTreatments.map((item) => ({
+          item: item.item, commodityId: item.commodityId, reviewedAt: item.unavailable!.reviewedAt,
+          reason: item.unavailable!.reason, retryTerms: item.unavailable!.retryTerms,
+        })) } } : {}),
       },
     };
     recipeCosts.push(cost);
@@ -820,7 +865,7 @@ export async function buildNativeRelease(
     top5: top5Payload,
     free_rotation: rotationPayload,
   };
-  const incomplete = recipeCosts.filter((cost) => cost.status === "incomplete");
+  const incomplete = recipeCosts.filter((cost) => cost.status !== "complete");
   const payloads = {
     board: boardPayload,
     feed: feedPayload,
@@ -860,6 +905,7 @@ export async function buildNativeRelease(
       authoredRecipes: recipes.length,
       completeRecipes: recipeCosts.length - incomplete.length,
       incompleteRecipes: incomplete.length,
+      heldRecipes: recipeCosts.filter((cost) => cost.status === "held").length,
       incrementallyReusedRecipes,
       recalculatedRecipes: recipes.length - incrementallyReusedRecipes,
       recipePricingCommodities: recipeRules.length,

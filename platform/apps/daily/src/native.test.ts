@@ -23,6 +23,7 @@ describe("native release construction", () => {
       writeFile(path.join(configDirectory, "recipe-commodity-aliases.json"), JSON.stringify({})),
       writeFile(path.join(configDirectory, "known-wrong.json"), JSON.stringify({ entries: [] })),
       writeFile(path.join(configDirectory, "ingredient-conversion-policy.json"), JSON.stringify({ version: 1, authority: "test", precedence: [], requirements: { maximumExceptionRatio: 20 }, confidence: {} })),
+      writeFile(path.join(configDirectory, "recipe-price-unavailable.json"), JSON.stringify({ version: 1, policy: "hold-without-estimate", entries: [] })),
     ]);
     await expect(loadNativeReleaseCatalog(root)).rejects.toThrow("duplicate normalized item");
   });
@@ -35,15 +36,22 @@ describe("native release construction", () => {
     await mkdir(recipeDirectory, { recursive: true });
     await mkdir(configDirectory, { recursive: true });
     await Promise.all([
-      writeFile(path.join(configDirectory, "recipe-commodities.json"), JSON.stringify({ global_exclude: [], commodities: [{ id: "spice", label: "Spice", unit: "oz", include: ["special spice"], exclude: [], band_min: 0.1, band_max: 5 }] })),
+      writeFile(path.join(configDirectory, "recipe-commodities.json"), JSON.stringify({ global_exclude: [], commodities: [
+        { id: "spice", label: "Spice", unit: "oz", include: ["special spice"], exclude: [], band_min: 0.1, band_max: 5 },
+        { id: "mystery", label: "Mystery", unit: "oz", include: ["mystery ingredient"], exclude: [], band_min: 0.1, band_max: 5 },
+      ] })),
       writeFile(path.join(configDirectory, "recipe-commodity-extensions.json"), JSON.stringify({ commodities: [] })),
       writeFile(path.join(configDirectory, "recipe-commodity-aliases.json"), JSON.stringify({})),
       writeFile(path.join(configDirectory, "known-wrong.json"), JSON.stringify({ entries: [] })),
       writeFile(path.join(configDirectory, "ingredient-conversion-policy.json"), JSON.stringify({ version: 1, authority: "test", precedence: [], requirements: { maximumExceptionRatio: 20 }, confidence: {} })),
+      writeFile(path.join(configDirectory, "recipe-price-unavailable.json"), JSON.stringify({ version: 1, policy: "hold-without-estimate", entries: [
+        { commodityId: "mystery", reviewedAt: "2026-08-12", reason: "No verified test offer.", retryTerms: ["mystery ingredient"] },
+      ] })),
     ]);
     await writeFile(path.join(root, "meal-prep", "db", "ingredients.json"), JSON.stringify([
       { item: "Eggs", bid: "eggs", gpu: 600, unit: "dozen", buy_pkg_g: 600, buy_pkg_label: "dozen" },
       { item: "Spice", bid: "spice", gpu: 28.3495, unit: "oz", buy_pkg_g: 28.3495, buy_pkg_label: "jar" },
+      { item: "Mystery", bid: "mystery", gpu: 28.3495, unit: "oz", buy_pkg_g: 28.3495, buy_pkg_label: "jar" },
     ]));
     await writeFile(path.join(recipeDirectory, "complete.json"), JSON.stringify({
       slug: "complete", name: "Complete", protein: "chicken", servings: 2, visibility: "paid", stat: { cal: 600 },
@@ -76,7 +84,7 @@ describe("native release construction", () => {
     expect(identity).toMatchObject({ releaseId: artifact.releaseId, inputHash: artifact.inputHash, inputBatchIds: artifact.inputBatchIds });
     expect(artifact.recipeCosts).toEqual(expect.arrayContaining([
       expect.objectContaining({ recipeSlug: "complete", status: "complete", batchCostMinor: 95, servingCostMinor: 48, detail: expect.objectContaining({ utilizedBatchCostMinor: 95, splitStoreCheckoutCostMinor: 200, bestSingleStoreCheckoutCostMinor: 200 }) }),
-      expect.objectContaining({ recipeSlug: "incomplete", status: "incomplete", missingIngredients: ["Mystery"] }),
+      expect.objectContaining({ recipeSlug: "incomplete", status: "held", missingIngredients: ["Mystery"], detail: expect.objectContaining({ unavailablePricing: expect.objectContaining({ policy: "hold-without-estimate" }) }) }),
       expect.objectContaining({ recipeSlug: "recipe-rule", status: "complete", batchCostMinor: 50, servingCostMinor: 25 }),
     ]));
     expect(artifact.top5.map((entry) => entry.recipeSlug)).toEqual(["complete", "recipe-rule"]);
@@ -124,6 +132,7 @@ describe("native release construction", () => {
       copyFile(path.join(realConfig, "recipe-commodity-extensions.json"), path.join(configDirectory, "recipe-commodity-extensions.json")),
       copyFile(path.join(realConfig, "recipe-commodity-aliases.json"), path.join(configDirectory, "recipe-commodity-aliases.json")),
       copyFile(path.join(realConfig, "ingredient-conversion-policy.json"), path.join(configDirectory, "ingredient-conversion-policy.json")),
+      copyFile(path.join(realConfig, "recipe-price-unavailable.json"), path.join(configDirectory, "recipe-price-unavailable.json")),
       writeFile(path.join(configDirectory, "known-wrong.json"), JSON.stringify({ entries: [] })),
     ]);
     const fixtures = [

@@ -293,16 +293,19 @@ export function commitSessionChunk(directory, draft, entry, body, file) {
     const transition = db.prepare(`UPDATE capture_work_units SET status = ?, result_chunk_id = ?, available_at = ?,
       lease_owner = NULL, lease_expires_at = NULL, last_error = ?, updated_at = ?
       WHERE session_directory = ? AND phase = ? AND unit_key = ?`);
+    const affectedOwners = new Set();
     for (const item of outcomes) {
+      const leased = db.prepare(`SELECT lease_owner FROM capture_work_units
+        WHERE session_directory = ? AND phase = ? AND unit_key = ?`).get(resolved, parsed.phase, item.key);
+      if (leased?.lease_owner) affectedOwners.add(leased.lease_owner);
       const terminal = parsed.phase === "discovery" ? ["success", "empty"].includes(item.outcome) : item.outcome === "observed";
       const blocked = item.outcome === "blocked";
       transition.run(terminal ? "completed" : blocked ? "blocked" : "queued", entry.id,
         terminal || blocked ? Date.now() : Date.now() + 60_000, terminal ? null : String(item.reason ?? `${item.outcome} requires retry`).slice(0, 2000),
         now, resolved, parsed.phase, item.key);
     }
-    db.prepare(`DELETE FROM capture_executors WHERE current_unit_id IN
-      (SELECT id FROM capture_work_units WHERE session_directory = ? AND phase = ? AND result_chunk_id = ?)`)
-      .run(resolved, parsed.phase, entry.id);
+    for (const owner of affectedOwners) db.prepare(`DELETE FROM capture_executors WHERE owner = ?
+      AND NOT EXISTS (SELECT 1 FROM capture_work_units WHERE lease_owner = ? AND status = 'leased')`).run(owner, owner);
     const remaining = Number(db.prepare(`SELECT COUNT(*) AS count FROM capture_work_units
       WHERE session_directory = ? AND phase = ? AND status <> 'completed'`).get(resolved, parsed.phase).count);
     if (remaining === 0) db.prepare(`UPDATE capture_session_state SET phase = ?, updated_at = ? WHERE session_directory = ?`)
@@ -361,11 +364,27 @@ export function replaceSessionWorkUnits(directory, store, phase, units, observed
 }
 
 export function setCaptureSessionPhase(sessionId, phase, observedAt = new Date().toISOString(), file) {
-  const allowed = ["initialized", "discovery", "verification_plan_required", "verification", "ready_to_finalize", "finalized", "enqueued"];
+  const allowed = ["initialized", "discovery", "verification_plan_required", "verification", "ready_to_finalize", "finalized", "enqueued", "abandoned"];
   if (!allowed.includes(phase)) throw new Error(`unsupported capture session phase: ${phase}`);
   const changed = database(file).prepare("UPDATE capture_session_state SET phase = ?, updated_at = ? WHERE session_id = ?")
     .run(phase, observedAt, sessionId).changes;
   return { changed: changed === 1, sessionId, phase };
+}
+
+export function abandonCaptureSessionWork(directory, reason, observedAt = new Date().toISOString(), file) {
+  const db = database(file);
+  const resolved = path.resolve(directory);
+  const session = db.prepare("SELECT session_id FROM capture_session_state WHERE session_directory = ?").get(resolved);
+  if (!session) return { abandoned: false, idempotent: true, reason: "session-not-journaled" };
+  db.exec("BEGIN IMMEDIATE");
+  try {
+    db.prepare(`UPDATE capture_work_units SET status = 'cancelled', lease_owner = NULL, lease_expires_at = NULL,
+      last_error = ?, updated_at = ? WHERE session_directory = ? AND status <> 'completed'`).run(String(reason).slice(0, 2000), observedAt, resolved);
+    db.prepare("DELETE FROM capture_executors WHERE current_unit_id IN (SELECT id FROM capture_work_units WHERE session_directory = ?)").run(resolved);
+    db.prepare("UPDATE capture_session_state SET phase = 'abandoned', updated_at = ? WHERE session_directory = ?").run(observedAt, resolved);
+    db.exec("COMMIT");
+    return { abandoned: true, idempotent: false, sessionId: session.session_id, sessionDirectory: resolved };
+  } catch (error) { db.exec("ROLLBACK"); throw error; }
 }
 
 export function completeSessionWorkUnits(directory, phase, unitKeys, resultChunkId = "reconciled", file) {
@@ -423,7 +442,7 @@ function reserveStoreToken(db, store, nowMs) {
   return { allowed: true, retryAt: nowMs + refillMs };
 }
 
-export function leaseCaptureWork(owner, requestedStore, now = new Date(), ttlMs = 5 * 60_000, file) {
+export function leaseCaptureWork(owner, requestedStore, now = new Date(), ttlMs = 5 * 60_000, file, requestedCount = 1) {
   const db = database(file);
   const nowMs = now.getTime();
   db.exec("BEGIN IMMEDIATE");
@@ -448,17 +467,23 @@ export function leaseCaptureWork(owner, requestedStore, now = new Date(), ttlMs 
       if (token.allowed) { selected = candidate; break; }
     }
     if (!selected) { db.exec("COMMIT"); return { acquired: false, reason: candidates.length ? "rate-limited" : "no-work", retryAt }; }
+    const count = Math.max(1, Math.min(5, Number(requestedCount) || 1));
+    const selectedBatch = db.prepare(`SELECT * FROM capture_work_units
+      WHERE status = 'queued' AND available_at <= ? AND store = ? AND session_directory = ? AND phase = ?
+      ORDER BY priority DESC, available_at, ordinal LIMIT ?`).all(nowMs, selected.store, selected.session_directory, selected.phase, count);
     const expiresAt = nowMs + Math.max(30_000, Math.min(ttlMs, 30 * 60_000));
-    db.prepare(`UPDATE capture_work_units SET status = 'leased', lease_owner = ?, lease_expires_at = ?,
-      attempts = attempts + 1, updated_at = ? WHERE id = ?`).run(owner, expiresAt, now.toISOString(), selected.id);
+    const lease = db.prepare(`UPDATE capture_work_units SET status = 'leased', lease_owner = ?, lease_expires_at = ?,
+      attempts = attempts + 1, updated_at = ? WHERE id = ? AND status = 'queued'`);
+    for (const work of selectedBatch) lease.run(owner, expiresAt, now.toISOString(), work.id);
     db.prepare(`INSERT INTO capture_executors (owner, store, current_unit_id, metadata_json, last_heartbeat_at, updated_at)
       VALUES (?, ?, ?, '{}', ?, ?) ON CONFLICT(owner) DO UPDATE SET store=excluded.store,
       current_unit_id=excluded.current_unit_id, last_heartbeat_at=excluded.last_heartbeat_at, updated_at=excluded.updated_at`)
       .run(owner, selected.store, selected.id, nowMs, now.toISOString());
     db.exec("COMMIT");
-    return { acquired: true, work: { id: selected.id, sessionDirectory: selected.session_directory, store: selected.store,
-      phase: selected.phase, unitKey: selected.unit_key, ordinal: selected.ordinal, payload: JSON.parse(selected.payload_json),
-      attempts: Number(selected.attempts) + 1, leaseExpiresAt: new Date(expiresAt).toISOString() } };
+    const works = selectedBatch.map((work) => ({ id: work.id, sessionDirectory: work.session_directory, store: work.store,
+      phase: work.phase, unitKey: work.unit_key, ordinal: work.ordinal, payload: JSON.parse(work.payload_json),
+      attempts: Number(work.attempts) + 1, leaseExpiresAt: new Date(expiresAt).toISOString() }));
+    return { acquired: true, work: works[0], works };
   } catch (error) { db.exec("ROLLBACK"); throw error; }
 }
 

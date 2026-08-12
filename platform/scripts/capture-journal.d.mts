@@ -14,7 +14,8 @@ export function storeSessionEvidence(directory: string, input: { id: string; kin
 export function sessionEvidence(directory: string, file?: string): Array<{ id: string; kind: string; file: string; sha256: string; contentType: string; byteLength: number; createdAt: string }>;
 export function replaceSessionWorkUnits(directory: string, store: string, phase: string, units: Array<{ key: string; ordinal: number; priority?: number; payload?: Record<string, unknown> }>, observedAt?: string, file?: string): void;
 export function completeSessionWorkUnits(directory: string, phase: string, unitKeys: string[], resultChunkId?: string, file?: string): void;
-export function leaseCaptureWork(owner: string, requestedStore?: string, now?: Date, ttlMs?: number, file?: string): Record<string, unknown>;
+export function leaseCaptureWork(owner: string, requestedStore?: string, now?: Date, ttlMs?: number, file?: string, requestedCount?: number): Record<string, unknown>;
+export function abandonCaptureSessionWork(directory: string, reason: string, observedAt?: string, file?: string): Record<string, unknown>;
 export function heartbeatCaptureWork(owner: string, workId: string, now?: Date, ttlMs?: number, metadata?: Record<string, unknown>, file?: string): Record<string, unknown>;
 export function failCaptureWork(owner: string, workId: string, error: string, retryAt?: Date, file?: string): void;
 export function openCaptureChallenge(store: string, detail?: Record<string, unknown>, now?: Date, file?: string): { id: string; idempotent: boolean };

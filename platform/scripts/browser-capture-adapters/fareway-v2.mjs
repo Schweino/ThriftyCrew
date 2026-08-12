@@ -99,8 +99,6 @@ function buildRows(query, page, capturedAt) {
       size: row.size,
       url: row.href,
       taxonomy_path: row.taxonomy,
-      availability_status: inStock ? "in_stock" : "unknown",
-      fulfillment_mode: "in_store",
       _capture: {
         capturedAt,
         pageUrl: page.url,

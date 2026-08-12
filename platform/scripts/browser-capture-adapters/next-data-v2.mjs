@@ -47,12 +47,14 @@ export function pickupEligible(row, locationId) {
 
 export function packageSizeFromName(name) {
   const text = String(name ?? "").replace(/\s+/g, " ").trim();
-  const pack = text.match(/(?:^|[,;(]\s*)([0-9]+(?:\.[0-9]+)?)\s*(fl\.?\s*oz\.?|oz\.?|lb\.?|g|kg|ml|l|gal(?:lon)?s?|qt|pt)\s*[,;]?\s*(\d+)\s*(?:pk|pack|ct)\.?\s*\)?\s*$/i);
-  if (pack) return `${pack[3]} x ${pack[1]} ${pack[2].toLowerCase().replace(/\./g, "").replace(/\s+/g, " ")}`;
+  const packageSuffix = "(?:box|bottle|can|jar|bag|carton|pouch|package|tub|tray|cup)";
+  const unit = (value) => value.toLowerCase().replace(/\./g, "").replace(/\s+/g, " ").replace(/^gallons?$/, "gal").replace(/^liters?$/, "l");
+  const pack = text.match(new RegExp(`(?:^|[,;(]\\s*)([0-9]+(?:\\.[0-9]+)?)\\s*(fl\\.?\\s*oz\\.?|oz\\.?|lb\\.?|g|kg|ml|l|liters?|gal(?:lon)?s?|qt|pt)\\s*[,;]?\\s*(\\d+)\\s*(?:pk|pack|ct)\\.?(?:\\s+${packageSuffix})?\\s*\\)?\\s*$`, "i"));
+  if (pack) return `${pack[3]} x ${pack[1]} ${unit(pack[2])}`;
   const count = text.match(/(?:^|[,;(]\s*)(\d+)\s*(?:pk|pack|ct|count)\.?\s*\)?\s*$/i);
   if (count) return `${count[1]} ct`;
-  const quantity = text.match(/(?:^|[,;(]\s*|\s+)([0-9]+(?:\.[0-9]+)?)\s*(fl\.?\s*oz\.?|oz\.?|lb\.?|g|kg|ml|l|gal(?:lon)?s?|qt|pt)\.?\s*\)?\s*$/i);
-  if (quantity) return `${quantity[1]} ${quantity[2].toLowerCase().replace(/\./g, "").replace(/\s+/g, " ").replace(/^gallons?$/, "gal")}`;
+  const quantity = text.match(new RegExp(`(?:^|[,;(]\\s*|\\s+)([0-9]+(?:\\.[0-9]+)?)\\s*(fl\\.?\\s*oz\\.?|oz\\.?|lb\\.?|g|kg|ml|l|liters?|gal(?:lon)?s?|qt|pt)\\.?(?:\\s+${packageSuffix})?\\s*\\)?\\s*$`, "i"));
+  if (quantity) return `${quantity[1]} ${unit(quantity[2])}`;
   const word = text.match(/(?:^|[,;(]\s*)(half\s+gallon|gallon|dozen|each)\s*\)?\s*$/i);
   if (word) return word[1].toLowerCase() === "half gallon" ? "0.5 gal" : word[1].toLowerCase() === "gallon" ? "1 gal" : word[1].toLowerCase();
   return "";
@@ -191,7 +193,7 @@ function buildRows(store, query, page, capturedAt) {
       offer,
       parser: { status: "exact", rule: "next-data-price-lines", notes: "Visible product-card price agrees with the projected __NEXT_DATA__ linePrice for the same retailer item ID." },
     };
-    return { q: query, n: row.name, lp: row.linePrice, up: row.unitPrice, id: row.id, size, taxonomy_path: row.taxonomy, url: row.url, image_url: row.imageUrl, availability_status: "in_stock", fulfillment_mode: "pickup", seller_name: row.sellerName, offer_id: row.offerId, _capture: truth };
+    return { q: query, n: row.name, lp: row.linePrice, up: row.unitPrice, id: row.id, size, taxonomy_path: row.taxonomy, url: row.url, image_url: row.imageUrl, _capture: truth };
   });
 }
 

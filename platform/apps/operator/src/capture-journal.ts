@@ -1,5 +1,6 @@
 import {
   acquireControllerLane,
+  abandonCaptureSessionWork,
   acknowledgeCaptureChallenge,
   browserCaptureJournalDueState,
   acquireQueueJournalLease,
@@ -36,6 +37,7 @@ import {
 export type { JournalQueueJob };
 export {
   acquireControllerLane,
+  abandonCaptureSessionWork,
   acknowledgeCaptureChallenge,
   browserCaptureJournalDueState,
   acquireQueueJournalLease,

@@ -196,6 +196,15 @@ export async function processGithubWorkflowRun(
     return { decision: recovered ? "recovered" : "ignored" };
   }
 
+  // GitHub-hosted Actions is not an execution or recovery plane when local
+  // execution is authoritative. Retain the signed webhook evidence, but do
+  // not create incidents or consume minutes retrying obsolete workflow runs.
+  if (!githubActionsDispatchEnabled(env)) {
+    await updateWebhookLedger(env, ledgerId, "suppressed", { ...baseDetail, decision: "ignored-local-authority" });
+    await resolveOperationalAlert(env, alertKey, { ...baseDetail, resolution: "GitHub Actions is disabled; local execution is authoritative." });
+    return { decision: "ignored-local-authority" };
+  }
+
   let diagnostics: FailedJobDiagnostic[] = [];
   let diagnosticError: string | null = null;
   try {

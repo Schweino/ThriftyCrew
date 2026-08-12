@@ -166,8 +166,8 @@ describe("GitHub workflow-run recovery processing", () => {
       repository: { full_name: "owner/repo" },
       workflow_run: { id: 44, run_attempt: 1, event: "workflow_dispatch", conclusion: "failure" },
     });
-    expect(result).toEqual({ decision: "retry-suppressed" });
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(result).toEqual({ decision: "ignored-local-authority" });
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("resolves the deferred alert when a later attempt succeeds", async () => {

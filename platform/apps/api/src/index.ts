@@ -3557,7 +3557,7 @@ app.put("/internal/releases/:id/graph-nodes", async (context) => {
   const stateError = await requireDraftRelease(context.env.DB, releaseId);
   if (stateError) return stateError;
   const body = await context.req.json<{ nodes?: unknown[] }>().catch(() => ({} as { nodes?: unknown[] }));
-  if (!Array.isArray(body.nodes) || body.nodes.length < 1 || body.nodes.length > 40) return jsonError("release graph node chunk must contain 1-40 nodes", 422);
+  if (!Array.isArray(body.nodes) || body.nodes.length < 1 || body.nodes.length > 100) return jsonError("release graph node chunk must contain 1-100 nodes", 422);
   const current = await context.env.DB.prepare(
     `SELECT current.release_id FROM current_releases current
        JOIN releases draft ON draft.market_id = current.market_id WHERE draft.id = ?1`,
@@ -3617,13 +3617,16 @@ app.put("/internal/releases/:id/graph-nodes", async (context) => {
   ).bind(stableJson(prepared.map((item) => item.contentHash))).all<{ content_hash: string }>();
   const globallyStored = new Set(globalObjects.results.map((item) => item.content_hash));
   for (const item of prepared) item.globallyStored = globallyStored.has(item.contentHash);
-  await Promise.all(prepared.filter((item) => !item.alreadyStored && !item.reusedFrom && !item.globallyStored).map(async (item) => {
-    if (await context.env.ARCHIVE.head(item.objectKey)) return;
-    await context.env.ARCHIVE.put(item.objectKey, item.bytes, {
-      httpMetadata: { contentType: "application/json; charset=utf-8" },
-      customMetadata: { sha256: item.contentHash, schema: "release-node-v1", kind: item.kind },
-    });
-  }));
+  const pendingUploads = prepared.filter((item) => !item.alreadyStored && !item.reusedFrom && !item.globallyStored);
+  for (let offset = 0; offset < pendingUploads.length; offset += 20) {
+    await Promise.all(pendingUploads.slice(offset, offset + 20).map(async (item) => {
+      if (await context.env.ARCHIVE.head(item.objectKey)) return;
+      await context.env.ARCHIVE.put(item.objectKey, item.bytes, {
+        httpMetadata: { contentType: "application/json; charset=utf-8" },
+        customMetadata: { sha256: item.contentHash, schema: "release-node-v1", kind: item.kind },
+      });
+    }));
+  }
   const statements: D1PreparedStatement[] = [];
   for (const item of prepared) {
     if (!item.alreadyStored && !item.reusedFrom && !item.globallyStored) {
@@ -3645,7 +3648,7 @@ app.put("/internal/releases/:id/graph-nodes", async (context) => {
     ).bind(releaseId, item.kind, item.key, item.dependencyHash, item.contentHash,
       new TextDecoder().decode(item.bytes), item.reusedFrom));
   }
-  await context.env.DB.batch(statements);
+  for (let offset = 0; offset < statements.length; offset += 80) await context.env.DB.batch(statements.slice(offset, offset + 80));
   return context.json({ ok: true, accepted: prepared.length,
     reused: prepared.filter((item) => item.reusedFrom).length,
     resumed: prepared.filter((item) => item.alreadyStored).length,
@@ -3745,11 +3748,16 @@ app.put("/internal/releases/:id/payload", zValidator("json", releasePayloadSchem
   if (await digestHex(serialized) !== body.contentHash) return jsonError("payload content hash mismatch", 422);
   const releaseId = context.req.param("id");
   const bytes = new TextEncoder().encode(serialized);
-  const objectKey = `releases/${releaseId}/${body.kind}-${body.contentHash}.json`;
-  await context.env.EVIDENCE.put(objectKey, bytes, {
-    httpMetadata: { contentType: "application/json; charset=utf-8" },
-    customMetadata: { sha256: body.contentHash, kind: body.kind, releaseId },
-  });
+  const objectKey = `release-payloads/v2/kind=${body.kind}/prefix=${body.contentHash.slice(0, 2)}/${body.contentHash}.json`;
+  const existing = await context.env.EVIDENCE.head(objectKey);
+  if (!existing) {
+    await context.env.EVIDENCE.put(objectKey, bytes, {
+      httpMetadata: { contentType: "application/json; charset=utf-8" },
+      customMetadata: { sha256: body.contentHash, kind: body.kind, schema: "release-payload-v2" },
+    });
+  } else if (existing.size !== bytes.byteLength || existing.customMetadata?.sha256 !== body.contentHash) {
+    return jsonError(`content-addressed ${body.kind} payload verification failed`, 500);
+  }
   await context.env.DB.prepare(
     `INSERT INTO release_payloads (release_id, kind, payload_json, content_hash, object_key, byte_length)
      VALUES (?1, ?2, ?3, ?4, ?5, ?6)
@@ -3767,7 +3775,7 @@ app.post("/internal/releases/:id/recipe-bundles", async (context) => {
   if (!release) return jsonError("release not found", 404);
   if (!['draft', 'validating'].includes(release.state)) return jsonError(`release recipe bundles are immutable in ${release.state} state`, 409);
   try {
-    const result = await buildReleaseRecipeBundles(context.env, context.req.param("id"), context.req.query("after") ?? "", 40);
+    const result = await buildReleaseRecipeBundles(context.env, context.req.param("id"), context.req.query("after") ?? "", 100);
     return context.json({ ok: true, releaseId: context.req.param("id"), ...result });
   } catch (error) {
     console.error("release recipe bundle build failed", { releaseId: context.req.param("id"), after: context.req.query("after") ?? "", error });

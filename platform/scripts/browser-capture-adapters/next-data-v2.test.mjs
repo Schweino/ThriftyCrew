@@ -28,6 +28,9 @@ describe("source-native offer parsing", () => {
     expect(packageSizeFromName("Silk Almond Milk, 64 fl. oz., 3 pk.")).toBe("3 x 64 fl oz");
     expect(packageSizeFromName("Large Eggs (24 ct)")).toBe("24 ct");
     expect(packageSizeFromName("Happy Farms String Cheese 10 OZ")).toBe("10 oz");
+    expect(packageSizeFromName("McCormick Pure Vanilla Extract, 1.0 fl oz Box")).toBe("1.0 fl oz");
+    expect(packageSizeFromName("Sam's Zero Sugar Cola Soda, 2 Liter Bottle")).toBe("2 l");
+    expect(packageSizeFromName("Maruchan Instant Lunch Ramen Noodles, Chicken Flavor, 2.25 oz Cup")).toBe("2.25 oz");
   });
 
   it("preserves promotion conditions instead of labeling every price everyday", () => {

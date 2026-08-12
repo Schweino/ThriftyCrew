@@ -13,11 +13,11 @@ async function controllerToken(environment) {
   return config.controllerToken;
 }
 
-export async function captureControllerRequest(pathname, body = {}, environment = process.env, timeoutMs = 1000) {
+export async function captureControllerRequest(pathname, body = {}, environment = process.env, timeoutMs = 1000, retrySafe = false) {
   if (environment.TC_CAPTURE_CONTROLLER_ORIGIN === "disabled") return null;
   const token = await controllerToken(environment).catch(() => null);
   if (!token) return null;
-  return await new Promise((resolve) => {
+  const request = () => new Promise((resolve) => {
     const socket = net.createConnection(CAPTURE_CONTROLLER_PIPE);
     let settled = false;
     let response = "";
@@ -39,4 +39,8 @@ export async function captureControllerRequest(pathname, body = {}, environment 
     });
     socket.on("end", () => finish(null));
   });
+  const first = await request();
+  if (first || !retrySafe) return first;
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  return await request();
 }

@@ -18,6 +18,86 @@ export interface VerifiedConfigurationArchive {
   payload: ArchivedConfigurationPayload;
 }
 
+interface ArchivedMatchDecision {
+  id: string;
+  product_id: string;
+  commodity_id: string;
+  configuration_id: string;
+  decided_by: string;
+  reason: string;
+  decided_at: string;
+  superseded_at: string;
+}
+
+export async function compactConfigurationDecisions(env: WorkerEnv, configurationId: string): Promise<{ configurationId: string; decisions: number; bytesReleased: number; idempotent: boolean }> {
+  const existing = await env.DB.prepare(
+    "SELECT object_key, content_hash, byte_length, decision_count FROM configuration_decision_archives WHERE configuration_id = ?1",
+  ).bind(configurationId).first<{ object_key: string; content_hash: string; byte_length: number; decision_count: number }>();
+  const remaining = await env.DB.prepare(
+    "SELECT COUNT(*) AS count FROM match_decisions WHERE configuration_id = ?1",
+  ).bind(configurationId).first<{ count: number }>();
+  if (existing && (remaining?.count ?? 0) === 0) return { configurationId, decisions: existing.decision_count, bytesReleased: 0, idempotent: true };
+
+  const [active, rollback, pending] = await Promise.all([
+    env.DB.prepare("SELECT id FROM configuration_versions WHERE active = 1").first<{ id: string }>(),
+    env.DB.prepare(`SELECT configuration_id AS id FROM releases
+      WHERE state IN ('published','superseded') AND configuration_id <> COALESCE((SELECT id FROM configuration_versions WHERE active = 1), '')
+      ORDER BY published_at DESC LIMIT 1`).first<{ id: string }>(),
+    env.DB.prepare("SELECT batch_id FROM capture_validation_jobs WHERE configuration_id = ?1 AND pipeline_completed_at IS NULL LIMIT 1")
+      .bind(configurationId).first<{ batch_id: string }>(),
+  ]);
+  if (configurationId === active?.id || configurationId === rollback?.id) throw new Error("active and immediate rollback configuration decisions cannot be compacted");
+  if (pending) throw new Error(`configuration decisions are pinned by incomplete capture pipeline ${pending.batch_id}`);
+
+  const decisions = (await keysetRows(env,
+    `SELECT id, product_id, commodity_id, configuration_id, decided_by, reason, decided_at, superseded_at
+       FROM match_decisions WHERE configuration_id = ?1`, configurationId)) as unknown as ArchivedMatchDecision[];
+  if (decisions.some((decision) => !decision.superseded_at)) throw new Error("non-current configuration contains an active match decision");
+  const body = new TextEncoder().encode(stableJson({ schema: "tc-configuration-match-decisions-v1", configurationId, decisions }));
+  const contentHash = await digestHex(body);
+  const objectKey = `configuration-decisions/schema=1/configuration=${configurationId}/${contentHash}.json`;
+  await env.ARCHIVE.put(objectKey, body, {
+    httpMetadata: { contentType: "application/json; charset=utf-8" },
+    customMetadata: { sha256: contentHash, schema: "tc-configuration-match-decisions-v1", configurationId },
+  });
+  const stored = await env.ARCHIVE.get(objectKey);
+  if (!stored) throw new Error("configuration decision archive object is missing after write");
+  const storedBytes = new Uint8Array(await stored.arrayBuffer());
+  if (storedBytes.byteLength !== body.byteLength || await digestHex(storedBytes) !== contentHash) throw new Error("configuration decision archive verification failed");
+  const verifiedAt = new Date().toISOString();
+  await env.DB.batch([
+    env.DB.prepare(`INSERT INTO configuration_decision_archives
+      (configuration_id, object_key, content_hash, byte_length, decision_count, verified_at)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6)
+      ON CONFLICT(configuration_id) DO UPDATE SET object_key = excluded.object_key,
+        content_hash = excluded.content_hash, byte_length = excluded.byte_length,
+        decision_count = excluded.decision_count, verified_at = excluded.verified_at`)
+      .bind(configurationId, objectKey, contentHash, body.byteLength, decisions.length, verifiedAt),
+    env.DB.prepare("DELETE FROM match_decisions WHERE configuration_id = ?1").bind(configurationId),
+  ]);
+  return { configurationId, decisions: decisions.length, bytesReleased: body.byteLength, idempotent: false };
+}
+
+async function rehydrateConfigurationDecisions(env: WorkerEnv, configurationId: string): Promise<number> {
+  const archive = await env.DB.prepare(
+    "SELECT object_key, content_hash, byte_length, decision_count FROM configuration_decision_archives WHERE configuration_id = ?1",
+  ).bind(configurationId).first<{ object_key: string; content_hash: string; byte_length: number; decision_count: number }>();
+  if (!archive) return 0;
+  const object = await env.ARCHIVE.get(archive.object_key);
+  if (!object) throw new Error("configuration decision archive object is unavailable");
+  const bytes = new Uint8Array(await object.arrayBuffer());
+  if (bytes.byteLength !== archive.byte_length || await digestHex(bytes) !== archive.content_hash) throw new Error("configuration decision archive failed rehydration verification");
+  const payload = JSON.parse(new TextDecoder().decode(bytes)) as { schema?: string; configurationId?: string; decisions?: ArchivedMatchDecision[] };
+  if (payload.schema !== "tc-configuration-match-decisions-v1" || payload.configurationId !== configurationId
+    || !Array.isArray(payload.decisions) || payload.decisions.length !== archive.decision_count) throw new Error("configuration decision archive envelope is invalid");
+  const statements = payload.decisions.map((decision) => env.DB.prepare(`INSERT OR IGNORE INTO match_decisions
+    (id, product_id, commodity_id, configuration_id, decided_by, reason, decided_at, superseded_at)
+    VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)`).bind(decision.id, decision.product_id, decision.commodity_id,
+      decision.configuration_id, decision.decided_by, decision.reason, decision.decided_at, decision.superseded_at));
+  for (let offset = 0; offset < statements.length; offset += 80) await env.DB.batch(statements.slice(offset, offset + 80));
+  return statements.length;
+}
+
 async function keysetRows(env: WorkerEnv, sql: string, configurationId: string): Promise<Array<Record<string, unknown>>> {
   const rows: Array<Record<string, unknown>> = [];
   const pageSize = 5_000;
@@ -152,9 +232,10 @@ export async function rehydrateConfiguration(env: WorkerEnv, configurationId: st
       FROM configuration_versions version WHERE version.id = ?1
   `).bind(configurationId).first<{ expected_rules: number; rules: number }>();
   if (!counts || counts.rules !== counts.expected_rules) throw new Error(`configuration rehydration rule count mismatch: expected ${counts?.expected_rules ?? "missing"}, restored ${counts?.rules ?? 0}`);
+  const restoredDecisions = await rehydrateConfigurationDecisions(env, configurationId);
   await env.DB.prepare("DELETE FROM configuration_compactions WHERE configuration_id = ?1").bind(configurationId).run();
   const upgraded = await archiveConfiguration(env, configurationId);
-  return { configurationId, rehydrated: true, idempotent: false, rules: counts.rules, actorId, archive: upgraded };
+  return { configurationId, rehydrated: true, idempotent: false, rules: counts.rules, restoredDecisions, actorId, archive: upgraded };
 }
 
 export async function compactConfiguration(env: WorkerEnv, configurationId: string, actorId: string): Promise<Record<string, unknown>> {
@@ -199,5 +280,6 @@ export async function compactConfiguration(env: WorkerEnv, configurationId: stri
   await env.DB.prepare(
     "DELETE FROM match_rule_definitions WHERE NOT EXISTS (SELECT 1 FROM configuration_match_rules member WHERE member.definition_id = match_rule_definitions.id)",
   ).run();
-  return { configurationId, archiveSha256: archive.sha256, compactedAt, legacyRuleRows: counts?.legacy ?? 0, membershipRows: counts?.membership ?? 0 };
+  const decisionArchive = await compactConfigurationDecisions(env, configurationId);
+  return { configurationId, archiveSha256: archive.sha256, compactedAt, legacyRuleRows: counts?.legacy ?? 0, membershipRows: counts?.membership ?? 0, decisionArchive };
 }
