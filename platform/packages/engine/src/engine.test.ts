@@ -86,18 +86,41 @@ describe("matching", () => {
         "5 Radish Vegetable Seeds: Watermelon Daikon Purple Plum French Champion Full Sun Biennial",
         "5-hour ENERGY Shot, Extra Strength, Watermelon 1.93 fl. oz., 24 pk.",
         "Karma Probiotic Water, Watermelon Wild Berry, 18 fl. oz., 1 Count Bottle",
+        "RESPAWN By RAZER Watermelon Guava Rush Sugar Free Chewing Mints, 1 oz., 8 pk.",
+        "Watermelon Spears 16 OZ",
+        "Seedless Watermelon Slices",
+        "Marketside Watermelon Bowl, 24 oz",
+        "Marketside Fresh Whole Watermelon Center, 32 oz",
+        "Starbucks Lime Watermelon Refreshers Concentrate 32 Fl Oz",
+        "Charms Watermelon Fluffy Stuff",
+        "Claeys Hard Candies, Old Fashioned, Watermelon 6 Oz",
+        "Red Thunder Watermelon 48 FL OZ",
+        "Summit Watermelon 12 FL OZ",
+        "Good2Grow BIGGER - Watermelon Berry Twist",
       ], good: ["Seedless Watermelon Each", "Whole Seedless Watermelon"] },
       { id: "mangoes", bad: [
         "bubly Mango Sparkling Water, 12 fl oz, 8 Pack Cans",
         "Golden Farms Organic Mango Sauce Pouches, Unsweetened, 3.17 oz., 12 pk.",
         "Dole Fruit Bowls Mangoes & Creme Layers Snacks, 4.3 oz, 4 pack",
         "(4 pack) Del Monte Diced Mango in Extra Light Syrup, Canned Fruit, 15 oz Can",
+        "Jolly Rancher Fruit Punch + Mango Ropes 10 Oz",
+        "Modelo Chelada Mango Chile Flavored Beer 24 Fl Oz",
+        "Star Kist Pink Salmon, Mango Chipotle, Wild Caught, Skinless, Boneless 2.6 Oz",
+        "Starbucks Mango Dragonfruit Refreshers Concentrate 32 Fl Oz",
+        "Aidells Refrigerated Spicy Mango with Jalapeño Smoked Chicken Sausage Links, 12 oz, 4 Count",
+        "SWEETENED MANGO GREAT VALUE BAG 12 OZ",
+        "Marketside Fresh Cut Mango, 16 oz Tray",
       ], good: ["Red Mango Each", "Large Mangos"] },
       { id: "cherries", bad: [
         "Fareway Unsweetened & Pitted Dark Sweet Cherries",
         "Del Monte Very Cherry Flavored Mixed Fruit In Extra Light Syrup",
         "Orchard Natural Cherry Mixed Fruit in Fruit Juice 4 oz., 24 ct.",
         "Great Value Light Syrup Extra Cherry Fruit Mix, 15 oz",
+        "Bubly Cherry Sparkling Water Cans",
+        "Ocean Spray Cherry Craisins",
+        "ICEE Cherry & Blue Raspberry Freeze Tubes, 3 fl oz, 6 Count",
+        "Great Value Premium Cocktail Cherries, 11 oz",
+        "Oregon Fruit Co. Red Tart Cherries in Water, 14.5 oz Can",
       ], good: ["Red Cherries Bag 1 LB", "Field & Vine Pacific Northwest Sweet Fresh Cherries"] },
     ];
     for (const test of cases) {
@@ -115,6 +138,8 @@ describe("matching", () => {
     const rules = [{ commodityId: commodity.id, includes: commodity.include, excludes: commodity.exclude, priority: 1 }];
     expect(matchProductName("Himalayan Pink Salt Black Pepper and Garlic Seasoning Blend", rules).status).toBe("unmatched");
     expect(matchProductName("Cheez-It Black Pepper Cheddar Baked Snack Crackers, 12.4 oz", rules).status).toBe("unmatched");
+    expect(matchProductName("Great Value Black Pepper Popcorn, Ready to Cook Popcorn Chicken, 11g Protein, 3 lb (Frozen)", rules).status).toBe("unmatched");
+    expect(matchProductName("Saverne Black Pepper & Lemon Organic Sauerkraut / 16oz Glass", rules).status).toBe("unmatched");
     expect(matchProductName("Member's Mark Fine Ground Black Pepper, 18 oz.", rules)).toMatchObject({ status: "matched", commodityId: "black-pepper" });
   });
 
