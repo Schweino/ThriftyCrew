@@ -1062,7 +1062,7 @@ export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number,
                 (SELECT COUNT(*) FROM product_versions) AS product_versions,
                 (SELECT COUNT(*) FROM observations) AS observation_facts,
                 (SELECT COUNT(*) FROM capture_observation_memberships) AS batch_memberships,
-                (SELECT COALESCE(SUM(byte_length), 0) FROM release_recipe_payloads) AS recipe_payload_bytes`,
+                (SELECT COALESCE(SUM(byte_length), 0) FROM release_recipe_payload_refs) AS recipe_payload_bytes`,
       ).first<{ products: number; product_versions: number; observation_facts: number; batch_memberships: number; recipe_payload_bytes: number }>(),
     ]);
     const databaseLimitBytes = Number(env.D1_DATABASE_LIMIT_BYTES ?? 10 * 1024 * 1024 * 1024);

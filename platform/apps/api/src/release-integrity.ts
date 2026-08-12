@@ -29,7 +29,7 @@ export async function evaluateReleaseIntegrity(env: WorkerEnv, releaseId: string
        FROM release_recipe_costs WHERE release_id = ?1 ORDER BY recipe_slug`,
   ).bind(releaseId).all<{ recipe_slug: string; status: string; batch_cost_minor: number | null; serving_cost_minor: number | null; servings: number; detail_json: string }>();
   const bundles = await env.DB.prepare(
-    "SELECT recipe_slug, content_hash, object_key, byte_length FROM release_recipe_payloads WHERE release_id = ?1 ORDER BY recipe_slug",
+    "SELECT recipe_slug, content_hash, object_key, byte_length FROM release_recipe_payload_refs WHERE release_id = ?1 ORDER BY recipe_slug",
   ).bind(releaseId).all<{ recipe_slug: string; content_hash: string; object_key: string; byte_length: number }>();
   const expectedSlugs = costs.results.map((cost) => cost.recipe_slug).sort();
   const actualSlugs = bundles.results.map((bundle) => bundle.recipe_slug).sort();

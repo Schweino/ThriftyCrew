@@ -2882,6 +2882,7 @@ app.post("/internal/storage/compact-releases", async (context) => {
     ).bind(release.id).first<{ cells: number; recipes: number }>();
     await context.env.DB.batch([
       context.env.DB.prepare("DELETE FROM recipe_cost_detail_objects WHERE release_id = ?1").bind(release.id),
+      context.env.DB.prepare("DELETE FROM release_recipe_payload_refs WHERE release_id = ?1").bind(release.id),
       context.env.DB.prepare("DELETE FROM release_recipe_payloads WHERE release_id = ?1").bind(release.id),
       context.env.DB.prepare("DELETE FROM release_recipe_scenarios WHERE release_id = ?1").bind(release.id),
       context.env.DB.prepare("DELETE FROM release_recipe_costs WHERE release_id = ?1").bind(release.id),
@@ -3800,7 +3801,7 @@ app.post("/internal/releases/:id/validate", async (context) => {
   ).bind(releaseId).first<{ configuration_id: string; market_id: string; input_manifest_json: string }>();
   if (!releaseIdentity) return jsonError("release not found", 404);
   const bundleCount = await context.env.DB.prepare(
-    "SELECT COUNT(*) AS count FROM release_recipe_payloads WHERE release_id = ?1",
+    "SELECT COUNT(*) AS count FROM release_recipe_payload_refs WHERE release_id = ?1",
   ).bind(releaseId).first<{ count: number }>();
   if ((bundleCount?.count ?? 0) !== summary.expectedRecipes) {
     return jsonError(`release recipe bundles are incomplete: expected ${summary.expectedRecipes}, found ${bundleCount?.count ?? 0}`, 409);
@@ -3953,6 +3954,7 @@ app.post("/internal/releases/:id/publish", async (context) => {
     } else try {
       await context.env.DB.batch([
         context.env.DB.prepare("DELETE FROM recipe_cost_detail_objects WHERE release_id = ?1").bind(current.release_id),
+        context.env.DB.prepare("DELETE FROM release_recipe_payload_refs WHERE release_id = ?1").bind(current.release_id),
         context.env.DB.prepare("DELETE FROM release_recipe_payloads WHERE release_id = ?1").bind(current.release_id),
         context.env.DB.prepare("DELETE FROM release_recipe_scenarios WHERE release_id = ?1").bind(current.release_id),
         context.env.DB.prepare("DELETE FROM release_recipe_costs WHERE release_id = ?1").bind(current.release_id),
@@ -4502,7 +4504,16 @@ app.get("/internal/releases/:id", async (context) => {
     "SELECT id, market_id, configuration_id, input_hash, state, validated_at, published_at FROM releases WHERE id = ?1",
   ).bind(context.req.param("id")).first<Record<string, unknown>>();
   if (!release) return context.json({ ok: false, found: false, error: "release not found" }, 404);
-  return context.json({ ok: true, found: true, release });
+  const progress = await context.env.DB.prepare(
+    `SELECT
+       (SELECT COUNT(*) FROM release_cells WHERE release_id = ?1) AS cells,
+       (SELECT COUNT(*) FROM release_recipe_costs WHERE release_id = ?1) AS recipe_costs,
+       (SELECT COUNT(*) FROM release_payloads WHERE release_id = ?1) AS payloads,
+       (SELECT COUNT(*) FROM release_graph_nodes WHERE release_id = ?1) AS graph_nodes,
+       EXISTS(SELECT 1 FROM release_graphs WHERE release_id = ?1) AS graph_finalized,
+       (SELECT COUNT(*) FROM release_recipe_payload_refs WHERE release_id = ?1) AS recipe_bundles`,
+  ).bind(context.req.param("id")).first<Record<string, unknown>>();
+  return context.json({ ok: true, found: true, release, progress });
 });
 
 app.get("/internal/engine/snapshot-identity", async (context) => {

@@ -72,7 +72,7 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
                 WHERE payload.object_key IS NOT NULL
                UNION ALL
                SELECT 'evidence', 'recipe-bundle', payload.object_key, payload.content_hash, payload.byte_length
-                 FROM current_releases current JOIN release_recipe_payloads payload ON payload.release_id = current.release_id
+                 FROM current_releases current JOIN release_recipe_payload_refs payload ON payload.release_id = current.release_id
                UNION ALL
                SELECT 'evidence', 'recipe-cost-detail', detail.object_key, detail.content_hash, detail.byte_length
                  FROM current_releases current JOIN recipe_cost_detail_objects detail ON detail.release_id = current.release_id

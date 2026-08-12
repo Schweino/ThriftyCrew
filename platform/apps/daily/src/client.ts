@@ -652,20 +652,23 @@ export async function publishNativeRelease(client: MutationClient, artifact: Nat
   }
   if (state !== "draft") throw new Error(`native release ${artifact.releaseId} is in unexpected state ${state}`);
   try {
-    for (const cellChunk of chunks(artifact.cells, 200)) await client.request(`/internal/releases/${artifact.releaseId}/cells`, { method: "PUT", json: { cells: cellChunk } });
-    for (const costChunk of chunks(artifact.recipeCosts, 200)) await client.request(`/internal/releases/${artifact.releaseId}/recipe-costs`, { method: "PUT", json: { costs: costChunk } });
-    await client.request(`/internal/releases/${artifact.releaseId}/free-rotation`, { method: "PUT", json: { entries: artifact.freeRotation } });
-    await client.request(`/internal/releases/${artifact.releaseId}/top5`, { method: "PUT", json: { entries: artifact.top5 } });
-    for (const [kind, payload] of Object.entries(artifact.payloads)) {
-      const wirePayload: unknown = JSON.parse(JSON.stringify(payload));
-      await client.request(`/internal/releases/${artifact.releaseId}/payload`, { method: "PUT", json: { kind, payload: wirePayload, contentHash: await digestHex(stableJson(wirePayload)) } });
+    const checkpoint = await client.request(`/internal/releases/${artifact.releaseId}`) as { progress?: { graph_finalized?: number | boolean } };
+    if (!checkpoint.progress?.graph_finalized) {
+      for (const cellChunk of chunks(artifact.cells, 200)) await client.request(`/internal/releases/${artifact.releaseId}/cells`, { method: "PUT", json: { cells: cellChunk } });
+      for (const costChunk of chunks(artifact.recipeCosts, 200)) await client.request(`/internal/releases/${artifact.releaseId}/recipe-costs`, { method: "PUT", json: { costs: costChunk } });
+      await client.request(`/internal/releases/${artifact.releaseId}/free-rotation`, { method: "PUT", json: { entries: artifact.freeRotation } });
+      await client.request(`/internal/releases/${artifact.releaseId}/top5`, { method: "PUT", json: { entries: artifact.top5 } });
+      for (const [kind, payload] of Object.entries(artifact.payloads)) {
+        const wirePayload: unknown = JSON.parse(JSON.stringify(payload));
+        await client.request(`/internal/releases/${artifact.releaseId}/payload`, { method: "PUT", json: { kind, payload: wirePayload, contentHash: await digestHex(stableJson(wirePayload)) } });
+      }
+      for (const nodeChunk of chunks(artifact.graph.nodes, 40)) {
+        await client.request(`/internal/releases/${artifact.releaseId}/graph-nodes`, { method: "PUT", json: { nodes: nodeChunk } });
+      }
+      await client.request(`/internal/releases/${artifact.releaseId}/graph-finalize`, { json: {
+        parentReleaseId: artifact.graph.parentReleaseId, dependencyHash: artifact.graph.dependencyHash,
+      } });
     }
-    for (const nodeChunk of chunks(artifact.graph.nodes, 40)) {
-      await client.request(`/internal/releases/${artifact.releaseId}/graph-nodes`, { method: "PUT", json: { nodes: nodeChunk } });
-    }
-    await client.request(`/internal/releases/${artifact.releaseId}/graph-finalize`, { json: {
-      parentReleaseId: artifact.graph.parentReleaseId, dependencyHash: artifact.graph.dependencyHash,
-    } });
     const recipeBundles = await buildRecipeBundles(client, artifact.releaseId);
     const validation = await client.request(`/internal/releases/${artifact.releaseId}/validate`, { method: "POST", acceptStatuses: [422] });
     const publication = validation.ok ? await client.request(`/internal/releases/${artifact.releaseId}/publish`, { method: "POST" }) : null;

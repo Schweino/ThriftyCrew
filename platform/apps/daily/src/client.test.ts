@@ -61,6 +61,27 @@ describe("direct capture observation deduplication", () => {
 });
 
 describe("native release publication", () => {
+  it("resumes after a finalized graph without replaying complete release stages", async () => {
+    const paths: string[] = [];
+    const request = vi.fn(async (pathname: string) => {
+      paths.push(pathname);
+      if (pathname === "/internal/releases") return { ok: true, state: "draft" };
+      if (pathname === "/internal/releases/rel_native_resume") return { ok: true, progress: { graph_finalized: 1 } };
+      if (pathname.endsWith("/recipe-bundles")) return { ok: true, count: 0, next: null };
+      if (pathname.endsWith("/validate")) return { ok: true };
+      if (pathname.endsWith("/publish")) return { ok: true };
+      throw new Error(`unexpected release resume request: ${pathname}`);
+    });
+    const artifact = {
+      releaseId: "rel_native_resume", marketId: "omaha", configurationId: "cfg_test", inputManifest: {},
+      inputBatchIds: [], inputHash: "a".repeat(64), cells: [{ commodityId: "milk" }], recipeCosts: [{ recipeSlug: "meal" }],
+      freeRotation: [], top5: [], payloads: { board: {} }, graph: { parentReleaseId: "parent", dependencyHash: "b".repeat(64), nodes: [{}] },
+      audit: { commodities: 507, stores: 7 },
+    } as unknown as NativeReleaseArtifact;
+    await expect(publishNativeRelease({ request } as unknown as MutationClient, artifact)).resolves.toMatchObject({ ok: true });
+    expect(paths.some((pathname) => pathname.endsWith("/cells") || pathname.endsWith("/graph-nodes") || pathname.endsWith("/graph-finalize"))).toBe(false);
+  });
+
   it("treats a deterministic release published by a concurrent executor as idempotent success", async () => {
     let releaseReads = 0;
     const request = vi.fn(async (pathname: string) => {
@@ -68,6 +89,7 @@ describe("native release publication", () => {
         releaseReads += 1;
         return { ok: true, state: releaseReads === 1 ? "draft" : "published" };
       }
+      if (pathname === "/internal/releases/rel_native_test") return { ok: true, progress: { graph_finalized: 0 } };
       throw new Error("PUT returned 409: release content is immutable in published state");
     });
     const artifact = {

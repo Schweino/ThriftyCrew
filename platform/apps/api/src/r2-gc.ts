@@ -94,7 +94,7 @@ export async function collectReachableObjectKeys(env: Pick<WorkerEnv, "DB" | "AR
     ).all<{ object_key: string }>(),
     env.DB.prepare(
       `SELECT object_key FROM release_payloads WHERE object_key IS NOT NULL
-       UNION SELECT object_key FROM release_recipe_payloads
+       UNION SELECT object_key FROM release_recipe_payload_refs
        UNION SELECT object_key FROM recipe_cost_detail_objects`,
     ).all<{ object_key: string }>(),
     env.DB.prepare(

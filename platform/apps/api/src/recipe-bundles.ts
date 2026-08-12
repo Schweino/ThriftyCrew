@@ -115,7 +115,7 @@ export async function buildReleaseRecipeBundles(
   }
   const placeholders = writes.map((_, index) => `?${index + 1}`).join(",");
   const [knownBundles, knownDetails] = writes.length === 0 ? [{ results: [] }, { results: [] }] : await Promise.all([
-    env.DB.prepare(`SELECT content_hash, object_key FROM release_recipe_payloads WHERE content_hash IN (${placeholders}) GROUP BY content_hash`).bind(...writes.map((write) => write.hash)).all<{ content_hash: string; object_key: string }>(),
+    env.DB.prepare(`SELECT content_hash, object_key FROM release_recipe_payload_refs WHERE content_hash IN (${placeholders}) GROUP BY content_hash`).bind(...writes.map((write) => write.hash)).all<{ content_hash: string; object_key: string }>(),
     env.DB.prepare(`SELECT content_hash, object_key FROM recipe_cost_detail_objects WHERE content_hash IN (${placeholders}) GROUP BY content_hash`).bind(...writes.map((write) => write.detailHash)).all<{ content_hash: string; object_key: string }>(),
   ]);
   const bundleObjects = new Map(knownBundles.results.map((row) => [row.content_hash, row.object_key]));
@@ -136,7 +136,7 @@ export async function buildReleaseRecipeBundles(
       })));
   }
   const statements = writes.flatMap((write) => [env.DB.prepare(
-    `INSERT INTO release_recipe_payloads (release_id, recipe_slug, content_hash, object_key, byte_length)
+    `INSERT INTO release_recipe_payload_refs (release_id, recipe_slug, content_hash, object_key, byte_length)
      VALUES (?1, ?2, ?3, ?4, ?5)
      ON CONFLICT(release_id, recipe_slug) DO UPDATE SET
        content_hash = excluded.content_hash, object_key = excluded.object_key, byte_length = excluded.byte_length`,
@@ -227,7 +227,7 @@ export async function readCurrentRecipeBundle(env: WorkerEnv, slug: string): Pro
             payload.content_hash, payload.object_key
        FROM current_releases current
        JOIN releases r ON r.id = current.release_id
-       JOIN release_recipe_payloads payload ON payload.release_id = r.id AND payload.recipe_slug = ?1
+       JOIN release_recipe_payload_refs payload ON payload.release_id = r.id AND payload.recipe_slug = ?1
       WHERE current.market_id = 'omaha'`,
   ).bind(slug).first<{ release_id: string; published_at: string; week_of: string; content_hash: string; object_key: string }>();
   if (!row) return null;
