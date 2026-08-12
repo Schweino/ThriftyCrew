@@ -529,7 +529,15 @@ if (command === "status") {
     if (!secondPass && cursor) { cursor = ""; secondPass = true; continue; }
     break;
   }
-  result = { ok: true, indexed };
+  let canonicalCursor = "";
+  let indexedCanonicalGroups = 0;
+  while (true) {
+    const page = await client.request(`/internal/canonical-cleanup/canonicals?after=${encodeURIComponent(canonicalCursor)}`, { method: "POST" }) as unknown as { indexed: number; nextCursor: string };
+    indexedCanonicalGroups += page.indexed;
+    if (page.indexed === 0) break;
+    canonicalCursor = page.nextCursor;
+  }
+  result = { ok: true, indexed, indexedCanonicalGroups };
 } else if (command === "cleanup" && subcommand === "export") {
   const [runId, outputFile] = arguments_;
   if (!runId || !outputFile) throw new Error("tc cleanup export requires a run id and output JSON file");
