@@ -90,6 +90,7 @@ try {
         @($reportOutput) -join [Environment]::NewLine | Set-Content -LiteralPath $reportFile -Encoding UTF8
         Write-PcRuntimeLog $logFile 'DONE efficiency-check'
         Invoke-Logged 'efficiency-incident-reconcile' { & $pnpmPath tc efficiency record $reportFile }
+        Invoke-Logged 'data-architecture-maintenance' { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $platformRoot 'scripts\run-data-architecture-maintenance.ps1') }
       }
       'accuracy-weekly' { Invoke-Logged 'accuracy-draw' { & $pnpmPath tc accuracy draw } }
       'accuracy-revalidation-daily' { Invoke-Logged 'accuracy-revalidation' { & $pnpmPath tc accuracy revalidate } }

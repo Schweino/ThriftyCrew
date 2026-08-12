@@ -32,7 +32,7 @@ export async function buildReleaseRecipeBundles(env: WorkerEnv, releaseId: strin
   const recipeBySlug = new Map(recipes.map((recipe) => [String(recipe.slug), recipe]));
   const allIngredients = object(feedPayload.ingredients);
   const feedRecipes = object(feedPayload.recipes);
-  const writes: Array<{ slug: string; hash: string; key: string; bytes: Uint8Array }> = [];
+  const writes: Array<{ slug: string; hash: string; key: string; bytes: Uint8Array; detailHash: string; detailKey: string; detailBytes: Uint8Array }> = [];
   for (const cost of costs.results) {
     const recipe = recipeBySlug.get(cost.recipe_slug);
     if (!recipe) throw new Error(`recipe payload is missing ${cost.recipe_slug}`);
@@ -54,22 +54,70 @@ export async function buildReleaseRecipeBundles(env: WorkerEnv, releaseId: strin
     const serialized = stableJson({ version: 1, releaseId, slug: cost.recipe_slug, recipe, feed });
     const hash = await digestHex(serialized);
     const bytes = new TextEncoder().encode(serialized);
-    writes.push({ slug: cost.recipe_slug, hash, key: `releases/${releaseId}/recipes/${cost.recipe_slug}-${hash}.json`, bytes });
+    const detailSerialized = stableJson(detail);
+    const detailHash = await digestHex(detailSerialized);
+    const detailBytes = new TextEncoder().encode(detailSerialized);
+    writes.push({ slug: cost.recipe_slug, hash, key: `releases/${releaseId}/recipes/${cost.recipe_slug}-${hash}.json`, bytes,
+      detailHash, detailKey: `recipe-cost-details/${detailHash}.json`, detailBytes });
   }
   for (let offset = 0; offset < writes.length; offset += 20) {
-    await Promise.all(writes.slice(offset, offset + 20).map((write) => env.EVIDENCE.put(write.key, write.bytes, {
-      httpMetadata: { contentType: "application/json; charset=utf-8" },
-      customMetadata: { sha256: write.hash, releaseId, recipeSlug: write.slug },
-    })));
+    await Promise.all(writes.slice(offset, offset + 20).flatMap((write) => [
+      env.EVIDENCE.put(write.key, write.bytes, {
+        httpMetadata: { contentType: "application/json; charset=utf-8" },
+        customMetadata: { sha256: write.hash, releaseId, recipeSlug: write.slug },
+      }),
+      env.EVIDENCE.put(write.detailKey, write.detailBytes, {
+        httpMetadata: { contentType: "application/json; charset=utf-8" },
+        customMetadata: { sha256: write.detailHash, kind: "recipe-cost-detail" },
+      }),
+    ]));
   }
-  const statements = writes.map((write) => env.DB.prepare(
+  const statements = writes.flatMap((write) => [env.DB.prepare(
     `INSERT INTO release_recipe_payloads (release_id, recipe_slug, content_hash, object_key, byte_length)
      VALUES (?1, ?2, ?3, ?4, ?5)
      ON CONFLICT(release_id, recipe_slug) DO UPDATE SET
        content_hash = excluded.content_hash, object_key = excluded.object_key, byte_length = excluded.byte_length`,
-  ).bind(releaseId, write.slug, write.hash, write.key, write.bytes.byteLength));
+  ).bind(releaseId, write.slug, write.hash, write.key, write.bytes.byteLength), env.DB.prepare(
+    `INSERT INTO recipe_cost_detail_objects
+       (release_id, recipe_slug, content_hash, object_key, byte_length)
+     VALUES (?1, ?2, ?3, ?4, ?5) ON CONFLICT(release_id, recipe_slug) DO UPDATE SET
+       content_hash = excluded.content_hash, object_key = excluded.object_key, byte_length = excluded.byte_length`,
+  ).bind(releaseId, write.slug, write.detailHash, write.detailKey, write.detailBytes.byteLength)]);
   for (let offset = 0; offset < statements.length; offset += 80) await env.DB.batch(statements.slice(offset, offset + 80));
   return { count: writes.length, bytes: writes.reduce((sum, write) => sum + write.bytes.byteLength, 0) };
+}
+
+export async function compactReleaseRecipeDetails(env: WorkerEnv, releaseId: string): Promise<{ releaseId: string; compacted: number; bytesReleased: number }> {
+  const release = await env.DB.prepare("SELECT state FROM releases WHERE id = ?1").bind(releaseId).first<{ state: string }>();
+  if (!release) throw new Error(`release ${releaseId} does not exist`);
+  if (release.state !== "superseded") throw new Error("recipe detail compaction is restricted to superseded releases");
+  const rows = await env.DB.prepare(
+    `SELECT detail.recipe_slug, detail.content_hash, detail.object_key, detail.byte_length,
+            costs.detail_json
+       FROM recipe_cost_detail_objects detail
+       JOIN release_recipe_costs costs ON costs.release_id = detail.release_id AND costs.recipe_slug = detail.recipe_slug
+      WHERE detail.release_id = ?1 AND detail.compacted_at IS NULL ORDER BY detail.recipe_slug`,
+  ).bind(releaseId).all<{ recipe_slug: string; content_hash: string; object_key: string; byte_length: number; detail_json: string }>();
+  const verified: typeof rows.results = [];
+  for (let offset = 0; offset < rows.results.length; offset += 20) {
+    const chunk = rows.results.slice(offset, offset + 20);
+    const heads = await Promise.all(chunk.map((row) => env.EVIDENCE.head(row.object_key)));
+    heads.forEach((head, index) => {
+      const row = chunk[index]!;
+      if (!head || head.size !== row.byte_length || head.customMetadata?.sha256 !== row.content_hash) throw new Error(`recipe detail object verification failed for ${releaseId}/${row.recipe_slug}`);
+      verified.push(row);
+    });
+  }
+  const now = new Date().toISOString();
+  const statements = verified.flatMap((row) => [env.DB.prepare(
+    `UPDATE release_recipe_costs SET detail_json = ?3
+      WHERE release_id = ?1 AND recipe_slug = ?2`,
+  ).bind(releaseId, row.recipe_slug, stableJson({ archived: true, contentHash: row.content_hash, objectKey: row.object_key })), env.DB.prepare(
+    `UPDATE recipe_cost_detail_objects SET verified_at = ?3, compacted_at = ?3
+      WHERE release_id = ?1 AND recipe_slug = ?2 AND compacted_at IS NULL`,
+  ).bind(releaseId, row.recipe_slug, now)]);
+  for (let offset = 0; offset < statements.length; offset += 80) await env.DB.batch(statements.slice(offset, offset + 80));
+  return { releaseId, compacted: verified.length, bytesReleased: verified.reduce((sum, row) => sum + new TextEncoder().encode(row.detail_json).byteLength, 0) };
 }
 
 export async function readCurrentRecipeBundle(env: WorkerEnv, slug: string): Promise<{

@@ -131,7 +131,7 @@ export async function createAccuracyDraw(db: D1Database, input: AccuracyDrawCrea
               COUNT(*) OVER (PARTITION BY c.commodity_id) AS stores,
               AVG(c.display_per_unit_micros) OVER (PARTITION BY c.commodity_id) AS mean_price,
               ROW_NUMBER() OVER (PARTITION BY c.commodity_id ORDER BY c.display_per_unit_micros, c.store_location_id) AS price_rank
-         FROM release_cells c WHERE c.release_id = ?1 AND c.status = 'priced'
+         FROM release_cells_with_reasons c WHERE c.release_id = ?1 AND c.status = 'priced'
      )
      SELECT *, CASE WHEN is_crown = 1 THEN 50 ELSE 0 END
           + CASE WHEN price_rank = 2 THEN 40 ELSE 0 END

@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "authority": "meal-prep/db/ingredients.json plus recipe-authored scaler exceptions",
+  "description": "Governed grams-per-priced-basis conversion policy used by the native recipe-cost engine.",
+  "precedence": [
+    "recipe-scaler-exception",
+    "ingredient-definition"
+  ],
+  "requirements": {
+    "positiveFiniteGramsPerBasisUnit": true,
+    "recipeExceptionRequiresIngredientDefinition": true,
+    "maximumExceptionRatio": 20,
+    "recordBothCandidates": true,
+    "contentAddressRegistry": true
+  },
+  "confidence": {
+    "recipe-scaler-exception": "moderate",
+    "ingredient-definition": "moderate"
+  }
+}

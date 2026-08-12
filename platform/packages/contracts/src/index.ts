@@ -270,6 +270,35 @@ const browserProductEvidenceSchema = z.object({
   })).min(1).max(4000),
   uniqueProducts: z.number().int().positive(), duplicateProductReferences: z.number().int().nonnegative(),
   productReadsRequired: z.number().int().nonnegative(), rowVerificationsSatisfied: z.number().int().nonnegative(), contentHash: sha256Hex,
+  operationalProjection: z.object({
+    discoveryRows: z.number().int().positive(),
+    retainedRows: z.number().int().positive(),
+    omittedRows: z.number().int().nonnegative(),
+    policy: z.literal("authored-matches-plus-verified-risk"),
+  }).optional(),
+});
+
+const browserDailyShardSchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  ordinal: z.number().int().nonnegative().max(31),
+  contentHash: sha256Hex,
+  termCount: z.number().int().nonnegative().max(2000),
+  rowCount: z.number().int().nonnegative().max(100_000),
+  chunkCount: z.number().int().positive().max(4000),
+  firstObservedAt: isoDateTime,
+  lastObservedAt: isoDateTime,
+}).refine((value) => value.lastObservedAt >= value.firstObservedAt, {
+  message: "daily shard end must not precede its start",
+});
+
+const browserOfferConfirmationSchema = z.object({
+  productKey: z.string().trim().min(1).max(300),
+  discoveryHash: sha256Hex,
+  purchasePriceMinor: z.number().int().nonnegative().max(10_000_000),
+  discoveredAt: isoDateTime,
+  confirmedAt: isoDateTime,
+}).refine((value) => value.confirmedAt > value.discoveredAt, {
+  message: "offer confirmation must be an independent later read",
 });
 
 export const browserCaptureAccuracySchema = z.object({
@@ -386,6 +415,7 @@ export const browserCaptureSessionV2Schema = z.object({
   })).min(1).max(4000),
   accuracy: browserCaptureAccuracySchema,
   productEvidence: browserProductEvidenceSchema.optional(),
+  dailyShards: z.array(browserDailyShardSchema).min(1).max(7),
   projectedCaptureSha256: sha256Hex,
   contentHash: sha256Hex,
 }).superRefine((value, context) => {
@@ -509,6 +539,8 @@ export const captureBatchSealSchema = z.object({
     manifestSha256: sha256Hex,
     projectedCaptureSha256: sha256Hex,
     screenshotSha256: sha256Hex,
+    dailyShards: z.array(browserDailyShardSchema).min(1).max(7),
+    offerConfirmations: z.array(browserOfferConfirmationSchema).max(5000),
     metrics: z.object({
       cycleStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
       attemptedTerms: z.number().int().nonnegative(),
@@ -540,6 +572,9 @@ export const captureBatchSealSchema = z.object({
       productReadsRequired: z.number().int().nonnegative().optional(),
       verificationReuse: z.number().int().nonnegative().optional(),
       immutableShardCount: z.number().int().positive().optional(),
+      dailyShardCount: z.number().int().positive(),
+      likelyWinnerRows: z.number().int().nonnegative(),
+      confirmedWinnerRows: z.number().int().nonnegative(),
     }),
   }).optional(),
 });

@@ -82,7 +82,8 @@ import { claimAgentWorkItem, completeAgentWorkItem, failAgentWorkItem } from "./
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
-import { buildReleaseRecipeBundles, readCurrentRecipeBundle } from "./recipe-bundles";
+import { buildReleaseRecipeBundles, compactReleaseRecipeDetails, readCurrentRecipeBundle } from "./recipe-bundles";
+import { backfillProductEntities, backfillReleaseReasons, buildProductEntitySuggestions } from "./data-maintenance";
 import { readBrowserCaptureSla } from "./browser-capture-sla";
 import { buildCaptureTermInserts } from "./capture-seal";
 import { createDirectEvidenceUpload, createDirectObjectDownload } from "./capture-direct-upload";
@@ -235,6 +236,7 @@ app.use("/internal/content-batches/*", requireIdentityRole(["engine", "operator"
 app.use("/internal/source-sentinels", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/source-sentinels/*", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/archival/*", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/maintenance/*", requireIdentityRole(["operator"]));
 app.use("/internal/backups/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/restore-drills", requireIdentityRole(["operator"]));
 app.use("/internal/restore-drills/*", requireIdentityRole(["operator"]));
@@ -1258,7 +1260,7 @@ app.post("/internal/recipe-waves/:id/corrective-release", async (context) => {
          FROM releases WHERE id = ?4`,
     ).bind(correctiveId, stableJson(inputManifest), inputHash, source.id),
     context.env.DB.prepare("INSERT INTO release_input_batches SELECT ?1, batch_id, ordinal FROM release_input_batches WHERE release_id = ?2").bind(correctiveId, source.id),
-    context.env.DB.prepare("INSERT INTO release_cells SELECT ?1, commodity_id, store_location_id, observation_id, status, is_crown, display_per_unit_micros, display_unit, reason_json FROM release_cells WHERE release_id = ?2").bind(correctiveId, source.id),
+    context.env.DB.prepare("INSERT INTO release_cells (release_id, commodity_id, store_location_id, observation_id, status, is_crown, display_per_unit_micros, display_unit, reason_json, reason_hash) SELECT ?1, commodity_id, store_location_id, observation_id, status, is_crown, display_per_unit_micros, display_unit, reason_json, reason_hash FROM release_cells WHERE release_id = ?2").bind(correctiveId, source.id),
     context.env.DB.prepare("INSERT INTO release_recipe_costs SELECT ?1, recipe_slug, status, batch_cost_minor, serving_cost_minor, servings, missing_ingredients_json, detail_json FROM release_recipe_costs WHERE release_id = ?2").bind(correctiveId, source.id),
     context.env.DB.prepare("INSERT INTO release_top5 SELECT ?1, protein, rank, recipe_slug, serving_cost_minor FROM release_top5 WHERE release_id = ?2").bind(correctiveId, source.id),
     context.env.DB.prepare("INSERT INTO release_free_rotation SELECT ?1, recipe_slug, intended_visibility, protein, rank FROM release_free_rotation WHERE release_id = ?2").bind(correctiveId, source.id),
@@ -2016,7 +2018,6 @@ app.post("/internal/archival/:id/execute", zValidator("json", canonicalCleanupEx
   await context.env.DB.batch([
     context.env.DB.prepare("INSERT OR REPLACE INTO maintenance_leases (kind, run_id, expires_at) VALUES ('verified-archive', ?1, ?2)").bind(manifest.id, expiresAt),
     context.env.DB.prepare("DELETE FROM capture_observation_memberships WHERE observation_id IN (SELECT observation_id FROM archive_manifest_observations WHERE manifest_id = ?1)").bind(manifest.id),
-    context.env.DB.prepare("DELETE FROM observation_semantic_keys WHERE observation_id IN (SELECT observation_id FROM archive_manifest_observations WHERE manifest_id = ?1)").bind(manifest.id),
     context.env.DB.prepare("DELETE FROM observation_fingerprints WHERE observation_id IN (SELECT observation_id FROM archive_manifest_observations WHERE manifest_id = ?1)").bind(manifest.id),
     context.env.DB.prepare("DELETE FROM semantic_fact_canonicals WHERE observation_id IN (SELECT observation_id FROM archive_manifest_observations WHERE manifest_id = ?1)").bind(manifest.id),
     context.env.DB.prepare("DELETE FROM observations WHERE id IN (SELECT observation_id FROM archive_manifest_observations WHERE manifest_id = ?1)").bind(manifest.id),
@@ -2217,7 +2218,6 @@ app.post("/internal/canonical-cleanup/:id/execute", zValidator("json", canonical
          provenance_json = excluded.provenance_json, carried = 1`,
     ).bind(run.id),
     context.env.DB.prepare("DELETE FROM capture_observation_memberships WHERE observation_id IN (SELECT duplicate_observation_id FROM canonical_cleanup_rows WHERE run_id = ?1)").bind(run.id),
-    context.env.DB.prepare("DELETE FROM observation_semantic_keys WHERE observation_id IN (SELECT duplicate_observation_id FROM canonical_cleanup_rows WHERE run_id = ?1)").bind(run.id),
     context.env.DB.prepare("DELETE FROM observation_fingerprints WHERE observation_id IN (SELECT duplicate_observation_id FROM canonical_cleanup_rows WHERE run_id = ?1)").bind(run.id),
     context.env.DB.prepare("DELETE FROM observations WHERE id IN (SELECT duplicate_observation_id FROM canonical_cleanup_rows WHERE run_id = ?1)").bind(run.id),
     context.env.DB.prepare("DELETE FROM product_versions WHERE NOT EXISTS (SELECT 1 FROM observations o WHERE o.product_version_id = product_versions.id)"),
@@ -2490,6 +2490,46 @@ app.get("/internal/capture-journal-checkpoints/latest", async (context) => {
   });
 });
 
+app.get("/internal/maintenance/architecture", async (context) => {
+  const [reasons, products, releases] = await Promise.all([
+    context.env.DB.prepare("SELECT COUNT(*) AS count FROM release_cells WHERE reason_hash IS NULL").first<{ count: number }>(),
+    context.env.DB.prepare(
+      `SELECT COUNT(DISTINCT p.id) AS count FROM products p JOIN product_versions pv ON pv.product_id = p.id
+        WHERE NOT EXISTS (SELECT 1 FROM product_entity_links link WHERE link.product_id = p.id)
+          AND (json_extract(pv.identity_json, '$.gtin') IS NOT NULL OR json_extract(pv.identity_json, '$.upc') IS NOT NULL)`,
+    ).first<{ count: number }>(),
+    context.env.DB.prepare(
+      `SELECT release.id, release.state,
+              COUNT(cost.recipe_slug) AS costs,
+              COUNT(detail.recipe_slug) AS detail_objects,
+              SUM(CASE WHEN detail.compacted_at IS NOT NULL THEN 1 ELSE 0 END) AS compacted
+         FROM releases release
+         LEFT JOIN release_recipe_costs cost ON cost.release_id = release.id
+         LEFT JOIN recipe_cost_detail_objects detail ON detail.release_id = cost.release_id AND detail.recipe_slug = cost.recipe_slug
+        GROUP BY release.id, release.state ORDER BY release.created_at`,
+    ).all<{ id: string; state: string; costs: number; detail_objects: number; compacted: number | null }>(),
+  ]);
+  return context.json({ ok: true, releaseReasonsRemaining: reasons?.count ?? 0, entityProductsRemaining: products?.count ?? 0, releases: releases.results });
+});
+
+app.post("/internal/maintenance/architecture", async (context) => {
+  const body: Record<string, unknown> = await context.req.json<Record<string, unknown>>().catch(() => ({} as Record<string, unknown>));
+  const action = String(body.action ?? "");
+  const limit = Math.max(1, Math.min(500, Number(body.limit ?? 200)));
+  try {
+    if (action === "release-reasons") return context.json({ ok: true, action, ...(await backfillReleaseReasons(context.env, limit)) });
+    if (action === "product-entities") return context.json({ ok: true, action, ...(await backfillProductEntities(context.env, limit)) });
+    if (action === "entity-suggestions") return context.json({ ok: true, action, ...(await buildProductEntitySuggestions(context.env, limit)) });
+    const releaseId = String(body.releaseId ?? "");
+    if (!releaseId) return jsonError("recipe detail maintenance requires releaseId", 422);
+    if (action === "recipe-detail-build") return context.json({ ok: true, action, releaseId, ...(await buildReleaseRecipeBundles(context.env, releaseId)) });
+    if (action === "recipe-detail-compact") return context.json({ ok: true, action, ...(await compactReleaseRecipeDetails(context.env, releaseId)) });
+    return jsonError("unsupported architecture maintenance action", 422);
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "architecture maintenance failed", 422);
+  }
+});
+
 app.post("/internal/capture-batches/:id/evidence-upload-sessions", zValidator("json", captureEvidenceUploadSessionSchema), async (context) => {
   const batch = await findBatch(context.env.DB, context.req.param("id"));
   if (!batch) return jsonError("capture batch not found", 404);
@@ -2721,8 +2761,8 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
       GROUP BY prior.id, prior.captured_to
       ORDER BY prior.captured_to DESC LIMIT 1`,
   ).bind(batch.source_id, batch.coverage_mode, batch.id).first<{ id: string; observation_count: number }>();
-  const collapseFloor = predecessor ? Math.ceil(predecessor.observation_count * 0.6) : 0;
-  const collapsePass = !predecessor || observationCount >= collapseFloor;
+  let collapseFloor = predecessor ? Math.ceil(predecessor.observation_count * 0.6) : 0;
+  let collapsePass = !predecessor || observationCount >= collapseFloor;
   const identityPass = batch.market_verified === 1 && batch.location_verified === 1 && batch.price_mode_verified === 1;
   const capturedToMillis = Date.parse(batch.captured_to);
   const captureAgeMillis = Date.now() - capturedToMillis;
@@ -2745,6 +2785,15 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
       expectedTerms: batch.expected_terms,
     }, evidenceRows.results, body.browserEvidenceAttestation, captureTermsSha256)
     : { pass: true, detail: { required: false }, metrics: null };
+  if (batch.capture_method === "browser" && predecessor && browserEvidence.metrics) {
+    const priorDiscovery = await context.env.DB.prepare(
+      "SELECT discovery_rows FROM browser_capture_metrics WHERE batch_id = ?1",
+    ).bind(predecessor.id).first<{ discovery_rows: number }>();
+    if (priorDiscovery && priorDiscovery.discovery_rows > 0) {
+      collapseFloor = Math.ceil(priorDiscovery.discovery_rows * 0.6);
+      collapsePass = browserEvidence.metrics.discoveryRows >= collapseFloor;
+    }
+  }
   const captureSemanticsRequired = batch.capture_method !== "legacy_bridge"
     && Date.parse(batch.captured_to) >= Date.parse(CAPTURE_SEMANTICS_CUTOVER);
   const priceSemantics = await context.env.DB.prepare(
@@ -2880,12 +2929,13 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
          accuracy_policy_version, discovery_rows, required_verification_rows, matched_verification_rows,
          unresolved_verification_rows, price_agreement_rows, single_channel_rows, anomaly_rows, retrieval_complete_terms,
          page_state_attested_rows, promotion_semantics_rows, unique_products, discovery_edges,
-         duplicate_product_references, product_reads_required, verification_reuse, immutable_shard_count
+         duplicate_product_references, product_reads_required, verification_reuse, immutable_shard_count,
+         daily_shard_count, likely_winner_rows, confirmed_winner_rows
        ) VALUES (
          ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10,
          ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20,
          ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29, ?30, ?31,
-         ?32, ?33, ?34, ?35, ?36, ?37
+         ?32, ?33, ?34, ?35, ?36, ?37, ?38, ?39, ?40
        )`,
     ).bind(
       batch.id, metrics.sessionId, metrics.sourceId, metrics.cycleStart, metrics.coverageMode,
@@ -2897,7 +2947,22 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
       metrics.pageStateAttestedRows, metrics.promotionSemanticsRows,
       metrics.uniqueProducts ?? 0, metrics.discoveryEdges ?? 0, metrics.duplicateProductReferences ?? 0,
       metrics.productReadsRequired ?? 0, metrics.verificationReuse ?? 0, metrics.immutableShardCount ?? 0,
+      metrics.dailyShardCount, metrics.likelyWinnerRows, metrics.confirmedWinnerRows,
     ));
+    for (const shard of body.browserEvidenceAttestation?.dailyShards ?? []) statements.push(context.env.DB.prepare(
+      `INSERT INTO browser_capture_shards
+         (batch_id, shard_date, ordinal, content_hash, term_count, row_count, chunk_count, first_observed_at, last_observed_at)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)`,
+    ).bind(batch.id, shard.date, shard.ordinal, shard.contentHash, shard.termCount, shard.rowCount, shard.chunkCount, shard.firstObservedAt, shard.lastObservedAt));
+    const confirmations = body.browserEvidenceAttestation?.offerConfirmations ?? [];
+    for (let offset = 0; offset < confirmations.length; offset += 14) {
+      const confirmationChunk = confirmations.slice(offset, offset + 14);
+      statements.push(context.env.DB.prepare(
+        `INSERT INTO capture_offer_confirmations
+           (batch_id, product_key, discovery_hash, purchase_price_minor, discovered_at, confirmed_at, confirmation_kind)
+         VALUES ${confirmationChunk.map(() => "(?, ?, ?, ?, ?, ?, 'browser-independent-read')").join(", ")}`,
+      ).bind(...confirmationChunk.flatMap((confirmation) => [batch.id, confirmation.productKey, confirmation.discoveryHash, confirmation.purchasePriceMinor, confirmation.discoveredAt, confirmation.confirmedAt])));
+    }
   }
   for (const [guardId, pass, eligible, examined, detail] of [
     ["batch-location", identityPass, 3, 3, {}],

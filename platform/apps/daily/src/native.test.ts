@@ -22,6 +22,7 @@ describe("native release construction", () => {
       writeFile(path.join(configDirectory, "recipe-commodity-extensions.json"), JSON.stringify({ commodities: [] })),
       writeFile(path.join(configDirectory, "recipe-commodity-aliases.json"), JSON.stringify({})),
       writeFile(path.join(configDirectory, "known-wrong.json"), JSON.stringify({ entries: [] })),
+      writeFile(path.join(configDirectory, "ingredient-conversion-policy.json"), JSON.stringify({ version: 1, authority: "test", precedence: [], requirements: { maximumExceptionRatio: 20 }, confidence: {} })),
     ]);
     await expect(loadNativeReleaseCatalog(root)).rejects.toThrow("duplicate normalized item");
   });
@@ -38,6 +39,7 @@ describe("native release construction", () => {
       writeFile(path.join(configDirectory, "recipe-commodity-extensions.json"), JSON.stringify({ commodities: [] })),
       writeFile(path.join(configDirectory, "recipe-commodity-aliases.json"), JSON.stringify({})),
       writeFile(path.join(configDirectory, "known-wrong.json"), JSON.stringify({ entries: [] })),
+      writeFile(path.join(configDirectory, "ingredient-conversion-policy.json"), JSON.stringify({ version: 1, authority: "test", precedence: [], requirements: { maximumExceptionRatio: 20 }, confidence: {} })),
     ]);
     await writeFile(path.join(root, "meal-prep", "db", "ingredients.json"), JSON.stringify([
       { item: "Eggs", bid: "eggs", gpu: 600, unit: "dozen", buy_pkg_g: 600, buy_pkg_label: "dozen" },
@@ -91,6 +93,7 @@ describe("native release construction", () => {
       copyFile(path.join(realConfig, "recipe-commodities.json"), path.join(configDirectory, "recipe-commodities.json")),
       copyFile(path.join(realConfig, "recipe-commodity-extensions.json"), path.join(configDirectory, "recipe-commodity-extensions.json")),
       copyFile(path.join(realConfig, "recipe-commodity-aliases.json"), path.join(configDirectory, "recipe-commodity-aliases.json")),
+      copyFile(path.join(realConfig, "ingredient-conversion-policy.json"), path.join(configDirectory, "ingredient-conversion-policy.json")),
       writeFile(path.join(configDirectory, "known-wrong.json"), JSON.stringify({ entries: [] })),
     ]);
     const fixtures = [

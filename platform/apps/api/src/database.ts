@@ -46,9 +46,9 @@ export async function insertObservations(
     versionHash: string; firstSeenAt: string; lastSeenAt: string;
   }>();
   const observationStatements: D1PreparedStatement[] = [];
-  const semanticKeyStatements: D1PreparedStatement[] = [];
   const fingerprintStatements: D1PreparedStatement[] = [];
   const membershipStatements: D1PreparedStatement[] = [];
+  const entityUpserts = new Map<string, { identifierType: "gtin" | "upc"; identifierValue: string; canonicalName: string; brand: string | null; sizeText: string; productIds: Set<string> }>();
   const ids: string[] = [];
 
   for (const observation of observations) {
@@ -91,6 +91,17 @@ export async function insertObservations(
       firstSeenAt: priorVersion && priorVersion.firstSeenAt < observation.capturedAt ? priorVersion.firstSeenAt : observation.capturedAt,
       lastSeenAt: priorVersion && priorVersion.lastSeenAt > observation.capturedAt ? priorVersion.lastSeenAt : observation.capturedAt,
     });
+    const identityCode = observation.identity?.gtin ?? observation.identity?.upc;
+    if (identityCode) {
+      const identifierType = observation.identity?.gtin ? "gtin" as const : "upc" as const;
+      const entityId = await deterministicId("entity", identityCode.padStart(14, "0"));
+      const entity = entityUpserts.get(entityId) ?? {
+        identifierType, identifierValue: identityCode, canonicalName: observation.name,
+        brand: observation.identity?.brand ?? null, sizeText: observation.sizeText, productIds: new Set<string>(),
+      };
+      entity.productIds.add(productId);
+      entityUpserts.set(entityId, entity);
+    }
 
     observationStatements.push(db.prepare(
       `INSERT OR IGNORE INTO observations
@@ -132,9 +143,6 @@ export async function insertObservations(
       observation.offerSnapshot?.availability.fulfillmentMode ?? "unknown",
       observation.offerSnapshot?.sellerName ?? null,
     ));
-    semanticKeyStatements.push(db.prepare(
-      `INSERT OR IGNORE INTO observation_semantic_keys (semantic_hash, observation_id) VALUES (?1, ?2)`,
-    ).bind(semanticObservation.hash, observationId));
     fingerprintStatements.push(db.prepare(
       `INSERT OR IGNORE INTO observation_fingerprints (observation_id, semantic_hash) VALUES (?1, ?2)`,
     ).bind(observationId, semanticObservation.hash));
@@ -183,7 +191,24 @@ export async function insertObservations(
       version.firstSeenAt, version.lastSeenAt,
     ));
   }
-  statements.push(...observationStatements, ...semanticKeyStatements, ...fingerprintStatements, ...membershipStatements);
+  for (const [entityId, entity] of entityUpserts) {
+    statements.push(db.prepare(
+      `INSERT INTO product_entities (id, canonical_name, canonical_brand, canonical_size_text, confidence)
+       VALUES (?1, ?2, ?3, ?4, 'strong') ON CONFLICT(id) DO UPDATE SET
+         canonical_brand = COALESCE(product_entities.canonical_brand, excluded.canonical_brand),
+         updated_at = CURRENT_TIMESTAMP`,
+    ).bind(entityId, entity.canonicalName, entity.brand, entity.sizeText));
+    statements.push(db.prepare(
+      `INSERT OR IGNORE INTO product_entity_identifiers (identifier_type, identifier_value, entity_id)
+       VALUES (?1, ?2, ?3)`,
+    ).bind(entity.identifierType, entity.identifierValue, entityId));
+    for (const productId of entity.productIds) statements.push(db.prepare(
+      `INSERT OR IGNORE INTO product_entity_links
+         (product_id, entity_id, link_method, confidence_millis, evidence_json)
+       VALUES (?1, ?2, ?3, 1000, ?4)`,
+    ).bind(productId, entityId, entity.identifierType, stableJson({ identifierType: entity.identifierType, identifierValue: entity.identifierValue })));
+  }
+  statements.push(...observationStatements, ...fingerprintStatements, ...membershipStatements);
 
   // D1 batch calls have practical statement and payload ceilings. Keep the
   // application contract independent of those ceilings by flushing bounded groups.
@@ -212,21 +237,42 @@ export async function createRelease(db: D1Database, release: ReleaseCreate): Pro
       "INSERT INTO release_input_batches (release_id, batch_id, ordinal) VALUES (?1, ?2, ?3)",
     ).bind(release.id, batchId, ordinal));
   });
+  const registry = release.inputManifest.ingredientConversionRegistry;
+  if (registry && typeof registry === "object" && !Array.isArray(registry)) {
+    const value = registry as Record<string, unknown>;
+    if (typeof value.contentHash === "string" && /^[a-f0-9]{64}$/.test(value.contentHash)
+      && Number.isSafeInteger(value.version) && Number(value.version) > 0
+      && Number.isSafeInteger(value.entryCount) && Number(value.entryCount) > 0) {
+      statements.push(db.prepare(
+        `INSERT OR IGNORE INTO ingredient_conversion_registry_versions
+           (content_hash, version, policy_json, entry_count) VALUES (?1, ?2, ?3, ?4)`,
+      ).bind(value.contentHash, Number(value.version), stableJson(value), Number(value.entryCount)));
+    }
+  }
   await db.batch(statements);
 }
 
 export async function insertReleaseCells(db: D1Database, releaseId: string, cells: readonly ReleaseCell[]): Promise<void> {
-  const statements = cells.map((cell) => db.prepare(
+  const statements: D1PreparedStatement[] = [];
+  for (const cell of cells) {
+    const reasonJson = stableJson(cell.reason);
+    const reasonHash = await digestHex(reasonJson);
+    statements.push(db.prepare(
+      `INSERT OR IGNORE INTO release_reason_blobs (content_hash, reason_json, byte_length)
+       VALUES (?1, ?2, ?3)`,
+    ).bind(reasonHash, reasonJson, new TextEncoder().encode(reasonJson).byteLength));
+    statements.push(db.prepare(
     `INSERT INTO release_cells
-       (release_id, commodity_id, store_location_id, observation_id, status, is_crown, display_per_unit_micros, display_unit, reason_json)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
+       (release_id, commodity_id, store_location_id, observation_id, status, is_crown, display_per_unit_micros, display_unit, reason_json, reason_hash)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, '{}', ?9)
      ON CONFLICT(release_id, commodity_id, store_location_id) DO UPDATE SET
        observation_id = excluded.observation_id,
        status = excluded.status,
        is_crown = excluded.is_crown,
        display_per_unit_micros = excluded.display_per_unit_micros,
        display_unit = excluded.display_unit,
-       reason_json = excluded.reason_json`,
+       reason_json = '{}',
+       reason_hash = excluded.reason_hash`,
   ).bind(
     releaseId,
     cell.commodityId,
@@ -236,8 +282,9 @@ export async function insertReleaseCells(db: D1Database, releaseId: string, cell
     cell.isCrown ? 1 : 0,
     cell.displayPerUnitMicros ?? null,
     cell.displayUnit ?? null,
-    stableJson(cell.reason),
+    reasonHash,
   ));
+  }
   for (let offset = 0; offset < statements.length; offset += 90) {
     await db.batch(statements.slice(offset, offset + 90));
   }

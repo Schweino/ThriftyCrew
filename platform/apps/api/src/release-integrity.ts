@@ -53,6 +53,12 @@ export async function evaluateReleaseIntegrity(env: WorkerEnv, releaseId: string
   ).bind(releaseId).all<{ id: string; purchase_price_minor: number; normalized_basis_unit: string; normalized_basis_qty_micros: number; membership_required: number; loyalty_required: number }>();
   const observations = new Map(observationRows.results.map((row) => [row.id, row]));
   const arithmeticFindings: ReleaseGuardResult["findings"] = [];
+  const conversionFindings: ReleaseGuardResult["findings"] = [];
+  const releaseRegistry = await env.DB.prepare(
+    `SELECT json_extract(input_manifest_json, '$.ingredientConversionRegistry.contentHash') AS content_hash,
+            CAST(json_extract(input_manifest_json, '$.ingredientConversionRegistry.entryCount') AS INTEGER) AS entry_count
+       FROM releases WHERE id = ?1`,
+  ).bind(releaseId).first<{ content_hash: string | null; entry_count: number | null }>();
   for (const cost of costs.results) {
     let detail: Record<string, unknown>;
     try { detail = record(JSON.parse(cost.detail_json)); } catch { detail = {}; }
@@ -92,9 +98,16 @@ export async function evaluateReleaseIntegrity(env: WorkerEnv, releaseId: string
         || observation.normalized_basis_qty_micros !== Number(ingredient.sourceNormalizedBasisQtyMicros)) {
         arithmeticFindings.push({ key: `line:${cost.recipe_slug}:${index}`, message: "Recipe ingredient line is not reproducible from its immutable source observation", evidence: { observationId, expectedUtilizedMinor: expectedUtilized, expectedCheckoutMinor: expectedCheckout, ingredient, sourceObservation: observation ?? null } });
       }
+      if (!releaseRegistry?.content_hash || ingredient.conversionRegistryHash !== releaseRegistry.content_hash
+        || typeof ingredient.conversionId !== "string" || !ingredient.conversionId
+        || !["recipe-scaler-exception", "ingredient-definition"].includes(String(ingredient.conversionSource))
+        || ingredient.conversionConfidence !== "moderate") {
+        conversionFindings.push({ key: `${cost.recipe_slug}:${index}`, message: "Recipe ingredient conversion is outside the immutable governed registry", evidence: { ingredient: ingredient.item, conversionId: ingredient.conversionId ?? null, conversionRegistryHash: ingredient.conversionRegistryHash ?? null, releaseRegistryHash: releaseRegistry?.content_hash ?? null } });
+      }
     }
   }
   await upsertGuardResult(env.DB, releaseId, guard("release-recipe-arithmetic", arithmeticFindings, costs.results.length, { authority: "server recomputation over immutable release observations" }));
+  await upsertGuardResult(env.DB, releaseId, guard("release-conversion-registry", conversionFindings, costs.results.length, { registryHash: releaseRegistry?.content_hash ?? null, registryEntries: releaseRegistry?.entry_count ?? 0 }));
 
   const [topRows, rotationRows] = await Promise.all([
     env.DB.prepare(

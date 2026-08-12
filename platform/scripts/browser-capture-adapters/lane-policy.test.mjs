@@ -23,6 +23,19 @@ describe("browser store lane policy", () => {
     await expect(browserLanePolicy("walmart", new Date("2026-08-12T15:02:00Z"), environment)).resolves.toMatchObject({ maxTerms: 5 });
   });
 
+  it("uses latency EWMA and success streaks to recover lane depth gradually", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-browser-lane-"));
+    roots.push(root);
+    const environment = { LOCALAPPDATA: root, TC_CAPTURE_CONTROLLER_ORIGIN: "disabled" };
+    const failed = await recordBrowserLaneResult("walmart", "rejected", 12_000, new Date("2026-08-12T15:00:00Z"), environment);
+    expect(failed).toMatchObject({ dynamicMaxTerms: 2, successStreak: 0 });
+    await recordBrowserLaneResult("walmart", "success", 1000, new Date("2026-08-12T15:01:00Z"), environment);
+    await recordBrowserLaneResult("walmart", "success", 1000, new Date("2026-08-12T15:02:00Z"), environment);
+    const recovered = await recordBrowserLaneResult("walmart", "success", 1000, new Date("2026-08-12T15:03:00Z"), environment);
+    expect(recovered.dynamicMaxTerms).toBe(3);
+    expect(recovered.ewmaLatencyMs).toBeGreaterThan(0);
+  });
+
   it("enforces one active operation per store", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "tc-browser-lane-"));
     roots.push(root);

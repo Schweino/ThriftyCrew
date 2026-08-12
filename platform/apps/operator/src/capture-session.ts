@@ -15,7 +15,7 @@ import {
 import { browserCaptureTruthPass, buildBrowserCaptureAccuracy, digestHex, normalizeName, parseCapturePriceText, stableJson } from "@thriftycrew/domain";
 import { compileProductMatcher } from "@thriftycrew/engine";
 import { captureAdapterManifest, validateCaptureAdapterManifest, type CaptureAdapterManifest } from "../../../scripts/browser-capture-adapters/adapter-registry.mjs";
-import { commitSessionChunk, completeSessionWorkUnits, readPlannerJournal, readSessionJournal, readSessionPayload, replacePlannerJournal, replaceSessionWorkUnits, sessionEvidence, setCaptureSessionPhase, storeSessionEvidence, upsertSessionJournal } from "./capture-journal";
+import { commitSessionChunk, completeSessionWorkUnits, readCatalogQueryStats, readPlannerJournal, readSessionJournal, readSessionPayload, replaceCatalogSnapshot, replacePlannerJournal, replaceSessionWorkUnits, sessionEvidence, setCaptureSessionPhase, storeSessionEvidence, upsertSessionJournal } from "./capture-journal";
 
 const storeSchema = z.enum(["aldi", "fareway", "sams", "walmart"]);
 type BrowserStore = z.infer<typeof storeSchema>;
@@ -267,13 +267,18 @@ export async function buildCaptureSessionWorklist(
       replacePlannerJournal(historyNamespace, history as Record<string, Record<string, unknown>>, new Date().toISOString());
     } catch { /* first cycle has no history */ }
   }
+  const inferredStore = (["aldi", "fareway", "sams", "walmart"] as const).find((store) => path.basename(pullOrderFile).toLowerCase().includes(store));
+  const catalog = inferredStore ? readCatalogQueryStats(inferredStore) : {};
   const score = (query: string): number => {
     const row = history[queryIdentity(query)];
     if (!row) return 0;
     const yieldScore = Math.max(0, row.distinctProducts ?? 0) * 1000;
     const duplicatePenalty = Math.max(0, row.duplicateProducts ?? 0) * 100;
     const latencyPenalty = Math.max(0, row.durationMs ?? 0) / 1000;
-    return yieldScore - duplicatePenalty - latencyPenalty + (row.complete === true ? 100 : 0);
+    const catalogRow = catalog[queryIdentity(query)];
+    const reusableCatalogScore = Math.max(0, catalogRow?.productCount ?? 0) * 250;
+    const staleRefreshScore = Math.min(14, Math.max(0, catalogRow?.ageDays ?? 0)) * 25;
+    return yieldScore + reusableCatalogScore + staleRefreshScore - duplicatePenalty - latencyPenalty + (row.complete === true ? 100 : 0);
   };
   const terms = merged.terms
     .map((query, ordinal) => ({ query, ordinal, rescue: rescueIdentities.has(queryIdentity(query)), score: score(query) }))
@@ -283,7 +288,7 @@ export async function buildCaptureSessionWorklist(
   const termIdentities = new Set(terms.map(queryIdentity));
   const retainedPullTerms = pullOrder.filter((term) => termIdentities.has(queryIdentity(term))).length;
   if (retainedPullTerms !== pullOrder.length) throw new Error(`capture worklist lost ${pullOrder.length - retainedPullTerms} generated pull-order queries`);
-  await atomicJson(outputFile, { version: 2, terms, aliases: merged.aliases, planner: { historyFile, historyNamespace, historyQueries: Object.keys(history).length, shadowCoverageTerms: pullOrder.length } });
+  await atomicJson(outputFile, { version: 2, terms, aliases: merged.aliases, planner: { historyFile, historyNamespace, historyQueries: Object.keys(history).length, catalogQueries: Object.keys(catalog).length, shadowCoverageTerms: pullOrder.length } });
   return {
     ok: true,
     outputFile,
@@ -293,6 +298,7 @@ export async function buildCaptureSessionWorklist(
     rescueOnlyTerms: rescue.filter((term) => !pullSet.has(term)).length,
     mergedDuplicateTerms: merged.aliases.length,
     historyQueries: Object.keys(history).length,
+    catalogQueries: Object.keys(catalog).length,
     totalTerms: terms.length,
   };
 }
@@ -513,6 +519,7 @@ function accuracyCandidates(draft: DraftSession, state: LoadedSessionState): Arr
 async function buildProductEvidence(
   accuracy: Awaited<ReturnType<typeof buildBrowserCaptureAccuracy>>,
   chunks: BrowserCaptureSessionV2["chunks"],
+  retainedRows: number,
 ): Promise<NonNullable<BrowserCaptureSessionV2["productEvidence"]>> {
   type ProductEvidence = NonNullable<BrowserCaptureSessionV2["productEvidence"]>;
   const snapshots = new Map<string, ProductEvidence["productSnapshots"][number]>();
@@ -541,8 +548,57 @@ async function buildProductEvidence(
     uniqueProducts: productSnapshots.length, duplicateProductReferences: discoveryEdges.length - productSnapshots.length,
     productReadsRequired: new Set(discoveryEdges.filter((edge) => edge.verificationRequired).map((edge) => edge.snapshotId)).size,
     rowVerificationsSatisfied: verificationReads.reduce((total, read) => total + read.satisfies.length, 0),
+    operationalProjection: {
+      discoveryRows: discoveryEdges.length,
+      retainedRows,
+      omittedRows: Math.max(0, discoveryEdges.length - retainedRows),
+      policy: "authored-matches-plus-verified-risk" as const,
+    },
   };
   return { ...content, contentHash: await digestHex(stableJson(content)) };
+}
+
+function centralDateKey(instant: string): string {
+  const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Chicago", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date(instant));
+  const values = Object.fromEntries(parts.filter((part) => part.type !== "literal").map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
+async function buildDailyShards(state: LoadedSessionState, terms: BrowserCaptureSessionV2["terms"]): Promise<BrowserCaptureSessionV2["dailyShards"]> {
+  const termByKey = new Map(terms.map((term) => [term.termKey, term]));
+  const groups = new Map<string, BrowserCaptureSessionV2["chunks"]>();
+  for (const chunk of state.chunkEntries) {
+    const observedAt = chunk.termKeys.map((key) => termByKey.get(key)?.finishedAt).filter((value): value is string => Boolean(value)).sort().at(-1) ?? chunk.createdAt;
+    const date = centralDateKey(observedAt);
+    const values = groups.get(date) ?? [];
+    values.push(chunk);
+    groups.set(date, values);
+  }
+  const shards = [] as BrowserCaptureSessionV2["dailyShards"];
+  for (const [ordinal, [date, chunks]] of [...groups.entries()].sort(([left], [right]) => left.localeCompare(right)).entries()) {
+    const shardTerms = [...new Set(chunks.flatMap((chunk) => chunk.termKeys))].map((key) => termByKey.get(key)).filter((term): term is BrowserCaptureSessionV2["terms"][number] => Boolean(term));
+    const instants = [...shardTerms.flatMap((term) => [term.startedAt, term.finishedAt]), ...chunks.map((chunk) => chunk.createdAt)].sort();
+    const contentHash = await digestHex(stableJson(chunks.map((chunk) => ({ id: chunk.id, phase: chunk.phase, sha256: chunk.sha256, rowCount: chunk.rowCount, verificationCount: chunk.verificationCount }))));
+    shards.push({
+      date, ordinal, contentHash, termCount: shardTerms.length,
+      rowCount: chunks.reduce((sum, chunk) => sum + chunk.rowCount, 0), chunkCount: chunks.length,
+      firstObservedAt: instants[0]!, lastObservedAt: instants.at(-1)!,
+    });
+  }
+  return shards;
+}
+
+function retainedOperationalRows(
+  rows: Array<Record<string, unknown>>,
+  accuracy: Awaited<ReturnType<typeof buildBrowserCaptureAccuracy>>,
+): Array<Record<string, unknown>> {
+  if (rows.length !== accuracy.discoveryRows.length) throw new Error("capture accuracy row order no longer agrees with discovery evidence");
+  const retained = rows.filter((_row, index) => {
+    const evidence = accuracy.discoveryRows[index]!;
+    return evidence.matchEligible === true || evidence.verificationRequired || evidence.riskReasons.includes("likely-board-winner");
+  });
+  if (retained.length === 0) throw new Error("operational projection removed every captured product");
+  return retained;
 }
 
 export async function buildCaptureVerificationPlan(directory: string, outputFile: string): Promise<Record<string, unknown>> {
@@ -588,9 +644,11 @@ export async function finalizeCaptureSession(directory: string, projectedOutputF
   const mergedRows = draft.worklist.flatMap((term) => state.latest.get(term.query)?.rows ?? []);
   if (mergedRows.length === 0) throw new Error("capture session contains no projected product rows");
   const accuracy = await buildBrowserCaptureAccuracy(draft.store, accuracyCandidates(draft, state), state.verifications, terms);
-  const projectedCaptureSha256 = await renderProjectedCapture(draft.store, mergedRows, projectedOutputFile, draft.worklist);
+  const operationalRows = retainedOperationalRows(mergedRows, accuracy);
+  const projectedCaptureSha256 = await renderProjectedCapture(draft.store, operationalRows, projectedOutputFile, draft.worklist);
   const coverageMode: BrowserCaptureSessionV2["coverageMode"] = terms.every((term) => term.outcome === "success" || term.outcome === "empty") && accuracy.pass ? "full" : "partial";
-  const productEvidence = await buildProductEvidence(accuracy, state.chunkEntries);
+  const productEvidence = await buildProductEvidence(accuracy, state.chunkEntries, operationalRows.length);
+  const dailyShards = await buildDailyShards(state, terms);
   const manifestContent = {
     version: 2 as const,
     sessionId: draft.sessionId,
@@ -607,6 +665,7 @@ export async function finalizeCaptureSession(directory: string, projectedOutputF
     chunks: state.chunkEntries,
     accuracy,
     productEvidence,
+    dailyShards,
     projectedCaptureSha256,
   };
   const manifest = browserCaptureSessionSchema.parse({ ...manifestContent, contentHash: await digestHex(stableJson(manifestContent)) });
@@ -628,6 +687,11 @@ export async function finalizeCaptureSession(directory: string, projectedOutputF
     await atomicJson(draft.plannerHistoryFile, history);
     replacePlannerJournal(draft.plannerHistoryNamespace ?? path.resolve(draft.plannerHistoryFile).toLowerCase(), history, finishedAt);
   }
+  replaceCatalogSnapshot(draft.store, accuracy.discoveryRows.map((row) => ({
+    productKey: row.productKey, queryKey: queryIdentity(row.query), name: row.name, sizeText: row.sizeText,
+    taxonomyPath: row.taxonomyPath ?? null, purchasePriceMinor: row.purchasePriceMinor,
+    observedAt: row.truth.capturedAt, pageUrl: row.truth.pageUrl,
+  })), finishedAt);
   return manifest;
 }
 

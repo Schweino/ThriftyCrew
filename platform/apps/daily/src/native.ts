@@ -47,6 +47,25 @@ interface PricedRecipeOption {
   raw: NonNullable<NativeEngineSnapshot["rawCandidates"]>[number] | NativeEngineSnapshot["candidates"][number];
 }
 
+interface IngredientConversionPolicy {
+  version: number;
+  authority: string;
+  precedence: string[];
+  requirements: { maximumExceptionRatio: number };
+  confidence: Record<string, "moderate">;
+}
+
+interface IngredientConversionEntry {
+  recipeSlug: string;
+  ingredientKey: string;
+  canonicalIngredientKey: string;
+  gramsPerBasisUnit: number;
+  source: "recipe-scaler-exception" | "ingredient-definition";
+  confidence: "moderate";
+  scalerGpu: number | null;
+  definitionGpu: number;
+}
+
 export interface NativeReleaseArtifact {
   version: 3;
   marketId: "omaha";
@@ -78,18 +97,24 @@ interface NativeReleaseCatalog {
   recipeCatalogHash: string;
   ingredientCatalogHash: string;
   recipePricingConfigurationHash: string;
+  conversionPolicy: IngredientConversionPolicy;
+  conversionPolicyHash: string;
+  conversionRegistryHash: string;
+  conversionRegistry: Map<string, IngredientConversionEntry>;
+  conversionRegistryEntries: number;
 }
 
 export async function loadNativeReleaseCatalog(incomeRoot: string): Promise<NativeReleaseCatalog> {
   const recipeDirectory = path.join(incomeRoot, "meal-prep", "db", "recipes");
   const configRoot = path.join(incomeRoot, "platform", "config");
-  const [ingredientBytes, recipeNames, recipeRuleBytes, recipeExtensionBytes, aliasBytes, knownWrongBytes] = await Promise.all([
+  const [ingredientBytes, recipeNames, recipeRuleBytes, recipeExtensionBytes, aliasBytes, knownWrongBytes, conversionPolicyBytes] = await Promise.all([
     readFile(path.join(incomeRoot, "meal-prep", "db", "ingredients.json"), "utf8"),
     readdir(recipeDirectory),
     readFile(path.join(configRoot, "recipe-commodities.json"), "utf8"),
     readFile(path.join(configRoot, "recipe-commodity-extensions.json"), "utf8"),
     readFile(path.join(configRoot, "recipe-commodity-aliases.json"), "utf8"),
     readFile(path.join(configRoot, "known-wrong.json"), "utf8"),
+    readFile(path.join(configRoot, "ingredient-conversion-policy.json"), "utf8"),
   ]);
   const ingredientDefinitions = JSON.parse(ingredientBytes.replace(/^\uFEFF/, "")) as IngredientDefinition[];
   const ingredientKeys = new Set<string>();
@@ -107,6 +132,37 @@ export async function loadNativeReleaseCatalog(incomeRoot: string): Promise<Nati
   const recipeExtensions = JSON.parse(recipeExtensionBytes.replace(/^\uFEFF/, "")) as NativeReleaseCatalog["recipeExtensions"];
   const recipeAliases = JSON.parse(aliasBytes.replace(/^\uFEFF/, "")) as Record<string, string>;
   const knownWrong = JSON.parse(knownWrongBytes.replace(/^\uFEFF/, "")) as KnownWrongDocument;
+  const conversionPolicy = JSON.parse(conversionPolicyBytes.replace(/^\uFEFF/, "")) as IngredientConversionPolicy;
+  if (conversionPolicy.version !== 1 || !Number.isFinite(conversionPolicy.requirements?.maximumExceptionRatio)) throw new Error("ingredient conversion policy is invalid");
+  const definitionByName = new Map(ingredientDefinitions.map((definition) => [key(definition.item), definition]));
+  const conversionEntries: IngredientConversionEntry[] = [];
+  for (const recipe of recipes) {
+    const scalerByName = new Map((recipe.scaler?.ing ?? []).map((item) => [key(item.item), item]));
+    for (const ingredient of recipe.ingredients_grams ?? []) {
+      const scaler = scalerByName.get(key(ingredient.item));
+      const canonicalIngredientKey = key(scaler?.canon ?? ingredient.item);
+      const definition = definitionByName.get(canonicalIngredientKey) ?? definitionByName.get(key(ingredient.item));
+      const definitionGpu = asNumber(definition?.gpu);
+      const scalerGpu = asNumber(scaler?.gpu);
+      if (!definitionGpu) {
+        if (scalerGpu) throw new Error(`conversion registry has a scaler GPU without an ingredient-definition authority for ${recipe.slug}/${ingredient.item}`);
+        continue;
+      }
+      if (scalerGpu && Math.max(scalerGpu / definitionGpu, definitionGpu / scalerGpu) > conversionPolicy.requirements.maximumExceptionRatio) {
+        throw new Error(`conversion registry exception exceeds policy ratio for ${recipe.slug}/${ingredient.item}`);
+      }
+      const exception = scalerGpu !== undefined && Math.abs(scalerGpu - definitionGpu) > 1e-9;
+      conversionEntries.push({
+        recipeSlug: recipe.slug, ingredientKey: key(ingredient.item), canonicalIngredientKey,
+        gramsPerBasisUnit: exception ? scalerGpu! : definitionGpu,
+        source: exception ? "recipe-scaler-exception" : "ingredient-definition",
+        confidence: "moderate", scalerGpu: scalerGpu ?? null, definitionGpu,
+      });
+    }
+  }
+  conversionEntries.sort((left, right) => left.recipeSlug.localeCompare(right.recipeSlug) || left.ingredientKey.localeCompare(right.ingredientKey));
+  const conversionRegistryHash = await digestHex(stableJson({ policy: conversionPolicy, entries: conversionEntries }));
+  const conversionRegistry = new Map(conversionEntries.map((entry) => [`${entry.recipeSlug}|${entry.ingredientKey}`, entry]));
   return {
     ingredientDefinitions,
     recipes,
@@ -117,6 +173,11 @@ export async function loadNativeReleaseCatalog(incomeRoot: string): Promise<Nati
     recipeCatalogHash: await digestHex(stableJson(recipes)),
     ingredientCatalogHash: await digestHex(stableJson(ingredientDefinitions)),
     recipePricingConfigurationHash: await digestHex(stableJson({ recipeRuleDocument, recipeExtensions, recipeAliases })),
+    conversionPolicy,
+    conversionPolicyHash: await digestHex(stableJson(conversionPolicy)),
+    conversionRegistryHash,
+    conversionRegistry,
+    conversionRegistryEntries: conversionEntries.length,
   };
 }
 
@@ -138,6 +199,13 @@ export async function nativeReleaseIdentity(
     recipeCatalogHash: catalog.recipeCatalogHash,
     ingredientCatalogHash: catalog.ingredientCatalogHash,
     recipePricingConfigurationHash: catalog.recipePricingConfigurationHash,
+    ingredientConversionRegistry: {
+      version: catalog.conversionPolicy.version,
+      contentHash: catalog.conversionRegistryHash,
+      policyHash: catalog.conversionPolicyHash,
+      entryCount: catalog.conversionRegistryEntries,
+      authority: catalog.conversionPolicy.authority,
+    },
   };
   const inputHash = await digestHex(stableJson({ inputManifest, inputBatchIds }));
   return { generatedAt, weekOf, inputBatchIds, inputManifest, inputHash, releaseId: `rel_native_${inputHash.slice(0, 20)}` };
@@ -335,7 +403,8 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
       const resolvedBid = requestedBids.find((bid) => commodityById.has(bid) || recipeRuleIds.has(bid))
         ?? aliasedBids.find((bid) => commodityById.has(bid) || recipeRuleIds.has(bid));
       const commodityId = resolvedBid ?? commodityByLabel.get(key(scaler?.canon ?? ingredient.item));
-      const gpu = asNumber(scaler?.gpu) ?? asNumber(definition?.gpu);
+      const conversion = catalog.conversionRegistry.get(`${recipe.slug}|${key(ingredient.item)}`);
+      const gpu = conversion?.gramsPerBasisUnit;
       const grams = asNumber(ingredient.grams);
       const options = commodityId ? (boardOptionsByCommodity.get(commodityId) ?? recipeOptionsByCommodity.get(commodityId) ?? []) : [];
       const crown = [...options].sort((left, right) => left.displayPerUnitMicros - right.displayPerUnitMicros || left.storeLocationId.localeCompare(right.storeLocationId))[0];
@@ -382,9 +451,13 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
         perUnitMicros: crown!.displayPerUnitMicros,
         basisUnit: crown!.displayUnit,
         gpu: gpu!,
-        gpuSource: scaler?.gpu !== undefined ? "recipe-scaler" : "ingredient-definition",
+        gpuSource: conversion?.source === "recipe-scaler-exception" ? "recipe-scaler" : "ingredient-definition",
         scalerGpu: asNumber(scaler?.gpu) ?? null,
         definitionGpu: asNumber(definition?.gpu) ?? null,
+        conversionId: `${catalog.conversionRegistryHash.slice(0, 16)}:${recipe.slug}:${key(ingredient.item).replace(/[^a-z0-9]+/g, "-")}`,
+        conversionRegistryHash: catalog.conversionRegistryHash,
+        conversionSource: conversion!.source,
+        conversionConfidence: conversion!.confidence,
         utilizedCostMinor: selectedCosts.utilizedMinor,
         purchaseCostMinor: selectedCosts.checkoutMinor,
         packageCount: selectedCosts.packages,

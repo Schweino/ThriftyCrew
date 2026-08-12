@@ -144,6 +144,43 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
     aisle_authoritative: number; known_wrong_rule_id: string | null;
   }>();
   const pricedCount = selectedRows.results.length;
+  const confirmationRows = await db.prepare(
+    `SELECT cell.commodity_id, cell.store_location_id, cell.observation_id, source.capture_method,
+            product.external_key,
+            CASE WHEN source.capture_method = 'browser' THEN EXISTS(
+              SELECT 1 FROM release_input_batches confirmation_input
+              JOIN capture_offer_confirmations confirmation ON confirmation.batch_id = confirmation_input.batch_id
+              WHERE confirmation_input.release_id = cell.release_id
+                AND confirmation.product_key = product.external_key
+                AND confirmation.purchase_price_minor = observation.purchase_price_minor
+            ) ELSE (
+              SELECT COUNT(DISTINCT membership.batch_id) FROM capture_observation_memberships membership
+              JOIN capture_batches repeat_batch ON repeat_batch.id = membership.batch_id
+              WHERE membership.observation_id = cell.observation_id
+                AND repeat_batch.status IN ('validated', 'promoted', 'superseded')
+            ) >= 2 END AS confirmed
+       FROM release_cells cell
+       JOIN observations observation ON observation.id = cell.observation_id
+       JOIN product_versions version ON version.id = observation.product_version_id
+       JOIN products product ON product.id = version.product_id
+       JOIN capture_batches origin_batch ON origin_batch.id = observation.batch_id
+       JOIN capture_sources source ON source.id = origin_batch.source_id
+      WHERE cell.release_id = ?1 AND cell.status = 'priced'
+      ORDER BY cell.commodity_id, cell.store_location_id`,
+  ).bind(context.releaseId).all<{ commodity_id: string; store_location_id: string; observation_id: string; capture_method: string; external_key: string; confirmed: number }>();
+  const unconfirmed = confirmationRows.results.filter((row) => row.confirmed !== 1);
+  await upsertGuardResult(db, context.releaseId, result(
+    "release-offer-confirmation",
+    unconfirmed.length === 0,
+    confirmationRows.results.length,
+    confirmationRows.results.length,
+    unconfirmed.map((row) => ({
+      key: `${row.commodity_id}:${row.store_location_id}`,
+      message: "Selected offer does not have an independent confirmation",
+      evidence: { observationId: row.observation_id, productKey: row.external_key, captureMethod: row.capture_method },
+    })),
+    { browserPolicy: "later independent product re-read", directPolicy: "same semantic fact observed in at least two validated capture batches" },
+  ));
   const aisleRows = selectedRows.results.filter((row) => row.aisle_authoritative === 1);
   const aisleMissing = aisleRows.filter((row) => !row.taxonomy_path);
   await upsertGuardResult(db, context.releaseId, result(
@@ -252,7 +289,7 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
     ? await db.prepare(
       `SELECT old.commodity_id, old.store_location_id, newer.status, newer.reason_json
          FROM release_cells old
-         LEFT JOIN release_cells newer
+         LEFT JOIN release_cells_with_reasons newer
            ON newer.release_id = ?1 AND newer.commodity_id = old.commodity_id AND newer.store_location_id = old.store_location_id
         WHERE old.release_id = ?2 AND old.status = 'priced'
           AND (newer.status IS NULL OR newer.status <> 'priced')

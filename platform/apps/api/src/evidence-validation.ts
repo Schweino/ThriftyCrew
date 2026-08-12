@@ -105,6 +105,9 @@ export interface BrowserCaptureMetricSummary {
   productReadsRequired: number | undefined;
   verificationReuse: number | undefined;
   immutableShardCount: number | undefined;
+  dailyShardCount: number;
+  likelyWinnerRows: number;
+  confirmedWinnerRows: number;
 }
 
 function percentile(values: readonly number[], percentileValue: number): number {
@@ -152,6 +155,14 @@ export function summarizeBrowserCaptureSession(session: BrowserCaptureSession): 
     verificationReuse: session.version === 2 && session.productEvidence
       ? Math.max(0, session.productEvidence.rowVerificationsSatisfied - session.productEvidence.verificationReads.length) : undefined,
     immutableShardCount: session.version === 2 ? session.productEvidence?.immutableShards.length : undefined,
+    dailyShardCount: session.version === 2 ? session.dailyShards.length : 0,
+    likelyWinnerRows: session.version === 2 ? session.accuracy.discoveryRows.filter((row) => row.riskReasons.includes("likely-board-winner")).length : 0,
+    confirmedWinnerRows: session.version === 2 ? session.accuracy.discoveryRows.filter((row) => {
+      if (!row.riskReasons.includes("likely-board-winner")) return false;
+      return session.accuracy.verifications.some((verification) => verification.rowKey === row.rowKey
+        && verification.discoveryHash === row.discoveryHash && verification.outcome === "observed"
+        && verification.purchasePriceMinor === row.purchasePriceMinor && verification.observedAt > row.truth.capturedAt);
+    }).length : 0,
   };
 }
 
@@ -183,6 +194,9 @@ export async function validateBrowserCaptureEvidence(
       && metric.unresolvedVerificationRows === 0
       && metric.retrievalCompleteTerms === attestation.expectedTerms
       && metric.priceAgreementRows + metric.singleChannelRows === metric.discoveryRows
+      && metric.dailyShardCount === attestation.dailyShards.length
+      && metric.likelyWinnerRows === metric.confirmedWinnerRows
+      && metric.confirmedWinnerRows === attestation.offerConfirmations.length
       && (metric.accuracyPolicyVersion !== 2 || metric.pageStateAttestedRows === metric.discoveryRows)
       && (metric.accuracyPolicyVersion !== 2 || metric.promotionSemanticsRows === metric.discoveryRows)
       && (attestation.coverageMode !== "full"
@@ -200,6 +214,9 @@ export async function validateBrowserCaptureEvidence(
       productReadsRequired: metric.productReadsRequired,
       verificationReuse: metric.verificationReuse,
       immutableShardCount: metric.immutableShardCount,
+      dailyShardCount: metric.dailyShardCount,
+      likelyWinnerRows: metric.likelyWinnerRows,
+      confirmedWinnerRows: metric.confirmedWinnerRows,
     };
     return {
       pass,

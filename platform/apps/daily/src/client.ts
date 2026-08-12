@@ -201,6 +201,19 @@ export async function buildBrowserEvidenceAttestation(
   if (!screenshotSha256) throw new Error("browser screenshot evidence is not bound by a capture canary");
   const attempted = session.terms.filter((term) => term.outcome !== "not_attempted");
   const durations = attempted.map((term) => Math.max(0, Date.parse(term.finishedAt) - Date.parse(term.startedAt)));
+  const latestVerification = new Map(session.accuracy.verifications.map((verification) => [verification.rowKey, verification]));
+  const offerConfirmations = session.accuracy.discoveryRows.flatMap((row) => {
+    if (!row.riskReasons.includes("likely-board-winner")) return [];
+    const verification = latestVerification.get(row.rowKey);
+    if (!verification || verification.outcome !== "observed" || verification.discoveryHash !== row.discoveryHash
+      || verification.purchasePriceMinor !== row.purchasePriceMinor || verification.observedAt <= row.truth.capturedAt) return [];
+    return [{
+      productKey: row.productKey, discoveryHash: row.discoveryHash, purchasePriceMinor: row.purchasePriceMinor,
+      discoveredAt: row.truth.capturedAt, confirmedAt: verification.observedAt,
+    }];
+  });
+  const expectedWinners = session.accuracy.discoveryRows.filter((row) => row.riskReasons.includes("likely-board-winner")).length;
+  if (offerConfirmations.length !== expectedWinners) throw new Error("browser likely-winner confirmations are incomplete");
   return {
     version: 1,
     verifier: "pc-browser-capture-queue",
@@ -218,6 +231,8 @@ export async function buildBrowserEvidenceAttestation(
     manifestSha256,
     projectedCaptureSha256: session.projectedCaptureSha256,
     screenshotSha256,
+    dailyShards: session.dailyShards,
+    offerConfirmations,
     metrics: {
       cycleStart: centralCycleStart(session.finishedAt),
       attemptedTerms: attempted.length,
@@ -251,6 +266,9 @@ export async function buildBrowserEvidenceAttestation(
         verificationReuse: Math.max(0, session.productEvidence.rowVerificationsSatisfied - session.productEvidence.verificationReads.length),
         immutableShardCount: session.productEvidence.immutableShards.length,
       } : {}),
+      dailyShardCount: session.dailyShards.length,
+      likelyWinnerRows: expectedWinners,
+      confirmedWinnerRows: offerConfirmations.length,
     },
   };
 }

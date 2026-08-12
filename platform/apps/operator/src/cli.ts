@@ -17,6 +17,7 @@ import { checkpointCaptureJournal, restoreCaptureJournal } from "./capture-journ
 import { findLatestRegularCapture, omahaDateKey, parseServerCaptureStore, readFreshRegularCapture, SERVER_CAPTURE_STORES } from "./current-captures";
 import { appendCaptureChunk, buildCaptureSessionWorklist, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession, retainCaptureSessionEvidence } from "./capture-session";
 import { captureControllerRequest } from "../../../scripts/capture-controller-client.mjs";
+import { catalogRefreshPlan } from "./capture-journal";
 import { agentJobRunFields } from "./job-run";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
@@ -552,6 +553,16 @@ if (command === "status") {
   const [runId, archiveSha256] = arguments_;
   if (!runId || !archiveSha256) throw new Error("tc cleanup execute requires a run id and verified archive SHA-256");
   result = await (await mutationClient()).request(`/internal/canonical-cleanup/${encodeURIComponent(runId)}/execute`, { json: { archiveSha256 } });
+} else if (command === "maintenance" && subcommand === "architecture") {
+  const [action = "status", value] = arguments_;
+  const client = await mutationClient();
+  if (action === "status") result = await client.request("/internal/maintenance/architecture");
+  else {
+    const apiAction = ({ reasons: "release-reasons", entities: "product-entities", suggestions: "entity-suggestions", "build-details": "recipe-detail-build", "compact-details": "recipe-detail-compact" } as Record<string, string>)[action];
+    if (!apiAction) throw new Error("tc maintenance architecture requires status, reasons, entities, suggestions, build-details, or compact-details");
+    if (["build-details", "compact-details"].includes(action) && !value) throw new Error(`${action} requires a release id`);
+    result = await client.request("/internal/maintenance/architecture", { json: { action: apiAction, ...(value ? { releaseId: value } : {}), limit: 200 } });
+  }
 } else if (command === "content" && subcommand === "show") {
   result = await (await mutationClient()).request("/internal/content-batches");
 } else if (command === "content" && subcommand === "create") {
@@ -873,8 +884,17 @@ if (command === "status") {
     const [directory, outputFile] = sessionArguments;
     if (!directory || !outputFile) throw new Error("tc capture session verification-plan requires a session directory and output JSON");
     result = await buildCaptureVerificationPlan(cliPath(directory), cliPath(outputFile));
+  } else if (action === "refresh-plan") {
+    const [store, outputFile, maxAgeInput = "7", limitInput = "500"] = sessionArguments;
+    if (!store || !outputFile) throw new Error("tc capture session refresh-plan requires store and output JSON");
+    const maxAgeDays = Number.parseInt(maxAgeInput, 10);
+    const limit = Number.parseInt(limitInput, 10);
+    if (!Number.isSafeInteger(maxAgeDays) || maxAgeDays < 1 || maxAgeDays > 90 || !Number.isSafeInteger(limit) || limit < 1 || limit > 2000) throw new Error("refresh-plan max age must be 1-90 days and limit 1-2000");
+    const targets = catalogRefreshPlan(store, maxAgeDays, limit);
+    await writeJson(cliPath(outputFile), { version: 1, store, generatedAt: new Date().toISOString(), maxAgeDays, targets });
+    result = { ok: true, store, outputFile: cliPath(outputFile), targets: targets.length };
   } else {
-    throw new Error("tc capture session requires worklist, init, append, evidence, verification-plan, finalize, or status");
+    throw new Error("tc capture session requires worklist, init, append, evidence, verification-plan, refresh-plan, finalize, or status");
   }
 } else if (command === "capture" && subcommand === "build-regular") {
   const browser = arguments_.includes("--browser");

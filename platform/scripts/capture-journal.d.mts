@@ -26,6 +26,9 @@ export function setCaptureSessionPhase(sessionId: string, phase: string, observe
 export function browserCaptureJournalDueState(now?: Date, file?: string): Record<string, unknown> | null;
 export function readPlannerJournal(namespace: string, file?: string): Record<string, Record<string, unknown>>;
 export function replacePlannerJournal(namespace: string, values: Record<string, Record<string, unknown>>, observedAt: string, file?: string): void;
+export function replaceCatalogSnapshot(store: string, rows: Array<{ productKey: string; queryKey: string; name: string; sizeText: string; taxonomyPath: string | null; purchasePriceMinor: number; observedAt: string; pageUrl: string }>, sessionAt?: string, file?: string): { store: string; products: number; edges: number; sessionAt: string };
+export function readCatalogQueryStats(store: string, now?: Date, file?: string): Record<string, { productCount: number; observations: number; lastObservedAt: string; ageDays: number }>;
+export function catalogRefreshPlan(store: string, maxAgeDays?: number, limit?: number, now?: Date, file?: string): Array<{ productKey: string; name: string; sizeText: string; taxonomyPath: string | null; previousPriceMinor: number; pageUrl: string; lastObservedAt: string }>;
 export function serializeCaptureJournal(file?: string): Uint8Array;
 export function closeCaptureJournals(): void;
 export function acquireControllerLane(store: string, owner: string, now?: Date, ttlMs?: number, environment?: NodeJS.ProcessEnv): { acquired: boolean; active?: number; reason?: string };

@@ -43,6 +43,7 @@ async function walmartBrowserSession(productName = "Eggs") {
       { id: "chunk-verification", phase: "verification" as const, ordinal: 1, termKeys: [], rowCount: 0, verificationCount: 1, sha256: "e".repeat(64), createdAt: "2026-08-12T15:01:30.000Z" },
     ],
     accuracy,
+    dailyShards: [{ date: "2026-08-12", ordinal: 0, contentHash: "f".repeat(64), termCount: 1, rowCount: 1, chunkCount: 2, firstObservedAt: "2026-08-12T15:00:00.000Z", lastObservedAt: "2026-08-12T15:01:30.000Z" }],
     projectedCaptureSha256: "d".repeat(64),
   };
   return { ...content, contentHash: await digestHex(stableJson(content)), screenshotSha256 };

@@ -75,6 +75,8 @@ describe("browser screenshot evidence", () => {
       coverageMode: "full" as const, startedAt: batch.capturedFrom, finishedAt: batch.capturedTo, expectedTerms: 1,
       captureTermsSha256: termsHash, sessionContentHash: "e".repeat(64), manifestSha256: manifestHash,
       projectedCaptureSha256: rawHash, screenshotSha256: screenshotHash,
+      dailyShards: [{ date: "2026-08-11", ordinal: 0, contentHash: "f".repeat(64), termCount: 1, rowCount: 3, chunkCount: 2, firstObservedAt: batch.capturedFrom, lastObservedAt: batch.capturedTo }],
+      offerConfirmations: [{ productKey: "123", discoveryHash: "1".repeat(64), purchasePriceMinor: 199, discoveredAt: "2026-08-11T15:01:00.000Z", confirmedAt: "2026-08-11T15:01:30.000Z" }],
       metrics: {
         cycleStart: "2026-08-05", attemptedTerms: 1, successTerms: 1, emptyTerms: 0, rejectedTerms: 0,
         blockedTerms: 0, notAttemptedTerms: 0, retryCount: 0, chunkCount: 2, durationMs: 120_000,
@@ -82,6 +84,7 @@ describe("browser screenshot evidence", () => {
         discoveryRows: 3, requiredVerificationRows: 1, matchedVerificationRows: 1, unresolvedVerificationRows: 0,
         priceAgreementRows: 3, singleChannelRows: 0, anomalyRows: 0, retrievalCompleteTerms: 1,
         pageStateAttestedRows: 3, promotionSemanticsRows: 3,
+        dailyShardCount: 1, likelyWinnerRows: 1, confirmedWinnerRows: 1,
       },
     };
     const rows = [

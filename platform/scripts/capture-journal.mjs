@@ -89,9 +89,69 @@ function database(file = captureJournalPath()) {
       local_status TEXT NOT NULL, remote_status TEXT, match_status TEXT, enqueued_at TEXT NOT NULL, updated_at TEXT NOT NULL
     );
     CREATE INDEX IF NOT EXISTS capture_source_latest_idx ON capture_source_state(source_id, captured_to DESC, enqueued_at DESC);
+    CREATE TABLE IF NOT EXISTS capture_catalog_products (
+      store TEXT NOT NULL, product_key TEXT NOT NULL, name TEXT NOT NULL, size_text TEXT NOT NULL,
+      taxonomy_path TEXT, purchase_price_minor INTEGER NOT NULL, page_url TEXT NOT NULL,
+      first_observed_at TEXT NOT NULL, last_observed_at TEXT NOT NULL, last_session_at TEXT NOT NULL,
+      PRIMARY KEY(store, product_key)
+    );
+    CREATE INDEX IF NOT EXISTS capture_catalog_stale_idx ON capture_catalog_products(store, last_observed_at, product_key);
+    CREATE TABLE IF NOT EXISTS capture_catalog_query_edges (
+      store TEXT NOT NULL, query_key TEXT NOT NULL, product_key TEXT NOT NULL,
+      first_observed_at TEXT NOT NULL, last_observed_at TEXT NOT NULL, observations INTEGER NOT NULL DEFAULT 1,
+      PRIMARY KEY(store, query_key, product_key),
+      FOREIGN KEY(store, product_key) REFERENCES capture_catalog_products(store, product_key)
+    );
+    CREATE INDEX IF NOT EXISTS capture_catalog_query_idx ON capture_catalog_query_edges(store, query_key, last_observed_at DESC);
   `);
   databases.set(key, db);
   return db;
+}
+
+export function replaceCatalogSnapshot(store, rows, sessionAt = new Date().toISOString(), file) {
+  const db = database(file);
+  const product = db.prepare(`INSERT INTO capture_catalog_products
+    (store, product_key, name, size_text, taxonomy_path, purchase_price_minor, page_url, first_observed_at, last_observed_at, last_session_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT(store, product_key) DO UPDATE SET name=excluded.name, size_text=excluded.size_text,
+      taxonomy_path=COALESCE(excluded.taxonomy_path, capture_catalog_products.taxonomy_path),
+      purchase_price_minor=excluded.purchase_price_minor, page_url=excluded.page_url,
+      last_observed_at=MAX(capture_catalog_products.last_observed_at, excluded.last_observed_at),
+      last_session_at=excluded.last_session_at`);
+  const edge = db.prepare(`INSERT INTO capture_catalog_query_edges
+    (store, query_key, product_key, first_observed_at, last_observed_at, observations)
+    VALUES (?, ?, ?, ?, ?, 1) ON CONFLICT(store, query_key, product_key) DO UPDATE SET
+      last_observed_at=MAX(capture_catalog_query_edges.last_observed_at, excluded.last_observed_at),
+      observations=capture_catalog_query_edges.observations + 1`);
+  db.exec("BEGIN IMMEDIATE");
+  try {
+    for (const row of rows) {
+      product.run(store, row.productKey, row.name, row.sizeText, row.taxonomyPath ?? null,
+        row.purchasePriceMinor, row.pageUrl, row.observedAt, row.observedAt, sessionAt);
+      edge.run(store, row.queryKey, row.productKey, row.observedAt, row.observedAt);
+    }
+    db.exec("COMMIT");
+  } catch (error) { db.exec("ROLLBACK"); throw error; }
+  return { store, products: new Set(rows.map((row) => row.productKey)).size, edges: rows.length, sessionAt };
+}
+
+export function readCatalogQueryStats(store, now = new Date(), file) {
+  const rows = database(file).prepare(`SELECT edge.query_key, COUNT(*) AS product_count,
+    MAX(edge.last_observed_at) AS last_observed_at, SUM(edge.observations) AS observations
+    FROM capture_catalog_query_edges edge WHERE edge.store = ? GROUP BY edge.query_key`).all(store);
+  return Object.fromEntries(rows.map((row) => [row.query_key, {
+    productCount: Number(row.product_count), observations: Number(row.observations),
+    lastObservedAt: row.last_observed_at,
+    ageDays: Math.max(0, Math.floor((now.getTime() - Date.parse(row.last_observed_at)) / 86_400_000)),
+  }]));
+}
+
+export function catalogRefreshPlan(store, maxAgeDays = 7, limit = 500, now = new Date(), file) {
+  const cutoff = new Date(now.getTime() - maxAgeDays * 86_400_000).toISOString();
+  return database(file).prepare(`SELECT product_key AS productKey, name, size_text AS sizeText,
+    taxonomy_path AS taxonomyPath, purchase_price_minor AS previousPriceMinor, page_url AS pageUrl,
+    last_observed_at AS lastObservedAt FROM capture_catalog_products
+    WHERE store = ? AND last_observed_at <= ? ORDER BY last_observed_at, product_key LIMIT ?`).all(store, cutoff, limit);
 }
 
 export function upsertQueueJournalJob(job, file) {

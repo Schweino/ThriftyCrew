@@ -16,9 +16,15 @@ async function controllerRequest(pathname, init = {}, environment = process.env)
 export async function browserLanePolicy(store, now = new Date(), environment = process.env) {
   const defaults = DEFAULTS[store];
   if (!defaults) throw new Error(`unsupported browser lane ${store}`);
-  const state = readLaneState(store, { consecutiveFailures: 0, dynamicDelayMs: defaults.minimumDelayMs, circuitOpenUntil: null }, environment);
+  const state = readLaneState(store, { consecutiveFailures: 0, successStreak: 0, dynamicDelayMs: defaults.minimumDelayMs, dynamicMaxTerms: defaults.maxTerms, ewmaLatencyMs: 0, circuitOpenUntil: null }, environment);
   if (state.circuitOpenUntil && Date.parse(state.circuitOpenUntil) > now.getTime()) throw new Error(`${store} browser lane circuit is open until ${state.circuitOpenUntil}`);
-  return { ...defaults, dynamicDelayMs: Math.max(defaults.minimumDelayMs, Number(state.dynamicDelayMs) || 0), state };
+  return {
+    ...defaults,
+    configuredMaxTerms: defaults.maxTerms,
+    maxTerms: Math.max(1, Math.min(defaults.maxTerms, Number(state.dynamicMaxTerms) || defaults.maxTerms)),
+    dynamicDelayMs: Math.max(defaults.minimumDelayMs, Number(state.dynamicDelayMs) || 0),
+    state,
+  };
 }
 
 export async function recordBrowserLaneResult(store, outcome, latencyMs, now = new Date(), environment = process.env) {
@@ -28,12 +34,19 @@ export async function recordBrowserLaneResult(store, outcome, latencyMs, now = n
   });
   const failure = outcome === "blocked" || outcome === "rejected";
   const consecutiveFailures = failure ? Number(policy.state.consecutiveFailures || 0) + 1 : 0;
+  const successStreak = failure ? 0 : Number(policy.state.successStreak || 0) + 1;
+  const previousEwma = Number(policy.state.ewmaLatencyMs || latencyMs);
+  const ewmaLatencyMs = Math.max(0, Math.round(previousEwma * 0.8 + Math.max(0, latencyMs) * 0.2));
+  const latencyPressure = ewmaLatencyMs > 10_000 ? 1.35 : ewmaLatencyMs > 6_000 ? 1.15 : 1;
   const dynamicDelayMs = failure
     ? Math.min(30_000, Math.max(policy.dynamicDelayMs, policy.minimumDelayMs) * 2)
-    : Math.max(policy.minimumDelayMs, Math.round(Math.max(policy.minimumDelayMs, policy.dynamicDelayMs) * 0.85));
+    : Math.max(policy.minimumDelayMs, Math.min(30_000, Math.round(Math.max(policy.minimumDelayMs, policy.dynamicDelayMs) * 0.85 * latencyPressure)));
+  const priorMaxTerms = Number(policy.state.dynamicMaxTerms || policy.maxTerms);
+  const dynamicMaxTerms = failure ? Math.max(1, Math.floor(priorMaxTerms / 2))
+    : successStreak >= 3 && ewmaLatencyMs < 8_000 ? Math.min(policy.configuredMaxTerms, priorMaxTerms + 1) : priorMaxTerms;
   const circuitMinutes = outcome === "blocked" ? 30 : consecutiveFailures >= 3 ? 5 : 0;
   const next = {
-    store, consecutiveFailures, dynamicDelayMs, lastOutcome: outcome,
+    store, consecutiveFailures, successStreak, dynamicDelayMs, dynamicMaxTerms, ewmaLatencyMs, lastOutcome: outcome,
     lastLatencyMs: Math.max(0, Math.round(latencyMs)), lastCompletedAt: now.toISOString(),
     circuitOpenUntil: circuitMinutes ? new Date(now.getTime() + circuitMinutes * 60_000).toISOString() : null,
   };
