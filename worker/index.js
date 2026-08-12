@@ -1,5 +1,7 @@
 // smp-feed Worker
-// - GET /smp-feed.json and all other paths: served from static ./public assets (ASSETS binding)
+// - GET /smp-feed.json: compatibility view of the current promoted V3 release, with the last
+//   static asset retained strictly as an outage fallback for legacy recipe-page widgets.
+// - Other GET paths: served from static ./public assets (ASSETS binding)
 // - POST /submit: item-request form handler -> emails admin@thriftycrew.com via Gmail API
 //   Reuses the Work Google OAuth (same refresh-token flow as send-alert.ps1).
 //   Secrets (set in Cloudflare dashboard, NOT in this repo):
@@ -12,6 +14,8 @@
 //   NEVER creates a member and refuses free/non-members server-side - hitting the endpoint directly
 //   must not grant the paid feature. The daily pipeline emails label segments on record lows.
 //   Extra secret required: GHOST_ADMIN_KEY (same id:hexsecret Admin API key the pipeline uses)
+
+import { serveCompatibleFeed } from "./feed-compat.mjs";
 
 const ALLOWED_ORIGINS = [
   "https://www.thriftycrew.com",
@@ -259,6 +263,10 @@ export default {
     const url = new URL(request.url);
     const origin = request.headers.get("Origin") || "";
 
+    if (url.pathname === "/smp-feed.json" && (request.method === "GET" || request.method === "HEAD")) {
+      return serveCompatibleFeed(request, env);
+    }
+
     // server-to-server only (no CORS path): the Actions backup posts here on failure.
     if (url.pathname === "/ops-alert") {
       if (request.method !== "POST") return json({ ok: false, error: "method not allowed" }, 405, origin);
@@ -286,7 +294,7 @@ export default {
       if (!/^[a-z0-9-]{2,60}$/.test(item)) return json({ ok: false, error: "Unknown item." }, 400, origin);
       // item must be something we actually track (guards junk labels)
       try {
-        const feedRes = await env.ASSETS.fetch(new Request(new URL("/smp-feed.json", request.url)));
+        const feedRes = await serveCompatibleFeed(new Request(new URL("/smp-feed.json", request.url)), env);
         const feedText = await feedRes.text();
         const feed = JSON.parse(feedText.charCodeAt(0) === 0xfeff ? feedText.slice(1) : feedText);
         if (!feed.ingredients || !feed.ingredients[item]) return json({ ok: false, error: "Unknown item." }, 400, origin);
