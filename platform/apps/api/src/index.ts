@@ -59,10 +59,10 @@ import {
   telemetryEventSchema,
   triageResolveSchema,
   triagePlanSchema,
-  CAPTURE_SEMANTICS_CUTOVER,
   OFFER_SNAPSHOT_CUTOVER,
 } from "@thriftycrew/contracts";
 import { decodeEvidenceUpload } from "./evidence-upload";
+import { requiresCaptureHistoryAssessment } from "./capture-history";
 import { deterministicId, digestHex, semanticObservationId, semanticProductVersion, stableJson } from "@thriftycrew/domain";
 import { isEngineSnapshotEncoding } from "@thriftycrew/engine";
 import { GhostEntitlementProvider, type Entitlement } from "@thriftycrew/entitlements";
@@ -3244,8 +3244,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
       collapsePass = browserEvidence.metrics.discoveryRows >= collapseFloor;
     }
   }
-  const captureSemanticsRequired = batch.capture_method !== "legacy_bridge"
-    && Date.parse(batch.captured_to) >= Date.parse(CAPTURE_SEMANTICS_CUTOVER);
+  const captureSemanticsRequired = requiresCaptureHistoryAssessment(batch.capture_method, batch.captured_to);
   const priceSemantics = await context.env.DB.prepare(
     `SELECT COUNT(*) AS eligible,
             SUM(CASE WHEN json_extract(price_semantics_json, '$.ambiguity') = 0
@@ -3295,7 +3294,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   const offerSnapshotPass = !offerSnapshotRequired
     || (offerSnapshotEligible > 0 && offerSnapshotExamined === offerSnapshotEligible);
 
-  const historyRows = await context.env.DB.prepare(
+  const historyRows = captureSemanticsRequired ? await context.env.DB.prepare(
     `WITH current_rows AS (
        SELECT p.id AS product_id, p.external_key,
               o.id AS current_observation_id, pv.name AS current_name, pv.size_text AS current_size_text,
@@ -3328,7 +3327,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
             prior_ranked.prior_identity_json
        FROM current_rows LEFT JOIN prior_ranked ON prior_ranked.product_id = current_rows.product_id
         AND prior_ranked.history_rank = 1 AND prior_ranked.prior_captured_at < current_rows.current_captured_at`,
-  ).bind(batch.id).all<ProductHistoryRow>();
+  ).bind(batch.id).all<ProductHistoryRow>() : { results: [] as ProductHistoryRow[] };
   const historyAssessment = assessProductHistory(historyRows.results);
   const skuIdentityPass = !captureSemanticsRequired || historyAssessment.identityFindings.length === 0;
   const changePointPass = !captureSemanticsRequired || historyAssessment.changePointFindings.length === 0;

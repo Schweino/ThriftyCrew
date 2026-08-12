@@ -32,6 +32,8 @@ describe("legacy current-state bridge", () => {
     expect(artifact.audit.pricedCells).toBeGreaterThan(0);
     expect(artifact.audit.pricedCells).toBeLessThanOrEqual(507 * 7);
     expect(artifact.cells).toHaveLength(507 * 7);
+    expect(artifact.stores).toHaveLength(7);
+    expect(artifact.stores.every((store) => store.priceMode === "mixed")).toBe(true);
     const boardCommodities = (artifact.payloads.board as { commodities: Array<{ id: string }> }).commodities;
     expect(boardCommodities).toHaveLength(artifact.audit.boardCommodities);
     expect(new Set(boardCommodities.map((commodity) => commodity.id)).size).toBe(boardCommodities.length);

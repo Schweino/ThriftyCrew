@@ -510,6 +510,7 @@ export async function replayCurrentArtifact(client: MutationClient, artifact: Cu
       marketVerified: true,
       locationVerified: true,
       priceModeVerified: true,
+      priceMode: store.priceMode,
       idempotencyKey: `legacy-v3-${artifact.weekOf}-${store.sourceId}-${captureManifestHash.slice(0, 16)}`,
     } });
     const batchId = String(created.batchId);

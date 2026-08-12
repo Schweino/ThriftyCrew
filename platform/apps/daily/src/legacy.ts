@@ -4,13 +4,13 @@ import type { ObservationInput, RecipeCost } from "@thriftycrew/contracts";
 import { deterministicId, digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 
 const STORE_IDENTITIES = {
-  "Aldi": { locationId: "aldi-omaha-446-048", sourceId: "legacy-aldi" },
-  "Baker's": { locationId: "bakers-saddle-creek", sourceId: "legacy-bakers" },
-  "Family Fare": { locationId: "family-fare-omaha-6401", sourceId: "legacy-family-fare" },
-  "Fareway": { locationId: "fareway-omaha-043", sourceId: "legacy-fareway" },
-  "Hy-Vee": { locationId: "hy-vee-omaha-1465", sourceId: "legacy-hy-vee" },
-  "Sam's Club": { locationId: "sams-omaha", sourceId: "legacy-sams" },
-  "Walmart": { locationId: "walmart-omaha", sourceId: "legacy-walmart" },
+  "Aldi": { locationId: "aldi-omaha-446-048", sourceId: "legacy-aldi", priceMode: "mixed" },
+  "Baker's": { locationId: "bakers-saddle-creek", sourceId: "legacy-bakers", priceMode: "mixed" },
+  "Family Fare": { locationId: "family-fare-omaha-6401", sourceId: "legacy-family-fare", priceMode: "mixed" },
+  "Fareway": { locationId: "fareway-omaha-043", sourceId: "legacy-fareway", priceMode: "mixed" },
+  "Hy-Vee": { locationId: "hy-vee-omaha-1465", sourceId: "legacy-hy-vee", priceMode: "mixed" },
+  "Sam's Club": { locationId: "sams-omaha", sourceId: "legacy-sams", priceMode: "mixed" },
+  "Walmart": { locationId: "walmart-omaha", sourceId: "legacy-walmart", priceMode: "mixed" },
 } as const;
 
 type StoreName = keyof typeof STORE_IDENTITIES;
@@ -151,7 +151,7 @@ export interface CurrentBridgeArtifact {
       evidence: string;
     }>;
   };
-  stores: Array<{ name: StoreName; locationId: string; sourceId: string }>;
+  stores: Array<{ name: StoreName; locationId: string; sourceId: string; priceMode: "mixed" }>;
   observations: LegacyObservationPlan[];
   cells: Array<{
     commodityId: string;

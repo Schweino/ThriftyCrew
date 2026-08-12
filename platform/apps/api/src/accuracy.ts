@@ -80,6 +80,14 @@ export function wilsonInterval(successes: number, total: number, z = 1.959963984
   return { low: Math.max(0, center - spread), high: Math.min(1, center + spread) };
 }
 
+export function accuracyRiskSampleLimit(protocolVersion: string, requestedSize: number): number {
+  return protocolVersion === "winner-challenger-v1" ? requestedSize : 25;
+}
+
+export function accuracyUniformSampleLimit(protocolVersion: string, requestedSize: number): number {
+  return protocolVersion === "winner-challenger-v1" ? 0 : requestedSize;
+}
+
 export async function createAccuracyDraw(db: D1Database, input: AccuracyDrawCreate): Promise<{ drawId: string; sampled: number; idempotent: boolean }> {
   const dailyRevalidation = input.protocolVersion === "winner-challenger-v1";
   const sameProtocolDraw = await db.prepare(
@@ -113,7 +121,7 @@ export async function createAccuracyDraw(db: D1Database, input: AccuracyDrawCrea
     score: await digestHex(`${input.seed}\u001f${cell.commodity_id}\u001f${cell.store_location_id}`),
   })));
   ranked.sort((left, right) => left.score.localeCompare(right.score));
-  const sampled = ranked.slice(0, Math.min(input.sampleSize, ranked.length));
+  const sampled = ranked.slice(0, Math.min(accuracyUniformSampleLimit(input.protocolVersion, input.sampleSize), ranked.length));
   const statements: D1PreparedStatement[] = [db.prepare(
     `INSERT INTO accuracy_draws
        (id, market_id, release_id, seed, protocol_version, requested_size, sampled_count, due_at)
@@ -144,8 +152,8 @@ export async function createAccuracyDraw(db: D1Database, input: AccuracyDrawCrea
   ).bind(current.release_id).all<{ commodity_id: string; store_location_id: string; observation_id: string; is_crown: number; display_per_unit_micros: number; reason_json: string; stores: number; mean_price: number; price_rank: number; risk_score: number }>();
   const riskBoardRanked = await Promise.all(riskBoard.results.map(async (row) => ({ row, score: await digestHex(`${input.seed}\u001fboard-risk\u001f${row.commodity_id}\u001f${row.price_rank}\u001f${row.store_location_id}`) })));
   const selectedRiskBoard = dailyRevalidation
-    ? riskBoardRanked.sort((left, right) => left.score.localeCompare(right.score)).slice(0, 100).map((item) => item.row)
-    : riskBoard.results.filter((row) => row.risk_score >= 50).slice(0, 25);
+    ? riskBoardRanked.sort((left, right) => left.score.localeCompare(right.score)).slice(0, accuracyRiskSampleLimit(input.protocolVersion, input.sampleSize)).map((item) => item.row)
+    : riskBoard.results.filter((row) => row.risk_score >= 50).slice(0, accuracyRiskSampleLimit(input.protocolVersion, input.sampleSize));
   let riskOrdinal = 0;
   for (const row of selectedRiskBoard) {
     const id = await deterministicId("accuracy-risk", drawId, "board", String(riskOrdinal));
@@ -326,6 +334,7 @@ export async function latestAccuracySummary(db: D1Database): Promise<AccuracySum
             COUNT(v.id) AS verdict_count
        FROM accuracy_draws d
        LEFT JOIN operator_verdicts v ON v.draw_id = d.id
+      WHERE d.protocol_version = 'blind-cell-v1'
       GROUP BY d.id ORDER BY d.created_at DESC LIMIT 1`,
   ).first<{ id: string; release_id: string; status: string; sampled_count: number; due_at: string; right_count: number; wrong_count: number; cannot_count: number; verdict_count: number }>();
   if (!row) return null;

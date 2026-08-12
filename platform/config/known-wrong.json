@@ -1852,6 +1852,36 @@
                         "ruled_on":  "2026-08-12",
                         "ruled_by":  "accuracy-revalidation-2026-08-12",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "black-pepper|Walmart|himalayan-pink-salt-black-pepper-garlic-seasoning-blend",
+                        "commodity":  "black-pepper",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Himalayan Pink Salt Black Pepper and Garlic Seasoning Blend"
+                                  ],
+                        "product_id":  "987746767",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A salt, pepper, and garlic seasoning blend is not ground black pepper.",
+                        "seen_on_board":  "accuracy sample 2026-08-12",
+                        "ruled_on":  "2026-08-12",
+                        "ruled_by":  "blind-accuracy-2026-08-12",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cherries|Fareway|fareway-cherries-dark-sweet-unsweetened-pitted-12-oz",
+                        "commodity":  "cherries",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "Fareway Unsweetened & Pitted Dark Sweet Cherries"
+                                  ],
+                        "product_id":  "25841971",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Packaged pitted dark sweet cherries are not fresh whole cherries sold by weight.",
+                        "seen_on_board":  "2026-08-12",
+                        "ruled_on":  "2026-08-12",
+                        "ruled_by":  "blind-accuracy-2026-08-12",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

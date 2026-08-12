@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { accuracyVerdictsSchema, captureBatchAbandonSchema, entitlementVerificationRecordSchema, evidenceGateRecordSchema, restoreDrillCleanupSchema, restoreDrillRecordSchema } from "@thriftycrew/contracts";
-import { createAccuracyDraw, readAccuracyDraw, wilsonInterval } from "./accuracy";
+import { accuracyRiskSampleLimit, accuracyUniformSampleLimit, createAccuracyDraw, readAccuracyDraw, wilsonInterval } from "./accuracy";
 import { mayShowFreeBadge } from "./ghost-reconciliation";
 import { releaseCaptureEvictionSql, storeCoverageFloor } from "./release-guards";
 import { memberStatusHtml } from "./member-status";
@@ -19,6 +19,13 @@ describe("capture role/source authorization", () => {
 });
 
 describe("out-of-band accuracy reporting", () => {
+  it("keeps daily winner/challenger work bounded to the requested one-item lane", () => {
+    expect(accuracyRiskSampleLimit("winner-challenger-v1", 1)).toBe(1);
+    expect(accuracyUniformSampleLimit("winner-challenger-v1", 1)).toBe(0);
+    expect(accuracyRiskSampleLimit("blind-cell-v1", 100)).toBe(25);
+    expect(accuracyUniformSampleLimit("blind-cell-v1", 100)).toBe(100);
+  });
+
   it("requires closed, auditable reviewer evidence instead of arbitrary output keys", () => {
     const verdict = {
       drawId: "accuracy_one", riskVerdicts: [], verdicts: [{ ordinal: 0, verdict: "right", verifiedAt: "2026-08-12T06:15:00.000Z",

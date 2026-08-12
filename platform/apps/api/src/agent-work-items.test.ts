@@ -1,7 +1,21 @@
 import { describe, expect, it } from "vitest";
-import { validateAgentOutput } from "./agent-work-items";
+import { normalizeAccuracyEvidenceRow, validateAgentOutput } from "./agent-work-items";
 
 describe("agent output boundary", () => {
+  it("turns frozen source-native offer facts into an explicit reviewer evidence packet", () => {
+    expect(normalizeAccuracyEvidenceRow({
+      observation_id: "obs_one", product_name: "Whole Milk, 1 gal", price_mode: "pickup",
+      source_id: "direct-store", capture_method: "browser", coverage_mode: "full", capture_batch_id: "batch_one",
+      market_verified: 1, location_verified: 1, price_mode_verified: 1,
+      price_semantics_json: '{"offerType":"everyday"}',
+      offer_snapshot_json: '{"purchasePriceMinor":399,"availability":{"status":"in_stock","fulfillmentMode":"pickup"}}',
+    })).toMatchObject({
+      priceSemantics: { offerType: "everyday" },
+      offerSnapshot: { purchasePriceMinor: 399, availability: { status: "in_stock", fulfillmentMode: "pickup" } },
+      captureVerification: { marketVerified: true, locationVerified: true, priceModeVerified: true, priceMode: "pickup", captureBatchId: "batch_one" },
+    });
+  });
+
   it("fences triage plans to their source item", () => {
     const plan = {
       version: 1, triageId: "tri_other", diagnosis: "A sufficiently detailed diagnosis for the evidence.", evidenceRefs: ["guard://one"],

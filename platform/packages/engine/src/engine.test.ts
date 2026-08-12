@@ -72,6 +72,47 @@ describe("matching", () => {
     expect(matchProductName("Appleton Farms Premium Pork Sausage Roll 16 OZ", rules)).toMatchObject({ status: "matched", commodityId: "breakfast-sausage" });
   });
 
+  it("rejects sampled and successor produce impostors while preserving clean produce", () => {
+    const authored = JSON.parse(readFileSync(new URL("../../../config/commodities.json", import.meta.url), "utf8")) as
+      Array<{ id: string; include: string[]; exclude: string[] }>;
+    const cases = [
+      { id: "watermelon", bad: [
+        "Gatorade Zero Sugar Thirst Quencher Watermelon Splash Sports Drinks, 12 fl oz, 12 Count Bottles",
+        "Propel Zero Sugar Electrolyte Water Beverage Watermelon",
+        "Extra Sugarfree Sweet Watermelon Gum 15 Ea",
+        "Salsagheti Watermelon, 0.84 oz., 24 pk.",
+        "BUBBL'R Antioxidant Sparkling Water, Watermelon Lime Smash'r, 12 fl oz, 6 Pack Cans",
+      ], good: ["Seedless Watermelon Each", "Whole Seedless Watermelon"] },
+      { id: "mangoes", bad: [
+        "bubly Mango Sparkling Water, 12 fl oz, 8 Pack Cans",
+        "Golden Farms Organic Mango Sauce Pouches, Unsweetened, 3.17 oz., 12 pk.",
+        "Dole Fruit Bowls Mangoes & Creme Layers Snacks, 4.3 oz, 4 pack",
+      ], good: ["Red Mango Each", "Large Mangos"] },
+      { id: "cherries", bad: [
+        "Fareway Unsweetened & Pitted Dark Sweet Cherries",
+        "Del Monte Very Cherry Flavored Mixed Fruit In Extra Light Syrup",
+        "Orchard Natural Cherry Mixed Fruit in Fruit Juice 4 oz., 24 ct.",
+        "Great Value Light Syrup Extra Cherry Fruit Mix, 15 oz",
+      ], good: ["Red Cherries Bag 1 LB", "Field & Vine Pacific Northwest Sweet Fresh Cherries"] },
+    ];
+    for (const test of cases) {
+      const commodity = authored.find((item) => item.id === test.id)!;
+      const rules = [{ commodityId: test.id, includes: commodity.include, excludes: commodity.exclude, priority: 1 }];
+      for (const product of test.bad) expect(matchProductName(product, rules).status, `${test.id}: ${product}`).toBe("unmatched");
+      for (const product of test.good) expect(matchProductName(product, rules), `${test.id}: ${product}`).toMatchObject({ status: "matched", commodityId: test.id });
+    }
+  });
+
+  it("rejects black-pepper blends and snacks while preserving ground black pepper", () => {
+    const authored = JSON.parse(readFileSync(new URL("../../../config/commodities.json", import.meta.url), "utf8")) as
+      Array<{ id: string; include: string[]; exclude: string[] }>;
+    const commodity = authored.find((item) => item.id === "black-pepper")!;
+    const rules = [{ commodityId: commodity.id, includes: commodity.include, excludes: commodity.exclude, priority: 1 }];
+    expect(matchProductName("Himalayan Pink Salt Black Pepper and Garlic Seasoning Blend", rules).status).toBe("unmatched");
+    expect(matchProductName("Cheez-It Black Pepper Cheddar Baked Snack Crackers, 12.4 oz", rules).status).toBe("unmatched");
+    expect(matchProductName("Member's Mark Fine Ground Black Pepper, 18 oz.", rules)).toMatchObject({ status: "matched", commodityId: "black-pepper" });
+  });
+
   it("rejects a food match when the store shelves it as cat litter", () => {
     expect(evaluateAisleEvidence("Pets/Cats/Cat Litter", ["baking"], ["cat litter", "pets"]).status).toBe("rejected");
   });
