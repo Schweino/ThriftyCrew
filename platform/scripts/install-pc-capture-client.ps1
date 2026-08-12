@@ -56,6 +56,7 @@ if ($nodeVersion -ne 'v24.18.1') { throw "capture runtime must be Node v24.18.1,
 $pnpmPath = Join-Path $NodeRuntimeDirectory 'pnpm.cmd'
 if (-not (Test-Path -LiteralPath $pnpmPath)) { throw "pinned pnpm runtime is missing: $pnpmPath; run scripts/install-node-runtime.ps1" }
 $runtimePath = @($NodeRuntimeDirectory)
+$env:Path = ($NodeRuntimeDirectory + [IO.Path]::PathSeparator + $env:Path)
 Push-Location $platformRoot
 try {
   $remoteSecret | & $pnpmPath exec wrangler secret put MUTATION_KEYS

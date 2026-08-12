@@ -45,6 +45,7 @@ $pnpmPath = Join-Path $NodeRuntimeDirectory 'pnpm.cmd'
 if (-not (Test-Path -LiteralPath $nodeExecutable) -or (& $nodeExecutable --version).Trim() -ne 'v24.18.1') { throw 'pinned Node v24.18.1 is missing; run scripts/install-node-runtime.ps1' }
 if (-not (Test-Path -LiteralPath $pnpmPath)) { throw 'pinned pnpm 11.16.0 is missing; run scripts/install-node-runtime.ps1' }
 $runtimePath = @($NodeRuntimeDirectory)
+$env:Path = ($NodeRuntimeDirectory + [IO.Path]::PathSeparator + $env:Path)
 $agents = (Get-Content -LiteralPath (Join-Path $platformRoot 'config\agents.json') -Raw | ConvertFrom-Json).agents | Where-Object { $_.enabled -and $_.plane -eq 'pc' }
 if (@($agents).Count -eq 0) { throw 'no enabled PC agents exist in config/agents.json' }
 
