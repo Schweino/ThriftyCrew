@@ -3416,12 +3416,15 @@ app.put("/internal/releases/:id/graph-nodes", async (context) => {
   const stateError = await requireDraftRelease(context.env.DB, releaseId);
   if (stateError) return stateError;
   const body = await context.req.json<{ nodes?: unknown[] }>().catch(() => ({} as { nodes?: unknown[] }));
-  if (!Array.isArray(body.nodes) || body.nodes.length < 1 || body.nodes.length > 25) return jsonError("release graph node chunk must contain 1-25 nodes", 422);
+  if (!Array.isArray(body.nodes) || body.nodes.length < 1 || body.nodes.length > 40) return jsonError("release graph node chunk must contain 1-40 nodes", 422);
   const current = await context.env.DB.prepare(
     `SELECT current.release_id FROM current_releases current
        JOIN releases draft ON draft.market_id = current.market_id WHERE draft.id = ?1`,
   ).bind(releaseId).first<{ release_id: string }>();
-  const prepared: Array<{ kind: string; key: string; dependencyHash: string; contentHash: string; bytes: Uint8Array; objectKey: string; reusedFrom: string | null }> = [];
+  const prepared: Array<{
+    kind: string; key: string; dependencyHash: string; contentHash: string; bytes: Uint8Array;
+    objectKey: string; reusedFrom: string | null; alreadyStored: boolean;
+  }> = [];
   for (const raw of body.nodes) {
     if (!raw || typeof raw !== "object" || Array.isArray(raw)) return jsonError("release graph node is invalid", 422);
     const value = raw as Record<string, unknown>;
@@ -3435,13 +3438,38 @@ app.put("/internal/releases/:id/graph-nodes", async (context) => {
     if (await digestHex(serialized) !== contentHash) return jsonError(`release graph node content hash mismatch: ${kind}/${key}`, 422);
     const bytes = new TextEncoder().encode(serialized);
     const objectKey = `release-nodes/schema=1/kind=${kind}/prefix=${contentHash.slice(0, 2)}/${contentHash}.json`;
-    const prior = current ? await context.env.DB.prepare(
-      `SELECT release_id FROM release_graph_nodes
-        WHERE release_id = ?1 AND node_kind = ?2 AND node_key = ?3 AND dependency_hash = ?4 AND content_hash = ?5`,
-    ).bind(current.release_id, kind, key, dependencyHash, contentHash).first<{ release_id: string }>() : null;
-    prepared.push({ kind, key, dependencyHash, contentHash, bytes, objectKey, reusedFrom: prior?.release_id ?? null });
+    prepared.push({ kind, key, dependencyHash, contentHash, bytes, objectKey, reusedFrom: null, alreadyStored: false });
   }
-  await Promise.all(prepared.map(async (item) => {
+  const requested = stableJson(prepared.map((item) => ({
+    kind: item.kind, key: item.key, dependencyHash: item.dependencyHash, contentHash: item.contentHash,
+  })));
+  const matches = await context.env.DB.prepare(
+    `WITH requested AS (
+       SELECT json_extract(value, '$.kind') AS kind, json_extract(value, '$.key') AS node_key,
+              json_extract(value, '$.dependencyHash') AS dependency_hash,
+              json_extract(value, '$.contentHash') AS content_hash
+         FROM json_each(?1)
+     )
+     SELECT node.release_id, node.node_kind, node.node_key,
+            CASE WHEN node.release_id = ?2 THEN 'draft' ELSE 'prior' END AS scope
+       FROM requested JOIN release_graph_nodes node
+         ON node.node_kind = requested.kind AND node.node_key = requested.node_key
+        AND node.dependency_hash = requested.dependency_hash AND node.content_hash = requested.content_hash
+      WHERE node.release_id = ?2 OR node.release_id = ?3`,
+  ).bind(requested, releaseId, current?.release_id ?? "").all<{
+    release_id: string; node_kind: string; node_key: string; scope: "draft" | "prior";
+  }>();
+  const matchByNode = new Map<string, typeof matches.results[number]>();
+  for (const match of matches.results) {
+    const matchKey = `${match.node_kind}\u0000${match.node_key}`;
+    if (!matchByNode.has(matchKey) || match.scope === "draft") matchByNode.set(matchKey, match);
+  }
+  for (const item of prepared) {
+    const match = matchByNode.get(`${item.kind}\u0000${item.key}`);
+    item.alreadyStored = match?.scope === "draft";
+    item.reusedFrom = match?.scope === "prior" ? match.release_id : null;
+  }
+  await Promise.all(prepared.filter((item) => !item.alreadyStored && !item.reusedFrom).map(async (item) => {
     if (await context.env.ARCHIVE.head(item.objectKey)) return;
     await context.env.ARCHIVE.put(item.objectKey, item.bytes, {
       httpMetadata: { contentType: "application/json; charset=utf-8" },
@@ -3450,13 +3478,15 @@ app.put("/internal/releases/:id/graph-nodes", async (context) => {
   }));
   const statements: D1PreparedStatement[] = [];
   for (const item of prepared) {
-    const stored = await context.env.ARCHIVE.head(item.objectKey);
-    if (!stored || stored.size !== item.bytes.byteLength || stored.customMetadata?.sha256 !== item.contentHash) return jsonError(`release graph node failed verification: ${item.kind}/${item.key}`, 500);
-    statements.push(context.env.DB.prepare(
-      `INSERT OR IGNORE INTO object_store_objects
-         (content_hash, object_key, object_kind, format, byte_length, schema_version, verified_at)
-       VALUES (?1, ?2, 'release-node', 'json', ?3, 1, CURRENT_TIMESTAMP)`,
-    ).bind(item.contentHash, item.objectKey, stored.size));
+    if (!item.alreadyStored && !item.reusedFrom) {
+      const stored = await context.env.ARCHIVE.head(item.objectKey);
+      if (!stored || stored.size !== item.bytes.byteLength || stored.customMetadata?.sha256 !== item.contentHash) return jsonError(`release graph node failed verification: ${item.kind}/${item.key}`, 500);
+      statements.push(context.env.DB.prepare(
+        `INSERT OR IGNORE INTO object_store_objects
+           (content_hash, object_key, object_kind, format, byte_length, schema_version, verified_at)
+         VALUES (?1, ?2, 'release-node', 'json', ?3, 1, CURRENT_TIMESTAMP)`,
+      ).bind(item.contentHash, item.objectKey, stored.size));
+    }
     statements.push(context.env.DB.prepare(
       `INSERT INTO release_graph_nodes
          (release_id, node_kind, node_key, dependency_hash, content_hash, payload_json, reused_from_release_id)
@@ -3468,7 +3498,9 @@ app.put("/internal/releases/:id/graph-nodes", async (context) => {
       new TextDecoder().decode(item.bytes), item.reusedFrom));
   }
   await context.env.DB.batch(statements);
-  return context.json({ ok: true, accepted: prepared.length, reused: prepared.filter((item) => item.reusedFrom).length });
+  return context.json({ ok: true, accepted: prepared.length,
+    reused: prepared.filter((item) => item.reusedFrom).length,
+    resumed: prepared.filter((item) => item.alreadyStored).length });
 });
 
 app.post("/internal/releases/:id/graph-finalize", async (context) => {
@@ -3584,7 +3616,7 @@ app.put("/internal/releases/:id/payload", zValidator("json", releasePayloadSchem
 app.post("/internal/releases/:id/recipe-bundles", async (context) => {
   const release = await context.env.DB.prepare("SELECT id FROM releases WHERE id = ?1").bind(context.req.param("id")).first();
   if (!release) return jsonError("release not found", 404);
-  const result = await buildReleaseRecipeBundles(context.env, context.req.param("id"));
+  const result = await buildReleaseRecipeBundles(context.env, context.req.param("id"), context.req.query("after") ?? "", 20);
   return context.json({ ok: true, releaseId: context.req.param("id"), ...result });
 });
 
@@ -3612,7 +3644,12 @@ app.post("/internal/releases/:id/validate", async (context) => {
     "SELECT configuration_id, market_id, input_manifest_json FROM releases WHERE id = ?1",
   ).bind(releaseId).first<{ configuration_id: string; market_id: string; input_manifest_json: string }>();
   if (!releaseIdentity) return jsonError("release not found", 404);
-  await buildReleaseRecipeBundles(context.env, releaseId);
+  const bundleCount = await context.env.DB.prepare(
+    "SELECT COUNT(*) AS count FROM release_recipe_payloads WHERE release_id = ?1",
+  ).bind(releaseId).first<{ count: number }>();
+  if ((bundleCount?.count ?? 0) !== summary.expectedRecipes) {
+    return jsonError(`release recipe bundles are incomplete: expected ${summary.expectedRecipes}, found ${bundleCount?.count ?? 0}`, 409);
+  }
   const [cellStats, recipeStats, payloadStats, invalidCellStats, rotationStats, top5Stats, invalidRankedRecipes] = await Promise.all([
     context.env.DB.prepare("SELECT COUNT(*) AS rows, COUNT(DISTINCT commodity_id) AS commodities, COUNT(DISTINCT store_location_id) AS stores FROM release_cells WHERE release_id = ?1").bind(releaseId).first<{ rows: number; commodities: number; stores: number }>(),
     context.env.DB.prepare("SELECT COUNT(*) AS rows, SUM(CASE WHEN status = 'incomplete' THEN 1 ELSE 0 END) AS incomplete FROM release_recipe_costs WHERE release_id = ?1").bind(releaseId).first<{ rows: number; incomplete: number | null }>(),

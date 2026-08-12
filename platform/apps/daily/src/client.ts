@@ -36,6 +36,15 @@ function chunks<T>(items: readonly T[], size: number): T[][] {
   return output;
 }
 
+async function buildRecipeBundles(client: MutationClient, releaseId: string): Promise<void> {
+  let afterRecipe = "";
+  while (true) {
+    const response = await client.request(`/internal/releases/${releaseId}/recipe-bundles${afterRecipe ? `?after=${encodeURIComponent(afterRecipe)}` : ""}`, { method: "POST" });
+    afterRecipe = typeof response.next === "string" ? response.next : "";
+    if (!afterRecipe) return;
+  }
+}
+
 type DirectObservation = DirectCaptureArtifact["observations"][number];
 
 export function deduplicateDirectObservations(observations: readonly DirectObservation[]): {
@@ -604,6 +613,7 @@ export async function replayCurrentArtifact(client: MutationClient, artifact: Cu
     const wirePayload: unknown = JSON.parse(JSON.stringify(payload));
     await client.request(`/internal/releases/${releaseId}/payload`, { method: "PUT", json: { kind, payload: wirePayload, contentHash: await digestHex(stableJson(wirePayload)) } });
   }
+  await buildRecipeBundles(client, releaseId);
   const validation = await client.request(`/internal/releases/${releaseId}/validate`, { method: "POST", acceptStatuses: [422] });
   const publication = validation.ok
     ? await client.request(`/internal/releases/${releaseId}/publish`, { method: "POST" })
@@ -644,12 +654,13 @@ export async function publishNativeRelease(client: MutationClient, artifact: Nat
       const wirePayload: unknown = JSON.parse(JSON.stringify(payload));
       await client.request(`/internal/releases/${artifact.releaseId}/payload`, { method: "PUT", json: { kind, payload: wirePayload, contentHash: await digestHex(stableJson(wirePayload)) } });
     }
-    for (const nodeChunk of chunks(artifact.graph.nodes, 25)) {
+    for (const nodeChunk of chunks(artifact.graph.nodes, 40)) {
       await client.request(`/internal/releases/${artifact.releaseId}/graph-nodes`, { method: "PUT", json: { nodes: nodeChunk } });
     }
     await client.request(`/internal/releases/${artifact.releaseId}/graph-finalize`, { json: {
       parentReleaseId: artifact.graph.parentReleaseId, dependencyHash: artifact.graph.dependencyHash,
     } });
+    await buildRecipeBundles(client, artifact.releaseId);
     const validation = await client.request(`/internal/releases/${artifact.releaseId}/validate`, { method: "POST", acceptStatuses: [422] });
     const publication = validation.ok ? await client.request(`/internal/releases/${artifact.releaseId}/publish`, { method: "POST" }) : null;
     return { ok: Boolean(validation.ok && publication?.ok), releaseId: artifact.releaseId, inputHash: artifact.inputHash, validation, publication, audit: artifact.audit };
