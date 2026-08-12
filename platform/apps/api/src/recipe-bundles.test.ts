@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { recipeFeedIngredients } from "./recipe-bundles";
+import { hydrateReleaseRecipeBundle, recipeFeedIngredients } from "./recipe-bundles";
 
 describe("recipeFeedIngredients", () => {
   it("exposes legacy scaler IDs with the promoted canonical price", () => {
@@ -17,5 +17,18 @@ describe("recipeFeedIngredients", () => {
 
   it("does not invent an alias when its canonical ingredient is absent", () => {
     expect(recipeFeedIngredients({}, ["ground-beef-93-7"], { "93-7-ground-beef": "ground-beef-93-7" })).toEqual({});
+  });
+});
+
+describe("hydrateReleaseRecipeBundle", () => {
+  it("adds release metadata at read time without changing release-neutral recipe data", () => {
+    const bundle = { version: 2, slug: "dinner", feed: { ingredients: { rice: { store: "Aldi" } } } };
+    expect(hydrateReleaseRecipeBundle(bundle, "release-2", "2026-08-12T14:00:00Z", "2026-08-12")).toEqual({
+      ...bundle, releaseId: "release-2", feed: {
+        ingredients: { rice: { store: "Aldi" } }, release_id: "release-2",
+        generated: "2026-08-12T14:00:00Z", week_of: "2026-08-12",
+      },
+    });
+    expect(bundle).not.toHaveProperty("releaseId");
   });
 });

@@ -548,7 +548,7 @@ app.get("/api/v2/recipes/:slug", async (context) => {
       ? bundled.bundle.recipe as Record<string, unknown> : {};
     if (bundled) return {
       body: { ok: true, releaseId: bundled.releaseId, publishedAt: bundled.publishedAt, recipe: { ...bundledRecipe, scenarios } },
-      etag: releaseEtag(await digestHex(`${bundled.contentHash}:${scenarioHash}`)),
+      etag: releaseEtag(await digestHex(`${bundled.releaseId}:${bundled.contentHash}:${scenarioHash}`)),
       releaseId: bundled.releaseId,
     };
     const current = await currentPayload(context.env, "recipes");
@@ -570,7 +570,7 @@ app.get("/api/v2/recipe-feed/:slug", async (context) => {
     if (!bundled) throw new PublicJsonError("Recipe feed not found", 404);
     return {
       body: bundled.bundle.feed,
-      etag: releaseEtag(bundled.contentHash),
+      etag: releaseEtag(await digestHex(`${bundled.releaseId}:${bundled.contentHash}`)),
       releaseId: bundled.releaseId,
     };
   });
@@ -3665,8 +3665,9 @@ app.put("/internal/releases/:id/payload", zValidator("json", releasePayloadSchem
 });
 
 app.post("/internal/releases/:id/recipe-bundles", async (context) => {
-  const release = await context.env.DB.prepare("SELECT id FROM releases WHERE id = ?1").bind(context.req.param("id")).first();
+  const release = await context.env.DB.prepare("SELECT id, state FROM releases WHERE id = ?1").bind(context.req.param("id")).first<{ id: string; state: string }>();
   if (!release) return jsonError("release not found", 404);
+  if (!['draft', 'validating'].includes(release.state)) return jsonError(`release recipe bundles are immutable in ${release.state} state`, 409);
   const result = await buildReleaseRecipeBundles(context.env, context.req.param("id"), context.req.query("after") ?? "", 20);
   return context.json({ ok: true, releaseId: context.req.param("id"), ...result });
 });

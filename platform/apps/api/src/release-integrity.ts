@@ -39,7 +39,8 @@ export async function evaluateReleaseIntegrity(env: WorkerEnv, releaseId: string
     message: "Per-recipe object coverage differs from authored recipe costs",
     evidence: { expected: expectedSlugs.length, actual: actualSlugs.length },
   });
-  for (const bundle of bundles.results) if (!/^[a-f0-9]{64}$/.test(bundle.content_hash) || bundle.byte_length <= 0 || !bundle.object_key.startsWith(`releases/${releaseId}/recipes/`)) {
+  for (const bundle of bundles.results) if (!/^[a-f0-9]{64}$/.test(bundle.content_hash) || bundle.byte_length <= 0
+    || !(bundle.object_key.startsWith(`releases/${releaseId}/recipes/`) || bundle.object_key === `recipe-bundles/v2/${bundle.content_hash}.json`)) {
     bundleFindings.push({ key: bundle.recipe_slug, message: "Recipe bundle metadata is invalid", evidence: bundle });
   }
   await upsertGuardResult(env.DB, releaseId, guard("release-recipe-bundles", bundleFindings, costs.results.length, { storage: "R2", granularity: "one object per recipe" }));

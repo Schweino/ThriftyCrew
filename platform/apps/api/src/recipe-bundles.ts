@@ -43,7 +43,7 @@ export async function buildReleaseRecipeBundles(
   releaseId: string,
   afterSlug = "",
   limit = 20,
-): Promise<{ count: number; bytes: number; next: string | null }> {
+): Promise<{ count: number; bytes: number; uploadedObjects: number; reusedObjects: number; next: string | null }> {
   const [recipesPayload, feedPayload, costs] = await Promise.all([
     releasePayload(env, releaseId, "recipes"),
     releasePayload(env, releaseId, "feed"),
@@ -93,9 +93,6 @@ export async function buildReleaseRecipeBundles(
     }));
     const feed = {
       version: feedPayload.version,
-      release_id: feedPayload.release_id,
-      generated: feedPayload.generated,
-      week_of: feedPayload.week_of,
       ingredient_count: Object.keys(ingredients).length,
       recipe_count: feedRecipes[cost.recipe_slug] ? 1 : 0,
       board_item_count: Object.keys(ingredients).length,
@@ -104,26 +101,39 @@ export async function buildReleaseRecipeBundles(
       scenarios: detail.scenarios ?? {},
       recipes: feedRecipes[cost.recipe_slug] ? { [cost.recipe_slug]: feedRecipes[cost.recipe_slug] } : {},
     };
-    const serialized = stableJson({ version: 1, releaseId, slug: cost.recipe_slug, recipe, feed });
+    // Delivery objects are release-neutral. The read path hydrates the current
+    // release metadata, allowing unchanged recipes to share this object across
+    // the copy-on-write graph instead of being rewritten for every promotion.
+    const serialized = stableJson({ version: 2, slug: cost.recipe_slug, recipe, feed });
     const hash = await digestHex(serialized);
     const bytes = new TextEncoder().encode(serialized);
     const detailSerialized = stableJson(detail);
     const detailHash = await digestHex(detailSerialized);
     const detailBytes = new TextEncoder().encode(detailSerialized);
-    writes.push({ slug: cost.recipe_slug, hash, key: `releases/${releaseId}/recipes/${cost.recipe_slug}-${hash}.json`, bytes,
+    writes.push({ slug: cost.recipe_slug, hash, key: `recipe-bundles/v2/${hash}.json`, bytes,
       detailHash, detailKey: `recipe-cost-details/${detailHash}.json`, detailBytes });
   }
-  for (let offset = 0; offset < writes.length; offset += 20) {
-    await Promise.all(writes.slice(offset, offset + 20).flatMap((write) => [
-      env.EVIDENCE.put(write.key, write.bytes, {
+  const placeholders = writes.map((_, index) => `?${index + 1}`).join(",");
+  const [knownBundles, knownDetails] = writes.length === 0 ? [{ results: [] }, { results: [] }] : await Promise.all([
+    env.DB.prepare(`SELECT content_hash, object_key FROM release_recipe_payloads WHERE content_hash IN (${placeholders}) GROUP BY content_hash`).bind(...writes.map((write) => write.hash)).all<{ content_hash: string; object_key: string }>(),
+    env.DB.prepare(`SELECT content_hash, object_key FROM recipe_cost_detail_objects WHERE content_hash IN (${placeholders}) GROUP BY content_hash`).bind(...writes.map((write) => write.detailHash)).all<{ content_hash: string; object_key: string }>(),
+  ]);
+  const bundleObjects = new Map(knownBundles.results.map((row) => [row.content_hash, row.object_key]));
+  const detailObjects = new Map(knownDetails.results.map((row) => [row.content_hash, row.object_key]));
+  for (const write of writes) {
+    write.key = bundleObjects.get(write.hash) ?? write.key;
+    write.detailKey = detailObjects.get(write.detailHash) ?? write.detailKey;
+  }
+  const uploads = writes.flatMap((write) => [
+    ...(!bundleObjects.has(write.hash) ? [{ key: write.key, bytes: write.bytes, metadata: { sha256: write.hash, kind: "recipe-bundle", recipeSlug: write.slug } }] : []),
+    ...(!detailObjects.has(write.detailHash) ? [{ key: write.detailKey, bytes: write.detailBytes, metadata: { sha256: write.detailHash, kind: "recipe-cost-detail" } }] : []),
+  ]);
+  for (let offset = 0; offset < uploads.length; offset += 40) {
+    await Promise.all(uploads.slice(offset, offset + 40).map((upload) =>
+      env.EVIDENCE.put(upload.key, upload.bytes, {
         httpMetadata: { contentType: "application/json; charset=utf-8" },
-        customMetadata: { sha256: write.hash, releaseId, recipeSlug: write.slug },
-      }),
-      env.EVIDENCE.put(write.detailKey, write.detailBytes, {
-        httpMetadata: { contentType: "application/json; charset=utf-8" },
-        customMetadata: { sha256: write.detailHash, kind: "recipe-cost-detail" },
-      }),
-    ]));
+        customMetadata: upload.metadata,
+      })));
   }
   const statements = writes.flatMap((write) => [env.DB.prepare(
     `INSERT INTO release_recipe_payloads (release_id, recipe_slug, content_hash, object_key, byte_length)
@@ -138,7 +148,12 @@ export async function buildReleaseRecipeBundles(
   ).bind(releaseId, write.slug, write.detailHash, write.detailKey, write.detailBytes.byteLength)]);
   for (let offset = 0; offset < statements.length; offset += 80) await env.DB.batch(statements.slice(offset, offset + 80));
   return { count: writes.length, bytes: writes.reduce((sum, write) => sum + write.bytes.byteLength, 0),
+    uploadedObjects: uploads.length, reusedObjects: writes.length * 2 - uploads.length,
     next: writes.length === Math.max(1, Math.min(20, limit)) ? writes.at(-1)!.slug : null };
+}
+
+export function hydrateReleaseRecipeBundle(bundle: Record<string, unknown>, releaseId: string, publishedAt: string, weekOf: string): Record<string, unknown> {
+  return { ...bundle, releaseId, feed: { ...object(bundle.feed), release_id: releaseId, generated: publishedAt, week_of: weekOf } };
 }
 
 export async function buildReleaseRecipeDetailArchive(env: WorkerEnv, releaseId: string): Promise<{ count: number; bytes: number }> {
@@ -207,14 +222,17 @@ export async function readCurrentRecipeBundle(env: WorkerEnv, slug: string): Pro
   releaseId: string; publishedAt: string; contentHash: string; bundle: Record<string, unknown>;
 } | null> {
   const row = await env.DB.prepare(
-    `SELECT r.id AS release_id, r.published_at, payload.content_hash, payload.object_key
+    `SELECT r.id AS release_id, r.published_at,
+            json_extract(r.input_manifest_json, '$.releaseDate') AS week_of,
+            payload.content_hash, payload.object_key
        FROM current_releases current
        JOIN releases r ON r.id = current.release_id
        JOIN release_recipe_payloads payload ON payload.release_id = r.id AND payload.recipe_slug = ?1
       WHERE current.market_id = 'omaha'`,
-  ).bind(slug).first<{ release_id: string; published_at: string; content_hash: string; object_key: string }>();
+  ).bind(slug).first<{ release_id: string; published_at: string; week_of: string; content_hash: string; object_key: string }>();
   if (!row) return null;
   const bundle = await env.EVIDENCE.get(row.object_key).then((item) => item?.json<Record<string, unknown>>());
   if (!bundle) throw new Error(`published recipe bundle ${row.object_key} is unavailable`);
-  return { releaseId: row.release_id, publishedAt: row.published_at, contentHash: row.content_hash, bundle };
+  return { releaseId: row.release_id, publishedAt: row.published_at, contentHash: row.content_hash,
+    bundle: hydrateReleaseRecipeBundle(bundle, row.release_id, row.published_at, row.week_of) };
 }

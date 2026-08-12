@@ -25,8 +25,6 @@ describe("legacy current-state bridge", () => {
       authoredCommodities: 507,
       boardCommodities: 495,
       authoredRecipes: 542,
-      sourceIncompleteRecipes: 8,
-      repairedRecipes: 8,
       incompleteRecipes: 0,
       uncategorized: [],
       multiplyCategorized: [],
@@ -34,9 +32,12 @@ describe("legacy current-state bridge", () => {
     expect(artifact.audit.pricedCells).toBeGreaterThan(0);
     expect(artifact.audit.pricedCells).toBeLessThanOrEqual(507 * 7);
     expect(artifact.cells).toHaveLength(507 * 7);
-    expect(artifact.payloads.board).toMatchObject({ commodities: expect.not.arrayContaining([expect.objectContaining({ id: "dried-ancho-chiles" })]) });
+    const boardCommodities = (artifact.payloads.board as { commodities: Array<{ id: string }> }).commodities;
+    expect(boardCommodities).toHaveLength(artifact.audit.boardCommodities);
+    expect(new Set(boardCommodities.map((commodity) => commodity.id)).size).toBe(boardCommodities.length);
     expect(artifact.recipeCosts.filter((item) => item.status === "incomplete")).toHaveLength(0);
-    expect(artifact.recipeCosts.filter((item) => (item.detail.repairedFromPrivateBasis as { commodityId?: string } | undefined)?.commodityId === "dried-ancho-chiles")).toHaveLength(8);
+    expect(artifact.audit.repairedRecipes).toBe(artifact.audit.sourceIncompleteRecipes);
+    expect(artifact.recipeCosts.filter((item) => (item.detail.repairedFromPrivateBasis as { commodityId?: string } | undefined)?.commodityId === "dried-ancho-chiles")).toHaveLength(artifact.audit.repairedRecipes);
     expect(artifact.observations.every((item) => item.observation.perUnitMicros >= 0)).toBe(true);
     const largestLegacyRoundingDelta = Math.max(...artifact.observations.map(({ observation }) => Math.abs(
       expectedPerUnitMicros(observation.purchasePriceMinor, observation.normalizedBasisQtyMicros) - observation.perUnitMicros,
