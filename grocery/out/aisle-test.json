@@ -1971,6 +1971,15 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
+        "id":  "jarred-gravy",
+        "store":  "Family Fare",
+        "product":  "Hormel Square Table Sliced Roast Turkey Breast And Gravy",
+        "dept":  "meat",
+        "aisle":  "meat/turkey",
+        "verdict":  "BLOCK",
+        "reason":  "candidate sits in \u0027meat\u0027; category \u0027canned\u0027 allows only: pantry"
+    },
+    {
         "id":  "jelly",
         "store":  "Family Fare",
         "product":  "Concord Grape Preserves Our Family",
@@ -2666,9 +2675,9 @@
     {
         "id":  "ramen",
         "store":  "Family Fare",
-        "product":  "Maruchan Ramen Noodle Soup, Chicken Flavor 12 Ea",
+        "product":  "Maruchan Roast Chicken Flavor Ramen Noodle Soup 3 Oz",
         "dept":  "pantry",
-        "aisle":  "pantry/mixes_spices_seasoning",
+        "aisle":  "pantry/broth_soups_stews_chili",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
     },

@@ -1,6 +1,6 @@
 ﻿{
     "store":  "Family Fare",
-    "updated":  "2026-08-12T04:06:19",
+    "updated":  "2026-08-12T08:32:51",
     "note":  "term -\u003e the last date that search term returned products. Written ONLY from measured receipt inside the buy loop, never bulk-stamped. Used to classify a 14-day carry expiry as starved / churn / unknown; see Get-FfExpiryClass in pull-regular-familyfare.ps1.",
     "term_count":  526,
     "terms":  {

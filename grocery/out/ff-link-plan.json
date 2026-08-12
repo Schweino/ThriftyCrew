@@ -42,10 +42,6 @@
                         "why":  "match found but its size \"16 oz\" gives no per-unit in each"
                     },
                     {
-                        "id":  "jarred-gravy",
-                        "why":  "match found but per-unit disagrees: board $0.1429 vs link $0.1843 (22.5%)"
-                    },
-                    {
                         "id":  "orange-juice",
                         "why":  "match found but its size \"0.5 gll\" gives no per-unit in floz"
                     },
@@ -58,7 +54,7 @@
                         "why":  "match found but its size \"8pk/20oz\" gives no per-unit in floz"
                     }
                 ],
-    "worked":  12,
-    "generated":  "2026-08-12 06:19",
-    "board":  "comparison-2026-08-11.json"
+    "worked":  11,
+    "generated":  "2026-08-12 09:07",
+    "board":  "comparison-2026-08-12.json"
 }

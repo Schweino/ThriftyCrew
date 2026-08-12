@@ -417,6 +417,19 @@
     },
     {
         "id":  "boneless-skinless-chicken-thigh",
+        "store":  "Baker\u0027s",
+        "unit":  "lb",
+        "board":  3.6633,
+        "link":  3.99,
+        "ratio":  1.09,
+        "price":  3.99,
+        "size":  "lb",
+        "boardItem":  "Kroger Frozen Raw Boneless Skinless Chicken Thighs",
+        "linkItem":  "Heritage Farm Boneless Skinless Chicken Thighs",
+        "board_src":  "recipe"
+    },
+    {
+        "id":  "boneless-skinless-chicken-thigh",
         "store":  "Family Fare",
         "unit":  "lb",
         "board":  7.19,
@@ -585,19 +598,6 @@
         "board_src":  "recipe"
     },
     {
-        "id":  "greek-yogurt",
-        "store":  "Family Fare",
-        "unit":  "oz",
-        "board":  0.2817,
-        "link":  0.3566,
-        "ratio":  1.27,
-        "price":  1.89,
-        "size":  "5.3 oz",
-        "boardItem":  "Chobani Strawberry Banana On The Bottom Reduced Fat Greek Yogurt 5.3 Oz",
-        "linkItem":  "Chobani Plain Nonfat Greek Yogurt 5.3 Oz",
-        "board_src":  "recipe"
-    },
-    {
         "id":  "honey-dijon-mustard",
         "store":  "Aldi",
         "unit":  "oz",
@@ -673,6 +673,19 @@
         "size":  "2 lb",
         "boardItem":  "Member\u0027s Mark Smoked Provolone Cheese Slices, 2 lb.",
         "linkItem":  "Member\u0027s Mark Smoked Provolone Cheese Slices, 2 lb.",
+        "board_src":  "recipe"
+    },
+    {
+        "id":  "provolone-cheese",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.4112,
+        "link":  0.3713,
+        "ratio":  0.9,
+        "price":  2.97,
+        "size":  "8 oz",
+        "boardItem":  "Hy-Vee Sliced Provolone Cheese 10Ct",
+        "linkItem":  "Hy-Vee Sliced Provolone Cheese 10Ct",
         "board_src":  "recipe"
     },
     {
