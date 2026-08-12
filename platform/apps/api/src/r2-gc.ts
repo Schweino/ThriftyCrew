@@ -57,7 +57,8 @@ export async function collectReachableObjectKeys(env: Pick<WorkerEnv, "DB" | "AR
     env.DB.prepare("SELECT release_id, root_hash, object_key FROM release_graphs ORDER BY release_id")
       .all<{ release_id: string; root_hash: string; object_key: string }>(),
     env.DB.prepare(
-      `SELECT object_key FROM observation_partitions
+      `SELECT object.object_key FROM observation_partitions partition
+         JOIN object_store_objects object ON object.content_hash = partition.content_hash
        UNION SELECT object_key FROM archive_manifests WHERE status = 'verified' OR completed_at IS NOT NULL
        UNION SELECT object_key FROM configuration_archives WHERE status = 'verified'`,
     ).all<{ object_key: string }>(),
