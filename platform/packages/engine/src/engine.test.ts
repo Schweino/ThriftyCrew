@@ -82,11 +82,14 @@ describe("matching", () => {
         "Extra Sugarfree Sweet Watermelon Gum 15 Ea",
         "Salsagheti Watermelon, 0.84 oz., 24 pk.",
         "BUBBL'R Antioxidant Sparkling Water, Watermelon Lime Smash'r, 12 fl oz, 6 Pack Cans",
+        "Red Bull Energy Watermelon, 8.4 oz., 24 pk.",
+        "5 Radish Vegetable Seeds: Watermelon Daikon Purple Plum French Champion Full Sun Biennial",
       ], good: ["Seedless Watermelon Each", "Whole Seedless Watermelon"] },
       { id: "mangoes", bad: [
         "bubly Mango Sparkling Water, 12 fl oz, 8 Pack Cans",
         "Golden Farms Organic Mango Sauce Pouches, Unsweetened, 3.17 oz., 12 pk.",
         "Dole Fruit Bowls Mangoes & Creme Layers Snacks, 4.3 oz, 4 pack",
+        "(4 pack) Del Monte Diced Mango in Extra Light Syrup, Canned Fruit, 15 oz Can",
       ], good: ["Red Mango Each", "Large Mangos"] },
       { id: "cherries", bad: [
         "Fareway Unsweetened & Pitted Dark Sweet Cherries",
