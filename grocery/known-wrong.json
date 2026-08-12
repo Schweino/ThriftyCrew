@@ -1651,7 +1651,7 @@
                                   ],
                         "product_id":  "00070919069887",
                         "verdict":  "wrong-basis",
-                        "evidence":  "Family Fare's live Omaha product page exposes UPC 00070919069887 as Hatfield Hardwood Smoked Classic Cut Bacon '12 Lb' for $6.99. That catalog size would imply $0.5825/lb and an impossible 12-pound retail bacon package. The source page itself is internally wrong, so the platform must not silently reinterpret it as 12 oz; this exact observation is blocked until the retailer corrects the catalog or an independently size-verified recapture is available. Evidence URL: https://www.shopfamilyfare.com/sm/planning/rsid/103/products/hatfield-hardwood-smoked-classic-cut-bacon-12-lb-id-00070919069887",
+                        "evidence":  "Family Fare\u0027s live Omaha product page exposes UPC 00070919069887 as Hatfield Hardwood Smoked Classic Cut Bacon \u002712 Lb\u0027 for $6.99. That catalog size would imply $0.5825/lb and an impossible 12-pound retail bacon package. The source page itself is internally wrong, so the platform must not silently reinterpret it as 12 oz; this exact observation is blocked until the retailer corrects the catalog or an independently size-verified recapture is available. Evidence URL: https://www.shopfamilyfare.com/sm/planning/rsid/103/products/hatfield-hardwood-smoked-classic-cut-bacon-12-lb-id-00070919069887",
                         "seen_on_board":  "2026-08-09 (crown)",
                         "ruled_on":  "2026-08-09",
                         "ruled_by":  "V3 live Chrome accuracy QA",
@@ -1660,8 +1660,10 @@
                     {
                         "key":  "lemons|Bakers|kroger-caffeine-free-lemon-sparkling-water",
                         "commodity":  "lemons",
-                        "store":  "Baker's",
-                        "names":  ["Kroger Caffeine Free Lemon Sparkling Water"],
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Kroger Caffeine Free Lemon Sparkling Water"
+                                  ],
                         "product_id":  "0001111015385",
                         "verdict":  "wrong-product",
                         "evidence":  "Sparkling lemon-flavored water is a beverage, not a fresh lemon. It was published in the lemons row on 2026-08-10 and its 12-can count could underbid actual produce.",
@@ -1673,8 +1675,11 @@
                     {
                         "key":  "lemons|SamsClub|true-lemon-crystallized-packets",
                         "commodity":  "lemons",
-                        "store":  "Sam's Club",
-                        "names":  ["True Lemon Crystallized Lemon Packets, 100 ct.", "True Lemon Crystallized Lemon Packets, 500 ct."],
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "True Lemon Crystallized Lemon Packets, 100 ct.",
+                                      "True Lemon Crystallized Lemon Packets, 500 ct."
+                                  ],
                         "product_id":  "",
                         "verdict":  "wrong-product",
                         "evidence":  "Crystallized flavor packets are not fresh lemons. The 500-count package held the lemons crown on 2026-08-10 at four cents per packet.",
@@ -1687,7 +1692,9 @@
                         "key":  "dried-oregano|Walmart|sw-crushed-tomatoes-oregano-basil",
                         "commodity":  "dried-oregano",
                         "store":  "Walmart",
-                        "names":  ["(3 pack) S&W Crushed Tomatoes with Oregano Basil, 28 oz Can"],
+                        "names":  [
+                                      "(3 pack) S\u0026W Crushed Tomatoes with Oregano Basil, 28 oz Can"
+                                  ],
                         "product_id":  "14903667945",
                         "verdict":  "wrong-product",
                         "evidence":  "This is a three-pack of canned tomatoes flavored with oregano and basil, not dried oregano. It held the dried-oregano crown on 2026-08-10.",
@@ -1700,7 +1707,9 @@
                         "key":  "avocados|Walmart|lunchskins-avocado-design-sandwich-bags",
                         "commodity":  "avocados",
                         "store":  "Walmart",
-                        "names":  ["(3 pack) Lunchskins Sandwich Bags – 50 Count   Avocado Design   Eco-Friendly Food Storage Bags Made from Unbleached Kraft Paper with Recyclable Resealable Stickers"],
+                        "names":  [
+                                      "(3 pack) Lunchskins Sandwich Bags – 50 Count   Avocado Design   Eco-Friendly Food Storage Bags Made from Unbleached Kraft Paper with Recyclable Resealable Stickers"
+                                  ],
                         "product_id":  "15519000593",
                         "verdict":  "wrong-product",
                         "evidence":  "Paper sandwich bags with an avocado print are household storage goods, not avocados. Their 150-count package held the avocados crown on 2026-08-10.",
@@ -1712,8 +1721,10 @@
                     {
                         "key":  "sliced-cheese|SamsClub|red-baron-deep-dish-pizza-combo",
                         "commodity":  "sliced-cheese",
-                        "store":  "Sam's Club",
-                        "names":  ["Red Baron Pepperoni & Four Cheese Deep Dish Singles Frozen Personal Pizza Combo, 69.60 oz., 12 PK"],
+                        "store":  "Sam\u0027s Club",
+                        "names":  [
+                                      "Red Baron Pepperoni \u0026 Four Cheese Deep Dish Singles Frozen Personal Pizza Combo, 69.60 oz., 12 PK"
+                                  ],
                         "product_id":  "13610718589",
                         "verdict":  "wrong-product",
                         "evidence":  "Frozen personal pizzas described as four-cheese are not packages of sliced cheese. The pizza combo held the sliced-cheese crown on 2026-08-10.",
@@ -1726,7 +1737,9 @@
                         "key":  "lemons|Walmart|snack-pack-lemon-pudding",
                         "commodity":  "lemons",
                         "store":  "Walmart",
-                        "names":  ["Snack Pack Lemon Pudding, 3.25 oz Pudding Cups, 4 Count"],
+                        "names":  [
+                                      "Snack Pack Lemon Pudding, 3.25 oz Pudding Cups, 4 Count"
+                                  ],
                         "product_id":  "",
                         "verdict":  "wrong-product",
                         "evidence":  "Lemon-flavored pudding cups are a prepared dessert, not fresh lemons. They held the lemons crown on 2026-08-10 after the four-count package was normalized as individual items.",
@@ -1739,7 +1752,9 @@
                         "key":  "lemons|Walmart|luigis-lemon-strawberry-italian-ice",
                         "commodity":  "lemons",
                         "store":  "Walmart",
-                        "names":  ["Luigi's Lemon & Strawberry Real Italian Ice, 6 fl oz, 6 Count, (Frozen)"],
+                        "names":  [
+                                      "Luigi\u0027s Lemon \u0026 Strawberry Real Italian Ice, 6 fl oz, 6 Count, (Frozen)"
+                                  ],
                         "product_id":  "10801194",
                         "verdict":  "wrong-product",
                         "evidence":  "Frozen lemon-and-strawberry Italian ice is a prepared dessert, not fresh lemons. It became the lemons crown after the pudding ruling was deployed on 2026-08-10.",
@@ -1752,7 +1767,9 @@
                         "key":  "lemons|Walmart|good-good-vegan-lemon-curd",
                         "commodity":  "lemons",
                         "store":  "Walmart",
-                        "names":  ["GOOD GOOD Vegan Lemon Curd With No Added Sugar, 12 oz Jar"],
+                        "names":  [
+                                      "GOOD GOOD Vegan Lemon Curd With No Added Sugar, 12 oz Jar"
+                                  ],
                         "product_id":  "18670771126",
                         "verdict":  "wrong-product",
                         "evidence":  "Jarred lemon curd is a prepared spread, not fresh lemons. Its source count basis makes it an eligible false fallback unless permanently excluded.",
@@ -1765,13 +1782,75 @@
                         "key":  "breakfast-sausage|Walmart|festive-turkey-breakfast-sausage-frozen-1-lb-roll",
                         "commodity":  "breakfast-sausage",
                         "store":  "Walmart",
-                        "names":  ["FESTIVE Turkey Breakfast Sausage, Frozen, 1 lb Roll"],
+                        "names":  [
+                                      "FESTIVE Turkey Breakfast Sausage, Frozen, 1 lb Roll"
+                                  ],
                         "product_id":  "",
                         "verdict":  "wrong-product",
                         "evidence":  "Turkey breakfast sausage is not pork breakfast sausage. It incorrectly held the V3 Breakfast Sausage (pork) crown at $1.98/lb during live Chrome QA on 2026-08-11 because the prior exclusion only matched the adjacent phrase turkey sausage.",
                         "seen_on_board":  "2026-08-11 (V3 crown)",
                         "ruled_on":  "2026-08-11",
                         "ruled_by":  "V3 Chrome semantic accuracy audit",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "watermelon|Walmart|gatorade-zero-sugar-thirst-quencher-watermelon-s",
+                        "commodity":  "watermelon",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "Gatorade Zero Sugar Thirst Quencher Watermelon Splash Sports Drinks, 12 fl oz, 12 Count Bottles"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Sports drink flavored watermelon, not a whole watermelon sold by each.",
+                        "seen_on_board":  "not on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-12",
+                        "ruled_by":  "accuracy-revalidation-2026-08-12",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cucumbers|FamilyFare|lacroix-blackberry-cucumber-sparkling-water",
+                        "commodity":  "cucumbers",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Lacroix Blackberry Cucumber Sparkling Water"
+                                  ],
+                        "product_id":  "1564405684716638907",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Flavored sparkling water, not fresh cucumbers sold by each.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-12",
+                        "ruled_by":  "accuracy-revalidation-2026-08-12",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "mangoes|Walmart|bubly-mango-sparkling-water-12-fl-oz-8-pack-cans",
+                        "commodity":  "mangoes",
+                        "store":  "Walmart",
+                        "names":  [
+                                      "bubly Mango Sparkling Water, 12 fl oz, 8 Pack Cans"
+                                  ],
+                        "product_id":  "538742129",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Mango-flavored sparkling water, not whole fresh mangoes sold by each.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-12",
+                        "ruled_by":  "accuracy-revalidation-2026-08-12",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "coconut|Fareway|foco-coconut-juice",
+                        "commodity":  "coconut",
+                        "store":  "Fareway",
+                        "names":  [
+                                      "FOCO Coconut Juice"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Coconut juice beverage, not a whole coconut sold by each.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-08-12",
+                        "ruled_by":  "accuracy-revalidation-2026-08-12",
                         "retire_when":  "ruling-reversed"
                     }
                 ]

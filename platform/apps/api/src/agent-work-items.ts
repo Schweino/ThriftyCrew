@@ -95,9 +95,17 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
       const riskSamples = await db.prepare(
         `SELECT sample.ordinal, sample.lane, sample.risk_kind, sample.risk_score,
                 sample.commodity_id, sample.store_location_id, sample.observation_id, sample.recipe_slug,
-                sample.evidence_json, version.name AS product_name, version.size_text, version.product_url,
+                sample.evidence_json, commodity.label AS commodity_label, location.display_name AS store_name,
+                version.name AS product_name, version.size_text, version.product_url, version.taxonomy_path,
+                observation.purchase_price_minor, observation.normalized_basis_unit,
+                observation.normalized_basis_qty_micros, observation.per_unit_micros,
+                observation.raw_price_text, observation.captured_at,
                 cost.status AS recipe_status, cost.batch_cost_minor, cost.serving_cost_minor, cost.detail_json
            FROM accuracy_risk_samples sample
+           JOIN accuracy_draws draw ON draw.id = sample.draw_id
+           JOIN releases release ON release.id = draw.release_id
+           LEFT JOIN commodities commodity ON commodity.id = sample.commodity_id AND commodity.configuration_id = release.configuration_id
+           LEFT JOIN store_locations location ON location.id = sample.store_location_id
            LEFT JOIN observations observation ON observation.id = sample.observation_id
            LEFT JOIN product_versions version ON version.id = observation.product_version_id
            LEFT JOIN release_recipe_costs cost ON cost.release_id = sample.release_id AND cost.recipe_slug = sample.recipe_slug

@@ -1,5 +1,6 @@
 import { browserLanePolicy, recordBrowserLaneResult, withBrowserStoreLane } from "./lane-policy.mjs";
 import { checkpointAdapterChunk } from "./adapter-protocol.mjs";
+import { packageSizeFromName } from "./next-data-v2.mjs";
 
 const LOCATION = "ALDI - OLA 42 - Omaha";
 const PRICE_MODE = "In-Store";
@@ -61,19 +62,23 @@ async function readPage(tab) {
 
 function buildRows(query, page, capturedAt) {
   return page.rows.map((row, resultIndex) => {
+    // ALDI cards have occasionally exposed a neighboring merchandising line as
+    // the trailing size. When the official product name itself carries an exact
+    // package suffix, bind that source-native value to the offer instead.
+    const size = packageSizeFromName(row.name) || row.size;
     const originalLine = row.lines.find((line) => /^Original Price:\s*\$/i.test(line));
     const originalMatch = originalLine?.match(/\$([0-9]+(?:\.[0-9]{1,2})?)/);
     const regularPriceMinor = originalMatch ? Math.round(Number(originalMatch[1]) * 100) : undefined;
     const priceSemantics = { offerType: regularPriceMinor ? "sale" : "everyday", condition: "none", unitPriceMinor: row.priceMinor, qualifyingQuantity: 1, totalPriceMinor: row.priceMinor, ...(regularPriceMinor ? { regularPriceMinor } : {}), ambiguity: false };
     const inStock = /in stock|only \d+ left/i.test(row.availabilityText);
-    const offer = { version: 1, retailerProductId: row.href, productName: row.name, sizeText: row.size, rawPriceText: row.current, purchasePriceMinor: row.priceMinor, availability: { status: inStock ? "in_stock" : "unknown", ...(row.availabilityText ? { rawText: row.availabilityText } : {}), fulfillmentMode: "in_store", eligible: inStock }, priceSemantics, observedAt: capturedAt, sourceUrl: row.href };
+    const offer = { version: 1, retailerProductId: row.href, productName: row.name, sizeText: size, rawPriceText: row.current, purchasePriceMinor: row.priceMinor, availability: { status: inStock ? "in_stock" : "unknown", ...(row.availabilityText ? { rawText: row.availabilityText } : {}), fulfillmentMode: "in_store", eligible: inStock }, priceSemantics, observedAt: capturedAt, sourceUrl: row.href };
     return {
       id: row.id,
       term: query,
       name: row.name,
       prices: `$${(row.priceMinor / 100).toFixed(2)}`,
       unit: "",
-      size: row.size,
+      size,
       href: row.href,
       taxonomy_path: row.taxonomy,
       availability_status: inStock ? "in_stock" : "unknown",
@@ -86,7 +91,7 @@ function buildRows(query, page, capturedAt) {
         pageIndex: 0,
         resultIndex,
         pageState: { pageType: "search_results", pageTitle: page.title, query: page.query, resultRegionPresent: true, challengeDetected: false, currency: "USD", locale: page.locale, locationText: LOCATION, fulfillmentText: PRICE_MODE },
-        visible: { rawText: row.current, priceMinor: row.priceMinor, productName: row.name, productKey: row.href, sizeText: row.size, priceSemantics },
+        visible: { rawText: row.current, priceMinor: row.priceMinor, productName: row.name, productKey: row.href, sizeText: size, priceSemantics },
         offer,
         parser: { status: "exact", rule: "current-price-label", notes: "ALDI visible Current price label; OLA 42 Omaha and In-Store mode verified by the chunk canary." },
       },

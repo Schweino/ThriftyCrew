@@ -46,7 +46,10 @@ async function loadInput(): Promise<unknown> {
   return { task: requestedAgent, instruction: "No approved mutable input was supplied. Return a typed no-op finding and do not propose publication." };
 }
 
-const input = await loadInput();
+const loadedInput = await loadInput();
+const input = requestedAgent === "accuracy-headless" && loadedInput && typeof loadedInput === "object" && !Array.isArray(loadedInput)
+  ? { ...(loadedInput as Record<string, unknown>), verificationClock: { startedAt: new Date().toISOString(), timezone: "America/Chicago" } }
+  : loadedInput;
 const inputJson = JSON.stringify(input);
 const inputHash = createHash("sha256").update(inputJson).digest("hex");
 await mkdir(outputRoot, { recursive: true });

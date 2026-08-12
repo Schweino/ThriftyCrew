@@ -12,8 +12,14 @@ interface CandidateCell {
 }
 
 async function triageAccuracyVerdict(db: D1Database, drawId: string, lane: "uniform" | "risk", ordinal: number, verdict: "right" | "wrong" | "cannot_tell", evidence: Record<string, unknown>): Promise<void> {
-  if (verdict === "right") return;
   const sourceRef = `${drawId}#${lane}#${ordinal}`;
+  if (verdict !== "wrong") {
+    await db.prepare(
+      `UPDATE triage_items SET status = 'resolved', resolved_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
+        WHERE source_kind = 'accuracy_gap' AND source_ref = ?1 AND status <> 'resolved'`,
+    ).bind(sourceRef).run();
+    return;
+  }
   const triageId = await deterministicId("triage", "accuracy-verdict", sourceRef);
   await db.prepare(
     `INSERT INTO triage_items (id, source_kind, source_ref, severity, title, evidence_json)
@@ -21,7 +27,33 @@ async function triageAccuracyVerdict(db: D1Database, drawId: string, lane: "unif
      ON CONFLICT(source_ref) DO UPDATE SET severity = excluded.severity, title = excluded.title,
        evidence_json = excluded.evidence_json, status = CASE WHEN triage_items.status = 'resolved' THEN 'open' ELSE triage_items.status END,
        updated_at = CURRENT_TIMESTAMP, resolved_at = NULL`,
-  ).bind(triageId, sourceRef, verdict === "wrong" ? "hard" : "warning", `${verdict === "wrong" ? "Wrong" : "Unverifiable"} ${lane} accuracy sample ${ordinal}`, stableJson({ drawId, lane, ordinal, verdict, ...evidence })).run();
+  ).bind(triageId, sourceRef, "hard", `Wrong ${lane} accuracy sample ${ordinal}`, stableJson({ drawId, lane, ordinal, verdict, ...evidence })).run();
+}
+
+async function reconcileCannotTellDigest(db: D1Database, drawId: string): Promise<void> {
+  const uniform = await db.prepare(
+    `SELECT COUNT(*) AS reviewed, COALESCE(SUM(CASE WHEN verdict = 'cannot_tell' THEN 1 ELSE 0 END), 0) AS cannot_tell
+       FROM operator_verdicts WHERE draw_id = ?1`,
+  ).bind(drawId).first<{ reviewed: number; cannot_tell: number }>();
+  const risk = await db.prepare(
+    `SELECT COUNT(verdict) AS reviewed, COALESCE(SUM(CASE WHEN verdict = 'cannot_tell' THEN 1 ELSE 0 END), 0) AS cannot_tell
+       FROM accuracy_risk_samples WHERE draw_id = ?1`,
+  ).bind(drawId).first<{ reviewed: number; cannot_tell: number }>();
+  const cannotTell = (uniform?.cannot_tell ?? 0) + (risk?.cannot_tell ?? 0);
+  const sourceRef = `${drawId}#unverifiable-digest`;
+  if (cannotTell === 0) {
+    await db.prepare("UPDATE triage_items SET status = 'resolved', resolved_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE source_ref = ?1 AND status <> 'resolved'").bind(sourceRef).run();
+    return;
+  }
+  const triageId = await deterministicId("triage", "accuracy-verdict", sourceRef);
+  const evidence = { drawId, cannotTell, reviewed: (uniform?.reviewed ?? 0) + (risk?.reviewed ?? 0), policy: "one-digest-per-draw" };
+  await db.prepare(
+    `INSERT INTO triage_items (id, source_kind, source_ref, severity, title, evidence_json)
+     VALUES (?1, 'accuracy_gap', ?2, 'warning', ?3, ?4)
+     ON CONFLICT(source_ref) DO UPDATE SET title = excluded.title, evidence_json = excluded.evidence_json,
+       status = CASE WHEN triage_items.status = 'resolved' THEN 'open' ELSE triage_items.status END,
+       updated_at = CURRENT_TIMESTAMP, resolved_at = NULL`,
+  ).bind(triageId, sourceRef, `${cannotTell} accuracy samples could not be independently verified`, stableJson(evidence)).run();
 }
 
 export interface AccuracySummary {
@@ -214,9 +246,20 @@ export async function readAccuracyDraw(db: D1Database, drawId?: string, reveal =
 }
 
 export async function recordAccuracyVerdicts(db: D1Database, input: AccuracyVerdicts, verifiedBy: string): Promise<{ recorded: number; completed: boolean }> {
-  const draw = await db.prepare("SELECT status, sampled_count FROM accuracy_draws WHERE id = ?1").bind(input.drawId).first<{ status: string; sampled_count: number }>();
+  const draw = await db.prepare("SELECT status, sampled_count, created_at FROM accuracy_draws WHERE id = ?1").bind(input.drawId).first<{ status: string; sampled_count: number; created_at: string }>();
   if (!draw) throw new Error("accuracy draw not found");
   if (draw.status === "cancelled") throw new Error("accuracy draw is cancelled");
+  const createdAt = Date.parse(draw.created_at.includes("T") ? draw.created_at : `${draw.created_at.replace(" ", "T")}Z`);
+  const maximumVerifiedAt = Date.now() + 5 * 60 * 1000;
+  for (const verdict of [...input.verdicts, ...input.riskVerdicts]) {
+    const verifiedAt = Date.parse(verdict.verifiedAt);
+    if (!Number.isFinite(verifiedAt) || verifiedAt < createdAt - 5 * 60 * 1000 || verifiedAt > maximumVerifiedAt) throw new Error("accuracy verdict timestamp is outside the draw window");
+    const accessedAtText = verdict.evidence.accessedAt;
+    if (accessedAtText !== null) {
+      const accessedAt = Date.parse(accessedAtText);
+      if (!Number.isFinite(accessedAt) || accessedAt < createdAt - 5 * 60 * 1000 || accessedAt > verifiedAt + 5 * 60 * 1000) throw new Error("accuracy evidence timestamp is outside the verification window");
+    }
+  }
   const statements: D1PreparedStatement[] = [];
   for (const verdict of input.verdicts) {
     const cell = await db.prepare(
@@ -244,6 +287,7 @@ export async function recordAccuracyVerdicts(db: D1Database, input: AccuracyVerd
     ).bind(input.drawId, verdict.ordinal, verdict.verdict, verifiedBy, verdict.verifiedAt, stableJson(verdict.evidence)).run();
     await triageAccuracyVerdict(db, input.drawId, "risk", verdict.ordinal, verdict.verdict, verdict.evidence);
   }
+  await reconcileCannotTellDigest(db, input.drawId);
   const count = (await db.prepare("SELECT COUNT(*) AS count FROM operator_verdicts WHERE draw_id = ?1").bind(input.drawId).first<{ count: number }>())?.count ?? 0;
   const riskCounts = await db.prepare("SELECT COUNT(*) AS sampled, COUNT(verdict) AS reviewed FROM accuracy_risk_samples WHERE draw_id = ?1").bind(input.drawId).first<{ sampled: number; reviewed: number }>();
   const completed = count === draw.sampled_count && (riskCounts?.reviewed ?? 0) === (riskCounts?.sampled ?? 0);

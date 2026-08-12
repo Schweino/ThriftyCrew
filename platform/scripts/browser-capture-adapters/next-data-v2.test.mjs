@@ -27,6 +27,7 @@ describe("source-native offer parsing", () => {
     expect(packageSizeFromName("Kemps Protein+ Whole Milk, 48 Fl. Oz.")).toBe("48 fl oz");
     expect(packageSizeFromName("Silk Almond Milk, 64 fl. oz., 3 pk.")).toBe("3 x 64 fl oz");
     expect(packageSizeFromName("Large Eggs (24 ct)")).toBe("24 ct");
+    expect(packageSizeFromName("Happy Farms String Cheese 10 OZ")).toBe("10 oz");
   });
 
   it("preserves promotion conditions instead of labeling every price everyday", () => {

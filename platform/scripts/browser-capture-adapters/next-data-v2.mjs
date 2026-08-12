@@ -51,7 +51,7 @@ export function packageSizeFromName(name) {
   if (pack) return `${pack[3]} x ${pack[1]} ${pack[2].toLowerCase().replace(/\./g, "").replace(/\s+/g, " ")}`;
   const count = text.match(/(?:^|[,;(]\s*)(\d+)\s*(?:pk|pack|ct|count)\.?\s*\)?\s*$/i);
   if (count) return `${count[1]} ct`;
-  const quantity = text.match(/(?:^|[,;(]\s*)([0-9]+(?:\.[0-9]+)?)\s*(fl\.?\s*oz\.?|oz\.?|lb\.?|g|kg|ml|l|gal(?:lon)?s?|qt|pt)\.?\s*\)?\s*$/i);
+  const quantity = text.match(/(?:^|[,;(]\s*|\s+)([0-9]+(?:\.[0-9]+)?)\s*(fl\.?\s*oz\.?|oz\.?|lb\.?|g|kg|ml|l|gal(?:lon)?s?|qt|pt)\.?\s*\)?\s*$/i);
   if (quantity) return `${quantity[1]} ${quantity[2].toLowerCase().replace(/\./g, "").replace(/\s+/g, " ").replace(/^gallons?$/, "gal")}`;
   const word = text.match(/(?:^|[,;(]\s*)(half\s+gallon|gallon|dozen|each)\s*\)?\s*$/i);
   if (word) return word[1].toLowerCase() === "half gallon" ? "0.5 gal" : word[1].toLowerCase() === "gallon" ? "1 gal" : word[1].toLowerCase();
