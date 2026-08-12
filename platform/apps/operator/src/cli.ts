@@ -9,7 +9,7 @@ import { buildNativeRelease, loadNativeReleaseCatalog, nativeReleaseIdentity } f
 import type { ContentAddressedReleaseGraph } from "@thriftycrew/daily/release-graph";
 import { digestHex, stableJson } from "@thriftycrew/domain";
 import { generateLegacyConfiguration } from "./config";
-import { buildNativeParityReport, compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot } from "@thriftycrew/engine";
+import { buildNativeParityReport, compileProductMatcher, decodeNativeEngineSnapshot, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot, type TupleEncodedNativeEngineSnapshot } from "@thriftycrew/engine";
 import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
 import { checkAgentRegistry, readAgentRegistry } from "./agents";
 import { browserCaptureCycleStatus, captureQueueStatus, compactPromotedCaptureQueue, defaultCaptureQueueRoot, enqueueCapture, reconcileCaptureQueueRemote, verifyCaptureQueueFilesystem } from "./capture-queue";
@@ -312,7 +312,7 @@ async function releaseFreezeDrill(): Promise<Record<string, unknown>> {
   const before = await publicGet("/api/v2/status") as { currentRelease?: { id?: string; summary?: { expectedCommodities?: number; expectedStores?: number; expectedRecipes?: number; expectedFreeRotation?: number } } };
   const currentReleaseId = before.currentRelease?.id;
   if (!currentReleaseId) throw new Error("release-freeze drill requires a published release");
-  const snapshot = await client.request("/internal/engine/snapshot?mode=direct") as unknown as NativeEngineSnapshot;
+  const snapshot = decodeNativeEngineSnapshot(await client.request("/internal/engine/snapshot?mode=direct") as unknown as TupleEncodedNativeEngineSnapshot);
   const observedAt = new Date().toISOString();
   const inputBatchIds = [...snapshot.inputBatchIds].sort();
   const inputManifest = {
@@ -809,7 +809,7 @@ if (command === "status") {
   const requestedMode = arguments_[0] ?? "legacy";
   if (!(["legacy", "direct", "all"] as const).includes(requestedMode as "legacy" | "direct" | "all")) throw new Error("tc engine parity mode must be legacy, direct, or all");
   const client = await mutationClient();
-  const snapshot = await client.request(`/internal/engine/snapshot?mode=${requestedMode}&profile=parity`) as unknown as NativeEngineSnapshot;
+  const snapshot = decodeNativeEngineSnapshot(await client.request(`/internal/engine/snapshot?mode=${requestedMode}&profile=parity`) as unknown as TupleEncodedNativeEngineSnapshot);
   const report = buildNativeParityReport(snapshot);
   result = await client.request("/internal/engine/parity", { json: report, acceptStatuses: [422] });
 } else if (command === "engine" && (subcommand === "build-native" || subcommand === "publish-native")) {
@@ -837,12 +837,13 @@ if (command === "status") {
   }
   if (result === undefined) {
     stageStartedAt = performance.now();
-    const [snapshot, previousGraph] = await Promise.all([
-      client.request("/internal/engine/snapshot?mode=direct") as Promise<unknown> as Promise<NativeEngineSnapshot>,
+    const [encodedSnapshot, previousGraph] = await Promise.all([
+      client.request("/internal/engine/snapshot?mode=direct") as Promise<unknown> as Promise<TupleEncodedNativeEngineSnapshot>,
       loadCurrentReleaseGraph(client),
     ]);
+    const snapshot = decodeNativeEngineSnapshot(encodedSnapshot);
     performanceProfile.snapshotFetchMs = Math.round(performance.now() - stageStartedAt);
-    performanceProfile.snapshotResponseBytes = new TextEncoder().encode(stableJson(snapshot)).byteLength;
+    performanceProfile.snapshotResponseBytes = snapshot.transportBytes ?? new TextEncoder().encode(stableJson(snapshot)).byteLength;
     stageStartedAt = performance.now();
     const artifact = await buildNativeRelease(incomeRoot, snapshot, catalog, previousGraph);
     performanceProfile.nativeBuildMs = Math.round(performance.now() - stageStartedAt);

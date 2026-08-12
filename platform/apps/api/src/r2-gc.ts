@@ -23,6 +23,23 @@ function releaseNodeKey(kind: string, contentHash: string): string {
   return `release-nodes/schema=1/kind=${kind}/prefix=${contentHash.slice(0, 2)}/${contentHash}.json`;
 }
 
+interface RecoveryManifestReferenceSet {
+  releaseRoots: Array<{ release_id: string; root_hash: string; object_key: string }>;
+  observationLake?: { partitions?: Array<{ object_key: string }> };
+  immutableObjects?: Array<{ bucket: ManagedBucket; object_key: string }>;
+}
+
+export function recoveryManifestDirectReferences(manifest: RecoveryManifestReferenceSet): Array<{ bucket: ManagedBucket; key: string }> {
+  if (!Array.isArray(manifest.releaseRoots)) throw new Error("backup recovery manifest release roots are invalid during garbage collection");
+  const references: Array<{ bucket: ManagedBucket; key: string }> = [];
+  for (const partition of manifest.observationLake?.partitions ?? []) references.push({ bucket: "archive", key: partition.object_key });
+  for (const object of manifest.immutableObjects ?? []) {
+    if (object.bucket !== "archive" && object.bucket !== "evidence") throw new Error("backup recovery manifest bucket is invalid during garbage collection");
+    references.push({ bucket: object.bucket, key: object.object_key });
+  }
+  return references;
+}
+
 export function selectGarbageObjects(objects: readonly ManagedObject[], reachable: ReadonlySet<string>, graceBefore: string, limit: number): ManagedObject[] {
   const cutoff = Date.parse(graceBefore);
   return objects.filter((object) => Date.parse(object.uploaded) < cutoff && !reachable.has(rootKey(object.bucket, object.key)))
@@ -51,9 +68,9 @@ export async function listManagedObjects(env: Pick<WorkerEnv, "ARCHIVE" | "EVIDE
   return groups.flat();
 }
 
-export async function collectReachableObjectKeys(env: Pick<WorkerEnv, "DB" | "ARCHIVE">): Promise<Set<string>> {
+export async function collectReachableObjectKeys(env: Pick<WorkerEnv, "DB" | "ARCHIVE" | "BACKUPS">): Promise<Set<string>> {
   const reachable = new Set<string>();
-  const [graphs, archiveRows, evidenceRows] = await Promise.all([
+  const [graphs, archiveRows, evidenceRows, backupRows] = await Promise.all([
     env.DB.prepare("SELECT release_id, root_hash, object_key FROM release_graphs ORDER BY release_id")
       .all<{ release_id: string; root_hash: string; object_key: string }>(),
     env.DB.prepare(
@@ -67,10 +84,16 @@ export async function collectReachableObjectKeys(env: Pick<WorkerEnv, "DB" | "AR
        UNION SELECT object_key FROM release_recipe_payloads
        UNION SELECT object_key FROM recipe_cost_detail_objects`,
     ).all<{ object_key: string }>(),
+    env.DB.prepare(
+      `SELECT id, object_key, content_hash, byte_length FROM lake_backup_manifests
+        WHERE status = 'completed' AND replica_verified = 1 AND created_at >= datetime('now', '-30 days')
+        ORDER BY created_at DESC`,
+    ).all<{ id: string; object_key: string; content_hash: string; byte_length: number }>(),
   ]);
   for (const row of archiveRows.results) reachable.add(rootKey("archive", row.object_key));
   for (const row of evidenceRows.results) reachable.add(rootKey("evidence", row.object_key));
-  for (const graph of graphs.results) {
+  const addReleaseGraph = async (graph: { release_id: string; root_hash: string; object_key: string }) => {
+    if (reachable.has(rootKey("archive", graph.object_key))) return;
     reachable.add(rootKey("archive", graph.object_key));
     const object = await env.ARCHIVE.get(graph.object_key);
     if (!object) throw new Error(`release graph root is missing during garbage collection: ${graph.release_id}`);
@@ -84,6 +107,16 @@ export async function collectReachableObjectKeys(env: Pick<WorkerEnv, "DB" | "AR
       if (!kind || !/^[a-f0-9]{64}$/.test(contentHash)) throw new Error(`release graph node identity is invalid during garbage collection: ${graph.release_id}`);
       reachable.add(rootKey("archive", releaseNodeKey(kind, contentHash)));
     }
+  };
+  for (const graph of graphs.results) await addReleaseGraph(graph);
+  for (const backup of backupRows.results) {
+    const object = await env.BACKUPS.get(backup.object_key);
+    if (!object || object.size !== backup.byte_length) throw new Error(`retained backup recovery manifest is missing during garbage collection: ${backup.id}`);
+    const bytes = new Uint8Array(await object.arrayBuffer());
+    if (await digestHex(bytes) !== backup.content_hash) throw new Error(`retained backup recovery manifest hash failed during garbage collection: ${backup.id}`);
+    const manifest = JSON.parse(new TextDecoder().decode(bytes)) as RecoveryManifestReferenceSet;
+    for (const reference of recoveryManifestDirectReferences(manifest)) reachable.add(rootKey(reference.bucket, reference.key));
+    for (const graph of manifest.releaseRoots) await addReleaseGraph(graph);
   }
   return reachable;
 }

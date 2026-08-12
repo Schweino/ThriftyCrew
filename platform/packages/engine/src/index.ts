@@ -205,6 +205,7 @@ export interface NativeEngineSnapshot {
   inputHash: string;
   inputBatchIds: string[];
   rawCandidateEncoding?: "full" | "unmatched-only" | "omitted";
+  transportBytes?: number;
   commodities: Array<{ id: string; label: string; basis_unit: WinnerCandidate["commodityId"] extends string ? string : never; category_id: string; category_label?: string; sort_order?: number; band_min_micros?: number | null; band_max_micros?: number | null }>;
   stores: Array<{ id: string; store_name: string; display_name?: string; membership_required?: number }>;
   candidates: Array<{
@@ -235,6 +236,45 @@ export interface NativeEngineSnapshot {
     commodity_id: string; store_location_id: string; observation_id: string | null; status: string;
     is_crown: number; display_per_unit_micros: number | null; display_unit: string | null;
   }>;
+}
+
+export const ENGINE_CANDIDATE_COLUMNS = [
+  "observation_id", "commodity_id", "store_location_id", "per_unit_micros", "captured_at", "valid_to",
+  "coverage_mode", "captured_to", "batch_id", "normalized_basis_unit", "normalized_basis_qty_micros",
+  "purchase_price_minor", "regular_price_minor", "kind", "purchase_quantity", "package_count", "size_text",
+  "membership_required", "loyalty_required", "raw_price_text", "name", "normalized_name", "product_url",
+  "taxonomy_path", "external_key", "basis_options_json", "max_age_days", "known_wrong",
+] as const;
+
+type CandidateColumn = (typeof ENGINE_CANDIDATE_COLUMNS)[number];
+export interface TupleEncodedNativeEngineSnapshot extends Omit<NativeEngineSnapshot, "candidates" | "rawCandidates"> {
+  candidateEncoding: "tuples-v1";
+  candidateColumns: readonly CandidateColumn[];
+  matchedCandidateRows: unknown[][];
+  unmatchedCandidateRows: unknown[][];
+  transportBytes: number;
+}
+
+export function encodeNativeEngineSnapshotCandidates<T extends NativeEngineSnapshot>(
+  snapshot: T,
+): Omit<T, "candidates" | "rawCandidates"> & TupleEncodedNativeEngineSnapshot {
+  const { candidates, rawCandidates = [], ...rest } = snapshot;
+  const tuple = (row: object) => ENGINE_CANDIDATE_COLUMNS.map((column) => (row as Record<string, unknown>)[column] ?? null);
+  const encoded = { ...rest, candidateEncoding: "tuples-v1" as const, candidateColumns: ENGINE_CANDIDATE_COLUMNS,
+    matchedCandidateRows: candidates.map(tuple), unmatchedCandidateRows: rawCandidates.map(tuple), transportBytes: 0 };
+  encoded.transportBytes = new TextEncoder().encode(JSON.stringify(encoded)).byteLength;
+  return encoded as unknown as Omit<T, "candidates" | "rawCandidates"> & TupleEncodedNativeEngineSnapshot;
+}
+
+export function decodeNativeEngineSnapshot(snapshot: NativeEngineSnapshot | TupleEncodedNativeEngineSnapshot): NativeEngineSnapshot {
+  if (!("candidateEncoding" in snapshot) || snapshot.candidateEncoding !== "tuples-v1") return snapshot as NativeEngineSnapshot;
+  if (snapshot.candidateColumns.length !== ENGINE_CANDIDATE_COLUMNS.length
+    || snapshot.candidateColumns.some((column, index) => column !== ENGINE_CANDIDATE_COLUMNS[index])) throw new Error("engine snapshot candidate tuple schema is unsupported");
+  const object = (row: unknown[]) => Object.fromEntries(snapshot.candidateColumns.map((column, index) => [column, row[index]]));
+  const { candidateEncoding: _encoding, candidateColumns: _columns, matchedCandidateRows, unmatchedCandidateRows,
+    transportBytes, ...rest } = snapshot;
+  return { ...rest, candidates: matchedCandidateRows.map(object), rawCandidates: unmatchedCandidateRows.map(object),
+    rawCandidateEncoding: rest.rawCandidateEncoding ?? "unmatched-only", transportBytes } as NativeEngineSnapshot;
 }
 
 export interface NativeReleaseCell {

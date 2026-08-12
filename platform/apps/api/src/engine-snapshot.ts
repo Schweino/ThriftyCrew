@@ -1,4 +1,5 @@
 import { digestHex, stableJson } from "@thriftycrew/domain";
+import { encodeNativeEngineSnapshotCandidates, type NativeEngineSnapshot } from "@thriftycrew/engine";
 import type { WorkerEnv } from "./env";
 
 export type EngineSourceMode = "legacy" | "direct" | "all";
@@ -150,7 +151,7 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
   );
   const inputBatchIds = batches.results.map((batch) => batch.id).sort();
   const inputHash = await digestHex(stableJson({ configurationId: configuration.id, configurationHash: configuration.content_hash, mode, inputBatchIds }));
-  return {
+  return encodeNativeEngineSnapshotCandidates({
     ok: true,
     mode,
     observedAt: new Date().toISOString(),
@@ -165,5 +166,5 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
     rawCandidateEncoding: includeRaw ? "unmatched-only" : "omitted",
     rawCandidates: partitioned.unmatchedRawCandidates,
     currentCells: currentCells.results,
-  };
+  } as unknown as NativeEngineSnapshot);
 }
