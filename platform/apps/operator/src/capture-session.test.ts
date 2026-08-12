@@ -2,11 +2,18 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { appendCaptureChunk, buildCaptureSessionWorklist, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession } from "./capture-session";
+import { appendCaptureChunk, buildCaptureSessionWorklist, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession, rollingDiscoveryTarget } from "./capture-session";
 
 const roots: string[] = [];
 const screenshotSha256 = "a".repeat(64);
 const priceSemantics = { offerType: "everyday" as const, condition: "none" as const, unitPriceMinor: 199, qualifyingQuantity: 1, totalPriceMinor: 199, ambiguity: false as const };
+
+describe("rolling browser discovery", () => {
+  it("spreads the durable full worklist across four cumulative daily targets", () => {
+    expect(rollingDiscoveryTarget(525, new Date("2026-08-12T15:00:00Z"))).toMatchObject({ day: "Wed", shard: 1, cumulativeTarget: 132 });
+    expect(rollingDiscoveryTarget(525, new Date("2026-08-15T15:00:00Z"))).toMatchObject({ day: "Sat", shard: 4, cumulativeTarget: 525, remainingAfterTarget: 0 });
+  });
+});
 
 function pageState(query: string) {
   return { pageType: "search_results" as const, pageTitle: `${query} - Walmart.com`, query, resultRegionPresent: true as const, challengeDetected: false as const, currency: "USD" as const, locale: "en-US", locationText: "Omaha L St Supercenter", fulfillmentText: "pickup" };

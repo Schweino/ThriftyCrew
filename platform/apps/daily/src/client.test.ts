@@ -47,9 +47,16 @@ describe("direct capture observation deduplication", () => {
     });
   });
 
-  it("rejects conflicting prices that would share an observation id", () => {
-    expect(() => deduplicateDirectObservations([observation, { ...observation, purchasePriceMinor: 399 }]))
-      .toThrow("conflicting duplicate observation");
+  it("retains genuinely different offer facts", () => {
+    expect(deduplicateDirectObservations([observation, {
+      ...observation, purchasePriceMinor: 399, perUnitMicros: 249_375, rawPriceText: "$3.99",
+    }])).toMatchObject({ duplicatesAvoided: 0, observations: [{ purchasePriceMinor: 299 }, { purchasePriceMinor: 399 }] });
+  });
+
+  it("ignores volatile capture provenance while preserving distinct term membership", () => {
+    const second = { ...observation, package: { ...observation.package, rawIndex: 99, source: "retry" }, capturedAt: "2026-08-12T12:00:00.000Z" };
+    expect(deduplicateDirectObservations([observation, second])).toMatchObject({ duplicatesAvoided: 1 });
+    expect(deduplicateDirectObservations([observation, { ...second, termKey: "milk" }])).toMatchObject({ duplicatesAvoided: 0 });
   });
 });
 

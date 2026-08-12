@@ -76,10 +76,11 @@ export async function runCloudCaptureMatch(env: WorkerEnv, batchId: string, pin:
     WITH ranked AS (
       SELECT p.id AS product_id, pv.name, pv.normalized_name, pv.taxonomy_path,
              ROW_NUMBER() OVER (PARTITION BY p.id ORDER BY o.captured_at DESC, o.id DESC) AS ordinal
-        FROM observations o
+        FROM capture_batch_observations member
+        JOIN observations o ON o.id = member.observation_id
         JOIN product_versions pv ON pv.id = o.product_version_id
         JOIN products p ON p.id = pv.product_id
-       WHERE o.batch_id = ?1
+       WHERE member.batch_id = ?1
     )
     SELECT product_id, name, normalized_name, taxonomy_path FROM ranked WHERE ordinal = 1 ORDER BY product_id
   `).bind(batchId).all<ProductRow>();
@@ -136,8 +137,10 @@ export async function runCloudCaptureMatch(env: WorkerEnv, batchId: string, pin:
   await env.DB.prepare(`UPDATE match_decisions SET superseded_at = CURRENT_TIMESTAMP
     WHERE configuration_id = ?2 AND superseded_at IS NULL
       AND product_id IN (
-        SELECT DISTINCT p.id FROM observations o JOIN product_versions pv ON pv.id = o.product_version_id
-        JOIN products p ON p.id = pv.product_id WHERE o.batch_id = ?1
+        SELECT DISTINCT p.id FROM capture_batch_observations member
+        JOIN observations o ON o.id = member.observation_id
+        JOIN product_versions pv ON pv.id = o.product_version_id
+        JOIN products p ON p.id = pv.product_id WHERE member.batch_id = ?1
       ) AND NOT EXISTS (
         SELECT 1 FROM json_each(?3) desired
          WHERE json_extract(desired.value, '$[0]') = match_decisions.product_id

@@ -146,9 +146,11 @@ h2[id]{scroll-margin-top:84px}
 <script>
 (function(){
 if(window.__smpScaler2)return; window.__smpScaler2=1;
-// live price feed (Cloudflare). Fetched once per page; everyday package prices show instantly if slow/down.
-var SMPFEED='https://feed.thriftycrew.com/smp-feed.json',smpFeedP=null,feedData=null,feedFailed=false;
-function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+// Fetch only this recipe's content-addressed price slice. The legacy feed is a
+// rollback path during migration, never the normal 500-recipe page payload.
+var SMPLEGACY='https://feed.thriftycrew.com/smp-feed.json',SMPRECIPE=(location.pathname||'').replace(/^\/+|\/+$/g,'').split('/').pop()||'recipe';
+var SMPFEED='https://www.thriftycrew.com/api/v2/recipe-feed/'+encodeURIComponent(SMPRECIPE),smpFeedP=null,feedData=null,feedFailed=false;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){if(r.ok)return r.json();return fetch(SMPLEGACY).then(function(x){return x.ok?x.json():null;});}).catch(function(){return null;}); } return smpFeedP; }
 function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
 // Scale ONLY the leading quantity, and understand fractions while doing it.
 // The old version multiplied every number in the string, which broke two ways the moment a reader touched

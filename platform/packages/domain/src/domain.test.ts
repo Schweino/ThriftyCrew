@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { assertObservationArithmetic, expectedPerUnitMicros, expectedProductIdentityFingerprint, normalizeName, productIdentityPass, stableJson } from "./index";
+import { assertObservationArithmetic, canonicalProductUrl, expectedPerUnitMicros, expectedProductIdentityFingerprint, normalizeName, productIdentityPass, semanticOfferFact, semanticProductVersion, stableJson } from "./index";
 
 describe("domain invariants", () => {
   it("normalizes product identity without punctuation drift", () => {
@@ -41,6 +41,20 @@ describe("domain invariants", () => {
 
   it("matches JSON wire semantics for undefined values", () => {
     expect(stableJson({ kept: 1, omitted: undefined, array: [1, undefined] })).toBe('{"array":[1,null],"kept":1}');
+  });
+
+  it("keeps transport provenance out of semantic product and offer identity", () => {
+    expect(canonicalProductUrl("https://STORE.example/item/1/?utm_source=x#details")).toBe("https://store.example/item/1");
+    const product = { name: " Whole Milk ", sizeText: "1 GAL", productUrl: "https://store.example/item/1?session=a", taxonomyPath: "Dairy > Milk", identity: { brand: "Store Brand" } };
+    expect(semanticProductVersion(product)).toEqual(semanticProductVersion({ ...product, productUrl: "https://store.example/item/1?session=b" }));
+    const offer = {
+      kind: "everyday", currency: "USD", purchasePriceMinor: 399, purchaseQuantity: 1, packageCount: 1,
+      capturedBasisUnit: "gal", capturedBasisQtyMicros: 1_000_000, normalizedBasisUnit: "gal",
+      normalizedBasisQtyMicros: 1_000_000, perUnitMicros: 3_990_000, loyaltyRequired: false,
+      membershipRequired: false, rawPriceText: "$3.99", rawSizeText: "1 gal",
+      offerSnapshot: { observedAt: "2026-08-11T00:00:00Z", retailerProductId: "1" },
+    };
+    expect(semanticOfferFact(offer)).toEqual(semanticOfferFact({ ...offer, offerSnapshot: { ...offer.offerSnapshot, observedAt: "2026-08-12T00:00:00Z" } }));
   });
 
   it("rejects forged identity fingerprints and confidence inflation", async () => {

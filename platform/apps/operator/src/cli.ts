@@ -511,6 +511,22 @@ if (command === "status") {
   const [manifestId, parquetFile] = arguments_;
   if (!manifestId || !parquetFile) throw new Error("tc archive upload requires a manifest id and Parquet file");
   result = await (await mutationClient()).request(`/internal/archival/${encodeURIComponent(manifestId)}/parquet`, { method: "PUT", body: new Uint8Array(await readFile(cliPath(parquetFile))), headers: { "content-type": "application/vnd.apache.parquet" } });
+} else if (command === "cleanup" && subcommand === "plan") {
+  result = await (await mutationClient()).request("/internal/canonical-cleanup/plan", { json: { dryRun: !arguments_.includes("--execute"), maximumRows: 10000 }, acceptStatuses: [422] });
+} else if (command === "cleanup" && subcommand === "export") {
+  const [runId, outputFile] = arguments_;
+  if (!runId || !outputFile) throw new Error("tc cleanup export requires a run id and output JSON file");
+  const exported = await (await mutationClient()).request(`/internal/canonical-cleanup/${encodeURIComponent(runId)}/export`);
+  await writeJson(cliPath(outputFile), exported);
+  result = { ok: true, runId, outputFile: cliPath(outputFile), rows: Array.isArray(exported.rows) ? exported.rows.length : 0 };
+} else if (command === "cleanup" && subcommand === "upload") {
+  const [runId, parquetFile] = arguments_;
+  if (!runId || !parquetFile) throw new Error("tc cleanup upload requires a run id and Parquet file");
+  result = await (await mutationClient()).request(`/internal/canonical-cleanup/${encodeURIComponent(runId)}/parquet`, { method: "PUT", body: new Uint8Array(await readFile(cliPath(parquetFile))), headers: { "content-type": "application/vnd.apache.parquet" } });
+} else if (command === "cleanup" && subcommand === "execute") {
+  const [runId, archiveSha256] = arguments_;
+  if (!runId || !archiveSha256) throw new Error("tc cleanup execute requires a run id and verified archive SHA-256");
+  result = await (await mutationClient()).request(`/internal/canonical-cleanup/${encodeURIComponent(runId)}/execute`, { json: { archiveSha256 } });
 } else if (command === "content" && subcommand === "show") {
   result = await (await mutationClient()).request("/internal/content-batches");
 } else if (command === "content" && subcommand === "create") {
@@ -1028,6 +1044,15 @@ if (command === "status") {
   result = await commodityAdd(arguments_[0]);
 } else if (command === "recipe" && subcommand === "add") {
   result = await recipeAdd(arguments_[0]);
+} else if (command === "recipe" && subcommand === "bundles") {
+  let releaseId = arguments_[0];
+  const client = await mutationClient();
+  if (!releaseId) {
+    const current = await client.request("/api/v2/releases/current", { method: "GET" });
+    releaseId = String(current.releaseId ?? "");
+  }
+  if (!releaseId) throw new Error("tc recipe bundles could not resolve the current release id");
+  result = await client.request(`/internal/releases/${encodeURIComponent(releaseId)}/recipe-bundles`, { method: "POST" });
 } else if (command === "efficiency" && subcommand === "record") {
   const file = arguments_[0];
   if (!file) throw new Error("tc efficiency record requires a D1 efficiency report JSON file");
@@ -1075,8 +1100,8 @@ if (command === "status") {
     ...(!isHelpRequest ? { error: `Unknown command: ${requestedCommand}` } : {}),
     usage: [
       "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy|archives|archive <id>",
-      "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
-      "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>", "tc efficiency record <report.json>",
+      "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>", "tc cleanup plan [--execute]|export <run> <json>|upload <run> <parquet>|execute <run> <sha256>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
+      "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>", "tc efficiency record <report.json>", "tc recipe bundles [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
         "tc capture metrics [limit]", "tc capture coordinator status|next|heartbeat|fail|challenge|resolve", "tc capture session worklist|init|append|evidence|verification-plan|finalize|status",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog", "tc capture journal checkpoint|restore [--force]",

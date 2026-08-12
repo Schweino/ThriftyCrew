@@ -297,6 +297,15 @@ export async function buildCaptureSessionWorklist(
   };
 }
 
+export function rollingDiscoveryTarget(totalTerms: number, instant = new Date()): { day: string; shard: number; shards: number; cumulativeTarget: number; remainingAfterTarget: number } {
+  if (!Number.isSafeInteger(totalTerms) || totalTerms <= 0) throw new Error("rolling discovery requires a positive term count");
+  const weekday = new Intl.DateTimeFormat("en-US", { timeZone: "America/Chicago", weekday: "short" }).format(instant);
+  const shard = ({ Wed: 1, Thu: 2, Fri: 3, Sat: 4 } as Record<string, number>)[weekday];
+  if (!shard) throw new Error(`rolling browser discovery is only scheduled Wednesday-Saturday (received ${weekday})`);
+  const cumulativeTarget = Math.ceil(totalTerms * shard / 4);
+  return { day: weekday, shard, shards: 4, cumulativeTarget, remainingAfterTarget: totalTerms - cumulativeTarget };
+}
+
 export async function initializeCaptureSession(storeInput: string, worklistFile: string, directory: string, startedAt = new Date().toISOString()): Promise<DraftSession> {
   const store = storeSchema.parse(storeInput);
   z.iso.datetime({ offset: true }).parse(startedAt);

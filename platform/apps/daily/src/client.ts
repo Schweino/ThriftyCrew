@@ -1,4 +1,4 @@
-import { deterministicId, digestHex, stableJson, verifyBrowserCaptureAccuracy } from "@thriftycrew/domain";
+import { deterministicId, digestHex, semanticObservationId, semanticOfferFact, semanticProductVersion, stableJson, verifyBrowserCaptureAccuracy } from "@thriftycrew/domain";
 import { createHash } from "node:crypto";
 import { gzipSync } from "node:zlib";
 import type { CurrentBridgeArtifact } from "./legacy";
@@ -41,26 +41,17 @@ export function deduplicateDirectObservations(observations: readonly DirectObser
   observations: DirectObservation[];
   duplicatesAvoided: number;
 } {
-  const unique = new Map<string, { observation: DirectObservation; semantic: string }>();
+  const unique = new Map<string, DirectObservation>();
   for (const observation of observations) {
-    const versionIdentity = {
-      name: observation.name,
-      sizeText: observation.sizeText,
-      productUrl: observation.productUrl ?? null,
-      imageUrl: observation.imageUrl ?? null,
-      taxonomyPath: observation.taxonomyPath ?? null,
-      package: observation.package,
-      identity: observation.identity ?? null,
-    };
-    const key = stableJson([observation.externalProductKey, versionIdentity, observation.kind, observation.capturedAt]);
-    const semantic = stableJson(observation);
-    const prior = unique.get(key);
-    if (prior && prior.semantic !== semantic) {
-      throw new Error(`conflicting duplicate observation for ${observation.externalProductKey} at ${observation.capturedAt}`);
-    }
-    if (!prior) unique.set(key, { observation, semantic });
+    const key = stableJson([
+      observation.externalProductKey,
+      semanticProductVersion(observation),
+      semanticOfferFact(observation),
+      observation.termKey ?? "",
+    ]);
+    if (!unique.has(key)) unique.set(key, observation);
   }
-  return { observations: [...unique.values()].map((entry) => entry.observation), duplicatesAvoided: observations.length - unique.size };
+  return { observations: [...unique.values()], duplicatesAvoided: observations.length - unique.size };
 }
 
 export class MutationClient {
@@ -295,6 +286,8 @@ export async function ingestDirectCapture(
     idempotencyKey: artifact.idempotencyKey,
   } });
   const batchId = String(created.batchId);
+  const storeLocationId = String(created.storeLocationId ?? "");
+  if (!storeLocationId) throw new Error(`capture batch ${batchId} did not return its store location identity`);
   let status = String(created.status);
   const primary: CaptureEvidenceInput = { body: evidenceBody, kind: artifact.evidence?.kind ?? "raw_payload", contentType: artifact.evidence?.contentType ?? "application/json" };
   const browserRawIndex = artifact.sourceId.endsWith("-browser")
@@ -337,7 +330,36 @@ export async function ingestDirectCapture(
       }
       await options.onEvidenceUploaded?.({ sha256: evidenceSha256, evidenceId: evidenceIds[index]!, index });
     }
-    for (const observationChunk of chunks(deduplicated.observations, 100)) {
+    const planned = await Promise.all(deduplicated.observations.map(async (observation) => {
+      const productId = await deterministicId("prod", storeLocationId, observation.externalProductKey);
+      const versionHash = await digestHex(stableJson(semanticProductVersion(observation)));
+      const versionId = await deterministicId("pver", productId, versionHash);
+      return { observation, observationId: (await semanticObservationId(artifact.sourceId, versionId, observation)).id };
+    }));
+    const existingIds = new Set<string>();
+    for (const idChunk of chunks([...new Set(planned.map((item) => item.observationId))], 250)) {
+      const probe = await client.request(`/internal/capture-batches/${batchId}/observations/existing`, { json: { observationIds: idChunk } });
+      for (const id of probe.existingIds as string[] ?? []) existingIds.add(id);
+    }
+    const carried = planned.filter((item) => existingIds.has(item.observationId));
+    const novel = planned.filter((item) => !existingIds.has(item.observationId));
+    for (const referenceChunk of chunks(carried, 100)) {
+      await client.request(`/internal/capture-batches/${batchId}/observation-references`, { json: { references: referenceChunk.map(({ observation, observationId }) => ({
+        observationId,
+        ...(observation.termKey ? { termKey: observation.termKey } : {}),
+        observedAt: observation.capturedAt,
+        ...(observation.sourcePayloadKey ? { sourcePayloadKey: observation.sourcePayloadKey } : {}),
+        evidenceObjectId: observation.evidenceObjectId ?? evidenceId,
+        provenance: {
+          package: observation.package,
+          identity: observation.identity ?? null,
+          productUrl: observation.productUrl ?? null,
+          imageUrl: observation.imageUrl ?? null,
+          offerSnapshot: observation.offerSnapshot ?? null,
+        },
+      })) } });
+    }
+    for (const observationChunk of chunks(novel.map((item) => item.observation), 100)) {
       await client.request(`/internal/capture-batches/${batchId}/observations`, { json: { observations: observationChunk.map((observation) => ({ ...observation, evidenceObjectId: observation.evidenceObjectId ?? evidenceId })) } });
     }
     const sealed = await client.request(`/internal/capture-batches/${batchId}/seal`, { json: {
@@ -447,7 +469,10 @@ export async function replayCurrentArtifact(client: MutationClient, artifact: Cu
     const evidenceId = `evidence-${batchId}-${captureManifestHash.slice(0, 12)}`;
     inputBatchIds.push(batchId);
     for (const plan of plans) {
-      const observationId = await deterministicId("obs", batchId, plan.versionId, plan.observation.kind, plan.observation.capturedAt);
+      const productId = await deterministicId("prod", plan.storeLocationId, plan.observation.externalProductKey);
+      const versionHash = await digestHex(stableJson(semanticProductVersion(plan.observation)));
+      const versionId = await deterministicId("pver", productId, versionHash);
+      const observationId = (await semanticObservationId(store.sourceId, versionId, plan.observation)).id;
       actualObservationByCell.set(`${plan.commodityId}\u001f${plan.storeLocationId}`, observationId);
     }
     if (created.status === "open") {

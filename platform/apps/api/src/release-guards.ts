@@ -19,7 +19,8 @@ export const releaseCaptureEvictionSql = `WITH complete_candidates AS (
       JOIN capture_batches candidate_batch
         ON candidate_batch.id = candidate_input.batch_id
        AND candidate_batch.coverage_mode IN ('full','ad_only')
-      JOIN observations candidate ON candidate.batch_id = candidate_batch.id
+      JOIN capture_batch_observations candidate_member ON candidate_member.batch_id = candidate_batch.id
+      JOIN observations candidate ON candidate.id = candidate_member.observation_id
       JOIN product_versions candidate_version ON candidate_version.id = candidate.product_version_id
       JOIN products candidate_product ON candidate_product.id = candidate_version.product_id
       JOIN match_decisions candidate_match
@@ -31,8 +32,10 @@ export const releaseCaptureEvictionSql = `WITH complete_candidates AS (
   ), thin_selected AS (
     SELECT selected.commodity_id, selected.store_location_id, selected.observation_id
       FROM release_cells selected
-      JOIN observations chosen ON chosen.id = selected.observation_id
-      JOIN capture_batches selected_batch ON selected_batch.id = chosen.batch_id
+      JOIN release_input_batches selected_input ON selected_input.release_id = selected.release_id
+      JOIN capture_batch_observations selected_member
+        ON selected_member.batch_id = selected_input.batch_id AND selected_member.observation_id = selected.observation_id
+      JOIN capture_batches selected_batch ON selected_batch.id = selected_member.batch_id
      WHERE selected.release_id = ?1 AND selected.status = 'priced'
        AND selected_batch.coverage_mode IN ('partial','targeted')
   )
@@ -66,13 +69,16 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
     "SELECT COUNT(*) AS count FROM release_cells WHERE release_id = ?1 AND status = 'priced'",
   ).bind(context.releaseId).first<CountRow>())?.count ?? 0;
   const snapshotRows = await db.prepare(
-    `SELECT c.commodity_id, c.store_location_id, o.batch_id, b.status
+    `SELECT c.commodity_id, c.store_location_id, o.batch_id, 'missing-membership' AS status
        FROM release_cells c
        JOIN observations o ON o.id = c.observation_id
-       JOIN capture_batches b ON b.id = o.batch_id
-       LEFT JOIN release_input_batches i ON i.release_id = c.release_id AND i.batch_id = o.batch_id
       WHERE c.release_id = ?1 AND c.status = 'priced'
-        AND (i.batch_id IS NULL OR b.status <> 'promoted')
+        AND NOT EXISTS (
+          SELECT 1 FROM release_input_batches i
+          JOIN capture_batch_observations member ON member.batch_id = i.batch_id
+          JOIN capture_batches b ON b.id = i.batch_id
+          WHERE i.release_id = c.release_id AND member.observation_id = o.id AND b.status = 'promoted'
+        )
       ORDER BY c.commodity_id, c.store_location_id LIMIT 500`,
   ).bind(context.releaseId).all<{ commodity_id: string; store_location_id: string; batch_id: string; status: string }>();
   const snapshotCount = (await db.prepare(
@@ -97,7 +103,7 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
   const selectedRows = await db.prepare(
     `SELECT c.commodity_id, c.store_location_id, c.observation_id,
             c.display_per_unit_micros, c.display_unit,
-            o.batch_id, o.captured_at, o.purchase_price_minor, o.per_unit_micros,
+            b.id AS batch_id, member.observed_at AS captured_at, o.purchase_price_minor, o.per_unit_micros,
             o.normalized_basis_unit, o.normalized_basis_qty_micros, o.raw_price_text,
             p.id AS product_id, p.external_key, pv.normalized_name, pv.name, pv.size_text, pv.taxonomy_path,
             s.capture_method,
@@ -118,9 +124,11 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
        FROM release_cells c
        JOIN releases r ON r.id = c.release_id
        JOIN observations o ON o.id = c.observation_id
+       JOIN release_input_batches input ON input.release_id = c.release_id
+       JOIN capture_batch_observations member ON member.batch_id = input.batch_id AND member.observation_id = o.id
        JOIN product_versions pv ON pv.id = o.product_version_id
        JOIN products p ON p.id = pv.product_id
-       JOIN capture_batches b ON b.id = o.batch_id
+       JOIN capture_batches b ON b.id = member.batch_id
        JOIN capture_sources s ON s.id = b.source_id
        JOIN commodities x ON x.id = c.commodity_id AND x.configuration_id = r.configuration_id
       WHERE c.release_id = ?1 AND c.status = 'priced'

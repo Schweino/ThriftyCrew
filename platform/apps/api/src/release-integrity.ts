@@ -28,10 +28,27 @@ export async function evaluateReleaseIntegrity(env: WorkerEnv, releaseId: string
     `SELECT recipe_slug, status, batch_cost_minor, serving_cost_minor, servings, detail_json
        FROM release_recipe_costs WHERE release_id = ?1 ORDER BY recipe_slug`,
   ).bind(releaseId).all<{ recipe_slug: string; status: string; batch_cost_minor: number | null; serving_cost_minor: number | null; servings: number; detail_json: string }>();
+  const bundles = await env.DB.prepare(
+    "SELECT recipe_slug, content_hash, object_key, byte_length FROM release_recipe_payloads WHERE release_id = ?1 ORDER BY recipe_slug",
+  ).bind(releaseId).all<{ recipe_slug: string; content_hash: string; object_key: string; byte_length: number }>();
+  const expectedSlugs = costs.results.map((cost) => cost.recipe_slug).sort();
+  const actualSlugs = bundles.results.map((bundle) => bundle.recipe_slug).sort();
+  const bundleFindings: ReleaseGuardResult["findings"] = [];
+  if (stableJson(expectedSlugs) !== stableJson(actualSlugs)) bundleFindings.push({
+    key: "recipe-bundle-coverage",
+    message: "Per-recipe object coverage differs from authored recipe costs",
+    evidence: { expected: expectedSlugs.length, actual: actualSlugs.length },
+  });
+  for (const bundle of bundles.results) if (!/^[a-f0-9]{64}$/.test(bundle.content_hash) || bundle.byte_length <= 0 || !bundle.object_key.startsWith(`releases/${releaseId}/recipes/`)) {
+    bundleFindings.push({ key: bundle.recipe_slug, message: "Recipe bundle metadata is invalid", evidence: bundle });
+  }
+  await upsertGuardResult(env.DB, releaseId, guard("release-recipe-bundles", bundleFindings, costs.results.length, { storage: "R2", granularity: "one object per recipe" }));
   const observationRows = await env.DB.prepare(
     `SELECT o.id, o.purchase_price_minor, o.normalized_basis_unit, o.normalized_basis_qty_micros,
             o.membership_required, o.loyalty_required
-       FROM release_input_batches input JOIN observations o ON o.batch_id = input.batch_id
+       FROM release_input_batches input
+       JOIN capture_batch_observations member ON member.batch_id = input.batch_id
+       JOIN observations o ON o.id = member.observation_id
       WHERE input.release_id = ?1`,
   ).bind(releaseId).all<{ id: string; purchase_price_minor: number; normalized_basis_unit: string; normalized_basis_qty_micros: number; membership_required: number; loyalty_required: number }>();
   const observations = new Map(observationRows.results.map((row) => [row.id, row]));

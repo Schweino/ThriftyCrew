@@ -474,6 +474,21 @@ export const observationChunkSchema = z.object({
   observations: z.array(observationInputSchema).min(1).max(100),
 });
 
+export const observationExistenceSchema = z.object({
+  observationIds: z.array(nonEmptyId).min(1).max(250),
+});
+
+export const observationReferencesSchema = z.object({
+  references: z.array(z.object({
+    observationId: nonEmptyId,
+    termKey: nonEmptyId.optional(),
+    observedAt: isoDateTime,
+    sourcePayloadKey: z.string().max(1000).optional(),
+    evidenceObjectId: nonEmptyId.optional(),
+    provenance: z.record(z.string(), z.unknown()).default({}),
+  })).min(1).max(100),
+});
+
 export const captureBatchSealSchema = z.object({
   terms: z.array(captureTermSchema).max(2000),
   evidenceManifestKey: z.string().min(1).max(1000).optional(),
@@ -1129,6 +1144,15 @@ export const accuracyDrawCreateSchema = z.object({
   protocolVersion: nonEmptyId.default("blind-cell-v1"),
   sampleSize: z.number().int().min(1).max(500).default(100),
   dueAt: isoDateTime,
+});
+
+export const canonicalCleanupPlanSchema = z.object({
+  dryRun: z.boolean().default(true),
+  maximumRows: z.number().int().min(1).max(10_000).default(10_000),
+});
+
+export const canonicalCleanupExecuteSchema = z.object({
+  archiveSha256: sha256Hex,
 });
 
 // The accuracy agent uses OpenAI strict structured outputs. Keep evidence

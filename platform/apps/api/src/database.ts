@@ -1,5 +1,5 @@
 import type { ObservationInput, RecipeCost, ReleaseCell, ReleaseCreate, ReleaseGuardResult } from "@thriftycrew/contracts";
-import { assertObservationArithmetic, deterministicId, digestHex, normalizeName, productIdentityPass, stableJson } from "@thriftycrew/domain";
+import { assertObservationArithmetic, canonicalProductUrl, deterministicId, digestHex, normalizeName, productIdentityPass, semanticObservationId, semanticProductVersion, stableJson } from "@thriftycrew/domain";
 
 export interface BatchRow {
   id: string;
@@ -46,6 +46,8 @@ export async function insertObservations(
     versionHash: string; firstSeenAt: string; lastSeenAt: string;
   }>();
   const observationStatements: D1PreparedStatement[] = [];
+  const semanticKeyStatements: D1PreparedStatement[] = [];
+  const membershipStatements: D1PreparedStatement[] = [];
   const ids: string[] = [];
 
   for (const observation of observations) {
@@ -60,17 +62,10 @@ export async function insertObservations(
       throw new Error(`observation ${observation.externalProductKey} falls outside the batch capture interval`);
     }
     const productId = await deterministicId("prod", batch.store_location_id, observation.externalProductKey);
-    const versionHash = await digestHex(stableJson({
-      name: observation.name,
-      sizeText: observation.sizeText,
-      productUrl: observation.productUrl ?? null,
-      imageUrl: observation.imageUrl ?? null,
-      taxonomyPath: observation.taxonomyPath ?? null,
-      package: observation.package,
-      identity: observation.identity ?? null,
-    }));
+    const versionHash = await digestHex(stableJson(semanticProductVersion(observation)));
     const versionId = await deterministicId("pver", productId, versionHash);
-    const observationId = await deterministicId("obs", batch.id, versionId, observation.kind, observation.capturedAt);
+    const semanticObservation = await semanticObservationId(batch.source_id, versionId, observation);
+    const observationId = semanticObservation.id;
     ids.push(observationId);
 
     const priorProduct = productUpserts.get(productId);
@@ -85,10 +80,10 @@ export async function insertObservations(
       name: observation.name,
       normalizedName: normalizeName(observation.name),
       sizeText: observation.sizeText,
-      productUrl: observation.productUrl ?? null,
+      productUrl: canonicalProductUrl(observation.productUrl),
       imageUrl: observation.imageUrl ?? null,
       taxonomyPath: observation.taxonomyPath ?? null,
-      packageJson: stableJson(observation.package),
+      packageJson: '{}',
       identityFingerprint: observation.identity?.fingerprint ?? null,
       identityJson: stableJson(observation.identity ?? {}),
       versionHash,
@@ -136,6 +131,29 @@ export async function insertObservations(
       observation.offerSnapshot?.availability.fulfillmentMode ?? "unknown",
       observation.offerSnapshot?.sellerName ?? null,
     ));
+    semanticKeyStatements.push(db.prepare(
+      `INSERT OR IGNORE INTO observation_semantic_keys (semantic_hash, observation_id) VALUES (?1, ?2)`,
+    ).bind(semanticObservation.hash, observationId));
+    membershipStatements.push(db.prepare(
+      `INSERT INTO capture_observation_memberships
+         (batch_id, observation_id, term_key, observed_at, source_payload_key, evidence_object_id, provenance_json, carried)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, 0)
+       ON CONFLICT(batch_id, observation_id, term_key) DO UPDATE SET
+         observed_at = MAX(capture_observation_memberships.observed_at, excluded.observed_at),
+         source_payload_key = COALESCE(excluded.source_payload_key, capture_observation_memberships.source_payload_key),
+         evidence_object_id = COALESCE(excluded.evidence_object_id, capture_observation_memberships.evidence_object_id),
+         provenance_json = excluded.provenance_json`,
+    ).bind(
+      batch.id, observationId, observation.termKey ?? "", observation.capturedAt,
+      observation.sourcePayloadKey ?? null, observation.evidenceObjectId ?? null,
+      stableJson({
+        package: observation.package,
+        identity: observation.identity ?? null,
+        productUrl: observation.productUrl ?? null,
+        imageUrl: observation.imageUrl ?? null,
+        offerSnapshot: observation.offerSnapshot ?? null,
+      }),
+    ));
   }
 
   const statements: D1PreparedStatement[] = [];
@@ -153,8 +171,7 @@ export async function insertObservations(
         (id, product_id, name, normalized_name, size_text, product_url, image_url, taxonomy_path, package_json,
          identity_fingerprint, identity_json, content_hash, first_seen_at, last_seen_at)
        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)
-       ON CONFLICT(product_id, content_hash) DO UPDATE SET last_seen_at = excluded.last_seen_at
-       WHERE product_versions.last_seen_at < excluded.last_seen_at`,
+       ON CONFLICT(product_id, content_hash) DO NOTHING`,
     ).bind(
       versionId, version.productId, version.name, version.normalizedName, version.sizeText,
       version.productUrl, version.imageUrl, version.taxonomyPath, version.packageJson,
@@ -162,7 +179,7 @@ export async function insertObservations(
       version.firstSeenAt, version.lastSeenAt,
     ));
   }
-  statements.push(...observationStatements);
+  statements.push(...observationStatements, ...semanticKeyStatements, ...membershipStatements);
 
   // D1 batch calls have practical statement and payload ceilings. Keep the
   // application contract independent of those ceilings by flushing bounded groups.

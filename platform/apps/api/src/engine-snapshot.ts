@@ -93,35 +93,37 @@ export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode,
   const rawPlaceholders = batches.results.map((_, index) => `?${index + 1}`).join(",");
   const candidatesRequest = env.DB.prepare(
     `SELECT o.id AS observation_id, m.commodity_id, p.store_location_id, o.per_unit_micros,
-            o.captured_at, o.valid_to, b.coverage_mode, b.captured_to, b.id AS batch_id,
+            member.observed_at AS captured_at, o.valid_to, b.coverage_mode, b.captured_to, b.id AS batch_id,
             o.normalized_basis_unit, o.normalized_basis_qty_micros, o.purchase_price_minor,
             o.purchase_quantity, o.package_count, pv.size_text,
             o.membership_required, o.loyalty_required, o.raw_price_text, pv.name, pv.normalized_name, pv.product_url,
             pv.taxonomy_path, p.external_key,
             o.basis_options_json,
             CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days
-       FROM observations o
-       JOIN capture_batches b ON b.id = o.batch_id
+       FROM capture_batch_observations member
+       JOIN observations o ON o.id = member.observation_id
+       JOIN capture_batches b ON b.id = member.batch_id
        JOIN capture_sources s ON s.id = b.source_id
        JOIN product_versions pv ON pv.id = o.product_version_id
        JOIN products p ON p.id = pv.product_id
        JOIN match_decisions m ON m.product_id = p.id AND m.configuration_id = ?1 AND m.superseded_at IS NULL
-      WHERE o.batch_id IN (${placeholders})
+      WHERE member.batch_id IN (${placeholders})
       ORDER BY m.commodity_id, p.store_location_id, o.per_unit_micros, o.id`,
   ).bind(configuration.id, ...batches.results.map((batch) => batch.id)).all();
   const rawCandidatesRequest = snapshotIncludesRawCandidates(profile) ? env.DB.prepare(
-    `SELECT o.id AS observation_id, p.store_location_id, o.per_unit_micros, o.captured_at, o.valid_to,
+    `SELECT o.id AS observation_id, p.store_location_id, o.per_unit_micros, member.observed_at AS captured_at, o.valid_to,
             b.coverage_mode, b.captured_to, b.id AS batch_id, o.normalized_basis_unit,
             o.normalized_basis_qty_micros, o.purchase_price_minor,
             o.membership_required, o.loyalty_required, pv.name, pv.size_text, p.external_key,
             o.basis_options_json,
             CAST(COALESCE(json_extract(s.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days
-       FROM observations o
-       JOIN capture_batches b ON b.id = o.batch_id
+       FROM capture_batch_observations member
+       JOIN observations o ON o.id = member.observation_id
+       JOIN capture_batches b ON b.id = member.batch_id
        JOIN capture_sources s ON s.id = b.source_id
        JOIN product_versions pv ON pv.id = o.product_version_id
        JOIN products p ON p.id = pv.product_id
-      WHERE o.batch_id IN (${rawPlaceholders})
+      WHERE member.batch_id IN (${rawPlaceholders})
       ORDER BY p.store_location_id, o.per_unit_micros, o.id`,
   ).bind(...batches.results.map((batch) => batch.id)).all() : { results: [] };
   const [candidates, rawCandidates, commodities, stores, currentCells, knownWrongRules] = await Promise.all([

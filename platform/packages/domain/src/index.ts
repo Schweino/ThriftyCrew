@@ -64,6 +64,103 @@ export async function deterministicId(prefix: string, ...parts: string[]): Promi
   return `${prefix}_${(await digestHex(parts.join("\u001f"))).slice(0, 32)}`;
 }
 
+/**
+ * Strip transport-only URL variation before a URL participates in durable
+ * product identity. Retailer/CDN query strings routinely contain session,
+ * tracking, resize, and cache-buster values which must not create versions.
+ */
+export function canonicalProductUrl(value: string | undefined): string | null {
+  if (!value) return null;
+  try {
+    const url = new URL(value);
+    url.hash = "";
+    url.search = "";
+    url.hostname = url.hostname.toLowerCase();
+    url.pathname = url.pathname.replace(/\/{2,}/g, "/").replace(/\/$/, "") || "/";
+    return url.toString();
+  } catch {
+    return value.trim() || null;
+  }
+}
+
+export interface SemanticProductVersionInput {
+  name: string;
+  sizeText: string;
+  productUrl?: string | undefined;
+  taxonomyPath?: string | undefined;
+  identity?: { brand?: string | undefined } | undefined;
+}
+
+/** Only fields whose meaning changed belong in a product-version hash. */
+export function semanticProductVersion(input: SemanticProductVersionInput): Record<string, unknown> {
+  return {
+    name: normalizeName(input.name),
+    sizeText: normalizeName(input.sizeText),
+    brand: normalizeName(input.identity?.brand ?? ""),
+    productUrl: canonicalProductUrl(input.productUrl),
+    taxonomyPath: normalizeName(input.taxonomyPath ?? ""),
+  };
+}
+
+export interface SemanticOfferInput {
+  kind: string;
+  currency: string;
+  purchasePriceMinor: number;
+  regularPriceMinor?: number | undefined;
+  purchaseQuantity: number;
+  packageCount: number;
+  capturedBasisUnit: string;
+  capturedBasisQtyMicros: number;
+  normalizedBasisUnit: string;
+  normalizedBasisQtyMicros: number;
+  perUnitMicros: number;
+  basisOptions?: unknown[] | undefined;
+  loyaltyRequired: boolean;
+  membershipRequired: boolean;
+  rawPriceText: string;
+  rawSizeText: string;
+  validFrom?: string | undefined;
+  validTo?: string | undefined;
+  priceSemantics?: unknown;
+  offerSnapshot?: object | undefined;
+}
+
+/**
+ * The source-native offer fact. Capture time, term, evidence, raw index, and
+ * other provenance live on batch membership and deliberately do not affect it.
+ */
+export function semanticOfferFact(input: SemanticOfferInput): Record<string, unknown> {
+  const snapshot: Record<string, unknown> = input.offerSnapshot ? { ...input.offerSnapshot } : {};
+  delete snapshot.observedAt;
+  return {
+    kind: input.kind,
+    currency: input.currency,
+    purchasePriceMinor: input.purchasePriceMinor,
+    regularPriceMinor: input.regularPriceMinor ?? null,
+    purchaseQuantity: input.purchaseQuantity,
+    packageCount: input.packageCount,
+    capturedBasisUnit: input.capturedBasisUnit,
+    capturedBasisQtyMicros: input.capturedBasisQtyMicros,
+    normalizedBasisUnit: input.normalizedBasisUnit,
+    normalizedBasisQtyMicros: input.normalizedBasisQtyMicros,
+    perUnitMicros: input.perUnitMicros,
+    basisOptions: input.basisOptions ?? [],
+    loyaltyRequired: input.loyaltyRequired,
+    membershipRequired: input.membershipRequired,
+    rawPriceText: input.rawPriceText.trim(),
+    rawSizeText: input.rawSizeText.trim(),
+    validFrom: input.validFrom ?? null,
+    validTo: input.validTo ?? null,
+    priceSemantics: input.priceSemantics ?? {},
+    offerSnapshot: snapshot,
+  };
+}
+
+export async function semanticObservationId(sourceId: string, productVersionId: string, input: SemanticOfferInput): Promise<{ id: string; hash: string }> {
+  const hash = await digestHex(stableJson([sourceId, productVersionId, semanticOfferFact(input)]));
+  return { id: `obs_${hash.slice(0, 32)}`, hash };
+}
+
 type CaptureAccuracyCandidate = Omit<BrowserCaptureAccuracyRow, "rowKey" | "discoveryHash" | "riskReasons" | "verificationRequired">;
 type CaptureAccuracyTerm = { outcome: string; rowCount: number; retrieval: { targetResultCount: number; loadedResultCount: number; availableResultCount?: number | undefined; hasMoreResults: boolean; termination: string } };
 

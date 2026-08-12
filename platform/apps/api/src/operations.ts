@@ -1050,13 +1050,20 @@ export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number,
     ).bind(runId, observedAt).run();
   }
   try {
-    const [databaseBytes, observations, protectedRows, history] = await Promise.all([
+    const [databaseBytes, observations, protectedRows, history, storageShape] = await Promise.all([
       d1DatabaseFileSize(env),
       env.DB.prepare(
         "SELECT observation_count AS count, oldest_observation_at AS oldest FROM observation_statistics WHERE singleton = 1",
       ).first<{ count: number; oldest: string | null }>(),
       env.DB.prepare("SELECT COUNT(DISTINCT observation_id) AS count FROM release_cells WHERE observation_id IS NOT NULL").first<{ count: number }>(),
       env.DB.prepare("SELECT database_bytes, observed_at FROM archival_forecasts ORDER BY observed_at DESC LIMIT 8").all<{ database_bytes: number; observed_at: string }>(),
+      env.DB.prepare(
+        `SELECT (SELECT COUNT(*) FROM products) AS products,
+                (SELECT COUNT(*) FROM product_versions) AS product_versions,
+                (SELECT COUNT(*) FROM observations) AS observation_facts,
+                (SELECT COUNT(*) FROM capture_observation_memberships) AS batch_memberships,
+                (SELECT COALESCE(SUM(byte_length), 0) FROM release_recipe_payloads) AS recipe_payload_bytes`,
+      ).first<{ products: number; product_versions: number; observation_facts: number; batch_memberships: number; recipe_payload_bytes: number }>(),
     ]);
     const databaseLimitBytes = Number(env.D1_DATABASE_LIMIT_BYTES ?? 10 * 1024 * 1024 * 1024);
     const monthlyGrowthBytes = robustMonthlyGrowth(history.results, databaseBytes, observedAt);
@@ -1076,6 +1083,18 @@ export async function runArchivalForecast(env: WorkerEnv, scheduledTime: number,
          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, 70, ?8, ?9, ?10, ?11)`,
       ).bind(forecastId, databaseBytes, databaseLimitBytes, observations?.count ?? 0, monthlyGrowthBytes,
         observations?.oldest ?? null, protectedRows?.count ?? 0, usagePercentMillis, projectedLimitAt, status, observedAt),
+      env.DB.prepare(
+        `INSERT INTO storage_measurements
+           (measured_on, d1_bytes, products, product_versions, observation_facts, batch_memberships, recipe_payload_bytes, detail_json)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
+         ON CONFLICT(measured_on) DO UPDATE SET
+           d1_bytes = excluded.d1_bytes, products = excluded.products, product_versions = excluded.product_versions,
+           observation_facts = excluded.observation_facts, batch_memberships = excluded.batch_memberships,
+           recipe_payload_bytes = excluded.recipe_payload_bytes, detail_json = excluded.detail_json,
+           recorded_at = CURRENT_TIMESTAMP`,
+      ).bind(observedAt.slice(0, 10), databaseBytes, storageShape?.products ?? 0, storageShape?.product_versions ?? 0,
+        storageShape?.observation_facts ?? 0, storageShape?.batch_memberships ?? 0, storageShape?.recipe_payload_bytes ?? 0,
+        stableJson({ observationToMembershipRatio: storageShape?.observation_facts ? (storageShape.batch_memberships / storageShape.observation_facts) : null })),
       env.DB.prepare("UPDATE job_runs SET status = 'completed', heartbeat_at = ?2, finished_at = ?2, stats_json = ?3 WHERE id = ?1")
         .bind(runId, new Date().toISOString(), stableJson({ forecastId, databaseBytes, databaseLimitBytes, usagePercentMillis, monthlyGrowthBytes, projectionReliable, projectedLimitAt, status })),
     ]);

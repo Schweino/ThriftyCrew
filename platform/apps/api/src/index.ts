@@ -29,6 +29,8 @@ import {
   matchRunSchema,
   milestoneAccrualSchema,
   observationChunkSchema,
+  observationExistenceSchema,
+  observationReferencesSchema,
   operationalAlertSchema,
   agentRegistrySchema,
   agentEvaluationRecordSchema,
@@ -41,6 +43,8 @@ import {
   loginCanaryProbeSchema,
   archivalForecastSchema,
   archivePlanSchema,
+  canonicalCleanupPlanSchema,
+  canonicalCleanupExecuteSchema,
   recipeCostsChunkSchema,
   releaseCellsChunkSchema,
   releaseCreateSchema,
@@ -78,6 +82,7 @@ import { claimAgentWorkItem, completeAgentWorkItem, failAgentWorkItem } from "./
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
+import { buildReleaseRecipeBundles, readCurrentRecipeBundle } from "./recipe-bundles";
 import { readBrowserCaptureSla } from "./browser-capture-sla";
 import { buildCaptureTermInserts } from "./capture-seal";
 import { createDirectEvidenceUpload, createDirectObjectDownload } from "./capture-direct-upload";
@@ -508,6 +513,12 @@ app.get("/api/v2/board/:commodity", async (context) => {
 
 app.get("/api/v2/recipes/:slug", async (context) => {
   return cachedPublicJson(context.req.raw, async () => {
+    const bundled = await readCurrentRecipeBundle(context.env, context.req.param("slug"));
+    if (bundled) return {
+      body: { ok: true, releaseId: bundled.releaseId, publishedAt: bundled.publishedAt, recipe: bundled.bundle.recipe },
+      etag: releaseEtag(bundled.contentHash),
+      releaseId: bundled.releaseId,
+    };
     const current = await currentPayload(context.env, "recipes");
     if (!current) throw new PublicJsonError("No published recipe payload", 404);
     const payload = current.payload as { recipes?: Array<{ slug?: string }> };
@@ -517,6 +528,18 @@ app.get("/api/v2/recipes/:slug", async (context) => {
       body: { ok: true, releaseId: current.releaseId, publishedAt: current.publishedAt, recipe },
       etag: releaseEtag(current.contentHash),
       releaseId: current.releaseId,
+    };
+  });
+});
+
+app.get("/api/v2/recipe-feed/:slug", async (context) => {
+  return cachedPublicJson(context.req.raw, async () => {
+    const bundled = await readCurrentRecipeBundle(context.env, context.req.param("slug"));
+    if (!bundled) throw new PublicJsonError("Recipe feed not found", 404);
+    return {
+      body: bundled.bundle.feed,
+      etag: releaseEtag(bundled.contentHash),
+      releaseId: bundled.releaseId,
     };
   });
 });
@@ -544,9 +567,13 @@ app.get("/api/v2/member/recipes/:slug", async (context) => {
       return context.json({ ok: false, error: "Paid membership is required", entitlement }, entitlement.authenticated ? 403 : 401);
     }
   }
-  const current = await currentPayload(context.env, "recipes");
-  const payload = current?.payload as { recipes?: Array<{ slug?: string }> } | undefined;
-  const recipe = payload?.recipes?.find((item) => item.slug === slug);
+  const bundled = await readCurrentRecipeBundle(context.env, slug);
+  let recipe = bundled?.bundle.recipe;
+  if (!recipe) {
+    const current = await currentPayload(context.env, "recipes");
+    const payload = current?.payload as { recipes?: Array<{ slug?: string }> } | undefined;
+    recipe = payload?.recipes?.find((item) => item.slug === slug);
+  }
   if (!recipe) return context.json({ ok: false, error: "Recipe not found" }, 404);
   context.header("cache-control", "private, no-store");
   context.header("vary", "cookie");
@@ -790,10 +817,11 @@ app.post("/internal/match-decisions/reconcile", zValidator("json", matchDecision
       WHERE configuration_id = ?2 AND superseded_at IS NULL
         AND product_id IN (
           SELECT DISTINCT p.id
-            FROM observations o
+            FROM capture_batch_observations member
+            JOIN observations o ON o.id = member.observation_id
             JOIN product_versions pv ON pv.id = o.product_version_id
             JOIN products p ON p.id = pv.product_id
-           WHERE o.batch_id = ?1
+           WHERE member.batch_id = ?1
         )
         AND product_id NOT IN (SELECT value FROM json_each(?3))`,
   ).bind(body.batchId, body.configurationId, stableJson(body.retainedProductIds)).run();
@@ -817,11 +845,12 @@ app.get("/internal/capture-batches/:id/products", async (context) => {
        SELECT p.id AS product_id, p.external_key, p.store_location_id,
               pv.name, pv.normalized_name, pv.taxonomy_path,
               o.normalized_basis_unit, o.normalized_basis_qty_micros,
-              ROW_NUMBER() OVER (PARTITION BY p.id ORDER BY o.captured_at DESC, o.id DESC) AS ordinal
-         FROM observations o
+              ROW_NUMBER() OVER (PARTITION BY p.id ORDER BY member.observed_at DESC, o.id DESC) AS ordinal
+         FROM capture_batch_observations member
+         JOIN observations o ON o.id = member.observation_id
          JOIN product_versions pv ON pv.id = o.product_version_id
          JOIN products p ON p.id = pv.product_id
-        WHERE o.batch_id = ?1
+        WHERE member.batch_id = ?1
      )
      SELECT product_id, external_key, store_location_id, name, normalized_name,
             taxonomy_path, normalized_basis_unit, normalized_basis_qty_micros
@@ -913,12 +942,13 @@ app.post("/internal/match-runs", zValidator("json", matchRunSchema), async (cont
   const actual = await context.env.DB.prepare(
     `SELECT COUNT(DISTINCT p.id) AS products,
             COUNT(DISTINCT CASE WHEN m.product_id IS NOT NULL THEN p.id END) AS matched
-       FROM observations o
+       FROM capture_batch_observations member
+       JOIN observations o ON o.id = member.observation_id
        JOIN product_versions pv ON pv.id = o.product_version_id
        JOIN products p ON p.id = pv.product_id
        LEFT JOIN match_decisions m ON m.product_id = p.id
          AND m.configuration_id = ?2 AND m.superseded_at IS NULL
-      WHERE o.batch_id = ?1`,
+      WHERE member.batch_id = ?1`,
   ).bind(body.batchId, body.configurationId).first<{ products: number; matched: number }>();
   if (!actual || actual.products !== body.productCount || actual.matched !== body.matchedCount) {
     return jsonError(`match report does not match persisted decisions: ${stableJson({ actual, reported: { products: body.productCount, matched: body.matchedCount } })}`, 409);
@@ -1230,13 +1260,26 @@ app.post("/internal/recipe-waves/:id/corrective-release", async (context) => {
     context.env.DB.prepare("INSERT INTO release_input_batches SELECT ?1, batch_id, ordinal FROM release_input_batches WHERE release_id = ?2").bind(correctiveId, source.id),
     context.env.DB.prepare("INSERT INTO release_cells SELECT ?1, commodity_id, store_location_id, observation_id, status, is_crown, display_per_unit_micros, display_unit, reason_json FROM release_cells WHERE release_id = ?2").bind(correctiveId, source.id),
     context.env.DB.prepare("INSERT INTO release_recipe_costs SELECT ?1, recipe_slug, status, batch_cost_minor, serving_cost_minor, servings, missing_ingredients_json, detail_json FROM release_recipe_costs WHERE release_id = ?2").bind(correctiveId, source.id),
-    context.env.DB.prepare("INSERT INTO release_payloads SELECT ?1, kind, payload_json, content_hash FROM release_payloads WHERE release_id = ?2").bind(correctiveId, source.id),
     context.env.DB.prepare("INSERT INTO release_top5 SELECT ?1, protein, rank, recipe_slug, serving_cost_minor FROM release_top5 WHERE release_id = ?2").bind(correctiveId, source.id),
     context.env.DB.prepare("INSERT INTO release_free_rotation SELECT ?1, recipe_slug, intended_visibility, protein, rank FROM release_free_rotation WHERE release_id = ?2").bind(correctiveId, source.id),
     context.env.DB.prepare("INSERT INTO release_feed_entries SELECT ?1, entry_key, ordinal, payload_json FROM release_feed_entries WHERE release_id = ?2").bind(correctiveId, source.id),
     context.env.DB.prepare("UPDATE recipe_wave_runs SET corrective_release_id = ?2, status = 'corrective_draft', updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(wave.id, correctiveId),
   ];
   await context.env.DB.batch(statements);
+  const sourcePayloads = await context.env.DB.prepare(
+    "SELECT kind, payload_json, content_hash, object_key, byte_length FROM release_payloads WHERE release_id = ?1 ORDER BY kind",
+  ).bind(source.id).all<{ kind: string; payload_json: string; content_hash: string; object_key: string | null; byte_length: number | null }>();
+  for (const payload of sourcePayloads.results) {
+    const bytes = payload.object_key
+      ? await context.env.EVIDENCE.get(payload.object_key).then((object) => object?.arrayBuffer()).then((value) => value ? new Uint8Array(value) : null)
+      : new TextEncoder().encode(payload.payload_json);
+    if (!bytes) return jsonError(`corrective source payload ${payload.kind} is unavailable`, 409);
+    const objectKey = `releases/${correctiveId}/${payload.kind}-${payload.content_hash}.json`;
+    await context.env.EVIDENCE.put(objectKey, bytes, { httpMetadata: { contentType: "application/json; charset=utf-8" }, customMetadata: { sha256: payload.content_hash, kind: payload.kind, releaseId: correctiveId } });
+    await context.env.DB.prepare(
+      "INSERT INTO release_payloads (release_id, kind, payload_json, content_hash, object_key, byte_length) VALUES (?1, ?2, '{}', ?3, ?4, ?5)",
+    ).bind(correctiveId, payload.kind, payload.content_hash, objectKey, bytes.byteLength).run();
+  }
   await recordAudit(context.env, context.get("identity"), "recipe_wave.corrective_release", "recipe_wave", String(wave.id), "accepted", { correctiveId, preWaveReleaseId: source.id, waveReleaseId: wave.wave_release_id });
   return context.json({ ok: true, waveId: wave.id, correctiveReleaseId: correctiveId, next: [`validate ${correctiveId}`, `publish ${correctiveId}`] }, 201);
 });
@@ -1931,11 +1974,150 @@ app.put("/internal/archival/:id/parquet", async (context) => {
   return context.json({ ok: true, manifestId: manifest.id, status: "verified", objectKey, byteLength: stored.size, sha256 });
 });
 
+const canonicalDuplicateCandidatesSql = `WITH base AS (
+  SELECT o.id, o.captured_at,
+         EXISTS(SELECT 1 FROM release_cells rc WHERE rc.observation_id = o.id) AS protected,
+         COALESCE((SELECT MAX(member.observed_at) FROM capture_observation_memberships member WHERE member.observation_id = o.id), o.captured_at) AS newest_at,
+         json_array(
+           origin.source_id, p.id, pv.normalized_name, lower(trim(pv.size_text)),
+           CASE WHEN instr(COALESCE(pv.product_url,''), '?') > 0 THEN substr(pv.product_url, 1, instr(pv.product_url, '?') - 1) ELSE COALESCE(pv.product_url,'') END,
+           lower(trim(COALESCE(pv.taxonomy_path,''))), lower(trim(COALESCE(json_extract(pv.identity_json, '$.brand'),''))),
+           o.kind, o.currency, o.purchase_price_minor, o.regular_price_minor, o.purchase_quantity, o.package_count,
+           o.captured_basis_unit, o.captured_basis_qty_micros, o.normalized_basis_unit, o.normalized_basis_qty_micros,
+           o.per_unit_micros, json(o.basis_options_json), o.loyalty_required, o.membership_required,
+           trim(o.raw_price_text), trim(o.raw_size_text), o.valid_from, o.valid_to, json(o.price_semantics_json),
+           json_remove(o.offer_snapshot_json, '$.observedAt'), o.availability_status, o.fulfillment_mode, o.seller_name
+         ) AS semantic_key
+    FROM observations o
+    JOIN product_versions pv ON pv.id = o.product_version_id
+    JOIN products p ON p.id = pv.product_id
+    JOIN capture_batches origin ON origin.id = o.batch_id
+), ranked AS (
+  SELECT *, FIRST_VALUE(id) OVER (
+    PARTITION BY semantic_key ORDER BY protected DESC, newest_at DESC, id
+  ) AS canonical_id
+  FROM base
+)
+SELECT id AS duplicate_id, canonical_id, semantic_key, captured_at
+  FROM ranked
+ WHERE id <> canonical_id AND protected = 0
+   AND NOT EXISTS (SELECT 1 FROM archive_manifest_observations archived WHERE archived.observation_id = ranked.id)
+   AND NOT EXISTS (SELECT 1 FROM canonical_cleanup_rows prior WHERE prior.duplicate_observation_id = ranked.id)
+ ORDER BY captured_at, id LIMIT ?1`;
+
+app.post("/internal/canonical-cleanup/plan", zValidator("json", canonicalCleanupPlanSchema), async (context) => {
+  const body = context.req.valid("json");
+  const [candidates, protectedRows] = await Promise.all([
+    context.env.DB.prepare(canonicalDuplicateCandidatesSql).bind(body.maximumRows).all<{ duplicate_id: string; canonical_id: string; semantic_key: string; captured_at: string }>(),
+    context.env.DB.prepare("SELECT DISTINCT observation_id FROM release_cells WHERE observation_id IS NOT NULL ORDER BY observation_id").all<{ observation_id: string }>(),
+  ]);
+  const protectedRefsHash = await digestHex(stableJson(protectedRows.results.map((row) => row.observation_id)));
+  const summary = { candidates: candidates.results.length, protectedCount: protectedRows.results.length, protectedRefsHash };
+  if (body.dryRun) return context.json({ ok: true, dryRun: true, ...summary });
+  if (!candidates.results.length) return jsonError("canonical cleanup plan has no eligible duplicates", 422);
+  const runId = await deterministicId("canonical-cleanup", protectedRefsHash, ...candidates.results.map((row) => `${row.duplicate_id}:${row.canonical_id}`));
+  const statements: D1PreparedStatement[] = [context.env.DB.prepare(
+    `INSERT INTO canonical_cleanup_runs (id, status, row_count, protected_refs_hash, detail_json)
+     VALUES (?1, 'planned', ?2, ?3, ?4) ON CONFLICT(id) DO NOTHING`,
+  ).bind(runId, candidates.results.length, protectedRefsHash, stableJson({ semanticPolicy: "canonical-offer-v1" }))];
+  for (const row of candidates.results) statements.push(context.env.DB.prepare(
+    "INSERT OR IGNORE INTO canonical_cleanup_rows (run_id, duplicate_observation_id, canonical_observation_id, semantic_key) VALUES (?1, ?2, ?3, ?4)",
+  ).bind(runId, row.duplicate_id, row.canonical_id, row.semantic_key));
+  for (let offset = 0; offset < statements.length; offset += 80) await context.env.DB.batch(statements.slice(offset, offset + 80));
+  return context.json({ ok: true, dryRun: false, runId, ...summary }, 201);
+});
+
+app.get("/internal/canonical-cleanup/:id/export", async (context) => {
+  const run = await context.env.DB.prepare("SELECT id, status, row_count, protected_refs_hash FROM canonical_cleanup_runs WHERE id = ?1")
+    .bind(context.req.param("id")).first<Record<string, unknown>>();
+  if (!run) return jsonError("canonical cleanup run not found", 404);
+  const rows = await context.env.DB.prepare(
+    `SELECT map.canonical_observation_id, map.semantic_key, o.*, pv.product_id, pv.name, pv.normalized_name,
+            pv.size_text, pv.product_url, pv.image_url, pv.taxonomy_path, p.store_location_id, p.external_key,
+            origin.source_id,
+            (SELECT json_group_array(json_object('batch_id', member.batch_id, 'term_key', member.term_key,
+              'observed_at', member.observed_at, 'source_payload_key', member.source_payload_key,
+              'evidence_object_id', member.evidence_object_id, 'provenance_json', json(member.provenance_json),
+              'carried', member.carried)) FROM capture_observation_memberships member WHERE member.observation_id = o.id) AS memberships_json
+       FROM canonical_cleanup_rows map
+       JOIN observations o ON o.id = map.duplicate_observation_id
+       JOIN product_versions pv ON pv.id = o.product_version_id
+       JOIN products p ON p.id = pv.product_id
+       JOIN capture_batches origin ON origin.id = o.batch_id
+      WHERE map.run_id = ?1 ORDER BY o.captured_at, o.id`,
+  ).bind(context.req.param("id")).all<Record<string, unknown>>();
+  return context.json({ ok: true, run, rows: rows.results });
+});
+
+app.put("/internal/canonical-cleanup/:id/parquet", async (context) => {
+  const run = await context.env.DB.prepare("SELECT id, status, row_count FROM canonical_cleanup_runs WHERE id = ?1")
+    .bind(context.req.param("id")).first<{ id: string; status: string; row_count: number }>();
+  if (!run) return jsonError("canonical cleanup run not found", 404);
+  if (run.status !== "planned") return jsonError(`canonical cleanup cannot accept bytes in ${run.status}`, 409);
+  const bytes = new Uint8Array(await context.req.arrayBuffer());
+  const parquetMagic = bytes.length >= 8 && new TextDecoder().decode(bytes.slice(0, 4)) === "PAR1" && new TextDecoder().decode(bytes.slice(-4)) === "PAR1";
+  if (!parquetMagic) return jsonError("cleanup archive is not a complete Parquet file", 422);
+  const sha256 = await digestHex(bytes);
+  const objectKey = `canonical-cleanup/${new Date().toISOString().slice(0, 10).replaceAll("-", "/")}/${run.id}.parquet`;
+  await context.env.ARCHIVE.put(objectKey, bytes, { httpMetadata: { contentType: "application/vnd.apache.parquet" }, customMetadata: { runId: run.id, sha256, rows: String(run.row_count) } });
+  const stored = await context.env.ARCHIVE.head(objectKey);
+  if (!stored || stored.size !== bytes.byteLength || stored.customMetadata?.sha256 !== sha256) return jsonError("cleanup archive failed post-write verification", 500);
+  await context.env.DB.prepare("UPDATE canonical_cleanup_runs SET status = 'verified', object_key = ?2, byte_length = ?3, sha256 = ?4, verified_at = CURRENT_TIMESTAMP WHERE id = ?1")
+    .bind(run.id, objectKey, stored.size, sha256).run();
+  return context.json({ ok: true, runId: run.id, status: "verified", objectKey, byteLength: stored.size, sha256 });
+});
+
+app.post("/internal/canonical-cleanup/:id/execute", zValidator("json", canonicalCleanupExecuteSchema), async (context) => {
+  const run = await context.env.DB.prepare("SELECT id, status, row_count, object_key, byte_length, sha256, protected_refs_hash FROM canonical_cleanup_runs WHERE id = ?1")
+    .bind(context.req.param("id")).first<{ id: string; status: string; row_count: number; object_key: string | null; byte_length: number | null; sha256: string | null; protected_refs_hash: string }>();
+  if (!run) return jsonError("canonical cleanup run not found", 404);
+  if (run.status === "completed") return context.json({ ok: true, runId: run.id, status: run.status, idempotent: true });
+  if (run.status !== "verified" || !run.object_key || run.sha256 !== context.req.valid("json").archiveSha256) return jsonError("verified archive hash confirmation is required", 409);
+  const stored = await context.env.ARCHIVE.head(run.object_key);
+  if (!stored || stored.size !== run.byte_length || stored.customMetadata?.sha256 !== run.sha256) return jsonError("verified cleanup archive is no longer intact", 409);
+  const protectedRows = await context.env.DB.prepare("SELECT DISTINCT observation_id FROM release_cells WHERE observation_id IS NOT NULL ORDER BY observation_id").all<{ observation_id: string }>();
+  if (await digestHex(stableJson(protectedRows.results.map((row) => row.observation_id))) !== run.protected_refs_hash) return jsonError("release references changed after cleanup planning", 409);
+  const invalid = await context.env.DB.prepare(
+    `SELECT COUNT(*) AS count FROM canonical_cleanup_rows map
+      WHERE map.run_id = ?1 AND (
+        EXISTS(SELECT 1 FROM release_cells cell WHERE cell.observation_id = map.duplicate_observation_id)
+        OR EXISTS(SELECT 1 FROM archive_manifest_observations archived WHERE archived.observation_id = map.duplicate_observation_id)
+        OR NOT EXISTS(SELECT 1 FROM observations canonical WHERE canonical.id = map.canonical_observation_id)
+      )`,
+  ).bind(run.id).first<{ count: number }>();
+  if ((invalid?.count ?? 0) > 0) return jsonError("cleanup candidates gained a protected reference or lost their canonical fact", 409);
+  const expiresAt = new Date(Date.now() + 5 * 60_000).toISOString();
+  await context.env.DB.batch([
+    context.env.DB.prepare("INSERT OR REPLACE INTO maintenance_leases (kind, run_id, expires_at) VALUES ('canonical-cleanup', ?1, ?2)").bind(run.id, expiresAt),
+    context.env.DB.prepare(
+      `INSERT INTO capture_observation_memberships
+         (batch_id, observation_id, term_key, observed_at, source_payload_key, evidence_object_id, provenance_json, carried)
+       SELECT member.batch_id, map.canonical_observation_id, member.term_key, member.observed_at,
+              member.source_payload_key, member.evidence_object_id, member.provenance_json, 1
+         FROM canonical_cleanup_rows map JOIN capture_observation_memberships member ON member.observation_id = map.duplicate_observation_id
+        WHERE map.run_id = ?1
+       ON CONFLICT(batch_id, observation_id, term_key) DO UPDATE SET
+         observed_at = MAX(capture_observation_memberships.observed_at, excluded.observed_at),
+         source_payload_key = COALESCE(excluded.source_payload_key, capture_observation_memberships.source_payload_key),
+         evidence_object_id = COALESCE(excluded.evidence_object_id, capture_observation_memberships.evidence_object_id),
+         provenance_json = excluded.provenance_json, carried = 1`,
+    ).bind(run.id),
+    context.env.DB.prepare("DELETE FROM capture_observation_memberships WHERE observation_id IN (SELECT duplicate_observation_id FROM canonical_cleanup_rows WHERE run_id = ?1)").bind(run.id),
+    context.env.DB.prepare("DELETE FROM observation_semantic_keys WHERE observation_id IN (SELECT duplicate_observation_id FROM canonical_cleanup_rows WHERE run_id = ?1)").bind(run.id),
+    context.env.DB.prepare("DELETE FROM observations WHERE id IN (SELECT duplicate_observation_id FROM canonical_cleanup_rows WHERE run_id = ?1)").bind(run.id),
+    context.env.DB.prepare("DELETE FROM product_versions WHERE NOT EXISTS (SELECT 1 FROM observations o WHERE o.product_version_id = product_versions.id)"),
+    context.env.DB.prepare("DELETE FROM maintenance_leases WHERE kind = 'canonical-cleanup' AND run_id = ?1").bind(run.id),
+    context.env.DB.prepare("UPDATE canonical_cleanup_runs SET status = 'completed', completed_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status = 'verified'").bind(run.id),
+  ]);
+  await recordAudit(context.env, context.get("identity"), "canonical_cleanup.execute", "canonical_cleanup", run.id, "accepted", { rows: run.row_count, archive: run.object_key, sha256: run.sha256 });
+  return context.json({ ok: true, runId: run.id, status: "completed", removedFacts: run.row_count, idempotent: false });
+});
+
 app.post("/internal/capture-batches", zValidator("json", captureBatchCreateSchema), async (context) => {
   const body = context.req.valid("json");
   const identity = context.get("identity");
   if (identity.sourceIds && !identity.sourceIds.includes(body.sourceId)) return jsonError("agent is not authorized for this capture source", 403);
-  const source = await context.env.DB.prepare("SELECT id, capture_method, price_mode FROM capture_sources WHERE id = ?1 AND active = 1").bind(body.sourceId).first<{ id: string; capture_method: string; price_mode: string }>();
+  const source = await context.env.DB.prepare("SELECT id, store_location_id, capture_method, price_mode FROM capture_sources WHERE id = ?1 AND active = 1").bind(body.sourceId).first<{ id: string; store_location_id: string; capture_method: string; price_mode: string }>();
   if (!source) return jsonError("unknown or inactive capture source", 404);
   const canonicalMode = (value: string) => value.toLowerCase().replaceAll(/[_\s-]+/g, "").replace("clubpickup", "club");
   if (canonicalMode(body.priceMode) !== canonicalMode(source.price_mode)) return jsonError(`capture price mode ${body.priceMode} does not match source contract ${source.price_mode}`, 422);
@@ -1945,7 +2127,7 @@ app.post("/internal/capture-batches", zValidator("json", captureBatchCreateSchem
   const existing = await context.env.DB.prepare(
     "SELECT id, status FROM capture_batches WHERE agent_id = ?1 AND idempotency_key = ?2",
   ).bind(identity.agentId, body.idempotencyKey).first<{ id: string; status: string }>();
-  if (existing) return context.json({ ok: true, batchId: existing.id, status: existing.status, idempotent: true });
+  if (existing) return context.json({ ok: true, batchId: existing.id, storeLocationId: source.store_location_id, status: existing.status, idempotent: true });
   const batchId = `batch_${crypto.randomUUID()}`;
   await context.env.DB.prepare(
     `INSERT INTO capture_batches
@@ -1973,7 +2155,7 @@ app.post("/internal/capture-batches", zValidator("json", captureBatchCreateSchem
     body.sourceSchema?.shapeFingerprint ?? null,
     stableJson(body.sourceSchema ?? {}),
   ).run();
-  return context.json({ ok: true, batchId, status: "open", idempotent: false }, 201);
+  return context.json({ ok: true, batchId, storeLocationId: source.store_location_id, status: "open", idempotent: false }, 201);
 });
 
 app.post("/internal/capture-batches/:id/abandon", zValidator("json", captureBatchAbandonSchema), async (context) => {
@@ -2022,6 +2204,66 @@ app.post("/internal/capture-batches/:id/observations", zValidator("json", observ
   } catch (error) {
     return jsonError(error instanceof Error ? error.message : "observation insert failed", 422);
   }
+});
+
+app.post("/internal/capture-batches/:id/observations/existing", zValidator("json", observationExistenceSchema), async (context) => {
+  const batch = await findBatch(context.env.DB, context.req.param("id"));
+  if (!batch) return jsonError("capture batch not found", 404);
+  const identity = context.get("identity");
+  const engineOwnedCapture = identity.role === "engine" && engineMayWriteCaptureSource(batch.source_id, batch.capture_method);
+  if (identity.role !== "capture" && identity.role !== "operator" && !engineOwnedCapture) return jsonError("mutation role is not authorized for capture content", 403);
+  if (batch.agent_id !== identity.agentId && identity.role !== "operator") return jsonError("batch belongs to another agent", 403);
+  const ids = context.req.valid("json").observationIds;
+  const rows = await context.env.DB.prepare(
+    `SELECT o.id FROM json_each(?1) requested
+       JOIN observations o ON o.id = requested.value
+       JOIN product_versions pv ON pv.id = o.product_version_id
+       JOIN products p ON p.id = pv.product_id
+       JOIN capture_batches origin ON origin.id = o.batch_id
+      WHERE p.store_location_id = ?2 AND origin.source_id = ?3`,
+  ).bind(stableJson(ids), batch.store_location_id, batch.source_id).all<{ id: string }>();
+  return context.json({ ok: true, existingIds: rows.results.map((row) => row.id), missingIds: ids.filter((id) => !rows.results.some((row) => row.id === id)) });
+});
+
+app.post("/internal/capture-batches/:id/observation-references", zValidator("json", observationReferencesSchema), async (context) => {
+  const batch = await findBatch(context.env.DB, context.req.param("id"));
+  if (!batch) return jsonError("capture batch not found", 404);
+  if (batch.status !== "open") return jsonError(`batch ${batch.id} is not open`, 409);
+  const identity = context.get("identity");
+  const engineOwnedCapture = identity.role === "engine" && engineMayWriteCaptureSource(batch.source_id, batch.capture_method);
+  if (identity.role !== "capture" && identity.role !== "operator" && !engineOwnedCapture) return jsonError("mutation role is not authorized for capture content", 403);
+  if (batch.agent_id !== identity.agentId && identity.role !== "operator") return jsonError("batch belongs to another agent", 403);
+  const references = context.req.valid("json").references;
+  const requestedIds = [...new Set(references.map((reference) => reference.observationId))];
+  const valid = await context.env.DB.prepare(
+    `SELECT o.id FROM json_each(?1) requested
+       JOIN observations o ON o.id = requested.value
+       JOIN product_versions pv ON pv.id = o.product_version_id
+       JOIN products p ON p.id = pv.product_id
+       JOIN capture_batches origin ON origin.id = o.batch_id
+      WHERE p.store_location_id = ?2 AND origin.source_id = ?3`,
+  ).bind(stableJson(requestedIds), batch.store_location_id, batch.source_id).all<{ id: string }>();
+  const validIds = new Set(valid.results.map((row) => row.id));
+  if (validIds.size !== requestedIds.length) return jsonError("one or more carried observations do not belong to this capture source and location", 422);
+  for (const reference of references) {
+    if (reference.observedAt < batch.captured_from || reference.observedAt > batch.captured_to) return jsonError(`carried observation ${reference.observationId} falls outside the batch capture interval`, 422);
+    const snapshot = reference.provenance.offerSnapshot;
+    if (snapshot && typeof snapshot === "object" && !Array.isArray(snapshot)
+      && (snapshot as Record<string, unknown>).observedAt !== reference.observedAt) return jsonError(`carried observation ${reference.observationId} snapshot time does not match membership`, 422);
+  }
+  const statements = references.map((reference) => context.env.DB.prepare(
+    `INSERT INTO capture_observation_memberships
+       (batch_id, observation_id, term_key, observed_at, source_payload_key, evidence_object_id, provenance_json, carried)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, 1)
+     ON CONFLICT(batch_id, observation_id, term_key) DO UPDATE SET
+       observed_at = MAX(capture_observation_memberships.observed_at, excluded.observed_at),
+       source_payload_key = COALESCE(excluded.source_payload_key, capture_observation_memberships.source_payload_key),
+       evidence_object_id = COALESCE(excluded.evidence_object_id, capture_observation_memberships.evidence_object_id),
+       provenance_json = excluded.provenance_json, carried = 1`,
+  ).bind(batch.id, reference.observationId, reference.termKey ?? "", reference.observedAt,
+    reference.sourcePayloadKey ?? null, reference.evidenceObjectId ?? null, stableJson(reference.provenance)));
+  for (let offset = 0; offset < statements.length; offset += 80) await context.env.DB.batch(statements.slice(offset, offset + 80));
+  return context.json({ ok: true, referenced: references.length, uniqueFacts: requestedIds.length });
 });
 
 app.put("/internal/capture-journal-checkpoints", async (context) => {
@@ -2345,19 +2587,21 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   ).bind(batch.id).first<{ count: number }>();
   const capturedPages = flyerPages?.count ?? 0;
   const observationCount = (await context.env.DB.prepare(
-    "SELECT COUNT(*) AS count FROM observations WHERE batch_id = ?1",
+    "SELECT COUNT(*) AS count FROM capture_batch_observations WHERE batch_id = ?1",
   ).bind(batch.id).first<{ count: number }>())?.count ?? 0;
   const taxonomyRows = batch.capture_method === "browser"
     ? (await context.env.DB.prepare(
       `SELECT COUNT(*) AS count
-         FROM observations o JOIN product_versions pv ON pv.id = o.product_version_id
-        WHERE o.batch_id = ?1 AND pv.taxonomy_path IS NOT NULL AND TRIM(pv.taxonomy_path) <> ''`,
+         FROM capture_batch_observations member
+         JOIN observations o ON o.id = member.observation_id
+         JOIN product_versions pv ON pv.id = o.product_version_id
+        WHERE member.batch_id = ?1 AND pv.taxonomy_path IS NOT NULL AND TRIM(pv.taxonomy_path) <> ''`,
     ).bind(batch.id).first<{ count: number }>())?.count ?? 0
     : 0;
   const predecessor = await context.env.DB.prepare(
     `SELECT prior.id, COUNT(o.id) AS observation_count
        FROM capture_batches prior
-       LEFT JOIN observations o ON o.batch_id = prior.id
+       LEFT JOIN capture_batch_observations o ON o.batch_id = prior.id
       WHERE prior.source_id = ?1 AND prior.coverage_mode = ?2 AND prior.status IN ('validated','promoted') AND prior.id <> ?3
       GROUP BY prior.id, prior.captured_to
       ORDER BY prior.captured_to DESC LIMIT 1`,
@@ -2396,7 +2640,9 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
                       AND ABS(json_extract(price_semantics_json, '$.totalPriceMinor')
                           - purchase_price_minor * json_extract(price_semantics_json, '$.qualifyingQuantity')) <= 1
                      THEN 1 ELSE 0 END) AS examined
-       FROM observations WHERE batch_id = ?1`,
+       FROM capture_batch_observations member
+       JOIN observations ON observations.id = member.observation_id
+      WHERE member.batch_id = ?1`,
   ).bind(batch.id).first<{ eligible: number; examined: number | null }>();
   const priceSemanticsEligible = priceSemantics?.eligible ?? 0;
   const priceSemanticsExamined = priceSemantics?.examined ?? 0;
@@ -2417,17 +2663,18 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
                       AND TRIM(json_extract(o.offer_snapshot_json, '$.sizeText')) <> ''
                       AND json_extract(o.offer_snapshot_json, '$.purchasePriceMinor') = o.purchase_price_minor
                       AND json_extract(o.offer_snapshot_json, '$.priceSemantics.unitPriceMinor') = o.purchase_price_minor
-                      AND json_extract(o.offer_snapshot_json, '$.observedAt') = o.captured_at
+                      AND COALESCE(json_extract(member.provenance_json, '$.offerSnapshot.observedAt'), json_extract(o.offer_snapshot_json, '$.observedAt')) = member.observed_at
                       AND LENGTH(TRIM(json_extract(o.offer_snapshot_json, '$.rawPriceText'))) > 0
                       AND LENGTH(TRIM(json_extract(o.offer_snapshot_json, '$.sourceUrl'))) > 0
                       AND json_extract(o.offer_snapshot_json, '$.availability.status') = o.availability_status
                       AND json_extract(o.offer_snapshot_json, '$.availability.fulfillmentMode') = o.fulfillment_mode
                       AND (o.seller_name IS NULL OR json_extract(o.offer_snapshot_json, '$.sellerName') = o.seller_name)
                      THEN 1 ELSE 0 END) AS examined
-       FROM observations o
+       FROM capture_batch_observations member
+       JOIN observations o ON o.id = member.observation_id
        JOIN product_versions pv ON pv.id = o.product_version_id
        JOIN products p ON p.id = pv.product_id
-      WHERE o.batch_id = ?1`,
+      WHERE member.batch_id = ?1`,
   ).bind(batch.id).first<{ eligible: number; examined: number | null }>();
   const offerSnapshotEligible = offerSnapshots?.eligible ?? 0;
   const offerSnapshotExamined = offerSnapshots?.examined ?? 0;
@@ -2440,20 +2687,24 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
               o.id AS current_observation_id, pv.name AS current_name, pv.size_text AS current_size_text,
               o.per_unit_micros AS current_per_unit_micros, o.normalized_basis_unit AS current_basis_unit,
               o.normalized_basis_qty_micros AS current_basis_qty_micros, pv.identity_json AS current_identity_json,
-              o.captured_at AS current_captured_at
-         FROM observations o JOIN product_versions pv ON pv.id = o.product_version_id
-         JOIN products p ON p.id = pv.product_id WHERE o.batch_id = ?1
+              member.observed_at AS current_captured_at
+         FROM capture_batch_observations member
+         JOIN observations o ON o.id = member.observation_id
+         JOIN product_versions pv ON pv.id = o.product_version_id
+         JOIN products p ON p.id = pv.product_id WHERE member.batch_id = ?1
      ), prior_ranked AS (
        SELECT pv.product_id, o.id AS prior_observation_id, pv.name AS prior_name, pv.size_text AS prior_size_text,
               o.per_unit_micros AS prior_per_unit_micros, o.normalized_basis_unit AS prior_basis_unit,
               o.normalized_basis_qty_micros AS prior_basis_qty_micros, pv.identity_json AS prior_identity_json,
-              o.captured_at AS prior_captured_at,
-              ROW_NUMBER() OVER (PARTITION BY pv.product_id ORDER BY o.captured_at DESC) AS history_rank
-         FROM observations o JOIN product_versions pv ON pv.id = o.product_version_id
-         JOIN capture_batches b ON b.id = o.batch_id
-        WHERE o.batch_id <> ?1 AND b.status IN ('validated','promoted','superseded')
+              prior_member.observed_at AS prior_captured_at,
+              ROW_NUMBER() OVER (PARTITION BY pv.product_id ORDER BY prior_member.observed_at DESC) AS history_rank
+         FROM capture_batch_observations prior_member
+         JOIN observations o ON o.id = prior_member.observation_id
+         JOIN product_versions pv ON pv.id = o.product_version_id
+         JOIN capture_batches b ON b.id = prior_member.batch_id
+        WHERE prior_member.batch_id <> ?1 AND b.status IN ('validated','promoted','superseded')
           AND pv.product_id IN (SELECT DISTINCT product_id FROM current_rows)
-          AND o.captured_at < (SELECT MAX(current_captured_at) FROM current_rows)
+          AND prior_member.observed_at < (SELECT MAX(current_captured_at) FROM current_rows)
      )
      SELECT current_rows.product_id, current_rows.external_key, current_rows.current_observation_id,
             current_rows.current_name, current_rows.current_size_text, current_rows.current_per_unit_micros,
@@ -2602,7 +2853,7 @@ app.get("/internal/capture-batches/ready-browser", async (context) => {
             COUNT(observation.id) AS observation_count
        FROM capture_batches batch
        JOIN capture_sources source ON source.id = batch.source_id
-       LEFT JOIN observations observation ON observation.batch_id = batch.id
+       LEFT JOIN capture_batch_observations observation ON observation.batch_id = batch.id
       WHERE batch.status = 'validated' AND source.capture_method = 'browser'
       GROUP BY batch.id, batch.source_id, batch.captured_to, batch.coverage_mode
       ORDER BY batch.captured_to, batch.id`,
@@ -2714,14 +2965,11 @@ app.put("/internal/releases/:id/payload", zValidator("json", releasePayloadSchem
   if (await digestHex(serialized) !== body.contentHash) return jsonError("payload content hash mismatch", 422);
   const releaseId = context.req.param("id");
   const bytes = new TextEncoder().encode(serialized);
-  const useObjectStorage = bytes.byteLength > 512 * 1024;
-  const objectKey = useObjectStorage ? `releases/${releaseId}/${body.kind}-${body.contentHash}.json` : null;
-  if (objectKey) {
-    await context.env.EVIDENCE.put(objectKey, bytes, {
-      httpMetadata: { contentType: "application/json; charset=utf-8" },
-      customMetadata: { sha256: body.contentHash, kind: body.kind, releaseId },
-    });
-  }
+  const objectKey = `releases/${releaseId}/${body.kind}-${body.contentHash}.json`;
+  await context.env.EVIDENCE.put(objectKey, bytes, {
+    httpMetadata: { contentType: "application/json; charset=utf-8" },
+    customMetadata: { sha256: body.contentHash, kind: body.kind, releaseId },
+  });
   await context.env.DB.prepare(
     `INSERT INTO release_payloads (release_id, kind, payload_json, content_hash, object_key, byte_length)
      VALUES (?1, ?2, ?3, ?4, ?5, ?6)
@@ -2730,8 +2978,15 @@ app.put("/internal/releases/:id/payload", zValidator("json", releasePayloadSchem
        content_hash = excluded.content_hash,
        object_key = excluded.object_key,
        byte_length = excluded.byte_length`,
-  ).bind(releaseId, body.kind, useObjectStorage ? '{}' : serialized, body.contentHash, objectKey, bytes.byteLength).run();
-  return context.json({ ok: true, storage: useObjectStorage ? "object" : "inline", byteLength: bytes.byteLength });
+  ).bind(releaseId, body.kind, '{}', body.contentHash, objectKey, bytes.byteLength).run();
+  return context.json({ ok: true, storage: "object", byteLength: bytes.byteLength });
+});
+
+app.post("/internal/releases/:id/recipe-bundles", async (context) => {
+  const release = await context.env.DB.prepare("SELECT id FROM releases WHERE id = ?1").bind(context.req.param("id")).first();
+  if (!release) return jsonError("release not found", 404);
+  const result = await buildReleaseRecipeBundles(context.env, context.req.param("id"));
+  return context.json({ ok: true, releaseId: context.req.param("id"), ...result });
 });
 
 app.put("/internal/releases/:id/guards", zValidator("json", releaseGuardResultSchema), async (context) => {
@@ -2758,6 +3013,7 @@ app.post("/internal/releases/:id/validate", async (context) => {
     "SELECT configuration_id, market_id FROM releases WHERE id = ?1",
   ).bind(releaseId).first<{ configuration_id: string; market_id: string }>();
   if (!releaseIdentity) return jsonError("release not found", 404);
+  await buildReleaseRecipeBundles(context.env, releaseId);
   const [cellStats, recipeStats, payloadStats, invalidCellStats, rotationStats, top5Stats, invalidRankedRecipes] = await Promise.all([
     context.env.DB.prepare("SELECT COUNT(*) AS rows, COUNT(DISTINCT commodity_id) AS commodities, COUNT(DISTINCT store_location_id) AS stores FROM release_cells WHERE release_id = ?1").bind(releaseId).first<{ rows: number; commodities: number; stores: number }>(),
     context.env.DB.prepare("SELECT COUNT(*) AS rows, SUM(CASE WHEN status = 'incomplete' THEN 1 ELSE 0 END) AS incomplete FROM release_recipe_costs WHERE release_id = ?1").bind(releaseId).first<{ rows: number; incomplete: number | null }>(),
