@@ -89,9 +89,9 @@ const agent = new Agent({
   instructions: prompt,
   model,
   modelSettings: { reasoning: { effort: definition.reasoningEffort }, text: { verbosity: "low" } },
-  tools: requestedAgent === "accuracy-headless"
+  tools: definition.capabilities.includes("search:web")
     ? [webSearchTool({
-        searchContextSize: "low",
+        searchContextSize: requestedAgent === "recipe-sourcer" ? "medium" : "low",
         externalWebAccess: true,
         userLocation: { type: "approximate", city: "Omaha", region: "Nebraska", country: "US", timezone: "America/Chicago" },
       })]

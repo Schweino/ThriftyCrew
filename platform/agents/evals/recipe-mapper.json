@@ -1,1 +1,22 @@
-{"version":1,"agentId":"recipe-mapper","thresholdMillis":950,"cases":[{"id":"known-alias","input":{"ingredient":"garbanzo beans","commodities":["chickpeas"]},"expect":{"decision":"chickpeas","mustMention":["garbanzo"]}},{"id":"unknown","input":{"ingredient":"dragonfruit powder","commodities":["apples"]},"expect":{"decision":"unmapped","mustMention":["dragonfruit"]}},{"id":"quantity","input":{"ingredient":"2 lb chicken breast","commodities":["chicken-breast"]},"expect":{"decision":"chicken-breast","mustMention":["chicken breast"]}}]}
+{
+  "version": 1,
+  "agentId": "recipe-mapper",
+  "thresholdMillis": 950,
+  "cases": [
+    {
+      "id": "known-alias",
+      "input": { "ingredient": "2 cans garbanzo beans", "sourceServings": 4, "targetServings": 14, "commodities": [{ "id": "chickpeas", "name": "Canned chickpeas" }] },
+      "expect": { "decision": "chickpeas", "mustMention": ["garbanzo"] }
+    },
+    {
+      "id": "unknown-commodity",
+      "input": { "ingredient": "1 tablespoon dragonfruit powder", "sourceServings": 4, "targetServings": 14, "commodities": [{ "id": "apples", "name": "Apples" }] },
+      "expect": { "decision": "unmapped", "mustMention": ["dragonfruit"] }
+    },
+    {
+      "id": "missing-yield",
+      "input": { "ingredient": "2 lb chicken breast", "sourceServings": null, "targetServings": 14, "commodities": [{ "id": "chicken-breast", "name": "Chicken breast" }] },
+      "expect": { "decision": "chicken-breast", "mustMention": ["yield"] }
+    }
+  ]
+}

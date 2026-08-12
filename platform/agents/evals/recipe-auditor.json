@@ -1,1 +1,55 @@
-{"version":1,"agentId":"recipe-auditor","thresholdMillis":950,"cases":[{"id":"valid","input":{"slug":"bean-chili","title":"Bean Chili","servings":4,"ingredients_grams":[{"commodity":"canned-beans","grams":400},{"commodity":"canned-tomatoes","grams":300}],"steps":["Simmer all ingredients until bubbling and maintain the simmer for twenty minutes."],"provenance":[{"url":"https://example.test/chili","accessedAt":"2026-08-10T12:00:00Z"}]},"expect":{"decision":"pass","mustMention":[]}},{"id":"unknown-commodity","input":{"slug":"x","servings":4,"ingredients_grams":[{"commodity":"moon-dust","grams":2}],"steps":["mix"]},"expect":{"decision":"fail","mustMention":["commodity"]}},{"id":"unsafe","input":{"slug":"raw-chicken","servings":4,"ingredients_grams":[{"commodity":"chicken","grams":500}],"steps":["serve raw"]},"expect":{"decision":"fail","mustMention":["risk"]}}]}
+{
+  "version": 1,
+  "agentId": "recipe-auditor",
+  "thresholdMillis": 950,
+  "cases": [
+    {
+      "id": "valid",
+      "input": {
+        "sourceCandidateId": "candidate-1",
+        "sourceServings": 4,
+        "slug": "bean-chili",
+        "title": "Bean Chili",
+        "servings": 14,
+        "cuisine": "American",
+        "proteinClass": "beans",
+        "method": "stovetop simmer",
+        "ingredients": [
+          { "name": "beans", "grams": 1488, "commodityId": "canned-beans", "sourceLine": "1 15-ounce can beans" },
+          { "name": "tomatoes", "grams": 2778, "commodityId": "canned-tomatoes", "sourceLine": "1 28-ounce can crushed tomatoes" },
+          { "name": "chili powder", "grams": 28, "commodityId": "chili-powder", "sourceLine": "1 tablespoon chili powder" }
+        ],
+        "instructions": [
+          { "text": "Combine the beans, tomatoes, and chili powder in a large pot.", "usesCommodityIds": ["canned-beans", "canned-tomatoes", "chili-powder"] },
+          { "text": "Simmer the chili for twenty minutes before serving.", "usesCommodityIds": [] }
+        ],
+        "provenance": [{ "url": "https://example.test/chili", "accessedAt": "2026-08-10T12:00:00Z" }]
+      },
+      "expect": { "decision": "pass", "mustMention": [] }
+    },
+    {
+      "id": "ingredient-step-mismatch",
+      "input": {
+        "sourceCandidateId": "candidate-2",
+        "sourceServings": 4,
+        "slug": "rice-bowl",
+        "servings": 14,
+        "ingredients": [{ "name": "rice", "grams": 1200, "commodityId": "rice", "sourceLine": "2 cups rice" }],
+        "instructions": [{ "text": "Stir in cilantro before serving.", "usesCommodityIds": ["cilantro"] }]
+      },
+      "expect": { "decision": "fail", "mustMention": ["ingredient"] }
+    },
+    {
+      "id": "unsafe-chicken",
+      "input": {
+        "sourceCandidateId": "candidate-3",
+        "sourceServings": 4,
+        "slug": "raw-chicken",
+        "servings": 14,
+        "ingredients": [{ "name": "chicken", "grams": 1750, "commodityId": "chicken", "sourceLine": "1 pound chicken" }],
+        "instructions": [{ "text": "Serve the chicken raw immediately.", "usesCommodityIds": ["chicken"] }]
+      },
+      "expect": { "decision": "fail", "mustMention": ["risk"] }
+    }
+  ]
+}

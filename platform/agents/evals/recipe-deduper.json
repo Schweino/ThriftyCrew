@@ -1,1 +1,37 @@
-{"version":1,"agentId":"recipe-deduper","thresholdMillis":950,"cases":[{"id":"exact-duplicate","input":{"candidates":[{"title":"Bean Chili","ingredients":["beans","tomatoes"]},{"title":"Bean Chili","ingredients":["beans","tomatoes"]}]},"expect":{"decision":"duplicate","mustMention":["identical"]}},{"id":"distinct","input":{"candidates":[{"title":"Bean Chili"},{"title":"Lentil Soup"}]},"expect":{"decision":"distinct","mustMention":[]}},{"id":"near-duplicate","input":{"candidates":[{"title":"Easy Bean Chili"},{"title":"Bean Chilli Easy"}]},"expect":{"decision":"duplicate","mustMention":[]}}]}
+{
+  "version": 1,
+  "agentId": "recipe-deduper",
+  "thresholdMillis": 950,
+  "cases": [
+    {
+      "id": "exact-catalog-duplicate",
+      "input": {
+        "catalog": [{ "slug": "bean-chili", "commodityIds": ["beans", "tomatoes"] }],
+        "candidates": [{ "id": "candidate-1", "title": "Easy Bean Chili", "proteinClass": "beans", "method": "stovetop simmer", "ingredients": ["beans", "tomatoes"] }]
+      },
+      "expect": { "decision": "duplicate", "mustMention": ["identical"] }
+    },
+    {
+      "id": "distinct-concepts",
+      "input": {
+        "catalog": [],
+        "candidates": [
+          { "id": "candidate-1", "title": "Bean Chili", "proteinClass": "beans", "method": "stovetop simmer", "ingredients": ["beans", "tomatoes"] },
+          { "id": "candidate-2", "title": "Lemon Chicken Orzo", "proteinClass": "chicken", "method": "oven bake", "ingredients": ["chicken", "lemon", "orzo"] }
+        ]
+      },
+      "expect": { "decision": "distinct", "mustMention": ["protein"] }
+    },
+    {
+      "id": "near-duplicate-concepts",
+      "input": {
+        "catalog": [],
+        "candidates": [
+          { "id": "candidate-1", "title": "Creamy Salsa Chicken Rice", "proteinClass": "chicken", "method": "slow cooker", "ingredients": ["chicken", "salsa", "rice"] },
+          { "id": "candidate-2", "title": "Slow Cooker Tex-Mex Chicken Bowl", "proteinClass": "chicken", "method": "slow cooker", "ingredients": ["chicken", "salsa", "rice"] }
+        ]
+      },
+      "expect": { "decision": "duplicate", "mustMention": ["flavor"] }
+    }
+  ]
+}

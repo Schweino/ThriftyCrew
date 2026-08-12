@@ -498,10 +498,17 @@ export const observationInputSchema = z
     if (value.priceSemantics && value.priceSemantics.unitPriceMinor !== value.purchasePriceMinor) {
       context.addIssue({ code: "custom", path: ["priceSemantics", "unitPriceMinor"], message: "must agree with purchasePriceMinor" });
     }
+    if (value.priceSemantics) {
+      if (value.priceSemantics.validFrom !== value.validFrom) context.addIssue({ code: "custom", path: ["priceSemantics", "validFrom"], message: "must agree with observation validFrom" });
+      if (value.priceSemantics.validTo !== value.validTo) context.addIssue({ code: "custom", path: ["priceSemantics", "validTo"], message: "must agree with observation validTo" });
+    }
     if (value.offerSnapshot) {
       if (value.offerSnapshot.retailerProductId !== value.externalProductKey) context.addIssue({ code: "custom", path: ["offerSnapshot", "retailerProductId"], message: "must agree with externalProductKey" });
       if (value.offerSnapshot.purchasePriceMinor !== value.purchasePriceMinor) context.addIssue({ code: "custom", path: ["offerSnapshot", "purchasePriceMinor"], message: "must agree with purchasePriceMinor" });
       if (value.offerSnapshot.sizeText !== value.sizeText) context.addIssue({ code: "custom", path: ["offerSnapshot", "sizeText"], message: "must agree with sizeText" });
+      if (value.offerSnapshot.priceSemantics.validFrom !== value.validFrom || value.offerSnapshot.priceSemantics.validTo !== value.validTo) {
+        context.addIssue({ code: "custom", path: ["offerSnapshot", "priceSemantics"], message: "offer window must agree with the observation" });
+      }
     }
   });
 
@@ -616,6 +623,11 @@ export const directCaptureArtifactSchema = z.object({
   if (value.expectedTerms !== undefined && value.terms.length !== value.expectedTerms) context.addIssue({ code: "custom", path: ["terms"], message: "term ledger does not match expectedTerms" });
   const ordinals = new Set(value.terms.map((term) => term.ordinal));
   if (ordinals.size !== value.terms.length) context.addIssue({ code: "custom", path: ["terms"], message: "term ordinals must be unique" });
+  if (value.coverageMode === "ad_only") for (const [index, observation] of value.observations.entries()) {
+    if (observation.kind !== "everyday" && (!observation.validFrom || !observation.validTo)) {
+      context.addIssue({ code: "custom", path: ["observations", index], message: "ad-only promotional observations require a bounded retailer-local window" });
+    }
+  }
 });
 
 export const evidenceMetadataSchema = z.object({
@@ -875,6 +887,37 @@ export const agentRegistryEntrySchema = z.object({
   }
 });
 
+export const promotionCalendarSyncSchema = z.object({
+  observedAt: isoDateTime,
+  calendars: z.array(z.object({
+    storeLocationId: nonEmptyId,
+    storeName: z.string().trim().min(1).max(200),
+    captureLane: z.enum(["headless", "browser"]),
+    expectedStartWeekday: z.number().int().min(0).max(6),
+    validFrom: isoDateTime,
+    validTo: isoDateTime,
+    evidence: z.record(z.string(), z.unknown()).default({}),
+  }).refine((value) => value.validTo > value.validFrom, { message: "promotion calendar window must be half-open and non-empty" })).min(1).max(10),
+});
+
+export const promotionRequestCompleteSchema = z.object({
+  requestIds: z.array(nonEmptyId).min(1).max(20),
+  status: z.enum(["completed", "failed"]),
+  completedAt: isoDateTime,
+  result: z.record(z.string(), z.unknown()).default({}),
+  error: z.string().trim().min(1).max(5000).optional(),
+}).superRefine((value, context) => {
+  if (value.status === "failed" && !value.error) context.addIssue({ code: "custom", path: ["error"], message: "failed promotion work requires an error" });
+});
+
+export const promotionRequestClaimSchema = z.object({
+  lane: z.enum(["headless", "browser"]),
+  owner: nonEmptyId,
+  observedAt: isoDateTime,
+  leaseMinutes: z.number().int().min(5).max(180).default(60),
+  limit: z.number().int().min(1).max(20).default(20),
+});
+
 export const agentRegistrySchema = z.object({
   version: z.number().int().positive(),
   pricingEffectiveAt: isoDateTime,
@@ -902,17 +945,50 @@ export const contentBatchCreateSchema = z.object({
   sourceRefs: z.array(z.string().min(1).max(1000)).min(1).max(1000),
 });
 
+const recipeSourceIngredientSchema = z.object({
+  raw: z.string().trim().min(1).max(1000),
+  quantityText: z.string().trim().min(1).max(300),
+});
+
+export const recipeSourceCandidateSchema = z.object({
+  id: nonEmptyId,
+  title: z.string().trim().min(4).max(300),
+  proposedSlug: nonEmptyId,
+  sourceUrl: z.url().max(3000),
+  accessedAt: isoDateTime,
+  sourceServings: z.number().int().min(1).max(100).nullable(),
+  cuisine: z.string().trim().min(2).max(160),
+  proteinClass: z.string().trim().min(2).max(100),
+  method: z.string().trim().min(3).max(500),
+  sourceNutrition: z.object({
+    calories: z.number().nonnegative().nullable(),
+    proteinGrams: z.number().nonnegative().nullable(),
+  }),
+  ingredients: z.array(recipeSourceIngredientSchema).min(2).max(100),
+  conceptSummary: z.string().trim().min(20).max(2000),
+  unmappedHints: z.array(z.string().trim().min(1).max(300)).max(100),
+  confidence: z.enum(["high", "medium", "low"]),
+});
+
 export const contentItemSchema = z.object({
+  sourceCandidateId: nonEmptyId,
+  sourceServings: z.number().int().min(1).max(100),
   slug: nonEmptyId,
   title: z.string().trim().min(4).max(300),
-  servings: z.number().int().min(1).max(100),
+  servings: z.literal(14),
+  cuisine: z.string().trim().min(2).max(160),
+  proteinClass: z.string().trim().min(2).max(100),
+  method: z.string().trim().min(3).max(500),
   ingredients: z.array(z.object({
     name: z.string().trim().min(1).max(300),
-    quantity: z.number().positive(),
-    unit: z.string().trim().min(1).max(80),
+    grams: z.number().positive(),
     commodityId: nonEmptyId,
+    sourceLine: z.string().trim().min(1).max(1000),
   })).min(2).max(100),
-  instructions: z.array(z.string().trim().min(10).max(2000)).min(1).max(100),
+  instructions: z.array(z.object({
+    text: z.string().trim().min(10).max(2000),
+    usesCommodityIds: z.array(nonEmptyId).max(100),
+  })).min(2).max(100),
   provenance: z.array(z.object({
     url: z.url().max(3000),
     accessedAt: isoDateTime,
@@ -952,26 +1028,83 @@ export const pullRequestProposalSchema = z.object({
 });
 
 export const recipeSourceCandidatesSchema = z.object({
-  candidates: z.array(z.object({
-    id: nonEmptyId,
-    title: z.string().min(4).max(300),
+  requestId: nonEmptyId,
+  candidates: z.array(recipeSourceCandidateSchema).max(50),
+  rejectedSources: z.array(z.object({
     sourceUrl: z.url().max(3000),
-    accessedAt: isoDateTime,
-    ingredients: z.array(z.string().min(1).max(300)).min(2).max(100),
-  })).min(1).max(50),
+    reason: z.string().trim().min(5).max(1000),
+  })).max(100),
+  searchSummary: z.string().trim().min(10).max(3000),
+});
+
+const recipeDedupDecisionSchema = z.object({
+  candidateId: nonEmptyId,
+  decision: z.enum(["accepted", "catalog_duplicate", "pool_duplicate", "rejected"]),
+  duplicateOf: nonEmptyId.nullable(),
+  reason: z.string().trim().min(5).max(1000),
+  similarity: z.object({
+    protein: z.enum(["same", "different", "unknown"]),
+    flavor: z.enum(["same", "different", "unknown"]),
+    starch: z.enum(["same", "different", "unknown"]),
+    method: z.enum(["same", "different", "unknown"]),
+  }),
 });
 
 export const recipeDedupSchema = z.object({
-  acceptedIds: z.array(nonEmptyId).min(1).max(50),
-  duplicates: z.array(z.object({ candidateId: nonEmptyId, duplicateOf: nonEmptyId, reason: z.string().min(5).max(1000) })).max(50),
+  requestId: nonEmptyId,
+  accepted: z.array(recipeSourceCandidateSchema).max(50),
+  decisions: z.array(recipeDedupDecisionSchema).max(50),
+}).superRefine((value, context) => {
+  const decisionIds = value.decisions.map((decision) => decision.candidateId);
+  if (new Set(decisionIds).size !== decisionIds.length) context.addIssue({ code: "custom", path: ["decisions"], message: "candidate decisions must be unique" });
+  const acceptedIds = new Set(value.accepted.map((candidate) => candidate.id));
+  for (const decision of value.decisions) {
+    if ((decision.decision === "accepted") !== acceptedIds.has(decision.candidateId)) {
+      context.addIssue({ code: "custom", path: ["decisions"], message: `accepted candidate mismatch for ${decision.candidateId}` });
+    }
+    if ((decision.decision === "catalog_duplicate" || decision.decision === "pool_duplicate") && !decision.duplicateOf) {
+      context.addIssue({ code: "custom", path: ["decisions"], message: `duplicate decision needs duplicateOf for ${decision.candidateId}` });
+    }
+  }
+});
+
+const recipeMappedIngredientSchema = z.object({
+  sourceLine: z.string().trim().min(1).max(1000),
+  sourceName: z.string().trim().min(1).max(300),
+  quantityText: z.string().trim().min(1).max(300),
+  commodityId: nonEmptyId.nullable(),
+  grams: z.number().positive().nullable(),
+  decision: z.enum(["exact", "alias", "unmapped"]),
+  scalingStatus: z.enum(["scaled", "unresolved"]),
+  evidence: z.string().trim().min(5).max(1000),
+}).superRefine((value, context) => {
+  if (value.decision === "unmapped" && value.commodityId !== null) {
+    context.addIssue({ code: "custom", message: "unmapped ingredients cannot carry a commodity id" });
+  }
+  if (value.decision !== "unmapped" && value.commodityId === null) {
+    context.addIssue({ code: "custom", message: "mapped ingredients require a commodity id" });
+  }
+  if ((value.scalingStatus === "scaled") !== (value.grams !== null)) {
+    context.addIssue({ code: "custom", message: "scaled ingredients require positive grams and unresolved ingredients require null grams" });
+  }
 });
 
 export const recipeMapSchema = z.object({
+  requestId: nonEmptyId,
   recipes: z.array(z.object({
-    candidateId: nonEmptyId,
-    ingredients: z.array(z.object({ sourceName: z.string().min(1).max(300), commodityId: nonEmptyId, grams: z.number().positive() })).min(2).max(100),
-    unmapped: z.array(z.string().min(1).max(300)).max(100),
-  })).min(1).max(50),
+    candidate: recipeSourceCandidateSchema,
+    ingredients: z.array(recipeMappedIngredientSchema).min(2).max(100),
+    readyForWriting: z.boolean(),
+    issues: z.array(z.string().trim().min(3).max(1000)).max(100),
+  })).max(50),
+}).superRefine((value, context) => {
+  for (const [index, recipe] of value.recipes.entries()) {
+    const hasBlockingFact = recipe.candidate.sourceServings === null
+      || recipe.ingredients.some((ingredient) => ingredient.decision === "unmapped" || ingredient.scalingStatus === "unresolved");
+    if (recipe.readyForWriting === hasBlockingFact) {
+      context.addIssue({ code: "custom", path: ["recipes", index, "readyForWriting"], message: "readiness must be false when source yield is missing or any ingredient is unmapped or unscaled" });
+    }
+  }
 });
 
 export const sourceSentinelResultSchema = z.object({

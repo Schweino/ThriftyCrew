@@ -13,6 +13,7 @@ import {
 } from "@thriftycrew/contracts";
 import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
 import type { MutationIdentity } from "./env";
+import { evaluateContentPromotion } from "./content-batches";
 
 interface RegistryRow {
   id: string;
@@ -71,6 +72,44 @@ const RECIPE_CHAIN: Record<string, string | undefined> = {
   "recipe-writer": "recipe-auditor",
   "recipe-auditor": undefined,
 };
+
+function object(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
+}
+
+function array(value: unknown): Array<Record<string, unknown>> {
+  return Array.isArray(value)
+    ? value.filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === "object" && !Array.isArray(item))
+    : [];
+}
+
+async function currentRecipeCatalog(db: D1Database): Promise<Array<Record<string, unknown>>> {
+  const rows = await db.prepare(
+    `SELECT cost.recipe_slug, cost.detail_json
+       FROM current_releases current
+       JOIN release_recipe_costs cost ON cost.release_id = current.release_id
+      WHERE current.market_id = 'omaha' ORDER BY cost.recipe_slug`,
+  ).all<{ recipe_slug: string; detail_json: string }>();
+  return rows.results.map((row) => {
+    const detail = object(JSON.parse(row.detail_json));
+    const commodityIds = [...new Set(array(detail.ingredients)
+      .map((ingredient) => ingredient.commodityId)
+      .filter((value): value is string => typeof value === "string" && value.length > 0))].sort();
+    return { slug: row.recipe_slug, commodityIds };
+  });
+}
+
+async function currentCommodityCatalog(db: D1Database): Promise<Array<Record<string, unknown>>> {
+  const rows = await db.prepare(
+    `SELECT commodity.id, commodity.label, commodity.basis_unit, category.label AS category
+       FROM commodities commodity
+       JOIN configuration_versions version ON version.id = commodity.configuration_id
+       LEFT JOIN categories category ON category.id = commodity.category_id
+      WHERE version.active = 1 AND commodity.active = 1
+      ORDER BY category.sort_order, commodity.id`,
+  ).all<Record<string, unknown>>();
+  return rows.results;
+}
 
 async function activeAgent(db: D1Database, agentId: string): Promise<RegistryRow> {
   const row = await db.prepare(
@@ -269,6 +308,12 @@ export async function claimAgentWorkItem(db: D1Database, identity: MutationIdent
      RETURNING *`,
   ).bind(candidate.id, leaseId, expiresAt, identity.githubRunId ?? null).first<Record<string, unknown>>();
   if (!claimed) return null;
+  if (claimed.source_kind === "recipe-request") {
+    await db.prepare(
+      `UPDATE recipe_suggestion_requests SET status = 'running', work_item_id = ?2,
+         updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status IN ('queued', 'running')`,
+    ).bind(claimed.source_ref, claimed.id).run();
+  }
   const inputHash = await digestHex(String(claimed.input_json));
   await db.prepare(
     `INSERT INTO agent_work_item_attempts
@@ -304,9 +349,21 @@ export function validateAgentOutput(contract: string, value: unknown, sourceRef:
     if (verdicts.drawId !== sourceRef) throw new Error("accuracy verdicts belong to a different draw");
     return verdicts;
   }
-  if (contract === "recipe-source-candidates-v1") return recipeSourceCandidatesSchema.parse(value);
-  if (contract === "recipe-dedup-v1") return recipeDedupSchema.parse(value);
-  if (contract === "recipe-map-v1") return recipeMapSchema.parse(value);
+  if (contract === "recipe-source-candidates-v1") {
+    const candidates = recipeSourceCandidatesSchema.parse(value);
+    if (candidates.requestId !== sourceRef) throw new Error("recipe source output belongs to a different request");
+    return candidates;
+  }
+  if (contract === "recipe-dedup-v1") {
+    const dedup = recipeDedupSchema.parse(value);
+    if (dedup.requestId !== sourceRef) throw new Error("recipe dedup output belongs to a different request");
+    return dedup;
+  }
+  if (contract === "recipe-map-v1") {
+    const map = recipeMapSchema.parse(value);
+    if (map.requestId !== sourceRef) throw new Error("recipe map output belongs to a different request");
+    return map;
+  }
   if (contract === "content-items-v1") return contentBatchItemsSchema.parse(value);
   if (contract === "content-audit-v1") return contentBatchAuditSchema.parse(value);
   throw new Error(`output contract ${contract} has no server validator`);
@@ -316,14 +373,49 @@ async function enqueueRecipeNext(db: D1Database, completed: Record<string, unkno
   const nextAgentId = RECIPE_CHAIN[String(completed.agent_id)];
   if (!nextAgentId) return undefined;
   const next = await activeAgent(db, nextAgentId);
+  const input: Record<string, unknown> = { contract: String(completed.output_contract), previousWorkItemId: completed.id, output, nextAgentId, nextPromptHash: next.prompt_sha256 };
+  if (nextAgentId === "recipe-deduper") input.catalog = await currentRecipeCatalog(db);
+  if (nextAgentId === "recipe-mapper") input.commodities = await currentCommodityCatalog(db);
   await enqueue(db, next, {
     sourceKind: "recipe-request",
     sourceRef: String(completed.source_ref),
     stage: nextAgentId.replace("recipe-", ""),
-    severity: "optional",
-    input: { contract: String(completed.output_contract), previousWorkItemId: completed.id, output, nextAgentId, nextPromptHash: next.prompt_sha256 },
+    severity: next.criticality,
+    input,
   }, String(completed.adapter_version), nextAgentId === "recipe-mapper" ? "recipe-dedup-v1" : String(completed.output_contract));
   return nextAgentId;
+}
+
+export function assertRecipeChainContinuity(agentId: string, inputValue: unknown, outputValue: unknown): void {
+  const input = object(inputValue);
+  if (agentId === "recipe-deduper") {
+    const sourced = recipeSourceCandidatesSchema.parse(input.output);
+    const dedup = recipeDedupSchema.parse(outputValue);
+    const sourceIds = sourced.candidates.map((candidate) => candidate.id).sort();
+    const decisionIds = dedup.decisions.map((decision) => decision.candidateId).sort();
+    if (stableJson(sourceIds) !== stableJson(decisionIds)) throw new Error("recipe deduper must return exactly one decision for every sourced candidate");
+  }
+  if (agentId === "recipe-mapper") {
+    const dedup = recipeDedupSchema.parse(input.output);
+    const map = recipeMapSchema.parse(outputValue);
+    const acceptedIds = dedup.accepted.map((candidate) => candidate.id).sort();
+    const mappedIds = map.recipes.map((recipe) => recipe.candidate.id).sort();
+    if (stableJson(acceptedIds) !== stableJson(mappedIds)) throw new Error("recipe mapper must return exactly one mapping record for every accepted candidate");
+  }
+  if (agentId === "recipe-writer") {
+    const map = recipeMapSchema.parse(input.output);
+    const items = contentBatchItemsSchema.parse(outputValue);
+    const readyIds = map.recipes.filter((recipe) => recipe.readyForWriting).map((recipe) => recipe.candidate.id).sort();
+    const writtenIds = items.items.map((item) => item.sourceCandidateId).sort();
+    if (stableJson(readyIds) !== stableJson(writtenIds)) throw new Error("recipe writer must return exactly one item for every ready mapped candidate");
+  }
+}
+
+export function recipeTerminalReason(agentId: string, outputValue: unknown): string | undefined {
+  if (agentId === "recipe-sourcer" && recipeSourceCandidatesSchema.parse(outputValue).candidates.length === 0) return "no verified source candidates";
+  if (agentId === "recipe-deduper" && recipeDedupSchema.parse(outputValue).accepted.length === 0) return "all candidates were rejected or deduplicated";
+  if (agentId === "recipe-mapper" && recipeMapSchema.parse(outputValue).recipes.every((recipe) => !recipe.readyForWriting)) return "no candidate could be mapped and scaled safely";
+  return undefined;
 }
 
 async function stageAuditedRecipeBatch(db: D1Database, completed: Record<string, unknown>, auditValue: unknown): Promise<{ contentBatchId: string; status: string }> {
@@ -331,8 +423,20 @@ async function stageAuditedRecipeBatch(db: D1Database, completed: Record<string,
   const itemsDocument = contentBatchItemsSchema.parse(input.output);
   const audit = contentBatchAuditSchema.parse(auditValue);
   if (audit.auditorAgentId !== "recipe-auditor" || audit.promptHash !== input.nextPromptHash) throw new Error("recipe audit identity or prompt hash does not match the active chain input");
+  const commodities = await currentCommodityCatalog(db);
+  const deterministicGuard = await evaluateContentPromotion(itemsDocument.items, new Set(commodities.map((commodity) => String(commodity.id))));
+  const combinedFindings = [
+    ...audit.findings,
+    ...deterministicGuard.findings.map((finding) => ({
+      key: `deterministic:${finding.key}`,
+      severity: finding.severity,
+      message: finding.message,
+      ...(finding.itemSlug ? { itemSlug: finding.itemSlug } : {}),
+    })),
+  ];
+  const findings = combinedFindings.slice(0, 1000);
   const inputHash = await digestHex(stableJson(input));
-  const contentHash = await digestHex(stableJson(itemsDocument));
+  const contentHash = deterministicGuard.contentHash;
   const batchId = await deterministicId("content", "recipe-pack", String(completed.source_ref), contentHash);
   await db.prepare(
     `INSERT INTO content_batches
@@ -345,8 +449,8 @@ async function stageAuditedRecipeBatch(db: D1Database, completed: Record<string,
      VALUES (?1, ?2, ?3, ?4, ?5) ON CONFLICT(batch_id, slug) DO NOTHING`,
   ).bind(batchId, item.slug, ordinal, stableJson(item), await digestHex(stableJson(item)))));
   for (let offset = 0; offset < itemStatements.length; offset += 90) await db.batch(itemStatements.slice(offset, offset + 90));
-  const hardFindings = audit.findings.filter((finding) => finding.severity === "hard").length;
-  const warningFindings = audit.findings.filter((finding) => finding.severity === "warning").length;
+  const hardFindings = combinedFindings.filter((finding) => finding.severity === "hard").length;
+  const warningFindings = combinedFindings.filter((finding) => finding.severity === "warning").length;
   const auditId = await deterministicId("content-audit", batchId, audit.promptHash);
   const status = hardFindings > 0 ? "rejected" : "audited";
   await db.batch([
@@ -354,7 +458,7 @@ async function stageAuditedRecipeBatch(db: D1Database, completed: Record<string,
       `INSERT INTO content_batch_audits
          (id, batch_id, auditor_agent_id, prompt_hash, findings_json, hard_findings, warning_findings)
        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7) ON CONFLICT(id) DO NOTHING`,
-    ).bind(auditId, batchId, audit.auditorAgentId, audit.promptHash, stableJson(audit.findings), hardFindings, warningFindings),
+    ).bind(auditId, batchId, audit.auditorAgentId, audit.promptHash, stableJson(findings), hardFindings, warningFindings),
     db.prepare("UPDATE content_batches SET status = ?2, sealed_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status = 'staging'").bind(batchId, status),
     db.prepare("UPDATE recipe_suggestion_requests SET status = ?2, content_batch_id = ?3, updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(completed.source_ref, status === "audited" ? "staged" : "rejected", batchId),
   ]);
@@ -367,6 +471,7 @@ export async function completeAgentWorkItem(db: D1Database, identity: MutationId
   if (identity.registeredAgentId !== current.agent_id) throw new Error("an agent may only complete its own work");
   if (current.state === "completed" && current.lease_id === body.leaseId && Number(current.lease_generation) === body.leaseGeneration) return { idempotent: true, workItemId, state: "completed" };
   const output = validateAgentOutput(String(current.output_contract), body.output, String(current.source_ref), String(current.agent_id));
+  if (String(current.agent_id).startsWith("recipe-")) assertRecipeChainContinuity(String(current.agent_id), JSON.parse(String(current.input_json)), output);
   const outputJson = stableJson(output);
   const outputHash = await digestHex(outputJson);
   const finishedAt = new Date().toISOString();
@@ -406,9 +511,16 @@ export async function completeAgentWorkItem(db: D1Database, identity: MutationId
       ).bind(current.source_ref, outputJson).run();
     }
   }
+  let recipeTerminal: { status: "rejected"; reason: string } | undefined;
   if (current.agent_id === "recipe-auditor") contentBatch = await stageAuditedRecipeBatch(db, current, output);
-  else if (String(current.agent_id).startsWith("recipe-")) nextAgentId = await enqueueRecipeNext(db, current, output);
-  return { idempotent: false, workItemId, state: "completed", outputHash, nextAgentId: nextAgentId ?? null, contentBatch: contentBatch ?? null };
+  else if (String(current.agent_id).startsWith("recipe-")) {
+    const reason = recipeTerminalReason(String(current.agent_id), output);
+    if (reason) {
+      await db.prepare("UPDATE recipe_suggestion_requests SET status = 'rejected', updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(current.source_ref).run();
+      recipeTerminal = { status: "rejected", reason };
+    } else nextAgentId = await enqueueRecipeNext(db, current, output);
+  }
+  return { idempotent: false, workItemId, state: "completed", outputHash, nextAgentId: nextAgentId ?? null, contentBatch: contentBatch ?? null, recipeTerminal: recipeTerminal ?? null };
 }
 
 export async function failAgentWorkItem(db: D1Database, identity: MutationIdentity, workItemId: string, body: AgentWorkItemFail): Promise<Record<string, unknown>> {

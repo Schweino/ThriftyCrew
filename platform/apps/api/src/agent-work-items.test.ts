@@ -1,5 +1,25 @@
 import { describe, expect, it } from "vitest";
-import { normalizeAccuracyEvidenceRow, validateAgentOutput } from "./agent-work-items";
+import { assertRecipeChainContinuity, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
+
+const candidate = {
+  id: "candidate-bean-chili",
+  title: "Weeknight Bean Chili",
+  proposedSlug: "weeknight-bean-chili",
+  sourceUrl: "https://example.test/chili",
+  accessedAt: "2026-08-10T12:00:00.000Z",
+  sourceServings: 4,
+  cuisine: "American",
+  proteinClass: "beans",
+  method: "stovetop simmer",
+  sourceNutrition: { calories: 420, proteinGrams: 20 },
+  ingredients: [
+    { raw: "1 can beans", quantityText: "1 can" },
+    { raw: "1 can tomatoes", quantityText: "1 can" },
+  ],
+  conceptSummary: "A weeknight bean and tomato chili cooked on the stovetop.",
+  unmappedHints: [],
+  confidence: "high" as const,
+};
 
 describe("agent output boundary", () => {
   it("turns frozen source-native offer facts into an explicit reviewer evidence packet", () => {
@@ -58,11 +78,56 @@ describe("agent output boundary", () => {
 
   it("accepts structured staged recipe content", () => {
     const content = { items: [{
-      slug: "bean-chili", title: "Weeknight Bean Chili", servings: 4,
-      ingredients: [{ name: "beans", quantity: 400, unit: "g", commodityId: "beans" }, { name: "tomatoes", quantity: 300, unit: "g", commodityId: "tomatoes" }],
-      instructions: ["Combine the ingredients and simmer gently for twenty minutes."],
+      sourceCandidateId: candidate.id,
+      sourceServings: 4,
+      slug: "bean-chili", title: "Weeknight Bean Chili", servings: 14,
+      cuisine: "American", proteinClass: "beans", method: "stovetop simmer",
+      ingredients: [
+        { name: "beans", grams: 1_400, commodityId: "beans", sourceLine: "1 can beans" },
+        { name: "tomatoes", grams: 1_050, commodityId: "tomatoes", sourceLine: "1 can tomatoes" },
+      ],
+      instructions: [
+        { text: "Combine the beans and tomatoes in a large pot.", usesCommodityIds: ["beans", "tomatoes"] },
+        { text: "Simmer gently for twenty minutes before serving.", usesCommodityIds: [] },
+      ],
       provenance: [{ url: "https://example.test/chili", accessedAt: "2026-08-10T12:00:00.000Z" }],
     }] };
     expect(validateAgentOutput("content-items-v1", content, "request_one", "recipe-writer")).toEqual(content);
+  });
+
+  it("fences recipe source output to its request", () => {
+    const sourceOutput = { requestId: "request_other", candidates: [candidate], rejectedSources: [], searchSummary: "One verified source was accepted." };
+    expect(() => validateAgentOutput("recipe-source-candidates-v1", sourceOutput, "request_expected", "recipe-sourcer")).toThrow(/different request/);
+  });
+
+  it("requires a dedup decision for every sourced candidate", () => {
+    const input = { output: { requestId: "request_one", candidates: [candidate], rejectedSources: [], searchSummary: "One verified source was accepted." } };
+    const output = { requestId: "request_one", accepted: [], decisions: [] };
+    expect(() => assertRecipeChainContinuity("recipe-deduper", input, output)).toThrow(/every sourced candidate/);
+  });
+
+  it("prevents the writer from silently dropping ready mappings", () => {
+    const input = { output: { requestId: "request_one", recipes: [{
+      candidate,
+      ingredients: [
+        { sourceLine: "1 can beans", sourceName: "beans", quantityText: "1 can", commodityId: "beans", grams: 1_400, decision: "exact", scalingStatus: "scaled", evidence: "Exact active commodity." },
+        { sourceLine: "1 can tomatoes", sourceName: "tomatoes", quantityText: "1 can", commodityId: "tomatoes", grams: 1_050, decision: "exact", scalingStatus: "scaled", evidence: "Exact active commodity." },
+      ],
+      readyForWriting: true,
+      issues: [],
+    }] } };
+    expect(() => assertRecipeChainContinuity("recipe-writer", input, { items: [] })).toThrow();
+  });
+
+  it("ends a recipe request cleanly when a stage has nothing safe to advance", () => {
+    expect(recipeTerminalReason("recipe-sourcer", {
+      requestId: "request_one", candidates: [], rejectedSources: [], searchSummary: "No source had enough verified facts.",
+    })).toBe("no verified source candidates");
+    expect(recipeTerminalReason("recipe-deduper", {
+      requestId: "request_one", accepted: [], decisions: [{
+        candidateId: candidate.id, decision: "catalog_duplicate", duplicateOf: "existing-chili", reason: "The current catalog already contains the same dish.",
+        similarity: { protein: "same", flavor: "same", starch: "same", method: "same" },
+      }],
+    })).toBe("all candidates were rejected or deduplicated");
   });
 });

@@ -22,13 +22,22 @@ export async function evaluateContentPromotion(
     if (titles.has(normalizedTitle)) findings.push({ key: `duplicate-title:${item.slug}`, severity: "hard", message: "normalized recipe title is duplicated", itemSlug: item.slug });
     titles.add(normalizedTitle);
     const ingredients = new Set<string>();
+    const ingredientCommodityIds = new Set<string>();
     for (const ingredient of item.ingredients) {
       const normalizedIngredient = normalizeName(ingredient.name);
       if (ingredients.has(normalizedIngredient)) findings.push({ key: `duplicate-ingredient:${item.slug}:${normalizedIngredient}`, severity: "hard", message: "recipe repeats an ingredient instead of combining quantities", itemSlug: item.slug });
       ingredients.add(normalizedIngredient);
+      if (ingredientCommodityIds.has(ingredient.commodityId)) findings.push({ key: `duplicate-commodity:${item.slug}:${ingredient.commodityId}`, severity: "hard", message: "recipe repeats a commodity instead of combining its grams", itemSlug: item.slug });
+      ingredientCommodityIds.add(ingredient.commodityId);
       if (!validCommodityIds.has(ingredient.commodityId)) findings.push({ key: `unknown-commodity:${item.slug}:${ingredient.commodityId}`, severity: "hard", message: `ingredient maps to unknown commodity ${ingredient.commodityId}`, itemSlug: item.slug });
     }
-    if (item.instructions.length < 2) findings.push({ key: `short-instructions:${item.slug}`, severity: "warning", message: "recipe has fewer than two instruction steps", itemSlug: item.slug });
+    const usedCommodityIds = new Set(item.instructions.flatMap((instruction) => instruction.usesCommodityIds));
+    for (const commodityId of ingredientCommodityIds) {
+      if (!usedCommodityIds.has(commodityId)) findings.push({ key: `unused-ingredient:${item.slug}:${commodityId}`, severity: "hard", message: `ingredient ${commodityId} is purchased but never used by an instruction`, itemSlug: item.slug });
+    }
+    for (const commodityId of usedCommodityIds) {
+      if (!ingredientCommodityIds.has(commodityId)) findings.push({ key: `unlisted-step-ingredient:${item.slug}:${commodityId}`, severity: "hard", message: `instructions use ${commodityId}, but the ingredient list does not purchase it`, itemSlug: item.slug });
+    }
     if (new Set(item.provenance.map((source) => new URL(source.url).hostname)).size < 1) findings.push({ key: `missing-provenance:${item.slug}`, severity: "hard", message: "recipe lacks attributable provenance", itemSlug: item.slug });
   }
   const contentHash = await digestHex(stableJson([...items].sort((left, right) => left.slug.localeCompare(right.slug))));
