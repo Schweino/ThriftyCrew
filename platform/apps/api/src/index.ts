@@ -2625,11 +2625,8 @@ app.post("/internal/storage/backfill-release/:id", async (context) => {
          FROM release_cells_with_reasons WHERE release_id = ?1 ORDER BY commodity_id, store_location_id`,
     ).bind(releaseId).all<Record<string, unknown>>(),
     context.env.DB.prepare(
-      `SELECT cost.recipe_slug, cost.status, cost.batch_cost_minor, cost.serving_cost_minor, cost.servings,
-              cost.missing_ingredients_json, cost.detail_json, detail.object_key AS detail_object_key
-         FROM release_recipe_costs cost LEFT JOIN recipe_cost_detail_objects detail
-           ON detail.release_id = cost.release_id AND detail.recipe_slug = cost.recipe_slug
-        WHERE cost.release_id = ?1 ORDER BY cost.recipe_slug`,
+      `SELECT recipe_slug, status, batch_cost_minor, serving_cost_minor, servings, missing_ingredients_json
+         FROM release_recipe_costs WHERE release_id = ?1 ORDER BY recipe_slug`,
     ).bind(releaseId).all<Record<string, unknown>>(),
     context.env.DB.prepare("SELECT kind, payload_json, object_key FROM release_payloads WHERE release_id = ?1 ORDER BY kind")
       .bind(releaseId).all<{ kind: string; payload_json: string; object_key: string | null }>(),
@@ -2641,34 +2638,40 @@ app.post("/internal/storage/backfill-release/:id", async (context) => {
       .bind(release.market_id, release.created_at).first<{ id: string }>(),
     context.env.DB.prepare("SELECT release_id FROM current_releases WHERE market_id = ?1").bind(release.market_id).first<{ release_id: string }>(),
   ]);
-  const nodes: Array<{ kind: string; key: string; dependencyHash: string; contentHash: string; payload: unknown; objectKey: string; bytes: Uint8Array }> = [];
+  const keepHotPayloads = current?.release_id === releaseId;
+  const nodes: Array<{ kind: string; key: string; dependencyHash: string; contentHash: string; objectKey: string; byteLength: number; payloadText?: string }> = [];
   const addNode = async (kind: string, key: string, payload: unknown) => {
     const serialized = stableJson(payload);
     const contentHash = await digestHex(serialized);
     const dependencyHash = await digestHex(stableJson({ version: "historical-backfill-v1", kind, key, contentHash }));
-    nodes.push({ kind, key, dependencyHash, contentHash, payload,
-      objectKey: `release-nodes/schema=1/kind=${kind}/prefix=${contentHash.slice(0, 2)}/${contentHash}.json`,
-      bytes: new TextEncoder().encode(serialized) });
+    const objectKey = `release-nodes/schema=1/kind=${kind}/prefix=${contentHash.slice(0, 2)}/${contentHash}.json`;
+    const bytes = new TextEncoder().encode(serialized);
+    if (!await context.env.ARCHIVE.head(objectKey)) await context.env.ARCHIVE.put(objectKey, bytes, {
+      httpMetadata: { contentType: "application/json; charset=utf-8" }, customMetadata: { sha256: contentHash, schema: "release-node-v1", kind },
+    });
+    const stored = await context.env.ARCHIVE.head(objectKey);
+    if (!stored || stored.size !== bytes.byteLength || stored.customMetadata?.sha256 !== contentHash) throw new Error(`historical release node failed verification: ${kind}/${key}`);
+    nodes.push({ kind, key, dependencyHash, contentHash, objectKey, byteLength: bytes.byteLength,
+      ...(keepHotPayloads ? { payloadText: serialized } : {}) });
   };
-  const historicalRecipes: Array<Record<string, unknown>> = [];
-  for (const row of costs.results) {
-    let detail = JSON.parse(String(row.detail_json)) as Record<string, unknown>;
-    if (detail.archived === true && row.detail_object_key) {
-      const object = await context.env.EVIDENCE.get(String(row.detail_object_key));
-      if (object) detail = await object.json<Record<string, unknown>>();
-    }
-    historicalRecipes.push({
+  const historicalRecipes = costs.results.map((row) => ({
       recipeSlug: row.recipe_slug, status: row.status, batchCostMinor: row.batch_cost_minor,
       servingCostMinor: row.serving_cost_minor, servings: row.servings,
-      missingIngredients: JSON.parse(String(row.missing_ingredients_json)), detail,
-    });
-  }
-  const historicalPayloads: Record<string, unknown> = {};
+      missingIngredients: JSON.parse(String(row.missing_ingredients_json)),
+    }));
+  await addNode("cells", "all", cells.results);
+  await addNode("recipes", "summaries", historicalRecipes);
+  await addNode("ranking", "top5", top5.results);
+  await addNode("rotation", "free", rotation.results);
+  let payloadCount = 0;
   for (const row of payloadRows.results) {
     const payload = row.object_key ? await context.env.EVIDENCE.get(row.object_key).then((object) => object?.json()) : JSON.parse(row.payload_json);
-    if (payload !== undefined) historicalPayloads[row.kind] = payload;
+    if (payload !== undefined) {
+      await addNode("payload", row.kind, payload);
+      payloadCount += 1;
+    }
   }
-  if (Object.keys(historicalPayloads).length === 0) {
+  if (payloadCount === 0) {
     // A prior projection compactor may have removed D1 payload pointers before
     // the object-graph cutover. The content-addressed R2 payloads remain and
     // are sufficient to recover the public historical release snapshot.
@@ -2681,31 +2684,38 @@ app.post("/internal/storage/backfill-release/:id", async (context) => {
         const match = suffix.match(/^([^/]+)-[a-f0-9]{64}\.json$/);
         if (!match) continue;
         const payload = await context.env.EVIDENCE.get(object.key).then((value) => value?.json());
-        if (payload !== undefined) historicalPayloads[match[1]!] = payload;
+        if (payload !== undefined) {
+          await addNode("payload", match[1]!, payload);
+          payloadCount += 1;
+        }
       }
       cursor = listed.truncated ? listed.cursor : undefined;
     } while (cursor);
   }
-  // Existing releases predate the DAG. Preserve each as one content-addressed
-  // snapshot node so the cutover is bounded to two R2 operations per release.
-  // Every newly-built release is granular and copy-on-write.
-  await addNode("payload", "historical-snapshot", {
-    version: 1,
-    releaseId,
-    cells: cells.results,
-    recipes: historicalRecipes,
-    payloads: historicalPayloads,
-    top5: top5.results,
-    freeRotation: rotation.results,
-  });
+  // Stream detailed recipe calculations in bounded chunks. Keeping the bytes
+  // out of the manifest builder prevents historical cutover memory from
+  // growing with the recipe catalog.
+  const detailChunkSize = 20;
+  for (let offset = 0; ; offset += detailChunkSize) {
+    const detailRows = await context.env.DB.prepare(
+      `SELECT cost.recipe_slug, cost.detail_json, detail.object_key AS detail_object_key
+         FROM release_recipe_costs cost LEFT JOIN recipe_cost_detail_objects detail
+           ON detail.release_id = cost.release_id AND detail.recipe_slug = cost.recipe_slug
+        WHERE cost.release_id = ?1 ORDER BY cost.recipe_slug LIMIT ?2 OFFSET ?3`,
+    ).bind(releaseId, detailChunkSize, offset).all<{ recipe_slug: string; detail_json: string; detail_object_key: string | null }>();
+    if (detailRows.results.length === 0) break;
+    const details = await Promise.all(detailRows.results.map(async (row) => {
+      let detail = JSON.parse(row.detail_json) as Record<string, unknown>;
+      if (detail.archived === true && row.detail_object_key) {
+        const object = await context.env.EVIDENCE.get(row.detail_object_key);
+        if (object) detail = await object.json<Record<string, unknown>>();
+      }
+      return { recipeSlug: row.recipe_slug, detail };
+    }));
+    await addNode("recipe-details", String(offset).padStart(6, "0"), details);
+    if (detailRows.results.length < detailChunkSize) break;
+  }
   nodes.sort((left, right) => left.kind.localeCompare(right.kind) || left.key.localeCompare(right.key));
-  for (let offset = 0; offset < nodes.length; offset += 25) await Promise.all(nodes.slice(offset, offset + 25).map(async (node) => {
-    if (!await context.env.ARCHIVE.head(node.objectKey)) await context.env.ARCHIVE.put(node.objectKey, node.bytes, {
-      httpMetadata: { contentType: "application/json; charset=utf-8" }, customMetadata: { sha256: node.contentHash, schema: "release-node-v1", kind: node.kind },
-    });
-    const stored = await context.env.ARCHIVE.head(node.objectKey);
-    if (!stored || stored.size !== node.bytes.byteLength || stored.customMetadata?.sha256 !== node.contentHash) throw new Error(`historical release node failed verification: ${node.kind}/${node.key}`);
-  }));
   const dependencyHash = await digestHex(stableJson(nodes.map((node) => [node.kind, node.key, node.dependencyHash])));
   const manifest = { version: 1, releaseId, parentReleaseId: parent?.id ?? null, inputHash: release.input_hash, dependencyHash,
     nodes: nodes.map((node) => ({ kind: node.kind, key: node.key, dependencyHash: node.dependencyHash, contentHash: node.contentHash })) };
@@ -2720,7 +2730,7 @@ app.post("/internal/storage/backfill-release/:id", async (context) => {
     `INSERT OR IGNORE INTO object_store_objects
        (content_hash, object_key, object_kind, format, byte_length, schema_version, verified_at)
      VALUES (?1, ?2, 'release-node', 'json', ?3, 1, CURRENT_TIMESTAMP)`,
-  ).bind(node.contentHash, node.objectKey, node.bytes.byteLength)]);
+  ).bind(node.contentHash, node.objectKey, node.byteLength)]);
   statements.push(context.env.DB.prepare(
     `INSERT OR IGNORE INTO object_store_objects
        (content_hash, object_key, object_kind, format, byte_length, row_count, schema_version, verified_at)
@@ -2736,7 +2746,7 @@ app.post("/internal/storage/backfill-release/:id", async (context) => {
        (release_id, node_kind, node_key, dependency_hash, content_hash, payload_json)
      VALUES (?1, ?2, ?3, ?4, ?5, ?6)`,
   ).bind(releaseId, node.kind, node.key, node.dependencyHash, node.contentHash,
-    new TextDecoder().decode(node.bytes)));
+    node.payloadText ?? "{}"));
   for (let offset = 0; offset < statements.length; offset += 80) await context.env.DB.batch(statements.slice(offset, offset + 80));
   return context.json({ ok: true, releaseId, rootHash, objectKey, nodes: nodes.length, current: current?.release_id === releaseId, idempotent: false });
 });
