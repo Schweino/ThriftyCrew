@@ -34,10 +34,13 @@ $nodePath = if ($config.nodePath) { [string]$config.nodePath } elseif ($runtimeP
 if (-not $nodePath -or -not (Test-Path -LiteralPath $nodePath)) { throw 'pinned capture controller node.exe is missing' }
 $restartDelaySeconds = 2
 while ($true) {
+  $controllerStartedAt = Get-Date
   Push-Location ([string]$config.platformRoot)
   try { & $nodePath '--import' 'tsx' 'apps/operator/src/capture-controller.ts' }
   finally { Pop-Location }
   $exitCode = $LASTEXITCODE
+  $runtimeSeconds = [Math]::Max(0, ((Get-Date) - $controllerStartedAt).TotalSeconds)
+  if ($runtimeSeconds -ge 300) { $restartDelaySeconds = 2 }
   $supervisorLog = Join-Path $clientDir 'logs\capture-controller-supervisor.log'
   New-Item -ItemType Directory -Path (Split-Path -Parent $supervisorLog) -Force | Out-Null
   if ((Test-Path -LiteralPath $supervisorLog) -and (Get-Item -LiteralPath $supervisorLog).Length -gt 1MB) {
@@ -47,10 +50,11 @@ while ($true) {
     at = (Get-Date).ToUniversalTime().ToString('o')
     event = 'controller-exit'
     exitCode = $exitCode
+    runtimeSeconds = [Math]::Round($runtimeSeconds, 1)
     restartDelaySeconds = $restartDelaySeconds
   } | ConvertTo-Json -Compress))
   Start-Sleep -Seconds $restartDelaySeconds
-  $restartDelaySeconds = [Math]::Min(60, $restartDelaySeconds * 2)
+  if ($runtimeSeconds -lt 300) { $restartDelaySeconds = [Math]::Min(60, $restartDelaySeconds * 2) }
 }
 } finally {
   if ($hasMutex) { $mutex.ReleaseMutex() }
