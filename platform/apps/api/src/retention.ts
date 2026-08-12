@@ -10,7 +10,7 @@ export interface RetentionProtectionSummary {
   byReason: Record<string, number>;
 }
 
-const protectionCte = `
+const retentionCtes = `
 WITH latest_promoted AS (
   SELECT id FROM (
     SELECT batch.id,
@@ -19,67 +19,55 @@ WITH latest_promoted AS (
       FROM capture_batches batch
      WHERE batch.status = 'promoted'
   ) WHERE ordinal = 1
-),
-protected_observations(observation_id, reason, reference_id) AS (
-  SELECT cell.observation_id, 'current-release-cell', current.release_id
-    FROM current_releases current
-    JOIN release_cells cell ON cell.release_id = current.release_id
-   WHERE cell.observation_id IS NOT NULL
-  UNION
-  SELECT member.observation_id, 'active-release-input', input.release_id
-    FROM release_input_batches input
-    JOIN releases release ON release.id = input.release_id
-    JOIN capture_observation_memberships member ON member.batch_id = input.batch_id
-   WHERE release.state IN ('draft', 'validating', 'published')
-  UNION
-  SELECT member.observation_id, 'latest-promoted-batch', member.batch_id
-    FROM capture_observation_memberships member
-    JOIN latest_promoted latest ON latest.id = member.batch_id
-  UNION
-  SELECT member.observation_id, 'in-flight-batch', member.batch_id
-    FROM capture_observation_memberships member
-    JOIN capture_batches batch ON batch.id = member.batch_id
-   WHERE batch.status IN ('open', 'sealed', 'validated')
-  UNION
-  SELECT cell.observation_id, 'accuracy-draw', cell.draw_id
-    FROM accuracy_draw_cells cell
-    JOIN accuracy_draws draw ON draw.id = cell.draw_id
-  UNION
-  SELECT sample.observation_id, 'accuracy-risk-sample', sample.draw_id
-    FROM accuracy_risk_samples sample
-    JOIN accuracy_draws draw ON draw.id = sample.draw_id
-   WHERE sample.observation_id IS NOT NULL
-  UNION
-  SELECT member.observation_id, 'unresolved-triage-batch', batch.id
+), unresolved_triage_batches AS (
+  SELECT DISTINCT batch.id
     FROM triage_items triage
     JOIN json_tree(triage.evidence_json) evidence ON evidence.type = 'text'
     JOIN capture_batches batch ON batch.id = CAST(evidence.value AS TEXT)
-    JOIN capture_observation_memberships member ON member.batch_id = batch.id
    WHERE triage.status <> 'resolved'
 )`;
 
+const protectionPredicates = {
+  "current-release-cell": `EXISTS (
+    SELECT 1 FROM current_releases current JOIN release_cells cell ON cell.release_id = current.release_id
+     WHERE cell.observation_id = observation.id)`,
+  "active-release-input": `EXISTS (
+    SELECT 1 FROM capture_observation_memberships member
+    JOIN release_input_batches input ON input.batch_id = member.batch_id
+    JOIN releases release ON release.id = input.release_id
+    WHERE member.observation_id = observation.id AND release.state IN ('draft', 'validating', 'published'))`,
+  "latest-promoted-batch": `EXISTS (
+    SELECT 1 FROM capture_observation_memberships member JOIN latest_promoted latest ON latest.id = member.batch_id
+     WHERE member.observation_id = observation.id)`,
+  "in-flight-batch": `EXISTS (
+    SELECT 1 FROM capture_observation_memberships member JOIN capture_batches batch ON batch.id = member.batch_id
+     WHERE member.observation_id = observation.id AND batch.status IN ('open', 'sealed', 'validated'))`,
+  "accuracy-draw": "EXISTS (SELECT 1 FROM accuracy_draw_cells cell WHERE cell.observation_id = observation.id)",
+  "accuracy-risk-sample": "EXISTS (SELECT 1 FROM accuracy_risk_samples sample WHERE sample.observation_id = observation.id)",
+  "unresolved-triage-batch": `EXISTS (
+    SELECT 1 FROM capture_observation_memberships member JOIN unresolved_triage_batches triage ON triage.id = member.batch_id
+     WHERE member.observation_id = observation.id)`,
+} as const;
+
+const protectedPredicate = Object.values(protectionPredicates).map((predicate) => `(${predicate})`).join(" OR ");
+
 export async function readRetentionProtectionSummary(db: D1Database, cutoffAt: string): Promise<RetentionProtectionSummary> {
-  const result = await db.prepare(`${protectionCte}
-    SELECT reason, COUNT(DISTINCT observation_id) AS protected_count
-      FROM protected_observations
-     WHERE observation_id IN (SELECT id FROM observations WHERE captured_at < ?1)
-     GROUP BY reason
-    UNION ALL
-    SELECT '__total__', COUNT(DISTINCT observation_id)
-      FROM protected_observations
-     WHERE observation_id IN (SELECT id FROM observations WHERE captured_at < ?1)
-     ORDER BY reason`).bind(cutoffAt).all<{ reason: string; protected_count: number }>();
-  const total = result.results.find((row) => row.reason === "__total__")?.protected_count ?? 0;
-  return { protectedCount: total, byReason: Object.fromEntries(result.results.filter((row) => row.reason !== "__total__")
-    .map((row) => [row.reason, row.protected_count])) };
+  const reasonEntries = Object.entries(protectionPredicates);
+  const columns = [
+    ...reasonEntries.map(([reason, predicate], index) => `(SELECT COUNT(*) FROM observations observation WHERE observation.captured_at < ?1 AND ${predicate}) AS reason_${index}`),
+    `(SELECT COUNT(*) FROM observations observation WHERE observation.captured_at < ?1 AND (${protectedPredicate})) AS protected_total`,
+  ];
+  const row = await db.prepare(`${retentionCtes} SELECT ${columns.join(", ")}`).bind(cutoffAt).first<Record<string, number>>();
+  const byReason = Object.fromEntries(reasonEntries.map(([reason], index) => [reason, row?.[`reason_${index}`] ?? 0]));
+  return { protectedCount: row?.protected_total ?? 0, byReason };
 }
 
 export async function readRetentionCandidates(db: D1Database, cutoffAt: string, limit: number): Promise<string[]> {
-  const result = await db.prepare(`${protectionCte}
+  const result = await db.prepare(`${retentionCtes}
     SELECT observation.id
       FROM observations observation
      WHERE observation.captured_at < ?1
-       AND NOT EXISTS (SELECT 1 FROM protected_observations protected WHERE protected.observation_id = observation.id)
+       AND NOT (${protectedPredicate})
        AND NOT EXISTS (SELECT 1 FROM archive_manifest_observations archived WHERE archived.observation_id = observation.id)
      ORDER BY observation.captured_at, observation.id
      LIMIT ?2`).bind(cutoffAt, limit).all<{ id: string }>();
@@ -97,12 +85,10 @@ export function summarizeRetentionProtections(rows: readonly RetentionProtection
 
 export async function assertRetentionCandidatesStillUnprotected(env: WorkerEnv, cutoffAt: string, observationIds: readonly string[]): Promise<void> {
   if (observationIds.length === 0) return;
-  const gained = await env.DB.prepare(`${protectionCte}
-    SELECT protected.observation_id, protected.reason, protected.reference_id
-      FROM protected_observations protected
-      JOIN json_each(?2) candidate ON CAST(candidate.value AS TEXT) = protected.observation_id
-     WHERE protected.observation_id IN (SELECT id FROM observations WHERE captured_at < ?1)
-     ORDER BY protected.observation_id, protected.reason LIMIT 10`).bind(cutoffAt, JSON.stringify(observationIds))
-    .all<{ observation_id: string; reason: string; reference_id: string }>();
-  if (gained.results.length > 0) throw new Error(`archive candidates gained protected dependencies: ${gained.results.map((row) => `${row.observation_id} (${row.reason})`).join(", ")}`);
+  const gained = await env.DB.prepare(`${retentionCtes}
+    SELECT observation.id
+      FROM observations observation JOIN json_each(?2) candidate ON CAST(candidate.value AS TEXT) = observation.id
+     WHERE observation.captured_at < ?1 AND (${protectedPredicate})
+     ORDER BY observation.id LIMIT 10`).bind(cutoffAt, JSON.stringify(observationIds)).all<{ id: string }>();
+  if (gained.results.length > 0) throw new Error(`archive candidates gained protected dependencies: ${gained.results.map((row) => row.id).join(", ")}`);
 }
