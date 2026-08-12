@@ -2,7 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import type { RecipeCost } from "@thriftycrew/contracts";
 import { digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
-import { buildNativeCells, candidatePriceForUnit, convertUnitPriceMicros, selectWinner, type NativeEngineSnapshot, type NativeReleaseCell } from "@thriftycrew/engine";
+import { buildNativeCells, candidatePriceForUnit, convertUnitPriceMicros, selectWinner, sourceNativeSizeConflict, type NativeEngineSnapshot, type NativeReleaseCell } from "@thriftycrew/engine";
 
 interface IngredientDefinition {
   item: string;
@@ -283,6 +283,7 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
           && (!wrong.store || normalizeName(wrong.store) === normalizeName(storeName))
           && ((wrong.product_id && wrong.product_id === candidate.raw.external_key)
             || (wrong.names ?? []).some((name) => normalizeName(name) === normalizeName(candidate.raw.name)))),
+        sourceIdentityConflict: sourceNativeSizeConflict(candidate.raw.name, candidate.raw.size_text),
       })), generatedAt).winner;
       if (!selected) continue;
       const raw = rawByObservation.get(selected.observationId);

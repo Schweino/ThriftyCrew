@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { buildNativeCells, buildNativeParityReport, candidatePriceForUnit, convertUnitPriceMicros, evaluateAisleEvidence, evaluateAisleFamilyEvidence, guardResult, matchProductName, selectWinner } from "./index";
+import { buildNativeCells, buildNativeParityReport, candidatePriceForUnit, convertUnitPriceMicros, evaluateAisleEvidence, evaluateAisleFamilyEvidence, guardResult, matchProductName, selectWinner, sourceNativeSizeConflict } from "./index";
 
 describe("matching", () => {
   it("ports the authored .NET inline case-insensitive prefix", () => {
@@ -92,6 +92,17 @@ describe("matching", () => {
 });
 
 describe("winner selection", () => {
+  it("rejects a captured package that contradicts an exact source-native title suffix", () => {
+    expect(sourceNativeSizeConflict("Happy Farms String Cheese 10 OZ", "12 oz")).toBe(true);
+    expect(sourceNativeSizeConflict("Happy Farms String Cheese 10 OZ", "10 oz")).toBe(false);
+    expect(sourceNativeSizeConflict("Dual Label 12 oz (340 g)", "12 oz")).toBe(false);
+    const result = selectWinner([
+      { observationId: "conflict", commodityId: "string-cheese", storeLocationId: "aldi", perUnitMicros: 1, capturedAt: "2026-08-12T11:00:00.000Z", batchCapturedTo: "2026-08-12T11:00:00.000Z", batchCoverageMode: "full", sourceIdentityConflict: true },
+      { observationId: "sound", commodityId: "string-cheese", storeLocationId: "aldi", perUnitMicros: 2, capturedAt: "2026-08-12T11:00:00.000Z", batchCapturedTo: "2026-08-12T11:00:00.000Z", batchCoverageMode: "full" },
+    ], "2026-08-12T12:00:00.000Z");
+    expect(result.winner?.observationId).toBe("sound");
+    expect(result.rejected).toContainEqual({ observationId: "conflict", reason: "source-name-size-conflict" });
+  });
   it("converts captured unit prices to the commodity basis", () => {
     expect(convertUnitPriceMicros(250_000, "oz", "lb")).toBe(4_000_000);
     expect(convertUnitPriceMicros(1_000_000, "each", "dozen")).toBe(12_000_000);

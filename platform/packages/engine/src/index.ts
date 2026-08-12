@@ -118,6 +118,7 @@ export interface WinnerCandidate {
   outOfBand?: boolean;
   basisSource?: string;
   sourceBasisUnit?: string;
+  sourceIdentityConflict?: boolean;
 }
 
 const UNIT_TO_BASE: Readonly<Record<string, { family: "mass" | "volume" | "count"; unitsPerBase: number }>> = {
@@ -158,6 +159,10 @@ export function selectWinner(candidates: readonly WinnerCandidate[], nowIso: str
     }
     if (candidate.outOfBand) {
       rejected.push({ observationId: candidate.observationId, reason: "outside-authored-price-band" });
+      return false;
+    }
+    if (candidate.sourceIdentityConflict) {
+      rejected.push({ observationId: candidate.observationId, reason: "source-name-size-conflict" });
       return false;
     }
     if (candidate.validTo && candidate.validTo < nowIso) {
@@ -243,6 +248,25 @@ export interface NativeReleaseCell {
 
 interface CandidateBasisOption { unit: string; perUnitMicros: number; source: string }
 
+interface ExactPackageMeasure { quantity: number; unit: "fl_oz" | "oz" | "lb" | "count" }
+
+function exactPackageMeasure(text: string, terminalName: boolean): ExactPackageMeasure | null {
+  const boundary = terminalName ? "(?:^|\\s|[,;(])" : "^";
+  const expression = new RegExp(`${boundary}([0-9]+(?:\\.[0-9]+)?)\\s*(fl\\.?\\s*oz\\.?|oz\\.?|lb\\.?|ct|count)\\s*\\)?\\s*$`, "i");
+  const match = text.trim().match(expression);
+  if (!match) return null;
+  const rawUnit = match[2]!.toLowerCase().replace(/\./g, "").replace(/\s+/g, " ");
+  const unit = rawUnit === "fl oz" ? "fl_oz" : rawUnit === "oz" ? "oz" : rawUnit === "lb" ? "lb" : "count";
+  return { quantity: Number(match[1]), unit };
+}
+
+export function sourceNativeSizeConflict(name: string | undefined, sizeText: string | null | undefined): boolean {
+  if (!name || !sizeText) return false;
+  const named = exactPackageMeasure(name, true);
+  const captured = exactPackageMeasure(sizeText, false);
+  return Boolean(named && captured && named.unit === captured.unit && Math.abs(named.quantity - captured.quantity) > 1e-9);
+}
+
 export function candidateBasisOptions(candidate: {
   normalized_basis_unit: string;
   per_unit_micros: number;
@@ -325,6 +349,7 @@ export function buildNativeCells(snapshot: NativeEngineSnapshot): NativeReleaseC
         ...(candidate.max_age_days !== undefined ? { maxAgeDays: candidate.max_age_days } : {}),
         outOfBand: (commodity.band_min_micros != null && converted.perUnitMicros < commodity.band_min_micros)
           || (commodity.band_max_micros != null && converted.perUnitMicros > commodity.band_max_micros),
+        sourceIdentityConflict: sourceNativeSizeConflict(candidate.name, candidate.size_text),
         basisSource: converted.source,
         sourceBasisUnit: converted.unit,
       }]; }), snapshot.observedAt);
