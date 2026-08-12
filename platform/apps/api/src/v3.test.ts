@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { captureBatchAbandonSchema, entitlementVerificationRecordSchema, evidenceGateRecordSchema, restoreDrillCleanupSchema, restoreDrillRecordSchema } from "@thriftycrew/contracts";
+import { accuracyVerdictsSchema, captureBatchAbandonSchema, entitlementVerificationRecordSchema, evidenceGateRecordSchema, restoreDrillCleanupSchema, restoreDrillRecordSchema } from "@thriftycrew/contracts";
 import { createAccuracyDraw, readAccuracyDraw, wilsonInterval } from "./accuracy";
 import { mayShowFreeBadge } from "./ghost-reconciliation";
 import { releaseCaptureEvictionSql, storeCoverageFloor } from "./release-guards";
@@ -19,6 +19,15 @@ describe("capture role/source authorization", () => {
 });
 
 describe("out-of-band accuracy reporting", () => {
+  it("requires closed, auditable reviewer evidence instead of arbitrary output keys", () => {
+    const verdict = {
+      drawId: "accuracy_one", riskVerdicts: [], verdicts: [{ ordinal: 0, verdict: "right", verifiedAt: "2026-08-12T06:15:00.000Z",
+        evidence: { sourceUrl: "https://example.test/product", accessedAt: "2026-08-12T06:14:00.000Z", summary: "The first-party page agrees with the captured offer.", location: "Omaha", priceMode: "pickup", packageText: "1 gal", priceText: "$3.49", availabilityText: "In stock", promotionText: "No qualification" } }],
+    };
+    expect(accuracyVerdictsSchema.safeParse(verdict).success).toBe(true);
+    expect(accuracyVerdictsSchema.safeParse({ ...verdict, verdicts: [{ ...verdict.verdicts[0], evidence: { arbitrary: true } }] }).success).toBe(false);
+  });
+
   it("computes the standard 95% Wilson interval without treating cannot-tell as a verdict", () => {
     const interval = wilsonInterval(90, 100);
     expect(interval?.low).toBeCloseTo(0.8256, 3);

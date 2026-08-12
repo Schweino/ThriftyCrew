@@ -1131,21 +1131,49 @@ export const accuracyDrawCreateSchema = z.object({
   dueAt: isoDateTime,
 });
 
+// The accuracy agent uses OpenAI strict structured outputs. Keep evidence
+// explicit and closed so the model cannot emit an unauditable arbitrary bag
+// and the SDK can compile this contract to strict JSON Schema.
+const accuracyVerdictEvidenceSchema = z.object({
+  // Avoid JSON Schema `format: uri`; OpenAI strict structured outputs reject
+  // that format. The evidence URL remains bounded and is subsequently stored
+  // only as reviewer evidence, never dereferenced by the control plane.
+  sourceUrl: z.string().trim().min(1).max(3000).nullable(),
+  accessedAt: z.string().trim().min(20).max(40).nullable(),
+  summary: z.string().trim().min(1).max(3000),
+  location: z.string().trim().min(1).max(500).nullable(),
+  priceMode: z.string().trim().min(1).max(200).nullable(),
+  packageText: z.string().trim().min(1).max(500).nullable(),
+  priceText: z.string().trim().min(1).max(500).nullable(),
+  availabilityText: z.string().trim().min(1).max(500).nullable(),
+  promotionText: z.string().trim().min(1).max(1000).nullable(),
+}).strict();
+
 export const accuracyVerdictsSchema = z.object({
   drawId: nonEmptyId,
   verdicts: z.array(z.object({
     ordinal: z.number().int().nonnegative(),
     verdict: z.enum(["right", "wrong", "cannot_tell"]),
-    verifiedAt: isoDateTime,
-    evidence: z.record(z.string(), z.unknown()).default({}),
+    verifiedAt: z.string().trim().min(20).max(40),
+    evidence: accuracyVerdictEvidenceSchema,
   })).max(500).default([]),
   riskVerdicts: z.array(z.object({
     ordinal: z.number().int().nonnegative(),
     verdict: z.enum(["right", "wrong", "cannot_tell"]),
-    verifiedAt: isoDateTime,
-    evidence: z.record(z.string(), z.unknown()).default({}),
+    verifiedAt: z.string().trim().min(20).max(40),
+    evidence: accuracyVerdictEvidenceSchema,
   })).max(500).default([]),
-}).refine((value) => value.verdicts.length + value.riskVerdicts.length > 0, { message: "at least one uniform or risk verdict is required" });
+}).superRefine((value, context) => {
+  if (value.verdicts.length + value.riskVerdicts.length === 0) {
+    context.addIssue({ code: "custom", message: "at least one uniform or risk verdict is required" });
+  }
+  [...value.verdicts, ...value.riskVerdicts].forEach((row, index) => {
+    if (!Number.isFinite(Date.parse(row.verifiedAt))) context.addIssue({ code: "custom", path: ["verifiedAt", index], message: "must be an ISO date-time" });
+    if (row.evidence.accessedAt !== null && !Number.isFinite(Date.parse(row.evidence.accessedAt))) {
+      context.addIssue({ code: "custom", path: ["evidence", index, "accessedAt"], message: "must be an ISO date-time" });
+    }
+  });
+});
 
 export const milestoneAccrualSchema = z.object({
   edgeProof: z.object({

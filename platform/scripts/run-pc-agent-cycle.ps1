@@ -158,7 +158,13 @@ function Invoke-AgentItem([string]$AgentId) {
       Invoke-LoggedCommand "$AgentId-authorize" { & $pnpmPath tc agent authorize $AgentId $claimFile 500000 $authorizationFile } | Out-Null
       $authorization = Get-Content -LiteralPath $authorizationFile -Raw | ConvertFrom-Json
       if (-not $authorization.allowed -or -not $authorization.modelId) { throw "$AgentId budget authorization was denied" }
-      $claim.item.input | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $inputFile -Encoding UTF8
+      # Windows PowerShell 5.1's `-Encoding UTF8` writes a BOM. Node's strict
+      # JSON.parse does not remove it, so agent inputs must be UTF-8 without BOM.
+      [IO.File]::WriteAllText(
+        $inputFile,
+        ($claim.item.input | ConvertTo-Json -Depth 30),
+        [Text.UTF8Encoding]::new($false)
+      )
       $env:TC_OUTPUT_ROOT = $outputRoot
       $env:TC_AGENT_INPUT_FILE = $inputFile
       $env:TC_AGENT_MODEL = [string]$authorization.modelId
@@ -177,7 +183,7 @@ function Invoke-AgentItem([string]$AgentId) {
       try {
         Set-PcRuntimeCredential $config $AgentId
         Push-Location $platformRoot
-        try { & $pnpmPath tc agent fail $claimFile ("local agent cycle failed: {0}" -f $_.Exception.Message) 2>&1 | ForEach-Object { Write-PcRuntimeLog $logFile ("$AgentId-fail: {0}" -f $_) } }
+        try { Invoke-LoggedCommand "$AgentId-fail" { & $pnpmPath tc agent fail $claimFile ("local agent cycle failed: {0}" -f $_.Exception.Message) } | Out-Null }
         finally { Pop-Location }
       } catch { Write-PcRuntimeLog $logFile ("$AgentId-fail ledger update failed: {0}" -f $_.Exception.Message) }
     }
@@ -226,7 +232,7 @@ try {
       Set-PcRuntimeCredential $config 'local-operator'
       $env:TC_GITHUB_JOB_STATUS = if ($failed) { 'failure' } else { 'success' }
       Push-Location $platformRoot
-      try { Invoke-LoggedCommand 'job-ledger-finish' { & $pnpmPath tc job finish $job } | Out-Null }
+      try { Invoke-LoggedCommand 'job-ledger-finish' { & $pnpmPath tc job finish $job $env:TC_GITHUB_JOB_STATUS } | Out-Null }
       finally { Pop-Location }
     } catch {
       $failed = $true

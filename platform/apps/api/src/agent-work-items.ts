@@ -186,7 +186,12 @@ export async function claimAgentWorkItem(db: D1Database, identity: MutationIdent
       WHERE agent_id = ?1 AND execution_config_hash = ?2
         AND state IN ('queued', 'retryable') AND available_at <= ?3
         AND attempt_count < max_attempts
-      ORDER BY CASE severity WHEN 'safety' THEN 0 WHEN 'operational' THEN 1 ELSE 2 END,
+      ORDER BY CASE WHEN agent_id = 'accuracy-headless' AND source_kind = 'accuracy-draw'
+                         AND EXISTS (SELECT 1 FROM accuracy_draws draw
+                                      WHERE draw.id = agent_work_items.source_ref
+                                        AND draw.protocol_version = 'winner-challenger-v1')
+                    THEN 0 ELSE 1 END,
+               CASE severity WHEN 'safety' THEN 0 WHEN 'operational' THEN 1 ELSE 2 END,
                created_at, id LIMIT 1`,
   ).bind(agent.id, agent.execution_config_hash, now.toISOString()).first<{ id: string }>();
   if (!candidate) return null;
