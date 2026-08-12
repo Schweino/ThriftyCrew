@@ -7,6 +7,7 @@ import {
   acquireControllerLane,
   acknowledgeCaptureChallenge,
   browserCaptureJournalDueState,
+  captureCoordinatorStatus,
   commitSessionChunk,
   completeSessionWorkUnits,
   heartbeatCaptureWork,
@@ -72,7 +73,7 @@ describe("unified persistent capture journal", () => {
     expect(first.work.unitKey).toBe("eggs");
     expect(heartbeatCaptureWork("executor-1", first.work.id, new Date(started.getTime() + 1_000), 60_000, {}, file)).toMatchObject({ renewed: true });
 
-    const body = new TextEncoder().encode(JSON.stringify({ version: 2, phase: "discovery", store: "aldi", terms: [{ query: "eggs" }], rows: [] }));
+    const body = new TextEncoder().encode(JSON.stringify({ version: 2, phase: "discovery", store: "aldi", terms: [{ query: "eggs", outcome: "success" }], rows: [] }));
     const entry = { id: "chunk-abc", file: "0000-chunk-abc.json", sha256: "a".repeat(64), createdAt: started.toISOString() };
     draft.chunks.push(entry);
     commitSessionChunk(directory, draft, entry, body, file);
@@ -86,6 +87,16 @@ describe("unified persistent capture journal", () => {
     const resumed = leaseCaptureWork("executor-2", "aldi", new Date(started.getTime() + 12_000), 60_000, file) as { acquired: boolean; work: { unitKey: string } };
     expect(resumed.acquired).toBe(true);
     expect(resumed.work.unitKey).toBe("milk");
+    const blockedBody = new TextEncoder().encode(JSON.stringify({ version: 2, phase: "discovery", store: "aldi", terms: [{ query: "milk", outcome: "blocked", reason: "wall" }], rows: [] }));
+    const blockedEntry = { id: "chunk-blocked", file: "0001-chunk-blocked.json", sha256: "b".repeat(64), createdAt: new Date(started.getTime() + 13_000).toISOString() };
+    draft.chunks.push(blockedEntry);
+    commitSessionChunk(directory, draft, blockedEntry, blockedBody, file);
+    expect((captureCoordinatorStatus(file) as { work: Array<{ unit_key?: string; unitKey?: string; status: string }> }).work)
+      .toEqual(expect.arrayContaining([expect.objectContaining({ status: "blocked" })]));
+    const secondChallenge = openCaptureChallenge("aldi", { reason: "wall again" }, new Date(started.getTime() + 14_000), file);
+    acknowledgeCaptureChallenge(secondChallenge.id, new Date(started.getTime() + 15_000), file);
+    resolveCaptureChallenge(secondChallenge.id, true, new Date(started.getTime() + 16_000), file);
+    expect(leaseCaptureWork("executor-3", "aldi", new Date(started.getTime() + 22_000), 60_000, file)).toMatchObject({ acquired: true });
     completeSessionWorkUnits(directory, "discovery", ["milk"], "chunk-def", file);
   });
 

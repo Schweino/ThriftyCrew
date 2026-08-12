@@ -227,13 +227,19 @@ export function commitSessionChunk(directory, draft, entry, body, file) {
       content_type=excluded.content_type, body=excluded.body, created_at=excluded.created_at`)
       .run(resolved, entry.id, entry.file, entry.sha256, body, entry.createdAt);
     const parsed = JSON.parse(Buffer.from(body).toString("utf8").replace(/^\uFEFF/, ""));
-    const unitKeys = parsed.phase === "discovery"
-      ? (parsed.terms ?? []).map((term) => term.query)
-      : (parsed.verifications ?? []).map((verification) => verification.rowKey);
-    const complete = db.prepare(`UPDATE capture_work_units SET status = 'completed', result_chunk_id = ?,
-      lease_owner = NULL, lease_expires_at = NULL, last_error = NULL, updated_at = ?
+    const outcomes = parsed.phase === "discovery"
+      ? (parsed.terms ?? []).map((term) => ({ key: term.query, outcome: term.outcome, reason: term.reason }))
+      : (parsed.verifications ?? []).map((verification) => ({ key: verification.rowKey, outcome: verification.outcome, reason: verification.reason }));
+    const transition = db.prepare(`UPDATE capture_work_units SET status = ?, result_chunk_id = ?, available_at = ?,
+      lease_owner = NULL, lease_expires_at = NULL, last_error = ?, updated_at = ?
       WHERE session_directory = ? AND phase = ? AND unit_key = ?`);
-    for (const unitKey of unitKeys) complete.run(entry.id, now, resolved, parsed.phase, unitKey);
+    for (const item of outcomes) {
+      const terminal = parsed.phase === "discovery" ? ["success", "empty"].includes(item.outcome) : item.outcome === "observed";
+      const blocked = item.outcome === "blocked";
+      transition.run(terminal ? "completed" : blocked ? "blocked" : "queued", entry.id,
+        terminal || blocked ? Date.now() : Date.now() + 60_000, terminal ? null : String(item.reason ?? `${item.outcome} requires retry`).slice(0, 2000),
+        now, resolved, parsed.phase, item.key);
+    }
     db.prepare(`DELETE FROM capture_executors WHERE current_unit_id IN
       (SELECT id FROM capture_work_units WHERE session_directory = ? AND phase = ? AND result_chunk_id = ?)`)
       .run(resolved, parsed.phase, entry.id);
