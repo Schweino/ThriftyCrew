@@ -1,4 +1,5 @@
 import { digestHex, stableJson } from "@thriftycrew/domain";
+import recipeCommodityAliases from "../../../config/recipe-commodity-aliases.json";
 import type { WorkerEnv } from "./env";
 
 type PayloadRow = { payload_json: string; object_key: string | null };
@@ -21,6 +22,22 @@ function array(value: unknown): Array<Record<string, unknown>> {
   return Array.isArray(value) ? value.filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === "object" && !Array.isArray(item)) : [];
 }
 
+export function recipeFeedIngredients(
+  allIngredients: Record<string, unknown>,
+  commodityIds: string[],
+  aliases: Record<string, string> = recipeCommodityAliases,
+): Record<string, unknown> {
+  const ingredients: Record<string, unknown> = Object.fromEntries(
+    commodityIds.filter((id) => allIngredients[id] !== undefined).map((id) => [id, allIngredients[id]]),
+  );
+  for (const [alias, target] of Object.entries(aliases)) {
+    if (!commodityIds.includes(target) || ingredients[target] === undefined || ingredients[alias] !== undefined) continue;
+    const targetIngredient = object(ingredients[target]);
+    ingredients[alias] = { ...targetIngredient, alias_of: target };
+  }
+  return ingredients;
+}
+
 export async function buildReleaseRecipeBundles(env: WorkerEnv, releaseId: string): Promise<{ count: number; bytes: number }> {
   const [recipesPayload, feedPayload, costs] = await Promise.all([
     releasePayload(env, releaseId, "recipes"),
@@ -39,7 +56,7 @@ export async function buildReleaseRecipeBundles(env: WorkerEnv, releaseId: strin
     const detail = object(JSON.parse(cost.detail_json));
     const commodityIds = [...new Set(array(detail.ingredients).map((ingredient) => ingredient.commodityId)
       .filter((value): value is string => typeof value === "string" && value.length > 0))].sort();
-    const ingredients = Object.fromEntries(commodityIds.filter((id) => allIngredients[id] !== undefined).map((id) => [id, allIngredients[id]]));
+    const ingredients = recipeFeedIngredients(allIngredients, commodityIds);
     const feed = {
       version: feedPayload.version,
       release_id: feedPayload.release_id,

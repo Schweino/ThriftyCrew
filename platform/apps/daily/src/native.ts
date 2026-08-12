@@ -591,7 +591,7 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
     categories,
     commodities: boardCommodities,
   };
-  const feedIngredients = Object.fromEntries(boardCommodities.filter((commodity) => commodity.cheapest).map((commodity) => [commodity.id, {
+  const feedIngredients: Record<string, Record<string, unknown>> = Object.fromEntries(boardCommodities.filter((commodity) => commodity.cheapest).map((commodity) => [commodity.id, {
     unit: commodity.unit === "fl_oz" ? "floz" : commodity.unit,
     cheapest: commodity.cheapest!.perUnitMicros! / 1_000_000,
     store: commodity.cheapest!.store,
@@ -600,6 +600,11 @@ export async function buildNativeRelease(incomeRoot: string, snapshot: NativeEng
     n: commodity.stores.length,
     stores: Object.fromEntries(commodity.stores.map((store) => [store.store, store.perUnitMicros! / 1_000_000])),
   }]));
+  for (const [alias, target] of Object.entries(recipeAliases)) {
+    const ingredient = feedIngredients[target];
+    if (!ingredient || feedIngredients[alias]) continue;
+    feedIngredients[alias] = { ...ingredient, alias_of: target };
+  }
   const feedRecipes = Object.fromEntries(recipePayload.filter((recipe) => recipe.status === "complete").map((recipe) => [String(recipe.slug), {
     name: recipe.name,
     servings: recipe.servings,
