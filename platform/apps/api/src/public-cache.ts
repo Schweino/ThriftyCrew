@@ -44,7 +44,11 @@ export async function cachedPublicJson(request: Request, load: () => Promise<Pub
   if (cache) {
     try {
       const hit = await cache.match(key);
-      if (hit) return notModified(request, hit);
+      if (hit?.ok) return notModified(request, hit);
+      // A pre-migration worker could leave an error response under a public
+      // URL. Error bodies are never authoritative release data: evict and
+      // reload rather than letting one stale failure poison the key indefinitely.
+      if (hit) await cache.delete(key);
     } catch (error) {
       console.warn("public edge cache read failed", { url: request.url, error: error instanceof Error ? error.message : String(error) });
     }
