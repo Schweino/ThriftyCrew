@@ -39,6 +39,9 @@ export async function recordBrowserLaneResult(store, outcome, latencyMs, now = n
   };
   writeLaneState(store, next, environment);
   await controllerRequest(`/v1/lanes/${encodeURIComponent(store)}/result`, { method: "POST", body: JSON.stringify(next) }, environment);
+  if (outcome === "blocked") await controllerRequest("/v1/challenges/open", { method: "POST", body: JSON.stringify({
+    store, detail: { reason: `${store} browser adapter detected a retailer human-verification wall`, latencyMs, observedAt: now.toISOString() },
+  }) }, environment);
   return next;
 }
 
@@ -48,8 +51,19 @@ export async function withBrowserStoreLane(store, operation, environment = proce
   const controllerOwned = controller?.acquired === true;
   if (controller?.controllerReachable && !controllerOwned) throw new Error(`${store} browser lane is unavailable: ${controller.reason ?? "controller rejected the lease"}`);
   if (!controller && !acquireLaneLease(store, owner, new Date(), 15 * 60_000, environment)) throw new Error(`${store} browser lane already has an active capture`);
+  const heartbeat = controllerOwned ? setInterval(() => {
+    void controllerRequest(`/v1/lanes/${encodeURIComponent(store)}/acquire`, { method: "POST", body: JSON.stringify({ owner, ttlMs: 15 * 60_000 }) }, environment);
+  }, 60_000) : null;
+  heartbeat?.unref?.();
   try { return await operation(await browserLanePolicy(store, new Date(), environment)); }
+  catch (error) {
+    if (/challenge|block page|human.verification|captcha/i.test(String(error?.message ?? error))) {
+      await controllerRequest("/v1/challenges/open", { method: "POST", body: JSON.stringify({ store, detail: { reason: String(error?.message ?? error) } }) }, environment);
+    }
+    throw error;
+  }
   finally {
+    if (heartbeat) clearInterval(heartbeat);
     if (controllerOwned) await controllerRequest(`/v1/lanes/${encodeURIComponent(store)}/release`, { method: "POST", body: JSON.stringify({ owner }) }, environment);
     else releaseLaneLease(store, owner, environment);
   }

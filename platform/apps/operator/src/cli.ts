@@ -15,7 +15,8 @@ import { browserCaptureCycleStatus, captureQueueStatus, compactPromotedCaptureQu
 import { drainBrowserCaptureQueue } from "./capture-drainer";
 import { checkpointCaptureJournal, restoreCaptureJournal } from "./capture-journal-checkpoint";
 import { findLatestRegularCapture, omahaDateKey, parseServerCaptureStore, readFreshRegularCapture, SERVER_CAPTURE_STORES } from "./current-captures";
-import { appendCaptureChunk, buildCaptureSessionWorklist, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession } from "./capture-session";
+import { appendCaptureChunk, buildCaptureSessionWorklist, buildCaptureVerificationPlan, captureSessionStatus, finalizeCaptureSession, initializeCaptureSession, retainCaptureSessionEvidence } from "./capture-session";
+import { captureControllerRequest } from "../../../scripts/capture-controller-client.mjs";
 import { agentJobRunFields } from "./job-run";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
@@ -759,6 +760,35 @@ if (command === "status") {
   const requestedLimit = Number.parseInt(arguments_[0] ?? "25", 10);
   if (!Number.isFinite(requestedLimit) || requestedLimit < 1 || requestedLimit > 100) throw new Error("tc capture metrics limit must be between 1 and 100");
   result = await (await mutationClient()).request(`/internal/capture-metrics?limit=${requestedLimit}`);
+} else if (command === "capture" && subcommand === "coordinator") {
+  const [action, ...coordinatorArguments] = arguments_;
+  const request = async (pathname: string, body: Record<string, unknown> = {}) => {
+    const response = await captureControllerRequest(pathname, body, process.env, 5_000);
+    if (!response) throw new Error("persistent capture controller is unavailable");
+    return response;
+  };
+  if (action === "status") result = await request("/v1/coordinator/status");
+  else if (action === "next") {
+    const [owner, store] = coordinatorArguments;
+    if (!owner) throw new Error("tc capture coordinator next requires an executor owner");
+    result = await request("/v1/work/next", { owner, ...(store ? { store } : {}) });
+  } else if (action === "heartbeat") {
+    const [owner, workId] = coordinatorArguments;
+    if (!owner || !workId) throw new Error("tc capture coordinator heartbeat requires owner and work ID");
+    result = await request("/v1/work/heartbeat", { owner, workId });
+  } else if (action === "fail") {
+    const [owner, workId, error = "capture executor failed"] = coordinatorArguments;
+    if (!owner || !workId) throw new Error("tc capture coordinator fail requires owner and work ID");
+    result = await request("/v1/work/fail", { owner, workId, error });
+  } else if (action === "challenge") {
+    const [store, reason = "retailer human-verification wall detected"] = coordinatorArguments;
+    if (!store) throw new Error("tc capture coordinator challenge requires a store");
+    result = await request("/v1/challenges/open", { store, detail: { reason } });
+  } else if (action === "resolve") {
+    const [challengeId] = coordinatorArguments;
+    if (!challengeId) throw new Error("tc capture coordinator resolve requires a challenge ID after a fresh canary pass");
+    result = await request(`/v1/challenges/${encodeURIComponent(challengeId)}/resolve`, { canaryPassed: true });
+  } else throw new Error("tc capture coordinator requires status, next, heartbeat, fail, challenge, or resolve");
 } else if (command === "capture" && subcommand === "session") {
   const [action, ...sessionArguments] = arguments_;
   if (action === "worklist") {
@@ -782,7 +812,13 @@ if (command === "status") {
   } else if (action === "append") {
     const [directory, chunkFile] = sessionArguments;
     if (!directory || !chunkFile) throw new Error("tc capture session append requires session directory and chunk JSON");
-    result = { ok: true, ...(await appendCaptureChunk(cliPath(directory), cliPath(chunkFile))) };
+    const controlled = await captureControllerRequest("/v1/sessions/commit-file", { directory: cliPath(directory), chunkFile: cliPath(chunkFile) }, process.env, 30_000);
+    result = controlled ?? { ok: true, ...(await appendCaptureChunk(cliPath(directory), cliPath(chunkFile))), controllerFallback: true };
+  } else if (action === "evidence") {
+    const [directory, evidenceFile, kind = "screenshot"] = sessionArguments;
+    if (!directory || !evidenceFile) throw new Error("tc capture session evidence requires a session directory and evidence file");
+    const controlled = await captureControllerRequest("/v1/sessions/evidence-file", { directory: cliPath(directory), evidenceFile: cliPath(evidenceFile), kind }, process.env, 30_000);
+    result = controlled ?? { ...(await retainCaptureSessionEvidence(cliPath(directory), cliPath(evidenceFile), kind)), controllerFallback: true };
   } else if (action === "finalize") {
     const [directory, projectedFile, manifestFile, finishedAt] = sessionArguments;
     if (!directory || !projectedFile || !manifestFile) throw new Error("tc capture session finalize requires session directory, projected capture output, and manifest output");
@@ -797,7 +833,7 @@ if (command === "status") {
     if (!directory || !outputFile) throw new Error("tc capture session verification-plan requires a session directory and output JSON");
     result = await buildCaptureVerificationPlan(cliPath(directory), cliPath(outputFile));
   } else {
-    throw new Error("tc capture session requires worklist, init, append, verification-plan, finalize, or status");
+    throw new Error("tc capture session requires worklist, init, append, evidence, verification-plan, finalize, or status");
   }
 } else if (command === "capture" && subcommand === "build-regular") {
   const browser = arguments_.includes("--browser");
@@ -1038,7 +1074,7 @@ if (command === "status") {
       "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
       "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>", "tc efficiency record <report.json>",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
-        "tc capture metrics [limit]", "tc capture session worklist|init|append|verification-plan|finalize|status",
+        "tc capture metrics [limit]", "tc capture coordinator status|next|heartbeat|fail|challenge|resolve", "tc capture session worklist|init|append|evidence|verification-plan|finalize|status",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog", "tc capture journal checkpoint|restore [--force]",
       "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|rematch-promoted|abandon <batch-id> <reason>",
       "tc accuracy draw [seed]", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",

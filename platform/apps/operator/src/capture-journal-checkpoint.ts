@@ -31,7 +31,7 @@ export async function checkpointCaptureJournal(): Promise<Record<string, unknown
       "content-type": "application/vnd.thriftycrew.capture-journal+encrypted",
       "x-content-sha256": ciphertextSha256,
       "x-journal-plaintext-sha256": plaintextSha256,
-      "x-journal-schema": "1",
+      "x-journal-schema": "2",
       "x-checkpoint-created-at": createdAt,
     },
   });
@@ -74,7 +74,7 @@ export async function restoreCaptureJournal(force = false): Promise<Record<strin
     verification = String((database.prepare("PRAGMA integrity_check").get() as Record<string, unknown>)["integrity_check"] ?? "");
     const tables = Number((database.prepare("SELECT COUNT(*) AS count FROM sqlite_master WHERE type = 'table'").get() as { count: number }).count);
     database.close();
-    if (verification !== "ok" || tables < 7) throw new Error(`restored journal validation failed (integrity=${verification}, tables=${tables})`);
+    if (verification !== "ok" || tables < 13) throw new Error(`restored journal validation failed (integrity=${verification}, tables=${tables})`);
     closeCaptureJournals();
     let backupFile: string | undefined;
     if (exists) {

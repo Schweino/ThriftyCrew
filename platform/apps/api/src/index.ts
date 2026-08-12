@@ -2039,7 +2039,10 @@ app.put("/internal/capture-journal-checkpoints", async (context) => {
     return jsonError("checkpoint creation time must be within 24 hours of ingestion", 422);
   }
   const bytes = new Uint8Array(await context.req.arrayBuffer());
-  if (bytes.byteLength < 32 || bytes.byteLength > 25 * 1024 * 1024) return jsonError("encrypted journal checkpoint must be 32 bytes through 25 MiB", 422);
+  // The journal now contains compressed, content-addressed in-progress chunks
+  // and proof images, not only coordination metadata. Keep the ceiling below
+  // the paid Workers request limit while allowing a complete four-store cycle.
+  if (bytes.byteLength < 32 || bytes.byteLength > 75 * 1024 * 1024) return jsonError("encrypted journal checkpoint must be 32 bytes through 75 MiB", 422);
   if (await digestHex(bytes) !== ciphertextSha256) return jsonError("journal checkpoint ciphertext hash does not match content", 422);
   const checkpointId = await deterministicId("capture-journal-checkpoint", identity.agentId, plaintextSha256);
   const existing = await context.env.DB.prepare(

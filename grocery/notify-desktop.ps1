@@ -32,6 +32,9 @@ param(
   [string]$Message = "",
   [switch]$AlsoEmail,
   [switch]$SelfTest,
+  # New V3 authority: when supplied, clicking OK journals the acknowledgment
+  # directly through the authenticated local capture controller.
+  [string]$ControllerChallengeId = "",
   # Poll for the ack a prompt writes when it is dismissed. Prints ACK or TIMEOUT; exit 0 = cleared to resume.
   [string]$WaitForAck = "",
   [int]$TimeoutMin = 20
@@ -127,13 +130,16 @@ try {
   $m = $Message -replace "'", "''"
   $a = $ackFile -replace "'", "''"
   $s = $slug    -replace "'", "''"
+  $challenge = $ControllerChallengeId -replace "'", "''"
+  $ackController = (Join-Path $root '..\platform\scripts\ack-capture-challenge.ps1') -replace "'", "''"
   $inner = "Add-Type -AssemblyName System.Windows.Forms; " +
            "`$f = New-Object System.Windows.Forms.Form; `$f.TopMost = `$true; `$f.ShowInTaskbar = `$false; " +
            "[void][System.Windows.Forms.MessageBox]::Show(`$f, '$m', '$t', " +
            "[System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Warning); `$f.Dispose(); " +
            "`$d = Split-Path '$a' -Parent; if (-not (Test-Path `$d)) { New-Item -ItemType Directory -Path `$d -Force | Out-Null }; " +
            "@{ store='$s'; acknowledged_at=(Get-Date).ToString('s'); meaning='user dismissed the prompt - treat as clearance to resume' } " +
-           "| ConvertTo-Json | Set-Content '$a' -Encoding UTF8"
+           "| ConvertTo-Json | Set-Content '$a' -Encoding UTF8; " +
+           $(if ($challenge) { "& '$ackController' -ChallengeId '$challenge'" } else { "" })
   Start-Process -FilePath 'powershell.exe' `
                 -ArgumentList @('-NoProfile', '-WindowStyle', 'Hidden', '-ExecutionPolicy', 'Bypass', '-Command', $inner) `
                 -WindowStyle Hidden | Out-Null

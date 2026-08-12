@@ -144,6 +144,9 @@ describe("resumable browser capture sessions", () => {
       await writeFile(file, JSON.stringify(value));
       await appendCaptureChunk(directory, file);
     }
+    // A total loss of local chunk mirrors is recoverable from the encrypted
+    // journal payload bodies; status recreates the evidence files by hash.
+    await rm(path.join(directory, "chunks"), { recursive: true, force: true });
     expect(await captureSessionStatus(directory)).toMatchObject({ expectedTerms: 2, attemptedTerms: 2, chunks: 3, unresolvedVerifications: 2, accuracyPass: false });
     const planFile = path.join(root, "verification-plan.json");
     await buildCaptureVerificationPlan(directory, planFile);

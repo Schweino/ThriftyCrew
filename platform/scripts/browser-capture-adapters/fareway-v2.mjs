@@ -344,7 +344,7 @@ async function captureExactNameVerification(tab, target, detailReason) {
   };
 }
 
-async function captureFarewayChunkInternal({ tab, terms, file, screenshotSha256 }) {
+async function captureFarewayChunkInternal({ tab, terms, file, sessionDirectory, screenshotSha256 }) {
   const policy = await browserLanePolicy("fareway");
   if (!Array.isArray(terms) || terms.length < 1 || terms.length > policy.maxTerms) throw new Error(`Fareway chunk requires 1-${policy.maxTerms} terms`);
   const canary = await captureCanary(tab, screenshotSha256);
@@ -358,7 +358,7 @@ async function captureFarewayChunkInternal({ tab, terms, file, screenshotSha256 
     const previousCount = results.length;
     results.push(captured);
     const chunk = { version: 2, phase: "discovery", store: "fareway", canary, terms: results.map((result) => result.term), rows: results.flatMap((result) => result.rows) };
-    await checkpointAdapterChunk(file, chunk, previousCount);
+    await checkpointAdapterChunk(file, chunk, previousCount, sessionDirectory);
     if (captured.blocked) break;
     if (Date.now() - chunkStarted >= 45_000) break;
     if (index < terms.length - 1) await tab.playwright.waitForTimeout(policy.dynamicDelayMs);
@@ -373,7 +373,7 @@ async function captureFarewayChunkInternal({ tab, terms, file, screenshotSha256 
   };
 }
 
-async function captureFarewayVerificationChunkInternal({ tab, targets, file, screenshotSha256 }) {
+async function captureFarewayVerificationChunkInternal({ tab, targets, file, sessionDirectory, screenshotSha256 }) {
   const policy = await browserLanePolicy("fareway");
   if (!Array.isArray(targets) || targets.length < 1 || targets.length > policy.maxTerms) throw new Error(`Fareway verification chunk requires 1-${policy.maxTerms} targets`);
   const canary = await captureCanary(tab, screenshotSha256);
@@ -391,7 +391,7 @@ async function captureFarewayVerificationChunkInternal({ tab, targets, file, scr
     const observedAt = captured.observedAt || new Date().toISOString();
     if (captured.outcome === "blocked") {
       verifications.push(...expandVerification(target, { observedAt, outcome: "blocked", reason: captured.reason || "Fareway challenge detected during independent verification" }));
-      await checkpointAdapterChunk(file, { version: 2, phase: "verification", store: "fareway", canary, verifications }, previousCount);
+      await checkpointAdapterChunk(file, { version: 2, phase: "verification", store: "fareway", canary, verifications }, previousCount, sessionDirectory);
       break;
     }
     if (captured.outcome !== "observed") {
@@ -407,7 +407,7 @@ async function captureFarewayVerificationChunkInternal({ tab, targets, file, scr
         truth: captured.truth,
       }));
     }
-    await checkpointAdapterChunk(file, { version: 2, phase: "verification", store: "fareway", canary, verifications }, previousCount);
+    await checkpointAdapterChunk(file, { version: 2, phase: "verification", store: "fareway", canary, verifications }, previousCount, sessionDirectory);
     if (Date.now() - chunkStarted >= 45_000) break;
     if (index < targets.length - 1) await tab.playwright.waitForTimeout(policy.dynamicDelayMs);
   }

@@ -324,6 +324,12 @@ export const browserCaptureSessionV2Schema = z.object({
   store: browserCaptureStore,
   sourceId: nonEmptyId,
   worklistHash: sha256Hex,
+  adapter: z.object({
+    id: nonEmptyId,
+    version: z.string().trim().min(1).max(50),
+    sha256: sha256Hex,
+    capabilities: z.array(z.string().trim().min(1).max(100)).min(4).max(20),
+  }).optional(),
   startedAt: isoDateTime,
   finishedAt: isoDateTime,
   coverageMode,

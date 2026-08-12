@@ -5,10 +5,20 @@ import { DatabaseSync } from "node:sqlite";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   acquireControllerLane,
+  acknowledgeCaptureChallenge,
+  browserCaptureJournalDueState,
+  commitSessionChunk,
+  completeSessionWorkUnits,
+  heartbeatCaptureWork,
+  leaseCaptureWork,
+  openCaptureChallenge,
+  readSessionPayload,
   closeCaptureJournals,
   readPlannerJournal,
   readSessionJournal,
   replacePlannerJournal,
+  replaceSessionWorkUnits,
+  resolveCaptureChallenge,
   serializeCaptureJournal,
   upsertQueueJournalJob,
   upsertSessionJournal,
@@ -42,5 +52,56 @@ describe("unified persistent capture journal", () => {
     expect((database.prepare("SELECT COUNT(*) AS count FROM capture_sessions").get() as { count: number }).count).toBe(1);
     expect((database.prepare("SELECT COUNT(*) AS count FROM lane_leases").get() as { count: number }).count).toBe(1);
     database.close();
+  });
+
+  it("atomically journals payload bodies, work completion, leases, and human challenges", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-capture-coordinator-"));
+    roots.push(root);
+    const file = path.join(root, "capture-journal.sqlite");
+    const directory = path.join(root, "session");
+    const started = new Date("2026-08-12T12:00:00.000Z");
+    const draft = { sessionId: "session", store: "aldi", chunks: [] as Array<{ id: string; file: string; sha256: string; createdAt: string }> };
+    upsertSessionJournal(directory, draft, file);
+    replaceSessionWorkUnits(directory, "aldi", "discovery", [
+      { key: "eggs", ordinal: 0, payload: { query: "eggs" } },
+      { key: "milk", ordinal: 1, payload: { query: "milk" } },
+    ], started.toISOString(), file);
+
+    const first = leaseCaptureWork("executor-1", "aldi", started, 60_000, file) as { acquired: boolean; work: { id: string; unitKey: string } };
+    expect(first.acquired).toBe(true);
+    expect(first.work.unitKey).toBe("eggs");
+    expect(heartbeatCaptureWork("executor-1", first.work.id, new Date(started.getTime() + 1_000), 60_000, {}, file)).toMatchObject({ renewed: true });
+
+    const body = new TextEncoder().encode(JSON.stringify({ version: 2, phase: "discovery", store: "aldi", terms: [{ query: "eggs" }], rows: [] }));
+    const entry = { id: "chunk-abc", file: "0000-chunk-abc.json", sha256: "a".repeat(64), createdAt: started.toISOString() };
+    draft.chunks.push(entry);
+    commitSessionChunk(directory, draft, entry, body, file);
+    expect(new TextDecoder().decode(readSessionPayload(directory, entry.id, file)?.body)).toContain('"eggs"');
+
+    const challenge = openCaptureChallenge("aldi", { reason: "wall" }, new Date(started.getTime() + 2_000), file);
+    expect(leaseCaptureWork("executor-2", "aldi", new Date(started.getTime() + 10_000), 60_000, file)).toMatchObject({ acquired: false });
+    expect(acknowledgeCaptureChallenge(challenge.id, new Date(started.getTime() + 3_000), file)).toMatchObject({ acknowledged: true, requiresCanary: true });
+    expect(resolveCaptureChallenge(challenge.id, false, new Date(started.getTime() + 4_000), file)).toMatchObject({ resolved: false });
+    expect(resolveCaptureChallenge(challenge.id, true, new Date(started.getTime() + 5_000), file)).toMatchObject({ resolved: true });
+    const resumed = leaseCaptureWork("executor-2", "aldi", new Date(started.getTime() + 12_000), 60_000, file) as { acquired: boolean; work: { unitKey: string } };
+    expect(resumed.acquired).toBe(true);
+    expect(resumed.work.unitKey).toBe("milk");
+    completeSessionWorkUnits(directory, "discovery", ["milk"], "chunk-def", file);
+  });
+
+  it("answers weekly browser freshness from journaled queue truth without scanning artifact files", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-capture-due-journal-"));
+    roots.push(root);
+    const file = path.join(root, "capture-journal.sqlite");
+    for (const sourceId of ["direct-aldi-browser", "direct-fareway-browser", "direct-sams-browser", "direct-walmart-browser"]) {
+      const manifest = {
+        captureSummary: { capturedTo: "2026-08-12T12:00:00.000Z", coverageMode: "full" },
+        receipt: { remote: { status: "promoted", matching: { status: "passed" } } },
+      };
+      upsertQueueJournalJob({ id: sourceId, directory: path.join(root, sourceId), sourceId, status: "completed", enqueuedAt: "2026-08-12T12:01:00.000Z", nextAttemptAt: "2026-08-12T12:01:00.000Z", manifestJson: JSON.stringify(manifest) }, file);
+    }
+    expect(browserCaptureJournalDueState(new Date("2026-08-13T12:00:00.000Z"), file)).toMatchObject({
+      status: "fresh", authority: "capture-journal", completed: expect.arrayContaining(["direct-aldi-browser", "direct-walmart-browser"]),
+    });
   });
 });

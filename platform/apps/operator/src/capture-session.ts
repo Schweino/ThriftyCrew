@@ -14,7 +14,8 @@ import {
 } from "@thriftycrew/contracts";
 import { browserCaptureTruthPass, buildBrowserCaptureAccuracy, digestHex, normalizeName, parseCapturePriceText, stableJson } from "@thriftycrew/domain";
 import { compileProductMatcher } from "@thriftycrew/engine";
-import { readPlannerJournal, readSessionJournal, replacePlannerJournal, upsertSessionJournal } from "./capture-journal";
+import { captureAdapterManifest, validateCaptureAdapterManifest, type CaptureAdapterManifest } from "../../../scripts/browser-capture-adapters/adapter-registry.mjs";
+import { commitSessionChunk, completeSessionWorkUnits, readPlannerJournal, readSessionJournal, readSessionPayload, replacePlannerJournal, replaceSessionWorkUnits, sessionEvidence, setCaptureSessionPhase, storeSessionEvidence, upsertSessionJournal } from "./capture-journal";
 
 const storeSchema = z.enum(["aldi", "fareway", "sams", "walmart"]);
 type BrowserStore = z.infer<typeof storeSchema>;
@@ -58,6 +59,7 @@ interface DraftSession {
   worklist: Array<{ termKey: string; query: string; ordinal: number }>;
   worklistHash: string;
   startedAt: string;
+  adapter?: CaptureAdapterManifest;
   chunks: Array<{ id: string; file: string; sha256: string; createdAt: string }>;
   plannerHistoryFile?: string;
   plannerHistoryNamespace?: string;
@@ -319,16 +321,29 @@ export async function initializeCaptureSession(storeInput: string, worklistFile:
     if (typeof document.planner?.historyFile === "string") plannerHistoryFile = path.resolve(document.planner.historyFile);
     if (typeof document.planner?.historyNamespace === "string") plannerHistoryNamespace = document.planner.historyNamespace;
   } catch { /* plain-text worklists have no planner history */ }
-  const draft: DraftSession = { version: 2, sessionId, store, sourceId: SOURCE_IDS[store], worklist: keyed, worklistHash, startedAt, chunks: [], ...(plannerHistoryFile ? { plannerHistoryFile } : {}), ...(plannerHistoryNamespace ? { plannerHistoryNamespace } : {}) };
+  const adapter = validateCaptureAdapterManifest(await captureAdapterManifest(store));
+  const draft: DraftSession = { version: 2, sessionId, store, sourceId: SOURCE_IDS[store], worklist: keyed, worklistHash, startedAt, adapter, chunks: [], ...(plannerHistoryFile ? { plannerHistoryFile } : {}), ...(plannerHistoryNamespace ? { plannerHistoryNamespace } : {}) };
   await mkdir(path.join(directory, "chunks"), { recursive: true });
   try {
     const existing = await loadDraft(directory);
     if (existing.store !== draft.store || existing.sourceId !== draft.sourceId || existing.worklistHash !== draft.worklistHash) throw new Error(`capture session directory already belongs to ${existing.sessionId}`);
+    replaceSessionWorkUnits(directory, store, "discovery", existing.worklist.map((term) => ({
+      key: term.query, ordinal: term.ordinal, priority: existing.worklist.length - term.ordinal,
+      payload: { termKey: term.termKey, query: term.query, ...(existing.adapter ? { adapter: { id: existing.adapter.id, version: existing.adapter.version, sha256: existing.adapter.sha256 } } : {}) },
+    })), existing.startedAt);
+    const existingState = await loadSessionState(directory, existing);
+    completeSessionWorkUnits(directory, "discovery", [...existingState.latest.keys()]);
     return existing;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
   }
   await persistDraft(directory, draft);
+  replaceSessionWorkUnits(directory, store, "discovery", keyed.map((term) => ({
+    key: term.query,
+    ordinal: term.ordinal,
+    priority: keyed.length - term.ordinal,
+    payload: { termKey: term.termKey, query: term.query, adapter: { id: adapter.id, version: adapter.version, sha256: adapter.sha256 } },
+  })), startedAt);
   return draft;
 }
 
@@ -360,9 +375,15 @@ export async function appendCaptureChunk(directory: string, chunkFile: string): 
   const existing = draft.chunks.find((entry) => entry.id === id);
   if (existing) return { id, idempotent: true, terms: chunk.phase === "discovery" ? chunk.terms.length : 0, rows: chunk.phase === "discovery" ? chunk.rows.length : chunk.verifications.length };
   const stored = `${String(draft.chunks.length).padStart(4, "0")}-${id}.json`;
+  const entry = { id, file: stored, sha256, createdAt: new Date().toISOString() };
+  draft.chunks.push(entry);
+  // The SQLite transaction is the commit point: chunk bytes, session progress,
+  // and coordinator work completion become durable together. Disk JSON is only
+  // a portable mirror and can always be rebuilt from the journal.
+  commitSessionChunk(directory, draft, entry, bytes);
+  await mkdir(path.join(directory, "chunks"), { recursive: true });
   await writeFile(path.join(directory, "chunks", stored), bytes);
-  draft.chunks.push({ id, file: stored, sha256, createdAt: new Date().toISOString() });
-  await persistDraft(directory, draft);
+  await atomicJson(path.join(directory, "session.json"), draft);
   return { id, idempotent: false, terms: chunk.phase === "discovery" ? chunk.terms.length : 0, rows: chunk.phase === "discovery" ? chunk.rows.length : chunk.verifications.length };
 }
 
@@ -422,7 +443,16 @@ async function loadSessionState(directory: string, draft: DraftSession): Promise
   const verifications: BrowserCaptureVerification[] = [];
   for (let ordinal = 0; ordinal < draft.chunks.length; ordinal += 1) {
     const entry = draft.chunks[ordinal]!;
-    const bytes = new Uint8Array(await readFile(path.join(directory, "chunks", entry.file)));
+    let bytes: Uint8Array;
+    try { bytes = new Uint8Array(await readFile(path.join(directory, "chunks", entry.file))); }
+    catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+      const payload = readSessionPayload(directory, entry.id);
+      if (!payload) throw error;
+      bytes = payload.body;
+      await mkdir(path.join(directory, "chunks"), { recursive: true });
+      await writeFile(path.join(directory, "chunks", entry.file), bytes);
+    }
     if (await digestHex(bytes) !== entry.sha256) throw new Error(`capture chunk hash mismatch: ${entry.file}`);
     const chunk = chunkSchema.parse(JSON.parse(new TextDecoder().decode(bytes).replace(/^\uFEFF/, "")));
     canaries.push({ ...chunk.canary, ordinal });
@@ -531,6 +561,13 @@ export async function buildCaptureVerificationPlan(directory: string, outputFile
   });
   const content = { version: 2, sessionId: draft.sessionId, sourceId: draft.sourceId, createdAt: new Date().toISOString(), targets };
   await atomicJson(outputFile, { ...content, contentHash: await digestHex(stableJson(content)) });
+  replaceSessionWorkUnits(directory, draft.store, "verification", targets.map((target, ordinal) => ({
+    key: target.rowKey,
+    ordinal,
+    priority: target.riskReasons.length + (targets.length - ordinal),
+    payload: target,
+  })), content.createdAt);
+  completeSessionWorkUnits(directory, "verification", state.verifications.map((verification) => verification.rowKey));
   return { ok: true, outputFile, productReads: targets.length, rowTargets: required.length, verificationReuse: required.length - targets.length, discoveryRows: accuracy.discoveryRows.length };
 }
 
@@ -551,6 +588,7 @@ export async function finalizeCaptureSession(directory: string, projectedOutputF
     store: draft.store,
     sourceId: draft.sourceId,
     worklistHash: draft.worklistHash,
+    ...(draft.adapter ? { adapter: { id: draft.adapter.id, version: draft.adapter.version, sha256: draft.adapter.sha256, capabilities: draft.adapter.capabilities } } : {}),
     startedAt: draft.startedAt,
     finishedAt,
     coverageMode,
@@ -564,6 +602,7 @@ export async function finalizeCaptureSession(directory: string, projectedOutputF
   };
   const manifest = browserCaptureSessionSchema.parse({ ...manifestContent, contentHash: await digestHex(stableJson(manifestContent)) });
   if (manifest.version !== 2) throw new Error("capture session manifest unexpectedly downgraded");
+  setCaptureSessionPhase(draft.sessionId, "finalized", finishedAt);
   await atomicJson(manifestOutputFile, manifest, false);
   if (draft.plannerHistoryFile) {
     const history = Object.fromEntries(draft.worklist.map((term) => {
@@ -615,6 +654,7 @@ export async function captureSessionStatus(directory: string): Promise<Record<st
     ok: true,
     sessionId: draft.sessionId,
     store: draft.store,
+    adapter: draft.adapter ? { id: draft.adapter.id, version: draft.adapter.version, sha256: draft.adapter.sha256 } : null,
     expectedTerms: draft.worklist.length,
     attemptedTerms: state.latest.size,
     remainingTermCount: remainingTerms.length,
@@ -636,5 +676,18 @@ export async function captureSessionStatus(directory: string): Promise<Record<st
     sourceTruthFailures: sourceTruthFailures.slice(0, previewLimit),
     sourceTruthFailuresTruncated: sourceTruthFailures.length > previewLimit,
     accuracyPass: accuracy?.pass ?? false,
+    evidence: sessionEvidence(directory),
   };
+}
+
+export async function retainCaptureSessionEvidence(directory: string, evidenceFile: string, kind = "screenshot"): Promise<Record<string, unknown>> {
+  const draft = await loadDraft(directory);
+  const body = new Uint8Array(await readFile(evidenceFile));
+  const sha256 = await digestHex(body);
+  const extension = path.extname(evidenceFile).toLowerCase();
+  const contentType = extension === ".png" ? "image/png" : extension === ".jpg" || extension === ".jpeg" ? "image/jpeg" : extension === ".webp" ? "image/webp" : "application/octet-stream";
+  const id = `evidence-${sha256.slice(0, 32)}`;
+  storeSessionEvidence(directory, { id, kind, file: path.basename(evidenceFile), sha256, contentType, body, createdAt: new Date().toISOString() });
+  await persistDraft(directory, draft);
+  return { ok: true, id, kind, sha256, byteLength: body.byteLength, contentType };
 }

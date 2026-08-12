@@ -142,7 +142,7 @@ async function captureCanary(tab, screenshotSha256) {
   return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: LOCATION, priceMode: PRICE_MODE, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
 }
 
-async function captureAldiChunkInternal({ tab, terms, file, screenshotSha256, interTermDelayMs = DEFAULT_INTER_TERM_DELAY_MS }) {
+async function captureAldiChunkInternal({ tab, terms, file, sessionDirectory, screenshotSha256, interTermDelayMs = DEFAULT_INTER_TERM_DELAY_MS }) {
   const policy = await browserLanePolicy("aldi");
   if (!Array.isArray(terms) || terms.length < 1 || terms.length > policy.maxTerms) throw new Error(`ALDI chunk requires 1-${policy.maxTerms} terms`);
   interTermDelayMs = Math.max(interTermDelayMs, policy.dynamicDelayMs);
@@ -157,7 +157,7 @@ async function captureAldiChunkInternal({ tab, terms, file, screenshotSha256, in
     await recordBrowserLaneResult("aldi", captured.term.outcome, Date.now() - termStarted);
     const previousCount = results.length;
     results.push(captured);
-    await checkpointAdapterChunk(file, { version: 2, phase: "discovery", store: "aldi", canary, terms: results.map((result) => result.term), rows: results.flatMap((result) => result.rows) }, previousCount);
+    await checkpointAdapterChunk(file, { version: 2, phase: "discovery", store: "aldi", canary, terms: results.map((result) => result.term), rows: results.flatMap((result) => result.rows) }, previousCount, sessionDirectory);
     if (captured.blocked) break;
     if (Date.now() - chunkStarted >= 45_000) break;
     if (index < terms.length - 1 && interTermDelayMs > 0) await tab.playwright.waitForTimeout(interTermDelayMs);
@@ -165,7 +165,7 @@ async function captureAldiChunkInternal({ tab, terms, file, screenshotSha256, in
   return { file, attempted: results.length, rows: results.reduce((total, result) => total + result.rows.length, 0), blocked: results.some((result) => result.blocked), rejected: results.filter((result) => result.term.outcome === "rejected").map((result) => ({ query: result.term.query, reason: result.term.reason })), empty: results.filter((result) => result.term.outcome === "empty").map((result) => result.term.query) };
 }
 
-async function captureAldiVerificationChunkInternal({ tab, targets, file, screenshotSha256, interTermDelayMs = DEFAULT_INTER_TERM_DELAY_MS }) {
+async function captureAldiVerificationChunkInternal({ tab, targets, file, sessionDirectory, screenshotSha256, interTermDelayMs = DEFAULT_INTER_TERM_DELAY_MS }) {
   const policy = await browserLanePolicy("aldi");
   if (!Array.isArray(targets) || targets.length < 1 || targets.length > policy.maxTerms) throw new Error(`ALDI verification chunk requires 1-${policy.maxTerms} targets`);
   interTermDelayMs = Math.max(interTermDelayMs, policy.dynamicDelayMs);
@@ -180,7 +180,7 @@ async function captureAldiVerificationChunkInternal({ tab, targets, file, screen
     const observedAt = new Date().toISOString();
     if (captured.blocked || captured.term.outcome === "blocked") {
       verifications.push(...expandVerification(target, { observedAt, outcome: "blocked", reason: captured.term.reason || "ALDI challenge detected during independent verification" }));
-      await checkpointAdapterChunk(file, { version: 2, phase: "verification", store: "aldi", canary, verifications }, previousCount);
+      await checkpointAdapterChunk(file, { version: 2, phase: "verification", store: "aldi", canary, verifications }, previousCount, sessionDirectory);
       break;
     }
     const row = captured.rows.find((candidate) => candidate.href === target.productKey);
@@ -198,7 +198,7 @@ async function captureAldiVerificationChunkInternal({ tab, targets, file, screen
         truth,
       }));
     }
-    await checkpointAdapterChunk(file, { version: 2, phase: "verification", store: "aldi", canary, verifications }, previousCount);
+    await checkpointAdapterChunk(file, { version: 2, phase: "verification", store: "aldi", canary, verifications }, previousCount, sessionDirectory);
     if (Date.now() - chunkStarted >= 45_000) break;
     if (index < targets.length - 1 && interTermDelayMs > 0) await tab.playwright.waitForTimeout(interTermDelayMs);
   }

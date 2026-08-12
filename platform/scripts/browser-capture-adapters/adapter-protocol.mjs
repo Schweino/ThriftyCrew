@@ -1,5 +1,6 @@
-import { appendFile, mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { appendFile, mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { captureControllerRequest } from "../capture-controller-client.mjs";
 
 function streamPath(file) {
   return `${file}.ndjson`;
@@ -34,7 +35,7 @@ async function ensureHeader(file, chunk) {
  * The compact JSON mirror preserves compatibility with the deterministic
  * session validator while the NDJSON stream is the crash-resume source.
  */
-export async function checkpointAdapterChunk(file, chunk, previousCount = 0) {
+export async function checkpointAdapterChunk(file, chunk, previousCount = 0, sessionDirectory) {
   if (!chunk || chunk.version !== 2 || !["discovery", "verification"].includes(chunk.phase)) throw new Error("invalid adapter checkpoint");
   await ensureHeader(file, chunk);
   if (chunk.phase === "discovery") {
@@ -50,7 +51,20 @@ export async function checkpointAdapterChunk(file, chunk, previousCount = 0) {
     }
   }
   await atomicJson(file, chunk);
-  return { file, streamFile: streamPath(file), events: chunk.phase === "discovery" ? chunk.terms.length : chunk.verifications.length };
+  let controllerCommit;
+  if (sessionDirectory) {
+    const delta = chunk.phase === "discovery"
+      ? { ...chunk, terms: chunk.terms.slice(previousCount), rows: chunk.rows.filter((row) => chunk.terms.slice(previousCount).some((term) => String(row[chunk.store === "walmart" || chunk.store === "sams" ? "q" : "term"] ?? "").trim() === term.query)) }
+      : { ...chunk, verifications: chunk.verifications.slice(previousCount) };
+    const commitFile = `${file}.controller-${crypto.randomUUID()}.json`;
+    await writeFile(commitFile, `${JSON.stringify(delta)}\n`, "utf8");
+    try {
+      controllerCommit = await captureControllerRequest("/v1/sessions/commit-file", { directory: path.resolve(sessionDirectory), chunkFile: path.resolve(commitFile) }, process.env, 30_000);
+      if (!controllerCommit) throw new Error("persistent capture controller is unavailable for atomic adapter commit");
+      if (controllerCommit.ok !== true) throw new Error(String(controllerCommit.error ?? "capture controller rejected adapter result"));
+    } finally { await rm(commitFile, { force: true }); }
+  }
+  return { file, streamFile: streamPath(file), events: chunk.phase === "discovery" ? chunk.terms.length : chunk.verifications.length, ...(controllerCommit ? { controllerCommit } : {}) };
 }
 
 export async function materializeAdapterStream(file) {

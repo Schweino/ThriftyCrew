@@ -120,6 +120,36 @@ if ($SelfTest) {
   }
 }
 
+# The persistent controller and its SQLite journal are the operational
+# freshness authority. The filesystem implementation above remains only as a
+# bootstrap/recovery fallback when the controller is unavailable.
+try {
+  $configFile = Join-Path $env:LOCALAPPDATA 'ThriftyCrew\grocery-v3\pc-capture-client.json'
+  if (Test-Path -LiteralPath $configFile) {
+    $config = Get-Content -LiteralPath $configFile -Raw -Encoding UTF8 | ConvertFrom-Json
+    $pipe = [IO.Pipes.NamedPipeClientStream]::new('.', 'ThriftyCrew.GroceryV3.CaptureController', [IO.Pipes.PipeDirection]::InOut)
+    try {
+      $pipe.Connect(1500)
+      $writer = [IO.StreamWriter]::new($pipe, [Text.UTF8Encoding]::new($false), 1024, $true)
+      $reader = [IO.StreamReader]::new($pipe, [Text.UTF8Encoding]::new($false), $false, 1024, $true)
+      $writer.AutoFlush = $true
+      $body = if ($Today) { @{ now = ([datetime]::ParseExact($Today, 'yyyy-MM-dd', $null).ToUniversalTime().ToString('o')) } } else { @{} }
+      $writer.WriteLine((@{ token = [string]$config.controllerToken; pathname = '/v1/cycle/status'; body = $body } | ConvertTo-Json -Compress))
+      $controller = $reader.ReadLine() | ConvertFrom-Json
+      if ($controller.ok -eq $true) {
+        $controller.status = ([string]$controller.status).ToUpperInvariant()
+        if ($Json) { $controller | ConvertTo-Json -Depth 8 }
+        else { Write-Output ($controller.status + ' - week of ' + $controller.weekStart + '; controller/journal authority') }
+        if ($controller.status -eq 'FRESH') { exit 0 }
+        if ($controller.status -eq 'INFLIGHT') { exit 2 }
+        exit 1
+      }
+    } finally { $pipe.Dispose() }
+  }
+} catch {
+  Write-Verbose ('Capture controller unavailable; using the recovery filesystem scan: ' + $_.Exception.Message)
+}
+
 if (-not $QueueRoot) {
   $QueueRoot = Join-Path $env:LOCALAPPDATA 'ThriftyCrew\grocery-v3\capture-queue'
 }

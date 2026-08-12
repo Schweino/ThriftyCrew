@@ -19,7 +19,7 @@ methods, but follow this runbook when they disagree about authority or publicati
 
 Run the automation every day at 06:15 America/Chicago.
 
-1. On Wednesday through Saturday, run `platform/scripts/browser-capture-due.ps1 -Json`.
+1. On Wednesday through Saturday, run `platform/scripts/browser-capture-due.ps1 -Json`. It queries the authenticated persistent controller and unified journal; its filesystem scan is disaster-recovery fallback only.
    - `FRESH` (exit 0): the weekly four-store capture is complete. Do not recapture.
    - `INFLIGHT` (exit 2): artifacts are already waiting/retrying in the local queue. Do not recapture; run the
      queue watchdog and report only if it is unhealthy.
@@ -35,7 +35,7 @@ Run the automation every day at 06:15 America/Chicago.
 
 - Use the connected real Chrome browser. Do not substitute server HTTP, a search engine, a different retailer,
   or marketplace pricing.
-- Codex browser page evaluation is read-only. Do not copy Claude's page-mutating router, iframe, local-storage,
+- Codex browser page evaluation is read-only. The persistent coordinator, not the automation prompt, owns due selection, exact work-unit order, leases, pacing, retries, challenges, and phase transitions. Obtain work with `pnpm tc capture coordinator next <executor-owner> [store]` and heartbeat long work. Do not copy Claude's page-mutating router, iframe, local-storage,
   or Blob-download tricks. Use ordinary top-level Chrome navigation for each search term, read the resulting DOM
   or `__NEXT_DATA__`, and append projected capture rows outside the page. Work in bounded 10-20 term chunks and
   commit each through `tc capture session`; prose progress or a partially written CSV is not a checkpoint.
@@ -47,9 +47,9 @@ Run the automation every day at 06:15 America/Chicago.
 - Store the product identity shown by the same result that supplied the price: Walmart `usItemId`, Sam's product
   ID, and Aldi/Fareway product URL.
 - Retry an ordinary empty/error once. If a human-verification wall survives one retry, do not evade it or solve
-  a challenge. Run `grocery/notify-desktop.ps1 -Store <store> -Detail <progress> -AlsoEmail`, continue with another
-  store, and wait for `grocery/out/notify-ack-<store>.json`. The operator clears the wall in Chrome and clicks OK
-  on the Windows alert; that acknowledgment authorizes only a fresh canary check, never an automated bypass.
+  a challenge. The adapter opens one controller-owned challenge, which raises the Windows/email prompt while another
+  store continues. Clicking OK journals an acknowledgment through the authenticated named pipe. It authorizes only
+  a fresh canary check; the lane remains blocked until that canary passes and `tc capture coordinator resolve` records it.
 - A current Omaha location/price-mode canary is required in every chunk. Bind at least one canary to the SHA-256
   of a proof screenshot so a retailer silently resetting fulfillment during a long sweep is detectable.
 - Record exact term outcomes, row counts, attempts, and time intervals. A challenge is `blocked`, never `empty`.
@@ -127,7 +127,7 @@ pnpm tc capture session init <aldi|fareway|sams|walmart> <worklist.txt> <session
 
 For every adapter-bounded discovery chunk (Aldi 3, Fareway 4, Sam's 3, Walmart 5, with a 45-second soft start budget), write JSON containing `version: 2`, `phase: discovery`, `store`, one current
 location/mode `canary`, exact `terms` with `retrieval`, and projected `rows` with internal `_capture` truth.
-Append with `pnpm tc capture session append <session-directory> <chunk.json>`.
+Pass `sessionDirectory` to the store adapter. Each completed result is validated and committed atomically by the controller: payload bytes, hash, session progress, work-unit completion, and executor release share one SQLite transaction. The adapter's NDJSON/JSON files are recovery mirrors. Use `pnpm tc capture session append <session-directory> <chunk.json>` only for manual/recovery chunks; it routes through the same controller transaction. Register every proof image immediately with `pnpm tc capture session evidence <session-directory> <screenshot> screenshot` so encrypted R2 checkpoints contain in-progress evidence rather than local paths alone.
 Use `pnpm tc capture session status <session-directory>` to resume. A later successful retry replaces the earlier
 blocked result for that term while both immutable chunks remain evidence.
 

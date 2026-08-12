@@ -4,7 +4,7 @@ import { gunzipSync, gzipSync } from "node:zlib";
 import { BROWSER_CAPTURE_ACCURACY_CUTOVER, browserCaptureSessionSchema, directCaptureArtifactSchema, type BrowserCaptureSealAttestation, type DirectCaptureArtifact } from "@thriftycrew/contracts";
 import { buildBrowserCaptureAccuracy, digestHex, stableJson } from "@thriftycrew/domain";
 import { buildBrowserEvidenceAttestation, type CaptureEvidenceInput } from "@thriftycrew/daily/client";
-import { acquireQueueJournalLease, queueJournalJobs, releaseQueueJournalLease, upsertQueueJournalJob } from "./capture-journal";
+import { acquireQueueJournalLease, captureJournalPath, queueJournalJobs, releaseQueueJournalLease, setCaptureSessionPhase, upsertQueueJournalJob } from "./capture-journal";
 
 export interface QueuedEvidence {
   file: string;
@@ -36,6 +36,7 @@ export interface CaptureQueueManifest {
   browserEvidenceAttestation?: BrowserCaptureSealAttestation;
   uploadedEvidence?: Array<{ sha256: string; evidenceId: string; uploadedAt: string }>;
   compacted?: { at: string; recoveryFiles: Array<{ originalFile: string; file: string; sha256: string; originalBytes: number; compressedBytes: number }> };
+  captureSummary?: { capturedTo: string; coverageMode: "full" | "partial" };
 }
 
 export interface CaptureQueueJob {
@@ -203,7 +204,7 @@ async function readManifest(directory: string): Promise<CaptureQueueManifest> {
   if (![1, 2, 3].includes(value.version) || !value.id || !value.sourceId || !value.artifactFile || !Array.isArray(value.evidence)) {
     throw new Error(`invalid capture queue manifest in ${directory}`);
   }
-  upsertQueueJournalJob({ id: value.id, directory, sourceId: value.sourceId, status: value.status, enqueuedAt: value.enqueuedAt, nextAttemptAt: value.nextAttemptAt, manifestJson: JSON.stringify(value) }, path.join(path.dirname(directory), "capture-journal.sqlite"));
+  upsertQueueJournalJob({ id: value.id, directory, sourceId: value.sourceId, status: value.status, enqueuedAt: value.enqueuedAt, nextAttemptAt: value.nextAttemptAt, manifestJson: JSON.stringify(value) }, queueJournalFile(path.dirname(directory)));
   return value;
 }
 
@@ -216,11 +217,18 @@ async function writeQueuedObject(directory: string, baseName: string, bytes: Uin
 
 async function persistManifest(directory: string, manifest: CaptureQueueManifest): Promise<void> {
   await atomicJson(path.join(directory, "manifest.json"), manifest);
-  upsertQueueJournalJob({ id: manifest.id, directory, sourceId: manifest.sourceId, status: manifest.status, enqueuedAt: manifest.enqueuedAt, nextAttemptAt: manifest.nextAttemptAt, manifestJson: JSON.stringify(manifest) }, path.join(path.dirname(directory), "capture-journal.sqlite"));
+  upsertQueueJournalJob({ id: manifest.id, directory, sourceId: manifest.sourceId, status: manifest.status, enqueuedAt: manifest.enqueuedAt, nextAttemptAt: manifest.nextAttemptAt, manifestJson: JSON.stringify(manifest) }, queueJournalFile(path.dirname(directory)));
+}
+
+function queueJournalFile(root: string): string {
+  // Production has one controller/session/planner/queue authority. Tests keep
+  // their temporary queue roots isolated unless they explicitly pin a journal.
+  if (process.env.NODE_ENV === "test" && !process.env.TC_CAPTURE_JOURNAL) return path.join(root, "capture-journal.sqlite");
+  return captureJournalPath();
 }
 
 async function queueDirectories(root: string): Promise<string[]> {
-  const journalFile = path.join(root, "capture-journal.sqlite");
+  const journalFile = queueJournalFile(root);
   const journal = queueJournalJobs(journalFile);
   if (journal.length > 0) return journal.map((job) => job.directory).sort();
   const disk = (await readdir(root, { withFileTypes: true }))
@@ -406,6 +414,7 @@ export async function enqueueCapture(
       status: "pending",
       attempts: 0,
       nextAttemptAt: instant,
+      captureSummary: { capturedTo: artifact.capturedTo, coverageMode: artifact.coverageMode === "full" ? "full" : "partial" },
       ...(browserEvidenceAttestation ? { browserEvidenceAttestation } : {}),
       uploadedEvidence: [],
     };
@@ -419,6 +428,7 @@ export async function enqueueCapture(
       return { id, directory, idempotent: true, manifest: existing.manifest };
     }
     await persistManifest(directory, manifest);
+    setCaptureSessionPhase(session.sessionId, "enqueued", instant);
     return { id, directory, idempotent: false, manifest };
   } catch (error) {
     await rm(temporary, { recursive: true, force: true });
@@ -451,7 +461,7 @@ export async function drainCaptureQueue(
       continue;
     }
     const leaseOwner = `queue-${process.pid}-${crypto.randomUUID()}`;
-    if (!acquireQueueJournalLease(manifest.id, leaseOwner, now, 15 * 60_000, path.join(root, "capture-journal.sqlite"))) {
+    if (!acquireQueueJournalLease(manifest.id, leaseOwner, now, 15 * 60_000, queueJournalFile(root))) {
       skipped += 1;
       continue;
     }
@@ -492,7 +502,7 @@ export async function drainCaptureQueue(
         results.push({ id: updated.id, sourceId: updated.sourceId, status: updated.status, attempts, nextAttemptAt: updated.nextAttemptAt, error: updated.lastError });
       }
     } finally {
-      releaseQueueJournalLease(manifest.id, leaseOwner, path.join(root, "capture-journal.sqlite"));
+      releaseQueueJournalLease(manifest.id, leaseOwner, queueJournalFile(root));
     }
   }
   return { ok: failed === 0, processed, completed, failed, skipped, results };
@@ -684,6 +694,28 @@ export async function browserCaptureCycleStatus(root: string, now = new Date()):
   const status = due.length ? "due" : inflight.length ? "inflight" : "fresh";
   const retryWindowExpired = current.weekday === 6 && current.hour >= 12 || current.weekday === 0 || current.weekday === 1 || current.weekday === 2;
   return { status, weekStart, previousWeekStart, due, inflight, completed, overdue, alertDue: status !== "fresh" && (retryWindowExpired || overdue.length > 0) };
+}
+
+export async function hydrateCaptureQueueJournal(root: string): Promise<{ checked: number; hydrated: number; errors: number }> {
+  await mkdir(root, { recursive: true });
+  let checked = 0;
+  let hydrated = 0;
+  let errors = 0;
+  for (const directory of await queueDirectories(root)) {
+    try {
+      const manifest = await readManifest(directory);
+      checked += 1;
+      if (manifest.captureSummary) continue;
+      const job = await loadJob(directory);
+      const updated: CaptureQueueManifest = {
+        ...manifest,
+        captureSummary: { capturedTo: job.artifact.capturedTo, coverageMode: job.artifact.coverageMode === "full" ? "full" : "partial" },
+      };
+      await persistManifest(directory, updated);
+      hydrated += 1;
+    } catch { errors += 1; }
+  }
+  return { checked, hydrated, errors };
 }
 
 export async function verifyCaptureQueueFilesystem(root: string): Promise<{ ok: boolean; jobs: number; bytes: number }> {
