@@ -73,7 +73,15 @@ import { evaluateReleaseIntegrity } from "./release-integrity";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation, runGhostClobberDrill } from "./ghost-reconciliation";
 import { dispatchGithubJob, dispatchRegisteredAgent, githubWorkflowRuns, jobStatusRequiresAlert, raiseOperationalAlert, recordAudit, resolveOperationalAlert, resolveRecoveredJobRunAlerts, runArchivalForecast, runControlPlaneProof, runD1RecoveryCheckpoint, runScheduledOperations, scheduleGap } from "./operations";
-import { readEngineSnapshot, readEngineSnapshotIdentity, type EngineSnapshotProfile, type EngineSourceMode } from "./engine-snapshot";
+import {
+  buildEngineSnapshotShard,
+  readEngineSnapshot,
+  readEngineSnapshotIdentity,
+  readEngineSnapshotManifest,
+  readEngineSnapshotShard,
+  type EngineSnapshotProfile,
+  type EngineSourceMode,
+} from "./engine-snapshot";
 import { memberStatusHtml } from "./member-status";
 import { accrueMilestoneEvidence, milestoneEvidenceSummary } from "./milestone-evidence";
 import { runServerChaosDrill } from "./chaos-drills";
@@ -97,6 +105,7 @@ import { transitionReadiness } from "./transitions";
 import { cachedPublicJson, PublicJsonError, releaseEtag } from "./public-cache";
 import { assertRetentionCandidatesStillUnprotected, readRetentionCandidates, readRetentionProtectionSummary } from "./retention";
 import { planR2GarbageCollection, sweepR2GarbageCollection } from "./r2-gc";
+import { compactHistoricalTriage } from "./triage-compaction";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 export { D1RestoreDrillWorkflow } from "./restore-workflow";
@@ -1381,6 +1390,41 @@ app.get("/internal/engine/snapshot", async (context) => {
     return context.json(await readEngineSnapshot(context.env, requested as EngineSourceMode, requestedProfile as EngineSnapshotProfile));
   } catch (error) {
     return jsonError(error instanceof Error ? error.message : "engine snapshot failed", 422);
+  }
+});
+
+app.get("/internal/engine/snapshot-manifest", async (context) => {
+  const requested = context.req.query("mode") ?? "direct";
+  if (!(["legacy", "direct", "all"] as const).includes(requested as EngineSourceMode)) return jsonError("engine mode must be legacy, direct, or all", 422);
+  try {
+    return context.json(await readEngineSnapshotManifest(context.env, requested as EngineSourceMode));
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "engine snapshot manifest failed", 422);
+  }
+});
+
+app.post("/internal/engine/snapshot-shards/:batchId/build", async (context) => {
+  const requested = context.req.query("mode") ?? "direct";
+  if (!(["legacy", "direct", "all"] as const).includes(requested as EngineSourceMode)) return jsonError("engine mode must be legacy, direct, or all", 422);
+  try {
+    const result = await buildEngineSnapshotShard(context.env, context.req.param("batchId"), requested as EngineSourceMode);
+    await recordAudit(context.env, context.get("identity"), "engine_snapshot_shard.build", "capture_batch", context.req.param("batchId"), "accepted", {
+      mode: requested, idempotent: result.idempotent, contentHash: result.shard.content_hash, byteLength: result.shard.byte_length,
+    });
+    return context.json(result);
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "engine snapshot shard build failed", 422);
+  }
+});
+
+app.get("/internal/engine/snapshot-shards/:batchId", async (context) => {
+  const configurationId = context.req.query("configurationId");
+  const matchRunId = context.req.query("matchRunId");
+  if (!configurationId || !matchRunId) return jsonError("configurationId and matchRunId are required", 422);
+  try {
+    return context.json(await readEngineSnapshotShard(context.env, context.req.param("batchId"), configurationId, matchRunId));
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "engine snapshot shard read failed", 422);
   }
 });
 
@@ -4430,6 +4474,22 @@ app.post("/internal/triage/:id/resolve", zValidator("json", triageResolveSchema)
       WHERE id = ?1`,
   ).bind(context.req.param("id"), body.status, body.planRef ?? null, stableJson(body.resolution)).run();
   return context.json({ ok: true, triageId: context.req.param("id"), status: body.status });
+});
+
+app.post("/internal/triage/compact", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may compact historical triage", 403);
+  const body = await context.req.json<{ execute?: unknown; limit?: unknown }>().catch(() => ({} as { execute?: unknown; limit?: unknown }));
+  const execute = body.execute === true;
+  const limit = body.limit === undefined ? 75 : Number(body.limit);
+  if (!Number.isInteger(limit) || limit < 1 || limit > 75) return jsonError("triage compaction limit must be 1-75 result groups", 422);
+  try {
+    const result = await compactHistoricalTriage(context.env, { execute, limit });
+    await recordAudit(context.env, context.get("identity"), "triage.compact", "triage_archive", "archiveId" in result ? String(result.archiveId) : null,
+      "accepted", result);
+    return context.json(result);
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "historical triage compaction failed", 409);
+  }
 });
 
 app.get("/internal/releases/:id", async (context) => {

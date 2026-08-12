@@ -11,7 +11,7 @@ export interface ManagedObject {
 }
 
 const managedPrefixes: Record<ManagedBucket, string[]> = {
-  archive: ["release-nodes/", "release-manifests/", "observations/", "configurations/"],
+  archive: ["release-nodes/", "release-manifests/", "observations/", "configurations/", "engine-snapshots/", "triage-archives/"],
   evidence: ["recipe-bundles/v2/", "recipe-cost-details/", "recipe-cost-detail-archives/", "releases/"],
 };
 
@@ -77,7 +77,20 @@ export async function collectReachableObjectKeys(env: Pick<WorkerEnv, "DB" | "AR
       `SELECT object.object_key FROM observation_partitions partition
          JOIN object_store_objects object ON object.content_hash = partition.content_hash
        UNION SELECT object_key FROM archive_manifests WHERE status = 'verified' OR completed_at IS NOT NULL
-       UNION SELECT object_key FROM configuration_archives WHERE status = 'verified'`,
+       UNION SELECT object_key FROM configuration_archives WHERE status = 'verified'
+       UNION SELECT object_key FROM triage_archives
+       UNION SELECT shard.object_key
+         FROM engine_snapshot_shards shard
+        WHERE shard.status = 'verified'
+          AND shard.configuration_id = (SELECT id FROM configuration_versions WHERE active = 1)
+          AND shard.batch_id IN (
+            SELECT id FROM (
+              SELECT batch.id, ROW_NUMBER() OVER (
+                PARTITION BY batch.source_id ORDER BY batch.captured_to DESC, batch.promoted_at DESC, batch.id DESC
+              ) AS ordinal
+                FROM capture_batches batch WHERE batch.status = 'promoted'
+            ) WHERE ordinal = 1
+          )`,
     ).all<{ object_key: string }>(),
     env.DB.prepare(
       `SELECT object_key FROM release_payloads WHERE object_key IS NOT NULL
@@ -203,6 +216,12 @@ export async function sweepR2GarbageCollection(env: WorkerEnv, runId: string, ex
         WHERE id = ?1`,
     ).bind(runId, outcomes.filter((item) => item.status === "deleted").length, deletedBytes, finishedAt, retained.length),
   ];
+  for (const item of outcomes) {
+    if (item.bucket === "archive" && item.object_key.startsWith("engine-snapshots/")) statements.push(env.DB.prepare(
+      `UPDATE engine_snapshot_shards SET status = 'collected', collected_at = ?2
+        WHERE object_key = ?1 AND status = 'verified'`,
+    ).bind(item.object_key, finishedAt));
+  }
   for (let offset = 0; offset < statements.length; offset += 80) await env.DB.batch(statements.slice(offset, offset + 80));
   return { ok: true, dryRun: false, runId, status: "completed", deleted: outcomes.filter((item) => item.status === "deleted").length,
     missing: outcomes.filter((item) => item.status === "missing").length, retained: retained.length, deletedBytes };

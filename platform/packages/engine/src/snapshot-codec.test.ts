@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { decodeNativeEngineSnapshot, encodeNativeEngineSnapshotCandidates, isEngineSnapshotEncoding, type NativeEngineSnapshot } from "./index";
+import {
+  decodeNativeEngineCandidateShard,
+  decodeNativeEngineSnapshot,
+  encodeNativeEngineCandidateShard,
+  encodeNativeEngineSnapshotCandidates,
+  isEngineSnapshotEncoding,
+  type NativeEngineSnapshot,
+} from "./index";
 
 describe("engine snapshot tuple transport", () => {
   it("round trips matched and unmatched candidates without semantic loss", () => {
@@ -21,7 +28,21 @@ describe("engine snapshot tuple transport", () => {
 
   it("accepts current and legacy measurement encodings", () => {
     expect(isEngineSnapshotEncoding("tuples-v1")).toBe(true);
+    expect(isEngineSnapshotEncoding("r2-shards-v1")).toBe(true);
     expect(isEngineSnapshotEncoding("unmatched-only")).toBe(true);
     expect(isEngineSnapshotEncoding("tuples-v2")).toBe(false);
+  });
+
+  it("round trips independently verifiable candidate shards", () => {
+    const encoded = encodeNativeEngineCandidateShard({
+      batchId: "batch", configurationId: "cfg", matchRunId: "match", matchInputHash: "a".repeat(64),
+      candidates: [{ observation_id: "matched", commodity_id: "milk", store_location_id: "store", known_wrong: 0 }],
+      rawCandidates: [{ observation_id: "raw", commodity_id: null, store_location_id: "store" }],
+    });
+    expect(decodeNativeEngineCandidateShard(encoded)).toEqual({
+      candidates: [expect.objectContaining({ observation_id: "matched", commodity_id: "milk", known_wrong: 0 })],
+      rawCandidates: [expect.objectContaining({ observation_id: "raw", commodity_id: null })],
+    });
+    expect(() => decodeNativeEngineCandidateShard({ ...encoded, matchedCandidateRows: [["too-short"]] })).toThrow(/wrong width/);
   });
 });

@@ -205,7 +205,7 @@ export interface NativeEngineSnapshot {
   inputHash: string;
   inputBatchIds: string[];
   rawCandidateEncoding?: "full" | "unmatched-only" | "omitted";
-  transportEncoding?: "json-rows-v1" | "tuples-v1";
+  transportEncoding?: "json-rows-v1" | "tuples-v1" | "r2-shards-v1";
   transportBytes?: number;
   commodities: Array<{ id: string; label: string; basis_unit: WinnerCandidate["commodityId"] extends string ? string : never; category_id: string; category_label?: string; sort_order?: number; band_min_micros?: number | null; band_max_micros?: number | null }>;
   stores: Array<{ id: string; store_name: string; display_name?: string; membership_required?: number }>;
@@ -247,12 +247,60 @@ export const ENGINE_CANDIDATE_COLUMNS = [
   "taxonomy_path", "external_key", "basis_options_json", "max_age_days", "known_wrong",
 ] as const;
 
-export const ENGINE_SNAPSHOT_ENCODING_VALUES = ["full", "unmatched-only", "omitted", "json-rows-v1", "tuples-v1"] as const;
+export const ENGINE_SNAPSHOT_ENCODING_VALUES = ["full", "unmatched-only", "omitted", "json-rows-v1", "tuples-v1", "r2-shards-v1"] as const;
 export function isEngineSnapshotEncoding(value: string): boolean {
   return (ENGINE_SNAPSHOT_ENCODING_VALUES as readonly string[]).includes(value);
 }
 
 type CandidateColumn = (typeof ENGINE_CANDIDATE_COLUMNS)[number];
+type CandidateRecord = Record<string, unknown>;
+
+export interface NativeEngineCandidateShard {
+  ok: true;
+  version: 1;
+  candidateEncoding: "tuples-v1";
+  candidateColumns: readonly CandidateColumn[];
+  batchId: string;
+  configurationId: string;
+  matchRunId: string;
+  matchInputHash: string;
+  matchedCandidateRows: unknown[][];
+  unmatchedCandidateRows: unknown[][];
+}
+
+function candidateTuple(row: object): unknown[] {
+  return ENGINE_CANDIDATE_COLUMNS.map((column) => (row as CandidateRecord)[column] ?? null);
+}
+
+function validateCandidateColumns(columns: readonly string[]): void {
+  if (columns.length !== ENGINE_CANDIDATE_COLUMNS.length
+    || columns.some((column, index) => column !== ENGINE_CANDIDATE_COLUMNS[index])) throw new Error("engine snapshot candidate tuple schema is unsupported");
+}
+
+function candidateObject(columns: readonly CandidateColumn[], row: unknown[]): CandidateRecord {
+  if (row.length !== columns.length) throw new Error("engine snapshot candidate tuple row has the wrong width");
+  return Object.fromEntries(columns.map((column, index) => [column, row[index]]));
+}
+
+export function encodeNativeEngineCandidateShard(input: {
+  batchId: string; configurationId: string; matchRunId: string; matchInputHash: string;
+  candidates: object[]; rawCandidates: object[];
+}): NativeEngineCandidateShard {
+  return { ok: true, version: 1, candidateEncoding: "tuples-v1", candidateColumns: ENGINE_CANDIDATE_COLUMNS,
+    batchId: input.batchId, configurationId: input.configurationId, matchRunId: input.matchRunId,
+    matchInputHash: input.matchInputHash, matchedCandidateRows: input.candidates.map(candidateTuple),
+    unmatchedCandidateRows: input.rawCandidates.map(candidateTuple) };
+}
+
+export function decodeNativeEngineCandidateShard(shard: NativeEngineCandidateShard): {
+  candidates: CandidateRecord[]; rawCandidates: CandidateRecord[];
+} {
+  if (shard.version !== 1 || shard.candidateEncoding !== "tuples-v1") throw new Error("engine snapshot shard contract is unsupported");
+  validateCandidateColumns(shard.candidateColumns);
+  return { candidates: shard.matchedCandidateRows.map((row) => candidateObject(shard.candidateColumns, row)),
+    rawCandidates: shard.unmatchedCandidateRows.map((row) => candidateObject(shard.candidateColumns, row)) };
+}
+
 export interface TupleEncodedNativeEngineSnapshot extends Omit<NativeEngineSnapshot, "candidates" | "rawCandidates"> {
   candidateEncoding: "tuples-v1";
   candidateColumns: readonly CandidateColumn[];
@@ -265,21 +313,19 @@ export function encodeNativeEngineSnapshotCandidates<T extends NativeEngineSnaps
   snapshot: T,
 ): Omit<T, "candidates" | "rawCandidates"> & TupleEncodedNativeEngineSnapshot {
   const { candidates, rawCandidates = [], ...rest } = snapshot;
-  const tuple = (row: object) => ENGINE_CANDIDATE_COLUMNS.map((column) => (row as Record<string, unknown>)[column] ?? null);
   const encoded = { ...rest, candidateEncoding: "tuples-v1" as const, candidateColumns: ENGINE_CANDIDATE_COLUMNS,
-    matchedCandidateRows: candidates.map(tuple), unmatchedCandidateRows: rawCandidates.map(tuple), transportBytes: 0 };
+    matchedCandidateRows: candidates.map(candidateTuple), unmatchedCandidateRows: rawCandidates.map(candidateTuple), transportBytes: 0 };
   encoded.transportBytes = new TextEncoder().encode(JSON.stringify(encoded)).byteLength;
   return encoded as unknown as Omit<T, "candidates" | "rawCandidates"> & TupleEncodedNativeEngineSnapshot;
 }
 
 export function decodeNativeEngineSnapshot(snapshot: NativeEngineSnapshot | TupleEncodedNativeEngineSnapshot): NativeEngineSnapshot {
   if (!("candidateEncoding" in snapshot) || snapshot.candidateEncoding !== "tuples-v1") return snapshot as NativeEngineSnapshot;
-  if (snapshot.candidateColumns.length !== ENGINE_CANDIDATE_COLUMNS.length
-    || snapshot.candidateColumns.some((column, index) => column !== ENGINE_CANDIDATE_COLUMNS[index])) throw new Error("engine snapshot candidate tuple schema is unsupported");
-  const object = (row: unknown[]) => Object.fromEntries(snapshot.candidateColumns.map((column, index) => [column, row[index]]));
+  validateCandidateColumns(snapshot.candidateColumns);
   const { candidateEncoding: _encoding, candidateColumns: _columns, matchedCandidateRows, unmatchedCandidateRows,
     transportBytes, ...rest } = snapshot;
-  return { ...rest, candidates: matchedCandidateRows.map(object), rawCandidates: unmatchedCandidateRows.map(object),
+  return { ...rest, candidates: matchedCandidateRows.map((row) => candidateObject(snapshot.candidateColumns, row)),
+    rawCandidates: unmatchedCandidateRows.map((row) => candidateObject(snapshot.candidateColumns, row)),
     rawCandidateEncoding: rest.rawCandidateEncoding ?? "unmatched-only", transportEncoding: "tuples-v1", transportBytes } as NativeEngineSnapshot;
 }
 

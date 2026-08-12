@@ -76,6 +76,9 @@ export class D1BackupWorkflow extends WorkflowEntrypoint<WorkerEnv, BackupWorkfl
                UNION ALL
                SELECT 'evidence', 'recipe-cost-detail', detail.object_key, detail.content_hash, detail.byte_length
                  FROM current_releases current JOIN recipe_cost_detail_objects detail ON detail.release_id = current.release_id
+               UNION ALL
+               SELECT 'archive', 'triage-archive', archive.object_key, archive.content_hash, archive.byte_length
+                 FROM triage_archives archive
              ) ORDER BY bucket, object_kind, object_key`,
           ).all<{ bucket: "archive" | "evidence"; object_kind: string; object_key: string; content_hash: string; byte_length: number }>(),
           this.env.DB.prepare("SELECT MAX(id) AS latest FROM d1_migrations").first<{ latest: number | null }>().catch(() => ({ latest: null })),

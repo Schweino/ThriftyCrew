@@ -22,6 +22,8 @@ pnpm tc help
 pnpm tc config check
 pnpm tc run daily --dry
 TC_LOCAL_MUTATION_SECRET=... pnpm tc replay
+pnpm tc triage compact
+pnpm tc triage compact --execute
 pnpm efficiency:check 1h
 ```
 
@@ -37,6 +39,12 @@ then swaps the Omaha release pointer:
 pnpm tc engine build-native native-release.json
 pnpm tc engine publish-native
 ```
+
+The engine snapshot is a content-addressed R2 shard per selected batch, configuration, and passed match
+run. The operator fetches those immutable shards with bounded concurrency, verifies every hash, and keeps
+the former D1 tuple snapshot as an explicit rollback path. Historical release guard findings can be
+compacted only after the same guard passes on the current release; the complete evidence group is verified
+in R2 before its superseded D1 queue rows are removed.
 
 `tc replay` reads the newest ignored local comparison artifact and the tracked upstream recipe-basis
 snapshot. `replay:current` signs every mutation, writes evidence and large payloads to the isolated R2 estate, validates all

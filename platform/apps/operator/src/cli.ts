@@ -20,6 +20,7 @@ import { appendCaptureChunk, buildCaptureSessionWorklist, buildCaptureVerificati
 import { captureControllerRequest } from "../../../scripts/capture-controller-client.mjs";
 import { catalogRefreshPlan } from "./capture-journal";
 import { agentJobRunFields } from "./job-run";
+import { loadR2ShardedEngineSnapshot } from "./engine-snapshot";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
@@ -89,6 +90,20 @@ async function loadCurrentReleaseGraph(client: MutationClient): Promise<ContentA
   }
   return { version: 1, parentReleaseId: header?.parentReleaseId ?? null,
     dependencyHash: header?.dependencyHash ?? "0".repeat(64), nodes };
+}
+
+async function loadEngineSnapshot(
+  client: MutationClient,
+  mode: "legacy" | "direct" | "all",
+  profile: "release" | "parity" = "release",
+): Promise<NativeEngineSnapshot> {
+  try {
+    return await loadR2ShardedEngineSnapshot(client, mode, profile);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.warn(`R2-sharded snapshot unavailable; using verified D1 rollback path: ${message}`);
+    return decodeNativeEngineSnapshot(await client.request(`/internal/engine/snapshot?mode=${mode}&profile=${profile}`) as unknown as TupleEncodedNativeEngineSnapshot);
+  }
 }
 
 async function publicGet(pathname: string): Promise<unknown> {
@@ -312,7 +327,7 @@ async function releaseFreezeDrill(): Promise<Record<string, unknown>> {
   const before = await publicGet("/api/v2/status") as { currentRelease?: { id?: string; summary?: { expectedCommodities?: number; expectedStores?: number; expectedRecipes?: number; expectedFreeRotation?: number } } };
   const currentReleaseId = before.currentRelease?.id;
   if (!currentReleaseId) throw new Error("release-freeze drill requires a published release");
-  const snapshot = decodeNativeEngineSnapshot(await client.request("/internal/engine/snapshot?mode=direct") as unknown as TupleEncodedNativeEngineSnapshot);
+  const snapshot = await loadEngineSnapshot(client, "direct");
   const observedAt = new Date().toISOString();
   const inputBatchIds = [...snapshot.inputBatchIds].sort();
   const inputManifest = {
@@ -379,7 +394,29 @@ if (command === "status") {
 } else if (command === "doctor") {
   result = await (await mutationClient()).request("/internal/doctor", { acceptStatuses: [422] });
 } else if (command === "triage") {
-  if (subcommand === "run" || subcommand === "reconcile") {
+  if (subcommand === "compact") {
+    const execute = arguments_.includes("--execute");
+    const client = await mutationClient();
+    if (!execute) result = await client.request("/internal/triage/compact", { json: { execute: false, limit: 75 } });
+    else {
+      const archives: unknown[] = [];
+      let resultCount = 0;
+      let findingCount = 0;
+      let triageCount = 0;
+      for (let page = 0; page < 100; page++) {
+        const compacted = await client.request("/internal/triage/compact", { json: { execute: true, limit: 75 } }) as {
+          resultCount?: number; findingCount?: number; triageCount?: number; archiveId?: string; objectKey?: string; contentHash?: string;
+        };
+        const pageResults = Number(compacted.resultCount ?? 0);
+        if (pageResults === 0) break;
+        resultCount += pageResults;
+        findingCount += Number(compacted.findingCount ?? 0);
+        triageCount += Number(compacted.triageCount ?? 0);
+        archives.push({ archiveId: compacted.archiveId, objectKey: compacted.objectKey, contentHash: compacted.contentHash, resultCount: pageResults });
+      }
+      result = { ok: true, executed: true, resultCount, findingCount, triageCount, archives };
+    }
+  } else if (subcommand === "run" || subcommand === "reconcile") {
     result = await (await mutationClient()).request(`/internal/triage/${subcommand}`, { method: "POST" });
   } else if (subcommand === "review") {
     const [triageId, outputFile] = arguments_;
@@ -809,7 +846,7 @@ if (command === "status") {
   const requestedMode = arguments_[0] ?? "legacy";
   if (!(["legacy", "direct", "all"] as const).includes(requestedMode as "legacy" | "direct" | "all")) throw new Error("tc engine parity mode must be legacy, direct, or all");
   const client = await mutationClient();
-  const snapshot = decodeNativeEngineSnapshot(await client.request(`/internal/engine/snapshot?mode=${requestedMode}&profile=parity`) as unknown as TupleEncodedNativeEngineSnapshot);
+  const snapshot = await loadEngineSnapshot(client, requestedMode as "legacy" | "direct" | "all", "parity");
   const report = buildNativeParityReport(snapshot);
   result = await client.request("/internal/engine/parity", { json: report, acceptStatuses: [422] });
 } else if (command === "engine" && (subcommand === "build-native" || subcommand === "publish-native")) {
@@ -837,11 +874,10 @@ if (command === "status") {
   }
   if (result === undefined) {
     stageStartedAt = performance.now();
-    const [encodedSnapshot, previousGraph] = await Promise.all([
-      client.request("/internal/engine/snapshot?mode=direct") as Promise<unknown> as Promise<TupleEncodedNativeEngineSnapshot>,
+    const [snapshot, previousGraph] = await Promise.all([
+      loadEngineSnapshot(client, "direct"),
       loadCurrentReleaseGraph(client),
     ]);
-    const snapshot = decodeNativeEngineSnapshot(encodedSnapshot);
     performanceProfile.snapshotFetchMs = Math.round(performance.now() - stageStartedAt);
     performanceProfile.snapshotResponseBytes = snapshot.transportBytes ?? new TextEncoder().encode(stableJson(snapshot)).byteLength;
     stageStartedAt = performance.now();
