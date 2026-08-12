@@ -60,8 +60,14 @@ describe("native release construction", () => {
     const snapshot: NativeEngineSnapshot = {
       mode: "direct", observedAt: "2026-08-09T12:00:00.000Z", configurationId: "config", currentReleaseId: "old", inputHash: "a".repeat(64), inputBatchIds: ["batch"],
       commodities: [{ id: "eggs", label: "Eggs", basis_unit: "dozen", category_id: "dairy", category_label: "Dairy", sort_order: 1 }],
-      stores: [{ id: "store", store_name: "Store", membership_required: 1 }],
-      candidates: [{ observation_id: "obs", commodity_id: "eggs", store_location_id: "store", per_unit_micros: 2_000_000, normalized_basis_unit: "dozen", normalized_basis_qty_micros: 1_000_000, purchase_price_minor: 200, purchase_quantity: 1, package_count: 1, captured_at: "2026-08-09T11:00:00.000Z", valid_to: null, coverage_mode: "full", captured_to: "2026-08-09T11:00:00.000Z", known_wrong: 0, batch_id: "batch", name: "Eggs" }],
+      stores: [{ id: "store", store_name: "Store", membership_required: 1 }, { id: "bulk", store_name: "Bulk", membership_required: 0 }],
+      candidates: [
+        { observation_id: "obs", commodity_id: "eggs", store_location_id: "store", per_unit_micros: 2_000_000, normalized_basis_unit: "dozen", normalized_basis_qty_micros: 1_000_000, purchase_price_minor: 200, purchase_quantity: 1, package_count: 1, captured_at: "2026-08-09T11:00:00.000Z", valid_to: null, coverage_mode: "full", captured_to: "2026-08-09T11:00:00.000Z", known_wrong: 0, batch_id: "batch", name: "Eggs" },
+        // Lower per-unit cost, but a ten-dozen package. Utilized food cost
+        // should use this option while register checkout should buy the
+        // smaller $2 package above.
+        { observation_id: "bulk-obs", commodity_id: "eggs", store_location_id: "bulk", per_unit_micros: 1_900_000, normalized_basis_unit: "dozen", normalized_basis_qty_micros: 10_000_000, purchase_price_minor: 1900, purchase_quantity: 1, package_count: 1, captured_at: "2026-08-09T11:00:00.000Z", valid_to: null, coverage_mode: "full", captured_to: "2026-08-09T11:00:00.000Z", known_wrong: 0, batch_id: "batch", name: "Bulk Eggs 10 dozen" },
+      ],
       rawCandidates: [{ observation_id: "raw-spice", store_location_id: "store", per_unit_micros: 1_000_000, normalized_basis_unit: "oz", captured_at: "2026-08-09T11:00:00.000Z", valid_to: null, coverage_mode: "full", captured_to: "2026-08-09T11:00:00.000Z", batch_id: "batch", name: "Special Spice 1 oz" }],
       currentCells: [],
     };
@@ -69,7 +75,7 @@ describe("native release construction", () => {
     const identity = await nativeReleaseIdentity(snapshot, await loadNativeReleaseCatalog(root));
     expect(identity).toMatchObject({ releaseId: artifact.releaseId, inputHash: artifact.inputHash, inputBatchIds: artifact.inputBatchIds });
     expect(artifact.recipeCosts).toEqual(expect.arrayContaining([
-      expect.objectContaining({ recipeSlug: "complete", status: "complete", batchCostMinor: 100, servingCostMinor: 50, detail: expect.objectContaining({ utilizedBatchCostMinor: 100, splitStoreCheckoutCostMinor: 200, bestSingleStoreCheckoutCostMinor: 200 }) }),
+      expect.objectContaining({ recipeSlug: "complete", status: "complete", batchCostMinor: 95, servingCostMinor: 48, detail: expect.objectContaining({ utilizedBatchCostMinor: 95, splitStoreCheckoutCostMinor: 200, bestSingleStoreCheckoutCostMinor: 200 }) }),
       expect.objectContaining({ recipeSlug: "incomplete", status: "incomplete", missingIngredients: ["Mystery"] }),
       expect.objectContaining({ recipeSlug: "recipe-rule", status: "complete", batchCostMinor: 50, servingCostMinor: 25 }),
     ]));
@@ -81,21 +87,21 @@ describe("native release construction", () => {
     expect(board.commodities[0]?.stores[0]).toMatchObject({ observationId: "obs", membership: true, member_label: "Membership required" });
     const complete = artifact.recipeCosts.find((cost) => cost.recipeSlug === "complete")!;
     expect(complete.detail.scenarios).toEqual(expect.objectContaining({
-      utilized: expect.objectContaining({ status: "complete", batchCostMinor: 100 }),
+      utilized: expect.objectContaining({ status: "complete", batchCostMinor: 95 }),
       registerCheckout: expect.objectContaining({ status: "complete", batchCostMinor: 200 }),
-      nonMemberCheckout: expect.objectContaining({ status: "incomplete" }),
+      nonMemberCheckout: expect.objectContaining({ status: "complete", batchCostMinor: 1900 }),
       everydayBaseline: expect.objectContaining({ status: "incomplete" }),
       selectedStoreCheckout: expect.objectContaining({ store: expect.objectContaining({ status: "complete", batchCostMinor: 200 }) }),
     }));
-    expect(artifact.graph.nodes.filter((node) => node.kind === "cell")).toHaveLength(1);
+    expect(artifact.graph.nodes.filter((node) => node.kind === "cell")).toHaveLength(2);
     expect(artifact.graph.nodes.filter((node) => node.kind === "recipe")).toHaveLength(3);
     const unchanged = await buildNativeRelease(root, snapshot, undefined, artifact.graph);
-    expect(unchanged.audit).toMatchObject({ incrementallyReusedCells: 1, recalculatedCells: 0, incrementallyReusedRecipes: 3, recalculatedRecipes: 0 });
+    expect(unchanged.audit).toMatchObject({ incrementallyReusedCells: 2, recalculatedCells: 0, incrementallyReusedRecipes: 3, recalculatedRecipes: 0 });
     const changed = await buildNativeRelease(root, {
       ...snapshot,
       candidates: snapshot.candidates.map((candidate) => ({ ...candidate, per_unit_micros: 2_200_000, purchase_price_minor: 220 })),
     }, undefined, artifact.graph);
-    expect(changed.audit).toMatchObject({ incrementallyReusedCells: 0, recalculatedCells: 1, incrementallyReusedRecipes: 2, recalculatedRecipes: 1 });
+    expect(changed.audit).toMatchObject({ incrementallyReusedCells: 0, recalculatedCells: 2, incrementallyReusedRecipes: 2, recalculatedRecipes: 1 });
   });
 
   it("prices the strict specialty rules and rejects their common false-positive traps", async () => {

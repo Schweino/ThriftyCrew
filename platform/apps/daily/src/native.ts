@@ -192,7 +192,7 @@ export async function nativeReleaseIdentity(
   const inputBatchIds = [...snapshot.inputBatchIds].sort();
   const inputManifest = {
     kind: "native-v3-release",
-    engineVersion: "native-v4.0.1-object-dag-scenarios",
+    engineVersion: "native-v4.0.2-checkout-optimized-scenarios",
     marketId: "omaha",
     mode: "direct",
     releaseDate: weekOf,
@@ -459,7 +459,7 @@ export async function buildNativeRelease(
         ?? commodityByLabel.get(key(scaler?.canon ?? ingredient.item));
     };
     const incrementalDependencyHash = await digestHex(stableJson({
-      version: "recipe-cost-dag-v1", recipe, configurationId: snapshot.configurationId,
+      version: "recipe-cost-dag-v2-checkout-optimized", recipe, configurationId: snapshot.configurationId,
       pricingConfigurationHash: catalog.recipePricingConfigurationHash,
       conversionRegistryHash: catalog.conversionRegistryHash,
       ingredients: (recipe.ingredients_grams ?? []).map((ingredient) => {
@@ -529,21 +529,32 @@ export async function buildNativeRelease(
         continue;
       }
       const requiredBasisUnits = grams! / gpu!;
-      const selectedCosts = optionCosts(crown!, requiredBasisUnits);
-      const nonMember = [...nonMemberOptions].sort((left, right) => left.displayPerUnitMicros - right.displayPerUnitMicros || left.storeLocationId.localeCompare(right.storeLocationId))[0];
-      const nonMemberCosts = nonMember ? optionCosts(nonMember, requiredBasisUnits) : null;
-      const everyday = [...everydayOptions].sort((left, right) => left.displayPerUnitMicros - right.displayPerUnitMicros || left.storeLocationId.localeCompare(right.storeLocationId))[0];
-      const everydayCosts = everyday ? optionCosts(everyday, requiredBasisUnits) : null;
-      utilizedBatchMinor += selectedCosts.utilizedMinor;
-      splitStoreCheckoutMinor += selectedCosts.checkoutMinor;
-      if (nonMemberCosts) {
-        nonMemberSplitStoreCheckoutMinor += nonMemberCosts.checkoutMinor;
-        nonMemberUtilizedBatchMinor += nonMemberCosts.utilizedMinor;
+      const utilizedCosts = optionCosts(crown!, requiredBasisUnits);
+      const checkoutChoices = options.map((option) => ({ option, costs: optionCosts(option, requiredBasisUnits) }))
+        .sort((left, right) => left.costs.checkoutMinor - right.costs.checkoutMinor
+          || left.option.displayPerUnitMicros - right.option.displayPerUnitMicros
+          || left.option.storeLocationId.localeCompare(right.option.storeLocationId));
+      const checkout = checkoutChoices[0]!;
+      const nonMemberUtilized = [...nonMemberOptions].sort((left, right) => left.displayPerUnitMicros - right.displayPerUnitMicros || left.storeLocationId.localeCompare(right.storeLocationId))[0];
+      const nonMemberCheckout = nonMemberOptions.map((option) => ({ option, costs: optionCosts(option, requiredBasisUnits) }))
+        .sort((left, right) => left.costs.checkoutMinor - right.costs.checkoutMinor
+          || left.option.displayPerUnitMicros - right.option.displayPerUnitMicros
+          || left.option.storeLocationId.localeCompare(right.option.storeLocationId))[0];
+      const everydayUtilized = [...everydayOptions].sort((left, right) => left.displayPerUnitMicros - right.displayPerUnitMicros || left.storeLocationId.localeCompare(right.storeLocationId))[0];
+      const everydayCheckout = everydayOptions.map((option) => ({ option, costs: optionCosts(option, requiredBasisUnits) }))
+        .sort((left, right) => left.costs.checkoutMinor - right.costs.checkoutMinor
+          || left.option.displayPerUnitMicros - right.option.displayPerUnitMicros
+          || left.option.storeLocationId.localeCompare(right.option.storeLocationId))[0];
+      utilizedBatchMinor += utilizedCosts.utilizedMinor;
+      splitStoreCheckoutMinor += checkout.costs.checkoutMinor;
+      if (nonMemberCheckout && nonMemberUtilized) {
+        nonMemberSplitStoreCheckoutMinor += nonMemberCheckout.costs.checkoutMinor;
+        nonMemberUtilizedBatchMinor += optionCosts(nonMemberUtilized, requiredBasisUnits).utilizedMinor;
       }
       else nonMemberMissing = true;
-      if (everydayCosts) {
-        everydayBaselineCheckoutMinor += everydayCosts.checkoutMinor;
-        everydayBaselineUtilizedMinor += everydayCosts.utilizedMinor;
+      if (everydayCheckout && everydayUtilized) {
+        everydayBaselineCheckoutMinor += everydayCheckout.costs.checkoutMinor;
+        everydayBaselineUtilizedMinor += optionCosts(everydayUtilized, requiredBasisUnits).utilizedMinor;
       } else everydayMissing = true;
       for (const [storeId, accumulator] of singleStoreCheckout) {
         const storeOption = options.find((option) => option.storeLocationId === storeId);
@@ -559,10 +570,10 @@ export async function buildNativeRelease(
         item: ingredient.item,
         grams: grams!,
         commodityId: commodityId!,
-        observationId: crown!.observationId,
-        store: storeById.get(crown!.storeLocationId)?.store_name ?? crown!.storeLocationId,
-        perUnitMicros: crown!.displayPerUnitMicros,
-        basisUnit: crown!.displayUnit,
+        observationId: checkout.option.observationId,
+        store: storeById.get(checkout.option.storeLocationId)?.store_name ?? checkout.option.storeLocationId,
+        perUnitMicros: checkout.option.displayPerUnitMicros,
+        basisUnit: checkout.option.displayUnit,
         gpu: gpu!,
         gpuSource: conversion?.source === "recipe-scaler-exception" ? "recipe-scaler" : "ingredient-definition",
         scalerGpu: asNumber(scaler?.gpu) ?? null,
@@ -571,26 +582,29 @@ export async function buildNativeRelease(
         conversionRegistryHash: catalog.conversionRegistryHash,
         conversionSource: conversion!.source,
         conversionConfidence: conversion!.confidence,
-        utilizedCostMinor: selectedCosts.utilizedMinor,
-        purchaseCostMinor: selectedCosts.checkoutMinor,
-        packageCount: selectedCosts.packages,
-        variableWeight: selectedCosts.variableWeight,
-        packageBasisUnits: selectedCosts.packageBasisUnits,
-        sourcePurchasePriceMinor: crown!.raw.purchase_price_minor ?? null,
-        sourceNormalizedBasisUnit: crown!.raw.normalized_basis_unit,
-        sourceNormalizedBasisQtyMicros: crown!.raw.normalized_basis_qty_micros ?? null,
-        membershipRequired: crown!.raw.membership_required === 1 || storeById.get(crown!.storeLocationId)?.membership_required === 1,
-        loyaltyRequired: crown!.raw.loyalty_required === 1,
-        nonMemberObservationId: nonMember?.observationId ?? null,
-        nonMemberPurchaseCostMinor: nonMemberCosts?.checkoutMinor ?? null,
-        nonMemberUtilizedCostMinor: nonMemberCosts?.utilizedMinor ?? null,
-        everydayObservationId: everyday?.observationId ?? null,
-        everydayStoreLocationId: everyday?.storeLocationId ?? null,
-        everydayPerUnitMicros: everyday?.displayPerUnitMicros ?? null,
-        everydayPurchaseCostMinor: everydayCosts?.checkoutMinor ?? null,
-        everydaySourcePurchasePriceMinor: everyday?.raw.purchase_price_minor ?? null,
-        everydayPackageBasisUnits: everydayCosts?.packageBasisUnits ?? null,
-        everydayVariableWeight: everydayCosts?.variableWeight ?? null,
+        utilizedObservationId: crown!.observationId,
+        utilizedStoreLocationId: crown!.storeLocationId,
+        utilizedPerUnitMicros: crown!.displayPerUnitMicros,
+        utilizedCostMinor: utilizedCosts.utilizedMinor,
+        purchaseCostMinor: checkout.costs.checkoutMinor,
+        packageCount: checkout.costs.packages,
+        variableWeight: checkout.costs.variableWeight,
+        packageBasisUnits: checkout.costs.packageBasisUnits,
+        sourcePurchasePriceMinor: checkout.option.raw.purchase_price_minor ?? null,
+        sourceNormalizedBasisUnit: checkout.option.raw.normalized_basis_unit,
+        sourceNormalizedBasisQtyMicros: checkout.option.raw.normalized_basis_qty_micros ?? null,
+        membershipRequired: checkout.option.raw.membership_required === 1 || storeById.get(checkout.option.storeLocationId)?.membership_required === 1,
+        loyaltyRequired: checkout.option.raw.loyalty_required === 1,
+        nonMemberObservationId: nonMemberCheckout?.option.observationId ?? null,
+        nonMemberPurchaseCostMinor: nonMemberCheckout?.costs.checkoutMinor ?? null,
+        nonMemberUtilizedCostMinor: nonMemberUtilized ? optionCosts(nonMemberUtilized, requiredBasisUnits).utilizedMinor : null,
+        everydayObservationId: everydayCheckout?.option.observationId ?? null,
+        everydayStoreLocationId: everydayCheckout?.option.storeLocationId ?? null,
+        everydayPerUnitMicros: everydayCheckout?.option.displayPerUnitMicros ?? null,
+        everydayPurchaseCostMinor: everydayCheckout?.costs.checkoutMinor ?? null,
+        everydaySourcePurchasePriceMinor: everydayCheckout?.option.raw.purchase_price_minor ?? null,
+        everydayPackageBasisUnits: everydayCheckout?.costs.packageBasisUnits ?? null,
+        everydayVariableWeight: everydayCheckout?.costs.variableWeight ?? null,
         storeOptions: Object.fromEntries(options.map((option) => {
           const optionCost = optionCosts(option, requiredBasisUnits);
           return [option.storeLocationId, {

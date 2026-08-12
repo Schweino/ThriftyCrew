@@ -197,7 +197,7 @@ function init(box){
   // uses over the package size, never less than one. Every tab prices whole packages; only the price
   // source differs (everyday shelf price vs this week's cheapest verified store).
   function pkgs(it,nn){ return Math.max(1,Math.ceil(it.grams*(nn/data.base)/it.pkg_g - 0.02)); }
-  function pkgLabel(it,k){ if(it.pkg_l==='lb'){return k+' lb';} if(it.pkg_l==='head'){return k+(k>1?' heads':' head');} if(k===1){return '1 '+it.pkg_l;} return k+' × '+it.pkg_l; }
+  function pkgLabel(it,k){ var q=fmtQty(k); if(it.pkg_l==='lb'){return q+' lb';} if(it.pkg_l==='head'){return q+(k>1?' heads':' head');} if(k===1){return '1 '+it.pkg_l;} return q+' × '+it.pkg_l; }
   function price(it,nn,basis){
     var inputs=(feedData&&feedData.pricing_inputs&&it.bid)?feedData.pricing_inputs[it.bid]:null;
     var source=inputs?(basis==='everyday'?inputs.everyday:inputs.current):null;
@@ -207,9 +207,9 @@ function init(box){
     var k=variable?0:(packageBasis>0?Math.max(1,Math.ceil(required/packageBasis-1e-9)):0);
     var cost=variable?(source.perUnitMicros/1000000)*required:((source.purchasePriceMinor>0&&k>0)?source.purchasePriceMinor*k/100:null);
     if(!(cost>=0)) return {cost:null,live:false,k:k,unavailable:true};
-    if(basis==='everyday'){ return {cost:cost,live:true,k:k,variable:variable}; }
+    if(basis==='everyday'){ return {cost:cost,live:true,k:k,required:required,variable:variable}; }
     var e=(feedData&&feedData.ingredients&&it.bid)?feedData.ingredients[it.bid]:null;
-    return {cost:cost,live:true,k:k,variable:variable,store:e&&e.store,url:e&&e.url,unit:e&&e.unit,up:e&&e.cheapest,sale:e&&e.type==='sale',cn:e&&e.n};
+    return {cost:cost,live:true,k:k,required:required,variable:variable,store:e&&e.store,url:e&&e.url,unit:e&&e.unit,up:e&&e.cheapest,sale:e&&e.type==='sale',cn:e&&e.n};
   }
   function totalAt(nn,basis,skipRemoved){
     var t=0,complete=true; data.ing.forEach(function(it,i){ if(skipRemoved&&removed[i])return; var p=price(it,nn,basis); if(p.cost===null){complete=false;}else{t+=p.cost;} }); return complete?t:null;
@@ -249,7 +249,7 @@ function init(box){
       var inc=!(tab==='custom'&&removed[i]);
       if(p.cost===null){ complete=false; html+='<li><span>'+esc(it.item)+'</span><span class="smp-ct-r">Price unavailable in this release</span></li>'; return; }
       if(inc){ tot+=p.cost; } else { own+=p.cost; }
-      var left, right, qty='<span class="smp-ct-qty">'+pkgLabel(it,p.k)+'</span> ';
+      var left, right, qty='<span class="smp-ct-qty">'+pkgLabel(it,p.variable?p.required:p.k)+'</span> ';
       if(tab==='custom'){ left='<label class="smp-ct-ck"><input type="checkbox" data-i="'+i+'"'+(inc?' checked':'')+'> <span>'+esc(it.item)+(p.sale?'<span class="smp-sc-saletag">sale</span>':'')+'</span></label>'; }
       else{ left='<span>'+esc(it.item)+(p.sale?'<span class="smp-sc-saletag">sale</span>':'')+'</span>'; }
       // winning-store chip: only when the feed actually named a store for this ingredient

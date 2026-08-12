@@ -74,9 +74,9 @@ function Move-SpecPriceToReleaseHydration { param($Spec)
   }
   if ($Spec.head -and $Spec.head.PSObject.Properties['description']) {
     $description = [string]$Spec.head.description
-    $priceClause = '\s+for about ' + $pattern + '\s+(?:a|per)\s+[^.]+\.?'
-    $description = [regex]::Replace($description, $priceClause, '.')
-    $Spec.head.description = Remove-GhostStaticCurrencyClaims ([regex]::Replace($description, $pattern, 'live promoted-release pricing'))
+    $priceClause = '(?i),?\s*(?:for\s+)?(?:about|roughly|around)\s+' + $pattern + '\s+(?:a|per|each\b)\s*[^.]*\.?'
+    $description = [regex]::Replace($description, $priceClause, ', with live pricing shown on the page.')
+    $Spec.head.description = Remove-GhostStaticCurrencyClaims ([regex]::Replace($description, $pattern, 'current pricing shown on the page'))
   }
   return $Spec
 }
@@ -127,6 +127,10 @@ if ($SelfTest) {
   T 'Ghost prose price becomes a live release hydration target while membership pricing is untouched' `
     ($h.upsell_html -eq '<span data-tc-live-price>current release price loading</span> a bowl' -and $h.head.description -notmatch '\$3\.58') `
     ($h.upsell_html + ' / ' + $h.head.description)
+  $h2 = '{"stat":{"cost_ps":"5.91"},"head":{"description":"678 calories, 37g protein, about $5.91 a serving (at everyday cost). Takeout, dethroned."}}' | ConvertFrom-Json
+  $h2 = Move-SpecPriceToReleaseHydration $h2
+  T 'metadata removes the price clause as a grammatical sentence' `
+    ($h2.head.description -eq '678 calories, 37g protein, with live pricing shown on the page. Takeout, dethroned.') $h2.head.description
   T 'non-release currency claims become qualitative while membership pricing remains' `
     ((Remove-GhostStaticCurrencyClaims 'runs $14 to $17, saves around $12, members pay $1 a month') -eq 'runs far more, saves substantially, members pay $1 a month') `
     (Remove-GhostStaticCurrencyClaims 'runs $14 to $17, saves around $12, members pay $1 a month')
