@@ -1422,7 +1422,10 @@ app.post("/internal/restore-drills/trigger", async (context) => {
   const attempts = await context.env.DB.prepare(
     "SELECT COUNT(*) AS count FROM job_runs WHERE job = 'restore-drill-quarterly' AND started_at >= ?1",
   ).bind(quarterStart).first<{ count: number }>();
-  const instanceId = `d1-restore-${quarter}-a${(attempts?.count ?? 0) + 1}`;
+  // A workflow can fail before it creates its job_run. Include an entropy
+  // suffix so the next forced drill never reuses Cloudflare's immutable
+  // instance id in that case.
+  const instanceId = `d1-restore-${quarter}-a${(attempts?.count ?? 0) + 1}-${crypto.randomUUID().slice(0, 8)}`;
   try {
     await context.env.RESTORE_WORKFLOW.create({ id: instanceId, params: { trigger: force ? "operator-forced" : "operator-or-schedule" } });
   } catch (error) {
