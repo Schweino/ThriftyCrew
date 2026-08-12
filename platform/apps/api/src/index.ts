@@ -2756,7 +2756,11 @@ app.post("/internal/storage/compact-releases", async (context) => {
   const releases = await context.env.DB.prepare(
     `SELECT release.id FROM releases release JOIN release_graphs graph ON graph.release_id = release.id
       WHERE release.state IN ('superseded', 'rejected')
-        AND (EXISTS (SELECT 1 FROM release_cells cell WHERE cell.release_id = release.id)
+        AND (EXISTS (SELECT 1 FROM release_cells cell WHERE cell.release_id = release.id
+                      AND NOT EXISTS (SELECT 1 FROM accuracy_draw_cells sample
+                                       WHERE sample.release_id = cell.release_id
+                                         AND sample.commodity_id = cell.commodity_id
+                                         AND sample.store_location_id = cell.store_location_id))
           OR EXISTS (SELECT 1 FROM release_recipe_costs cost WHERE cost.release_id = release.id)
           OR EXISTS (SELECT 1 FROM release_payloads payload WHERE payload.release_id = release.id))
       ORDER BY release.created_at LIMIT 5`,
