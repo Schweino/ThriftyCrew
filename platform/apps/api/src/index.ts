@@ -94,7 +94,7 @@ import { acquireOperationLease, activeDeploymentBlockers, releaseOperationLease,
 import { archiveConfiguration, compactConfiguration, rehydrateConfiguration } from "./configuration-archive";
 import { transitionReadiness } from "./transitions";
 import { cachedPublicJson, PublicJsonError, releaseEtag } from "./public-cache";
-import { assertRetentionCandidatesStillUnprotected, readRetentionCandidates, readRetentionProtections, summarizeRetentionProtections } from "./retention";
+import { assertRetentionCandidatesStillUnprotected, readRetentionCandidates, readRetentionProtectionSummary } from "./retention";
 import { planR2GarbageCollection, sweepR2GarbageCollection } from "./r2-gc";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
@@ -1941,12 +1941,11 @@ app.post("/internal/archival/plan", zValidator("json", archivePlanSchema), async
   if (Date.parse(body.cutoffAt) > minimumCutoff) return jsonError("archive cutoff must retain a 24 hour ingestion safety window", 422);
   const forecast = await context.env.DB.prepare("SELECT status, usage_percent_millis FROM archival_forecasts ORDER BY observed_at DESC LIMIT 1")
     .first<{ status: string; usage_percent_millis: number }>();
-  const [ids, protectedRows] = await Promise.all([
+  const [ids, protection] = await Promise.all([
     readRetentionCandidates(context.env.DB, body.cutoffAt, body.maximumRows),
-    readRetentionProtections(context.env.DB, body.cutoffAt),
+    readRetentionProtectionSummary(context.env.DB, body.cutoffAt),
   ]);
-  const protection = summarizeRetentionProtections(protectedRows);
-  const protectedRefsHash = await digestHex(stableJson({ cutoffAt: body.cutoffAt, protectedRows }));
+  const protectedRefsHash = await digestHex(stableJson({ cutoffAt: body.cutoffAt, protection }));
   const result = { cutoffAt: body.cutoffAt, candidates: ids.length, ...protection, protectedRefsHash, forecast: forecast ?? null };
   if (body.dryRun) return context.json({ ok: true, dryRun: true, ...result });
   if (!ids.length) return jsonError("archive plan has no eligible observations", 422);
@@ -2099,8 +2098,8 @@ app.post("/internal/archival/:id/execute", zValidator("json", canonicalCleanupEx
   if (!stored || stored.size !== manifest.byte_length || stored.customMetadata?.sha256 !== manifest.sha256) {
     return jsonError("verified archive object is no longer intact", 409);
   }
-  const protectedRows = await readRetentionProtections(context.env.DB, manifest.cutoff_at);
-  const protectedRefsHash = await digestHex(stableJson({ cutoffAt: manifest.cutoff_at, protectedRows }));
+  const protection = await readRetentionProtectionSummary(context.env.DB, manifest.cutoff_at);
+  const protectedRefsHash = await digestHex(stableJson({ cutoffAt: manifest.cutoff_at, protection }));
   if (protectedRefsHash !== manifest.protected_refs_hash) return jsonError("release references changed after archive planning", 409);
   const archivedIds = await context.env.DB.prepare(
     "SELECT observation_id FROM archive_manifest_observations WHERE manifest_id = ?1 ORDER BY observation_id",

@@ -58,18 +58,20 @@ protected_observations(observation_id, reason, reference_id) AS (
    WHERE triage.status <> 'resolved'
 )`;
 
-export async function readRetentionProtections(db: D1Database, cutoffAt: string): Promise<RetentionProtectionRow[]> {
+export async function readRetentionProtectionSummary(db: D1Database, cutoffAt: string): Promise<RetentionProtectionSummary> {
   const result = await db.prepare(`${protectionCte}
-    SELECT observation_id, group_concat(protection) AS protections
-      FROM (
-        SELECT observation_id, reason || ':' || reference_id AS protection
-          FROM protected_observations
-         WHERE observation_id IN (SELECT id FROM observations WHERE captured_at < ?1)
-         ORDER BY observation_id, reason, reference_id
-      ) ordered
-     GROUP BY observation_id
-     ORDER BY observation_id`).bind(cutoffAt).all<RetentionProtectionRow>();
-  return result.results;
+    SELECT reason, COUNT(DISTINCT observation_id) AS protected_count
+      FROM protected_observations
+     WHERE observation_id IN (SELECT id FROM observations WHERE captured_at < ?1)
+     GROUP BY reason
+    UNION ALL
+    SELECT '__total__', COUNT(DISTINCT observation_id)
+      FROM protected_observations
+     WHERE observation_id IN (SELECT id FROM observations WHERE captured_at < ?1)
+     ORDER BY reason`).bind(cutoffAt).all<{ reason: string; protected_count: number }>();
+  const total = result.results.find((row) => row.reason === "__total__")?.protected_count ?? 0;
+  return { protectedCount: total, byReason: Object.fromEntries(result.results.filter((row) => row.reason !== "__total__")
+    .map((row) => [row.reason, row.protected_count])) };
 }
 
 export async function readRetentionCandidates(db: D1Database, cutoffAt: string, limit: number): Promise<string[]> {
@@ -94,8 +96,13 @@ export function summarizeRetentionProtections(rows: readonly RetentionProtection
 }
 
 export async function assertRetentionCandidatesStillUnprotected(env: WorkerEnv, cutoffAt: string, observationIds: readonly string[]): Promise<void> {
-  const protectedRows = await readRetentionProtections(env.DB, cutoffAt);
-  const protectedIds = new Set(protectedRows.map((row) => row.observation_id));
-  const gained = observationIds.filter((id) => protectedIds.has(id));
-  if (gained.length > 0) throw new Error(`archive candidates gained protected dependencies: ${gained.slice(0, 10).join(", ")}`);
+  if (observationIds.length === 0) return;
+  const gained = await env.DB.prepare(`${protectionCte}
+    SELECT protected.observation_id, protected.reason, protected.reference_id
+      FROM protected_observations protected
+      JOIN json_each(?2) candidate ON CAST(candidate.value AS TEXT) = protected.observation_id
+     WHERE protected.observation_id IN (SELECT id FROM observations WHERE captured_at < ?1)
+     ORDER BY protected.observation_id, protected.reason LIMIT 10`).bind(cutoffAt, JSON.stringify(observationIds))
+    .all<{ observation_id: string; reason: string; reference_id: string }>();
+  if (gained.results.length > 0) throw new Error(`archive candidates gained protected dependencies: ${gained.results.map((row) => `${row.observation_id} (${row.reason})`).join(", ")}`);
 }
