@@ -75,9 +75,12 @@ evidence and verified archive objects.
 
 - Daily archival forecasts use database bytes, the configured 10 GiB limit, measured growth, protected release
   references and projected exhaustion rather than a fixed row threshold.
-- Archive execution is disarmed below 70% capacity. When armed, a manifest can select only observations older
-  than 18 months that are not referenced by a release. Parquet uploads require header/trailer verification,
-  SHA-256, R2 reread/size verification and an immutable manifest.
+- D1 is the 90-day hot store. A manifest can select only older observations that are not referenced by a
+  release. Parquet uploads require header/trailer verification, SHA-256, R2 reread/size verification and an
+  immutable restoration ledger. Destructive compaction then requires the caller to repeat the verified object
+  hash; the Worker rechecks the R2 object and the exact protected-reference set before issuing a short-lived
+  deletion lease. Capacity forecasts remain independent early-warning signals rather than a prerequisite that
+  lets cold history accumulate in operational D1.
 - The Parquet builder pins its runtime in `scripts/requirements-archive.txt`; operators install that file before
   creating an archive object so local and recovery runs use the same Arrow version.
 - Source-contract checks are deterministic and run before each server-source ingestion. Failures create durable

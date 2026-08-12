@@ -1900,8 +1900,8 @@ app.post("/internal/archival/forecast/run", async (context) => {
 
 app.post("/internal/archival/plan", zValidator("json", archivePlanSchema), async (context) => {
   const body = context.req.valid("json");
-  const minimumCutoff = Date.now() - 18 * 30 * 24 * 60 * 60 * 1000;
-  if (Date.parse(body.cutoffAt) > minimumCutoff) return jsonError("archive cutoff must retain at least 18 months", 422);
+  const minimumCutoff = Date.now() - 90 * 24 * 60 * 60 * 1000;
+  if (Date.parse(body.cutoffAt) > minimumCutoff) return jsonError("archive cutoff must retain at least 90 days of hot observations", 422);
   const forecast = await context.env.DB.prepare("SELECT status, usage_percent_millis FROM archival_forecasts ORDER BY observed_at DESC LIMIT 1")
     .first<{ status: string; usage_percent_millis: number }>();
   const rows = await context.env.DB.prepare(
@@ -1914,19 +1914,20 @@ app.post("/internal/archival/plan", zValidator("json", archivePlanSchema), async
       LIMIT ?2`,
   ).bind(body.cutoffAt, body.maximumRows).all<{ id: string }>();
   const ids = rows.results.map((row) => row.id);
-  const protectedCount = (await context.env.DB.prepare(
-    `SELECT COUNT(DISTINCT o.id) AS count FROM observations o JOIN release_cells rc ON rc.observation_id = o.id WHERE o.captured_at < ?1`,
-  ).bind(body.cutoffAt).first<{ count: number }>())?.count ?? 0;
-  const protectedRefsHash = await digestHex(stableJson({ cutoffAt: body.cutoffAt, protectedCount }));
+  const protectedRows = await context.env.DB.prepare(
+    `SELECT DISTINCT o.id FROM observations o JOIN release_cells rc ON rc.observation_id = o.id
+      WHERE o.captured_at < ?1 ORDER BY o.id`,
+  ).bind(body.cutoffAt).all<{ id: string }>();
+  const protectedCount = protectedRows.results.length;
+  const protectedRefsHash = await digestHex(stableJson({ cutoffAt: body.cutoffAt, observationIds: protectedRows.results.map((row) => row.id) }));
   const result = { cutoffAt: body.cutoffAt, candidates: ids.length, protectedCount, protectedRefsHash, forecast: forecast ?? null };
   if (body.dryRun) return context.json({ ok: true, dryRun: true, ...result });
-  if (!forecast || !["armed", "critical"].includes(forecast.status)) return jsonError("archive execution is disarmed while D1 capacity is healthy", 409);
   if (!ids.length) return jsonError("archive plan has no eligible observations", 422);
   const manifestId = await deterministicId("archive-manifest", body.cutoffAt, protectedRefsHash, ...ids);
   const statements: D1PreparedStatement[] = [context.env.DB.prepare(
     `INSERT INTO archive_manifests (id, cutoff_at, format, row_count, status, protected_refs_hash, detail_json)
      VALUES (?1, ?2, 'parquet', ?3, 'planned', ?4, ?5)`,
-  ).bind(manifestId, body.cutoffAt, ids.length, protectedRefsHash, stableJson({ forecast }))];
+  ).bind(manifestId, body.cutoffAt, ids.length, protectedRefsHash, stableJson({ forecast, retentionDays: 90 }))];
   for (const observationId of ids) statements.push(context.env.DB.prepare(
     "INSERT INTO archive_manifest_observations (manifest_id, observation_id) VALUES (?1, ?2)",
   ).bind(manifestId, observationId));
@@ -1940,7 +1941,12 @@ app.get("/internal/archival/:id/export", async (context) => {
   if (!manifest) return jsonError("archive manifest not found", 404);
   const rows = await context.env.DB.prepare(
     `SELECT o.*, pv.product_id, pv.name, pv.normalized_name, pv.size_text, pv.product_url,
-            pv.image_url, pv.taxonomy_path, p.store_location_id, p.external_key, b.source_id
+            pv.image_url, pv.taxonomy_path, p.store_location_id, p.external_key, b.source_id,
+            (SELECT json_group_array(json_object('batch_id', member.batch_id, 'term_key', member.term_key,
+              'observed_at', member.observed_at, 'source_payload_key', member.source_payload_key,
+              'evidence_object_id', member.evidence_object_id, 'provenance_json', json(member.provenance_json),
+              'carried', member.carried)) FROM capture_observation_memberships member
+              WHERE member.observation_id = o.id) AS memberships_json
        FROM archive_manifest_observations amo
        JOIN observations o ON o.id = amo.observation_id
        JOIN product_versions pv ON pv.id = o.product_version_id
@@ -1972,6 +1978,53 @@ app.put("/internal/archival/:id/parquet", async (context) => {
   ).bind(manifest.id, objectKey, stored.size, sha256).run();
   await recordAudit(context.env, context.get("identity"), "archive.verify", "archive_manifest", manifest.id, "accepted", { objectKey, byteLength: stored.size, sha256, rowCount: manifest.row_count });
   return context.json({ ok: true, manifestId: manifest.id, status: "verified", objectKey, byteLength: stored.size, sha256 });
+});
+
+app.post("/internal/archival/:id/execute", zValidator("json", canonicalCleanupExecuteSchema), async (context) => {
+  const manifest = await context.env.DB.prepare(
+    `SELECT id, status, cutoff_at, row_count, object_key, byte_length, sha256, protected_refs_hash, completed_at
+       FROM archive_manifests WHERE id = ?1`,
+  ).bind(context.req.param("id")).first<{
+    id: string; status: string; cutoff_at: string; row_count: number; object_key: string | null;
+    byte_length: number | null; sha256: string | null; protected_refs_hash: string; completed_at: string | null;
+  }>();
+  if (!manifest) return jsonError("archive manifest not found", 404);
+  if (manifest.completed_at) return context.json({ ok: true, manifestId: manifest.id, status: "completed", idempotent: true });
+  if (manifest.status !== "verified" || !manifest.object_key || manifest.sha256 !== context.req.valid("json").archiveSha256) {
+    return jsonError("verified archive hash confirmation is required", 409);
+  }
+  const stored = await context.env.ARCHIVE.head(manifest.object_key);
+  if (!stored || stored.size !== manifest.byte_length || stored.customMetadata?.sha256 !== manifest.sha256) {
+    return jsonError("verified archive object is no longer intact", 409);
+  }
+  const protectedRows = await context.env.DB.prepare(
+    `SELECT DISTINCT o.id FROM observations o JOIN release_cells rc ON rc.observation_id = o.id
+      WHERE o.captured_at < ?1 ORDER BY o.id`,
+  ).bind(manifest.cutoff_at).all<{ id: string }>();
+  const protectedRefsHash = await digestHex(stableJson({ cutoffAt: manifest.cutoff_at, observationIds: protectedRows.results.map((row) => row.id) }));
+  if (protectedRefsHash !== manifest.protected_refs_hash) return jsonError("release references changed after archive planning", 409);
+  const invalid = await context.env.DB.prepare(
+    `SELECT COUNT(*) AS count FROM archive_manifest_observations archived
+      WHERE archived.manifest_id = ?1 AND (
+        EXISTS(SELECT 1 FROM release_cells cell WHERE cell.observation_id = archived.observation_id)
+        OR NOT EXISTS(SELECT 1 FROM observations current WHERE current.id = archived.observation_id)
+      )`,
+  ).bind(manifest.id).first<{ count: number }>();
+  if ((invalid?.count ?? 0) > 0) return jsonError("archive candidates gained a protected reference or are no longer present", 409);
+  const expiresAt = new Date(Date.now() + 5 * 60_000).toISOString();
+  await context.env.DB.batch([
+    context.env.DB.prepare("INSERT OR REPLACE INTO maintenance_leases (kind, run_id, expires_at) VALUES ('verified-archive', ?1, ?2)").bind(manifest.id, expiresAt),
+    context.env.DB.prepare("DELETE FROM capture_observation_memberships WHERE observation_id IN (SELECT observation_id FROM archive_manifest_observations WHERE manifest_id = ?1)").bind(manifest.id),
+    context.env.DB.prepare("DELETE FROM observation_semantic_keys WHERE observation_id IN (SELECT observation_id FROM archive_manifest_observations WHERE manifest_id = ?1)").bind(manifest.id),
+    context.env.DB.prepare("DELETE FROM observations WHERE id IN (SELECT observation_id FROM archive_manifest_observations WHERE manifest_id = ?1)").bind(manifest.id),
+    context.env.DB.prepare("DELETE FROM product_versions WHERE NOT EXISTS (SELECT 1 FROM observations o WHERE o.product_version_id = product_versions.id)"),
+    context.env.DB.prepare("DELETE FROM maintenance_leases WHERE kind = 'verified-archive' AND run_id = ?1").bind(manifest.id),
+    context.env.DB.prepare("UPDATE archive_manifests SET completed_at = CURRENT_TIMESTAMP WHERE id = ?1 AND completed_at IS NULL").bind(manifest.id),
+  ]);
+  await recordAudit(context.env, context.get("identity"), "archive.execute", "archive_manifest", manifest.id, "accepted", {
+    rows: manifest.row_count, archive: manifest.object_key, sha256: manifest.sha256, cutoffAt: manifest.cutoff_at,
+  });
+  return context.json({ ok: true, manifestId: manifest.id, status: "completed", removedFacts: manifest.row_count, idempotent: false });
 });
 
 const canonicalDuplicateCandidatesSql = `WITH base AS (

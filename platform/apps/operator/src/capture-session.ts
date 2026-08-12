@@ -639,6 +639,8 @@ export async function captureSessionStatus(directory: string): Promise<Record<st
   const accuracy = candidates.length ? await buildBrowserCaptureAccuracy(draft.store, candidates, state.verifications, terms) : null;
   const remainingTerms = draft.worklist.filter((term) => !state.latest.has(term.query));
   const retryTerms = draft.worklist.filter((term) => ["blocked", "rejected"].includes(state.latest.get(term.query)?.result.outcome ?? ""));
+  let rollingDiscovery: ReturnType<typeof rollingDiscoveryTarget> | null = null;
+  try { rollingDiscovery = rollingDiscoveryTarget(draft.worklist.length); } catch { /* outside the Wed-Sat discovery window */ }
   const previewLimit = 20;
   const sourceTruthFailures = accuracy?.discoveryRows.flatMap((row) => {
     const identityPass = browserCaptureTruthPass(draft.store, {
@@ -666,6 +668,12 @@ export async function captureSessionStatus(directory: string): Promise<Record<st
     adapter: draft.adapter ? { id: draft.adapter.id, version: draft.adapter.version, sha256: draft.adapter.sha256 } : null,
     expectedTerms: draft.worklist.length,
     attemptedTerms: state.latest.size,
+    rollingDiscovery: rollingDiscovery ? {
+      ...rollingDiscovery,
+      attempted: state.latest.size,
+      targetReached: state.latest.size >= rollingDiscovery.cumulativeTarget,
+      remainingToTarget: Math.max(0, rollingDiscovery.cumulativeTarget - state.latest.size),
+    } : null,
     remainingTermCount: remainingTerms.length,
     remainingTerms: remainingTerms.slice(0, previewLimit),
     remainingTermsTruncated: remainingTerms.length > previewLimit,

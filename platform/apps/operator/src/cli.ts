@@ -496,8 +496,8 @@ if (command === "status") {
   if (!file) throw new Error("tc restore cleanup requires a JSON cleanup-evidence file");
   result = await (await mutationClient()).request("/internal/restore-drills/cleanup", { json: JSON.parse(await readFile(cliPath(file), "utf8")) });
 } else if (command === "archive" && subcommand === "plan") {
-  // Keep one full day of safety behind the API's moving 18-month retention boundary.
-  const cutoffAt = arguments_.find((value: string) => !value.startsWith("--")) ?? new Date(Date.now() - (18 * 30 + 1) * 24 * 60 * 60 * 1000).toISOString();
+  // Keep one full day of safety behind the API's moving 90-day hot-retention boundary.
+  const cutoffAt = arguments_.find((value: string) => !value.startsWith("--")) ?? new Date(Date.now() - 91 * 24 * 60 * 60 * 1000).toISOString();
   result = await (await mutationClient()).request("/internal/archival/plan", { json: { cutoffAt, dryRun: !arguments_.includes("--execute"), maximumRows: 10000 }, acceptStatuses: [409, 422] });
 } else if (command === "archive" && subcommand === "forecast") {
   result = await (await mutationClient()).request("/internal/archival/forecast/run", { method: "POST" });
@@ -511,6 +511,10 @@ if (command === "status") {
   const [manifestId, parquetFile] = arguments_;
   if (!manifestId || !parquetFile) throw new Error("tc archive upload requires a manifest id and Parquet file");
   result = await (await mutationClient()).request(`/internal/archival/${encodeURIComponent(manifestId)}/parquet`, { method: "PUT", body: new Uint8Array(await readFile(cliPath(parquetFile))), headers: { "content-type": "application/vnd.apache.parquet" } });
+} else if (command === "archive" && subcommand === "execute") {
+  const [manifestId, archiveSha256] = arguments_;
+  if (!manifestId || !archiveSha256) throw new Error("tc archive execute requires a manifest id and verified archive SHA-256");
+  result = await (await mutationClient()).request(`/internal/archival/${encodeURIComponent(manifestId)}/execute`, { json: { archiveSha256 } });
 } else if (command === "cleanup" && subcommand === "plan") {
   result = await (await mutationClient()).request("/internal/canonical-cleanup/plan", { json: { dryRun: !arguments_.includes("--execute"), maximumRows: 10000 }, acceptStatuses: [422] });
 } else if (command === "cleanup" && subcommand === "export") {
@@ -1100,7 +1104,7 @@ if (command === "status") {
     ...(!isHelpRequest ? { error: `Unknown command: ${requestedCommand}` } : {}),
     usage: [
       "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy|archives|archive <id>",
-      "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>", "tc cleanup plan [--execute]|export <run> <json>|upload <run> <parquet>|execute <run> <sha256>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
+      "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>|execute <manifest> <sha256>", "tc cleanup plan [--execute]|export <run> <json>|upload <run> <parquet>|execute <run> <sha256>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
       "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>", "tc efficiency record <report.json>", "tc recipe bundles [release-id]",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
         "tc capture metrics [limit]", "tc capture coordinator status|next|heartbeat|fail|challenge|resolve", "tc capture session worklist|init|append|evidence|verification-plan|finalize|status",
