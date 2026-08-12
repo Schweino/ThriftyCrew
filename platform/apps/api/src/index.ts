@@ -64,6 +64,7 @@ import {
 } from "@thriftycrew/contracts";
 import { decodeEvidenceUpload } from "./evidence-upload";
 import { deterministicId, digestHex, semanticObservationId, semanticProductVersion, stableJson } from "@thriftycrew/domain";
+import { isEngineSnapshotEncoding } from "@thriftycrew/engine";
 import { GhostEntitlementProvider, type Entitlement } from "@thriftycrew/entitlements";
 import { authenticateMutation } from "./auth";
 import { createRelease, findBatch, insertObservations, insertRecipeCosts, insertReleaseCells, upsertGuardResult } from "./database";
@@ -2024,7 +2025,7 @@ app.post("/internal/engine/measurements", async (context) => {
   const inputHash = String(body.inputHash ?? "");
   const encoding = String(body.encoding ?? "");
   const integers = ["matchedCandidates", "unmatchedCandidates", "responseBytes", "snapshotFetchMs", "nativeBuildMs", "publishMs", "totalMs"] as const;
-  if (!releaseId || !/^[a-f0-9]{64}$/.test(inputHash) || !["full", "unmatched-only", "omitted"].includes(encoding)) {
+  if (!releaseId || !/^[a-f0-9]{64}$/.test(inputHash) || !isEngineSnapshotEncoding(encoding)) {
     return jsonError("engine measurement identity is invalid", 422);
   }
   const values = Object.fromEntries(integers.map((key) => [key, Number(body[key])])) as Record<(typeof integers)[number], number>;

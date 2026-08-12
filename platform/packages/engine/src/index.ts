@@ -247,6 +247,11 @@ export const ENGINE_CANDIDATE_COLUMNS = [
   "taxonomy_path", "external_key", "basis_options_json", "max_age_days", "known_wrong",
 ] as const;
 
+export const ENGINE_SNAPSHOT_ENCODING_VALUES = ["full", "unmatched-only", "omitted", "json-rows-v1", "tuples-v1"] as const;
+export function isEngineSnapshotEncoding(value: string): boolean {
+  return (ENGINE_SNAPSHOT_ENCODING_VALUES as readonly string[]).includes(value);
+}
+
 type CandidateColumn = (typeof ENGINE_CANDIDATE_COLUMNS)[number];
 export interface TupleEncodedNativeEngineSnapshot extends Omit<NativeEngineSnapshot, "candidates" | "rawCandidates"> {
   candidateEncoding: "tuples-v1";

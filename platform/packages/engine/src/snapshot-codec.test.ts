@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decodeNativeEngineSnapshot, encodeNativeEngineSnapshotCandidates, type NativeEngineSnapshot } from "./index";
+import { decodeNativeEngineSnapshot, encodeNativeEngineSnapshotCandidates, isEngineSnapshotEncoding, type NativeEngineSnapshot } from "./index";
 
 describe("engine snapshot tuple transport", () => {
   it("round trips matched and unmatched candidates without semantic loss", () => {
@@ -17,5 +17,11 @@ describe("engine snapshot tuple transport", () => {
     expect(decoded.candidates[0]!).toMatchObject(snapshot.candidates[0]!);
     expect(decoded.rawCandidates?.[0]).toMatchObject(snapshot.rawCandidates[0]!);
     expect(decoded.transportEncoding).toBe("tuples-v1");
+  });
+
+  it("accepts current and legacy measurement encodings", () => {
+    expect(isEngineSnapshotEncoding("tuples-v1")).toBe(true);
+    expect(isEngineSnapshotEncoding("unmatched-only")).toBe(true);
+    expect(isEngineSnapshotEncoding("tuples-v2")).toBe(false);
   });
 });
