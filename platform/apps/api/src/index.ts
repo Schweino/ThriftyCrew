@@ -112,6 +112,7 @@ app.use("*", async (context, next) => {
     || context.req.path === "/api/v2/free-rotation"
     || context.req.path === "/api/v2/recipes"
     || context.req.path.startsWith("/api/v2/recipes/")
+    || context.req.path.startsWith("/api/v2/recipe-feed/")
   );
   if (!explicitlyCacheable) context.res.headers.set("cache-control", "no-store");
 });
@@ -3869,7 +3870,9 @@ app.post("/internal/releases/:id/publish", async (context) => {
   let cachePurged = false;
   let cachePurgeErrors: Array<{ code: number; message: string }> = [];
   try {
-    const purge = await cache.purge({ tags: ["grocery-public"] });
+    // Tags remove content-addressed release responses; the path prefix also
+    // evicts any pre-tag legacy/error entries that may share these public URLs.
+    const purge = await cache.purge({ tags: ["grocery-public"], pathPrefixes: ["/api/v2/"] });
     cachePurged = purge.success;
     cachePurgeErrors = purge.errors;
   } catch (error) {
