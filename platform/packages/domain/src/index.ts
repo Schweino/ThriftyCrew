@@ -12,6 +12,11 @@ import { CAPTURE_SEMANTICS_CUTOVER } from "@thriftycrew/contracts";
 
 const encoder = new TextEncoder();
 
+/** Normalize repository text before hashing so Windows and Linux checkouts agree. */
+export function normalizeTextForHash(value: string): string {
+  return value.replace(/\r\n?/g, "\n");
+}
+
 export function normalizeName(value: string): string {
   return value
     .normalize("NFKD")

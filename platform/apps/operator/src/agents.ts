@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { agentRegistrySchema } from "@thriftycrew/contracts";
+import { normalizeTextForHash } from "@thriftycrew/domain";
 import { readScheduleAuthority } from "./schedules";
 
 export interface AgentExecutionConfiguration {
@@ -49,8 +50,8 @@ export async function checkAgentRegistry(platformRoot: string): Promise<Record<s
   const workflowFiles = new Set<string>();
   for (const agent of registry.agents) {
     if (agent.scheduleId && !scheduleIds.has(agent.scheduleId)) throw new Error(`agent ${agent.id} references unknown schedule ${agent.scheduleId}`);
-    const prompt = await readFile(path.join(platformRoot, agent.promptFile));
-    const actualHash = createHash("sha256").update(prompt).digest("hex");
+    const prompt = await readFile(path.join(platformRoot, agent.promptFile), "utf8");
+    const actualHash = createHash("sha256").update(normalizeTextForHash(prompt)).digest("hex");
     if (actualHash !== agent.promptSha256) throw new Error(`agent ${agent.id} prompt drift: registry ${agent.promptSha256}, actual ${actualHash}`);
     hashes[agent.id] = actualHash;
     const actualExecutionHash = executionConfigHash(agent);

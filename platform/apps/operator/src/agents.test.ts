@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import path from "node:path";
 import { agentRegistryEntrySchema } from "@thriftycrew/contracts";
+import { normalizeTextForHash } from "@thriftycrew/domain";
 import { checkAgentRegistry, executionConfigHash } from "./agents";
 
 describe("agent registry", () => {
@@ -28,5 +29,9 @@ describe("agent registry", () => {
     const first = executionConfigHash(semantic);
     expect(executionConfigHash({ ...semantic, monthlyBudgetMicrousd: 1, scheduleId: "one" } as typeof semantic)).toBe(first);
     expect(executionConfigHash({ ...semantic, promptSha256: "b".repeat(64) })).not.toBe(first);
+  });
+
+  it("normalizes prompt line endings before hashing", () => {
+    expect(normalizeTextForHash("first\r\nsecond\rthird\n")).toBe("first\nsecond\nthird\n");
   });
 });

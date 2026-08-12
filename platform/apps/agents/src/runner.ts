@@ -13,6 +13,7 @@ import {
   recipeSourceCandidatesSchema,
   triagePlanSchema,
 } from "@thriftycrew/contracts";
+import { normalizeTextForHash } from "@thriftycrew/domain";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const outputRoot = path.resolve(process.env.TC_OUTPUT_ROOT ?? process.env.RUNNER_TEMP ?? path.join(platformRoot, ".agent-output"));
@@ -30,7 +31,7 @@ if (definition.plane !== runtimePlane && process.env.TC_ALLOW_PLANE_FALLBACK !==
   throw new Error(`agent ${requestedAgent} is assigned to the ${definition.plane} plane, not ${runtimePlane}`);
 }
 const prompt = await readFile(path.join(platformRoot, definition.promptFile), "utf8");
-const promptHash = createHash("sha256").update(prompt).digest("hex");
+const promptHash = createHash("sha256").update(normalizeTextForHash(prompt)).digest("hex");
 if (promptHash !== definition.promptSha256) throw new Error(`agent ${requestedAgent} prompt hash drift`);
 const hasApprovedInput = Boolean(process.env.TC_AGENT_INPUT_FILE) || fixtureMode || requestedAgent === "post-publish-reviewer";
 
