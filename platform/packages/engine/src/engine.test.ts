@@ -84,6 +84,8 @@ describe("matching", () => {
         "BUBBL'R Antioxidant Sparkling Water, Watermelon Lime Smash'r, 12 fl oz, 6 Pack Cans",
         "Red Bull Energy Watermelon, 8.4 oz., 24 pk.",
         "5 Radish Vegetable Seeds: Watermelon Daikon Purple Plum French Champion Full Sun Biennial",
+        "5-hour ENERGY Shot, Extra Strength, Watermelon 1.93 fl. oz., 24 pk.",
+        "Karma Probiotic Water, Watermelon Wild Berry, 18 fl. oz., 1 Count Bottle",
       ], good: ["Seedless Watermelon Each", "Whole Seedless Watermelon"] },
       { id: "mangoes", bad: [
         "bubly Mango Sparkling Water, 12 fl oz, 8 Pack Cans",
