@@ -3204,7 +3204,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
     ).bind(batch.id).first<{ count: number }>())?.count ?? 0
     : 0;
   const predecessor = await context.env.DB.prepare(
-    `SELECT prior.id, COUNT(o.id) AS observation_count
+    `SELECT prior.id, COUNT(o.observation_id) AS observation_count
        FROM capture_batches prior
        LEFT JOIN capture_batch_observations o ON o.batch_id = prior.id
       WHERE prior.source_id = ?1 AND prior.coverage_mode = ?2 AND prior.status IN ('validated','promoted') AND prior.id <> ?3
@@ -3267,7 +3267,7 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
   // the canonical observation before the batch can become visible.
   const offerSnapshotRequired = batch.capture_method !== "legacy_bridge"
     && Date.parse(batch.captured_to) >= Date.parse(OFFER_SNAPSHOT_CUTOVER);
-  const offerSnapshots = await context.env.DB.prepare(
+  const offerSnapshots = offerSnapshotRequired ? await context.env.DB.prepare(
     `SELECT COUNT(*) AS eligible,
             SUM(CASE WHEN json_extract(o.offer_snapshot_json, '$.version') = 1
                       AND json_extract(o.offer_snapshot_json, '$.retailerProductId') = p.external_key
@@ -3283,12 +3283,12 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
                       AND json_extract(o.offer_snapshot_json, '$.availability.fulfillmentMode') = o.fulfillment_mode
                       AND (o.seller_name IS NULL OR json_extract(o.offer_snapshot_json, '$.sellerName') = o.seller_name)
                      THEN 1 ELSE 0 END) AS examined
-       FROM capture_batch_observations member
+       FROM capture_observation_memberships member
        JOIN observations o ON o.id = member.observation_id
        JOIN product_versions pv ON pv.id = o.product_version_id
        JOIN products p ON p.id = pv.product_id
       WHERE member.batch_id = ?1`,
-  ).bind(batch.id).first<{ eligible: number; examined: number | null }>();
+  ).bind(batch.id).first<{ eligible: number; examined: number | null }>() : { eligible: 0, examined: 0 };
   const offerSnapshotEligible = offerSnapshots?.eligible ?? 0;
   const offerSnapshotExamined = offerSnapshots?.examined ?? 0;
   const offerSnapshotPass = !offerSnapshotRequired
@@ -4624,7 +4624,12 @@ app.all("*", (context) => context.env.ASSETS.fetch(context.req.raw));
 
 app.onError((error, context) => {
   console.error(error);
-  return context.json({ ok: false, error: context.env.APP_ENV === "production" ? "Internal error" : error.message }, 500);
+  const identity = context.get("identity");
+  const maySeeInternalDetail = context.req.path.startsWith("/internal/") && identity?.role === "operator";
+  return context.json({
+    ok: false,
+    error: context.env.APP_ENV === "production" && !maySeeInternalDetail ? "Internal error" : error.message,
+  }, 500);
 });
 
 export default {
