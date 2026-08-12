@@ -7,7 +7,14 @@ Set-PcRuntimeCredential $config 'local-operator'
 $platformRoot = Split-Path -Parent $PSScriptRoot
 
 function Invoke-TcJson([string[]]$Arguments) {
-  $output = & ([string]$config.pnpmPath) --silent --filter '@thriftycrew/operator' tc @Arguments 2>&1
+  # Windows PowerShell promotes any native stderr record to an ErrorRecord when
+  # ErrorActionPreference is Stop, even when the process ultimately succeeds.
+  # Capture the complete stream under Continue and make the exit code + JSON
+  # contract authoritative instead.
+  $priorPreference = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try { $output = & ([string]$config.pnpmPath) --silent --filter '@thriftycrew/operator' tc @Arguments 2>&1 }
+  finally { $ErrorActionPreference = $priorPreference }
   if ($LASTEXITCODE -ne 0) { throw "tc $($Arguments -join ' ') failed: $($output -join [Environment]::NewLine)" }
   $text = $output -join [Environment]::NewLine
   $start = $text.IndexOf('{'); $end = $text.LastIndexOf('}')
