@@ -50,7 +50,7 @@ export class D1RestoreDrillWorkflow extends WorkflowEntrypoint<WorkerEnv, Restor
         `INSERT INTO job_runs
            (id, job, trigger_kind, scheduled_for, started_at, heartbeat_at, status, executor_run_id, actor_id,
             input_json, lease_resource, lease_fence)
-         VALUES (?1, 'd1-restore-drill', 'schedule', ?2, ?2, ?2, 'started', ?3, 'cloudflare:workflow', ?4, ?5, ?6)
+         VALUES (?1, 'restore-drill-quarterly', 'schedule', ?2, ?2, ?2, 'started', ?3, 'cloudflare:workflow', ?4, ?5, ?6)
          ON CONFLICT(id) DO NOTHING`,
       ).bind(runId, startedAt, event.instanceId, stableJson({ mode: "non-destructive-manifest-verification" }), lease.resource, lease.fence).run();
       const selected = await step.do("select lake recovery manifest", async () => {
