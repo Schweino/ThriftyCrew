@@ -8,16 +8,16 @@
     "grocery/recipe-commodities.json"
   ],
   "hashes": {
-    "commodities.json": "9fb3eb103a7e13308c13fac0caa8f5b0c39c2179745b2bcc3624602cd0ad2e12",
-    "categories.json": "65a61ae9f8ded8532fba9b3bd7b7e1ec62ad82fa93ae14c5b1e3fca340f2d492",
+    "commodities.json": "18ea051e99cf41cf31c80c1681a0db4329bf434a56fa576ba7749c34fc239f9d",
+    "categories.json": "56990374fe7c61e41ac9933251a4ac4bd9f9fd79e70e967253ab3811b83292b3",
     "known-wrong.json": "55489ceee179b14120dcfcd45481a4c0b929b6ba9137ed13cb8bddc638037ade",
     "recipe-commodities.json": "b44604ffac3eca6d80916dd530bf1b8e2025e123b5d3737fedd6559db3bb33a7",
     "recipe-commodity-aliases.json": "36aa3984f9ba69b6cdddc4c4c82c3ebf4e15e387ac4013d3cd88bdf6798e7666",
     "recipe-commodity-extensions.json": "7e33979b2caac54810a1fee17f5456551f026c8c4c38392904452128a0ef0efb"
   },
   "counts": {
-    "commodities": 507,
-    "uniqueMatchRules": 49086,
+    "commodities": 519,
+    "uniqueMatchRules": 49149,
     "knownWrongRulings": 121,
     "expandedKnownWrongNames": 126
   }
