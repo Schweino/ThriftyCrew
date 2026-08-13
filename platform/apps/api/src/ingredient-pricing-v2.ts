@@ -490,7 +490,11 @@ export async function pricingWaveStatus(db: D1Database, waveId: string): Promise
 
 export async function ingredientPipelineStatus(db: D1Database): Promise<Record<string, unknown>> {
   const [jobs, stores, waves, attention, lastProgress] = await Promise.all([
-    db.prepare("SELECT state, COUNT(*) AS count FROM ingredient_pricing_jobs GROUP BY state ORDER BY state").all(),
+    db.prepare(`SELECT CASE WHEN job.state = 'failed' AND gap.qa_resolution IS NOT NULL
+          THEN 'cancelled_existing_alias' ELSE job.state END AS state, COUNT(*) AS count
+      FROM ingredient_pricing_jobs job JOIN ingredient_gaps gap ON gap.id = job.gap_id
+      GROUP BY CASE WHEN job.state = 'failed' AND gap.qa_resolution IS NOT NULL
+          THEN 'cancelled_existing_alias' ELSE job.state END ORDER BY state`).all(),
     db.prepare(`SELECT check_row.store_location_id, check_row.state, COUNT(*) AS count
       FROM ingredient_store_checks check_row JOIN ingredient_pricing_jobs job ON job.id = check_row.pricing_job_id
       WHERE job.state != 'failed' GROUP BY check_row.store_location_id, check_row.state
