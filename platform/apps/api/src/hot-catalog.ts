@@ -62,6 +62,14 @@ export async function materializeHotCatalog(db: D1Database): Promise<{ roots: nu
     ).bind(policy.source_id).first<BatchRow>();
     if (!batch) continue;
     const rootHash = await digestHex(stableJson(batch));
+    const priorRoot = await db.prepare(
+      `SELECT root.root_hash,
+              (SELECT COUNT(*) FROM catalog_current_offers offer WHERE offer.source_id = ?1) AS existing_count,
+              (SELECT COUNT(DISTINCT version.product_id) FROM observations observation
+                JOIN product_versions version ON version.id = observation.product_version_id WHERE observation.batch_id = ?2) AS expected_count
+         FROM capture_source_roots root WHERE root.source_id = ?1`,
+    ).bind(batch.source_id, batch.id).first<{ root_hash: string; existing_count: number; expected_count: number }>();
+    if (priorRoot?.root_hash === rootHash && Number(priorRoot.existing_count) === Number(priorRoot.expected_count)) continue;
     await db.prepare(
       `INSERT INTO capture_source_roots
          (source_id, store_location_id, base_batch_id, root_hash, coverage_mode, valid_from, valid_to)
@@ -70,75 +78,48 @@ export async function materializeHotCatalog(db: D1Database): Promise<{ roots: nu
          root_hash = excluded.root_hash, coverage_mode = excluded.coverage_mode,
          valid_from = excluded.valid_from, valid_to = excluded.valid_to, updated_at = CURRENT_TIMESTAMP`,
     ).bind(batch.source_id, batch.store_location_id, batch.id, rootHash, batch.coverage_mode, batch.valid_from ?? batch.captured_from, batch.valid_to).run();
-    const rows = await db.prepare(
-      `SELECT product.id AS product_id, observation.id AS observation_id, observation.product_version_id,
-              version.name AS product_name, version.normalized_name, version.size_text, version.product_url,
-              observation.availability_status, observation.fulfillment_mode, observation.seller_name,
-              observation.kind AS offer_kind, observation.purchase_price_minor AS package_price_minor,
-              observation.normalized_basis_unit, observation.normalized_basis_qty_micros, observation.per_unit_micros,
-              observation.loyalty_required, observation.membership_required, observation.valid_from, observation.valid_to,
-              observation.captured_at
+    if (batch.coverage_mode === "full") {
+      await db.prepare(
+        `DELETE FROM catalog_current_offers WHERE source_id = ?1 AND product_id NOT IN (
+           SELECT version.product_id FROM observations observation
+           JOIN product_versions version ON version.id = observation.product_version_id
+           WHERE observation.batch_id = ?2
+         )`,
+      ).bind(batch.source_id, batch.id).run();
+    }
+    const materialized = await db.prepare(
+      `INSERT INTO catalog_current_offers
+         (store_location_id, product_id, observation_id, product_version_id, source_id, batch_id, normalized_name,
+          product_name, size_text, product_url, availability_status, fulfillment_mode, seller_name, offer_kind,
+          package_price_minor, normalized_basis_unit, normalized_basis_qty_micros, per_unit_micros,
+          loyalty_required, membership_required, valid_from, valid_to, captured_at, evidence_hash)
+       SELECT ?1, product.id, observation.id, observation.product_version_id, ?2, ?3, version.normalized_name,
+              version.name, version.size_text, version.product_url, observation.availability_status,
+              observation.fulfillment_mode, observation.seller_name, observation.kind,
+              observation.purchase_price_minor, observation.normalized_basis_unit,
+              observation.normalized_basis_qty_micros, observation.per_unit_micros,
+              observation.loyalty_required, observation.membership_required,
+              observation.valid_from, observation.valid_to, observation.captured_at, observation.id
          FROM observations observation
          JOIN product_versions version ON version.id = observation.product_version_id
          JOIN products product ON product.id = version.product_id
-        WHERE observation.batch_id = ?1
-          AND NOT EXISTS (
-            SELECT 1 FROM observations newer
-             WHERE newer.batch_id = observation.batch_id AND newer.product_version_id = observation.product_version_id
-               AND (newer.captured_at > observation.captured_at OR (newer.captured_at = observation.captured_at AND newer.id > observation.id))
-          )
-        ORDER BY product.id`,
-    ).bind(batch.id).all<Record<string, unknown>>();
-    const currentProductIds = new Set(rows.results.map((row) => String(row.product_id)));
-    if (batch.coverage_mode === "full") {
-      const existing = await db.prepare("SELECT product_id FROM catalog_current_offers WHERE source_id = ?1").bind(batch.source_id).all<{ product_id: string }>();
-      const stale = existing.results.filter((row) => !currentProductIds.has(row.product_id));
-      if (stale.length) {
-        for (let offset = 0; offset < stale.length; offset += 90) {
-          await db.batch(stale.slice(offset, offset + 90).flatMap((row) => [
-            db.prepare("DELETE FROM catalog_offer_tokens WHERE store_location_id = ?1 AND product_id = ?2").bind(batch.store_location_id, row.product_id),
-            db.prepare("DELETE FROM catalog_current_offers WHERE store_location_id = ?1 AND product_id = ?2 AND source_id = ?3").bind(batch.store_location_id, row.product_id, batch.source_id),
-          ]));
-        }
-      }
-    }
-    for (const row of rows.results) {
-      const semantic = {
-        observationId: row.observation_id, productVersionId: row.product_version_id, name: row.product_name,
-        size: row.size_text, price: row.package_price_minor, unit: row.normalized_basis_unit,
-        qty: row.normalized_basis_qty_micros, perUnit: row.per_unit_micros, validFrom: row.valid_from, validTo: row.valid_to,
-        availability: row.availability_status, fulfillment: row.fulfillment_mode, seller: row.seller_name,
-      };
-      const evidenceHash = await digestHex(stableJson(semantic));
-      await db.prepare(
-        `INSERT INTO catalog_current_offers
-           (store_location_id, product_id, observation_id, product_version_id, source_id, batch_id, normalized_name,
-            product_name, size_text, product_url, availability_status, fulfillment_mode, seller_name, offer_kind,
-            package_price_minor, normalized_basis_unit, normalized_basis_qty_micros, per_unit_micros,
-            loyalty_required, membership_required, valid_from, valid_to, captured_at, evidence_hash)
-         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24)
-         ON CONFLICT(store_location_id, product_id) DO UPDATE SET
-           observation_id = excluded.observation_id, product_version_id = excluded.product_version_id,
-           source_id = excluded.source_id, batch_id = excluded.batch_id, normalized_name = excluded.normalized_name,
-           product_name = excluded.product_name, size_text = excluded.size_text, product_url = excluded.product_url,
-           availability_status = excluded.availability_status, fulfillment_mode = excluded.fulfillment_mode,
-           seller_name = excluded.seller_name, offer_kind = excluded.offer_kind, package_price_minor = excluded.package_price_minor,
-           normalized_basis_unit = excluded.normalized_basis_unit, normalized_basis_qty_micros = excluded.normalized_basis_qty_micros,
-           per_unit_micros = excluded.per_unit_micros, loyalty_required = excluded.loyalty_required,
-           membership_required = excluded.membership_required, valid_from = excluded.valid_from, valid_to = excluded.valid_to,
-           captured_at = excluded.captured_at, evidence_hash = excluded.evidence_hash, updated_at = CURRENT_TIMESTAMP`,
-      ).bind(batch.store_location_id, row.product_id, row.observation_id, row.product_version_id, batch.source_id, batch.id,
-        row.normalized_name, row.product_name, row.size_text, row.product_url, row.availability_status, row.fulfillment_mode,
-        row.seller_name, row.offer_kind, row.package_price_minor, row.normalized_basis_unit, row.normalized_basis_qty_micros,
-        row.per_unit_micros, row.loyalty_required, row.membership_required, row.valid_from, row.valid_to, row.captured_at, evidenceHash).run();
-      await db.prepare("DELETE FROM catalog_offer_tokens WHERE store_location_id = ?1 AND product_id = ?2").bind(batch.store_location_id, row.product_id).run();
-      const tokenStatements = tokens(String(row.normalized_name)).map((token) => db.prepare(
-        "INSERT INTO catalog_offer_tokens (store_location_id, token, product_id) VALUES (?1, ?2, ?3) ON CONFLICT DO NOTHING",
-      ).bind(batch.store_location_id, token, row.product_id));
-      if (tokenStatements.length) await db.batch(tokenStatements);
-      offerCount += 1;
-      tokenCount += tokenStatements.length;
-    }
+        WHERE observation.batch_id = ?3
+          AND NOT EXISTS (SELECT 1 FROM observations newer
+            WHERE newer.batch_id = observation.batch_id AND newer.product_version_id = observation.product_version_id
+              AND (newer.captured_at > observation.captured_at OR (newer.captured_at = observation.captured_at AND newer.id > observation.id)))
+       ON CONFLICT(store_location_id, product_id) DO UPDATE SET
+         observation_id = excluded.observation_id, product_version_id = excluded.product_version_id,
+         source_id = excluded.source_id, batch_id = excluded.batch_id, normalized_name = excluded.normalized_name,
+         product_name = excluded.product_name, size_text = excluded.size_text, product_url = excluded.product_url,
+         availability_status = excluded.availability_status, fulfillment_mode = excluded.fulfillment_mode,
+         seller_name = excluded.seller_name, offer_kind = excluded.offer_kind,
+         package_price_minor = excluded.package_price_minor, normalized_basis_unit = excluded.normalized_basis_unit,
+         normalized_basis_qty_micros = excluded.normalized_basis_qty_micros, per_unit_micros = excluded.per_unit_micros,
+         loyalty_required = excluded.loyalty_required, membership_required = excluded.membership_required,
+         valid_from = excluded.valid_from, valid_to = excluded.valid_to, captured_at = excluded.captured_at,
+         evidence_hash = excluded.evidence_hash, updated_at = CURRENT_TIMESTAMP`,
+    ).bind(batch.store_location_id, batch.source_id, batch.id).run();
+    offerCount += Number(materialized.meta.changes ?? 0);
   }
   return { roots: policies.results.length, offers: offerCount, tokens: tokenCount };
 }
