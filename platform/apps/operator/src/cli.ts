@@ -1511,8 +1511,8 @@ if (command === "status") {
   result = await (await mutationClient()).request("/internal/recipe-suggestions", { json: request });
 } else if (command === "ingredient" && subcommand === "campaign") {
   const [requestId, action, target, workers, batchSize] = arguments_;
-  if (!requestId || !action || !["pause", "resume", "configure"].includes(action)) {
-    throw new Error("tc ingredient campaign requires <request-id> pause|resume|configure [target-published] [workers] [batch-size]");
+  if (!requestId || !action || !["pause", "resume", "configure", "freeze-discovery", "resume-discovery"].includes(action)) {
+    throw new Error("tc ingredient campaign requires <request-id> pause|resume|configure|freeze-discovery|resume-discovery [target-published] [workers] [batch-size]");
   }
   result = await (await mutationClient()).request(`/internal/ingredient-campaigns/${encodeURIComponent(requestId)}/control`, { json: {
     action,
@@ -1520,6 +1520,20 @@ if (command === "status") {
     ...(workers !== undefined ? { desiredPricingWorkers: Number(workers) } : {}),
     ...(batchSize !== undefined ? { publishBatchSize: Number(batchSize) } : {}),
   } });
+} else if (command === "ingredient" && subcommand === "qa-retry") {
+  result = await (await mutationClient()).request("/internal/ingredient-gaps/qa-retry", {
+    json: { ...(arguments_.length > 0 ? { gapIds: arguments_ } : {}) },
+  });
+} else if (command === "ingredient" && subcommand === "qa-resolve") {
+  const [gapId, resolution, commodityId, ...reasonParts] = arguments_;
+  if (!gapId || !resolution || !["existing_alias", "excluded_noncommodity"].includes(resolution)) {
+    throw new Error("tc ingredient qa-resolve requires <gap-id> existing_alias|excluded_noncommodity <commodity-id|-> <reason>");
+  }
+  const reason = reasonParts.join(" ").trim();
+  if (reason.length < 10) throw new Error("tc ingredient qa-resolve requires a durable reason of at least 10 characters");
+  result = await (await mutationClient()).request(`/internal/ingredient-gaps/${encodeURIComponent(gapId)}/qa-resolution`, {
+    json: { resolution, commodityId: commodityId && commodityId !== "-" ? commodityId : null, reason },
+  });
 } else if (command === "ingredient" && subcommand === "reconcile") {
   result = await (await mutationClient()).request("/internal/ingredient-gaps/reconcile", { method: "POST" });
 } else if (command === "ingredient" && subcommand === "status") {

@@ -258,7 +258,7 @@ describe("agent output boundary", () => {
 describe("ingredient campaign orchestration", () => {
   const snapshot = (values: Partial<IngredientCampaignSnapshot> = {}): IngredientCampaignSnapshot => ({
     requestId: "campaign_200", state: "pricing", targetPublishedIngredients: 200,
-    desiredPricingWorkers: 10, publishBatchSize: 20, pausedAt: null,
+    desiredPricingWorkers: 10, publishBatchSize: 20, pausedAt: null, discoveryFrozenAt: null,
     published: 13, pending: 100, researching: 10, readyToPublish: 20,
     permanentlyUnavailable: 1, needsOperator: 9, totalUniqueGaps: 153,
     ...values,
@@ -274,5 +274,16 @@ describe("ingredient campaign orchestration", () => {
 
   it("completes only from published ingredients", () => {
     expect(ingredientCampaignPhase(snapshot({ published: 200, pending: 50, researching: 5 }))).toBe("completed");
+  });
+
+  it("drains the current queue without sourcing when discovery is frozen", () => {
+    expect(ingredientCampaignPhase(snapshot({ discoveryFrozenAt: "2026-08-13T17:20:00Z" }))).toBe("pricing");
+  });
+
+  it("completes a frozen campaign when no actionable queue remains", () => {
+    expect(ingredientCampaignPhase(snapshot({
+      discoveryFrozenAt: "2026-08-13T17:20:00Z", pending: 0, researching: 0,
+      readyToPublish: 0, needsOperator: 0,
+    }))).toBe("completed");
   });
 });

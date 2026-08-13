@@ -39,6 +39,8 @@ import {
   agentWorkItemFailSchema,
   ingredientCampaignControlSchema,
   ingredientPublicationFailureSchema,
+  ingredientQaRetrySchema,
+  ingredientQaResolutionSchema,
   recipeSuggestionRequestSchema,
   recipeWaveSnapshotSchema,
   recipeWavePublicationSchema,
@@ -1274,24 +1276,27 @@ app.get("/internal/ingredient-gaps", async (context) => {
   const allowed = new Set(["pending", "researching", "ready_to_publish", "published", "permanently_unavailable", "needs_operator"]);
   if (requestedStatus && !allowed.has(requestedStatus)) return jsonError("unknown ingredient gap status", 400);
   const gaps = await context.env.DB.prepare(
-    `SELECT gap.id, gap.normalized_name, gap.display_name, gap.status, gap.commodity_id,
+    `SELECT gap.id, gap.normalized_name, gap.display_name,
+            CASE WHEN gap.qa_resolution IS NOT NULL THEN 'resolved_' || gap.qa_resolution ELSE gap.status END AS status,
+            gap.commodity_id, gap.qa_resolution, gap.qa_resolution_commodity_id, gap.qa_resolved_at,
             CASE WHEN ?1 = 'ready_to_publish' THEN gap.research_json ELSE NULL END AS research_json,
             gap.first_seen_at, gap.updated_at, COUNT(occurrence.request_id) AS occurrence_count
        FROM ingredient_gaps gap
        LEFT JOIN ingredient_gap_occurrences occurrence ON occurrence.gap_id = gap.id
-      WHERE (?1 IS NULL OR gap.status = ?1)
+      WHERE (?1 IS NULL OR (gap.status = ?1 AND (?1 <> 'needs_operator' OR gap.qa_resolution IS NULL)))
       GROUP BY gap.id ORDER BY gap.first_seen_at DESC, gap.id LIMIT 500`,
   ).bind(requestedStatus ?? null).all();
   const batches = await context.env.DB.prepare(
     `SELECT batch.request_id, batch.target_missing_ingredients, batch.target_published_ingredients,
-            batch.desired_pricing_workers, batch.publish_batch_size, batch.paused_at,
+            batch.desired_pricing_workers, batch.publish_batch_size, batch.paused_at, batch.discovery_frozen_at,
             batch.unique_missing_ingredients, batch.source_round, batch.state, batch.created_at, batch.updated_at,
             COUNT(DISTINCT CASE WHEN gap.status = 'published' THEN gap.id END) AS published_ingredients,
             COUNT(DISTINCT CASE WHEN gap.status = 'pending' THEN gap.id END) AS pending_ingredients,
             COUNT(DISTINCT CASE WHEN gap.status = 'researching' THEN gap.id END) AS researching_ingredients,
             COUNT(DISTINCT CASE WHEN gap.status = 'ready_to_publish' THEN gap.id END) AS ready_to_publish_ingredients,
             COUNT(DISTINCT CASE WHEN gap.status = 'permanently_unavailable' THEN gap.id END) AS permanently_unavailable_ingredients,
-            COUNT(DISTINCT CASE WHEN gap.status = 'needs_operator' THEN gap.id END) AS needs_operator_ingredients
+            COUNT(DISTINCT CASE WHEN gap.status = 'needs_operator' AND gap.qa_resolution IS NULL THEN gap.id END) AS needs_operator_ingredients,
+            COUNT(DISTINCT CASE WHEN gap.qa_resolution IS NOT NULL THEN gap.id END) AS resolved_qa_ingredients
        FROM ingredient_discovery_batches batch
        LEFT JOIN ingredient_gap_occurrences occurrence ON occurrence.request_id = batch.request_id
        LEFT JOIN ingredient_gaps gap ON gap.id = occurrence.gap_id
@@ -1320,6 +1325,17 @@ app.post("/internal/ingredient-campaigns/:id/control", zValidator("json", ingred
       context.env.DB.prepare("UPDATE ingredient_discovery_batches SET paused_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1").bind(requestId),
       context.env.DB.prepare("UPDATE recipe_suggestion_requests SET status = 'running', updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status = 'queued'").bind(requestId),
     ]);
+  } else if (body.action === "freeze-discovery") {
+    await context.env.DB.batch([
+      context.env.DB.prepare("UPDATE ingredient_discovery_batches SET discovery_frozen_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1").bind(requestId),
+      context.env.DB.prepare("UPDATE recipe_suggestion_requests SET status = 'running', updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status = 'queued'").bind(requestId),
+    ]);
+    await reconcileIngredientCampaign(context.env.DB, requestId);
+  } else if (body.action === "resume-discovery") {
+    await context.env.DB.prepare(
+      "UPDATE ingredient_discovery_batches SET discovery_frozen_at = NULL, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1",
+    ).bind(requestId).run();
+    await reconcileIngredientCampaign(context.env.DB, requestId);
   } else {
     await context.env.DB.prepare(
       `UPDATE ingredient_discovery_batches
@@ -1333,6 +1349,53 @@ app.post("/internal/ingredient-campaigns/:id/control", zValidator("json", ingred
     await reconcileIngredientCampaign(context.env.DB, requestId);
   }
   return context.json({ ok: true, campaign: await ingredientCampaignSnapshot(context.env.DB, requestId) });
+});
+
+app.post("/internal/ingredient-gaps/qa-retry", zValidator("json", ingredientQaRetrySchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may retry ingredient QA", 403);
+  const body = context.req.valid("json");
+  const candidates = await context.env.DB.prepare(
+    `SELECT id FROM ingredient_gaps
+      WHERE status = 'needs_operator' AND publication_attempts = 0
+        AND json_extract(research_json, '$.disposition') = 'needs_operator'
+      ORDER BY first_seen_at, id LIMIT 50`,
+  ).all<{ id: string }>();
+  const requested = body.gapIds ? new Set(body.gapIds) : null;
+  const gapIds = candidates.results.map((row) => row.id).filter((id) => !requested || requested.has(id));
+  if (gapIds.length > 0) {
+    await context.env.DB.batch(gapIds.map((gapId) => context.env.DB.prepare(
+      `UPDATE ingredient_gaps SET status = 'pending', qa_attempts = qa_attempts + 1,
+          research_work_item_id = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status = 'needs_operator'`,
+    ).bind(gapId)));
+  }
+  const campaigns = await context.env.DB.prepare(
+    `SELECT DISTINCT occurrence.request_id FROM ingredient_gap_occurrences occurrence
+      WHERE occurrence.gap_id IN (SELECT id FROM ingredient_gaps WHERE qa_attempts > 0)`,
+  ).all<{ request_id: string }>();
+  for (const campaign of campaigns.results) await reconcileIngredientCampaign(context.env.DB, campaign.request_id);
+  return context.json({ ok: true, retried: gapIds });
+});
+
+app.post("/internal/ingredient-gaps/:id/qa-resolution", zValidator("json", ingredientQaResolutionSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may resolve ingredient QA", 403);
+  const gapId = context.req.param("id");
+  const body = context.req.valid("json");
+  if (body.commodityId) {
+    const active = await context.env.DB.prepare(
+      `SELECT commodity.id FROM commodities commodity
+        JOIN configuration_versions version ON version.id = commodity.configuration_id
+       WHERE version.active = 1 AND commodity.active = 1 AND commodity.id = ?1 LIMIT 1`,
+    ).bind(body.commodityId).first();
+    if (!active) return jsonError("QA alias target is not an active commodity", 422);
+  }
+  const update = await context.env.DB.prepare(
+    `UPDATE ingredient_gaps SET qa_resolution = ?2, qa_resolution_commodity_id = ?3,
+        qa_resolved_at = CURRENT_TIMESTAMP, publication_error = ?4, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?1 AND status = 'needs_operator' AND qa_resolution IS NULL`,
+  ).bind(gapId, body.resolution, body.commodityId, body.reason).run();
+  if ((update.meta.changes ?? 0) !== 1) return jsonError("ingredient QA item is not open", 409);
+  await reconcileIngredientHolds(context.env.DB);
+  return context.json({ ok: true, gapId, resolution: body.resolution, commodityId: body.commodityId });
 });
 
 app.post("/internal/ingredient-gaps/:id/publication-failure", zValidator("json", ingredientPublicationFailureSchema), async (context) => {

@@ -240,7 +240,7 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
               discovery.target_published_ingredients, discovery.source_round, discovery.state AS discovery_state
          FROM recipe_suggestion_requests request
          LEFT JOIN ingredient_discovery_batches discovery ON discovery.request_id = request.id
-        WHERE request.status = 'queued' AND (discovery.request_id IS NULL OR discovery.paused_at IS NULL)
+        WHERE request.status = 'queued' AND (discovery.request_id IS NULL OR (discovery.paused_at IS NULL AND discovery.discovery_frozen_at IS NULL))
         ORDER BY request.requested_at, request.id LIMIT 10`,
     ).all<Record<string, unknown>>();
     const commodities = rows.results.length > 0 ? await currentCommodityCatalog(db) : [];
@@ -280,7 +280,7 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
   }
   if (agentId === "ingredient-price-researcher") {
     const rows = await db.prepare(
-      `SELECT id, display_name, normalized_name, first_seen_at
+      `SELECT id, display_name, normalized_name, first_seen_at, qa_attempts, research_json, publication_error
          FROM ingredient_gaps WHERE status = 'pending'
         ORDER BY first_seen_at, id LIMIT 50`,
     ).all<Record<string, unknown>>();
@@ -305,7 +305,17 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
       sourceRef: String(row.id),
       stage: "ingredient-price",
       severity: "operational",
-      input: { contract: "ingredient-price-request-v1", gap: row, marketId: "omaha", stores, categories: categories.results },
+      input: {
+        contract: "ingredient-price-request-v1", gap: row, marketId: "omaha", stores, categories: categories.results,
+        ...(Number(row.qa_attempts) > 0 ? {
+          qaContext: {
+            attempt: Number(row.qa_attempts),
+            priorResearch: row.research_json ? JSON.parse(String(row.research_json)) : null,
+            priorError: row.publication_error ?? null,
+            instruction: "Resolve the prior blocked or ambiguous checks with fresh first-party evidence. Preserve every still-valid prior fact, but do not repeat an unsupported conclusion.",
+          },
+        } : {}),
+      },
     }));
   }
   return [];
@@ -342,6 +352,7 @@ export interface IngredientCampaignSnapshot {
   desiredPricingWorkers: number;
   publishBatchSize: number;
   pausedAt: string | null;
+  discoveryFrozenAt: string | null;
   published: number;
   pending: number;
   researching: number;
@@ -352,6 +363,10 @@ export interface IngredientCampaignSnapshot {
 }
 
 export function ingredientCampaignPhase(snapshot: IngredientCampaignSnapshot): "collecting" | "pricing" | "completed" {
+  if (snapshot.discoveryFrozenAt) {
+    const open = snapshot.pending + snapshot.researching + snapshot.readyToPublish + snapshot.needsOperator;
+    return open === 0 ? "completed" : "pricing";
+  }
   if (snapshot.published >= snapshot.targetPublishedIngredients) return "completed";
   const viable = snapshot.published + snapshot.pending + snapshot.researching + snapshot.readyToPublish;
   return viable < snapshot.targetPublishedIngredients ? "collecting" : "pricing";
@@ -360,14 +375,14 @@ export function ingredientCampaignPhase(snapshot: IngredientCampaignSnapshot): "
 export async function ingredientCampaignSnapshot(db: D1Database, requestId: string): Promise<IngredientCampaignSnapshot | null> {
   const row = await db.prepare(
     `SELECT batch.request_id, batch.state, batch.target_published_ingredients,
-            batch.desired_pricing_workers, batch.publish_batch_size, batch.paused_at,
+            batch.desired_pricing_workers, batch.publish_batch_size, batch.paused_at, batch.discovery_frozen_at,
             COUNT(DISTINCT gap.id) AS total_unique_gaps,
             COUNT(DISTINCT CASE WHEN gap.status = 'published' THEN gap.id END) AS published,
             COUNT(DISTINCT CASE WHEN gap.status = 'pending' THEN gap.id END) AS pending,
             COUNT(DISTINCT CASE WHEN gap.status = 'researching' THEN gap.id END) AS researching,
             COUNT(DISTINCT CASE WHEN gap.status = 'ready_to_publish' THEN gap.id END) AS ready_to_publish,
             COUNT(DISTINCT CASE WHEN gap.status = 'permanently_unavailable' THEN gap.id END) AS permanently_unavailable,
-            COUNT(DISTINCT CASE WHEN gap.status = 'needs_operator' THEN gap.id END) AS needs_operator
+            COUNT(DISTINCT CASE WHEN gap.status = 'needs_operator' AND gap.qa_resolution IS NULL THEN gap.id END) AS needs_operator
        FROM ingredient_discovery_batches batch
        LEFT JOIN ingredient_gap_occurrences occurrence ON occurrence.request_id = batch.request_id
        LEFT JOIN ingredient_gaps gap ON gap.id = occurrence.gap_id
@@ -379,6 +394,7 @@ export async function ingredientCampaignSnapshot(db: D1Database, requestId: stri
     targetPublishedIngredients: Number(row.target_published_ingredients),
     desiredPricingWorkers: Number(row.desired_pricing_workers), publishBatchSize: Number(row.publish_batch_size),
     pausedAt: row.paused_at ? String(row.paused_at) : null,
+    discoveryFrozenAt: row.discovery_frozen_at ? String(row.discovery_frozen_at) : null,
     published: Number(row.published), pending: Number(row.pending), researching: Number(row.researching),
     readyToPublish: Number(row.ready_to_publish), permanentlyUnavailable: Number(row.permanently_unavailable),
     needsOperator: Number(row.needs_operator), totalUniqueGaps: Number(row.total_unique_gaps),
@@ -416,8 +432,8 @@ export async function reconcileIngredientHolds(db: D1Database): Promise<void> {
     for (const batch of batches.results) await reconcileIngredientCampaign(db, batch.request_id);
     return;
   }
-  const gapRows = await db.prepare("SELECT id, status FROM ingredient_gaps").all<{ id: string; status: string }>();
-  const statuses = new Map(gapRows.results.map((row) => [row.id, row.status]));
+  const gapRows = await db.prepare("SELECT id, status, qa_resolution FROM ingredient_gaps").all<{ id: string; status: string; qa_resolution: string | null }>();
+  const statuses = new Map(gapRows.results.map((row) => [row.id, row.qa_resolution === "existing_alias" ? "published" : row.status]));
   const mapper = await activeAgent(db, "recipe-mapper");
   const commodities = await currentCommodityCatalog(db);
   for (const hold of holds.results) {

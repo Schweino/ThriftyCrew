@@ -48,7 +48,7 @@ try {
   Write-PcRuntimeLog $logFile 'supervisor started; research, sourcing, and publication are isolated stages'
   while ($true) {
     $status = Read-IngredientStatus
-    $campaigns = @($status.batches | Where-Object { -not $_.paused_at -and $_.state -ne 'completed' -and [int]$_.published_ingredients -lt [int]$_.target_published_ingredients })
+    $campaigns = @($status.batches | Where-Object { -not $_.paused_at -and $_.state -ne 'completed' })
     if ($campaigns.Count -eq 0) {
       Write-PcRuntimeLog $logFile 'no active ingredient campaign remains; supervisor completed'
       break
@@ -75,7 +75,7 @@ try {
       }
     }
 
-    $collecting = @($campaigns | Where-Object state -eq 'collecting').Count -gt 0
+    $collecting = @($campaigns | Where-Object { $_.state -eq 'collecting' -and -not $_.discovery_frozen_at }).Count -gt 0
     if ($collecting -and (Get-CycleProcesses 'Recipe').Count -eq 0 -and ((Get-Date) - $lastRecipeStart).TotalSeconds -ge 60) {
       Start-Cycle 'Recipe' 50
       $lastRecipeStart = Get-Date

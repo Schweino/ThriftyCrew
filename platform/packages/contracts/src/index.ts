@@ -1362,11 +1362,28 @@ export const recipeSuggestionRequestSchema = z.object({
 });
 
 export const ingredientCampaignControlSchema = z.object({
-  action: z.enum(["pause", "resume", "configure"]),
+  action: z.enum(["pause", "resume", "configure", "freeze-discovery", "resume-discovery"]),
   targetPublishedIngredients: z.number().int().min(1).max(500).optional(),
   desiredPricingWorkers: z.number().int().min(1).max(10).optional(),
   publishBatchSize: z.number().int().min(1).max(50).optional(),
 }).strict();
+
+export const ingredientQaRetrySchema = z.object({
+  gapIds: z.array(nonEmptyId).min(1).max(50).optional(),
+}).strict();
+
+export const ingredientQaResolutionSchema = z.object({
+  resolution: z.enum(["existing_alias", "excluded_noncommodity"]),
+  commodityId: nonEmptyId.nullable(),
+  reason: z.string().trim().min(10).max(2000),
+}).strict().superRefine((value, context) => {
+  if (value.resolution === "existing_alias" && value.commodityId === null) {
+    context.addIssue({ code: "custom", path: ["commodityId"], message: "an existing alias requires its active commodity id" });
+  }
+  if (value.resolution === "excluded_noncommodity" && value.commodityId !== null) {
+    context.addIssue({ code: "custom", path: ["commodityId"], message: "an excluded noncommodity cannot reference a commodity" });
+  }
+});
 
 export const ingredientPublicationFailureSchema = z.object({
   error: z.string().trim().min(1).max(5000),
