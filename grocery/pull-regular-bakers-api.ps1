@@ -79,6 +79,41 @@ if (-not (Test-Path $out)) { New-Item -ItemType Directory -Path $out -Force | Ou
 if (-not (Test-Path (Join-Path $out 'regular'))) { New-Item -ItemType Directory -Path (Join-Path $out 'regular') -Force | Out-Null }
 $today = Get-OmahaDateKey
 
+function Get-BakersAdWindow([datetime]$Date) {
+  # Baker's weekly ad is Wednesday through Tuesday in Omaha. Derive the
+  # containing window from the same Central-local date used to stamp the
+  # successful store capture; this prevents the customer-facing legacy guide
+  # from lagging the promotion coordinator by one full ad cycle.
+  $daysSinceWednesday = (([int]$Date.DayOfWeek - [int][DayOfWeek]::Wednesday) + 7) % 7
+  $from = $Date.Date.AddDays(-$daysSinceWednesday)
+  return [ordered]@{ from=$from.ToString('yyyy-MM-dd'); to=$from.AddDays(6).ToString('yyyy-MM-dd') }
+}
+
+function Update-BakersAdSchedule([string]$ScheduleFile, [string]$DetectedOn) {
+  if (-not (Test-Path -LiteralPath $ScheduleFile)) { throw "Baker's ad schedule is missing: $ScheduleFile" }
+  $schedule = Get-Content -LiteralPath $ScheduleFile -Raw -Encoding UTF8 | ConvertFrom-Json
+  $record = @($schedule.stores | Where-Object { [string]$_.store -eq "Baker's" }) | Select-Object -First 1
+  if (-not $record) { throw "Baker's ad schedule record is missing" }
+  $window = Get-BakersAdWindow ([datetime]$DetectedOn)
+  $changed = -not $record.current -or [string]$record.current.from -ne $window.from -or [string]$record.current.to -ne $window.to
+  $record.method = 'server'
+  $record.current = [pscustomobject]$window
+  $record.next_pull = ([datetime]$window.to).AddDays(1).ToString('yyyy-MM-dd')
+  if ($changed) {
+    $history = @($record.history)
+    if (-not @($history | Where-Object { [string]$_.from -eq $window.from -and [string]$_.to -eq $window.to }).Count) {
+      $record.history = @($history) + ,([pscustomobject][ordered]@{ from=$window.from; to=$window.to; detected=$DetectedOn })
+    }
+  }
+  $schedule.updated = $DetectedOn
+  $temporary = "$ScheduleFile.tmp-$([guid]::NewGuid().ToString('N'))"
+  try {
+    ($schedule | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $temporary -Encoding UTF8
+    Move-Item -LiteralPath $temporary -Destination $ScheduleFile -Force
+  } finally { Remove-Item -LiteralPath $temporary -Force -ErrorAction SilentlyContinue }
+  return $window
+}
+
 # ---------------------------------------------------------------- credentials
 $cid = $env:KROGER_CLIENT_ID; $csec = $env:KROGER_CLIENT_SECRET
 # NOT UNDER -SelfTest (2026-08-08). The self-test below is deliberately credential-free and network-free -
@@ -311,6 +346,11 @@ function Get-KrogerTaxonomy($p) {
 # Fixtures are REAL rows read off the Saddlecreek store on 2026-07-24 - every case is a known answer, and
 # several are the exact products that produced the 4x Kerrygold underprice this resolver exists to prevent.
 if ($SelfTest) {
+  $wed = Get-BakersAdWindow ([datetime]'2026-08-12')
+  $tue = Get-BakersAdWindow ([datetime]'2026-08-18')
+  if ($wed.from -ne '2026-08-12' -or $wed.to -ne '2026-08-18' -or $tue.from -ne '2026-08-12' -or $tue.to -ne '2026-08-18') {
+    throw "Baker's Wednesday-Tuesday ad-window self-test failed"
+  }
   $fail = 0
   function T([string]$label, $got, [string]$want) {
     $g = if ($null -eq $got) { '<refused>' } else { [string]$got }
@@ -601,6 +641,8 @@ $doc = [ordered]@{
 $file = Join-Path $out ('regular\bakers-regular-' + $today + '.json')
 ($doc | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8
 Write-Output ("bakers-api: wrote $($deals.Count) rows -> " + (Split-Path $file -Leaf))
+$bakersWindow = Update-BakersAdSchedule (Join-Path $root 'ad-schedule.json') $today
+Write-Output ("bakers-api: advanced ad schedule to {0}..{1}" -f $bakersWindow.from, $bakersWindow.to)
 
 # NO carry-forward here, deliberately. Those helpers exist for PARTIAL browser pulls of the same catalogue.
 # This pull is comprehensive (all 447 terms, ~4,800 products vs the browser pass's ~250), and the browser
