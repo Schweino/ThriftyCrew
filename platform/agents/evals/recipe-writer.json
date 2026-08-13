@@ -76,6 +76,19 @@
       "expect": { "decision": "content", "mustMention": ["160 F"] }
     },
     {
+      "id": "safe-stuffed-poultry-center",
+      "input": {
+        "candidate": { "id": "candidate-stuffed-chicken", "title": "Spinach Ricotta Stuffed Chicken" },
+        "readyForWriting": true,
+        "ingredients": [
+          { "sourceLine": "2.5 lb chicken breasts", "sourceName": "chicken breasts", "grams": 3968.9, "commodityId": "chicken-breast" },
+          { "sourceLine": "1 egg white", "sourceName": "egg white", "grams": 105, "commodityId": "eggs" }
+        ],
+        "method": "Stuff raw chicken with an egg-containing spinach and ricotta filling, then bake."
+      },
+      "expect": { "decision": "content", "mustMention": ["center of the stuffing", "165 F"] }
+    },
+    {
       "id": "safe-whole-cut-pork-complete-meal",
       "input": {
         "candidate": {
