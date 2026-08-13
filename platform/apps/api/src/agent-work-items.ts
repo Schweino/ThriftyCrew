@@ -653,12 +653,20 @@ async function persistRecipeIngredientGaps(db: D1Database, completed: Record<str
 
 async function persistIngredientResearch(db: D1Database, outputValue: unknown): Promise<void> {
   const research = ingredientPriceResearchSchema.parse(outputValue);
-  const status = research.disposition === "available"
+  let status = research.disposition === "available"
     ? "ready_to_publish"
     : research.disposition === "permanently_unavailable" ? "permanently_unavailable" : "needs_operator";
+  if (research.disposition === "available" && research.commodityProposal) {
+    const activeCommodity = await db.prepare(
+      `SELECT commodity.id FROM commodities commodity
+       JOIN configuration_versions version ON version.id = commodity.configuration_id
+       WHERE version.active = 1 AND commodity.active = 1 AND commodity.id = ?1 LIMIT 1`,
+    ).bind(research.commodityProposal.id).first();
+    if (activeCommodity) status = "published";
+  }
   await db.prepare(
     `UPDATE ingredient_gaps SET status = ?2, commodity_id = ?3, research_json = ?4,
-       updated_at = CURRENT_TIMESTAMP WHERE id = ?1`,
+       updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status <> 'published'`,
   ).bind(research.gapId, status, research.commodityProposal?.id ?? null, stableJson(research)).run();
   const requests = await db.prepare(
     `SELECT DISTINCT occurrence.request_id FROM ingredient_gap_occurrences occurrence WHERE occurrence.gap_id = ?1`,
