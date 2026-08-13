@@ -395,10 +395,19 @@ try {
     }
     Publish-ReadyRecipeContent
   } elseif ($Cycle -eq 'IngredientPricing' -and -not $OnlyAgent) {
-    Set-PcRuntimeCredential $config 'local-operator'
-    Push-Location $platformRoot
-    try { Invoke-LoggedCommand 'ingredient-v2-pricing-tick' { & $pnpmPath tc ingredient pipeline tick } | Out-Null }
-    finally { Pop-Location }
+    if ($PricingWorkerSlot -le 1) {
+      Set-PcRuntimeCredential $config 'local-operator'
+      Push-Location $platformRoot
+      try { Invoke-LoggedCommand 'ingredient-v2-pricing-tick' { & $pnpmPath tc ingredient pipeline tick } | Out-Null }
+      finally { Pop-Location }
+    }
+    for ($item = 0; $item -lt $MaxItems; $item++) {
+      try { if (-not (Invoke-AgentItem 'ingredient-price-researcher')) { break } }
+      catch {
+        Write-PcRuntimeLog $logFile ("targeted ingredient pricing item failed and remains durable: {0}" -f $_.Exception.Message)
+        Start-Sleep -Seconds 5
+      }
+    }
   } elseif ($Cycle -eq 'IngredientPublication' -and -not $OnlyAgent) {
     for ($item = 0; $item -lt $MaxItems; $item++) {
       if (-not (Invoke-AgentItem 'ingredient-definition-planner')) { break }

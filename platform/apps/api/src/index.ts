@@ -1242,7 +1242,7 @@ app.post("/internal/agent-work-items/:id/complete", zValidator("json", agentWork
   try {
     const identity = context.get("identity");
     const body = context.req.valid("json");
-    const result = await completeAgentWorkItem(context.env.DB, identity, context.req.param("id"), body);
+    const result = await completeAgentWorkItem(context.env, identity, context.req.param("id"), body);
     if (identity.registeredAgentId === "accuracy-headless") {
       await recordAccuracyVerdicts(context.env.DB, accuracyVerdictsSchema.parse(body.output), identity.agentId);
     }

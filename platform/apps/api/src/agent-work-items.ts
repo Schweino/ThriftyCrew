@@ -19,10 +19,11 @@ import {
 } from "@thriftycrew/contracts";
 import { deterministicId, digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 import type { z } from "zod";
-import type { MutationIdentity } from "./env";
+import type { MutationIdentity, WorkerEnv } from "./env";
 import { evaluateContentPromotion } from "./content-batches";
 import { mergeRecipeCommodityCatalog } from "./recipe-commodity-catalog";
 import { createPricingWave } from "./ingredient-pricing-v2";
+import { ingestAgentIngredientResearch } from "./ingredient-pricing-v2";
 
 interface RegistryRow {
   id: string;
@@ -295,7 +296,9 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
   if (agentId === "ingredient-price-researcher") {
     const rows = await db.prepare(
       `SELECT id, display_name, normalized_name, first_seen_at, qa_attempts, research_json, publication_error
-         FROM ingredient_gaps WHERE status = 'pending'
+         FROM ingredient_gaps gap WHERE gap.status IN ('pending','needs_operator')
+           AND EXISTS (SELECT 1 FROM ingredient_store_checks check_row
+             WHERE check_row.gap_id = gap.id AND check_row.state = 'targeted_refresh')
         ORDER BY first_seen_at, id LIMIT 50`,
     ).all<Record<string, unknown>>();
     const categories = await db.prepare(activeIngredientCategoryContextSql).all<Record<string, unknown>>();
@@ -1042,7 +1045,8 @@ async function stageAuditedRecipeBatch(db: D1Database, completed: Record<string,
   return { contentBatchId: batchId, status };
 }
 
-export async function completeAgentWorkItem(db: D1Database, identity: MutationIdentity, workItemId: string, body: AgentWorkItemComplete): Promise<Record<string, unknown>> {
+export async function completeAgentWorkItem(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, identity: MutationIdentity, workItemId: string, body: AgentWorkItemComplete): Promise<Record<string, unknown>> {
+  const db = env.DB;
   const current = await db.prepare("SELECT * FROM agent_work_items WHERE id = ?1").bind(workItemId).first<Record<string, unknown>>();
   if (!current) throw new Error("work item not found");
   if (identity.registeredAgentId !== current.agent_id) throw new Error("an agent may only complete its own work");
@@ -1091,6 +1095,7 @@ export async function completeAgentWorkItem(db: D1Database, identity: MutationId
   let recipeTerminal: { status: "rejected"; reason: string } | undefined;
   if (current.agent_id === "ingredient-price-researcher") {
     await persistIngredientResearch(db, output);
+    await ingestAgentIngredientResearch(env, output);
   } else if (current.agent_id === "ingredient-definition-planner") {
     const expected = array(object(JSON.parse(String(current.input_json))).ingredients).map((row) => String(row.pricing_job_id)).sort();
     const actual = ingredientDefinitionPlanSchema.parse(output).items.map((item) => item.pricingJobId).sort();
