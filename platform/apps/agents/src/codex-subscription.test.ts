@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { assertChatGptAuthDocument, codexStrictOutputSchema, stripCodexOptionalNulls, subscriptionEnvironment } from "./codex-subscription";
+import { assertChatGptAuthDocument, codexStrictOutputSchema, normalizeCodexStructuredOutput, stripCodexOptionalNulls, subscriptionEnvironment } from "./codex-subscription";
 
 describe("Codex subscription execution boundary", () => {
   it("accepts ChatGPT OAuth auth without an API key", () => {
@@ -30,5 +30,27 @@ describe("Codex subscription execution boundary", () => {
       properties: { optionalValue: { anyOf: [{ type: "string" }, { type: "null" }] } },
     });
     expect(stripCodexOptionalNulls({ requiredValue: null, optionalValue: null }, schema)).toEqual({ requiredValue: null });
+  });
+
+  it("collapses only exact duplicate mapper component references before contract validation", () => {
+    const output = {
+      requestId: "request_one",
+      recipes: [{
+        mealComponents: [
+          { role: "main", commodityIds: ["chicken", "oil", "chicken"] },
+          { role: "substantial-accompaniment", commodityIds: ["rice", "beans"] },
+        ],
+      }],
+    };
+    expect(normalizeCodexStructuredOutput(output, "recipe-map-v2")).toEqual({
+      requestId: "request_one",
+      recipes: [{
+        mealComponents: [
+          { role: "main", commodityIds: ["chicken", "oil"] },
+          { role: "substantial-accompaniment", commodityIds: ["rice", "beans"] },
+        ],
+      }],
+    });
+    expect(normalizeCodexStructuredOutput(output, "content-items-v2")).toBe(output);
   });
 });

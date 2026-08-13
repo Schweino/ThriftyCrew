@@ -16,7 +16,7 @@ import {
   triagePlanSchema,
 } from "@thriftycrew/contracts";
 import { normalizeTextForHash } from "@thriftycrew/domain";
-import { codexStrictOutputSchema, runSubscriptionAgent, stripCodexOptionalNulls } from "./codex-subscription";
+import { codexStrictOutputSchema, normalizeCodexStructuredOutput, runSubscriptionAgent, stripCodexOptionalNulls } from "./codex-subscription";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const outputRoot = path.resolve(process.env.TC_OUTPUT_ROOT ?? process.env.RUNNER_TEMP ?? path.join(platformRoot, ".agent-output"));
@@ -102,7 +102,7 @@ if (definition.provider === "codex-chatgpt") {
     outputRoot,
     webSearch: definition.capabilities.includes("search:web"),
   });
-  finalOutput = outputType.parse(stripCodexOptionalNulls(result.output, jsonSchema));
+  finalOutput = outputType.parse(normalizeCodexStructuredOutput(stripCodexOptionalNulls(result.output, jsonSchema), definition.outputContract));
   usageOutput = {
     inputTokens: result.usage.input_tokens,
     outputTokens: result.usage.output_tokens,

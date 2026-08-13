@@ -42,6 +42,23 @@ export function stripCodexOptionalNulls(value: unknown, schema: unknown): unknow
   }));
 }
 
+export function normalizeCodexStructuredOutput(value: unknown, outputContract: string): unknown {
+  if (outputContract !== "recipe-map-v2" || !isObject(value) || !Array.isArray(value.recipes)) return value;
+  return {
+    ...value,
+    recipes: value.recipes.map((recipe) => {
+      if (!isObject(recipe) || !Array.isArray(recipe.mealComponents)) return recipe;
+      return {
+        ...recipe,
+        mealComponents: recipe.mealComponents.map((component) => {
+          if (!isObject(component) || !Array.isArray(component.commodityIds)) return component;
+          return { ...component, commodityIds: [...new Set(component.commodityIds)] };
+        }),
+      };
+    }),
+  };
+}
+
 export function assertChatGptAuthDocument(document: CodexAuthDocument): void {
   if (document.auth_mode !== "chatgpt") {
     throw new Error("Codex subscription execution requires auth_mode=chatgpt; API-key execution is prohibited");
