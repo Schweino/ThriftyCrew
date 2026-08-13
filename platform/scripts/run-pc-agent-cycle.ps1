@@ -1,6 +1,6 @@
 param(
   [Parameter(Mandatory=$true)]
-  [ValidateSet('Triage','PostPublish','SourceSentinel','Recipe','Accuracy')]
+  [ValidateSet('Triage','PostPublish','SourceSentinel','Recipe','IngredientPricing','Accuracy')]
   [string]$Cycle,
   [ValidateRange(1,50)][int]$MaxItems = 1,
   [string]$OnlyAgent,
@@ -21,7 +21,8 @@ $cycleAgents = @{
   Triage = @('triage-reviewer','triage-developer')
   PostPublish = @('post-publish-reviewer')
   SourceSentinel = @('source-sentinel-investigator')
-  Recipe = @('recipe-sourcer','recipe-deduper','recipe-mapper','ingredient-price-researcher','recipe-mapper','recipe-writer','recipe-auditor')
+  Recipe = @('recipe-sourcer','recipe-deduper','recipe-mapper','recipe-writer','recipe-auditor')
+  IngredientPricing = @('ingredient-price-researcher')
   Accuracy = @('accuracy-headless')
 }
 $jobByCycle = @{
@@ -29,6 +30,7 @@ $jobByCycle = @{
   PostPublish = 'post-publish-review'
   SourceSentinel = 'source-sentinel-daily'
   Recipe = 'recipe-pack-weekly'
+  IngredientPricing = 'ingredient-pricing-continuous'
   Accuracy = 'accuracy-verdict'
 }
 $agentsForCycle = @($cycleAgents[$Cycle])
@@ -150,16 +152,31 @@ function Apply-PendingIngredientProposals {
     [string]$runner.finalOutput.disposition -eq 'available'
   })
   if ($available.Count -eq 0) { $script:ingredientProposalFiles.Clear(); return }
+  $publicationLock = $null
+  for ($attempt = 0; $attempt -lt 360 -and -not $publicationLock; $attempt++) {
+    $publicationLock = Enter-PcRuntimeLock 'ingredient-config-publication' 300
+    if (-not $publicationLock) { Start-Sleep -Seconds 5 }
+  }
+  if (-not $publicationLock) { throw 'ingredient configuration publication lock remained occupied for 30 minutes' }
   $branch = @(git -C $incomeRoot branch --show-current)
-  if ($LASTEXITCODE -ne 0 -or [string]$branch[0] -ne 'main') { throw 'automatic ingredient publication requires the checked-out main branch' }
+  if ($LASTEXITCODE -ne 0 -or [string]$branch[0] -ne 'main') {
+    Exit-PcRuntimeLock $publicationLock
+    throw 'automatic ingredient publication requires the checked-out main branch'
+  }
   $scopedPaths = @(
     'platform/config/commodities.json', 'platform/config/categories.json',
     'grocery/commodity-search.json', 'grocery/commodities.json', 'grocery/categories.json',
     'platform/config/manifest.json'
   )
   $dirty = @(git -C $incomeRoot status --porcelain -- $scopedPaths)
-  if ($LASTEXITCODE -ne 0) { throw 'could not inspect ingredient configuration paths' }
-  if ($dirty.Count -gt 0) { throw "ingredient configuration paths already contain uncommitted work: $($dirty -join '; ')" }
+  if ($LASTEXITCODE -ne 0) {
+    Exit-PcRuntimeLock $publicationLock
+    throw 'could not inspect ingredient configuration paths'
+  }
+  if ($dirty.Count -gt 0) {
+    Exit-PcRuntimeLock $publicationLock
+    throw "ingredient configuration paths already contain uncommitted work: $($dirty -join '; ')"
+  }
   $committed = $false
   try {
     foreach ($file in $available) {
@@ -184,6 +201,7 @@ function Apply-PendingIngredientProposals {
     }
     throw
   } finally {
+    Exit-PcRuntimeLock $publicationLock
     $script:ingredientProposalFiles.Clear()
   }
 }
@@ -267,8 +285,17 @@ function Invoke-AgentItem([string]$AgentId) {
   }
 }
 
+function Publish-ReadyRecipeContent {
+  Set-PcRuntimeCredential $config 'local-operator'
+  Push-Location $platformRoot
+  try {
+    Invoke-LoggedCommand 'recipe-content-promote-ready' { & $pnpmPath tc content promote-ready $env:TC_SCHEDULED_FOR } | Out-Null
+    Invoke-LoggedCommand 'recipe-content-publish-native' { & $pnpmPath tc engine publish-native } | Out-Null
+  } finally { Pop-Location }
+}
+
 if ($SelfTest) {
-  if ($Cycle -eq 'Recipe' -and -not $OnlyAgent) {
+  if ($Cycle -in @('Recipe','IngredientPricing')) {
     $authPath = Join-Path ([Environment]::GetFolderPath('UserProfile')) '.codex\auth.json'
     if (-not (Test-Path -LiteralPath $authPath)) { throw 'Codex ChatGPT authentication is not configured' }
     $auth = Read-PcUtf8Json $authPath
@@ -306,28 +333,25 @@ try {
       foreach ($agentId in @('recipe-sourcer','recipe-deduper','recipe-mapper')) {
         if (Invoke-AgentItem $agentId) { $roundProgress = $true }
       }
-      # Price one durable gap after every discovery round so sourcing and Omaha
-      # coverage advance as one pipeline without concurrent Git/config writers.
-      if (Invoke-AgentItem 'ingredient-price-researcher') {
-        Apply-PendingIngredientProposals
-      }
       if (-not $roundProgress) { break }
     }
-    for ($item = 0; $item -lt $MaxItems; $item++) {
-      if (-not (Invoke-AgentItem 'ingredient-price-researcher')) { break }
-    }
-    Apply-PendingIngredientProposals
     foreach ($agentId in @('recipe-mapper','recipe-writer','recipe-auditor')) {
       for ($item = 0; $item -lt $MaxItems; $item++) {
         if (-not (Invoke-AgentItem $agentId)) { break }
       }
     }
-    Set-PcRuntimeCredential $config 'local-operator'
-    Push-Location $platformRoot
-    try {
-      Invoke-LoggedCommand 'recipe-content-promote-ready' { & $pnpmPath tc content promote-ready $env:TC_SCHEDULED_FOR } | Out-Null
-      Invoke-LoggedCommand 'recipe-content-publish-native' { & $pnpmPath tc engine publish-native } | Out-Null
-    } finally { Pop-Location }
+    Publish-ReadyRecipeContent
+  } elseif ($Cycle -eq 'IngredientPricing' -and -not $OnlyAgent) {
+    for ($item = 0; $item -lt $MaxItems; $item++) {
+      if (-not (Invoke-AgentItem 'ingredient-price-researcher')) { break }
+      Apply-PendingIngredientProposals
+    }
+    foreach ($agentId in @('recipe-mapper','recipe-writer','recipe-auditor')) {
+      for ($item = 0; $item -lt $MaxItems; $item++) {
+        if (-not (Invoke-AgentItem $agentId)) { break }
+      }
+    }
+    Publish-ReadyRecipeContent
   } else {
     foreach ($agentId in $agentsForCycle) {
       for ($item = 0; $item -lt $MaxItems; $item++) {
