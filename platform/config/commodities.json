@@ -986,6 +986,7 @@
       "\\bbutter\\b"
     ],
     "exclude": [
+      "\\bbutter\\s+beans?\\b",
       "\\balternatives?\\b",
       "\\bsubstitutes?\\b",
       "\\bwhirl\\b",
@@ -2510,6 +2511,7 @@
       "vidalia"
     ],
     "exclude": [
+      "\\bpepper(?:s)?\\s*(?:&|and)?\\s*onions?\\b",
       "green\\s+onion",
       "onion\\s+ring",
       "onion\\s+powder",
@@ -6996,6 +6998,7 @@
       "\\bgarlic\\b"
     ],
     "exclude": [
+      "\\bgarlic[-\\s]+infused\\b.*\\boil\\b|\\boil\\b.*\\bgarlic[-\\s]+infused\\b",
       "\\bolives?\\b",
       "\\bquinoa\\b",
       "\\brice\\b",
@@ -10426,6 +10429,7 @@
       "\\bsalt\\b"
     ],
     "exclude": [
+      "\\bkosher\\b",
       "garlic salt",
       "salted",
       "chips",

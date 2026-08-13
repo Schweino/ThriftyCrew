@@ -1534,6 +1534,14 @@ if (command === "status") {
   result = await (await mutationClient()).request(`/internal/ingredient-gaps/${encodeURIComponent(gapId)}/qa-resolution`, {
     json: { resolution, commodityId: commodityId && commodityId !== "-" ? commodityId : null, reason },
   });
+} else if (command === "ingredient" && subcommand === "publication-retry") {
+  if (arguments_.length === 0) throw new Error("tc ingredient publication-retry requires one or more gap ids");
+  const client = await mutationClient();
+  const retried = [];
+  for (const gapId of arguments_) {
+    retried.push(await client.request(`/internal/ingredient-gaps/${encodeURIComponent(gapId)}/publication-retry`, { method: "POST" }));
+  }
+  result = { ok: true, retried };
 } else if (command === "ingredient" && subcommand === "reconcile") {
   result = await (await mutationClient()).request("/internal/ingredient-gaps/reconcile", { method: "POST" });
 } else if (command === "ingredient" && subcommand === "status") {

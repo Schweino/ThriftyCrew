@@ -1417,6 +1417,22 @@ app.post("/internal/ingredient-gaps/:id/publication-failure", zValidator("json",
   return context.json({ ok: true, gapId, requiresJudgment: body.requiresJudgment });
 });
 
+app.post("/internal/ingredient-gaps/:id/publication-retry", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may retry ingredient publication", 403);
+  const gapId = context.req.param("id");
+  const update = await context.env.DB.prepare(
+    `UPDATE ingredient_gaps SET status = 'ready_to_publish', publication_error = NULL, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?1 AND status = 'needs_operator' AND qa_resolution IS NULL AND publication_attempts > 0
+        AND json_extract(research_json, '$.disposition') = 'available'`,
+  ).bind(gapId).run();
+  if ((update.meta.changes ?? 0) !== 1) return jsonError("ingredient publication QA item is not retryable", 409);
+  const campaigns = await context.env.DB.prepare(
+    "SELECT DISTINCT request_id FROM ingredient_gap_occurrences WHERE gap_id = ?1",
+  ).bind(gapId).all<{ request_id: string }>();
+  for (const campaign of campaigns.results) await reconcileIngredientCampaign(context.env.DB, campaign.request_id);
+  return context.json({ ok: true, gapId, status: "ready_to_publish" });
+});
+
 app.post("/internal/recipe-waves/snapshot", zValidator("json", recipeWaveSnapshotSchema), async (context) => {
   const body = context.req.valid("json");
   const batch = await context.env.DB.prepare("SELECT status, content_hash FROM content_batches WHERE id = ?1").bind(body.contentBatchId).first<{ status: string; content_hash: string | null }>();
