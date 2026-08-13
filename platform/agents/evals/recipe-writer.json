@@ -30,7 +30,7 @@
       "input": {
         "candidate": {
           "id": "candidate-pork",
-          "title": "Paprika Pork Tenderloin",
+          "title": "30-Minute Paprika Pork Tenderloin",
           "sourceUrl": "https://example.test/pork",
           "accessedAt": "2026-08-10T12:00:00Z",
           "sourceServings": 2,
@@ -45,7 +45,7 @@
           { "sourceLine": "2 tablespoons olive oil", "sourceName": "olive oil", "grams": 189, "commodityId": "olive-oil" }
         ]
       },
-      "expect": { "decision": "content", "mustMention": ["145 F", "3-minute rest"] }
+      "expect": { "decision": "content", "mustMention": ["batches", "145 F", "3-minute rest", "omit the 30-minute claim"] }
     }
   ]
 }

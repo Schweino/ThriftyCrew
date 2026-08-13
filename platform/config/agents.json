@@ -232,7 +232,7 @@
       "enabled": true,
       "plane": "pc",
       "promptFile": "agents/recipe-writer/prompt.md",
-      "promptSha256": "901b95155e2af743c692a2b23b3dd0495bd4fa0364fa641b674574a813671ed9",
+      "promptSha256": "a2fc2c12fb6c5b018c4d7ba7767786a3291214ac1e3f4ed6f300ce91319f627a",
       "provider": "openai",
       "model": "gpt-5.6-terra",
       "reasoningEffort": "medium",
@@ -241,7 +241,7 @@
       "criticality": "optional",
       "workflowFile": ".github/workflows/agent-recipe-writer.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "3baae71767dbf154977853f47a8d1de3edf2d07069655bccb239b29d55fe9e2d",
+      "executionConfigHash": "51b99cbd1c1ac8e95b643c83139fdf1a6751d1d9638300be312aefe4c652c23f",
       "capabilities": [
         "read:content",
         "write:ledger",
