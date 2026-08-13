@@ -13,6 +13,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "air-freshener",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.308,
+        "link":  0.2463,
+        "ratio":  0.8,
+        "price":  7.98,
+        "size":  "32.4 oz",
+        "boardItem":  "Febreze Air Mist Air Freshener Spray",
+        "linkItem":  "Febreze Air Mist Air Freshener Spray, Fall Mixed Scent, 4ct., 32.4 oz.",
+        "board_src":  "main"
+    },
+    {
         "id":  "aluminum-foil",
         "store":  "Walmart",
         "unit":  "each",
@@ -234,6 +247,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "paper-towels",
+        "store":  "Sam\u0027s Club",
+        "unit":  "each",
+        "board":  1.3953,
+        "link":  1.7488,
+        "ratio":  1.25,
+        "price":  27.98,
+        "size":  "16 ct",
+        "boardItem":  "Member\u0027s Mark Select \u0026 Tear 2-Ply Paper Towels, 15 Rolls (150 Sheets/Roll)",
+        "linkItem":  "Boardwalk Multifold 1-Ply Natural Paper Towels 16 pks., 250 towels/pk.",
+        "board_src":  "main"
+    },
+    {
         "id":  "plums",
         "store":  "Aldi",
         "unit":  "lb",
@@ -325,6 +351,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "shaving-cream",
+        "store":  "Sam\u0027s Club",
+        "unit":  "oz",
+        "board":  0.3361,
+        "link":  0.3677,
+        "ratio":  1.09,
+        "price":  10.48,
+        "size":  "28.5 oz",
+        "boardItem":  "Skintimate Summer Splash Shave Gel",
+        "linkItem":  "Skintimate Skin Therapy Dry Skin Shave Gel, 9.5 oz., 3 pk.",
+        "board_src":  "main"
+    },
+    {
         "id":  "strawberries",
         "store":  "Aldi",
         "unit":  "oz",
@@ -351,6 +390,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "tampons",
+        "store":  "Sam\u0027s Club",
+        "unit":  "each",
+        "board":  0.1769,
+        "link":  0.1456,
+        "ratio":  0.82,
+        "price":  13.98,
+        "size":  "96 ct",
+        "boardItem":  "Tampax Pearl Regular Tampons",
+        "linkItem":  "Tampax Pearl Super Tampons, Unscented, 96 ct.",
+        "board_src":  "main"
+    },
+    {
         "id":  "tartar-sauce",
         "store":  "Walmart",
         "unit":  "floz",
@@ -374,6 +426,19 @@
         "size":  "12 ct",
         "boardItem":  "Great Value Frosted Chocolate Fudge Toasted Pastries, 20.3 oz, 12 Count",
         "linkItem":  "Great Value Frosted Cherry Toaster Pastries",
+        "board_src":  "main"
+    },
+    {
+        "id":  "toothbrushes",
+        "store":  "Sam\u0027s Club",
+        "unit":  "each",
+        "board":  1.8712,
+        "link":  1.6212,
+        "ratio":  0.87,
+        "price":  12.97,
+        "size":  "8 ct",
+        "boardItem":  "Oral-B ProHealth Advanced Manual Soft Toothbrushes",
+        "linkItem":  "Oral-B ProHealth Advanced Manual Soft Toothbrush, 8 ct.",
         "board_src":  "main"
     },
     {

@@ -32,38 +32,12 @@
                          "unit":  "floz",
                          "store":  "Fareway",
                          "per_unit":  0.1395,
-                         "median":  0.0312,
-                         "mult":  4.47,
+                         "median":  0.0328,
+                         "mult":  4.25,
                          "size":  "20 fl oz",
                          "item":  "Coca-Cola Soda Bottle",
-                         "peers_packed":  "3 of 6",
+                         "peers_packed":  "3 of 5",
                          "size_shape_mismatch":  true
-                     },
-                     {
-                         "id":  "razors",
-                         "commodity":  "Razors (disposable)",
-                         "unit":  "each",
-                         "store":  "Fareway",
-                         "per_unit":  2.3233,
-                         "median":  0.3317,
-                         "mult":  7,
-                         "size":  "3 ct",
-                         "item":  "Venus Tropical Women\u0027s Disposable Razor",
-                         "peers_packed":  "5 of 6",
-                         "size_shape_mismatch":  false
-                     },
-                     {
-                         "id":  "razors",
-                         "commodity":  "Razors (disposable)",
-                         "unit":  "each",
-                         "store":  "Hy-Vee",
-                         "per_unit":  1.9975,
-                         "median":  0.3317,
-                         "mult":  6.02,
-                         "size":  "4 ct",
-                         "item":  "Bic Soleil Razors, Lavender \u0026 Eucalyptus Scented, 4 Blades",
-                         "peers_packed":  "5 of 6",
-                         "size_shape_mismatch":  false
                      },
                      {
                          "id":  "bay-leaves",
@@ -132,7 +106,7 @@
                      }
                  ],
     "min_stores":  4,
-    "generated":  "2026-08-13T06:20:14",
+    "generated":  "2026-08-13T09:09:16",
     "ratio":  4,
     "kind_mismatch":  [
                           {
@@ -568,18 +542,6 @@
                               "holds_crown":  false
                           },
                           {
-                              "id":  "glass-cleaner",
-                              "commodity":  "Glass Cleaner",
-                              "unit":  "floz",
-                              "store":  "Sam\u0027s Club",
-                              "per_unit":  0.1445,
-                              "size":  "4 ct 19 oz",
-                              "item":  "Windex Fast Shine Foam Glass Cleaner, No-Drip Aerosol Cleaning Spray, 19 oz., 4 pk.",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false
-                          },
-                          {
                               "id":  "gochujang",
                               "commodity":  "Gochujang (Korean Chili Paste)",
                               "unit":  "oz",
@@ -772,6 +734,18 @@
                               "holds_crown":  false
                           },
                           {
+                              "id":  "lemonade",
+                              "commodity":  "Lemonade",
+                              "unit":  "floz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.0422,
+                              "size":  "59 oz",
+                              "item":  "Minute Maid Lemonade 59 Oz",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
                               "id":  "egg-whites",
                               "commodity":  "Liquid Egg Whites",
                               "unit":  "floz",
@@ -946,7 +920,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.0993,
                               "size":  "15 oz",
-                              "item":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
+                              "item":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -983,6 +957,18 @@
                               "per_unit":  0.199,
                               "size":  "10 oz",
                               "item":  "Fareway Soy Sauce",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false
+                          },
+                          {
+                              "id":  "sparkling-water",
+                              "commodity":  "Sparkling Water",
+                              "unit":  "floz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.0818,
+                              "size":  "17 oz",
+                              "item":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
                               "kind":  "weight",
                               "row_kind":  "volume",
                               "holds_crown":  false
@@ -1156,5 +1142,5 @@
                               "holds_crown":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-08-12.json"
+    "compare_file":  "comparison-2026-08-13.json"
 }

@@ -15,7 +15,7 @@
     "refused":  [
                     {
                         "id":  "ground-beef-8020",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but per-unit disagrees: board $5.99 vs link $7.99 (25%)"
                     },
                     {
                         "id":  "caesar-salad-kit",
@@ -55,6 +55,6 @@
                     }
                 ],
     "worked":  11,
-    "generated":  "2026-08-13 06:19",
-    "board":  "comparison-2026-08-12.json"
+    "generated":  "2026-08-13 09:08",
+    "board":  "comparison-2026-08-13.json"
 }

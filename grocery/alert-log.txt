@@ -280,3 +280,21 @@
 [2026-08-13T06:23:36] QUEUE ABSORBED into open item 2026-08-11-35684e (day 2 of this condition, count now 9) - no new id minted
 [2026-08-13T06:23:36] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: family-fare-paced' [type: thriftycrew v local job failed family fare paced]
 [2026-08-13T06:24:27] SENT 'Grocery: test-guards could not evaluate (guards already red on the unmutated board)' -> schweino68@gmail.com (id 19ffaddc56b61382)
+[2026-08-13T06:24:43] SENT 'Baker's ad rolled (ADFLIP) on a Thursday - flyer capture needed' -> schweino68@gmail.com (id 19ffade03717744d)
+[2026-08-13T06:45:09] QUEUE ABSORBED into open item 2026-08-12-87d03b (day 1 of this condition, count now 2) - no new id minted
+[2026-08-13T06:45:10] SENT 'Automation silent-death: 2 issue(s)' -> schweino68@gmail.com (id 19ffaf0bd2f5bd4e)
+[2026-08-13T08:57:25] SUPPRESSED (already sent this type today) 'Baker's ad window advanced with no capture behind it' [type: baker s ad window advanced with no capture behind it]
+[2026-08-13T08:59:23] QUEUE ABSORBED into open item 2026-08-07-9d0317 (day 6 of this condition, count now 7) - no new id minted
+[2026-08-13T08:59:24] SENT 'Grocery: 12 store(s) dropped from a commodity they carry - 2026-08-13' -> schweino68@gmail.com (id 19ffb6ba659f68df)
+[2026-08-13T09:01:18] QUEUE ABSORBED into open item 2026-08-07-cac5f3 (day 6 of this condition, count now 11) - no new id minted
+[2026-08-13T09:01:18] SUPPRESSED (already sent this type today) 'Grocery: semantic sweep found 40 product(s) no rule can see - 2026-08-13' [type: grocery semantic sweep found product s no rule can see]
+[2026-08-13T09:06:07] QUEUE ABSORBED into open item 2026-08-12-2f6bba (day 1 of this condition, count now 4) - no new id minted
+[2026-08-13T09:06:07] SUPPRESSED (already sent this type today) 'Database constraint refused a write' [type: database constraint refused a write]
+[2026-08-13T09:06:08] QUEUE ABSORBED into open item 2026-08-12-fb9d1d (day 1 of this condition, count now 4) - no new id minted
+[2026-08-13T09:06:08] SUPPRESSED (already sent this type today) 'A write broke cross-store integrity' [type: a write broke cross store integrity]
+[2026-08-13T09:06:11] QUEUE ABSORBED into open item 2026-08-09-817ca5 (day 4 of this condition, count now 11) - no new id minted
+[2026-08-13T09:06:11] SUPPRESSED (already sent this type today) 'Board prices aging inside a fresh file' [type: board prices aging inside a fresh file]
+[2026-08-13T09:08:52] QUEUE ABSORBED into open item 2026-08-07-058ac6 (day 6 of this condition, count now 9) - no new id minted
+[2026-08-13T09:08:52] SUPPRESSED (already sent this type today) 'Grocery: 4 NEW price flag(s) - 2026-08-13' [type: grocery new price flag s]
+[2026-08-13T09:09:32] QUEUE ABSORBED into open item 2026-08-10-740129 (day 3 of this condition, count now 6) - no new id minted
+[2026-08-13T09:09:32] SUPPRESSED (already sent this type today) 'Grocery: GUARDS FAILED - board not published - 2026-08-13' [type: grocery guards failed board not published]

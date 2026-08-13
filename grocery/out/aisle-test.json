@@ -173,7 +173,7 @@
     {
         "id":  "baby-food",
         "store":  "Family Fare",
-        "product":  "Gerber Sitter 2nd Foods Nourishing Blends Sweet Potato Turkey With Oats 2 Ea",
+        "product":  "Gerber Prune Apple, Sitter 2nd Foods, 2 Packs 2 Ea",
         "dept":  "health_beauty",
         "aisle":  "health_beauty/baby_child",
         "verdict":  "ALLOW",
@@ -614,7 +614,7 @@
     {
         "id":  "canned-green-beans",
         "store":  "Family Fare",
-        "product":  "Our Family Cut Green Beans 14.5 Oz",
+        "product":  "Our Family No Salt Added Cut Green Beans 14.5 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -2135,7 +2135,7 @@
     {
         "id":  "lemonade",
         "store":  "Family Fare",
-        "product":  "Minute Maid Strawberry Lemonade Carton 59 Fl Oz",
+        "product":  "Minute Maid Lemonade 59 Oz",
         "dept":  "beverages",
         "aisle":  "beverages/fruit_vegetable_beverages",
         "verdict":  "ALLOW",
@@ -2549,7 +2549,7 @@
     {
         "id":  "pickles",
         "store":  "Family Fare",
-        "product":  "Our Family Spears Polish Dill Pickles 24 Fl Oz",
+        "product":  "Our Family Reduced Sodium Kosher Dill Pickle Spears 24 Fl Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -2738,7 +2738,7 @@
     {
         "id":  "ramen",
         "store":  "Family Fare",
-        "product":  "Maruchan Roast Chicken Flavor Ramen Noodle Soup 3 Oz",
+        "product":  "Maruchan Ramen Noodle Soup, Roast Beef Flavor 3 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/broth_soups_stews_chili",
         "verdict":  "ALLOW",
@@ -2999,7 +2999,7 @@
     {
         "id":  "shampoo",
         "store":  "Family Fare",
-        "product":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
+        "product":  "Alberto Vo5 Shampoo, Clarifying, Kiwi Lime Squeeze 15 Fl Oz",
         "dept":  "health_beauty",
         "aisle":  "health_beauty/grooming_hygiene",
         "verdict":  "ALLOW",
@@ -3116,7 +3116,7 @@
     {
         "id":  "sparkling-water",
         "store":  "Family Fare",
-        "product":  "Sparkling Ice Zero Sugar Strawberry Watermelon Sparkling Water 17 Fl Oz",
+        "product":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/soda_other_carbonated_beverages",
         "verdict":  "ALLOW",
@@ -3373,15 +3373,6 @@
         "aisle":  "pantry/broth_soups_stews_chili",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
-    },
-    {
-        "id":  "tomatoes",
-        "store":  "Family Fare",
-        "product":  "Serious Bean Co Pinto Beans, With Tomatoes, Chipotle, Sweet \u0026 Smoky 15.5 Oz",
-        "dept":  "pantry",
-        "aisle":  "pantry/canned_goods",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
         "id":  "toothbrushes",

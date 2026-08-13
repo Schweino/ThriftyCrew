@@ -1,1 +1,1 @@
-﻿baked-beans|Hy-Vee;beets|Family Fare;cilantro|Walmart;coleslaw-mix|Hy-Vee;coleslaw-mix|Walmart;french-bread|Walmart;green-onions|Walmart;habanero-peppers|Walmart;papaya|Walmart;plums|Fareway;pomegranates|Walmart
+﻿baked-beans|Hy-Vee;beets|Family Fare;cilantro|Walmart;coleslaw-mix|Hy-Vee;coleslaw-mix|Walmart;french-bread|Walmart;fruit-snacks|Sam's Club;green-onions|Walmart;habanero-peppers|Walmart;papaya|Walmart;plums|Fareway;pomegranates|Walmart

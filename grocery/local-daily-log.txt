@@ -203,3 +203,12 @@
 [2026-08-12T09:13:07] EDGE STALE: The edge is serving a feed generated 2026-08-12T13:47:16.692Z but the repo pushed 2026-08-12T09:06:35. The push succeeded, so this is a Cloudflare deploy that has not landed. Live recipe prices are stale until it does. Check the CF dashboard build log for the smp-feed worker.
 [2026-08-12T09:13:09] feed fresh: week 2026-08-12, 542 recipes, 572 ingredients (inputs verified same-day)
 [2026-08-12T09:13:09] done
+[2026-08-13T08:30:02] cloud-runs: check-cloud-runs: daily.yml ok (completed/success)
+[2026-08-13T08:30:03] cloud-runs: check-cloud-runs: heartbeat.yml ok (completed/success)
+[2026-08-13T08:30:03] weekly-lock: weekly-run lock: none - no weekly refresh is holding the tree.
+[2026-08-13T08:30:03] start: syncing repo
+[2026-08-13T08:30:04] pull: From https://github.com/Schweino/SimpleMoneyPlaybook
+[2026-08-13T08:30:04] pull:  * branch              main       -> FETCH_HEAD
+[2026-08-13T08:30:04] pull: Already up to date.
+[2026-08-13T08:30:04] running check-ad-cycles
+[2026-08-13T09:12:49] check-ad-cycles exit 0
