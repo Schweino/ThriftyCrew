@@ -1,0 +1,2324 @@
+{
+  "siteName": "dietdoctor",
+  "checked": 1151,
+  "matches": 85,
+  "errors": [
+    {
+      "url": "https://www.googletagmanager.com",
+      "error": "404 https://www.googletagmanager.com"
+    },
+    {
+      "url": "https://i.dietdoctor.com",
+      "error": "400 https://i.dietdoctor.com"
+    },
+    {
+      "url": "https://www.googleadservices.com",
+      "error": "404 https://www.googleadservices.com"
+    },
+    {
+      "url": "https://dietdoctor.zendesk.com/hc/en-us",
+      "error": "403 https://dietdoctor.zendesk.com/hc/en-us"
+    },
+    {
+      "url": "https://dietdoctor.zendesk.com/hc/en-us/requests/new",
+      "error": "403 https://dietdoctor.zendesk.com/hc/en-us/requests/new"
+    },
+    {
+      "url": "https://www.dietdoctor.com/xmlrpc.php",
+      "error": "404 https://www.dietdoctor.com/xmlrpc.php"
+    },
+    {
+      "url": "https://apps.apple.com/us/app/diet-doctor-eat/id1440002708",
+      "error": "404 https://apps.apple.com/us/app/diet-doctor-eat/id1440002708"
+    },
+    {
+      "url": "https://careers.dietdoctor.com/",
+      "error": "404 https://careers.dietdoctor.com/"
+    },
+    {
+      "url": "https://www.dietdoctor.com/recipes/savory-sesame-fatbombs",
+      "error": "404 https://www.dietdoctor.com/recipes/savory-sesame-fatbombs"
+    },
+    {
+      "url": "https://careers.dietdoctor.com",
+      "error": "404 https://careers.dietdoctor.com"
+    },
+    {
+      "url": "https://www.dietdoctor.com/about/careers",
+      "error": "404 https://www.dietdoctor.com/about/careers"
+    }
+  ],
+  "recipes": [
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/asparagus-egg-and-bacon-salad",
+      "title": "Asparagus, egg and bacon salad",
+      "calories": 563,
+      "listedCarbs": 6,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "2",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 lb green asparagus, ends trimmed",
+        "3 oz. bacon, cooked crisp and chopped",
+        "4 large, hard-boiled eggs, peeled and halved",
+        "2 tbsp avocado oil or olive oil",
+        "2 tbsp red wine vinegar",
+        "1 tbsp Dijon mustard",
+        "1 tbsp bacon fat",
+        "1 garlic clove, minced",
+        "1 pinch sea salt",
+        "1 pinch red chili flakes"
+      ],
+      "description": "This simple summer salad is actually perfect for any time of the year. It is delicious served both warm and cold. From time to time we even like to add some fresh goat cheese and pickled red onions as well."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/breakfast-keto-chaffles",
+      "title": "Breakfast keto chaffles",
+      "calories": 624,
+      "listedCarbs": 5,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Breakfast"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "8 eggs",
+        "2 cups cheddar cheese",
+        "2 tbsp fresh chives",
+        "salt",
+        "pepper",
+        "8 bacon",
+        "8 cherry tomatoes",
+        "2 oz. baby spinach"
+      ],
+      "description": "The perfect low carb breakfast. Cheesy waffles topped with soft egg and crispy bacon. Add a fresh salad on the side and you’ve got the best start to the day ever."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-chicken-and-zucchini-curry-soup",
+      "title": "Chicken and zucchini curry soup",
+      "calories": 601,
+      "listedCarbs": 18,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "2",
+      "categories": [
+        "Lunch"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "2 tbsp olive oil, divided",
+        "2 garlic cloves, minced",
+        "2 white onions, finely chopped",
+        "3/4 cup coconut milk",
+        "2 cups water",
+        "3 tbsp green curry paste",
+        "1 tbsp fresh parsley or fresh cilantro, finely chopped",
+        "3/4 lb chicken breasts, cut into small pieces",
+        "11 oz. zucchini, thinly sliced",
+        "salt and ground black pepper"
+      ],
+      "description": "The warm and inviting scent of curry that fills the house when you make this bright, fresh low carb soup is irresistible. Tender chicken and crispy zucchini are the stars of this coconut-infused flavor wonder!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/claras-delicious-low-carb-huevos-rancheros",
+      "title": "Clara's delicious low carb huevos rancheros",
+      "calories": 547,
+      "listedCarbs": 12,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Breakfast"
+      ],
+      "cuisine": "Latin American",
+      "ingredients": [
+        "1/2 cup olive oil",
+        "1 white onion",
+        "2 garlic cloves",
+        "2 fresh jalapeños",
+        "2 cups crushed tomatoes",
+        "2 tsp salt",
+        "1 tsp pepper",
+        "8 eggs",
+        "1/2 cup queso fresco",
+        "4 tbsp fresh cilantro",
+        "1 avocado"
+      ],
+      "description": "Spice it up at breakfast time with these Mexican-style eggs. <a href=\"https://www.dietdoctor.com/authors/clara-gonzalez\">Clara's version</a> keeps it low carb and satisfying: fried eggs, a zesty tomato salsa with jalapeños and cheese, and avocado. It's a perfectly delicious way to start your day!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/creamy-low-carb-broccoli-leek-soup",
+      "title": "Creamy low carb broccoli and leek soup",
+      "calories": 646,
+      "listedCarbs": 12,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Appetizer"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 leek",
+        "10 oz. broccoli",
+        "3 cups vegetable stock",
+        "1/4 tsp salt",
+        "7 oz. cream cheese",
+        "1 cup heavy whipping cream",
+        "1/2 tsp ground black pepper",
+        "1/2 cup fresh basil",
+        "1 garlic clove",
+        "2 cups cheddar cheese",
+        "1/2 tsp paprika powder"
+      ],
+      "description": "This <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a> soup is the “little black dress” of meals. It can go anywhere and do anything. It can be a lunch or a dinner, an entrée or an appetizer. And it loves, loves, loves extra accoutrements, like these cheese chips!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/crustless-keto-broccoli-and-bacon-quiche",
+      "title": "Crustless keto broccoli and bacon quiche",
+      "calories": 509,
+      "listedCarbs": 5,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Breakfast"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 tsp butter, for greasing",
+        "4 oz. bacon",
+        "8 eggs",
+        "1/2 cup heavy whipping cream",
+        "1/2 tbsp Italian seasoning",
+        "1/2 tbsp onion powder",
+        "1/2 tsp salt",
+        "4 oz. broccoli, cut into florets",
+        "6 oz. mozzarella cheese"
+      ],
+      "description": "This quick and easy quiche only uses a handful of ingredients, yet it's certainly not lacking in flavor. A rich, creamy quiche that can easily make a wholesome breakfast, lunch, or dinner."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/zucchini-salad-eggs",
+      "title": "Egg salad",
+      "calories": 531,
+      "listedCarbs": 6,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Side dish"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 1/2 lbs zucchini",
+        "2 tbsp butter or olive oil",
+        "1 cup mayonnaise",
+        "4 hardboiled eggs, chopped",
+        "1/2 green bell pepper, the seeds removed",
+        "3 oz. celery stalks, thinly sliced",
+        "3 oz. dill pickles",
+        "2 oz. finely chopped scallions",
+        "3 tbsp pickled jalapeños",
+        "2 tbsp finely chopped fresh chives",
+        "1/2 tbsp Dijon mustard",
+        "salt and pepper"
+      ],
+      "description": "BBQ or potluck, here we come! Zucchini stands in for potatoes in this <a href=\"https://www.dietdoctor.com/low-carb\">low-carb</a> and spiced-up makeover of the classic summer fave, potato salad. All of the creamy flavor, and (almost) none of the carbs!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/garlic-and-herb-cauliflower-mac-and-cheese-with-bacon",
+      "title": "Garlic and herb cauliflower mac and cheese with bacon",
+      "calories": 620,
+      "listedCarbs": 10,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "6",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": "American",
+      "ingredients": [
+        "2 1/2 lbs cauliflower, trimmed and cut into small florets",
+        "3 tbsp olive oil",
+        "sea salt and ground black pepper",
+        "2 tsp fresh chives, chopped",
+        "1 1/2 tsp Italian seasoning",
+        "1 tbsp butter",
+        "2 garlic cloves, minced",
+        "1 cup heavy whipping cream",
+        "1 cup shredded mozzarella cheese, divided",
+        "1 cup finely grated Parmesan cheese, divided",
+        "1 cup shredded cheddar cheese",
+        "1/3 cup cream cheese, softened",
+        "4 oz. bacon, cooked crisp and crumbled"
+      ],
+      "description": "Mac and cheese is the ultimate in comfort food. You really can’t go wrong with any dish that has garlic and bacon in it. This low carb version with garlic and herbs sure to be the whole family's new favorite."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/halloumi-cheese-butter-fried-eggplant",
+      "title": "Halloumi cheese with butter-fried eggplant",
+      "calories": 588,
+      "listedCarbs": 12,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "2",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": "Mediterranean",
+      "ingredients": [
+        "1 lb eggplant",
+        "1 tbsp butter",
+        "10 oz. halloumi cheese",
+        "10 black olives",
+        "salt and pepper"
+      ],
+      "description": "Vegetarian fast food for real! This simple, hearty <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a> meal is quick and easy to make... a buttery shortcut to real food satisfaction!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/high-protein-turkey-breakfast-burger",
+      "title": "High protein turkey breakfast burger",
+      "calories": 647,
+      "listedCarbs": 2,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "2",
+      "categories": [
+        "Breakfast"
+      ],
+      "cuisine": "American",
+      "ingredients": [
+        "2 oz. uncooked bacon, cut in half",
+        "1 lb ground turkey or ground beef",
+        "salt and ground black pepper",
+        "2 large eggs",
+        "4 butterhead lettuce leaves",
+        "2 tbsp mayonnaise",
+        "1/2 tomato, sliced"
+      ],
+      "description": "Whether you enjoy this protein-packed keto burger for breakfast, lunch or dinner, it will keep you satisfied for hours. The best part is that you only need one pan, which means fewer dishes. Be prepared to get your hands dirty if you forgo the knife and fork, we won't tell."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-italian-cabbage-stir-fry",
+      "title": "Italian cabbage stir-fry",
+      "calories": 506,
+      "listedCarbs": 11,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": "Italian",
+      "ingredients": [
+        "1 1/2 lbs green cabbage",
+        "1 oz. butter",
+        "1 1/4 lbs ground beef",
+        "1 tbsp white wine vinegar",
+        "1 tsp salt",
+        "1 tsp onion powder",
+        "1/4 tsp pepper",
+        "2 tbsp tomato paste",
+        "2 garlic cloves, finely chopped",
+        "3 oz. leeks, thinly sliced",
+        "2/3 oz. fresh basil, chopped",
+        "1 cup sour cream"
+      ],
+      "description": "This meal is simple rustic deliciousness. The combination of tart cabbage, luscious basil, and savory beef is melt-in-your-mouth fabulous. This is <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a> at its finest."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/italian-keto-chicken-stew-with-cabbage-pasta",
+      "title": "Italian keto chicken parmesan with cabbage pasta",
+      "calories": 600,
+      "listedCarbs": 7,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": "Italian",
+      "ingredients": [
+        "4 tbsp butter",
+        "1 1/2 lbs boneless chicken thighs",
+        "1/4 cup sun-dried tomatoes in oil",
+        "6 cherry tomatoes",
+        "1 garlic clove",
+        "3/4 cup heavy whipping cream",
+        "1 1/4 cups shredded Parmesan cheese",
+        "1 cup baby spinach",
+        "salt",
+        "pepper",
+        "11 oz. green cabbage"
+      ],
+      "description": "A simple, creamy chicken parmesan dinner with the added tang of sundried and regular tomatoes. It works just as well for regular weekdays meals as it does for a festive weekend get-together. Serve it on top of butter-fried cabbage strips in place of pasta. A true keto success!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/italian-keto-plate",
+      "title": "Italian plate",
+      "calories": 561,
+      "listedCarbs": 7,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "2",
+      "categories": [
+        "Appetizer"
+      ],
+      "cuisine": "Italian",
+      "ingredients": [
+        "6 oz. fresh mozzarella cheese",
+        "6 oz. prosciutto, sliced",
+        "2 tomatoes",
+        "2 tbsp olive oil",
+        "10 green olives",
+        "salt and pepper",
+        "fresh basil for garnish"
+      ],
+      "description": "Simple ingredients, satisfying results. Prosciutto, mozzarella, tomatoes, and olives, that's all!  Because a filling <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a> lunch or dinner doesn't have to be complicated."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-italian-stuffed-bell-peppers-with-ground-turkey",
+      "title": "Italian stuffed bell peppers with ground turkey",
+      "calories": 549,
+      "listedCarbs": 15,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": "Italian",
+      "ingredients": [
+        "4 red bell peppers",
+        "2 tbsp olive oil",
+        "4 oz. yellow onions",
+        "3 garlic cloves",
+        "3/4 tsp salt",
+        "1 lb ground turkey",
+        "1/4 tsp ground black pepper",
+        "1 tbsp dried basil",
+        "3/4 cup crushed tomatoes",
+        "3 oz. baby spinach",
+        "7 oz. fresh mozzarella cheese",
+        "3/4 cup sour cream",
+        "2 tbsp fresh parsley (optional)",
+        "3 oz. leafy greens"
+      ],
+      "description": "These delectably aromatic little parcels will provide you with a wonderful flavor explosion. Generous seasoning combined with deliciously savory mozzarella make the perfect partners for sumptuous ground turkey all piled into roasted bell peppers. They really do taste as good as they look!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-italian-turkey-plate-with-fresh-mozzarella",
+      "title": "Italian turkey plate with fresh mozzarella",
+      "calories": 624,
+      "listedCarbs": 9,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "1",
+      "categories": [
+        "Lunch"
+      ],
+      "cuisine": "Italian",
+      "ingredients": [
+        "1 cup lettuce mix",
+        "1 1/2 oz. deli turkey",
+        "3 oz. hearts canned artichokes",
+        "2 oz. cherry tomatoes",
+        "3 1/2 oz. fresh mozzarella cheese, cut in wedges",
+        "2 oz. avocados, sliced",
+        "1 tbsp olive oil",
+        "2 tsp balsamic vinegar (optional)",
+        "salt and pepper to taste"
+      ],
+      "description": "This deliciously satisfying low carb plate is packed with fresh, full-flavored, and creamy Italian goodness. Enjoy tangy artichokes paired with creamy mozzarella."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/jills-cheese-crusted-omelet",
+      "title": "Jill's cheese-crusted keto omelet",
+      "calories": 627,
+      "listedCarbs": 5,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "1",
+      "categories": [
+        "Breakfast"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "2 large eggs",
+        "2 tbsp heavy whipping cream",
+        "salt",
+        "1/2 tbsp butter (optional)",
+        "3 oz. shredded cheese",
+        "ground black pepper",
+        "2 mushrooms",
+        "2 cherry tomatoes",
+        "1/2 cup baby spinach",
+        "2 tbsp cream cheese (optional)",
+        "1 oz. deli turkey",
+        "1 tsp dried oregano"
+      ],
+      "description": "Once you've tried this omelet, there's no turning back. With its irresistible crust and sumptuously rich filling, this cheese-crusted miracle puts traditional omelets to shame. Perfect as a hearty breakfast but also an impressive option for a quick <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a> lunch or dinner."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/kerala-style-chicken-curry-with-coconut-cream",
+      "title": "Kerala style chicken curry with coconut cream",
+      "calories": 613,
+      "listedCarbs": 9,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 1/4 lbs skinless boneless chicken thighs",
+        "1 tsp salt",
+        "1/2 tsp ground black pepper",
+        "1 tsp red chili powder",
+        "2 tsp ground coriander seed",
+        "2 tbsp ginger garlic paste",
+        "2 tbsp coconut oil",
+        "2 bay leaves",
+        "1 cinnamon stick",
+        "1 green chili pepper, chopped",
+        "3 1/2 oz. white onions",
+        "3 1/2 oz. mushrooms",
+        "1 3/4 cups coconut cream",
+        "20 curry leaves",
+        "3/4 cup fresh cilantro, chopped"
+      ],
+      "description": "A quick and flavorsome <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a> chicken curry, South Indian style! Succulent pieces of chicken and mushroom-infused with a delicious blend of spices and a rich coconut gravy. A delicious hot dish, no matter the season."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-swedish-meatballs-in-gravy",
+      "title": "Keto \"Swedish\" meatballs in gravy",
+      "calories": 611,
+      "listedCarbs": 7,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "8",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 lb ground beef",
+        "1 lb ground pork",
+        "2 eggs",
+        "2 tbsp dried parsley",
+        "2 tbsp dried minced onion",
+        "1 tsp salt",
+        "1 tsp garlic powder",
+        "1/2 cup pork rinds (optional)",
+        "1 1/2 oz. Parmesan cheese",
+        "2 oz. red onions",
+        "7 oz. butter",
+        "1/2 tsp ground black pepper",
+        "2 cups beef broth",
+        "1/2 cup sour cream",
+        "1 cup cream cheese",
+        "1 3/4 lbs cauliflower"
+      ],
+      "description": "While my Swedish friends tell me this isn’t truly a Swedish meatball, everyone agrees that these meatballs in gravy are delicious. And <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a>! For a quick variation, you can try making this as a meatloaf and baking longer in a loaf pan."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/goat-cheese-bites-with-marinated-sesame-seeds",
+      "title": "Keto baked goat cheese with blackberries and roasted pistachios",
+      "calories": 584,
+      "listedCarbs": 4,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Appetizer"
+      ],
+      "cuisine": "French",
+      "ingredients": [
+        "1 1/4 lbs goat cheese",
+        "9 oz. fresh blackberries",
+        "1 tbsp erythritol (optional)",
+        "1 pinch ground cinnamon",
+        "1 oz. pistachio nuts",
+        "salt",
+        "fresh rosemary"
+      ],
+      "description": "This delicious oven-baked goat cheese dish wows as an appetizer or a dessert. But it is so tasty and nutritious you could even have it for lunch with a good salad!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-goat-cheese-with-blackberry-pistachios",
+      "title": "Keto baked goat cheese with blackberries and roasted pistachios",
+      "calories": 584,
+      "listedCarbs": 4,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Appetizer"
+      ],
+      "cuisine": "French",
+      "ingredients": [
+        "1 1/4 lbs goat cheese",
+        "9 oz. fresh blackberries",
+        "1 tbsp erythritol (optional)",
+        "1 pinch ground cinnamon",
+        "1 oz. pistachio nuts",
+        "salt",
+        "fresh rosemary"
+      ],
+      "description": "This delicious oven-baked goat cheese dish wows as an appetizer or a dessert. But it is so tasty and nutritious you could even have it for lunch with a good salad!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/breakfast-tapas",
+      "title": "Keto breakfast tapas",
+      "calories": 507,
+      "listedCarbs": 5,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Appetizer"
+      ],
+      "cuisine": "Spanish",
+      "ingredients": [
+        "4 oz. cheddar cheese",
+        "8 oz. prosciutto",
+        "8 oz. chorizo",
+        "4 tbsp mayonnaise or vegan mayonnaise",
+        "4 oz. cucumber",
+        "2 oz. red bell peppers"
+      ],
+      "description": "If you’re looking for a simple AND luxurious crowd-pleaser, look no further! Go for the best quality cheeses, cold cuts, and veggies, and you will have a stunning <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a> spread in no time."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-butter-burgers",
+      "title": "Keto butter burgers",
+      "calories": 619,
+      "listedCarbs": 4,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Lunch"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 lb 80/20 ground beef or ground turkey",
+        "1 tsp salt",
+        "1/2 tsp ground black pepper",
+        "1/4 red onion, finely chopped",
+        "1 fresh jalapeño, cut in small pieces",
+        "1 tomato, thinly sliced",
+        "1 avocado, cut lengthwise",
+        "1 butterhead lettuce",
+        "8 slices cheddar cheese",
+        "1 1/2 oz. butter, in slices"
+      ],
+      "description": "Butter on a burger? We’re sold! Traditionally, it’s a Midwestern staple but we ditched the bun and made it irresistibly <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a>. Crispy edges, juicy bites... just perfect for the grill."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-caprese-omelet",
+      "title": "Keto Caprese omelet",
+      "calories": 533,
+      "listedCarbs": 4,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "2",
+      "categories": [
+        "Breakfast"
+      ],
+      "cuisine": "Mediterranean",
+      "ingredients": [
+        "6 eggs",
+        "salt and pepper",
+        "1 tbsp chopped fresh basil or 1 tsp dried basil",
+        "2 tbsp olive oil",
+        "3 oz. cherry tomatoes cut in halves or tomatoes cut in slices",
+        "5 oz. fresh mozzarella cheese, diced or sliced"
+      ],
+      "description": "Soft mozzarella, ripe tomatoes, and fresh basil, yes please!  In an omelet — even better! This super-easy, <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a> dish works for breakfast, lunch or dinner, and is sure to be a new fave. So get out your frying pan… Italy, here we come!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/cauliflower-potato-salad",
+      "title": "Keto cauliflower ‘potato’ salad",
+      "calories": 521,
+      "listedCarbs": 5,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "6",
+      "categories": [
+        "Side dish"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 1/2 lbs cauliflower",
+        "1 pinch salt",
+        "1/2 cup water",
+        "5 oz. bacon",
+        "3 celery stalks",
+        "1/2 red onion",
+        "2 tbsp fresh chives",
+        "1 pinch ground black pepper",
+        "1 1/2 cups mayonnaise",
+        "3/4 tbsp Dijon mustard",
+        "3/4 tbsp cider vinegar"
+      ],
+      "description": "This quick and easy cauliflower salad tastes just like traditional potato salad, if not even better — especially on the grill. Potato salad is one of the most common barbecue side dishes, and we're proud to present this glorious <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a> version with an extra crunch."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-cauliflower-hash-eggs-poblano-peppers",
+      "title": "Keto cauliflower hash with eggs and Poblano peppers",
+      "calories": 594,
+      "listedCarbs": 9,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "2",
+      "categories": [
+        "Breakfast"
+      ],
+      "cuisine": "American",
+      "ingredients": [
+        "4 tbsp mayonnaise",
+        "1 tsp garlic powder or onion powder (optional)",
+        "1 lb grated cauliflower",
+        "1 oz. butter or coconut oil",
+        "salt and pepper",
+        "1 tsp olive oil",
+        "3 oz. pimientos de padron or poblano peppers",
+        "6 large eggs"
+      ],
+      "description": "Southwest flavors meet <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a> sides in this gorgeous combo. Eggs aren't just for breakfast anymore, and hash doesn't have to include potatoes. Plus, peppers, roasted whole, can be a sophisticated finishing touch. It's a brave, new, delicious world. Jump in!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/cauliflower-soup-crumbled-pancetta",
+      "title": "Keto cauliflower soup with crispy pancetta",
+      "calories": 527,
+      "listedCarbs": 6,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "6",
+      "categories": [
+        "Appetizer"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 lb cauliflower, cut into small florets, divided",
+        "1 tbsp butter",
+        "7 oz. pancetta, diced or bacon",
+        "3 oz. pecans, coarsely chopped",
+        "1 tsp paprika powder or smoked chili powder",
+        "4 cups chicken broth or vegetable stock",
+        "7 oz. cream cheese",
+        "1 tbsp Dijon mustard",
+        "4 oz. unsalted butter",
+        "3/4 tsp salt",
+        "1/2 tsp pepper"
+      ],
+      "description": "No time? No problem. This soup proves that keto food can be just as quick and easy as it is deeply satisfying. A silky, creamy soup topped with the salty crunch of fried pancetta, cauliflower, and nuts. Who knew fast food could be so luxurious?"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-chicken-green-beans-plate",
+      "title": "Keto chicken and green beans plate",
+      "calories": 638,
+      "listedCarbs": 4,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "2",
+      "categories": [
+        "Lunch"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "7 oz. fresh green beans",
+        "1 tbsp butter for frying",
+        "1 lb of cooked chicken breast",
+        "2 oz. butter for serving",
+        "salt and pepper"
+      ],
+      "description": "Real food on a plate. Chicken. Green beans. Creamy butter. Because a <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a> dinner doesn't have to be complicated."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-chicken-burger-with-jalapeno-aioli",
+      "title": "Keto chicken burger with jalapeño aioli",
+      "calories": 504,
+      "listedCarbs": 4,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Lunch"
+      ],
+      "cuisine": "American",
+      "ingredients": [
+        "1/2 cup mayonnaise",
+        "2 tbsp pickled jalapeños",
+        "1 garlic clove",
+        "salt",
+        "ground black pepper",
+        "1 lb chicken breasts",
+        "2 tbsp butter",
+        "8 butterhead lettuce",
+        "4 cheddar cheese",
+        "1/2 yellow onion",
+        "1 tomato"
+      ],
+      "description": "Get ready to get your hands dirty with this quick and healthy no-bun burger! Made with thinly sliced chicken breast fillets, cheddar cheese, onion, tomatoes, and jalapeño aioli. All wrapped up in crispy salad leaves. Cook the chicken on the stovetop or, even better – on the grill for more flavor."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-chicken-curry-stew",
+      "title": "Keto chicken curry stew",
+      "calories": 606,
+      "listedCarbs": 8,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 1/2 lbs skinless, boneless chicken thighs",
+        "1/3 cup coconut oil",
+        "2 tbsp curry powder",
+        "2 tbsp ginger garlic paste",
+        "salt and pepper",
+        "3/4 lb cauliflower, chopped into small pieces",
+        "1 green bell pepper, chopped",
+        "1 3/4 cups unsweetened coconut milk",
+        "1/4 cup fresh cilantro"
+      ],
+      "description": "Warm. Savory. Simple. This flavorful one-pot wonder satisfies with its creamy curry base. A delicious <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a> meal, ready in an hour. Bring it on!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-chicken-fajita-bowl",
+      "title": "Keto chicken fajita bowl",
+      "calories": 583,
+      "listedCarbs": 7,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "8 oz. Romaine lettuce",
+        "5 oz. cherry tomatoes",
+        "1 avocado",
+        "4 tbsp fresh cilantro",
+        "1 yellow onion",
+        "1 green bell pepper",
+        "2 lbs boneless chicken thighs",
+        "2 oz. butter",
+        "salt and ground black pepper",
+        "2 tbsp Tex-Mex seasoning",
+        "3/4 cup Mexican cheese or cheddar cheese, shredded"
+      ],
+      "description": "Have it both ways. A warm and satisfying meal, and a fresh salad, rolled into one. Plus, it's <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a> AND amazingly delicious! Feast or fiesta? You decide."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-chicken-pesto-stew-with-zoodles",
+      "title": "Keto chicken pesto stew with zoodles",
+      "calories": 546,
+      "listedCarbs": 7,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": "Mediterranean",
+      "ingredients": [
+        "2 tbsp butter",
+        "1 1/2 lbs boneless, skinless boneless chicken thighs, cut into 1\" (3 cm) pieces",
+        "1 1/2 tsp garlic powder",
+        "1 cup heavy whipping cream",
+        "3 tbsp green pesto",
+        "1 lb zucchini, spiralized",
+        "8 oz. tomatoes, diced, or cherry tomatoes cut in half",
+        "salt and ground black pepper, to taste"
+      ],
+      "description": "This dish will give you a big warm hug. If you enjoy a hearty, slurpable stew, then this one is for you. Even better, this stew is quick and easy and only requires a few essential ingredients to prepare this creamy, yet crisp vibrant meal."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-crack-chicken",
+      "title": "Keto crack chicken",
+      "calories": 537,
+      "listedCarbs": 4,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "6",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "2 lbs chicken breasts",
+        "10 oz. cream cheese",
+        "2 tbsp ranch seasoning",
+        "1 tsp salt",
+        "5 oz. bacon, diced",
+        "1 cup cheddar cheese",
+        "2 tbsp fresh chives, chopped",
+        "1/4 tsp ground black pepper",
+        "3 cups baby spinach"
+      ],
+      "description": "It's no surprise that this fuss-free and hearty <em>Keto crack chicken</em> has gone viral. The classic combination of cream cheese, ranch seasoning, and bacon is always a winner. The slow cooker method is a breeze, but we've also provided you with oven cooking and instant pot instructions in the tips, done in under 30 minutes!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-falafels",
+      "title": "Keto falafels",
+      "calories": 595,
+      "listedCarbs": 7,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Main course"
+      ],
+      "cuisine": "Eastern",
+      "ingredients": [
+        "1/2 cup pumpkin seeds",
+        "1/2 cup almonds",
+        "8 oz. mushrooms, sliced",
+        "1/2 cup light olive oil, divided",
+        "3/4 cup vegan pea protein powder (unflavored)",
+        "1/4 cup water",
+        "1/4 cup chia seeds",
+        "2 garlic cloves, minced",
+        "2 tbsp fresh parsley, finely chopped",
+        "1 tsp salt",
+        "1 tsp onion powder",
+        "1 tsp ground cumin",
+        "1 tsp ground coriander seed",
+        "1/4 tsp ground black pepper"
+      ],
+      "description": "Falafel is a healthy, plant-based alternative to meat that's low carb, high-protein and tastes great! Mix up the spices to make Italian, Greek or Mexican-flavored keto vegan meals. Great for meal prep as they're easy to prepare and freeze well."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-fried-chicken-broccoli-butter",
+      "title": "Keto fried chicken with broccoli and butter",
+      "calories": 570,
+      "listedCarbs": 6,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "5 oz. butter, divided",
+        "2 lbs boneless chicken thighs",
+        "salt and pepper",
+        "1 lb broccoli, chopped into bite-sized pieces (including stem)",
+        "1/2 leek",
+        "1 tsp garlic powder",
+        "1/2 tsp salt",
+        "1/4 ground black pepper"
+      ],
+      "description": "A quick and easy one-skillet <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a> meal. Who doesn't love that? Juicy fried chicken paired with green and crunchy broccoli topped off with melting butter. Mmmmm... Put this in your rotation for busy weeknights!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-fried-chicken-cabbage",
+      "title": "Keto fried chicken with cabbage",
+      "calories": 557,
+      "listedCarbs": 6,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "2",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "12 oz. green cabbage",
+        "3 oz. butter or olive oil",
+        "12 oz. boneless chicken thighs",
+        "salt and pepper"
+      ],
+      "description": "Another one-skillet wonder. It's <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a>; it's quick; it's easy and affordable, too. All you need is three ingredients, one pan, and 20 minutes. Then (chicken) dinner is served."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/butter-fried-kale-pork-cranberries",
+      "title": "Keto fried kale with pork and cranberries",
+      "calories": 583,
+      "listedCarbs": 2,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Side dish"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 lb kale",
+        "3/4 lb smoked pork belly or bacon",
+        "2 oz. pecans or walnuts",
+        "2 oz. frozen cranberries",
+        "salt and ground black pepper to taste"
+      ],
+      "description": "Greens, elevated to wondrous, by bacon fat. Who knew? This kale transcends ordinary when sautéed with pork belly. A handful of nuts and cranberries complete the story. A <a href=\"https://www.dietdoctor.com/low-carb/keto\" rel=\"noopener\" target=\"_blank\">keto</a> fairy tale."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-ground-beef-broccoli",
+      "title": "Keto ground beef and broccoli",
+      "calories": 638,
+      "listedCarbs": 5,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "2",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1/2 lb broccoli",
+        "1 1/2 oz. butter or light olive oil",
+        "1 lb ground beef or ground turkey",
+        "salt and ground black pepper"
+      ],
+      "description": "A one-skillet wonder: real food, affordable ingredients, simple prep, tasty dinner, and easy cleanup. It's <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a> fast food, made right in your kitchen."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/harvest-pumpkin-and-sausage-soup",
+      "title": "Keto harvest pumpkin and sausage soup",
+      "calories": 522,
+      "listedCarbs": 5,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 1/2 lbs fresh sausage",
+        "1/2 oz. white onions, minced",
+        "1 small red bell pepper, diced",
+        "1 garlic clove, minced",
+        "1 pinch salt",
+        "1/2 tsp rubbed dried sage",
+        "1/2 tsp ground dried thyme",
+        "1/2 tsp red chili peppers flakes (optional)",
+        "1/2 cup pumpkin puree or crushed tomatoes",
+        "1 1/2 cups chicken broth",
+        "1/2 cup heavy whipping cream",
+        "1 tbsp salted butter"
+      ],
+      "description": "This hearty <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a> soup uses just enough pumpkin to provide a rich broth set off by sausage. The spices are what make this soup so yummy! Like most soups, this recipe has a richer flavor the day after it’s made, so don’t be afraid to volunteer to eat the leftovers."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-meat-pie",
+      "title": "Keto meat pie",
+      "calories": 607,
+      "listedCarbs": 8,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "6",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1/2 yellow onion",
+        "1 garlic clove",
+        "2 tbsp butter",
+        "1 1/2 lbs ground beef",
+        "2 tbsp dried oregano",
+        "2/3 tsp salt",
+        "1/4 tsp ground black pepper",
+        "3 tbsp tomato paste",
+        "3/4 cup water",
+        "3/4 cup almond flour",
+        "1/4 cup sesame seeds",
+        "1/4 cup coconut flour",
+        "1 tbsp ground psyllium husk powder",
+        "1 tsp baking powder",
+        "4 tbsp olive oil",
+        "1 large egg",
+        "1 cup cottage cheese",
+        "1 cup cheddar cheese"
+      ],
+      "description": "Keep everyone happy with this satisfying, cheese-topped keto masterpiece. Meat pie may be a little old-school, but it’s time to rediscover its deliciousness. Any cook can get rave reviews with this easy-to-follow recipe."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/mozzarella-stuffed-meatballs",
+      "title": "Keto mozzarella-stuffed meatballs",
+      "calories": 501,
+      "listedCarbs": 2,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Main course"
+      ],
+      "cuisine": "Italian",
+      "ingredients": [
+        "1 1/2 lbs ground beef or ground turkey",
+        "2 tbsp heavy whipping cream",
+        "2 garlic cloves, minced",
+        "1 tbsp dried basil",
+        "1 tsp salt",
+        "1/4 tsp ground black pepper",
+        "4 oz. shredded mozzarella cheese",
+        "2 tbsp butter, for frying"
+      ],
+      "description": "Oooey, gooey, cheese-stuffed keto meatballs will make everyone swoon. Have plenty of napkins on hand, and be prepared to watch these keto treats disappear... they're irresistible!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-mushroom-omelet",
+      "title": "Keto mushroom omelet",
+      "calories": 529,
+      "listedCarbs": 6,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "1",
+      "categories": [
+        "Breakfast"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "3 eggs",
+        "1 oz. butter, for frying",
+        "1 oz. cheddar cheese",
+        "1/4 yellow onion, chopped",
+        "4 large mushrooms, sliced",
+        "salt and pepper"
+      ],
+      "description": "Looking for a quick and easy way to start your day? This hearty omelet is super healthy, and just takes a few minutes to make! Fresh mushrooms make a delicious filling. Enjoy this <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a> meal anytime — breakfast, lunch or dinner!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-no-noodle-chicken-soup",
+      "title": "Keto no-noodle chicken soup",
+      "calories": 508,
+      "listedCarbs": 4,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "8",
+      "categories": [
+        "Lunch"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "4 oz. butter",
+        "2 tbsp dried minced onion",
+        "2 celery stalks, chopped",
+        "6 oz. mushrooms, sliced",
+        "2 minced garlic cloves",
+        "8 cups chicken broth",
+        "2 oz. carrots, sliced",
+        "2 tsp dried parsley",
+        "1 tsp salt",
+        "1/4 tsp ground black pepper",
+        "1 1/2 rotisserie chicken* , shredded",
+        "5 oz. green cabbage, sliced into strips"
+      ],
+      "description": "Made with healing bone broth, this <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto </a>chicken no-noodle soup with healthy cabbage is warm and comforting when it’s cold outside, when you’re fighting a cold, or you just crave a hearty soup!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/parma-ham-mediterranean-plate",
+      "title": "Keto Parma ham Mediterranean plate",
+      "calories": 516,
+      "listedCarbs": 7,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "1",
+      "categories": [
+        "Lunch"
+      ],
+      "cuisine": "Italian",
+      "ingredients": [
+        "3 oz. prosciutto",
+        "1/2 oz. mixed leafy greens",
+        "1 large egg, boiled",
+        "2 oz. avocados, sliced",
+        "2 cherry tomatoes, sliced in half",
+        "1 oz. feta cheese, crumbled",
+        "1/2 oz. scallions, thinly sliced",
+        "1 tbsp olive oil",
+        "1 tsp fresh lemons juice",
+        "Salt and pepper, to taste"
+      ],
+      "description": "Who said salad needs to be boring? Certainly not if it's a Diet Doctor inspired one! This keto Parma ham plate takes some of the best ingredients from the Mediterranean and combines them to be a creamy, rich salad plate that will keep you full for hours."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/sindhi-style-lamb-curry-with-cauliflower-rice",
+      "title": "Keto Sindhi style lamb curry with cauliflower rice",
+      "calories": 642,
+      "listedCarbs": 7,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 1/2 lbs lamb shoulder",
+        "1 1/4 cups water",
+        "1 tsp salt",
+        "6 tbsp butter",
+        "1/2 red onion",
+        "1 tsp ground black pepper",
+        "1/2 tsp ground cardamom (green)",
+        "1 tsp ground cumin",
+        "2 tsp ginger garlic paste",
+        "2 oz. tomatoes",
+        "1/2 tsp xanthan gum (optional)",
+        "1 tbsp fresh cilantro",
+        "1 1/4 lbs cauliflower"
+      ],
+      "description": "This Sindhi-style lamb curry is wonderfully flavored with cumin, green cardamom and pepper. The meat is cooked until it’s super tender and falls off the bone. It’s flavorful but not too spicy, a tasty Indian keto dish!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-spinach-goat-cheese-pie",
+      "title": "Keto spinach and goat cheese pie",
+      "calories": 606,
+      "listedCarbs": 6,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "6",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 1/4 cups almond flour",
+        "3 tbsp sesame seeds",
+        "1 tbsp ground psyllium husk powder",
+        "1 1/2 tsp salt",
+        "2 oz. butter",
+        "6 eggs",
+        "1 cup heavy whipping cream",
+        "1 cup cheddar cheese",
+        "1 tsp pepper",
+        "7 oz. baby spinach",
+        "1 garlic clove",
+        "1 pinch ground nutmeg (optional)",
+        "6 oz. goat cheese"
+      ],
+      "description": "There’s good pie, and then there’s mind-blowingly amazing pie. This <a href=\"https://www.dietdoctor.com/low-carb/keto\">keto</a> pie falls in the latter category. Savory spinach. Creamy goat cheese. Stunning colors. O.M.G., you want this on your plate!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-tex-mex-zucchini-boats",
+      "title": "Keto Tex-Mex stuffed zucchini boats",
+      "calories": 578,
+      "listedCarbs": 5,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 lb ground beef",
+        "7 tbsp olive oil",
+        "2 tsp salt",
+        "2 tbsp Tex-Mex seasoning",
+        "1/2 cup fresh cilantro (optional)",
+        "2 zucchini",
+        "1 cup Pepper Jack cheese",
+        "7 oz. lettuce",
+        "1/2 tbsp red wine vinegar",
+        "pepper"
+      ],
+      "description": "Zucchini takes on the taco and delivers <a href=\"https://www.dietdoctor.com/low-carb/keto\" target=\"_blank\" rel=\"noopener\">keto</a> tastiness instead of crunch. This boat delivers more veggie goodness than the original, but with all of your fave Tex-Mex cargo. Anchors aweigh!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-turkey-plate",
+      "title": "Keto turkey plate",
+      "calories": 525,
+      "listedCarbs": 7,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "2",
+      "categories": [
+        "Breakfast"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "8 oz. deli turkey",
+        "1 avocado, sliced",
+        "1 cup lettuce",
+        "2 oz. cream cheese",
+        "2 tbsp olive oil",
+        "salt and pepper"
+      ],
+      "description": "Real food on a plate. Turkey. Avocado. Lettuce. Cream cheese and olive oil. Because a <a href=\"https://www.dietdoctor.com/low-carb/keto/recipes\">keto meal</a> can be this simple."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-wedge-salad",
+      "title": "Keto wedge salad",
+      "calories": 633,
+      "listedCarbs": 5,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Lunch"
+      ],
+      "cuisine": "American",
+      "ingredients": [
+        "1/3 cup mayonnaise",
+        "1/4 cup sour cream",
+        "2 tbsp heavy whipping cream",
+        "1 tbsp lemon juice",
+        "1/4 tsp garlic powder",
+        "1/4 tsp salt",
+        "4 oz. blue cheese",
+        "1/2 iceberg lettuce",
+        "8 oz. bacon",
+        "1 tomato",
+        "4 large eggs"
+      ],
+      "description": "You don’t have to go to a fancy steakhouse to enjoy this signature salad! This keto wedge salad is so simple and filling, that it will surely be added to your weekly meal rotation. Topped with fresh tomatoes, crunchy bacon, creamy blue cheese, and protein-packed eggs, the flavors and textures make this quick salad a winning keto dinner."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-zucchini-walnut-salad",
+      "title": "Keto zucchini and walnut salad",
+      "calories": 575,
+      "listedCarbs": 6,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Side dish"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "3 tbsp olive oil",
+        "3/4 cup mayonnaise",
+        "2 tsp lemon juice",
+        "1 garlic clove",
+        "1/2 tsp salt",
+        "1/4 tsp chili powder",
+        "1 lb Romaine lettuce",
+        "4 oz. arugula lettuce",
+        "1/4 cup fresh chives",
+        "2 zucchini",
+        "1 cup walnuts",
+        "pepper"
+      ],
+      "description": "Meet your new favorite <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a> meal! This salad is crunchy and nutty, and filled with the gorgeous flavor of sautéed zucchini. It’s perfect for a barbecue, or a Wednesday night!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-loaded-cauliflower-mash",
+      "title": "Loaded cauliflower mash",
+      "calories": 544,
+      "listedCarbs": 10,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Side dish"
+      ],
+      "cuisine": "American",
+      "ingredients": [
+        "1 1/2 lbs cauliflower, cut into florets",
+        "2 oz. butter, room temperature",
+        "4 oz. cream cheese, room temperature",
+        "salt and ground black pepper, to taste",
+        "4 oz. bacon, chopped",
+        "1 cup shredded cheddar cheese",
+        "1/2 oz. scallions, thinly sliced",
+        "1/2 cup sour cream"
+      ],
+      "description": "This creamy cauliflower mash is stacked with crispy bacon, melted cheese, sour cream, and scallions. It's the perfect side dish for a juicy steak or roasted chicken."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-beef-rydberg",
+      "title": "Low carb beef Rydberg",
+      "calories": 599,
+      "listedCarbs": 18,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": "Swedish",
+      "ingredients": [
+        "1 3/4 lbs rutabaga, finely diced",
+        "3 tbsp butter, divided, for frying",
+        "3 tbsp olive oil, divided, for frying",
+        "2 yellow onions, finely chopped",
+        "1 1/2 lbs beef, tenderloin, finely diced like rutabaga, at room temperature",
+        "salt and pepper",
+        "4 egg yolks (optional)",
+        "fresh parsley, finely chopped (optional)",
+        "2 tbsp Dijon mustard (optional)",
+        "1/4 cup sour cream (optional)"
+      ],
+      "description": "Beef Rydberg is a classic Swedish dish, traditionally served with fried onions and potatoes. It becomes a tasty low carb treat with rutabaga. Try this hearty Nordic meal today!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-beef-skewers-onions",
+      "title": "Low carb beef skewers with grilled onions",
+      "calories": 642,
+      "listedCarbs": 12,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": "Middle Eastern",
+      "ingredients": [
+        "1 1/4 lbs ground beef",
+        "1 tsp coriander seed",
+        "1 tsp yellow mustard seeds",
+        "1/2 tsp turmeric",
+        "1/2 tsp ground black pepper",
+        "2 tsp sea salt",
+        "1/2 cup fresh cilantro",
+        "2 tbsp water",
+        "7 tbsp olive oil",
+        "1 lb yellow onions",
+        "2 tbsp lemon juice",
+        "1/2 tsp salt",
+        "pepper",
+        "7 oz. canned whole tomatoes",
+        "2 oz. almonds",
+        "1 tbsp sesame seeds",
+        "1 - 2 garlic cloves",
+        "1 tbsp red wine vinegar"
+      ],
+      "description": "Spicy ground beef on a skewer. Popular in many countries because it's affordable and easy. It's also <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a> and delicious. Try this inspired version, seasoned with a blend of unique spices. Cilantro lovers in your family may even leave a tip!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-cabbage-casserole",
+      "title": "Low carb cabbage casserole",
+      "calories": 635,
+      "listedCarbs": 12,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "6",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "2 lbs green cabbage",
+        "1 yellow onion, thinly sliced",
+        "2 garlic cloves, minced",
+        "4 oz. butter",
+        "1 1/2 cups heavy whipping cream",
+        "1/2 cup sour cream",
+        "6 oz. cream cheese",
+        "1 tbsp ranch seasoning",
+        "1/2 tsp ground black pepper",
+        "1 tsp salt",
+        "1 1/2 cups shredded cheddar cheese  ",
+        "unsalted butter for greasing"
+      ],
+      "description": "Cabbage gets kicked up a few tasty notches in this creamy and cheesy <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a> casserole. You just found your new go-to cruciferous fix!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-cauliflower-cheese",
+      "title": "Low carb cauliflower cheese",
+      "calories": 527,
+      "listedCarbs": 12,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "6",
+      "categories": [
+        "Meal"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 lb frozen or fresh broccoli, cut into florets",
+        "7 oz. cream cheese",
+        "1 cup heavy whipping cream",
+        "2 oz. butter, more for greasing the pan",
+        "salt and pepper",
+        "2 tsp garlic powder",
+        "1 3/4 lbs cauliflower, cut into small florets",
+        "2 cups cheddar cheese, shredded"
+      ],
+      "description": "Hey... wait. There's broccoli in my cauliflower? Yes. Experience this creative combo that delivers <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a> deliciousness like no other. You won’t be disappointed!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-cauliflower-lasagna",
+      "title": "Low carb cauliflower lasagna",
+      "calories": 549,
+      "listedCarbs": 16,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "6",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 lb ground beef",
+        "8 oz. yellow onions",
+        "3 garlic cloves",
+        "2 tbsp tomato paste",
+        "14 oz. crushed tomatoes",
+        "1/2 cup red wine",
+        "1 tsp salt",
+        "2 pinches ground black pepper",
+        "2 tbsp butter",
+        "2 lbs cauliflower",
+        "4 eggs",
+        "1/2 tsp sea salt",
+        "1 1/2 cups shredded Parmesan cheese",
+        "1 cup sour cream",
+        "1/2 cup heavy whipping cream",
+        "pepper"
+      ],
+      "description": "An amazing <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a> lasagna, from popular Swedish cookbook author and blogger <a href=\"http://56kilo.se/\" rel=\"noopener\" target=\"_blank\">Åse Falkman Fredrikson</a>. You know you absolutely want this cheesy and savory lasagna for dinner tonight."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/cheese-platter",
+      "title": "Low carb cheese platter",
+      "calories": 576,
+      "listedCarbs": 9,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "10",
+      "categories": [
+        "Appetizer"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "5 oz. blue cheese",
+        "5 oz. Parmesan cheese",
+        "5 oz. gruyère cheese",
+        "5 oz. edam cheese",
+        "5 oz. mozzarella, mini cheese balls",
+        "5 oz. brie cheese",
+        "5 oz. cream cheese",
+        "2 fresh figs",
+        "2 pears",
+        "5 oz. celery stalks",
+        "5 oz. pecans",
+        "5 oz. butter"
+      ],
+      "description": "It’s the holidays. You love company! But suddenly you’ve drawn a blank on what to feed guests an hour before they arrive. Don’t worry, we’ve got your back. Try our amazing <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a> cheese platter, and watch those carolers swoon!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-chicken-parmesan",
+      "title": "Low carb chicken parmesan",
+      "calories": 642,
+      "listedCarbs": 9,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 1/2 lbs chicken breasts",
+        "2 eggs",
+        "2 tbsp Italian seasoning",
+        "1 pinch cayenne pepper",
+        "1/2 tsp salt",
+        "1 cup shredded Parmesan cheese",
+        "1/4 cup fresh parsley",
+        "2 tbsp butter",
+        "2 tbsp olive oil",
+        "2 garlic cloves",
+        "1 lb crushed tomatoes",
+        "1 tbsp dried oregano",
+        "1/2 lb mozzarella, mini cheese balls",
+        "ground black pepper",
+        "3 oz. baby spinach"
+      ],
+      "description": "Ready for a tasty Italian-American dish? Chicken parmesan is a classic, so moist and so full of gusto. We skipped the breading without sacrificing the exciting flavors."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-curry-chicken-zucchini-boats",
+      "title": "Low carb curry chicken zucchini boats",
+      "calories": 636,
+      "listedCarbs": 8,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "2 lbs zucchini",
+        "1 tsp salt",
+        "1 lb chicken breasts",
+        "5 tbsp olive oil",
+        "1 tbsp butter",
+        "2 tbsp mayonnaise",
+        "5 oz. cottage cheese",
+        "1 tbsp curry powder",
+        "1 tsp onion powder",
+        "2 cups Gouda cheese",
+        "pepper",
+        "1/2 tbsp red wine vinegar",
+        "6 oz. lettuce"
+      ],
+      "description": "A creamy curried chicken cargo makes this zucchini boat go the distance. Plus, mild cheeses batten down the hatches and keep everything together. Your crew will clear the decks... well, their plates."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-eggplant-towers",
+      "title": "Low carb eggplant towers",
+      "calories": 547,
+      "listedCarbs": 9,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Appetizer"
+      ],
+      "cuisine": "Italian",
+      "ingredients": [
+        "13 oz. fresh basil",
+        "2/3 cup olive oil",
+        "1 1/2 tbsp balsamic vinegar (optional)",
+        "1 garlic clove",
+        "1/2 tsp salt",
+        "ground black pepper",
+        "1 eggplant",
+        "9 oz. mozzarella cheese",
+        "2 tomatoes",
+        "4 oz. cherry tomatoes"
+      ],
+      "description": "These colorful eggplant towers are low in carbs, but high on flavor. This delicious starter or side dish requires minimal preparation: just slice and stack the ingredients for an impressive presentation with all the wonderful flavors of the Mediterranean."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/goulash-butter-fried-cabbage",
+      "title": "Low carb goulash with butter-fried cabbage",
+      "calories": 548,
+      "listedCarbs": 14,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "8",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "2 yellow onions",
+        "2 red bell peppers",
+        "8 oz. celery root",
+        "8 oz. butter",
+        "2 garlic cloves",
+        "1 tbsp tomato paste",
+        "14 oz. crushed tomatoes",
+        "3/4 cup water",
+        "1 tbsp paprika powder",
+        "1 tbsp dried oregano",
+        "1 tsp onion powder",
+        "1 tbsp caraway seeds",
+        "1 pinch cayenne pepper",
+        "2 lbs chuck roast",
+        "1 tsp salt",
+        "1 tsp ground black pepper",
+        "2 lbs green cabbage",
+        "pepper",
+        "1 cup sour cream",
+        "2 tbsp fresh parsley (optional)"
+      ],
+      "description": "Tickle your senses with the flavors in this classical Hungarian stew. It’s filled with the savory flavors of pepper, tomato, and caraway. Serve it with delicious butter-fried cabbage. Yes, we said it. Butter fried cabbage."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-ground-turkey-chili",
+      "title": "Low carb ground turkey chili",
+      "calories": 593,
+      "listedCarbs": 18,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1/4 cup olive oil",
+        "1 1/2 lbs ground turkey",
+        "4 garlic cloves",
+        "15 oz. crushed tomatoes",
+        "1 cup water",
+        "6 oz. tomato paste",
+        "2 tbsp chili powder",
+        "2 tsp ground cumin",
+        "1 tsp salt",
+        "1 tsp onion powder",
+        "1 tsp chili flakes",
+        "1 zucchini",
+        "1 cup sour cream",
+        "1/4 cup fresh chives (optional)"
+      ],
+      "description": "Here's an easy turkey chili that can be made on the stovetop, in a slow cooker, or with an Instant Pot. Diced zucchini replaces the beans to keep carbs to a minimum. The prep time is quick, but slow cooking allows the flavors to develop and bloom."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-indian-lamb-stew",
+      "title": "Low carb Indian lamb stew",
+      "calories": 608,
+      "listedCarbs": 16,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "6",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "2 lbs lamb shoulder",
+        "3 yellow onions",
+        "1 carrot",
+        "2 celery stalks",
+        "1 red chili pepper",
+        "2 garlic cloves",
+        "2 tbsp curry powder",
+        "2 tsp sea salt",
+        "1 cinnamon stick",
+        "2 oz. butter",
+        "14 oz. crushed tomatoes",
+        "1/4 cup water",
+        "1 lamb bone",
+        "2 bok choy",
+        "2 red bell peppers",
+        "1/2 leek",
+        "1 cup fresh cilantro",
+        "1/2 cup sour cream"
+      ],
+      "description": "This is perfect <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a> slow food. Flavorful, savory, with a hint of heat and sweetness. Place the main ingredients in one pot, and daydream about the moment you ladle up a big bowl of it."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-mushroom-cauliflower-risotto",
+      "title": "Low carb mushroom cauliflower risotto",
+      "calories": 557,
+      "listedCarbs": 13,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 cup vegetable stock",
+        "9 oz. mushrooms",
+        "4 oz. butter",
+        "1 shallot",
+        "2 garlic cloves",
+        "1 large cauliflower",
+        "3/4 cup white wine",
+        "1 cup heavy whipping cream",
+        "1/2 cup shredded Parmesan cheese",
+        "salt and pepper",
+        "fresh thyme"
+      ],
+      "description": "You don’t need to graduate from cooking school to make a luscious low carb risotto. You just need the rich and earthy flavors in this unabashedly tasty recipe. Here’s the first pillar in your <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a> culinary education. No diploma required!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-salad-olivieh",
+      "title": "Low carb salad olivieh",
+      "calories": 641,
+      "listedCarbs": 7,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "12",
+      "categories": [
+        "Appetizer"
+      ],
+      "cuisine": "Persian",
+      "ingredients": [
+        "1 1/4 lbs rutabaga",
+        "1 1/4 lbs mayonnaise",
+        "18 oz. dill pickles",
+        "8 oz. green peas",
+        "4 1/2 oz. green olives",
+        "2 lbs rotisserie chicken",
+        "10 eggs",
+        "1/4 cup lemon juice",
+        "2 tsp cayenne pepper",
+        "salt",
+        "ground black pepper, to taste",
+        "10 oz. tomatoes",
+        "1 oz. fresh mint",
+        "2 tbsp olive oil"
+      ],
+      "description": "This rich and creamy salad derives from ancient Persia. By replacing the carb-heavy potatoes with rutabaga we turned it into the perfect dairy-free low carb dish. You could almost, just almost, trick a Persian grandmother that it's her very own original recipe. Enjoy as a side dish or crowd-pleasing appetizer served with <a href=\"https://www.dietdoctor.com/recipes/keto-seed-crackers\">seed crackers</a>."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-shepherds-pie",
+      "title": "Low carb shepherd's pie",
+      "calories": 555,
+      "listedCarbs": 15,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 lb cauliflower",
+        "3 yellow onions",
+        "3 carrots",
+        "3 garlic cloves",
+        "1 1/2 lbs ground beef or ground turkey",
+        "1/4 cup olive oil",
+        "salt and ground black pepper to taste",
+        "9 oz. cherry tomatoes"
+      ],
+      "description": "Pascale Naessens' <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a> take on the classic Irish shepherd's pie, where cauliflower replaces the traditional mashed potato topping. A multi-layered masterpiece! A convenient and comforting all-in-one dinner, and an irresistible family dish that everybody loves. Perfect for cooking in advance and freezes well — not that there will be any leftovers!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-vegetarian-mediterranean-breakfast-plate",
+      "title": "Low carb vegetarian Mediterranean breakfast plate",
+      "calories": 502,
+      "listedCarbs": 11,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "2",
+      "categories": [
+        "Breakfast"
+      ],
+      "cuisine": "Mediterranean",
+      "ingredients": [
+        "6 oz. cucumber, cut into strips",
+        "1 tomato, cut in half and sliced",
+        "1/2 cup olives of preference",
+        "8 oz. feta cheese or any other white cheese",
+        "1/4 cup walnuts",
+        "1 tbsp olive oil",
+        "1 tsp dried mint or dried oregano (optional)",
+        "salt, to taste"
+      ],
+      "description": "What could be simpler? Start your morning with this wholesome low carb mezze platter of vegetables, nuts, and cheese. No cooking required. This colorful, satisfying meal also works well as a quick and easy brunch or lunch."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-vegetarian-zucchini-boats",
+      "title": "Low carb vegetarian stuffed zucchini boats",
+      "calories": 582,
+      "listedCarbs": 8,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "2 zucchini",
+        "1 tsp salt",
+        "5 tbsp olive oil",
+        "1 lb mushrooms",
+        "4 oz. butter",
+        "4 1/2 oz. cottage cheese",
+        "6 sun-dried tomatoes in oil (optional)",
+        "2 tbsp mayonnaise",
+        "1 tsp onion powder",
+        "1 tsp paprika powder",
+        "1 1/4 cups mozzarella cheese",
+        "pepper",
+        "7 oz. baby spinach",
+        "1/2 tbsp red wine vinegar"
+      ],
+      "description": "Yowsa. Cheesy, mushroomy heaven. With the deep, delicious flavor of oil-packed sun-dried tomatoes layered in for even more satisfaction. If you are looking for a <a href=\"https://www.dietdoctor.com/low-carb/recipes/vegetarian\" rel=\"noopener\" target=\"_blank\">low carb vegetarian</a> dreamboat, hooboy, have we got your number. Swipe right."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/low-carb-mushroom-and-ricotta-stuffed-chicken-breasts",
+      "title": "Mushroom and ricotta stuffed chicken breasts",
+      "calories": 640,
+      "listedCarbs": 9,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "4 chicken breasts",
+        "4 tbsp olive oil",
+        "sea salt",
+        "2 1/2 oz. mushrooms",
+        "1 tbsp + <span class=\"ingredient-extra\">4</span> fresh thyme",
+        "1 tbsp coconut aminos",
+        "7 oz. ricotta cheese",
+        "1 oz. Parmesan cheese",
+        "1 tsp onion powder",
+        "1 tsp ground black pepper",
+        "6 oz. leafy greens",
+        "1 cup sour cream"
+      ],
+      "description": "With delicately flavored mushrooms and a rich cheesy filling, these stuffed low carb chicken breasts are sure to impress. Serve with a fresh salad or with a side of roasted vegetables, and most importantly, enjoy!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/old-fashioned-beef-stew",
+      "title": "Old fashioned beef stew",
+      "calories": 618,
+      "listedCarbs": 11,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 1/3 lbs chuck roast",
+        "5 oz. butter",
+        "1 yellow onion",
+        "2 garlic cloves",
+        "1/3 cup red wine",
+        "3/4 cup water",
+        "1 meat bouillon cube",
+        "1 bay leaf",
+        "1/2 tsp dried rosemary",
+        "1/2 tsp dried thyme",
+        "1 carrot",
+        "4 oz. celery stalks",
+        "1 3/4 lbs cauliflower",
+        "1/8 tsp ground nutmeg",
+        "salt",
+        "ground black pepper"
+      ],
+      "description": "Beefy, and naturally <a href=\"https://www.dietdoctor.com/low-carb\" rel=\"noopener\" target=\"_blank\">low carb</a>. Simmer this classic dish low and slow for tender meat and plenty of flavor. With our buttery cauli mash, you won't miss the potatoes. Promise."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/oxtail-stifado",
+      "title": "Oxtail Stifado",
+      "calories": 565,
+      "listedCarbs": 23,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Main course"
+      ],
+      "cuisine": "Greek",
+      "ingredients": [
+        "8 pearl onions",
+        "3 garlic cloves",
+        "1 oz. butter or olive oil",
+        "3 1/2 tbsp tomato paste",
+        "2 lbs oxtails, cut into pieces",
+        "1 tbsp salt",
+        "1/2 tbsp ground black pepper",
+        "1 orange",
+        "1 lb crushed tomatoes",
+        "2 tbsp red wine vinegar",
+        "2 cinnamon sticks",
+        "2 bay leaves",
+        "8 allspice berries",
+        "1 tbsp dried oregano",
+        "1 pinch ground cloves"
+      ],
+      "description": "This stew is slow-simmered to bring out every ounce of goodness from the meat and vegetables. It’s savory with a hint of sweetness, and your taste buds are going to do a happy dance."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/pan-seared-pork-loin-with-bacon-wrapped-green-beans-and-baked-tomatoes",
+      "title": "Pan-seared pork loin with bacon-wrapped green beans and baked tomatoes",
+      "calories": 632,
+      "listedCarbs": 8,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "2 tbsp olive oil",
+        "1 tbsp Dijon mustard",
+        "12 oz. fresh green beans, trimmed ",
+        "8 bacon strips (turkey or pork)",
+        "14 oz. cherry tomatoes",
+        "1 3/4 lbs pork tenderloin, trimmed and cut into medallions 0.75\" (2 cm) thick",
+        "1 tbsp butter or olive oil",
+        "2 garlic cloves, crushed",
+        "salt or ground black pepper, to taste"
+      ],
+      "description": "This quick and easy keto meal is packed with nutrients and flavor. Pork tenderloin is a budget-friendly and versatile source of protein. Paired with tender green beans wrapped in bacon and naturally sweet baked tomatoes, we promise that this healthy meal tastes as good as it looks."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/parma-cauli-tabbouleh-plate-with-feta",
+      "title": "Parma cauli tabbouleh plate with feta",
+      "calories": 621,
+      "listedCarbs": 11,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "1",
+      "categories": [
+        "Lunch"
+      ],
+      "cuisine": "Mediterranean",
+      "ingredients": [
+        "3 oz. prosciutto",
+        "2 1/2 oz. feta cheese",
+        "4 oz. cauliflower",
+        "1/2 tomato",
+        "1/2 oz. scallions",
+        "2 tbsp olive oil",
+        "2 tsp lemon juice",
+        "1/4 cup fresh mint",
+        "salt",
+        "pepper to taste"
+      ],
+      "description": "This no-cook low carb version of tabbouleh alongside parma ham and creamy feta makes for a refreshing and zesty no-cook plate. The perfect plate to enjoy on a warm day."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/portobello-steaks-with-avocado-chimichurri",
+      "title": "Portobello steaks with avocado chimichurri",
+      "calories": 582,
+      "listedCarbs": 12,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "2",
+      "categories": [
+        "Side dish"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "4 portobello mushrooms",
+        "6 tbsp olive oil",
+        "2 1/2 tsp sea salt",
+        "1 1/2 tsp pepper",
+        "1 fresh jalapeño",
+        "2 garlic cloves",
+        "1 shallot",
+        "1 avocado",
+        "1 lemon",
+        "2 tbsp fresh parsley"
+      ],
+      "description": "Everyone has that one friend who feels left out at the barbecue when grilling steaks. But it doesn't have to be like that. Here comes one of the best vegetarian low carb dishes you can make on the grill, so you can accommodate both your vegan and carnivore guests."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/quick-keto-chicken-garam-masala",
+      "title": "Quick keto chicken garam masala",
+      "calories": 558,
+      "listedCarbs": 6,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": "Indian",
+      "ingredients": [
+        "1 1/2 lbs boneless chicken thighs, sliced",
+        "1 red bell pepper, thinly sliced",
+        "3 tbsp coconut oil",
+        "2 1/2 tbsp garam masala seasoning",
+        "2 tsp turmeric",
+        "2 garlic cloves, finely chopped ",
+        "1 tsp salt",
+        "1 1/4 cups coconut cream or heavy whipping cream",
+        "3 tbsp fresh cilantro, roughly chopped "
+      ],
+      "description": "With coconut cream, turmeric, and garam masala, this dish has an exotic and satisfying spicy flavor. You'll be amazed that something so tasty could be so quick and simple. Serve with cauliflower rice and you have a winning low carb take on a classic Indian dish."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/ratatouille-with-baked-eggs",
+      "title": "Ratatouille with baked eggs",
+      "calories": 502,
+      "listedCarbs": 20,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Lunch"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "17 oz. eggplant",
+        "7 oz. zucchini",
+        "1 green bell pepper",
+        "1 yellow onion",
+        "8 tbsp olive oil",
+        "1 garlic clove",
+        "2 tsp dried coriander (cilantro) leaves",
+        "2 tsp paprika powder",
+        "salt",
+        "3 cups crushed tomatoes",
+        "8 eggs",
+        "pepper",
+        "1 green chili pepper",
+        "2 oz. olives"
+      ],
+      "description": "This classic French stew calls for a rendezvous with some of our favorite <a href=\"https://www.dietdoctor.com/low-carb/vegetables\">low carb veggies</a>. Eggplant, zucchini, tomatoes and bell pepper come together in this luscious dish with a yummy sunny surprise on top. It's budget-friendly and ready to please the whole family."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/keto-indian-cabbage-stir-fry",
+      "title": "Red curry cabbage and pork stir-fry",
+      "calories": 546,
+      "listedCarbs": 11,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": "Thai",
+      "ingredients": [
+        "2 oz. butter or coconut oil, divided",
+        "1 1/2 lbs green cabbage, shredded",
+        "salt and ground black pepper, to taste",
+        "1/2 tbsp turmeric",
+        "1 tbsp white wine vinegar",
+        "4 garlic cloves, finely chopped",
+        "2 tbsp fresh ginger, minced",
+        "1 yellow onion, finely chopped",
+        "2 tbsp red curry paste",
+        "1 1/2 lbs ground pork or ground turkey",
+        "1/2 cup fresh cilantro"
+      ],
+      "description": "Putting a Thai spin on the ultra-popular \"crack slaw\" recipe makes this low carb stir-fry recipe even more addictive. In this version, we add spicy red curry and fresh cilantro to elevate the taste and add flavor complexity. Addictive taste aside, this dish comes together in no time!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/scallops-parsnip-pure-browned-butter",
+      "title": "Scallops with parsnip purée and browned butter",
+      "calories": 528,
+      "listedCarbs": 7,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Appetizer"
+      ],
+      "cuisine": "French",
+      "ingredients": [
+        "5 oz. parsnips",
+        "1/2 cup water",
+        "9 oz. butter",
+        "1 tsp white wine vinegar",
+        "1 tsp fennel seeds",
+        "salt",
+        "pepper",
+        "8 scallops"
+      ],
+      "description": "Our fennel and parsnip-tastic combination will make you salivate! It’s buttery and <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a>, and filled with earthy flavors. Elegance defined."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/slow-cooked-keto-pork-roast-gravy",
+      "title": "Slow-cooked keto pork roast with creamy gravy",
+      "calories": 589,
+      "listedCarbs": 4,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "6",
+      "categories": [
+        "Main course"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "2 lbs pork shoulder",
+        "1/2 tbsp salt",
+        "1 bay leaf",
+        "5 black peppercorns",
+        "2 1/2 cups water",
+        "2 tsp dried thyme",
+        "2 garlic cloves",
+        "1 1/2 oz. fresh ginger",
+        "1 tbsp olive oil",
+        "1 tbsp paprika powder",
+        "1/2 tsp ground black pepper",
+        "drippings from the meat",
+        "1 1/2 cups heavy whipping cream"
+      ],
+      "description": "Let time do the cooking instead of you! Slow-roasted meat gets all the love in this recipe. Succulent garlic, savory rosemary, and even the humble bay leaf create a mélange of flavors that melt in your mouth. And the pan drippings make the base for an out-of-this-world cream gravy."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/smoked-ham-zucchini-boats",
+      "title": "Smoked ham stuffed zucchini boats",
+      "calories": 537,
+      "listedCarbs": 8,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 2/3 lbs zucchini",
+        "1 tsp salt",
+        "5 tbsp olive oil",
+        "14 oz. smoked deli ham",
+        "4 oz. cottage cheese",
+        "2 tbsp mayonnaise",
+        "2 tbsp red onions",
+        "1/2 tbsp dried rosemary",
+        "1 1/2 cups cheddar cheese",
+        "pepper",
+        "7 oz. lettuce",
+        "1/2 tbsp white wine vinegar"
+      ],
+      "description": "Ham, herbs, and cheese anchor a low-carb filling that carries zucchini from yum to YOWSA. Familiar, satisfying, and oh-so-delicious. If you like zucchini, we promise this dish will float your boat."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/garden-chicken",
+      "title": "South American garden chicken with cauliflower rice",
+      "calories": 527,
+      "listedCarbs": 10,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": "Latin American",
+      "ingredients": [
+        "3 tbsp coconut oil",
+        "1 yellow onion",
+        "4 celery stalks",
+        "2 bay leaves",
+        "1 1/2 tsp salt",
+        "2 tbsp fresh thyme",
+        "1 1/2 lbs boneless chicken thighs",
+        "3/4 cup pumpkin puree",
+        "1 cup chicken broth",
+        "6 oz. green olives",
+        "1 lemon",
+        "1 lb cauliflower",
+        "2 oz. butter"
+      ],
+      "description": "This South American saucy chicken dish is perfect over cauliflower rice. Usually made with potatoes, peas, and carrots, We’ve traded these classic ingredients for less starchy <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a> counterparts while maintaining the authentic flavor. Make this in a pressure cooker (Instant Pot) or on the stove."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/taco-stuffed-portobello-mushrooms",
+      "title": "Taco stuffed keto portobello mushrooms",
+      "calories": 645,
+      "listedCarbs": 6,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1 1/2 tbsp chili powder",
+        "1/2 tbsp ground cumin",
+        "1 tsp salt",
+        "1/2 tsp garlic powder",
+        "1/2 tsp ground black pepper",
+        "1/4 tsp cayenne pepper",
+        "1/4 cup olive oil",
+        "1 1/2 lbs ground beef",
+        "4 portobello mushrooms",
+        "1 cup cheddar cheese",
+        "1/4 cup sour cream",
+        "2 tomatoes",
+        "2 tbsp fresh cilantro"
+      ],
+      "description": "Taco night is back with these delicious stuffed mushrooms. Ditch the high-carb tortillas and amp up your nutrition by using vegetables stuffed with seasoned ground beef and topped with cheese and sour cream. Pro tip! This recipe also works well with avocado halves."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/tex-mex-pulled-chicken-soup",
+      "title": "Tex-Mex pulled chicken soup",
+      "calories": 650,
+      "listedCarbs": 10,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "2 tbsp coconut oil",
+        "1 lb boneless chicken thighs",
+        "1 yellow onion, chopped ",
+        "2 garlic cloves, chopped",
+        "3 tbsp Tex-Mex seasoning",
+        "salt or ground black pepper, to taste",
+        "2 cups water or chicken broth",
+        "1 3/4 cups heavy whipping cream or coconut cream",
+        "2/3 lb celery stalks, diced",
+        "1/4 cup roasted pumpkin seeds",
+        "1 tsp paprika powder",
+        "1 lime, in wedges",
+        "1/2 cup fresh cilantro"
+      ],
+      "description": "A colorful and creamy Tex-Mex soup with pulled chicken and topped with crunchy pumpkin seeds, fragrant cilantro, and fresh lime."
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/vegetarian-keto-breakfast-casserole",
+      "title": "Vegetarian keto breakfast casserole",
+      "calories": 613,
+      "listedCarbs": 6,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Breakfast"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "1/2 leek",
+        "2 oz. green olives, pitted",
+        "12 large eggs",
+        "1 cup heavy whipping cream",
+        "1 3/4 cups mozzarella cheese, shredded",
+        "1 tsp onion powder",
+        "3 oz. cherry tomatoes",
+        "1/4 cup shredded Parmesan cheese",
+        "salt and pepper"
+      ],
+      "description": "Vegetarian breakfast made easy. Cook up this <a href=\"https://www.dietdoctor.com/low-carb/keto\" target=\"_blank\" rel=\"noopener\">keto</a> casserole on Sunday and you're all set for breakfast for the coming week. Easy, protein packed, and durable enough to eat on-the-go. Did we mention olives and tomatoes?"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/yellow-beet-salad-with-anchovies",
+      "title": "Yellow beet salad with anchovies",
+      "calories": 533,
+      "listedCarbs": 8,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Appetizer"
+      ],
+      "cuisine": null,
+      "ingredients": [
+        "7 1/2 oz. yellow beets, cooked",
+        "2 oz. anchovies",
+        "1/2 red onion",
+        "1 cup mayonnaise or vegan mayonnaise",
+        "2 baby gem lettuce",
+        "fresh chives"
+      ],
+      "description": "There are lots of <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a> friendly foods on a regular Easter buffet. Eggs are, to begin with, the ultimate low carb food. How about something new this year? Anchovies with yellow beets really brings the taste, and color, of Easter!"
+    },
+    {
+      "source": "dietdoctor",
+      "url": "https://www.dietdoctor.com/recipes/yogurt-chicken-kebabs-with-beet-carpaccio",
+      "title": "Yogurt chicken kebabs with beet carpaccio",
+      "calories": 552,
+      "listedCarbs": 9,
+      "carbohydrateCaveat": "JSON-LD carbohydrate value is a discovery filter only; the registered sourcer must verify total carbs and its serving basis on the public page.",
+      "yield": "4",
+      "categories": [
+        "Dinner"
+      ],
+      "cuisine": "Middle Eastern",
+      "ingredients": [
+        "1 1/2 lbs boneless chicken thighs",
+        "1/2 cup Greek yogurt (4% fat)",
+        "2 tbsp curry powder",
+        "9 tbsp light olive oil",
+        "1 tsp salt",
+        "1/2 tsp ground black pepper",
+        "4 beets",
+        "3 oz. sugar snap peas",
+        "1/2 red onion",
+        "1/2 cup fresh cilantro",
+        "1 tbsp lemon juice",
+        "1 garlic clove"
+      ],
+      "description": "A rich curry and Greek yogurt based marinade is the key to these radiant and juicy grilled <a href=\"https://www.dietdoctor.com/low-carb\">low carb</a> chicken kebabs. This tender combo is served with thinly sliced beetroots and tangy cilantro vinaigrette. Let it steal the spotlight at your next grill party!"
+    }
+  ]
+}

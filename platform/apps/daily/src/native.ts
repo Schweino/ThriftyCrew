@@ -28,6 +28,7 @@ interface RecipeSpecification {
   stat?: { cal?: number; protein?: number; carbs?: number; fat?: number };
   ingredients_grams?: RecipeIngredient[];
   scaler?: { ing?: RecipeScalerIngredient[] };
+  stagedContent?: NonNullable<NativeEngineSnapshot["contentRecipes"]>[number];
 }
 
 interface RecipeCommodityRule {
@@ -67,7 +68,7 @@ interface IngredientConversionEntry {
   ingredientKey: string;
   canonicalIngredientKey: string;
   gramsPerBasisUnit: number;
-  source: "recipe-scaler-exception" | "ingredient-definition";
+  source: "recipe-scaler-exception" | "ingredient-definition" | "commodity-mass-unit";
   confidence: "moderate";
   scalerGpu: number | null;
   definitionGpu: number;
@@ -199,7 +200,7 @@ export async function loadNativeReleaseCatalog(incomeRoot: string): Promise<Nati
 }
 
 export async function nativeReleaseIdentity(
-  snapshot: Pick<NativeEngineSnapshot, "mode" | "observedAt" | "configurationId" | "inputHash" | "inputBatchIds">,
+  snapshot: Pick<NativeEngineSnapshot, "mode" | "observedAt" | "configurationId" | "inputHash" | "inputBatchIds" | "contentBatchIds" | "contentRecipeHash">,
   catalog: NativeReleaseCatalog,
 ) {
   const generatedAt = snapshot.observedAt;
@@ -210,12 +211,16 @@ export async function nativeReleaseIdentity(
   const inputBatchIds = [...snapshot.inputBatchIds].sort();
   const inputManifest = {
     kind: "native-v3-release",
-    engineVersion: "native-v4.3.0-promotion-windows",
+    engineVersion: "native-v4.4.1-promoted-recipe-content",
     marketId: "omaha",
     mode: "direct",
     releaseDate: weekOf,
     configurationId: snapshot.configurationId,
     engineSnapshotHash: snapshot.inputHash,
+    promotedRecipeContent: {
+      batchIds: snapshot.contentBatchIds ?? [],
+      contentHash: snapshot.contentRecipeHash ?? null,
+    },
     recipeCatalogHash: catalog.recipeCatalogHash,
     ingredientCatalogHash: catalog.ingredientCatalogHash,
     recipePricingConfigurationHash: catalog.recipePricingConfigurationHash,
@@ -229,6 +234,52 @@ export async function nativeReleaseIdentity(
   };
   const inputHash = await digestHex(stableJson({ inputManifest, inputBatchIds }));
   return { generatedAt, weekOf, inputBatchIds, inputManifest, inputHash, releaseId: `rel_native_${inputHash.slice(0, 20)}` };
+}
+
+function stagedRecipeSpecification(
+  item: NonNullable<NativeEngineSnapshot["contentRecipes"]>[number],
+  ingredientDefinitions: IngredientDefinition[],
+): RecipeSpecification {
+  if (!item.sourceNutrition) throw new Error(`promoted staged recipe ${item.slug} lacks source nutrition`);
+  const definitionsByBid = new Map<string, IngredientDefinition[]>();
+  for (const definition of ingredientDefinitions) {
+    if (!definition.bid) continue;
+    const values = definitionsByBid.get(definition.bid) ?? [];
+    values.push(definition);
+    definitionsByBid.set(definition.bid, values);
+  }
+  const mapped = item.ingredients.map((ingredient) => {
+    const definitions = definitionsByBid.get(ingredient.commodityId) ?? [];
+    const normalizedName = key(ingredient.name);
+    const definition = definitions.find((candidate) => key(candidate.item) === normalizedName)
+      ?? definitions.find((candidate) => normalizedName.includes(key(candidate.item)) || key(candidate.item).includes(normalizedName))
+      ?? definitions[0];
+    const canonical = definition?.item ?? ingredient.name;
+    return {
+      ingredient: { item: canonical, grams: ingredient.grams },
+      scaler: { item: canonical, canon: canonical, grams: ingredient.grams, bid: ingredient.commodityId },
+    };
+  });
+  const protein = /chicken/i.test(item.proteinClass) ? "chicken"
+    : /turkey/i.test(item.proteinClass) ? "turkey"
+      : /beef/i.test(item.proteinClass) ? "beef"
+        : /pork|bacon|sausage/i.test(item.proteinClass) ? "pork"
+          : item.proteinClass;
+  return {
+    slug: item.slug,
+    name: item.title,
+    protein,
+    servings: item.servings,
+    visibility: "paid",
+    stat: {
+      cal: item.sourceNutrition.calories,
+      ...(item.sourceNutrition.proteinGrams !== null ? { protein: item.sourceNutrition.proteinGrams } : {}),
+      carbs: item.sourceNutrition.carbohydrateGrams,
+    },
+    ingredients_grams: mapped.map((value) => value.ingredient),
+    scaler: { ing: mapped.map((value) => value.scaler) },
+    stagedContent: item,
+  };
 }
 
 function key(value: string): string {
@@ -276,7 +327,38 @@ export async function buildNativeRelease(
 ): Promise<NativeReleaseArtifact> {
   if (snapshot.mode !== "direct") throw new Error("native publication requires a direct-only immutable engine snapshot");
   const catalog = suppliedCatalog ?? await loadNativeReleaseCatalog(incomeRoot);
-  const { ingredientDefinitions, recipes, recipeRuleDocument, recipeExtensions, recipeAliases, knownWrong, recipePriceUnavailable } = catalog;
+  const { ingredientDefinitions, recipes: legacyRecipes, recipeRuleDocument, recipeExtensions, recipeAliases, knownWrong, recipePriceUnavailable } = catalog;
+  const recipes = [...new Map([
+    ...legacyRecipes.map((recipe) => [recipe.slug, recipe] as const),
+    ...(snapshot.contentRecipes ?? []).map((item) => [item.slug, stagedRecipeSpecification(item, ingredientDefinitions)] as const),
+  ]).values()].sort((left, right) => left.slug.localeCompare(right.slug));
+  const definitionByName = new Map(ingredientDefinitions.map((definition) => [key(definition.item), definition]));
+  const snapshotCommodityById = new Map(snapshot.commodities.map((commodity) => [commodity.id, commodity]));
+  const governedConversions = new Map(catalog.conversionRegistry);
+  for (const recipe of recipes.filter((candidate) => candidate.stagedContent)) {
+    const scalerByName = new Map((recipe.scaler?.ing ?? []).map((item) => [key(item.item), item]));
+    for (const ingredient of recipe.ingredients_grams ?? []) {
+      const registryKey = `${recipe.slug}|${key(ingredient.item)}`;
+      if (governedConversions.has(registryKey)) continue;
+      const scaler = scalerByName.get(key(ingredient.item));
+      const definition = definitionByName.get(key(scaler?.canon ?? ingredient.item)) ?? definitionByName.get(key(ingredient.item));
+      const commodity = scaler?.bid ? snapshotCommodityById.get(scaler.bid) : undefined;
+      const definitionGpu = asNumber(definition?.gpu);
+      const massGpu = commodity?.basis_unit === "lb" ? 453.59237 : commodity?.basis_unit === "oz" ? 28.349523125
+        : commodity?.basis_unit === "kg" ? 1000 : commodity?.basis_unit === "g" ? 1 : undefined;
+      const gramsPerBasisUnit = definitionGpu ?? massGpu;
+      if (!gramsPerBasisUnit) continue;
+      governedConversions.set(registryKey, {
+        recipeSlug: recipe.slug, ingredientKey: key(ingredient.item), canonicalIngredientKey: key(definition?.item ?? ingredient.item),
+        gramsPerBasisUnit, source: definitionGpu ? "ingredient-definition" : "commodity-mass-unit",
+        confidence: "moderate", scalerGpu: null, definitionGpu: gramsPerBasisUnit,
+      });
+    }
+  }
+  const governedEntries = [...governedConversions.values()].sort((left, right) => left.recipeSlug.localeCompare(right.recipeSlug) || left.ingredientKey.localeCompare(right.ingredientKey));
+  catalog.conversionRegistry = governedConversions;
+  catalog.conversionRegistryEntries = governedEntries.length;
+  catalog.conversionRegistryHash = await digestHex(stableJson({ policy: catalog.conversionPolicy, entries: governedEntries }));
   // Narrow recipe extensions precede broad legacy rules and carry their own
   // explicit exclusions, so they do not inherit the legacy global filter.
   const extensionIds = new Set(recipeExtensions.commodities.map((rule) => rule.id));
@@ -472,6 +554,7 @@ export async function buildNativeRelease(
   const previousRecipes = new Map((previousGraph?.nodes ?? []).filter((item) => item.kind === "recipe").map((item) => [item.key, item]));
   const appendRecipePayload = (recipe: RecipeSpecification, cost: RecipeCost) => {
     recipePayload.push({
+      ...(recipe.stagedContent ?? {}),
       slug: recipe.slug, name: recipe.name, protein: recipe.protein ?? null, visibility: recipe.visibility ?? "paid",
       servings: recipe.servings, calories: recipe.stat?.cal ?? null, status: cost.status,
       servingCostMinor: cost.servingCostMinor ?? null, batchCostMinor: cost.batchCostMinor ?? null,
@@ -501,6 +584,27 @@ export async function buildNativeRelease(
         ?? aliasedBids.find((bid) => commodityById.has(bid) || recipeRuleIds.has(bid))
         ?? commodityByLabel.get(key(scaler?.canon ?? ingredient.item));
     };
+    const conversionFor = (ingredient: RecipeIngredient) => {
+      const existing = catalog.conversionRegistry.get(`${recipe.slug}|${key(ingredient.item)}`);
+      if (existing) return existing;
+      const scaler = scalerByName.get(key(ingredient.item));
+      const definition = ingredientByName.get(key(scaler?.canon ?? ingredient.item)) ?? ingredientByName.get(key(ingredient.item));
+      const definitionGpu = asNumber(definition?.gpu);
+      if (definitionGpu) return {
+        recipeSlug: recipe.slug, ingredientKey: key(ingredient.item), canonicalIngredientKey: key(definition!.item),
+        gramsPerBasisUnit: definitionGpu, source: "ingredient-definition" as const, confidence: "moderate" as const,
+        scalerGpu: null, definitionGpu,
+      };
+      const commodityId = resolveCommodity(ingredient);
+      const basisUnit = commodityId ? commodityById.get(commodityId)?.basis_unit : undefined;
+      const gramsPerBasisUnit = basisUnit === "lb" ? 453.59237 : basisUnit === "oz" ? 28.349523125
+        : basisUnit === "kg" ? 1000 : basisUnit === "g" ? 1 : undefined;
+      return gramsPerBasisUnit ? {
+        recipeSlug: recipe.slug, ingredientKey: key(ingredient.item), canonicalIngredientKey: key(ingredient.item),
+        gramsPerBasisUnit, source: "commodity-mass-unit" as const, confidence: "moderate" as const,
+        scalerGpu: null, definitionGpu: gramsPerBasisUnit,
+      } : undefined;
+    };
     const incrementalDependencyHash = await digestHex(stableJson({
       version: "recipe-cost-dag-v4-semantic-inputs", recipe,
       pricingConfigurationHash: catalog.recipePricingConfigurationHash,
@@ -509,7 +613,7 @@ export async function buildNativeRelease(
         const commodityId = resolveCommodity(ingredient);
         return {
           item: ingredient.item, grams: ingredient.grams, commodityId: commodityId ?? null,
-          conversion: catalog.conversionRegistry.get(`${recipe.slug}|${key(ingredient.item)}`) ?? null,
+          conversion: conversionFor(ingredient) ?? null,
           options: (commodityId ? (boardOptionsByCommodity.get(commodityId) ?? recipeOptionsByCommodity.get(commodityId) ?? []) : []).map((option) => ({
             observationId: option.observationId, storeLocationId: option.storeLocationId,
             displayPerUnitMicros: option.displayPerUnitMicros, displayUnit: option.displayUnit,
@@ -547,7 +651,7 @@ export async function buildNativeRelease(
       const scaler = scalerByName.get(key(ingredient.item));
       const definition = ingredientByName.get(key(scaler?.canon ?? ingredient.item)) ?? ingredientByName.get(key(ingredient.item));
       const commodityId = resolveCommodity(ingredient);
-      const conversion = catalog.conversionRegistry.get(`${recipe.slug}|${key(ingredient.item)}`);
+      const conversion = conversionFor(ingredient);
       const gpu = conversion?.gramsPerBasisUnit;
       const grams = asNumber(ingredient.grams);
       const options = commodityId ? (boardOptionsByCommodity.get(commodityId) ?? recipeOptionsByCommodity.get(commodityId) ?? []) : [];
@@ -625,9 +729,9 @@ export async function buildNativeRelease(
         perUnitMicros: crown!.displayPerUnitMicros,
         basisUnit: crown!.displayUnit,
         gpu: gpu!,
-        gpuSource: conversion?.source === "recipe-scaler-exception" ? "recipe-scaler" : "ingredient-definition",
+        gpuSource: conversion?.source === "recipe-scaler-exception" ? "recipe-scaler" : conversion?.source ?? null,
         scalerGpu: asNumber(scaler?.gpu) ?? null,
-        definitionGpu: asNumber(definition?.gpu) ?? null,
+        definitionGpu: conversion!.definitionGpu,
         conversionId: `${catalog.conversionRegistryHash.slice(0, 16)}:${recipe.slug}:${key(ingredient.item).replace(/[^a-z0-9]+/g, "-")}`,
         conversionRegistryHash: catalog.conversionRegistryHash,
         conversionSource: conversion!.source,
@@ -684,7 +788,7 @@ export async function buildNativeRelease(
           }];
         })),
         packageLabel: definition?.bulk ? definition?.pantry_pkg_label : definition?.buy_pkg_label,
-        pantry: Boolean(definition!.bulk),
+        pantry: Boolean(definition?.bulk),
         status: "priced",
       });
     }

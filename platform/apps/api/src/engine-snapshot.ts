@@ -5,6 +5,7 @@ import {
   type NativeEngineCandidateShard,
   type NativeEngineSnapshot,
 } from "@thriftycrew/engine";
+import { contentItemSchema } from "@thriftycrew/contracts";
 import type { WorkerEnv } from "./env";
 
 export type EngineSourceMode = "legacy" | "direct" | "all";
@@ -30,6 +31,8 @@ interface EngineSnapshotContext {
   currentReleaseId: string;
   inputHash: string;
   inputBatchIds: string[];
+  contentBatchIds: string[];
+  contentRecipeHash: string;
   batches: EngineSnapshotBatch[];
 }
 
@@ -100,11 +103,16 @@ export function markKnownWrongCandidates<T extends {
 async function readEngineSnapshotContext(env: WorkerEnv, mode: EngineSourceMode, requestedObservedAt?: string): Promise<EngineSnapshotContext> {
   const observedAt = requestedObservedAt ?? new Date().toISOString();
   if (!Number.isFinite(Date.parse(observedAt))) throw new Error("Engine snapshot observedAt is invalid");
-  const [configuration, currentRelease] = await Promise.all([
+  const [configuration, currentRelease, promotedContent] = await Promise.all([
     env.DB.prepare("SELECT id, content_hash FROM configuration_versions WHERE active = 1")
       .first<{ id: string; content_hash: string }>(),
     env.DB.prepare("SELECT release_id FROM current_releases WHERE market_id = 'omaha'")
       .first<{ release_id: string }>(),
+    env.DB.prepare(
+      `SELECT id, content_hash FROM content_batches
+        WHERE status = 'promoted' AND kind = 'recipe-pack'
+        ORDER BY promoted_at, id`,
+    ).all<{ id: string; content_hash: string }>(),
   ]);
   if (!configuration) throw new Error("No active engine configuration");
   if (!currentRelease) throw new Error("No current Omaha release");
@@ -134,6 +142,8 @@ async function readEngineSnapshotContext(env: WorkerEnv, mode: EngineSourceMode,
   const unbound = batches.results.filter((batch) => !batch.match_run_id || !batch.match_input_hash);
   if (unbound.length > 0) throw new Error(`Promoted snapshot batches lack a passed match run: ${unbound.map((batch) => batch.id).join(", ")}`);
   const inputBatchIds = batches.results.map((batch) => batch.id).sort();
+  const contentBatchIds = promotedContent.results.map((batch) => batch.id);
+  const contentRecipeHash = await digestHex(stableJson(promotedContent.results.map((batch) => [batch.id, batch.content_hash])));
   const dateParts = Object.fromEntries(new Intl.DateTimeFormat("en-US", {
     timeZone: "America/Chicago", year: "numeric", month: "2-digit", day: "2-digit",
   }).formatToParts(new Date(observedAt)).map((part) => [part.type, part.value]));
@@ -145,11 +155,25 @@ async function readEngineSnapshotContext(env: WorkerEnv, mode: EngineSourceMode,
     inputBatchIds,
     shardSchemaVersion: SHARD_SCHEMA_VERSION,
     matchRuns: batches.results.map((batch) => [batch.id, batch.match_run_id, batch.match_input_hash]),
+    contentBatchIds,
+    contentRecipeHash,
   }));
   return {
     observedAt, mode, configurationId: configuration.id, configurationHash: configuration.content_hash,
-    currentReleaseId: currentRelease.release_id, inputHash, inputBatchIds, batches: batches.results,
+    currentReleaseId: currentRelease.release_id, inputHash, inputBatchIds, contentBatchIds, contentRecipeHash, batches: batches.results,
   };
+}
+
+async function readPromotedContentRecipes(env: WorkerEnv) {
+  const rows = await env.DB.prepare(
+    `SELECT item.slug, item.content_json
+       FROM content_batch_items item JOIN content_batches batch ON batch.id = item.batch_id
+      WHERE batch.status = 'promoted' AND batch.kind = 'recipe-pack'
+      ORDER BY batch.promoted_at, batch.id, item.ordinal`,
+  ).all<{ slug: string; content_json: string }>();
+  const latestBySlug = new Map(rows.results.map((row) => [row.slug, row.content_json]));
+  return [...latestBySlug.entries()].sort(([left], [right]) => left.localeCompare(right))
+    .map(([slug, json]) => contentItemSchema.parse({ ...JSON.parse(json), slug }));
 }
 
 export async function readEngineSnapshotIdentity(env: WorkerEnv, mode: EngineSourceMode, observedAt?: string) {
@@ -260,7 +284,7 @@ export async function buildEngineSnapshotShard(env: WorkerEnv, batchId: string, 
 }
 
 async function readSnapshotDimensions(env: WorkerEnv, context: EngineSnapshotContext) {
-  const [commodities, stores, currentCells] = await Promise.all([
+  const [commodities, stores, currentCells, contentRecipes] = await Promise.all([
     env.DB.prepare(
       `SELECT c.id, c.label, c.basis_unit, c.category_id, c.band_min_micros, c.band_max_micros, cat.label AS category_label, cat.sort_order
          FROM commodities c LEFT JOIN categories cat ON cat.id = c.category_id
@@ -276,8 +300,9 @@ async function readSnapshotDimensions(env: WorkerEnv, context: EngineSnapshotCon
               c.display_per_unit_micros, c.display_unit
          FROM release_cells c WHERE c.release_id = ?1 ORDER BY c.commodity_id, c.store_location_id`,
     ).bind(context.currentReleaseId).all(),
+    readPromotedContentRecipes(env),
   ]);
-  return { commodities: commodities.results, stores: stores.results, currentCells: currentCells.results };
+  return { commodities: commodities.results, stores: stores.results, currentCells: currentCells.results, contentRecipes };
 }
 
 export async function readEngineSnapshotManifest(env: WorkerEnv, mode: EngineSourceMode, observedAt?: string) {

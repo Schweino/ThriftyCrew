@@ -840,6 +840,22 @@ if (command === "status") {
   const batchId = arguments_[0];
   if (!batchId) throw new Error("tc content promote requires a batch id");
   result = await (await mutationClient()).request(`/internal/content-batches/${encodeURIComponent(batchId)}/promote`, { method: "POST", acceptStatuses: [422] });
+} else if (command === "content" && subcommand === "promote-ready") {
+  const client = await mutationClient();
+  const since = arguments_[0];
+  const sinceMillis = since ? Date.parse(since) : Number.NEGATIVE_INFINITY;
+  if (since && !Number.isFinite(sinceMillis)) throw new Error("tc content promote-ready optional since value must be an ISO timestamp");
+  const listed = await client.request("/internal/content-batches") as { batches?: Array<{ id?: string; kind?: string; status?: string; created_at?: string }> };
+  const audited = (listed.batches ?? []).filter((batch) =>
+    batch.kind === "recipe-pack" && batch.status === "audited" && batch.id
+    && (!since || Date.parse(`${batch.created_at ?? ""}Z`) >= sinceMillis));
+  const promotions = [];
+  for (const batch of audited) {
+    promotions.push(await client.request(`/internal/content-batches/${encodeURIComponent(batch.id!)}/promote`, { method: "POST", acceptStatuses: [422] }));
+  }
+  const rejected = promotions.filter((promotion) => promotion.ok === false);
+  if (rejected.length > 0) throw new Error(`${rejected.length} audited recipe content batch${rejected.length === 1 ? "" : "es"} failed deterministic promotion`);
+  result = { ok: rejected.length === 0, since: since ?? null, examined: audited.length, promoted: promotions.filter((promotion) => promotion.ok).length, rejected: rejected.length, promotions };
 } else if (command === "evidence" && subcommand === "record") {
   const file = arguments_[0];
   if (!file) throw new Error("tc evidence record requires a JSON evidence file");

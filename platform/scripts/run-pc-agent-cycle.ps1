@@ -317,6 +317,12 @@ try {
         if (-not (Invoke-AgentItem $agentId)) { break }
       }
     }
+    Set-PcRuntimeCredential $config 'local-operator'
+    Push-Location $platformRoot
+    try {
+      Invoke-LoggedCommand 'recipe-content-promote-ready' { & $pnpmPath tc content promote-ready $env:TC_SCHEDULED_FOR } | Out-Null
+      Invoke-LoggedCommand 'recipe-content-publish-native' { & $pnpmPath tc engine publish-native } | Out-Null
+    } finally { Pop-Location }
   } else {
     foreach ($agentId in $agentsForCycle) {
       for ($item = 0; $item -lt $MaxItems; $item++) {

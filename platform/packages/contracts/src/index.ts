@@ -1027,6 +1027,11 @@ export const contentItemSchema = z.object({
   cuisine: z.string().trim().min(2).max(160),
   proteinClass: z.string().trim().min(2).max(100),
   method: z.string().trim().min(3).max(500),
+  sourceNutrition: z.object({
+    calories: z.number().nonnegative(),
+    proteinGrams: z.number().nonnegative().nullable(),
+    carbohydrateGrams: z.number().nonnegative(),
+  }).optional(),
   ingredients: z.array(z.object({
     name: z.string().trim().min(1).max(300),
     grams: z.number().positive(),

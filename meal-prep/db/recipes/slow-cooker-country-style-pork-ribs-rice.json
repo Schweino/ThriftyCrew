@@ -24,7 +24,7 @@
                  "protein":  47,
                  "carbs":  76,
                  "fat":  30,
-                 "cost_ps":  "2.20"
+                 "cost_ps":  "2.21"
              },
     "intro_html":  "Five minutes of work in the morning, barbecue for a week. Country style ribs are cut from the shoulder, which means they are cheap, forgiving, and they turn to shreds after a long slow cook. Pile them over rice and you have {{protein}} grams of protein sitting at about ${{cost_ps}} a bowl (at everyday cost).",
     "ingredients_display":  [
@@ -169,7 +169,7 @@
                  "prepTime":  "PT15M",
                  "cookTime":  "PT8H",
                  "totalTime":  "PT8H15M",
-                 "costPerServing":  2.20,
+                 "costPerServing":  2.21,
                  "recipeIngredient":  [
                                           "Pork Shoulder, 7.5 lb (3360 g)",
                                           "Brown Sugar, 7 tbsp (94 g)",

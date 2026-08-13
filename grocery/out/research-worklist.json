@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-08-12 09:04",
+    "generated":  "2026-08-13 06:16",
     "items":  [
                   {
                       "commodity":  "cantaloupe",
@@ -9,6 +9,11 @@
                   {
                       "commodity":  "garden-salad",
                       "store":  "Hy-Vee",
+                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
+                  },
+                  {
+                      "commodity":  "watermelon",
+                      "store":  "Fareway",
                       "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
                   }
               ]

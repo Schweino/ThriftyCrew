@@ -10,6 +10,7 @@ const valid = {
   cuisine: "American",
   proteinClass: "chicken",
   method: "stovetop simmer",
+  sourceNutrition: { calories: 575, proteinGrams: 42, carbohydrateGrams: 32 },
   ingredients: [
     { name: "Chicken", grams: 1_600, commodityId: "chicken-breast", sourceLine: "1 lb chicken breast" },
     { name: "Rice", grams: 1_200, commodityId: "white-rice", sourceLine: "2 cups white rice" },

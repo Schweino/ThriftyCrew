@@ -1,0 +1,131 @@
+{
+  "id": "eval_9a99c5f9ca8c88b93b685fbcda612e75",
+  "agentId": "recipe-mapper",
+  "executionConfigHash": "6290fc134830d0ae1c04f5c7ef3611d2739eccde47030aba41b07c6831cdf614",
+  "modelId": "gpt-5.6-sol",
+  "corpusHash": "51714cb5599ed7b87b7dd3d6b221779f696089b6885b813db5e478ddee6a65ee",
+  "evaluatorVersion": "deterministic-recipe-mapper-v3",
+  "caseCount": 9,
+  "passedCount": 9,
+  "scoreMillis": 1000,
+  "thresholdMillis": 950,
+  "passed": true,
+  "detail": {
+    "cases": [
+      {
+        "caseId": "known-alias",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "chickpeas",
+          "evidence": [
+            "garbanzo is a recognized alias for chickpeas."
+          ]
+        }
+      },
+      {
+        "caseId": "unknown-commodity",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "unmapped",
+          "evidence": [
+            "dragonfruit powder has no matching shopping commodity in the supplied catalog."
+          ]
+        }
+      },
+      {
+        "caseId": "missing-yield",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "blocked",
+          "evidence": [
+            "yield is null, so scaling to 14 servings is unresolved and writing is blocked."
+          ]
+        }
+      },
+      {
+        "caseId": "standard-unmodified-grocery-form",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "mapped",
+          "evidence": [
+            "onions",
+            "garlic"
+          ]
+        }
+      },
+      {
+        "caseId": "explicit-form-conflict",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "unmapped",
+          "evidence": [
+            "jarred minced garlic conflicts with the catalog-defined fresh garlic form; no catalog commodity represents the jarred product."
+          ]
+        }
+      },
+      {
+        "caseId": "preparation-variant-shopping-commodity",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "mapped",
+          "evidence": [
+            "parmesan: shaved Parmesan is a preparation variant of Parmesan cheese.",
+            "eggs: an egg yolk maps to the eggs shopping commodity."
+          ]
+        }
+      },
+      {
+        "caseId": "flavor-and-pack-variant-shopping-commodity",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "mapped",
+          "evidence": [
+            "“roasted-garlic smoked sausage” is a flavor variant of the smoked sausage shopping commodity.",
+            "“sun-dried tomatoes” maps directly to the sun-dried tomatoes shopping commodity."
+          ]
+        }
+      },
+      {
+        "caseId": "canonical-unqualified-ground-beef",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "mapped",
+          "evidence": [
+            "The registered canonical alias maps unqualified ground beef to ground-beef-8020.",
+            "Scaled from 4 to 14 servings: 1 lb × 3.5 = 3.5 lb (about 1,588 g)."
+          ]
+        }
+      },
+      {
+        "caseId": "insubstantial-accompaniment",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "blocked",
+          "evidence": [
+            "The substantial-accompaniment totals 525 grams for the 14-serving batch, below the required 980 grams.",
+            "The incomplete accompaniment means writing is blocked."
+          ]
+        }
+      }
+    ]
+  },
+  "evaluatedAt": "2026-08-13T09:46:32.410Z"
+}

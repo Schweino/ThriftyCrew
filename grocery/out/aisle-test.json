@@ -254,7 +254,7 @@
     {
         "id":  "banana-peppers",
         "store":  "Family Fare",
-        "product":  "Our Family Hot Banana Pepper Rings 16 Fl Oz",
+        "product":  "Our Family Mild Banana Pepper Rings 16 Fl Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -342,6 +342,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
+        "id":  "blackberries",
+        "store":  "Family Fare",
+        "product":  "Fresh Blackberries",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/berries",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
+    },
+    {
         "id":  "bleach",
         "store":  "Family Fare",
         "product":  "Our Family Bleach 81 Fl Oz",
@@ -416,7 +425,7 @@
     {
         "id":  "bratwurst",
         "store":  "Family Fare",
-        "product":  "Bratwurst, Cheddar Our Family",
+        "product":  "Bratwurst, Original Our Family",
         "dept":  "meat",
         "aisle":  "meat/sausage",
         "verdict":  "ALLOW",
@@ -578,7 +587,7 @@
     {
         "id":  "canned-corn",
         "store":  "Family Fare",
-        "product":  "Our Family Sweet Whole Kernel Corn 15.25 Oz",
+        "product":  "Our Family Super Sweet Whole Kernel Corn 15.25 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -605,7 +614,7 @@
     {
         "id":  "canned-green-beans",
         "store":  "Family Fare",
-        "product":  "Our Family No Salt Added Cut Green Beans 14.5 Oz",
+        "product":  "Our Family Cut Green Beans 14.5 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
@@ -956,7 +965,7 @@
     {
         "id":  "coffee-creamer",
         "store":  "Family Fare",
-        "product":  "International Delight French Vanilla Liquid Coffee Creamer 64 Fl Oz",
+        "product":  "International Delight Caramel Macchiato Liquid Coffee Creamer 64 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/coffee",
         "verdict":  "ALLOW",
@@ -1046,7 +1055,7 @@
     {
         "id":  "cottage-cheese",
         "store":  "Family Fare",
-        "product":  "Our Family Cottage Cheese, Large Curd, 4% Milkfat Minimum 24 Oz",
+        "product":  "Our Family Cottage Cheese, Small Curd, 4% Milkfat Minimum 24 Oz",
         "dept":  "dairy",
         "aisle":  "dairy/cheese",
         "verdict":  "ALLOW",
@@ -1123,6 +1132,15 @@
         "aisle":  "bakery/breakfast_sweet_breads",
         "verdict":  "ALLOW",
         "reason":  "\u0027bakery\u0027 is an allowed department for category \u0027bakery\u0027"
+    },
+    {
+        "id":  "crushed-tomatoes",
+        "store":  "Family Fare",
+        "product":  "Contadina Crushed Tomatoes 28 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
         "id":  "cucumbers",
@@ -1352,7 +1370,7 @@
     {
         "id":  "english-muffins",
         "store":  "Family Fare",
-        "product":  "Country Hearth English Muffins, Light, Valu Pack 12 Ea",
+        "product":  "Country Hearth Sourdough English Muffins",
         "dept":  "bakery",
         "aisle":  "bakery/english_muffins_biscuits_croissants",
         "verdict":  "ALLOW",
@@ -1521,6 +1539,15 @@
         "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
     {
+        "id":  "frozen-fruit",
+        "store":  "Family Fare",
+        "product":  "Our Family Cherry Berry Blend, Fresh Frozen 16 Oz",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_fruit",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
+    },
+    {
         "id":  "frozen-meatballs",
         "store":  "Family Fare",
         "product":  "Marie Callender\u0027s Swedish Meatballs Bowl Frozen Meal 11.5 Oz",
@@ -1573,6 +1600,15 @@
         "aisle":  "beverages/fruit_vegetable_beverages",
         "verdict":  "ALLOW",
         "reason":  "\u0027beverages\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
+        "id":  "fruit-snacks",
+        "store":  "Family Fare",
+        "product":  "Welch\u0027s Red, White \u0026 Blueberry Fruit Snacks 26 Ea",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "furniture-polish",
@@ -1654,6 +1690,24 @@
         "aisle":  "pantry/crackers",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
+    },
+    {
+        "id":  "granola",
+        "store":  "Family Fare",
+        "product":  "Our Family Granola, Vanilla Almond 12 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/breakfast",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
+        "id":  "granola-bars",
+        "store":  "Family Fare",
+        "product":  "Our Family Chewy Chocolate Chunk Granola Bars 10 Ea",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
         "id":  "sugar",
@@ -1775,11 +1829,11 @@
     {
         "id":  "deli-ham",
         "store":  "Family Fare",
-        "product":  "Oscar Mayer Uncured Oven Roasted Smoked Turkey Breast/Ham Variety Pack 9 Oz",
-        "dept":  "deli",
-        "aisle":  "deli/lunch_meat",
+        "product":  "Hatfield Sliced Boneless Sweet Brown Sugar Ham With Natural Juices 44 Oz",
+        "dept":  "meat",
+        "aisle":  "meat/ham",
         "verdict":  "ALLOW",
-        "reason":  "\u0027deli\u0027 is an allowed department for category \u0027meat\u0027"
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
         "id":  "hamburger-buns",
@@ -1937,7 +1991,7 @@
     {
         "id":  "italian-dressing",
         "store":  "Family Fare",
-        "product":  "Our Family Zesty Italian Dressing 16 Fl Oz",
+        "product":  "Our Family House Italian Dressing 16 Fl Oz",
         "dept":  "pantry",
         "aisle":  "pantry/condiments_dressing",
         "verdict":  "ALLOW",
@@ -2070,9 +2124,18 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
+        "id":  "lemon-juice",
+        "store":  "Family Fare",
+        "product":  "Our Family Lemon 100% Juice 32 Fl Oz",
+        "dept":  "beverages",
+        "aisle":  "beverages/fruit_vegetable_beverages",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027beverages\u0027 is a reviewed exception department for \u0027lemon-juice\u0027"
+    },
+    {
         "id":  "lemonade",
         "store":  "Family Fare",
-        "product":  "Minute Maid Lemonade 59 Oz",
+        "product":  "Minute Maid Strawberry Lemonade Carton 59 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/fruit_vegetable_beverages",
         "verdict":  "ALLOW",
@@ -2414,7 +2477,7 @@
     {
         "id":  "pasta",
         "store":  "Family Fare",
-        "product":  "Our Family Spaghetti, Pot Sized 16 Oz",
+        "product":  "Our Family Spaghetti, Thin, Pot Sized 16 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/pasta_sauces",
         "verdict":  "ALLOW",
@@ -2781,6 +2844,15 @@
         "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
+        "id":  "rice-cakes",
+        "store":  "Family Fare",
+        "product":  "Quaker Caramel Chocolate Chip Rice Cakes 7.4 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/snacks",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
         "id":  "rice-noodles",
         "store":  "Family Fare",
         "product":  "Thai Kitchen Med Pad Thai Rice Noodle Cart 9.77 Oz",
@@ -2927,7 +2999,7 @@
     {
         "id":  "shampoo",
         "store":  "Family Fare",
-        "product":  "Alberto Vo5 Shampoo, Revitalizing, Ocean Refresh, Bonus Size 15 Fl Oz",
+        "product":  "Alberto Vo5 Shampoo, Daily Revitalizing, Bonus Size 15 Fl Oz",
         "dept":  "health_beauty",
         "aisle":  "health_beauty/grooming_hygiene",
         "verdict":  "ALLOW",
@@ -2954,11 +3026,29 @@
     {
         "id":  "shredded-cheese",
         "store":  "Family Fare",
-        "product":  "Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz",
+        "product":  "Our Family Natural Finely Cut Mexican Shredded Cheese 32 Oz",
         "dept":  "deli",
         "aisle":  "deli/cheese",
         "verdict":  "ALLOW",
         "reason":  "\u0027deli\u0027 is an allowed department for category \u0027dairy\u0027"
+    },
+    {
+        "id":  "shrimp",
+        "store":  "Family Fare",
+        "product":  "Our Family Shrimp Raw Small",
+        "dept":  "meat",
+        "aisle":  "meat/seafood_fish",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
+        "id":  "sirloin-steak",
+        "store":  "Family Fare",
+        "product":  "Fresh Usda Choice Whole Sirloin Tip",
+        "dept":  "meat",
+        "aisle":  "meat/beef",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
         "id":  "sliced-cheese",
@@ -3026,7 +3116,7 @@
     {
         "id":  "sparkling-water",
         "store":  "Family Fare",
-        "product":  "Sparkling Ice Zero Sugar Orange Mango Sparkling Water 17 Fl Oz",
+        "product":  "Sparkling Ice Zero Sugar Strawberry Watermelon Sparkling Water 17 Fl Oz",
         "dept":  "beverages",
         "aisle":  "beverages/soda_other_carbonated_beverages",
         "verdict":  "ALLOW",
@@ -3089,7 +3179,7 @@
     {
         "id":  "stuffing-mix",
         "store":  "Family Fare",
-        "product":  "Our Family Stuffing Mix, Pork Flavor 6 Oz",
+        "product":  "Our Family Stuffing Mix, Cornbread 6 Oz",
         "dept":  "pantry",
         "aisle":  "pantry/dry_goods",
         "verdict":  "ALLOW",
@@ -3224,7 +3314,7 @@
     {
         "id":  "toaster-pastries",
         "store":  "Family Fare",
-        "product":  "Our Family Toaster Pastries, Brown Sugar Cinnamon, Frosted 12 Ea",
+        "product":  "Our Family Toaster Pastries, Strawberry, Frosted 12 Ea",
         "dept":  "pantry",
         "aisle":  "pantry/breakfast",
         "verdict":  "ALLOW",
@@ -3256,6 +3346,15 @@
         "aisle":  "fresh_fruits_vegetables/other_vegetables",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "tomato-paste",
+        "store":  "Family Fare",
+        "product":  "Our Family Tomato Paste 12 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
     },
     {
         "id":  "tomato-sauce",
@@ -3395,11 +3494,11 @@
     {
         "id":  "whipped-cream",
         "store":  "Family Fare",
-        "product":  "Our Family Reduced Fat Whipped Topping 8 Oz",
-        "dept":  "dairy",
-        "aisle":  "dairy/whipped_toppings_whipping_creams",
+        "product":  "Our Family Original Whipped Topping 8 Oz",
+        "dept":  "freezer",
+        "aisle":  "freezer/sweet_stuff",
         "verdict":  "ALLOW",
-        "reason":  "\u0027dairy\u0027 is a reviewed exception department for \u0027whipped-cream\u0027"
+        "reason":  "\u0027freezer\u0027 is a reviewed exception department for \u0027whipped-cream\u0027"
     },
     {
         "id":  "rice",
@@ -3503,7 +3602,7 @@
     {
         "id":  "greek-yogurt",
         "store":  "Family Fare",
-        "product":  "Chobani Strawberry Banana On The Bottom Reduced Fat Greek Yogurt 5.3 Oz",
+        "product":  "Oikos Triple Zero Triple Zero Mixed Berry High Protein Nonfat Greek Yogurt 4 Ea",
         "dept":  "dairy",
         "aisle":  "dairy/yogurt",
         "verdict":  "BLIND",

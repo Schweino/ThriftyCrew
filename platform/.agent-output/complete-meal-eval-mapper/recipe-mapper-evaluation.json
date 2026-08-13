@@ -1,0 +1,94 @@
+{
+  "id": "eval_2328b18f29fc694784833ee189203df6",
+  "agentId": "recipe-mapper",
+  "executionConfigHash": "22f1d6031d1cb420aa2343d7dd177bed4494b93b31172014db38180aaa51b25f",
+  "modelId": "gpt-5.6-sol",
+  "corpusHash": "205f39a0ae201693d884b0e36735fcedb13bff1600346547b7eabe7de8afdfa8",
+  "evaluatorVersion": "deterministic-recipe-mapper-v3",
+  "caseCount": 6,
+  "passedCount": 6,
+  "scoreMillis": 1000,
+  "thresholdMillis": 950,
+  "passed": true,
+  "detail": {
+    "cases": [
+      {
+        "caseId": "known-alias",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "chickpeas",
+          "evidence": [
+            "garbanzo is an ordinary alias for chickpeas."
+          ]
+        }
+      },
+      {
+        "caseId": "unknown-commodity",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "unmapped",
+          "evidence": [
+            "dragonfruit powder is not present in the supplied commodity catalog; Apples is a different product concept."
+          ]
+        }
+      },
+      {
+        "caseId": "missing-yield",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "chicken-breast",
+          "evidence": [
+            "Ingredient maps exactly to chicken-breast.",
+            "Source yield is null, so scaling is unresolved."
+          ]
+        }
+      },
+      {
+        "caseId": "standard-unmodified-grocery-form",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "mapped",
+          "evidence": [
+            "Ordinary unmodified onion maps to onions.",
+            "Chopped garlic has no contrary qualifier and maps to fresh garlic."
+          ]
+        }
+      },
+      {
+        "caseId": "explicit-form-conflict",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "unmapped",
+          "evidence": [
+            "Explicit jarred minced garlic conflicts with the catalog's Fresh garlic commodity.",
+            "jarred"
+          ]
+        }
+      },
+      {
+        "caseId": "insubstantial-accompaniment",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "unmapped",
+          "evidence": [
+            "The substantial-accompaniment totals 525 grams, below the required 980 grams.",
+            "The meal is incomplete and not ready for writing."
+          ]
+        }
+      }
+    ]
+  },
+  "evaluatedAt": "2026-08-13T08:20:17.983Z"
+}

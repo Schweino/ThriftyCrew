@@ -1,0 +1,120 @@
+{
+  "id": "eval_b51d9eb25535c3eb54e0aca15db4018a",
+  "agentId": "recipe-writer",
+  "executionConfigHash": "724e3b88f7d4727bcba68bcd59b45154c03f2e238cf702da673b8bf40eb0e524",
+  "modelId": "gpt-5.6-terra",
+  "corpusHash": "fb79fddeeadfab04bf78290c30c9b91eb58848b3eabb9d9fd9ddf6197d92886c",
+  "evaluatorVersion": "deterministic-recipe-writer-v3",
+  "caseCount": 8,
+  "passedCount": 8,
+  "scoreMillis": 1000,
+  "thresholdMillis": 900,
+  "passed": true,
+  "detail": {
+    "cases": [
+      {
+        "caseId": "complete-card",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "content",
+          "evidence": [
+            "ingredients"
+          ]
+        }
+      },
+      {
+        "caseId": "unresolved-mapping",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "refuse",
+          "evidence": [
+            "mapping: chipotle paste is unmapped"
+          ]
+        }
+      },
+      {
+        "caseId": "medical-claim",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "refuse",
+          "evidence": [
+            "claim: cures diabetes"
+          ]
+        }
+      },
+      {
+        "caseId": "combine-duplicate-commodity-lines",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "content",
+          "evidence": [
+            "combine",
+            "98"
+          ]
+        }
+      },
+      {
+        "caseId": "safe-batch-cooling",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "content",
+          "evidence": [
+            "shallow containers",
+            "2 hours"
+          ]
+        }
+      },
+      {
+        "caseId": "quantified-pressure-cooking-water",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "content",
+          "evidence": [
+            "5.6 cups",
+            "pressure"
+          ]
+        }
+      },
+      {
+        "caseId": "safe-egg-yolk-finish",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "content",
+          "evidence": [
+            "160 F"
+          ]
+        }
+      },
+      {
+        "caseId": "safe-whole-cut-pork-complete-meal",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "content",
+          "evidence": [
+            "batches",
+            "145 F",
+            "3-minute rest",
+            "omit the 30-minute claim"
+          ]
+        }
+      }
+    ]
+  },
+  "evaluatedAt": "2026-08-13T10:04:50.591Z"
+}

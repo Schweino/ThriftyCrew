@@ -227,3 +227,56 @@
 [2026-08-12T09:09:12] SUPPRESSED (already sent this type today) 'Grocery: GUARDS FAILED - board not published - 2026-08-12' [type: grocery guards failed board not published]
 [2026-08-12T09:09:17] QUEUE ABSORBED into open item 2026-08-07-fb1fee (day 5 of this condition, count now 11) - no new id minted
 [2026-08-12T09:09:17] SUPPRESSED (already sent this type today) 'Grocery: Walmart full capture aging - 2026-08-12' [type: grocery walmart full capture aging]
+[2026-08-12T09:13:07] QUEUE ABSORBED into open item 2026-08-09-e547d0 (day 3 of this condition, count now 4) - no new id minted
+[2026-08-12T09:13:09] SENT 'smp-feed edge did not pick up today's push - 2026-08-12' -> schweino68@gmail.com (id 19ff651e173b644e)
+[2026-08-12T12:10:05] SENT 'ThriftyCrew V3 local job failed: daily-engine' -> schweino68@gmail.com (id 19ff6f3df4f477fb)
+[2026-08-12T12:23:13] QUEUE ABSORBED into open item 2026-08-11-35684e (day 1 of this condition, count now 3) - no new id minted
+[2026-08-12T12:23:13] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: family-fare-paced' [type: thriftycrew v local job failed family fare paced]
+[2026-08-12T15:23:11] QUEUE ABSORBED into open item 2026-08-11-35684e (day 1 of this condition, count now 4) - no new id minted
+[2026-08-12T15:23:11] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: family-fare-paced' [type: thriftycrew v local job failed family fare paced]
+[2026-08-12T18:23:40] QUEUE ABSORBED into open item 2026-08-11-35684e (day 1 of this condition, count now 5) - no new id minted
+[2026-08-12T18:23:40] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: family-fare-paced' [type: thriftycrew v local job failed family fare paced]
+[2026-08-12T18:50:33] SENT 'ThriftyCrew V3 local agent cycle failed: Recipe' -> schweino68@gmail.com (id 19ff8627d0d71ea0)
+[2026-08-12T19:11:31] SENT 'ThriftyCrew V3 local job failed: promotion-boundary' -> schweino68@gmail.com (id 19ff875b13bd60d4)
+[2026-08-12T19:21:39] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: promotion-boundary' [type: thriftycrew v local job failed promotion boundary]
+[2026-08-12T21:24:05] QUEUE ABSORBED into open item 2026-08-11-35684e (day 1 of this condition, count now 6) - no new id minted
+[2026-08-12T21:24:05] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: family-fare-paced' [type: thriftycrew v local job failed family fare paced]
+[2026-08-12T22:44:22] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T00:23:40] QUEUE ABSORBED into open item 2026-08-11-35684e (day 2 of this condition, count now 7) - no new id minted
+[2026-08-13T00:23:41] SENT 'ThriftyCrew V3 local job failed: family-fare-paced' -> schweino68@gmail.com (id 19ff9937ac6c9928)
+[2026-08-13T03:23:41] QUEUE ABSORBED into open item 2026-08-11-35684e (day 2 of this condition, count now 8) - no new id minted
+[2026-08-13T03:23:41] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: family-fare-paced' [type: thriftycrew v local job failed family fare paced]
+[2026-08-13T03:31:23] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 3) - no new id minted
+[2026-08-13T03:31:24] SENT 'ThriftyCrew V3 local agent cycle failed: Recipe' -> schweino68@gmail.com (id 19ffa3f54fd8a9c3)
+[2026-08-13T05:08:56] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 4) - no new id minted
+[2026-08-13T05:08:56] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T05:27:18] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 5) - no new id minted
+[2026-08-13T05:27:18] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T05:52:48] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 6) - no new id minted
+[2026-08-13T05:52:48] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T05:53:27] QUEUE ABSORBED into open item 2026-08-12-7ec698 (day 1 of this condition, count now 7) - no new id minted
+[2026-08-13T05:53:27] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local agent cycle failed: Recipe' [type: thriftycrew v local agent cycle failed recipe]
+[2026-08-13T06:09:11] SENT 'Baker's ad window advanced with no capture behind it' -> schweino68@gmail.com (id 19ffacfca527ebe6)
+[2026-08-13T06:09:12] SENT 'Grocery: Wednesday browser refresh MISSED - week of 2026-08-12' -> schweino68@gmail.com (id 19ffacfd174fc166)
+[2026-08-13T06:10:48] QUEUE ABSORBED into open item 2026-08-12-e3ce13 (day 1 of this condition, count now 3) - no new id minted
+[2026-08-13T06:10:49] SENT 'ThriftyCrew V3 local job failed: promotion-boundary' -> schweino68@gmail.com (id 19ffad148029d053)
+[2026-08-13T06:13:19] QUEUE ABSORBED into open item 2026-08-07-cac5f3 (day 6 of this condition, count now 10) - no new id minted
+[2026-08-13T06:13:20] SENT 'Grocery: semantic sweep found 41 product(s) no rule can see - 2026-08-13' -> schweino68@gmail.com (id 19ffad398d2e0e24)
+[2026-08-13T06:14:48] QUEUE BODY UPGRADED on 2026-08-07-79b768 (743 -> 1574 chars) - a later occurrence carried fuller evidence
+[2026-08-13T06:14:48] QUEUE ABSORBED into open item 2026-08-07-79b768 (day 6 of this condition, count now 9) - no new id minted
+[2026-08-13T06:14:49] SENT 'Grocery matching soundness - review needed' -> schweino68@gmail.com (id 19ffad4f025ace42)
+[2026-08-13T06:16:33] QUEUE ABSORBED into open item 2026-08-09-92a805 (day 4 of this condition, count now 4) - no new id minted
+[2026-08-13T06:16:34] SENT 'Grocery: 4 on-sale item(s) have no everyday fallback - 2026-08-13' -> schweino68@gmail.com (id 19ffad68c1bd8b11)
+[2026-08-13T06:17:27] QUEUE ABSORBED into open item 2026-08-12-2f6bba (day 1 of this condition, count now 3) - no new id minted
+[2026-08-13T06:17:28] SENT 'Database constraint refused a write' -> schweino68@gmail.com (id 19ffad76179e15f5)
+[2026-08-13T06:17:30] QUEUE ABSORBED into open item 2026-08-12-fb9d1d (day 1 of this condition, count now 3) - no new id minted
+[2026-08-13T06:17:31] SENT 'A write broke cross-store integrity' -> schweino68@gmail.com (id 19ffad76b98b4256)
+[2026-08-13T06:17:34] QUEUE ABSORBED into open item 2026-08-09-817ca5 (day 4 of this condition, count now 10) - no new id minted
+[2026-08-13T06:17:35] SENT 'Board prices aging inside a fresh file' -> schweino68@gmail.com (id 19ffad77ad849785)
+[2026-08-13T06:19:52] QUEUE ABSORBED into open item 2026-08-07-058ac6 (day 6 of this condition, count now 8) - no new id minted
+[2026-08-13T06:19:53] SENT 'Grocery: 1 NEW price flag(s) - 2026-08-13' -> schweino68@gmail.com (id 19ffad996e21496d)
+[2026-08-13T06:20:31] QUEUE ABSORBED into open item 2026-08-10-740129 (day 3 of this condition, count now 5) - no new id minted
+[2026-08-13T06:20:32] SENT 'Grocery: GUARDS FAILED - board not published - 2026-08-13' -> schweino68@gmail.com (id 19ffada2edeb9c13)
+[2026-08-13T06:23:36] QUEUE ABSORBED into open item 2026-08-11-35684e (day 2 of this condition, count now 9) - no new id minted
+[2026-08-13T06:23:36] SUPPRESSED (already sent this type today) 'ThriftyCrew V3 local job failed: family-fare-paced' [type: thriftycrew v local job failed family fare paced]
+[2026-08-13T06:24:27] SENT 'Grocery: test-guards could not evaluate (guards already red on the unmutated board)' -> schweino68@gmail.com (id 19ffaddc56b61382)

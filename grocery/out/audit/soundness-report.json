@@ -1,21 +1,204 @@
 ﻿{
-    "generated":  "2026-08-12 09:02",
+    "generated":  "2026-08-13 06:14",
     "drift_vs_engine":  0,
     "moved":  [
-
+                  {
+                      "name":  "Starbucks Lime Watermelon Refreshers Concentrate 32 Fl Oz",
+                      "from":  "watermelon",
+                      "to":  "limes"
+                  },
+                  {
+                      "name":  "Lunch Buddies Mixed Fruit IN Black Cherry Gel Bowls 4 3 OZ",
+                      "from":  "cherries",
+                      "to":  "fruit-cocktail"
+                  },
+                  {
+                      "name":  "Dole Fruit Bowls Mangoes \u0026 Creme Layers Snacks, 4.3 oz, 4 pack",
+                      "from":  "mangoes",
+                      "to":  "fruit-cups"
+                  },
+                  {
+                      "name":  "Master Of Mixes Grenadine Syrup\r\nCherry \u0026 Pomegranate",
+                      "from":  "cherries",
+                      "to":  "pomegranates"
+                  },
+                  {
+                      "name":  "Saverne Black Pepper \u0026 Lemon Organic Sauerkraut / 16oz Glass",
+                      "from":  "black-pepper",
+                      "to":  "sauerkraut"
+                  },
+                  {
+                      "name":  "Star Kist Pink Salmon, Mango Chipotle, Wild Caught, Skinless, Boneless 2.6 Oz",
+                      "from":  "mangoes",
+                      "to":  "canned-salmon"
+                  },
+                  {
+                      "name":  "Del Monte Cherry Mixed Fruit No Sugar Added Fruit Cup Snacks 4 oz Cup (Pack of 4)",
+                      "from":  "cherries",
+                      "to":  "fruit-cups"
+                  },
+                  {
+                      "name":  "Dole Fruit Bowls Mixed Fruit in Black Cherry Gel, 4.3 oz Cups (4 Pack)",
+                      "from":  "cherries",
+                      "to":  "fruit-cups"
+                  },
+                  {
+                      "name":  "Red Bull Energy Watermelon, 8.4 oz., 24 pk.",
+                      "from":  "watermelon",
+                      "to":  "energy-drinks"
+                  },
+                  {
+                      "name":  "Jolly Rancher Fruit Punch + Mango Ropes 10 Oz",
+                      "from":  "mangoes",
+                      "to":  "fruit-punch"
+                  },
+                  {
+                      "name":  "Electrolit Watermelon Lime Electrolyte Beverage 21 Fl Oz",
+                      "from":  "watermelon",
+                      "to":  "sports-drinks"
+                  },
+                  {
+                      "name":  "Great Value Cherry Mixed Fruit, 4 oz, 12 Count",
+                      "from":  "cherries",
+                      "to":  "fruit-cocktail"
+                  }
               ],
     "dropped":  [
                     {
+                        "name":  "Claeys Hard Candies,  Old Fashioned, Watermelon 6 Oz",
+                        "from":  "watermelon"
+                    },
+                    {
+                        "name":  "Watermelon Spears 16 OZ",
+                        "from":  "watermelon"
+                    },
+                    {
+                        "name":  "Crazy Fresh Sliced Mango",
+                        "from":  "mangoes"
+                    },
+                    {
+                        "name":  "Chobani 20g Protein Cherry Berry Ygr",
+                        "from":  "cherries"
+                    },
+                    {
+                        "name":  "Salsagheti Watermelon, 0.84 oz., 24 pk.",
+                        "from":  "watermelon"
+                    },
+                    {
+                        "name":  "Red Thunder Watermelon 48 FL OZ",
+                        "from":  "watermelon"
+                    },
+                    {
+                        "name":  "Charms Watermelon Fluffy Stuff",
+                        "from":  "watermelon"
+                    },
+                    {
+                        "name":  "Finest Reserve Cherry Habanero Pepper Jelly 9 Oz",
+                        "from":  "cherries"
+                    },
+                    {
+                        "name":  "Good2Grow BIGGER - Watermelon Berry Twist",
+                        "from":  "watermelon"
+                    },
+                    {
                         "name":  "Butterball All Natural Fresh Turkey Breakfast Sausage, 16 oz. Roll",
                         "from":  "breakfast-sausage"
+                    },
+                    {
+                        "name":  "Marketside Fresh Cut Mango, 16 oz Tray",
+                        "from":  "mangoes"
                     },
                     {
                         "name":  "Johnsonville Fully Cooked Turkey Breakfast Sausage Links",
                         "from":  "breakfast-sausage"
                     },
                     {
+                        "name":  "Mango Cubes Fresh Cut In Store Daily",
+                        "from":  "mangoes"
+                    },
+                    {
+                        "name":  "McCormick Seasoning, Himalayan Pink Salt with Black Pepper and Garlic, 6.5 oz Bottle",
+                        "from":  "black-pepper"
+                    },
+                    {
+                        "name":  "Alani Nu Cherry Slush Sugar Free Energy 12 Fl Oz (Pack of 6)",
+                        "from":  "cherries"
+                    },
+                    {
+                        "name":  "Starbucks Mango Dragonfruit Refreshers Concentrate 32 Fl Oz",
+                        "from":  "mangoes"
+                    },
+                    {
+                        "name":  "Summit Popz Cherry Limeade 12 FL OZ",
+                        "from":  "cherries"
+                    },
+                    {
+                        "name":  "Marketside Fresh Whole Watermelon Center, 32 oz",
+                        "from":  "watermelon"
+                    },
+                    {
+                        "name":  "McCormick Seasoning, Garlic, Herb and Black Pepper and Sea Salt, 4.37 oz Bottle",
+                        "from":  "black-pepper"
+                    },
+                    {
+                        "name":  "Summit Watermelon 12 FL OZ",
+                        "from":  "watermelon"
+                    },
+                    {
+                        "name":  "5 Hour Energy Watermelon Energy Shot 1.93 Fl Oz",
+                        "from":  "watermelon"
+                    },
+                    {
+                        "name":  "ICEE Cherry \u0026 Blue Raspberry Freeze Tubes, 3 fl oz, 6 Count",
+                        "from":  "cherries"
+                    },
+                    {
+                        "name":  "RESPAWN By RAZER Watermelon Guava Rush Sugar Free Chewing Mints, 1 oz., 8 pk.",
+                        "from":  "watermelon"
+                    },
+                    {
+                        "name":  "5-hour ENERGY Shot, Extra Strength, Watermelon 1.93 fl. oz., 24 pk.",
+                        "from":  "watermelon"
+                    },
+                    {
+                        "name":  "Del Monte Diced Mango in Extra Light Syrup",
+                        "from":  "mangoes"
+                    },
+                    {
+                        "name":  "Mango Slices 16 OZ",
+                        "from":  "mangoes"
+                    },
+                    {
+                        "name":  "Marketside Watermelon Bowl, 24 oz",
+                        "from":  "watermelon"
+                    },
+                    {
+                        "name":  "Liquid I.V. Hydration Multiplier Sugar-Free Electrolyte Powder Variety Pack, White Peach and Strawberry Watermelon, 30 pk.",
+                        "from":  "watermelon"
+                    },
+                    {
+                        "name":  "Marketside Fresh Cut Mango, 10 oz Tray",
+                        "from":  "mangoes"
+                    },
+                    {
+                        "name":  "Fareway Unsweetened \u0026 Pitted Dark Sweet Cherries",
+                        "from":  "cherries"
+                    },
+                    {
+                        "name":  "Simply Limeade with Cherry Bottle",
+                        "from":  "cherries"
+                    },
+                    {
                         "name":  "Johnsonville Turkey Breakfast Sausage 12 Ea",
                         "from":  "breakfast-sausage"
+                    },
+                    {
+                        "name":  "Watermelon Slices Fresh Divide",
+                        "from":  "watermelon"
+                    },
+                    {
+                        "name":  "SWEETENED MANGO GREAT VALUE BAG 12 OZ",
+                        "from":  "mangoes"
                     }
                 ],
     "new_contested":  [
@@ -45,16 +228,15 @@
                           "Chicken of the Sea Wild Caught Alaskan Pink Salmon in Spring Water, Low Sodium Packet 2.5 oz",
                           "Chobani Flip Low-Fat Greek Yogurt Cookies and Cream 4.5 oz Cup",
                           "Chobani Reduced Fat Blended Honey Vanilla Greek Yogurt",
-                          "CLIF BAR Peanut Butter Banana with Dark Chocolate Energy Protein Bars",
                           "Clorox 2 for Colors Stain Remover and Laundry Additive, Free and Clear, Bleach Free, 66 Fl Oz",
                           "Colorado Premium\u0027s Fresh Corned Beef Brisket Flat, 2.0- 4.25 lb",
                           "Dash Pasta Blend Garlic Pesto, Salt Free Seasoning Blend, 2.0 oz Bottle",
                           "Del Monte No Soy Teriyaki Whole Green Beans, 14.5 oz. Can",
                           "Del Monte Whole Kernel Southwest Style Corn with Poblano \u0026 Red Peppers",
                           "Dippin Stix Sliced Apples \u0026 Peanut Butter, 2.75oz",
-                          "Dole Fruit Bowls No Sugar Added Mixed Fruit in Cherry Gel, 4.3 oz Cups (4 Pack)",
                           "Dole Mandarin Oranges in 100% Fruit Juice From Concentrate**, 15 oz Can",
                           "Dole Tropical Fruit, Pineapple and Papaya, No Sugar Added, 15.25 oz Can",
+                          "Dove Body Wash for 24hr Lotion-Soft Skin Rejuvenate Pomegranate \u0026 Hibiscus Moisturizing Cleanser",
                           "Dove Body Wash with Pump For 24hr Lotion-Soft Skin Renew Peony \u0026 Rose Oil Moisturizing Skin Cleanser",
                           "eos Shea Better Travel Shave Cream - Pomegranate Raspberry | 2.5oz",
                           "eos Shea Better Women\u0027s Shave Cream - Pomegranate Raspberry | 7 fl oz",
@@ -69,10 +251,8 @@
                           "Fritos Flavor Twists  Spicy Dill Pickle Corn Chips Bag, 3.375 oz",
                           "Gatorade Protein Bars Peanut Butter Chocolate , 2.8 Oz 4ct",
                           "Germ-X Subtle Green Apple Scented Hand Sanitizer, Vitamin E \u0026 Plant-Based Alcohol, {8 fl oz}",
-                          "GoGo squeeZ Fruit \u0026 VeggieZ No Sugar Added Berry/Pear Applesauce Pouches",
                           "Goodles Twirly Mac \u0026 Cheese Cheddar Weather 5.25oz",
                           "Great Value All Purpose Cleaner with Bleach, Refill, 64 fl oz",
-                          "Great Value Black Pepper \u0026 Iodized Salt, 5.25 oz",
                           "Great Value Twist \u0026 Shout Thin \u0026 Crispy Chocolate Sandwich Cookies, 10.9 Oz.",
                           "Great Value Ultra Antibacterial Dish Liquid, Crisp Apple, 28 fl oz",
                           "Green Giant Steamers Lightly Sauced Roasted Red Potatoes, Green Beans \u0026 Rosemary",
@@ -82,8 +262,6 @@
                           "Honey Pot 100% Organic Cotton Cover Cooling Herbal Infusion Overnight Pads, 12 Count",
                           "HORMEL GATHERINGS, Hard Salami and Pepperoni withCheese and Crackers, Refrigerated, 28 oz Plastic Tray",
                           "Kinder\u0027s Caramelized Onion Butter Seasoning, 6.2 oz",
-                          "Kinder\u0027s Chipotle Garlic With Sea Salt \u0026 Lime Grilling Glaze \u0026 Marinade",
-                          "King Arthur Baking Company Buttermilk Flour Blend",
                           "Kleenex Lotion with Coconut Oil 3-Ply Cube Box Facial Tissues, 4 Pack (240 Total Tissues)",
                           "Kleenex Lotion with Coconut Oil 3-Ply Flat Box Facial Tissues, 1 Pack (120 Total Tissues)",
                           "Kleenex Lotion with Coconut Oil 3-Ply Flat Box Facial Tissues, 4 Pack (480 Total Tissues)",
@@ -116,18 +294,19 @@
                           "Pineapple Ginger ORG",
                           "Pledge Antibacterial Multi Surface Cleaner Spray, Fresh Citrus - Household Antibacterial Spray (2 Pack Aerosol), 9.7 oz",
                           "Private Selection Black Forest Ham Egg and Cheddar Cheese Everything Bagel Breakfast Sandwich",
+                          "Pure Organic Strawberry Banana 6.2oz",
                           "Quaker Chewy Peanut Butter Chocolate Chip, 15.2 OZ",
                           "Rice A Roni Rice Vermicelli Beef Broth And Carrots Beef Flavor 6.8 oz.",
                           "RITZ Bits Flavor Charged Fiesta Salsa Sandwich Crackers, Lunch Snacks, 8.8 oz",
                           "RITZ Hint of Salt Crackers, Snacks for Kids and Adults, Lunch Snacks, 13.7 oz",
                           "ROTEL Hot Diced Tomatoes with Habaneros, 10 oz",
                           "Salad Pizazz! Dried Cranberries \u0026 Honey Almonds Fruit \u0026 Nut Topping, 3.5 oz, No Artificial Flavors or Colors",
+                          "Samyang Tangle Creamy Mushroom Pasta Big Bowl",
                           "Scent Theory Hand Sanitizer Spray, Brazilian Coconut, 1 fl oz",
                           "Scent Theory Hand Sanitizer Spray, Cherry Chai, 1 fl oz",
                           "Scent Theory Hand Sanitizer Spray, Juicy Pear, 1 fl oz",
                           "Scent Theory Hand Sanitizer Spray, Raspberry Mango, 1 fl oz",
                           "Siete Foods Poblano Mexican Rice Seasoning, Gluten Free, 1.01 oz",
-                          "SKINNY POP Sea Salt Flavor Microwave Popcorn 6-Pack Box",
                           "Smart Care Scented Hand Sanitizer Spray, Watermelon, 1.35 fl oz",
                           "Smuckers Pineapple Preserves, 18 oz Jar",
                           "Stauffer\u0027s Simply Animals Glazed Cinnamon Animal Cookies, Fun Kid Snacks, 20oz Family-Size",
@@ -137,7 +316,7 @@
                           "Thai Kitchen Gluten Free Gluten Free Brown Rice Noodles, 8.0 oz Box",
                           "That\u0027s It. Crispy, Gluten-Free, Organic Apple + Cinnamon Crunchables, 6 Count",
                           "That\u0027s It. Crispy, Gluten-Free, Organic Apple + Strawberry Crunchables, 6 Count",
-                          "True Fruit Cherry Mixed Fruit Cup Snacks, 7 oz",
+                          "Veggiecraft Zucchini Penne",
                           "Velveeta Shells and Cheese Queso Blanco Mac and Cheese, 1 Box, for Easy Dinner or Dinner Sides, Made with Real Cheese, 12 oz",
                           "Vlasic Stackers Bread \u0026 Butter Pickles, 24 fl. oz.",
                           "Wild Oats Marketplace Organic Basil Leaves, 0.5 oz",

@@ -211,6 +211,17 @@ export interface NativeEngineSnapshot {
   currentReleaseId: string;
   inputHash: string;
   inputBatchIds: string[];
+  contentBatchIds?: string[];
+  contentRecipeHash?: string;
+  contentRecipes?: Array<{
+    sourceCandidateId: string; sourceServings: number; slug: string; title: string; servings: 14;
+    cuisine: string; proteinClass: string; method: string;
+    sourceNutrition?: { calories: number; proteinGrams: number | null; carbohydrateGrams: number };
+    ingredients: Array<{ name: string; grams: number; commodityId: string; sourceLine: string }>;
+    mealComponents: Array<{ role: "main" | "substantial-accompaniment"; label: string; commodityIds: string[] }>;
+    instructions: Array<{ text: string; usesCommodityIds: string[] }>;
+    provenance: Array<{ url: string; accessedAt: string }>;
+  }>;
   rawCandidateEncoding?: "full" | "unmatched-only" | "omitted";
   transportEncoding?: "json-rows-v1" | "tuples-v1" | "r2-shards-v1";
   transportBytes?: number;

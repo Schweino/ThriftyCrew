@@ -1,0 +1,106 @@
+{
+  "id": "eval_4b3185410b2b993c3c6deeeab96bbbfd",
+  "agentId": "recipe-auditor",
+  "executionConfigHash": "bd7c53fc05c37882c002ad406a591e63fc7992c8f23945fc380d613f962116ac",
+  "modelId": "gpt-5.6-sol",
+  "corpusHash": "45dd588894d00051e35da2dabd2c598e0b433096f5f6e14f0232b30a66cdf654",
+  "evaluatorVersion": "deterministic-recipe-auditor-v3",
+  "caseCount": 7,
+  "passedCount": 7,
+  "scoreMillis": 1000,
+  "thresholdMillis": 950,
+  "passed": true,
+  "detail": {
+    "cases": [
+      {
+        "caseId": "valid",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "pass",
+          "evidence": [
+            "The bean main and tomato vegetable base form a coherent served dish, with the substantial accompaniment providing about 198 grams per serving.",
+            "All purchased ingredients are used in the instructions, and the commodity IDs agree across ingredients, components, and instruction usage.",
+            "The 14-serving gram quantities plausibly scale the original 4-serving source lines, and provenance is present."
+          ]
+        }
+      },
+      {
+        "caseId": "ingredient-step-mismatch",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "fail",
+          "evidence": [
+            "The instruction uses cilantro, but no cilantro ingredient is listed or purchased."
+          ]
+        }
+      },
+      {
+        "caseId": "unsafe-chicken",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "fail",
+          "evidence": [
+            "Food-safety risk: raw-chicken instructs serving chicken raw, creating a serious pathogen hazard."
+          ]
+        }
+      },
+      {
+        "caseId": "registered-smoked-sausage-commodity",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "pass",
+          "evidence": [
+            "smoked sausage is validly covered by the kielbasa commodity; zucchini noodles provide a 100 g-per-serving substantial accompaniment; scaled quantities match the 4-to-14-serving factor; both purchased ingredients are used."
+          ]
+        }
+      },
+      {
+        "caseId": "precise-volume-with-produce-count",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "pass",
+          "evidence": [
+            "1.5 cups is the precise source quantity; scaling it from 5 to 14 servings supports 672 g of diced onions despite the approximate parenthetical produce count.",
+            "Broccoli provides about 78.6 g per serving, exceeding the 70 g substantial-accompaniment threshold.",
+            "All purchased ingredients are used and their commodity IDs agree with the declared meal components and instruction usage."
+          ]
+        }
+      },
+      {
+        "caseId": "quantified-process-water",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "pass",
+          "evidence": [
+            "The quantified 5.6 cups is permissible non-purchased process water used for pressure-cooking."
+          ]
+        }
+      },
+      {
+        "caseId": "standalone-protein-is-not-complete-meal",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "fail",
+          "evidence": [
+            "herb-chicken: The claimed accompaniment is only 525 g of onion, or 37.5 g per serving, below the required 70 grams per serving; an onion cooking bed is an aromatic, not a meaningful substantial accompaniment, so this is standalone protein rather than a complete meal."
+          ]
+        }
+      }
+    ]
+  },
+  "evaluatedAt": "2026-08-13T10:07:57.285Z"
+}

@@ -1,0 +1,81 @@
+{
+  "id": "eval_8e0566a37e38c12512d2381e8f805585",
+  "agentId": "recipe-mapper",
+  "executionConfigHash": "ee53c2259991dc1d57ac2034a5e0004814e73e7507d1e156964e6c1147f865b7",
+  "modelId": "gpt-5.6-sol",
+  "corpusHash": "ee32198a4c6987abf481471ab00cc0fdb16b2a53c73e3e6c1237c6c166c6f980",
+  "evaluatorVersion": "deterministic-recipe-mapper-v3",
+  "caseCount": 5,
+  "passedCount": 5,
+  "scoreMillis": 1000,
+  "thresholdMillis": 950,
+  "passed": true,
+  "detail": {
+    "cases": [
+      {
+        "caseId": "known-alias",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "chickpeas",
+          "evidence": [
+            "garbanzo is an ordinary alias for chickpeas."
+          ]
+        }
+      },
+      {
+        "caseId": "unknown-commodity",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "unmapped",
+          "evidence": [
+            "dragonfruit powder is not present in the commodity catalog; the only catalog item is Apples."
+          ]
+        }
+      },
+      {
+        "caseId": "missing-yield",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "chicken-breast",
+          "evidence": [
+            "Ingredient maps to Chicken breast.",
+            "Source yield is null, so scaling is unresolved."
+          ]
+        }
+      },
+      {
+        "caseId": "standard-unmodified-grocery-form",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "mapped",
+          "evidence": [
+            "Unmodified onion maps to onions.",
+            "Chopped garlic maps to fresh garlic."
+          ]
+        }
+      },
+      {
+        "caseId": "explicit-form-conflict",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "unmapped",
+          "evidence": [
+            "Explicit jarred minced garlic conflicts with the catalog commodity Fresh garlic.",
+            "jarred"
+          ]
+        }
+      }
+    ]
+  },
+  "evaluatedAt": "2026-08-13T03:29:33.605Z"
+}

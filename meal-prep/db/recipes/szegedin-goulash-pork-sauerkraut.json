@@ -25,7 +25,7 @@
                  "protein":  42,
                  "carbs":  54,
                  "fat":  30,
-                 "cost_ps":  "3.09"
+                 "cost_ps":  "3.15"
              },
     "intro_html":  "Szegedin goulash, or szekely gulyas, is the Hungarian braise that pairs pork shoulder with sauerkraut and a serious amount of sweet paprika, then finishes it with sour cream. It is tangy, smoky and rich all at once, and nothing else in the library tastes like it. It carries {{protein}} grams of protein at about ${{cost_ps}} a bowl (at everyday cost).",
     "ingredients_display":  [
@@ -221,7 +221,7 @@
                  "prepTime":  "PT25M",
                  "cookTime":  "PT2H",
                  "totalTime":  "PT2H25M",
-                 "costPerServing":  3.09,
+                 "costPerServing":  3.15,
                  "recipeIngredient":  [
                                           "Hickory Smoked Bacon, 0.25 lb (168 g)",
                                           "Yellow Onion, 5 onions (525 g)",

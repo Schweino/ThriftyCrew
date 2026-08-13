@@ -109,7 +109,7 @@ export async function evaluateReleaseIntegrity(env: WorkerEnv, releaseId: string
       }
       if (!releaseRegistry?.content_hash || ingredient.conversionRegistryHash !== releaseRegistry.content_hash
         || typeof ingredient.conversionId !== "string" || !ingredient.conversionId
-        || !["recipe-scaler-exception", "ingredient-definition"].includes(String(ingredient.conversionSource))
+        || !["recipe-scaler-exception", "ingredient-definition", "commodity-mass-unit"].includes(String(ingredient.conversionSource))
         || ingredient.conversionConfidence !== "moderate") {
         conversionFindings.push({ key: `${cost.recipe_slug}:${index}`, message: "Recipe ingredient conversion is outside the immutable governed registry", evidence: { ingredient: ingredient.item, conversionId: ingredient.conversionId ?? null, conversionRegistryHash: ingredient.conversionRegistryHash ?? null, releaseRegistryHash: releaseRegistry?.content_hash ?? null } });
       }

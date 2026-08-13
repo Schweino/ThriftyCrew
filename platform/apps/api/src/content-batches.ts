@@ -16,6 +16,9 @@ export async function evaluateContentPromotion(
   const slugs = new Set<string>();
   const titles = new Set<string>();
   for (const item of items) {
+    if (!item.sourceNutrition) {
+      findings.push({ key: `missing-source-nutrition:${item.slug}`, severity: "hard", message: "recipe lacks durable source calories and total-carbohydrate facts", itemSlug: item.slug });
+    }
     if (slugs.has(item.slug)) findings.push({ key: `duplicate-slug:${item.slug}`, severity: "hard", message: "recipe slug is duplicated", itemSlug: item.slug });
     slugs.add(item.slug);
     const normalizedTitle = normalizeName(item.title);

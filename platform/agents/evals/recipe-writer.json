@@ -68,9 +68,10 @@
     {
       "id": "safe-egg-yolk-finish",
       "input": {
-        "candidate": { "id": "candidate-carbonara", "title": "Cauliflower Carbonara" },
+        "candidate": { "id": "candidate-carbonara", "title": "Cauliflower Carbonara", "sourceUrl": "https://example.test/carbonara", "accessedAt": "2026-08-10T12:00:00Z", "sourceServings": 4, "cuisine": "Italian", "proteinClass": "eggs", "sourceNutrition": { "calories": 554, "proteinGrams": 15, "carbohydrateGrams": 9 } },
         "readyForWriting": true,
         "ingredients": [{ "sourceLine": "1 egg yolk", "sourceName": "egg yolk", "grams": 59.5, "commodityId": "eggs" }],
+        "mealComponents": [{ "role": "main", "label": "egg sauce", "commodityIds": ["eggs"] }, { "role": "substantial-accompaniment", "label": "cauliflower", "commodityIds": ["eggs"] }],
         "method": "Finish the hot sauce with egg yolk."
       },
       "expect": { "decision": "content", "mustMention": ["160 F"] }
@@ -78,12 +79,13 @@
     {
       "id": "safe-stuffed-poultry-center",
       "input": {
-        "candidate": { "id": "candidate-stuffed-chicken", "title": "Spinach Ricotta Stuffed Chicken" },
+        "candidate": { "id": "candidate-stuffed-chicken", "title": "Spinach Ricotta Stuffed Chicken", "sourceUrl": "https://example.test/stuffed-chicken", "accessedAt": "2026-08-10T12:00:00Z", "sourceServings": 4, "cuisine": "Italian American", "proteinClass": "chicken", "sourceNutrition": { "calories": 511, "proteinGrams": 70.5, "carbohydrateGrams": 5 } },
         "readyForWriting": true,
         "ingredients": [
           { "sourceLine": "2.5 lb chicken breasts", "sourceName": "chicken breasts", "grams": 3968.9, "commodityId": "chicken-breast" },
           { "sourceLine": "1 egg white", "sourceName": "egg white", "grams": 105, "commodityId": "eggs" }
         ],
+        "mealComponents": [{ "role": "main", "label": "stuffed chicken", "commodityIds": ["chicken-breast"] }, { "role": "substantial-accompaniment", "label": "spinach ricotta filling", "commodityIds": ["eggs"] }],
         "method": "Stuff raw chicken with an egg-containing spinach and ricotta filling, then bake."
       },
       "expect": { "decision": "content", "mustMention": ["center of the stuffing", "165 F"] }

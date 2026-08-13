@@ -1,0 +1,68 @@
+{
+  "id": "eval_0e969fe08f56f9ee4a8e979f9fee60ff",
+  "agentId": "recipe-auditor",
+  "executionConfigHash": "1e53b0b5adf39b48a1281a7c76349cbb832f842010250d50a677b532bb91c770",
+  "modelId": "gpt-5.6-sol",
+  "corpusHash": "21400aff05ed380d190533d32ae128f2b55dfa6f34933878a6ccd3c7f4b3780a",
+  "evaluatorVersion": "deterministic-recipe-auditor-v3",
+  "caseCount": 4,
+  "passedCount": 4,
+  "scoreMillis": 1000,
+  "thresholdMillis": 950,
+  "passed": true,
+  "detail": {
+    "cases": [
+      {
+        "caseId": "valid",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "pass",
+          "evidence": [
+            "Bean Chili contains a genuine bean main and a substantial tomato accompaniment of about 198 grams per serving.",
+            "All purchased ingredients are used in the instructions, and all instruction commodity ids match declared ingredients.",
+            "The 14-serving gram quantities plausibly scale the original 4-serving source lines, and provenance is present."
+          ]
+        }
+      },
+      {
+        "caseId": "ingredient-step-mismatch",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "fail",
+          "evidence": [
+            "ingredient-step mismatch: the instruction requires cilantro, but cilantro is absent from the purchased ingredients."
+          ]
+        }
+      },
+      {
+        "caseId": "unsafe-chicken",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "fail",
+          "evidence": [
+            "Food safety risk: the instruction says to serve chicken raw, creating a serious pathogen hazard."
+          ]
+        }
+      },
+      {
+        "caseId": "standalone-protein-is-not-complete-meal",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "fail",
+          "evidence": [
+            "The claimed substantial accompaniment is only 525 g of onion for 14 servings (37.5 g per serving), below the required 70 grams per serving; an onion cooking bed is an aromatic rather than a meaningful substantial accompaniment, so this is standalone protein rather than a complete meal."
+          ]
+        }
+      }
+    ]
+  },
+  "evaluatedAt": "2026-08-13T08:21:18.248Z"
+}

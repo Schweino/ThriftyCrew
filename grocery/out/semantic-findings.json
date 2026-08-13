@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-08-12 09:01",
+    "generated":  "2026-08-13 06:13",
     "board":  "comparison-2026-08-12.json",
-    "sidecar_generated":  "2026-08-12 09:01:17",
+    "sidecar_generated":  "2026-08-13 06:13:17",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,9 +9,9 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2877,
-                     "corpus":  35027,
-                     "rule_invisible":  6311
+                     "board_pairs":  2876,
+                     "corpus":  35082,
+                     "rule_invisible":  6390
                  },
     "identity_count":  0,
     "coverage_count":  41,
@@ -101,22 +101,22 @@
                      },
                      {
                          "kind":  "coverage",
-                         "id":  "bar-soap",
-                         "commodity":  "Bar Soap",
-                         "store":  "Baker\u0027s",
-                         "product":  "Caress Daily Silk Cleansing Bar, White Peach \u0026 Orange Blossom Moisturizing Body Soap",
-                         "cos":  0.6953,
-                         "score":  0.955202,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
                          "id":  "quart-storage-bags",
                          "commodity":  "Food Storage Bags (quart)",
                          "store":  "Walmart",
                          "product":  "Ziploc Brand Food Storage Bags, School Supplies, with Grip \u0027n Seal Technology, Zipper, Quart, 50 Count",
                          "cos":  0.7096,
                          "score":  0.954744,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "bar-soap",
+                         "commodity":  "Bar Soap",
+                         "store":  "Baker\u0027s",
+                         "product":  "Caress Daily Silk Cleansing Bar, White Peach \u0026 Orange Blossom Moisturizing Body Soap",
+                         "cos":  0.7059,
+                         "score":  0.951366,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -391,6 +391,16 @@
                      },
                      {
                          "kind":  "coverage",
+                         "id":  "deli-ham",
+                         "commodity":  "Ham (deli / sliced)",
+                         "store":  "Walmart",
+                         "product":  "Marketside Natural Juice Bone-in Spiral Cut Brown Sugar Double Glazed Ham, Pork, 8 - 12 lb, 14g of protein per serving",
+                         "cos":  0.684,
+                         "score":  0.906507,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
                          "id":  "queso",
                          "commodity":  "Queso / Cheese Dip",
                          "store":  "Walmart",
@@ -417,16 +427,6 @@
                          "product":  "Great Value Stuffed Queen Olives with Minced Pimento, 10 oz",
                          "cos":  0.6861,
                          "score":  0.901376,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-pods",
-                         "commodity":  "Laundry Detergent Pods",
-                         "store":  "Walmart",
-                         "product":  "Tide Power PODS Laundry Detergent Soap Pacs with Odor Defense + Oxi, Original Scent, 45 Count",
-                         "cos":  0.7388,
-                         "score":  0.900907,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ]
