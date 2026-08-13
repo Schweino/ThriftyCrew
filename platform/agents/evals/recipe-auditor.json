@@ -62,8 +62,15 @@
         "sourceServings": 4,
         "slug": "smoked-sausage-zoodles",
         "servings": 14,
-        "ingredients": [{ "name": "roasted-garlic smoked sausage", "grams": 1289.4, "commodityId": "kielbasa", "sourceLine": "1 (13-ounce) package roasted-garlic smoked sausage" }],
-        "instructions": [{ "text": "Brown the smoked sausage in batches.", "usesCommodityIds": ["kielbasa"] }]
+        "ingredients": [
+          { "name": "roasted-garlic smoked sausage", "grams": 1289.4, "commodityId": "kielbasa", "sourceLine": "1 (13-ounce) package roasted-garlic smoked sausage" },
+          { "name": "zucchini noodles", "grams": 1400, "commodityId": "zucchini", "sourceLine": "4 large zucchini" }
+        ],
+        "mealComponents": [
+          { "role": "main", "label": "smoked sausage", "commodityIds": ["kielbasa"] },
+          { "role": "substantial-accompaniment", "label": "zucchini noodles", "commodityIds": ["zucchini"] }
+        ],
+        "instructions": [{ "text": "Brown the smoked sausage in batches, then serve with the zucchini noodles.", "usesCommodityIds": ["kielbasa", "zucchini"] }]
       },
       "expect": { "decision": "pass", "mustMention": ["smoked sausage"] }
     },
@@ -74,8 +81,17 @@
         "sourceServings": 5,
         "slug": "broccoli-soup",
         "servings": 14,
-        "ingredients": [{ "name": "diced onions", "grams": 672, "commodityId": "onions", "sourceLine": "1.5 cups diced onions (1/2 onion)" }],
-        "instructions": [{ "text": "Cook the diced onions until soft.", "usesCommodityIds": ["onions"] }]
+        "title": "Broccoli Cheddar Soup",
+        "ingredients": [
+          { "name": "diced onions", "grams": 672, "commodityId": "onions", "sourceLine": "1.5 cups diced onions (1/2 onion)" },
+          { "name": "cheddar", "grams": 900, "commodityId": "cheddar", "sourceLine": "3 cups cheddar" },
+          { "name": "broccoli", "grams": 1100, "commodityId": "broccoli", "sourceLine": "4 cups broccoli" }
+        ],
+        "mealComponents": [
+          { "role": "main", "label": "cheddar soup base", "commodityIds": ["cheddar"] },
+          { "role": "substantial-accompaniment", "label": "broccoli", "commodityIds": ["broccoli"] }
+        ],
+        "instructions": [{ "text": "Cook the diced onions until soft, then add the cheddar and broccoli.", "usesCommodityIds": ["onions", "cheddar", "broccoli"] }]
       },
       "expect": { "decision": "pass", "mustMention": ["1.5 cups"] }
     },
