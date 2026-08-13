@@ -1431,12 +1431,16 @@ if (command === "status") {
     })
     : { ok: true, applied: false, gapId: research.gapId, disposition: research.disposition };
 } else if (command === "ingredient" && subcommand === "apply-ready") {
-  const response = await (await mutationClient()).request("/internal/ingredient-gaps?status=ready_to_publish", { method: "GET" }) as {
+  const limit = arguments_[0] === undefined ? 20 : Number(arguments_[0]);
+  if (!Number.isInteger(limit) || limit < 1 || limit > 50) throw new Error("tc ingredient apply-ready limit must be between 1 and 50");
+  const client = await mutationClient();
+  await client.request("/internal/ingredient-gaps/reconcile", { method: "POST" });
+  const response = await client.request("/internal/ingredient-gaps?status=ready_to_publish", { method: "GET" }) as {
     gaps?: Array<{ id?: string; research_json?: string | null }>;
   };
   const applied: Array<{ gapId: string; commodityId: string }> = [];
   const failed: Array<{ gapId: string; error: string }> = [];
-  for (const gap of response.gaps ?? []) {
+  for (const gap of (response.gaps ?? []).slice(0, limit)) {
     try {
       if (!gap.id || !gap.research_json) throw new Error("ready ingredient gap omitted durable research evidence");
       const research = ingredientPriceResearchSchema.parse(JSON.parse(gap.research_json));
@@ -1451,7 +1455,12 @@ if (command === "status") {
       });
       applied.push({ gapId: research.gapId, commodityId: research.commodityProposal.id });
     } catch (error) {
-      failed.push({ gapId: gap.id ?? "unknown", error: error instanceof Error ? (error.stack ?? error.message) : String(error) });
+      const message = error instanceof Error ? (error.stack ?? error.message) : String(error);
+      const requiresJudgment = /(?:collide|would also claim|already exists|matcher surgery)/i.test(message);
+      if (gap.id) await client.request(`/internal/ingredient-gaps/${encodeURIComponent(gap.id)}/publication-failure`, {
+        method: "POST", json: { error: message, requiresJudgment },
+      });
+      failed.push({ gapId: gap.id ?? "unknown", error: message });
     }
   }
   result = { ok: true, applied, failed };
@@ -1497,8 +1506,22 @@ if (command === "status") {
     sourceRef: supplied.sourceRef ?? "codex-task://ingredient-discovery",
     mode: "missing-ingredients",
     targetMissingIngredients: supplied.targetMissingIngredients ?? 50,
+    targetPublishedIngredients: supplied.targetPublishedIngredients ?? supplied.targetMissingIngredients ?? 50,
   };
   result = await (await mutationClient()).request("/internal/recipe-suggestions", { json: request });
+} else if (command === "ingredient" && subcommand === "campaign") {
+  const [requestId, action, target, workers, batchSize] = arguments_;
+  if (!requestId || !action || !["pause", "resume", "configure"].includes(action)) {
+    throw new Error("tc ingredient campaign requires <request-id> pause|resume|configure [target-published] [workers] [batch-size]");
+  }
+  result = await (await mutationClient()).request(`/internal/ingredient-campaigns/${encodeURIComponent(requestId)}/control`, { json: {
+    action,
+    ...(target !== undefined ? { targetPublishedIngredients: Number(target) } : {}),
+    ...(workers !== undefined ? { desiredPricingWorkers: Number(workers) } : {}),
+    ...(batchSize !== undefined ? { publishBatchSize: Number(batchSize) } : {}),
+  } });
+} else if (command === "ingredient" && subcommand === "reconcile") {
+  result = await (await mutationClient()).request("/internal/ingredient-gaps/reconcile", { method: "POST" });
 } else if (command === "ingredient" && subcommand === "status") {
   const query = arguments_[0] ? `?status=${encodeURIComponent(arguments_[0])}` : "";
   result = await (await mutationClient()).request(`/internal/ingredient-gaps${query}`, { method: "GET" });

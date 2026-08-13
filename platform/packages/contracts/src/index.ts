@@ -1358,7 +1358,20 @@ export const recipeSuggestionRequestSchema = z.object({
   sourceRef: z.string().min(1).max(1000),
   mode: z.enum(["recipe", "missing-ingredients"]).default("recipe"),
   targetMissingIngredients: z.number().int().min(1).max(50).default(50),
+  targetPublishedIngredients: z.number().int().min(1).max(500).optional(),
 });
+
+export const ingredientCampaignControlSchema = z.object({
+  action: z.enum(["pause", "resume", "configure"]),
+  targetPublishedIngredients: z.number().int().min(1).max(500).optional(),
+  desiredPricingWorkers: z.number().int().min(1).max(10).optional(),
+  publishBatchSize: z.number().int().min(1).max(50).optional(),
+}).strict();
+
+export const ingredientPublicationFailureSchema = z.object({
+  error: z.string().trim().min(1).max(5000),
+  requiresJudgment: z.boolean(),
+}).strict();
 
 export const recipeWaveSnapshotSchema = z.object({
   id: nonEmptyId,

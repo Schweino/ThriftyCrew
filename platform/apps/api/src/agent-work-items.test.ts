@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { ingredientPriceResearchSchema, OMAHA_GROCERY_STORE_LOCATION_IDS, recipeMapSchema, recipeSourceCandidatesSchema } from "@thriftycrew/contracts";
-import { assertRecipeChainContinuity, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
+import { assertRecipeChainContinuity, ingredientCampaignPhase, type IngredientCampaignSnapshot, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
 
 const candidate = {
   id: "candidate-bean-chili",
@@ -252,5 +252,27 @@ describe("agent output boundary", () => {
         similarity: { protein: "same", flavor: "same", starch: "same", method: "same" },
       }],
     })).toBe("all candidates were rejected or deduplicated");
+  });
+});
+
+describe("ingredient campaign orchestration", () => {
+  const snapshot = (values: Partial<IngredientCampaignSnapshot> = {}): IngredientCampaignSnapshot => ({
+    requestId: "campaign_200", state: "pricing", targetPublishedIngredients: 200,
+    desiredPricingWorkers: 10, publishBatchSize: 20, pausedAt: null,
+    published: 13, pending: 100, researching: 10, readyToPublish: 20,
+    permanentlyUnavailable: 1, needsOperator: 9, totalUniqueGaps: 153,
+    ...values,
+  });
+
+  it("continues sourcing replacements when unavailable or judgment items leave fewer than the published target viable", () => {
+    expect(ingredientCampaignPhase(snapshot())).toBe("collecting");
+  });
+
+  it("prices without extra sourcing when enough viable gaps remain", () => {
+    expect(ingredientCampaignPhase(snapshot({ pending: 157, researching: 10, readyToPublish: 20 }))).toBe("pricing");
+  });
+
+  it("completes only from published ingredients", () => {
+    expect(ingredientCampaignPhase(snapshot({ published: 200, pending: 50, researching: 5 }))).toBe("completed");
   });
 });

@@ -37,6 +37,8 @@ import {
   agentWorkItemClaimSchema,
   agentWorkItemCompleteSchema,
   agentWorkItemFailSchema,
+  ingredientCampaignControlSchema,
+  ingredientPublicationFailureSchema,
   recipeSuggestionRequestSchema,
   recipeWaveSnapshotSchema,
   recipeWavePublicationSchema,
@@ -91,7 +93,7 @@ import { runServerChaosDrill } from "./chaos-drills";
 import { engineMayWriteCaptureSource } from "./capture-authorization";
 import { evaluateContentPromotion } from "./content-batches";
 import { recipeCommodityIds } from "./recipe-commodity-catalog";
-import { claimAgentWorkItem, completeAgentWorkItem, failAgentWorkItem, reconcileIngredientHolds } from "./agent-work-items";
+import { claimAgentWorkItem, completeAgentWorkItem, failAgentWorkItem, ingredientCampaignSnapshot, reconcileIngredientCampaign, reconcileIngredientHolds } from "./agent-work-items";
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
@@ -1251,11 +1253,16 @@ app.post("/internal/recipe-suggestions", zValidator("json", recipeSuggestionRequ
   ).bind(body.id, body.request, body.sourceRef, body.requestedAt).run();
   if (body.mode === "missing-ingredients") {
     await context.env.DB.prepare(
-      `INSERT INTO ingredient_discovery_batches (request_id, target_missing_ingredients)
-       VALUES (?1, ?2) ON CONFLICT(request_id) DO NOTHING`,
-    ).bind(body.id, body.targetMissingIngredients).run();
+      `INSERT INTO ingredient_discovery_batches
+         (request_id, target_missing_ingredients, target_published_ingredients)
+       VALUES (?1, ?2, ?3) ON CONFLICT(request_id) DO NOTHING`,
+    ).bind(body.id, body.targetMissingIngredients, body.targetPublishedIngredients ?? body.targetMissingIngredients).run();
   }
-  return context.json({ ok: true, requestId: body.id, mode: body.mode, targetMissingIngredients: body.mode === "missing-ingredients" ? body.targetMissingIngredients : null }, 201);
+  return context.json({
+    ok: true, requestId: body.id, mode: body.mode,
+    targetMissingIngredients: body.mode === "missing-ingredients" ? body.targetMissingIngredients : null,
+    targetPublishedIngredients: body.mode === "missing-ingredients" ? (body.targetPublishedIngredients ?? body.targetMissingIngredients) : null,
+  }, 201);
 });
 
 app.get("/internal/ingredient-gaps", async (context) => {
@@ -1272,8 +1279,19 @@ app.get("/internal/ingredient-gaps", async (context) => {
       GROUP BY gap.id ORDER BY gap.first_seen_at DESC, gap.id LIMIT 500`,
   ).bind(requestedStatus ?? null).all();
   const batches = await context.env.DB.prepare(
-    `SELECT request_id, target_missing_ingredients, unique_missing_ingredients, source_round, state, created_at, updated_at
-       FROM ingredient_discovery_batches ORDER BY created_at DESC LIMIT 100`,
+    `SELECT batch.request_id, batch.target_missing_ingredients, batch.target_published_ingredients,
+            batch.desired_pricing_workers, batch.publish_batch_size, batch.paused_at,
+            batch.unique_missing_ingredients, batch.source_round, batch.state, batch.created_at, batch.updated_at,
+            COUNT(DISTINCT CASE WHEN gap.status = 'published' THEN gap.id END) AS published_ingredients,
+            COUNT(DISTINCT CASE WHEN gap.status = 'pending' THEN gap.id END) AS pending_ingredients,
+            COUNT(DISTINCT CASE WHEN gap.status = 'researching' THEN gap.id END) AS researching_ingredients,
+            COUNT(DISTINCT CASE WHEN gap.status = 'ready_to_publish' THEN gap.id END) AS ready_to_publish_ingredients,
+            COUNT(DISTINCT CASE WHEN gap.status = 'permanently_unavailable' THEN gap.id END) AS permanently_unavailable_ingredients,
+            COUNT(DISTINCT CASE WHEN gap.status = 'needs_operator' THEN gap.id END) AS needs_operator_ingredients
+       FROM ingredient_discovery_batches batch
+       LEFT JOIN ingredient_gap_occurrences occurrence ON occurrence.request_id = batch.request_id
+       LEFT JOIN ingredient_gaps gap ON gap.id = occurrence.gap_id
+      GROUP BY batch.request_id ORDER BY batch.created_at DESC LIMIT 100`,
   ).all();
   const holds = await context.env.DB.prepare(
     `SELECT status, COUNT(*) AS count FROM recipe_ingredient_holds GROUP BY status ORDER BY status`,
@@ -1285,6 +1303,51 @@ app.post("/internal/ingredient-gaps/reconcile", async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only an operator may reconcile ingredient publication", 403);
   await reconcileIngredientHolds(context.env.DB);
   return context.json({ ok: true, reconciled: true });
+});
+
+app.post("/internal/ingredient-campaigns/:id/control", zValidator("json", ingredientCampaignControlSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may control an ingredient campaign", 403);
+  const requestId = context.req.param("id");
+  const body = context.req.valid("json");
+  const existing = await ingredientCampaignSnapshot(context.env.DB, requestId);
+  if (!existing) return jsonError("ingredient campaign not found", 404);
+  if (body.action === "pause") {
+    await context.env.DB.batch([
+      context.env.DB.prepare("UPDATE ingredient_discovery_batches SET paused_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1").bind(requestId),
+      context.env.DB.prepare("UPDATE recipe_suggestion_requests SET status = 'running', updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status = 'queued'").bind(requestId),
+    ]);
+  } else {
+    await context.env.DB.prepare(
+      `UPDATE ingredient_discovery_batches
+          SET target_published_ingredients = COALESCE(?2, target_published_ingredients),
+              desired_pricing_workers = COALESCE(?3, desired_pricing_workers),
+              publish_batch_size = COALESCE(?4, publish_batch_size),
+              paused_at = CASE WHEN ?5 = 'resume' THEN NULL ELSE paused_at END,
+              updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1`,
+    ).bind(requestId, body.targetPublishedIngredients ?? null, body.desiredPricingWorkers ?? null,
+      body.publishBatchSize ?? null, body.action).run();
+    await reconcileIngredientCampaign(context.env.DB, requestId);
+  }
+  return context.json({ ok: true, campaign: await ingredientCampaignSnapshot(context.env.DB, requestId) });
+});
+
+app.post("/internal/ingredient-gaps/:id/publication-failure", zValidator("json", ingredientPublicationFailureSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may record ingredient publication failure", 403);
+  const gapId = context.req.param("id");
+  const body = context.req.valid("json");
+  const update = await context.env.DB.prepare(
+    `UPDATE ingredient_gaps SET publication_attempts = publication_attempts + 1, publication_error = ?2,
+       status = CASE WHEN ?3 = 1 THEN 'needs_operator' ELSE status END, updated_at = CURRENT_TIMESTAMP
+     WHERE id = ?1 AND status = 'ready_to_publish'`,
+  ).bind(gapId, body.error, body.requiresJudgment ? 1 : 0).run();
+  if ((update.meta.changes ?? 0) !== 1) return jsonError("ingredient is not awaiting publication", 409);
+  if (body.requiresJudgment) {
+    const campaigns = await context.env.DB.prepare(
+      "SELECT DISTINCT request_id FROM ingredient_gap_occurrences WHERE gap_id = ?1",
+    ).bind(gapId).all<{ request_id: string }>();
+    for (const campaign of campaigns.results) await reconcileIngredientCampaign(context.env.DB, campaign.request_id);
+  }
+  return context.json({ ok: true, gapId, requiresJudgment: body.requiresJudgment });
 });
 
 app.post("/internal/recipe-waves/snapshot", zValidator("json", recipeWaveSnapshotSchema), async (context) => {

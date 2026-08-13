@@ -1,6 +1,6 @@
 param(
   [Parameter(Mandatory=$true)]
-  [ValidateSet('Triage','PostPublish','SourceSentinel','Recipe','IngredientPricing','Accuracy')]
+  [ValidateSet('Triage','PostPublish','SourceSentinel','Recipe','IngredientPricing','IngredientPublication','Accuracy')]
   [string]$Cycle,
   [ValidateRange(1,50)][int]$MaxItems = 1,
   [ValidateRange(0,10)][int]$PricingWorkerSlot = 0,
@@ -25,6 +25,7 @@ $cycleAgents = @{
   SourceSentinel = @('source-sentinel-investigator')
   Recipe = @('recipe-sourcer','recipe-deduper','recipe-mapper','recipe-writer','recipe-auditor')
   IngredientPricing = @('ingredient-price-researcher')
+  IngredientPublication = @()
   Accuracy = @('accuracy-headless')
 }
 $jobByCycle = @{
@@ -149,7 +150,7 @@ function Publish-AgentProposal([string]$AgentId, [string]$WorkItemId, [string]$R
   return [string]$pr.html_url
 }
 
-function Apply-PendingIngredientProposals {
+function Apply-PendingIngredientProposals([int]$BatchSize = 20) {
   $publicationLock = $null
   for ($attempt = 0; $attempt -lt 360 -and -not $publicationLock; $attempt++) {
     $publicationLock = Enter-PcRuntimeLock 'ingredient-config-publication' 300
@@ -188,7 +189,7 @@ function Apply-PendingIngredientProposals {
   $committed = $false
   try {
     Set-PcRuntimeCredential $config 'local-operator'
-    Invoke-LoggedCommand 'ingredient-config-apply-ready' { & $pnpmPath tc ingredient apply-ready } | Out-Null
+    Invoke-LoggedCommand 'ingredient-config-apply-ready' { & $pnpmPath tc ingredient apply-ready $BatchSize } | Out-Null
     $changed = @(git -C $incomeRoot status --porcelain -- $scopedPaths)
     if ($LASTEXITCODE -ne 0) { throw 'could not inspect recovered ingredient configuration changes' }
     if ($changed.Count -eq 0) { return }
@@ -304,17 +305,10 @@ function Publish-ReadyRecipeContent {
 }
 
 function Start-IngredientPricingDrain {
-  $pricingScript = Join-Path $platformRoot 'scripts\run-pc-agent-cycle.ps1'
-  foreach ($slot in 1..10) {
-    $arguments = @(
-      '-NoProfile', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden',
-      '-File', ('"{0}"' -f $pricingScript), '-Cycle', 'IngredientPricing',
-      '-PricingWorkerSlot', [string]$slot, '-MaxItems', '50'
-    )
-    Start-Process -FilePath 'powershell.exe' -ArgumentList $arguments -WindowStyle Hidden | Out-Null
-    Start-Sleep -Milliseconds 900
-  }
-  Write-PcRuntimeLog $logFile 'recipe-mapper queued or advanced ingredient gaps; launched the ten-worker event-driven pricing pool'
+  $supervisorScript = Join-Path $platformRoot 'scripts\run-ingredient-campaign-supervisor.ps1'
+  $arguments = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden', '-File', ('"{0}"' -f $supervisorScript))
+  Start-Process -FilePath 'powershell.exe' -ArgumentList $arguments -WindowStyle Hidden | Out-Null
+  Write-PcRuntimeLog $logFile 'recipe-mapper queued or advanced ingredient gaps; ensured the supervised pricing and batch-publication coordinator is running'
 }
 
 function Invoke-IngredientDownstreamDrain {
@@ -396,23 +390,22 @@ try {
     }
     Publish-ReadyRecipeContent
   } elseif ($Cycle -eq 'IngredientPricing' -and -not $OnlyAgent) {
-    Apply-PendingIngredientProposals
     for ($item = 0; $item -lt $MaxItems; $item++) {
       try {
         if (-not (Invoke-AgentItem 'ingredient-price-researcher')) { break }
-        Apply-PendingIngredientProposals
       } catch {
         Write-PcRuntimeLog $logFile ("ingredient pricing item failed and was durably retained for automatic recovery: {0}" -f $_.Exception.Message)
         Start-Sleep -Seconds 65
       }
     }
+  } elseif ($Cycle -eq 'IngredientPublication' -and -not $OnlyAgent) {
+    Apply-PendingIngredientProposals $MaxItems
     Invoke-IngredientDownstreamDrain
   } else {
     foreach ($agentId in $agentsForCycle) {
       for ($item = 0; $item -lt $MaxItems; $item++) {
         if (-not (Invoke-AgentItem $agentId)) { break }
       }
-      if ($agentId -eq 'ingredient-price-researcher') { Apply-PendingIngredientProposals }
     }
   }
   if ($script:ingredientConfigurationChanged) {

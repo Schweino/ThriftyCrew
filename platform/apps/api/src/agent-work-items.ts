@@ -237,10 +237,11 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
     const rows = await db.prepare(
       `SELECT request.id, request.request_text, request.source_ref, request.requested_at,
               discovery.target_missing_ingredients, discovery.unique_missing_ingredients,
-              discovery.source_round, discovery.state AS discovery_state
+              discovery.target_published_ingredients, discovery.source_round, discovery.state AS discovery_state
          FROM recipe_suggestion_requests request
          LEFT JOIN ingredient_discovery_batches discovery ON discovery.request_id = request.id
-        WHERE request.status = 'queued' ORDER BY request.requested_at, request.id LIMIT 10`,
+        WHERE request.status = 'queued' AND (discovery.request_id IS NULL OR discovery.paused_at IS NULL)
+        ORDER BY request.requested_at, request.id LIMIT 10`,
     ).all<Record<string, unknown>>();
     const commodities = rows.results.length > 0 ? await currentCommodityCatalog(db) : [];
     const sourcingCommodities = commodities.map((commodity) => [commodity.id, commodity.label, commodity.category]
@@ -267,7 +268,7 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
           commodities: sourcingCommodities,
           permanentlyUnavailable: unavailable.results,
           discovery: row.target_missing_ingredients ? {
-            targetMissingIngredients: row.target_missing_ingredients,
+            targetMissingIngredients: row.target_published_ingredients ?? row.target_missing_ingredients,
             uniqueMissingIngredients: row.unique_missing_ingredients,
             sourceRound: row.source_round,
             priorSourceUrls: [...new Set(prior.results.map((item) => item.source_url))],
@@ -334,6 +335,69 @@ async function enqueue(db: D1Database, agent: RegistryRow, seed: WorkSeed, adapt
   return id;
 }
 
+export interface IngredientCampaignSnapshot {
+  requestId: string;
+  state: string;
+  targetPublishedIngredients: number;
+  desiredPricingWorkers: number;
+  publishBatchSize: number;
+  pausedAt: string | null;
+  published: number;
+  pending: number;
+  researching: number;
+  readyToPublish: number;
+  permanentlyUnavailable: number;
+  needsOperator: number;
+  totalUniqueGaps: number;
+}
+
+export function ingredientCampaignPhase(snapshot: IngredientCampaignSnapshot): "collecting" | "pricing" | "completed" {
+  if (snapshot.published >= snapshot.targetPublishedIngredients) return "completed";
+  const viable = snapshot.published + snapshot.pending + snapshot.researching + snapshot.readyToPublish;
+  return viable < snapshot.targetPublishedIngredients ? "collecting" : "pricing";
+}
+
+export async function ingredientCampaignSnapshot(db: D1Database, requestId: string): Promise<IngredientCampaignSnapshot | null> {
+  const row = await db.prepare(
+    `SELECT batch.request_id, batch.state, batch.target_published_ingredients,
+            batch.desired_pricing_workers, batch.publish_batch_size, batch.paused_at,
+            COUNT(DISTINCT gap.id) AS total_unique_gaps,
+            COUNT(DISTINCT CASE WHEN gap.status = 'published' THEN gap.id END) AS published,
+            COUNT(DISTINCT CASE WHEN gap.status = 'pending' THEN gap.id END) AS pending,
+            COUNT(DISTINCT CASE WHEN gap.status = 'researching' THEN gap.id END) AS researching,
+            COUNT(DISTINCT CASE WHEN gap.status = 'ready_to_publish' THEN gap.id END) AS ready_to_publish,
+            COUNT(DISTINCT CASE WHEN gap.status = 'permanently_unavailable' THEN gap.id END) AS permanently_unavailable,
+            COUNT(DISTINCT CASE WHEN gap.status = 'needs_operator' THEN gap.id END) AS needs_operator
+       FROM ingredient_discovery_batches batch
+       LEFT JOIN ingredient_gap_occurrences occurrence ON occurrence.request_id = batch.request_id
+       LEFT JOIN ingredient_gaps gap ON gap.id = occurrence.gap_id
+      WHERE batch.request_id = ?1 GROUP BY batch.request_id`,
+  ).bind(requestId).first<Record<string, unknown>>();
+  if (!row) return null;
+  return {
+    requestId: String(row.request_id), state: String(row.state),
+    targetPublishedIngredients: Number(row.target_published_ingredients),
+    desiredPricingWorkers: Number(row.desired_pricing_workers), publishBatchSize: Number(row.publish_batch_size),
+    pausedAt: row.paused_at ? String(row.paused_at) : null,
+    published: Number(row.published), pending: Number(row.pending), researching: Number(row.researching),
+    readyToPublish: Number(row.ready_to_publish), permanentlyUnavailable: Number(row.permanently_unavailable),
+    needsOperator: Number(row.needs_operator), totalUniqueGaps: Number(row.total_unique_gaps),
+  };
+}
+
+export async function reconcileIngredientCampaign(db: D1Database, requestId: string): Promise<IngredientCampaignSnapshot | null> {
+  const snapshot = await ingredientCampaignSnapshot(db, requestId);
+  if (!snapshot || snapshot.pausedAt) return snapshot;
+  const state = ingredientCampaignPhase(snapshot);
+  await db.batch([
+    db.prepare("UPDATE ingredient_discovery_batches SET state = ?2, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1")
+      .bind(requestId, state),
+    db.prepare("UPDATE recipe_suggestion_requests SET status = ?2, updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status <> 'promoted'")
+      .bind(requestId, state === "completed" ? "reviewed" : state === "collecting" ? "queued" : "running"),
+  ]);
+  return { ...snapshot, state };
+}
+
 export async function reconcileIngredientHolds(db: D1Database): Promise<void> {
   await db.prepare(
     `UPDATE ingredient_gaps SET status = 'published', updated_at = CURRENT_TIMESTAMP
@@ -347,7 +411,11 @@ export async function reconcileIngredientHolds(db: D1Database): Promise<void> {
     `SELECT id, request_id, mapper_work_item_id, candidate_id, candidate_json, gap_ids_json, discovery_only
        FROM recipe_ingredient_holds WHERE status = 'paused' ORDER BY created_at, id`,
   ).all<Record<string, unknown>>();
-  if (holds.results.length === 0) return;
+  if (holds.results.length === 0) {
+    const batches = await db.prepare("SELECT request_id FROM ingredient_discovery_batches ORDER BY request_id").all<{ request_id: string }>();
+    for (const batch of batches.results) await reconcileIngredientCampaign(db, batch.request_id);
+    return;
+  }
   const gapRows = await db.prepare("SELECT id, status FROM ingredient_gaps").all<{ id: string; status: string }>();
   const statuses = new Map(gapRows.results.map((row) => [row.id, row.status]));
   const mapper = await activeAgent(db, "recipe-mapper");
@@ -390,24 +458,8 @@ export async function reconcileIngredientHolds(db: D1Database): Promise<void> {
       db.prepare("UPDATE recipe_suggestion_requests SET status = 'running', updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status <> 'promoted'").bind(hold.request_id),
     ]);
   }
-  const batches = await db.prepare(
-    `SELECT request_id FROM ingredient_discovery_batches WHERE state IN ('pricing', 'attention') ORDER BY request_id`,
-  ).all<{ request_id: string }>();
-  for (const batch of batches.results) {
-    const rows = await db.prepare(
-      `SELECT DISTINCT gap.status FROM ingredient_gap_occurrences occurrence
-       JOIN ingredient_gaps gap ON gap.id = occurrence.gap_id WHERE occurrence.request_id = ?1`,
-    ).bind(batch.request_id).all<{ status: string }>();
-    const states = rows.results.map((row) => row.status);
-    const hasAttention = states.includes("needs_operator");
-    const complete = states.length > 0 && states.every((status) => status === "published" || status === "permanently_unavailable");
-    await db.prepare(
-      "UPDATE ingredient_discovery_batches SET state = ?2, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1",
-    ).bind(batch.request_id, complete ? "completed" : hasAttention ? "attention" : "pricing").run();
-    if (complete) await db.prepare(
-      "UPDATE recipe_suggestion_requests SET status = 'reviewed', updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status <> 'promoted'",
-    ).bind(batch.request_id).run();
-  }
+  const batches = await db.prepare("SELECT request_id FROM ingredient_discovery_batches ORDER BY request_id").all<{ request_id: string }>();
+  for (const batch of batches.results) await reconcileIngredientCampaign(db, batch.request_id);
 }
 
 export async function claimAgentWorkItem(db: D1Database, identity: MutationIdentity, body: AgentWorkItemClaim): Promise<Record<string, unknown> | null> {
@@ -578,8 +630,8 @@ export function assertRecipeChainContinuity(agentId: string, inputValue: unknown
 async function persistRecipeIngredientGaps(db: D1Database, completed: Record<string, unknown>, outputValue: unknown): Promise<{ gapCount: number; discovery: boolean; collecting: boolean }> {
   const map = recipeMapSchema.parse(outputValue);
   const discovery = await db.prepare(
-    "SELECT target_missing_ingredients FROM ingredient_discovery_batches WHERE request_id = ?1",
-  ).bind(completed.source_ref).first<{ target_missing_ingredients: number }>();
+    "SELECT request_id FROM ingredient_discovery_batches WHERE request_id = ?1",
+  ).bind(completed.source_ref).first<{ request_id: string }>();
   const gapIdsByName = new Map<string, string>();
   for (const recipe of map.recipes) {
     for (const ingredient of recipe.ingredients.filter((item) => item.decision === "unmapped")) {
@@ -593,15 +645,12 @@ async function persistRecipeIngredientGaps(db: D1Database, completed: Record<str
       "SELECT COUNT(DISTINCT gap_id) AS count FROM ingredient_gap_occurrences WHERE request_id = ?1",
     ).bind(completed.source_ref).first<{ count: number }>();
     const uniqueCount = Number(count?.count ?? 0);
-    const collecting = uniqueCount < Number(discovery.target_missing_ingredients);
-    await db.batch([
-      db.prepare(
-        `UPDATE ingredient_discovery_batches SET source_round = source_round + 1,
-           state = ?2, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1`,
-      ).bind(completed.source_ref, collecting ? "collecting" : "pricing"),
-      db.prepare("UPDATE recipe_suggestion_requests SET status = ?2, updated_at = CURRENT_TIMESTAMP WHERE id = ?1")
-        .bind(completed.source_ref, collecting ? "queued" : "running"),
-    ]);
+    await db.prepare(
+      `UPDATE ingredient_discovery_batches SET unique_missing_ingredients = ?2,
+         source_round = source_round + 1, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1`,
+    ).bind(completed.source_ref, uniqueCount).run();
+    const campaign = await reconcileIngredientCampaign(db, String(completed.source_ref));
+    const collecting = campaign?.state === "collecting";
     return { gapCount: 0, discovery: true, collecting };
   }
   const statements: D1PreparedStatement[] = [];
@@ -637,17 +686,13 @@ async function persistRecipeIngredientGaps(db: D1Database, completed: Record<str
     "SELECT COUNT(DISTINCT gap_id) AS count FROM ingredient_gap_occurrences WHERE request_id = ?1",
   ).bind(completed.source_ref).first<{ count: number }>();
   const uniqueCount = Number(count?.count ?? 0);
-  const collecting = uniqueCount < Number(discovery.target_missing_ingredients);
-  await db.batch([
-    db.prepare(
-      `UPDATE ingredient_discovery_batches
-          SET unique_missing_ingredients = ?2, source_round = source_round + 1,
-              state = ?3, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1`,
-    ).bind(completed.source_ref, uniqueCount, collecting ? "collecting" : "pricing"),
-    db.prepare(
-      `UPDATE recipe_suggestion_requests SET status = ?2, updated_at = CURRENT_TIMESTAMP WHERE id = ?1`,
-    ).bind(completed.source_ref, collecting ? "queued" : "running"),
-  ]);
+  await db.prepare(
+    `UPDATE ingredient_discovery_batches
+        SET unique_missing_ingredients = ?2, source_round = source_round + 1,
+            updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1`,
+  ).bind(completed.source_ref, uniqueCount).run();
+  const campaign = await reconcileIngredientCampaign(db, String(completed.source_ref));
+  const collecting = campaign?.state === "collecting";
   return { gapCount: gapIdsByName.size, discovery: true, collecting };
 }
 
@@ -678,9 +723,7 @@ async function persistIngredientResearch(db: D1Database, outputValue: unknown): 
     if (research.disposition === "permanently_unavailable" && !discovery) {
       await db.prepare("UPDATE recipe_suggestion_requests SET status = 'rejected', updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status <> 'promoted'").bind(request.request_id).run();
     }
-    if (research.disposition === "needs_operator" && discovery) {
-      await db.prepare("UPDATE ingredient_discovery_batches SET state = 'attention', updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1").bind(request.request_id).run();
-    }
+    if (discovery) await reconcileIngredientCampaign(db, request.request_id);
   }
 }
 
@@ -833,5 +876,15 @@ export async function failAgentWorkItem(db: D1Database, identity: MutationIdenti
     `UPDATE agent_work_item_attempts SET status = 'failed', detail_json = ?4, finished_at = ?5
      WHERE work_item_id = ?1 AND lease_id = ?2 AND lease_generation = ?3`,
   ).bind(workItemId, body.leaseId, body.leaseGeneration, stableJson({ reason: body.reason, retryable: retry }), finishedAt).run();
+  if (current.agent_id === "ingredient-price-researcher" && !retry) {
+    await db.prepare(
+      `UPDATE ingredient_gaps SET status = 'needs_operator', publication_error = ?2,
+         updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status = 'researching'`,
+    ).bind(current.source_ref, body.reason).run();
+    const campaigns = await db.prepare(
+      "SELECT DISTINCT request_id FROM ingredient_gap_occurrences WHERE gap_id = ?1",
+    ).bind(current.source_ref).all<{ request_id: string }>();
+    for (const campaign of campaigns.results) await reconcileIngredientCampaign(db, campaign.request_id);
+  }
   return { workItemId, state, retryAt: retry ? availableAt : null };
 }
