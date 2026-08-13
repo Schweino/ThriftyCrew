@@ -49,6 +49,16 @@
       "expect": { "decision": "mapped", "mustMention": ["smoked sausage", "sun-dried tomatoes"] }
     },
     {
+      "id": "canonical-unqualified-ground-beef",
+      "input": {
+        "ingredient": "1 lb ground beef",
+        "sourceServings": 4,
+        "targetServings": 14,
+        "commodities": [{ "id": "ground-beef-8020", "name": "Ground beef 80/20" }, { "id": "ground-beef-93-7", "name": "Ground beef 93/7" }]
+      },
+      "expect": { "decision": "mapped", "mustMention": ["ground-beef-8020"] }
+    },
+    {
       "id": "insubstantial-accompaniment",
       "input": {
         "sourceServings": 4,
