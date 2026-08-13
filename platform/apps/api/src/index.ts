@@ -91,7 +91,7 @@ import { runServerChaosDrill } from "./chaos-drills";
 import { engineMayWriteCaptureSource } from "./capture-authorization";
 import { evaluateContentPromotion } from "./content-batches";
 import { recipeCommodityIds } from "./recipe-commodity-catalog";
-import { claimAgentWorkItem, completeAgentWorkItem, failAgentWorkItem } from "./agent-work-items";
+import { claimAgentWorkItem, completeAgentWorkItem, failAgentWorkItem, reconcileIngredientHolds } from "./agent-work-items";
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
@@ -1279,6 +1279,12 @@ app.get("/internal/ingredient-gaps", async (context) => {
     `SELECT status, COUNT(*) AS count FROM recipe_ingredient_holds GROUP BY status ORDER BY status`,
   ).all();
   return context.json({ ok: true, status: requestedStatus ?? null, gaps: gaps.results, batches: batches.results, holds: holds.results });
+});
+
+app.post("/internal/ingredient-gaps/reconcile", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may reconcile ingredient publication", 403);
+  await reconcileIngredientHolds(context.env.DB);
+  return context.json({ ok: true, reconciled: true });
 });
 
 app.post("/internal/recipe-waves/snapshot", zValidator("json", recipeWaveSnapshotSchema), async (context) => {

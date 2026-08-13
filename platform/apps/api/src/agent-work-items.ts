@@ -334,7 +334,7 @@ async function enqueue(db: D1Database, agent: RegistryRow, seed: WorkSeed, adapt
   return id;
 }
 
-async function reconcileIngredientHolds(db: D1Database): Promise<void> {
+export async function reconcileIngredientHolds(db: D1Database): Promise<void> {
   await db.prepare(
     `UPDATE ingredient_gaps SET status = 'published', updated_at = CURRENT_TIMESTAMP
       WHERE status = 'ready_to_publish' AND commodity_id IN (

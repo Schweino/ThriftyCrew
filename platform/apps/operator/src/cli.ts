@@ -593,6 +593,7 @@ if (command === "status") {
   const client = await mutationClient();
   const deployment = await deployConfiguration(client, artifact.configuration);
   const matching = await rematchPromotedBatches(client);
+  const ingredientReconciliation = await client.request("/internal/ingredient-gaps/reconcile", { method: "POST" });
   result = {
     ok: true,
     configurationId: artifact.configuration.id,
@@ -601,6 +602,7 @@ if (command === "status") {
     releasePublicationRequired: true,
     deployment,
     matching,
+    ingredientReconciliation,
   };
 } else if (command === "config" && subcommand === "archives") {
   result = await (await mutationClient()).request("/internal/configurations/archives");
