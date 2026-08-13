@@ -1385,13 +1385,13 @@ app.post("/internal/ingredient-gaps/:id/qa-not-found", zValidator("json", ingred
   const row = await context.env.DB.prepare(
     "SELECT status, qa_resolution, research_json FROM ingredient_gaps WHERE id = ?1",
   ).bind(gapId).first<{ status: string; qa_resolution: string | null; research_json: string | null }>();
-  if (!row || row.status !== "needs_operator" || row.qa_resolution !== null || !row.research_json) {
+  if (!row || !["needs_operator", "permanently_unavailable"].includes(row.status) || row.qa_resolution !== null || !row.research_json) {
     return jsonError("ingredient QA item is not open with durable research evidence", 409);
   }
   const prior = ingredientPriceResearchSchema.parse(JSON.parse(row.research_json));
   const target = prior.stores.find((store) => store.storeLocationId === body.storeLocationId);
-  if (!target || !["blocked", "ambiguous"].includes(target.outcome)) {
-    return jsonError("store QA may only replace a blocked or ambiguous check", 409);
+  if (!target || !["blocked", "ambiguous", "not_found"].includes(target.outcome)) {
+    return jsonError("store QA may only replace a blocked, ambiguous, or previously resolved not-found check", 409);
   }
   const checkedAt = new Date().toISOString();
   const stores = prior.stores.map((store) => store.storeLocationId === body.storeLocationId ? {
@@ -1432,7 +1432,7 @@ app.post("/internal/ingredient-gaps/:id/qa-not-found", zValidator("json", ingred
   });
   const update = await context.env.DB.prepare(
     `UPDATE ingredient_gaps SET status = ?2, research_json = ?3, updated_at = CURRENT_TIMESTAMP
-      WHERE id = ?1 AND status = 'needs_operator' AND qa_resolution IS NULL`,
+      WHERE id = ?1 AND status IN ('needs_operator', 'permanently_unavailable') AND qa_resolution IS NULL`,
   ).bind(gapId, research.disposition === "permanently_unavailable" ? "permanently_unavailable" : "needs_operator", JSON.stringify(research)).run();
   if ((update.meta.changes ?? 0) !== 1) return jsonError("ingredient QA item changed during resolution", 409);
   const campaigns = await context.env.DB.prepare(
