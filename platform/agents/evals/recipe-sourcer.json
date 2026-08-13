@@ -159,6 +159,33 @@
         }
       },
       "expect": { "decision": "candidates", "mustMention": ["black pepper"] }
+    },
+    {
+      "id": "select-published-range-endpoint",
+      "input": {
+        "id": "recipe_eval_range_endpoint",
+        "request": "Find a batch-scalable low-carbohydrate dinner.",
+        "commodities": [
+          "whole-chicken | Whole Chicken | Meat",
+          "onions | Yellow / Sweet Onions | Produce"
+        ],
+        "sourceEvidence": {
+          "url": "https://example.test/range-chicken",
+          "accessedAt": "2026-08-10T12:00:00Z",
+          "title": "Slow-Cooker Chicken",
+          "yield": "4 servings",
+          "cuisine": "American",
+          "proteinClass": "chicken",
+          "method": "Slow-cook the chicken over onions.",
+          "nutrition": { "calories": 550, "proteinGrams": 85, "carbohydrateGrams": 3 },
+          "completeIngredientList": true,
+          "ingredients": [
+            "1 cut-up whole chicken (3 1/2 to 4 lb)",
+            "1 large onion"
+          ]
+        }
+      },
+      "expect": { "decision": "candidates", "mustMention": ["4 lb", "endpoint"] }
     }
   ]
 }
