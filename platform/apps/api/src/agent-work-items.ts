@@ -286,7 +286,8 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
     const categories = await db.prepare(
       `SELECT category.id, category.label
          FROM categories category
-         JOIN configuration_versions version ON version.id = category.configuration_id
+         JOIN configuration_categories member ON member.category_id = category.id
+         JOIN configuration_versions version ON version.id = member.configuration_id
         WHERE version.active = 1 ORDER BY category.sort_order, category.id`,
     ).all<Record<string, unknown>>();
     const stores = [
