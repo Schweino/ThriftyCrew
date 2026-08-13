@@ -864,7 +864,7 @@ export const agentRegistryEntrySchema = z.object({
   scheduleId: nonEmptyId.optional(),
   promptFile: z.string().min(1).max(500),
   promptSha256: sha256Hex,
-  provider: z.literal("openai"),
+  provider: z.enum(["openai", "codex-chatgpt"]),
   model: z.string().min(1).max(200),
   fallbackModel: z.string().min(1).max(200).optional(),
   reasoningEffort: z.enum(["none", "low", "medium", "high", "xhigh", "max"]),

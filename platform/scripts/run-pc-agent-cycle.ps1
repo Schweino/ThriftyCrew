@@ -136,6 +136,8 @@ function Publish-AgentProposal([string]$AgentId, [string]$WorkItemId, [string]$R
 function Invoke-AgentItem([string]$AgentId) {
   $definition = $registry.agents | Where-Object { $_.id -eq $AgentId } | Select-Object -First 1
   if (-not $definition -or -not $definition.enabled -or $definition.plane -ne 'pc') { throw "$AgentId is not an enabled PC agent" }
+  $subscriptionExecution = [string]$definition.provider -eq 'codex-chatgpt'
+  $estimatedCostMicrousd = if ($subscriptionExecution) { 0 } else { 500000 }
   Set-PcRuntimeCredential $config $AgentId
   $stamp = "{0}-{1}" -f (Get-Date -Format 'yyyyMMdd-HHmmss'), ([guid]::NewGuid().ToString('N').Substring(0,8))
   $outputRoot = Join-Path $outputBase ("{0}-{1}" -f $AgentId, $stamp)
@@ -155,7 +157,7 @@ function Invoke-AgentItem([string]$AgentId) {
       Invoke-LoggedCommand "$AgentId-claim" { & $pnpmPath tc agent claim $AgentId $claimFile } | Out-Null
       $claim = Get-Content -LiteralPath $claimFile -Raw | ConvertFrom-Json
       if (-not $claim.item) { Write-PcRuntimeLog $logFile ("{0}: no queued work" -f $AgentId); return $false }
-      Invoke-LoggedCommand "$AgentId-authorize" { & $pnpmPath tc agent authorize $AgentId $claimFile 500000 $authorizationFile } | Out-Null
+      Invoke-LoggedCommand "$AgentId-authorize" { & $pnpmPath tc agent authorize $AgentId $claimFile $estimatedCostMicrousd $authorizationFile } | Out-Null
       $authorization = Get-Content -LiteralPath $authorizationFile -Raw | ConvertFrom-Json
       if (-not $authorization.allowed -or -not $authorization.modelId) { throw "$AgentId budget authorization was denied" }
       # Windows PowerShell 5.1's `-Encoding UTF8` writes a BOM. Node's strict
@@ -169,9 +171,27 @@ function Invoke-AgentItem([string]$AgentId) {
       $env:TC_AGENT_INPUT_FILE = $inputFile
       $env:TC_AGENT_MODEL = [string]$authorization.modelId
       $env:TC_AGENT_PROMPT_HASH = [string]$definition.promptSha256
-      $env:TC_AGENT_ESTIMATED_COST_MICROUSD = '500000'
+      $env:TC_AGENT_ESTIMATED_COST_MICROUSD = [string]$estimatedCostMicrousd
       $env:TC_AGENT_WORK_ITEM_ID = [string]$claim.item.id
-      Invoke-LoggedCommand "$AgentId-run" { & $pnpmPath --filter '@thriftycrew/agents' run run -- $AgentId } | Out-Null
+      $savedBillingEnvironment = @{
+        OPENAI_API_KEY = $env:OPENAI_API_KEY
+        CODEX_API_KEY = $env:CODEX_API_KEY
+        OPENAI_BASE_URL = $env:OPENAI_BASE_URL
+      }
+      try {
+        if ($subscriptionExecution) {
+          Remove-Item Env:OPENAI_API_KEY -ErrorAction SilentlyContinue
+          Remove-Item Env:CODEX_API_KEY -ErrorAction SilentlyContinue
+          Remove-Item Env:OPENAI_BASE_URL -ErrorAction SilentlyContinue
+        }
+        Invoke-LoggedCommand "$AgentId-run" { & $pnpmPath --filter '@thriftycrew/agents' run run -- $AgentId } | Out-Null
+      } finally {
+        foreach ($name in $savedBillingEnvironment.Keys) {
+          $value = $savedBillingEnvironment[$name]
+          if ($null -eq $value) { Remove-Item "Env:$name" -ErrorAction SilentlyContinue }
+          else { Set-Item "Env:$name" $value }
+        }
+      }
       if (-not (Test-Path -LiteralPath $runnerFile)) { throw "$AgentId did not produce its bounded runner output" }
       if ($AgentId -in @('triage-developer','source-sentinel-investigator')) { Publish-AgentProposal $AgentId ([string]$claim.item.id) $runnerFile | Out-Null }
       Invoke-LoggedCommand "$AgentId-complete" { & $pnpmPath tc agent complete $claimFile $runnerFile } | Out-Null
@@ -192,7 +212,14 @@ function Invoke-AgentItem([string]$AgentId) {
 }
 
 if ($SelfTest) {
-  if (-not [Environment]::GetEnvironmentVariable('OPENAI_API_KEY','User')) { throw 'OPENAI_API_KEY is not configured for the Windows user' }
+  if ($Cycle -eq 'Recipe') {
+    $authPath = Join-Path ([Environment]::GetFolderPath('UserProfile')) '.codex\auth.json'
+    if (-not (Test-Path -LiteralPath $authPath)) { throw 'Codex ChatGPT authentication is not configured' }
+    $auth = Get-Content -LiteralPath $authPath -Raw | ConvertFrom-Json
+    if ([string]$auth.auth_mode -ne 'chatgpt' -or [string]$auth.OPENAI_API_KEY) { throw 'Recipe execution requires ChatGPT OAuth and prohibits API-key billing' }
+  } elseif (-not [Environment]::GetEnvironmentVariable('OPENAI_API_KEY','User')) {
+    throw 'OPENAI_API_KEY is not configured for this API-backed agent cycle'
+  }
   foreach ($agentId in $cycleAgents[$Cycle]) { Set-PcRuntimeCredential $config $agentId }
   Set-PcRuntimeCredential $config 'local-operator'
   Write-Output "PC agent cycle self-test passed for $Cycle"

@@ -13,8 +13,10 @@
   },
   "dependencies": {
     "@openai/agents": "0.14.3",
+    "@openai/codex-sdk": "0.147.0",
     "@thriftycrew/contracts": "workspace:*",
     "@thriftycrew/daily": "workspace:*",
-    "@thriftycrew/domain": "workspace:*"
+    "@thriftycrew/domain": "workspace:*",
+    "zod": "4.4.3"
   }
 }

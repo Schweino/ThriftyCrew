@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { Agent, run, webSearchTool } from "@openai/agents";
+import { z } from "zod";
 import {
   accuracyVerdictsSchema,
   agentRegistrySchema,
@@ -14,6 +15,7 @@ import {
   triagePlanSchema,
 } from "@thriftycrew/contracts";
 import { normalizeTextForHash } from "@thriftycrew/domain";
+import { runSubscriptionAgent } from "./codex-subscription";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const outputRoot = path.resolve(process.env.TC_OUTPUT_ROOT ?? process.env.RUNNER_TEMP ?? path.join(platformRoot, ".agent-output"));
@@ -63,7 +65,7 @@ if (!hasApprovedInput) {
   process.exit(0);
 }
 
-if (!process.env.OPENAI_API_KEY) {
+if (definition.provider === "openai" && !process.env.OPENAI_API_KEY) {
   const diagnostic = { ok: true, skipped: true, reason: "OPENAI_API_KEY is not configured", agentId: requestedAgent, promptHash, inputHash };
   await writeFile(path.join(outputRoot, `${requestedAgent}.json`), `${JSON.stringify(diagnostic, null, 2)}\n`, "utf8");
   await writeFile(path.join(outputRoot, `${requestedAgent}-usage.json`), `${JSON.stringify({ inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, cacheWriteTokens: 0, costMicrousd: 0 })}\n`, "utf8");
@@ -85,35 +87,59 @@ const outputSchemas = {
 } as const;
 const outputType = outputSchemas[definition.outputContract as keyof typeof outputSchemas];
 if (!outputType) throw new Error(`output contract ${definition.outputContract} has no structured runner schema`);
-const agent = new Agent({
-  name: requestedAgent,
-  instructions: prompt,
-  model,
-  modelSettings: { reasoning: { effort: definition.reasoningEffort }, text: { verbosity: "low" } },
-  tools: definition.capabilities.includes("search:web")
-    ? [webSearchTool({
-        searchContextSize: requestedAgent === "recipe-sourcer" ? "medium" : "low",
-        externalWebAccess: true,
-        userLocation: { type: "approximate", city: "Omaha", region: "Nebraska", country: "US", timezone: "America/Chicago" },
-      })]
-    : [],
-  outputType,
-});
-const result = await run(agent, inputJson, { maxTurns: 8 });
-const usage = result.state.usage;
-const prices = registry.pricing[model];
-if (!prices) throw new Error(`pricing is unavailable for ${model}`);
-const inputTokens = usage.inputTokens;
-const outputTokens = usage.outputTokens;
-const cacheReadTokens = usage.inputTokensDetails.reduce((sum, details) => sum + (details.cached_tokens ?? details.cachedTokens ?? 0), 0);
-const uncachedInputTokens = Math.max(0, inputTokens - cacheReadTokens);
-const costMicrousd = Math.ceil(
-  uncachedInputTokens * prices.inputMicrousdPerMillion / 1_000_000
-  + cacheReadTokens * prices.cacheReadMicrousdPerMillion / 1_000_000
-  + outputTokens * prices.outputMicrousdPerMillion / 1_000_000,
-);
-const output = { ok: true, agentId: requestedAgent, model, promptHash, inputHash, finalOutput: result.finalOutput };
-const usageOutput = { inputTokens, outputTokens, cacheReadTokens, cacheWriteTokens: 0, costMicrousd };
+let finalOutput: unknown;
+let usageOutput: { inputTokens: number; outputTokens: number; cacheReadTokens: number; cacheWriteTokens: number; costMicrousd: number; billingMode?: string };
+if (definition.provider === "codex-chatgpt") {
+  const result = await runSubscriptionAgent({
+    model,
+    reasoningEffort: definition.reasoningEffort,
+    prompt,
+    inputJson,
+    outputSchema: z.toJSONSchema(outputType),
+    outputRoot,
+    webSearch: definition.capabilities.includes("search:web"),
+  });
+  finalOutput = outputType.parse(result.output);
+  usageOutput = {
+    inputTokens: result.usage.input_tokens,
+    outputTokens: result.usage.output_tokens,
+    cacheReadTokens: result.usage.cached_input_tokens,
+    cacheWriteTokens: result.usage.cache_write_input_tokens,
+    costMicrousd: 0,
+    billingMode: "chatgpt-included-limits",
+  };
+} else {
+  const agent = new Agent({
+    name: requestedAgent,
+    instructions: prompt,
+    model,
+    modelSettings: { reasoning: { effort: definition.reasoningEffort }, text: { verbosity: "low" } },
+    tools: definition.capabilities.includes("search:web")
+      ? [webSearchTool({
+          searchContextSize: requestedAgent === "recipe-sourcer" ? "medium" : "low",
+          externalWebAccess: true,
+          userLocation: { type: "approximate", city: "Omaha", region: "Nebraska", country: "US", timezone: "America/Chicago" },
+        })]
+      : [],
+    outputType,
+  });
+  const result = await run(agent, inputJson, { maxTurns: 8 });
+  const usage = result.state.usage;
+  const prices = registry.pricing[model];
+  if (!prices) throw new Error(`pricing is unavailable for ${model}`);
+  const inputTokens = usage.inputTokens;
+  const outputTokens = usage.outputTokens;
+  const cacheReadTokens = usage.inputTokensDetails.reduce((sum, details) => sum + (details.cached_tokens ?? details.cachedTokens ?? 0), 0);
+  const uncachedInputTokens = Math.max(0, inputTokens - cacheReadTokens);
+  const costMicrousd = Math.ceil(
+    uncachedInputTokens * prices.inputMicrousdPerMillion / 1_000_000
+    + cacheReadTokens * prices.cacheReadMicrousdPerMillion / 1_000_000
+    + outputTokens * prices.outputMicrousdPerMillion / 1_000_000,
+  );
+  finalOutput = result.finalOutput;
+  usageOutput = { inputTokens, outputTokens, cacheReadTokens, cacheWriteTokens: 0, costMicrousd, billingMode: "openai-api" };
+}
+const output = { ok: true, agentId: requestedAgent, model, promptHash, inputHash, billingMode: usageOutput.billingMode, finalOutput };
 await writeFile(path.join(outputRoot, `${requestedAgent}.json`), `${JSON.stringify(output, null, 2)}\n`, "utf8");
 await writeFile(path.join(outputRoot, `${requestedAgent}-usage.json`), `${JSON.stringify(usageOutput)}\n`, "utf8");
 console.log(JSON.stringify({ ...output, usage: usageOutput }));
