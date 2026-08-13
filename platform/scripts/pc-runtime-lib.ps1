@@ -1,5 +1,10 @@
 $ErrorActionPreference = 'Stop'
 
+function Read-PcUtf8Json([string]$Path) {
+  if (-not (Test-Path -LiteralPath $Path)) { throw "JSON file is missing: $Path" }
+  return ([IO.File]::ReadAllText($Path, [Text.Encoding]::UTF8) | ConvertFrom-Json)
+}
+
 function Get-PcRuntimePath {
   return (Join-Path $env:LOCALAPPDATA 'ThriftyCrew\grocery-v3\pc-platform-runtime.json')
 }
@@ -7,7 +12,7 @@ function Get-PcRuntimePath {
 function Read-PcRuntimeConfig {
   $path = Get-PcRuntimePath
   if (-not (Test-Path -LiteralPath $path)) { throw "PC platform runtime is not installed: $path" }
-  $config = Get-Content -LiteralPath $path -Raw | ConvertFrom-Json
+  $config = Read-PcUtf8Json $path
   if ([int]$config.version -ne 1) { throw "unsupported PC platform runtime version: $($config.version)" }
   return $config
 }

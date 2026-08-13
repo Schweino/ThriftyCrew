@@ -14,7 +14,7 @@ $incomeRoot = [string]$config.incomeRoot
 $pnpmPath = [string]$config.pnpmPath
 $logFile = Join-Path ([string]$config.logRoot) ("agent-{0}.log" -f $Cycle.ToLowerInvariant())
 $outputBase = Join-Path (Split-Path -Parent ([string]$config.logRoot)) 'agent-output'
-$registry = Get-Content -LiteralPath (Join-Path $platformRoot 'config\agents.json') -Raw | ConvertFrom-Json
+$registry = Read-PcUtf8Json (Join-Path $platformRoot 'config\agents.json')
 
 $cycleAgents = @{
   Triage = @('triage-reviewer','triage-developer')
@@ -61,7 +61,7 @@ function Find-PullRequest($Github, [string]$Branch) {
 }
 
 function Publish-AgentProposal([string]$AgentId, [string]$WorkItemId, [string]$RunnerOutputFile) {
-  $runner = Get-Content -LiteralPath $RunnerOutputFile -Raw | ConvertFrom-Json
+  $runner = Read-PcUtf8Json $RunnerOutputFile
   $proposal = $runner.finalOutput
   if (-not $proposal) { throw 'agent runner output omitted finalOutput' }
   if ($proposal.requiresOperator) {
@@ -152,13 +152,13 @@ function Invoke-AgentItem([string]$AgentId) {
     Push-Location $platformRoot
     try {
       Invoke-LoggedCommand "$AgentId-evaluation-status" { & $pnpmPath tc agent evaluation-status $AgentId $evaluationFile } | Out-Null
-      $evaluation = Get-Content -LiteralPath $evaluationFile -Raw | ConvertFrom-Json
+      $evaluation = Read-PcUtf8Json $evaluationFile
       if (-not $evaluation.current) { throw "$AgentId execution is blocked because its exact live evaluation is not current" }
       Invoke-LoggedCommand "$AgentId-claim" { & $pnpmPath tc agent claim $AgentId $claimFile } | Out-Null
-      $claim = Get-Content -LiteralPath $claimFile -Raw | ConvertFrom-Json
+      $claim = Read-PcUtf8Json $claimFile
       if (-not $claim.item) { Write-PcRuntimeLog $logFile ("{0}: no queued work" -f $AgentId); return $false }
       Invoke-LoggedCommand "$AgentId-authorize" { & $pnpmPath tc agent authorize $AgentId $claimFile $estimatedCostMicrousd $authorizationFile } | Out-Null
-      $authorization = Get-Content -LiteralPath $authorizationFile -Raw | ConvertFrom-Json
+      $authorization = Read-PcUtf8Json $authorizationFile
       if (-not $authorization.allowed -or -not $authorization.modelId) { throw "$AgentId budget authorization was denied" }
       # Windows PowerShell 5.1's `-Encoding UTF8` writes a BOM. Node's strict
       # JSON.parse does not remove it, so agent inputs must be UTF-8 without BOM.
@@ -215,7 +215,7 @@ if ($SelfTest) {
   if ($Cycle -eq 'Recipe') {
     $authPath = Join-Path ([Environment]::GetFolderPath('UserProfile')) '.codex\auth.json'
     if (-not (Test-Path -LiteralPath $authPath)) { throw 'Codex ChatGPT authentication is not configured' }
-    $auth = Get-Content -LiteralPath $authPath -Raw | ConvertFrom-Json
+    $auth = Read-PcUtf8Json $authPath
     if ([string]$auth.auth_mode -ne 'chatgpt' -or [string]$auth.OPENAI_API_KEY) { throw 'Recipe execution requires ChatGPT OAuth and prohibits API-key billing' }
   } elseif (-not [Environment]::GetEnvironmentVariable('OPENAI_API_KEY','User')) {
     throw 'OPENAI_API_KEY is not configured for this API-backed agent cycle'
