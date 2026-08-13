@@ -55441,5 +55441,109 @@
     ],
     "band_min": 0.18,
     "band_max": 1.61
+  },
+  {
+    "id": "garlic-infused-olive-oil",
+    "label": "Garlic-Infused Olive Oil",
+    "unit": "fl_oz",
+    "include": [
+      "\\bgarlic[- ]infused\\s+(?:extra\\s+virgin\\s+)?olive\\s+oil\\b",
+      "\\b(?:extra\\s+virgin\\s+)?olive\\s+oil\\b[^\\n]{0,40}\\bgarlic[- ]infused\\b"
+    ],
+    "exclude": [
+      "\\b(?:spray|aerosol|cooking spray)\\b",
+      "\\b(?:minced|chopped|whole|peeled|clove|paste|powder|seasoning)\\s+garlic\\b",
+      "\\b(?:dressing|vinaigrette|marinade|sauce|dip|pesto|mayonnaise)\\b",
+      "\\b(?:supplement|capsule|softgel|essential oil|fragrance|beverage|drink)\\b",
+      "\\b(?:pasta|noodle|bread|pizza|meal|kit|prepared)\\b",
+      "\\b(?:ghee|butter|margarine|spread)\\b",
+      "\\b(?:chili|truffle|lemon|basil|rosemary)[- &]+garlic\\b"
+    ],
+    "band_min": 0.38,
+    "band_max": 3.3
+  },
+  {
+    "id": "canned-butter-beans",
+    "label": "Canned Butter Beans",
+    "unit": "oz",
+    "include": [
+      "\\bbutter\\s+beans?\\b",
+      "\\blima\\s+beans?\\b"
+    ],
+    "exclude": [
+      "\\b(?:dry|dried|frozen|steamable|fresh)\\b",
+      "\\b(?:baked|refried|seasoned|soup|chili|salad|dip|hummus|entree)\\b",
+      "\\b(?:supplement|capsule|tablet|powder|protein)\\b",
+      "\\b(?:juice|drink|beverage|smoothie)\\b",
+      "\\b(?:cannellini|great\\s+northern|navy|kidney|pinto|black|garbanzo|chickpea)\\b"
+    ],
+    "band_min": 0.03,
+    "band_max": 0.38
+  },
+  {
+    "id": "rice-arborio",
+    "label": "Arborio Risotto Rice",
+    "unit": "oz",
+    "include": [
+      "\\barborio\\b.*\\b(rice|risotto)\\b",
+      "\\b(rice|risotto)\\b.*\\barborio\\b"
+    ],
+    "exclude": [
+      "\\b(ready[- ]?to[- ]?eat|microwave(?:able)?|frozen|cooked|prepared|risotto\\s+(?:mix|meal|side))\\b",
+      "\\b(cheese|parmesan|mushroom|garlic|herb|broccoli|asparagus|vegetable|chicken|beef|pork|seafood|saffron|milanese)\\b",
+      "\\b(jasmine|basmati|calrose|sushi|brown|wild|cauliflower|quinoa)\\b",
+      "\\b(supplement|capsule|powder|drink|beverage|tea|extract)\\b"
+    ],
+    "band_min": 0.08,
+    "band_max": 0.72
+  },
+  {
+    "id": "fresh-sweet-italian-turkey-sausage",
+    "label": "Fresh Sweet Italian Turkey Sausage",
+    "unit": "oz",
+    "include": [
+      "\\b(?:fresh\\s+)?sweet\\s+italian(?:\\s+style)?\\s+turkey\\s+sausage(?:\\s+links?)?\\b",
+      "\\bturkey\\s+sweet\\s+italian(?:\\s+style)?\\s+(?:fresh\\s+)?sausage(?:\\s+links?)?\\b"
+    ],
+    "exclude": [
+      "\\b(?:pork|chicken|beef|plant[- ]based|vegan|vegetarian)\\b",
+      "\\b(?:breakfast|smoked|kielbasa|polska|andouille|hot|spicy|cheddar|apple|maple)\\b",
+      "\\b(?:fully\\s+cooked|pre[- ]?cooked|frozen|meatballs?|patties|snack\\s+(?:sticks?|bites?)|jerky)\\b",
+      "\\b(?:supplements?|capsules?|tablets?|powders?|drinks?|beverages?|sauces?|pizzas?|sandwiches?)\\b"
+    ],
+    "band_min": 0.15,
+    "band_max": 1.32
+  },
+  {
+    "id": "cheddar-cheese-curds",
+    "label": "Cheddar cheese curds",
+    "unit": "oz",
+    "include": [
+      "\\b(?:white\\s+)?cheddar\\s+cheese\\s+curds?\\b",
+      "\\bnatural\\s+(?:cheddar\\s+)?cheese\\s+curds?\\b",
+      "\\bcheese\\s+curds?\\b"
+    ],
+    "exclude": [
+      "\\b(?:breaded|battered|fried|crispy|frozen|appetizers?|ready[- ]to[- ]eat)\\b",
+      "\\b(?:cottage\\s+cheese|lemon\\s+curd|fruit\\s+curd|cheese\\s+(?:sticks?|cubes?|nuggets?|bites?|sauce|dip|spread|crumbles?))\\b",
+      "\\b(?:vegan|plant[- ]based|dairy[- ]free|protein\\s+(?:powder|supplement|shake)|capsules?|tablets?|smoothies?|drinks?|beverages?)\\b"
+    ],
+    "band_min": 0.13,
+    "band_max": 1.19
+  },
+  {
+    "id": "white-onion",
+    "label": "White Onion",
+    "unit": "lb",
+    "include": [
+      "\\bwhite onions?\\b"
+    ],
+    "exclude": [
+      "\\b(yellow|red|green|sweet|vidalia|pearl|cipollini|shallot|scallion)\\b",
+      "\\b(diced|chopped|sliced|peeled|minced|frozen|dehydrated|powder|flakes?)\\b",
+      "\\b(buns?|bread|chips?|dip|soup|sauce|seasoning|supplement|beverage|juice|prepared|tray)\\b"
+    ],
+    "band_min": 0.42,
+    "band_max": 5.97
   }
 ]
