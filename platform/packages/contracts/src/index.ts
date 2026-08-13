@@ -1183,7 +1183,7 @@ export const recipeMapSchema = z.object({
         context.addIssue({ code: "custom", path: ["recipes", index, "mealComponents", componentIndex], message: "mapped meal components must preserve source component identity" });
         return;
       }
-      const expectedIds = sourceComponent.ingredientIndexes.flatMap((ingredientIndex) => recipe.ingredients[ingredientIndex]?.commodityId ?? []).sort();
+      const expectedIds = [...new Set(sourceComponent.ingredientIndexes.flatMap((ingredientIndex) => recipe.ingredients[ingredientIndex]?.commodityId ?? []))].sort();
       const actualIds = [...mappedComponent.commodityIds].sort();
       if (JSON.stringify(expectedIds) !== JSON.stringify(actualIds)) {
         context.addIssue({ code: "custom", path: ["recipes", index, "mealComponents", componentIndex, "commodityIds"], message: "mapped meal component must preserve its source ingredients" });

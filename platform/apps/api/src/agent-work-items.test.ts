@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { ingredientPriceResearchSchema, OMAHA_GROCERY_STORE_LOCATION_IDS, recipeSourceCandidatesSchema } from "@thriftycrew/contracts";
+import { ingredientPriceResearchSchema, OMAHA_GROCERY_STORE_LOCATION_IDS, recipeMapSchema, recipeSourceCandidatesSchema } from "@thriftycrew/contracts";
 import { assertRecipeChainContinuity, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
 
 const candidate = {
@@ -48,6 +48,39 @@ describe("agent output boundary", () => {
     expect(() => ingredientPriceResearchSchema.parse({ ...research, stores: research.stores.slice(0, 6) })).toThrow(/exactly|Array must contain/);
     expect(() => ingredientPriceResearchSchema.parse({ ...research, stores: research.stores.map((store, index) => index === 2 ? { ...store, outcome: "blocked" } : store) })).toThrow(/needs_operator/);
     expect(JSON.stringify(z.toJSONSchema(ingredientPriceResearchSchema))).not.toContain('"format":"uri"');
+  });
+
+  it("preserves multiple source lines that map to one unique component commodity", () => {
+    const duplicateCommodityCandidate = {
+      ...candidate,
+      ingredients: [
+        { raw: "1 can black beans", quantityText: "1 can" },
+        { raw: "1 can pinto beans", quantityText: "1 can" },
+        { raw: "1 can tomatoes", quantityText: "1 can" },
+      ],
+      mealComponents: [
+        { role: "main" as const, label: "beans", ingredientIndexes: [0, 1] },
+        { role: "substantial-accompaniment" as const, label: "tomato vegetable base", ingredientIndexes: [2] },
+      ],
+    };
+    const mapped = {
+      requestId: "request_one",
+      recipes: [{
+        candidate: duplicateCommodityCandidate,
+        ingredients: [
+          { sourceLine: "1 can black beans", sourceName: "black beans", quantityText: "1 can", commodityId: "canned-beans", grams: 400, decision: "alias", scalingStatus: "scaled", evidence: "Registered canned bean family." },
+          { sourceLine: "1 can pinto beans", sourceName: "pinto beans", quantityText: "1 can", commodityId: "canned-beans", grams: 400, decision: "alias", scalingStatus: "scaled", evidence: "Registered canned bean family." },
+          { sourceLine: "1 can tomatoes", sourceName: "tomatoes", quantityText: "1 can", commodityId: "tomatoes", grams: 1_050, decision: "exact", scalingStatus: "scaled", evidence: "Exact active commodity." },
+        ],
+        mealComponents: [
+          { role: "main" as const, label: "beans", commodityIds: ["canned-beans"] },
+          { role: "substantial-accompaniment" as const, label: "tomato vegetable base", commodityIds: ["tomatoes"] },
+        ],
+        readyForWriting: true,
+        issues: [],
+      }],
+    };
+    expect(recipeMapSchema.parse(mapped)).toEqual(mapped);
   });
 
   it("recomputes unit prices and requires sale validity dates", () => {
