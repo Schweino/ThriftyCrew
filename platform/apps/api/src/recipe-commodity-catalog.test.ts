@@ -20,4 +20,15 @@ describe("recipe commodity catalog", () => {
     expect(catalog.find((commodity) => commodity.id === "whole-chicken")).toEqual(active);
     expect(catalog.filter((commodity) => commodity.id === "whole-chicken")).toHaveLength(1);
   });
+
+  it("exposes deterministic recipe aliases on their priced shopping commodity", () => {
+    const catalog = mergeRecipeCommodityCatalog([
+      { id: "ground-beef-8020", label: "Ground Beef 80/20", basis_unit: "lb", category: "Meat" },
+    ]);
+
+    expect(catalog.find((commodity) => commodity.id === "ground-beef-8020")).toEqual(expect.objectContaining({
+      recipe_aliases: expect.arrayContaining(["ground-beef"]),
+    }));
+    expect(catalog.some((commodity) => commodity.id === "ground-beef")).toBe(false);
+  });
 });

@@ -1,4 +1,5 @@
 import recipeCommodityExtensions from "../../../config/recipe-commodity-extensions.json";
+import recipeCommodityAliases from "../../../config/recipe-commodity-aliases.json";
 import recipeCommodityRules from "../../../config/recipe-commodities.json";
 
 interface RecipeCommodityRule {
@@ -28,6 +29,14 @@ export function mergeRecipeCommodityCatalog(
       basis_unit: commodity.unit,
       category: "Recipe pricing",
     });
+  }
+  for (const [alias, target] of Object.entries(recipeCommodityAliases)) {
+    const commodity = commoditiesById.get(target);
+    if (!commodity) continue;
+    const aliases = Array.isArray(commodity.recipe_aliases)
+      ? commodity.recipe_aliases.filter((value): value is string => typeof value === "string")
+      : [];
+    commoditiesById.set(target, { ...commodity, recipe_aliases: [...new Set([...aliases, alias])].sort() });
   }
   return [...commoditiesById.values()].sort((left, right) => String(left.id).localeCompare(String(right.id)));
 }

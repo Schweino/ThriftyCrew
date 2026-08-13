@@ -29,6 +29,26 @@
       "expect": { "decision": "unmapped", "mustMention": ["jarred"] }
     },
     {
+      "id": "preparation-variant-shopping-commodity",
+      "input": {
+        "ingredient": "1/2 cup shaved Parmesan and 1 egg yolk",
+        "sourceServings": 4,
+        "targetServings": 14,
+        "commodities": [{ "id": "parmesan", "name": "Parmesan cheese" }, { "id": "eggs", "name": "Large eggs" }]
+      },
+      "expect": { "decision": "mapped", "mustMention": ["parmesan", "eggs"] }
+    },
+    {
+      "id": "flavor-and-pack-variant-shopping-commodity",
+      "input": {
+        "ingredient": "roasted-garlic smoked sausage and sun-dried tomatoes",
+        "sourceServings": 4,
+        "targetServings": 14,
+        "commodities": [{ "id": "smoked-sausage", "name": "Smoked sausage" }, { "id": "sun-dried-tomatoes", "name": "Sun-dried tomatoes" }]
+      },
+      "expect": { "decision": "mapped", "mustMention": ["smoked sausage", "sun-dried tomatoes"] }
+    },
+    {
       "id": "insubstantial-accompaniment",
       "input": {
         "sourceServings": 4,
