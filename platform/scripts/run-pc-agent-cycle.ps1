@@ -317,6 +317,7 @@ function Start-IngredientPricingDrain {
       '-PricingWorkerSlot', [string]$slot, '-MaxItems', '50'
     )
     Start-Process -FilePath 'powershell.exe' -ArgumentList $arguments -WindowStyle Hidden | Out-Null
+    Start-Sleep -Milliseconds 900
   }
   Write-PcRuntimeLog $logFile 'recipe-mapper queued or advanced ingredient gaps; launched the ten-worker event-driven pricing pool'
 }
