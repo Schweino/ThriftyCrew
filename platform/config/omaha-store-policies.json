@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "marketId": "omaha",
+  "stores": [
+    {
+      "storeLocationId": "aldi-omaha-446-048",
+      "sourceId": "direct-aldi-browser",
+      "plane": "browser",
+      "priceMode": "in_store",
+      "minimumIntervalMs": 5000,
+      "sameStoreConcurrency": 1,
+      "requireDualPriceAgreement": false,
+      "membershipRequired": false,
+      "notFoundRequiresTargetedCoverage": true
+    },
+    {
+      "storeLocationId": "bakers-saddle-creek",
+      "sourceId": "direct-bakers-headless",
+      "plane": "headless",
+      "priceMode": "in_store",
+      "minimumIntervalMs": 180,
+      "sameStoreConcurrency": 1,
+      "requireDualPriceAgreement": false,
+      "membershipRequired": false,
+      "notFoundRequiresTargetedCoverage": true
+    },
+    {
+      "storeLocationId": "family-fare-omaha-6401",
+      "sourceId": "direct-family-fare-headless",
+      "plane": "headless",
+      "priceMode": "pickup",
+      "minimumIntervalMs": 500,
+      "sameStoreConcurrency": 1,
+      "requireDualPriceAgreement": false,
+      "membershipRequired": false,
+      "notFoundRequiresTargetedCoverage": true
+    },
+    {
+      "storeLocationId": "fareway-omaha-043",
+      "sourceId": "direct-fareway-browser",
+      "plane": "browser",
+      "priceMode": "in_store",
+      "minimumIntervalMs": 2000,
+      "sameStoreConcurrency": 1,
+      "requireDualPriceAgreement": false,
+      "membershipRequired": false,
+      "notFoundRequiresTargetedCoverage": true
+    },
+    {
+      "storeLocationId": "hy-vee-omaha-1465",
+      "sourceId": "direct-hy-vee-headless",
+      "plane": "headless",
+      "priceMode": "in_store",
+      "minimumIntervalMs": 500,
+      "sameStoreConcurrency": 1,
+      "requireDualPriceAgreement": false,
+      "membershipRequired": false,
+      "notFoundRequiresTargetedCoverage": true
+    },
+    {
+      "storeLocationId": "sams-omaha",
+      "sourceId": "direct-sams-browser",
+      "plane": "browser",
+      "priceMode": "club",
+      "minimumIntervalMs": 3000,
+      "sameStoreConcurrency": 1,
+      "requireDualPriceAgreement": true,
+      "membershipRequired": true,
+      "notFoundRequiresTargetedCoverage": true
+    },
+    {
+      "storeLocationId": "walmart-omaha",
+      "sourceId": "direct-walmart-browser",
+      "plane": "browser",
+      "priceMode": "pickup",
+      "minimumIntervalMs": 1500,
+      "sameStoreConcurrency": 1,
+      "requireDualPriceAgreement": true,
+      "membershipRequired": false,
+      "notFoundRequiresTargetedCoverage": true
+    }
+  ]
+}

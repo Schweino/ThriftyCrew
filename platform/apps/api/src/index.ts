@@ -38,12 +38,20 @@ import {
   agentWorkItemCompleteSchema,
   agentWorkItemFailSchema,
   ingredientCampaignControlSchema,
+  ingredientPricingWaveCreateSchema,
+  ingredientPublicationBatchCreateSchema,
+  ingredientPublicationVerifySchema,
+  ingredientResolutionProposalSchema,
   ingredientPublicationFailureSchema,
   ingredientPriceResearchSchema,
   ingredientQaNotFoundSchema,
   ingredientQaPricedSchema,
   ingredientQaRetrySchema,
   ingredientQaResolutionSchema,
+  ingredientStoreCheckClaimSchema,
+  ingredientStoreCheckCompleteSchema,
+  ingredientStoreCheckFailSchema,
+  ingredientStoreCheckHeartbeatSchema,
   recipeSuggestionRequestSchema,
   recipeWaveSnapshotSchema,
   recipeWavePublicationSchema,
@@ -99,7 +107,10 @@ import { runServerChaosDrill } from "./chaos-drills";
 import { engineMayWriteCaptureSource } from "./capture-authorization";
 import { evaluateContentPromotion } from "./content-batches";
 import { recipeCommodityIds } from "./recipe-commodity-catalog";
-import { claimAgentWorkItem, completeAgentWorkItem, failAgentWorkItem, ingredientCampaignSnapshot, reconcileIngredientCampaign, reconcileIngredientHolds } from "./agent-work-items";
+import { claimAgentWorkItem, completeAgentWorkItem, enqueueIngredientDefinitionPlan, failAgentWorkItem, ingredientCampaignSnapshot, reconcileIngredientCampaign, reconcileIngredientHolds } from "./agent-work-items";
+import { claimStoreChecks, completeStoreCheck, createPricingWave, failStoreCheck, heartbeatStoreCheck, ingredientPipelineStatus, pipelineEvents, pricingWaveStatus, qaClaimedCatalogStoreCheck, resolveClaimedStoreCheckFromCatalog } from "./ingredient-pricing-v2";
+import { materializeHotCatalog } from "./hot-catalog";
+import { attachIngredientProposal, createIngredientPublicationBatch, verifyIngredientPublication } from "./ingredient-publication-v2";
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
@@ -1390,6 +1401,121 @@ app.post("/internal/ingredient-gaps/qa-retry", zValidator("json", ingredientQaRe
   return context.json({ ok: true, retried: gapIds });
 });
 
+app.post("/internal/ingredient-pricing/waves", zValidator("json", ingredientPricingWaveCreateSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may create an ingredient pricing wave", 403);
+  try {
+    const result = await createPricingWave(context.env.DB, context.req.valid("json"));
+    return context.json({ ok: true, ...result }, 201);
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "ingredient pricing wave creation failed", 409);
+  }
+});
+
+app.post("/internal/ingredient-pricing/proposals", zValidator("json", ingredientResolutionProposalSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may attach an ingredient proposal", 403);
+  try { return context.json({ ok: true, ...await attachIngredientProposal(context.env.DB, context.req.valid("json")) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient proposal failed", 409); }
+});
+
+app.post("/internal/ingredient-pricing/proposals/plan", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may queue ingredient definition planning", 403);
+  try { return context.json({ ok: true, ...await enqueueIngredientDefinitionPlan(context.env.DB, 50) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient definition planning failed", 409); }
+});
+
+app.post("/internal/ingredient-publication/batches", zValidator("json", ingredientPublicationBatchCreateSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may seal an ingredient publication batch", 403);
+  try { return context.json({ ok: true, ...await createIngredientPublicationBatch(context.env.DB, context.req.valid("json")) }, 201); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient publication batch failed", 409); }
+});
+
+app.post("/internal/ingredient-publication/batches/:id/verify", zValidator("json", ingredientPublicationVerifySchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may verify an ingredient publication", 403);
+  try { return context.json({ ok: true, ...await verifyIngredientPublication(context.env, context.req.param("id"), context.req.valid("json")) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient publication verification failed", 409); }
+});
+
+app.post("/internal/ingredient-pricing/catalog/materialize", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may materialize the pricing catalog", 403);
+  try {
+    return context.json({ ok: true, ...await materializeHotCatalog(context.env.DB) });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "hot catalog materialization failed", 422);
+  }
+});
+
+app.get("/internal/ingredient-pricing/waves/:id", async (context) => {
+  const status = await pricingWaveStatus(context.env.DB, context.req.param("id"));
+  return status ? context.json({ ok: true, wave: status }) : jsonError("ingredient pricing wave not found", 404);
+});
+
+app.get("/internal/ingredient-pricing/status", async (context) => context.json({ ok: true, status: await ingredientPipelineStatus(context.env.DB) }));
+
+app.get("/internal/pipeline/events", async (context) => {
+  const after = Math.max(0, Number(context.req.query("after") ?? "0"));
+  const limit = Math.min(200, Math.max(1, Number(context.req.query("limit") ?? "100")));
+  if (!Number.isInteger(after) || !Number.isInteger(limit)) return jsonError("pipeline event cursor is invalid", 400);
+  return context.json({ ok: true, ...await pipelineEvents(context.env.DB, after, limit) });
+});
+
+app.post("/internal/ingredient-pricing/store-checks/claim", zValidator("json", ingredientStoreCheckClaimSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only the local operator coordinator may claim store checks", 403);
+  try {
+    return context.json({ ok: true, checks: await claimStoreChecks(context.env.DB, context.req.valid("json")) });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "store-check claim failed", 409);
+  }
+});
+
+app.post("/internal/ingredient-pricing/store-checks/:id/heartbeat", zValidator("json", ingredientStoreCheckHeartbeatSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only the local operator coordinator may renew store checks", 403);
+  try {
+    await heartbeatStoreCheck(context.env.DB, context.req.param("id"), context.req.valid("json"));
+    return context.json({ ok: true, checkId: context.req.param("id") });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "store-check heartbeat failed", 409);
+  }
+});
+
+app.post("/internal/ingredient-pricing/store-checks/:id/catalog-resolve", zValidator("json", ingredientStoreCheckHeartbeatSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only the local operator coordinator may resolve catalog checks", 403);
+  try {
+    return context.json({ ok: true, result: await resolveClaimedStoreCheckFromCatalog(context.env.DB, context.req.param("id"), context.req.valid("json")) });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "catalog resolution failed", 409);
+  }
+});
+
+app.post("/internal/ingredient-pricing/store-checks/:id/complete", zValidator("json", ingredientStoreCheckCompleteSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only the local operator coordinator may complete store checks", 403);
+  try {
+    const aggregate = await completeStoreCheck(context.env, context.req.param("id"), context.req.valid("json"));
+    return context.json({ ok: true, checkId: context.req.param("id"), aggregate });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "store-check completion failed", 409);
+  }
+});
+
+app.post("/internal/ingredient-pricing/store-checks/:id/catalog-qa", zValidator("json", ingredientStoreCheckHeartbeatSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only the local operator coordinator may QA catalog checks", 403);
+  try {
+    const aggregate = await qaClaimedCatalogStoreCheck(context.env, context.req.param("id"), context.req.valid("json"));
+    return context.json({ ok: true, checkId: context.req.param("id"), aggregate });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "catalog QA failed", 409);
+  }
+});
+
+app.post("/internal/ingredient-pricing/store-checks/:id/fail", zValidator("json", ingredientStoreCheckFailSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only the local operator coordinator may fail store checks", 403);
+  try {
+    await failStoreCheck(context.env.DB, context.req.param("id"), context.req.valid("json"));
+    return context.json({ ok: true, checkId: context.req.param("id") });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : "store-check failure failed", 409);
+  }
+});
+
 app.post("/internal/ingredient-gaps/:id/qa-not-found", zValidator("json", ingredientQaNotFoundSchema), async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only an operator may resolve ingredient store QA", 403);
   const gapId = context.req.param("id");
@@ -1485,7 +1611,7 @@ app.post("/internal/ingredient-gaps/:id/qa-priced", zValidator("json", ingredien
     ...prior,
     researchedAt: body.store.checkedAt,
     stores,
-    disposition: "available",
+    disposition: allResolved ? "available" : "needs_operator",
     commodityProposal,
     summary: allResolved
       ? `Operator-assisted first-party QA completed all seven Omaha store checks for ${prior.ingredientName}; verified prices and completed not-found outcomes are ready for publication.`

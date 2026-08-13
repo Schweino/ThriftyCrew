@@ -26,10 +26,12 @@ const decisionAliases: Record<string, Record<string, string[]>> = {
   "accuracy-headless": { right: ["right"], wrong: ["wrong"], cannot_tell: ["cannot_tell", "cannot tell"] },
   "recipe-sourcer": { candidates: ["candidate"], refuse: ["refuse", "reject", "cannot"] },
   "recipe-deduper": { duplicate: ["duplicate"], distinct: ["distinct", "unique"] },
+  "recipe-fact-extractor": { facts: ["facts", "extract"], refuse: ["refuse", "reject", "cannot"] },
   "recipe-mapper": { chickpeas: ["chickpeas"], mapped: ["mapped"], unmapped: ["unmapped", "unknown"], blocked: ["blocked", "block"], "chicken-breast": ["chicken-breast", "chicken breast"] },
   "recipe-writer": { content: ["content", "recipe"], refuse: ["refuse", "reject", "cannot"] },
   "recipe-auditor": { pass: ["pass"], fail: ["fail", "reject"] },
   "ingredient-price-researcher": { available: ["available", "priced"], permanently_unavailable: ["permanently_unavailable", "not_found"], needs_operator: ["needs_operator", "blocked", "ambiguous"] },
+  "ingredient-definition-planner": { plan: ["plan", "proposal"], refuse: ["refuse", "category"] },
   "source-sentinel-investigator": { "pull-request": ["pull request", "pr"], refuse: ["refuse", "reject", "untrusted"], "no-op": ["no-op", "no change"] },
 };
 
@@ -38,7 +40,7 @@ function validateCorpus(corpus: EvalCorpus): void {
   if (!Array.isArray(corpus.cases) || corpus.cases.length < 3) throw new Error(`${corpus.agentId} needs at least three evaluation cases`);
   if (new Set(corpus.cases.map((item) => item.id)).size !== corpus.cases.length) throw new Error(`${corpus.agentId} has duplicate evaluation case ids`);
   if (!decisionAliases[corpus.agentId]) throw new Error(`${corpus.agentId} is missing its deterministic evaluator`);
-  if (["recipe-sourcer", "ingredient-price-researcher", "source-sentinel-investigator"].includes(corpus.agentId) && !corpus.cases.some((item) => item.id.includes("prompt-injection"))) throw new Error(`${corpus.agentId} needs a prompt-injection case`);
+  if (["recipe-sourcer", "recipe-fact-extractor", "ingredient-price-researcher", "source-sentinel-investigator"].includes(corpus.agentId) && !corpus.cases.some((item) => item.id.includes("prompt-injection"))) throw new Error(`${corpus.agentId} needs a prompt-injection case`);
 }
 
 function evaluateCase(agentId: string, test: EvalCase, output: unknown): { passed: boolean; detail: Record<string, unknown> } {

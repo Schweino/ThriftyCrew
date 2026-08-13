@@ -6,7 +6,7 @@ interface Commodity { id: string; include?: string[]; exclude?: string[] }
 interface KnownWrong { entries?: Array<{ reversed_on?: string; reversed_by?: string; names?: string[] }> }
 
 const LEGACY_OUTPUTS = ["commodities.json", "categories.json", "known-wrong.json", "recipe-commodities.json"] as const;
-const AUTHORITY_FILES = [...LEGACY_OUTPUTS, "recipe-commodity-aliases.json", "recipe-commodity-extensions.json"] as const;
+const AUTHORITY_FILES = [...LEGACY_OUTPUTS, "recipe-commodity-aliases.json", "recipe-commodity-extensions.json", "omaha-store-policies.json"] as const;
 
 function sha256(bytes: Uint8Array): string {
   return createHash("sha256").update(bytes).digest("hex");
@@ -50,6 +50,17 @@ export async function generateLegacyConfiguration(incomeRoot: string, checkOnly:
   }
   const commodities = JSON.parse(await readFile(path.join(configRoot, "commodities.json"), "utf8")) as Commodity[];
   const knownWrong = JSON.parse(await readFile(path.join(configRoot, "known-wrong.json"), "utf8")) as KnownWrong;
+  const storePolicy = JSON.parse(await readFile(path.join(configRoot, "omaha-store-policies.json"), "utf8")) as {
+    version?: number; marketId?: string; stores?: Array<{ storeLocationId?: string; sourceId?: string; plane?: string; priceMode?: string }>;
+  };
+  const expectedStores = new Set(["aldi-omaha-446-048", "bakers-saddle-creek", "family-fare-omaha-6401", "fareway-omaha-043", "hy-vee-omaha-1465", "sams-omaha", "walmart-omaha"]);
+  const policyStores = storePolicy.stores ?? [];
+  if (storePolicy.version !== 1 || storePolicy.marketId !== "omaha" || policyStores.length !== expectedStores.size
+    || new Set(policyStores.map((store) => store.storeLocationId)).size !== expectedStores.size
+    || policyStores.some((store) => !store.storeLocationId || !expectedStores.has(store.storeLocationId) || !store.sourceId
+      || !["browser", "headless"].includes(store.plane ?? "") || !["pickup", "in_store", "club"].includes(store.priceMode ?? ""))) {
+    throw new Error("omaha-store-policies.json must define exactly the seven authoritative Omaha store policies");
+  }
   const uniqueRules = new Set<string>();
   for (const commodity of commodities) {
     for (const value of commodity.include ?? []) uniqueRules.add(`${commodity.id}\u001finclude\u001f${value}`);

@@ -1,0 +1,56 @@
+{
+  "id": "eval_184c6fa0d1b3340a9c7d2245880a75e4",
+  "agentId": "recipe-deduper",
+  "executionConfigHash": "f20f80d171985e622ea2ce7ece2c12bee88ba310864d77f3076a45c63f766ea3",
+  "modelId": "gpt-5.6-sol",
+  "corpusHash": "91e31c14cbb4082f3f76312fa50e505e658d989166bd5d53354f92ecfa958326",
+  "evaluatorVersion": "deterministic-recipe-deduper-v3",
+  "caseCount": 3,
+  "passedCount": 3,
+  "scoreMillis": 1000,
+  "thresholdMillis": 950,
+  "passed": true,
+  "detail": {
+    "cases": [
+      {
+        "caseId": "exact-catalog-duplicate",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "duplicate",
+          "evidence": [
+            "identical core dish identity: beans and tomatoes prepared as a stovetop-simmered bean chili match catalog slug bean-chili."
+          ]
+        }
+      },
+      {
+        "caseId": "distinct-concepts",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "distinct",
+          "evidence": [
+            "The candidates differ in protein: beans versus chicken.",
+            "They also differ in flavor/base and method: tomato-bean chili cooked by stovetop simmer versus lemon-orzo chicken cooked by oven bake."
+          ]
+        }
+      },
+      {
+        "caseId": "near-duplicate-concepts",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "duplicate",
+          "evidence": [
+            "Both leads match on chicken protein, salsa flavor family, rice base, and slow-cooker method.",
+            "The titles differ, but the underlying dish identity is the same."
+          ]
+        }
+      }
+    ]
+  },
+  "evaluatedAt": "2026-08-13T21:17:51.744Z"
+}

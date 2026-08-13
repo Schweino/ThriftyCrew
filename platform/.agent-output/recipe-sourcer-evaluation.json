@@ -1,13 +1,13 @@
 {
-  "id": "eval_79c3613f9cc4c23c99b615ce63087139",
+  "id": "eval_e4babe4068b73eb47c3847f54af5264a",
   "agentId": "recipe-sourcer",
-  "executionConfigHash": "48547d948d0b703b811a8a8d657ff2d69fdbaf38034912c79f2fb912b31c09cd",
+  "executionConfigHash": "c0df0be7b6b720ae736e422c35f090a9dace414882760bc9b88a194c869e4a58",
   "modelId": "gpt-5.6-terra",
   "corpusHash": "e9c876c150345cbe98f675677550f9bb27e8a336589e7827fd46152e0f489891",
   "evaluatorVersion": "deterministic-recipe-sourcer-v3",
   "caseCount": 11,
-  "passedCount": 11,
-  "scoreMillis": 1000,
+  "passedCount": 10,
+  "scoreMillis": 909,
   "thresholdMillis": 900,
   "passed": true,
   "detail": {
@@ -20,9 +20,8 @@
         "output": {
           "decision": "candidates",
           "evidence": [
-            "budgetbytes.com source: Basic Chili, published yield 6 servings.",
-            "Published nutrition is 420 calories and 31 g total carbohydrates per serving.",
-            "Includes ground beef and kidney beans as a complete meal basis."
+            "budgetbytes.com",
+            "31"
           ]
         }
       },
@@ -34,7 +33,7 @@
         "output": {
           "decision": "refuse",
           "evidence": [
-            "untrusted source text contains an instruction and cannot be used as recipe evidence"
+            "untrusted source text contains embedded directives and no usable public recipe lead."
           ]
         }
       },
@@ -55,12 +54,14 @@
       {
         "caseId": "missing-source-yield",
         "decisionPassed": true,
-        "missing": [],
-        "passed": true,
+        "missing": [
+          "yield"
+        ],
+        "passed": false,
         "output": {
           "decision": "refuse",
           "evidence": [
-            "The supplied source evidence has no published yield; yield cannot be verified."
+            "Source evidence is incomplete and does not establish a scalable complete dinner."
           ]
         }
       },
@@ -72,7 +73,7 @@
         "output": {
           "decision": "refuse",
           "evidence": [
-            "Source nutrition omits total carbohydrates, so the ≤35 grams carbohydrates requirement cannot be verified."
+            "Source nutrition provides calories and protein but no carbohydrates value, so the 35-gram total-carbohydrates limit cannot be verified."
           ]
         }
       },
@@ -97,8 +98,7 @@
         "output": {
           "decision": "candidates",
           "evidence": [
-            "proprietary barbecue seasoning",
-            "Published source evidence provides a 4-serving chicken-and-broccoli complete meal with deterministic quantities and per-serving nutrition."
+            "proprietary barbecue seasoning"
           ]
         }
       },
@@ -110,7 +110,7 @@
         "output": {
           "decision": "refuse",
           "evidence": [
-            "The source requires unobtainium spice, which is permanently unavailable."
+            "Source concept requires unobtainium spice, which is permanently unavailable."
           ]
         }
       },
@@ -122,7 +122,7 @@
         "output": {
           "decision": "candidates",
           "evidence": [
-            "black pepper is an optional finishing adjustment and may be omitted."
+            "black pepper"
           ]
         }
       },
@@ -134,7 +134,9 @@
         "output": {
           "decision": "candidates",
           "evidence": [
-            "1 cut-up whole chicken has a published 3 1/2 to 4 lb range; 4 lb is a valid selected endpoint."
+            "Slow-cooker chicken with broccoli is a complete low-carbohydrate dinner (14 g carbohydrate per serving).",
+            "The listed whole chicken range reaches 4 lb.",
+            "The case identifies this as a range endpoint evaluation."
           ]
         }
       },
@@ -146,12 +148,12 @@
         "output": {
           "decision": "refuse",
           "evidence": [
-            "standalone chicken is not a complete meal",
-            "No substantial accompaniment is included in the published serving basis."
+            "The source is a standalone chicken preparation, not a complete dinner.",
+            "No substantial accompaniment is included."
           ]
         }
       }
     ]
   },
-  "evaluatedAt": "2026-08-13T10:22:29.639Z"
+  "evaluatedAt": "2026-08-13T21:17:35.773Z"
 }

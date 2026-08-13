@@ -1018,6 +1018,29 @@ export const recipeSourceCandidateSchema = z.object({
   });
 });
 
+export const recipeHuntLeadSchema = z.object({
+  id: nonEmptyId,
+  title: z.string().trim().min(4).max(300),
+  proposedSlug: nonEmptyId,
+  sourceUrl: recipeHttpUrl,
+  sourceDomain: z.string().trim().min(3).max(300),
+  cuisine: z.string().trim().min(2).max(160),
+  proteinClass: z.string().trim().min(2).max(100),
+  method: z.string().trim().min(3).max(300),
+  flavorFamily: z.string().trim().min(2).max(160),
+  baseOrStarch: z.string().trim().min(2).max(160),
+  conceptSummary: z.string().trim().min(20).max(1000),
+  structuredDataAvailable: z.boolean(),
+  confidence: z.enum(["high", "medium", "low"]),
+}).strict();
+
+export const recipeHuntResultsSchema = z.object({
+  requestId: nonEmptyId,
+  leads: z.array(recipeHuntLeadSchema).max(100),
+  rejectedSources: z.array(z.object({ sourceUrl: recipeHttpUrl, reason: z.string().trim().min(5).max(1000) }).strict()).max(200),
+  searchSummary: z.string().trim().min(10).max(3000),
+}).strict();
+
 export const contentItemSchema = z.object({
   sourceCandidateId: nonEmptyId,
   sourceServings: z.number().int().min(1).max(100),
@@ -1218,7 +1241,7 @@ export const OMAHA_GROCERY_STORE_LOCATION_IDS = [
   "walmart-omaha",
 ] as const;
 
-const ingredientStorePriceSchema = z.object({
+export const ingredientStorePriceSchema = z.object({
   storeLocationId: z.enum(OMAHA_GROCERY_STORE_LOCATION_IDS),
   outcome: z.enum(["priced", "not_found", "blocked", "ambiguous"]),
   checkedAt: isoDateTime,
@@ -1268,7 +1291,7 @@ const ingredientStorePriceSchema = z.object({
   if (value.outcome !== "blocked" && value.sourceUrl === null) context.addIssue({ code: "custom", path: ["sourceUrl"], message: "completed store checks require a first-party evidence URL" });
 });
 
-const ingredientCommodityProposalSchema = z.object({
+export const ingredientCommodityProposalSchema = z.object({
   id: z.string().regex(/^[a-z0-9][a-z0-9-]{1,79}$/),
   label: z.string().trim().min(2).max(120),
   categoryId: z.string().regex(/^[a-z0-9][a-z0-9-]{1,79}$/),
@@ -1292,11 +1315,129 @@ export const ingredientPriceResearchSchema = z.object({
   const actual = value.stores.map((store) => store.storeLocationId).sort();
   if (JSON.stringify(expected) !== JSON.stringify(actual)) context.addIssue({ code: "custom", path: ["stores"], message: "research must contain exactly one check for each registered Omaha store" });
   const priced = value.stores.filter((store) => store.outcome === "priced").length;
+  const allTerminal = value.stores.every((store) => store.outcome === "priced" || store.outcome === "not_found");
   const allNotFound = value.stores.every((store) => store.outcome === "not_found");
-  const expectedDisposition = priced > 0 ? "available" : allNotFound ? "permanently_unavailable" : "needs_operator";
+  const expectedDisposition = allNotFound ? "permanently_unavailable" : allTerminal && priced > 0 ? "available" : "needs_operator";
   if (value.disposition !== expectedDisposition) context.addIssue({ code: "custom", path: ["disposition"], message: `store outcomes require disposition ${expectedDisposition}` });
-  if ((value.disposition === "available") !== (value.commodityProposal !== null)) context.addIssue({ code: "custom", path: ["commodityProposal"], message: "only available ingredients require a commodity proposal" });
+  if ((priced > 0) !== (value.commodityProposal !== null)) context.addIssue({ code: "custom", path: ["commodityProposal"], message: "a commodity proposal is required exactly when at least one store has a verified price" });
 });
+
+export const recipeHuntDedupSchema = z.object({
+  requestId: nonEmptyId,
+  accepted: z.array(recipeHuntLeadSchema).max(50),
+  decisions: z.array(recipeDedupDecisionSchema).max(100),
+}).strict().superRefine((value, context) => {
+  const decisionIds = value.decisions.map((decision) => decision.candidateId);
+  if (new Set(decisionIds).size !== decisionIds.length) context.addIssue({ code: "custom", path: ["decisions"], message: "hunt decisions must be unique" });
+  const acceptedIds = new Set(value.accepted.map((candidate) => candidate.id));
+  for (const decision of value.decisions) {
+    if ((decision.decision === "accepted") !== acceptedIds.has(decision.candidateId)) {
+      context.addIssue({ code: "custom", path: ["decisions"], message: `accepted hunt lead mismatch for ${decision.candidateId}` });
+    }
+  }
+});
+
+export const recipeSourceFactsSchema = z.object({
+  requestId: nonEmptyId,
+  candidates: z.array(recipeSourceCandidateSchema).max(50),
+  factLocks: z.array(z.object({
+    candidateId: nonEmptyId,
+    sourceUrl: recipeHttpUrl,
+    accessedAt: isoDateTime,
+    extractorVersion: z.string().trim().min(3).max(160),
+  }).strict()).max(50),
+  rejectedSources: z.array(z.object({
+    candidateId: nonEmptyId,
+    sourceUrl: recipeHttpUrl,
+    reason: z.string().trim().min(5).max(1000),
+  }).strict()).max(100),
+  extractionSummary: z.string().trim().min(10).max(3000),
+}).strict().superRefine((value, context) => {
+  const candidateIds = value.candidates.map((candidate) => candidate.id).sort();
+  const lockIds = value.factLocks.map((lock) => lock.candidateId).sort();
+  if (JSON.stringify(candidateIds) !== JSON.stringify(lockIds)) {
+    context.addIssue({ code: "custom", path: ["factLocks"], message: "every extracted candidate requires exactly one immutable fact lock" });
+  }
+  const candidateById = new Map(value.candidates.map((candidate) => [candidate.id, candidate]));
+  for (const lock of value.factLocks) {
+    const candidate = candidateById.get(lock.candidateId);
+    if (!candidate || candidate.sourceUrl !== lock.sourceUrl || candidate.accessedAt !== lock.accessedAt) {
+      context.addIssue({ code: "custom", path: ["factLocks"], message: `fact lock identity mismatch for ${lock.candidateId}` });
+    }
+  }
+});
+
+export const ingredientPricingWaveCreateSchema = z.object({
+  id: nonEmptyId,
+  campaignId: nonEmptyId.nullable().default(null),
+  sourceKind: z.enum(["recipe", "adhoc", "backfill"]),
+  gapIds: z.array(nonEmptyId).min(1).max(200),
+  targetAvailable: z.number().int().min(1).max(200),
+  deadlineAt: isoDateTime.nullable().default(null),
+  inputHash: sha256Hex,
+}).strict();
+
+export const ingredientStoreCheckClaimSchema = z.object({
+  storeLocationId: z.enum(OMAHA_GROCERY_STORE_LOCATION_IDS),
+  owner: nonEmptyId,
+  lane: z.enum(["catalog", "qa", "targeted_refresh"]).default("catalog"),
+  limit: z.number().int().min(1).max(200).default(50),
+  leaseSeconds: z.number().int().min(60).max(900).default(300),
+}).strict();
+
+export const ingredientStoreCheckHeartbeatSchema = z.object({
+  owner: nonEmptyId,
+  leaseGeneration: z.number().int().positive(),
+  leaseSeconds: z.number().int().min(60).max(900).default(300),
+}).strict();
+
+export const ingredientStoreCheckCompleteSchema = z.object({
+  owner: nonEmptyId,
+  leaseGeneration: z.number().int().positive(),
+  result: ingredientStorePriceSchema,
+  evidence: z.object({
+    objectKey: z.string().trim().min(3).max(1000),
+    sha256: sha256Hex,
+    byteLength: z.number().int().nonnegative(),
+    contentType: z.string().trim().min(3).max(200),
+  }).strict(),
+  candidateSetHash: sha256Hex,
+  validatorVersions: z.record(z.string(), z.string().min(1).max(160)).default({}),
+}).strict();
+
+export const ingredientStoreCheckFailSchema = z.object({
+  owner: nonEmptyId,
+  leaseGeneration: z.number().int().positive(),
+  failureClass: z.enum(["transient", "challenge", "ambiguous", "adapter_quarantined"]),
+  reason: z.string().trim().min(5).max(5000),
+  challengeId: nonEmptyId.nullable().default(null),
+  retryAt: isoDateTime.nullable().default(null),
+}).strict();
+
+export const ingredientResolutionProposalSchema = z.object({
+  pricingJobId: nonEmptyId,
+  proposal: ingredientCommodityProposalSchema,
+  plannerVersion: z.string().trim().min(3).max(160),
+}).strict();
+
+export const ingredientDefinitionPlanSchema = z.object({
+  batchId: nonEmptyId,
+  items: z.array(z.object({
+    pricingJobId: nonEmptyId,
+    gapId: nonEmptyId,
+    proposal: ingredientCommodityProposalSchema,
+    rationale: z.string().trim().min(10).max(2000),
+  }).strict()).min(1).max(50),
+}).strict();
+
+export const ingredientPublicationBatchCreateSchema = z.object({
+  gapIds: z.array(nonEmptyId).min(1).max(50),
+  sourceCommit: z.string().trim().min(7).max(100).nullable().default(null),
+}).strict();
+
+export const ingredientPublicationVerifySchema = z.object({
+  releaseId: nonEmptyId,
+}).strict();
 
 export const sourceSentinelResultSchema = z.object({
   sourceId: nonEmptyId,

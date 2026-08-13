@@ -146,7 +146,7 @@
       "plane": "pc",
       "scheduleId": "recipe-pack-weekly",
       "promptFile": "agents/recipe-sourcer/prompt.md",
-      "promptSha256": "f332e602bf68df82de9eb262daafa0f64ee7d7ac3f96c1c468144e65c5dccb3b",
+      "promptSha256": "c56e875569e12fe23d45d9c8fb69af3631d9cdcb1b088016a365458c804e801d",
       "provider": "codex-chatgpt",
       "model": "gpt-5.6-terra",
       "reasoningEffort": "medium",
@@ -155,7 +155,7 @@
       "criticality": "optional",
       "workflowFile": ".github/workflows/agent-recipe-sourcer.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "48547d948d0b703b811a8a8d657ff2d69fdbaf38034912c79f2fb912b31c09cd",
+      "executionConfigHash": "c0df0be7b6b720ae736e422c35f090a9dace414882760bc9b88a194c869e4a58",
       "capabilities": [
         "read:content",
         "search:web",
@@ -165,7 +165,7 @@
       "inputContracts": [
         "recipe-source-request-v1"
       ],
-      "outputContract": "recipe-source-candidates-v2",
+      "outputContract": "recipe-hunt-leads-v1",
       "fixtureFiles": [
         "agents/evals/recipe-sourcer.json"
       ]
@@ -175,7 +175,7 @@
       "enabled": true,
       "plane": "pc",
       "promptFile": "agents/recipe-deduper/prompt.md",
-      "promptSha256": "39c914e6e3a2459692d6fc4e5c140579c0211d8b88282e930e2f178b9d64eb84",
+      "promptSha256": "291be4ae0a37477ac2aa9869fd9bd167d113a3b8b89374b087a06843db2d3545",
       "provider": "codex-chatgpt",
       "model": "gpt-5.6-sol",
       "reasoningEffort": "high",
@@ -184,18 +184,47 @@
       "criticality": "optional",
       "workflowFile": ".github/workflows/agent-recipe-deduper.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "aafc71bae3cf0e8bc1c9919a2dd158cfd6977655b4337710044e2ca84e01837e",
+      "executionConfigHash": "f20f80d171985e622ea2ce7ece2c12bee88ba310864d77f3076a45c63f766ea3",
       "capabilities": [
         "read:content",
         "write:ledger",
         "write:content-stage"
       ],
       "inputContracts": [
-        "recipe-source-candidates-v2"
+        "recipe-hunt-leads-v1"
       ],
-      "outputContract": "recipe-dedup-v2",
+      "outputContract": "recipe-hunt-dedup-v1",
       "fixtureFiles": [
         "agents/evals/recipe-deduper.json"
+      ]
+    },
+    {
+      "id": "recipe-fact-extractor",
+      "enabled": true,
+      "plane": "pc",
+      "promptFile": "agents/recipe-fact-extractor/prompt.md",
+      "promptSha256": "5389a21b0e90cc708fdff302e55455c894fef0cccd834b233618c1cb3da1a1fa",
+      "provider": "codex-chatgpt",
+      "model": "gpt-5.6-terra",
+      "reasoningEffort": "medium",
+      "monthlyBudgetMicrousd": 20000000,
+      "reserveBudgetPercent": 0,
+      "criticality": "optional",
+      "workflowFile": ".github/workflows/agent-recipe-fact-extractor.yml",
+      "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
+      "executionConfigHash": "62f95940b5d548fe9f05b712e9440e957acd0c71530e4f76144ef3929c73511f",
+      "capabilities": [
+        "read:content",
+        "search:web",
+        "write:ledger",
+        "write:content-stage"
+      ],
+      "inputContracts": [
+        "recipe-hunt-dedup-v1"
+      ],
+      "outputContract": "recipe-source-facts-v3",
+      "fixtureFiles": [
+        "agents/evals/recipe-fact-extractor.json"
       ]
     },
     {
@@ -203,7 +232,7 @@
       "enabled": true,
       "plane": "pc",
       "promptFile": "agents/ingredient-price-researcher/prompt.md",
-      "promptSha256": "4d4385728211ce80a4abc5f232a267a2da7e68f0c34a04ff91d1cbb3617faeb1",
+      "promptSha256": "0aca8cf901658f5c9ec614f95f07a4ea4671f08937e7a2e54127e0d04d47b04d",
       "provider": "codex-chatgpt",
       "model": "gpt-5.6-sol",
       "reasoningEffort": "high",
@@ -212,7 +241,7 @@
       "criticality": "operational",
       "workflowFile": ".github/workflows/agent-ingredient-price-researcher.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "454fd7dcff1357e50d49163dcd26665c17cc80cbd2027ddca23b24d54e2f2c8d",
+      "executionConfigHash": "b3c427d1516f3ef4fb83a137cecc848031c322d887010afaf1fe0809e95d5513",
       "capabilities": [
         "read:content",
         "read:evidence",
@@ -228,6 +257,26 @@
       ]
     },
     {
+      "id": "ingredient-definition-planner",
+      "enabled": true,
+      "plane": "pc",
+      "promptFile": "agents/ingredient-definition-planner/prompt.md",
+      "promptSha256": "67694f9830d65feda2a720f7f56de70d1f3db75982238a3dbe4621639a3ba74f",
+      "provider": "codex-chatgpt",
+      "model": "gpt-5.6-sol",
+      "reasoningEffort": "medium",
+      "monthlyBudgetMicrousd": 10000000,
+      "reserveBudgetPercent": 20,
+      "criticality": "operational",
+      "workflowFile": ".github/workflows/agent-ingredient-definition-planner.yml",
+      "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
+      "executionConfigHash": "027718981eaec49f33134e6c3ed866c91c726622653e325ac61b5b8bb82bd5da",
+      "capabilities": ["read:content", "write:ledger"],
+      "inputContracts": ["ingredient-definition-plan-v1"],
+      "outputContract": "ingredient-definition-plan-v1",
+      "fixtureFiles": ["agents/evals/ingredient-definition-planner.json"]
+    },
+    {
       "id": "recipe-mapper",
       "enabled": true,
       "plane": "pc",
@@ -241,14 +290,14 @@
       "criticality": "optional",
       "workflowFile": ".github/workflows/agent-recipe-mapper.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "6290fc134830d0ae1c04f5c7ef3611d2739eccde47030aba41b07c6831cdf614",
+      "executionConfigHash": "3f96a39a539a3ee775be7a09a5a66a6a75f8eb005dd4ea3c1f408d32c864571b",
       "capabilities": [
         "read:content",
         "write:ledger",
         "write:content-stage"
       ],
       "inputContracts": [
-        "recipe-dedup-v2",
+        "recipe-source-facts-v3",
         "commodity-config-v1"
       ],
       "outputContract": "recipe-map-v2",
@@ -289,7 +338,7 @@
       "enabled": true,
       "plane": "pc",
       "promptFile": "agents/recipe-auditor/prompt.md",
-      "promptSha256": "22aed77c8fb94b25abd274d2b93bd4c991add1a307babe2d59dcc7868c1c6e7b",
+      "promptSha256": "84d0dc45515b65365060af86da034ac848640089cc75c17fbc34848628087c4b",
       "provider": "codex-chatgpt",
       "model": "gpt-5.6-sol",
       "reasoningEffort": "high",
@@ -298,7 +347,7 @@
       "criticality": "safety",
       "workflowFile": ".github/workflows/agent-recipe-auditor.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "bd7c53fc05c37882c002ad406a591e63fc7992c8f23945fc380d613f962116ac",
+      "executionConfigHash": "9193bca6e9718f8b06c8351025039ed16f37bb5b432ea60ac807dab3b972552d",
       "capabilities": [
         "read:content",
         "write:ledger",

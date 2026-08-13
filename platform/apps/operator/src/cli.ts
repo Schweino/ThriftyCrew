@@ -22,6 +22,7 @@ import { catalogRefreshPlan } from "./capture-journal";
 import { agentJobRunFields } from "./job-run";
 import { loadR2ShardedEngineSnapshot } from "./engine-snapshot";
 import { compileCommodityRegexPattern, normalizeCommodityRegexPattern, parseCatalogJson } from "./commodity-regex";
+import { runIngredientPipeline } from "./ingredient-pipeline";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
@@ -393,7 +394,7 @@ interface CommodityAddition {
   bandMin?: number; bandMax?: number;
 }
 
-async function commodityAddSpecification(incoming: CommodityAddition): Promise<unknown> {
+async function commodityAddSpecification(incoming: CommodityAddition, generate = true): Promise<unknown> {
   if (!incoming.id || !/^[a-z0-9][a-z0-9-]{1,79}$/.test(incoming.id) || !incoming.label?.trim() || !incoming.categoryId) throw new Error("commodity file needs a safe id, label, unit, and categoryId");
   const allowedUnits = new Set(["lb", "oz", "fl_oz", "each", "dozen", "gal", "qt", "pt", "liter", "ml", "gram", "kg"]);
   if (!incoming.unit || !allowedUnits.has(incoming.unit)) throw new Error(`commodity ${incoming.id} has an unsupported basis unit`);
@@ -447,12 +448,39 @@ async function commodityAddSpecification(incoming: CommodityAddition): Promise<u
   await writeJson(commodityFile, commodities);
   await writeJson(categoryFile, categoryDocument);
   await writeJson(searchFile, searchDocument);
-  return { ...await generateLegacyConfiguration(incomeRoot, false), commodityId: incoming.id, searchTerm: searchTerms[0] };
+  return { ...(generate ? await generateLegacyConfiguration(incomeRoot, false) : { generated: false }), commodityId: incoming.id, searchTerm: searchTerms[0] };
 }
 
 async function commodityAdd(inputFile: string | undefined): Promise<unknown> {
   if (!inputFile) throw new Error("tc commodity add requires a JSON file");
   return commodityAddSpecification(JSON.parse(await readFile(cliPath(inputFile), "utf8")) as CommodityAddition);
+}
+
+async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
+  if (gapIds.length < 1 || gapIds.length > 50) throw new Error("ingredient publish-v2 requires 1 through 50 gap ids");
+  const client = await mutationClient();
+  const sealed = await client.request("/internal/ingredient-publication/batches", {
+    json: { gapIds, sourceCommit: process.env.GITHUB_SHA ?? null },
+  }) as { batchId?: string; members?: Array<{ gapId: string; proposal: CommodityAddition }> };
+  if (!sealed.batchId || sealed.members?.length !== gapIds.length) throw new Error("sealed ingredient publication batch is incomplete");
+  const applied = [];
+  for (const member of sealed.members) applied.push(await commodityAddSpecification(member.proposal, false));
+  await generateLegacyConfiguration(incomeRoot, true);
+  const bridge = await buildCurrentBridge(incomeRoot);
+  const deployment = await deployConfiguration(client, bridge.configuration);
+  const matching = await rematchPromotedBatches(client);
+  const snapshot = await loadEngineSnapshot(client, "direct");
+  const catalog = await loadNativeReleaseCatalog(incomeRoot);
+  const releaseArtifact = await buildNativeRelease(incomeRoot, snapshot, catalog, await loadCurrentReleaseGraph(client));
+  if (Number(releaseArtifact.audit.top5Entries) !== 20 || Number(releaseArtifact.audit.rotationEntries) !== 20) {
+    throw new Error("ingredient microbatch release failed the 20-recipe ranking guard");
+  }
+  const publication = await publishNativeRelease(client, releaseArtifact);
+  const verification = await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(sealed.batchId)}/verify`, {
+    json: { releaseId: releaseArtifact.releaseId },
+  });
+  if (verification.complete !== true) throw new Error("ingredient microbatch is live on fewer than both required public origins");
+  return { ok: true, batchId: sealed.batchId, releaseId: releaseArtifact.releaseId, applied: applied.length, deployment, matching, publication, verification };
 }
 
 async function recipeAdd(inputFile: string | undefined): Promise<unknown> {
@@ -1466,6 +1494,8 @@ if (command === "status") {
     }
   }
   result = { ok: true, applied, failed };
+} else if (command === "ingredient" && subcommand === "publish-v2") {
+  result = await publishIngredientMicrobatch(arguments_);
 } else if (command === "recipe" && subcommand === "add") {
   result = await recipeAdd(arguments_[0]);
 } else if (command === "recipe" && subcommand === "bundles") {
@@ -1564,6 +1594,12 @@ if (command === "status") {
 } else if (command === "ingredient" && subcommand === "status") {
   const query = arguments_[0] ? `?status=${encodeURIComponent(arguments_[0])}` : "";
   result = await (await mutationClient()).request(`/internal/ingredient-gaps${query}`, { method: "GET" });
+} else if (command === "ingredient" && subcommand === "pipeline") {
+  const action = arguments_[0] ?? "run";
+  if (action === "status") result = await (await mutationClient()).request("/internal/ingredient-pricing/status");
+  else if (action === "tick") result = await runIngredientPipeline(await mutationClient(), { once: true });
+  else if (action === "run") result = await runIngredientPipeline(await mutationClient());
+  else throw new Error("tc ingredient pipeline requires run, tick, or status");
 } else if (command === "recipe" && subcommand === "wave") {
   const [action, waveId, value] = arguments_;
   if (!action || !waveId) throw new Error("tc recipe wave requires snapshot|published|corrective and a wave id");

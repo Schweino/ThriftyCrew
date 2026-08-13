@@ -50,6 +50,30 @@ describe("agent output boundary", () => {
     expect(JSON.stringify(z.toJSONSchema(ingredientPriceResearchSchema))).not.toContain('"format":"uri"');
   });
 
+  it("requires seven terminal store checks but only one verified price", () => {
+    const priced = {
+      ...unpricedStores[0], outcome: "priced" as const, productName: "Test spice", packageText: "8 oz",
+      sellerName: "Example Retailer", fulfillmentMode: "pickup" as const, availabilityText: "In stock",
+      qualifyingProductsExamined: 3, packagePriceMinor: 400, normalizedBasisUnit: "oz" as const,
+      normalizedBasisQtyMicros: 8_000_000, perUnitMicros: 500_000, offerKind: "everyday" as const,
+    };
+    const commodityProposal = { id: "test-spice", label: "Test Spice", categoryId: "pantry", unit: "oz" as const, include: ["\\btest spice\\b"], exclude: [], searchTerms: ["test spice"] };
+    const available = {
+      gapId: "gap_terminal", ingredientName: "Test spice", marketId: "omaha" as const, researchedAt: "2026-08-13T12:00:00.000Z",
+      disposition: "available" as const, stores: [priced, ...unpricedStores.slice(1)], commodityProposal,
+      summary: "One store has a verified price and every other Omaha store has a validated not-found result.",
+    };
+    expect(ingredientPriceResearchSchema.parse(available)).toEqual(available);
+    const partialStores = available.stores.map((store, index) => index === 6
+      ? { ...store, outcome: "ambiguous" as const, searchComplete: false }
+      : store);
+    expect(() => ingredientPriceResearchSchema.parse({ ...available, stores: partialStores })).toThrow(/needs_operator/);
+    expect(ingredientPriceResearchSchema.parse({
+      ...available, disposition: "needs_operator", stores: partialStores,
+      summary: "One store is priced but another store remains ambiguous, so the ingredient is not terminal.",
+    }).commodityProposal).toEqual(commodityProposal);
+  });
+
   it("loads ingredient category context through active configuration membership", () => {
     expect(activeIngredientCategoryContextSql).toContain("configuration_categories member");
     expect(activeIngredientCategoryContextSql).toContain("version.id = member.configuration_id");
@@ -226,7 +250,13 @@ describe("agent output boundary", () => {
   });
 
   it("requires a dedup decision for every sourced candidate", () => {
-    const input = { output: { requestId: "request_one", candidates: [candidate], rejectedSources: [], searchSummary: "One verified source was accepted." } };
+    const lead = {
+      id: candidate.id, title: candidate.title, proposedSlug: candidate.proposedSlug, sourceUrl: candidate.sourceUrl,
+      sourceDomain: "example.test", cuisine: candidate.cuisine, proteinClass: candidate.proteinClass,
+      method: candidate.method, flavorFamily: "tomato chili", baseOrStarch: "beans",
+      conceptSummary: candidate.conceptSummary, structuredDataAvailable: true, confidence: "high" as const,
+    };
+    const input = { output: { requestId: "request_one", leads: [lead], rejectedSources: [], searchSummary: "One lightweight source lead was accepted." } };
     const output = { requestId: "request_one", accepted: [], decisions: [] };
     expect(() => assertRecipeChainContinuity("recipe-deduper", input, output)).toThrow(/every sourced candidate/);
   });
@@ -250,14 +280,14 @@ describe("agent output boundary", () => {
 
   it("ends a recipe request cleanly when a stage has nothing safe to advance", () => {
     expect(recipeTerminalReason("recipe-sourcer", {
-      requestId: "request_one", candidates: [], rejectedSources: [], searchSummary: "No source had enough verified facts.",
-    })).toBe("no verified source candidates");
+      requestId: "request_one", leads: [], rejectedSources: [], searchSummary: "No accessible source lead met the request.",
+    })).toBe("no accessible source leads");
     expect(recipeTerminalReason("recipe-deduper", {
       requestId: "request_one", accepted: [], decisions: [{
         candidateId: candidate.id, decision: "catalog_duplicate", duplicateOf: "existing-chili", reason: "The current catalog already contains the same dish.",
         similarity: { protein: "same", flavor: "same", starch: "same", method: "same" },
       }],
-    })).toBe("all candidates were rejected or deduplicated");
+    })).toBe("all recipe leads were rejected or deduplicated");
   });
 });
 

@@ -9,9 +9,13 @@ import {
   contentBatchAuditSchema,
   contentBatchItemsSchema,
   ingredientPriceResearchSchema,
+  ingredientDefinitionPlanSchema,
   pullRequestProposalSchema,
   recipeDedupSchema,
+  recipeHuntDedupSchema,
+  recipeHuntResultsSchema,
   recipeMapSchema,
+  recipeSourceFactsSchema,
   recipeSourceCandidatesSchema,
   triagePlanSchema,
 } from "@thriftycrew/contracts";
@@ -81,11 +85,15 @@ const outputSchemas = {
   "pull-request-v1": pullRequestProposalSchema,
   "accuracy-verdicts-v1": accuracyVerdictsSchema,
   "recipe-source-candidates-v2": recipeSourceCandidatesSchema,
+  "recipe-hunt-leads-v1": recipeHuntResultsSchema,
+  "recipe-hunt-dedup-v1": recipeHuntDedupSchema,
+  "recipe-source-facts-v3": recipeSourceFactsSchema,
   "recipe-dedup-v2": recipeDedupSchema,
   "recipe-map-v2": recipeMapSchema,
   "content-items-v2": contentBatchItemsSchema,
   "content-audit-v1": contentBatchAuditSchema,
   "ingredient-price-research-v1": ingredientPriceResearchSchema,
+  "ingredient-definition-plan-v1": ingredientDefinitionPlanSchema,
 } as const;
 const outputType = outputSchemas[definition.outputContract as keyof typeof outputSchemas];
 if (!outputType) throw new Error(`output contract ${definition.outputContract} has no structured runner schema`);
@@ -119,7 +127,7 @@ if (definition.provider === "codex-chatgpt") {
     modelSettings: { reasoning: { effort: definition.reasoningEffort }, text: { verbosity: "low" } },
     tools: definition.capabilities.includes("search:web")
       ? [webSearchTool({
-          searchContextSize: requestedAgent === "recipe-sourcer" || requestedAgent === "ingredient-price-researcher" ? "medium" : "low",
+          searchContextSize: requestedAgent === "recipe-sourcer" || requestedAgent === "recipe-fact-extractor" || requestedAgent === "ingredient-price-researcher" ? "medium" : "low",
           externalWebAccess: true,
           userLocation: { type: "approximate", city: "Omaha", region: "Nebraska", country: "US", timezone: "America/Chicago" },
         })]

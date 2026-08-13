@@ -6,7 +6,7 @@
     {
       "id": "available-loyalty-and-sale-dates",
       "input": { "ingredientName": "gochujang", "storeEvidence": { "hy-vee-omaha-1465": { "price": "$4.99", "size": "17.6 oz", "loyalty": true, "validFrom": "2026-08-12T05:00:00Z", "validTo": "2026-08-19T05:00:00Z" } } },
-      "expect": { "decision": "available", "mustMention": ["loyalty", "validFrom", "validTo"] }
+      "expect": { "decision": "needs_operator", "mustMention": ["loyalty", "validFrom", "validTo", "six"] }
     },
     {
       "id": "seven-successful-empty-checks",

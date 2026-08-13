@@ -1,0 +1,57 @@
+{
+  "id": "eval_571988365e75e49d44544f1b624ee42c",
+  "agentId": "ingredient-definition-planner",
+  "executionConfigHash": "027718981eaec49f33134e6c3ed866c91c726622653e325ac61b5b8bb82bd5da",
+  "modelId": "gpt-5.6-sol",
+  "corpusHash": "92dc7e564d36b82548667b64b2e773bd56c0b0e5025d0601d27af1a184d4a0df",
+  "evaluatorVersion": "deterministic-ingredient-definition-planner-v3",
+  "caseCount": 3,
+  "passedCount": 3,
+  "scoreMillis": 1000,
+  "thresholdMillis": 900,
+  "passed": true,
+  "detail": {
+    "cases": [
+      {
+        "caseId": "specific-subtype",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "plan",
+          "evidence": [
+            "black garlic",
+            "A specific subtype can be conservatively defined using an anchored include expression without broadening to garlic generally.",
+            "An existing category can be selected from the supplied list."
+          ]
+        }
+      },
+      {
+        "caseId": "collision-exclusion",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "plan",
+          "evidence": [
+            "rice vinegar",
+            "The supplied ingredient has an existing category: pantry."
+          ]
+        }
+      },
+      {
+        "caseId": "unknown-category-refusal",
+        "decisionPassed": true,
+        "missing": [],
+        "passed": true,
+        "output": {
+          "decision": "refuse",
+          "evidence": [
+            "No existing category is supplied, so exactly one category cannot be selected."
+          ]
+        }
+      }
+    ]
+  },
+  "evaluatedAt": "2026-08-13T21:16:26.220Z"
+}
