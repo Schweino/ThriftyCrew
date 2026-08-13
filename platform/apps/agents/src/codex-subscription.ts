@@ -9,6 +9,39 @@ interface CodexAuthDocument {
   tokens?: unknown;
 }
 
+type JsonSchemaObject = Record<string, unknown>;
+
+function isObject(value: unknown): value is JsonSchemaObject {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+export function codexStrictOutputSchema(schema: unknown): unknown {
+  if (Array.isArray(schema)) return schema.map(codexStrictOutputSchema);
+  if (!isObject(schema)) return schema;
+  const transformed = Object.fromEntries(Object.entries(schema).map(([key, value]) => [key, codexStrictOutputSchema(value)]));
+  if (!isObject(schema.properties)) return transformed;
+  const originallyRequired = new Set(Array.isArray(schema.required) ? schema.required.filter((value): value is string => typeof value === "string") : []);
+  const properties = Object.fromEntries(Object.entries(schema.properties).map(([key, value]) => {
+    const property = codexStrictOutputSchema(value);
+    return [key, originallyRequired.has(key) ? property : { anyOf: [property, { type: "null" }] }];
+  }));
+  return { ...transformed, properties, required: Object.keys(properties), additionalProperties: false };
+}
+
+export function stripCodexOptionalNulls(value: unknown, schema: unknown): unknown {
+  if (Array.isArray(value)) {
+    const itemSchema = isObject(schema) ? schema.items : undefined;
+    return value.map((item) => stripCodexOptionalNulls(item, itemSchema));
+  }
+  if (!isObject(value) || !isObject(schema) || !isObject(schema.properties)) return value;
+  const schemaProperties = schema.properties;
+  const required = new Set(Array.isArray(schema.required) ? schema.required.filter((item): item is string => typeof item === "string") : []);
+  return Object.fromEntries(Object.entries(value).flatMap(([key, item]) => {
+    if (item === null && !required.has(key)) return [];
+    return [[key, stripCodexOptionalNulls(item, schemaProperties[key])]];
+  }));
+}
+
 export function assertChatGptAuthDocument(document: CodexAuthDocument): void {
   if (document.auth_mode !== "chatgpt") {
     throw new Error("Codex subscription execution requires auth_mode=chatgpt; API-key execution is prohibited");

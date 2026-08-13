@@ -15,7 +15,7 @@ import {
   triagePlanSchema,
 } from "@thriftycrew/contracts";
 import { normalizeTextForHash } from "@thriftycrew/domain";
-import { runSubscriptionAgent } from "./codex-subscription";
+import { codexStrictOutputSchema, runSubscriptionAgent, stripCodexOptionalNulls } from "./codex-subscription";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const outputRoot = path.resolve(process.env.TC_OUTPUT_ROOT ?? process.env.RUNNER_TEMP ?? path.join(platformRoot, ".agent-output"));
@@ -90,16 +90,17 @@ if (!outputType) throw new Error(`output contract ${definition.outputContract} h
 let finalOutput: unknown;
 let usageOutput: { inputTokens: number; outputTokens: number; cacheReadTokens: number; cacheWriteTokens: number; costMicrousd: number; billingMode?: string };
 if (definition.provider === "codex-chatgpt") {
+  const jsonSchema = z.toJSONSchema(outputType);
   const result = await runSubscriptionAgent({
     model,
     reasoningEffort: definition.reasoningEffort,
     prompt,
     inputJson,
-    outputSchema: z.toJSONSchema(outputType),
+    outputSchema: codexStrictOutputSchema(jsonSchema),
     outputRoot,
     webSearch: definition.capabilities.includes("search:web"),
   });
-  finalOutput = outputType.parse(result.output);
+  finalOutput = outputType.parse(stripCodexOptionalNulls(result.output, jsonSchema));
   usageOutput = {
     inputTokens: result.usage.input_tokens,
     outputTokens: result.usage.output_tokens,
