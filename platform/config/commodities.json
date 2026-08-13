@@ -1394,6 +1394,7 @@
       "cheese[^,]*(cheddar|mozzarella|colby)"
     ],
     "exclude": [
+      "\\bcheese\\s+curds?\\b",
       "\\b(?:burritos?|feta)\\b",
       "cottage",
       "cream\\s+cheese",
@@ -2511,6 +2512,7 @@
       "vidalia"
     ],
     "exclude": [
+      "\\bwhite\\s+onions?\\b",
       "\\bpepper(?:s)?\\s*(?:&|and)?\\s*onions?\\b",
       "green\\s+onion",
       "onion\\s+ring",
@@ -8036,6 +8038,7 @@
       "\\brice\\b"
     ],
     "exclude": [
+      "\\b(?:arborio|risotto)\\b",
       "chicken\\s+rice",
       "\\bready\\s+rice\\b",
       "\\bready\\s+to\\s+heat\\b",
@@ -8884,6 +8887,7 @@
       "olive\\s+oil"
     ],
     "exclude": [
+      "\\bgarlic(?:[-\\s]+infused)?\\b",
       "\\bmayo\\b",
       "mayonnaise",
       "\\bspray\\b",
@@ -17053,6 +17057,7 @@
       "sausage,\\s*italian"
     ],
     "exclude": [
+      "\\bturkey\\b",
       "pizza",
       "pasta",
       "\\bsoup\\b",
@@ -33688,6 +33693,7 @@
       "butter\\s+beans?"
     ],
     "exclude": [
+      "\\b(?:butter|lima)\\s+beans?\\b",
       "\\bdry\\b",
       "\\bdried\\b",
       "\\bbag\\b",
