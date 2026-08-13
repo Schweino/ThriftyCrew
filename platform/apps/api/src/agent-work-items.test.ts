@@ -13,7 +13,7 @@ const candidate = {
   cuisine: "American",
   proteinClass: "beans",
   method: "stovetop simmer",
-  sourceNutrition: { calories: 420, proteinGrams: 20 },
+  sourceNutrition: { calories: 420, proteinGrams: 20, carbohydrateGrams: 34 },
   ingredients: [
     { raw: "1 can beans", quantityText: "1 can" },
     { raw: "1 can tomatoes", quantityText: "1 can" },

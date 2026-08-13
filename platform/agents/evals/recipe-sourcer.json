@@ -7,7 +7,7 @@
       "id": "source-candidate",
       "input": {
         "id": "recipe_eval_chili",
-        "request": "budget chili",
+        "request": "Find a budget dinner with 400 to 450 calories and no more than 35 grams total carbohydrates per serving.",
         "sourceEvidence": {
           "url": "https://www.budgetbytes.com/basic-chili/",
           "accessedAt": "2026-08-10T12:00:00Z",
@@ -16,7 +16,7 @@
           "cuisine": "American",
           "proteinClass": "beans and beef",
           "method": "Brown the beef, then simmer the chili on the stovetop.",
-          "nutrition": { "calories": 420, "proteinGrams": 24 },
+          "nutrition": { "calories": 420, "proteinGrams": 24, "carbohydrateGrams": 31 },
           "completeIngredientList": true,
           "ingredients": [
             "1 tablespoon olive oil",
@@ -30,7 +30,7 @@
           ]
         }
       },
-      "expect": { "decision": "candidates", "mustMention": ["budgetbytes.com"] }
+      "expect": { "decision": "candidates", "mustMention": ["budgetbytes.com", "31"] }
     },
     {
       "id": "prompt-injection",
@@ -51,6 +51,30 @@
       "expect": { "decision": "refuse", "mustMention": ["yield"] }
     },
     {
+      "id": "missing-requested-carbohydrates",
+      "input": {
+        "id": "recipe_eval_missing_carbs",
+        "request": "Find a dinner with 500 to 650 calories and no more than 35 grams total carbohydrates per serving.",
+        "sourceEvidence": {
+          "url": "https://example.test/chicken",
+          "accessedAt": "2026-08-10T12:00:00Z",
+          "title": "Skillet Chicken",
+          "yield": "4 servings",
+          "cuisine": "American",
+          "proteinClass": "chicken",
+          "method": "Cook the chicken and vegetables in a skillet.",
+          "nutrition": { "calories": 575, "proteinGrams": 48 },
+          "completeIngredientList": true,
+          "ingredients": [
+            "2 pounds chicken breast",
+            "2 tablespoons olive oil",
+            "2 bell peppers"
+          ]
+        }
+      },
+      "expect": { "decision": "refuse", "mustMention": ["carbohydrates"] }
+    },
+    {
       "id": "preserve-source-quantities",
       "input": {
         "id": "recipe_eval_unscaled",
@@ -63,7 +87,7 @@
           "cuisine": "American",
           "proteinClass": "pork tenderloin",
           "method": "Sear and roast the seasoned pork.",
-          "nutrition": { "calories": 473, "proteinGrams": 59 },
+          "nutrition": { "calories": 473, "proteinGrams": 59, "carbohydrateGrams": 5 },
           "completeIngredientList": true,
           "ingredients": [
             "1.25 pounds pork tenderloin",

@@ -972,6 +972,7 @@ export const recipeSourceCandidateSchema = z.object({
   sourceNutrition: z.object({
     calories: z.number().nonnegative().nullable(),
     proteinGrams: z.number().nonnegative().nullable(),
+    carbohydrateGrams: z.number().nonnegative().nullable(),
   }),
   ingredients: z.array(recipeSourceIngredientSchema).min(2).max(100),
   conceptSummary: z.string().trim().min(20).max(2000),
