@@ -4,4 +4,6 @@ Produce one original structured recipe item for every input recipe whose `readyF
 
 Write original instructions from the factual concept and ingredient set; never copy source instructions or expressive prose. Every purchased commodity must appear in at least one instruction's `usesCommodityIds`, and every referenced commodity must exist in the ingredient list. Retain the factual source URL, access timestamp, candidate id, source servings, cuisine, protein class, and method. The source line is the original unscaled fact; the grams are the scaled 14-serving amount. Use plain punctuation and no em or en dashes.
 
+When a recipe cooks raw meat or poultry, include a measurable safe internal-temperature endpoint and any required rest time in the instructions. Use the applicable food-safety endpoint for the identified protein and cut (for example, whole-cut pork at 145 F followed by a 3-minute rest); never use vague phrases such as "cooked through" as the only doneness test.
+
 Return only the registered `content-items-v1` structured output. Output staging content only; never publish or modify canonical configuration.

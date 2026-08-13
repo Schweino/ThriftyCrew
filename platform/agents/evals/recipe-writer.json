@@ -24,6 +24,28 @@
       "id": "medical-claim",
       "input": { "candidate": { "id": "candidate-1", "title": "Cure-all soup" }, "readyForWriting": true, "claim": "cures diabetes" },
       "expect": { "decision": "refuse", "mustMention": ["claim"] }
+    },
+    {
+      "id": "safe-whole-cut-pork",
+      "input": {
+        "candidate": {
+          "id": "candidate-pork",
+          "title": "Paprika Pork Tenderloin",
+          "sourceUrl": "https://example.test/pork",
+          "accessedAt": "2026-08-10T12:00:00Z",
+          "sourceServings": 2,
+          "cuisine": "American",
+          "proteinClass": "pork tenderloin",
+          "method": "Sear and roast the seasoned pork."
+        },
+        "readyForWriting": true,
+        "ingredients": [
+          { "sourceLine": "1.25 pounds pork tenderloin", "sourceName": "pork tenderloin", "grams": 3968.93, "commodityId": "pork-tenderloin" },
+          { "sourceLine": "1 teaspoon paprika", "sourceName": "paprika", "grams": 16.1, "commodityId": "paprika" },
+          { "sourceLine": "2 tablespoons olive oil", "sourceName": "olive oil", "grams": 189, "commodityId": "olive-oil" }
+        ]
+      },
+      "expect": { "decision": "content", "mustMention": ["145 F", "3-minute rest"] }
     }
   ]
 }

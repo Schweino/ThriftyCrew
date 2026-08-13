@@ -49,6 +49,34 @@
         "sourceEvidence": { "url": "https://example.test/partial", "title": "Mystery Dinner", "ingredients": ["beans"] }
       },
       "expect": { "decision": "refuse", "mustMention": ["yield"] }
+    },
+    {
+      "id": "preserve-source-quantities",
+      "input": {
+        "id": "recipe_eval_unscaled",
+        "request": "find one dinner and scale it to 14 servings",
+        "sourceEvidence": {
+          "url": "https://example.test/pork",
+          "accessedAt": "2026-08-10T12:00:00Z",
+          "title": "Roasted Pork Tenderloin",
+          "yield": "2 servings",
+          "cuisine": "American",
+          "proteinClass": "pork tenderloin",
+          "method": "Sear and roast the seasoned pork.",
+          "nutrition": { "calories": 473, "proteinGrams": 59 },
+          "completeIngredientList": true,
+          "ingredients": [
+            "1.25 pounds pork tenderloin",
+            "1 teaspoon black pepper",
+            "1.5 teaspoons salt",
+            "1 teaspoon garlic powder",
+            "1 teaspoon dried thyme",
+            "1 teaspoon paprika",
+            "2 tablespoons olive oil"
+          ]
+        }
+      },
+      "expect": { "decision": "candidates", "mustMention": ["1.25 pounds", "2 servings"] }
     }
   ]
 }
