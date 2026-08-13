@@ -1171,6 +1171,10 @@ export async function failAgentWorkItem(db: D1Database, identity: MutationIdenti
       `UPDATE ingredient_gaps SET status = 'needs_operator', publication_error = ?2,
          updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status = 'researching'`,
     ).bind(current.source_ref, body.reason).run();
+    await db.prepare(
+      `UPDATE ingredient_pricing_jobs SET state = 'needs_operator', updated_at = CURRENT_TIMESTAMP
+        WHERE gap_id = ?1 AND state = 'store_checks_running'`,
+    ).bind(current.source_ref).run();
     const campaigns = await db.prepare(
       "SELECT DISTINCT request_id FROM ingredient_gap_occurrences WHERE gap_id = ?1",
     ).bind(current.source_ref).all<{ request_id: string }>();

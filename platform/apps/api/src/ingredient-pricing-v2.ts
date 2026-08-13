@@ -506,7 +506,7 @@ export async function ingredientPipelineStatus(db: D1Database): Promise<Record<s
           THEN 'cancelled_existing_alias' ELSE job.state END ORDER BY state`).all(),
     db.prepare(`SELECT check_row.store_location_id, check_row.state, COUNT(*) AS count
       FROM ingredient_store_checks check_row JOIN ingredient_pricing_jobs job ON job.id = check_row.pricing_job_id
-      WHERE job.state != 'failed' GROUP BY check_row.store_location_id, check_row.state
+      WHERE job.state = 'store_checks_running' GROUP BY check_row.store_location_id, check_row.state
       ORDER BY check_row.store_location_id, check_row.state`).all(),
     db.prepare("SELECT state, COUNT(*) AS count FROM pricing_waves GROUP BY state ORDER BY state").all(),
     db.prepare(`SELECT check_row.id, check_row.gap_id, gap.display_name, check_row.store_location_id,
