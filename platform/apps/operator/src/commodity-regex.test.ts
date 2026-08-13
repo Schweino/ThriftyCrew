@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { compileCommodityRegexPattern, normalizeCommodityRegexPattern } from "./commodity-regex";
+import { compileCommodityRegexPattern, normalizeCommodityRegexPattern, parseCatalogJson } from "./commodity-regex";
 
 describe("commodity regex compatibility", () => {
   it("normalizes a leading PCRE case-insensitive flag because matching is already case-insensitive", () => {
@@ -15,5 +15,10 @@ describe("commodity regex compatibility", () => {
 
   it("continues to reject malformed syntax", () => {
     expect(() => compileCommodityRegexPattern("(?q)invalid")).toThrow();
+  });
+
+  it("accepts authoritative JSON with or without a UTF-8 BOM", () => {
+    expect(parseCatalogJson<{ ok: boolean }>("\uFEFF{\"ok\":true}")).toEqual({ ok: true });
+    expect(parseCatalogJson<{ ok: boolean }>("{\"ok\":true}")).toEqual({ ok: true });
   });
 });

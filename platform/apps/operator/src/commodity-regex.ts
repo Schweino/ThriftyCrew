@@ -6,3 +6,7 @@ export function normalizeCommodityRegexPattern(value: string): string {
 export function compileCommodityRegexPattern(value: string): RegExp {
   return new RegExp(normalizeCommodityRegexPattern(value), "i");
 }
+
+export function parseCatalogJson<T>(value: string): T {
+  return JSON.parse(value.replace(/^\uFEFF/, "")) as T;
+}

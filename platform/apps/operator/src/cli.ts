@@ -21,7 +21,7 @@ import { captureControllerRequest } from "../../../scripts/capture-controller-cl
 import { catalogRefreshPlan } from "./capture-journal";
 import { agentJobRunFields } from "./job-run";
 import { loadR2ShardedEngineSnapshot } from "./engine-snapshot";
-import { compileCommodityRegexPattern, normalizeCommodityRegexPattern } from "./commodity-regex";
+import { compileCommodityRegexPattern, normalizeCommodityRegexPattern, parseCatalogJson } from "./commodity-regex";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
@@ -408,7 +408,7 @@ async function commodityAddSpecification(incoming: CommodityAddition): Promise<u
   const commodityFile = path.join(platformRoot, "config", "commodities.json");
   const categoryFile = path.join(platformRoot, "config", "categories.json");
   const searchFile = path.join(incomeRoot, "grocery", "commodity-search.json");
-  const commodities = JSON.parse(await readFile(commodityFile, "utf8")) as Array<Record<string, unknown>>;
+  const commodities = parseCatalogJson<Array<Record<string, unknown>>>(await readFile(commodityFile, "utf8"));
   if (commodities.some((item) => item.id === incoming.id)) throw new Error(`commodity ${incoming.id} already exists`);
   if (commodities.some((item) => normalizeName(String(item.label ?? "")) === normalizeName(incoming.label!))) throw new Error(`commodity label ${incoming.label} already exists`);
   const proposedNames = [incoming.label!, ...searchTerms];
@@ -435,11 +435,11 @@ async function commodityAddSpecification(incoming: CommodityAddition): Promise<u
     ...(incoming.bandMin !== undefined ? { band_min: incoming.bandMin } : {}),
     ...(incoming.bandMax !== undefined ? { band_max: incoming.bandMax } : {}),
   });
-  const categoryDocument = JSON.parse(await readFile(categoryFile, "utf8")) as { categories: Array<{ key: string; commodities: string[] }> };
+  const categoryDocument = parseCatalogJson<{ categories: Array<{ key: string; commodities: string[] }> }>(await readFile(categoryFile, "utf8"));
   const category = categoryDocument.categories.find((item) => item.key === incoming.categoryId);
   if (!category) throw new Error(`category ${incoming.categoryId} does not exist`);
   category.commodities.push(incoming.id);
-  const searchDocument = JSON.parse(await readFile(searchFile, "utf8")) as { note?: string; terms: Record<string, string> };
+  const searchDocument = parseCatalogJson<{ note?: string; terms: Record<string, string> }>(await readFile(searchFile, "utf8"));
   if (searchDocument.terms[incoming.id]) throw new Error(`commodity search term ${incoming.id} already exists`);
   searchDocument.terms[incoming.id] = searchTerms[0]!;
   await writeJson(commodityFile, commodities);
@@ -1449,7 +1449,7 @@ if (command === "status") {
       });
       applied.push({ gapId: research.gapId, commodityId: research.commodityProposal.id });
     } catch (error) {
-      failed.push({ gapId: gap.id ?? "unknown", error: error instanceof Error ? error.message : String(error) });
+      failed.push({ gapId: gap.id ?? "unknown", error: error instanceof Error ? (error.stack ?? error.message) : String(error) });
     }
   }
   result = { ok: true, applied, failed };
