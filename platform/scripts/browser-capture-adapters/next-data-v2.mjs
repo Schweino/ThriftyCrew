@@ -203,7 +203,15 @@ export function buildNextDataRows(store, query, page, capturedAt) {
       offer,
       parser: { status: "exact", rule: "next-data-price-lines", notes: "Visible product-card price agrees with the projected __NEXT_DATA__ linePrice for the same retailer item ID." },
     };
-      rows.push({ q: query, n: row.name, lp: row.linePrice, up: row.unitPrice, id: row.id, size, taxonomy_path: row.taxonomy, url: row.url, image_url: row.imageUrl, _capture: truth });
+      rows.push({
+        q: query, n: row.name, lp: row.linePrice, up: row.unitPrice, id: row.id, size,
+        taxonomy_path: row.taxonomy, url: row.url, image_url: row.imageUrl,
+        availability_status: offer.availability.status,
+        fulfillment_mode: offer.availability.fulfillmentMode,
+        ...(offer.sellerName ? { seller_name: offer.sellerName } : {}),
+        ...(offer.offerId ? { offer_id: offer.offerId } : {}),
+        _capture: truth,
+      });
     } catch (error) {
       excludedResults.push({ productKey: row.id, name: row.name, reason: String(error?.message || error) });
     }

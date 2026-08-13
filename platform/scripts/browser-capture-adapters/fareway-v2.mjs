@@ -106,6 +106,8 @@ export function buildFarewayRows(query, page, capturedAt) {
       size: row.size,
       url: row.href,
       taxonomy_path: row.taxonomy,
+      availability_status: offer.availability.status,
+      fulfillment_mode: offer.availability.fulfillmentMode,
       _capture: {
         capturedAt,
         pageUrl: page.url,

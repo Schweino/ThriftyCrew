@@ -56,7 +56,7 @@ describe("source-native offer parsing", () => {
       rows: [{ ...base, id: "exact", name: "Turkey Breast, 2 lb Bag", visiblePrice: "$4.25" }, { ...base, id: "missing-size", name: "Premium Carved Turkey Breast", visiblePrice: "$4.25" }],
     }, capturedAt);
     expect(result.rows).toHaveLength(1);
-    expect(result.rows[0]).toMatchObject({ id: "exact", size: "2 lb" });
+    expect(result.rows[0]).toMatchObject({ id: "exact", size: "2 lb", availability_status: "in_stock", fulfillment_mode: "pickup", seller_name: "Sam's Club", offer_id: "offer" });
     expect(result.excludedResults).toEqual([{ productKey: "missing-size", name: "Premium Carved Turkey Breast", reason: "source-native package size is not exact" }]);
   });
 

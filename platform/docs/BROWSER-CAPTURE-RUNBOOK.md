@@ -88,7 +88,7 @@ slice as retryable evidence, not a successful weekly capture.
 Verify an Omaha club is selected. Build the priority order with
 `grocery/build-pull-order.ps1 -Store "Sam's Club"`. Navigate to `/s/<term>` and parse the resulting page's
 `__NEXT_DATA__`; project only query, name, line/item price, unit price, product ID, exact package size, product URL/image, and available
-first-party taxonomy as `departmentName/category.categoryPathId`. Keep broad candidate sets, write a UTF-8 `q|n|lp|up|id|size|taxonomy_path|url|image_url` capture, and run `grocery/build-sams-deals.ps1`. Do not return or persist raw
+first-party taxonomy as `departmentName/category.categoryPathId`. Keep broad candidate sets, write a UTF-8 `q|n|lp|up|id|size|taxonomy_path|url|image_url|availability_status|fulfillment_mode|seller_name|offer_id` capture, and run `grocery/build-sams-deals.ps1`. Do not return or persist raw
 tracking/cookie-bearing product objects.
 
 Use `scripts/browser-capture-adapters/next-data-v2.mjs` with no more than three Sam's terms per chunk and the adaptive delay (never less than three seconds). A challenge/block ends the Sam's lane immediately; do not retry it in the same
@@ -100,7 +100,7 @@ Verify `ALDI - OLA 42 - Omaha` and independently verify `In-Store`; delivery/pic
 Navigate normally to `/store/aldi/s?k=<term>` and wait for product anchors before extracting. Parse the card's
 authoritative `Current price: $X.XX` text, not glued visual price nodes. Take the name
 and identity from the product URL, retain card size and the explicit category/aisle label printed on the card, and write UTF-8
-`id|term|name|prices|unit|size|href|taxonomy_path`. Run `grocery/build-aldi-regular.ps1`, followed by the existing carry-forward
+`id|term|name|prices|unit|size|href|taxonomy_path|availability_status|fulfillment_mode`. Run `grocery/build-aldi-regular.ps1`, followed by the existing carry-forward
 and degraded-size repair commands only when the builder reports a complete, current pull.
 
 ALDI is a deliberately low-rate lane: use `scripts/browser-capture-adapters/aldi-v2.mjs`, capture no more than three

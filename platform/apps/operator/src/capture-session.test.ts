@@ -198,11 +198,56 @@ describe("resumable browser capture sessions", () => {
     await finalizeCaptureSession(directory, projected, path.join(root, "manifest.json"), "2026-08-12T15:02:00.000Z");
     const output = await readFile(projected, "utf8");
     if (store === "fareway") {
-      expect(JSON.parse(output.trim())).toMatchObject({ id: "fresh-garlic", term: "fresh garlic", candidates: [{ name: "Fresh Garlic 3 ct" }] });
+      expect(JSON.parse(output.trim())).toMatchObject({ id: "fresh-garlic", term: "fresh garlic", candidates: [{ name: "Fresh Garlic 3 ct", availability_status: "", fulfillment_mode: "" }] });
     } else {
       expect(output).toContain("id|term|name|prices");
       expect(output).toContain("fresh-garlic|fresh garlic|Fresh Garlic 3 ct|$1.99");
     }
+  });
+
+  it("accepts offer provenance columns only when they agree with signed capture truth", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "tc-browser-session-"));
+    roots.push(root);
+    const worklist = path.join(root, "worklist.txt");
+    const directory = path.join(root, "session");
+    await writeFile(worklist, "provenance garlic\n", "utf8");
+    await initializeCaptureSession("fareway", worklist, directory, "2026-08-12T15:00:00.000Z");
+    const value = storefrontChunk("fareway", "provenance garlic", 0);
+    const row = value.rows[0]! as Record<string, any>;
+    value.rows[0] = {
+      ...row,
+      availability_status: "unknown",
+      fulfillment_mode: "in_store",
+      _capture: {
+        ...row._capture,
+        offer: {
+          version: 1,
+          retailerProductId: row.url,
+          productName: row.name,
+          sizeText: row.size,
+          rawPriceText: "Current price: $1.99",
+          purchasePriceMinor: 199,
+          availability: { status: "unknown", fulfillmentMode: "in_store", eligible: false },
+          priceSemantics,
+          observedAt: row._capture.capturedAt,
+          sourceUrl: row.url,
+        },
+      },
+    } as any;
+    const accepted = path.join(root, "fareway-provenance.json");
+    await writeFile(accepted, JSON.stringify(value));
+    await expect(appendCaptureChunk(directory, accepted)).resolves.toMatchObject({ terms: 1, rows: 1 });
+    const projected = path.join(root, "fareway-provenance.jsonl");
+    await finalizeCaptureSession(directory, projected, path.join(root, "fareway-provenance-manifest.json"), "2026-08-12T15:02:00.000Z");
+    expect(JSON.parse((await readFile(projected, "utf8")).trim())).toMatchObject({
+      candidates: [{ availability_status: "unknown", fulfillment_mode: "in_store" }],
+    });
+
+    const conflicting = storefrontChunk("fareway", "provenance garlic", 2);
+    conflicting.rows[0] = { ...(value.rows[0] as Record<string, any>), availability_status: "in_stock" } as any;
+    const rejected = path.join(root, "fareway-conflicting-provenance.json");
+    await writeFile(rejected, JSON.stringify(conflicting));
+    await expect(appendCaptureChunk(directory, rejected)).rejects.toThrow("availability_status disagrees");
   });
 
   it("accepts an exact storefront result while retaining an explicitly excluded sibling row", async () => {

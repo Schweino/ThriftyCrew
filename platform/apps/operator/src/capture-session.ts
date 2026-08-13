@@ -71,11 +71,18 @@ interface DraftSession {
 }
 
 const STORE_COLUMNS: Record<BrowserStore, string[]> = {
-  walmart: ["q", "n", "lp", "up", "id", "size", "taxonomy_path", "url", "image_url"],
-  sams: ["q", "n", "lp", "up", "id", "size", "taxonomy_path", "url", "image_url"],
-  aldi: ["id", "term", "name", "prices", "unit", "size", "href", "taxonomy_path"],
-  fareway: ["id", "term", "name", "price", "per", "orig", "unit", "size", "url", "taxonomy_path"],
+  walmart: ["q", "n", "lp", "up", "id", "size", "taxonomy_path", "url", "image_url", "availability_status", "fulfillment_mode", "seller_name", "offer_id"],
+  sams: ["q", "n", "lp", "up", "id", "size", "taxonomy_path", "url", "image_url", "availability_status", "fulfillment_mode", "seller_name", "offer_id"],
+  aldi: ["id", "term", "name", "prices", "unit", "size", "href", "taxonomy_path", "availability_status", "fulfillment_mode"],
+  fareway: ["id", "term", "name", "price", "per", "orig", "unit", "size", "url", "taxonomy_path", "availability_status", "fulfillment_mode"],
 };
+
+const OFFER_PROVENANCE_COLUMNS = {
+  availability_status: (truth: z.infer<typeof browserCaptureTruthSchema>) => truth.offer?.availability.status,
+  fulfillment_mode: (truth: z.infer<typeof browserCaptureTruthSchema>) => truth.offer?.availability.fulfillmentMode,
+  seller_name: (truth: z.infer<typeof browserCaptureTruthSchema>) => truth.offer?.sellerName,
+  offer_id: (truth: z.infer<typeof browserCaptureTruthSchema>) => truth.offer?.offerId,
+} as const;
 
 const TERM_COLUMN: Record<BrowserStore, "q" | "term"> = { walmart: "q", sams: "q", aldi: "term", fareway: "term" };
 const SOURCE_IDS: Record<BrowserStore, string> = {
@@ -144,6 +151,14 @@ function validateRows(store: BrowserStore, chunk: DiscoveryChunk, worklist: Map<
     counts.set(query, (counts.get(query) ?? 0) + 1);
     if (!identity.name || !identity.productKey) throw new Error(`${store} projected row must retain term, name, product identity, and price`);
     const truth = browserCaptureTruthSchema.parse(row._capture);
+    for (const [column, expectedValue] of Object.entries(OFFER_PROVENANCE_COLUMNS)) {
+      if (!(column in row)) continue;
+      const projectedValue = normalizedString(row[column]);
+      const truthValue = normalizedString(expectedValue(truth));
+      if (!truthValue || projectedValue !== truthValue) {
+        throw new Error(`${store} projected row ${column} disagrees with its authoritative offer evidence`);
+      }
+    }
     if (!browserCaptureTruthPass(store as BrowserCaptureStore, identity, truth)) {
       throw new Error(`${store} projected row visible/structured price, product identity, parser, location, or price-mode evidence disagrees with the accepted row`);
     }
@@ -420,6 +435,12 @@ function csvValue(value: unknown): string {
   return /["|\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 }
 
+function projectedColumnValue(row: Record<string, unknown>, column: string): unknown {
+  const provenance = OFFER_PROVENANCE_COLUMNS[column as keyof typeof OFFER_PROVENANCE_COLUMNS];
+  if (!provenance) return row[column];
+  return provenance(browserCaptureTruthSchema.parse(row._capture)) ?? "";
+}
+
 async function renderProjectedCapture(
   store: BrowserStore,
   rows: Array<Record<string, unknown>>,
@@ -435,7 +456,7 @@ async function renderProjectedCapture(
       const id = termKeyByQuery.get(term);
       if (!id) throw new Error(`fareway projected row refers to a query outside the finalized worklist: ${term || "(missing)"}`);
       const group = grouped.get(id) ?? { id, term, candidates: [] };
-      group.candidates.push(Object.fromEntries(STORE_COLUMNS.fareway.filter((column) => column !== "id" && column !== "term").map((column) => [column, normalizedString(row[column])])));
+      group.candidates.push(Object.fromEntries(STORE_COLUMNS.fareway.filter((column) => column !== "id" && column !== "term").map((column) => [column, normalizedString(projectedColumnValue(row, column))])));
       grouped.set(id, group);
     }
     output = [...grouped.values()].map((group) => JSON.stringify(group)).join("\n") + "\n";
@@ -443,7 +464,7 @@ async function renderProjectedCapture(
   else {
     const columns = STORE_COLUMNS[store];
     output = `${columns.join("|")}\n${rows.map((row) => columns.map((column) => {
-      if (store !== "aldi" || column !== "id") return csvValue(row[column]);
+      if (store !== "aldi" || column !== "id") return csvValue(projectedColumnValue(row, column));
       const query = normalizedString(row.term);
       const id = termKeyByQuery.get(query);
       if (!id) throw new Error(`aldi projected row refers to a query outside the finalized worklist: ${query || "(missing)"}`);

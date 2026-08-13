@@ -12,9 +12,10 @@ describe("Fareway regular-price semantics", () => {
 
 describe("Fareway exact-row projection", () => {
   it("keeps exact rows while explicitly recording a row with no package size", () => {
-    const common = { name: "Fareway Turkey", current: "Current price: $4.99", priceMinor: 499, taxonomy: "Deli", href: "https://shop.fareway.com/products/1", id: "1", lines: [] };
+    const common = { name: "Fareway Turkey", current: "Current price: $4.99", priceMinor: 499, taxonomy: "Deli", href: "https://shop.fareway.com/products/1", id: "1", lines: ["In stock"] };
     const result = buildFarewayRows("turkey", { url: "https://shop.fareway.com/s?k=turkey", title: "turkey", query: "turkey", locale: "en-US", rows: [{ ...common, size: "9 oz" }, { ...common, id: "2", href: "https://shop.fareway.com/products/2", size: "" }] }, "2026-08-12T00:00:00.000Z");
     expect(result.rows).toHaveLength(1);
+    expect(result.rows[0]).toMatchObject({ availability_status: "in_stock", fulfillment_mode: "in_store" });
     expect(result.excludedResults).toEqual([{ productKey: "2", name: "Fareway Turkey", reason: "source-native package size is not exact" }]);
   });
 });

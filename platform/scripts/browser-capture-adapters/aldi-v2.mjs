@@ -87,6 +87,8 @@ export function buildAldiRows(query, page, capturedAt) {
       size,
       href: row.href,
       taxonomy_path: row.taxonomy,
+      availability_status: offer.availability.status,
+      fulfillment_mode: offer.availability.fulfillmentMode,
       _capture: {
         capturedAt,
         pageUrl: page.url,
