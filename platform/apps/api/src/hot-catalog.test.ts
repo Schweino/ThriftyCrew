@@ -27,4 +27,15 @@ describe("hot catalog deterministic resolution", () => {
       offer({ productId: "product-two", availabilityStatus: "out_of_stock" }),
     ], ["plain greek yogurt"], new Date("2026-08-14T00:00:00.000Z"))).toEqual([]);
   });
+
+  it("matches complete query tokens and honors hard exclusions", () => {
+    expect(catalogCandidatesForTerms([
+      offer({ productName: "Plain Greek Yogurt 32 oz", normalizedName: "plain greek yogurt 32 oz" }),
+      offer({ productId: "product-two", productName: "Vanilla Greek Yogurt", normalizedName: "vanilla greek yogurt" }),
+    ], ["greek yogurt"], new Date("2026-08-13T12:00:00.000Z"), ["vanilla"]).map((item) => item.productId)).toEqual(["product-one"]);
+  });
+
+  it("does not accept substring-only identity collisions", () => {
+    expect(catalogCandidatesForTerms([offer({ normalizedName: "pineapple yogurt" })], ["apple"])).toEqual([]);
+  });
 });

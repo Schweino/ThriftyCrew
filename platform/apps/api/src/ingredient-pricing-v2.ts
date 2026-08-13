@@ -1,17 +1,17 @@
 import {
   OMAHA_GROCERY_STORE_LOCATION_IDS,
   ingredientPricingWaveCreateSchema,
-  ingredientPriceResearchSchema,
   ingredientStorePriceSchema,
   ingredientStoreCheckClaimSchema,
   ingredientStoreCheckCompleteSchema,
   ingredientStoreCheckFailSchema,
   ingredientStoreCheckHeartbeatSchema,
 } from "@thriftycrew/contracts";
-import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
+import { deterministicId, digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 import type { z } from "zod";
 import type { WorkerEnv } from "./env";
 import { catalogCandidatesForTerms, chooseCatalogWinner, readStoreCatalog } from "./hot-catalog";
+import { aggregateIngredientStoreChecks, type IngredientAggregate } from "./ingredient-state-machine";
 
 type WaveCreate = z.infer<typeof ingredientPricingWaveCreateSchema>;
 type StoreClaim = z.infer<typeof ingredientStoreCheckClaimSchema>;
@@ -19,29 +19,8 @@ type StoreHeartbeat = z.infer<typeof ingredientStoreCheckHeartbeatSchema>;
 type StoreComplete = z.infer<typeof ingredientStoreCheckCompleteSchema>;
 type StoreFail = z.infer<typeof ingredientStoreCheckFailSchema>;
 
-const terminalStates = new Set(["qa_verified_priced", "qa_verified_not_found"]);
-
-export type IngredientAggregate = {
-  state: "store_checks_running" | "ready_to_publish" | "permanently_unavailable";
-  terminalCount: number;
-  pricedCount: number;
-  notFoundCount: number;
-};
-
 export function aggregateStoreCheckStates(states: Array<{ state: string }>): IngredientAggregate {
-  const terminalCount = states.filter((row) => terminalStates.has(row.state)).length;
-  const pricedCount = states.filter((row) => row.state === "qa_verified_priced").length;
-  const notFoundCount = states.filter((row) => row.state === "qa_verified_not_found").length;
-  if (terminalCount !== OMAHA_GROCERY_STORE_LOCATION_IDS.length) {
-    return { state: "store_checks_running", terminalCount, pricedCount, notFoundCount };
-  }
-  if (notFoundCount === OMAHA_GROCERY_STORE_LOCATION_IDS.length) {
-    return { state: "permanently_unavailable", terminalCount, pricedCount, notFoundCount };
-  }
-  if (pricedCount > 0 && pricedCount + notFoundCount === OMAHA_GROCERY_STORE_LOCATION_IDS.length) {
-    return { state: "ready_to_publish", terminalCount, pricedCount, notFoundCount };
-  }
-  throw new Error("seven terminal store checks have an impossible aggregate");
+  return aggregateIngredientStoreChecks(states);
 }
 
 async function appendOutbox(db: D1Database, topic: string, aggregateKind: string, aggregateId: string, dedupeKey: string, payload: unknown): Promise<D1PreparedStatement> {
@@ -77,8 +56,9 @@ export async function createPricingWave(db: D1Database, inputValue: unknown): Pr
     const planId = await deterministicId("ingredient-query-plan", jobId, row.normalized_name);
     const planHash = await digestHex(stableJson({ canonicalTerm: row.normalized_name, aliases: [], exclusions: [], version: 1 }));
     statements.push(db.prepare(
-      `INSERT INTO ingredient_pricing_jobs (id, wave_id, gap_id, entity_id, market_id, state, semantic_plan_hash)
-       VALUES (?1, ?2, ?3, ?4, 'omaha', 'store_checks_running', ?5)
+      `INSERT INTO ingredient_pricing_jobs
+         (id, wave_id, gap_id, entity_id, market_id, state, operational_state, semantic_plan_hash, last_progress_at)
+       VALUES (?1, ?2, ?3, ?4, 'omaha', 'store_checks_running', 'identity_ready', ?5, CURRENT_TIMESTAMP)
        ON CONFLICT(gap_id, market_id) DO UPDATE SET
          wave_id = COALESCE(ingredient_pricing_jobs.wave_id, excluded.wave_id), updated_at = CURRENT_TIMESTAMP`,
     ).bind(jobId, input.id, row.id, row.entity_id, planHash));
@@ -96,11 +76,18 @@ export async function createPricingWave(db: D1Database, inputValue: unknown): Pr
       const checkId = await deterministicId("ingredient-store-check", jobId, storeLocationId);
       statements.push(db.prepare(
         `INSERT INTO ingredient_store_checks
-           (id, pricing_job_id, gap_id, store_location_id, state, query_plan_id)
-         VALUES (?1, ?2, ?3, ?4, 'queued', ?5)
+           (id, pricing_job_id, gap_id, store_location_id, state, operational_state, query_plan_id, query_plan_hash, last_progress_at)
+         VALUES (?1, ?2, ?3, ?4, 'queued', 'queued', ?5, ?6, CURRENT_TIMESTAMP)
          ON CONFLICT(pricing_job_id, store_location_id) DO NOTHING`,
-      ).bind(checkId, jobId, row.id, storeLocationId, planId));
+      ).bind(checkId, jobId, row.id, storeLocationId, planId, planHash));
     }
+    if (!row.entity_id) throw new Error(`ingredient gap ${row.id} has no canonical entity`);
+    statements.push(db.prepare(
+      `INSERT INTO ingredient_pricing_inbox
+         (id, market_id, entity_id, gap_id, pricing_job_id, campaign_id, state)
+       VALUES (?1, 'omaha', ?2, ?3, ?4, ?5, 'queued')
+       ON CONFLICT(market_id, entity_id) DO NOTHING`,
+    ).bind(`inbox_${jobId}`, row.entity_id, row.id, jobId, input.campaignId));
     statements.push(await appendOutbox(db, "ingredient.pricing.queued", "ingredient_pricing_job", jobId,
       `ingredient.pricing.queued:${jobId}:${planHash}`, { waveId: input.id, jobId, gapId: row.id, entityId: row.entity_id, planId, planHash }));
   }
@@ -137,12 +124,14 @@ export async function claimStoreChecks(db: D1Database, inputValue: unknown): Pro
   for (const candidate of candidates.results) {
     const updated = await db.prepare(
       `UPDATE ingredient_store_checks
-          SET state = 'leased', lease_owner = ?, lease_generation = lease_generation + 1,
-              lease_expires_at = ?, heartbeat_at = ?, attempt_count = attempt_count + 1,
-              last_error = NULL, updated_at = CURRENT_TIMESTAMP
+          SET state = 'leased', operational_state = ?, lease_lane = ?, lease_owner = ?,
+              lease_generation = lease_generation + 1, lease_expires_at = ?, heartbeat_at = ?,
+              attempt_count = attempt_count + 1, last_error = NULL,
+              last_progress_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
         WHERE id = ?
           AND state IN (${claimStates.map(() => "?").join(",")})`,
-    ).bind(input.owner, expiresAt, now.toISOString(), candidate.id, ...claimStates).run();
+    ).bind(input.lane === "qa" ? "qa_leased" : input.lane === "targeted_refresh" ? "capture_leased" : "catalog_lookup",
+      input.lane, input.owner, expiresAt, now.toISOString(), candidate.id, ...claimStates).run();
     if ((updated.meta.changes ?? 0) !== 1) continue;
     const row = await db.prepare(
       `SELECT check_row.*, gap.display_name, gap.normalized_name,
@@ -172,18 +161,19 @@ export async function resolveClaimedStoreCheckFromCatalog(db: D1Database, checkI
   const input: StoreHeartbeat = ingredientStoreCheckHeartbeatSchema.parse(inputValue);
   const row = await db.prepare(
     `SELECT check_row.id, check_row.store_location_id, check_row.state, check_row.lease_owner, check_row.lease_generation,
-            plan.canonical_term, plan.aliases_json, plan.plan_hash
+            plan.canonical_term, plan.aliases_json, plan.exclusions_json, plan.plan_hash
        FROM ingredient_store_checks check_row
        JOIN ingredient_query_plans plan ON plan.id = check_row.query_plan_id
       WHERE check_row.id = ?1`,
-  ).bind(checkId).first<{ id: string; store_location_id: string; state: string; lease_owner: string | null; lease_generation: number; canonical_term: string; aliases_json: string; plan_hash: string }>();
+  ).bind(checkId).first<{ id: string; store_location_id: string; state: string; lease_owner: string | null; lease_generation: number; canonical_term: string; aliases_json: string; exclusions_json: string; plan_hash: string }>();
   if (!row || row.state !== "leased" || row.lease_owner !== input.owner || row.lease_generation !== input.leaseGeneration) {
     throw new Error("catalog resolution rejected by lease fence");
   }
   const catalog = await readStoreCatalog(db, row.store_location_id);
   const aliases = JSON.parse(row.aliases_json) as string[];
+  const exclusions = JSON.parse(row.exclusions_json) as string[];
   const terms = [row.canonical_term, ...aliases];
-  const candidates = catalogCandidatesForTerms(catalog.offers, terms);
+  const candidates = catalogCandidatesForTerms(catalog.offers, terms, new Date(), exclusions);
   const selection = chooseCatalogWinner(candidates);
   const statements: D1PreparedStatement[] = [];
   for (const candidate of candidates) {
@@ -199,7 +189,13 @@ export async function resolveClaimedStoreCheckFromCatalog(db: D1Database, checkI
       candidate.packagePriceMinor, candidate.normalizedBasisUnit, candidate.normalizedBasisQtyMicros, candidate.perUnitMicros,
       candidate.offerKind, candidate.validFrom, candidate.validTo, candidate.loyaltyRequired ? 1 : 0, candidate.membershipRequired ? 1 : 0, candidate.evidenceHash));
   }
-  const nextState = selection.winner && selection.winner.productUrl && catalog.coverageMode === "full" ? "qa_pending" : "targeted_refresh";
+  const exactCoverage = await db.prepare(
+    `SELECT COUNT(*) AS count FROM ingredient_query_coverage
+      WHERE store_check_id = ?1 AND complete = 1 AND location_verified = 1 AND price_mode_verified = 1
+        AND expires_at > CURRENT_TIMESTAMP AND normalized_query IN (${terms.map(() => "?").join(",")})`,
+  ).bind(checkId, ...terms.map((term) => normalizeName(term))).first<{ count: number }>();
+  const hasCompleteCoverage = Number(exactCoverage?.count ?? 0) === new Set(terms.map((term) => normalizeName(term))).size;
+  const nextState = selection.winner && selection.winner.productUrl && hasCompleteCoverage ? "qa_pending" : "targeted_refresh";
   statements.push(db.prepare(
     `UPDATE ingredient_store_checks
         SET state = ?4, candidate_count = ?5, eligible_count = ?5,
@@ -207,7 +203,7 @@ export async function resolveClaimedStoreCheckFromCatalog(db: D1Database, checkI
             last_error = ?6, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?1 AND state = 'leased' AND lease_owner = ?2 AND lease_generation = ?3`,
   ).bind(checkId, input.owner, input.leaseGeneration, nextState, candidates.length,
-    selection.reason ?? (catalog.coverageMode === "full" ? null : "catalog root is not complete; targeted search is required")));
+    selection.reason ?? (hasCompleteCoverage ? null : "exact query coverage is absent or expired; targeted search is required")));
   const results = await db.batch(statements);
   if ((results.at(-1)?.meta.changes ?? 0) !== 1) throw new Error("catalog resolution lost its lease fence");
   return {
@@ -284,7 +280,7 @@ async function verifyEvidenceObject(bucket: R2Bucket, evidence: StoreComplete["e
   }
 }
 
-async function sealAggregateIfTerminal(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, pricingJobId: string): Promise<IngredientAggregate> {
+export async function sealAggregateIfTerminal(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, pricingJobId: string): Promise<IngredientAggregate> {
   const rows = await env.DB.prepare(
     `SELECT check_row.id, check_row.gap_id, check_row.store_location_id, check_row.state, check_row.result_json,
             check_row.evidence_id, check_row.qa_attestation_id,
@@ -297,8 +293,10 @@ async function sealAggregateIfTerminal(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, 
   const aggregate = aggregateStoreCheckStates(rows.results);
   await env.DB.prepare(
     `UPDATE ingredient_pricing_jobs
-        SET state = ?2, terminal_store_count = ?3, priced_store_count = ?4,
-            not_found_store_count = ?5, updated_at = CURRENT_TIMESTAMP WHERE id = ?1`,
+        SET state = ?2, operational_state = ?2, state_version = state_version + 1,
+            terminal_store_count = ?3, priced_store_count = ?4,
+            not_found_store_count = ?5, last_progress_at = CURRENT_TIMESTAMP,
+            updated_at = CURRENT_TIMESTAMP WHERE id = ?1`,
   ).bind(pricingJobId, aggregate.state, aggregate.terminalCount, aggregate.pricedCount, aggregate.notFoundCount).run();
   if (aggregate.state === "store_checks_running") return aggregate;
   if (rows.results.length !== OMAHA_GROCERY_STORE_LOCATION_IDS.length || rows.results.some((row) => !row.evidence_hash || !row.qa_hash)) {
@@ -335,7 +333,9 @@ async function sealAggregateIfTerminal(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, 
       `INSERT INTO ingredient_current_resolutions (gap_id, resolution_version_id)
        VALUES (?1, ?2) ON CONFLICT(gap_id) DO UPDATE SET resolution_version_id = excluded.resolution_version_id, updated_at = CURRENT_TIMESTAMP`,
     ).bind(job.gap_id, resolutionId),
-    env.DB.prepare("UPDATE ingredient_pricing_jobs SET resolution_version_id = ?2, updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(pricingJobId, resolutionId),
+    env.DB.prepare("UPDATE ingredient_pricing_jobs SET resolution_version_id = ?2, last_progress_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(pricingJobId, resolutionId),
+    env.DB.prepare("UPDATE ingredient_pricing_inbox SET state = ?2, updated_at = CURRENT_TIMESTAMP WHERE pricing_job_id = ?1")
+      .bind(pricingJobId, aggregate.state === "ready_to_publish" ? "publish_pending" : "active"),
     env.DB.prepare(
       `UPDATE ingredient_gaps SET status = ?2, updated_at = CURRENT_TIMESTAMP
         WHERE id = ?1 AND status NOT IN ('published','permanently_unavailable')`,
@@ -356,6 +356,7 @@ async function sealAggregateIfTerminal(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, 
       `UPDATE recipe_hold_requirements SET resolution_version_id = ?2, terminal_kind = 'unavailable', blocked_at = CURRENT_TIMESTAMP
         WHERE gap_id = ?1 AND terminal_kind IS NULL`,
     ).bind(job.gap_id, resolutionId));
+    statements.push(env.DB.prepare("DELETE FROM ingredient_pricing_inbox WHERE pricing_job_id = ?1").bind(pricingJobId));
   }
   await env.DB.batch(statements);
   return aggregate;
@@ -410,6 +411,10 @@ export async function completeStoreCheck(env: Pick<WorkerEnv, "DB" | "EVIDENCE">
 }
 
 export async function ingestAgentIngredientResearch(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, inputValue: unknown): Promise<IngredientAggregate | null> {
+  void env;
+  void inputValue;
+  throw new Error("model-authored ingredient pricing is disabled; use first-party store capture and independent QA");
+  /* Retained temporarily as forensic migration reference; intentionally unreachable.
   const research = ingredientPriceResearchSchema.parse(inputValue);
   const job = await env.DB.prepare(`SELECT job.id FROM ingredient_pricing_jobs job
       JOIN ingredient_gaps gap ON gap.id = job.gap_id
@@ -460,6 +465,7 @@ export async function ingestAgentIngredientResearch(env: Pick<WorkerEnv, "DB" | 
     return null;
   }
   return sealAggregateIfTerminal(env, job.id);
+  */
 }
 
 export async function failStoreCheck(db: D1Database, checkId: string, inputValue: unknown): Promise<void> {

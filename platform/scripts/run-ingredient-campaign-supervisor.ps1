@@ -71,14 +71,13 @@ try {
     $researching = @($status.gaps | Where-Object status -eq 'researching').Count
     $ready = @($status.gaps | Where-Object status -eq 'ready_to_publish').Count
     $v2RunningJobs = [int](($pipeline.status.jobs | Where-Object { $_.state -in @('queued', 'store_checks_running', 'qa_running') } | Measure-Object count -Sum).Sum)
-    $configuredWorkers = if ($campaigns.Count -gt 0) { [int](($campaigns | Measure-Object desired_pricing_workers -Maximum).Maximum) } else { 10 }
-    $desiredWorkers = [Math]::Min(10, [Math]::Max(1, $configuredWorkers))
+    $desiredWorkers = 1
     $workerProcesses = Get-CycleProcesses 'IngredientPricing'
     $activeSlots = [Collections.Generic.HashSet[int]]::new()
     foreach ($process in $workerProcesses) {
       if ([string]$process.CommandLine -match '-PricingWorkerSlot\s+(\d+)') { [void]$activeSlots.Add([int]$matches[1]) }
     }
-    $neededWorkers = [Math]::Min($desiredWorkers, [Math]::Max($pending + $researching, $v2RunningJobs))
+    $neededWorkers = if (($pending + $researching + $v2RunningJobs) -gt 0) { 1 } else { 0 }
     if ($neededWorkers -gt 0) {
       foreach ($slot in 1..$neededWorkers) {
         if ($activeSlots.Contains($slot)) { continue }

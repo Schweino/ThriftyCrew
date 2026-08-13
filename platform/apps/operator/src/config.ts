@@ -1,9 +1,51 @@
 import { createHash } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { OMAHA_GROCERY_STORE_LOCATION_IDS } from "@thriftycrew/contracts";
+import { z } from "zod";
 
 interface Commodity { id: string; include?: string[]; exclude?: string[] }
 interface KnownWrong { entries?: Array<{ reversed_on?: string; reversed_by?: string; names?: string[] }> }
+
+export const omahaStorePolicySchema = z.object({
+  version: z.literal(2),
+  marketId: z.literal("omaha"),
+  timezone: z.literal("America/Chicago"),
+  stores: z.array(z.object({
+    storeLocationId: z.enum(OMAHA_GROCERY_STORE_LOCATION_IDS),
+    storeName: z.string().trim().min(2),
+    sourceId: z.string().trim().min(3),
+    firstPartyHost: z.string().trim().min(3),
+    plane: z.enum(["browser", "headless"]),
+    priceMode: z.enum(["pickup", "in_store", "club"]),
+    retailerLocationKey: z.string().trim().min(1),
+    priceLocationKey: z.string().trim().min(1),
+    adLocationKey: z.string().trim().min(1).nullable(),
+    exactAddress: z.string().trim().min(10),
+    locationCanary: z.object({
+      expectedLocationPattern: z.string().trim().min(3),
+      expectedModePattern: z.string().trim().min(3),
+    }).strict(),
+    minimumIntervalMs: z.number().int().nonnegative(),
+    sameStoreConcurrency: z.literal(1),
+    evidenceFreshnessMinutes: z.number().int().min(5).max(1440),
+    requireDualPriceAgreement: z.boolean(),
+    membershipRequired: z.boolean(),
+    notFoundRequiresTargetedCoverage: z.literal(true),
+    exhaustiveSearchRequired: z.literal(true),
+    adCalendarBinding: z.enum(["source_native_or_store_calendar", "none"]),
+  }).strict()).length(OMAHA_GROCERY_STORE_LOCATION_IDS.length),
+}).strict().superRefine((value, context) => {
+  const actual = value.stores.map((store) => store.storeLocationId).sort();
+  const expected = [...OMAHA_GROCERY_STORE_LOCATION_IDS].sort();
+  if (new Set(actual).size !== actual.length || JSON.stringify(actual) !== JSON.stringify(expected)) {
+    context.addIssue({ code: "custom", path: ["stores"], message: "store policies must contain each authoritative Omaha store exactly once" });
+  }
+  for (const store of value.stores) {
+    try { new RegExp(store.locationCanary.expectedLocationPattern, "i"); new RegExp(store.locationCanary.expectedModePattern, "i"); }
+    catch { context.addIssue({ code: "custom", path: ["stores", store.storeLocationId, "locationCanary"], message: "canary patterns must compile" }); }
+  }
+});
 
 const LEGACY_OUTPUTS = ["commodities.json", "categories.json", "known-wrong.json", "recipe-commodities.json"] as const;
 const AUTHORITY_FILES = [...LEGACY_OUTPUTS, "recipe-commodity-aliases.json", "recipe-commodity-extensions.json", "omaha-store-policies.json"] as const;
@@ -50,17 +92,7 @@ export async function generateLegacyConfiguration(incomeRoot: string, checkOnly:
   }
   const commodities = JSON.parse(await readFile(path.join(configRoot, "commodities.json"), "utf8")) as Commodity[];
   const knownWrong = JSON.parse(await readFile(path.join(configRoot, "known-wrong.json"), "utf8")) as KnownWrong;
-  const storePolicy = JSON.parse(await readFile(path.join(configRoot, "omaha-store-policies.json"), "utf8")) as {
-    version?: number; marketId?: string; stores?: Array<{ storeLocationId?: string; sourceId?: string; plane?: string; priceMode?: string }>;
-  };
-  const expectedStores = new Set(["aldi-omaha-446-048", "bakers-saddle-creek", "family-fare-omaha-6401", "fareway-omaha-043", "hy-vee-omaha-1465", "sams-omaha", "walmart-omaha"]);
-  const policyStores = storePolicy.stores ?? [];
-  if (storePolicy.version !== 1 || storePolicy.marketId !== "omaha" || policyStores.length !== expectedStores.size
-    || new Set(policyStores.map((store) => store.storeLocationId)).size !== expectedStores.size
-    || policyStores.some((store) => !store.storeLocationId || !expectedStores.has(store.storeLocationId) || !store.sourceId
-      || !["browser", "headless"].includes(store.plane ?? "") || !["pickup", "in_store", "club"].includes(store.priceMode ?? ""))) {
-    throw new Error("omaha-store-policies.json must define exactly the seven authoritative Omaha store policies");
-  }
+  omahaStorePolicySchema.parse(JSON.parse(await readFile(path.join(configRoot, "omaha-store-policies.json"), "utf8")));
   const uniqueRules = new Set<string>();
   for (const commodity of commodities) {
     for (const value of commodity.include ?? []) uniqueRules.add(`${commodity.id}\u001finclude\u001f${value}`);

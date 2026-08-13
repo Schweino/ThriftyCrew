@@ -1405,6 +1405,47 @@ export const ingredientStoreCheckCompleteSchema = z.object({
   validatorVersions: z.record(z.string(), z.string().min(1).max(160)).default({}),
 }).strict();
 
+const ingredientEvidencePointerSchema = z.object({
+  objectKey: z.string().trim().min(3).max(1000),
+  sha256: sha256Hex,
+  byteLength: z.number().int().positive(),
+  contentType: z.string().trim().min(3).max(200),
+  sourceUrl: recipeHttpUrl,
+  observedAt: isoDateTime,
+}).strict();
+
+export const ingredientStoreCaptureResultSchema = z.object({
+  owner: nonEmptyId,
+  leaseGeneration: z.number().int().positive(),
+  producerVersion: z.string().trim().min(3).max(160),
+  queryPlanHash: sha256Hex,
+  result: ingredientStorePriceSchema,
+  evidence: ingredientEvidencePointerSchema,
+  candidateSetHash: sha256Hex,
+  coverage: z.array(z.object({
+    normalizedQuery: z.string().trim().min(1).max(300),
+    pageCount: z.number().int().positive(),
+    resultCount: z.number().int().nonnegative(),
+    retailerResultTotal: z.number().int().nonnegative().nullable(),
+    terminationReason: z.literal("end_of_results"),
+    paginationHash: sha256Hex,
+    evidenceHash: sha256Hex,
+    completedAt: isoDateTime,
+    expiresAt: isoDateTime,
+  }).strict()).min(1).max(20),
+}).strict();
+
+export const ingredientStoreQaCompleteSchema = z.object({
+  owner: nonEmptyId,
+  leaseGeneration: z.number().int().positive(),
+  verdict: z.enum(["priced", "not_found", "ambiguous"]),
+  verifierVersion: z.string().trim().min(3).max(160),
+  verifierEvidence: ingredientEvidencePointerSchema,
+  validatorVersions: z.record(z.string(), z.string().trim().min(1).max(160))
+    .refine((value) => Object.keys(value).length > 0, "at least one validator version is required"),
+  findings: z.array(z.string().trim().min(3).max(1000)).max(100).default([]),
+}).strict();
+
 export const ingredientStoreCheckFailSchema = z.object({
   owner: nonEmptyId,
   leaseGeneration: z.number().int().positive(),
@@ -1412,6 +1453,22 @@ export const ingredientStoreCheckFailSchema = z.object({
   reason: z.string().trim().min(5).max(5000),
   challengeId: nonEmptyId.nullable().default(null),
   retryAt: isoDateTime.nullable().default(null),
+}).strict();
+
+export const pipelineOutboxClaimSchema = z.object({
+  owner: nonEmptyId,
+  limit: z.number().int().min(1).max(200).default(100),
+  leaseSeconds: z.number().int().min(30).max(900).default(120),
+}).strict();
+
+export const pipelineOutboxAcknowledgeSchema = z.object({
+  owner: nonEmptyId,
+  leaseGeneration: z.number().int().positive(),
+}).strict();
+
+export const pipelineOutboxNackSchema = pipelineOutboxAcknowledgeSchema.extend({
+  reason: z.string().trim().min(5).max(5000),
+  retryAt: isoDateTime,
 }).strict();
 
 export const ingredientResolutionProposalSchema = z.object({

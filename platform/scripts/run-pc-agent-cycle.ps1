@@ -24,7 +24,7 @@ $cycleAgents = @{
   PostPublish = @('post-publish-reviewer')
   SourceSentinel = @('source-sentinel-investigator')
   Recipe = @('recipe-sourcer','recipe-deduper','recipe-fact-extractor','recipe-mapper','recipe-writer','recipe-auditor')
-  IngredientPricing = @('ingredient-price-researcher')
+  IngredientPricing = @()
   IngredientPublication = @('ingredient-definition-planner')
   Accuracy = @('accuracy-headless')
 }
@@ -395,19 +395,11 @@ try {
     }
     Publish-ReadyRecipeContent
   } elseif ($Cycle -eq 'IngredientPricing' -and -not $OnlyAgent) {
-    if ($PricingWorkerSlot -le 1) {
-      Set-PcRuntimeCredential $config 'local-operator'
-      Push-Location $platformRoot
-      try { Invoke-LoggedCommand 'ingredient-v2-pricing-tick' { & $pnpmPath tc ingredient pipeline tick } | Out-Null }
-      finally { Pop-Location }
-    }
-    for ($item = 0; $item -lt $MaxItems; $item++) {
-      try { if (-not (Invoke-AgentItem 'ingredient-price-researcher')) { break } }
-      catch {
-        Write-PcRuntimeLog $logFile ("targeted ingredient pricing item failed and remains durable: {0}" -f $_.Exception.Message)
-        Start-Sleep -Seconds 5
-      }
-    }
+    if ($PricingWorkerSlot -gt 1) { throw 'V3 ingredient pricing uses one coordinator with seven store lanes, not model worker slots' }
+    Set-PcRuntimeCredential $config 'local-operator'
+    Push-Location $platformRoot
+    try { Invoke-LoggedCommand 'ingredient-v3-pricing-tick' { & $pnpmPath tc ingredient pipeline tick } | Out-Null }
+    finally { Pop-Location }
   } elseif ($Cycle -eq 'IngredientPublication' -and -not $OnlyAgent) {
     for ($item = 0; $item -lt $MaxItems; $item++) {
       if (-not (Invoke-AgentItem 'ingredient-definition-planner')) { break }

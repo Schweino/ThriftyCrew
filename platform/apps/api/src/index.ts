@@ -52,6 +52,11 @@ import {
   ingredientStoreCheckCompleteSchema,
   ingredientStoreCheckFailSchema,
   ingredientStoreCheckHeartbeatSchema,
+  ingredientStoreCaptureResultSchema,
+  ingredientStoreQaCompleteSchema,
+  pipelineOutboxAcknowledgeSchema,
+  pipelineOutboxClaimSchema,
+  pipelineOutboxNackSchema,
   recipeSuggestionRequestSchema,
   recipeWaveSnapshotSchema,
   recipeWavePublicationSchema,
@@ -109,6 +114,8 @@ import { evaluateContentPromotion } from "./content-batches";
 import { recipeCommodityIds } from "./recipe-commodity-catalog";
 import { claimAgentWorkItem, completeAgentWorkItem, enqueueIngredientDefinitionPlan, failAgentWorkItem, ingredientCampaignSnapshot, reconcileIngredientCampaign, reconcileIngredientHolds } from "./agent-work-items";
 import { claimStoreChecks, completeStoreCheck, createPricingWave, failStoreCheck, heartbeatStoreCheck, ingredientPipelineStatus, pipelineEvents, pricingWaveStatus, qaClaimedCatalogStoreCheck, resolveClaimedStoreCheckFromCatalog } from "./ingredient-pricing-v2";
+import { acknowledgePipelineOutbox, claimPipelineOutbox, nackPipelineOutbox } from "./pipeline-outbox";
+import { completeIngredientStoreCapture, completeIngredientStoreQa } from "./ingredient-independent-qa";
 import { materializeHotCatalog } from "./hot-catalog";
 import { attachIngredientProposal, createIngredientPublicationBatch, verifyIngredientPublication } from "./ingredient-publication-v2";
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
@@ -1486,6 +1493,28 @@ app.get("/internal/pipeline/events", async (context) => {
   return context.json({ ok: true, ...await pipelineEvents(context.env.DB, after, limit) });
 });
 
+app.post("/internal/pipeline/outbox/claim", zValidator("json", pipelineOutboxClaimSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only the local coordinator may claim pipeline events", 403);
+  try { return context.json({ ok: true, events: await claimPipelineOutbox(context.env.DB, context.req.valid("json")) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "outbox claim failed", 409); }
+});
+
+app.post("/internal/pipeline/outbox/:id/ack", zValidator("json", pipelineOutboxAcknowledgeSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only the local coordinator may acknowledge pipeline events", 403);
+  const id = Number(context.req.param("id"));
+  if (!Number.isInteger(id) || id < 1) return jsonError("outbox id is invalid", 400);
+  try { await acknowledgePipelineOutbox(context.env.DB, id, context.req.valid("json")); return context.json({ ok: true, id }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "outbox acknowledgement failed", 409); }
+});
+
+app.post("/internal/pipeline/outbox/:id/nack", zValidator("json", pipelineOutboxNackSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only the local coordinator may nack pipeline events", 403);
+  const id = Number(context.req.param("id"));
+  if (!Number.isInteger(id) || id < 1) return jsonError("outbox id is invalid", 400);
+  try { await nackPipelineOutbox(context.env.DB, id, context.req.valid("json")); return context.json({ ok: true, id }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "outbox nack failed", 409); }
+});
+
 app.post("/internal/ingredient-pricing/store-checks/claim", zValidator("json", ingredientStoreCheckClaimSchema), async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only the local operator coordinator may claim store checks", 403);
   try {
@@ -1522,6 +1551,18 @@ app.post("/internal/ingredient-pricing/store-checks/:id/complete", zValidator("j
   } catch (error) {
     return jsonError(error instanceof Error ? error.message : "store-check completion failed", 409);
   }
+});
+
+app.post("/internal/ingredient-pricing/store-checks/:id/capture-result", zValidator("json", ingredientStoreCaptureResultSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only the local capture coordinator may submit store evidence", 403);
+  try { return context.json({ ok: true, result: await completeIngredientStoreCapture(context.env, context.req.param("id"), context.req.valid("json")) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "store capture completion failed", 409); }
+});
+
+app.post("/internal/ingredient-pricing/store-checks/:id/qa-complete", zValidator("json", ingredientStoreQaCompleteSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only the independent QA coordinator may complete store QA", 403);
+  try { return context.json({ ok: true, aggregate: await completeIngredientStoreQa(context.env, context.req.param("id"), context.req.valid("json")) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "store QA completion failed", 409); }
 });
 
 app.post("/internal/ingredient-pricing/store-checks/:id/catalog-qa", zValidator("json", ingredientStoreCheckHeartbeatSchema), async (context) => {

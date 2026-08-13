@@ -23,7 +23,8 @@ import type { MutationIdentity, WorkerEnv } from "./env";
 import { evaluateContentPromotion } from "./content-batches";
 import { mergeRecipeCommodityCatalog } from "./recipe-commodity-catalog";
 import { createPricingWave } from "./ingredient-pricing-v2";
-import { ingestAgentIngredientResearch } from "./ingredient-pricing-v2";
+import { assertPublicRecipeSourceUrl, recipeFactVerificationHash, verifyRecipeFactsAgainstArtifact, verifyRecipeMappingContinuity } from "./recipe-source-verification";
+import { expectedUnitDimension, extractShoppingRequirements } from "./ingredient-requirements";
 
 interface RegistryRow {
   id: string;
@@ -300,40 +301,9 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
     }));
   }
   if (agentId === "ingredient-price-researcher") {
-    const rows = await db.prepare(
-      `SELECT id, display_name, normalized_name, first_seen_at, qa_attempts, research_json, publication_error
-         FROM ingredient_gaps gap WHERE gap.status IN ('pending','needs_operator') AND gap.qa_resolution IS NULL
-           AND EXISTS (SELECT 1 FROM ingredient_store_checks check_row
-             WHERE check_row.gap_id = gap.id AND check_row.state = 'targeted_refresh')
-        ORDER BY first_seen_at, id LIMIT 50`,
-    ).all<Record<string, unknown>>();
-    const categories = await db.prepare(activeIngredientCategoryContextSql).all<Record<string, unknown>>();
-    const stores = [
-      { storeLocationId: "aldi-omaha-446-048", storeName: "Aldi", priceMode: "pickup" },
-      { storeLocationId: "bakers-saddle-creek", storeName: "Baker's", priceMode: "pickup" },
-      { storeLocationId: "family-fare-omaha-6401", storeName: "Family Fare", priceMode: "pickup" },
-      { storeLocationId: "fareway-omaha-043", storeName: "Fareway", priceMode: "pickup" },
-      { storeLocationId: "hy-vee-omaha-1465", storeName: "Hy-Vee", priceMode: "pickup" },
-      { storeLocationId: "sams-omaha", storeName: "Sam's Club", priceMode: "club" },
-      { storeLocationId: "walmart-omaha", storeName: "Walmart", priceMode: "pickup" },
-    ];
-    return rows.results.map((row) => ({
-      sourceKind: "recipe-request",
-      sourceRef: String(row.id),
-      stage: "ingredient-price",
-      severity: "operational",
-      input: {
-        contract: "ingredient-price-request-v1", gap: row, marketId: "omaha", stores, categories: categories.results,
-        ...(Number(row.qa_attempts) > 0 ? {
-          qaContext: {
-            attempt: Number(row.qa_attempts),
-            priorResearch: row.research_json ? JSON.parse(String(row.research_json)) : null,
-            priorError: row.publication_error ?? null,
-            instruction: "Resolve the prior blocked or ambiguous checks with fresh first-party evidence. Preserve every still-valid prior fact, but do not repeat an unsupported conclusion.",
-          },
-        } : {}),
-      },
-    }));
+    // V3 containment boundary: generic model/web research is not a pricing
+    // execution plane and may never be seeded as public price authority.
+    return [];
   }
   return [];
 }
@@ -444,7 +414,17 @@ export async function reconcileIngredientHolds(db: D1Database): Promise<void> {
   }
   const writer = await activeAgent(db, "recipe-writer");
   for (const hold of holds.results) {
-    const gapIds = JSON.parse(String(hold.gap_ids_json)) as string[];
+    const requirements = await db.prepare(
+      `SELECT gap_id FROM recipe_hold_requirement_occurrences
+        WHERE hold_id = ?1 AND role = 'purchased' AND gap_id IS NOT NULL
+        ORDER BY source_ingredient_index, split_component_index`,
+    ).bind(hold.id).all<{ gap_id: string }>();
+    const gapIds = [...new Set(requirements.results.map((row) => row.gap_id))];
+    if (gapIds.length === 0) {
+      await db.prepare("UPDATE recipe_ingredient_holds SET resume_error = 'relational dependency occurrences are missing', updated_at = CURRENT_TIMESTAMP WHERE id = ?1")
+        .bind(hold.id).run();
+      continue;
+    }
     const gaps = await db.prepare(
       `SELECT id, status, commodity_id, qa_resolution, qa_resolution_commodity_id
          FROM ingredient_gaps WHERE id IN (${gapIds.map(() => "?").join(",")}) ORDER BY id`,
@@ -463,36 +443,9 @@ export async function reconcileIngredientHolds(db: D1Database): Promise<void> {
       continue;
     }
     if (!hold.source_fact_version_id || !hold.mapping_version_id) {
-      const legacyMapper = await db.prepare("SELECT output_json FROM agent_work_items WHERE id = ?1 AND state = 'completed'")
-        .bind(hold.mapper_work_item_id).first<{ output_json: string | null }>();
-      const legacyMap = legacyMapper?.output_json ? recipeMapSchema.parse(JSON.parse(legacyMapper.output_json)) : null;
-      const legacyRecipe = legacyMap?.recipes.find((recipe) => recipe.candidate.id === hold.candidate_id);
-      if (!legacyRecipe) {
-        await db.prepare("UPDATE recipe_ingredient_holds SET resume_error = 'immutable fact or mapping version is missing', updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(hold.id).run();
-        continue;
-      }
-      const factsJson = stableJson(legacyRecipe.candidate);
-      const factsHash = await digestHex(factsJson);
-      const factVersionId = await deterministicId("recipe-source-facts", String(hold.request_id), String(hold.candidate_id), factsHash);
-      const mappingJson = stableJson(legacyRecipe);
-      const mappingHash = await digestHex(mappingJson);
-      const mappingVersionId = await deterministicId("recipe-mapping", factVersionId, mappingHash);
-      await db.batch([
-        db.prepare(`INSERT INTO recipe_source_fact_versions
-          (id, request_id, candidate_id, source_url, accessed_at, extractor_version, artifact_hash, facts_json, facts_hash, verified_at)
-          VALUES (?1, ?2, ?3, ?4, ?5, 'legacy-completed-mapper-v1', ?6, ?7, ?6, CURRENT_TIMESTAMP)
-          ON CONFLICT(request_id, candidate_id, facts_hash) DO NOTHING`)
-          .bind(factVersionId, hold.request_id, hold.candidate_id, legacyRecipe.candidate.sourceUrl, legacyRecipe.candidate.accessedAt, factsHash, factsJson),
-        db.prepare(`INSERT INTO recipe_mapping_versions
-          (id, source_fact_version_id, request_id, candidate_id, mapper_version, configuration_hash, mapping_json, mapping_hash, verified_at)
-          VALUES (?1, ?2, ?3, ?4, 'legacy-completed-mapper-v1', ?5, ?6, ?7, CURRENT_TIMESTAMP)
-          ON CONFLICT(source_fact_version_id, mapping_hash) DO NOTHING`)
-          .bind(mappingVersionId, factVersionId, hold.request_id, hold.candidate_id, factsHash, mappingJson, mappingHash),
-        db.prepare("UPDATE recipe_ingredient_holds SET source_fact_version_id = ?2, mapping_version_id = ?3, resume_error = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?1")
-          .bind(hold.id, factVersionId, mappingVersionId),
-      ]);
-      hold.source_fact_version_id = factVersionId;
-      hold.mapping_version_id = mappingVersionId;
+      await db.prepare("UPDATE recipe_ingredient_holds SET resume_error = 'immutable fact or mapping version is missing; legacy self-verification is prohibited', updated_at = CURRENT_TIMESTAMP WHERE id = ?1")
+        .bind(hold.id).run();
+      continue;
     }
     const locked = await db.prepare(
       `SELECT mapping.mapping_json, mapping.mapping_hash, facts.facts_hash
@@ -505,12 +458,13 @@ export async function reconcileIngredientHolds(db: D1Database): Promise<void> {
       continue;
     }
     const occurrenceRows = await db.prepare(
-      `SELECT occurrence.source_line, gap.id AS gap_id,
+      `SELECT occurrence.source_line, occurrence.source_ingredient_index, occurrence.split_component_index, gap.id AS gap_id,
               COALESCE(gap.qa_resolution_commodity_id, gap.commodity_id) AS commodity_id
-         FROM ingredient_gap_occurrences occurrence
+         FROM recipe_hold_requirement_occurrences occurrence
          JOIN ingredient_gaps gap ON gap.id = occurrence.gap_id
-        WHERE occurrence.request_id = ?1 AND occurrence.candidate_id = ?2`,
-    ).bind(hold.request_id, hold.candidate_id).all<{ source_line: string; gap_id: string; commodity_id: string | null }>();
+        WHERE occurrence.hold_id = ?1 AND occurrence.role = 'purchased'
+        ORDER BY occurrence.source_ingredient_index, occurrence.split_component_index`,
+    ).bind(hold.id).all<{ source_line: string; source_ingredient_index: number; split_component_index: number; gap_id: string; commodity_id: string | null }>();
     const commodityBySourceLine = new Map(occurrenceRows.results.map((row) => [row.source_line, row.commodity_id]));
     const lockedRecipe = JSON.parse(locked.mapping_json) as z.infer<typeof recipeMapSchema>["recipes"][number];
     const ingredients = lockedRecipe.ingredients.map((ingredient) => {
@@ -554,7 +508,7 @@ export async function reconcileIngredientHolds(db: D1Database): Promise<void> {
           WHERE hold_id = ?1 AND gap_id = ?2 AND terminal_kind IS NULL`,
       ).bind(hold.id, gapId)),
     ]);
-    await enqueue(db, writer, {
+    const writerWorkItemId = await enqueue(db, writer, {
       sourceKind: "recipe-request", sourceRef: String(hold.request_id), stage: "writer-resume", severity: writer.criticality,
       input: {
         contract: "recipe-map-v2", previousWorkItemId: hold.mapper_work_item_id,
@@ -564,7 +518,7 @@ export async function reconcileIngredientHolds(db: D1Database): Promise<void> {
     }, "phase2-v1", "recipe-map-v2");
     await db.batch([
       db.prepare("UPDATE recipe_ingredient_holds SET status = 'resumed', resume_error = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status = 'paused'").bind(hold.id),
-      db.prepare("UPDATE recipe_resume_events SET state = 'consumed', consumed_at = CURRENT_TIMESTAMP WHERE id = ?1 AND state = 'ready'").bind(resumeEventId),
+      db.prepare("UPDATE recipe_resume_events SET state = 'consumed', consumed_work_item_id = ?2, consumed_at = CURRENT_TIMESTAMP WHERE id = ?1 AND state = 'ready'").bind(resumeEventId, writerWorkItemId),
       db.prepare("UPDATE recipe_suggestion_requests SET status = 'running', updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status <> 'promoted'").bind(hold.request_id),
     ]);
   }
@@ -779,15 +733,24 @@ async function persistRecipeIngredientGaps(db: D1Database, completed: Record<str
     "SELECT request_id FROM ingredient_discovery_batches WHERE request_id = ?1",
   ).bind(completed.source_ref).first<{ request_id: string }>();
   const gapIdsByName = new Map<string, string>();
+  const rejectedAlternativeCandidates = new Set<string>();
   for (const recipe of map.recipes) {
     for (const ingredient of recipe.ingredients.filter((item) => item.decision === "unmapped")) {
-      const normalized = normalizeName(ingredient.sourceName);
-      if (!isAtomicDiscoveryGapName(ingredient.sourceName)) {
-        if (!discovery) throw new Error(`mapper emitted a non-atomic required ingredient: ${ingredient.sourceName}`);
-        continue;
+      const requirements = extractShoppingRequirements(ingredient.sourceLine || ingredient.sourceName);
+      if (requirements.some((requirement) => requirement.role === "alternative")) {
+        rejectedAlternativeCandidates.add(recipe.candidate.id);
+        break;
       }
-      if (normalized && !gapIdsByName.has(normalized)) gapIdsByName.set(normalized, await deterministicId("ingredient-gap", normalized));
+      for (const requirement of requirements.filter((item) => item.role === "purchased")) {
+        if (!gapIdsByName.has(requirement.normalizedName)) gapIdsByName.set(requirement.normalizedName, await deterministicId("ingredient-gap", requirement.normalizedName));
+      }
     }
+  }
+  for (const candidateId of rejectedAlternativeCandidates) {
+    await db.prepare(
+      `INSERT INTO pipeline_stage_events (campaign_id, lane, aggregate_kind, aggregate_id, stage, event_kind, detail_json)
+       VALUES (?1, 'discovery', 'recipe_candidate', ?2, 'atomic-requirements', 'source_rejected', ?3)`,
+    ).bind(completed.source_ref, candidateId, stableJson({ reason: "unresolved source ingredient alternative" })).run();
   }
   if (gapIdsByName.size === 0) {
     if (!discovery) return { gapCount: 0, discovery: false, collecting: false };
@@ -805,32 +768,53 @@ async function persistRecipeIngredientGaps(db: D1Database, completed: Record<str
   }
   const statements: D1PreparedStatement[] = [];
   for (const recipe of map.recipes) {
+    if (rejectedAlternativeCandidates.has(recipe.candidate.id)) {
+      continue;
+    }
     const recipeGapIds: string[] = [];
+    const occurrenceRequirements: Array<{ gapId: string; entityId: string; sourceIngredientIndex: number; splitComponentIndex: number; sourceLine: string; normalizedName: string }> = [];
     for (const ingredient of recipe.ingredients.filter((item) => item.decision === "unmapped")) {
-      const normalized = normalizeName(ingredient.sourceName);
-      const gapId = gapIdsByName.get(normalized);
-      if (!gapId) continue;
-      recipeGapIds.push(gapId);
-      statements.push(db.prepare(
-        `INSERT INTO ingredient_gaps (id, normalized_name, display_name)
-         VALUES (?1, ?2, ?3) ON CONFLICT(normalized_name) DO NOTHING`,
-      ).bind(gapId, normalized, ingredient.sourceName));
-      statements.push(db.prepare(
-        `INSERT INTO ingredient_entities
-           (id, market_id, canonical_name, identity_hash, identity_json, state)
-         VALUES (?1, 'omaha', ?2, ?3, ?4, 'novel')
-         ON CONFLICT(market_id, identity_hash) DO NOTHING`,
-      ).bind(`entity_${gapId}`, ingredient.sourceName, `legacy:${normalized}`, stableJson({ baseProduct: normalized, source: "legacy-normalized-v2" })));
-      statements.push(db.prepare(
-        `INSERT INTO ingredient_aliases
-           (market_id, normalized_alias, entity_id, resolution_source, confidence)
-         VALUES ('omaha', ?1, ?2, 'deterministic', 'exact')
-         ON CONFLICT(market_id, normalized_alias) DO NOTHING`,
-      ).bind(normalized, `entity_${gapId}`));
-      statements.push(db.prepare(
-        `INSERT INTO ingredient_gap_occurrences (gap_id, request_id, candidate_id, source_line, source_url)
-         VALUES (?1, ?2, ?3, ?4, ?5) ON CONFLICT DO NOTHING`,
-      ).bind(gapId, completed.source_ref, recipe.candidate.id, ingredient.sourceLine, recipe.candidate.sourceUrl));
+      const sourceIngredientIndex = recipe.candidate.ingredients.findIndex((item) => item.raw === ingredient.sourceLine);
+      if (sourceIngredientIndex < 0) throw new Error(`unmapped ingredient is not pinned to a source occurrence: ${ingredient.sourceLine}`);
+      for (const requirement of extractShoppingRequirements(ingredient.sourceLine || ingredient.sourceName).filter((item) => item.role === "purchased")) {
+        const gapId = gapIdsByName.get(requirement.normalizedName);
+        if (!gapId) continue;
+        const entityId = `entity_${gapId}`;
+        const identity = { baseProduct: requirement.normalizedName, forms: [], aliases: [requirement.normalizedName], exclusions: [],
+          expectedUnitDimension: expectedUnitDimension(ingredient.sourceLine), resolverVersion: "atomic-source-v1" };
+        const identityHash = await digestHex(stableJson(identity));
+        const identityVersionId = await deterministicId("ingredient-identity-version", entityId, identityHash);
+        recipeGapIds.push(gapId);
+        occurrenceRequirements.push({ gapId, entityId, sourceIngredientIndex, splitComponentIndex: requirement.splitComponentIndex,
+          sourceLine: ingredient.sourceLine, normalizedName: requirement.normalizedName });
+        statements.push(db.prepare(
+          `INSERT INTO ingredient_gaps (id, normalized_name, display_name)
+           VALUES (?1, ?2, ?3) ON CONFLICT(normalized_name) DO NOTHING`,
+        ).bind(gapId, requirement.normalizedName, requirement.displayName));
+        statements.push(db.prepare(
+          `INSERT INTO ingredient_entities
+             (id, market_id, canonical_name, identity_hash, identity_json, state)
+           VALUES (?1, 'omaha', ?2, ?3, ?4, 'novel')
+           ON CONFLICT(market_id, identity_hash) DO NOTHING`,
+        ).bind(entityId, requirement.displayName, identityHash, stableJson(identity)));
+        statements.push(db.prepare(
+          `INSERT INTO ingredient_identity_versions
+             (id, entity_id, version, base_product, aliases_json, exclusions_json, expected_unit_dimension,
+              identity_hash, resolver_version, verified_at)
+           VALUES (?1, ?2, 1, ?3, ?4, '[]', ?5, ?6, 'atomic-source-v1', CURRENT_TIMESTAMP)
+           ON CONFLICT(entity_id, identity_hash) DO NOTHING`,
+        ).bind(identityVersionId, entityId, requirement.normalizedName, stableJson([requirement.normalizedName]), identity.expectedUnitDimension, identityHash));
+        statements.push(db.prepare(
+          `INSERT INTO ingredient_aliases
+             (market_id, normalized_alias, entity_id, resolution_source, confidence, evidence_hash)
+           VALUES ('omaha', ?1, ?2, 'deterministic', 'exact', ?3)
+           ON CONFLICT(market_id, normalized_alias) DO NOTHING`,
+        ).bind(requirement.normalizedName, entityId, identityHash));
+        statements.push(db.prepare(
+          `INSERT INTO ingredient_gap_occurrences (gap_id, request_id, candidate_id, source_line, source_url)
+           VALUES (?1, ?2, ?3, ?4, ?5) ON CONFLICT DO NOTHING`,
+        ).bind(gapId, completed.source_ref, recipe.candidate.id, ingredient.sourceLine, recipe.candidate.sourceUrl));
+      }
     }
     const uniqueGapIds = [...new Set(recipeGapIds)].sort();
     if (uniqueGapIds.length > 0) {
@@ -856,6 +840,15 @@ async function persistRecipeIngredientGaps(db: D1Database, completed: Record<str
           `INSERT INTO recipe_hold_requirements (hold_id, gap_id, entity_id)
            VALUES (?1, ?2, ?3) ON CONFLICT(hold_id, gap_id) DO NOTHING`,
         ).bind(holdId, gapId, `entity_${gapId}`));
+      }
+      for (const occurrence of occurrenceRequirements) {
+        statements.push(db.prepare(
+          `INSERT INTO recipe_hold_requirement_occurrences
+             (hold_id, source_ingredient_index, split_component_index, gap_id, entity_id, source_line, normalized_requirement, role)
+           VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, 'purchased')
+           ON CONFLICT(hold_id, source_ingredient_index, split_component_index) DO NOTHING`,
+        ).bind(holdId, occurrence.sourceIngredientIndex, occurrence.splitComponentIndex, occurrence.gapId, occurrence.entityId,
+          occurrence.sourceLine, occurrence.normalizedName));
       }
     }
   }
@@ -913,24 +906,64 @@ async function persistIngredientResearch(db: D1Database, outputValue: unknown): 
   }
 }
 
-async function persistRecipeSourceFacts(db: D1Database, outputValue: unknown): Promise<void> {
+async function persistRecipeSourceFacts(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, outputValue: unknown): Promise<void> {
   const facts = recipeSourceFactsSchema.parse(outputValue);
   const lockByCandidate = new Map(facts.factLocks.map((lock) => [lock.candidateId, lock]));
+  const artifacts = await Promise.all(facts.candidates.map(async (candidate) => {
+    const sourceUrl = assertPublicRecipeSourceUrl(candidate.sourceUrl).toString();
+    const response = await fetch(sourceUrl, { headers: { accept: "text/html,application/ld+json,application/json;q=0.9" }, redirect: "follow" });
+    if (!response.ok) throw new Error(`source artifact fetch failed for ${candidate.id}: HTTP ${response.status}`);
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    if (bytes.byteLength < 1 || bytes.byteLength > 2_000_000) throw new Error(`source artifact size is invalid for ${candidate.id}`);
+    const sha256 = await digestHex(bytes);
+    const artifactId = await deterministicId("recipe-source-artifact", facts.requestId, candidate.id, sha256);
+    const objectKey = `recipe-source-artifacts/${facts.requestId}/${candidate.id}/${sha256}`;
+    const contentType = response.headers.get("content-type")?.slice(0, 200) || "text/html";
+    await env.EVIDENCE.put(objectKey, bytes, { httpMetadata: { contentType }, customMetadata: { sha256, kind: "recipe-source-artifact" } });
+    const stored = await env.EVIDENCE.head(objectKey);
+    if (!stored || stored.size !== bytes.byteLength || stored.customMetadata?.sha256 !== sha256) throw new Error(`source artifact storage verification failed for ${candidate.id}`);
+    return { candidate, sourceUrl, bytes, sha256, artifactId, objectKey, contentType, status: response.status };
+  }));
   const statements: D1PreparedStatement[] = [];
-  for (const candidate of facts.candidates) {
+  for (const artifact of artifacts) {
+    const { candidate } = artifact;
     const lock = lockByCandidate.get(candidate.id);
     if (!lock) throw new Error(`missing fact lock for ${candidate.id}`);
     const factsJson = stableJson(candidate);
     const factsHash = await digestHex(factsJson);
     const id = await deterministicId("recipe-facts", facts.requestId, candidate.id, factsHash);
-    statements.push(db.prepare(
+    const findings = verifyRecipeFactsAgainstArtifact(candidate, new TextDecoder().decode(artifact.bytes));
+    if (findings.length > 0) throw new Error(`source fact verification rejected ${candidate.id}: ${findings.join(", ")}`);
+    const verificationInputHash = await recipeFactVerificationHash({ artifactHash: artifact.sha256, factsHash });
+    const verificationOutputHash = await recipeFactVerificationHash({ verdict: "verified", findings, verifierVersion: "artifact-containment-v1" });
+    const verificationId = await deterministicId("recipe-fact-verification", id, verificationInputHash, verificationOutputHash);
+    statements.push(env.DB.prepare(
+      `INSERT INTO recipe_source_artifacts
+         (id, request_id, candidate_id, source_url, object_key, sha256, byte_length, content_type, http_status, fetched_at)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, CURRENT_TIMESTAMP)
+       ON CONFLICT(request_id, candidate_id, sha256) DO NOTHING`,
+    ).bind(artifact.artifactId, facts.requestId, candidate.id, artifact.sourceUrl, artifact.objectKey, artifact.sha256,
+      artifact.bytes.byteLength, artifact.contentType, artifact.status));
+    statements.push(env.DB.prepare(
       `INSERT INTO recipe_source_fact_versions
-         (id, request_id, candidate_id, source_url, accessed_at, artifact_hash, facts_json, facts_hash, verifier_version, verified_at)
-       VALUES (?1, ?2, ?3, ?4, ?5, ?7, ?6, ?7, ?8, CURRENT_TIMESTAMP)
+         (id, request_id, candidate_id, source_url, accessed_at, artifact_key, artifact_hash, source_artifact_id,
+          facts_json, facts_hash, verifier_version, verified_at)
+       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, 'artifact-containment-v1', NULL)
        ON CONFLICT(request_id, candidate_id, facts_hash) DO NOTHING`,
-    ).bind(id, facts.requestId, candidate.id, candidate.sourceUrl, candidate.accessedAt, factsJson, factsHash, lock.extractorVersion));
+    ).bind(id, facts.requestId, candidate.id, artifact.sourceUrl, candidate.accessedAt, artifact.objectKey, artifact.sha256,
+      artifact.artifactId, factsJson, factsHash));
+    statements.push(env.DB.prepare(
+      `INSERT INTO recipe_fact_verifications
+         (id, source_fact_version_id, source_artifact_id, verifier_version, input_hash, verdict, findings_json, output_hash)
+       VALUES (?1, ?2, ?3, 'artifact-containment-v1', ?4, 'verified', ?5, ?6)
+       ON CONFLICT(source_fact_version_id, input_hash, output_hash) DO NOTHING`,
+    ).bind(verificationId, id, artifact.artifactId, verificationInputHash, stableJson(findings), verificationOutputHash));
+    statements.push(env.DB.prepare(
+      `UPDATE recipe_source_fact_versions SET fact_verification_id = ?2, verified_at = CURRENT_TIMESTAMP
+        WHERE id = ?1 AND source_artifact_id = ?3 AND facts_hash = ?4`,
+    ).bind(id, verificationId, artifact.artifactId, factsHash));
   }
-  for (let offset = 0; offset < statements.length; offset += 90) await db.batch(statements.slice(offset, offset + 90));
+  for (let offset = 0; offset < statements.length; offset += 90) await env.DB.batch(statements.slice(offset, offset + 90));
 }
 
 async function persistRecipeMappings(db: D1Database, outputValue: unknown): Promise<void> {
@@ -946,12 +979,26 @@ async function persistRecipeMappings(db: D1Database, outputValue: unknown): Prom
     const mappingJson = stableJson(recipe);
     const mappingHash = await digestHex(mappingJson);
     const id = await deterministicId("recipe-mapping", source.id, mappingHash);
+    const findings = verifyRecipeMappingContinuity(recipe);
+    if (findings.length > 0) throw new Error(`mapping verification rejected ${recipe.candidate.id}: ${findings.join(", ")}`);
+    const verificationInputHash = await digestHex(stableJson({ sourceFactVersionId: source.id, mappingHash }));
+    const verificationOutputHash = await digestHex(stableJson({ verdict: "verified", findings, verifierVersion: "mapping-continuity-v1" }));
+    const verificationId = await deterministicId("recipe-mapping-verification", id, verificationInputHash, verificationOutputHash);
     statements.push(db.prepare(
       `INSERT INTO recipe_mapping_versions
          (id, source_fact_version_id, mapping_json, mapping_hash, mapper_version, verified_at)
-       VALUES (?1, ?2, ?3, ?4, 'recipe-map-v2', CURRENT_TIMESTAMP)
+       VALUES (?1, ?2, ?3, ?4, 'recipe-map-v2', NULL)
        ON CONFLICT(source_fact_version_id, mapping_hash) DO NOTHING`,
     ).bind(id, source.id, mappingJson, mappingHash));
+    statements.push(db.prepare(
+      `INSERT INTO recipe_mapping_verifications
+         (id, mapping_version_id, verifier_version, input_hash, verdict, findings_json, output_hash)
+       VALUES (?1, ?2, 'mapping-continuity-v1', ?3, 'verified', ?4, ?5)
+       ON CONFLICT(mapping_version_id, input_hash, output_hash) DO NOTHING`,
+    ).bind(verificationId, id, verificationInputHash, stableJson(findings), verificationOutputHash));
+    statements.push(db.prepare(
+      `UPDATE recipe_mapping_versions SET mapping_verification_id = ?2, verified_at = CURRENT_TIMESTAMP WHERE id = ?1`,
+    ).bind(id, verificationId));
   }
   for (let offset = 0; offset < statements.length; offset += 90) await db.batch(statements.slice(offset, offset + 90));
 }
@@ -1106,7 +1153,11 @@ export async function completeAgentWorkItem(env: Pick<WorkerEnv, "DB" | "EVIDENC
   let recipeTerminal: { status: "rejected"; reason: string } | undefined;
   if (current.agent_id === "ingredient-price-researcher") {
     await persistIngredientResearch(db, output);
-    await ingestAgentIngredientResearch(env, output);
+    await db.prepare(
+      `INSERT INTO pipeline_stage_events
+         (campaign_id, lane, aggregate_kind, aggregate_id, stage, event_kind, detail_json)
+       VALUES (NULL, 'pricing', 'ingredient_gap', ?1, 'legacy-model-research', 'forensic_only', ?2)`,
+    ).bind(current.source_ref, stableJson({ workItemId, outputHash, authority: false })).run();
   } else if (current.agent_id === "ingredient-definition-planner") {
     const expected = array(object(JSON.parse(String(current.input_json))).ingredients).map((row) => String(row.pricing_job_id)).sort();
     const actual = ingredientDefinitionPlanSchema.parse(output).items.map((item) => item.pricingJobId).sort();
@@ -1115,12 +1166,23 @@ export async function completeAgentWorkItem(env: Pick<WorkerEnv, "DB" | "EVIDENC
   } else if (current.agent_id === "recipe-auditor") contentBatch = await stageAuditedRecipeBatch(db, current, output);
   else if (String(current.agent_id).startsWith("recipe-")) {
     if (current.agent_id === "recipe-writer") {
-      await db.prepare(
-        `INSERT INTO pipeline_stage_events (campaign_id, lane, aggregate_kind, aggregate_id, stage, event_kind, detail_json)
-         VALUES (?1, 'recipe', 'recipe_request', ?1, 'deterministic-verify', 'passed', ?2)`,
-      ).bind(current.source_ref, stableJson({ workItemId, outputHash, verifierVersion: "locked-facts-v1" })).run();
+      const writerInput = object(JSON.parse(String(current.input_json)));
+      const dependencyRoot = String(writerInput.dependencyRoot ?? await digestHex(stableJson(writerInput.output)));
+      const verifierInputHash = await digestHex(stableJson({ dependencyRoot, lockedMap: writerInput.output }));
+      const verificationId = await deterministicId("recipe-write-verification", workItemId, verifierInputHash, outputHash);
+      await db.batch([
+        db.prepare(`INSERT INTO recipe_write_verification_versions
+          (id, request_id, writer_work_item_id, dependency_root_hash, input_hash, output_hash, verifier_version, verdict, findings_json)
+          VALUES (?1, ?2, ?3, ?4, ?5, ?6, 'locked-facts-v2', 'verified', '[]')
+          ON CONFLICT(writer_work_item_id, input_hash, output_hash) DO NOTHING`)
+          .bind(verificationId, current.source_ref, workItemId, dependencyRoot, verifierInputHash, outputHash),
+        db.prepare(
+          `INSERT INTO pipeline_stage_events (campaign_id, lane, aggregate_kind, aggregate_id, stage, event_kind, detail_json)
+           VALUES (?1, 'recipe', 'recipe_request', ?1, 'deterministic-verify', 'passed', ?2)`,
+        ).bind(current.source_ref, stableJson({ workItemId, outputHash, verificationId, dependencyRoot, verifierVersion: "locked-facts-v2" })),
+      ]);
     }
-    if (current.agent_id === "recipe-fact-extractor") await persistRecipeSourceFacts(db, output);
+    if (current.agent_id === "recipe-fact-extractor") await persistRecipeSourceFacts(env, output);
     if (current.agent_id === "recipe-mapper") await persistRecipeMappings(db, output);
     const gapResult = current.agent_id === "recipe-mapper"
       ? await persistRecipeIngredientGaps(db, current, output)

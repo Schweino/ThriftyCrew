@@ -28,11 +28,14 @@ export type CatalogCandidate = {
 
 const tokens = (value: string): string[] => [...new Set(normalizeName(value).split(/[^a-z0-9]+/).filter((token) => token.length >= 2))].sort();
 
-export function catalogCandidatesForTerms(offers: CatalogCandidate[], terms: string[], now = new Date()): CatalogCandidate[] {
-  const normalizedTerms = terms.map((term) => normalizeName(term)).filter(Boolean);
+export function catalogCandidatesForTerms(offers: CatalogCandidate[], terms: string[], now = new Date(), exclusions: string[] = []): CatalogCandidate[] {
+  const termTokens = terms.map(tokens).filter((term) => term.length > 0);
+  const exclusionTokens = exclusions.map(tokens).filter((term) => term.length > 0);
   const nowIso = now.toISOString();
   return offers.filter((offer) => {
-    if (!normalizedTerms.some((term) => offer.normalizedName.includes(term))) return false;
+    const offerTokens = new Set(tokens(offer.normalizedName));
+    if (!termTokens.some((term) => term.every((token) => offerTokens.has(token)))) return false;
+    if (exclusionTokens.some((term) => term.every((token) => offerTokens.has(token)))) return false;
     if (!["in_stock", "available", "limited"].includes(offer.availabilityStatus)) return false;
     if (offer.validFrom && offer.validFrom > nowIso) return false;
     if (offer.validTo && offer.validTo <= nowIso) return false;
@@ -120,6 +123,18 @@ export async function materializeHotCatalog(db: D1Database): Promise<{ roots: nu
          evidence_hash = excluded.evidence_hash, updated_at = CURRENT_TIMESTAMP`,
     ).bind(batch.store_location_id, batch.source_id, batch.id).run();
     offerCount += Number(materialized.meta.changes ?? 0);
+    const offers = await db.prepare(
+      "SELECT product_id, normalized_name FROM catalog_current_offers WHERE store_location_id = ?1 ORDER BY product_id",
+    ).bind(batch.store_location_id).all<{ product_id: string; normalized_name: string }>();
+    await db.prepare("DELETE FROM catalog_offer_tokens WHERE store_location_id = ?1").bind(batch.store_location_id).run();
+    const tokenStatements = offers.results.flatMap((offer) => tokens(offer.normalized_name).map((token) => db.prepare(
+      `INSERT INTO catalog_offer_tokens (store_location_id, token, product_id)
+       VALUES (?1, ?2, ?3) ON CONFLICT(store_location_id, token, product_id) DO NOTHING`,
+    ).bind(batch.store_location_id, token, offer.product_id)));
+    for (let offset = 0; offset < tokenStatements.length; offset += 90) {
+      const results = await db.batch(tokenStatements.slice(offset, offset + 90));
+      tokenCount += results.reduce((count, result) => count + Number(result.meta.changes ?? 0), 0);
+    }
   }
   return { roots: policies.results.length, offers: offerCount, tokens: tokenCount };
 }
@@ -135,7 +150,11 @@ export async function readStoreCatalog(db: D1Database, storeLocationId: string):
             availability_status, fulfillment_mode, seller_name, offer_kind, package_price_minor,
             normalized_basis_unit, normalized_basis_qty_micros, per_unit_micros, loyalty_required,
             membership_required, valid_from, valid_to, captured_at, evidence_hash
-       FROM catalog_current_offers WHERE store_location_id = ?1 ORDER BY product_id`,
+       FROM catalog_current_offers offer
+       JOIN store_pricing_policies policy ON policy.store_location_id = offer.store_location_id
+      WHERE offer.store_location_id = ?1
+        AND lower(replace(offer.fulfillment_mode, '-', '_')) = policy.price_mode
+      ORDER BY offer.product_id`,
   ).bind(storeLocationId).all<Record<string, unknown>>();
   return {
     coverageMode: root?.coverage_mode ?? null,

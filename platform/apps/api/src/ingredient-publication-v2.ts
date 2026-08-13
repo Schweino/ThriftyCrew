@@ -90,6 +90,7 @@ export async function verifyIngredientPublication(env: Pick<WorkerEnv, "DB" | "P
       statements.push(env.DB.prepare("UPDATE ingredient_gaps SET status = 'published', published_commodity_id = ?3, updated_at = CURRENT_TIMESTAMP WHERE id = ?2 AND status = 'ready_to_publish'").bind(batchId, member.gap_id, member.commodity_id));
       statements.push(env.DB.prepare("UPDATE ingredient_pricing_jobs SET state = 'public_verified', updated_at = CURRENT_TIMESTAMP WHERE gap_id = ?1 AND state = 'ready_to_publish'").bind(member.gap_id));
       statements.push(env.DB.prepare("UPDATE recipe_hold_requirements SET terminal_kind = 'available', satisfied_at = CURRENT_TIMESTAMP WHERE gap_id = ?1 AND terminal_kind IS NULL").bind(member.gap_id));
+      statements.push(env.DB.prepare("DELETE FROM ingredient_pricing_inbox WHERE gap_id = ?1").bind(member.gap_id));
     }
   }
   if (statements.length) for (let offset = 0; offset < statements.length; offset += 90) await env.DB.batch(statements.slice(offset, offset + 90));
