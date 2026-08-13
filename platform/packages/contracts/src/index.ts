@@ -1242,6 +1242,7 @@ export const releaseCreateSchema = z.object({
   marketId: nonEmptyId,
   configurationId: nonEmptyId,
   engineRunId: nonEmptyId.optional(),
+  snapshotObservedAt: z.iso.datetime().optional(),
   inputManifest: z.record(z.string(), z.unknown()),
   inputBatchIds: z.array(nonEmptyId).min(1).max(100).refine((ids) => new Set(ids).size === ids.length, {
     message: "input batch ids must be unique",

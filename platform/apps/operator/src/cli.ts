@@ -974,6 +974,10 @@ if (command === "status") {
       missingIngredients: recipe.missingIngredients ?? [],
     })),
   };
+} else if (command === "release" && subcommand === "reject") {
+  const releaseId = arguments_[0];
+  if (!releaseId) throw new Error("tc release reject requires a release id");
+  result = await (await mutationClient()).request(`/internal/releases/${encodeURIComponent(releaseId)}/reject`, { method: "POST" });
 } else if (command === "engine" && subcommand === "parity") {
   const requestedMode = arguments_[0] ?? "legacy";
   if (!(["legacy", "direct", "all"] as const).includes(requestedMode as "legacy" | "direct" | "all")) throw new Error("tc engine parity mode must be legacy, direct, or all");
@@ -1402,7 +1406,7 @@ if (command === "status") {
     usage: [
       "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy|archives|archive <id>",
       "tc schedules check|deploy", "tc promotion sync|status|reconcile|due [headless|browser]|claim <headless|browser> [owner]|complete <completed|failed> <id...>", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>|execute <manifest> <sha256>", "tc storage migrate-releases|gc-plan [days] [--execute]|gc-sweep <run> [--execute]", "tc cleanup index|plan [--execute]|export <run> <json>|upload <run> <parquet>|execute <run> <sha256>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
-      "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>", "tc efficiency record <report.json>", "tc recipe bundles [release-id]", "tc cache purge",
+      "tc release reject <release-id>", "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>", "tc efficiency record <report.json>", "tc recipe bundles [release-id]", "tc cache purge",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
         "tc capture metrics [limit]", "tc capture coordinator status|next|heartbeat|fail|challenge|resolve", "tc capture session worklist|init|append|evidence|verification-plan|finalize|status",
       "tc capture queue enqueue <artifact> <screenshot...>", "tc capture queue drain|status|watchdog", "tc capture journal checkpoint|restore [--force]",

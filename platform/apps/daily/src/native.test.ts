@@ -82,6 +82,12 @@ describe("native release construction", () => {
     const artifact = await buildNativeRelease(root, snapshot);
     const identity = await nativeReleaseIdentity(snapshot, await loadNativeReleaseCatalog(root));
     expect(identity).toMatchObject({ releaseId: artifact.releaseId, inputHash: artifact.inputHash, inputBatchIds: artifact.inputBatchIds });
+    const laterBoundaryCheck = await nativeReleaseIdentity(
+      { ...snapshot, observedAt: "2026-08-09T13:00:00.000Z" },
+      await loadNativeReleaseCatalog(root),
+    );
+    expect(laterBoundaryCheck.releaseId).toBe(identity.releaseId);
+    expect(laterBoundaryCheck.inputHash).toBe(identity.inputHash);
     expect(artifact.recipeCosts).toEqual(expect.arrayContaining([
       expect.objectContaining({ recipeSlug: "complete", status: "complete", batchCostMinor: 95, servingCostMinor: 48, detail: expect.objectContaining({ utilizedBatchCostMinor: 95, splitStoreCheckoutCostMinor: 200, bestSingleStoreCheckoutCostMinor: 200 }) }),
       expect.objectContaining({ recipeSlug: "incomplete", status: "held", missingIngredients: ["Mystery"], detail: expect.objectContaining({ unavailablePricing: expect.objectContaining({ policy: "hold-without-estimate" }) }) }),

@@ -662,6 +662,7 @@ export async function publishNativeRelease(client: MutationClient, artifact: Nat
     id: artifact.releaseId,
     marketId: artifact.marketId,
     configurationId: artifact.configurationId,
+    snapshotObservedAt: artifact.generatedAt,
     inputManifest: artifact.inputManifest,
     inputBatchIds: artifact.inputBatchIds,
     inputHash: artifact.inputHash,

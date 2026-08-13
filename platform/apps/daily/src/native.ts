@@ -214,7 +214,6 @@ export async function nativeReleaseIdentity(
     marketId: "omaha",
     mode: "direct",
     releaseDate: weekOf,
-    snapshotObservedAt: generatedAt,
     configurationId: snapshot.configurationId,
     engineSnapshotHash: snapshot.inputHash,
     recipeCatalogHash: catalog.recipeCatalogHash,

@@ -3638,10 +3638,7 @@ app.post("/internal/releases", zValidator("json", releaseCreateSchema), async (c
     "SELECT active FROM configuration_versions WHERE id = ?1",
   ).bind(requested.configurationId).first<{ active: number }>();
   if (!configuration || configuration.active !== 1) return jsonError("release configuration is not active", 422);
-  const snapshotObservedAtValue = requested.inputManifest.snapshotObservedAt;
-  const snapshotObservedAt = typeof snapshotObservedAtValue === "string" && Number.isFinite(Date.parse(snapshotObservedAtValue))
-    ? snapshotObservedAtValue
-    : new Date().toISOString();
+  const snapshotObservedAt = requested.snapshotObservedAt ?? new Date().toISOString();
   const batches = await Promise.all(requested.inputBatchIds.map((batchId) => context.env.DB.prepare(
     `SELECT b.id, b.status, b.valid_from, b.valid_to, l.market_id
        FROM capture_batches b
