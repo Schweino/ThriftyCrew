@@ -129,6 +129,36 @@
         }
       },
       "expect": { "decision": "refuse", "mustMention": ["catalog"] }
+    },
+    {
+      "id": "allow-disclosed-finishing-pepper-omission",
+      "input": {
+        "id": "recipe_eval_optional_finish",
+        "request": "Find a dinner with 500 to 650 calories and no more than 35 grams total carbohydrates per serving.",
+        "commodities": [
+          "chicken-thighs | Chicken thighs | Meat",
+          "olive-oil | Olive oil | Pantry",
+          "garlic | Garlic | Produce"
+        ],
+        "sourceEvidence": {
+          "url": "https://example.test/garlic-chicken",
+          "accessedAt": "2026-08-10T12:00:00Z",
+          "title": "Garlic Chicken Thighs",
+          "yield": "4 servings",
+          "cuisine": "American",
+          "proteinClass": "chicken",
+          "method": "Roast the garlic-seasoned chicken thighs.",
+          "nutrition": { "calories": 575, "proteinGrams": 48, "carbohydrateGrams": 8 },
+          "completeIngredientList": true,
+          "ingredients": [
+            "2 pounds chicken thighs",
+            "2 tablespoons olive oil",
+            "4 cloves garlic",
+            "black pepper, to taste"
+          ]
+        }
+      },
+      "expect": { "decision": "candidates", "mustMention": ["black pepper"] }
     }
   ]
 }

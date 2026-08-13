@@ -237,12 +237,14 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
          FROM recipe_suggestion_requests WHERE status = 'queued' ORDER BY requested_at, id LIMIT 10`,
     ).all<Record<string, unknown>>();
     const commodities = rows.results.length > 0 ? await currentCommodityCatalog(db) : [];
+    const sourcingCommodities = commodities.map((commodity) => [commodity.id, commodity.label, commodity.category]
+      .filter((value) => typeof value === "string" && value.length > 0).join(" | "));
     return rows.results.map((row) => ({
       sourceKind: "recipe-request",
       sourceRef: String(row.id),
       stage: "source",
       severity: "optional",
-      input: { contract: "recipe-source-request-v1", request: row, commodities },
+      input: { contract: "recipe-source-request-v1", request: row, commodities: sourcingCommodities },
     }));
   }
   return [];

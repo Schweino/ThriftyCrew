@@ -146,7 +146,7 @@
       "plane": "pc",
       "scheduleId": "recipe-pack-weekly",
       "promptFile": "agents/recipe-sourcer/prompt.md",
-      "promptSha256": "a9c8dd96332e00cfb20fbbcbece3847b63c6dcc175ed9d85d19c5dc5562b08a9",
+      "promptSha256": "c6fa2a09b93b3b3ba4a22b4b7593f9fd5bc094f7dab6c90fbcd5297c2b3b6fc2",
       "provider": "openai",
       "model": "gpt-5.6-terra",
       "reasoningEffort": "medium",
@@ -155,7 +155,7 @@
       "criticality": "optional",
       "workflowFile": ".github/workflows/agent-recipe-sourcer.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "3eea908dbc7b3df487659d207f6f32114fbc7671fd0ce93970c63c5b11c84487",
+      "executionConfigHash": "b3dd84ffb66bb29d947c201316a117be55daa0e1c2473acc8f654b69e84b3367",
       "capabilities": [
         "read:content",
         "search:web",
