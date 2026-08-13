@@ -417,7 +417,6 @@ export async function ingestAgentIngredientResearch(env: Pick<WorkerEnv, "DB" | 
     .bind(research.gapId).first<{ id: string }>();
   if (!job) return null;
   for (const result of research.stores) {
-    if (result.outcome !== "priced" && result.outcome !== "not_found") continue;
     const check = await env.DB.prepare(
       `SELECT id, state FROM ingredient_store_checks WHERE pricing_job_id = ?1 AND store_location_id = ?2`,
     ).bind(job.id, result.storeLocationId).first<{ id: string; state: string }>();
@@ -428,27 +427,37 @@ export async function ingestAgentIngredientResearch(env: Pick<WorkerEnv, "DB" | 
     const objectKey = `ingredient-store-evidence/${check.id}/${sha256}.json`;
     await env.EVIDENCE.put(objectKey, bytes, { httpMetadata: { contentType: "application/json; charset=utf-8" }, customMetadata: { sha256, kind: "agent-targeted-store-evidence" } });
     const evidenceId = await deterministicId("ingredient-evidence", check.id, sha256);
-    const qaInputHash = await digestHex(stableJson({ result, evidenceHash: sha256 }));
-    const qaOutputHash = await digestHex(stableJson({ verdict: result.outcome, qaInputHash, policy: "targeted-agent-v1" }));
-    const qaId = await deterministicId("ingredient-qa", check.id, qaInputHash, qaOutputHash);
-    const state = result.outcome === "priced" ? "qa_verified_priced" : "qa_verified_not_found";
-    await env.DB.batch([
+    const verified = result.outcome === "priced" || result.outcome === "not_found";
+    const qaInputHash = verified ? await digestHex(stableJson({ result, evidenceHash: sha256 })) : null;
+    const qaOutputHash = verified ? await digestHex(stableJson({ verdict: result.outcome, qaInputHash, policy: "targeted-agent-v1" })) : null;
+    const qaId = verified ? await deterministicId("ingredient-qa", check.id, qaInputHash!, qaOutputHash!) : null;
+    const state = result.outcome === "priced" ? "qa_verified_priced"
+      : result.outcome === "not_found" ? "qa_verified_not_found"
+        : result.outcome === "blocked" ? "blocked_challenge" : "ambiguous";
+    const statements = [
       env.DB.prepare(`INSERT INTO ingredient_evidence_refs
         (id, store_check_id, kind, object_key, sha256, byte_length, content_type, observed_at, source_url)
         VALUES (?1, ?2, ?3, ?4, ?5, ?6, 'application/json; charset=utf-8', ?7, ?8)
         ON CONFLICT(store_check_id, kind, sha256) DO NOTHING`)
-        .bind(evidenceId, check.id, result.outcome === "priced" ? "offer" : "not_found", objectKey, sha256, bytes.byteLength, result.checkedAt, result.sourceUrl),
-      env.DB.prepare(`INSERT INTO ingredient_qa_attestations
-        (id, store_check_id, input_hash, validator_versions_json, verdict, findings_json, output_hash)
-        VALUES (?1, ?2, ?3, ?4, ?5, '[]', ?6) ON CONFLICT(store_check_id, input_hash, output_hash) DO NOTHING`)
-        .bind(qaId, check.id, qaInputHash, stableJson({ schema: "ingredient-store-price-v1", identity: "codex-targeted-v1", arithmetic: "schema-v1" }), result.outcome, qaOutputHash),
+        .bind(evidenceId, check.id, result.outcome === "priced" ? "offer" : result.outcome === "not_found" ? "not_found" : "challenge", objectKey, sha256, bytes.byteLength, result.checkedAt, result.sourceUrl),
       env.DB.prepare(`UPDATE ingredient_store_checks SET state = ?2, terminal_outcome = ?3, evidence_id = ?4,
         qa_attestation_id = ?5, result_json = ?6, candidate_count = ?7, eligible_count = ?8,
-        lease_owner = NULL, lease_expires_at = NULL, heartbeat_at = NULL, last_error = NULL, updated_at = CURRENT_TIMESTAMP
+        lease_owner = NULL, lease_expires_at = NULL, heartbeat_at = NULL, last_error = ?9, updated_at = CURRENT_TIMESTAMP
         WHERE id = ?1 AND state NOT IN ('qa_verified_priced','qa_verified_not_found')`)
-        .bind(check.id, state, result.outcome, evidenceId, qaId, stableJson(result), result.qualifyingProductsExamined,
-          result.outcome === "priced" ? result.qualifyingProductsExamined : 0),
-    ]);
+        .bind(check.id, state, verified ? result.outcome : null, evidenceId, qaId, stableJson(result), result.qualifyingProductsExamined,
+          result.outcome === "priced" ? result.qualifyingProductsExamined : 0, verified ? null : result.evidenceSummary),
+    ];
+    if (verified) statements.splice(1, 0, env.DB.prepare(`INSERT INTO ingredient_qa_attestations
+        (id, store_check_id, input_hash, validator_versions_json, verdict, findings_json, output_hash)
+        VALUES (?1, ?2, ?3, ?4, ?5, '[]', ?6) ON CONFLICT(store_check_id, input_hash, output_hash) DO NOTHING`)
+        .bind(qaId, check.id, qaInputHash, stableJson({ schema: "ingredient-store-price-v1", identity: "codex-targeted-v1", arithmetic: "schema-v1" }), result.outcome, qaOutputHash));
+    await env.DB.batch(statements);
+  }
+  const attention = await env.DB.prepare(`SELECT COUNT(*) AS count FROM ingredient_store_checks
+    WHERE pricing_job_id = ?1 AND state IN ('blocked_challenge','ambiguous','adapter_quarantined')`).bind(job.id).first<{ count: number }>();
+  if (Number(attention?.count ?? 0) > 0) {
+    await env.DB.prepare("UPDATE ingredient_pricing_jobs SET state = 'needs_operator', updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(job.id).run();
+    return null;
   }
   return sealAggregateIfTerminal(env, job.id);
 }
