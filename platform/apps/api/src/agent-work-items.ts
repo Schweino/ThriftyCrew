@@ -454,8 +454,36 @@ export async function reconcileIngredientHolds(db: D1Database): Promise<void> {
       continue;
     }
     if (!hold.source_fact_version_id || !hold.mapping_version_id) {
-      await db.prepare("UPDATE recipe_ingredient_holds SET resume_error = 'immutable fact or mapping version is missing', updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(hold.id).run();
-      continue;
+      const legacyMapper = await db.prepare("SELECT output_json FROM agent_work_items WHERE id = ?1 AND state = 'completed'")
+        .bind(hold.mapper_work_item_id).first<{ output_json: string | null }>();
+      const legacyMap = legacyMapper?.output_json ? recipeMapSchema.parse(JSON.parse(legacyMapper.output_json)) : null;
+      const legacyRecipe = legacyMap?.recipes.find((recipe) => recipe.candidate.id === hold.candidate_id);
+      if (!legacyRecipe) {
+        await db.prepare("UPDATE recipe_ingredient_holds SET resume_error = 'immutable fact or mapping version is missing', updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(hold.id).run();
+        continue;
+      }
+      const factsJson = stableJson(legacyRecipe.candidate);
+      const factsHash = await digestHex(factsJson);
+      const factVersionId = await deterministicId("recipe-source-facts", String(hold.request_id), String(hold.candidate_id), factsHash);
+      const mappingJson = stableJson(legacyRecipe);
+      const mappingHash = await digestHex(mappingJson);
+      const mappingVersionId = await deterministicId("recipe-mapping", factVersionId, mappingHash);
+      await db.batch([
+        db.prepare(`INSERT INTO recipe_source_fact_versions
+          (id, request_id, candidate_id, source_url, accessed_at, extractor_version, artifact_hash, facts_json, facts_hash, verified_at)
+          VALUES (?1, ?2, ?3, ?4, ?5, 'legacy-completed-mapper-v1', ?6, ?7, ?6, CURRENT_TIMESTAMP)
+          ON CONFLICT(request_id, candidate_id, facts_hash) DO NOTHING`)
+          .bind(factVersionId, hold.request_id, hold.candidate_id, legacyRecipe.candidate.sourceUrl, legacyRecipe.candidate.accessedAt, factsHash, factsJson),
+        db.prepare(`INSERT INTO recipe_mapping_versions
+          (id, source_fact_version_id, request_id, candidate_id, mapper_version, configuration_hash, mapping_json, mapping_hash, verified_at)
+          VALUES (?1, ?2, ?3, ?4, 'legacy-completed-mapper-v1', ?5, ?6, ?7, CURRENT_TIMESTAMP)
+          ON CONFLICT(source_fact_version_id, mapping_hash) DO NOTHING`)
+          .bind(mappingVersionId, factVersionId, hold.request_id, hold.candidate_id, factsHash, mappingJson, mappingHash),
+        db.prepare("UPDATE recipe_ingredient_holds SET source_fact_version_id = ?2, mapping_version_id = ?3, resume_error = NULL, updated_at = CURRENT_TIMESTAMP WHERE id = ?1")
+          .bind(hold.id, factVersionId, mappingVersionId),
+      ]);
+      hold.source_fact_version_id = factVersionId;
+      hold.mapping_version_id = mappingVersionId;
     }
     const locked = await db.prepare(
       `SELECT mapping.mapping_json, mapping.mapping_hash, facts.facts_hash

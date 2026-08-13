@@ -1461,6 +1461,23 @@ app.get("/internal/ingredient-pricing/publication-ready", async (context) => {
   return context.json({ ok: true, gaps: rows.results });
 });
 
+app.post("/internal/ingredient-pricing/backfill", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may backfill ingredient pricing", 403);
+  const rows = await context.env.DB.prepare(
+    `SELECT gap.id FROM ingredient_gaps gap
+      WHERE gap.status NOT IN ('published','permanently_unavailable')
+        AND NOT EXISTS (SELECT 1 FROM ingredient_pricing_jobs job WHERE job.gap_id = gap.id AND job.market_id = 'omaha')
+      ORDER BY gap.first_seen_at, gap.id LIMIT 200`,
+  ).all<{ id: string }>();
+  if (rows.results.length === 0) return context.json({ ok: true, backfilled: 0, waveId: null });
+  const gapIds = rows.results.map((row) => row.id);
+  const inputHash = await digestHex(stableJson({ kind: "ingredient-v2-backfill", gapIds }));
+  const waveId = await deterministicId("pricing-wave-backfill", inputHash);
+  const wave = await createPricingWave(context.env.DB, { id: waveId, campaignId: null, sourceKind: "backfill", gapIds,
+    targetAvailable: gapIds.length, deadlineAt: null, inputHash });
+  return context.json({ ok: true, backfilled: gapIds.length, ...wave });
+});
+
 app.get("/internal/pipeline/events", async (context) => {
   const after = Math.max(0, Number(context.req.query("after") ?? "0"));
   const limit = Math.min(200, Math.max(1, Number(context.req.query("limit") ?? "100")));

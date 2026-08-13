@@ -1602,6 +1602,8 @@ if (command === "status") {
   else throw new Error("tc ingredient pipeline requires run, tick, or status");
 } else if (command === "ingredient" && subcommand === "publication-ready") {
   result = await (await mutationClient()).request("/internal/ingredient-pricing/publication-ready");
+} else if (command === "ingredient" && subcommand === "backfill-v2") {
+  result = await (await mutationClient()).request("/internal/ingredient-pricing/backfill", { method: "POST" });
 } else if (command === "recipe" && subcommand === "wave") {
   const [action, waveId, value] = arguments_;
   if (!action || !waveId) throw new Error("tc recipe wave requires snapshot|published|corrective and a wave id");
