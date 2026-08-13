@@ -3,6 +3,7 @@ param(
   [ValidateSet('Triage','PostPublish','SourceSentinel','Recipe','Accuracy')]
   [string]$Cycle,
   [ValidateRange(1,10)][int]$MaxItems = 1,
+  [string]$OnlyAgent,
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -29,6 +30,13 @@ $jobByCycle = @{
   SourceSentinel = 'source-sentinel-daily'
   Recipe = 'recipe-pack-weekly'
   Accuracy = 'accuracy-verdict'
+}
+$agentsForCycle = @($cycleAgents[$Cycle])
+if ($OnlyAgent) {
+  if ($OnlyAgent -notin $agentsForCycle) {
+    throw "Agent '$OnlyAgent' is not registered for the $Cycle cycle"
+  }
+  $agentsForCycle = @($OnlyAgent)
 }
 
 function Invoke-LoggedCommand([string]$Label, [scriptblock]$Command, [switch]$AllowFailure) {
@@ -220,7 +228,7 @@ if ($SelfTest) {
   } elseif (-not [Environment]::GetEnvironmentVariable('OPENAI_API_KEY','User')) {
     throw 'OPENAI_API_KEY is not configured for this API-backed agent cycle'
   }
-  foreach ($agentId in $cycleAgents[$Cycle]) { Set-PcRuntimeCredential $config $agentId }
+  foreach ($agentId in $agentsForCycle) { Set-PcRuntimeCredential $config $agentId }
   Set-PcRuntimeCredential $config 'local-operator'
   Write-Output "PC agent cycle self-test passed for $Cycle"
   exit 0
@@ -244,7 +252,7 @@ try {
     $jobStarted = $true
   }
   finally { Pop-Location }
-  foreach ($agentId in $cycleAgents[$Cycle]) {
+  foreach ($agentId in $agentsForCycle) {
     for ($item = 0; $item -lt $MaxItems; $item++) {
       if (-not (Invoke-AgentItem $agentId)) { break }
     }
