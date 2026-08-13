@@ -281,7 +281,7 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
     const rows = await db.prepare(
       `SELECT id, display_name, normalized_name, first_seen_at
          FROM ingredient_gaps WHERE status = 'pending'
-        ORDER BY first_seen_at, id LIMIT 10`,
+        ORDER BY first_seen_at, id LIMIT 50`,
     ).all<Record<string, unknown>>();
     const categories = await db.prepare(
       `SELECT category.id, category.label
