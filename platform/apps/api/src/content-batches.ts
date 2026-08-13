@@ -1,4 +1,4 @@
-import type { ContentItem } from "@thriftycrew/contracts";
+import { RECIPE_MIN_ACCOMPANIMENT_GRAMS_PER_SERVING, type ContentItem } from "@thriftycrew/contracts";
 import { digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 
 export interface ContentGuardFinding {
@@ -37,6 +37,20 @@ export async function evaluateContentPromotion(
     }
     for (const commodityId of usedCommodityIds) {
       if (!ingredientCommodityIds.has(commodityId)) findings.push({ key: `unlisted-step-ingredient:${item.slug}:${commodityId}`, severity: "hard", message: `instructions use ${commodityId}, but the ingredient list does not purchase it`, itemSlug: item.slug });
+    }
+    const mainComponents = item.mealComponents.filter((component) => component.role === "main");
+    const accompanimentComponents = item.mealComponents.filter((component) => component.role === "substantial-accompaniment");
+    if (mainComponents.length === 0) findings.push({ key: `missing-main:${item.slug}`, severity: "hard", message: "recipe is not structured as a complete meal with a main component", itemSlug: item.slug });
+    if (accompanimentComponents.length === 0) findings.push({ key: `missing-accompaniment:${item.slug}`, severity: "hard", message: "recipe is not structured as a complete meal with a substantial accompaniment", itemSlug: item.slug });
+    const gramsByCommodity = new Map(item.ingredients.map((ingredient) => [ingredient.commodityId, ingredient.grams]));
+    const componentCommodityIds = new Set(item.mealComponents.flatMap((component) => component.commodityIds));
+    for (const commodityId of componentCommodityIds) {
+      if (!ingredientCommodityIds.has(commodityId)) findings.push({ key: `unknown-component-ingredient:${item.slug}:${commodityId}`, severity: "hard", message: `meal component references unpurchased ingredient ${commodityId}`, itemSlug: item.slug });
+    }
+    const accompanimentCommodityIds = new Set(accompanimentComponents.flatMap((component) => component.commodityIds));
+    const accompanimentGrams = [...accompanimentCommodityIds].reduce((sum, commodityId) => sum + (gramsByCommodity.get(commodityId) ?? 0), 0);
+    if (accompanimentGrams < item.servings * RECIPE_MIN_ACCOMPANIMENT_GRAMS_PER_SERVING) {
+      findings.push({ key: `insubstantial-accompaniment:${item.slug}`, severity: "hard", message: `substantial accompaniment provides less than ${RECIPE_MIN_ACCOMPANIMENT_GRAMS_PER_SERVING} grams per serving`, itemSlug: item.slug });
     }
     if (new Set(item.provenance.map((source) => new URL(source.url).hostname)).size < 1) findings.push({ key: `missing-provenance:${item.slug}`, severity: "hard", message: "recipe lacks attributable provenance", itemSlug: item.slug });
   }

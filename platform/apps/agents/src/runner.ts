@@ -79,10 +79,10 @@ const outputSchemas = {
   "triage-plan-v1": triagePlanSchema,
   "pull-request-v1": pullRequestProposalSchema,
   "accuracy-verdicts-v1": accuracyVerdictsSchema,
-  "recipe-source-candidates-v1": recipeSourceCandidatesSchema,
-  "recipe-dedup-v1": recipeDedupSchema,
-  "recipe-map-v1": recipeMapSchema,
-  "content-items-v1": contentBatchItemsSchema,
+  "recipe-source-candidates-v2": recipeSourceCandidatesSchema,
+  "recipe-dedup-v2": recipeDedupSchema,
+  "recipe-map-v2": recipeMapSchema,
+  "content-items-v2": contentBatchItemsSchema,
   "content-audit-v1": contentBatchAuditSchema,
 } as const;
 const outputType = outputSchemas[definition.outputContract as keyof typeof outputSchemas];

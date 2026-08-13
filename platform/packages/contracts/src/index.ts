@@ -950,6 +950,34 @@ const recipeSourceIngredientSchema = z.object({
   quantityText: z.string().trim().min(1).max(300),
 });
 
+export const RECIPE_MIN_ACCOMPANIMENT_GRAMS_PER_SERVING = 70;
+const recipeMealComponentRoleSchema = z.enum(["main", "substantial-accompaniment"]);
+const recipeSourceMealComponentSchema = z.object({
+  role: recipeMealComponentRoleSchema,
+  label: z.string().trim().min(2).max(160),
+  ingredientIndexes: z.array(z.number().int().min(0).max(99)).min(1).max(100)
+    .refine((values) => new Set(values).size === values.length, "meal component ingredient indexes must be unique"),
+});
+const recipeMappedMealComponentSchema = z.object({
+  role: recipeMealComponentRoleSchema,
+  label: z.string().trim().min(2).max(160),
+  commodityIds: z.array(nonEmptyId).max(100)
+    .refine((values) => new Set(values).size === values.length, "meal component commodity ids must be unique"),
+});
+const contentMealComponentSchema = recipeMappedMealComponentSchema.extend({
+  commodityIds: z.array(nonEmptyId).min(1).max(100)
+    .refine((values) => new Set(values).size === values.length, "meal component commodity ids must be unique"),
+});
+
+function requireCompleteMealRoles(components: readonly { role: "main" | "substantial-accompaniment" }[], context: z.RefinementCtx, path: PropertyKey[]): void {
+  if (!components.some((component) => component.role === "main")) {
+    context.addIssue({ code: "custom", path, message: "complete meals require a main component" });
+  }
+  if (!components.some((component) => component.role === "substantial-accompaniment")) {
+    context.addIssue({ code: "custom", path, message: "complete meals require a substantial accompaniment" });
+  }
+}
+
 const recipeHttpUrl = z.string().trim().min(8).max(3000).superRefine((value, context) => {
   try {
     const parsed = new URL(value);
@@ -975,9 +1003,19 @@ export const recipeSourceCandidateSchema = z.object({
     carbohydrateGrams: z.number().nonnegative().nullable(),
   }),
   ingredients: z.array(recipeSourceIngredientSchema).min(2).max(100),
+  mealComponents: z.array(recipeSourceMealComponentSchema).min(2).max(20),
   conceptSummary: z.string().trim().min(20).max(2000),
   unmappedHints: z.array(z.string().trim().min(1).max(300)).max(100),
   confidence: z.enum(["high", "medium", "low"]),
+}).superRefine((value, context) => {
+  requireCompleteMealRoles(value.mealComponents, context, ["mealComponents"]);
+  value.mealComponents.forEach((component, componentIndex) => {
+    component.ingredientIndexes.forEach((ingredientIndex, indexIndex) => {
+      if (ingredientIndex >= value.ingredients.length) {
+        context.addIssue({ code: "custom", path: ["mealComponents", componentIndex, "ingredientIndexes", indexIndex], message: "meal component references a missing ingredient" });
+      }
+    });
+  });
 });
 
 export const contentItemSchema = z.object({
@@ -995,6 +1033,7 @@ export const contentItemSchema = z.object({
     commodityId: nonEmptyId,
     sourceLine: z.string().trim().min(1).max(1000),
   })).min(2).max(100),
+  mealComponents: z.array(contentMealComponentSchema).min(2).max(20),
   instructions: z.array(z.object({
     text: z.string().trim().min(10).max(2000),
     usesCommodityIds: z.array(nonEmptyId).max(100),
@@ -1003,6 +1042,23 @@ export const contentItemSchema = z.object({
     url: recipeHttpUrl,
     accessedAt: isoDateTime,
   })).min(1).max(50),
+}).superRefine((value, context) => {
+  requireCompleteMealRoles(value.mealComponents, context, ["mealComponents"]);
+  const gramsByCommodity = new Map(value.ingredients.map((ingredient) => [ingredient.commodityId, ingredient.grams]));
+  value.mealComponents.forEach((component, componentIndex) => {
+    component.commodityIds.forEach((commodityId, commodityIndex) => {
+      if (!gramsByCommodity.has(commodityId)) {
+        context.addIssue({ code: "custom", path: ["mealComponents", componentIndex, "commodityIds", commodityIndex], message: "meal component references an ingredient that is not purchased" });
+      }
+    });
+  });
+  const accompanimentIds = new Set(value.mealComponents
+    .filter((component) => component.role === "substantial-accompaniment")
+    .flatMap((component) => component.commodityIds));
+  const accompanimentGrams = [...accompanimentIds].reduce((sum, commodityId) => sum + (gramsByCommodity.get(commodityId) ?? 0), 0);
+  if (accompanimentGrams < value.servings * RECIPE_MIN_ACCOMPANIMENT_GRAMS_PER_SERVING) {
+    context.addIssue({ code: "custom", path: ["mealComponents"], message: `substantial accompaniment must provide at least ${RECIPE_MIN_ACCOMPANIMENT_GRAMS_PER_SERVING} grams per serving` });
+  }
 });
 
 export const contentBatchItemsSchema = z.object({ items: z.array(contentItemSchema).min(1).max(100) });
@@ -1104,13 +1160,43 @@ export const recipeMapSchema = z.object({
   recipes: z.array(z.object({
     candidate: recipeSourceCandidateSchema,
     ingredients: z.array(recipeMappedIngredientSchema).min(2).max(100),
+    mealComponents: z.array(recipeMappedMealComponentSchema).min(2).max(20),
     readyForWriting: z.boolean(),
     issues: z.array(z.string().trim().min(3).max(1000)).max(100),
   })).max(50),
 }).superRefine((value, context) => {
   for (const [index, recipe] of value.recipes.entries()) {
+    requireCompleteMealRoles(recipe.mealComponents, context, ["recipes", index, "mealComponents"]);
+    if (recipe.ingredients.length !== recipe.candidate.ingredients.length) {
+      context.addIssue({ code: "custom", path: ["recipes", index, "ingredients"], message: "mapped ingredients must preserve every source ingredient in order" });
+    }
+    recipe.candidate.ingredients.forEach((sourceIngredient, ingredientIndex) => {
+      const mappedIngredient = recipe.ingredients[ingredientIndex];
+      if (!mappedIngredient || mappedIngredient.sourceLine !== sourceIngredient.raw || mappedIngredient.quantityText !== sourceIngredient.quantityText) {
+        context.addIssue({ code: "custom", path: ["recipes", index, "ingredients", ingredientIndex], message: "mapped ingredient must preserve its source line and quantity position" });
+      }
+    });
+    const gramsByCommodity = new Map(recipe.ingredients.flatMap((ingredient) => ingredient.commodityId && ingredient.grams !== null ? [[ingredient.commodityId, ingredient.grams] as const] : []));
+    recipe.candidate.mealComponents.forEach((sourceComponent, componentIndex) => {
+      const mappedComponent = recipe.mealComponents[componentIndex];
+      if (!mappedComponent || mappedComponent.role !== sourceComponent.role || mappedComponent.label !== sourceComponent.label) {
+        context.addIssue({ code: "custom", path: ["recipes", index, "mealComponents", componentIndex], message: "mapped meal components must preserve source component identity" });
+        return;
+      }
+      const expectedIds = sourceComponent.ingredientIndexes.flatMap((ingredientIndex) => recipe.ingredients[ingredientIndex]?.commodityId ?? []).sort();
+      const actualIds = [...mappedComponent.commodityIds].sort();
+      if (JSON.stringify(expectedIds) !== JSON.stringify(actualIds)) {
+        context.addIssue({ code: "custom", path: ["recipes", index, "mealComponents", componentIndex, "commodityIds"], message: "mapped meal component must preserve its source ingredients" });
+      }
+    });
+    if (recipe.mealComponents.length !== recipe.candidate.mealComponents.length) {
+      context.addIssue({ code: "custom", path: ["recipes", index, "mealComponents"], message: "mapped meal components must preserve every source component" });
+    }
+    const accompanimentIds = new Set(recipe.mealComponents.filter((component) => component.role === "substantial-accompaniment").flatMap((component) => component.commodityIds));
+    const accompanimentGrams = [...accompanimentIds].reduce((sum, commodityId) => sum + (gramsByCommodity.get(commodityId) ?? 0), 0);
     const hasBlockingFact = recipe.candidate.sourceServings === null
-      || recipe.ingredients.some((ingredient) => ingredient.decision === "unmapped" || ingredient.scalingStatus === "unresolved");
+      || recipe.ingredients.some((ingredient) => ingredient.decision === "unmapped" || ingredient.scalingStatus === "unresolved")
+      || accompanimentGrams < 14 * RECIPE_MIN_ACCOMPANIMENT_GRAMS_PER_SERVING;
     if (recipe.readyForWriting === hasBlockingFact) {
       context.addIssue({ code: "custom", path: ["recipes", index, "readyForWriting"], message: "readiness must be false when source yield is missing or any ingredient is unmapped or unscaled" });
     }

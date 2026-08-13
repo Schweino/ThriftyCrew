@@ -2019,7 +2019,16 @@ app.post("/internal/content-batches/:id/promote", async (context) => {
   if (batch.status === "promoted") return context.json({ ok: true, batchId, status: "promoted", idempotent: true });
   if (batch.status !== "audited") return jsonError(`content batch cannot be promoted from ${batch.status}`, 409);
   const rows = await context.env.DB.prepare("SELECT content_json FROM content_batch_items WHERE batch_id = ?1 ORDER BY ordinal").bind(batchId).all<{ content_json: string }>();
-  const items = rows.results.map((row) => contentItemSchema.parse(JSON.parse(row.content_json)));
+  const parsedItems = rows.results.map((row) => contentItemSchema.safeParse(JSON.parse(row.content_json)));
+  const invalidItem = parsedItems.find((result) => !result.success);
+  if (invalidItem && !invalidItem.success) {
+    const contentHash = await digestHex(stableJson(rows.results.map((row) => JSON.parse(row.content_json))));
+    const findings = [{ key: "legacy-incomplete-meal-contract", severity: "hard" as const, message: "recipe batch predates the V2 complete-meal contract or fails its component requirements" }];
+    await context.env.DB.prepare("UPDATE content_batches SET status = 'rejected', content_hash = ?2 WHERE id = ?1").bind(batchId, contentHash).run();
+    await recordAudit(context.env, context.get("identity"), "content_batch.promote", "content_batch", batchId, "rejected", { findings, issues: invalidItem.error.issues });
+    return context.json({ ok: false, batchId, status: "rejected", guardVersion: "recipe-content-v2", findings }, 422);
+  }
+  const items = parsedItems.flatMap((result) => result.success ? [result.data] : []);
   const commodities = await context.env.DB.prepare(
     `SELECT c.id FROM commodities c JOIN configuration_versions v ON v.id = c.configuration_id WHERE v.active = 1`,
   ).all<{ id: string }>();
@@ -2027,20 +2036,20 @@ app.post("/internal/content-batches/:id/promote", async (context) => {
   if (!guard.ok) {
     await context.env.DB.prepare("UPDATE content_batches SET status = 'rejected', content_hash = ?2 WHERE id = ?1").bind(batchId, guard.contentHash).run();
     await recordAudit(context.env, context.get("identity"), "content_batch.promote", "content_batch", batchId, "rejected", { findings: guard.findings });
-    return context.json({ ok: false, batchId, status: "rejected", guardVersion: "recipe-content-v1", findings: guard.findings }, 422);
+    return context.json({ ok: false, batchId, status: "rejected", guardVersion: "recipe-content-v2", findings: guard.findings }, 422);
   }
   const promotionId = await deterministicId("content-promotion", batchId, guard.contentHash);
   await context.env.DB.batch([
     context.env.DB.prepare(
       `INSERT INTO content_promotions
          (id, batch_id, promoted_by, deterministic_guard_version, content_hash, detail_json)
-       VALUES (?1, ?2, ?3, 'recipe-content-v1', ?4, ?5)`,
+       VALUES (?1, ?2, ?3, 'recipe-content-v2', ?4, ?5)`,
     ).bind(promotionId, batchId, context.get("identity").agentId, guard.contentHash, stableJson({ findings: guard.findings })),
     context.env.DB.prepare("UPDATE content_batches SET status = 'promoted', promoted_at = CURRENT_TIMESTAMP, content_hash = ?2 WHERE id = ?1")
       .bind(batchId, guard.contentHash),
   ]);
   await recordAudit(context.env, context.get("identity"), "content_batch.promote", "content_batch", batchId, "accepted", { promotionId, contentHash: guard.contentHash });
-  return context.json({ ok: true, batchId, status: "promoted", promotionId, guardVersion: "recipe-content-v1", contentHash: guard.contentHash, warnings: guard.findings }, 201);
+  return context.json({ ok: true, batchId, status: "promoted", promotionId, guardVersion: "recipe-content-v2", contentHash: guard.contentHash, warnings: guard.findings }, 201);
 });
 
 app.post("/internal/source-sentinels", zValidator("json", sourceSentinelResultSchema), async (context) => {

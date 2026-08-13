@@ -146,7 +146,7 @@
       "plane": "pc",
       "scheduleId": "recipe-pack-weekly",
       "promptFile": "agents/recipe-sourcer/prompt.md",
-      "promptSha256": "21955551c9713fcb012a5bf94ea6c241be5c3574e960ce9decfab58afbf004c5",
+      "promptSha256": "1e041cd4a1762fcaab2134b54d4cbb6312564d6a8f1a52e9c7b443396ce7e6b9",
       "provider": "codex-chatgpt",
       "model": "gpt-5.6-terra",
       "reasoningEffort": "medium",
@@ -155,7 +155,7 @@
       "criticality": "optional",
       "workflowFile": ".github/workflows/agent-recipe-sourcer.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "db2e682ea56199b0a6dcd1bcaf504a4d20ba08c177e00c844d102e31f500c4b2",
+      "executionConfigHash": "56dda2d3c918f65776c3f0c3f334dbdfda9b84367d19fdd254d381ee04be6ee0",
       "capabilities": [
         "read:content",
         "search:web",
@@ -165,7 +165,7 @@
       "inputContracts": [
         "recipe-source-request-v1"
       ],
-      "outputContract": "recipe-source-candidates-v1",
+      "outputContract": "recipe-source-candidates-v2",
       "fixtureFiles": [
         "agents/evals/recipe-sourcer.json"
       ]
@@ -175,7 +175,7 @@
       "enabled": true,
       "plane": "pc",
       "promptFile": "agents/recipe-deduper/prompt.md",
-      "promptSha256": "7a7d23c991b73dfd876213d0505070ed647b3f7f02ab7dc341c2b927bec2dfb4",
+      "promptSha256": "39c914e6e3a2459692d6fc4e5c140579c0211d8b88282e930e2f178b9d64eb84",
       "provider": "codex-chatgpt",
       "model": "gpt-5.6-sol",
       "reasoningEffort": "high",
@@ -184,16 +184,16 @@
       "criticality": "optional",
       "workflowFile": ".github/workflows/agent-recipe-deduper.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "56d1fa002ad8e0a7d36f6b43415f5a8c1ac15dd87b484a35437761c4f0856ed0",
+      "executionConfigHash": "aafc71bae3cf0e8bc1c9919a2dd158cfd6977655b4337710044e2ca84e01837e",
       "capabilities": [
         "read:content",
         "write:ledger",
         "write:content-stage"
       ],
       "inputContracts": [
-        "recipe-source-candidates-v1"
+        "recipe-source-candidates-v2"
       ],
-      "outputContract": "recipe-dedup-v1",
+      "outputContract": "recipe-dedup-v2",
       "fixtureFiles": [
         "agents/evals/recipe-deduper.json"
       ]
@@ -203,7 +203,7 @@
       "enabled": true,
       "plane": "pc",
       "promptFile": "agents/recipe-mapper/prompt.md",
-      "promptSha256": "ccc89ee2229ae9b37954690a6eebf3bba8952bb5dcc1e34316a1d0b2ff5cfef4",
+      "promptSha256": "e6f3ae661d6ea4976ebf19e41971bd7fa26a22b49d8ee8740c2fefd12d50bbc7",
       "provider": "codex-chatgpt",
       "model": "gpt-5.6-sol",
       "reasoningEffort": "high",
@@ -212,17 +212,17 @@
       "criticality": "optional",
       "workflowFile": ".github/workflows/agent-recipe-mapper.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "ee53c2259991dc1d57ac2034a5e0004814e73e7507d1e156964e6c1147f865b7",
+      "executionConfigHash": "22f1d6031d1cb420aa2343d7dd177bed4494b93b31172014db38180aaa51b25f",
       "capabilities": [
         "read:content",
         "write:ledger",
         "write:content-stage"
       ],
       "inputContracts": [
-        "recipe-dedup-v1",
+        "recipe-dedup-v2",
         "commodity-config-v1"
       ],
-      "outputContract": "recipe-map-v1",
+      "outputContract": "recipe-map-v2",
       "fixtureFiles": [
         "agents/evals/recipe-mapper.json"
       ]
@@ -232,7 +232,7 @@
       "enabled": true,
       "plane": "pc",
       "promptFile": "agents/recipe-writer/prompt.md",
-      "promptSha256": "a2fc2c12fb6c5b018c4d7ba7767786a3291214ac1e3f4ed6f300ce91319f627a",
+      "promptSha256": "6271b005e2d69b9d08533305578d920af3f671384bd1c05e68cb8cfddba1fd3d",
       "provider": "codex-chatgpt",
       "model": "gpt-5.6-terra",
       "reasoningEffort": "medium",
@@ -241,16 +241,16 @@
       "criticality": "optional",
       "workflowFile": ".github/workflows/agent-recipe-writer.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "c6a1b41bc1eebc96c67907b58b3219e32d1c3a31a4e5119b0e06f6644098210d",
+      "executionConfigHash": "3e321427e1ea9043dda07039bf9c10d0233814a02dfaf78b17e9ca6d11fcf671",
       "capabilities": [
         "read:content",
         "write:ledger",
         "write:content-stage"
       ],
       "inputContracts": [
-        "recipe-map-v1"
+        "recipe-map-v2"
       ],
-      "outputContract": "content-items-v1",
+      "outputContract": "content-items-v2",
       "fixtureFiles": [
         "agents/evals/recipe-writer.json"
       ]
@@ -260,7 +260,7 @@
       "enabled": true,
       "plane": "pc",
       "promptFile": "agents/recipe-auditor/prompt.md",
-      "promptSha256": "7cd001f17c8cfae4f105bc637be4fd98696534fd036f31893e4576366e9d440f",
+      "promptSha256": "062b6165a9d1d493a0db22cfac84a670dd658698cf1392d5e2db589704b741ed",
       "provider": "codex-chatgpt",
       "model": "gpt-5.6-sol",
       "reasoningEffort": "high",
@@ -269,14 +269,14 @@
       "criticality": "safety",
       "workflowFile": ".github/workflows/agent-recipe-auditor.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "feab6b4bd02e7104369b2937a2294e1604f087efd9fc84c73fe8d29428bade5b",
+      "executionConfigHash": "1e53b0b5adf39b48a1281a7c76349cbb832f842010250d50a677b532bb91c770",
       "capabilities": [
         "read:content",
         "write:ledger",
         "write:content-stage"
       ],
       "inputContracts": [
-        "content-items-v1"
+        "content-items-v2"
       ],
       "outputContract": "content-audit-v1",
       "fixtureFiles": [

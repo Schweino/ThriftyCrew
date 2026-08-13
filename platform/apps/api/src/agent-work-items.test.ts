@@ -18,6 +18,10 @@ const candidate = {
     { raw: "1 can beans", quantityText: "1 can" },
     { raw: "1 can tomatoes", quantityText: "1 can" },
   ],
+  mealComponents: [
+    { role: "main" as const, label: "beans", ingredientIndexes: [0] },
+    { role: "substantial-accompaniment" as const, label: "tomato vegetable base", ingredientIndexes: [1] },
+  ],
   conceptSummary: "A weeknight bean and tomato chili cooked on the stovetop.",
   unmappedHints: [],
   confidence: "high" as const,
@@ -88,18 +92,44 @@ describe("agent output boundary", () => {
         { name: "beans", grams: 1_400, commodityId: "beans", sourceLine: "1 can beans" },
         { name: "tomatoes", grams: 1_050, commodityId: "tomatoes", sourceLine: "1 can tomatoes" },
       ],
+      mealComponents: [
+        { role: "main", label: "beans", commodityIds: ["beans"] },
+        { role: "substantial-accompaniment", label: "tomato vegetable base", commodityIds: ["tomatoes"] },
+      ],
       instructions: [
         { text: "Combine the beans and tomatoes in a large pot.", usesCommodityIds: ["beans", "tomatoes"] },
         { text: "Simmer gently for twenty minutes before serving.", usesCommodityIds: [] },
       ],
       provenance: [{ url: "https://example.test/chili", accessedAt: "2026-08-10T12:00:00.000Z" }],
     }] };
-    expect(validateAgentOutput("content-items-v1", content, "request_one", "recipe-writer")).toEqual(content);
+    expect(validateAgentOutput("content-items-v2", content, "request_one", "recipe-writer")).toEqual(content);
+  });
+
+  it("rejects a protein-only staged recipe before audit", () => {
+    const content = { items: [{
+      sourceCandidateId: "candidate-herb-chicken", sourceServings: 4,
+      slug: "herb-chicken", title: "Herb Chicken", servings: 14,
+      cuisine: "American", proteinClass: "chicken", method: "slow cooker",
+      ingredients: [
+        { name: "whole chicken", grams: 6_350, commodityId: "whole-chicken", sourceLine: "1 whole chicken" },
+        { name: "onion", grams: 525, commodityId: "onions", sourceLine: "1 onion" },
+      ],
+      mealComponents: [
+        { role: "main", label: "herb chicken", commodityIds: ["whole-chicken"] },
+        { role: "substantial-accompaniment", label: "onion cooking bed", commodityIds: ["onions"] },
+      ],
+      instructions: [
+        { text: "Cook the chicken and onions to a safe internal temperature.", usesCommodityIds: ["whole-chicken", "onions"] },
+        { text: "Serve the chicken with the softened aromatic onions.", usesCommodityIds: ["whole-chicken", "onions"] },
+      ],
+      provenance: [{ url: "https://example.test/chicken", accessedAt: "2026-08-10T12:00:00.000Z" }],
+    }] };
+    expect(() => validateAgentOutput("content-items-v2", content, "request_one", "recipe-writer")).toThrow(/70 grams per serving/);
   });
 
   it("fences recipe source output to its request", () => {
     const sourceOutput = { requestId: "request_other", candidates: [candidate], rejectedSources: [], searchSummary: "One verified source was accepted." };
-    expect(() => validateAgentOutput("recipe-source-candidates-v1", sourceOutput, "request_expected", "recipe-sourcer")).toThrow(/different request/);
+    expect(() => validateAgentOutput("recipe-source-candidates-v2", sourceOutput, "request_expected", "recipe-sourcer")).toThrow(/different request/);
   });
 
   it("keeps recipe source URLs strict without emitting an unsupported uri format", () => {
@@ -125,6 +155,10 @@ describe("agent output boundary", () => {
       ingredients: [
         { sourceLine: "1 can beans", sourceName: "beans", quantityText: "1 can", commodityId: "beans", grams: 1_400, decision: "exact", scalingStatus: "scaled", evidence: "Exact active commodity." },
         { sourceLine: "1 can tomatoes", sourceName: "tomatoes", quantityText: "1 can", commodityId: "tomatoes", grams: 1_050, decision: "exact", scalingStatus: "scaled", evidence: "Exact active commodity." },
+      ],
+      mealComponents: [
+        { role: "main", label: "beans", commodityIds: ["beans"] },
+        { role: "substantial-accompaniment", label: "tomato vegetable base", commodityIds: ["tomatoes"] },
       ],
       readyForWriting: true,
       issues: [],

@@ -186,6 +186,28 @@
         }
       },
       "expect": { "decision": "candidates", "mustMention": ["4 lb", "endpoint"] }
+    },
+    {
+      "id": "reject-standalone-protein-as-dinner",
+      "input": {
+        "id": "recipe_eval_protein_only",
+        "request": "Find a complete low-carbohydrate dinner.",
+        "sourceEvidence": {
+          "url": "https://example.test/herb-chicken",
+          "accessedAt": "2026-08-10T12:00:00Z",
+          "title": "Herb Chicken",
+          "yield": "4 servings",
+          "nutrition": { "calories": 550, "proteinGrams": 85, "carbohydrateGrams": 3 },
+          "ingredients": [
+            "1 whole chicken",
+            "1 onion",
+            "1 tablespoon garlic",
+            "1 teaspoon dried herbs"
+          ],
+          "servingDescription": "Chicken served with the onions used as its aromatic cooking bed; no side or vegetable accompaniment is included."
+        }
+      },
+      "expect": { "decision": "refuse", "mustMention": ["standalone", "accompaniment"] }
     }
   ]
 }

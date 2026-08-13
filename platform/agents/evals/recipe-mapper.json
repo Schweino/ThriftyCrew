@@ -27,6 +27,22 @@
       "id": "explicit-form-conflict",
       "input": { "ingredient": "1 tablespoon jarred minced garlic", "sourceServings": 4, "targetServings": 14, "commodities": [{ "id": "garlic", "name": "Fresh garlic" }] },
       "expect": { "decision": "unmapped", "mustMention": ["jarred"] }
+    },
+    {
+      "id": "insubstantial-accompaniment",
+      "input": {
+        "sourceServings": 4,
+        "targetServings": 14,
+        "ingredients": [
+          { "name": "whole chicken", "scaledGrams": 6350, "commodityId": "whole-chicken" },
+          { "name": "onion", "scaledGrams": 525, "commodityId": "onions" }
+        ],
+        "mealComponents": [
+          { "role": "main", "commodityIds": ["whole-chicken"] },
+          { "role": "substantial-accompaniment", "commodityIds": ["onions"] }
+        ]
+      },
+      "expect": { "decision": "unmapped", "mustMention": ["980", "accompaniment"] }
     }
   ]
 }

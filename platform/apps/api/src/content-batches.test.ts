@@ -14,6 +14,10 @@ const valid = {
     { name: "Chicken", grams: 1_600, commodityId: "chicken-breast", sourceLine: "1 lb chicken breast" },
     { name: "Rice", grams: 1_200, commodityId: "white-rice", sourceLine: "2 cups white rice" },
   ],
+  mealComponents: [
+    { role: "main" as const, label: "chicken", commodityIds: ["chicken-breast"] },
+    { role: "substantial-accompaniment" as const, label: "rice", commodityIds: ["white-rice"] },
+  ],
   instructions: [
     { text: "Cook the chicken fully in a large covered skillet.", usesCommodityIds: ["chicken-breast"] },
     { text: "Add the rice and simmer until tender and safely done.", usesCommodityIds: ["white-rice"] },
@@ -47,5 +51,28 @@ describe("content promotion guards", () => {
       "unused-ingredient:fixture-chicken-rice:white-rice",
       "unlisted-step-ingredient:fixture-chicken-rice:cilantro",
     ]));
+  });
+
+  it("rejects a standalone protein with an aromatic mislabeled as an accompaniment", async () => {
+    const proteinOnly = {
+      ...valid,
+      slug: "fixture-herb-chicken",
+      title: "Fixture Herb Chicken",
+      ingredients: [
+        { name: "Chicken", grams: 6_350, commodityId: "whole-chicken", sourceLine: "1 whole chicken" },
+        { name: "Onion", grams: 525, commodityId: "onions", sourceLine: "1 onion" },
+      ],
+      mealComponents: [
+        { role: "main" as const, label: "herb chicken", commodityIds: ["whole-chicken"] },
+        { role: "substantial-accompaniment" as const, label: "onion cooking bed", commodityIds: ["onions"] },
+      ],
+      instructions: [
+        { text: "Cook the chicken over the onion bed to a safe internal temperature.", usesCommodityIds: ["whole-chicken", "onions"] },
+        { text: "Serve the chicken pieces with the softened aromatic onions.", usesCommodityIds: ["whole-chicken", "onions"] },
+      ],
+    };
+    const result = await evaluateContentPromotion([proteinOnly], new Set(["whole-chicken", "onions"]));
+    expect(result.ok).toBe(false);
+    expect(result.findings.map((finding) => finding.key)).toContain("insubstantial-accompaniment:fixture-herb-chicken");
   });
 });

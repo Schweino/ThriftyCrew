@@ -359,22 +359,22 @@ export function validateAgentOutput(contract: string, value: unknown, sourceRef:
     if (verdicts.drawId !== sourceRef) throw new Error("accuracy verdicts belong to a different draw");
     return verdicts;
   }
-  if (contract === "recipe-source-candidates-v1") {
+  if (contract === "recipe-source-candidates-v2") {
     const candidates = recipeSourceCandidatesSchema.parse(value);
     if (candidates.requestId !== sourceRef) throw new Error("recipe source output belongs to a different request");
     return candidates;
   }
-  if (contract === "recipe-dedup-v1") {
+  if (contract === "recipe-dedup-v2") {
     const dedup = recipeDedupSchema.parse(value);
     if (dedup.requestId !== sourceRef) throw new Error("recipe dedup output belongs to a different request");
     return dedup;
   }
-  if (contract === "recipe-map-v1") {
+  if (contract === "recipe-map-v2") {
     const map = recipeMapSchema.parse(value);
     if (map.requestId !== sourceRef) throw new Error("recipe map output belongs to a different request");
     return map;
   }
-  if (contract === "content-items-v1") return contentBatchItemsSchema.parse(value);
+  if (contract === "content-items-v2") return contentBatchItemsSchema.parse(value);
   if (contract === "content-audit-v1") return contentBatchAuditSchema.parse(value);
   throw new Error(`output contract ${contract} has no server validator`);
 }
@@ -392,7 +392,7 @@ async function enqueueRecipeNext(db: D1Database, completed: Record<string, unkno
     stage: nextAgentId.replace("recipe-", ""),
     severity: next.criticality,
     input,
-  }, String(completed.adapter_version), nextAgentId === "recipe-mapper" ? "recipe-dedup-v1" : String(completed.output_contract));
+  }, String(completed.adapter_version), nextAgentId === "recipe-mapper" ? "recipe-dedup-v2" : String(completed.output_contract));
   return nextAgentId;
 }
 
@@ -418,6 +418,13 @@ export function assertRecipeChainContinuity(agentId: string, inputValue: unknown
     const readyIds = map.recipes.filter((recipe) => recipe.readyForWriting).map((recipe) => recipe.candidate.id).sort();
     const writtenIds = items.items.map((item) => item.sourceCandidateId).sort();
     if (stableJson(readyIds) !== stableJson(writtenIds)) throw new Error("recipe writer must return exactly one item for every ready mapped candidate");
+    const mappedByCandidate = new Map(map.recipes.map((recipe) => [recipe.candidate.id, recipe]));
+    for (const item of items.items) {
+      const mapped = mappedByCandidate.get(item.sourceCandidateId);
+      if (!mapped || stableJson(mapped.mealComponents) !== stableJson(item.mealComponents)) {
+        throw new Error(`recipe writer must preserve meal components for ${item.sourceCandidateId}`);
+      }
+    }
   }
 }
 
