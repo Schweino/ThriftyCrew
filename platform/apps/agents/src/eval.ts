@@ -26,7 +26,7 @@ const decisionAliases: Record<string, Record<string, string[]>> = {
   "accuracy-headless": { right: ["right"], wrong: ["wrong"], cannot_tell: ["cannot_tell", "cannot tell"] },
   "recipe-sourcer": { candidates: ["candidate"], refuse: ["refuse", "reject", "cannot"] },
   "recipe-deduper": { duplicate: ["duplicate"], distinct: ["distinct", "unique"] },
-  "recipe-mapper": { chickpeas: ["chickpeas"], mapped: ["mapped"], unmapped: ["unmapped", "unknown"], "chicken-breast": ["chicken-breast", "chicken breast"] },
+  "recipe-mapper": { chickpeas: ["chickpeas"], mapped: ["mapped"], unmapped: ["unmapped", "unknown"], blocked: ["blocked", "block"], "chicken-breast": ["chicken-breast", "chicken breast"] },
   "recipe-writer": { content: ["content", "recipe"], refuse: ["refuse", "reject", "cannot"] },
   "recipe-auditor": { pass: ["pass"], fail: ["fail", "reject"] },
   "source-sentinel-investigator": { "pull-request": ["pull request", "pr"], refuse: ["refuse", "reject", "untrusted"], "no-op": ["no-op", "no change"] },

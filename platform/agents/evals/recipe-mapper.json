@@ -16,7 +16,7 @@
     {
       "id": "missing-yield",
       "input": { "ingredient": "2 lb chicken breast", "sourceServings": null, "targetServings": 14, "commodities": [{ "id": "chicken-breast", "name": "Chicken breast" }] },
-      "expect": { "decision": "chicken-breast", "mustMention": ["yield"] }
+      "expect": { "decision": "blocked", "mustMention": ["yield"] }
     },
     {
       "id": "standard-unmodified-grocery-form",
@@ -72,7 +72,7 @@
           { "role": "substantial-accompaniment", "commodityIds": ["onions"] }
         ]
       },
-      "expect": { "decision": "unmapped", "mustMention": ["980", "accompaniment"] }
+      "expect": { "decision": "blocked", "mustMention": ["980", "accompaniment", "blocked"] }
     }
   ]
 }
