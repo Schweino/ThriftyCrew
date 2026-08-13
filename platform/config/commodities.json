@@ -55151,5 +55151,22 @@
     ],
     "band_min": 0.35,
     "band_max": 4.53
+  },
+  {
+    "id": "daiya-mozzarella-style-shreds",
+    "label": "Daiya Mozzarella Style Shreds",
+    "unit": "oz",
+    "include": [
+      "\\bdaiya\\b.*\\bmozzarella\\b.*\\b(?:shreds?|shredded)\\b",
+      "\\bmozzarella\\b.*\\b(?:shreds?|shredded)\\b.*\\bdaiya\\b"
+    ],
+    "exclude": [
+      "\\b(?:cheddar|mexican|parmesan|provolone|gouda|american)\\b",
+      "\\b(?:slices?|blocks?|sticks?|sauce|spread)\\b",
+      "\\b(?:pizza|burrito|flatbread|mac(?:aroni)?\\s*(?:&|and)\\s*chee[sz]e|meal|snack)\\b",
+      "\\b(?:supplement|protein\\s*(?:drink|shake)|beverage)\\b"
+    ],
+    "band_min": 0.22,
+    "band_max": 2.54
   }
 ]
