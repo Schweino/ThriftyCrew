@@ -133,7 +133,11 @@ app.use("*", async (context, next) => {
     || context.req.path.startsWith("/api/v2/recipes/")
     || context.req.path.startsWith("/api/v2/recipe-feed/")
   );
-  if (!explicitlyCacheable) context.res.headers.set("cache-control", "no-store");
+  if (!explicitlyCacheable) {
+    const headers = new Headers(context.res.headers);
+    headers.set("cache-control", "no-store");
+    context.res = new Response(context.res.body, { status: context.res.status, statusText: context.res.statusText, headers });
+  }
 });
 
 function jsonError(message: string, status: 400 | 401 | 403 | 404 | 409 | 422 | 500 | 502 = 400): Response {
