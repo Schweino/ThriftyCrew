@@ -14,6 +14,7 @@ import {
 import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
 import type { MutationIdentity } from "./env";
 import { evaluateContentPromotion } from "./content-batches";
+import { mergeRecipeCommodityCatalog } from "./recipe-commodity-catalog";
 
 interface RegistryRow {
   id: string;
@@ -108,7 +109,7 @@ async function currentCommodityCatalog(db: D1Database): Promise<Array<Record<str
       WHERE version.active = 1 AND commodity.active = 1
       ORDER BY category.sort_order, commodity.id`,
   ).all<Record<string, unknown>>();
-  return rows.results;
+  return mergeRecipeCommodityCatalog(rows.results);
 }
 
 async function activeAgent(db: D1Database, agentId: string): Promise<RegistryRow> {

@@ -90,6 +90,7 @@ import { accrueMilestoneEvidence, milestoneEvidenceSummary } from "./milestone-e
 import { runServerChaosDrill } from "./chaos-drills";
 import { engineMayWriteCaptureSource } from "./capture-authorization";
 import { evaluateContentPromotion } from "./content-batches";
+import { recipeCommodityIds } from "./recipe-commodity-catalog";
 import { claimAgentWorkItem, completeAgentWorkItem, failAgentWorkItem } from "./agent-work-items";
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
@@ -2022,7 +2023,7 @@ app.post("/internal/content-batches/:id/promote", async (context) => {
   const commodities = await context.env.DB.prepare(
     `SELECT c.id FROM commodities c JOIN configuration_versions v ON v.id = c.configuration_id WHERE v.active = 1`,
   ).all<{ id: string }>();
-  const guard = await evaluateContentPromotion(items, new Set(commodities.results.map((row) => row.id)));
+  const guard = await evaluateContentPromotion(items, recipeCommodityIds(commodities.results));
   if (!guard.ok) {
     await context.env.DB.prepare("UPDATE content_batches SET status = 'rejected', content_hash = ?2 WHERE id = ?1").bind(batchId, guard.contentHash).run();
     await recordAudit(context.env, context.get("identity"), "content_batch.promote", "content_batch", batchId, "rejected", { findings: guard.findings });
