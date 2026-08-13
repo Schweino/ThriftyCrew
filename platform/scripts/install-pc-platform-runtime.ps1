@@ -31,6 +31,7 @@ $taskNames = @(
 if ($Uninstall) {
   foreach ($name in $taskNames) { Unregister-ScheduledTask -TaskName $name -Confirm:$false -ErrorAction SilentlyContinue }
   & (Join-Path $PSScriptRoot 'install-pc-capture-controller.ps1') -Uninstall | Out-Null
+  & (Join-Path $PSScriptRoot 'install-pc-ingredient-pipeline-supervisor.ps1') -Uninstall | Out-Null
   Write-Output "Removed $($taskNames.Count) PC platform tasks. DPAPI credentials and logs remain at $runtimeRoot for rollback."
   exit 0
 }
@@ -142,5 +143,6 @@ Register-PcTask 'ThriftyCrew V3 Recipe Pack' $agentLauncher '-Cycle Recipe -MaxI
 Register-PcTask 'ThriftyCrew V3 Restore Drill' $platformLauncher '-Job restore-drill-quarterly' (New-ScheduledTaskTrigger -Daily -At '5:23 AM') 30 'Daily guarded trigger; executes only on the first day of each quarter.'
 
 & (Join-Path $PSScriptRoot 'install-pc-capture-controller.ps1') | Out-Null
+& (Join-Path $PSScriptRoot 'install-pc-ingredient-pipeline-supervisor.ps1') | Out-Null
 
 Write-Output "Installed $($taskNames.Count) authoritative local V3 tasks. Credentials are DPAPI-protected for $env:USERNAME."

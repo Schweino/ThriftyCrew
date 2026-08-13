@@ -25,7 +25,8 @@
     ,{ "name": "ThriftyCrew V3 Restore Drill",       "max_age_hours": 2232, "why": "quarterly local trigger of the Cloudflare scratch restore workflow", "allow_pending": true }
   ],
   "startup_entries": [
-    { "name": "ThriftyCrew V3 Capture Controller", "why": "persistent per-user browser-capture lane coordinator and direct R2 queue drainer" }
+    { "name": "ThriftyCrew V3 Capture Controller", "why": "persistent per-user browser-capture lane coordinator and direct R2 queue drainer" },
+    { "name": "ThriftyCrew V3 Ingredient Pipeline", "why": "persistent event-driven discovery, seven-store pricing, QA, publication, and recipe-resume coordinator" }
   ],
   "output_files": [
     { "path": "grocery/out/smp-feed.json",             "max_age_hours": 30, "why": "public price feed every card fetches" },

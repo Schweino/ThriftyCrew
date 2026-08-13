@@ -62,6 +62,7 @@ export async function createPricingWave(db: D1Database, inputValue: unknown): Pr
        LEFT JOIN ingredient_entities entity ON entity.id = 'entity_' || gap.id
       WHERE gap.id IN (${uniqueGapIds.map(() => "?").join(",")})
         AND gap.status NOT IN ('published','permanently_unavailable')
+        AND gap.qa_resolution IS NULL
       ORDER BY gap.id`,
   ).bind(...uniqueGapIds).all<{ id: string; display_name: string; normalized_name: string; entity_id: string | null }>();
   if (rows.results.length !== uniqueGapIds.length) throw new Error("pricing wave contains an unknown or terminal ingredient gap");
@@ -124,10 +125,12 @@ export async function claimStoreChecks(db: D1Database, inputValue: unknown): Pro
     `SELECT check_row.id
        FROM ingredient_store_checks check_row
        JOIN ingredient_pricing_jobs job ON job.id = check_row.pricing_job_id
+       JOIN ingredient_gaps gap ON gap.id = check_row.gap_id
       WHERE check_row.store_location_id = ?
         AND check_row.state IN (${claimStates.map(() => "?").join(",")})
         AND check_row.next_attempt_at <= ?
         AND job.state = 'store_checks_running'
+        AND gap.qa_resolution IS NULL
       ORDER BY check_row.next_attempt_at, check_row.created_at, check_row.id LIMIT ?`,
   ).bind(input.storeLocationId, ...claimStates, now.toISOString(), input.limit).all<{ id: string }>();
   const claimed: Record<string, unknown>[] = [];
@@ -408,7 +411,9 @@ export async function completeStoreCheck(env: Pick<WorkerEnv, "DB" | "EVIDENCE">
 
 export async function ingestAgentIngredientResearch(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, inputValue: unknown): Promise<IngredientAggregate | null> {
   const research = ingredientPriceResearchSchema.parse(inputValue);
-  const job = await env.DB.prepare("SELECT id FROM ingredient_pricing_jobs WHERE gap_id = ?1 AND market_id = 'omaha'")
+  const job = await env.DB.prepare(`SELECT job.id FROM ingredient_pricing_jobs job
+      JOIN ingredient_gaps gap ON gap.id = job.gap_id
+      WHERE job.gap_id = ?1 AND job.market_id = 'omaha' AND job.state != 'failed' AND gap.qa_resolution IS NULL`)
     .bind(research.gapId).first<{ id: string }>();
   if (!job) return null;
   for (const result of research.stores) {
@@ -486,12 +491,17 @@ export async function pricingWaveStatus(db: D1Database, waveId: string): Promise
 export async function ingredientPipelineStatus(db: D1Database): Promise<Record<string, unknown>> {
   const [jobs, stores, waves, attention, lastProgress] = await Promise.all([
     db.prepare("SELECT state, COUNT(*) AS count FROM ingredient_pricing_jobs GROUP BY state ORDER BY state").all(),
-    db.prepare("SELECT store_location_id, state, COUNT(*) AS count FROM ingredient_store_checks GROUP BY store_location_id, state ORDER BY store_location_id, state").all(),
+    db.prepare(`SELECT check_row.store_location_id, check_row.state, COUNT(*) AS count
+      FROM ingredient_store_checks check_row JOIN ingredient_pricing_jobs job ON job.id = check_row.pricing_job_id
+      WHERE job.state != 'failed' GROUP BY check_row.store_location_id, check_row.state
+      ORDER BY check_row.store_location_id, check_row.state`).all(),
     db.prepare("SELECT state, COUNT(*) AS count FROM pricing_waves GROUP BY state ORDER BY state").all(),
     db.prepare(`SELECT check_row.id, check_row.gap_id, gap.display_name, check_row.store_location_id,
         check_row.state, check_row.challenge_id, check_row.last_error, check_row.updated_at
       FROM ingredient_store_checks check_row JOIN ingredient_gaps gap ON gap.id = check_row.gap_id
+      JOIN ingredient_pricing_jobs job ON job.id = check_row.pricing_job_id
       WHERE check_row.state IN ('blocked_challenge','ambiguous','adapter_quarantined')
+        AND job.state != 'failed' AND gap.qa_resolution IS NULL
       ORDER BY check_row.updated_at, check_row.id LIMIT 100`).all(),
     db.prepare(`SELECT MAX(changed_at) AS changed_at FROM (
       SELECT MAX(updated_at) AS changed_at FROM ingredient_store_checks

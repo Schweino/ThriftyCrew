@@ -1,5 +1,5 @@
 {
-  "version": 14,
+  "version": 15,
   "timezone": "America/Chicago",
   "schedules": [
     { "id": "ledger-watchdog", "cron": "*/15 * * * *", "executor": "worker-cron", "maxGapMinutes": 30, "owner": "platform", "proof": "job_runs:ledger-watchdog", "dispatchOnGap": false },
@@ -27,6 +27,7 @@
     { "id": "restore-drill-quarterly", "cron": "23 5 1 1,4,7,10 *", "executor": "pc", "windowsTask": "ThriftyCrew V3 Restore Drill", "maxGapMinutes": 133920, "owner": "platform", "proof": "restore_drills:passed", "dispatchOnGap": false },
     { "id": "browser-capture-local", "cron": "15 * * * *", "executor": "codex-automation", "automationFile": "config/automations/grocery-v3-browser-capture.json", "maxGapMinutes": 90, "owner": "capture", "proof": "promotion_capture_requests:browser-completed", "dispatchOnGap": false, "monitorInLedger": false },
     { "id": "capture-controller-local", "cron": "@reboot", "executor": "pc-startup", "startupEntry": "ThriftyCrew V3 Capture Controller", "maxGapMinutes": 5256000, "owner": "capture", "proof": "named-pipe:ThriftyCrew.GroceryV3.CaptureController", "dispatchOnGap": false, "monitorInLedger": false },
+    { "id": "ingredient-pipeline-local", "cron": "@reboot", "executor": "pc-startup", "startupEntry": "ThriftyCrew V3 Ingredient Pipeline", "maxGapMinutes": 5256000, "owner": "pricing", "proof": "process:run-ingredient-campaign-supervisor.ps1", "dispatchOnGap": false, "monitorInLedger": false },
 
     { "id": "legacy-bakers-scan", "cron": "0 6 * * *", "executor": "pc", "windowsTask": "SMP Bakers Daily Scan", "maxGapMinutes": 1800, "owner": "legacy", "proof": "grocery/out/regular/bakers-regular-*.json", "dispatchOnGap": false, "monitorInLedger": false, "lifecycle": "transition", "retirementGate": "direct-chrome-week", "inventoryId": "legacy-bakers", "inventoryScope": "grocery" },
     { "id": "legacy-family-fare-sweep", "cron": "0 */3 * * *", "executor": "pc", "windowsTask": "SMP Family Fare Term Sweep", "maxGapMinutes": 240, "owner": "legacy", "proof": "grocery/out/regular/family-fare-regular-*.json", "dispatchOnGap": false, "monitorInLedger": false, "lifecycle": "transition", "retirementGate": "direct-chrome-week", "inventoryId": "legacy-family-fare", "inventoryScope": "grocery" },

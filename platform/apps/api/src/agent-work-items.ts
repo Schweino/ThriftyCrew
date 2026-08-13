@@ -296,7 +296,7 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
   if (agentId === "ingredient-price-researcher") {
     const rows = await db.prepare(
       `SELECT id, display_name, normalized_name, first_seen_at, qa_attempts, research_json, publication_error
-         FROM ingredient_gaps gap WHERE gap.status IN ('pending','needs_operator')
+         FROM ingredient_gaps gap WHERE gap.status IN ('pending','needs_operator') AND gap.qa_resolution IS NULL
            AND EXISTS (SELECT 1 FROM ingredient_store_checks check_row
              WHERE check_row.gap_id = gap.id AND check_row.state = 'targeted_refresh')
         ORDER BY first_seen_at, id LIMIT 50`,
@@ -886,7 +886,8 @@ async function persistIngredientResearch(db: D1Database, outputValue: unknown): 
     : research.disposition === "permanently_unavailable" ? "permanently_unavailable" : "needs_operator";
   await db.prepare(
     `UPDATE ingredient_gaps SET status = ?2, commodity_id = ?3, research_json = ?4,
-       updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status <> 'published'`,
+       updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND qa_resolution IS NULL
+         AND status IN ('pending','researching','needs_operator')`,
   ).bind(research.gapId, status, research.commodityProposal?.id ?? null, stableJson(research)).run();
   const requests = await db.prepare(
     `SELECT DISTINCT occurrence.request_id FROM ingredient_gap_occurrences occurrence WHERE occurrence.gap_id = ?1`,

@@ -1466,6 +1466,7 @@ app.post("/internal/ingredient-pricing/backfill", async (context) => {
   const rows = await context.env.DB.prepare(
     `SELECT gap.id FROM ingredient_gaps gap
       WHERE gap.status NOT IN ('published','permanently_unavailable')
+        AND gap.qa_resolution IS NULL
         AND NOT EXISTS (SELECT 1 FROM ingredient_pricing_jobs job WHERE job.gap_id = gap.id AND job.market_id = 'omaha')
       ORDER BY gap.first_seen_at, gap.id LIMIT 200`,
   ).all<{ id: string }>();
@@ -1675,6 +1676,10 @@ app.post("/internal/ingredient-gaps/:id/qa-resolution", zValidator("json", ingre
       WHERE id = ?1 AND status = 'needs_operator' AND qa_resolution IS NULL`,
   ).bind(gapId, body.resolution, body.commodityId, body.reason).run();
   if ((update.meta.changes ?? 0) !== 1) return jsonError("ingredient QA item is not open", 409);
+  await context.env.DB.prepare(
+    `UPDATE ingredient_pricing_jobs SET state = 'failed', updated_at = CURRENT_TIMESTAMP
+      WHERE gap_id = ?1 AND state NOT IN ('public_verified','permanently_unavailable','failed')`,
+  ).bind(gapId).run();
   await reconcileIngredientHolds(context.env.DB);
   return context.json({ ok: true, gapId, resolution: body.resolution, commodityId: body.commodityId });
 });
