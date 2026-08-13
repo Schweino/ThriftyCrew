@@ -1,5 +1,5 @@
 {
-  "version": 13,
+  "version": 14,
   "timezone": "America/Chicago",
   "schedules": [
     { "id": "ledger-watchdog", "cron": "*/15 * * * *", "executor": "worker-cron", "maxGapMinutes": 30, "owner": "platform", "proof": "job_runs:ledger-watchdog", "dispatchOnGap": false },
@@ -24,7 +24,6 @@
     { "id": "post-publish-review", "cron": "47 12 * * *", "executor": "pc", "windowsTask": "ThriftyCrew V3 Post Publish Review", "agentId": "post-publish-reviewer", "maxGapMinutes": 1560, "owner": "operations", "proof": "job_runs:post-publish-review", "dispatchOnGap": false },
     { "id": "triage-review", "cron": "57 13 * * *", "executor": "pc", "windowsTask": "ThriftyCrew V3 Triage Agents", "agentId": "triage-reviewer", "maxGapMinutes": 1560, "leaseMinutes": 300, "owner": "operations", "proof": "job_runs:triage-review", "dispatchOnGap": false },
     { "id": "recipe-pack-weekly", "cron": "27 10 * * 2", "executor": "pc", "windowsTask": "ThriftyCrew V3 Recipe Pack", "agentId": "recipe-sourcer", "maxGapMinutes": 11520, "leaseMinutes": 300, "owner": "content", "proof": "content_batches:promoted-or-rejected", "dispatchOnGap": false },
-    { "id": "ingredient-pricing-continuous", "cron": "*/15 * * * *", "executor": "pc", "windowsTask": "ThriftyCrew V3 Ingredient Pricing", "agentId": "ingredient-price-researcher", "maxGapMinutes": 45, "leaseMinutes": 720, "owner": "pricing", "proof": "ingredient_gaps:terminal-or-attention", "dispatchOnGap": false },
     { "id": "restore-drill-quarterly", "cron": "23 5 1 1,4,7,10 *", "executor": "pc", "windowsTask": "ThriftyCrew V3 Restore Drill", "maxGapMinutes": 133920, "owner": "platform", "proof": "restore_drills:passed", "dispatchOnGap": false },
     { "id": "browser-capture-local", "cron": "15 * * * *", "executor": "codex-automation", "automationFile": "config/automations/grocery-v3-browser-capture.json", "maxGapMinutes": 90, "owner": "capture", "proof": "promotion_capture_requests:browser-completed", "dispatchOnGap": false, "monitorInLedger": false },
     { "id": "capture-controller-local", "cron": "@reboot", "executor": "pc-startup", "startupEntry": "ThriftyCrew V3 Capture Controller", "maxGapMinutes": 5256000, "owner": "capture", "proof": "named-pipe:ThriftyCrew.GroceryV3.CaptureController", "dispatchOnGap": false, "monitorInLedger": false },

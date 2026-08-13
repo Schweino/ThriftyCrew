@@ -202,7 +202,6 @@
       "id": "ingredient-price-researcher",
       "enabled": true,
       "plane": "pc",
-      "scheduleId": "ingredient-pricing-continuous",
       "promptFile": "agents/ingredient-price-researcher/prompt.md",
       "promptSha256": "4d4385728211ce80a4abc5f232a267a2da7e68f0c34a04ff91d1cbb3617faeb1",
       "provider": "codex-chatgpt",

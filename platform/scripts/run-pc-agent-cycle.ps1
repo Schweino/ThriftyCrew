@@ -30,7 +30,6 @@ $jobByCycle = @{
   PostPublish = 'post-publish-review'
   SourceSentinel = 'source-sentinel-daily'
   Recipe = 'recipe-pack-weekly'
-  IngredientPricing = 'ingredient-pricing-continuous'
   Accuracy = 'accuracy-verdict'
 }
 $agentsForCycle = @($cycleAgents[$Cycle])
@@ -177,6 +176,16 @@ function Apply-PendingIngredientProposals {
     Exit-PcRuntimeLock $publicationLock
     throw "ingredient configuration paths already contain uncommitted work: $($dirty -join '; ')"
   }
+  git -C $incomeRoot fetch origin main
+  if ($LASTEXITCODE -ne 0) {
+    Exit-PcRuntimeLock $publicationLock
+    throw 'could not refresh origin/main before ingredient publication'
+  }
+  git -C $incomeRoot merge --ff-only origin/main
+  if ($LASTEXITCODE -ne 0) {
+    Exit-PcRuntimeLock $publicationLock
+    throw 'ingredient publication checkout could not fast-forward to origin/main'
+  }
   $committed = $false
   try {
     foreach ($file in $available) {
@@ -294,6 +303,16 @@ function Publish-ReadyRecipeContent {
   } finally { Pop-Location }
 }
 
+function Start-IngredientPricingDrain {
+  $pricingScript = Join-Path $platformRoot 'scripts\run-pc-agent-cycle.ps1'
+  $arguments = @(
+    '-NoProfile', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden',
+    '-File', ('"{0}"' -f $pricingScript), '-Cycle', 'IngredientPricing', '-MaxItems', '50'
+  )
+  Start-Process -FilePath 'powershell.exe' -ArgumentList $arguments -WindowStyle Hidden | Out-Null
+  Write-PcRuntimeLog $logFile 'recipe-mapper queued or advanced ingredient gaps; launched the event-driven pricing drain'
+}
+
 if ($SelfTest) {
   if ($Cycle -in @('Recipe','IngredientPricing')) {
     $authPath = Join-Path ([Environment]::GetFolderPath('UserProfile')) '.codex\auth.json'
@@ -312,26 +331,33 @@ if ($SelfTest) {
 $lock = Enter-PcRuntimeLock ("agent-cycle-{0}" -f $Cycle.ToLowerInvariant()) 300
 if (-not $lock) { Write-PcRuntimeLog $logFile 'another instance holds the cycle lock; standing down'; exit 0 }
 $job = $jobByCycle[$Cycle]
-$env:TC_JOB_RUN_ID = "run_{0}_pc-{1}" -f $job, ([DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())
 $env:TC_SCHEDULED_FOR = (Get-Date).ToUniversalTime().ToString('o')
-$env:TC_JOB_LEASE_FILE = Join-Path ([string]$config.logRoot) ("lease-{0}.json" -f ($env:TC_JOB_RUN_ID -replace '[^a-zA-Z0-9_-]', '-'))
+if ($job) {
+  $env:TC_JOB_RUN_ID = "run_{0}_pc-{1}" -f $job, ([DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())
+  $env:TC_JOB_LEASE_FILE = Join-Path ([string]$config.logRoot) ("lease-{0}.json" -f ($env:TC_JOB_RUN_ID -replace '[^a-zA-Z0-9_-]', '-'))
+}
 $failed = $false
 $jobStarted = $false
 try {
-  Set-PcRuntimeCredential $config 'local-operator'
-  Push-Location $platformRoot
-  try {
-    $start = Invoke-LoggedCommand 'job-ledger-start' { & $pnpmPath tc job start $job } -AllowFailure
-    if ($start.ExitCode -eq 75) { Write-PcRuntimeLog $logFile 'control-plane lease is held; standing down'; exit 0 }
-    if ($start.ExitCode -ne 0) { throw "job-ledger-start failed with exit code $($start.ExitCode)" }
-    $jobStarted = $true
+  if ($job) {
+    Set-PcRuntimeCredential $config 'local-operator'
+    Push-Location $platformRoot
+    try {
+      $start = Invoke-LoggedCommand 'job-ledger-start' { & $pnpmPath tc job start $job } -AllowFailure
+      if ($start.ExitCode -eq 75) { Write-PcRuntimeLog $logFile 'control-plane lease is held; standing down'; exit 0 }
+      if ($start.ExitCode -ne 0) { throw "job-ledger-start failed with exit code $($start.ExitCode)" }
+      $jobStarted = $true
+    }
+    finally { Pop-Location }
   }
-  finally { Pop-Location }
   if ($Cycle -eq 'Recipe' -and -not $OnlyAgent) {
     for ($round = 0; $round -lt $MaxItems; $round++) {
       $roundProgress = $false
       foreach ($agentId in @('recipe-sourcer','recipe-deduper','recipe-mapper')) {
-        if (Invoke-AgentItem $agentId) { $roundProgress = $true }
+        if (Invoke-AgentItem $agentId) {
+          $roundProgress = $true
+          if ($agentId -eq 'recipe-mapper') { Start-IngredientPricingDrain }
+        }
       }
       if (-not $roundProgress) { break }
     }

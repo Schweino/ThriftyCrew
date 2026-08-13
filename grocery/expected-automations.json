@@ -22,7 +22,6 @@
     ,{ "name": "ThriftyCrew V3 Post Publish Review", "max_age_hours": 30, "why": "daily local registered post-publish reviewer", "allow_pending": true }
     ,{ "name": "ThriftyCrew V3 Triage Agents",       "max_age_hours": 30, "why": "bounded daily local reviewer-to-developer triage drain", "allow_pending": true }
     ,{ "name": "ThriftyCrew V3 Recipe Pack",         "max_age_hours": 192, "why": "weekly bounded local immutable recipe-content agent chain", "allow_pending": true }
-    ,{ "name": "ThriftyCrew V3 Ingredient Pricing",  "max_age_hours": 1, "why": "continuous independent seven-store Omaha missing-ingredient pricing lane", "allow_pending": true }
     ,{ "name": "ThriftyCrew V3 Restore Drill",       "max_age_hours": 2232, "why": "quarterly local trigger of the Cloudflare scratch restore workflow", "allow_pending": true }
   ],
   "startup_entries": [
