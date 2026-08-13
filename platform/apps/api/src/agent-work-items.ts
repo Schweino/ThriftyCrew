@@ -236,7 +236,14 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
       `SELECT id, request_text, source_ref, requested_at
          FROM recipe_suggestion_requests WHERE status = 'queued' ORDER BY requested_at, id LIMIT 10`,
     ).all<Record<string, unknown>>();
-    return rows.results.map((row) => ({ sourceKind: "recipe-request", sourceRef: String(row.id), stage: "source", severity: "optional", input: { contract: "recipe-source-request-v1", request: row } }));
+    const commodities = rows.results.length > 0 ? await currentCommodityCatalog(db) : [];
+    return rows.results.map((row) => ({
+      sourceKind: "recipe-request",
+      sourceRef: String(row.id),
+      stage: "source",
+      severity: "optional",
+      input: { contract: "recipe-source-request-v1", request: row, commodities },
+    }));
   }
   return [];
 }

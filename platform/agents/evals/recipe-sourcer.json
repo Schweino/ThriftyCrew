@@ -101,6 +101,34 @@
         }
       },
       "expect": { "decision": "candidates", "mustMention": ["1.25 pounds", "2 servings"] }
+    },
+    {
+      "id": "reject-commodity-incompatible-source",
+      "input": {
+        "id": "recipe_eval_catalog_gate",
+        "request": "Find a scalable chicken dinner.",
+        "commodities": [
+          { "id": "chicken-breast", "label": "Chicken breast", "basis_unit": "lb", "category": "Meat" },
+          { "id": "olive-oil", "label": "Olive oil", "basis_unit": "fl_oz", "category": "Pantry" }
+        ],
+        "sourceEvidence": {
+          "url": "https://example.test/chicken",
+          "accessedAt": "2026-08-10T12:00:00Z",
+          "title": "Seasoned Chicken",
+          "yield": "4 servings",
+          "cuisine": "American",
+          "proteinClass": "chicken",
+          "method": "Roast the seasoned chicken.",
+          "nutrition": { "calories": 550, "proteinGrams": 48, "carbohydrateGrams": 9 },
+          "completeIngredientList": true,
+          "ingredients": [
+            "2 pounds chicken breast",
+            "2 tablespoons olive oil",
+            "1 tablespoon proprietary barbecue seasoning"
+          ]
+        }
+      },
+      "expect": { "decision": "refuse", "mustMention": ["catalog"] }
     }
   ]
 }
