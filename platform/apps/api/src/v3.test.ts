@@ -2,7 +2,12 @@ import { describe, expect, it } from "vitest";
 import { accuracyVerdictsSchema, captureBatchAbandonSchema, entitlementVerificationRecordSchema, evidenceGateRecordSchema, restoreDrillCleanupSchema, restoreDrillRecordSchema } from "@thriftycrew/contracts";
 import { accuracyRiskSampleLimit, accuracyUniformSampleLimit, createAccuracyDraw, readAccuracyDraw, wilsonInterval } from "./accuracy";
 import { mayShowFreeBadge } from "./ghost-reconciliation";
-import { releaseCaptureEvictionSql, storeCoverageFloor } from "./release-guards";
+import {
+  completeCaptureCandidateIsEligible,
+  releaseCaptureEvictionSql,
+  releaseThinSelectedSql,
+  storeCoverageFloor,
+} from "./release-guards";
 import { memberStatusHtml } from "./member-status";
 import { engineMayWriteCaptureSource } from "./capture-authorization";
 import { snapshotIncludesRawCandidates } from "./engine-snapshot";
@@ -117,6 +122,21 @@ describe("capture eviction guard", () => {
     expect(releaseCaptureEvictionSql).toContain("FROM release_input_batches candidate_input");
     expect(releaseCaptureEvictionSql).toContain("candidate_input.release_id = ?1");
     expect(releaseCaptureEvictionSql).not.toContain("candidate_batch.status IN");
+    expect(releaseThinSelectedSql).toContain("release_input_batches selected_input");
+  });
+
+  it("protects only complete-capture candidates that the native selector can actually use", () => {
+    const base = {
+      commodity_id: "grapes", store_location_id: "fareway-omaha-043", observation_id: "complete",
+      per_unit_micros: 1990000, captured_at: "2026-08-13T18:00:00.000Z", valid_from: null, valid_to: null,
+      coverage_mode: "full" as const, captured_to: "2026-08-13T18:00:00.000Z", normalized_basis_unit: "lb",
+      basis_options_json: null, name: "Red Seedless Grapes", size_text: "1 lb", max_age_days: 14,
+      commodity_basis_unit: "lb", band_min_micros: 100000, band_max_micros: 5000000, known_wrong: 0,
+    };
+    expect(completeCaptureCandidateIsEligible(base, "2026-08-13T19:00:00.000Z")).toBe(true);
+    expect(completeCaptureCandidateIsEligible({ ...base, normalized_basis_unit: "fl_oz" }, "2026-08-13T19:00:00.000Z")).toBe(false);
+    expect(completeCaptureCandidateIsEligible({ ...base, per_unit_micros: 6000000 }, "2026-08-13T19:00:00.000Z")).toBe(false);
+    expect(completeCaptureCandidateIsEligible({ ...base, known_wrong: 1 }, "2026-08-13T19:00:00.000Z")).toBe(false);
   });
 });
 

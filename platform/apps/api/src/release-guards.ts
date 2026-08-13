@@ -1,4 +1,5 @@
 import type { ReleaseGuardResult } from "@thriftycrew/contracts";
+import { candidatePriceForUnit, selectWinner, sourceNativeSizeConflict } from "@thriftycrew/engine";
 import { upsertGuardResult } from "./database";
 
 interface ReleaseContext {
@@ -12,13 +13,45 @@ interface ReleaseContext {
 
 interface CountRow { count: number }
 
-export const releaseCaptureEvictionSql = `WITH complete_candidates AS (
-    SELECT candidate_match.commodity_id, candidate_product.store_location_id,
-           candidate.id AS observation_id
+export interface CompleteCaptureCandidateRow {
+  commodity_id: string;
+  store_location_id: string;
+  observation_id: string;
+  per_unit_micros: number;
+  captured_at: string;
+  valid_from: string | null;
+  valid_to: string | null;
+  coverage_mode: "full" | "ad_only";
+  captured_to: string;
+  normalized_basis_unit: string;
+  basis_options_json: string | null;
+  name: string;
+  size_text: string | null;
+  max_age_days: number;
+  commodity_basis_unit: string;
+  band_min_micros: number | null;
+  band_max_micros: number | null;
+  known_wrong: number;
+}
+
+export const releaseCaptureEvictionSql = `SELECT candidate_match.commodity_id, candidate_product.store_location_id,
+           candidate.id AS observation_id, candidate.per_unit_micros, candidate_member.observed_at AS captured_at,
+           candidate.valid_from, candidate.valid_to, candidate_batch.coverage_mode, candidate_batch.captured_to,
+           candidate.normalized_basis_unit, candidate.basis_options_json, candidate_version.name, candidate_version.size_text,
+           CAST(COALESCE(json_extract(candidate_source.coverage_policy_json, '$.max_age_days'), 14) AS INTEGER) AS max_age_days,
+           commodity.basis_unit AS commodity_basis_unit, commodity.band_min_micros, commodity.band_max_micros,
+           EXISTS(
+             SELECT 1 FROM known_wrong_rules wrong
+              WHERE wrong.configuration_id = ?2 AND wrong.commodity_id = candidate_match.commodity_id
+                AND (wrong.store_location_id IS NULL OR wrong.store_location_id = candidate_product.store_location_id)
+                AND ((wrong.external_product_key IS NOT NULL AND wrong.external_product_key = candidate_product.external_key)
+                  OR (wrong.normalized_name IS NOT NULL AND wrong.normalized_name = candidate_version.normalized_name))
+           ) AS known_wrong
       FROM release_input_batches candidate_input
       JOIN capture_batches candidate_batch
         ON candidate_batch.id = candidate_input.batch_id
        AND candidate_batch.coverage_mode IN ('full','ad_only')
+      JOIN capture_sources candidate_source ON candidate_source.id = candidate_batch.source_id
       JOIN capture_batch_observations candidate_member ON candidate_member.batch_id = candidate_batch.id
       JOIN observations candidate ON candidate.id = candidate_member.observation_id
       JOIN product_versions candidate_version ON candidate_version.id = candidate.product_version_id
@@ -27,11 +60,12 @@ export const releaseCaptureEvictionSql = `WITH complete_candidates AS (
         ON candidate_match.product_id = candidate_product.id
        AND candidate_match.configuration_id = ?2
        AND candidate_match.superseded_at IS NULL
+      JOIN commodities commodity
+        ON commodity.id = candidate_match.commodity_id AND commodity.configuration_id = ?2
      WHERE candidate_input.release_id = ?1
-       AND (candidate.valid_from IS NULL OR candidate.valid_from <= (SELECT created_at FROM releases WHERE id = ?1))
-       AND (candidate.valid_to IS NULL OR candidate.valid_to > (SELECT created_at FROM releases WHERE id = ?1))
-  ), thin_selected AS (
-    SELECT selected.commodity_id, selected.store_location_id, selected.observation_id
+     ORDER BY candidate_match.commodity_id, candidate_product.store_location_id, candidate.id`;
+
+export const releaseThinSelectedSql = `SELECT DISTINCT selected.commodity_id, selected.store_location_id, selected.observation_id
       FROM release_cells selected
       JOIN release_input_batches selected_input ON selected_input.release_id = selected.release_id
       JOIN capture_batch_observations selected_member
@@ -39,15 +73,32 @@ export const releaseCaptureEvictionSql = `WITH complete_candidates AS (
       JOIN capture_batches selected_batch ON selected_batch.id = selected_member.batch_id
      WHERE selected.release_id = ?1 AND selected.status = 'priced'
        AND selected_batch.coverage_mode IN ('partial','targeted')
-  )
-  SELECT selected.commodity_id, selected.store_location_id, selected.observation_id,
-         candidate.observation_id AS protected_observation_id
-    FROM thin_selected selected
-    JOIN complete_candidates candidate
-      ON candidate.commodity_id = selected.commodity_id
-     AND candidate.store_location_id = selected.store_location_id
-     AND candidate.observation_id <> selected.observation_id
-   ORDER BY selected.commodity_id, selected.store_location_id LIMIT 500`;
+     ORDER BY selected.commodity_id, selected.store_location_id`;
+
+export function completeCaptureCandidateIsEligible(row: CompleteCaptureCandidateRow, releaseInstant: string): boolean {
+  const converted = candidatePriceForUnit({
+    normalized_basis_unit: row.normalized_basis_unit,
+    per_unit_micros: row.per_unit_micros,
+    ...(row.basis_options_json ? { basis_options_json: row.basis_options_json } : {}),
+  }, row.commodity_basis_unit);
+  if (!converted) return false;
+  return selectWinner([{
+    observationId: row.observation_id,
+    commodityId: row.commodity_id,
+    storeLocationId: row.store_location_id,
+    perUnitMicros: converted.perUnitMicros,
+    capturedAt: row.captured_at,
+    batchCoverageMode: row.coverage_mode,
+    batchCapturedTo: row.captured_to,
+    ...(row.valid_from ? { validFrom: row.valid_from } : {}),
+    ...(row.valid_to ? { validTo: row.valid_to } : {}),
+    knownWrong: row.known_wrong === 1,
+    maxAgeDays: row.max_age_days,
+    outOfBand: (row.band_min_micros !== null && converted.perUnitMicros < row.band_min_micros)
+      || (row.band_max_micros !== null && converted.perUnitMicros > row.band_max_micros),
+    sourceIdentityConflict: sourceNativeSizeConflict(row.name, row.size_text),
+  }], releaseInstant).winner !== null;
+}
 
 export function storeCoverageFloor(priorPriced: number | undefined, firstNativeMinimum: number | undefined, firstNativeCutover: boolean): number {
   if (firstNativeCutover && firstNativeMinimum !== undefined) return firstNativeMinimum;
@@ -506,15 +557,31 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
   // through all validated/promoted history made the result depend on captures
   // arriving after the snapshot and created a combinatorial history join once
   // direct catalogs grew. Snapshot batches are the correct bounded input.
-  const evictionRows = await db.prepare(releaseCaptureEvictionSql)
-    .bind(context.releaseId, context.configurationId)
-    .all<{ commodity_id: string; store_location_id: string; observation_id: string; protected_observation_id: string }>();
+  const [completeCandidateRows, thinSelectedRows] = await Promise.all([
+    db.prepare(releaseCaptureEvictionSql).bind(context.releaseId, context.configurationId).all<CompleteCaptureCandidateRow>(),
+    db.prepare(releaseThinSelectedSql).bind(context.releaseId).all<{
+      commodity_id: string; store_location_id: string; observation_id: string;
+    }>(),
+  ]);
+  const eligibleCompleteByCell = new Map<string, CompleteCaptureCandidateRow[]>();
+  for (const candidate of completeCandidateRows.results) {
+    if (!completeCaptureCandidateIsEligible(candidate, releaseInstant)) continue;
+    const cell = `${candidate.commodity_id}\u001f${candidate.store_location_id}`;
+    const existing = eligibleCompleteByCell.get(cell) ?? [];
+    existing.push(candidate);
+    eligibleCompleteByCell.set(cell, existing);
+  }
+  const evictionRows = thinSelectedRows.results.flatMap((selected) =>
+    (eligibleCompleteByCell.get(`${selected.commodity_id}\u001f${selected.store_location_id}`) ?? [])
+      .filter((candidate) => candidate.observation_id !== selected.observation_id)
+      .map((candidate) => ({ ...selected, protected_observation_id: candidate.observation_id })),
+  ).slice(0, 500);
   await upsertGuardResult(db, context.releaseId, result(
     "release-capture-eviction",
-    evictionRows.results.length === 0,
+    evictionRows.length === 0,
     pricedCount,
     pricedCount,
-    evictionRows.results.map((row) => ({
+    evictionRows.map((row) => ({
       key: `${row.commodity_id}:${row.store_location_id}`,
       message: "A thin partial capture evicted an eligible complete-capture observation",
       evidence: { selectedObservationId: row.observation_id, protectedObservationId: row.protected_observation_id },
