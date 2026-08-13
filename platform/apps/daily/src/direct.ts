@@ -15,6 +15,10 @@ interface RegularDocument {
   capture_session?: unknown;
   location_id?: string | number;
   store_label?: string;
+  ad_from?: string;
+  ad_to?: string;
+  valid_from?: string;
+  valid_to?: string;
 }
 export interface CaptureAttestation {
   store: string;
@@ -268,6 +272,36 @@ async function externalKey(row: Record<string, unknown>, index: number): Promise
   return `catalog-${(await digestHex(stableJson(identity))).slice(0, 32)}${identity.name ? "" : `-${index}`}`;
 }
 
+function addCalendarDays(date: string, days: number): string {
+  const match = date.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) throw new Error(`invalid retailer calendar date ${date}`);
+  const shifted = new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3]) + days));
+  return shifted.toISOString().slice(0, 10);
+}
+
+function offerWindow(document: RegularDocument, row: Record<string, unknown>): { validFrom?: string; validTo?: string } {
+  const start = stringValue(row.valid_from) ?? stringValue(row.promo_start) ?? stringValue(row.sale_start)
+    ?? stringValue(document.valid_from) ?? stringValue(document.ad_from);
+  const exclusiveEnd = stringValue(row.valid_to_exclusive);
+  const inclusiveEnd = stringValue(row.valid_to) ?? stringValue(row.promo_end) ?? stringValue(row.sale_end)
+    ?? stringValue(document.valid_to) ?? stringValue(document.ad_to);
+  const normalizeStart = (value: string | undefined): string | undefined => value
+    ? /^\d{4}-\d{2}-\d{2}$/.test(value) ? omahaDayStart(value) : new Date(value).toISOString()
+    : undefined;
+  const normalizeExclusiveEnd = (value: string | undefined): string | undefined => value
+    ? /^\d{4}-\d{2}-\d{2}$/.test(value) ? omahaDayStart(value) : new Date(value).toISOString()
+    : undefined;
+  const normalizeInclusiveEnd = (value: string | undefined): string | undefined => value
+    ? /^\d{4}-\d{2}-\d{2}$/.test(value) ? omahaDayStart(addCalendarDays(value, 1)) : new Date(value).toISOString()
+    : undefined;
+  const validFrom = normalizeStart(start);
+  const validTo = exclusiveEnd ? normalizeExclusiveEnd(exclusiveEnd) : normalizeInclusiveEnd(inclusiveEnd);
+  return {
+    ...(validFrom ? { validFrom } : {}),
+    ...(validTo ? { validTo } : {}),
+  };
+}
+
 function digits(value: unknown): string | undefined {
   const normalized = identifierValue(value)?.replace(/\D/g, "");
   return normalized && /^\d{8,14}$/.test(normalized) ? normalized : undefined;
@@ -470,7 +504,8 @@ export async function buildRegularCapture(
     const priceSemantics: PriceSemantics = {
       offerType, condition, unitPriceMinor: purchasePriceMinor, qualifyingQuantity,
       totalPriceMinor: purchasePriceMinor * qualifyingQuantity,
-      ...(regularPriceMinor !== undefined ? { regularPriceMinor } : {}), ambiguity: false,
+      ...(regularPriceMinor !== undefined ? { regularPriceMinor } : {}),
+      ...(offerType !== "everyday" ? offerWindow(document, row) : {}), ambiguity: false,
     };
     const retailerProductId = await externalKey(row, index);
     const sourceUrl = productUrl ?? ({ bakers: "https://www.bakersplus.com/", "family-fare": "https://www.shopfamilyfare.com/", "hy-vee": "https://www.hy-vee.com/", aldi: "https://www.aldi.us/", fareway: "https://www.fareway.com/", sams: "https://www.samsclub.com/", walmart: "https://www.walmart.com/" } as const)[store];
@@ -507,7 +542,9 @@ export async function buildRegularCapture(
       perUnitMicros: Math.round((purchasePriceMinor * 10_000 * 1_000_000) / normalizedBasisQtyMicros),
       basisOptions: packageBasisOptions(sizeText, name, purchasePriceMinor),
       loyaltyRequired, membershipRequired, rawPriceText: stringValue(row.ad_price) ?? String(price), rawSizeText: sizeText,
-      capturedAt, sourcePayloadKey: `regular:${store}:${index}`, priceSemantics, offerSnapshot,
+      capturedAt, ...(priceSemantics.validFrom ? { validFrom: priceSemantics.validFrom } : {}),
+      ...(priceSemantics.validTo ? { validTo: priceSemantics.validTo } : {}),
+      sourcePayloadKey: `regular:${store}:${index}`, priceSemantics, offerSnapshot,
     });
     acceptedSourceRows.push(row);
     count.accepted += 1;
@@ -523,16 +560,63 @@ export async function buildRegularCapture(
       if (!match) throw new Error(`normalized browser observation is not bound to exact capture truth: ${observation.termKey ?? "(no-term)"}/${observation.externalProductKey}`);
       if (Date.parse(captureSession.finishedAt) >= Date.parse(CAPTURE_SEMANTICS_CUTOVER)) {
         if (!match.truth.visible.priceSemantics || !match.truth.pageState) throw new Error("browser capture truth is missing required price semantics or page-state attestation");
-        observation.priceSemantics = match.truth.visible.priceSemantics;
+        const calendarWindow = observation.priceSemantics?.offerType !== "everyday"
+          ? { validFrom: observation.validFrom, validTo: observation.validTo } : {};
+        const boundSemantics: PriceSemantics = {
+          ...match.truth.visible.priceSemantics,
+          ...(match.truth.visible.priceSemantics.offerType !== "everyday" && !match.truth.visible.priceSemantics.validFrom && calendarWindow.validFrom
+            ? { validFrom: calendarWindow.validFrom } : {}),
+          ...(match.truth.visible.priceSemantics.offerType !== "everyday" && !match.truth.visible.priceSemantics.validTo && calendarWindow.validTo
+            ? { validTo: calendarWindow.validTo } : {}),
+        };
+        observation.priceSemantics = boundSemantics;
+        if (boundSemantics.validFrom) observation.validFrom = boundSemantics.validFrom;
+        else delete observation.validFrom;
+        if (boundSemantics.validTo) observation.validTo = boundSemantics.validTo;
+        else delete observation.validTo;
         if (Date.parse(captureSession.finishedAt) >= Date.parse(OFFER_SNAPSHOT_CUTOVER)) {
           if (!match.truth.offer) throw new Error("browser capture truth is missing its source-native offer snapshot");
           if (match.sizeText !== observation.sizeText || match.truth.offer.sizeText !== observation.sizeText) throw new Error("browser package size is not bound across discovery, truth, and normalized observation");
-          observation.offerSnapshot = match.truth.offer;
+          observation.offerSnapshot = { ...match.truth.offer, priceSemantics: boundSemantics };
         }
       }
       truthBoundObservations += 1;
     }
   }
+  // Preserve the verified shelf fallback as a distinct immutable offer. A
+  // promotion ending must reveal the regular price without mutating history or
+  // waiting for another browser pull. The promotional observation remains the
+  // independently verified checkout truth; this sibling differs only in the
+  // retailer-supplied regular price and is never eligible to underbid it.
+  const regularFallbacks: ObservationInput[] = observations.flatMap((observation) => {
+    const regular = observation.regularPriceMinor;
+    if (regular === undefined || regular <= observation.purchasePriceMinor) return [];
+    const priceSemantics: PriceSemantics = {
+      offerType: "everyday", condition: "none", unitPriceMinor: regular,
+      qualifyingQuantity: 1, totalPriceMinor: regular, ambiguity: false,
+    };
+    const offerSnapshot = observation.offerSnapshot ? {
+      ...observation.offerSnapshot,
+      rawPriceText: String(regular / 100),
+      purchasePriceMinor: regular,
+      priceSemantics,
+    } : undefined;
+    const { validFrom: _validFrom, validTo: _validTo, regularPriceMinor: _regularPriceMinor, ...base } = observation;
+    return [{
+      ...base,
+      kind: "everyday" as const,
+      purchasePriceMinor: regular,
+      perUnitMicros: Math.round((regular * 10_000 * 1_000_000) / observation.normalizedBasisQtyMicros),
+      ...(observation.basisOptions ? { basisOptions: observation.basisOptions.map((option) => ({ ...option, perUnitMicros: Math.round((regular * 10_000 * 1_000_000) / option.quantityMicros) })) } : {}),
+      loyaltyRequired: false,
+      membershipRequired: false,
+      rawPriceText: String(regular / 100),
+      sourcePayloadKey: `${observation.sourcePayloadKey ?? "regular"}:everyday-fallback`,
+      priceSemantics,
+      ...(offerSnapshot ? { offerSnapshot } : {}),
+    }];
+  });
+  observations.push(...regularFallbacks);
   const captured = observations.map((item) => item.capturedAt).sort();
   const derivedTerms = [...buckets.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([key, value], ordinal) => ({
     termKey: key, ordinal, outcome: value.accepted > 0 ? "success" as const : "rejected" as const, rowCount: value.accepted,

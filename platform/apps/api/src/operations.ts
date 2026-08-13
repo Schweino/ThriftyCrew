@@ -3,6 +3,7 @@ import type { MutationIdentity, WorkerEnv } from "./env";
 import { readBrowserCaptureSla } from "./browser-capture-sla";
 import { compactConfiguration, compactConfigurationDecisions } from "./configuration-archive";
 import { cleanupCaptureUploadAttempts, type CaptureUploadCleanupResult } from "./capture-upload-attempts";
+import { runPromotionLifecycle } from "./promotion-lifecycle";
 
 export function jobStatusRequiresAlert(status: string): boolean {
   return status === "failed" || status === "timed_out" || status === "missed";
@@ -1142,6 +1143,19 @@ export async function runScheduledOperations(env: WorkerEnv, scheduledTime: numb
   await runCaptureUploadCleanup(env, scheduledTime);
   await dispatchPendingRegisteredAgents(env);
   await flushOperationalAlertDigest(env, new Date(scheduledTime).toISOString());
+  try {
+    const promotion = await runPromotionLifecycle(env, scheduledTime);
+    if (promotion.status === "action_required") {
+      await raiseOperationalAlert(env, "promotion-lifecycle", "Promotion boundary needs capture or release work", promotion,
+        { notification: "digest", deferMinutes: 15, observedAt: new Date(scheduledTime).toISOString() });
+    } else {
+      await resolveOperationalAlert(env, "promotion-lifecycle", promotion, { recoveryTitle: "Promotion lifecycle recovered" });
+    }
+  } catch (error) {
+    await raiseOperationalAlert(env, "promotion-lifecycle", "Promotion lifecycle coordinator failed", {
+      error: error instanceof Error ? error.message : String(error),
+    }, { notification: "immediate", deferMinutes: 0, observedAt: new Date(scheduledTime).toISOString() });
+  }
   const parts = localScheduleParts(scheduledTime);
   const localDate = `${parts.year}-${parts.month}-${parts.day}`;
   if (parts.minute === "00") await runBrowserCaptureSla(env, scheduledTime);

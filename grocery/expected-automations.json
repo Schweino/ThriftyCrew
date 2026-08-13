@@ -9,6 +9,7 @@
     { "name": "SMP Family Fare Term Sweep",         "max_age_hours": 24, "why": "every-3h Freshop term sweep; one run a day can only reach ~60-130 of 526 terms, so if this dies Family Fare freezes within days", "proves": "grocery/out/regular/family-fare-regular-*.json" },
     { "name": "SMP Friday Email (draft)",           "max_age_hours": 192, "why": "weekly Friday 7:15 member email draft; 192h = 8 days, one missed Friday", "allow_pending": true }
     ,{ "name": "ThriftyCrew V3 Daily Engine",        "max_age_hours": 30, "why": "local V3 direct capture, immutable release, Ghost reconciliation, parity and evidence", "allow_pending": true }
+    ,{ "name": "ThriftyCrew V3 Promotion Boundary",  "max_age_hours": 1, "why": "15-minute promotion prefetch, activation, expiry, post-start verification, and release rollover", "allow_pending": true }
     ,{ "name": "ThriftyCrew V3 Efficiency Budget",   "max_age_hours": 30, "why": "daily D1 query/write amplification budget with one durable incident", "allow_pending": true }
     ,{ "name": "ThriftyCrew V3 Family Fare Paced",  "max_age_hours": 6, "why": "local three-hour Freshop pacing into the V3 capture ledger", "allow_pending": true }
     ,{ "name": "ThriftyCrew V3 Accuracy Weekly",     "max_age_hours": 192, "why": "weekly deterministic blind accuracy draw", "allow_pending": true }

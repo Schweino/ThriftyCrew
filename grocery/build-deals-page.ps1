@@ -444,9 +444,9 @@ if (-not $Embed) { [void]$sb.Append("<h1>Omaha's Cheapest Groceries This Week</h
 [void]$sb.Append("<p class='pg-sub'>The cheapest place to buy every grocery staple in Omaha this week. Seven stores, checked every morning, ranked cheapest first.</p>")
 # The masthead band was injected here (a <!--PG-MASTHEAD--> placeholder filled at the end of the build).
 # Removed 2026-08-09; see the note where it used to be built.
-# THE RETURN RHYTHM: ads flip Wednesdays, so today's sale prices have a real deadline. Saying so gives every
-# visit urgency and every visitor a reason to come back on a schedule - the habit is the product.
-[void]$sb.Append("<p class='pg-cycle'>Sale prices end when the new ads drop <strong>Wednesday morning</strong>. This board is re-checked every morning by 7am.</p>")
+# Retailers do not share one ad boundary. The promotion coordinator refreshes each store at its own
+# start/end boundary, while the daily pass remains the independent freshness backstop.
+[void]$sb.Append("<p class='pg-cycle'>Sale prices update as each retailer's ad starts or ends. This board is also re-checked every morning.</p>")
 # THE TRUST COPY, collapsed. It matters and it stays word for word, but as three stacked paragraphs it
 # pushed the first actual price below two viewports on a phone. One <details> keeps every claim on the page
 # and in the HTML for search, and gives the board back a screen and a half.

@@ -12,6 +12,7 @@ $configFile = Join-Path $runtimeRoot 'pc-platform-runtime.json'
 $logRoot = Join-Path $runtimeRoot 'logs'
 $taskNames = @(
   'ThriftyCrew V3 Daily Engine',
+  'ThriftyCrew V3 Promotion Boundary',
   'ThriftyCrew V3 Efficiency Budget',
   'ThriftyCrew V3 Family Fare Paced',
   'ThriftyCrew V3 Accuracy Weekly',
@@ -123,7 +124,9 @@ function Register-PcTask([string]$Name, [string]$Script, [string]$Arguments, $Tr
 $today = (Get-Date).Date
 $familyFareStart = $today.AddMinutes(17)
 while ($familyFareStart -le (Get-Date)) { $familyFareStart = $familyFareStart.AddHours(3) }
+$promotionStart = (Get-Date).AddMinutes(30)
 Register-PcTask 'ThriftyCrew V3 Daily Engine' $platformLauncher '-Job daily-engine' (New-ScheduledTaskTrigger -Daily -At '12:07 PM') 180 'Authoritative local V3 direct capture and immutable release pipeline.'
+Register-PcTask 'ThriftyCrew V3 Promotion Boundary' $platformLauncher '-Job promotion-boundary' (New-ScheduledTaskTrigger -Once -At $promotionStart -RepetitionInterval (New-TimeSpan -Minutes 15)) 90 'Promotion-aware prefetch, start, end, and post-start verification with an immediate immutable release rebuild.'
 Register-PcTask 'ThriftyCrew V3 Efficiency Budget' $platformLauncher '-Job efficiency-daily' (New-ScheduledTaskTrigger -Daily -At '5:47 PM') 30 'Measures D1 query and write amplification and reconciles one durable incident.'
 Register-PcTask 'ThriftyCrew V3 Family Fare Paced' $platformLauncher '-Job family-fare-paced' (New-ScheduledTaskTrigger -Once -At $familyFareStart -RepetitionInterval (New-TimeSpan -Hours 3)) 60 'Authoritative local three-hour Family Fare capture pacing.'
 Register-PcTask 'ThriftyCrew V3 Accuracy Weekly' $platformLauncher '-Job accuracy-weekly' (New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday -At '3:17 PM') 30 'Weekly deterministic blind accuracy draw.'

@@ -207,6 +207,20 @@ describe("winner selection", () => {
     expect(result.winner?.observationId).toBe("fresh");
     expect(result.rejected).toContainEqual({ observationId: "stale", reason: "stale" });
   });
+
+  it("uses half-open retailer offer windows and reveals the everyday fallback at expiry", () => {
+    const candidates = [
+      { observationId: "sale", commodityId: "x", storeLocationId: "s", perUnitMicros: 1, capturedAt: "2026-08-12T12:00:00.000Z", batchCapturedTo: "2026-08-12T12:00:00.000Z", batchCoverageMode: "full" as const, validFrom: "2026-08-12T05:00:00.000Z", validTo: "2026-08-19T05:00:00.000Z" },
+      { observationId: "regular", commodityId: "x", storeLocationId: "s", perUnitMicros: 2, capturedAt: "2026-08-12T12:00:00.000Z", batchCapturedTo: "2026-08-12T12:00:00.000Z", batchCoverageMode: "full" as const },
+    ];
+    expect(selectWinner(candidates, "2026-08-19T04:59:59.999Z").winner?.observationId).toBe("sale");
+    const expired = selectWinner(candidates, "2026-08-19T05:00:00.000Z");
+    expect(expired.winner?.observationId).toBe("regular");
+    expect(expired.rejected).toContainEqual({ observationId: "sale", reason: "expired" });
+    const future = selectWinner(candidates, "2026-08-12T04:59:59.999Z");
+    expect(future.winner?.observationId).toBe("regular");
+    expect(future.rejected).toContainEqual({ observationId: "sale", reason: "not-yet-active" });
+  });
 });
 
 describe("alternative package bases", () => {

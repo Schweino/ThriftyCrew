@@ -112,7 +112,7 @@ $records = @($records | Sort-Object @{Expression='core';Descending=$true}, @{Exp
 $sb = New-Object System.Text.StringBuilder
 $dateLong = ([datetime]$week).ToString('MMMM d')
 
-[void]$sb.Append("<p>Here is where every staple is cheapest in Omaha this week, checked across seven stores. Sale prices end when the new ads drop Wednesday morning.</p>")
+[void]$sb.Append("<p>Here is where every staple is cheapest in Omaha this week, checked across seven stores. Sale prices update as each retailer's ad starts or ends.</p>")
 
 if ($staples.Count -gt 0) {
   [void]$sb.Append("<h3>The staples this week</h3>")

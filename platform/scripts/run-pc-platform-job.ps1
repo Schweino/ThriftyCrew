@@ -1,6 +1,6 @@
 param(
   [Parameter(Mandatory=$true)]
-  [ValidateSet('daily-engine','efficiency-daily','family-fare-paced','accuracy-weekly','accuracy-revalidation-daily','triage-daily','ghost-rotation-reconcile','restore-drill-quarterly')]
+  [ValidateSet('daily-engine','promotion-boundary','efficiency-daily','family-fare-paced','accuracy-weekly','accuracy-revalidation-daily','triage-daily','ghost-rotation-reconcile','restore-drill-quarterly')]
   [string]$Job,
   [switch]$Force,
   [switch]$SelfTest
@@ -46,6 +46,21 @@ function Invoke-Logged([string]$Label, [scriptblock]$Command, [int[]]$AllowedExi
   return $exitCode
 }
 
+function Invoke-TcJson([string]$Label, [string[]]$Arguments) {
+  Write-PcRuntimeLog $logFile ("START {0}" -f $Label)
+  $prior = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try { $lines = @(& $pnpmPath --silent tc @Arguments 2>&1); $exitCode = $LASTEXITCODE }
+  finally { $ErrorActionPreference = $prior }
+  foreach ($line in $lines) { Write-PcRuntimeLog $logFile ("{0}: {1}" -f $Label, $line) }
+  if ($exitCode -ne 0) { throw "$Label failed with exit code $exitCode" }
+  $text = $lines -join [Environment]::NewLine
+  $start = $text.IndexOf('{')
+  if ($start -lt 0) { throw "$Label did not return JSON" }
+  Write-PcRuntimeLog $logFile ("DONE {0}" -f $Label)
+  return ($text.Substring($start) | ConvertFrom-Json)
+}
+
 Set-PcRuntimeCredential $config 'local-operator'
 $env:TC_JOB_RUN_ID = "run_{0}_pc-{1}" -f $Job, ([DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())
 $env:TC_SCHEDULED_FOR = (Get-Date).ToUniversalTime().ToString('o')
@@ -71,6 +86,38 @@ try {
         Invoke-Logged 'ghost-reconcile' { & $pnpmPath tc ghost reconcile }
         Invoke-Logged 'direct-parity' { & $pnpmPath tc engine parity direct }
         Invoke-Logged 'evidence-accrue' { & $pnpmPath tc evidence accrue }
+      }
+      'promotion-boundary' {
+        Invoke-Logged 'promotion-calendar-sync' { & $pnpmPath tc promotion sync }
+        Invoke-Logged 'promotion-lifecycle-reconcile' { & $pnpmPath tc promotion reconcile }
+        $claim = Invoke-TcJson 'promotion-headless-claim' @('promotion','claim','headless',("pc-{0}" -f $env:COMPUTERNAME))
+        $requests = @($claim.requests)
+        $browserDue = Invoke-TcJson 'promotion-browser-due' @('promotion','due','browser')
+        $publishForBoundary = @($browserDue.requests | Where-Object { $_.request_kind -in @('activate','expire') }).Count -gt 0
+        if ($requests.Count -gt 0) {
+          $stores = @($requests.store_location_id | Sort-Object -Unique)
+          if ($stores -contains 'bakers-saddle-creek') {
+            Invoke-Logged 'promotion-bakers-capture' { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $incomeRoot 'grocery\pull-regular-bakers-api.ps1') }
+          }
+          if ($stores -contains 'family-fare-omaha-6401') {
+            Invoke-Logged 'promotion-family-fare-capture' { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $incomeRoot 'grocery\pull-regular-familyfare.ps1') }
+          }
+          if ($stores -contains 'hy-vee-omaha-1465') {
+            Invoke-Logged 'promotion-hy-vee-capture' { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $incomeRoot 'grocery\pull-regular-hyvee.ps1') }
+          }
+          $storeKeys = @()
+          if ($stores -contains 'bakers-saddle-creek') { $storeKeys += 'bakers' }
+          if ($stores -contains 'family-fare-omaha-6401') { $storeKeys += 'family-fare' }
+          if ($stores -contains 'hy-vee-omaha-1465') { $storeKeys += 'hy-vee' }
+          if ($storeKeys.Count -gt 0) { Invoke-Logged 'promotion-capture-ingest' { & $pnpmPath tc capture ingest-current @storeKeys } }
+          $publishForBoundary = $true
+        }
+        if ($publishForBoundary) { Invoke-Logged 'promotion-native-publish' { & $pnpmPath tc engine publish-native } }
+        if ($requests.Count -gt 0) {
+          $requestIds = @($requests.id)
+          Invoke-Logged 'promotion-headless-complete' { & $pnpmPath tc promotion complete completed @requestIds }
+        }
+        if ($requests.Count -eq 0 -and -not $publishForBoundary) { Write-PcRuntimeLog $logFile 'no promotion boundary work is due; standing down' }
       }
       'family-fare-paced' {
         $globalLock = Join-Path $env:LOCALAPPDATA 'ThriftyCrew\grocery-v3\locks\platform-job-daily-engine.lock'

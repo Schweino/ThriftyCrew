@@ -28,7 +28,8 @@ export const releaseCaptureEvictionSql = `WITH complete_candidates AS (
        AND candidate_match.configuration_id = ?2
        AND candidate_match.superseded_at IS NULL
      WHERE candidate_input.release_id = ?1
-       AND (candidate.valid_to IS NULL OR candidate.valid_to >= CURRENT_TIMESTAMP)
+       AND (candidate.valid_from IS NULL OR candidate.valid_from <= (SELECT created_at FROM releases WHERE id = ?1))
+       AND (candidate.valid_to IS NULL OR candidate.valid_to > (SELECT created_at FROM releases WHERE id = ?1))
   ), thin_selected AS (
     SELECT selected.commodity_id, selected.store_location_id, selected.observation_id
       FROM release_cells selected
@@ -65,6 +66,10 @@ function result(
 }
 
 export async function evaluateReleaseGuards(db: D1Database, context: ReleaseContext): Promise<void> {
+  const releaseInstant = (await db.prepare(
+    "SELECT created_at FROM releases WHERE id = ?1",
+  ).bind(context.releaseId).first<{ created_at: string }>())?.created_at;
+  if (!releaseInstant) throw new Error(`Release ${context.releaseId} does not exist`);
   const pricedForSnapshot = (await db.prepare(
     "SELECT COUNT(*) AS count FROM release_cells WHERE release_id = ?1 AND status = 'priced'",
   ).bind(context.releaseId).first<CountRow>())?.count ?? 0;
@@ -77,7 +82,7 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
           SELECT 1 FROM release_input_batches i
           JOIN capture_batch_observations member ON member.batch_id = i.batch_id
           JOIN capture_batches b ON b.id = i.batch_id
-          WHERE i.release_id = c.release_id AND member.observation_id = o.id AND b.status = 'promoted'
+          WHERE i.release_id = c.release_id AND member.observation_id = o.id AND b.status IN ('promoted','superseded')
         )
       ORDER BY c.commodity_id, c.store_location_id LIMIT 500`,
   ).bind(context.releaseId).all<{ commodity_id: string; store_location_id: string; batch_id: string; status: string }>();
@@ -95,6 +100,72 @@ export async function evaluateReleaseGuards(db: D1Database, context: ReleaseCont
       evidence: { batchId: row.batch_id, batchStatus: row.status },
     })),
     { snapshotBatchCount: snapshotCount },
+  ));
+
+  const offerWindowRows = await db.prepare(
+    `SELECT cell.commodity_id, cell.store_location_id, observation.id AS observation_id,
+            observation.valid_from, observation.valid_to, batch.coverage_mode
+       FROM release_cells cell
+       JOIN observations observation ON observation.id = cell.observation_id
+       JOIN capture_batches batch ON batch.id = observation.batch_id
+      WHERE cell.release_id = ?1 AND cell.status = 'priced'
+        AND ((observation.valid_from IS NOT NULL AND julianday(observation.valid_from) > julianday(?2))
+          OR (observation.valid_to IS NOT NULL AND julianday(observation.valid_to) <= julianday(?2))
+          OR (batch.coverage_mode = 'ad_only' AND observation.kind <> 'everyday'
+            AND (observation.valid_from IS NULL OR observation.valid_to IS NULL)))
+      ORDER BY cell.commodity_id, cell.store_location_id LIMIT 500`,
+  ).bind(context.releaseId, releaseInstant).all<{
+    commodity_id: string; store_location_id: string; observation_id: string;
+    valid_from: string | null; valid_to: string | null; coverage_mode: string;
+  }>();
+  await upsertGuardResult(db, context.releaseId, result(
+    "release-offer-window",
+    offerWindowRows.results.length === 0,
+    pricedForSnapshot,
+    pricedForSnapshot,
+    offerWindowRows.results.map((row) => ({
+      key: `${row.commodity_id}:${row.store_location_id}`,
+      message: "Selected offer is outside its half-open validity window or an ad-only offer is unbounded",
+      evidence: { observationId: row.observation_id, releaseInstant, validFrom: row.valid_from, validTo: row.valid_to, coverageMode: row.coverage_mode },
+    })),
+    { releaseInstant, intervalPolicy: "valid_from <= releaseInstant < valid_to" },
+  ));
+
+  const regularFallbackRows = await db.prepare(
+    `SELECT observation.id AS observation_id, product.store_location_id, product.external_key,
+            observation.regular_price_minor, observation.purchase_price_minor, observation.batch_id
+       FROM release_input_batches input
+       JOIN capture_batch_observations member ON member.batch_id = input.batch_id
+       JOIN observations observation ON observation.id = member.observation_id
+       JOIN product_versions version ON version.id = observation.product_version_id
+       JOIN products product ON product.id = version.product_id
+      WHERE input.release_id = ?1
+        AND observation.valid_from IS NOT NULL AND observation.valid_to IS NOT NULL
+        AND observation.regular_price_minor > observation.purchase_price_minor
+        AND NOT EXISTS (
+          SELECT 1 FROM capture_batch_observations fallback_member
+          JOIN observations fallback ON fallback.id = fallback_member.observation_id
+          WHERE fallback_member.batch_id = input.batch_id
+            AND fallback.product_version_id = observation.product_version_id
+            AND fallback.kind = 'everyday'
+            AND fallback.purchase_price_minor = observation.regular_price_minor
+            AND fallback.valid_from IS NULL AND fallback.valid_to IS NULL
+        )
+      ORDER BY product.store_location_id, product.external_key LIMIT 500`,
+  ).bind(context.releaseId).all<{
+    observation_id: string; store_location_id: string; external_key: string; batch_id: string;
+    regular_price_minor: number; purchase_price_minor: number;
+  }>();
+  await upsertGuardResult(db, context.releaseId, result(
+    "release-regular-fallback",
+    regularFallbackRows.results.length === 0,
+    pricedForSnapshot,
+    pricedForSnapshot,
+    regularFallbackRows.results.map((row) => ({
+      key: `${row.store_location_id}:${row.external_key}`,
+      message: "Bounded promotional offer lacks an immutable everyday-price fallback in the same capture batch",
+      evidence: { observationId: row.observation_id, batchId: row.batch_id, purchasePriceMinor: row.purchase_price_minor, regularPriceMinor: row.regular_price_minor },
+    })),
   ));
 
   // Load the selected release projection once. Six guards consume this same

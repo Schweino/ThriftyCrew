@@ -112,6 +112,7 @@ export interface WinnerCandidate {
   capturedAt: string;
   batchCoverageMode: "full" | "partial" | "targeted" | "ad_only";
   batchCapturedTo: string;
+  validFrom?: string;
   validTo?: string;
   knownWrong?: boolean;
   maxAgeDays?: number;
@@ -165,7 +166,13 @@ export function selectWinner(candidates: readonly WinnerCandidate[], nowIso: str
       rejected.push({ observationId: candidate.observationId, reason: "source-name-size-conflict" });
       return false;
     }
-    if (candidate.validTo && candidate.validTo < nowIso) {
+    if (candidate.validFrom && candidate.validFrom > nowIso) {
+      rejected.push({ observationId: candidate.observationId, reason: "not-yet-active" });
+      return false;
+    }
+    // Offer windows are half-open: [validFrom, validTo). At the exact end
+    // instant the promotion is no longer eligible.
+    if (candidate.validTo && candidate.validTo <= nowIso) {
       rejected.push({ observationId: candidate.observationId, reason: "expired" });
       return false;
     }
@@ -211,7 +218,7 @@ export interface NativeEngineSnapshot {
   stores: Array<{ id: string; store_name: string; display_name?: string; membership_required?: number }>;
   candidates: Array<{
     observation_id: string; commodity_id: string; store_location_id: string; per_unit_micros: number;
-    captured_at: string; valid_to: string | null; coverage_mode: WinnerCandidate["batchCoverageMode"];
+    captured_at: string; valid_from?: string | null; valid_to: string | null; coverage_mode: WinnerCandidate["batchCoverageMode"];
     captured_to: string; normalized_basis_unit: string; known_wrong: number;
     purchase_price_minor?: number; purchase_quantity?: number; package_count?: number;
     kind?: "sale" | "everyday" | "markdown" | "member"; regular_price_minor?: number | null;
@@ -223,7 +230,7 @@ export interface NativeEngineSnapshot {
   }>;
   rawCandidates?: Array<{
     observation_id: string; store_location_id: string; per_unit_micros: number; captured_at: string;
-    valid_to: string | null; coverage_mode: WinnerCandidate["batchCoverageMode"]; captured_to: string;
+    valid_from?: string | null; valid_to: string | null; coverage_mode: WinnerCandidate["batchCoverageMode"]; captured_to: string;
     normalized_basis_unit: string; purchase_price_minor?: number; purchase_quantity?: number;
     kind?: "sale" | "everyday" | "markdown" | "member"; regular_price_minor?: number | null;
     package_count?: number; normalized_basis_qty_micros?: number; membership_required?: number;
@@ -240,7 +247,7 @@ export interface NativeEngineSnapshot {
 }
 
 export const ENGINE_CANDIDATE_COLUMNS = [
-  "observation_id", "commodity_id", "store_location_id", "per_unit_micros", "captured_at", "valid_to",
+  "observation_id", "commodity_id", "store_location_id", "per_unit_micros", "captured_at", "valid_from", "valid_to",
   "coverage_mode", "captured_to", "batch_id", "normalized_basis_unit", "normalized_basis_qty_micros",
   "purchase_price_minor", "regular_price_minor", "kind", "purchase_quantity", "package_count", "size_text",
   "membership_required", "loyalty_required", "raw_price_text", "name", "normalized_name", "product_url",
@@ -453,6 +460,7 @@ export function buildNativeCells(snapshot: NativeEngineSnapshot): NativeReleaseC
         capturedAt: candidate.captured_at,
         batchCoverageMode: candidate.coverage_mode,
         batchCapturedTo: candidate.captured_to,
+        ...(candidate.valid_from ? { validFrom: candidate.valid_from } : {}),
         ...(candidate.valid_to ? { validTo: candidate.valid_to } : {}),
         knownWrong: candidate.known_wrong === 1,
         ...(candidate.max_age_days !== undefined ? { maxAgeDays: candidate.max_age_days } : {}),

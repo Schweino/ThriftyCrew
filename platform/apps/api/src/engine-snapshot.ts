@@ -10,7 +10,7 @@ import type { WorkerEnv } from "./env";
 export type EngineSourceMode = "legacy" | "direct" | "all";
 export type EngineSnapshotProfile = "release" | "parity";
 
-const SHARD_SCHEMA_VERSION = 1;
+const SHARD_SCHEMA_VERSION = 2;
 
 interface EngineSnapshotBatch {
   id: string;
@@ -97,8 +97,9 @@ export function markKnownWrongCandidates<T extends {
   });
 }
 
-async function readEngineSnapshotContext(env: WorkerEnv, mode: EngineSourceMode): Promise<EngineSnapshotContext> {
-  const observedAt = new Date().toISOString();
+async function readEngineSnapshotContext(env: WorkerEnv, mode: EngineSourceMode, requestedObservedAt?: string): Promise<EngineSnapshotContext> {
+  const observedAt = requestedObservedAt ?? new Date().toISOString();
+  if (!Number.isFinite(Date.parse(observedAt))) throw new Error("Engine snapshot observedAt is invalid");
   const [configuration, currentRelease] = await Promise.all([
     env.DB.prepare("SELECT id, content_hash FROM configuration_versions WHERE active = 1")
       .first<{ id: string; content_hash: string }>(),
@@ -113,7 +114,9 @@ async function readEngineSnapshotContext(env: WorkerEnv, mode: EngineSourceMode)
          SELECT b.id, b.source_id, b.coverage_mode, b.captured_to, s.capture_method,
                 ROW_NUMBER() OVER (PARTITION BY b.source_id ORDER BY b.captured_to DESC, b.promoted_at DESC, b.id DESC) AS ordinal
            FROM capture_batches b JOIN capture_sources s ON s.id = b.source_id
-          WHERE b.status = 'promoted' AND ${modePredicate(mode)}
+          WHERE b.status IN ('promoted','superseded') AND ${modePredicate(mode)}
+            AND (b.valid_from IS NULL OR b.valid_from <= ?2)
+            AND (b.valid_to IS NULL OR b.valid_to > ?2)
        ) WHERE ordinal = 1
      ), ranked_runs AS (
        SELECT run.batch_id, run.id AS match_run_id, run.input_hash AS match_input_hash,
@@ -126,15 +129,19 @@ async function readEngineSnapshotContext(env: WorkerEnv, mode: EngineSourceMode)
        FROM selected_batches batch
        LEFT JOIN ranked_runs run ON run.batch_id = batch.id AND run.ordinal = 1
       ORDER BY batch.source_id`,
-  ).bind(configuration.id).all<EngineSnapshotBatch>();
+  ).bind(configuration.id, observedAt).all<EngineSnapshotBatch>();
   if (batches.results.length === 0) throw new Error(`No promoted ${mode} capture batches`);
   const unbound = batches.results.filter((batch) => !batch.match_run_id || !batch.match_input_hash);
   if (unbound.length > 0) throw new Error(`Promoted snapshot batches lack a passed match run: ${unbound.map((batch) => batch.id).join(", ")}`);
   const inputBatchIds = batches.results.map((batch) => batch.id).sort();
+  const dateParts = Object.fromEntries(new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago", year: "numeric", month: "2-digit", day: "2-digit",
+  }).formatToParts(new Date(observedAt)).map((part) => [part.type, part.value]));
   const inputHash = await digestHex(stableJson({
     configurationId: configuration.id,
     configurationHash: configuration.content_hash,
     mode,
+    pricingDate: `${dateParts.year}-${dateParts.month}-${dateParts.day}`,
     inputBatchIds,
     shardSchemaVersion: SHARD_SCHEMA_VERSION,
     matchRuns: batches.results.map((batch) => [batch.id, batch.match_run_id, batch.match_input_hash]),
@@ -145,8 +152,8 @@ async function readEngineSnapshotContext(env: WorkerEnv, mode: EngineSourceMode)
   };
 }
 
-export async function readEngineSnapshotIdentity(env: WorkerEnv, mode: EngineSourceMode) {
-  const context = await readEngineSnapshotContext(env, mode);
+export async function readEngineSnapshotIdentity(env: WorkerEnv, mode: EngineSourceMode, observedAt?: string) {
+  const context = await readEngineSnapshotContext(env, mode, observedAt);
   const { configurationHash: _configurationHash, ...identity } = context;
   return identity;
 }
@@ -156,7 +163,7 @@ async function readCandidateRows(env: WorkerEnv, configurationId: string, batchI
   const placeholders = batchIds.map((_, index) => `?${index + 2}`).join(",");
   const rows = await env.DB.prepare(
     `SELECT o.id AS observation_id, m.commodity_id, p.store_location_id, o.per_unit_micros,
-            member.observed_at AS captured_at, o.valid_to, b.coverage_mode, b.captured_to, b.id AS batch_id,
+            member.observed_at AS captured_at, o.valid_from, o.valid_to, b.coverage_mode, b.captured_to, b.id AS batch_id,
             o.normalized_basis_unit, o.normalized_basis_qty_micros, o.purchase_price_minor, o.regular_price_minor, o.kind,
             o.purchase_quantity, o.package_count, pv.size_text,
             o.membership_required, o.loyalty_required, o.raw_price_text, pv.name, pv.normalized_name, pv.product_url,
@@ -183,17 +190,17 @@ async function readKnownWrongRules(env: WorkerEnv, configurationId: string) {
 }
 
 function shardObjectKey(configurationId: string, batchId: string, contentHash: string): string {
-  return `engine-snapshots/schema=1/config=${configurationId}/batch=${batchId}/prefix=${contentHash.slice(0, 2)}/${contentHash}.json`;
+  return `engine-snapshots/schema=${SHARD_SCHEMA_VERSION}/config=${configurationId}/batch=${batchId}/prefix=${contentHash.slice(0, 2)}/${contentHash}.json`;
 }
 
 async function verifiedShardObject(env: WorkerEnv, row: EngineSnapshotShardRow): Promise<boolean> {
-  if (row.status !== "verified") return false;
+  if (row.status !== "verified" || row.schema_version !== SHARD_SCHEMA_VERSION) return false;
   const object = await env.ARCHIVE.head(row.object_key);
   return Boolean(object && object.size === row.byte_length && object.customMetadata?.sha256 === row.content_hash);
 }
 
-export async function buildEngineSnapshotShard(env: WorkerEnv, batchId: string, mode: EngineSourceMode = "direct") {
-  const context = await readEngineSnapshotContext(env, mode);
+export async function buildEngineSnapshotShard(env: WorkerEnv, batchId: string, mode: EngineSourceMode = "direct", observedAt?: string) {
+  const context = await readEngineSnapshotContext(env, mode, observedAt);
   const batch = context.batches.find((candidate) => candidate.id === batchId);
   if (!batch) throw new Error(`Batch ${batchId} is not selected by the current ${mode} snapshot`);
   const existing = await env.DB.prepare(
@@ -219,7 +226,7 @@ export async function buildEngineSnapshotShard(env: WorkerEnv, batchId: string, 
   const bytes = new TextEncoder().encode(stableJson(shard));
   const contentHash = await digestHex(bytes);
   const objectKey = shardObjectKey(context.configurationId, batch.id, contentHash);
-  if (existing && (existing.content_hash !== contentHash || existing.object_key !== objectKey || existing.byte_length !== bytes.byteLength)) {
+  if (existing && existing.schema_version === SHARD_SCHEMA_VERSION && (existing.content_hash !== contentHash || existing.object_key !== objectKey || existing.byte_length !== bytes.byteLength)) {
     throw new Error(`Engine snapshot shard drifted without a new match run: ${batch.id}`);
   }
   await env.ARCHIVE.put(objectKey, bytes, { customMetadata: {
@@ -235,11 +242,14 @@ export async function buildEngineSnapshotShard(env: WorkerEnv, batchId: string, 
     `INSERT INTO engine_snapshot_shards
        (id, batch_id, configuration_id, match_run_id, match_input_hash, content_hash, object_key,
         matched_candidates, unmatched_candidates, byte_length, schema_version, status, verified_at)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, 1, 'verified', ?11)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, 'verified', ?12)
      ON CONFLICT(batch_id, configuration_id, match_run_id) DO UPDATE SET
+       content_hash = excluded.content_hash, object_key = excluded.object_key,
+       matched_candidates = excluded.matched_candidates, unmatched_candidates = excluded.unmatched_candidates,
+       byte_length = excluded.byte_length, schema_version = excluded.schema_version,
        status = 'verified', verified_at = excluded.verified_at, collected_at = NULL`,
   ).bind(shardId, batch.id, context.configurationId, batch.match_run_id, batch.match_input_hash, contentHash, objectKey,
-    matched.length, partitioned.unmatchedRawCandidates.length, bytes.byteLength, new Date().toISOString()).run();
+    matched.length, partitioned.unmatchedRawCandidates.length, bytes.byteLength, SHARD_SCHEMA_VERSION, new Date().toISOString()).run();
   const row: EngineSnapshotShardRow = {
     batch_id: batch.id, configuration_id: context.configurationId, match_run_id: batch.match_run_id,
     match_input_hash: batch.match_input_hash, content_hash: contentHash, object_key: objectKey,
@@ -270,8 +280,8 @@ async function readSnapshotDimensions(env: WorkerEnv, context: EngineSnapshotCon
   return { commodities: commodities.results, stores: stores.results, currentCells: currentCells.results };
 }
 
-export async function readEngineSnapshotManifest(env: WorkerEnv, mode: EngineSourceMode) {
-  const context = await readEngineSnapshotContext(env, mode);
+export async function readEngineSnapshotManifest(env: WorkerEnv, mode: EngineSourceMode, observedAt?: string) {
+  const context = await readEngineSnapshotContext(env, mode, observedAt);
   const dimensions = await readSnapshotDimensions(env, context);
   const clauses = context.batches.map((_, index) => `(batch_id = ?${index * 3 + 1} AND configuration_id = ?${index * 3 + 2} AND match_run_id = ?${index * 3 + 3})`).join(" OR ");
   const bindings = context.batches.flatMap((batch) => [batch.id, context.configurationId, batch.match_run_id]);
@@ -308,8 +318,8 @@ export async function readEngineSnapshotShard(env: WorkerEnv, batchId: string, c
   return shard;
 }
 
-export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode, profile: EngineSnapshotProfile = "release") {
-  const context = await readEngineSnapshotContext(env, mode);
+export async function readEngineSnapshot(env: WorkerEnv, mode: EngineSourceMode, profile: EngineSnapshotProfile = "release", observedAt?: string) {
+  const context = await readEngineSnapshotContext(env, mode, observedAt);
   const [candidateRows, knownWrongRules, dimensions] = await Promise.all([
     readCandidateRows(env, context.configurationId, context.inputBatchIds),
     readKnownWrongRules(env, context.configurationId),

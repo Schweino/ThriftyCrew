@@ -18,7 +18,7 @@ describe("R2-sharded engine snapshot loader", () => {
       byte_length: new TextEncoder().encode(stableJson(shard)).byteLength, schema_version: 1, status: "verified",
     };
     const base = {
-      ok: true, version: 1, shardSchemaVersion: 1, transportEncoding: "r2-shards-v1", mode: "direct",
+      ok: true, version: 1, shardSchemaVersion: 2, transportEncoding: "r2-shards-v1", mode: "direct",
       observedAt: "2026-08-12T00:00:00Z", configurationId: "cfg", currentReleaseId: "rel",
       inputHash: "b".repeat(64), inputBatchIds: ["batch"], commodities: [], stores: [], currentCells: [],
       batches: [{ id: "batch", source_id: "source", coverage_mode: "full", captured_to: "2026-08-12T00:00:00Z",
@@ -43,7 +43,7 @@ describe("R2-sharded engine snapshot loader", () => {
       batchId: "batch", configurationId: "cfg", matchRunId: "match", matchInputHash: "a".repeat(64), candidates: [], rawCandidates: [],
     });
     const client = { request: async (pathname: string) => pathname.includes("snapshot-manifest") ? {
-      ok: true, version: 1, shardSchemaVersion: 1, transportEncoding: "r2-shards-v1", mode: "direct",
+      ok: true, version: 1, shardSchemaVersion: 2, transportEncoding: "r2-shards-v1", mode: "direct",
       observedAt: "2026-08-12T00:00:00Z", configurationId: "cfg", currentReleaseId: "rel", inputHash: "b".repeat(64),
       inputBatchIds: ["batch"], commodities: [], stores: [], currentCells: [], missingBatchIds: [],
       batches: [{ id: "batch", source_id: "source", coverage_mode: "full", captured_to: "2026-08-12T00:00:00Z",

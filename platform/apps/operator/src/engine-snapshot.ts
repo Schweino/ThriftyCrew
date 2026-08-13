@@ -34,7 +34,7 @@ interface SnapshotBatch {
 
 interface SnapshotManifest extends Omit<NativeEngineSnapshot, "candidates" | "rawCandidates" | "rawCandidateEncoding"> {
   version: 1;
-  shardSchemaVersion: 1;
+  shardSchemaVersion: 2;
   transportEncoding: "r2-shards-v1";
   batches: SnapshotBatch[];
   shards: SnapshotShardDescriptor[];
@@ -60,24 +60,29 @@ async function mapConcurrent<T, R>(items: readonly T[], concurrency: number, wor
   return results;
 }
 
-async function manifest(client: MutationClient, mode: SnapshotMode): Promise<SnapshotManifest> {
-  return await client.request(`/internal/engine/snapshot-manifest?mode=${mode}`) as unknown as SnapshotManifest;
+async function manifest(client: MutationClient, mode: SnapshotMode, observedAt?: string): Promise<SnapshotManifest> {
+  const query = new URLSearchParams({ mode });
+  if (observedAt) query.set("observedAt", observedAt);
+  return await client.request(`/internal/engine/snapshot-manifest?${query}`) as unknown as SnapshotManifest;
 }
 
 export async function loadR2ShardedEngineSnapshot(
   client: MutationClient,
   mode: SnapshotMode,
   profile: SnapshotProfile = "release",
+  observedAt?: string,
 ): Promise<NativeEngineSnapshot> {
-  let current = await manifest(client, mode);
-  if (current.version !== 1 || current.transportEncoding !== "r2-shards-v1" || current.shardSchemaVersion !== 1) {
+  let current = await manifest(client, mode, observedAt);
+  if (current.version !== 1 || current.transportEncoding !== "r2-shards-v1" || current.shardSchemaVersion !== 2) {
     throw new Error("R2 engine snapshot manifest contract is unsupported");
   }
   if (current.missingBatchIds.length > 0) {
     await mapConcurrent(current.missingBatchIds, 4, async (batchId) => {
-      await client.request(`/internal/engine/snapshot-shards/${encodeURIComponent(batchId)}/build?mode=${mode}`, { method: "POST" });
+      const query = new URLSearchParams({ mode });
+      if (observedAt) query.set("observedAt", observedAt);
+      await client.request(`/internal/engine/snapshot-shards/${encodeURIComponent(batchId)}/build?${query}`, { method: "POST" });
     });
-    current = await manifest(client, mode);
+    current = await manifest(client, mode, observedAt);
   }
   if (current.missingBatchIds.length > 0) throw new Error(`R2 engine snapshot shards remain missing: ${current.missingBatchIds.join(", ")}`);
   if (current.shards.length !== current.batches.length) throw new Error("R2 engine snapshot manifest does not bind exactly one shard per batch");

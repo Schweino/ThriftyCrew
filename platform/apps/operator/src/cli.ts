@@ -31,6 +31,94 @@ function cliPath(file: string): string {
   return path.normalize(path.isAbsolute(file) ? file : path.resolve(invocationRoot, file));
 }
 
+interface LocalAdSchedule {
+  updated?: string;
+  stores?: Array<{ store?: string; method?: string; cadence_days?: number | null; current?: { from?: string; to?: string } | null; next_pull?: string | null }>;
+}
+
+const AD_STORE_LABELS: Record<string, string> = {
+  aldi: "Aldi", bakers: "Baker's", "family-fare": "Family Fare", fareway: "Fareway", "hy-vee": "Hy-Vee",
+};
+
+async function bindDetectedAdWindow(store: string, document: Record<string, unknown>): Promise<Record<string, unknown>> {
+  if (document.ad_from || document.ad_to || !AD_STORE_LABELS[store]) return document;
+  try {
+    const schedule = JSON.parse(await readFile(path.join(incomeRoot, "grocery", "ad-schedule.json"), "utf8")) as LocalAdSchedule;
+    const label = AD_STORE_LABELS[store]!;
+    const policy = PROMOTION_STORES[label];
+    const authored = schedule.stores?.find((entry) => entry.store === label)?.current;
+    const today = dateKey(new Date());
+    const current = authored?.from && authored.to && authored.to >= today
+      ? { from: authored.from, to: authored.to }
+      : policy ? predictedWeeklyWindow(today, policy.expectedStartWeekday) : undefined;
+    if (!current) return document;
+    return { ...document, ad_from: current.from, ad_to: current.to };
+  } catch {
+    // Missing schedule evidence does not invent a window. The promotion guard
+    // will keep undated ad-only offers out of publication.
+    return document;
+  }
+}
+
+const PROMOTION_STORES: Record<string, { storeLocationId: string; captureLane: "headless" | "browser"; expectedStartWeekday: number }> = {
+  "Family Fare": { storeLocationId: "family-fare-omaha-6401", captureLane: "headless", expectedStartWeekday: 0 },
+  Fareway: { storeLocationId: "fareway-omaha-043", captureLane: "browser", expectedStartWeekday: 0 },
+  "Hy-Vee": { storeLocationId: "hy-vee-omaha-1465", captureLane: "headless", expectedStartWeekday: 1 },
+  Aldi: { storeLocationId: "aldi-omaha-446-048", captureLane: "browser", expectedStartWeekday: 3 },
+  "Baker's": { storeLocationId: "bakers-saddle-creek", captureLane: "headless", expectedStartWeekday: 3 },
+};
+
+function dateKey(date: Date): string {
+  const values = Object.fromEntries(new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago", year: "numeric", month: "2-digit", day: "2-digit",
+  }).formatToParts(date).map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
+function shiftDateKey(value: string, days: number): string {
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(Date.UTC(year!, month! - 1, day! + days)).toISOString().slice(0, 10);
+}
+
+function omahaMidnight(value: string): string {
+  const noon = new Date(`${value}T12:00:00.000Z`);
+  const zone = new Intl.DateTimeFormat("en-US", { timeZone: "America/Chicago", timeZoneName: "longOffset" })
+    .formatToParts(noon).find((part) => part.type === "timeZoneName")?.value;
+  const offset = zone?.match(/^GMT([+-]\d{2}:\d{2})$/)?.[1];
+  if (!offset) throw new Error(`cannot resolve Omaha UTC offset for ${value}`);
+  return new Date(`${value}T00:00:00${offset}`).toISOString();
+}
+
+function predictedWeeklyWindow(today: string, expectedStartWeekday: number): { from: string; to: string } {
+  const weekday = new Date(`${today}T12:00:00Z`).getUTCDay();
+  const from = shiftDateKey(today, -((weekday - expectedStartWeekday + 7) % 7));
+  return { from, to: shiftDateKey(from, 6) };
+}
+
+async function localPromotionCalendarDocument() {
+  const sourceFile = path.join(incomeRoot, "grocery", "ad-schedule.json");
+  const source = JSON.parse((await readFile(sourceFile, "utf8")).replace(/^\uFEFF/, "")) as LocalAdSchedule;
+  const observedAt = new Date().toISOString();
+  const today = dateKey(new Date());
+  const calendars = Object.entries(PROMOTION_STORES).map(([storeName, policy]) => {
+    const entry = source.stores?.find((item) => item.store === storeName);
+    const detected = entry?.current?.from && entry.current.to ? { from: entry.current.from, to: entry.current.to } : undefined;
+    const current = detected && detected.to >= today ? detected : predictedWeeklyWindow(today, policy.expectedStartWeekday);
+    return {
+      ...policy, storeName,
+      validFrom: omahaMidnight(current.from!),
+      validTo: omahaMidnight(shiftDateKey(current.to!, 1)),
+      evidence: {
+        authority: "grocery/ad-schedule.json", scheduleUpdated: source.updated ?? null,
+        detected: Boolean(detected && detected.to >= today), sourceMethod: entry?.method ?? null,
+        sourceFrom: detected?.from ?? null, sourceToInclusive: detected?.to ?? null,
+        nextPull: entry?.next_pull ?? null, intervalPolicy: "half-open",
+      },
+    };
+  });
+  return { observedAt, calendars };
+}
+
 async function githubOidcToken(): Promise<string | undefined> {
   const requestUrl = process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
   const requestToken = process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
@@ -96,13 +184,16 @@ async function loadEngineSnapshot(
   client: MutationClient,
   mode: "legacy" | "direct" | "all",
   profile: "release" | "parity" = "release",
+  observedAt?: string,
 ): Promise<NativeEngineSnapshot> {
   try {
-    return await loadR2ShardedEngineSnapshot(client, mode, profile);
+    return await loadR2ShardedEngineSnapshot(client, mode, profile, observedAt);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.warn(`R2-sharded snapshot unavailable; using verified D1 rollback path: ${message}`);
-    return decodeNativeEngineSnapshot(await client.request(`/internal/engine/snapshot?mode=${mode}&profile=${profile}`) as unknown as TupleEncodedNativeEngineSnapshot);
+    const query = new URLSearchParams({ mode, profile });
+    if (observedAt) query.set("observedAt", observedAt);
+    return decodeNativeEngineSnapshot(await client.request(`/internal/engine/snapshot?${query}`) as unknown as TupleEncodedNativeEngineSnapshot);
   }
 }
 
@@ -165,7 +256,7 @@ async function matchBatch(client: MutationClient, batchId: string, reusableConte
     sourceId: string; status: string; configurationId: string; configurationHash: string; products: MatchProductRow[];
   };
   if (!Array.isArray(snapshot.products)) throw new Error("matching snapshot omitted products");
-  if (!(snapshot.status === "promoted" || snapshot.status === "validated")) throw new Error(`batch ${batchId} cannot be matched from ${snapshot.status}`);
+  if (!(snapshot.status === "promoted" || snapshot.status === "superseded" || snapshot.status === "validated")) throw new Error(`batch ${batchId} cannot be matched from ${snapshot.status}`);
   const { matcher, categoryByCommodity, nonFoodFamilies } = reusableContext ?? await loadMatchContext();
   const decisions: Array<{ productId: string; commodityId: string; configurationId: string; decidedBy: "rule" | "aisle"; reason: string }> = [];
   const unmatched: Array<Record<string, unknown>> = [];
@@ -263,11 +354,15 @@ async function matchBatch(client: MutationClient, batchId: string, reusableConte
 
 async function rematchPromotedBatches(client: MutationClient, verbose = false): Promise<Record<string, unknown>> {
   const startedAt = performance.now();
-  const listed = await client.request("/internal/capture-batches/promoted") as { batches?: Array<{ id: string; source_id: string; captured_to: string }> };
+  const listed = await client.request("/internal/capture-batches/promoted") as {
+    batches?: Array<{ id: string; source_id: string; captured_to: string; has_active_match?: number }>;
+  };
   const context = await loadMatchContext();
   const batches: Array<Record<string, unknown>> = [];
-  const summary = { checked: 0, reused: 0, rebuilt: 0, failed: 0, products: 0, matched: 0, decisionWrites: 0, unchanged: 0 };
-  for (const batch of listed.batches ?? []) {
+  const selected = listed.batches ?? [];
+  const pending = selected.filter((batch) => Number(batch.has_active_match ?? 0) !== 1);
+  const summary = { selected: selected.length, alreadyBound: selected.length - pending.length, checked: 0, reused: 0, rebuilt: 0, failed: 0, products: 0, matched: 0, decisionWrites: 0, unchanged: 0 };
+  for (const batch of pending) {
     const matching = await matchBatch(client, batch.id, context);
     summary.checked += 1;
     summary.products += Number(matching.productCount ?? 0);
@@ -472,6 +567,31 @@ if (command === "status") {
 } else if (command === "schedules" && subcommand === "deploy") {
   const document = await readScheduleAuthority(platformRoot);
   result = await (await mutationClient()).request("/internal/schedules/sync", { method: "PUT", json: document });
+} else if (command === "promotion" && subcommand === "sync") {
+  const document = await localPromotionCalendarDocument();
+  result = await (await mutationClient()).request("/internal/promotions/calendars/sync", { method: "PUT", json: document });
+} else if (command === "promotion" && subcommand === "status") {
+  result = await (await mutationClient()).request("/internal/promotions/status");
+} else if (command === "promotion" && subcommand === "reconcile") {
+  result = await (await mutationClient()).request("/internal/promotions/reconcile", { method: "POST" });
+} else if (command === "promotion" && subcommand === "due") {
+  const lane = arguments_[0];
+  if (lane && lane !== "headless" && lane !== "browser") throw new Error("tc promotion due accepts only headless or browser");
+  result = await (await mutationClient()).request(`/internal/promotions/requests/due${lane ? `?lane=${lane}` : ""}`);
+} else if (command === "promotion" && subcommand === "claim") {
+  const [lane, owner = `pc-${process.env.COMPUTERNAME ?? "local"}`] = arguments_;
+  if (lane !== "headless" && lane !== "browser") throw new Error("tc promotion claim requires headless|browser [owner]");
+  result = await (await mutationClient()).request("/internal/promotions/requests/claim", { json: {
+    lane, owner, observedAt: new Date().toISOString(), leaseMinutes: lane === "browser" ? 180 : 60, limit: 20,
+  } });
+} else if (command === "promotion" && subcommand === "complete") {
+  const [status, ...requestIds] = arguments_;
+  if ((status !== "completed" && status !== "failed") || requestIds.length === 0) throw new Error("tc promotion complete requires completed|failed and one or more request ids");
+  const completedAt = new Date().toISOString();
+  result = await (await mutationClient()).request("/internal/promotions/requests/complete", { json: {
+    requestIds, status, completedAt, result: { executor: "pc", completedAt },
+    ...(status === "failed" ? { error: "local promotion-boundary execution failed" } : {}),
+  } });
 } else if (command === "transition" && subcommand === "readiness") {
   result = await (await mutationClient()).request("/internal/transitions/readiness");
 } else if (command === "transition" && subcommand === "retire") {
@@ -865,6 +985,10 @@ if (command === "status") {
   const operationStartedAt = performance.now();
   const performanceProfile: Record<string, number> = {};
   const client = await mutationClient();
+  // A configuration can change while a time-windowed, superseded batch remains the
+  // effective input. Bind every effective batch to the active matcher immediately
+  // before publication so the immutable snapshot can never select an unbound input.
+  if (subcommand === "publish-native") await rematchPromotedBatches(client);
   let stageStartedAt = performance.now();
   const identity = await client.request("/internal/engine/snapshot-identity?mode=direct") as unknown as Pick<NativeEngineSnapshot, "mode" | "observedAt" | "configurationId" | "inputHash" | "inputBatchIds">;
   performanceProfile.snapshotIdentityMs = Math.round(performance.now() - stageStartedAt);
@@ -1048,9 +1172,13 @@ if (command === "status") {
     };
   }));
   const client = await mutationClient();
-  const ingestion = await ingestDirectCapture(client, artifact, evidenceInputs[0]!.body, evidenceInputs.slice(1));
+  const ingestion = await ingestDirectCapture(client, artifact, evidenceInputs[0]!.body, evidenceInputs.slice(1), { promote: false });
   const matching = ingestion.ok ? await matchBatch(client, String(ingestion.batchId)) : null;
-  result = { ...ingestion, matching };
+  if (matching && matching.status !== "passed") throw new Error(`validated capture ${String(ingestion.batchId)} failed matching and was not promoted`);
+  const promotion = matching
+    ? await client.request(`/internal/capture-batches/${encodeURIComponent(String(ingestion.batchId))}/promote`, { method: "POST" })
+    : null;
+  result = { ...ingestion, matching, promotion, ...(promotion ? { status: promotion.status } : {}) };
 } else if (command === "capture" && subcommand === "ingest-current") {
   const stores = arguments_.length > 0 ? arguments_.map(parseServerCaptureStore) : [...SERVER_CAPTURE_STORES];
   const regularDirectory = path.join(incomeRoot, "grocery", "out", "regular");
@@ -1063,7 +1191,7 @@ if (command === "status") {
       maximumAgeHours: Number(process.env.TC_SERVER_CAPTURE_MAX_AGE_HOURS ?? 36),
       ...(process.env.TC_SERVER_CAPTURE_ALLOW_PRIOR === "1" ? {} : { requiredDate: omahaDateKey(new Date()) }),
     });
-    const artifact = await buildRegularCapture(store, fresh.document);
+    const artifact = await buildRegularCapture(store, await bindDetectedAdWindow(store, fresh.document as Record<string, unknown>));
     const contract = sourceContractDocument.sources.find((entry) => entry.sourceId === artifact.sourceId);
     if (!contract) throw new Error(`no source contract is registered for ${artifact.sourceId}`);
     const sentinel = evaluateSourceContract(artifact, contract);
@@ -1076,10 +1204,12 @@ if (command === "status") {
       evidence: { file, rows: fresh.rows, newestCaptureDate: fresh.newestCaptureDate },
     }, acceptStatuses: [422] });
     if (sentinel.status !== "pass") throw new Error(`source contract failed for ${artifact.sourceId}: ${stableJson(sentinel.checks)}`);
-    const ingestion = await ingestDirectCapture(client, artifact, new Uint8Array(await readFile(file)));
+    const ingestion = await ingestDirectCapture(client, artifact, new Uint8Array(await readFile(file)), [], { promote: false });
     if (!ingestion.ok) throw new Error(`current ${store} capture was rejected: ${stableJson(ingestion)}`);
     const matching = await matchBatch(client, String(ingestion.batchId));
-    captures.push({ store, file, newestCaptureDate: fresh.newestCaptureDate, oldestCaptureDate: fresh.oldestCaptureDate, sourceRows: fresh.rows, sentinel: sentinelReceipt, ...ingestion, matching });
+    if (matching.status !== "passed") throw new Error(`validated ${store} capture ${String(ingestion.batchId)} failed matching and was not promoted`);
+    const promotion = await client.request(`/internal/capture-batches/${encodeURIComponent(String(ingestion.batchId))}/promote`, { method: "POST" });
+    captures.push({ store, file, newestCaptureDate: fresh.newestCaptureDate, oldestCaptureDate: fresh.oldestCaptureDate, sourceRows: fresh.rows, sentinel: sentinelReceipt, ...ingestion, status: promotion.status, matching, promotion });
   }
   result = { ok: true, captures };
 } else if (command === "sentinel" && subcommand === "latest") {
@@ -1091,7 +1221,7 @@ if (command === "status") {
   for (const store of stores) {
     const file = await findLatestRegularCapture(regularDirectory, store);
     const fresh = await readFreshRegularCapture(file, { maximumAgeHours: Number(process.env.TC_SERVER_CAPTURE_MAX_AGE_HOURS ?? 36) });
-    const artifact = await buildRegularCapture(store, fresh.document);
+    const artifact = await buildRegularCapture(store, await bindDetectedAdWindow(store, fresh.document as Record<string, unknown>));
     const contract = sourceContractDocument.sources.find((entry) => entry.sourceId === artifact.sourceId);
     if (!contract) throw new Error(`no source contract is registered for ${artifact.sourceId}`);
     const evaluated = evaluateSourceContract(artifact, contract);
@@ -1271,7 +1401,7 @@ if (command === "status") {
     ...(!isHelpRequest ? { error: `Unknown command: ${requestedCommand}` } : {}),
     usage: [
       "tc status", "tc doctor", "tc triage [status|run|reconcile]", "tc triage review <id> <file>|plan|resolve|needs-operator <id> <file>", "tc config generate|check|deploy|archives|archive <id>",
-      "tc schedules check|deploy", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>|execute <manifest> <sha256>", "tc storage migrate-releases|gc-plan [days] [--execute]|gc-sweep <run> [--execute]", "tc cleanup index|plan [--execute]|export <run> <json>|upload <run> <parquet>|execute <run> <sha256>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
+      "tc schedules check|deploy", "tc promotion sync|status|reconcile|due [headless|browser]|claim <headless|browser> [owner]|complete <completed|failed> <id...>", "tc agents check|deploy", "tc content show|create <json>|items <batch> <json>|audit <batch> <json>|promote <batch>", "tc backup checkpoint|trigger [--replica]", "tc restore trigger [--force]|record <file>|show|cleanup <file>", "tc archive forecast|plan [cutoff] [--execute]|export <manifest> <json>|upload <manifest> <parquet>|execute <manifest> <sha256>", "tc storage migrate-releases|gc-plan [days] [--execute]|gc-sweep <run> [--execute]", "tc cleanup index|plan [--execute]|export <run> <json>|upload <run> <parquet>|execute <run> <sha256>", "tc evidence record <file>|show [gate]|accrue", "tc entitlement record <file>|show", "tc drill release-freeze|ghost-clobber [release-id]|chaos <kind>|stale-capture [artifact]", "tc job start|finish|dispatch <job> [status|reason]|github-runs [limit]",
       "tc ghost reconcile [release-id]", "tc transition readiness|retire <schedule-id>", "tc efficiency record <report.json>", "tc recipe bundles [release-id]", "tc cache purge",
         "tc run daily --dry", "tc parity", "tc replay", "tc engine parity [legacy|direct|all]", "tc capture validate|ingest <file> [evidence]", "tc capture build-regular <store> <input> <output> [attestation] [--browser]",
         "tc capture metrics [limit]", "tc capture coordinator status|next|heartbeat|fail|challenge|resolve", "tc capture session worklist|init|append|evidence|verification-plan|finalize|status",

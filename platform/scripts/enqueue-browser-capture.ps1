@@ -89,6 +89,25 @@ try {
   } | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $attestationFile -Encoding UTF8
 
   $regular = Get-Content -LiteralPath $regularPath -Raw -Encoding UTF8 | ConvertFrom-Json
+  $adScheduleFile = Join-Path (Split-Path -Parent $platformRoot) 'grocery\ad-schedule.json'
+  if (Test-Path -LiteralPath $adScheduleFile) {
+    $adLabel = @{ aldi='Aldi'; fareway='Fareway'; sams="Sam's Club"; walmart='Walmart' }[$Store]
+    $adEntry = @((Get-Content -LiteralPath $adScheduleFile -Raw -Encoding UTF8 | ConvertFrom-Json).stores) |
+      Where-Object { [string]$_.store -eq $adLabel } | Select-Object -First 1
+    $today = (Get-Date).Date
+    $window = if ($adEntry -and $adEntry.current -and $adEntry.current.from -and $adEntry.current.to -and ([datetime]$adEntry.current.to).Date -ge $today) {
+      @{ from = [string]$adEntry.current.from; to = [string]$adEntry.current.to }
+    } elseif ($Store -in @('aldi','fareway')) {
+      $startWeekday = if ($Store -eq 'aldi') { [DayOfWeek]::Wednesday } else { [DayOfWeek]::Sunday }
+      $daysBack = (([int]$today.DayOfWeek - [int]$startWeekday) + 7) % 7
+      $from = $today.AddDays(-$daysBack)
+      @{ from = $from.ToString('yyyy-MM-dd'); to = $from.AddDays(6).ToString('yyyy-MM-dd') }
+    } else { $null }
+    if ($window) {
+      $regular | Add-Member -NotePropertyName ad_from -NotePropertyValue ([string]$window.from) -Force
+      $regular | Add-Member -NotePropertyName ad_to -NotePropertyValue ([string]$window.to) -Force
+    }
+  }
   $regular | Add-Member -NotePropertyName capture_session -NotePropertyValue $session -Force
   $regular | Add-Member -NotePropertyName coverage_mode -NotePropertyValue ([string]$session.coverageMode) -Force
   $regular | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $augmentedRegularFile -Encoding UTF8

@@ -203,11 +203,14 @@ export async function nativeReleaseIdentity(
   catalog: NativeReleaseCatalog,
 ) {
   const generatedAt = snapshot.observedAt;
-  const weekOf = generatedAt.slice(0, 10);
+  const parts = Object.fromEntries(new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago", year: "numeric", month: "2-digit", day: "2-digit",
+  }).formatToParts(new Date(generatedAt)).map((part) => [part.type, part.value]));
+  const weekOf = `${parts.year}-${parts.month}-${parts.day}`;
   const inputBatchIds = [...snapshot.inputBatchIds].sort();
   const inputManifest = {
     kind: "native-v3-release",
-    engineVersion: "native-v4.2.0-incremental-cell-dag",
+    engineVersion: "native-v4.3.0-promotion-windows",
     marketId: "omaha",
     mode: "direct",
     releaseDate: weekOf,
@@ -298,13 +301,14 @@ export async function buildNativeRelease(
           observationId: candidate.observation_id,
           perUnitMicros: candidate.per_unit_micros, basisUnit: candidate.normalized_basis_unit,
           basisOptions: candidate.basis_options_json ?? null, capturedAt: candidate.captured_at,
-          validTo: candidate.valid_to, coverageMode: candidate.coverage_mode, capturedTo: candidate.captured_to,
+          validFrom: candidate.valid_from, validTo: candidate.valid_to, coverageMode: candidate.coverage_mode, capturedTo: candidate.captured_to,
           knownWrong: candidate.known_wrong, maxAgeDays: candidate.max_age_days ?? null,
           name: candidate.name ?? null, sizeText: candidate.size_text ?? null,
           // Time is an input only when it changes eligibility. This avoids a
           // daily full rebuild while still invalidating a cell at the exact
           // release where an offer expires or a capture becomes stale.
-          expired: Boolean(candidate.valid_to && candidate.valid_to < snapshot.observedAt),
+          notYetActive: Boolean(candidate.valid_from && candidate.valid_from > snapshot.observedAt),
+          expired: Boolean(candidate.valid_to && candidate.valid_to <= snapshot.observedAt),
           stale: candidate.max_age_days === undefined ? false
             : Date.parse(candidate.captured_at) < observedAtMillis - candidate.max_age_days * 86_400_000,
         })),
@@ -426,6 +430,7 @@ export async function buildNativeRelease(
         capturedAt: candidate.raw.captured_at,
         batchCoverageMode: candidate.raw.coverage_mode,
         batchCapturedTo: candidate.raw.captured_to,
+        ...(candidate.raw.valid_from ? { validFrom: candidate.raw.valid_from } : {}),
         ...(candidate.raw.valid_to ? { validTo: candidate.raw.valid_to } : {}),
         ...(candidate.raw.max_age_days !== undefined ? { maxAgeDays: candidate.raw.max_age_days } : {}),
         knownWrong: activeKnownWrong.some((wrong) => wrong.commodity === rule.id

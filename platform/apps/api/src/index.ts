@@ -55,6 +55,9 @@ import {
   restoreDrillCleanupSchema,
   restoreDrillRecordSchema,
   scheduleDocumentSchema,
+  promotionCalendarSyncSchema,
+  promotionRequestClaimSchema,
+  promotionRequestCompleteSchema,
   sourceSentinelResultSchema,
   telemetryEventSchema,
   triageResolveSchema,
@@ -106,6 +109,7 @@ import { cachedPublicJson, PublicJsonError, releaseEtag } from "./public-cache";
 import { assertRetentionCandidatesStillUnprotected, readRetentionCandidates, readRetentionProtectionSummary } from "./retention";
 import { planR2GarbageCollection, sweepR2GarbageCollection } from "./r2-gc";
 import { compactHistoricalTriage } from "./triage-compaction";
+import { runPromotionLifecycle } from "./promotion-lifecycle";
 import type { MutationIdentity, MutationRole, WorkerEnv } from "./env";
 export { D1BackupWorkflow } from "./backup-workflow";
 export { D1RestoreDrillWorkflow } from "./restore-workflow";
@@ -238,6 +242,7 @@ app.use("/internal/job-runs/*", requireIdentityRole(["capture", "engine", "opera
 app.use("/internal/operational-alerts", requireIdentityRole(["capture", "engine", "operator"]));
 app.use("/internal/jobs/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/schedules/*", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/promotions/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/agents/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/agent-work-items/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/agent-evaluations", requireIdentityRole(["engine", "operator"]));
@@ -1386,18 +1391,121 @@ app.get("/internal/engine/snapshot", async (context) => {
   if (!(["legacy", "direct", "all"] as const).includes(requested as EngineSourceMode)) return jsonError("engine mode must be legacy, direct, or all", 422);
   const requestedProfile = context.req.query("profile") ?? "release";
   if (!(["release", "parity"] as const).includes(requestedProfile as EngineSnapshotProfile)) return jsonError("engine snapshot profile must be release or parity", 422);
+  const observedAt = context.req.query("observedAt");
+  if (observedAt && !Number.isFinite(Date.parse(observedAt))) return jsonError("engine snapshot observedAt must be an ISO timestamp", 422);
   try {
-    return context.json(await readEngineSnapshot(context.env, requested as EngineSourceMode, requestedProfile as EngineSnapshotProfile));
+    return context.json(await readEngineSnapshot(context.env, requested as EngineSourceMode, requestedProfile as EngineSnapshotProfile, observedAt));
   } catch (error) {
     return jsonError(error instanceof Error ? error.message : "engine snapshot failed", 422);
   }
 });
 
+app.put("/internal/promotions/calendars/sync", zValidator("json", promotionCalendarSyncSchema), async (context) => {
+  const body = context.req.valid("json");
+  const statements = body.calendars.map((calendar) => context.env.DB.prepare(
+    `INSERT INTO retailer_ad_calendars
+       (store_location_id, store_name, capture_lane, expected_start_weekday, current_valid_from,
+        current_valid_to, detected_at, source_evidence_json, updated_at)
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, CURRENT_TIMESTAMP)
+     ON CONFLICT(store_location_id) DO UPDATE SET
+       store_name = excluded.store_name, capture_lane = excluded.capture_lane,
+       expected_start_weekday = excluded.expected_start_weekday,
+       current_valid_from = excluded.current_valid_from, current_valid_to = excluded.current_valid_to,
+       detected_at = excluded.detected_at, source_evidence_json = excluded.source_evidence_json,
+       updated_at = CURRENT_TIMESTAMP`,
+  ).bind(calendar.storeLocationId, calendar.storeName, calendar.captureLane, calendar.expectedStartWeekday,
+    calendar.validFrom, calendar.validTo, body.observedAt, stableJson(calendar.evidence)));
+  await context.env.DB.batch(statements);
+  await recordAudit(context.env, context.get("identity"), "promotion_calendars.sync", "promotion_calendar", "omaha", "accepted", {
+    observedAt: body.observedAt, calendars: body.calendars.map((item) => [item.storeLocationId, item.validFrom, item.validTo]),
+  });
+  return context.json({ ok: true, calendars: statements.length });
+});
+
+app.get("/internal/promotions/status", async (context) => {
+  const [calendars, due, latest] = await Promise.all([
+    context.env.DB.prepare("SELECT * FROM retailer_ad_calendars ORDER BY store_location_id").all(),
+    context.env.DB.prepare("SELECT * FROM promotion_capture_requests WHERE status IN ('queued','leased','failed') ORDER BY due_at, store_location_id LIMIT 100").all(),
+    context.env.DB.prepare("SELECT * FROM promotion_boundary_runs ORDER BY observed_at DESC LIMIT 1").first(),
+  ]);
+  return context.json({ ok: true, calendars: calendars.results, requests: due.results, latest });
+});
+
+app.post("/internal/promotions/reconcile", async (context) => {
+  const result = await runPromotionLifecycle(context.env, Date.now());
+  await recordAudit(context.env, context.get("identity"), "promotion_lifecycle.reconcile", "promotion_boundary_run", result.runId, "accepted", result);
+  return context.json({ ok: true, ...result });
+});
+
+app.get("/internal/promotions/requests/due", async (context) => {
+  const lane = context.req.query("lane");
+  if (lane && lane !== "headless" && lane !== "browser") return jsonError("promotion lane must be headless or browser", 422);
+  const rows = await context.env.DB.prepare(
+    `SELECT request.id, request.store_location_id, calendar.store_name, request.request_kind,
+            request.capture_lane, request.window_valid_from, request.window_valid_to, request.due_at,
+            request.status, request.attempts
+       FROM promotion_capture_requests request
+       JOIN retailer_ad_calendars calendar ON calendar.store_location_id = request.store_location_id
+      WHERE request.status IN ('queued','failed') AND julianday(request.due_at) <= julianday('now', '+15 minutes')
+        AND (?1 IS NULL OR request.capture_lane = ?1)
+      ORDER BY request.due_at, request.store_location_id LIMIT 20`,
+  ).bind(lane ?? null).all();
+  return context.json({ ok: true, requests: rows.results });
+});
+
+app.post("/internal/promotions/requests/claim", zValidator("json", promotionRequestClaimSchema), async (context) => {
+  const body = context.req.valid("json");
+  const leaseExpiresAt = new Date(Date.parse(body.observedAt) + body.leaseMinutes * 60_000).toISOString();
+  const candidates = await context.env.DB.prepare(
+    `SELECT id FROM promotion_capture_requests
+      WHERE capture_lane = ?1
+        AND (status IN ('queued','failed') OR (status = 'leased' AND lease_expires_at <= ?2))
+        AND julianday(due_at) <= julianday(?2, '+15 minutes')
+      ORDER BY due_at, store_location_id LIMIT ?3`,
+  ).bind(body.lane, body.observedAt, body.limit).all<{ id: string }>();
+  const claimed: string[] = [];
+  for (const row of candidates.results) {
+    const updated = await context.env.DB.prepare(
+      `UPDATE promotion_capture_requests
+          SET status = 'leased', lease_owner = ?2, lease_expires_at = ?3, updated_at = ?4
+        WHERE id = ?1 AND (status IN ('queued','failed') OR (status = 'leased' AND lease_expires_at <= ?4))`,
+    ).bind(row.id, body.owner, leaseExpiresAt, body.observedAt).run();
+    if ((updated.meta.changes ?? 0) > 0) claimed.push(row.id);
+  }
+  if (claimed.length === 0) return context.json({ ok: true, requests: [], leaseExpiresAt });
+  const placeholders = claimed.map((_, index) => `?${index + 1}`).join(",");
+  const requests = await context.env.DB.prepare(
+    `SELECT request.id, request.store_location_id, calendar.store_name, request.request_kind,
+            request.capture_lane, request.window_valid_from, request.window_valid_to, request.due_at,
+            request.status, request.attempts, request.lease_owner, request.lease_expires_at
+       FROM promotion_capture_requests request
+       JOIN retailer_ad_calendars calendar ON calendar.store_location_id = request.store_location_id
+      WHERE request.id IN (${placeholders}) ORDER BY request.due_at, request.store_location_id`,
+  ).bind(...claimed).all();
+  return context.json({ ok: true, requests: requests.results, leaseExpiresAt });
+});
+
+app.post("/internal/promotions/requests/complete", zValidator("json", promotionRequestCompleteSchema), async (context) => {
+  const body = context.req.valid("json");
+  const statements = body.requestIds.map((id) => context.env.DB.prepare(
+    `UPDATE promotion_capture_requests
+        SET status = ?2, attempts = attempts + 1, result_json = ?3, last_error = ?4,
+            completed_at = CASE WHEN ?2 = 'completed' THEN ?5 ELSE NULL END, updated_at = ?5,
+            lease_owner = NULL, lease_expires_at = NULL
+      WHERE id = ?1 AND status IN ('queued','leased','failed')`,
+  ).bind(id, body.status, stableJson(body.result), body.error ?? null, body.completedAt));
+  await context.env.DB.batch(statements);
+  await recordAudit(context.env, context.get("identity"), "promotion_requests.complete", "promotion_request", body.requestIds.join(","), body.status === "completed" ? "accepted" : "failed", body);
+  return context.json({ ok: body.status === "completed", requests: body.requestIds.length, status: body.status });
+});
+
 app.get("/internal/engine/snapshot-manifest", async (context) => {
   const requested = context.req.query("mode") ?? "direct";
   if (!(["legacy", "direct", "all"] as const).includes(requested as EngineSourceMode)) return jsonError("engine mode must be legacy, direct, or all", 422);
+  const observedAt = context.req.query("observedAt");
+  if (observedAt && !Number.isFinite(Date.parse(observedAt))) return jsonError("engine snapshot observedAt must be an ISO timestamp", 422);
   try {
-    return context.json(await readEngineSnapshotManifest(context.env, requested as EngineSourceMode));
+    return context.json(await readEngineSnapshotManifest(context.env, requested as EngineSourceMode, observedAt));
   } catch (error) {
     return jsonError(error instanceof Error ? error.message : "engine snapshot manifest failed", 422);
   }
@@ -1406,8 +1514,10 @@ app.get("/internal/engine/snapshot-manifest", async (context) => {
 app.post("/internal/engine/snapshot-shards/:batchId/build", async (context) => {
   const requested = context.req.query("mode") ?? "direct";
   if (!(["legacy", "direct", "all"] as const).includes(requested as EngineSourceMode)) return jsonError("engine mode must be legacy, direct, or all", 422);
+  const observedAt = context.req.query("observedAt");
+  if (observedAt && !Number.isFinite(Date.parse(observedAt))) return jsonError("engine snapshot observedAt must be an ISO timestamp", 422);
   try {
-    const result = await buildEngineSnapshotShard(context.env, context.req.param("batchId"), requested as EngineSourceMode);
+    const result = await buildEngineSnapshotShard(context.env, context.req.param("batchId"), requested as EngineSourceMode, observedAt);
     await recordAudit(context.env, context.get("identity"), "engine_snapshot_shard.build", "capture_batch", context.req.param("batchId"), "accepted", {
       mode: requested, idempotent: result.idempotent, contentHash: result.shard.content_hash, byteLength: result.shard.byte_length,
     });
@@ -3462,16 +3572,25 @@ app.post("/internal/capture-batches/:id/seal", zValidator("json", captureBatchSe
 app.get("/internal/capture-batches/promoted", async (context) => {
   const identity = context.get("identity");
   if (identity.role !== "engine" && identity.role !== "operator") return jsonError("mutation role is not authorized to list promoted batches", 403);
+  const observedAt = new Date().toISOString();
   const batches = await context.env.DB.prepare(
     `WITH ranked AS (
        SELECT id, source_id, coverage_mode, captured_to,
               ROW_NUMBER() OVER (PARTITION BY source_id ORDER BY captured_to DESC, promoted_at DESC, id DESC) AS ordinal
-         FROM capture_batches WHERE status = 'promoted'
+         FROM capture_batches
+        WHERE status IN ('promoted','superseded')
+          AND (valid_from IS NULL OR valid_from <= ?1)
+          AND (valid_to IS NULL OR valid_to > ?1)
      )
-     SELECT id, source_id, coverage_mode, captured_to
+     SELECT ranked.id, ranked.source_id, ranked.coverage_mode, ranked.captured_to,
+            EXISTS (
+              SELECT 1 FROM match_runs run
+              JOIN configuration_versions configuration ON configuration.id = run.configuration_id
+             WHERE run.batch_id = ranked.id AND run.status = 'passed' AND configuration.active = 1
+            ) AS has_active_match
        FROM ranked WHERE ordinal = 1
       ORDER BY source_id`,
-  ).all();
+  ).bind(observedAt).all();
   return context.json({ ok: true, batches: batches.results });
 });
 
@@ -4526,8 +4645,10 @@ app.get("/internal/releases/:id", async (context) => {
 app.get("/internal/engine/snapshot-identity", async (context) => {
   const requested = context.req.query("mode") ?? "direct";
   if (!(["legacy", "direct", "all"] as const).includes(requested as EngineSourceMode)) return jsonError("engine mode must be legacy, direct, or all", 422);
+  const observedAt = context.req.query("observedAt");
+  if (observedAt && !Number.isFinite(Date.parse(observedAt))) return jsonError("engine snapshot observedAt must be an ISO timestamp", 422);
   try {
-    return context.json({ ok: true, ...await readEngineSnapshotIdentity(context.env, requested as EngineSourceMode) });
+    return context.json({ ok: true, ...await readEngineSnapshotIdentity(context.env, requested as EngineSourceMode, observedAt) });
   } catch (error) {
     return jsonError(error instanceof Error ? error.message : "engine snapshot identity failed", 422);
   }

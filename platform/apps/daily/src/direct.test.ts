@@ -222,6 +222,23 @@ describe("direct regular capture", () => {
     ]);
   });
 
+  it("binds promotional prices to the detected ad window and emits an immutable everyday fallback", async () => {
+    const artifact = await buildRegularCapture("bakers", {
+      mode_verified: true,
+      ad_from: "2026-08-12",
+      ad_to: "2026-08-18",
+      deals: [{ item: "Large Eggs", current_price: 1.99, base_price: 2.99, size: "dozen", as_of: "2026-08-12", product_id: "eggs-1" }],
+    });
+    expect(artifact.observations).toHaveLength(2);
+    const sale = artifact.observations.find((observation) => observation.kind === "sale")!;
+    const fallback = artifact.observations.find((observation) => observation.kind === "everyday")!;
+    expect(sale).toMatchObject({ purchasePriceMinor: 199, regularPriceMinor: 299, validFrom: "2026-08-12T05:00:00.000Z", validTo: "2026-08-19T05:00:00.000Z" });
+    expect(sale.priceSemantics).toMatchObject({ offerType: "sale", validFrom: sale.validFrom, validTo: sale.validTo });
+    expect(fallback).toMatchObject({ externalProductKey: "eggs-1", purchasePriceMinor: 299, loyaltyRequired: false, membershipRequired: false });
+    expect(fallback.validFrom).toBeUndefined();
+    expect(fallback.validTo).toBeUndefined();
+  });
+
   it("downgrades a claimed full capture when any term was blocked", async () => {
     const artifact = await buildRegularCapture("bakers", {
       coverage_mode: "full",
