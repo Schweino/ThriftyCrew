@@ -206,7 +206,7 @@ export async function buildEngineSnapshotShard(env: WorkerEnv, batchId: string, 
   const existing = await env.DB.prepare(
     `SELECT batch_id, configuration_id, match_run_id, match_input_hash, content_hash, object_key,
             matched_candidates, unmatched_candidates, byte_length, schema_version, status
-       FROM engine_snapshot_shards WHERE batch_id = ?1 AND configuration_id = ?2 AND match_run_id = ?3`,
+       FROM engine_snapshot_shards_v2 WHERE batch_id = ?1 AND configuration_id = ?2 AND match_run_id = ?3`,
   ).bind(batch.id, context.configurationId, batch.match_run_id).first<EngineSnapshotShardRow>();
   if (existing && await verifiedShardObject(env, existing)) return { ok: true, idempotent: true, shard: existing };
 
@@ -239,7 +239,7 @@ export async function buildEngineSnapshotShard(env: WorkerEnv, batchId: string, 
   }
   const shardId = await deterministicId("engine-snapshot-shard", batch.id, context.configurationId, batch.match_run_id);
   await env.DB.prepare(
-    `INSERT INTO engine_snapshot_shards
+    `INSERT INTO engine_snapshot_shards_v2
        (id, batch_id, configuration_id, match_run_id, match_input_hash, content_hash, object_key,
         matched_candidates, unmatched_candidates, byte_length, schema_version, status, verified_at)
      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, 'verified', ?12)
@@ -288,7 +288,7 @@ export async function readEngineSnapshotManifest(env: WorkerEnv, mode: EngineSou
   const rows = clauses ? await env.DB.prepare(
     `SELECT batch_id, configuration_id, match_run_id, match_input_hash, content_hash, object_key,
             matched_candidates, unmatched_candidates, byte_length, schema_version, status
-       FROM engine_snapshot_shards WHERE ${clauses} ORDER BY batch_id`,
+       FROM engine_snapshot_shards_v2 WHERE ${clauses} ORDER BY batch_id`,
   ).bind(...bindings).all<EngineSnapshotShardRow>() : { results: [] as EngineSnapshotShardRow[] };
   const verification = await Promise.all(rows.results.map(async (row) => ({ row, verified: await verifiedShardObject(env, row) })));
   const verified = verification.filter((item) => item.verified).map((item) => item.row);
@@ -305,7 +305,7 @@ export async function readEngineSnapshotShard(env: WorkerEnv, batchId: string, c
   const row = await env.DB.prepare(
     `SELECT batch_id, configuration_id, match_run_id, match_input_hash, content_hash, object_key,
             matched_candidates, unmatched_candidates, byte_length, schema_version, status
-       FROM engine_snapshot_shards WHERE batch_id = ?1 AND configuration_id = ?2 AND match_run_id = ?3`,
+       FROM engine_snapshot_shards_v2 WHERE batch_id = ?1 AND configuration_id = ?2 AND match_run_id = ?3`,
   ).bind(batchId, configurationId, matchRunId).first<EngineSnapshotShardRow>();
   if (!row || row.status !== "verified") throw new Error("Engine snapshot shard is not available");
   const object = await env.ARCHIVE.get(row.object_key);

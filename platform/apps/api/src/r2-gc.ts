@@ -88,7 +88,25 @@ export async function collectReachableObjectKeys(env: Pick<WorkerEnv, "DB" | "AR
               SELECT batch.id, ROW_NUMBER() OVER (
                 PARTITION BY batch.source_id ORDER BY batch.captured_to DESC, batch.promoted_at DESC, batch.id DESC
               ) AS ordinal
-                FROM capture_batches batch WHERE batch.status = 'promoted'
+                FROM capture_batches batch
+               WHERE batch.status IN ('promoted','superseded')
+                 AND (batch.valid_from IS NULL OR batch.valid_from <= strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+                 AND (batch.valid_to IS NULL OR batch.valid_to > strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+            ) WHERE ordinal = 1
+          )
+       UNION SELECT shard.object_key
+         FROM engine_snapshot_shards_v2 shard
+        WHERE shard.status = 'verified'
+          AND shard.configuration_id = (SELECT id FROM configuration_versions WHERE active = 1)
+          AND shard.batch_id IN (
+            SELECT id FROM (
+              SELECT batch.id, ROW_NUMBER() OVER (
+                PARTITION BY batch.source_id ORDER BY batch.captured_to DESC, batch.promoted_at DESC, batch.id DESC
+              ) AS ordinal
+                FROM capture_batches batch
+               WHERE batch.status IN ('promoted','superseded')
+                 AND (batch.valid_from IS NULL OR batch.valid_from <= strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+                 AND (batch.valid_to IS NULL OR batch.valid_to > strftime('%Y-%m-%dT%H:%M:%fZ','now'))
             ) WHERE ordinal = 1
           )`,
     ).all<{ object_key: string }>(),
@@ -217,10 +235,16 @@ export async function sweepR2GarbageCollection(env: WorkerEnv, runId: string, ex
     ).bind(runId, outcomes.filter((item) => item.status === "deleted").length, deletedBytes, finishedAt, retained.length),
   ];
   for (const item of outcomes) {
-    if (item.bucket === "archive" && item.object_key.startsWith("engine-snapshots/")) statements.push(env.DB.prepare(
-      `UPDATE engine_snapshot_shards SET status = 'collected', collected_at = ?2
-        WHERE object_key = ?1 AND status = 'verified'`,
-    ).bind(item.object_key, finishedAt));
+    if (item.bucket === "archive" && item.object_key.startsWith("engine-snapshots/")) statements.push(
+      env.DB.prepare(
+        `UPDATE engine_snapshot_shards SET status = 'collected', collected_at = ?2
+          WHERE object_key = ?1 AND status = 'verified'`,
+      ).bind(item.object_key, finishedAt),
+      env.DB.prepare(
+        `UPDATE engine_snapshot_shards_v2 SET status = 'collected', collected_at = ?2
+          WHERE object_key = ?1 AND status = 'verified'`,
+      ).bind(item.object_key, finishedAt),
+    );
   }
   for (let offset = 0; offset < statements.length; offset += 80) await env.DB.batch(statements.slice(offset, offset + 80));
   return { ok: true, dryRun: false, runId, status: "completed", deleted: outcomes.filter((item) => item.status === "deleted").length,

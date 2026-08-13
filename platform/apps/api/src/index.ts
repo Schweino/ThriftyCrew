@@ -3638,15 +3638,26 @@ app.post("/internal/releases", zValidator("json", releaseCreateSchema), async (c
     "SELECT active FROM configuration_versions WHERE id = ?1",
   ).bind(requested.configurationId).first<{ active: number }>();
   if (!configuration || configuration.active !== 1) return jsonError("release configuration is not active", 422);
+  const snapshotObservedAtValue = requested.inputManifest.snapshotObservedAt;
+  const snapshotObservedAt = typeof snapshotObservedAtValue === "string" && Number.isFinite(Date.parse(snapshotObservedAtValue))
+    ? snapshotObservedAtValue
+    : new Date().toISOString();
   const batches = await Promise.all(requested.inputBatchIds.map((batchId) => context.env.DB.prepare(
-    `SELECT b.id, b.status, l.market_id
+    `SELECT b.id, b.status, b.valid_from, b.valid_to, l.market_id
        FROM capture_batches b
        JOIN capture_sources s ON s.id = b.source_id
        JOIN store_locations l ON l.id = s.store_location_id
       WHERE b.id = ?1`,
-  ).bind(batchId).first<{ id: string; status: string; market_id: string }>()));
-  const invalidBatches = requested.inputBatchIds.filter((batchId, index) => !batches[index] || batches[index]!.status !== "promoted" || batches[index]!.market_id !== requested.marketId);
-  if (invalidBatches.length > 0) return jsonError(`release snapshot includes missing, unpromoted, or wrong-market batches: ${invalidBatches.join(", ")}`, 422);
+  ).bind(batchId).first<{ id: string; status: string; valid_from: string | null; valid_to: string | null; market_id: string }>()));
+  const invalidBatches = requested.inputBatchIds.filter((_batchId, index) => {
+    const batch = batches[index];
+    return !batch
+      || !["promoted", "superseded"].includes(batch.status)
+      || batch.market_id !== requested.marketId
+      || (batch.valid_from !== null && batch.valid_from > snapshotObservedAt)
+      || (batch.valid_to !== null && batch.valid_to <= snapshotObservedAt);
+  });
+  if (invalidBatches.length > 0) return jsonError(`release snapshot includes missing, ineligible, or wrong-market batches at ${snapshotObservedAt}: ${invalidBatches.join(", ")}`, 422);
   const existing = await context.env.DB.prepare(
     "SELECT id, input_hash, state FROM releases WHERE id = ?1 OR (market_id = ?2 AND input_hash = ?3) LIMIT 1",
   ).bind(requested.id, requested.marketId, requested.inputHash).first<{ id: string; input_hash: string; state: string }>();
