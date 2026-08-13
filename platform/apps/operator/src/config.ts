@@ -71,7 +71,7 @@ export async function generateLegacyConfiguration(incomeRoot: string, checkOnly:
   const manifestBytes = new TextEncoder().encode(`${JSON.stringify(manifest, null, 2)}\n`);
   const manifestFile = path.join(configRoot, "manifest.json");
   const currentManifest = await readFile(manifestFile).catch(() => undefined);
-  const manifestChanged = !currentManifest || !manifestBytes.every((byte, index) => currentManifest[index] === byte) || currentManifest.length !== manifestBytes.length;
+  const manifestChanged = !currentManifest || canonicalJsonHash(currentManifest) !== canonicalJsonHash(manifestBytes);
   if (manifestChanged && !checkOnly) await atomicWrite(manifestFile, manifestBytes);
   if (checkOnly && (changed.length > 0 || manifestChanged)) {
     throw new Error(`generated configuration is stale: ${[...changed, ...(manifestChanged ? ["manifest.json"] : [])].join(", ")}`);
