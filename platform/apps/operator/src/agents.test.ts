@@ -7,7 +7,7 @@ import { checkAgentRegistry, executionConfigHash } from "./agents";
 describe("agent registry", () => {
   it("matches every deployed prompt hash and fixture", async () => {
     const platformRoot = path.resolve(import.meta.dirname, "../../..");
-    await expect(checkAgentRegistry(platformRoot)).resolves.toMatchObject({ ok: true, enabled: 10, pc: 10 });
+    await expect(checkAgentRegistry(platformRoot)).resolves.toMatchObject({ ok: true, enabled: 11, pc: 11 });
   });
 
   it("permits a registered PC judgment agent while preserving capability incompatibilities", () => {

@@ -2,6 +2,7 @@ import {
   accuracyVerdictsSchema,
   contentBatchAuditSchema,
   contentBatchItemsSchema,
+  ingredientPriceResearchSchema,
   pullRequestProposalSchema,
   recipeDedupSchema,
   recipeMapSchema,
@@ -11,7 +12,7 @@ import {
   type AgentWorkItemComplete,
   type AgentWorkItemFail,
 } from "@thriftycrew/contracts";
-import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
+import { deterministicId, digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 import type { MutationIdentity } from "./env";
 import { evaluateContentPromotion } from "./content-batches";
 import { mergeRecipeCommodityCatalog } from "./recipe-commodity-catalog";
@@ -234,18 +235,75 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
   }
   if (agentId === "recipe-sourcer") {
     const rows = await db.prepare(
-      `SELECT id, request_text, source_ref, requested_at
-         FROM recipe_suggestion_requests WHERE status = 'queued' ORDER BY requested_at, id LIMIT 10`,
+      `SELECT request.id, request.request_text, request.source_ref, request.requested_at,
+              discovery.target_missing_ingredients, discovery.unique_missing_ingredients,
+              discovery.source_round, discovery.state AS discovery_state
+         FROM recipe_suggestion_requests request
+         LEFT JOIN ingredient_discovery_batches discovery ON discovery.request_id = request.id
+        WHERE request.status = 'queued' ORDER BY request.requested_at, request.id LIMIT 10`,
     ).all<Record<string, unknown>>();
     const commodities = rows.results.length > 0 ? await currentCommodityCatalog(db) : [];
     const sourcingCommodities = commodities.map((commodity) => [commodity.id, commodity.label, commodity.category]
       .filter((value) => typeof value === "string" && value.length > 0).join(" | "));
+    const unavailable = rows.results.length > 0 ? await db.prepare(
+      `SELECT display_name, normalized_name FROM ingredient_gaps
+        WHERE status = 'permanently_unavailable' ORDER BY normalized_name`,
+    ).all<{ display_name: string; normalized_name: string }>() : { results: [] };
+    return Promise.all(rows.results.map(async (row) => {
+      const prior = row.target_missing_ingredients ? await db.prepare(
+        `SELECT DISTINCT occurrence.source_url, gap.normalized_name
+           FROM ingredient_gap_occurrences occurrence
+           JOIN ingredient_gaps gap ON gap.id = occurrence.gap_id
+          WHERE occurrence.request_id = ?1 ORDER BY occurrence.source_url, gap.normalized_name`,
+      ).bind(row.id).all<{ source_url: string; normalized_name: string }>() : { results: [] };
+      return {
+        sourceKind: "recipe-request" as const,
+        sourceRef: String(row.id),
+        stage: "source",
+        severity: "optional" as const,
+        input: {
+          contract: "recipe-source-request-v1",
+          request: row,
+          commodities: sourcingCommodities,
+          permanentlyUnavailable: unavailable.results,
+          discovery: row.target_missing_ingredients ? {
+            targetMissingIngredients: row.target_missing_ingredients,
+            uniqueMissingIngredients: row.unique_missing_ingredients,
+            sourceRound: row.source_round,
+            priorSourceUrls: [...new Set(prior.results.map((item) => item.source_url))],
+            previouslyFoundIngredients: [...new Set(prior.results.map((item) => item.normalized_name))],
+          } : null,
+        },
+      };
+    }));
+  }
+  if (agentId === "ingredient-price-researcher") {
+    const rows = await db.prepare(
+      `SELECT id, display_name, normalized_name, first_seen_at
+         FROM ingredient_gaps WHERE status = 'pending'
+        ORDER BY first_seen_at, id LIMIT 10`,
+    ).all<Record<string, unknown>>();
+    const categories = await db.prepare(
+      `SELECT category.id, category.label
+         FROM categories category
+         JOIN configuration_versions version ON version.id = category.configuration_id
+        WHERE version.active = 1 ORDER BY category.sort_order, category.id`,
+    ).all<Record<string, unknown>>();
+    const stores = [
+      { storeLocationId: "aldi-omaha-446-048", storeName: "Aldi", priceMode: "pickup" },
+      { storeLocationId: "bakers-saddle-creek", storeName: "Baker's", priceMode: "pickup" },
+      { storeLocationId: "family-fare-omaha-6401", storeName: "Family Fare", priceMode: "pickup" },
+      { storeLocationId: "fareway-omaha-043", storeName: "Fareway", priceMode: "pickup" },
+      { storeLocationId: "hy-vee-omaha-1465", storeName: "Hy-Vee", priceMode: "pickup" },
+      { storeLocationId: "sams-omaha", storeName: "Sam's Club", priceMode: "club" },
+      { storeLocationId: "walmart-omaha", storeName: "Walmart", priceMode: "pickup" },
+    ];
     return rows.results.map((row) => ({
       sourceKind: "recipe-request",
       sourceRef: String(row.id),
-      stage: "source",
-      severity: "optional",
-      input: { contract: "recipe-source-request-v1", request: row, commodities: sourcingCommodities },
+      stage: "ingredient-price",
+      severity: "operational",
+      input: { contract: "ingredient-price-request-v1", gap: row, marketId: "omaha", stores, categories: categories.results },
     }));
   }
   return [];
@@ -275,9 +333,86 @@ async function enqueue(db: D1Database, agent: RegistryRow, seed: WorkSeed, adapt
   return id;
 }
 
+async function reconcileIngredientHolds(db: D1Database): Promise<void> {
+  await db.prepare(
+    `UPDATE ingredient_gaps SET status = 'published', updated_at = CURRENT_TIMESTAMP
+      WHERE status = 'ready_to_publish' AND commodity_id IN (
+        SELECT commodity.id FROM commodities commodity
+        JOIN configuration_versions version ON version.id = commodity.configuration_id
+        WHERE version.active = 1 AND commodity.active = 1
+      )`,
+  ).run();
+  const holds = await db.prepare(
+    `SELECT id, request_id, mapper_work_item_id, candidate_id, candidate_json, gap_ids_json, discovery_only
+       FROM recipe_ingredient_holds WHERE status = 'paused' ORDER BY created_at, id`,
+  ).all<Record<string, unknown>>();
+  if (holds.results.length === 0) return;
+  const gapRows = await db.prepare("SELECT id, status FROM ingredient_gaps").all<{ id: string; status: string }>();
+  const statuses = new Map(gapRows.results.map((row) => [row.id, row.status]));
+  const mapper = await activeAgent(db, "recipe-mapper");
+  const commodities = await currentCommodityCatalog(db);
+  for (const hold of holds.results) {
+    const gapIds = JSON.parse(String(hold.gap_ids_json)) as string[];
+    const gapStatuses = gapIds.map((id) => statuses.get(id));
+    if (gapStatuses.some((status) => status === "permanently_unavailable")) {
+      await db.batch([
+        db.prepare("UPDATE recipe_ingredient_holds SET status = 'rejected', updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(hold.id),
+        db.prepare("UPDATE recipe_suggestion_requests SET status = 'rejected', updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status <> 'promoted'").bind(hold.request_id),
+      ]);
+      continue;
+    }
+    if (!gapStatuses.every((status) => status === "published")) continue;
+    if (Number(hold.discovery_only) === 1) {
+      await db.prepare("UPDATE recipe_ingredient_holds SET status = 'completed', updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(hold.id).run();
+      continue;
+    }
+    const candidate = JSON.parse(String(hold.candidate_json));
+    const dedup = {
+      requestId: String(hold.request_id),
+      accepted: [candidate],
+      decisions: [{
+        candidateId: String(hold.candidate_id), decision: "accepted", duplicateOf: null,
+        reason: "resumed after every missing Omaha commodity became active",
+        similarity: { protein: "unknown", flavor: "unknown", starch: "unknown", method: "unknown" },
+      }],
+    };
+    await enqueue(db, mapper, {
+      sourceKind: "recipe-request", sourceRef: String(hold.request_id), stage: "mapper-resume", severity: mapper.criticality,
+      input: {
+        contract: "recipe-dedup-v2", previousWorkItemId: hold.mapper_work_item_id,
+        output: dedup, nextAgentId: "recipe-mapper", nextPromptHash: mapper.prompt_sha256,
+        commodities,
+      },
+    }, "phase2-v1", "recipe-dedup-v2");
+    await db.batch([
+      db.prepare("UPDATE recipe_ingredient_holds SET status = 'resumed', updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(hold.id),
+      db.prepare("UPDATE recipe_suggestion_requests SET status = 'running', updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status <> 'promoted'").bind(hold.request_id),
+    ]);
+  }
+  const batches = await db.prepare(
+    `SELECT request_id FROM ingredient_discovery_batches WHERE state IN ('pricing', 'attention') ORDER BY request_id`,
+  ).all<{ request_id: string }>();
+  for (const batch of batches.results) {
+    const rows = await db.prepare(
+      `SELECT DISTINCT gap.status FROM ingredient_gap_occurrences occurrence
+       JOIN ingredient_gaps gap ON gap.id = occurrence.gap_id WHERE occurrence.request_id = ?1`,
+    ).bind(batch.request_id).all<{ status: string }>();
+    const states = rows.results.map((row) => row.status);
+    const hasAttention = states.includes("needs_operator");
+    const complete = states.length > 0 && states.every((status) => status === "published" || status === "permanently_unavailable");
+    await db.prepare(
+      "UPDATE ingredient_discovery_batches SET state = ?2, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1",
+    ).bind(batch.request_id, complete ? "completed" : hasAttention ? "attention" : "pricing").run();
+    if (complete) await db.prepare(
+      "UPDATE recipe_suggestion_requests SET status = 'reviewed', updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status <> 'promoted'",
+    ).bind(batch.request_id).run();
+  }
+}
+
 export async function claimAgentWorkItem(db: D1Database, identity: MutationIdentity, body: AgentWorkItemClaim): Promise<Record<string, unknown> | null> {
   if (identity.registeredAgentId !== body.agentId) throw new Error("an agent may only claim its own registered work");
   const agent = await activeAgent(db, body.agentId);
+  if (body.agentId === "recipe-mapper") await reconcileIngredientHolds(db);
   if (body.adapterVersion !== "phase2-v1") throw new Error("agent adapter version is not registered");
   const inputContracts = JSON.parse(agent.input_contracts_json) as string[];
   if (!inputContracts.includes(body.inputContract)) throw new Error("agent input contract is not registered");
@@ -322,6 +457,12 @@ export async function claimAgentWorkItem(db: D1Database, identity: MutationIdent
     await db.prepare(
       `UPDATE recipe_suggestion_requests SET status = 'running', work_item_id = ?2,
          updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status IN ('queued', 'running')`,
+    ).bind(claimed.source_ref, claimed.id).run();
+  }
+  if (claimed.agent_id === "ingredient-price-researcher") {
+    await db.prepare(
+      `UPDATE ingredient_gaps SET status = 'researching', research_work_item_id = ?2,
+         updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status IN ('pending', 'researching')`,
     ).bind(claimed.source_ref, claimed.id).run();
   }
   const inputHash = await digestHex(String(claimed.input_json));
@@ -374,6 +515,11 @@ export function validateAgentOutput(contract: string, value: unknown, sourceRef:
     if (map.requestId !== sourceRef) throw new Error("recipe map output belongs to a different request");
     return map;
   }
+  if (contract === "ingredient-price-research-v1") {
+    const research = ingredientPriceResearchSchema.parse(value);
+    if (research.gapId !== sourceRef) throw new Error("ingredient research belongs to a different gap");
+    return research;
+  }
   if (contract === "content-items-v2") return contentBatchItemsSchema.parse(value);
   if (contract === "content-audit-v1") return contentBatchAuditSchema.parse(value);
   throw new Error(`output contract ${contract} has no server validator`);
@@ -424,6 +570,107 @@ export function assertRecipeChainContinuity(agentId: string, inputValue: unknown
       if (!mapped || stableJson(mapped.mealComponents) !== stableJson(item.mealComponents)) {
         throw new Error(`recipe writer must preserve meal components for ${item.sourceCandidateId}`);
       }
+    }
+  }
+}
+
+async function persistRecipeIngredientGaps(db: D1Database, completed: Record<string, unknown>, outputValue: unknown): Promise<{ gapCount: number; discovery: boolean; collecting: boolean }> {
+  const map = recipeMapSchema.parse(outputValue);
+  const discovery = await db.prepare(
+    "SELECT target_missing_ingredients FROM ingredient_discovery_batches WHERE request_id = ?1",
+  ).bind(completed.source_ref).first<{ target_missing_ingredients: number }>();
+  const gapIdsByName = new Map<string, string>();
+  for (const recipe of map.recipes) {
+    for (const ingredient of recipe.ingredients.filter((item) => item.decision === "unmapped")) {
+      const normalized = normalizeName(ingredient.sourceName);
+      if (normalized && !gapIdsByName.has(normalized)) gapIdsByName.set(normalized, await deterministicId("ingredient-gap", normalized));
+    }
+  }
+  if (gapIdsByName.size === 0) {
+    if (!discovery) return { gapCount: 0, discovery: false, collecting: false };
+    const count = await db.prepare(
+      "SELECT COUNT(DISTINCT gap_id) AS count FROM ingredient_gap_occurrences WHERE request_id = ?1",
+    ).bind(completed.source_ref).first<{ count: number }>();
+    const uniqueCount = Number(count?.count ?? 0);
+    const collecting = uniqueCount < Number(discovery.target_missing_ingredients);
+    await db.batch([
+      db.prepare(
+        `UPDATE ingredient_discovery_batches SET source_round = source_round + 1,
+           state = ?2, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1`,
+      ).bind(completed.source_ref, collecting ? "collecting" : "pricing"),
+      db.prepare("UPDATE recipe_suggestion_requests SET status = ?2, updated_at = CURRENT_TIMESTAMP WHERE id = ?1")
+        .bind(completed.source_ref, collecting ? "queued" : "running"),
+    ]);
+    return { gapCount: 0, discovery: true, collecting };
+  }
+  const statements: D1PreparedStatement[] = [];
+  for (const recipe of map.recipes) {
+    const recipeGapIds: string[] = [];
+    for (const ingredient of recipe.ingredients.filter((item) => item.decision === "unmapped")) {
+      const normalized = normalizeName(ingredient.sourceName);
+      const gapId = gapIdsByName.get(normalized);
+      if (!gapId) continue;
+      recipeGapIds.push(gapId);
+      statements.push(db.prepare(
+        `INSERT INTO ingredient_gaps (id, normalized_name, display_name)
+         VALUES (?1, ?2, ?3) ON CONFLICT(normalized_name) DO NOTHING`,
+      ).bind(gapId, normalized, ingredient.sourceName));
+      statements.push(db.prepare(
+        `INSERT INTO ingredient_gap_occurrences (gap_id, request_id, candidate_id, source_line, source_url)
+         VALUES (?1, ?2, ?3, ?4, ?5) ON CONFLICT DO NOTHING`,
+      ).bind(gapId, completed.source_ref, recipe.candidate.id, ingredient.sourceLine, recipe.candidate.sourceUrl));
+    }
+    const uniqueGapIds = [...new Set(recipeGapIds)].sort();
+    if (uniqueGapIds.length > 0) {
+      const holdId = await deterministicId("recipe-hold", String(completed.source_ref), String(completed.id), recipe.candidate.id);
+      statements.push(db.prepare(
+        `INSERT INTO recipe_ingredient_holds
+           (id, request_id, mapper_work_item_id, candidate_id, candidate_json, gap_ids_json, discovery_only)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7) ON CONFLICT(request_id, mapper_work_item_id, candidate_id) DO NOTHING`,
+      ).bind(holdId, completed.source_ref, completed.id, recipe.candidate.id, stableJson(recipe.candidate), stableJson(uniqueGapIds), discovery ? 1 : 0));
+    }
+  }
+  for (let offset = 0; offset < statements.length; offset += 90) await db.batch(statements.slice(offset, offset + 90));
+  if (!discovery) return { gapCount: gapIdsByName.size, discovery: false, collecting: false };
+  const count = await db.prepare(
+    "SELECT COUNT(DISTINCT gap_id) AS count FROM ingredient_gap_occurrences WHERE request_id = ?1",
+  ).bind(completed.source_ref).first<{ count: number }>();
+  const uniqueCount = Number(count?.count ?? 0);
+  const collecting = uniqueCount < Number(discovery.target_missing_ingredients);
+  await db.batch([
+    db.prepare(
+      `UPDATE ingredient_discovery_batches
+          SET unique_missing_ingredients = ?2, source_round = source_round + 1,
+              state = ?3, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1`,
+    ).bind(completed.source_ref, uniqueCount, collecting ? "collecting" : "pricing"),
+    db.prepare(
+      `UPDATE recipe_suggestion_requests SET status = ?2, updated_at = CURRENT_TIMESTAMP WHERE id = ?1`,
+    ).bind(completed.source_ref, collecting ? "queued" : "running"),
+  ]);
+  return { gapCount: gapIdsByName.size, discovery: true, collecting };
+}
+
+async function persistIngredientResearch(db: D1Database, outputValue: unknown): Promise<void> {
+  const research = ingredientPriceResearchSchema.parse(outputValue);
+  const status = research.disposition === "available"
+    ? "ready_to_publish"
+    : research.disposition === "permanently_unavailable" ? "permanently_unavailable" : "needs_operator";
+  await db.prepare(
+    `UPDATE ingredient_gaps SET status = ?2, commodity_id = ?3, research_json = ?4,
+       updated_at = CURRENT_TIMESTAMP WHERE id = ?1`,
+  ).bind(research.gapId, status, research.commodityProposal?.id ?? null, stableJson(research)).run();
+  const requests = await db.prepare(
+    `SELECT DISTINCT occurrence.request_id FROM ingredient_gap_occurrences occurrence WHERE occurrence.gap_id = ?1`,
+  ).bind(research.gapId).all<{ request_id: string }>();
+  for (const request of requests.results) {
+    const discovery = await db.prepare(
+      "SELECT request_id FROM ingredient_discovery_batches WHERE request_id = ?1",
+    ).bind(request.request_id).first();
+    if (research.disposition === "permanently_unavailable" && !discovery) {
+      await db.prepare("UPDATE recipe_suggestion_requests SET status = 'rejected', updated_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status <> 'promoted'").bind(request.request_id).run();
+    }
+    if (research.disposition === "needs_operator" && discovery) {
+      await db.prepare("UPDATE ingredient_discovery_batches SET state = 'attention', updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1").bind(request.request_id).run();
     }
   }
 }
@@ -529,13 +776,31 @@ export async function completeAgentWorkItem(db: D1Database, identity: MutationId
     }
   }
   let recipeTerminal: { status: "rejected"; reason: string } | undefined;
-  if (current.agent_id === "recipe-auditor") contentBatch = await stageAuditedRecipeBatch(db, current, output);
+  if (current.agent_id === "ingredient-price-researcher") {
+    await persistIngredientResearch(db, output);
+  } else if (current.agent_id === "recipe-auditor") contentBatch = await stageAuditedRecipeBatch(db, current, output);
   else if (String(current.agent_id).startsWith("recipe-")) {
-    const reason = recipeTerminalReason(String(current.agent_id), output);
+    const gapResult = current.agent_id === "recipe-mapper"
+      ? await persistRecipeIngredientGaps(db, current, output)
+      : { gapCount: 0, discovery: false, collecting: false };
+    const reason = gapResult.gapCount > 0 ? undefined : recipeTerminalReason(String(current.agent_id), output);
     if (reason) {
-      await db.prepare("UPDATE recipe_suggestion_requests SET status = 'rejected', updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(current.source_ref).run();
-      recipeTerminal = { status: "rejected", reason };
-    } else nextAgentId = await enqueueRecipeNext(db, current, output);
+      const discovery = await db.prepare(
+        "SELECT request_id FROM ingredient_discovery_batches WHERE request_id = ?1 AND state = 'collecting'",
+      ).bind(current.source_ref).first();
+      if (discovery && (current.agent_id === "recipe-sourcer" || current.agent_id === "recipe-deduper")) {
+        await db.batch([
+          db.prepare("UPDATE ingredient_discovery_batches SET source_round = source_round + 1, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1").bind(current.source_ref),
+          db.prepare("UPDATE recipe_suggestion_requests SET status = 'queued', updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(current.source_ref),
+        ]);
+      } else {
+        await db.prepare("UPDATE recipe_suggestion_requests SET status = 'rejected', updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(current.source_ref).run();
+        recipeTerminal = { status: "rejected", reason };
+      }
+    } else if (!gapResult.discovery) {
+      const hasReadyRecipe = current.agent_id !== "recipe-mapper" || recipeMapSchema.parse(output).recipes.some((recipe) => recipe.readyForWriting);
+      if (hasReadyRecipe) nextAgentId = await enqueueRecipeNext(db, current, output);
+    }
   }
   return { idempotent: false, workItemId, state: "completed", outputHash, nextAgentId: nextAgentId ?? null, contentBatch: contentBatch ?? null, recipeTerminal: recipeTerminal ?? null };
 }

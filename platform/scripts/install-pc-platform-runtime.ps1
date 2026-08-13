@@ -138,7 +138,7 @@ Register-PcTask 'ThriftyCrew V3 Triage Agents' $agentLauncher '-Cycle Triage -Ma
 Register-PcTask 'ThriftyCrew V3 Post Publish Review' $agentLauncher '-Cycle PostPublish -MaxItems 1' (New-ScheduledTaskTrigger -Daily -At '12:47 PM') 90 'Daily local post-publish review.'
 Register-PcTask 'ThriftyCrew V3 Source Sentinel' $agentLauncher '-Cycle SourceSentinel -MaxItems 1' (New-ScheduledTaskTrigger -Daily -At '2:47 PM') 120 'Daily local source-contract sentinel.'
 Register-PcTask 'ThriftyCrew V3 Ghost Reconcile' $platformLauncher '-Job ghost-rotation-reconcile' (New-ScheduledTaskTrigger -Daily -At '4:07 PM') 30 'Daily Ghost intent-versus-truth reconciliation.'
-Register-PcTask 'ThriftyCrew V3 Recipe Pack' $agentLauncher '-Cycle Recipe -MaxItems 1' (New-ScheduledTaskTrigger -Weekly -DaysOfWeek Tuesday -At '10:27 AM') 240 'Weekly bounded local immutable recipe agent chain.'
+Register-PcTask 'ThriftyCrew V3 Recipe Pack' $agentLauncher '-Cycle Recipe -MaxItems 50' (New-ScheduledTaskTrigger -Weekly -DaysOfWeek Tuesday -At '10:27 AM') 720 'Weekly resumable recipe and 50-gap Omaha ingredient coverage chain using ChatGPT-included Codex limits only.'
 Register-PcTask 'ThriftyCrew V3 Restore Drill' $platformLauncher '-Job restore-drill-quarterly' (New-ScheduledTaskTrigger -Daily -At '5:23 AM') 30 'Daily guarded trigger; executes only on the first day of each quarter.'
 
 & (Join-Path $PSScriptRoot 'install-pc-capture-controller.ps1') | Out-Null

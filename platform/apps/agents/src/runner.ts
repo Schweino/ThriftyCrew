@@ -8,6 +8,7 @@ import {
   agentRegistrySchema,
   contentBatchAuditSchema,
   contentBatchItemsSchema,
+  ingredientPriceResearchSchema,
   pullRequestProposalSchema,
   recipeDedupSchema,
   recipeMapSchema,
@@ -84,6 +85,7 @@ const outputSchemas = {
   "recipe-map-v2": recipeMapSchema,
   "content-items-v2": contentBatchItemsSchema,
   "content-audit-v1": contentBatchAuditSchema,
+  "ingredient-price-research-v1": ingredientPriceResearchSchema,
 } as const;
 const outputType = outputSchemas[definition.outputContract as keyof typeof outputSchemas];
 if (!outputType) throw new Error(`output contract ${definition.outputContract} has no structured runner schema`);
@@ -117,7 +119,7 @@ if (definition.provider === "codex-chatgpt") {
     modelSettings: { reasoning: { effort: definition.reasoningEffort }, text: { verbosity: "low" } },
     tools: definition.capabilities.includes("search:web")
       ? [webSearchTool({
-          searchContextSize: requestedAgent === "recipe-sourcer" ? "medium" : "low",
+          searchContextSize: requestedAgent === "recipe-sourcer" || requestedAgent === "ingredient-price-researcher" ? "medium" : "low",
           externalWebAccess: true,
           userLocation: { type: "approximate", city: "Omaha", region: "Nebraska", country: "US", timezone: "America/Chicago" },
         })]

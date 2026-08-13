@@ -118,13 +118,14 @@
       "expect": { "decision": "candidates", "mustMention": ["1.25 pounds", "2 servings"] }
     },
     {
-      "id": "reject-commodity-incompatible-source",
+      "id": "preserve-commodity-gap-for-mapper",
       "input": {
         "id": "recipe_eval_catalog_gate",
         "request": "Find a scalable chicken dinner.",
         "commodities": [
           { "id": "chicken-breast", "label": "Chicken breast", "basis_unit": "lb", "category": "Meat" },
-          { "id": "olive-oil", "label": "Olive oil", "basis_unit": "fl_oz", "category": "Pantry" }
+          { "id": "olive-oil", "label": "Olive oil", "basis_unit": "fl_oz", "category": "Pantry" },
+          { "id": "broccoli", "label": "Broccoli", "basis_unit": "lb", "category": "Produce" }
         ],
         "sourceEvidence": {
           "url": "https://example.test/chicken",
@@ -133,17 +134,32 @@
           "yield": "4 servings",
           "cuisine": "American",
           "proteinClass": "chicken",
-          "method": "Roast the seasoned chicken.",
+          "method": "Roast the seasoned chicken and broccoli and serve them together as a complete meal.",
           "nutrition": { "calories": 550, "proteinGrams": 48, "carbohydrateGrams": 9 },
           "completeIngredientList": true,
           "ingredients": [
             "2 pounds chicken breast",
             "2 tablespoons olive oil",
-            "1 tablespoon proprietary barbecue seasoning"
+            "1 tablespoon proprietary barbecue seasoning",
+            "1 pound broccoli florets"
           ]
         }
       },
-      "expect": { "decision": "refuse", "mustMention": ["catalog"] }
+      "expect": { "decision": "candidates", "mustMention": ["proprietary barbecue seasoning"] }
+    },
+    {
+      "id": "reject-permanently-unavailable-ingredient",
+      "input": {
+        "id": "recipe_eval_permanent_gap",
+        "request": "Find a scalable dinner.",
+        "permanentlyUnavailable": ["unobtainium spice"],
+        "sourceEvidence": {
+          "url": "https://example.test/unobtainium-stew",
+          "yield": "4 servings",
+          "ingredients": ["1 pound chicken", "1 tablespoon unobtainium spice", "1 pound broccoli"]
+        }
+      },
+      "expect": { "decision": "refuse", "mustMention": ["permanently unavailable"] }
     },
     {
       "id": "allow-disclosed-finishing-pepper-omission",

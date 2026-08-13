@@ -146,7 +146,7 @@
       "plane": "pc",
       "scheduleId": "recipe-pack-weekly",
       "promptFile": "agents/recipe-sourcer/prompt.md",
-      "promptSha256": "1726a109dfc89c5988b07b871be0246e9b2620a2aecea569c0d6cd4d0a97e4f7",
+      "promptSha256": "f332e602bf68df82de9eb262daafa0f64ee7d7ac3f96c1c468144e65c5dccb3b",
       "provider": "codex-chatgpt",
       "model": "gpt-5.6-terra",
       "reasoningEffort": "medium",
@@ -155,7 +155,7 @@
       "criticality": "optional",
       "workflowFile": ".github/workflows/agent-recipe-sourcer.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "8eb89228da7e6ef492234cd4d7f7750523cc22e71d09926c0b8f03f305ea6681",
+      "executionConfigHash": "48547d948d0b703b811a8a8d657ff2d69fdbaf38034912c79f2fb912b31c09cd",
       "capabilities": [
         "read:content",
         "search:web",
@@ -196,6 +196,35 @@
       "outputContract": "recipe-dedup-v2",
       "fixtureFiles": [
         "agents/evals/recipe-deduper.json"
+      ]
+    },
+    {
+      "id": "ingredient-price-researcher",
+      "enabled": true,
+      "plane": "pc",
+      "promptFile": "agents/ingredient-price-researcher/prompt.md",
+      "promptSha256": "4d4385728211ce80a4abc5f232a267a2da7e68f0c34a04ff91d1cbb3617faeb1",
+      "provider": "codex-chatgpt",
+      "model": "gpt-5.6-sol",
+      "reasoningEffort": "high",
+      "monthlyBudgetMicrousd": 10000000,
+      "reserveBudgetPercent": 20,
+      "criticality": "operational",
+      "workflowFile": ".github/workflows/agent-ingredient-price-researcher.yml",
+      "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
+      "executionConfigHash": "454fd7dcff1357e50d49163dcd26665c17cc80cbd2027ddca23b24d54e2f2c8d",
+      "capabilities": [
+        "read:content",
+        "read:evidence",
+        "search:web",
+        "write:ledger"
+      ],
+      "inputContracts": [
+        "ingredient-price-request-v1"
+      ],
+      "outputContract": "ingredient-price-research-v1",
+      "fixtureFiles": [
+        "agents/evals/ingredient-price-researcher.json"
       ]
     },
     {

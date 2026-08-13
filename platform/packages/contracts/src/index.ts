@@ -1203,6 +1203,96 @@ export const recipeMapSchema = z.object({
   }
 });
 
+export const OMAHA_GROCERY_STORE_LOCATION_IDS = [
+  "aldi-omaha-446-048",
+  "bakers-saddle-creek",
+  "family-fare-omaha-6401",
+  "fareway-omaha-043",
+  "hy-vee-omaha-1465",
+  "sams-omaha",
+  "walmart-omaha",
+] as const;
+
+const ingredientStorePriceSchema = z.object({
+  storeLocationId: z.enum(OMAHA_GROCERY_STORE_LOCATION_IDS),
+  outcome: z.enum(["priced", "not_found", "blocked", "ambiguous"]),
+  checkedAt: isoDateTime,
+  queryTerms: z.array(z.string().trim().min(2).max(160)).min(1).max(10),
+  searchComplete: z.boolean(),
+  qualifyingProductsExamined: z.number().int().nonnegative().max(10_000),
+  locationVerified: z.boolean(),
+  priceModeVerified: z.boolean(),
+  sourceUrl: recipeHttpUrl.nullable(),
+  evidenceSummary: z.string().trim().min(10).max(3000),
+  productName: z.string().trim().min(1).max(500).nullable(),
+  sellerName: z.string().trim().min(1).max(300).nullable(),
+  fulfillmentMode: z.enum(["pickup", "in_store", "club"]).nullable(),
+  availabilityText: z.string().trim().min(1).max(500).nullable(),
+  packageText: z.string().trim().min(1).max(500).nullable(),
+  packagePriceMinor: z.number().int().positive().nullable(),
+  normalizedBasisUnit: basisUnit.nullable(),
+  normalizedBasisQtyMicros: z.number().int().positive().nullable(),
+  perUnitMicros: z.number().int().positive().nullable(),
+  offerKind: observationKind.nullable(),
+  validFrom: isoDateTime.nullable(),
+  validTo: isoDateTime.nullable(),
+  loyaltyRequired: z.boolean(),
+  membershipRequired: z.boolean(),
+}).strict().superRefine((value, context) => {
+  const pricedFacts = [value.sourceUrl, value.productName, value.sellerName, value.fulfillmentMode, value.availabilityText, value.packageText, value.packagePriceMinor,
+    value.normalizedBasisUnit, value.normalizedBasisQtyMicros, value.perUnitMicros, value.offerKind];
+  if (value.outcome === "priced") {
+    if (pricedFacts.some((fact) => fact === null)) context.addIssue({ code: "custom", message: "priced store checks require complete product, package, price, basis, offer, and source evidence" });
+    if (!value.searchComplete || value.qualifyingProductsExamined < 1 || !value.locationVerified || !value.priceModeVerified) {
+      context.addIssue({ code: "custom", message: "priced store checks require a complete location-bound comparison of qualifying products" });
+    }
+    if (value.packagePriceMinor !== null && value.normalizedBasisQtyMicros !== null && value.perUnitMicros !== null) {
+      const expected = Math.round((value.packagePriceMinor * 10_000 * 1_000_000) / value.normalizedBasisQtyMicros);
+      if (Math.abs(expected - value.perUnitMicros) > 2) context.addIssue({ code: "custom", path: ["perUnitMicros"], message: `normalized unit price must equal ${expected}` });
+    }
+    if ((value.offerKind === "sale" || value.offerKind === "markdown") && (!value.validFrom || !value.validTo || value.validTo <= value.validFrom)) {
+      context.addIssue({ code: "custom", path: ["validFrom"], message: "sale and markdown evidence requires a valid ad date window" });
+    }
+  } else if (pricedFacts.slice(1).some((fact) => fact !== null) || value.validFrom !== null || value.validTo !== null) {
+    context.addIssue({ code: "custom", message: "non-priced store checks cannot carry product or price facts" });
+  }
+  if (value.outcome === "not_found" && (!value.searchComplete || value.qualifyingProductsExamined !== 0 || !value.locationVerified || !value.priceModeVerified)) {
+    context.addIssue({ code: "custom", message: "not_found requires a completed location-bound search with zero qualifying products" });
+  }
+  if (value.outcome === "blocked" && value.searchComplete) context.addIssue({ code: "custom", message: "a blocked store check cannot claim complete search coverage" });
+  if (value.outcome !== "blocked" && value.sourceUrl === null) context.addIssue({ code: "custom", path: ["sourceUrl"], message: "completed store checks require a first-party evidence URL" });
+});
+
+const ingredientCommodityProposalSchema = z.object({
+  id: z.string().regex(/^[a-z0-9][a-z0-9-]{1,79}$/),
+  label: z.string().trim().min(2).max(120),
+  categoryId: z.string().regex(/^[a-z0-9][a-z0-9-]{1,79}$/),
+  unit: basisUnit,
+  include: z.array(z.string().trim().min(2).max(500)).min(1).max(20),
+  exclude: z.array(z.string().trim().min(2).max(500)).max(40),
+  searchTerms: z.array(z.string().trim().min(2).max(160)).min(1).max(10),
+}).strict();
+
+export const ingredientPriceResearchSchema = z.object({
+  gapId: nonEmptyId,
+  ingredientName: z.string().trim().min(2).max(300),
+  marketId: z.literal("omaha"),
+  researchedAt: isoDateTime,
+  disposition: z.enum(["available", "permanently_unavailable", "needs_operator"]),
+  stores: z.array(ingredientStorePriceSchema).length(OMAHA_GROCERY_STORE_LOCATION_IDS.length),
+  commodityProposal: ingredientCommodityProposalSchema.nullable(),
+  summary: z.string().trim().min(20).max(5000),
+}).strict().superRefine((value, context) => {
+  const expected = [...OMAHA_GROCERY_STORE_LOCATION_IDS].sort();
+  const actual = value.stores.map((store) => store.storeLocationId).sort();
+  if (JSON.stringify(expected) !== JSON.stringify(actual)) context.addIssue({ code: "custom", path: ["stores"], message: "research must contain exactly one check for each registered Omaha store" });
+  const priced = value.stores.filter((store) => store.outcome === "priced").length;
+  const allNotFound = value.stores.every((store) => store.outcome === "not_found");
+  const expectedDisposition = priced > 0 ? "available" : allNotFound ? "permanently_unavailable" : "needs_operator";
+  if (value.disposition !== expectedDisposition) context.addIssue({ code: "custom", path: ["disposition"], message: `store outcomes require disposition ${expectedDisposition}` });
+  if ((value.disposition === "available") !== (value.commodityProposal !== null)) context.addIssue({ code: "custom", path: ["commodityProposal"], message: "only available ingredients require a commodity proposal" });
+});
+
 export const sourceSentinelResultSchema = z.object({
   sourceId: nonEmptyId,
   contractVersion: z.number().int().positive(),
@@ -1261,6 +1351,8 @@ export const recipeSuggestionRequestSchema = z.object({
   request: z.string().trim().min(10).max(10_000),
   requestedAt: isoDateTime,
   sourceRef: z.string().min(1).max(1000),
+  mode: z.enum(["recipe", "missing-ingredients"]).default("recipe"),
+  targetMissingIngredients: z.number().int().min(1).max(50).default(50),
 });
 
 export const recipeWaveSnapshotSchema = z.object({

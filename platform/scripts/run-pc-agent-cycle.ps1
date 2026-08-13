@@ -2,7 +2,7 @@ param(
   [Parameter(Mandatory=$true)]
   [ValidateSet('Triage','PostPublish','SourceSentinel','Recipe','Accuracy')]
   [string]$Cycle,
-  [ValidateRange(1,10)][int]$MaxItems = 1,
+  [ValidateRange(1,50)][int]$MaxItems = 1,
   [string]$OnlyAgent,
   [switch]$SelfTest
 )
@@ -21,7 +21,7 @@ $cycleAgents = @{
   Triage = @('triage-reviewer','triage-developer')
   PostPublish = @('post-publish-reviewer')
   SourceSentinel = @('source-sentinel-investigator')
-  Recipe = @('recipe-sourcer','recipe-deduper','recipe-mapper','recipe-writer','recipe-auditor')
+  Recipe = @('recipe-sourcer','recipe-deduper','recipe-mapper','ingredient-price-researcher','recipe-mapper','recipe-writer','recipe-auditor')
   Accuracy = @('accuracy-headless')
 }
 $jobByCycle = @{
@@ -32,6 +32,8 @@ $jobByCycle = @{
   Accuracy = 'accuracy-verdict'
 }
 $agentsForCycle = @($cycleAgents[$Cycle])
+$script:ingredientProposalFiles = [Collections.Generic.List[string]]::new()
+$script:ingredientConfigurationChanged = $false
 if ($OnlyAgent) {
   if ($OnlyAgent -notin $agentsForCycle) {
     throw "Agent '$OnlyAgent' is not registered for the $Cycle cycle"
@@ -141,6 +143,51 @@ function Publish-AgentProposal([string]$AgentId, [string]$WorkItemId, [string]$R
   return [string]$pr.html_url
 }
 
+function Apply-PendingIngredientProposals {
+  if ($script:ingredientProposalFiles.Count -eq 0) { return }
+  $available = @($script:ingredientProposalFiles | Where-Object {
+    $runner = Read-PcUtf8Json $_
+    [string]$runner.finalOutput.disposition -eq 'available'
+  })
+  if ($available.Count -eq 0) { $script:ingredientProposalFiles.Clear(); return }
+  $branch = @(git -C $incomeRoot branch --show-current)
+  if ($LASTEXITCODE -ne 0 -or [string]$branch[0] -ne 'main') { throw 'automatic ingredient publication requires the checked-out main branch' }
+  $scopedPaths = @(
+    'platform/config/commodities.json', 'platform/config/categories.json',
+    'grocery/commodity-search.json', 'grocery/commodities.json', 'grocery/categories.json',
+    'platform/config/manifest.json'
+  )
+  $dirty = @(git -C $incomeRoot status --porcelain -- $scopedPaths)
+  if ($LASTEXITCODE -ne 0) { throw 'could not inspect ingredient configuration paths' }
+  if ($dirty.Count -gt 0) { throw "ingredient configuration paths already contain uncommitted work: $($dirty -join '; ')" }
+  $committed = $false
+  try {
+    foreach ($file in $available) {
+      Invoke-LoggedCommand 'ingredient-config-apply' { & $pnpmPath tc ingredient apply $file } | Out-Null
+    }
+    Invoke-LoggedCommand 'ingredient-config-full-check' { & $pnpmPath check } | Out-Null
+    git -C $incomeRoot add -- $scopedPaths
+    if ($LASTEXITCODE -ne 0) { throw 'could not stage verified ingredient configuration' }
+    git -C $incomeRoot diff --cached --quiet
+    if ($LASTEXITCODE -eq 0) { throw 'available ingredient research produced no configuration change' }
+    $ids = @($available | ForEach-Object { [string](Read-PcUtf8Json $_).finalOutput.gapId })
+    git -C $incomeRoot commit -m ("Add verified Omaha ingredient coverage ({0})" -f ($ids -join ', '))
+    if ($LASTEXITCODE -ne 0) { throw 'could not commit verified ingredient configuration' }
+    $committed = $true
+    git -C $incomeRoot push origin HEAD:main
+    if ($LASTEXITCODE -ne 0) { throw 'could not push verified ingredient configuration to main' }
+    Invoke-LoggedCommand 'ingredient-config-deploy' { & $pnpmPath tc config deploy } | Out-Null
+    $script:ingredientConfigurationChanged = $true
+  } catch {
+    if (-not $committed) {
+      git -C $incomeRoot restore --staged --worktree -- $scopedPaths 2>&1 | ForEach-Object { Write-PcRuntimeLog $logFile ("ingredient-config-rollback: {0}" -f $_) }
+    }
+    throw
+  } finally {
+    $script:ingredientProposalFiles.Clear()
+  }
+}
+
 function Invoke-AgentItem([string]$AgentId) {
   $definition = $registry.agents | Where-Object { $_.id -eq $AgentId } | Select-Object -First 1
   if (-not $definition -or -not $definition.enabled -or $definition.plane -ne 'pc') { throw "$AgentId is not an enabled PC agent" }
@@ -203,6 +250,7 @@ function Invoke-AgentItem([string]$AgentId) {
       if (-not (Test-Path -LiteralPath $runnerFile)) { throw "$AgentId did not produce its bounded runner output" }
       if ($AgentId -in @('triage-developer','source-sentinel-investigator')) { Publish-AgentProposal $AgentId ([string]$claim.item.id) $runnerFile | Out-Null }
       Invoke-LoggedCommand "$AgentId-complete" { & $pnpmPath tc agent complete $claimFile $runnerFile } | Out-Null
+      if ($AgentId -eq 'ingredient-price-researcher') { $script:ingredientProposalFiles.Add($runnerFile) }
       return $true
     } finally { Pop-Location }
   } catch {
@@ -220,7 +268,7 @@ function Invoke-AgentItem([string]$AgentId) {
 }
 
 if ($SelfTest) {
-  if ($Cycle -eq 'Recipe') {
+  if ($Cycle -eq 'Recipe' -and -not $OnlyAgent) {
     $authPath = Join-Path ([Environment]::GetFolderPath('UserProfile')) '.codex\auth.json'
     if (-not (Test-Path -LiteralPath $authPath)) { throw 'Codex ChatGPT authentication is not configured' }
     $auth = Read-PcUtf8Json $authPath
@@ -252,10 +300,35 @@ try {
     $jobStarted = $true
   }
   finally { Pop-Location }
-  foreach ($agentId in $agentsForCycle) {
-    for ($item = 0; $item -lt $MaxItems; $item++) {
-      if (-not (Invoke-AgentItem $agentId)) { break }
+  if ($Cycle -eq 'Recipe' -and -not $OnlyAgent) {
+    for ($round = 0; $round -lt $MaxItems; $round++) {
+      $roundProgress = $false
+      foreach ($agentId in @('recipe-sourcer','recipe-deduper','recipe-mapper')) {
+        if (Invoke-AgentItem $agentId) { $roundProgress = $true }
+      }
+      if (-not $roundProgress) { break }
     }
+    for ($item = 0; $item -lt $MaxItems; $item++) {
+      if (-not (Invoke-AgentItem 'ingredient-price-researcher')) { break }
+    }
+    Apply-PendingIngredientProposals
+    foreach ($agentId in @('recipe-mapper','recipe-writer','recipe-auditor')) {
+      for ($item = 0; $item -lt $MaxItems; $item++) {
+        if (-not (Invoke-AgentItem $agentId)) { break }
+      }
+    }
+  } else {
+    foreach ($agentId in $agentsForCycle) {
+      for ($item = 0; $item -lt $MaxItems; $item++) {
+        if (-not (Invoke-AgentItem $agentId)) { break }
+      }
+      if ($agentId -eq 'ingredient-price-researcher') { Apply-PendingIngredientProposals }
+    }
+  }
+  if ($script:ingredientConfigurationChanged) {
+    Invoke-LoggedCommand 'ingredient-immediate-grocery-refresh' {
+      & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $platformRoot 'scripts\run-pc-platform-job.ps1') -Job daily-engine
+    } | Out-Null
   }
 } catch {
   $failed = $true

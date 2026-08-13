@@ -1,13 +1,13 @@
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { directCaptureArtifactSchema, observationChunkSchema } from "@thriftycrew/contracts";
+import { directCaptureArtifactSchema, ingredientPriceResearchSchema, observationChunkSchema } from "@thriftycrew/contracts";
 import { deployConfiguration, ingestDirectCapture, MutationClient, publishNativeRelease, replayCurrentArtifact, type CaptureEvidenceInput } from "@thriftycrew/daily/client";
 import { buildCurrentBridge } from "@thriftycrew/daily/legacy";
 import { buildRegularCapture, type CaptureAttestation } from "@thriftycrew/daily/direct";
 import { evaluateSourceContract, type SourceContract } from "@thriftycrew/daily/source-contracts";
 import { buildNativeRelease, loadNativeReleaseCatalog, nativeReleaseIdentity } from "@thriftycrew/daily/native";
 import type { ContentAddressedReleaseGraph } from "@thriftycrew/daily/release-graph";
-import { digestHex, stableJson } from "@thriftycrew/domain";
+import { digestHex, normalizeName, stableJson } from "@thriftycrew/domain";
 import { generateLegacyConfiguration } from "./config";
 import { buildNativeParityReport, compileProductMatcher, decodeNativeEngineSnapshot, evaluateAisleFamilyEvidence, type AisleFamily, type NativeEngineSnapshot, type TupleEncodedNativeEngineSnapshot } from "@thriftycrew/engine";
 import { checkScheduleAuthority, readScheduleAuthority } from "./schedules";
@@ -385,22 +385,71 @@ async function rematchPromotedBatches(client: MutationClient, verbose = false): 
   };
 }
 
-async function commodityAdd(inputFile: string | undefined): Promise<unknown> {
-  if (!inputFile) throw new Error("tc commodity add requires a JSON file");
-  const incoming = JSON.parse(await readFile(cliPath(inputFile), "utf8")) as { id?: string; label?: string; unit?: string; include?: string[]; exclude?: string[]; categoryId?: string };
-  if (!incoming.id || !/^[a-z0-9][a-z0-9-]*$/.test(incoming.id) || !incoming.label || !incoming.unit || !incoming.categoryId) throw new Error("commodity file needs id, label, unit, and categoryId");
+interface CommodityAddition {
+  id?: string; label?: string; unit?: string; include?: string[]; exclude?: string[]; categoryId?: string; searchTerms?: string[];
+  bandMin?: number; bandMax?: number;
+}
+
+async function commodityAddSpecification(incoming: CommodityAddition): Promise<unknown> {
+  if (!incoming.id || !/^[a-z0-9][a-z0-9-]{1,79}$/.test(incoming.id) || !incoming.label?.trim() || !incoming.categoryId) throw new Error("commodity file needs a safe id, label, unit, and categoryId");
+  const allowedUnits = new Set(["lb", "oz", "fl_oz", "each", "dozen", "gal", "qt", "pt", "liter", "ml", "gram", "kg"]);
+  if (!incoming.unit || !allowedUnits.has(incoming.unit)) throw new Error(`commodity ${incoming.id} has an unsupported basis unit`);
+  const include = [...new Set((incoming.include ?? []).map((value) => value.trim()).filter(Boolean))];
+  const exclude = [...new Set((incoming.exclude ?? []).map((value) => value.trim()).filter(Boolean))];
+  const searchTerms = [...new Set((incoming.searchTerms ?? []).map((value) => value.trim()).filter(Boolean))];
+  if (include.length === 0 || searchTerms.length === 0) throw new Error(`commodity ${incoming.id} needs at least one include regex and one search term`);
+  for (const [kind, patterns] of [["include", include], ["exclude", exclude]] as const) {
+    for (const pattern of patterns) {
+      if (pattern.length > 500) throw new Error(`${kind} regex is too long for ${incoming.id}`);
+      try { new RegExp(pattern, "i"); } catch (error) { throw new Error(`${kind} regex is invalid for ${incoming.id}: ${error instanceof Error ? error.message : String(error)}`); }
+    }
+  }
   const commodityFile = path.join(platformRoot, "config", "commodities.json");
   const categoryFile = path.join(platformRoot, "config", "categories.json");
+  const searchFile = path.join(incomeRoot, "grocery", "commodity-search.json");
   const commodities = JSON.parse(await readFile(commodityFile, "utf8")) as Array<Record<string, unknown>>;
   if (commodities.some((item) => item.id === incoming.id)) throw new Error(`commodity ${incoming.id} already exists`);
-  commodities.push({ id: incoming.id, label: incoming.label, unit: incoming.unit, include: incoming.include ?? [], exclude: incoming.exclude ?? [] });
+  if (commodities.some((item) => normalizeName(String(item.label ?? "")) === normalizeName(incoming.label!))) throw new Error(`commodity label ${incoming.label} already exists`);
+  const proposedNames = [incoming.label!, ...searchTerms];
+  const newIncludes = include.map((pattern) => new RegExp(pattern, "i"));
+  const newExcludes = exclude.map((pattern) => new RegExp(pattern, "i"));
+  if (!proposedNames.some((name) => newIncludes.some((pattern) => pattern.test(name)) && !newExcludes.some((pattern) => pattern.test(name)))) {
+    throw new Error(`commodity ${incoming.id} include rules do not positively identify its own label or search terms`);
+  }
+  for (const existing of commodities) {
+    const existingLabel = String(existing.label ?? "");
+    if (newIncludes.some((pattern) => pattern.test(existingLabel)) && !newExcludes.some((pattern) => pattern.test(existingLabel))) {
+      throw new Error(`commodity ${incoming.id} include rules collide with existing commodity ${String(existing.id)}`);
+    }
+    const existingIncludes = Array.isArray(existing.include) ? existing.include.map((pattern) => new RegExp(String(pattern), "i")) : [];
+    const existingExcludes = Array.isArray(existing.exclude) ? existing.exclude.map((pattern) => new RegExp(String(pattern), "i")) : [];
+    if (proposedNames.some((name) => existingIncludes.some((pattern) => pattern.test(name)) && !existingExcludes.some((pattern) => pattern.test(name)))) {
+      throw new Error(`existing commodity ${String(existing.id)} would also claim proposed commodity ${incoming.id}; operator matcher surgery is required`);
+    }
+  }
+  if (incoming.bandMin !== undefined && (!Number.isFinite(incoming.bandMin) || incoming.bandMin <= 0)) throw new Error(`commodity ${incoming.id} has an invalid minimum price band`);
+  if (incoming.bandMax !== undefined && (!Number.isFinite(incoming.bandMax) || incoming.bandMax <= (incoming.bandMin ?? 0))) throw new Error(`commodity ${incoming.id} has an invalid maximum price band`);
+  commodities.push({
+    id: incoming.id, label: incoming.label.trim(), unit: incoming.unit, include, exclude,
+    ...(incoming.bandMin !== undefined ? { band_min: incoming.bandMin } : {}),
+    ...(incoming.bandMax !== undefined ? { band_max: incoming.bandMax } : {}),
+  });
   const categoryDocument = JSON.parse(await readFile(categoryFile, "utf8")) as { categories: Array<{ key: string; commodities: string[] }> };
   const category = categoryDocument.categories.find((item) => item.key === incoming.categoryId);
   if (!category) throw new Error(`category ${incoming.categoryId} does not exist`);
   category.commodities.push(incoming.id);
+  const searchDocument = JSON.parse(await readFile(searchFile, "utf8")) as { note?: string; terms: Record<string, string> };
+  if (searchDocument.terms[incoming.id]) throw new Error(`commodity search term ${incoming.id} already exists`);
+  searchDocument.terms[incoming.id] = searchTerms[0]!;
   await writeJson(commodityFile, commodities);
   await writeJson(categoryFile, categoryDocument);
-  return generateLegacyConfiguration(incomeRoot, false);
+  await writeJson(searchFile, searchDocument);
+  return { ...await generateLegacyConfiguration(incomeRoot, false), commodityId: incoming.id, searchTerm: searchTerms[0] };
+}
+
+async function commodityAdd(inputFile: string | undefined): Promise<unknown> {
+  if (!inputFile) throw new Error("tc commodity add requires a JSON file");
+  return commodityAddSpecification(JSON.parse(await readFile(cliPath(inputFile), "utf8")) as CommodityAddition);
 }
 
 async function recipeAdd(inputFile: string | undefined): Promise<unknown> {
@@ -1345,6 +1394,21 @@ if (command === "status") {
   result = await (await mutationClient()).request("/internal/accuracy/verdicts", { json: JSON.parse(await readFile(cliPath(file), "utf8")) });
 } else if (command === "commodity" && subcommand === "add") {
   result = await commodityAdd(arguments_[0]);
+} else if (command === "ingredient" && subcommand === "apply") {
+  const file = arguments_[0];
+  if (!file) throw new Error("tc ingredient apply requires an ingredient researcher output JSON file");
+  const document = JSON.parse(await readFile(cliPath(file), "utf8")) as { finalOutput?: unknown };
+  const research = ingredientPriceResearchSchema.parse(document.finalOutput ?? document);
+  const verifiedUnitPrices = research.stores.flatMap((store) => store.outcome === "priced" && store.perUnitMicros !== null ? [store.perUnitMicros / 1_000_000] : []);
+  const bandMin = verifiedUnitPrices.length > 0 ? Math.max(0.01, Math.floor(Math.min(...verifiedUnitPrices) * 0.35 * 100) / 100) : undefined;
+  const bandMax = verifiedUnitPrices.length > 0 ? Math.ceil(Math.max(...verifiedUnitPrices) * 3 * 100) / 100 : undefined;
+  result = research.disposition === "available" && research.commodityProposal
+    ? await commodityAddSpecification({
+      ...research.commodityProposal,
+      ...(bandMin !== undefined ? { bandMin } : {}),
+      ...(bandMax !== undefined ? { bandMax } : {}),
+    })
+    : { ok: true, applied: false, gapId: research.gapId, disposition: research.disposition };
 } else if (command === "recipe" && subcommand === "add") {
   result = await recipeAdd(arguments_[0]);
 } else if (command === "recipe" && subcommand === "bundles") {
@@ -1376,6 +1440,22 @@ if (command === "status") {
   const file = arguments_[0];
   if (!file) throw new Error("tc recipe suggest requires a request JSON file");
   result = await (await mutationClient()).request("/internal/recipe-suggestions", { json: JSON.parse(await readFile(cliPath(file), "utf8")) });
+} else if (command === "ingredient" && subcommand === "discover") {
+  const supplied = arguments_[0] ? JSON.parse(await readFile(cliPath(arguments_[0]), "utf8")) as Record<string, unknown> : {};
+  const requestedAt = typeof supplied.requestedAt === "string" ? supplied.requestedAt : new Date().toISOString();
+  const generatedId = `ingredient_discovery_${requestedAt.replace(/[^0-9]/g, "").slice(0, 14)}_${crypto.randomUUID().replaceAll("-", "").slice(0, 8)}`;
+  const request = {
+    id: supplied.id ?? generatedId,
+    request: supplied.request ?? "Randomly source diverse, externally verified complete meal-prep recipes solely to discover required purchased ingredients missing from the active Omaha grocery catalog. Preserve every quantified required ingredient, ignore only true process water and optional garnish, and exclude seafood and ground chicken.",
+    requestedAt,
+    sourceRef: supplied.sourceRef ?? "codex-task://ingredient-discovery",
+    mode: "missing-ingredients",
+    targetMissingIngredients: supplied.targetMissingIngredients ?? 50,
+  };
+  result = await (await mutationClient()).request("/internal/recipe-suggestions", { json: request });
+} else if (command === "ingredient" && subcommand === "status") {
+  const query = arguments_[0] ? `?status=${encodeURIComponent(arguments_[0])}` : "";
+  result = await (await mutationClient()).request(`/internal/ingredient-gaps${query}`, { method: "GET" });
 } else if (command === "recipe" && subcommand === "wave") {
   const [action, waveId, value] = arguments_;
   if (!action || !waveId) throw new Error("tc recipe wave requires snapshot|published|corrective and a wave id");
@@ -1413,7 +1493,7 @@ if (command === "status") {
       "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|rematch-promoted|abandon <batch-id> <reason>",
       "tc accuracy draw [seed]|revalidate", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",
       "tc sentinel latest [bakers family-fare hy-vee]",
-      "tc match batch <batch-id>", "tc commodity add <file>", "tc recipe add <file>",
+      "tc match batch <batch-id>", "tc commodity add <file>", "tc ingredient discover [request-file]", "tc ingredient status [state]", "tc ingredient apply <research-output>", "tc recipe add <file>",
     ],
   };
   if (!isHelpRequest) process.exitCode = 2;

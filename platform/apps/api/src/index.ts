@@ -248,6 +248,7 @@ app.use("/internal/agents/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/agent-work-items/*", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/agent-evaluations", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/recipe-suggestions", requireIdentityRole(["engine", "operator"]));
+app.use("/internal/ingredient-gaps", requireIdentityRole(["engine", "operator"]));
 app.use("/internal/recipe-waves/*", requireIdentityRole(["operator"]));
 app.use("/internal/login-canary-probes", requireIdentityRole(["capture", "operator"]));
 app.use("/internal/content-batches", requireIdentityRole(["engine", "operator"]));
@@ -1248,7 +1249,35 @@ app.post("/internal/recipe-suggestions", zValidator("json", recipeSuggestionRequ
     `INSERT INTO recipe_suggestion_requests (id, request_text, source_ref, requested_at)
      VALUES (?1, ?2, ?3, ?4) ON CONFLICT(id) DO NOTHING`,
   ).bind(body.id, body.request, body.sourceRef, body.requestedAt).run();
-  return context.json({ ok: true, requestId: body.id }, 201);
+  if (body.mode === "missing-ingredients") {
+    await context.env.DB.prepare(
+      `INSERT INTO ingredient_discovery_batches (request_id, target_missing_ingredients)
+       VALUES (?1, ?2) ON CONFLICT(request_id) DO NOTHING`,
+    ).bind(body.id, body.targetMissingIngredients).run();
+  }
+  return context.json({ ok: true, requestId: body.id, mode: body.mode, targetMissingIngredients: body.mode === "missing-ingredients" ? body.targetMissingIngredients : null }, 201);
+});
+
+app.get("/internal/ingredient-gaps", async (context) => {
+  const requestedStatus = context.req.query("status");
+  const allowed = new Set(["pending", "researching", "ready_to_publish", "published", "permanently_unavailable", "needs_operator"]);
+  if (requestedStatus && !allowed.has(requestedStatus)) return jsonError("unknown ingredient gap status", 400);
+  const gaps = await context.env.DB.prepare(
+    `SELECT gap.id, gap.normalized_name, gap.display_name, gap.status, gap.commodity_id,
+            gap.first_seen_at, gap.updated_at, COUNT(occurrence.request_id) AS occurrence_count
+       FROM ingredient_gaps gap
+       LEFT JOIN ingredient_gap_occurrences occurrence ON occurrence.gap_id = gap.id
+      WHERE (?1 IS NULL OR gap.status = ?1)
+      GROUP BY gap.id ORDER BY gap.first_seen_at DESC, gap.id LIMIT 500`,
+  ).bind(requestedStatus ?? null).all();
+  const batches = await context.env.DB.prepare(
+    `SELECT request_id, target_missing_ingredients, unique_missing_ingredients, source_round, state, created_at, updated_at
+       FROM ingredient_discovery_batches ORDER BY created_at DESC LIMIT 100`,
+  ).all();
+  const holds = await context.env.DB.prepare(
+    `SELECT status, COUNT(*) AS count FROM recipe_ingredient_holds GROUP BY status ORDER BY status`,
+  ).all();
+  return context.json({ ok: true, status: requestedStatus ?? null, gaps: gaps.results, batches: batches.results, holds: holds.results });
 });
 
 app.post("/internal/recipe-waves/snapshot", zValidator("json", recipeWaveSnapshotSchema), async (context) => {

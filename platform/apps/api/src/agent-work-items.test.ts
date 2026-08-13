@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { recipeSourceCandidatesSchema } from "@thriftycrew/contracts";
+import { ingredientPriceResearchSchema, OMAHA_GROCERY_STORE_LOCATION_IDS, recipeSourceCandidatesSchema } from "@thriftycrew/contracts";
 import { assertRecipeChainContinuity, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
 
 const candidate = {
@@ -28,6 +28,49 @@ const candidate = {
 };
 
 describe("agent output boundary", () => {
+  const unpricedStores = OMAHA_GROCERY_STORE_LOCATION_IDS.map((storeLocationId) => ({
+    storeLocationId, outcome: "not_found" as const, checkedAt: "2026-08-13T12:00:00.000Z",
+    queryTerms: ["unobtainium spice"], searchComplete: true, qualifyingProductsExamined: 0,
+    locationVerified: true, priceModeVerified: true,
+    sourceUrl: `https://example.test/${storeLocationId}`, evidenceSummary: "The first-party Omaha storefront completed an exact search with no qualifying in-stock result.",
+    productName: null, sellerName: null, fulfillmentMode: null, availabilityText: null, packageText: null, packagePriceMinor: null, normalizedBasisUnit: null,
+    normalizedBasisQtyMicros: null, perUnitMicros: null, offerKind: null, validFrom: null, validTo: null,
+    loyaltyRequired: false, membershipRequired: false,
+  }));
+
+  it("requires all seven successful Omaha checks before permanent unavailability", () => {
+    const research = {
+      gapId: "gap_one", ingredientName: "Unobtainium spice", marketId: "omaha", researchedAt: "2026-08-13T12:00:00.000Z",
+      disposition: "permanently_unavailable", stores: unpricedStores, commodityProposal: null,
+      summary: "All seven registered Omaha store checks completed without a qualifying in-stock product.",
+    };
+    expect(ingredientPriceResearchSchema.parse(research)).toEqual(research);
+    expect(() => ingredientPriceResearchSchema.parse({ ...research, stores: research.stores.slice(0, 6) })).toThrow(/exactly|Array must contain/);
+    expect(() => ingredientPriceResearchSchema.parse({ ...research, stores: research.stores.map((store, index) => index === 2 ? { ...store, outcome: "blocked" } : store) })).toThrow(/needs_operator/);
+    expect(JSON.stringify(z.toJSONSchema(ingredientPriceResearchSchema))).not.toContain('"format":"uri"');
+  });
+
+  it("recomputes unit prices and requires sale validity dates", () => {
+    const priced = {
+      ...unpricedStores[0], outcome: "priced" as const, productName: "Test spice", packageText: "8 oz",
+      sellerName: "Example Retailer", fulfillmentMode: "pickup" as const, availabilityText: "In stock",
+      qualifyingProductsExamined: 3,
+      packagePriceMinor: 400, normalizedBasisUnit: "oz" as const, normalizedBasisQtyMicros: 8_000_000,
+      perUnitMicros: 500_000, offerKind: "sale" as const,
+    };
+    const research = {
+      gapId: "gap_two", ingredientName: "Test spice", marketId: "omaha", researchedAt: "2026-08-13T12:00:00.000Z",
+      disposition: "available", stores: [priced, ...unpricedStores.slice(1)],
+      commodityProposal: { id: "test-spice", label: "Test Spice", categoryId: "pantry", unit: "oz", include: ["\\btest spice\\b"], exclude: [], searchTerms: ["test spice"] },
+      summary: "One Omaha store has a verified qualifying price and the other checks completed without a result.",
+    };
+    expect(() => ingredientPriceResearchSchema.parse(research)).toThrow(/ad date window/);
+    expect(() => ingredientPriceResearchSchema.parse({
+      ...research,
+      stores: [{ ...priced, offerKind: "everyday", perUnitMicros: 499_000 }, ...unpricedStores.slice(1)],
+    })).toThrow(/normalized unit price/);
+  });
+
   it("turns frozen source-native offer facts into an explicit reviewer evidence packet", () => {
     expect(normalizeAccuracyEvidenceRow({
       observation_id: "obs_one", product_name: "Whole Milk, 1 gal", price_mode: "pickup",
