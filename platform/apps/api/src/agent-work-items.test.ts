@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { ingredientPriceResearchSchema, OMAHA_GROCERY_STORE_LOCATION_IDS, recipeMapSchema, recipeSourceCandidatesSchema } from "@thriftycrew/contracts";
-import { assertRecipeChainContinuity, ingredientCampaignPhase, type IngredientCampaignSnapshot, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
+import { activeIngredientCategoryContextSql, assertRecipeChainContinuity, ingredientCampaignPhase, type IngredientCampaignSnapshot, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
 
 const candidate = {
   id: "candidate-bean-chili",
@@ -48,6 +48,12 @@ describe("agent output boundary", () => {
     expect(() => ingredientPriceResearchSchema.parse({ ...research, stores: research.stores.slice(0, 6) })).toThrow(/exactly|Array must contain/);
     expect(() => ingredientPriceResearchSchema.parse({ ...research, stores: research.stores.map((store, index) => index === 2 ? { ...store, outcome: "blocked" } : store) })).toThrow(/needs_operator/);
     expect(JSON.stringify(z.toJSONSchema(ingredientPriceResearchSchema))).not.toContain('"format":"uri"');
+  });
+
+  it("loads ingredient category context through active configuration membership", () => {
+    expect(activeIngredientCategoryContextSql).toContain("configuration_categories member");
+    expect(activeIngredientCategoryContextSql).toContain("version.id = member.configuration_id");
+    expect(activeIngredientCategoryContextSql).not.toContain("category.configuration_id");
   });
 
   it("preserves multiple source lines that map to one unique component commodity", () => {

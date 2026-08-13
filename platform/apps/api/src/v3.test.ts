@@ -123,6 +123,9 @@ describe("capture eviction guard", () => {
     expect(releaseCaptureEvictionSql).toContain("candidate_input.release_id = ?1");
     expect(releaseCaptureEvictionSql).not.toContain("candidate_batch.status IN");
     expect(releaseThinSelectedSql).toContain("release_input_batches selected_input");
+    expect(releaseThinSelectedSql).toContain("NOT EXISTS");
+    expect(releaseThinSelectedSql).toContain("complete_member.observation_id = selected.observation_id");
+    expect(releaseThinSelectedSql).toContain("complete_batch.coverage_mode IN ('full','ad_only')");
   });
 
   it("protects only complete-capture candidates that the native selector can actually use", () => {

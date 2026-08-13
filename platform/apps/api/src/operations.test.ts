@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { archivalCapacityStatus, archivalGrowthProjectionReliable, controlPlaneProofPass, d1DatabaseFileSize, d1TimeTravelBookmark, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalDigestMemberKey, operationalIncidentIsNew, operationalNotificationDueAt, recoveryCheckpointTriggerKind, resumeFailedCapturePipelines, robustMonthlyGrowth, scheduleGap, weeklyRecoveryManifestDue } from "./operations";
+import { archivalCapacityStatus, archivalGrowthProjectionReliable, controlPlaneProofPass, d1DatabaseFileSize, d1TimeTravelBookmark, githubActionsDispatchEnabled, githubDispatchInputs, githubWorkflowRuns, jobStatusRequiresAlert, operationalDigestMemberKey, operationalIncidentIsNew, operationalNotificationDueAt, recoveryCheckpointTriggerKind, resumeFailedCapturePipelines, robustMonthlyGrowth, runFailureIsolatedScheduledStages, sanitizedScheduledError, scheduleGap, weeklyRecoveryManifestDue } from "./operations";
 
 describe("archival capacity policy", () => {
   it("arms on projected exhaustion before the static percentage threshold", () => {
@@ -164,6 +164,35 @@ describe("schedule gap lifecycle", () => {
       basis: "monitoring-grace",
     });
     expect(scheduleGap(null, null, checkedAt, 120)).toEqual({ stale: true, ageMinutes: null, basis: "unknown" });
+  });
+});
+
+describe("scheduled stage isolation", () => {
+  it("continues through promotion after every earlier stage failure", async () => {
+    for (const failingStage of ["watchdog", "recovery", "cleanup", "dispatch", "digest"]) {
+      const executed: string[] = [];
+      const failures: string[] = [];
+      const stages = ["watchdog", "recovery", "cleanup", "dispatch", "digest", "promotion"].map((name) => ({
+        name,
+        run: async () => {
+          executed.push(name);
+          if (name === failingStage) throw new Error(`failed ${name}`);
+        },
+      }));
+      const results = await runFailureIsolatedScheduledStages(stages, async (stage) => { failures.push(stage); });
+      expect(executed).toEqual(["watchdog", "recovery", "cleanup", "dispatch", "digest", "promotion"]);
+      expect(failures).toEqual([failingStage]);
+      expect(results.at(-1)).toMatchObject({ stage: "promotion", status: "completed" });
+    }
+  });
+
+  it("bounds and redacts scheduled diagnostics", () => {
+    const error = sanitizedScheduledError(new Error(`token=private-value authorization: Bearer bearer-value ${"x".repeat(700)}`));
+    expect(error).toContain("token=[REDACTED]");
+    expect(error).toContain("authorization: Bearer [REDACTED]");
+    expect(error.length).toBeLessThanOrEqual(600);
+    expect(error).not.toContain("private-value");
+    expect(error).not.toContain("bearer-value");
   });
 });
 

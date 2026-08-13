@@ -1137,43 +1137,88 @@ function localScheduleParts(scheduledTime: number): Record<string, string> {
   );
 }
 
-export async function runScheduledOperations(env: WorkerEnv, scheduledTime: number): Promise<void> {
-  await runLedgerWatchdog(env, scheduledTime);
-  await resumeFailedCapturePipelines(env, scheduledTime);
-  await runCaptureUploadCleanup(env, scheduledTime);
-  await dispatchPendingRegisteredAgents(env);
-  await flushOperationalAlertDigest(env, new Date(scheduledTime).toISOString());
-  try {
-    const promotion = await runPromotionLifecycle(env, scheduledTime);
-    if (promotion.status === "action_required") {
-      await raiseOperationalAlert(env, "promotion-lifecycle", "Promotion boundary needs capture or release work", promotion,
-        { notification: "digest", deferMinutes: 15, observedAt: new Date(scheduledTime).toISOString() });
-    } else {
-      await resolveOperationalAlert(env, "promotion-lifecycle", promotion, { recoveryTitle: "Promotion lifecycle recovered" });
+export interface ScheduledOperationStage {
+  name: string;
+  run: () => Promise<unknown>;
+}
+
+export function sanitizedScheduledError(error: unknown): string {
+  return (error instanceof Error ? error.message : String(error))
+    .replaceAll(/(github_pat_|gh[pousr]_)[A-Za-z0-9_]+/gi, "$1[REDACTED]")
+    .replaceAll(/(authorization:\s*(?:bearer|token)\s+)[^\s]+/gi, "$1[REDACTED]")
+    .replaceAll(/((?:secret|token|password|TC_LOCAL_MUTATION_SECRET)\s*[=:]\s*)[^\s]+/gi, "$1[REDACTED]")
+    .slice(0, 600);
+}
+
+export async function runFailureIsolatedScheduledStages(
+  stages: ScheduledOperationStage[],
+  onFailure: (stage: string, error: unknown) => Promise<void>,
+  onSuccess?: (stage: string) => Promise<void>,
+): Promise<Array<{ stage: string; status: "completed" | "failed"; error?: string }>> {
+  const results: Array<{ stage: string; status: "completed" | "failed"; error?: string }> = [];
+  for (const stage of stages) {
+    try {
+      await stage.run();
+      results.push({ stage: stage.name, status: "completed" });
+      try { await onSuccess?.(stage.name); } catch { /* stage completion must not block later independent stages */ }
+    } catch (error) {
+      results.push({ stage: stage.name, status: "failed", error: sanitizedScheduledError(error) });
+      try { await onFailure(stage.name, error); } catch { /* diagnostic persistence failure must not block later independent stages */ }
     }
-  } catch (error) {
-    await raiseOperationalAlert(env, "promotion-lifecycle", "Promotion lifecycle coordinator failed", {
-      error: error instanceof Error ? error.message : String(error),
-    }, { notification: "immediate", deferMinutes: 0, observedAt: new Date(scheduledTime).toISOString() });
   }
+  return results;
+}
+
+export async function runScheduledOperations(env: WorkerEnv, scheduledTime: number): Promise<void> {
+  const observedAt = new Date(scheduledTime).toISOString();
   const parts = localScheduleParts(scheduledTime);
   const localDate = `${parts.year}-${parts.month}-${parts.day}`;
-  if (parts.minute === "00") await runBrowserCaptureSla(env, scheduledTime);
-  if (parts.hour === "04" && parts.minute === "30") await runD1RecoveryCheckpoint(env, scheduledTime);
-  if (weeklyRecoveryManifestDue(scheduledTime)) {
-    const instanceId = `d1-backup-${localDate}`;
-    const recorded = await env.DB.prepare("SELECT id FROM backup_exports WHERE id = ?1")
-      .bind(`backup_${instanceId}`).first();
-    if (!recorded) {
-      try {
-        await env.BACKUP_WORKFLOW.create({ id: instanceId, params: { trigger: "worker-cron", localDate } });
-      } catch (error) {
-        const message = error instanceof Error ? error.message : "unknown workflow create failure";
-        if (!message.toLowerCase().includes("already")) throw error;
+  const stages: ScheduledOperationStage[] = [
+    { name: "ledger-watchdog", run: () => runLedgerWatchdog(env, scheduledTime) },
+    { name: "capture-pipeline-recovery", run: async () => { await resumeFailedCapturePipelines(env, scheduledTime); } },
+    { name: "capture-upload-cleanup", run: () => runCaptureUploadCleanup(env, scheduledTime) },
+    { name: "registered-agent-dispatch", run: () => dispatchPendingRegisteredAgents(env) },
+    { name: "operational-alert-digest", run: () => flushOperationalAlertDigest(env, observedAt) },
+    { name: "promotion-lifecycle", run: async () => {
+      const promotion = await runPromotionLifecycle(env, scheduledTime);
+      if (promotion.status === "action_required") {
+        await raiseOperationalAlert(env, "promotion-lifecycle", "Promotion boundary needs capture or release work", promotion,
+          { notification: "digest", deferMinutes: 15, observedAt });
+      } else {
+        await resolveOperationalAlert(env, "promotion-lifecycle", promotion, { recoveryTitle: "Promotion lifecycle recovered" });
       }
-    }
+    } },
+  ];
+  if (parts.minute === "00") stages.push({ name: "browser-capture-sla", run: () => runBrowserCaptureSla(env, scheduledTime) });
+  if (parts.hour === "04" && parts.minute === "30") stages.push({ name: "d1-recovery-checkpoint", run: () => runD1RecoveryCheckpoint(env, scheduledTime) });
+  if (weeklyRecoveryManifestDue(scheduledTime)) {
+    stages.push({ name: "weekly-recovery-manifest", run: async () => {
+      const instanceId = `d1-backup-${localDate}`;
+      const recorded = await env.DB.prepare("SELECT id FROM backup_exports WHERE id = ?1")
+        .bind(`backup_${instanceId}`).first();
+      if (!recorded) {
+        try {
+          await env.BACKUP_WORKFLOW.create({ id: instanceId, params: { trigger: "worker-cron", localDate } });
+        } catch (error) {
+          const message = error instanceof Error ? error.message : "unknown workflow create failure";
+          if (!message.toLowerCase().includes("already")) throw error;
+        }
+      }
+    } });
   }
-  if (parts.hour === "05" && parts.minute === "15") await runArchivalForecast(env, scheduledTime);
-  if (parts.hour === "05" && parts.minute === "45") await runControlPlaneProof(env, scheduledTime);
-  if (parts.hour === "06" && parts.minute === "00") await runConfigurationLifecycle(env, scheduledTime);
+  if (parts.hour === "05" && parts.minute === "15") stages.push({ name: "archival-forecast", run: () => runArchivalForecast(env, scheduledTime) });
+  if (parts.hour === "05" && parts.minute === "45") stages.push({ name: "control-plane-proof", run: () => runControlPlaneProof(env, scheduledTime) });
+  if (parts.hour === "06" && parts.minute === "00") stages.push({ name: "configuration-lifecycle", run: () => runConfigurationLifecycle(env, scheduledTime) });
+  const results = await runFailureIsolatedScheduledStages(stages, async (stage, error) => {
+    const alertKey = stage === "promotion-lifecycle" ? "promotion-lifecycle" : `scheduled-stage:${stage}`;
+    await raiseOperationalAlert(env, alertKey, `Scheduled stage ${stage} failed`, {
+      stage, error: sanitizedScheduledError(error), scheduledAt: observedAt,
+    }, { notification: "immediate", deferMinutes: 0, observedAt });
+  }, async (stage) => {
+    if (stage !== "promotion-lifecycle") {
+      await resolveOperationalAlert(env, `scheduled-stage:${stage}`, { stage, scheduledAt: observedAt, status: "completed" });
+    }
+  });
+  const failures = results.filter((result) => result.status === "failed");
+  if (failures.length > 0) throw new Error(`scheduled stages failed after isolated execution: ${failures.map((failure) => failure.stage).join(", ")}`);
 }

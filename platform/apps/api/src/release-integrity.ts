@@ -15,6 +15,42 @@ function array(value: unknown): Array<Record<string, unknown>> {
   return Array.isArray(value) ? value.filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === "object" && !Array.isArray(item)) : [];
 }
 
+export function declaredGramsPerBasisUnit(ingredient: Record<string, unknown>): number {
+  const source = String(ingredient.conversionSource ?? "");
+  if (source === "recipe-scaler-exception") return Number(ingredient.scalerGpu);
+  if (source === "ingredient-definition") return Number(ingredient.definitionGpu);
+  if (source === "commodity-mass-unit") {
+    const basisUnit = String(ingredient.basisUnit ?? "");
+    if (basisUnit === "lb") return 453.59237;
+    if (basisUnit === "oz") return 28.349523125;
+    if (basisUnit === "kg") return 1000;
+    if (basisUnit === "g") return 1;
+  }
+  return Number.NaN;
+}
+
+export function recomputeRecipeIngredientAmounts(ingredient: Record<string, unknown>): {
+  declaredGpu: number;
+  expectedUtilizedMinor: number;
+  expectedCheckoutMinor: number;
+  expectedPackages: number;
+} {
+  const grams = Number(ingredient.grams);
+  const declaredGpu = declaredGramsPerBasisUnit(ingredient);
+  const perUnitMicros = Number(ingredient.perUnitMicros);
+  const expectedUtilizedMinor = Math.round(perUnitMicros * (grams / declaredGpu) / 10_000);
+  const checkoutPerUnitMicros = Number(ingredient.checkoutPerUnitMicros ?? perUnitMicros);
+  const checkoutPurchasePriceMinor = Number(ingredient.checkoutSourcePurchasePriceMinor ?? ingredient.sourcePurchasePriceMinor);
+  const checkoutPackageBasisUnits = checkoutPurchasePriceMinor * 10_000 / checkoutPerUnitMicros;
+  const checkoutVariableWeight = ingredient.checkoutVariableWeight === true
+    || (ingredient.checkoutVariableWeight === undefined && ingredient.variableWeight === true);
+  const expectedPackages = checkoutVariableWeight ? 0 : Math.max(1, Math.ceil((grams / declaredGpu) / checkoutPackageBasisUnits - 1e-9));
+  const expectedCheckoutMinor = checkoutVariableWeight
+    ? Math.round(checkoutPerUnitMicros * (grams / declaredGpu) / 10_000)
+    : checkoutPurchasePriceMinor * expectedPackages;
+  return { declaredGpu, expectedUtilizedMinor, expectedCheckoutMinor, expectedPackages };
+}
+
 async function payload(env: WorkerEnv, releaseId: string, kind: string): Promise<unknown> {
   const row = await env.DB.prepare("SELECT payload_json, object_key FROM release_payloads WHERE release_id = ?1 AND kind = ?2").bind(releaseId, kind).first<{ payload_json: string; object_key: string | null }>();
   if (!row) return null;
@@ -82,19 +118,9 @@ export async function evaluateReleaseIntegrity(env: WorkerEnv, releaseId: string
       const observation = observations.get(observationId);
       const checkoutObservationId = String(ingredient.checkoutObservationId ?? observationId);
       const checkoutObservation = observations.get(checkoutObservationId);
-      const grams = Number(ingredient.grams);
       const gpu = Number(ingredient.gpu);
-      const perUnitMicros = Number(ingredient.perUnitMicros);
-      const declaredGpu = ingredient.gpuSource === "recipe-scaler" ? Number(ingredient.scalerGpu) : Number(ingredient.definitionGpu);
-      const expectedUtilized = Math.round(perUnitMicros * (grams / gpu) / 10_000);
-      const checkoutPerUnitMicros = Number(ingredient.checkoutPerUnitMicros ?? perUnitMicros);
+      const { declaredGpu, expectedUtilizedMinor: expectedUtilized, expectedCheckoutMinor: expectedCheckout, expectedPackages } = recomputeRecipeIngredientAmounts(ingredient);
       const checkoutPurchasePriceMinor = Number(ingredient.checkoutSourcePurchasePriceMinor ?? ingredient.sourcePurchasePriceMinor);
-      const checkoutPackageBasisUnits = checkoutPurchasePriceMinor * 10_000 / checkoutPerUnitMicros;
-      const checkoutVariableWeight = ingredient.checkoutVariableWeight === true || (ingredient.checkoutVariableWeight === undefined && ingredient.variableWeight === true);
-      const expectedPackages = checkoutVariableWeight ? 0 : Math.max(1, Math.ceil((grams / gpu) / checkoutPackageBasisUnits - 1e-9));
-      const expectedCheckout = checkoutVariableWeight
-        ? Math.round(checkoutPerUnitMicros * (grams / gpu) / 10_000)
-        : checkoutPurchasePriceMinor * expectedPackages;
       if (!observation || gpu !== declaredGpu || !Number.isFinite(expectedUtilized) || !Number.isFinite(expectedPackages) || expectedUtilized !== Number(ingredient.utilizedCostMinor)
         || expectedCheckout !== Number(ingredient.purchaseCostMinor)
         || expectedPackages !== Number(ingredient.packageCount)

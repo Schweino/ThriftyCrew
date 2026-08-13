@@ -379,9 +379,11 @@ async function rematchPromotedBatches(client: MutationClient, verbose = false): 
     }
     batches.push({ ...batch, matching });
   }
+  const inactiveDecisionReconciliation = await client.request("/internal/match-decisions/reconcile-inactive", { method: "POST" });
   return {
     ok: true,
     summary: { ...summary, elapsedMs: Math.round(performance.now() - startedAt) },
+    inactiveDecisionReconciliation,
     ...(verbose ? { batches } : {}),
   };
 }

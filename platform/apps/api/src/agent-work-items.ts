@@ -75,6 +75,12 @@ const RECIPE_CHAIN: Record<string, string | undefined> = {
   "recipe-auditor": undefined,
 };
 
+export const activeIngredientCategoryContextSql = `SELECT category.id, category.label
+  FROM categories category
+  JOIN configuration_categories member ON member.category_id = category.id
+  JOIN configuration_versions version ON version.id = member.configuration_id
+ WHERE version.active = 1 ORDER BY category.sort_order, category.id`;
+
 function object(value: unknown): Record<string, unknown> {
   return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : {};
 }
@@ -284,13 +290,7 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
          FROM ingredient_gaps WHERE status = 'pending'
         ORDER BY first_seen_at, id LIMIT 50`,
     ).all<Record<string, unknown>>();
-    const categories = await db.prepare(
-      `SELECT category.id, category.label
-         FROM categories category
-         JOIN configuration_categories member ON member.category_id = category.id
-         JOIN configuration_versions version ON version.id = member.configuration_id
-        WHERE version.active = 1 ORDER BY category.sort_order, category.id`,
-    ).all<Record<string, unknown>>();
+    const categories = await db.prepare(activeIngredientCategoryContextSql).all<Record<string, unknown>>();
     const stores = [
       { storeLocationId: "aldi-omaha-446-048", storeName: "Aldi", priceMode: "pickup" },
       { storeLocationId: "bakers-saddle-creek", storeName: "Baker's", priceMode: "pickup" },

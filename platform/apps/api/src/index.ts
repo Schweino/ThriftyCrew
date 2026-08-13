@@ -80,6 +80,7 @@ import { authenticateMutation } from "./auth";
 import { createRelease, findBatch, insertObservations, insertRecipeCosts, insertReleaseCells, upsertGuardResult } from "./database";
 import { evaluateNotBlindGuard, evaluateReleaseGuards } from "./release-guards";
 import { evaluateReleaseIntegrity } from "./release-integrity";
+import { reconcileInactiveConfigurationDecisions } from "./match-decision-reconciliation";
 import { createAccuracyDraw, latestAccuracySummary, markOverdueAccuracyDraws, readAccuracyDraw, recordAccuracyVerdicts } from "./accuracy";
 import { reconcileGhostRotation, runGhostClobberDrill } from "./ghost-reconciliation";
 import { dispatchGithubJob, dispatchRegisteredAgent, githubWorkflowRuns, jobStatusRequiresAlert, raiseOperationalAlert, recordAudit, resolveOperationalAlert, resolveRecoveredJobRunAlerts, runArchivalForecast, runControlPlaneProof, runD1RecoveryCheckpoint, runScheduledOperations, scheduleGap } from "./operations";
@@ -895,6 +896,13 @@ app.post("/internal/match-decisions/reconcile", zValidator("json", matchDecision
   return context.json({ ok: true, batchId: body.batchId, retained: body.retainedProductIds.length, superseded: updated.meta.changes });
 });
 
+app.post("/internal/match-decisions/reconcile-inactive", async (context) => {
+  const reconciliation = await reconcileInactiveConfigurationDecisions(context.env.DB);
+  await recordAudit(context.env, context.get("identity"), "matching.reconcile-inactive", "configuration",
+    reconciliation.activeConfigurationId ?? "missing", "accepted", { ...reconciliation });
+  return context.json({ ok: true, reconciliation });
+});
+
 app.get("/internal/capture-batches/:id/products", async (context) => {
   const batch = await findBatch(context.env.DB, context.req.param("id"));
   if (!batch) return jsonError("capture batch not found", 404);
@@ -1035,7 +1043,10 @@ app.post("/internal/match-runs", zValidator("json", matchRunSchema), async (cont
   }
   await recordAudit(context.env, context.get("identity"), "matching.complete", "capture_batch", body.batchId,
     status === "passed" ? "accepted" : "failed", { runId: body.id, ...body });
-  return context.json({ ok: status === "passed", runId: body.id, status, idempotent: false }, status === "passed" ? 201 : 422);
+  const inactiveDecisionReconciliation = status === "passed"
+    ? await reconcileInactiveConfigurationDecisions(context.env.DB)
+    : null;
+  return context.json({ ok: status === "passed", runId: body.id, status, idempotent: false, inactiveDecisionReconciliation }, status === "passed" ? 201 : 422);
 });
 
 app.put("/internal/schedules/sync", zValidator("json", scheduleDocumentSchema), async (context) => {
@@ -3936,7 +3947,8 @@ app.post("/internal/capture-batches/:id/promote", async (context) => {
     "UPDATE capture_batches SET status = 'promoted', promoted_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status = 'validated'",
   ).bind(batch.id));
   await context.env.DB.batch(statements);
-  return context.json({ ok: true, batchId: batch.id, status: "promoted", superseded: previous.results.map((row) => row.id), idempotent: false });
+  const inactiveDecisionReconciliation = await reconcileInactiveConfigurationDecisions(context.env.DB);
+  return context.json({ ok: true, batchId: batch.id, status: "promoted", superseded: previous.results.map((row) => row.id), idempotent: false, inactiveDecisionReconciliation });
 });
 
 app.post("/internal/releases", zValidator("json", releaseCreateSchema), async (context) => {

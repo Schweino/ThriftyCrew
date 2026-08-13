@@ -71,8 +71,18 @@ export const releaseThinSelectedSql = `SELECT DISTINCT selected.commodity_id, se
       JOIN capture_batch_observations selected_member
         ON selected_member.batch_id = selected_input.batch_id AND selected_member.observation_id = selected.observation_id
       JOIN capture_batches selected_batch ON selected_batch.id = selected_member.batch_id
-     WHERE selected.release_id = ?1 AND selected.status = 'priced'
+      WHERE selected.release_id = ?1 AND selected.status = 'priced'
        AND selected_batch.coverage_mode IN ('partial','targeted')
+       AND NOT EXISTS (
+         SELECT 1
+           FROM release_input_batches complete_input
+           JOIN capture_batch_observations complete_member
+             ON complete_member.batch_id = complete_input.batch_id
+            AND complete_member.observation_id = selected.observation_id
+           JOIN capture_batches complete_batch ON complete_batch.id = complete_member.batch_id
+          WHERE complete_input.release_id = selected.release_id
+            AND complete_batch.coverage_mode IN ('full','ad_only')
+       )
      ORDER BY selected.commodity_id, selected.store_location_id`;
 
 export function completeCaptureCandidateIsEligible(row: CompleteCaptureCandidateRow, releaseInstant: string): boolean {

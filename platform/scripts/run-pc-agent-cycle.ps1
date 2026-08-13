@@ -296,9 +296,14 @@ function Invoke-AgentItem([string]$AgentId) {
 }
 
 function Publish-ReadyRecipeContent {
+  $dailyEngineLock = Join-Path $env:LOCALAPPDATA 'ThriftyCrew\grocery-v3\locks\platform-job-daily-engine.lock'
+  if (Test-Path -LiteralPath $dailyEngineLock) {
+    throw 'grocery publication deferred because daily-engine owns the capture and publication coordinator'
+  }
   Set-PcRuntimeCredential $config 'local-operator'
   Push-Location $platformRoot
   try {
+    Invoke-LoggedCommand 'recipe-browser-capture-promote-ready' { & $pnpmPath tc capture promote-ready-browser } | Out-Null
     Invoke-LoggedCommand 'recipe-content-promote-ready' { & $pnpmPath tc content promote-ready $env:TC_SCHEDULED_FOR } | Out-Null
     Invoke-LoggedCommand 'recipe-content-publish-native' { & $pnpmPath tc engine publish-native } | Out-Null
   } finally { Pop-Location }

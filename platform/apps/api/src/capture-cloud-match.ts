@@ -2,6 +2,7 @@ import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
 import { compileProductMatcher, evaluateAisleFamilyEvidence, type AisleFamily } from "@thriftycrew/engine";
 import type { WorkerEnv } from "./env";
 import { archiveConfiguration, verifyConfigurationArchive } from "./configuration-archive";
+import { reconcileInactiveConfigurationDecisions } from "./match-decision-reconciliation";
 
 interface ProductRow {
   product_id: string;
@@ -164,6 +165,7 @@ export async function runCloudCaptureMatch(env: WorkerEnv, batchId: string, pin:
       VALUES (?1, 'operational_alert', ?2, 'hard', 'open', ?3, ?4)`)
       .bind(triageId, runId, `Cloud matching found ${collisions.length} unresolved collisions`, stableJson(detail)).run();
   }
+  if (status === "passed") await reconcileInactiveConfigurationDecisions(env.DB);
   return { status, runId, matched: decisions.length, products: products.results.length };
 }
 
@@ -180,5 +182,6 @@ export async function promoteCloudMatchedCapture(env: WorkerEnv, batchId: string
   const statements = previous.results.map((row) => env.DB.prepare("UPDATE capture_batches SET status = 'superseded' WHERE id = ?1 AND status = 'promoted'").bind(row.id));
   statements.push(env.DB.prepare("UPDATE capture_batches SET status = 'promoted', promoted_at = CURRENT_TIMESTAMP WHERE id = ?1 AND status = 'validated'").bind(batchId));
   await env.DB.batch(statements);
+  await reconcileInactiveConfigurationDecisions(env.DB);
   return "promoted";
 }
