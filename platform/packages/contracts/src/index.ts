@@ -1378,6 +1378,15 @@ export const ingredientQaNotFoundSchema = z.object({
   evidenceSummary: z.string().trim().min(30).max(5000),
 }).strict();
 
+export const ingredientQaPricedSchema = z.object({
+  store: ingredientStorePriceSchema,
+  commodityProposal: ingredientCommodityProposalSchema.optional(),
+}).strict().superRefine((value, context) => {
+  if (value.store.outcome !== "priced") {
+    context.addIssue({ code: "custom", path: ["store", "outcome"], message: "operator-priced QA requires a priced store outcome" });
+  }
+});
+
 export const ingredientQaResolutionSchema = z.object({
   resolution: z.enum(["existing_alias", "excluded_noncommodity"]),
   commodityId: nonEmptyId.nullable(),

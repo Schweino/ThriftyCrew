@@ -54992,7 +54992,7 @@
       "^(?:[\\w&'®™.-]+\\s+){0,6}(?:(?:organic|whole[- ]grain|white|red|black|tri[- ]?colou?r)\\s+)*quinoa(?:\\s+(?:grain|whole[- ]grain|organic))?(?:\\s*,?\\s*(?:organic|gluten[- ]free))?$"
     ],
     "exclude": [
-      "\\b(?:ready[- ]to[- ](?:eat|serve)|cooked|microwaveable|microwavable|90[- ]second|instant|frozen|pouch|cup|bowl|meal|salad|soup|stew|curry|pilaf|side)\\b",
+      "\\b(?:ready[- ]to[- ](?:eat|serve)|cooked|microwaveable|microwavable|90[- ]second|instant|frozen|steamfresh|pouch|cup|bowl|meal|salad|soup|stew|curry|pilaf|side)\\b",
       "\\b(?:brown rice|rice blend|lentils?|chickpeas?|flax(?:seed)?|chia|millet|buckwheat|amaranth|multigrain|grain blend)\\b",
       "\\b(?:seasoned|garlic|herb|basil|pesto|sauce)\\b",
       "\\b(?:chips?|crackers?|crisps?|puffs?|clusters?|cereal|bread|wraps?|tortillas?|pasta|flour|bars?|burgers?|patties|snacks?)\\b",

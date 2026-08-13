@@ -41,6 +41,7 @@ import {
   ingredientPublicationFailureSchema,
   ingredientPriceResearchSchema,
   ingredientQaNotFoundSchema,
+  ingredientQaPricedSchema,
   ingredientQaRetrySchema,
   ingredientQaResolutionSchema,
   recipeSuggestionRequestSchema,
@@ -1419,21 +1420,28 @@ app.post("/internal/ingredient-gaps/:id/qa-not-found", zValidator("json", ingred
     loyaltyRequired: false,
     membershipRequired: false,
   } : store);
+  const allResolved = stores.every((store) => store.outcome === "priced" || store.outcome === "not_found");
+  const anyPriced = stores.some((store) => store.outcome === "priced");
   const allNotFound = stores.every((store) => store.outcome === "not_found");
+  if (anyPriced && !prior.commodityProposal) return jsonError("priced ingredient QA is missing its commodity proposal", 409);
+  const disposition = anyPriced ? "available" : allNotFound ? "permanently_unavailable" : "needs_operator";
   const research = ingredientPriceResearchSchema.parse({
     ...prior,
     researchedAt: checkedAt,
     stores,
-    disposition: allNotFound ? "permanently_unavailable" : "needs_operator",
-    commodityProposal: null,
+    disposition,
+    commodityProposal: anyPriced ? prior.commodityProposal : null,
     summary: allNotFound
       ? `Operator-assisted first-party QA completed the final blocked store check. All seven Omaha stores now have completed location-bound searches with no qualifying in-stock ${prior.ingredientName} product.`
-      : `Operator-assisted first-party QA resolved ${body.storeLocationId} as not found; another blocked or ambiguous Omaha store check still requires review.`,
+      : allResolved
+        ? `Operator-assisted first-party QA completed all seven Omaha store checks for ${prior.ingredientName}; verified prices and completed not-found outcomes are ready for publication.`
+        : `Operator-assisted first-party QA resolved ${body.storeLocationId} as not found; another blocked or ambiguous Omaha store check still requires review.`,
   });
+  const nextStatus = allNotFound ? "permanently_unavailable" : allResolved && anyPriced ? "ready_to_publish" : "needs_operator";
   const update = await context.env.DB.prepare(
-    `UPDATE ingredient_gaps SET status = ?2, research_json = ?3, updated_at = CURRENT_TIMESTAMP
+    `UPDATE ingredient_gaps SET status = ?2, commodity_id = ?3, research_json = ?4, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?1 AND status IN ('needs_operator', 'permanently_unavailable') AND qa_resolution IS NULL`,
-  ).bind(gapId, research.disposition === "permanently_unavailable" ? "permanently_unavailable" : "needs_operator", JSON.stringify(research)).run();
+  ).bind(gapId, nextStatus, research.commodityProposal?.id ?? null, JSON.stringify(research)).run();
   if ((update.meta.changes ?? 0) !== 1) return jsonError("ingredient QA item changed during resolution", 409);
   const campaigns = await context.env.DB.prepare(
     "SELECT DISTINCT request_id FROM ingredient_gap_occurrences WHERE gap_id = ?1",
@@ -1441,6 +1449,48 @@ app.post("/internal/ingredient-gaps/:id/qa-not-found", zValidator("json", ingred
   for (const campaign of campaigns.results) await reconcileIngredientCampaign(context.env.DB, campaign.request_id);
   await reconcileIngredientHolds(context.env.DB);
   return context.json({ ok: true, gapId, storeLocationId: body.storeLocationId, disposition: research.disposition });
+});
+
+app.post("/internal/ingredient-gaps/:id/qa-priced", zValidator("json", ingredientQaPricedSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may resolve ingredient store QA", 403);
+  const gapId = context.req.param("id");
+  const body = context.req.valid("json");
+  const row = await context.env.DB.prepare(
+    "SELECT status, qa_resolution, research_json FROM ingredient_gaps WHERE id = ?1",
+  ).bind(gapId).first<{ status: string; qa_resolution: string | null; research_json: string | null }>();
+  if (!row || row.status !== "needs_operator" || row.qa_resolution !== null || !row.research_json) {
+    return jsonError("ingredient QA item is not open with durable research evidence", 409);
+  }
+  const prior = ingredientPriceResearchSchema.parse(JSON.parse(row.research_json));
+  const target = prior.stores.find((store) => store.storeLocationId === body.store.storeLocationId);
+  if (!target || !["blocked", "ambiguous", "not_found", "priced"].includes(target.outcome)) {
+    return jsonError("store QA target is not replaceable", 409);
+  }
+  const commodityProposal = prior.commodityProposal ?? body.commodityProposal ?? null;
+  if (!commodityProposal) return jsonError("the first verified price requires a commodity proposal", 422);
+  const stores = prior.stores.map((store) => store.storeLocationId === body.store.storeLocationId ? body.store : store);
+  const allResolved = stores.every((store) => store.outcome === "priced" || store.outcome === "not_found");
+  const research = ingredientPriceResearchSchema.parse({
+    ...prior,
+    researchedAt: body.store.checkedAt,
+    stores,
+    disposition: "available",
+    commodityProposal,
+    summary: allResolved
+      ? `Operator-assisted first-party QA completed all seven Omaha store checks for ${prior.ingredientName}; verified prices and completed not-found outcomes are ready for publication.`
+      : `Operator-assisted first-party QA recorded a verified ${body.store.storeLocationId} price for ${prior.ingredientName}; another blocked or ambiguous Omaha store check still requires review.`,
+  });
+  const update = await context.env.DB.prepare(
+    `UPDATE ingredient_gaps SET status = ?2, commodity_id = ?3, research_json = ?4, publication_error = NULL, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?1 AND status = 'needs_operator' AND qa_resolution IS NULL`,
+  ).bind(gapId, allResolved ? "ready_to_publish" : "needs_operator", commodityProposal.id, JSON.stringify(research)).run();
+  if ((update.meta.changes ?? 0) !== 1) return jsonError("ingredient QA item changed during resolution", 409);
+  const campaigns = await context.env.DB.prepare(
+    "SELECT DISTINCT request_id FROM ingredient_gap_occurrences WHERE gap_id = ?1",
+  ).bind(gapId).all<{ request_id: string }>();
+  for (const campaign of campaigns.results) await reconcileIngredientCampaign(context.env.DB, campaign.request_id);
+  await reconcileIngredientHolds(context.env.DB);
+  return context.json({ ok: true, gapId, storeLocationId: body.store.storeLocationId, status: allResolved ? "ready_to_publish" : "needs_operator" });
 });
 
 app.post("/internal/ingredient-gaps/:id/qa-resolution", zValidator("json", ingredientQaResolutionSchema), async (context) => {

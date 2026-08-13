@@ -1533,6 +1533,12 @@ if (command === "status") {
   result = await (await mutationClient()).request(`/internal/ingredient-gaps/${encodeURIComponent(gapId)}/qa-not-found`, {
     json: { storeLocationId, sourceUrl, evidenceSummary },
   });
+} else if (command === "ingredient" && subcommand === "qa-priced") {
+  const [gapId, file] = arguments_;
+  if (!gapId || !file) throw new Error("tc ingredient qa-priced requires <gap-id> <priced-store-evidence.json>");
+  result = await (await mutationClient()).request(`/internal/ingredient-gaps/${encodeURIComponent(gapId)}/qa-priced`, {
+    json: JSON.parse(await readFile(cliPath(file), "utf8")),
+  });
 } else if (command === "ingredient" && subcommand === "qa-resolve") {
   const [gapId, resolution, commodityId, ...reasonParts] = arguments_;
   if (!gapId || !resolution || !["existing_alias", "excluded_noncommodity"].includes(resolution)) {
