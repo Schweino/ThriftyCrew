@@ -306,6 +306,11 @@ try {
       foreach ($agentId in @('recipe-sourcer','recipe-deduper','recipe-mapper')) {
         if (Invoke-AgentItem $agentId) { $roundProgress = $true }
       }
+      # Price one durable gap after every discovery round so sourcing and Omaha
+      # coverage advance as one pipeline without concurrent Git/config writers.
+      if (Invoke-AgentItem 'ingredient-price-researcher') {
+        Apply-PendingIngredientProposals
+      }
       if (-not $roundProgress) { break }
     }
     for ($item = 0; $item -lt $MaxItems; $item++) {

@@ -53,4 +53,19 @@ describe("Codex subscription execution boundary", () => {
     });
     expect(normalizeCodexStructuredOutput(output, "content-items-v2")).toBe(output);
   });
+
+  it("removes product and price residue only from non-priced ingredient store checks", () => {
+    const output = {
+      stores: [
+        { outcome: "priced", productName: "Extra firm tofu", packagePriceMinor: 249, validFrom: null },
+        { outcome: "ambiguous", productName: "Possible tofu", packagePriceMinor: 199, sourceUrl: "https://example.test" },
+      ],
+    };
+    expect(normalizeCodexStructuredOutput(output, "ingredient-price-research-v1")).toMatchObject({
+      stores: [
+        { outcome: "priced", productName: "Extra firm tofu", packagePriceMinor: 249 },
+        { outcome: "ambiguous", productName: null, packagePriceMinor: null, sourceUrl: "https://example.test" },
+      ],
+    });
+  });
 });

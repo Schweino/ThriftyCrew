@@ -43,20 +43,37 @@ export function stripCodexOptionalNulls(value: unknown, schema: unknown): unknow
 }
 
 export function normalizeCodexStructuredOutput(value: unknown, outputContract: string): unknown {
-  if (outputContract !== "recipe-map-v2" || !isObject(value) || !Array.isArray(value.recipes)) return value;
-  return {
-    ...value,
-    recipes: value.recipes.map((recipe) => {
-      if (!isObject(recipe) || !Array.isArray(recipe.mealComponents)) return recipe;
-      return {
-        ...recipe,
-        mealComponents: recipe.mealComponents.map((component) => {
-          if (!isObject(component) || !Array.isArray(component.commodityIds)) return component;
-          return { ...component, commodityIds: [...new Set(component.commodityIds)] };
-        }),
-      };
-    }),
-  };
+  if (!isObject(value)) return value;
+  if (outputContract === "recipe-map-v2" && Array.isArray(value.recipes)) {
+    return {
+      ...value,
+      recipes: value.recipes.map((recipe) => {
+        if (!isObject(recipe) || !Array.isArray(recipe.mealComponents)) return recipe;
+        return {
+          ...recipe,
+          mealComponents: recipe.mealComponents.map((component) => {
+            if (!isObject(component) || !Array.isArray(component.commodityIds)) return component;
+            return { ...component, commodityIds: [...new Set(component.commodityIds)] };
+          }),
+        };
+      }),
+    };
+  }
+  if (outputContract === "ingredient-price-research-v1" && Array.isArray(value.stores)) {
+    const nonPricedNullFields = [
+      "productName", "sellerName", "fulfillmentMode", "availabilityText", "packageText",
+      "packagePriceMinor", "normalizedBasisUnit", "normalizedBasisQtyMicros", "perUnitMicros",
+      "offerKind", "validFrom", "validTo",
+    ];
+    return {
+      ...value,
+      stores: value.stores.map((store) => {
+        if (!isObject(store) || store.outcome === "priced") return store;
+        return { ...store, ...Object.fromEntries(nonPricedNullFields.map((field) => [field, null])) };
+      }),
+    };
+  }
+  return value;
 }
 
 export function assertChatGptAuthDocument(document: CodexAuthDocument): void {
