@@ -3908,7 +3908,7 @@ app.get("/internal/capture-batches/ready-browser", async (context) => {
   if (identity.role !== "engine" && identity.role !== "operator") return jsonError("mutation role is not authorized to select promotion candidates", 403);
   const rows = await context.env.DB.prepare(
     `SELECT batch.id, batch.source_id, batch.captured_to, batch.coverage_mode,
-            COUNT(observation.id) AS observation_count
+            COUNT(observation.observation_id) AS observation_count
        FROM capture_batches batch
        JOIN capture_sources source ON source.id = batch.source_id
        LEFT JOIN capture_batch_observations observation ON observation.batch_id = batch.id
