@@ -55562,5 +55562,21 @@
     ],
     "band_min": 0.08,
     "band_max": 0.72
+  },
+  {
+    "id": "shelled-edamame",
+    "label": "Shelled Edamame",
+    "unit": "oz",
+    "include": [
+      "\\b(?:shelled\\s+edamame|mukimame)\\b",
+      "\\bedamame\\b.*\\bshelled\\b"
+    ],
+    "exclude": [
+      "\\b(?:in\\s+the\\s+pod|in[- ]pod|pods?)\\b",
+      "\\b(?:dry[- ]roasted|roasted|crunchy|snack|trail\\s+mix|protein\\s+mix)\\b",
+      "\\b(?:salad|succotash|stir[- ]?fry|mixed\\s+vegetables?|vegetable\\s+blend)\\b"
+    ],
+    "band_min": 0.06,
+    "band_max": 0.9
   }
 ]
