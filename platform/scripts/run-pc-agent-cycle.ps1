@@ -187,6 +187,7 @@ function Apply-PendingIngredientProposals {
   }
   $committed = $false
   try {
+    Set-PcRuntimeCredential $config 'local-operator'
     Invoke-LoggedCommand 'ingredient-config-apply-ready' { & $pnpmPath tc ingredient apply-ready } | Out-Null
     $changed = @(git -C $incomeRoot status --porcelain -- $scopedPaths)
     if ($LASTEXITCODE -ne 0) { throw 'could not inspect recovered ingredient configuration changes' }
