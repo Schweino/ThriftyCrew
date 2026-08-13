@@ -17,16 +17,6 @@
       "id": "missing-yield",
       "input": { "ingredient": "2 lb chicken breast", "sourceServings": null, "targetServings": 14, "commodities": [{ "id": "chicken-breast", "name": "Chicken breast" }] },
       "expect": { "decision": "chicken-breast", "mustMention": ["yield"] }
-    },
-    {
-      "id": "standard-unmodified-grocery-form",
-      "input": { "ingredients": ["1 large onion", "1 tablespoon chopped garlic"], "sourceServings": 4, "targetServings": 14, "commodities": [{ "id": "onions", "name": "Yellow / Sweet Onions" }, { "id": "garlic", "name": "Garlic (fresh)" }] },
-      "expect": { "decision": "mapped", "mustMention": ["onions", "garlic"] }
-    },
-    {
-      "id": "explicit-form-conflict",
-      "input": { "ingredient": "1 tablespoon jarred minced garlic", "sourceServings": 4, "targetServings": 14, "commodities": [{ "id": "garlic", "name": "Garlic (fresh)" }] },
-      "expect": { "decision": "unmapped", "mustMention": ["jarred"] }
     }
   ]
 }

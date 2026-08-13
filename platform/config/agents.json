@@ -203,7 +203,7 @@
       "enabled": true,
       "plane": "pc",
       "promptFile": "agents/recipe-mapper/prompt.md",
-      "promptSha256": "74a7d18db8f53d0479f29d903693fdcd47cfe9dbf3038e9c63203962e0e41fb2",
+      "promptSha256": "57fc9cf0502e7db514bb6e25838ee046ab1bbf3972735ff52dd43e42ee6149e4",
       "provider": "openai",
       "model": "gpt-5.6-sol",
       "reasoningEffort": "high",
@@ -212,7 +212,7 @@
       "criticality": "optional",
       "workflowFile": ".github/workflows/agent-recipe-mapper.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "f3d2e660122c05cc8ba54f87688caf27b5d51a716a71aeb5a9526536917920d1",
+      "executionConfigHash": "1ba1a64efab7d2d311cf33342080c33cc1a64577f44b34e9a0899fe55f625b4a",
       "capabilities": [
         "read:content",
         "write:ledger",
