@@ -1050,6 +1050,8 @@ if (command === "status") {
   const snapshot = await loadEngineSnapshot(client, requestedMode as "legacy" | "direct" | "all", "parity");
   const report = buildNativeParityReport(snapshot);
   result = await client.request("/internal/engine/parity", { json: report, acceptStatuses: [422] });
+} else if (command === "engine" && subcommand === "snapshot-identity") {
+  result = await (await mutationClient()).request("/internal/engine/snapshot-identity?mode=direct");
 } else if (command === "engine" && (subcommand === "build-native" || subcommand === "publish-native")) {
   const operationStartedAt = performance.now();
   const performanceProfile: Record<string, number> = {};
@@ -1059,7 +1061,7 @@ if (command === "status") {
   // before publication so the immutable snapshot can never select an unbound input.
   if (subcommand === "publish-native") await rematchPromotedBatches(client);
   let stageStartedAt = performance.now();
-  const identity = await client.request("/internal/engine/snapshot-identity?mode=direct") as unknown as Pick<NativeEngineSnapshot, "mode" | "observedAt" | "configurationId" | "inputHash" | "inputBatchIds">;
+  const identity = await client.request("/internal/engine/snapshot-identity?mode=direct") as unknown as Pick<NativeEngineSnapshot, "mode" | "observedAt" | "configurationId" | "inputHash" | "inputBatchIds" | "contentBatchIds" | "contentRecipeHash">;
   performanceProfile.snapshotIdentityMs = Math.round(performance.now() - stageStartedAt);
   stageStartedAt = performance.now();
   const catalog = await loadNativeReleaseCatalog(incomeRoot);
