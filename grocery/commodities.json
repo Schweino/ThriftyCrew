@@ -55578,5 +55578,23 @@
     ],
     "band_min": 0.06,
     "band_max": 0.9
+  },
+  {
+    "id": "red-wine",
+    "label": "Red Wine",
+    "unit": "fl_oz",
+    "include": [
+      "\\bred\\s+wine\\b",
+      "\\b(?:cabernet(?:\\s+sauvignon)?|merlot|pinot\\s+noir|malbec|chianti|zinfandel|shiraz|syrah|red\\s+blend|burgundy|rioja)\\b.*\\b(?:wine|abv)\\b"
+    ],
+    "exclude": [
+      "\\b(?:vinegar|cooking\\s+wine|wine\\s+sauce|marinade|broth|stock|seasoning|extract)\\b",
+      "\\b(?:non[- ]?alcoholic|alcohol[- ]?removed|zero[- ]?proof|0%\\s*abv)\\b",
+      "\\b(?:sparkling|champagne|prosecco|brut|ros[eé]|pink|white\\s+zinfandel|white\\s+wine)\\b",
+      "\\b(?:sangria|sweet\\s+red|dessert\\s+wine|port|sherry|marsala|cocktail|margarita|ready[- ]to[- ]drink|rtd)\\b",
+      "\\b(?:frozen|entr[eé]e|meal|pasta|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
+    ],
+    "band_min": 0.02,
+    "band_max": 0.46
   }
 ]
