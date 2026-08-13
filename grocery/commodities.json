@@ -55309,5 +55309,131 @@
     ],
     "band_min": 0.06,
     "band_max": 0.98
+  },
+  {
+    "id": "red-lentils",
+    "label": "Red Lentils",
+    "unit": "oz",
+    "include": [
+      "\\b(?:(?:split|dry)\\s+)?red\\s+lentils?\\b|\\bred\\s+split\\s+lentils?\\b"
+    ],
+    "exclude": [
+      "\\b(?:pasta|spaghetti|penne|rotini|fusilli|noodles?|rice)\\b",
+      "\\b(?:soup|curry|dal|dahl|meal|bowl|prepared|ready[- ]?to[- ]?eat|cooked|seasoned|mix)\\b",
+      "\\b(?:canned|flour|powder|protein|supplement|snack|chips?|crackers?|beverage|drink)\\b",
+      "\\b(?:green|brown|black|yellow)\\s+lentils?\\b"
+    ],
+    "band_min": 0.05,
+    "band_max": 0.47
+  },
+  {
+    "id": "ready-to-serve-long-grain-wild-rice-pouch",
+    "label": "Ready-to-Serve Long Grain & Wild Rice Pouch",
+    "unit": "oz",
+    "include": [
+      "\\b(?:ready(?:[- ]to[- ]serve)?|90[- ]second|microwave(?:able)?)\\b.*\\b(?:long grain\\s*(?:&|and)\\s*wild|wild\\s*(?:&|and)\\s*long grain)\\b.*\\brice\\b",
+      "\\b(?:long grain\\s*(?:&|and)\\s*wild|wild\\s*(?:&|and)\\s*long grain)\\b.*\\bready(?:[- ]to[- ]serve)?\\s+rice\\b"
+    ],
+    "exclude": [
+      "\\b(?:uncooked|dry\\s+mix|rice\\s+mix|boxed?|cups?|bowls?|frozen|baby\\s+food|meal\\s+kit|soup|salad)\\b",
+      "\\b(?:jasmine|basmati|plain\\s+brown|plain\\s+white|spanish|fried|cilantro|chicken|vegetable)\\b",
+      "\\b(?:supplement|protein\\s+powder|drink|beverage|smoothie)\\b"
+    ],
+    "band_min": 0.05,
+    "band_max": 0.92
+  },
+  {
+    "id": "frozen-mixed-peppers",
+    "label": "Frozen Sliced Mixed Peppers",
+    "unit": "oz",
+    "include": [
+      "\\b(frozen|fresh frozen)\\b.*\\b(3|three|tri[- ]?colou?red|mixed)\\b.*\\b(bell\\s+)?peppers?\\b",
+      "\\b(frozen|fresh frozen)\\b.*\\b(bell\\s+)?peppers?\\b.*\\b(onions?|blend|medley|stir[- ]?fry)\\b",
+      "\\bpeppers?\\s*(?:&|and)\\s*onions?\\b.*\\b(blend|medley)\\b",
+      "\\bpepper stir[- ]?fry vegetables\\b.*\\bfrozen\\b",
+      "\\bfajita blend\\b.*\\b(frozen|fresh frozen)\\b"
+    ],
+    "exclude": [
+      "\\b(sauce|sauced|seasoning|spice|powder|flakes?|pickled|canned|jarred|dried|dehydrated)\\b",
+      "\\b(stuffed|pizza|meal|entrée|entree|omelet|sandwich|bowl|supplement|capsule|juice|drink|beverage)\\b",
+      "\\b(roasted red pepper|green chiles?|jalape[nñ]os?|banana peppers?|poblanos?|serranos?)\\b",
+      "\\b(broccoli|cauliflower|carrots?|corn|peas?|potatoes?|mushrooms?|celery)\\b"
+    ],
+    "band_min": 0.04,
+    "band_max": 0.4
+  },
+  {
+    "id": "daiya-cheddar-style-shreds",
+    "label": "Daiya Cheddar Style Shreds",
+    "unit": "oz",
+    "include": [
+      "\\bdaiya\\b.*\\bcheddar(?:\\s+style)?\\b.*\\b(?:cheese\\s+)?shreds?\\b",
+      "\\bdaiya\\b.*\\bcheddar\\b.*\\bshredded\\b"
+    ],
+    "exclude": [
+      "\\b(?:mozzarella|mexican|pepper\\s*jack|american|provolone|parmesan|colby|swiss)\\b",
+      "\\b(?:slices?|blocks?|sauce|dip|spread|cream\\s+cheese|mac(?:aroni)?(?:\\s*(?:and|&)\\s*)?cheese|pizza|burrito|meal|snack|crackers?|chips?|popcorn|supplements?|capsules?|powder|drinks?|beverages?)\\b"
+    ],
+    "band_min": 0.22,
+    "band_max": 2.54
+  },
+  {
+    "id": "veggie-sausages",
+    "label": "Veggie Sausages",
+    "unit": "oz",
+    "include": [
+      "\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b.*\\b(?:sausage|sausages|saus['’]?ge|bratwurst|brat)\\b|\\b(?:sausage|sausages|saus['’]?ge|bratwurst|brat)\\b.*\\b(?:veggie|vegetarian|vegan|plant[- ]based|meatless)\\b"
+    ],
+    "exclude": [
+      "\\b(?:hot dog|veggie dog|smart dog|ground|crumble|meatball|burger|bacon|nugget|wing|pizza|burrito|bowl|sandwich|pasta sauce|supplement|protein powder|shake|beverage|drink)\\b",
+      "\\b(?:pork|chicken|turkey|beef)\\s+(?:breakfast\\s+)?sausage\\b"
+    ],
+    "band_min": 0.22,
+    "band_max": 1.93
+  },
+  {
+    "id": "buckwheat-soba-noodles",
+    "label": "Buckwheat Soba Noodles",
+    "unit": "oz",
+    "include": [
+      "^(?=.*\\bbuckwheat\\b)(?=.*\\bsoba\\b)(?=.*\\bnoodles?\\b).*$"
+    ],
+    "exclude": [
+      "\\b(?:ramen|udon|yakisoba|lo mein|pad thai|vermicelli|glass noodles?)\\b",
+      "\\b(?:bowl|soup|meal kit|prepared|ready[- ]to[- ]eat|frozen|sauce|seasoning)\\b",
+      "\\b(?:flour|groats?|kasha|pancake|tea|drink|beverage|supplement|capsules?|powder)\\b"
+    ],
+    "band_min": 0.21,
+    "band_max": 1.88
+  },
+  {
+    "id": "kosher-salt",
+    "label": "Kosher Salt",
+    "unit": "oz",
+    "include": [
+      "\\b(?:coarse\\s+kosher\\s+salt|kosher\\s+salt(?:\\s+flakes?)?|kosher\\s+salt\\s+coarse|salt,\\s*kosher)\\b"
+    ],
+    "exclude": [
+      "\\b(?:fine(?:\\s+grain)?|pink|himalayan|iodized|seasoned|seasoning|garlic|onion|celery|lite|low[-\\s]?sodium|salt[-\\s]?free|salt\\s+substitute)\\b",
+      "\\b(?:pickling|canning|curing|bath|supplement|capsule|tablet|beverage|drink)\\b",
+      "\\b(?:cracker|chip|pretzel|butter|chocolate|popcorn|sauce|dressing|snack)\\b"
+    ],
+    "band_min": 0.02,
+    "band_max": 0.4
+  },
+  {
+    "id": "plain-soy-tempeh",
+    "label": "Plain Soy Tempeh",
+    "unit": "oz",
+    "include": [
+      "\\btempeh\\b"
+    ],
+    "exclude": [
+      "\\b(?:chips?|jerky|bacon|sausages?|burgers?|strips?|bowls?|meals?|sandwich(?:es)?|wraps?|salads?|marinated|seasoned|flavou?red|bbq|teriyaki|buffalo|smoky|maple)\\b",
+      "\\b(?:starter|culture|spores?|supplements?|capsules?|powder|protein\\s+powder|drinks?|beverages?)\\b",
+      "\\b(?:chickpea|black\\s+bean|lupin|hemp)\\b"
+    ],
+    "band_min": 0.18,
+    "band_max": 1.61
   }
 ]
