@@ -56,6 +56,42 @@
       "expect": { "decision": "fail", "mustMention": ["risk"] }
     },
     {
+      "id": "registered-smoked-sausage-commodity",
+      "input": {
+        "sourceCandidateId": "candidate-sausage",
+        "sourceServings": 4,
+        "slug": "smoked-sausage-zoodles",
+        "servings": 14,
+        "ingredients": [{ "name": "roasted-garlic smoked sausage", "grams": 1289.4, "commodityId": "kielbasa", "sourceLine": "1 (13-ounce) package roasted-garlic smoked sausage" }],
+        "instructions": [{ "text": "Brown the smoked sausage in batches.", "usesCommodityIds": ["kielbasa"] }]
+      },
+      "expect": { "decision": "pass", "mustMention": ["smoked sausage"] }
+    },
+    {
+      "id": "precise-volume-with-produce-count",
+      "input": {
+        "sourceCandidateId": "candidate-soup",
+        "sourceServings": 5,
+        "slug": "broccoli-soup",
+        "servings": 14,
+        "ingredients": [{ "name": "diced onions", "grams": 672, "commodityId": "onions", "sourceLine": "1.5 cups diced onions (1/2 onion)" }],
+        "instructions": [{ "text": "Cook the diced onions until soft.", "usesCommodityIds": ["onions"] }]
+      },
+      "expect": { "decision": "pass", "mustMention": ["1.5 cups"] }
+    },
+    {
+      "id": "quantified-process-water",
+      "input": {
+        "sourceCandidateId": "candidate-pressure",
+        "sourceServings": 5,
+        "slug": "pressure-soup",
+        "servings": 14,
+        "ingredients": [{ "name": "broccoli", "grams": 1019.2, "commodityId": "broccoli", "sourceLine": "4 cups broccoli" }],
+        "instructions": [{ "text": "Add 5.6 cups water and pressure-cook the broccoli.", "usesCommodityIds": ["broccoli"] }]
+      },
+      "expect": { "decision": "pass", "mustMention": ["process water"] }
+    },
+    {
       "id": "standalone-protein-is-not-complete-meal",
       "input": {
         "sourceCandidateId": "candidate-4",

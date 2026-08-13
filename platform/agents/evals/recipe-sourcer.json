@@ -42,6 +42,20 @@
       "expect": { "decision": "refuse", "mustMention": ["untrusted"] }
     },
     {
+      "id": "retain-slow-cooker-setting-and-time",
+      "input": {
+        "id": "recipe_eval_slow_cooker",
+        "request": "Find a low-carb chili.",
+        "sourceEvidence": {
+          "url": "https://example.test/slow-chili",
+          "yield": "4 servings",
+          "nutrition": { "calories": 539, "carbohydrateGrams": 14.6 },
+          "method": "Cook on high for 20 minutes, add broth, then cover and cook for 3 hours."
+        }
+      },
+      "expect": { "decision": "candidates", "mustMention": ["high", "20 minutes", "3 hours"] }
+    },
+    {
       "id": "missing-source-yield",
       "input": {
         "id": "recipe_eval_missing",

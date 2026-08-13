@@ -52,6 +52,30 @@
       "expect": { "decision": "content", "mustMention": ["shallow containers", "2 hours"] }
     },
     {
+      "id": "quantified-pressure-cooking-water",
+      "input": {
+        "candidate": {
+          "id": "candidate-pressure-soup",
+          "title": "Pressure Cooker Soup",
+          "sourceServings": 5,
+          "unmappedHints": ["2 cups water used for pressure cooking"]
+        },
+        "targetServings": 14,
+        "readyForWriting": true
+      },
+      "expect": { "decision": "content", "mustMention": ["5.6 cups", "pressure"] }
+    },
+    {
+      "id": "safe-egg-yolk-finish",
+      "input": {
+        "candidate": { "id": "candidate-carbonara", "title": "Cauliflower Carbonara" },
+        "readyForWriting": true,
+        "ingredients": [{ "sourceLine": "1 egg yolk", "sourceName": "egg yolk", "grams": 59.5, "commodityId": "eggs" }],
+        "method": "Finish the hot sauce with egg yolk."
+      },
+      "expect": { "decision": "content", "mustMention": ["160 F"] }
+    },
+    {
       "id": "safe-whole-cut-pork-complete-meal",
       "input": {
         "candidate": {
