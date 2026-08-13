@@ -82,12 +82,12 @@
         "sourceEvidence": {
           "url": "https://example.test/pork",
           "accessedAt": "2026-08-10T12:00:00Z",
-          "title": "Roasted Pork Tenderloin",
+          "title": "Roasted Pork Tenderloin with Broccoli",
           "yield": "2 servings",
           "cuisine": "American",
           "proteinClass": "pork tenderloin",
-          "method": "Sear and roast the seasoned pork.",
-          "nutrition": { "calories": 473, "proteinGrams": 59, "carbohydrateGrams": 5 },
+          "method": "Sear and roast the seasoned pork, then serve it with the roasted broccoli.",
+          "nutrition": { "calories": 473, "proteinGrams": 59, "carbohydrateGrams": 18 },
           "completeIngredientList": true,
           "ingredients": [
             "1.25 pounds pork tenderloin",
@@ -96,7 +96,8 @@
             "1 teaspoon garlic powder",
             "1 teaspoon dried thyme",
             "1 teaspoon paprika",
-            "2 tablespoons olive oil"
+            "2 tablespoons olive oil",
+            "12 ounces broccoli florets"
           ]
         }
       },
@@ -138,22 +139,24 @@
         "commodities": [
           "chicken-thighs | Chicken thighs | Meat",
           "olive-oil | Olive oil | Pantry",
-          "garlic | Garlic | Produce"
+          "garlic | Garlic | Produce",
+          "broccoli | Broccoli | Produce"
         ],
         "sourceEvidence": {
           "url": "https://example.test/garlic-chicken",
           "accessedAt": "2026-08-10T12:00:00Z",
-          "title": "Garlic Chicken Thighs",
+          "title": "Garlic Chicken Thighs with Broccoli",
           "yield": "4 servings",
           "cuisine": "American",
           "proteinClass": "chicken",
-          "method": "Roast the garlic-seasoned chicken thighs.",
-          "nutrition": { "calories": 575, "proteinGrams": 48, "carbohydrateGrams": 8 },
+          "method": "Roast the garlic-seasoned chicken thighs and broccoli together as a complete meal.",
+          "nutrition": { "calories": 575, "proteinGrams": 48, "carbohydrateGrams": 18 },
           "completeIngredientList": true,
           "ingredients": [
             "2 pounds chicken thighs",
             "2 tablespoons olive oil",
             "4 cloves garlic",
+            "4 cups broccoli florets",
             "black pepper, to taste"
           ]
         }
@@ -167,21 +170,23 @@
         "request": "Find a batch-scalable low-carbohydrate dinner.",
         "commodities": [
           "whole-chicken | Whole Chicken | Meat",
-          "onions | Yellow / Sweet Onions | Produce"
+          "onions | Yellow / Sweet Onions | Produce",
+          "broccoli | Broccoli | Produce"
         ],
         "sourceEvidence": {
           "url": "https://example.test/range-chicken",
           "accessedAt": "2026-08-10T12:00:00Z",
-          "title": "Slow-Cooker Chicken",
+          "title": "Slow-Cooker Chicken with Broccoli",
           "yield": "4 servings",
           "cuisine": "American",
           "proteinClass": "chicken",
-          "method": "Slow-cook the chicken over onions.",
-          "nutrition": { "calories": 550, "proteinGrams": 85, "carbohydrateGrams": 3 },
+          "method": "Slow-cook the chicken over onions and serve each portion with the included steamed broccoli.",
+          "nutrition": { "calories": 550, "proteinGrams": 85, "carbohydrateGrams": 14 },
           "completeIngredientList": true,
           "ingredients": [
             "1 cut-up whole chicken (3 1/2 to 4 lb)",
-            "1 large onion"
+            "1 large onion",
+            "1 1/2 pounds broccoli florets"
           ]
         }
       },
