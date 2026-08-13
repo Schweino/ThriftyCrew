@@ -55545,5 +55545,22 @@
     ],
     "band_min": 0.42,
     "band_max": 5.97
+  },
+  {
+    "id": "cooked-quinoa",
+    "label": "Cooked Quinoa",
+    "unit": "oz",
+    "include": [
+      "\\b(?:cooked|fully[- ]cooked|ready[- ]to[- ]eat|microwave(?:able)?|steamfresh|frozen)\\b.*\\bquinoa\\b",
+      "\\bquinoa\\b.*\\b(?:cooked|fully[- ]cooked|ready[- ]to[- ]eat|microwave(?:able)?|steamfresh|frozen)\\b"
+    ],
+    "exclude": [
+      "\\b(?:uncooked|dry|raw)\\b",
+      "\\b(?:brown|red|white|wild|jasmine|basmati)\\s+rice\\b",
+      "\\b(?:lentils?|beans?|chicken|beef|pork|soup|salad|bowl|meal|flour|flakes?|pasta|chips?|crisps?|puffs?|protein powder|supplement|beverage|drink)\\b",
+      "\\bquinoa\\s*(?:and|&|with)\\s*(?:rice|lentils?|vegetables?|veggies)\\b"
+    ],
+    "band_min": 0.08,
+    "band_max": 0.72
   }
 ]
