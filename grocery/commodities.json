@@ -55168,5 +55168,142 @@
     ],
     "band_min": 0.22,
     "band_max": 2.54
+  },
+  {
+    "id": "creme-fraiche",
+    "label": "Crème fraîche",
+    "unit": "oz",
+    "include": [
+      "\\bcr[eè]me\\s+fra[iî]che\\b"
+    ],
+    "exclude": [
+      "\\bsour\\s+cream\\b",
+      "\\bcrema\\s+(?:mexicana|salvadore[nñ]a|agria)\\b",
+      "\\btable\\s+cream\\b",
+      "\\bcream\\s+cheese\\b",
+      "\\bmascarpone\\b",
+      "\\b(?:brie|camembert)\\b",
+      "\\bcoffee\\s+creamer\\b",
+      "\\bwhipp(?:ed|ing)\\s+cream\\b",
+      "\\bice\\s+cream\\b",
+      "\\byogurt\\b",
+      "\\b(?:dip|spread|dessert|mousse|beverage|drink|supplement|powder|capsule)s?\\b"
+    ],
+    "band_min": 0.3,
+    "band_max": 2.63
+  },
+  {
+    "id": "white-wine",
+    "label": "White Wine",
+    "unit": "fl_oz",
+    "include": [
+      "\\bwhite\\s+wine\\b",
+      "\\b(chardonnay|sauvignon\\s+blanc|pinot\\s+grigio|pinot\\s+gris|riesling|moscato|chenin\\s+blanc|viognier|pinot\\s+blanc|fume\\s+blanc)\\b.*\\b(wine|abv)\\b"
+    ],
+    "exclude": [
+      "\\b(vinegar|cooking\\s+wine|wine\\s+sauce|marinade|broth|stock|seasoning|extract)\\b",
+      "\\b(non[- ]?alcoholic|alcohol[- ]?removed|zero[- ]?proof|0%\\s*abv)\\b",
+      "\\b(sparkling|champagne|prosecco|brut|ros[eé]|pink|white\\s+zinfandel)\\b",
+      "\\b(cocktail|mimosa|sangria|hard\\s+seltzer|beer|cider|margarita|ready[- ]to[- ]drink|rtd)\\b",
+      "\\b(frozen|entr[eé]e|meal|pasta|shrimp|supplement|capsule|gummy|powder|drink\\s+mix)\\b"
+    ],
+    "band_min": 1.11,
+    "band_max": 14.4
+  },
+  {
+    "id": "brown-lentils",
+    "label": "Brown Lentils",
+    "unit": "lb",
+    "include": [
+      "\\bbrown\\s+lentils?\\b",
+      "\\bbrown\\s+lentil\\s+beans?\\b"
+    ],
+    "exclude": [
+      "\\b(red|green|black|beluga|french|puy|yellow)\\s+lentils?\\b",
+      "\\b(split|canned|cooked|prepared|ready[- ]?to[- ]?eat|soup|stew|dal|dahl|curry|tikka|masala|pasta|penne|rotini|chips?|crackers?|snacks?|drink|beverage|protein powder|supplement)\\b",
+      "\\blentil\\s+(flour|pasta|soup|mix|meal|chips?|snacks?)\\b"
+    ],
+    "band_min": 0.8,
+    "band_max": 6.87
+  },
+  {
+    "id": "15-bean-soup-mix",
+    "label": "15 Bean Soup Mix",
+    "unit": "oz",
+    "include": [
+      "\\b15[- ]?bean\\b.*\\bsoup\\b(?:\\s+mix)?\\b",
+      "\\bhambeens?\\b.*\\b15[- ]?bean\\b",
+      "\\bfifteen[- ]bean\\b.*\\bsoup\\b"
+    ],
+    "exclude": [
+      "\\b(?:canned|condensed|ready[- ]to[- ]eat|prepared|frozen)\\b",
+      "\\b(?:9|nine|10|ten|12|twelve|13|thirteen|14|fourteen|16|sixteen)[- ]bean\\b",
+      "\\b(?:chili|salad|dip|bouillon|broth|stock|beverage|drink|supplement|capsule)\\b"
+    ],
+    "band_min": 0.06,
+    "band_max": 0.53
+  },
+  {
+    "id": "southern-mixed-greens",
+    "label": "Southern-Style Mixed Greens",
+    "unit": "oz",
+    "include": [
+      "\\b(?:seasoned\\s+)?southern(?:\\s+style)?\\s+mixed\\s+greens\\b",
+      "\\bmixed\\s+greens\\b.*\\b(?:turnip|mustard)\\b"
+    ],
+    "exclude": [
+      "\\b(?:collard|turnip|mustard|kale|spinach)\\s+greens?\\b(?!.*\\bmixed\\b)",
+      "\\b(?:spring mix|salad mix|salad kit|lettuce|arugula|green beans?|vegetable medley)\\b",
+      "\\b(?:fresh|frozen|juice|smoothie|beverage|powder|gumm(?:y|ies)|supplement|trail mix|soup|prepared meal)\\b"
+    ],
+    "band_min": 0.04,
+    "band_max": 0.37
+  },
+  {
+    "id": "adobo-seasoning",
+    "label": "Adobo seasoning",
+    "unit": "oz",
+    "include": [
+      "\\b(?:adobo|adob-o)\\b.*\\b(?:seasoning|blend)\\b",
+      "\\b(?:seasoning|blend)\\b.*\\b(?:adobo|adob-o)\\b"
+    ],
+    "exclude": [
+      "\\b(?:sauce|marinade|mole|chipotles?|peppers?\\s+in\\s+adobo|canned)\\b",
+      "\\b(?:filipino|chicken\\s+adobo|meal|soup|ready[- ]to[- ]eat|prepared)\\b",
+      "\\b(?:beverage|drink|tea|capsules?|tablets?|supplements?)\\b",
+      "\\b(?:sazon|taco|fajita|cajun|jerk|italian)\\b"
+    ],
+    "band_min": 0.09,
+    "band_max": 0.98
+  },
+  {
+    "id": "sofrito-cooking-base",
+    "label": "Sofrito Cooking Base",
+    "unit": "oz",
+    "include": [
+      "\\bsofrito\\b"
+    ],
+    "exclude": [
+      "\\b(saz[oó]n|adobo|recaito|bouillon|seasoning mix|dry seasoning|salsa|pesto|marinade)\\b",
+      "\\b(beverage|drink|juice|cocktail|supplement|capsule|tablet|powder)\\b",
+      "\\b(prepared meal|meal kit|ready-to-eat|restaurant)\\b"
+    ],
+    "band_min": 0.08,
+    "band_max": 0.75
+  },
+  {
+    "id": "vienna-sausage",
+    "label": "Vienna sausage",
+    "unit": "oz",
+    "include": [
+      "\\bvienna\\s+sausages?\\b"
+    ],
+    "exclude": [
+      "\\b(cocktail sausages?|hot dogs?|smoked sausages?|summer sausages?|breakfast sausages?|sausage links?|sausage patties?|bratwurst|kielbasa|corn dogs?|sausage gravy)\\b",
+      "\\b(potted meat|luncheon meat|beanee weenee|spaghettios|pasta|pizza|sandwich|prepared meal|soup|seasoning)\\b",
+      "\\b(protein powder|supplement|drink|beverage)\\b"
+    ],
+    "band_min": 0.06,
+    "band_max": 0.98
   }
 ]
