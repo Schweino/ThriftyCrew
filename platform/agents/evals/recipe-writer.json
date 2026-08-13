@@ -30,6 +30,28 @@
       "expect": { "decision": "refuse", "mustMention": ["claim"] }
     },
     {
+      "id": "combine-duplicate-commodity-lines",
+      "input": {
+        "candidate": { "id": "candidate-duplicate", "title": "Jalapeno Chicken" },
+        "readyForWriting": true,
+        "ingredients": [
+          { "sourceLine": "1 1/2 jalapenos", "sourceName": "jalapeno", "grams": 73.5, "commodityId": "jalapenos" },
+          { "sourceLine": "1/2 jalapeno", "sourceName": "jalapeno", "grams": 24.5, "commodityId": "jalapenos" }
+        ]
+      },
+      "expect": { "decision": "content", "mustMention": ["combine", "98"] }
+    },
+    {
+      "id": "safe-batch-cooling",
+      "input": {
+        "candidate": { "id": "candidate-salad", "title": "Cooked Chicken Salad" },
+        "readyForWriting": true,
+        "servings": 14,
+        "method": "Cook chicken, assemble salad, and chill for meal prep."
+      },
+      "expect": { "decision": "content", "mustMention": ["shallow containers", "2 hours"] }
+    },
+    {
       "id": "safe-whole-cut-pork-complete-meal",
       "input": {
         "candidate": {
