@@ -150,12 +150,6 @@ function Publish-AgentProposal([string]$AgentId, [string]$WorkItemId, [string]$R
 }
 
 function Apply-PendingIngredientProposals {
-  if ($script:ingredientProposalFiles.Count -eq 0) { return }
-  $available = @($script:ingredientProposalFiles | Where-Object {
-    $runner = Read-PcUtf8Json $_
-    [string]$runner.finalOutput.disposition -eq 'available'
-  })
-  if ($available.Count -eq 0) { $script:ingredientProposalFiles.Clear(); return }
   $publicationLock = $null
   for ($attempt = 0; $attempt -lt 360 -and -not $publicationLock; $attempt++) {
     $publicationLock = Enter-PcRuntimeLock 'ingredient-config-publication' 300
@@ -193,16 +187,16 @@ function Apply-PendingIngredientProposals {
   }
   $committed = $false
   try {
-    foreach ($file in $available) {
-      Invoke-LoggedCommand 'ingredient-config-apply' { & $pnpmPath tc ingredient apply $file } | Out-Null
-    }
+    Invoke-LoggedCommand 'ingredient-config-apply-ready' { & $pnpmPath tc ingredient apply-ready } | Out-Null
+    $changed = @(git -C $incomeRoot status --porcelain -- $scopedPaths)
+    if ($LASTEXITCODE -ne 0) { throw 'could not inspect recovered ingredient configuration changes' }
+    if ($changed.Count -eq 0) { return }
     Invoke-LoggedCommand 'ingredient-config-full-check' { & $pnpmPath check } | Out-Null
     git -C $incomeRoot add -- $scopedPaths
     if ($LASTEXITCODE -ne 0) { throw 'could not stage verified ingredient configuration' }
     git -C $incomeRoot diff --cached --quiet
     if ($LASTEXITCODE -eq 0) { throw 'available ingredient research produced no configuration change' }
-    $ids = @($available | ForEach-Object { [string](Read-PcUtf8Json $_).finalOutput.gapId })
-    git -C $incomeRoot commit -m ("Add verified Omaha ingredient coverage ({0})" -f ($ids -join ', '))
+    git -C $incomeRoot commit -m 'Add verified Omaha ingredient coverage'
     if ($LASTEXITCODE -ne 0) { throw 'could not commit verified ingredient configuration' }
     $committed = $true
     git -C $incomeRoot push origin HEAD:main
@@ -401,9 +395,15 @@ try {
     }
     Publish-ReadyRecipeContent
   } elseif ($Cycle -eq 'IngredientPricing' -and -not $OnlyAgent) {
+    Apply-PendingIngredientProposals
     for ($item = 0; $item -lt $MaxItems; $item++) {
-      if (-not (Invoke-AgentItem 'ingredient-price-researcher')) { break }
-      Apply-PendingIngredientProposals
+      try {
+        if (-not (Invoke-AgentItem 'ingredient-price-researcher')) { break }
+        Apply-PendingIngredientProposals
+      } catch {
+        Write-PcRuntimeLog $logFile ("ingredient pricing item failed and was durably retained for automatic recovery: {0}" -f $_.Exception.Message)
+        Start-Sleep -Seconds 65
+      }
     }
     Invoke-IngredientDownstreamDrain
   } else {

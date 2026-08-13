@@ -21,6 +21,7 @@ import { captureControllerRequest } from "../../../scripts/capture-controller-cl
 import { catalogRefreshPlan } from "./capture-journal";
 import { agentJobRunFields } from "./job-run";
 import { loadR2ShardedEngineSnapshot } from "./engine-snapshot";
+import { compileCommodityRegexPattern, normalizeCommodityRegexPattern } from "./commodity-regex";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
@@ -394,14 +395,14 @@ async function commodityAddSpecification(incoming: CommodityAddition): Promise<u
   if (!incoming.id || !/^[a-z0-9][a-z0-9-]{1,79}$/.test(incoming.id) || !incoming.label?.trim() || !incoming.categoryId) throw new Error("commodity file needs a safe id, label, unit, and categoryId");
   const allowedUnits = new Set(["lb", "oz", "fl_oz", "each", "dozen", "gal", "qt", "pt", "liter", "ml", "gram", "kg"]);
   if (!incoming.unit || !allowedUnits.has(incoming.unit)) throw new Error(`commodity ${incoming.id} has an unsupported basis unit`);
-  const include = [...new Set((incoming.include ?? []).map((value) => value.trim()).filter(Boolean))];
-  const exclude = [...new Set((incoming.exclude ?? []).map((value) => value.trim()).filter(Boolean))];
+  const include = [...new Set((incoming.include ?? []).map(normalizeCommodityRegexPattern).filter(Boolean))];
+  const exclude = [...new Set((incoming.exclude ?? []).map(normalizeCommodityRegexPattern).filter(Boolean))];
   const searchTerms = [...new Set((incoming.searchTerms ?? []).map((value) => value.trim()).filter(Boolean))];
   if (include.length === 0 || searchTerms.length === 0) throw new Error(`commodity ${incoming.id} needs at least one include regex and one search term`);
   for (const [kind, patterns] of [["include", include], ["exclude", exclude]] as const) {
     for (const pattern of patterns) {
       if (pattern.length > 500) throw new Error(`${kind} regex is too long for ${incoming.id}`);
-      try { new RegExp(pattern, "i"); } catch (error) { throw new Error(`${kind} regex is invalid for ${incoming.id}: ${error instanceof Error ? error.message : String(error)}`); }
+      try { compileCommodityRegexPattern(pattern); } catch (error) { throw new Error(`${kind} regex is invalid for ${incoming.id}: ${error instanceof Error ? error.message : String(error)}`); }
     }
   }
   const commodityFile = path.join(platformRoot, "config", "commodities.json");
@@ -411,8 +412,8 @@ async function commodityAddSpecification(incoming: CommodityAddition): Promise<u
   if (commodities.some((item) => item.id === incoming.id)) throw new Error(`commodity ${incoming.id} already exists`);
   if (commodities.some((item) => normalizeName(String(item.label ?? "")) === normalizeName(incoming.label!))) throw new Error(`commodity label ${incoming.label} already exists`);
   const proposedNames = [incoming.label!, ...searchTerms];
-  const newIncludes = include.map((pattern) => new RegExp(pattern, "i"));
-  const newExcludes = exclude.map((pattern) => new RegExp(pattern, "i"));
+  const newIncludes = include.map(compileCommodityRegexPattern);
+  const newExcludes = exclude.map(compileCommodityRegexPattern);
   if (!proposedNames.some((name) => newIncludes.some((pattern) => pattern.test(name)) && !newExcludes.some((pattern) => pattern.test(name)))) {
     throw new Error(`commodity ${incoming.id} include rules do not positively identify its own label or search terms`);
   }
@@ -421,8 +422,8 @@ async function commodityAddSpecification(incoming: CommodityAddition): Promise<u
     if (newIncludes.some((pattern) => pattern.test(existingLabel)) && !newExcludes.some((pattern) => pattern.test(existingLabel))) {
       throw new Error(`commodity ${incoming.id} include rules collide with existing commodity ${String(existing.id)}`);
     }
-    const existingIncludes = Array.isArray(existing.include) ? existing.include.map((pattern) => new RegExp(String(pattern), "i")) : [];
-    const existingExcludes = Array.isArray(existing.exclude) ? existing.exclude.map((pattern) => new RegExp(String(pattern), "i")) : [];
+    const existingIncludes = Array.isArray(existing.include) ? existing.include.map((pattern) => compileCommodityRegexPattern(String(pattern))) : [];
+    const existingExcludes = Array.isArray(existing.exclude) ? existing.exclude.map((pattern) => compileCommodityRegexPattern(String(pattern))) : [];
     if (proposedNames.some((name) => existingIncludes.some((pattern) => pattern.test(name)) && !existingExcludes.some((pattern) => pattern.test(name)))) {
       throw new Error(`existing commodity ${String(existing.id)} would also claim proposed commodity ${incoming.id}; operator matcher surgery is required`);
     }
@@ -1427,6 +1428,31 @@ if (command === "status") {
       ...(bandMax !== undefined ? { bandMax } : {}),
     })
     : { ok: true, applied: false, gapId: research.gapId, disposition: research.disposition };
+} else if (command === "ingredient" && subcommand === "apply-ready") {
+  const response = await (await mutationClient()).request("/internal/ingredient-gaps?status=ready_to_publish", { method: "GET" }) as {
+    gaps?: Array<{ id?: string; research_json?: string | null }>;
+  };
+  const applied: Array<{ gapId: string; commodityId: string }> = [];
+  const failed: Array<{ gapId: string; error: string }> = [];
+  for (const gap of response.gaps ?? []) {
+    try {
+      if (!gap.id || !gap.research_json) throw new Error("ready ingredient gap omitted durable research evidence");
+      const research = ingredientPriceResearchSchema.parse(JSON.parse(gap.research_json));
+      if (research.disposition !== "available" || !research.commodityProposal) throw new Error("ready ingredient gap does not contain an available commodity proposal");
+      const verifiedUnitPrices = research.stores.flatMap((store) => store.outcome === "priced" && store.perUnitMicros !== null ? [store.perUnitMicros / 1_000_000] : []);
+      const bandMin = verifiedUnitPrices.length > 0 ? Math.max(0.01, Math.floor(Math.min(...verifiedUnitPrices) * 0.35 * 100) / 100) : undefined;
+      const bandMax = verifiedUnitPrices.length > 0 ? Math.ceil(Math.max(...verifiedUnitPrices) * 3 * 100) / 100 : undefined;
+      await commodityAddSpecification({
+        ...research.commodityProposal,
+        ...(bandMin !== undefined ? { bandMin } : {}),
+        ...(bandMax !== undefined ? { bandMax } : {}),
+      });
+      applied.push({ gapId: research.gapId, commodityId: research.commodityProposal.id });
+    } catch (error) {
+      failed.push({ gapId: gap.id ?? "unknown", error: error instanceof Error ? error.message : String(error) });
+    }
+  }
+  result = { ok: true, applied, failed };
 } else if (command === "recipe" && subcommand === "add") {
   result = await recipeAdd(arguments_[0]);
 } else if (command === "recipe" && subcommand === "bundles") {
@@ -1511,7 +1537,7 @@ if (command === "status") {
       "tc capture ingest-current [bakers family-fare hy-vee]|promote-ready-browser|rematch-promoted|abandon <batch-id> <reason>",
       "tc accuracy draw [seed]|revalidate", "tc accuracy show [draw-id] [--reveal]", "tc accuracy verdict <file>",
       "tc sentinel latest [bakers family-fare hy-vee]",
-      "tc match batch <batch-id>", "tc commodity add <file>", "tc ingredient discover [request-file]", "tc ingredient status [state]", "tc ingredient apply <research-output>", "tc recipe add <file>",
+      "tc match batch <batch-id>", "tc commodity add <file>", "tc ingredient discover [request-file]", "tc ingredient status [state]", "tc ingredient apply <research-output>", "tc ingredient apply-ready", "tc recipe add <file>",
     ],
   };
   if (!isHelpRequest) process.exitCode = 2;

@@ -65,12 +65,26 @@ export function normalizeCodexStructuredOutput(value: unknown, outputContract: s
       "packagePriceMinor", "normalizedBasisUnit", "normalizedBasisQtyMicros", "perUnitMicros",
       "offerKind", "validFrom", "validTo",
     ];
+    const stores = value.stores.map((store) => {
+        if (!isObject(store) || store.outcome === "priced") return store;
+        const invalidNotFound = store.outcome === "not_found" && (
+          store.searchComplete !== true || store.qualifyingProductsExamined !== 0
+          || store.locationVerified !== true || store.priceModeVerified !== true
+        );
+        return {
+          ...store,
+          ...(invalidNotFound ? { outcome: store.searchComplete === false ? "blocked" : "ambiguous" } : {}),
+          ...Object.fromEntries(nonPricedNullFields.map((field) => [field, null])),
+        };
+      });
+    const priced = stores.filter((store) => isObject(store) && store.outcome === "priced").length;
+    const allNotFound = stores.every((store) => isObject(store) && store.outcome === "not_found");
+    const disposition = priced > 0 ? "available" : allNotFound ? "permanently_unavailable" : "needs_operator";
     return {
       ...value,
-      stores: value.stores.map((store) => {
-        if (!isObject(store) || store.outcome === "priced") return store;
-        return { ...store, ...Object.fromEntries(nonPricedNullFields.map((field) => [field, null])) };
-      }),
+      stores,
+      disposition,
+      ...(disposition === "available" ? {} : { commodityProposal: null }),
     };
   }
   return value;

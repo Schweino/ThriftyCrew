@@ -68,4 +68,20 @@ describe("Codex subscription execution boundary", () => {
       ],
     });
   });
+
+  it("downgrades an unproven absence instead of letting a worker fail schema QA", () => {
+    const output = {
+      disposition: "permanently_unavailable",
+      commodityProposal: { id: "unsafe" },
+      stores: [
+        { outcome: "not_found", searchComplete: true, qualifyingProductsExamined: 0, locationVerified: true, priceModeVerified: true },
+        { outcome: "not_found", searchComplete: false, qualifyingProductsExamined: 0, locationVerified: false, priceModeVerified: true },
+      ],
+    };
+    expect(normalizeCodexStructuredOutput(output, "ingredient-price-research-v1")).toMatchObject({
+      disposition: "needs_operator",
+      commodityProposal: null,
+      stores: [{ outcome: "not_found" }, { outcome: "blocked" }],
+    });
+  });
 });

@@ -1264,6 +1264,7 @@ app.get("/internal/ingredient-gaps", async (context) => {
   if (requestedStatus && !allowed.has(requestedStatus)) return jsonError("unknown ingredient gap status", 400);
   const gaps = await context.env.DB.prepare(
     `SELECT gap.id, gap.normalized_name, gap.display_name, gap.status, gap.commodity_id,
+            CASE WHEN ?1 = 'ready_to_publish' THEN gap.research_json ELSE NULL END AS research_json,
             gap.first_seen_at, gap.updated_at, COUNT(occurrence.request_id) AS occurrence_count
        FROM ingredient_gaps gap
        LEFT JOIN ingredient_gap_occurrences occurrence ON occurrence.gap_id = gap.id
