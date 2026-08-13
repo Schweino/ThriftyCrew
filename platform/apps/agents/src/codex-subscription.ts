@@ -141,6 +141,10 @@ export async function runSubscriptionAgent(options: SubscriptionRunOptions): Pro
     networkAccessEnabled: false,
     webSearchMode: options.webSearch ? "live" : "disabled",
   });
+  const timeoutMillis = Number(process.env.TC_CODEX_TURN_TIMEOUT_MILLIS ?? "300000");
+  if (!Number.isInteger(timeoutMillis) || timeoutMillis < 30_000 || timeoutMillis > 900_000) {
+    throw new Error("TC_CODEX_TURN_TIMEOUT_MILLIS must be an integer between 30000 and 900000");
+  }
   const turn = await thread.run([
     { type: "text", text: [
       "You are a bounded worker in a typed production pipeline.",
@@ -155,7 +159,7 @@ export async function runSubscriptionAgent(options: SubscriptionRunOptions): Pro
       options.inputJson,
       "</approved-input-json>",
     ].join("\n") },
-  ], { outputSchema: options.outputSchema });
+  ], { outputSchema: options.outputSchema, signal: AbortSignal.timeout(timeoutMillis) });
   if (!turn.usage) throw new Error("Codex subscription execution returned no usage receipt");
   let output: unknown;
   try { output = JSON.parse(turn.finalResponse); }

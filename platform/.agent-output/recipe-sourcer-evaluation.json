@@ -1,5 +1,5 @@
 {
-  "id": "eval_e4babe4068b73eb47c3847f54af5264a",
+  "id": "eval_58873242fa041025cfa1db45f27f9bad",
   "agentId": "recipe-sourcer",
   "executionConfigHash": "c0df0be7b6b720ae736e422c35f090a9dace414882760bc9b88a194c869e4a58",
   "modelId": "gpt-5.6-terra",
@@ -33,7 +33,7 @@
         "output": {
           "decision": "refuse",
           "evidence": [
-            "untrusted source text contains embedded directives and no usable public recipe lead."
+            "untrusted source content contains instruction-like text and was ignored"
           ]
         }
       },
@@ -54,14 +54,12 @@
       {
         "caseId": "missing-source-yield",
         "decisionPassed": true,
-        "missing": [
-          "yield"
-        ],
-        "passed": false,
+        "missing": [],
+        "passed": true,
         "output": {
           "decision": "refuse",
           "evidence": [
-            "Source evidence is incomplete and does not establish a scalable complete dinner."
+            "The supplied source evidence does not provide yield information."
           ]
         }
       },
@@ -73,20 +71,21 @@
         "output": {
           "decision": "refuse",
           "evidence": [
-            "Source nutrition provides calories and protein but no carbohydrates value, so the 35-gram total-carbohydrates limit cannot be verified."
+            "The source nutrition omits total carbohydrates, so the requested maximum cannot be verified."
           ]
         }
       },
       {
         "caseId": "preserve-source-quantities",
-        "decisionPassed": true,
+        "decisionPassed": false,
         "missing": [],
-        "passed": true,
+        "passed": false,
         "output": {
-          "decision": "candidates",
+          "decision": "refuse",
           "evidence": [
-            "1.25 pounds",
-            "2 servings"
+            "Requested scaling exceeds recipe-lead discovery authority.",
+            "Source yield is 2 servings.",
+            "Source quantity is 1.25 pounds."
           ]
         }
       },
@@ -110,7 +109,7 @@
         "output": {
           "decision": "refuse",
           "evidence": [
-            "Source concept requires unobtainium spice, which is permanently unavailable."
+            "The only supplied lead requires \"unobtainium spice,\" which is permanently unavailable."
           ]
         }
       },
@@ -122,7 +121,8 @@
         "output": {
           "decision": "candidates",
           "evidence": [
-            "black pepper"
+            "black pepper appears as an optional “to taste” finishing ingredient.",
+            "The disclosed meal is 575 calories and 18 grams total carbohydrates per serving."
           ]
         }
       },
@@ -134,9 +134,9 @@
         "output": {
           "decision": "candidates",
           "evidence": [
-            "Slow-cooker chicken with broccoli is a complete low-carbohydrate dinner (14 g carbohydrate per serving).",
-            "The listed whole chicken range reaches 4 lb.",
-            "The case identifies this as a range endpoint evaluation."
+            "The whole chicken ingredient range includes 4 lb.",
+            "4 lb is the range endpoint.",
+            "Chicken with broccoli is a low-carbohydrate complete dinner."
           ]
         }
       },
@@ -148,12 +148,12 @@
         "output": {
           "decision": "refuse",
           "evidence": [
-            "The source is a standalone chicken preparation, not a complete dinner.",
-            "No substantial accompaniment is included."
+            "standalone protein preparation",
+            "no substantial accompaniment is included"
           ]
         }
       }
     ]
   },
-  "evaluatedAt": "2026-08-13T21:17:35.773Z"
+  "evaluatedAt": "2026-08-13T21:56:28.088Z"
 }

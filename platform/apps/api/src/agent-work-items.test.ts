@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { ingredientPriceResearchSchema, OMAHA_GROCERY_STORE_LOCATION_IDS, recipeMapSchema, recipeSourceCandidatesSchema } from "@thriftycrew/contracts";
-import { activeIngredientCategoryContextSql, assertRecipeChainContinuity, ingredientCampaignPhase, type IngredientCampaignSnapshot, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
+import { activeIngredientCategoryContextSql, assertRecipeChainContinuity, ingredientCampaignPhase, type IngredientCampaignSnapshot, isAtomicDiscoveryGapName, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
 
 const candidate = {
   id: "candidate-bean-chili",
@@ -26,6 +26,15 @@ const candidate = {
   unmappedHints: [],
   confidence: "high" as const,
 };
+
+describe("discovery gap identity", () => {
+  it("accepts one purchasable product and rejects process water, alternatives, and combined lines", () => {
+    expect(isAtomicDiscoveryGapName("Israeli couscous")).toBe(true);
+    expect(isAtomicDiscoveryGapName("water")).toBe(false);
+    expect(isAtomicDiscoveryGapName("dried apricots or prunes")).toBe(false);
+    expect(isAtomicDiscoveryGapName("roasted peanuts and cilantro")).toBe(false);
+  });
+});
 
 describe("agent output boundary", () => {
   const unpricedStores = OMAHA_GROCERY_STORE_LOCATION_IDS.map((storeLocationId) => ({

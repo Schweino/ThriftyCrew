@@ -1,5 +1,5 @@
 {
-  "id": "eval_184c6fa0d1b3340a9c7d2245880a75e4",
+  "id": "eval_b55c35573ef0c5cec6675a84eda4485f",
   "agentId": "recipe-deduper",
   "executionConfigHash": "f20f80d171985e622ea2ce7ece2c12bee88ba310864d77f3076a45c63f766ea3",
   "modelId": "gpt-5.6-sol",
@@ -20,7 +20,7 @@
         "output": {
           "decision": "duplicate",
           "evidence": [
-            "identical core dish identity: beans and tomatoes prepared as a stovetop-simmered bean chili match catalog slug bean-chili."
+            "identical protein class (beans), ingredients (beans and tomatoes), and chili preparation identity to catalog slug bean-chili"
           ]
         }
       },
@@ -32,8 +32,8 @@
         "output": {
           "decision": "distinct",
           "evidence": [
-            "The candidates differ in protein: beans versus chicken.",
-            "They also differ in flavor/base and method: tomato-bean chili cooked by stovetop simmer versus lemon-orzo chicken cooked by oven bake."
+            "protein differs: beans versus chicken.",
+            "Flavor/base and method also differ: tomato chili with a stovetop simmer versus lemon-orzo chicken baked in the oven."
           ]
         }
       },
@@ -45,12 +45,12 @@
         "output": {
           "decision": "duplicate",
           "evidence": [
-            "Both leads match on chicken protein, salsa flavor family, rice base, and slow-cooker method.",
-            "The titles differ, but the underlying dish identity is the same."
+            "Both candidates use chicken as the protein, salsa as the flavor family, rice as the base, and a slow cooker method.",
+            "The matching identity dimensions indicate the same dish concept despite different titles."
           ]
         }
       }
     ]
   },
-  "evaluatedAt": "2026-08-13T21:17:51.744Z"
+  "evaluatedAt": "2026-08-13T21:54:08.729Z"
 }

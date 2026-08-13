@@ -1,5 +1,5 @@
 {
-  "id": "eval_9ae50be53b6f11206c721d58845cabd4",
+  "id": "eval_daca04626bb0a5a8bfc842fe1ed6c3ed",
   "agentId": "recipe-auditor",
   "executionConfigHash": "9193bca6e9718f8b06c8351025039ed16f37bb5b432ea60ac807dab3b972552d",
   "modelId": "gpt-5.6-sol",
@@ -20,9 +20,9 @@
         "output": {
           "decision": "pass",
           "evidence": [
-            "The staged recipe is a coherent bean chili with a bean main and a substantial tomato vegetable base of approximately 198 grams per serving.",
-            "All purchased ingredients are used in the instructions, quantities plausibly scale from 4 to 14 servings, and provenance is supplied.",
-            "No food-safety, title, cuisine, commodity-id, duplication, or ingredient-instruction mismatch is evident."
+            "The locked source facts scale plausibly from 4 to 14 servings: beans 1488 g, tomatoes 2778 g, and chili powder 28 g.",
+            "The bean main includes a substantial tomato vegetable accompaniment at about 198 g per serving, exceeding 70 g per serving.",
+            "All purchased ingredients are used in coherent stovetop-simmer instructions, and provenance is present."
           ]
         }
       },
@@ -34,7 +34,8 @@
         "output": {
           "decision": "fail",
           "evidence": [
-            "The instruction requires cilantro, but there is no purchased cilantro ingredient row; the purchased rice ingredient is also never used in the instructions."
+            "The instruction uses purchased commodity id cilantro, but no cilantro ingredient is listed.",
+            "The listed rice ingredient is never used in the instructions."
           ]
         }
       },
@@ -46,7 +47,7 @@
         "output": {
           "decision": "fail",
           "evidence": [
-            "Food safety risk: the instruction says to serve raw chicken immediately, with no cooking step."
+            "Food safety risk: the instructions explicitly say to serve the chicken raw, which is unsafe."
           ]
         }
       },
@@ -58,9 +59,10 @@
         "output": {
           "decision": "pass",
           "evidence": [
-            "smoked sausage is validly covered by the registered kielbasa commodity.",
-            "Zucchini noodles provide a substantial accompaniment at 100 grams per serving.",
-            "Ingredient quantities scale plausibly from 4 to 14 servings, and both purchased ingredients are used in the instructions."
+            "The kielbasa commodity validly covers roasted-garlic smoked sausage.",
+            "The staged sausage quantity plausibly scales a 13-ounce package from 4 to 14 servings.",
+            "Zucchini noodles provide a substantial accompaniment at 100 grams per serving, exceeding 70 grams.",
+            "Both purchased ingredients are used in the instruction and match the declared meal components."
           ]
         }
       },
@@ -72,8 +74,9 @@
         "output": {
           "decision": "pass",
           "evidence": [
-            "The 672 g onion quantity consistently scales the precise source measure of 1.5 cups from 5 to 14 servings; the parenthetical produce count is only a convenience equivalence.",
-            "Broccoli provides a substantial accompaniment at approximately 78.6 g per serving, and all purchased ingredients are used coherently in the soup instructions."
+            "The 672 g onion quantity correctly scales the precise source measure of 1.5 cups from 5 to 14 servings; the parenthetical produce count is only a convenience equivalence.",
+            "Broccoli provides a coherent substantial accompaniment at approximately 78.6 g per serving, exceeding 70 g per serving.",
+            "All purchased ingredients are used in the soup instructions and match the declared component commodity ids."
           ]
         }
       },
@@ -85,7 +88,9 @@
         "output": {
           "decision": "pass",
           "evidence": [
-            "The 5.6 cups of non-purchased process water is permitted for pressure-cooking, both purchased ingredients are used, and the dish provides 150 g chicken plus 100 g broccoli per serving."
+            "The 5.6 cups of process water is permitted non-purchased pressure-cooking water.",
+            "Chicken and broccoli provide a genuine main and substantial accompaniment at 100 grams of broccoli per serving.",
+            "Scaled ingredient quantities agree with the 5-to-14-serving conversion, and both purchased ingredients are used."
           ]
         }
       },
@@ -97,11 +102,12 @@
         "output": {
           "decision": "fail",
           "evidence": [
-            "The claimed accompaniment is only 525 g of onion for 14 servings (37.5 g per serving), below 70 grams per serving, and an onion cooking bed is an aromatic rather than a meaningful substantial accompaniment."
+            "The onion cooking bed is aromatics, not a meaningful substantial accompaniment.",
+            "At 525 grams for 14 servings, the claimed accompaniment provides only 37.5 grams per serving, below 70 grams."
           ]
         }
       }
     ]
   },
-  "evaluatedAt": "2026-08-13T21:22:32.558Z"
+  "evaluatedAt": "2026-08-13T21:54:49.136Z"
 }

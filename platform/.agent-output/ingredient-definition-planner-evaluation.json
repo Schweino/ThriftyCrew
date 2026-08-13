@@ -1,5 +1,5 @@
 {
-  "id": "eval_571988365e75e49d44544f1b624ee42c",
+  "id": "eval_25e8fb342f482807f3b9ab1efa3e688d",
   "agentId": "ingredient-definition-planner",
   "executionConfigHash": "027718981eaec49f33134e6c3ed866c91c726622653e325ac61b5b8bb82bd5da",
   "modelId": "gpt-5.6-sol",
@@ -21,8 +21,7 @@
           "decision": "plan",
           "evidence": [
             "black garlic",
-            "A specific subtype can be conservatively defined using an anchored include expression without broadening to garlic generally.",
-            "An existing category can be selected from the supplied list."
+            "The ingredient is a specific subtype and can be conservatively defined using an existing category."
           ]
         }
       },
@@ -35,7 +34,8 @@
           "decision": "plan",
           "evidence": [
             "rice vinegar",
-            "The supplied ingredient has an existing category: pantry."
+            "The supplied ingredient has exactly one existing category: pantry.",
+            "A conservative definition can anchor rice vinegar and exclude likely collisions such as seasoned rice vinegar and rice wine."
           ]
         }
       },
@@ -53,5 +53,5 @@
       }
     ]
   },
-  "evaluatedAt": "2026-08-13T21:16:26.220Z"
+  "evaluatedAt": "2026-08-13T21:54:07.252Z"
 }

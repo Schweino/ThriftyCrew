@@ -42,6 +42,12 @@ interface WorkSeed {
   severity: "safety" | "operational" | "optional";
 }
 
+export function isAtomicDiscoveryGapName(value: string): boolean {
+  const normalized = normalizeName(value);
+  if (!normalized || /^(?:hot |boiling |cold )?water$/.test(normalized)) return false;
+  return !/\b(?:and|or)\b/.test(normalized);
+}
+
 export function normalizeAccuracyEvidenceRow(row: Record<string, unknown>): Record<string, unknown> {
   if (!row.observation_id && !row.product_name) return row;
   const parseEvidence = (value: unknown, field: string): Record<string, unknown> => {
@@ -776,6 +782,10 @@ async function persistRecipeIngredientGaps(db: D1Database, completed: Record<str
   for (const recipe of map.recipes) {
     for (const ingredient of recipe.ingredients.filter((item) => item.decision === "unmapped")) {
       const normalized = normalizeName(ingredient.sourceName);
+      if (!isAtomicDiscoveryGapName(ingredient.sourceName)) {
+        if (!discovery) throw new Error(`mapper emitted a non-atomic required ingredient: ${ingredient.sourceName}`);
+        continue;
+      }
       if (normalized && !gapIdsByName.has(normalized)) gapIdsByName.set(normalized, await deterministicId("ingredient-gap", normalized));
     }
   }

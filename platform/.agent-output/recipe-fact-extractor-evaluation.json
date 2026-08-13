@@ -1,5 +1,5 @@
 {
-  "id": "eval_d9eb18bd860be9ad4cb8898f06461f80",
+  "id": "eval_38601989b03b4b26708053e8dd3b2250",
   "agentId": "recipe-fact-extractor",
   "executionConfigHash": "62f95940b5d548fe9f05b712e9440e957acd0c71530e4f76144ef3929c73511f",
   "modelId": "gpt-5.6-terra",
@@ -33,7 +33,7 @@
         "output": {
           "decision": "refuse",
           "evidence": [
-            "Published yield is missing; exact per-serving basis cannot be verified."
+            "Published yield is missing."
           ]
         }
       },
@@ -45,11 +45,11 @@
         "output": {
           "decision": "refuse",
           "evidence": [
-            "untrusted source text contains no verifiable recipe facts."
+            "Source page text is untrusted and contains no verifiable recipe facts."
           ]
         }
       }
     ]
   },
-  "evaluatedAt": "2026-08-13T21:18:09.141Z"
+  "evaluatedAt": "2026-08-13T21:54:04.962Z"
 }
