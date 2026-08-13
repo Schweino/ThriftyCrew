@@ -3,6 +3,7 @@ param(
   [ValidateSet('Triage','PostPublish','SourceSentinel','Recipe','IngredientPricing','Accuracy')]
   [string]$Cycle,
   [ValidateRange(1,50)][int]$MaxItems = 1,
+  [ValidateRange(0,10)][int]$PricingWorkerSlot = 0,
   [string]$OnlyAgent,
   [switch]$SelfTest
 )
@@ -13,7 +14,8 @@ Initialize-PcRuntimeEnvironment $config
 $platformRoot = [string]$config.platformRoot
 $incomeRoot = [string]$config.incomeRoot
 $pnpmPath = [string]$config.pnpmPath
-$logFile = Join-Path ([string]$config.logRoot) ("agent-{0}.log" -f $Cycle.ToLowerInvariant())
+$logSuffix = if ($Cycle -eq 'IngredientPricing' -and $PricingWorkerSlot -gt 0) { "-{0}" -f $PricingWorkerSlot } else { '' }
+$logFile = Join-Path ([string]$config.logRoot) ("agent-{0}{1}.log" -f $Cycle.ToLowerInvariant(), $logSuffix)
 $outputBase = Join-Path (Split-Path -Parent ([string]$config.logRoot)) 'agent-output'
 $registry = Read-PcUtf8Json (Join-Path $platformRoot 'config\agents.json')
 
@@ -35,6 +37,9 @@ $jobByCycle = @{
 $agentsForCycle = @($cycleAgents[$Cycle])
 $script:ingredientProposalFiles = [Collections.Generic.List[string]]::new()
 $script:ingredientConfigurationChanged = $false
+if ($Cycle -ne 'IngredientPricing' -and $PricingWorkerSlot -ne 0) {
+  throw 'PricingWorkerSlot is valid only for the IngredientPricing cycle'
+}
 if ($OnlyAgent) {
   if ($OnlyAgent -notin $agentsForCycle) {
     throw "Agent '$OnlyAgent' is not registered for the $Cycle cycle"
@@ -305,12 +310,34 @@ function Publish-ReadyRecipeContent {
 
 function Start-IngredientPricingDrain {
   $pricingScript = Join-Path $platformRoot 'scripts\run-pc-agent-cycle.ps1'
-  $arguments = @(
-    '-NoProfile', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden',
-    '-File', ('"{0}"' -f $pricingScript), '-Cycle', 'IngredientPricing', '-MaxItems', '50'
-  )
-  Start-Process -FilePath 'powershell.exe' -ArgumentList $arguments -WindowStyle Hidden | Out-Null
-  Write-PcRuntimeLog $logFile 'recipe-mapper queued or advanced ingredient gaps; launched the event-driven pricing drain'
+  foreach ($slot in 1..10) {
+    $arguments = @(
+      '-NoProfile', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden',
+      '-File', ('"{0}"' -f $pricingScript), '-Cycle', 'IngredientPricing',
+      '-PricingWorkerSlot', [string]$slot, '-MaxItems', '50'
+    )
+    Start-Process -FilePath 'powershell.exe' -ArgumentList $arguments -WindowStyle Hidden | Out-Null
+  }
+  Write-PcRuntimeLog $logFile 'recipe-mapper queued or advanced ingredient gaps; launched the ten-worker event-driven pricing pool'
+}
+
+function Invoke-IngredientDownstreamDrain {
+  $downstreamLock = $null
+  for ($attempt = 0; $attempt -lt 360 -and -not $downstreamLock; $attempt++) {
+    $downstreamLock = Enter-PcRuntimeLock 'ingredient-recipe-downstream' 300
+    if (-not $downstreamLock) { Start-Sleep -Seconds 5 }
+  }
+  if (-not $downstreamLock) { throw 'ingredient recipe downstream lock remained occupied for 30 minutes' }
+  try {
+    foreach ($agentId in @('recipe-mapper','recipe-writer','recipe-auditor')) {
+      for ($item = 0; $item -lt $MaxItems; $item++) {
+        if (-not (Invoke-AgentItem $agentId)) { break }
+      }
+    }
+    Publish-ReadyRecipeContent
+  } finally {
+    Exit-PcRuntimeLock $downstreamLock
+  }
 }
 
 if ($SelfTest) {
@@ -328,7 +355,12 @@ if ($SelfTest) {
   exit 0
 }
 
-$lock = Enter-PcRuntimeLock ("agent-cycle-{0}" -f $Cycle.ToLowerInvariant()) 300
+$lockName = if ($Cycle -eq 'IngredientPricing' -and $PricingWorkerSlot -gt 0) {
+  "agent-cycle-ingredientpricing-{0}" -f $PricingWorkerSlot
+} else {
+  "agent-cycle-{0}" -f $Cycle.ToLowerInvariant()
+}
+$lock = Enter-PcRuntimeLock $lockName 300
 if (-not $lock) { Write-PcRuntimeLog $logFile 'another instance holds the cycle lock; standing down'; exit 0 }
 $job = $jobByCycle[$Cycle]
 $env:TC_SCHEDULED_FOR = (Get-Date).ToUniversalTime().ToString('o')
@@ -372,12 +404,7 @@ try {
       if (-not (Invoke-AgentItem 'ingredient-price-researcher')) { break }
       Apply-PendingIngredientProposals
     }
-    foreach ($agentId in @('recipe-mapper','recipe-writer','recipe-auditor')) {
-      for ($item = 0; $item -lt $MaxItems; $item++) {
-        if (-not (Invoke-AgentItem $agentId)) { break }
-      }
-    }
-    Publish-ReadyRecipeContent
+    Invoke-IngredientDownstreamDrain
   } else {
     foreach ($agentId in $agentsForCycle) {
       for ($item = 0; $item -lt $MaxItems; $item++) {
