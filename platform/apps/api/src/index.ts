@@ -1451,6 +1451,16 @@ app.get("/internal/ingredient-pricing/waves/:id", async (context) => {
 
 app.get("/internal/ingredient-pricing/status", async (context) => context.json({ ok: true, status: await ingredientPipelineStatus(context.env.DB) }));
 
+app.get("/internal/ingredient-pricing/publication-ready", async (context) => {
+  const rows = await context.env.DB.prepare(
+    `SELECT job.gap_id, job.id AS pricing_job_id FROM ingredient_pricing_jobs job
+      WHERE job.state = 'ready_to_publish' AND job.commodity_proposal_json IS NOT NULL
+        AND NOT EXISTS (SELECT 1 FROM ingredient_publication_members member WHERE member.gap_id = job.gap_id AND member.state != 'failed')
+      ORDER BY job.updated_at, job.id LIMIT 50`,
+  ).all();
+  return context.json({ ok: true, gaps: rows.results });
+});
+
 app.get("/internal/pipeline/events", async (context) => {
   const after = Math.max(0, Number(context.req.query("after") ?? "0"));
   const limit = Math.min(200, Math.max(1, Number(context.req.query("limit") ?? "100")));

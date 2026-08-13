@@ -23,9 +23,9 @@ $cycleAgents = @{
   Triage = @('triage-reviewer','triage-developer')
   PostPublish = @('post-publish-reviewer')
   SourceSentinel = @('source-sentinel-investigator')
-  Recipe = @('recipe-sourcer','recipe-deduper','recipe-mapper','recipe-writer','recipe-auditor')
+  Recipe = @('recipe-sourcer','recipe-deduper','recipe-fact-extractor','recipe-mapper','recipe-writer','recipe-auditor')
   IngredientPricing = @('ingredient-price-researcher')
-  IngredientPublication = @()
+  IngredientPublication = @('ingredient-definition-planner')
   Accuracy = @('accuracy-headless')
 }
 $jobByCycle = @{
@@ -336,7 +336,7 @@ function Invoke-IngredientDownstreamDrain {
 }
 
 if ($SelfTest) {
-  if ($Cycle -in @('Recipe','IngredientPricing')) {
+  if ($Cycle -in @('Recipe','IngredientPricing','IngredientPublication')) {
     $authPath = Join-Path ([Environment]::GetFolderPath('UserProfile')) '.codex\auth.json'
     if (-not (Test-Path -LiteralPath $authPath)) { throw 'Codex ChatGPT authentication is not configured' }
     $auth = Read-PcUtf8Json $authPath
@@ -380,7 +380,7 @@ try {
   if ($Cycle -eq 'Recipe' -and -not $OnlyAgent) {
     for ($round = 0; $round -lt $MaxItems; $round++) {
       $roundProgress = $false
-      foreach ($agentId in @('recipe-sourcer','recipe-deduper','recipe-mapper')) {
+      foreach ($agentId in @('recipe-sourcer','recipe-deduper','recipe-fact-extractor','recipe-mapper')) {
         if (Invoke-AgentItem $agentId) {
           $roundProgress = $true
           if ($agentId -eq 'recipe-mapper') { Start-IngredientPricingDrain }
@@ -395,16 +395,26 @@ try {
     }
     Publish-ReadyRecipeContent
   } elseif ($Cycle -eq 'IngredientPricing' -and -not $OnlyAgent) {
-    for ($item = 0; $item -lt $MaxItems; $item++) {
-      try {
-        if (-not (Invoke-AgentItem 'ingredient-price-researcher')) { break }
-      } catch {
-        Write-PcRuntimeLog $logFile ("ingredient pricing item failed and was durably retained for automatic recovery: {0}" -f $_.Exception.Message)
-        Start-Sleep -Seconds 65
-      }
-    }
+    Set-PcRuntimeCredential $config 'local-operator'
+    Push-Location $platformRoot
+    try { Invoke-LoggedCommand 'ingredient-v2-pricing-tick' { & $pnpmPath tc ingredient pipeline tick } | Out-Null }
+    finally { Pop-Location }
   } elseif ($Cycle -eq 'IngredientPublication' -and -not $OnlyAgent) {
-    Apply-PendingIngredientProposals $MaxItems
+    for ($item = 0; $item -lt $MaxItems; $item++) {
+      if (-not (Invoke-AgentItem 'ingredient-definition-planner')) { break }
+    }
+    Set-PcRuntimeCredential $config 'local-operator'
+    Push-Location $platformRoot
+    try {
+      $readyResult = Invoke-LoggedCommand 'ingredient-v2-publication-ready' { & $pnpmPath --silent --filter '@thriftycrew/operator' tc ingredient publication-ready }
+      $readyText = @($readyResult.Output) -join "`n"
+      $readyStart = $readyText.IndexOf('{'); $readyEnd = $readyText.LastIndexOf('}')
+      if ($readyStart -ge 0 -and $readyEnd -gt $readyStart) {
+        $readyDocument = $readyText.Substring($readyStart, $readyEnd - $readyStart + 1) | ConvertFrom-Json
+        $gapIds = @($readyDocument.gaps | Select-Object -First $MaxItems | ForEach-Object { [string]$_.gap_id })
+        if ($gapIds.Count -gt 0) { Invoke-LoggedCommand 'ingredient-v2-publish' { & $pnpmPath tc ingredient publish-v2 @gapIds } | Out-Null }
+      }
+    } finally { Pop-Location }
     Invoke-IngredientDownstreamDrain
   } else {
     foreach ($agentId in $agentsForCycle) {
