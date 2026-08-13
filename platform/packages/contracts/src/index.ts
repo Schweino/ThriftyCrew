@@ -1372,6 +1372,12 @@ export const ingredientQaRetrySchema = z.object({
   gapIds: z.array(nonEmptyId).min(1).max(50).optional(),
 }).strict();
 
+export const ingredientQaNotFoundSchema = z.object({
+  storeLocationId: z.enum(OMAHA_GROCERY_STORE_LOCATION_IDS),
+  sourceUrl: z.string().trim().url().max(2000),
+  evidenceSummary: z.string().trim().min(30).max(5000),
+}).strict();
+
 export const ingredientQaResolutionSchema = z.object({
   resolution: z.enum(["existing_alias", "excluded_noncommodity"]),
   commodityId: nonEmptyId.nullable(),

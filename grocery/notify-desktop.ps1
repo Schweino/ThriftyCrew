@@ -15,15 +15,15 @@
   It is a COMPLEMENT to send-alert.ps1 (email), not a replacement: use -AlsoEmail when the run is unattended
   and the wall means a store will go stale. On screen for "you can fix this now", email for the record.
 
-  *** CLICKING OK IS THE RESUME SIGNAL *** (Brad, 2026-07-29: "clicking ok on the alert you gave me should
-  be confirmation for you to resume"). Dismissing the dialog writes out\notify-ack-<store>.json. The agent
+  *** CLICKING DONE IS THE RESUME SIGNAL *** (Brad, 2026-08-13: "give me a windows alert that I can click
+  Done on so you can hear the callback and proceed"). Clicking Done writes out\notify-ack-<store>.json. The agent
   polls for that file instead of asking Brad to type anything - the click is the handshake. Any stale ack is
   deleted when a new prompt is raised, so a leftover from last week can never read as "already cleared".
 
   Usage:
     .\notify-desktop.ps1 -Store "Sam's Club" -Detail "human-verification wall after 203 of 526 terms"
     .\notify-desktop.ps1 -Title "Grocery run needs you" -Message "..." -AlsoEmail
-    .\notify-desktop.ps1 -WaitForAck "Sam's Club" -TimeoutMin 20     # block until OK is clicked
+    .\notify-desktop.ps1 -WaitForAck "Sam's Club" -TimeoutMin 20     # block until Done is clicked
 #>
 param(
   [string]$Store   = "",
@@ -57,7 +57,7 @@ clears it.
 
 WHAT HELPS: leave this alert open, switch to $store in Chrome, and clear the
 "not a robot" / press-and-hold challenge yourself. Then return to this alert
-and click OK. That OK click is the callback that tells me to re-check the
+and click Done. That click is the callback that tells me to re-check the
 store canary and resume from where the pull stopped.
 "@
        }
@@ -69,12 +69,12 @@ if ($WaitForAck) {
   $slugW = ($WaitForAck.ToLower() -replace '[^a-z0-9]', '')
   $ackW  = Join-Path $root ("out\notify-ack-$slugW.json")
   $deadline = (Get-Date).AddMinutes($TimeoutMin)
-  Write-Output ("waiting for the OK click on the $WaitForAck prompt (up to $TimeoutMin min)...")
+  Write-Output ("waiting for the Done click on the $WaitForAck prompt (up to $TimeoutMin min)...")
   while ((Get-Date) -lt $deadline) {
-    if (Test-Path $ackW) { Write-Output ("ACK - $WaitForAck prompt was dismissed; cleared to resume"); exit 0 }
+    if (Test-Path $ackW) { Write-Output ("ACK - Done was clicked for $WaitForAck; cleared to resume"); exit 0 }
     Start-Sleep -Seconds 5
   }
-  Write-Output ("TIMEOUT - no OK click on the $WaitForAck prompt within $TimeoutMin min; still blocked")
+  Write-Output ("TIMEOUT - no Done click on the $WaitForAck prompt within $TimeoutMin min; still blocked")
   exit 1
 }
 
@@ -106,6 +106,11 @@ if ($SelfTest) {
   # instead: the source must invoke send-alert.ps1 directly, never through a child powershell -File. That is
   # the whole defect - a string round trip - so the shape IS the thing worth pinning.
   $src = Get-Content $PSCommandPath -Raw
+  if ($src -match "`\$done\.Text = 'Done'" -and $src -match 'ack-capture-challenge\.ps1') {
+    Write-Output 'ok    the Done button writes the durable controller callback'
+  } else {
+    Write-Output 'FAIL  the Windows prompt no longer exposes Done plus the controller callback'; $ok = $false
+  }
   if ($src -match '(?m)^\s*&\s*powershell[^\r\n]*send-alert\.ps1') {
     Write-Output 'FAIL  -AlsoEmail calls send-alert through `powershell -File`; a quoted body will be re-split and the email will silently not send'; $ok = $false
   } elseif ($src -match '(?m)^\s*&\s*\(Join-Path \$root ''send-alert\.ps1''\)\s+-Subject') {
@@ -117,9 +122,8 @@ if ($SelfTest) {
 }
 
 # ---- the prompt, in a DETACHED process so an unattended run is never held up ---------------------------
-# CLICKING OK IS THE RESUME SIGNAL (Brad, 2026-07-29: "clicking ok on the alert you gave me should be
-# confirmation for you to resume"). The detached process writes an ACK file the moment the dialog is
-# dismissed, so the agent can poll for it instead of asking Brad to type anything. The ack is deleted up
+# CLICKING DONE IS THE RESUME SIGNAL. The detached process writes an ACK file the moment Done is clicked,
+# so the agent can poll for it instead of asking Brad to type anything. The ack is deleted up
 # front, so a stale one from a previous wall can never read as "already cleared" - that would have the agent
 # charge back into a wall it was never released from.
 $slug = if ($Store) { ($Store.ToLower() -replace '[^a-z0-9]', '') } else { 'run' }
@@ -132,10 +136,13 @@ try {
   $s = $slug    -replace "'", "''"
   $challenge = $ControllerChallengeId -replace "'", "''"
   $ackController = (Join-Path $root '..\platform\scripts\ack-capture-challenge.ps1') -replace "'", "''"
-  $inner = "Add-Type -AssemblyName System.Windows.Forms; " +
-           "`$f = New-Object System.Windows.Forms.Form; `$f.TopMost = `$true; `$f.ShowInTaskbar = `$false; " +
-           "[void][System.Windows.Forms.MessageBox]::Show(`$f, '$m', '$t', " +
-           "[System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Warning); `$f.Dispose(); " +
+  $inner = "Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; " +
+           "`$f = New-Object System.Windows.Forms.Form; `$f.Text = '$t'; `$f.TopMost = `$true; `$f.ShowInTaskbar = `$true; " +
+           "`$f.StartPosition = 'CenterScreen'; `$f.Width = 620; `$f.Height = 340; `$f.FormBorderStyle = 'FixedDialog'; `$f.MaximizeBox = `$false; `$f.MinimizeBox = `$false; " +
+           "`$label = New-Object System.Windows.Forms.Label; `$label.Text = '$m'; `$label.Left = 24; `$label.Top = 20; `$label.Width = 555; `$label.Height = 220; `$label.AutoEllipsis = `$true; " +
+           "`$done = New-Object System.Windows.Forms.Button; `$done.Text = 'Done'; `$done.Left = 474; `$done.Top = 250; `$done.Width = 105; `$done.Height = 34; `$done.DialogResult = [System.Windows.Forms.DialogResult]::OK; " +
+           "`$f.Controls.Add(`$label); `$f.Controls.Add(`$done); `$f.AcceptButton = `$done; `$f.CancelButton = `$null; `$f.Add_FormClosing({ if (`$f.DialogResult -ne [System.Windows.Forms.DialogResult]::OK) { `$_.Cancel = `$true } }); " +
+           "[void]`$f.ShowDialog(); `$f.Dispose(); " +
            "`$d = Split-Path '$a' -Parent; if (-not (Test-Path `$d)) { New-Item -ItemType Directory -Path `$d -Force | Out-Null }; " +
            "@{ store='$s'; acknowledged_at=(Get-Date).ToString('s'); meaning='user dismissed the prompt - treat as clearance to resume' } " +
            "| ConvertTo-Json | Set-Content '$a' -Encoding UTF8; " +
@@ -144,7 +151,7 @@ try {
                 -ArgumentList @('-NoProfile', '-WindowStyle', 'Hidden', '-ExecutionPolicy', 'Bypass', '-Command', $inner) `
                 -WindowStyle Hidden | Out-Null
   Write-Output ("desktop prompt raised: " + $Title)
-  Write-Output ("clicking OK writes: " + $ackFile + "   (poll it - that click IS the resume signal)")
+  Write-Output ("clicking Done writes: " + $ackFile + "   (poll it - that click IS the resume signal)")
 } catch {
   Write-Output ("desktop prompt FAILED to raise (" + $_.Exception.Message + ") - the notification is still in notify-log.txt")
 }

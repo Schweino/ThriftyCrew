@@ -69,6 +69,25 @@ describe("source-native offer parsing", () => {
 });
 
 describe("next-data location canary", () => {
+  it("binds Walmart pickup evidence to store 5361 at 12850 L St, not the shopper shipping address", async () => {
+    const tab = {
+      playwright: {
+        evaluate: async () => ({
+          url: "https://www.walmart.com/search?q=milk&facet=fulfillment_method%3APickup",
+          body: "12812 S 38TH St\nOmaha L St Supercenter\n12850 L St, Omaha, NE 68137",
+          challenge: false,
+        }),
+        waitForTimeout: async () => { throw new Error("exact store canary should pass immediately"); },
+      },
+    };
+
+    await expect(captureNextDataCanary(tab, "walmart")).resolves.toMatchObject({
+      location: "Omaha L St Supercenter, 12850 L St, Omaha, NE 68137",
+      locationVerified: true,
+      priceModeVerified: true,
+    });
+  });
+
   it("waits for Sam's pickup location hydration before passing", async () => {
     const states = [
       { url: "https://www.samsclub.com/search?q=milk", body: "Loading", challenge: false },

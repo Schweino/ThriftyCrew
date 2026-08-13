@@ -11,7 +11,7 @@ const CONFIG = {
     host: "https://www.samsclub.com",
   },
   walmart: {
-    location: "Omaha L St Supercenter 12812 S 38TH St",
+    location: "Omaha L St Supercenter, 12850 L St, Omaha, NE 68137",
     priceMode: "Pickup",
     url: (query) => `https://www.walmart.com/search?q=${encodeURIComponent(query)}&facet=fulfillment_method%3APickup`,
     host: "https://www.walmart.com",
@@ -286,7 +286,7 @@ export async function captureNextDataCanary(tab, store, screenshotSha256) {
     if (state.challenge) throw new Error(`${store} retailer block page detected; stop the lane without retrying or attempting a bypass`);
     const pass = store === "sams"
       ? /Pickup[\s\S]*Omaha Sam's Club/i.test(state.body)
-      : /Omaha L St Supercenter/i.test(state.body) && /12812 S 38TH St/i.test(state.body) && /fulfillment_method%3APickup/i.test(state.url);
+      : /Omaha L St Supercenter/i.test(state.body) && /12850 L St/i.test(state.body) && /fulfillment_method%3APickup/i.test(state.url);
     if (pass) return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: config.location, priceMode: config.priceMode, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
     if (attempt < 4) await tab.playwright.waitForTimeout(750);
   }

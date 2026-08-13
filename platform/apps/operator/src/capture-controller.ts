@@ -20,14 +20,23 @@ let checkpointTimer: NodeJS.Timeout | null = null;
 const checkpointReasons = new Set<string>();
 let lastCheckpointAt = 0;
 
-function raiseChallengePrompt(challengeId: string, store: string, detail: string): void {
+function raiseChallengePrompt(challengeId: string, store: string, detail: string): Promise<void> {
   const notifier = path.resolve(import.meta.dirname, "../../../../grocery/notify-desktop.ps1");
   const storeLabel = store === "sams" ? "Sam's Club" : store === "aldi" ? "ALDI" : store[0]!.toUpperCase() + store.slice(1);
-  const child = spawn("powershell.exe", ["-NoProfile", "-WindowStyle", "Hidden", "-ExecutionPolicy", "Bypass", "-File", notifier,
-    "-Store", storeLabel, "-Detail", detail, "-AlsoEmail", "-ControllerChallengeId", challengeId], {
-    detached: true, stdio: "ignore", windowsHide: true,
+  return new Promise((resolve, reject) => {
+    const child = spawn("powershell.exe", ["-NoProfile", "-WindowStyle", "Hidden", "-ExecutionPolicy", "Bypass", "-File", notifier,
+      "-Store", storeLabel, "-Detail", detail, "-AlsoEmail", "-ControllerChallengeId", challengeId], {
+      stdio: ["ignore", "pipe", "pipe"], windowsHide: true,
+    });
+    let stderr = "";
+    child.stderr.setEncoding("utf8");
+    child.stderr.on("data", (chunk: string) => { stderr += chunk; });
+    child.once("error", reject);
+    child.once("exit", (code) => {
+      if (code === 0) resolve();
+      else reject(new Error(`desktop notifier exited ${code ?? "without a code"}: ${stderr.trim().slice(0, 1000)}`));
+    });
   });
-  child.unref();
 }
 
 async function log(event: string, detail: Record<string, unknown> = {}): Promise<void> {
@@ -135,10 +144,18 @@ async function dispatch(pathname: string, body: Record<string, unknown>): Promis
     if (!/^(aldi|fareway|sams|walmart)$/.test(store)) return { status: 422, body: { ok: false, error: "supported store is required" } };
     const detail = body.detail && typeof body.detail === "object" ? body.detail as Record<string, unknown> : { reason: String(body.reason ?? "retailer challenge detected") };
     const result = openCaptureChallenge(store, detail);
-    if (!result.idempotent) raiseChallengePrompt(result.id, store, String(detail.reason ?? "A human-verification wall stopped this store lane. Clear it in Chrome, then click OK."));
+    const shouldNotify = !result.idempotent || body.notify === true;
+    if (shouldNotify) {
+      try { await raiseChallengePrompt(result.id, store, String(detail.reason ?? "A human-verification wall stopped this store lane. Clear it in Chrome, then click Done.")); }
+      catch (error) {
+        const notificationError = error instanceof Error ? error.message : String(error);
+        await log("challenge-notification-failed", { store, id: result.id, notificationError });
+        return { status: 500, body: { ok: false, ...result, challengeRecorded: true, notificationRaised: false, error: notificationError } };
+      }
+    }
     await log("challenge-open", { store, ...result, detail });
     scheduleCheckpoint("challenge-open");
-    return { status: 201, body: { ok: true, ...result } };
+    return { status: 201, body: { ok: true, ...result, notificationRaised: shouldNotify } };
   }
   const challenge = pathname.match(/^\/v1\/challenges\/([^/]+)\/(acknowledge|resolve)$/);
   if (challenge) {

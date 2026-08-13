@@ -1153,7 +1153,7 @@ if (command === "status") {
   } else if (action === "challenge") {
     const [store, reason = "retailer human-verification wall detected"] = coordinatorArguments;
     if (!store) throw new Error("tc capture coordinator challenge requires a store");
-    result = await request("/v1/challenges/open", { store, detail: { reason } });
+    result = await request("/v1/challenges/open", { store, detail: { reason }, notify: true });
   } else if (action === "resolve") {
     const [challengeId] = coordinatorArguments;
     if (!challengeId) throw new Error("tc capture coordinator resolve requires a challenge ID after a fresh canary pass");
@@ -1523,6 +1523,15 @@ if (command === "status") {
 } else if (command === "ingredient" && subcommand === "qa-retry") {
   result = await (await mutationClient()).request("/internal/ingredient-gaps/qa-retry", {
     json: { ...(arguments_.length > 0 ? { gapIds: arguments_ } : {}) },
+  });
+} else if (command === "ingredient" && subcommand === "qa-not-found") {
+  const [gapId, storeLocationId, sourceUrl, ...evidenceParts] = arguments_;
+  const evidenceSummary = evidenceParts.join(" ").trim();
+  if (!gapId || !storeLocationId || !sourceUrl || evidenceSummary.length < 30) {
+    throw new Error("tc ingredient qa-not-found requires <gap-id> <store-location-id> <source-url> <evidence-summary>");
+  }
+  result = await (await mutationClient()).request(`/internal/ingredient-gaps/${encodeURIComponent(gapId)}/qa-not-found`, {
+    json: { storeLocationId, sourceUrl, evidenceSummary },
   });
 } else if (command === "ingredient" && subcommand === "qa-resolve") {
   const [gapId, resolution, commodityId, ...reasonParts] = arguments_;
