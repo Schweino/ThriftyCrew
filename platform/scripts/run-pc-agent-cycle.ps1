@@ -4,6 +4,7 @@ param(
   [string]$Cycle,
   [ValidateRange(1,50)][int]$MaxItems = 1,
   [ValidateRange(0,10)][int]$PricingWorkerSlot = 0,
+  [ValidateRange(0,4)][int]$RecipeWorkerSlot = 0,
   [string]$OnlyAgent,
   [switch]$SelfTest
 )
@@ -14,7 +15,8 @@ Initialize-PcRuntimeEnvironment $config
 $platformRoot = [string]$config.platformRoot
 $incomeRoot = [string]$config.incomeRoot
 $pnpmPath = [string]$config.pnpmPath
-$logSuffix = if ($Cycle -eq 'IngredientPricing' -and $PricingWorkerSlot -gt 0) { "-{0}" -f $PricingWorkerSlot } else { '' }
+$logSuffix = if ($Cycle -eq 'IngredientPricing' -and $PricingWorkerSlot -gt 0) { "-{0}" -f $PricingWorkerSlot }
+  elseif ($Cycle -eq 'Recipe' -and $RecipeWorkerSlot -gt 0) { "-shard-{0}" -f $RecipeWorkerSlot } else { '' }
 $logFile = Join-Path ([string]$config.logRoot) ("agent-{0}{1}.log" -f $Cycle.ToLowerInvariant(), $logSuffix)
 $outputBase = Join-Path (Split-Path -Parent ([string]$config.logRoot)) 'agent-output'
 $registry = Read-PcUtf8Json (Join-Path $platformRoot 'config\agents.json')
@@ -308,6 +310,8 @@ function Publish-ReadyRecipeContent {
     Invoke-LoggedCommand 'recipe-content-publish-native' { & $pnpmPath tc engine publish-native } | Out-Null
   } finally { Pop-Location }
 }
+if ($Cycle -ne 'Recipe' -and $RecipeWorkerSlot -ne 0) { throw 'RecipeWorkerSlot is valid only for the Recipe cycle' }
+if ($RecipeWorkerSlot -gt 0 -and $OnlyAgent) { throw 'RecipeWorkerSlot cannot be combined with OnlyAgent' }
 
 function Start-IngredientPricingDrain {
   $supervisorScript = Join-Path $platformRoot 'scripts\run-ingredient-campaign-supervisor.ps1'
@@ -354,12 +358,14 @@ if ($SelfTest) {
 
 $lockName = if ($Cycle -eq 'IngredientPricing' -and $PricingWorkerSlot -gt 0) {
   "agent-cycle-ingredientpricing-{0}" -f $PricingWorkerSlot
+} elseif ($Cycle -eq 'Recipe' -and $RecipeWorkerSlot -gt 0) {
+  "agent-cycle-recipe-shard-{0}" -f $RecipeWorkerSlot
 } else {
   "agent-cycle-{0}" -f $Cycle.ToLowerInvariant()
 }
 $lock = Enter-PcRuntimeLock $lockName 300
 if (-not $lock) { Write-PcRuntimeLog $logFile 'another instance holds the cycle lock; standing down'; exit 0 }
-$job = $jobByCycle[$Cycle]
+$job = if ($Cycle -eq 'Recipe' -and $RecipeWorkerSlot -gt 0) { $null } else { $jobByCycle[$Cycle] }
 $env:TC_SCHEDULED_FOR = (Get-Date).ToUniversalTime().ToString('o')
 if ($job) {
   $env:TC_JOB_RUN_ID = "run_{0}_pc-{1}" -f $job, ([DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())
@@ -379,14 +385,34 @@ try {
     }
     finally { Pop-Location }
   }
-  if ($Cycle -eq 'Recipe' -and -not $OnlyAgent) {
+  if ($Cycle -eq 'Recipe' -and $RecipeWorkerSlot -gt 0 -and -not $OnlyAgent) {
     for ($round = 0; $round -lt $MaxItems; $round++) {
       $roundProgress = $false
-      foreach ($agentId in @('recipe-sourcer','recipe-deduper','recipe-fact-extractor','recipe-mapper')) {
+      foreach ($agentId in @('recipe-fact-extractor','recipe-mapper')) {
         if (Invoke-AgentItem $agentId) {
           $roundProgress = $true
           if ($agentId -eq 'recipe-mapper') { Start-IngredientPricingDrain }
         }
+      }
+      if (-not $roundProgress) { break }
+    }
+  } elseif ($Cycle -eq 'Recipe' -and -not $OnlyAgent) {
+    for ($round = 0; $round -lt $MaxItems; $round++) {
+      $roundProgress = $false
+      foreach ($agentId in @('recipe-sourcer','recipe-deduper')) {
+        if (Invoke-AgentItem $agentId) {
+          $roundProgress = $true
+        }
+      }
+      $shardProcesses = @()
+      foreach ($slot in 1..4) {
+        $shardArgs = @('-NoProfile','-ExecutionPolicy','Bypass','-WindowStyle','Hidden','-File',('"{0}"' -f $PSCommandPath),
+          '-Cycle','Recipe','-RecipeWorkerSlot',[string]$slot,'-MaxItems',[string]$MaxItems)
+        $shardProcesses += Start-Process -FilePath 'powershell.exe' -ArgumentList $shardArgs -WorkingDirectory $platformRoot -WindowStyle Hidden -PassThru
+      }
+      $shardProcesses | Wait-Process
+      foreach ($process in $shardProcesses) {
+        if ($process.ExitCode -ne 0) { throw "recipe shard worker $($process.Id) failed with exit code $($process.ExitCode)" }
       }
       if (-not $roundProgress) { break }
     }

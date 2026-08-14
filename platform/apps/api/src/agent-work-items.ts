@@ -299,6 +299,8 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
           discovery: row.target_missing_ingredients ? {
             targetMissingIngredients: row.target_published_ingredients ?? row.target_missing_ingredients,
             uniqueMissingIngredients: row.unique_missing_ingredients,
+            requestedLeadCount: Math.min(50, Math.max(20,
+              (Number(row.target_published_ingredients ?? row.target_missing_ingredients) - Number(row.unique_missing_ingredients ?? 0)) * 3)),
             sourceRound: row.source_round,
             priorSourceUrls: [...new Set([
               ...prior.results.map((item) => item.source_url),
@@ -359,6 +361,10 @@ export interface IngredientCampaignSnapshot {
   totalUniqueGaps: number;
 }
 
+export function ingredientDiscoveryBufferTarget(targetPublishedIngredients: number): number {
+  return targetPublishedIngredients + Math.max(10, Math.min(20, Math.ceil(targetPublishedIngredients * 0.4)));
+}
+
 export function ingredientCampaignPhase(snapshot: IngredientCampaignSnapshot): "collecting" | "pricing" | "completed" {
   if (snapshot.discoveryFrozenAt) {
     const open = snapshot.pending + snapshot.researching + snapshot.readyToPublish + snapshot.needsOperator;
@@ -366,7 +372,7 @@ export function ingredientCampaignPhase(snapshot: IngredientCampaignSnapshot): "
   }
   if (snapshot.published >= snapshot.targetPublishedIngredients) return "completed";
   const viable = snapshot.published + snapshot.pending + snapshot.researching + snapshot.readyToPublish;
-  return viable < snapshot.targetPublishedIngredients ? "collecting" : "pricing";
+  return viable < ingredientDiscoveryBufferTarget(snapshot.targetPublishedIngredients) ? "collecting" : "pricing";
 }
 
 export async function ingredientCampaignSnapshot(db: D1Database, requestId: string): Promise<IngredientCampaignSnapshot | null> {
@@ -702,6 +708,26 @@ async function enqueueRecipeNext(db: D1Database, completed: Record<string, unkno
   const nextAgentId = RECIPE_CHAIN[String(completed.agent_id)];
   if (!nextAgentId) return undefined;
   const next = await activeAgent(db, nextAgentId);
+  if (nextAgentId === "recipe-fact-extractor") {
+    const discovery = await db.prepare("SELECT request_id FROM ingredient_discovery_batches WHERE request_id = ?1")
+      .bind(String(completed.source_ref)).first<{ request_id: string }>();
+    if (discovery) {
+      const dedup = recipeHuntDedupSchema.parse(output);
+      const shardSize = 8;
+      for (let offset = 0; offset < dedup.accepted.length; offset += shardSize) {
+        const accepted = dedup.accepted.slice(offset, offset + shardSize);
+        const candidateIds = new Set(accepted.map((candidate) => candidate.id));
+        const shardOutput = { ...dedup, accepted,
+          decisions: dedup.decisions.filter((decision) => candidateIds.has(decision.candidateId)) };
+        const input = { contract: String(completed.output_contract), previousWorkItemId: completed.id,
+          output: shardOutput, nextAgentId, nextPromptHash: next.prompt_sha256,
+          shard: { index: Math.floor(offset / shardSize), size: accepted.length, total: dedup.accepted.length } };
+        await enqueue(db, next, { sourceKind: "recipe-request", sourceRef: String(completed.source_ref),
+          stage: "fact-extractor", severity: next.criticality, input }, String(completed.adapter_version), String(completed.output_contract));
+      }
+      return nextAgentId;
+    }
+  }
   const input: Record<string, unknown> = { contract: String(completed.output_contract), previousWorkItemId: completed.id, output, nextAgentId, nextPromptHash: next.prompt_sha256 };
   if (nextAgentId === "recipe-deduper") input.catalog = await currentRecipeCatalog(db);
   if (nextAgentId === "recipe-mapper") input.commodities = await currentCommodityCatalog(db);

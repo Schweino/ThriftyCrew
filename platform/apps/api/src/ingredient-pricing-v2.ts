@@ -561,7 +561,7 @@ export async function pricingWaveStatus(db: D1Database, waveId: string): Promise
 }
 
 export async function ingredientPipelineStatus(db: D1Database): Promise<Record<string, unknown>> {
-  const [jobs, stores, waves, inbox, attention, lastProgress, challenges, outbox, stageLatency, orphans] = await Promise.all([
+  const [jobs, stores, waves, inbox, attention, lastProgress, challenges, outbox, stageLatency, orphans, definitionWork] = await Promise.all([
     db.prepare(`SELECT CASE WHEN job.operational_state = 'cancelled' AND gap.qa_resolution IS NOT NULL
           THEN 'cancelled_existing_alias' ELSE job.operational_state END AS state, COUNT(*) AS count
       FROM ingredient_pricing_jobs job JOIN ingredient_gaps gap ON gap.id = job.gap_id
@@ -599,11 +599,56 @@ export async function ingredientPipelineStatus(db: D1Database): Promise<Record<s
       JOIN ingredient_pricing_jobs job ON job.id = check_row.pricing_job_id
       WHERE job.operational_state IN ('cancelled','public_verified','permanently_unavailable','failed_manual')
         AND check_row.operational_state NOT IN ('cancelled','qa_verified_priced','qa_verified_not_found')`).first<{ count: number }>(),
+    db.prepare(`SELECT state, COUNT(*) AS count FROM agent_work_items
+      WHERE agent_id = 'ingredient-definition-planner' AND state IN ('queued','retryable','leased')
+      GROUP BY state ORDER BY state`).all(),
   ]);
   return { marketId: "omaha", waves: waves.results, jobs: jobs.results, stores: stores.results, inbox: inbox.results,
     needsOperator: attention.results, challenges: challenges.results, outbox: outbox.results,
+    definitionWork: definitionWork.results,
     stagesLast24Hours: stageLatency.results, orphanActiveChecks: Number(orphans?.count ?? 0),
     lastProgressAt: lastProgress?.changed_at ?? null };
+}
+
+export async function ingredientCampaignProgress(db: D1Database, requestId?: string): Promise<Record<string, unknown>> {
+  const campaignFilter = requestId ? "WHERE batch.request_id = ?1" : "";
+  const campaignsStatement = db.prepare(`SELECT batch.request_id, batch.state, batch.target_published_ingredients,
+      batch.publish_batch_size, batch.paused_at, batch.discovery_frozen_at, batch.source_round, batch.updated_at,
+      COUNT(DISTINCT gap.id) AS discovered,
+      COUNT(DISTINCT CASE WHEN gap.status = 'pending' THEN gap.id END) AS pending,
+      COUNT(DISTINCT CASE WHEN gap.status = 'researching' THEN gap.id END) AS researching,
+      COUNT(DISTINCT CASE WHEN gap.status = 'ready_to_publish' THEN gap.id END) AS ready_to_publish,
+      COUNT(DISTINCT CASE WHEN gap.status = 'published' THEN gap.id END) AS published,
+      COUNT(DISTINCT CASE WHEN gap.status = 'permanently_unavailable' THEN gap.id END) AS permanently_unavailable,
+      COUNT(DISTINCT CASE WHEN gap.status = 'needs_operator' AND gap.qa_resolution IS NULL THEN gap.id END) AS needs_operator,
+      COUNT(DISTINCT CASE WHEN gap.qa_resolution IS NOT NULL THEN gap.id END) AS resolved_qa
+    FROM ingredient_discovery_batches batch
+    LEFT JOIN ingredient_gap_occurrences occurrence ON occurrence.request_id = batch.request_id
+    LEFT JOIN ingredient_gaps gap ON gap.id = occurrence.gap_id
+    ${campaignFilter} GROUP BY batch.request_id ORDER BY batch.created_at DESC LIMIT 100`);
+  const campaigns = requestId ? await campaignsStatement.bind(requestId).all() : await campaignsStatement.all();
+  const memberFilter = requestId ? "AND occurrence.request_id = ?1" : "";
+  const membersStatement = db.prepare(`SELECT occurrence.request_id, gap.id AS gap_id, gap.display_name,
+      CASE WHEN gap.qa_resolution IS NOT NULL THEN 'resolved_' || gap.qa_resolution ELSE gap.status END AS gap_state,
+      job.operational_state AS job_state, check_row.store_location_id, check_row.operational_state AS store_state,
+      check_row.updated_at
+    FROM ingredient_gap_occurrences occurrence
+    JOIN ingredient_gaps gap ON gap.id = occurrence.gap_id
+    LEFT JOIN ingredient_pricing_jobs job ON job.gap_id = gap.id
+    LEFT JOIN ingredient_store_checks check_row ON check_row.pricing_job_id = job.id
+    WHERE 1 = 1 ${memberFilter}
+    ORDER BY occurrence.request_id, gap.first_seen_at, gap.id, check_row.store_location_id LIMIT 5000`);
+  const members = requestId ? await membersStatement.bind(requestId).all<Record<string, unknown>>() : await membersStatement.all<Record<string, unknown>>();
+  const terminal = new Set(["cancelled", "qa_verified_priced", "qa_verified_not_found"]);
+  const activeCounts = new Map<string, number>();
+  for (const row of members.results) {
+    if (row.store_state && !terminal.has(String(row.store_state))) {
+      activeCounts.set(String(row.store_state), (activeCounts.get(String(row.store_state)) ?? 0) + 1);
+    }
+  }
+  const bottleneck = [...activeCounts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0]?.[0] ?? null;
+  const lastProgressAt = members.results.map((row) => row.updated_at ? String(row.updated_at) : "").sort().at(-1) || null;
+  return { campaigns: campaigns.results, members: members.results, activeStoreStates: Object.fromEntries(activeCounts), bottleneck, lastProgressAt };
 }
 
 export async function pipelineEvents(db: D1Database, after: number, limit: number): Promise<{ events: Record<string, unknown>[]; next: number }> {

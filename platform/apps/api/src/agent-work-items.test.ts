@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { ingredientPriceResearchSchema, ingredientStoreCaptureResultSchema, OMAHA_GROCERY_STORE_LOCATION_IDS, recipeMapSchema, recipeSourceCandidatesSchema } from "@thriftycrew/contracts";
-import { activeIngredientCategoryContextSql, assertRecipeChainContinuity, assertRetailerTolerantIngredientDefinition, ingredientCampaignPhase, type IngredientCampaignSnapshot, isAtomicDiscoveryGapName, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
+import { activeIngredientCategoryContextSql, assertRecipeChainContinuity, assertRetailerTolerantIngredientDefinition, ingredientCampaignPhase, ingredientDiscoveryBufferTarget, type IngredientCampaignSnapshot, isAtomicDiscoveryGapName, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
 
 const candidate = {
   id: "candidate-bean-chili",
@@ -388,8 +388,17 @@ describe("ingredient campaign orchestration", () => {
     expect(ingredientCampaignPhase(snapshot())).toBe("collecting");
   });
 
+  it("over-discovers a bounded forty-percent replacement buffer", () => {
+    expect(ingredientDiscoveryBufferTarget(25)).toBe(35);
+    expect(ingredientDiscoveryBufferTarget(50)).toBe(70);
+    expect(ingredientCampaignPhase(snapshot({ targetPublishedIngredients: 25, published: 4, pending: 21,
+      researching: 0, readyToPublish: 0 }))).toBe("collecting");
+    expect(ingredientCampaignPhase(snapshot({ targetPublishedIngredients: 25, published: 4, pending: 31,
+      researching: 0, readyToPublish: 0 }))).toBe("pricing");
+  });
+
   it("prices without extra sourcing when enough viable gaps remain", () => {
-    expect(ingredientCampaignPhase(snapshot({ pending: 157, researching: 10, readyToPublish: 20 }))).toBe("pricing");
+    expect(ingredientCampaignPhase(snapshot({ pending: 177, researching: 10, readyToPublish: 20 }))).toBe("pricing");
   });
 
   it("completes only from published ingredients", () => {

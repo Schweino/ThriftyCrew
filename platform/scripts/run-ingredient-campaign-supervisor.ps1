@@ -13,7 +13,9 @@ $lock = Enter-PcRuntimeLock 'ingredient-campaign-supervisor' 300
 if (-not $lock) { Write-PcRuntimeLog $logFile 'another supervisor owns the active ingredient campaign; standing down'; exit 0 }
 $lastPublisherStart = [DateTime]::MinValue
 $lastRecipeStart = [DateTime]::MinValue
-$pipelineProcess = $null
+$lastPricingStart = [DateTime]::MinValue
+$lastBrowserAlertKey = ''
+$pricingProcess = $null
 $recipeProcess = $null
 $publisherProcess = $null
 
@@ -58,16 +60,8 @@ function Start-Cycle([string]$CycleName, [int]$MaxItems, [int]$Slot = 0) {
   return Start-Process -FilePath 'powershell.exe' -ArgumentList $arguments -WorkingDirectory $platformRoot -WindowStyle Hidden -PassThru
 }
 
-function Start-PersistentPricingCoordinator {
-  Set-PcRuntimeCredential $config 'local-operator'
-  return Start-Process -FilePath $pnpmPath -ArgumentList @('--silent','--filter','@thriftycrew/operator','tc','ingredient','pipeline','run') `
-    -WorkingDirectory $platformRoot -WindowStyle Hidden -PassThru
-}
-
 try {
-  Write-PcRuntimeLog $logFile 'persistent event-driven supervisor started; research, sourcing, and publication are isolated stages'
-  $pipelineProcess = Start-PersistentPricingCoordinator
-  Write-PcRuntimeLog $logFile ("started persistent pricing coordinator pid={0}" -f $pipelineProcess.Id)
+  Write-PcRuntimeLog $logFile 'stage-aware supervisor started; idle stages are not launched'
   while ($true) {
     $status = Read-IngredientStatus
     $pipeline = Read-PipelineStatus
@@ -76,17 +70,29 @@ try {
     $pending = @($status.gaps | Where-Object status -eq 'pending').Count
     $researching = @($status.gaps | Where-Object status -eq 'researching').Count
     $ready = @($status.gaps | Where-Object status -eq 'ready_to_publish').Count
-    # Pipeline status exposes the v2 operational state as `state`. Keep the
-    # definition/publication cycle alive for every nonterminal job phase.
-    $activeJobStates = @('queued','identity_ready','store_checks_running','aggregate_ready','proposal_ready','ready_to_publish','publishing')
-    $v2RunningJobs = [int](($pipeline.jobs | Where-Object { $_.state -in $activeJobStates } | Measure-Object count -Sum).Sum)
-    if (-not $pipelineProcess -or $pipelineProcess.HasExited) {
-      $pipelineProcess = Start-PersistentPricingCoordinator
-      Write-PcRuntimeLog $logFile ("recovered persistent pricing coordinator pid={0}" -f $pipelineProcess.Id)
+    $headlessStoreIds = @('bakers-saddle-creek','family-fare-omaha-6401','hy-vee-omaha-1465')
+    $browserStoreIds = @('aldi-omaha-446-048','fareway-omaha-043','sams-omaha','walmart-omaha')
+    $terminalStoreStates = @('cancelled','qa_verified_priced','qa_verified_not_found')
+    $headlessWork = [int](($pipeline.stores | Where-Object { $_.store_location_id -in $headlessStoreIds -and $_.state -notin $terminalStoreStates } | Measure-Object count -Sum).Sum)
+    $browserWork = [int](($pipeline.stores | Where-Object { $_.store_location_id -in $browserStoreIds -and $_.state -notin $terminalStoreStates } | Measure-Object count -Sum).Sum)
+    $inboxWork = [int](($pipeline.inbox | Where-Object { $_.state -in @('pending','claimed') } | Measure-Object count -Sum).Sum)
+    $outboxWork = [int](($pipeline.outbox | Where-Object state -eq 'pending' | Measure-Object count -Sum).Sum)
+    if (($headlessWork -gt 0 -or $inboxWork -gt 0 -or $outboxWork -gt 0) -and
+        (-not $pricingProcess -or $pricingProcess.HasExited) -and ((Get-Date) - $lastPricingStart).TotalSeconds -ge 5) {
+      $pricingProcess = Start-Cycle 'IngredientPricing' 50
+      $lastPricingStart = Get-Date
+      Write-PcRuntimeLog $logFile ("started one bounded headless pricing tick; headless={0} inbox={1} outbox={2}" -f $headlessWork, $inboxWork, $outboxWork)
     }
+    if ($browserWork -gt 0) {
+      $browserAlertKey = [string]$browserWork
+      if ($browserAlertKey -ne $lastBrowserAlertKey) {
+        Send-PcRuntimeAlert 'Omaha pricing browser lanes are ready' ("$browserWork browser-store checks are queued. Open Codex and ask it to use `$omaha-ingredient-pricing. Chrome challenges will raise a separate Done callback alert.")
+        $lastBrowserAlertKey = $browserAlertKey
+      }
+    } else { $lastBrowserAlertKey = '' }
 
     $collecting = @($campaigns | Where-Object { $_.state -eq 'collecting' -and -not $_.discovery_frozen_at }).Count -gt 0
-    if ($collecting -and (-not $recipeProcess -or $recipeProcess.HasExited) -and ((Get-Date) - $lastRecipeStart).TotalSeconds -ge 60) {
+    if ($collecting -and (-not $recipeProcess -or $recipeProcess.HasExited) -and ((Get-Date) - $lastRecipeStart).TotalSeconds -ge 5) {
       $recipeProcess = Start-Cycle 'Recipe' 50
       $lastRecipeStart = Get-Date
       Write-PcRuntimeLog $logFile 'started or recovered the recipe discovery stage'
@@ -97,14 +103,15 @@ try {
     $remaining = if ($campaigns.Count -gt 0) { [int](($campaigns | ForEach-Object { [int]$_.target_published_ingredients - [int]$_.published_ingredients } | Measure-Object -Minimum).Minimum) } else { $ready }
     $publishLimit = [Math]::Min($batchSize, [Math]::Max(1, [int]$remaining))
     $flushTail = $ready -gt 0 -and $pending -eq 0 -and $researching -eq 0
-    $definitionOrPublicationWork = $v2RunningJobs -gt 0 -or $ready -ge $publishLimit -or $flushTail
-    if ($definitionOrPublicationWork -and (-not $publisherProcess -or $publisherProcess.HasExited) -and ((Get-Date) - $lastPublisherStart).TotalSeconds -ge 60) {
+    $definitionWork = [int](($pipeline.definitionWork | Measure-Object count -Sum).Sum)
+    $definitionOrPublicationWork = $definitionWork -gt 0 -or $ready -ge $publishLimit -or $flushTail
+    if ($definitionOrPublicationWork -and (-not $publisherProcess -or $publisherProcess.HasExited) -and ((Get-Date) - $lastPublisherStart).TotalSeconds -ge 5) {
       $publisherProcess = Start-Cycle 'IngredientPublication' $publishLimit
       $lastPublisherStart = Get-Date
       Write-PcRuntimeLog $logFile ("started batch publication for up to {0} ingredients; ready={1}" -f $publishLimit, $ready)
     }
 
-    Write-PcRuntimeLog $logFile ("heartbeat campaigns={0} v2RunningJobs={1} pending={2} researching={3} ready={4} coordinatorPid={5}" -f $campaigns.Count, $v2RunningJobs, $pending, $researching, $ready, $pipelineProcess.Id)
+    Write-PcRuntimeLog $logFile ("heartbeat campaigns={0} headless={1} browser={2} definition={3} pending={4} researching={5} ready={6}" -f $campaigns.Count, $headlessWork, $browserWork, $definitionWork, $pending, $researching, $ready)
     Start-Sleep -Seconds $PollSeconds
   }
 } catch {
@@ -112,6 +119,6 @@ try {
   Send-PcRuntimeAlert 'ThriftyCrew ingredient campaign supervisor failed' ("The durable campaign is preserved but paused operationally.`n`n$($_.Exception.Message)`n`nLog: $logFile")
   exit 1
 } finally {
-  if ($pipelineProcess -and -not $pipelineProcess.HasExited) { Stop-Process -Id $pipelineProcess.Id -Force -ErrorAction SilentlyContinue }
+  if ($pricingProcess -and -not $pricingProcess.HasExited) { Stop-Process -Id $pricingProcess.Id -Force -ErrorAction SilentlyContinue }
   Exit-PcRuntimeLock $lock
 }

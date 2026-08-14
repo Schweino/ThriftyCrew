@@ -1713,6 +1713,9 @@ if (command === "status") {
 } else if (command === "ingredient" && subcommand === "status") {
   const query = arguments_[0] ? `?status=${encodeURIComponent(arguments_[0])}` : "";
   result = await (await mutationClient()).request(`/internal/ingredient-gaps${query}`, { method: "GET" });
+} else if (command === "ingredient" && subcommand === "progress") {
+  const query = arguments_[0] ? `?requestId=${encodeURIComponent(arguments_[0])}` : "";
+  result = await (await mutationClient()).request(`/internal/ingredient-pricing/progress${query}`, { method: "GET" });
 } else if (command === "ingredient" && subcommand === "pipeline") {
   const action = arguments_[0] ?? "run";
   if (action === "status") result = await (await mutationClient()).request("/internal/ingredient-pricing/status");

@@ -117,12 +117,13 @@ import { engineMayWriteCaptureSource } from "./capture-authorization";
 import { evaluateContentPromotion } from "./content-batches";
 import { recipeCommodityIds } from "./recipe-commodity-catalog";
 import { claimAgentWorkItem, completeAgentWorkItem, enqueueIngredientDefinitionPlan, failAgentWorkItem, ingredientCampaignSnapshot, reconcileIngredientCampaign, reconcileIngredientHolds } from "./agent-work-items";
-import { claimStoreChecks, createPricingWave, failStoreCheck, heartbeatStoreCheck, ingredientPipelineStatus, pipelineEvents, pricingWaveStatus, resolveClaimedStoreCheckFromCatalog } from "./ingredient-pricing-v2";
+import { claimStoreChecks, createPricingWave, failStoreCheck, heartbeatStoreCheck, ingredientCampaignProgress, ingredientPipelineStatus, pipelineEvents, pricingWaveStatus, resolveClaimedStoreCheckFromCatalog } from "./ingredient-pricing-v2";
 import { acknowledgePipelineOutbox, claimPipelineOutbox, nackPipelineOutbox } from "./pipeline-outbox";
 import { completeIngredientStoreCapture, completeIngredientStoreQa, rejectIngredientStoreQa, uploadIngredientEvidence } from "./ingredient-independent-qa";
 import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredientChallenge } from "./ingredient-challenges";
 import { materializeHotCatalog } from "./hot-catalog";
 import { attachIngredientProposal, createIngredientPublicationBatch, ingredientPublicationProofPlan, materializeIngredientPublicationCaptures, verifyIngredientPublicationExternal, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
+import { releasePayloadObjectKey } from "./release-payloads";
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
@@ -1480,6 +1481,8 @@ app.get("/internal/ingredient-pricing/waves/:id", async (context) => {
 });
 
 app.get("/internal/ingredient-pricing/status", async (context) => context.json({ ok: true, status: await ingredientPipelineStatus(context.env.DB) }));
+app.get("/internal/ingredient-pricing/progress", async (context) => context.json({ ok: true,
+  progress: await ingredientCampaignProgress(context.env.DB, context.req.query("requestId")) }));
 
 app.get("/internal/ingredient-pricing/publication-ready", async (context) => {
   const rows = await context.env.DB.prepare(
@@ -4432,7 +4435,7 @@ app.put("/internal/releases/:id/payload", zValidator("json", releasePayloadSchem
   if (await digestHex(serialized) !== body.contentHash) return jsonError("payload content hash mismatch", 422);
   const releaseId = context.req.param("id");
   const bytes = new TextEncoder().encode(serialized);
-  const objectKey = `release-payloads/v2/kind=${body.kind}/prefix=${body.contentHash.slice(0, 2)}/${body.contentHash}.json`;
+  const objectKey = releasePayloadObjectKey(releaseId, body.kind, body.contentHash);
   const existing = await context.env.EVIDENCE.head(objectKey);
   if (!existing) {
     await context.env.EVIDENCE.put(objectKey, bytes, {
