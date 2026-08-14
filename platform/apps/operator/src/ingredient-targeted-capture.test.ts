@@ -24,6 +24,15 @@ const evidence = { objectKey: "ingredient-store-evidence/check/producer/hash.jso
   contentType: "application/json", sourceUrl: chunk.canary.evidenceUrl, observedAt };
 
 describe("targeted ingredient capture bridge", () => {
+  it("accepts a redundant leading inline case-insensitive flag", async () => {
+    const inlineFlagClaim = { ...claim, commodity_proposal_json: JSON.stringify({
+      id: "test-spice", label: "Test Spice", categoryId: "pantry", unit: "oz",
+      include: ["(?i)\\btest spice\\b"], exclude: [], searchTerms: ["test spice"],
+    }) };
+    const payload = await buildIngredientCapturePayload(inlineFlagClaim, [chunk], evidence, new Date(observedAt));
+    expect(payload.result.outcome).toBe("priced");
+  });
+
   it("fails closed on non-food products whose names happen to match an ingredient", () => {
     expect(isClearlyNonFoodProduct("Spicy Cinnamon Stick Scented Wax Melts", "Home Decor")).toBe(true);
     expect(isClearlyNonFoodProduct("Organic Cinnamon Sticks", "Pantry / Spices")).toBe(false);

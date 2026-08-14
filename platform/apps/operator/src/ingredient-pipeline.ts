@@ -21,15 +21,21 @@ async function drainCatalogLane(client: MutationClient, storeLocationId: string,
   const claimed = await client.request("/internal/ingredient-pricing/store-checks/claim", {
     json: { storeLocationId, owner, lane: "catalog", limit, leaseSeconds: 300 },
   }) as ClaimResponse;
+  let completed = 0;
   await Promise.all((claimed.checks ?? []).map(async (check) => {
     const id = String(check.id);
     const leaseGeneration = Number(check.lease_generation);
     if (!id || !Number.isInteger(leaseGeneration) || leaseGeneration < 1) throw new Error("claimed store check omitted its lease fence");
-    await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(id)}/catalog-resolve`, {
-      json: { owner, leaseGeneration, leaseSeconds: 300 },
-    });
+    try {
+      await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(id)}/catalog-resolve`, {
+        json: { owner, leaseGeneration, leaseSeconds: 300 },
+      });
+      completed += 1;
+    } catch (error) {
+      await failClaimedChecks(client, [check], error);
+    }
   }));
-  return (claimed.checks ?? []).length;
+  return completed;
 }
 
 async function uploadEvidence(client: MutationClient, check: ClaimedCheck, kind: "producer" | "verifier", chunk: AdapterChunk) {

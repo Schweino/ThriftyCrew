@@ -171,6 +171,10 @@ async function captureHyVee(query: string, observedAt: string) {
       headers: { "content-type": "application/json", "user-agent": USER_AGENT, "x-hy-vee-correlation-id": crypto.randomUUID() }, body: JSON.stringify(body) });
     const items = Array.isArray(response.results) ? response.results : [];
     pagesTotal = Number(response.meta?.pagination?.pagesTotal ?? 0); total = Number(response.meta?.pagination?.total ?? -1);
+    // Hy-Vee reports a complete empty search as total=0/pagesTotal=0 even
+    // though page 1 was fetched successfully. Treat that as one examined page
+    // so a true no-match can proceed to independent QA.
+    if (total === 0 && pagesTotal === 0) pagesTotal = 1;
     if (!Number.isInteger(pagesTotal) || pagesTotal < 1 || !Number.isInteger(total) || total < 0) throw new Error("Hy-Vee omitted pagination totals");
     for (const [index, item] of items.entries()) {
       const current = headlessPriceMinor(item.pricing?.tagPriceValue); const regular = headlessPriceMinor(item.pricing?.basePriceValue ?? item.pricing?.regularPriceValue);

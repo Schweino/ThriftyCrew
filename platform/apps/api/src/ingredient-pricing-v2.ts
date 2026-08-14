@@ -101,10 +101,12 @@ export async function claimStoreChecks(db: D1Database, inputValue: unknown): Pro
   const expiresAt = new Date(now.getTime() + input.leaseSeconds * 1000).toISOString();
   await db.prepare(
     `UPDATE ingredient_store_checks
-        SET state = 'transient_failed', operational_state = 'transient_backoff',
-            resume_state = CASE WHEN lease_lane = 'qa' THEN 'qa_queued' ELSE 'capture_queued' END,
+        SET state = CASE WHEN lease_lane = 'catalog' THEN 'catalog_lookup' ELSE 'transient_failed' END,
+            operational_state = CASE WHEN lease_lane = 'catalog' THEN 'catalog_lookup' ELSE 'transient_backoff' END,
+            resume_state = CASE WHEN lease_lane = 'catalog' THEN NULL WHEN lease_lane = 'qa' THEN 'qa_queued' ELSE 'capture_queued' END,
             lease_owner = NULL, lease_expires_at = NULL, heartbeat_at = NULL, lease_lane = NULL,
-            error_class = 'transient', last_error = 'lease expired', next_attempt_at = ?2,
+            error_class = CASE WHEN lease_lane = 'catalog' THEN NULL ELSE 'transient' END,
+            last_error = 'lease expired', next_attempt_at = ?2,
             last_progress_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
       WHERE store_location_id = ?1 AND state = 'leased' AND lease_expires_at <= ?2`,
   ).bind(input.storeLocationId, now.toISOString()).run();
@@ -210,7 +212,8 @@ export async function resolveClaimedStoreCheckFromCatalog(db: D1Database, checkI
   const nextState = selection.winner && selection.winner.productUrl && hasCompleteCoverage ? "qa_pending" : "targeted_refresh";
   statements.push(db.prepare(
     `UPDATE ingredient_store_checks
-        SET state = ?4, candidate_count = ?5, eligible_count = ?5,
+        SET state = ?4, operational_state = CASE WHEN ?4 = 'qa_pending' THEN 'qa_queued' ELSE 'targeted_refresh' END,
+            candidate_count = ?5, eligible_count = ?5,
             lease_owner = NULL, lease_expires_at = NULL, heartbeat_at = NULL,
             last_error = ?6, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?1 AND state = 'leased' AND lease_owner = ?2 AND lease_generation = ?3`,

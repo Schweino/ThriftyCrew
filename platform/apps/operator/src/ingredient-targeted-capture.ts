@@ -87,7 +87,7 @@ function convertQuantity(quantity: number, from: string, to: string): number | n
 }
 
 function regexes(patterns: string[]): RegExp[] {
-  return patterns.map((pattern) => new RegExp(pattern, "i"));
+  return patterns.map((pattern) => new RegExp(pattern.replace(/^\(\?i\)/, ""), "i"));
 }
 
 function rowIdentity(row: Record<string, unknown>) {

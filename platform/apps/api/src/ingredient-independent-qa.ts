@@ -178,8 +178,8 @@ export async function completeIngredientStoreQa(env: Pick<WorkerEnv, "DB" | "EVI
     if (!(captured.queryTerms ?? []).every((term) => complete.has(term.trim().toLowerCase()))) throw new Error("independent verifier did not reproduce complete no-match coverage");
     const proposal = JSON.parse(String(row.commodity_proposal_json ?? "null")) as { include?: string[]; exclude?: string[] } | null;
     if (!proposal || !Array.isArray(proposal.include) || !Array.isArray(proposal.exclude)) throw new Error("QA lacks the locked ingredient definition");
-    const include = proposal.include.map((pattern) => new RegExp(pattern, "i"));
-    const exclude = proposal.exclude.map((pattern) => new RegExp(pattern, "i"));
+    const include = proposal.include.map((pattern) => new RegExp(pattern.replace(/^\(\?i\)/, ""), "i"));
+    const exclude = proposal.exclude.map((pattern) => new RegExp(pattern.replace(/^\(\?i\)/, ""), "i"));
     const eligibleLike = (Array.isArray(verification.rows) ? verification.rows : []).some((item: Record<string, any>) => {
       const offer = item?._capture?.offer ?? {};
       const name = String(offer.productName ?? item.n ?? item.name ?? "");
