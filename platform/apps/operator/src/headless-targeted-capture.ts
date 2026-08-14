@@ -193,7 +193,13 @@ async function captureBakers(query: string, token: string, observedAt: string, f
     const response = await jsonFetch(url.href, { headers: { authorization: `Bearer ${token}`, accept: "application/json" } }, 3, fetchImpl);
     requestPages += 1;
     const products = Array.isArray(response.data) ? response.data : [];
-    const total = Number(response.meta?.pagination?.total);
+    const reportedTotal = response.meta?.pagination?.total;
+    // Kroger represents a valid zero-result first page as `{ data: [] }`
+    // without a pagination envelope. That is authoritative only for start=0;
+    // a non-empty or later page still requires an explicit stable total.
+    const total = reportedTotal === undefined && start === 0 && products.length === 0
+      ? 0
+      : Number(reportedTotal);
     if (!Number.isSafeInteger(total) || total < 0) throw new Error("Baker's omitted a valid pagination total");
     const reportedStart = response.meta?.pagination?.start;
     if (reportedStart !== undefined && Number(reportedStart) !== start) throw new Error(`Baker's returned offset ${reportedStart} for requested offset ${start}`);

@@ -161,6 +161,26 @@ describe("headless targeted store capture", () => {
     }
   });
 
+  it("accepts Kroger's pagination-less empty first page as a complete zero-result envelope", async () => {
+    const directory = await mkdtemp(path.join(os.tmpdir(), "tc-kroger-empty-test-"));
+    const credentials = path.join(directory, "kroger.json"); const output = path.join(directory, "capture.json");
+    await writeFile(credentials, JSON.stringify({ client_id: "id", client_secret: "secret" }), "utf8");
+    const fetchImpl = async (input: string | URL | Request) => {
+      const url = new URL(String(input));
+      if (url.pathname.endsWith("/token")) return new Response(JSON.stringify({ access_token: "token" }), { status: 200 });
+      return new Response(JSON.stringify({ data: [] }), { status: 200 });
+    };
+    try {
+      const chunk = await captureHeadlessDiscovery("bakers", ["ras el hanout"], output,
+        { krogerCredentialsFile: credentials, fetchImpl });
+      expect(chunk.terms?.[0]).toMatchObject({ outcome: "empty", rowCount: 0,
+        retrieval: { targetResultCount: 0, loadedResultCount: 0, availableResultCount: 0,
+          pageCount: 1, hasMoreResults: false, termination: "end-of-results" } });
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+
   it("keeps one Hy-Vee search view across parallel pages and counts its complete envelope", async () => {
     const directory = await mkdtemp(path.join(os.tmpdir(), "tc-hyvee-test-"));
     const output = path.join(directory, "capture.json"); const requests: Array<{ pageNumber: number; pageViewId: string }> = [];
