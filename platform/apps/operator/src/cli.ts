@@ -26,7 +26,7 @@ import { agentJobRunFields } from "./job-run";
 import { loadR2ShardedEngineSnapshot } from "./engine-snapshot";
 import { compileCommodityRegexPattern, normalizeCommodityRegexPattern, parseCatalogJson } from "./commodity-regex";
 import { runIngredientPipeline } from "./ingredient-pipeline";
-import { buildIngredientCapturePayload, buildIngredientQaPayload, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
+import { buildIngredientCapturePayload, buildIngredientQaPayload, mergeIngredientQaDiscoveryChunks, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
@@ -1688,13 +1688,19 @@ if (command === "status") {
     json: JSON.parse(await readFile(cliPath(inputFile), "utf8")),
   });
 } else if (command === "ingredient" && subcommand === "qa-submit") {
-  const [claimFile, verificationFile] = arguments_;
-  if (!claimFile || !verificationFile) throw new Error("tc ingredient qa-submit requires a QA claim JSON and independent verification chunk JSON");
+  const [claimFile, ...verificationFiles] = arguments_;
+  if (!claimFile || verificationFiles.length === 0) throw new Error("tc ingredient qa-submit requires a QA claim JSON and one or more independent verification chunk JSON files");
   const claimDocument = JSON.parse(await readFile(cliPath(claimFile), "utf8")) as { checks?: ClaimedCheck[] };
-  const verification = JSON.parse(await readFile(cliPath(verificationFile), "utf8")) as AdapterChunk;
+  const verifications = await Promise.all(verificationFiles.map(async (file: string) => JSON.parse(await readFile(cliPath(file), "utf8")) as AdapterChunk));
+  const discovery = mergeIngredientQaDiscoveryChunks(verifications);
   const client = await mutationClient();
   const submitted = [];
   for (const check of claimDocument.checks ?? []) {
+    const captured = JSON.parse(String(check.capture_result_json ?? "null")) as { outcome?: string; sourceUrl?: string } | null;
+    const verification = captured?.outcome === "priced"
+      ? verifications.find((chunk) => chunk.phase === "verification" && (chunk.verifications ?? []).some((item: Record<string, unknown>) => item.productKey === captured.sourceUrl))
+      : discovery;
+    if (!verification) throw new Error(`no independent verification supplied for ${check.id}`);
     const pointer = await client.request("/internal/ingredient-pricing/evidence", { json: {
       checkId: check.id, kind: "verifier", sourceUrl: verification.canary.evidenceUrl,
       observedAt: verification.canary.observedAt, document: { claim: { checkId: check.id, queryPlanHash: check.query_plan_hash }, verification },

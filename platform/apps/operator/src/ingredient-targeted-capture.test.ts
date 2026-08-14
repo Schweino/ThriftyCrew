@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildIngredientCapturePayload, buildIngredientQaPayload, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
+import { buildIngredientCapturePayload, buildIngredientQaPayload, mergeIngredientQaDiscoveryChunks, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
 
 const hash = (character: string) => character.repeat(64);
 const observedAt = "2026-08-13T20:00:00.000Z";
@@ -71,5 +71,29 @@ describe("targeted ingredient capture bridge", () => {
     expect(buildIngredientQaPayload(qaClaim, verification, { ...evidence, objectKey: "ingredient-store-evidence/check/verifier/hash.json", sha256: hash("c") }).verdict).toBe("priced");
     verification.verifications![0]!.purchasePriceMinor = 499;
     expect(() => buildIngredientQaPayload(qaClaim, verification, { ...evidence, objectKey: "ingredient-store-evidence/check/verifier/hash.json", sha256: hash("c") })).toThrow(/does not reproduce/);
+  });
+
+  it("verifies a no-match result from complete searches that returned only ineligible products", () => {
+    const qaClaim = { ...claim, lease_owner: "qa-owner", lease_generation: 3, capture_result_json: JSON.stringify({
+      outcome: "not_found", queryTerms: ["test spice"], qualifyingProductsExamined: 0,
+    }) };
+    const repeated = structuredClone(chunk);
+    repeated.rows![0]!.n = "Unrelated Extract";
+    (repeated.rows![0]!._capture as Record<string, any>).offer.productName = "Unrelated Extract";
+    expect(buildIngredientQaPayload(qaClaim, repeated, { ...evidence, objectKey: "ingredient-store-evidence/check/verifier/hash.json",
+      sha256: hash("c"), observedAt: "2026-08-13T20:02:00.000Z" }).verdict).toBe("not_found");
+    (repeated.rows![0]!._capture as Record<string, any>).offer.productName = "Great Value Test Spice";
+    expect(() => buildIngredientQaPayload(qaClaim, repeated, { ...evidence, objectKey: "ingredient-store-evidence/check/verifier/hash.json",
+      sha256: hash("c"), observedAt: "2026-08-13T20:02:00.000Z" })).toThrow(/eligible exact candidate/);
+  });
+
+  it("merges bounded independent discovery chunks without losing query coverage", () => {
+    const second = structuredClone(chunk);
+    second.terms![0]!.query = "whole test spice";
+    second.rows![0]!.q = "whole test spice";
+    second.canary.observedAt = "2026-08-13T20:01:00.000Z";
+    const merged = mergeIngredientQaDiscoveryChunks([chunk, second]);
+    expect(merged.terms?.map((term) => term.query)).toEqual(["test spice", "whole test spice"]);
+    expect(merged.canary.observedAt).toBe(second.canary.observedAt);
   });
 });

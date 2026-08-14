@@ -210,15 +210,30 @@ export function buildIngredientQaPayload(check: ClaimedCheck, verification: Adap
     if (!match) throw new Error(`${check.id} independent verification does not reproduce the frozen winner`);
   } else if (captured.outcome === "not_found") {
     if (verification.phase !== "discovery") throw new Error("not-found QA requires an independent repeated discovery chunk");
-    const empty = new Set((verification.terms ?? []).filter((item) => item.outcome === "empty"
+    const complete = new Set((verification.terms ?? []).filter((item) => ["success", "empty"].includes(String(item.outcome))
       && (item.retrieval as Record<string, unknown> | undefined)?.termination === "end-of-results"
       && (item.retrieval as Record<string, unknown> | undefined)?.hasMoreResults === false)
       .map((item) => normalizeName(String(item.query ?? ""))));
-    if (!captured.queryTerms.every((term) => empty.has(normalizeName(term)))) throw new Error(`${check.id} independent pass did not reproduce complete no-result coverage`);
+    if (!captured.queryTerms.every((term) => complete.has(normalizeName(term)))) throw new Error(`${check.id} independent pass did not reproduce complete no-match coverage`);
+    const expected = new Set(captured.queryTerms.map(normalizeName));
+    const rows = (verification.rows ?? []).filter((row) => expected.has(normalizeName(String(row.q ?? row.term ?? ""))));
+    if (rows.some((row) => canonicalCandidate(row, check, "0".repeat(64)).eligible)) {
+      throw new Error(`${check.id} independent pass found an eligible exact candidate`);
+    }
   }
   return ingredientStoreQaCompleteSchema.parse({ owner: check.lease_owner, leaseGeneration: Number(check.lease_generation),
     verdict: captured.outcome, verifierVersion: "targeted-independent-verifier-v1", verifierEvidence: evidence,
     validatorVersions: { schema: "ingredient-store-qa-v3", winner: "exact-product-price-size-v1" }, findings: [] });
+}
+
+export function mergeIngredientQaDiscoveryChunks(chunks: AdapterChunk[]): AdapterChunk {
+  const discovery = chunks.filter((chunk) => chunk.version === 2 && chunk.phase === "discovery");
+  if (discovery.length === 0) throw new Error("no independent discovery chunks supplied");
+  const store = discovery[0]!.store;
+  if (discovery.some((chunk) => chunk.store !== store)) throw new Error("independent discovery chunks span multiple stores");
+  const newest = [...discovery].sort((a, b) => a.canary.observedAt.localeCompare(b.canary.observedAt)).at(-1)!;
+  return { version: 2, phase: "discovery", store, canary: newest.canary,
+    terms: discovery.flatMap((chunk) => chunk.terms ?? []), rows: discovery.flatMap((chunk) => chunk.rows ?? []) };
 }
 
 export type { AdapterChunk, ClaimedCheck };

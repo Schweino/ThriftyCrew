@@ -125,9 +125,11 @@ export async function completeIngredientStoreCapture(env: Pick<WorkerEnv, "DB" |
 
 export async function completeIngredientStoreQa(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, checkId: string, inputValue: unknown): Promise<IngredientAggregate> {
   const input: QaComplete = ingredientStoreQaCompleteSchema.parse(inputValue);
-  const row = await env.DB.prepare(`SELECT pricing_job_id, lease_owner, lease_generation, lease_lane, query_plan_hash,
-      capture_result_json, candidate_set_hash, producer_evidence_id FROM ingredient_store_checks
-      WHERE id = ?1 AND state = 'leased'`).bind(checkId).first<Record<string, unknown>>();
+  const row = await env.DB.prepare(`SELECT check_row.pricing_job_id, check_row.lease_owner, check_row.lease_generation,
+      check_row.lease_lane, check_row.query_plan_hash, check_row.capture_result_json, check_row.candidate_set_hash,
+      check_row.producer_evidence_id, job.commodity_proposal_json FROM ingredient_store_checks check_row
+      JOIN ingredient_pricing_jobs job ON job.id = check_row.pricing_job_id
+      WHERE check_row.id = ?1 AND check_row.state = 'leased'`).bind(checkId).first<Record<string, unknown>>();
   if (!row || row.lease_owner !== input.owner || Number(row.lease_generation) !== input.leaseGeneration || row.lease_lane !== "qa") {
     throw new Error("QA completion rejected by lease fence or lane boundary");
   }
@@ -169,10 +171,24 @@ export async function completeIngredientStoreQa(env: Pick<WorkerEnv, "DB" | "EVI
   } else if (input.verdict === "not_found") {
     const captured = JSON.parse(String(row.capture_result_json)) as { queryTerms?: string[] };
     const terms = Array.isArray(verification.terms) ? verification.terms : [];
-    const empty = new Set(terms.filter((item: Record<string, any>) => item.outcome === "empty"
+    const complete = new Set(terms.filter((item: Record<string, any>) => ["success", "empty"].includes(String(item.outcome))
       && item.retrieval?.termination === "end-of-results" && item.retrieval?.hasMoreResults === false)
       .map((item: Record<string, unknown>) => String(item.query).trim().toLowerCase()));
-    if (!(captured.queryTerms ?? []).every((term) => empty.has(term.trim().toLowerCase()))) throw new Error("independent verifier did not reproduce complete no-result coverage");
+    if (!(captured.queryTerms ?? []).every((term) => complete.has(term.trim().toLowerCase()))) throw new Error("independent verifier did not reproduce complete no-match coverage");
+    const proposal = JSON.parse(String(row.commodity_proposal_json ?? "null")) as { include?: string[]; exclude?: string[] } | null;
+    if (!proposal || !Array.isArray(proposal.include) || !Array.isArray(proposal.exclude)) throw new Error("QA lacks the locked ingredient definition");
+    const include = proposal.include.map((pattern) => new RegExp(pattern, "i"));
+    const exclude = proposal.exclude.map((pattern) => new RegExp(pattern, "i"));
+    const eligibleLike = (Array.isArray(verification.rows) ? verification.rows : []).some((item: Record<string, any>) => {
+      const offer = item?._capture?.offer ?? {};
+      const name = String(offer.productName ?? item.n ?? item.name ?? "");
+      const availability = offer.availability ?? {};
+      const price = Number(offer.purchasePriceMinor ?? item?._capture?.visible?.priceMinor);
+      const size = String(offer.sizeText ?? item.size ?? "").trim();
+      return include.some((rule) => rule.test(name)) && !exclude.some((rule) => rule.test(name))
+        && availability.eligible === true && availability.status === "in_stock" && Number.isSafeInteger(price) && price > 0 && size.length > 0;
+    });
+    if (eligibleLike) throw new Error("independent verifier found an eligible exact candidate in the repeated result envelope");
   }
   const producer = await env.DB.prepare("SELECT sha256 FROM ingredient_evidence_refs WHERE id = ?1").bind(row.producer_evidence_id).first<{ sha256: string }>();
   if (!producer || producer.sha256 === input.verifierEvidence.sha256) throw new Error("producer and verifier evidence must be distinct");
