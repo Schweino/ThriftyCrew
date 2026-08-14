@@ -24,6 +24,7 @@ import { captureControllerRequest } from "../../../scripts/capture-controller-cl
 import { catalogRefreshPlan } from "./capture-journal";
 import { agentJobRunFields } from "./job-run";
 import { loadR2ShardedEngineSnapshot } from "./engine-snapshot";
+import { publicationCandidates } from "./ingredient-publication-snapshot";
 import { commodityPhraseExclusionPattern, compileCommodityRegexPattern, normalizeCommodityRegexPattern, parseCatalogJson } from "./commodity-regex";
 import { compactEvidenceChunkForCheck, isIdempotentCaptureResumeConflict, isIdempotentQaResumeConflict, runIngredientPipeline } from "./ingredient-pipeline";
 import { buildIngredientCapturePayload, buildIngredientQaPayload, mergeIngredientQaDiscoveryChunks, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
@@ -885,8 +886,7 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
         memberRootHash: sealed.memberRootHash,
         materializedBatchIds: [...materializedBatchIds].sort(),
       })),
-      candidates: snapshot.candidates.filter((candidate) => !publicationCommodityIds.has(candidate.commodity_id)
-        || (candidate.batch_id !== undefined && materializedBatchIds.has(candidate.batch_id))),
+      candidates: publicationCandidates(snapshot.candidates, publicationCommodityIds, materializedBatchIds),
     };
     const catalog = await loadNativeReleaseCatalog(worktreeRoot);
     const releaseArtifact = await buildNativeRelease(worktreeRoot, publicationSnapshot, catalog, await loadCurrentReleaseGraph(client));
