@@ -55982,5 +55982,16 @@
       "\\bcanned\\b",
       "\\b(?:pork|loin|filet|chicken|beef|steak)\\b"
     ]
+  },
+  {
+    "id": "phyllo-dough",
+    "label": "Phyllo Dough",
+    "unit": "oz",
+    "include": [
+      "\\b(?:phyllo|filo|fillo)\\s+(?:dough|pastry)(?:\\s+sheets?)?\\b"
+    ],
+    "exclude": [
+      "\\b(?:shells?|cups?|bites?|baklava|spanakopita)\\b"
+    ]
   }
 ]
