@@ -1790,7 +1790,11 @@ if (command === "status") {
   if (!claimFile || verificationFiles.length === 0) throw new Error("tc ingredient qa-submit requires a QA claim JSON and one or more independent verification chunk JSON files");
   const claimDocument = JSON.parse(await readFile(cliPath(claimFile), "utf8")) as { checks?: ClaimedCheck[] };
   const verifications = await Promise.all(verificationFiles.map(async (file: string) => JSON.parse(await readFile(cliPath(file), "utf8")) as AdapterChunk));
-  const discovery = mergeIngredientQaDiscoveryChunks(verifications);
+  const needsDiscovery = (claimDocument.checks ?? []).some((check) => {
+    const captured = JSON.parse(String(check.capture_result_json ?? "null")) as { outcome?: string } | null;
+    return captured?.outcome === "not_found";
+  });
+  const discovery = needsDiscovery ? mergeIngredientQaDiscoveryChunks(verifications) : null;
   const client = await mutationClient();
   const submitted = [];
   for (const check of claimDocument.checks ?? []) {
