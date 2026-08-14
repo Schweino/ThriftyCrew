@@ -21,10 +21,7 @@ function fixture() {
     CREATE TABLE catalog_backfill_cells_v4(run_id TEXT,commodity_id TEXT,ingredient_id TEXT,definition_version_id TEXT,store_location_id TEXT,
       semantic_state TEXT,evidence_state TEXT,producer_work_item_id TEXT,verifier_work_item_id TEXT,terminal_result_json TEXT,
       terminal_result_hash TEXT,updated_at TEXT,PRIMARY KEY(run_id,commodity_id,store_location_id));`);
-  for (const migration of ["0078_catalog_backfill_definition_corrections.sql",
-    "0079_catalog_backfill_definition_correction_fence.sql", "0080_catalog_backfill_definition_correction_apply.sql"]) {
-    db.exec(readFileSync(new URL(`../../../migrations/${migration}`, import.meta.url), "utf8"));
-  }
+  db.exec(readFileSync(new URL("../../../migrations/0078_catalog_backfill_definition_corrections.sql", import.meta.url), "utf8"));
   db.exec(`INSERT INTO ingredient_entities VALUES('ingredient');
     INSERT INTO catalog_ingredient_versions VALUES('old','ingredient','${"a".repeat(64)}'),('new','ingredient','${"b".repeat(64)}');
     INSERT INTO catalog_ingredient_current VALUES('ingredient','old',3,CURRENT_TIMESTAMP);
@@ -54,10 +51,42 @@ function fixture() {
 }
 
 function apply(db: DatabaseSync, options: { oldHash?: string; newGeneration?: number } = {}) {
-  db.exec(`INSERT INTO catalog_backfill_definition_corrections_v4(correction_id,run_id,commodity_id,ingredient_id,
+  db.exec(`BEGIN;
+    INSERT INTO catalog_backfill_definition_corrections_v4(correction_id,run_id,commodity_id,ingredient_id,
     old_definition_version_id,new_definition_version_id,old_definition_hash,new_definition_hash,old_pointer_generation,
-    new_pointer_generation,rollback_json,reason) VALUES('correction','run','almonds','ingredient','old','new',
-    '${options.oldHash ?? "a".repeat(64)}','${"b".repeat(64)}',3,${options.newGeneration ?? 4},'{}','durable authored identity correction');`);
+    new_pointer_generation,rollback_json,reason)
+    SELECT 'correction','run','almonds','ingredient','old','new','${options.oldHash ?? "a".repeat(64)}','${"b".repeat(64)}',
+      3,${options.newGeneration ?? 4},'{}','durable authored identity correction'
+    WHERE ${options.newGeneration ?? 4}=4
+      AND EXISTS(SELECT 1 FROM catalog_ingredient_current WHERE ingredient_id='ingredient' AND current_version_id='old' AND pointer_generation=3)
+      AND EXISTS(SELECT 1 FROM catalog_ingredient_versions WHERE version_id='old' AND ingredient_id='ingredient'
+        AND definition_hash='${options.oldHash ?? "a".repeat(64)}')
+      AND (SELECT COUNT(*) FROM catalog_backfill_cells_v4 c WHERE c.run_id='run' AND c.commodity_id='almonds'
+        AND EXISTS(SELECT 1 FROM catalog_backfill_definition_correction_stage_v4 s
+          JOIN pipeline_agent_work_items_v4 p ON p.id=s.old_producer_work_item_id WHERE s.correction_id='correction'
+            AND s.store_location_id=c.store_location_id AND c.evidence_state=s.old_evidence_state AND p.state=s.old_producer_state))=7;
+    UPDATE catalog_ingredient_current SET current_version_id='new',pointer_generation=4
+      WHERE ingredient_id='ingredient' AND EXISTS(SELECT 1 FROM catalog_backfill_definition_corrections_v4 WHERE correction_id='correction');
+    INSERT INTO pipeline_agent_work_items_v4(id,agent_id,entity_type,entity_id,dedupe_key,priority,state,input_ref_hash,correlation_id,input_json)
+      SELECT new_work_item_id,new_agent_id,'cell','ingredient',new_dedupe_key,100,'queued',new_input_ref_hash,'run',new_input_json
+      FROM catalog_backfill_definition_correction_stage_v4 WHERE correction_id='correction'
+        AND EXISTS(SELECT 1 FROM catalog_backfill_definition_corrections_v4 WHERE correction_id='correction');
+    UPDATE pipeline_agent_work_items_v4 SET state='superseded' WHERE
+      EXISTS(SELECT 1 FROM catalog_backfill_definition_corrections_v4 WHERE correction_id='correction') AND
+      (id IN(SELECT old_producer_work_item_id FROM catalog_backfill_definition_correction_stage_v4 WHERE correction_id='correction')
+       OR id IN(SELECT old_verifier_work_item_id FROM catalog_backfill_definition_correction_stage_v4 WHERE correction_id='correction'));
+    UPDATE catalog_backfill_cells_v4 SET definition_version_id='new',evidence_state='queued',
+      producer_work_item_id=(SELECT new_work_item_id FROM catalog_backfill_definition_correction_stage_v4 s
+        WHERE s.correction_id='correction' AND s.store_location_id=catalog_backfill_cells_v4.store_location_id),verifier_work_item_id=NULL
+      WHERE run_id='run' AND commodity_id='almonds'
+        AND EXISTS(SELECT 1 FROM catalog_backfill_definition_corrections_v4 WHERE correction_id='correction');
+    COMMIT;`);
+  if ((db.prepare("SELECT COUNT(*) n FROM catalog_backfill_definition_corrections_v4").get() as { n: number }).n !== 1) {
+    throw new Error(options.newGeneration === 5 ? "pointer generation must advance exactly once" :
+      options.oldHash ? "old definition hash fence" :
+      (db.prepare("SELECT pointer_generation FROM catalog_ingredient_current").get() as { pointer_generation: number }).pointer_generation !== 3
+        ? "pointer fence" : "snapshot fence");
+  }
 }
 
 describe("atomic catalog definition correction migration", () => {

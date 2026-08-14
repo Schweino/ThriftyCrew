@@ -535,6 +535,8 @@ describe("truthful V4 catalog backfill", () => {
       oldPointerGeneration: 3, newPointerGeneration: 4, idempotent: false });
     expect(statements.filter((statement) => statement.sql.includes("INSERT OR IGNORE INTO catalog_backfill_definition_correction_stage_v4"))).toHaveLength(7);
     expect(statements.filter((statement) => statement.sql.includes("INSERT INTO catalog_backfill_definition_corrections_v4"))).toHaveLength(1);
-    expect(statements.some((statement) => statement.sql.includes("catalog_backfill_definition_corrections_v4"))).toBe(true);
+    const liveMutations = statements.filter((statement) => /UPDATE catalog_ingredient_current|INSERT INTO pipeline_agent_work_items_v4|UPDATE pipeline_agent_work_items_v4|UPDATE catalog_backfill_cells_v4|UPDATE catalog_backfill_ingredients_v4/.test(statement.sql));
+    expect(liveMutations).toHaveLength(5);
+    expect(liveMutations.every((statement) => statement.sql.includes("EXISTS(SELECT 1 FROM catalog_backfill_definition_corrections_v4"))).toBe(true);
   });
 });

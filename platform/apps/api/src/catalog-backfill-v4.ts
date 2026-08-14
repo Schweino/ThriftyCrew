@@ -576,11 +576,61 @@ export async function correctCatalogBackfillDefinition(db: D1Database, input: {
       current.pointer_generation, Number(current.pointer_generation) + 1).first<{ cells: number }>();
   if (durableVersion?.ingredient_id !== current.ingredient_id || durableVersion?.definition_hash !== definitionHash
     || Number(staged?.cells) !== 7) throw new Error("definition correction immutable staging conflict");
-  await db.prepare(`INSERT INTO catalog_backfill_definition_corrections_v4
+  const guardedCorrection = db.prepare(`INSERT INTO catalog_backfill_definition_corrections_v4
     (correction_id,run_id,commodity_id,ingredient_id,old_definition_version_id,new_definition_version_id,old_definition_hash,new_definition_hash,
-     old_pointer_generation,new_pointer_generation,rollback_json,reason) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12)`)
+     old_pointer_generation,new_pointer_generation,rollback_json,reason)
+    SELECT ?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12
+    WHERE ?10=?9+1
+      AND EXISTS(SELECT 1 FROM catalog_ingredient_current p WHERE p.ingredient_id=?4 AND p.current_version_id=?5 AND p.pointer_generation=?9)
+      AND EXISTS(SELECT 1 FROM catalog_ingredient_versions v WHERE v.version_id=?5 AND v.ingredient_id=?4 AND v.definition_hash=?7)
+      AND EXISTS(SELECT 1 FROM catalog_ingredient_versions v WHERE v.version_id=?6 AND v.ingredient_id=?4 AND v.definition_hash=?8)
+      AND EXISTS(SELECT 1 FROM catalog_backfill_ingredients_v4 i WHERE i.run_id=?2 AND i.commodity_id=?3
+        AND i.ingredient_id=?4 AND i.definition_version_id=?5)
+      AND (SELECT COUNT(*) FROM catalog_backfill_cells_v4 c
+        WHERE c.run_id=?2 AND c.commodity_id=?3 AND EXISTS(SELECT 1 FROM catalog_backfill_definition_correction_stage_v4 s
+          JOIN pipeline_agent_work_items_v4 p ON p.id=s.old_producer_work_item_id
+          LEFT JOIN pipeline_agent_work_items_v4 v ON v.id=s.old_verifier_work_item_id
+          WHERE s.correction_id=?1 AND s.store_location_id=c.store_location_id AND s.ingredient_id=?4
+            AND s.old_definition_version_id=?5 AND s.new_definition_version_id=?6
+            AND s.old_pointer_generation=?9 AND s.new_pointer_generation=?10
+            AND c.ingredient_id=?4 AND c.definition_version_id=s.old_definition_version_id
+            AND c.evidence_state=s.old_evidence_state AND c.producer_work_item_id=s.old_producer_work_item_id
+            AND c.verifier_work_item_id IS s.old_verifier_work_item_id AND c.terminal_result_hash IS s.old_terminal_result_hash
+            AND p.state=s.old_producer_state AND p.result_ref_hash IS s.old_producer_result_ref_hash
+            AND p.lease_owner IS s.old_producer_lease_owner AND p.lease_generation=s.old_producer_lease_generation
+            AND p.lease_expires_at IS s.old_producer_lease_expires_at
+            AND ((s.old_verifier_work_item_id IS NULL AND s.old_verifier_state IS NULL)
+              OR (v.state=s.old_verifier_state AND v.result_ref_hash IS s.old_verifier_result_ref_hash
+                AND v.lease_owner IS s.old_verifier_lease_owner AND v.lease_generation=s.old_verifier_lease_generation
+                AND v.lease_expires_at IS s.old_verifier_lease_expires_at))))=7
+      AND NOT EXISTS(SELECT 1 FROM catalog_backfill_definition_correction_stage_v4 s
+        JOIN pipeline_agent_work_items_v4 w ON w.id=s.new_work_item_id OR w.dedupe_key=s.new_dedupe_key WHERE s.correction_id=?1)`)
     .bind(input.correctionId, input.runId, input.commodityId, current.ingredient_id, current.definition_version_id, versionId,
-      current.definition_hash, definitionHash, current.pointer_generation, Number(current.pointer_generation) + 1, rollbackJson, input.reason.trim()).run();
+      current.definition_hash, definitionHash, current.pointer_generation, Number(current.pointer_generation) + 1, rollbackJson, input.reason.trim());
+  const correctionExists = `EXISTS(SELECT 1 FROM catalog_backfill_definition_corrections_v4 WHERE correction_id=?1)`;
+  await db.batch([
+    guardedCorrection,
+    db.prepare(`UPDATE catalog_ingredient_current SET current_version_id=?2,pointer_generation=pointer_generation+1,updated_at=CURRENT_TIMESTAMP
+      WHERE ingredient_id=?3 AND current_version_id=?4 AND pointer_generation=?5 AND ${correctionExists}`)
+      .bind(input.correctionId, versionId, current.ingredient_id, current.definition_version_id, current.pointer_generation),
+    db.prepare(`INSERT INTO pipeline_agent_work_items_v4
+      (id,agent_id,entity_type,entity_id,dedupe_key,priority,state,input_ref_hash,correlation_id,input_json)
+      SELECT s.new_work_item_id,s.new_agent_id,'catalog_backfill_cell',?2,s.new_dedupe_key,100,'queued',s.new_input_ref_hash,?3,s.new_input_json
+      FROM catalog_backfill_definition_correction_stage_v4 s WHERE s.correction_id=?1 AND ${correctionExists}`)
+      .bind(input.correctionId, current.ingredient_id, input.runId),
+    db.prepare(`UPDATE pipeline_agent_work_items_v4 SET state='superseded',terminal_at=COALESCE(terminal_at,CURRENT_TIMESTAMP),
+      lease_owner=NULL,lease_expires_at=NULL WHERE ${correctionExists} AND (id IN
+        (SELECT old_producer_work_item_id FROM catalog_backfill_definition_correction_stage_v4 WHERE correction_id=?1)
+        OR id IN (SELECT old_verifier_work_item_id FROM catalog_backfill_definition_correction_stage_v4
+          WHERE correction_id=?1 AND old_verifier_work_item_id IS NOT NULL))`).bind(input.correctionId),
+    db.prepare(`UPDATE catalog_backfill_cells_v4 SET definition_version_id=?4,evidence_state='queued',
+      producer_work_item_id=(SELECT s.new_work_item_id FROM catalog_backfill_definition_correction_stage_v4 s
+        WHERE s.correction_id=?1 AND s.store_location_id=catalog_backfill_cells_v4.store_location_id),
+      verifier_work_item_id=NULL,terminal_result_json=NULL,terminal_result_hash=NULL,updated_at=CURRENT_TIMESTAMP
+      WHERE run_id=?2 AND commodity_id=?3 AND ${correctionExists}`).bind(input.correctionId, input.runId, input.commodityId, versionId),
+    db.prepare(`UPDATE catalog_backfill_ingredients_v4 SET definition_version_id=?4,terminal_evidence_count=0,updated_at=CURRENT_TIMESTAMP
+      WHERE run_id=?2 AND commodity_id=?3 AND ${correctionExists}`).bind(input.correctionId, input.runId, input.commodityId, versionId),
+  ]);
   const verified = await db.prepare(`SELECT current.current_version_id,current.pointer_generation,backfill.definition_version_id,backfill.terminal_evidence_count,
       COUNT(cell.store_location_id) AS cells,SUM(CASE WHEN cell.evidence_state='queued' THEN 1 ELSE 0 END) AS queued
     FROM catalog_ingredient_current current JOIN catalog_backfill_ingredients_v4 backfill ON backfill.ingredient_id=current.ingredient_id
