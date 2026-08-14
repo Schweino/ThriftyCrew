@@ -438,6 +438,7 @@ async function verifyIngredientPublicationExternally(client: MutationClient, bat
 
 interface CommodityAddition {
   id?: string; label?: string; unit?: string; include?: string[]; exclude?: string[]; categoryId?: string; searchTerms?: string[];
+  verifiedProductNames?: string[];
   bandMin?: number; bandMax?: number;
 }
 
@@ -462,7 +463,8 @@ async function commodityAddSpecification(incoming: CommodityAddition, generate =
   const commodities = parseCatalogJson<Array<Record<string, unknown>>>(await readFile(commodityFile, "utf8"));
   if (commodities.some((item) => item.id === incoming.id)) throw new Error(`commodity ${incoming.id} already exists`);
   if (commodities.some((item) => normalizeName(String(item.label ?? "")) === normalizeName(incoming.label!))) throw new Error(`commodity label ${incoming.label} already exists`);
-  const proposedNames = [incoming.label!, ...searchTerms];
+  const proposedNames = [...new Set([incoming.label!, ...searchTerms,
+    ...(incoming.verifiedProductNames ?? []).map((value) => value.trim()).filter(Boolean)])];
   const matcherSurgeryIds: string[] = [];
   const newIncludes = include.map(compileCommodityRegexPattern);
   const newExcludes = exclude.map(compileCommodityRegexPattern);
@@ -515,7 +517,7 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
   const client = await mutationClient();
   const sealed = await client.request("/internal/ingredient-publication/batches", {
     json: { gapIds, sourceCommit: process.env.GITHUB_SHA ?? null },
-  }) as { batchId?: string; memberRootHash?: string; members?: Array<{ gapId: string; proposal: CommodityAddition }> };
+  }) as { batchId?: string; memberRootHash?: string; members?: Array<{ gapId: string; proposal: CommodityAddition; verifiedProductNames?: string[] }> };
   if (!sealed.batchId || !sealed.memberRootHash || sealed.members?.length !== gapIds.length) throw new Error("sealed ingredient publication batch is incomplete");
   const scopedStatus = await execFileAsync("git", ["-C", incomeRoot, "status", "--porcelain", "--",
     "platform/config/commodities.json", "platform/config/categories.json", "platform/config/manifest.json",
@@ -530,7 +532,10 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
   try {
     await execFileAsync("git", ["-C", incomeRoot, "worktree", "add", "-b", branch, worktreeRoot, "HEAD"]);
     const applied = [];
-    for (const member of sealed.members) applied.push(await commodityAddSpecification(member.proposal, false, worktreeRoot));
+    for (const member of sealed.members) applied.push(await commodityAddSpecification({
+      ...member.proposal,
+      ...(member.verifiedProductNames ? { verifiedProductNames: member.verifiedProductNames } : {}),
+    }, false, worktreeRoot));
     await generateLegacyConfiguration(worktreeRoot, false);
     await generateLegacyConfiguration(worktreeRoot, true);
     const publicationMatchContext = await loadMatchContext(path.join(worktreeRoot, "platform"));
@@ -549,13 +554,12 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
     const materialization = await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(sealed.batchId)}/materialize`, { method: "POST" }) as {
       batches?: Array<{ batchId: string; status: string }>;
     };
-    const materializedCaptures = [];
-    for (const batch of materialization.batches ?? []) {
+    const materializedCaptures = await Promise.all((materialization.batches ?? []).map(async (batch) => {
       const matched = await matchBatch(client, batch.batchId, publicationMatchContext);
       if (matched.status !== "passed") throw new Error(`ingredient publication capture ${batch.batchId} failed deterministic matching`);
       const promoted = await client.request(`/internal/capture-batches/${encodeURIComponent(batch.batchId)}/promote`, { method: "POST" });
-      materializedCaptures.push({ batchId: batch.batchId, matched, promoted });
-    }
+      return { batchId: batch.batchId, matched, promoted };
+    }));
     const snapshot = await loadEngineSnapshot(client, "direct");
     const materializedBatchIds = new Set(materializedCaptures.map((capture) => capture.batchId));
     const publicationCommodityIds = new Set((sealed.members ?? []).map((member) => member.proposal.id).filter((id): id is string => Boolean(id)));

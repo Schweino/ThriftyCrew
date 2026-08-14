@@ -1,5 +1,5 @@
 import { ingredientPublicationBatchCreateSchema, ingredientPublicationExternalVerifySchema, ingredientResolutionProposalSchema, observationInputSchema, type ObservationInput } from "@thriftycrew/contracts";
-import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
+import { deterministicId, digestHex, isClearlyIngredientDerivative, isClearlyNonFoodIngredientProduct, matchesIngredientCommodityExclusion, stableJson } from "@thriftycrew/domain";
 import type { z } from "zod";
 import type { WorkerEnv } from "./env";
 import { findBatch, insertObservations } from "./database";
@@ -31,6 +31,18 @@ interface PricedStoreResult {
   sellerName: string | null;
   loyaltyRequired: boolean;
   membershipRequired: boolean;
+}
+
+export function pricedResultMatchesIngredientProposal(
+  proposal: { id: string; include?: string[]; exclude?: string[] },
+  productName: string,
+): boolean {
+  const name = productName.trim();
+  const includeRules = (proposal.include ?? []).map((pattern) => new RegExp(pattern.replace(/^\(\?i\)/, ""), "i"));
+  return Boolean(name) && includeRules.length > 0 && includeRules.some((rule) => rule.test(name))
+    && !matchesIngredientCommodityExclusion(proposal.exclude ?? [], name)
+    && !isClearlyNonFoodIngredientProduct(name)
+    && !isClearlyIngredientDerivative(proposal.id, name);
 }
 
 export async function ingredientPublicationObservation(storeLocationId: string, commodityId: string, result: PricedStoreResult): Promise<ObservationInput> {
@@ -126,11 +138,17 @@ export async function createIngredientPublicationBatch(db: D1Database, inputValu
   if (rows.results.length !== gapIds.length) throw new Error("every publication member requires a sealed available resolution and reviewed commodity proposal");
   const members = [];
   for (const row of rows.results) {
-    const proposal = JSON.parse(String(row.commodity_proposal_json)) as { id: string };
+    const proposal = JSON.parse(String(row.commodity_proposal_json)) as { id: string; include?: string[]; exclude?: string[] };
     const checks = await db.prepare(`SELECT store_location_id, result_json FROM ingredient_store_checks
       WHERE pricing_job_id = ?1 AND state = 'qa_verified_priced' ORDER BY store_location_id`).bind(row.job_id).all<{ store_location_id: string; result_json: string }>();
+    const verifiedProductNames: string[] = [];
     const stores = checks.results.map((check) => {
-      const result = JSON.parse(check.result_json) as { perUnitMicros: number; normalizedBasisUnit: string; validFrom: string | null; validTo: string | null };
+      const result = JSON.parse(check.result_json) as { productName?: string; perUnitMicros: number; normalizedBasisUnit: string; validFrom: string | null; validTo: string | null };
+      const productName = String(result.productName ?? "").trim();
+      if (!pricedResultMatchesIngredientProposal(proposal, productName)) {
+        throw new Error(`publication member ${String(row.gap_id)} has a QA-priced product outside its locked ingredient identity at ${check.store_location_id}`);
+      }
+      verifiedProductNames.push(productName);
       return { storeLocationId: check.store_location_id, perUnitMicros: result.perUnitMicros,
         unit: result.normalizedBasisUnit, validFrom: result.validFrom, validTo: result.validTo };
     });
@@ -138,7 +156,7 @@ export async function createIngredientPublicationBatch(db: D1Database, inputValu
     const cheapest = [...stores].sort((left, right) => left.perUnitMicros - right.perUnitMicros || left.storeLocationId.localeCompare(right.storeLocationId))[0]!;
     const expectedPublicProjection = { id: proposal.id, cheapest: { storeLocationId: cheapest.storeLocationId, perUnitMicros: cheapest.perUnitMicros }, stores };
     members.push({ gapId: row.gap_id, resolutionVersionId: row.resolution_version_id, commodityId: proposal.id,
-      proposal, proposalHash: row.commodity_proposal_hash, evidenceRootHash: row.evidence_root_hash,
+      proposal, verifiedProductNames: [...new Set(verifiedProductNames)].sort(), proposalHash: row.commodity_proposal_hash, evidenceRootHash: row.evidence_root_hash,
       expectedPublicProjection, expectedPublicProjectionHash: await digestHex(stableJson(expectedPublicProjection)) });
   }
   const memberRootHash = await digestHex(stableJson(members));

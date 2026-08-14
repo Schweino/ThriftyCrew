@@ -1,7 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { ingredientPublicationObservation, validateIngredientPublicationExternalProofs } from "./ingredient-publication-v2";
+import { ingredientPublicationObservation, pricedResultMatchesIngredientProposal, validateIngredientPublicationExternalProofs } from "./ingredient-publication-v2";
 
 describe("ingredient publication capture materialization", () => {
+  it("rejects stale QA winners outside the locked ingredient identity before publication", () => {
+    const greenChilli = { id: "ingredient-definition-green-chilli", include: ["\\bgreen chiles?\\b"], exclude: ["\\bcanned\\b"] };
+    const portobello = { id: "portobello-mushrooms", include: ["\\bport(?:o|a)bella? mushrooms?\\b"], exclude: [] };
+    expect(pricedResultMatchesIngredientProposal(greenChilli, "Old El Paso Green Chiles Refried Beans")).toBe(false);
+    expect(pricedResultMatchesIngredientProposal(portobello, "Smithfield Marinated Portobello Mushroom Fresh Pork Loin Filet")).toBe(false);
+    expect(pricedResultMatchesIngredientProposal(portobello, "Fresh Portabella Mushrooms")).toBe(true);
+  });
+
   it("turns a QA-verified package price into an exact durable observation", async () => {
     const observation = await ingredientPublicationObservation("walmart-omaha", "ingredient-definition-pistachios", {
       checkedAt: "2026-08-14T01:40:00.000Z",
