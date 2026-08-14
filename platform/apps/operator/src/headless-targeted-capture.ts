@@ -356,8 +356,11 @@ async function captureBakers(query: string, token: string, observedAt: string, f
         "seasoning", "table", "natural", "organic", "pink", "mediterranean", "celtic", "french", "crystals", "shaker",
         "refill", "bulk", "gourmet", "artisan", "classic", "original", "garlic", "truffle", "chips", "popcorn", "crackers",
         "nuts", "chocolate", "caramel", "pretzel", "snack", "roasted", "butter"];
-      const probeAttempts = await mapWithConcurrency(probeModifiers, pageConcurrency, async (modifier) => {
-        try { return await fetchPage(0, baseFilters, `${modifier} ${query}`); }
+      const alphabet = "abcdefghijklmnopqrstuvwxyz0123456789".split("");
+      const probeTerms = [...probeModifiers.map((modifier) => `${modifier} ${query}`),
+        ...alphabet.flatMap((token) => [`${token} ${query}`, `${query} ${token}`])];
+      const probeAttempts = await mapWithConcurrency(probeTerms, pageConcurrency, async (probeTerm) => {
+        try { return await fetchPage(0, baseFilters, probeTerm); }
         catch (error) {
           if (/omitted a valid pagination total/i.test(String(error instanceof Error ? error.message : error))) return null;
           throw error;
@@ -376,7 +379,7 @@ async function captureBakers(query: string, token: string, observedAt: string, f
         pageIndex: direct.pages + probes.length + resultIndex, resultIndex }));
       products = unionProductHits([...products, ...lexicalUnbranded], "lexically exact unbranded probes");
       partitionProof.push({ label: "brand-discovery-probes", strategy: "brand_keys_only",
-        probeCount: probes.length, discoveredBrands: probeBrands.size,
+        probeCount: probes.length, plannedProbeCount: probeTerms.length, discoveredBrands: probeBrands.size,
         lexicallyExactUnbranded: lexicalUnbranded.length, recoveredUnique: products.length });
       const queriedBrands = new Set<string>();
       for (let round = 0; products.length !== first.total;) {
