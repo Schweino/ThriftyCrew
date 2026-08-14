@@ -96,7 +96,8 @@ function extractLastJson(text) {
 
 async function runCommand(command, args, options = {}) {
   return new Promise((resolve, reject) => {
-    const child = spawn(command, args, { cwd: ROOT, env: process.env, windowsHide: true, stdio: [options.stdin ? "pipe" : "ignore", "pipe", "pipe"] });
+    const child = spawn(command, args, { cwd: ROOT, env: process.env, windowsHide: true,
+      shell: process.platform === "win32" && /\.cmd$/i.test(command), stdio: [options.stdin ? "pipe" : "ignore", "pipe", "pipe"] });
     const stdout = []; const stderr = [];
     child.stdout.on("data", (chunk) => stdout.push(chunk)); child.stderr.on("data", (chunk) => stderr.push(chunk));
     child.on("error", reject);
@@ -109,8 +110,8 @@ async function runCommand(command, args, options = {}) {
   });
 }
 
-export function createSubprocessDriver({ pnpm = process.platform === "win32" ? "pnpm.cmd" : "pnpm" } = {}) {
-  const tc = (...args) => runCommand(pnpm, ["--silent", "tc", "ingredient", "backfill-v4", ...args]);
+export function createSubprocessDriver({ pnpm = process.platform === "win32" ? "pnpm.cmd" : "pnpm", pnpmPrefix = [] } = {}) {
+  const tc = (...args) => runCommand(pnpm, [...pnpmPrefix, "--silent", "tc", "ingredient", "backfill-v4", ...args]);
   return {
     async claimProducer(store, lane, plan) {
       const file = path.join(lane.directory, "producer-claim.json");
@@ -118,7 +119,7 @@ export function createSubprocessDriver({ pnpm = process.platform === "win32" ? "
     },
     async capture(store, claim, file) {
       const claimText = `${JSON.stringify(claim)}\n`;
-      await runCommand(pnpm, ["--silent", "exec", "tsx", "scripts/run-v4-backfill-store-batch.mjs", "headless", store.key, file], { stdin: claimText, json: false });
+      await runCommand(pnpm, [...pnpmPrefix, "--silent", "exec", "tsx", "scripts/run-v4-backfill-store-batch.mjs", "headless", store.key, file], { stdin: claimText, json: false });
       return JSON.parse(await readFile(file, "utf8"));
     },
     async submit(role, claimFile, chunkFile, generation, session, wrapperFile) {
