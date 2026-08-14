@@ -37,6 +37,7 @@ describe("targeted ingredient capture bridge", () => {
     expect(isClearlyNonFoodProduct("Spicy Cinnamon Stick Scented Wax Melts", "Home Decor")).toBe(true);
     expect(isClearlyNonFoodProduct("Aussie Miracle Moist Conditioner with Avocado Oil Paraben Free", "Grocery")).toBe(true);
     expect(isClearlyNonFoodProduct("Aussie Conditioner, With Avocado Oil 12.1 Fl Oz", "Grocery")).toBe(true);
+    expect(isClearlyNonFoodProduct("Dossier Ambery Saffron Eau De Parfum, 1.7 oz", "Beauty")).toBe(true);
     expect(isClearlyNonFoodProduct("Organic Cinnamon Sticks", "Pantry / Spices")).toBe(false);
   });
 
