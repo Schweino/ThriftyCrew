@@ -114,6 +114,11 @@ export function isIdempotentQaResumeConflict(reason: unknown): boolean {
     .test(String(reason instanceof Error ? reason.message : reason));
 }
 
+export function isIdempotentCaptureResumeConflict(reason: unknown): boolean {
+  return /capture completion rejected by lease fence or lane boundary/i
+    .test(String(reason instanceof Error ? reason.message : reason));
+}
+
 async function rejectQaToCapture(client: MutationClient, check: ClaimedCheck, reason: unknown): Promise<void> {
   const message = String(reason instanceof Error ? reason.message : reason).slice(0, 2000);
   console.error(JSON.stringify({ event: "ingredient_store_qa_rejected_to_capture", checkId: check.id,

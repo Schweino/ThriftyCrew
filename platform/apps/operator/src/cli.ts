@@ -25,7 +25,7 @@ import { catalogRefreshPlan } from "./capture-journal";
 import { agentJobRunFields } from "./job-run";
 import { loadR2ShardedEngineSnapshot } from "./engine-snapshot";
 import { compileCommodityRegexPattern, normalizeCommodityRegexPattern, parseCatalogJson } from "./commodity-regex";
-import { compactEvidenceChunkForCheck, isIdempotentQaResumeConflict, runIngredientPipeline } from "./ingredient-pipeline";
+import { compactEvidenceChunkForCheck, isIdempotentCaptureResumeConflict, isIdempotentQaResumeConflict, runIngredientPipeline } from "./ingredient-pipeline";
 import { buildIngredientCapturePayload, buildIngredientQaPayload, mergeIngredientQaDiscoveryChunks, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
 import { captureHeadlessDiscovery, captureHeadlessVerification, claimSearchTerms, type HeadlessStore } from "./headless-targeted-capture";
 
@@ -1761,7 +1761,9 @@ if (command === "status") {
       familyFareCatalogFile: path.join(incomeRoot, "grocery", "out", "regular", `family-fare-regular-${new Date().toISOString().slice(0, 10)}.json`) });
   result = { ok: true, store, verifications: chunk.verifications?.length ?? 0, outputFile: cliPath(outputFile) };
 } else if (command === "ingredient" && subcommand === "capture-submit") {
-  const [claimFile, ...chunkFiles] = arguments_;
+  const [claimFile, ...captureArguments] = arguments_;
+  const resume = captureArguments.includes("--resume");
+  const chunkFiles = captureArguments.filter((value: string) => value !== "--resume");
   if (!claimFile || chunkFiles.length === 0) throw new Error("tc ingredient capture-submit requires a claim JSON and one or more discovery chunk JSON files");
   const claimDocument = JSON.parse(await readFile(cliPath(claimFile), "utf8")) as { checks?: ClaimedCheck[] };
   const chunks = await Promise.all(chunkFiles.map(async (file: string) => JSON.parse(await readFile(cliPath(file), "utf8")) as AdapterChunk));
@@ -1778,7 +1780,12 @@ if (command === "status") {
       checkId: check.id, kind: "producer", sourceUrl: store.canary.evidenceUrl, observedAt: store.canary.observedAt, document: evidenceDocument,
     } }) as unknown as { evidence: any };
     const payload = await buildIngredientCapturePayload(check, chunks, pointer.evidence);
-    submitted.push(await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/capture-result`, { json: payload }));
+    try {
+      submitted.push(await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/capture-result`, { json: payload }));
+    } catch (error) {
+      if (!resume || !isIdempotentCaptureResumeConflict(error)) throw error;
+      submitted.push({ ok: true, checkId: check.id, idempotentResume: true, reason: "check already left this capture lease" });
+    }
   }
   result = { ok: true, submitted };
 } else if (command === "ingredient" && subcommand === "evidence-upload") {

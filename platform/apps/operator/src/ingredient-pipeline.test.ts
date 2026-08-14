@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { compactEvidenceChunkForCheck, ingredientQaFailureAction, isIdempotentQaResumeConflict } from "./ingredient-pipeline";
+import { compactEvidenceChunkForCheck, ingredientQaFailureAction, isIdempotentCaptureResumeConflict, isIdempotentQaResumeConflict } from "./ingredient-pipeline";
 
 describe("ingredient QA failure routing", () => {
   it.each([
@@ -22,6 +22,11 @@ describe("ingredient QA failure routing", () => {
   it("only treats a lease-fence conflict as an idempotent QA resume", () => {
     expect(isIdempotentQaResumeConflict("POST returned 409: QA completion rejected by lease fence or lane boundary")).toBe(true);
     expect(isIdempotentQaResumeConflict("POST returned 409: independent verifier found an eligible exact candidate")).toBe(false);
+  });
+
+  it("only treats a lease-fence conflict as an idempotent capture resume", () => {
+    expect(isIdempotentCaptureResumeConflict("capture completion rejected by lease fence or lane boundary")).toBe(true);
+    expect(isIdempotentCaptureResumeConflict("capture coverage does not exactly match the locked query plan")).toBe(false);
   });
 });
 
