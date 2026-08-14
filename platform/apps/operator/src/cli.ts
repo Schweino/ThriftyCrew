@@ -490,6 +490,16 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
     const bridge = await buildCurrentBridge(worktreeRoot);
     const deployment = await deployConfiguration(client, bridge.configuration);
     const matching = await rematchPromotedBatches(client);
+    const materialization = await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(sealed.batchId)}/materialize`, { method: "POST" }) as {
+      batches?: Array<{ batchId: string; status: string }>;
+    };
+    const materializedCaptures = [];
+    for (const batch of materialization.batches ?? []) {
+      const matched = await matchBatch(client, batch.batchId);
+      if (matched.status !== "passed") throw new Error(`ingredient publication capture ${batch.batchId} failed deterministic matching`);
+      const promoted = await client.request(`/internal/capture-batches/${encodeURIComponent(batch.batchId)}/promote`, { method: "POST" });
+      materializedCaptures.push({ batchId: batch.batchId, matched, promoted });
+    }
     const snapshot = await loadEngineSnapshot(client, "direct");
     const catalog = await loadNativeReleaseCatalog(worktreeRoot);
     const releaseArtifact = await buildNativeRelease(worktreeRoot, snapshot, catalog, await loadCurrentReleaseGraph(client));
@@ -510,7 +520,7 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
     await execFileAsync("git", ["-C", incomeRoot, "merge", "--ff-only", branch]);
     completed = true;
     return { ok: true, batchId: sealed.batchId, releaseId: releaseArtifact.releaseId, sourceCommit,
-      applied: applied.length, deployment, matching, stagedRelease, prepublication, publication, verification };
+      applied: applied.length, deployment, matching, materialization, materializedCaptures, stagedRelease, prepublication, publication, verification };
   } catch (error) {
     throw new Error(`${error instanceof Error ? error.message : String(error)}; failed publication worktree preserved at ${worktreeRoot}`);
   } finally {
@@ -1627,6 +1637,14 @@ if (command === "status") {
     retried.push(await client.request(`/internal/ingredient-gaps/${encodeURIComponent(gapId)}/publication-retry`, { method: "POST" }));
   }
   result = { ok: true, retried };
+} else if (command === "ingredient" && subcommand === "publication-failure") {
+  const [gapId, judgmentText, ...reasonParts] = arguments_;
+  if (!gapId || !["true", "false"].includes(judgmentText ?? "") || reasonParts.join(" ").trim().length < 10) {
+    throw new Error("tc ingredient publication-failure requires <gap-id> true|false <durable-reason>");
+  }
+  result = await (await mutationClient()).request(`/internal/ingredient-gaps/${encodeURIComponent(gapId)}/publication-failure`, {
+    method: "POST", json: { error: reasonParts.join(" ").trim(), requiresJudgment: judgmentText === "true" },
+  });
 } else if (command === "ingredient" && subcommand === "reconcile") {
   result = await (await mutationClient()).request("/internal/ingredient-gaps/reconcile", { method: "POST" });
 } else if (command === "ingredient" && subcommand === "status") {

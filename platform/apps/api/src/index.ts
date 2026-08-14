@@ -121,7 +121,7 @@ import { acknowledgePipelineOutbox, claimPipelineOutbox, nackPipelineOutbox } fr
 import { completeIngredientStoreCapture, completeIngredientStoreQa, rejectIngredientStoreQa, uploadIngredientEvidence } from "./ingredient-independent-qa";
 import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredientChallenge } from "./ingredient-challenges";
 import { materializeHotCatalog } from "./hot-catalog";
-import { attachIngredientProposal, createIngredientPublicationBatch, verifyIngredientPublication, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
+import { attachIngredientProposal, createIngredientPublicationBatch, materializeIngredientPublicationCaptures, verifyIngredientPublication, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
@@ -1438,6 +1438,12 @@ app.post("/internal/ingredient-publication/batches", zValidator("json", ingredie
   if (context.get("identity").role !== "operator") return jsonError("only an operator may seal an ingredient publication batch", 403);
   try { return context.json({ ok: true, ...await createIngredientPublicationBatch(context.env.DB, context.req.valid("json")) }, 201); }
   catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient publication batch failed", 409); }
+});
+
+app.post("/internal/ingredient-publication/batches/:id/materialize", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may materialize ingredient publication captures", 403);
+  try { return context.json({ ok: true, ...await materializeIngredientPublicationCaptures(context.env.DB, context.req.param("id")) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient publication materialization failed", 409); }
 });
 
 app.post("/internal/ingredient-publication/batches/:id/verify", zValidator("json", ingredientPublicationVerifySchema), async (context) => {

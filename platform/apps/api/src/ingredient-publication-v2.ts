@@ -1,7 +1,98 @@
-import { ingredientPublicationBatchCreateSchema, ingredientPublicationVerifySchema, ingredientResolutionProposalSchema } from "@thriftycrew/contracts";
+import { ingredientPublicationBatchCreateSchema, ingredientPublicationVerifySchema, ingredientResolutionProposalSchema, observationInputSchema, type ObservationInput } from "@thriftycrew/contracts";
 import { deterministicId, digestHex, stableJson } from "@thriftycrew/domain";
 import type { z } from "zod";
 import type { WorkerEnv } from "./env";
+import { findBatch, insertObservations } from "./database";
+
+const INGREDIENT_TARGETED_SOURCES: Record<string, string> = {
+  "aldi-omaha-446-048": "ingredient-targeted-aldi",
+  "bakers-saddle-creek": "ingredient-targeted-bakers",
+  "family-fare-omaha-6401": "ingredient-targeted-family-fare",
+  "fareway-omaha-043": "ingredient-targeted-fareway",
+  "hy-vee-omaha-1465": "ingredient-targeted-hy-vee",
+  "sams-omaha": "ingredient-targeted-sams",
+  "walmart-omaha": "ingredient-targeted-walmart",
+};
+
+interface PricedStoreResult {
+  checkedAt: string;
+  sourceUrl: string;
+  productName: string;
+  packageText: string;
+  packagePriceMinor: number;
+  normalizedBasisUnit: ObservationInput["normalizedBasisUnit"];
+  normalizedBasisQtyMicros: number;
+  perUnitMicros: number;
+  validFrom: string | null;
+  validTo: string | null;
+  offerKind: "sale" | "everyday" | "markdown" | "member" | null;
+  availabilityText: string | null;
+  fulfillmentMode: string | null;
+  sellerName: string | null;
+  loyaltyRequired: boolean;
+  membershipRequired: boolean;
+}
+
+export async function ingredientPublicationObservation(storeLocationId: string, commodityId: string, result: PricedStoreResult): Promise<ObservationInput> {
+  const externalProductKey = await deterministicId("ingredient-targeted-product", storeLocationId, result.sourceUrl, result.productName);
+  const kind = result.offerKind === "sale" || result.offerKind === "markdown" || result.offerKind === "member" ? result.offerKind : "everyday";
+  const rawPriceText = `$${(result.packagePriceMinor / 100).toFixed(2)}`;
+  return observationInputSchema.parse({
+    externalProductKey,
+    name: result.productName,
+    sizeText: result.packageText,
+    productUrl: result.sourceUrl,
+    taxonomyPath: "Grocery",
+    package: { source: "ingredient-independent-qa", commodityId },
+    termKey: commodityId,
+    kind,
+    currency: "USD",
+    purchasePriceMinor: result.packagePriceMinor,
+    ...(kind === "everyday" ? { regularPriceMinor: result.packagePriceMinor } : {}),
+    purchaseQuantity: 1,
+    packageCount: 1,
+    capturedBasisUnit: result.normalizedBasisUnit,
+    capturedBasisQtyMicros: result.normalizedBasisQtyMicros,
+    normalizedBasisUnit: result.normalizedBasisUnit,
+    normalizedBasisQtyMicros: result.normalizedBasisQtyMicros,
+    perUnitMicros: result.perUnitMicros,
+    loyaltyRequired: result.loyaltyRequired,
+    membershipRequired: result.membershipRequired,
+    rawPriceText,
+    rawSizeText: result.packageText,
+    capturedAt: result.checkedAt,
+    ...(result.validFrom ? { validFrom: result.validFrom } : {}),
+    ...(result.validTo ? { validTo: result.validTo } : {}),
+    offerSnapshot: {
+      version: 1,
+      retailerProductId: externalProductKey,
+      productName: result.productName,
+      sizeText: result.packageText,
+      rawPriceText,
+      purchasePriceMinor: result.packagePriceMinor,
+      sellerName: result.sellerName ?? undefined,
+      availability: {
+        status: "in_stock",
+        rawText: result.availabilityText ?? undefined,
+        fulfillmentMode: result.fulfillmentMode ?? "unknown",
+        locationId: storeLocationId,
+        eligible: true,
+      },
+      priceSemantics: {
+        offerType: kind,
+        condition: result.loyaltyRequired ? "loyalty" : result.membershipRequired ? "membership" : "none",
+        unitPriceMinor: result.packagePriceMinor,
+        qualifyingQuantity: 1,
+        totalPriceMinor: result.packagePriceMinor,
+        ambiguity: false,
+        ...(result.validFrom ? { validFrom: result.validFrom } : {}),
+        ...(result.validTo ? { validTo: result.validTo } : {}),
+      },
+      observedAt: result.checkedAt,
+      sourceUrl: result.sourceUrl,
+    },
+  });
+}
 
 export async function attachIngredientProposal(db: D1Database, inputValue: unknown) {
   const input = ingredientResolutionProposalSchema.parse(inputValue);
@@ -65,6 +156,104 @@ export async function createIngredientPublicationBatch(db: D1Database, inputValu
     ON CONFLICT(batch_id, from_state, to_state, actor) DO NOTHING`).bind(`receipt_${batchId}_sealed`, batchId, stableJson({ memberRootHash, members: members.length })));
   await db.batch(statements);
   return { batchId, memberRootHash, members };
+}
+
+export async function materializeIngredientPublicationCaptures(db: D1Database, batchId: string) {
+  const publication = await db.prepare("SELECT state, member_root_hash FROM ingredient_publication_batches WHERE id = ?1")
+    .bind(batchId).first<{ state: string; member_root_hash: string }>();
+  if (!publication || !["sealed", "release_built", "validated"].includes(publication.state)) {
+    throw new Error("ingredient publication batch is not sealed for capture materialization");
+  }
+  const rows = await db.prepare(
+    `SELECT member.commodity_id, check.store_location_id, check.result_json
+       FROM ingredient_publication_members member
+       JOIN ingredient_pricing_jobs job ON job.gap_id = member.gap_id
+       JOIN ingredient_store_checks check ON check.pricing_job_id = job.id
+      WHERE member.batch_id = ?1 AND check.state = 'qa_verified_priced'
+      ORDER BY check.store_location_id, member.commodity_id`,
+  ).bind(batchId).all<{ commodity_id: string; store_location_id: string; result_json: string }>();
+  if (rows.results.length < 1) throw new Error("ingredient publication batch has no QA-verified prices to materialize");
+  const grouped = new Map<string, typeof rows.results>();
+  for (const row of rows.results) {
+    const values = grouped.get(row.store_location_id) ?? [];
+    values.push(row);
+    grouped.set(row.store_location_id, values);
+  }
+  const activeConfiguration = await db.prepare("SELECT id FROM configuration_versions WHERE active = 1").first<{ id: string }>();
+  if (!activeConfiguration) throw new Error("ingredient publication materialization requires an active configuration");
+  const materialized = [];
+  for (const [storeLocationId, storeRows] of grouped) {
+    const sourceId = INGREDIENT_TARGETED_SOURCES[storeLocationId];
+    if (!sourceId) throw new Error(`ingredient publication has no targeted source for ${storeLocationId}`);
+    const source = await db.prepare("SELECT capture_method, price_mode FROM capture_sources WHERE id = ?1 AND store_location_id = ?2 AND active = 1")
+      .bind(sourceId, storeLocationId).first<{ capture_method: string; price_mode: string }>();
+    if (!source) throw new Error(`ingredient targeted source ${sourceId} is not active`);
+    const captureBatchId = await deterministicId("ingredient-publication-capture", batchId, storeLocationId);
+    const existing = await db.prepare("SELECT status FROM capture_batches WHERE id = ?1").bind(captureBatchId).first<{ status: string }>();
+    if (existing) {
+      materialized.push({ batchId: captureBatchId, sourceId, storeLocationId, status: existing.status, idempotent: true });
+      continue;
+    }
+    const parsedRows = storeRows.map((row) => ({ ...row, result: JSON.parse(row.result_json) as PricedStoreResult }));
+    if (parsedRows.some((row) => !row.result.checkedAt || !row.result.productName || !row.result.sourceUrl
+      || !Number.isInteger(row.result.packagePriceMinor) || !Number.isInteger(row.result.normalizedBasisQtyMicros)
+      || !Number.isInteger(row.result.perUnitMicros))) throw new Error(`ingredient publication ${storeLocationId} result is incomplete`);
+    const capturedFrom = parsedRows.map((row) => row.result.checkedAt).sort()[0]!;
+    const capturedTo = parsedRows.map((row) => row.result.checkedAt).sort().at(-1)!;
+    const prior = await db.prepare(
+      `SELECT id, coverage_mode FROM capture_batches
+        WHERE source_id = ?1 AND status IN ('promoted','superseded')
+        ORDER BY captured_to DESC, promoted_at DESC, id DESC LIMIT 1`,
+    ).bind(sourceId).first<{ id: string; coverage_mode: string }>();
+    await db.prepare(
+      `INSERT INTO capture_batches
+         (id, source_id, coverage_mode, status, captured_from, captured_to, expected_terms, attempted_terms,
+          successful_terms, empty_terms, rejected_terms, blocked_terms, market_verified, location_verified,
+          price_mode_verified, price_mode, agent_id, idempotency_key, validation_summary_json, sealed_at)
+       VALUES (?1, ?2, 'targeted', 'open', ?3, ?4, ?5, ?5, ?5, 0, 0, 0, 1, 1, 1, ?6,
+          'ingredient-publication-materializer', ?7, '{}', CURRENT_TIMESTAMP)`,
+    ).bind(captureBatchId, sourceId, capturedFrom, capturedTo, parsedRows.length, source.price_mode, `${batchId}:${storeLocationId}`).run();
+    const batch = await findBatch(db, captureBatchId);
+    if (!batch) throw new Error(`ingredient publication capture ${captureBatchId} was not created`);
+    const observations = await Promise.all(parsedRows.map((row) => ingredientPublicationObservation(storeLocationId, row.commodity_id, row.result)));
+    const inserted = await insertObservations(db, batch, observations);
+    const refreshedCommodityIds = parsedRows.map((row) => row.commodity_id);
+    if (prior) {
+      await db.prepare(
+        `INSERT OR IGNORE INTO capture_observation_memberships
+           (batch_id, observation_id, term_key, observed_at, source_payload_key, evidence_object_id, provenance_json, carried)
+         SELECT ?1, membership.observation_id, membership.term_key, membership.observed_at,
+                membership.source_payload_key, membership.evidence_object_id, membership.provenance_json, 1
+           FROM capture_observation_memberships membership
+           JOIN observations observation ON observation.id = membership.observation_id
+           JOIN product_versions version ON version.id = observation.product_version_id
+           JOIN products product ON product.id = version.product_id
+           LEFT JOIN match_decisions decision ON decision.product_id = product.id
+            AND decision.configuration_id = ?3 AND decision.superseded_at IS NULL
+          WHERE membership.batch_id = ?2
+            AND (decision.commodity_id IS NULL OR decision.commodity_id NOT IN (SELECT value FROM json_each(?4)))`,
+      ).bind(captureBatchId, prior.id, activeConfiguration.id, stableJson(refreshedCommodityIds)).run();
+    }
+    const membershipCount = await db.prepare("SELECT COUNT(DISTINCT observation_id) AS count FROM capture_observation_memberships WHERE batch_id = ?1")
+      .bind(captureBatchId).first<{ count: number }>();
+    const summary = {
+      version: 1,
+      materializer: "ingredient-publication-v1",
+      publicationBatchId: batchId,
+      memberRootHash: publication.member_root_hash,
+      sourceId,
+      priorBatchId: prior?.id ?? null,
+      insertedObservations: inserted.accepted,
+      carriedObservations: Math.max(0, Number(membershipCount?.count ?? 0) - inserted.ids.length),
+      refreshedCommodityIds,
+    };
+    await db.prepare(
+      `UPDATE capture_batches SET status = 'validated', validation_summary_json = ?2, sealed_at = CURRENT_TIMESTAMP
+        WHERE id = ?1 AND status = 'open'`,
+    ).bind(captureBatchId, stableJson(summary)).run();
+    materialized.push({ batchId: captureBatchId, storeLocationId, status: "validated", idempotent: false, ...summary });
+  }
+  return { publicationBatchId: batchId, batches: materialized };
 }
 
 async function fetchProof(origin: string, commodityId: string, releaseId: string, expectedHash: string) {
