@@ -56,6 +56,10 @@ async function readEvidenceEnvelope(bucket: R2Bucket, pointer: { objectKey: stri
   return parsed as { checkId: string; kind: string; sourceUrl: string; observedAt: string; document: Record<string, any> };
 }
 
+export function lockedQueryCoverageTerms(canonicalTerm: string, aliases: string[]): string[] {
+  return [...new Set([canonicalTerm, ...aliases].map(normalizeName).filter(Boolean))].sort();
+}
+
 export async function completeIngredientStoreCapture(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, checkId: string, inputValue: unknown) {
   const input: CaptureResult = ingredientStoreCaptureResultSchema.parse(inputValue);
   const row = await env.DB.prepare(`SELECT check_row.store_location_id, check_row.lease_owner, check_row.lease_generation,
@@ -71,8 +75,7 @@ export async function completeIngredientStoreCapture(env: Pick<WorkerEnv, "DB" |
     throw new Error("capture result lacks complete location/mode proof");
   }
   if (new Set(input.coverage.map((item) => item.normalizedQuery)).size !== input.coverage.length) throw new Error("capture coverage contains duplicate queries");
-  const expectedQueries = [String(row.canonical_term), ...(JSON.parse(String(row.aliases_json)) as string[])]
-    .map(normalizeName).sort();
+  const expectedQueries = lockedQueryCoverageTerms(String(row.canonical_term), JSON.parse(String(row.aliases_json)) as string[]);
   const coveredQueries = input.coverage.map((item) => normalizeName(item.normalizedQuery)).sort();
   if (stableJson(expectedQueries) !== stableJson(coveredQueries)) throw new Error("capture coverage does not exactly match the locked query plan");
   const producerEnvelope = await readEvidenceEnvelope(env.EVIDENCE, input.evidence);

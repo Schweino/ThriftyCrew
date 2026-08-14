@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hasCompleteLocationModeProof, isCompleteVerificationTerm } from "./ingredient-independent-qa";
+import { hasCompleteLocationModeProof, isCompleteVerificationTerm, lockedQueryCoverageTerms } from "./ingredient-independent-qa";
 
 const common = { storeLocationId: "aldi-omaha-446-048", checkedAt: "2026-08-13T20:00:00.000Z",
   queryTerms: ["test"], searchComplete: true, qualifyingProductsExamined: 0, locationVerified: true,
@@ -24,5 +24,10 @@ describe("ingredient independent QA capture proof", () => {
       normalizedBasisUnit: "oz", normalizedBasisQtyMicros: 8_000_000, perUnitMicros: 500_000,
       offerKind: "everyday", validFrom: null, validTo: null, loyaltyRequired: false, membershipRequired: false } as const;
     expect(hasCompleteLocationModeProof(priced as unknown as Parameters<typeof hasCompleteLocationModeProof>[0], "in_store")).toBe(false);
+  });
+
+  it("deduplicates aliases that normalize to the canonical query", () => {
+    expect(lockedQueryCoverageTerms("ginger garlic paste", ["ginger-garlic paste", "Ginger Garlic Paste"]))
+      .toEqual(["ginger garlic paste"]);
   });
 });

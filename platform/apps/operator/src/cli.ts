@@ -25,7 +25,7 @@ import { catalogRefreshPlan } from "./capture-journal";
 import { agentJobRunFields } from "./job-run";
 import { loadR2ShardedEngineSnapshot } from "./engine-snapshot";
 import { compileCommodityRegexPattern, normalizeCommodityRegexPattern, parseCatalogJson } from "./commodity-regex";
-import { isIdempotentQaResumeConflict, runIngredientPipeline } from "./ingredient-pipeline";
+import { compactEvidenceChunkForCheck, isIdempotentQaResumeConflict, runIngredientPipeline } from "./ingredient-pipeline";
 import { buildIngredientCapturePayload, buildIngredientQaPayload, mergeIngredientQaDiscoveryChunks, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
 import { captureHeadlessDiscovery, captureHeadlessVerification, claimSearchTerms, type HeadlessStore } from "./headless-targeted-capture";
 
@@ -1770,7 +1770,10 @@ if (command === "status") {
   for (const check of claimDocument.checks ?? []) {
     const store = chunks.find((chunk) => chunk.phase === "discovery");
     if (!store) throw new Error(`no discovery chunk supplied for ${check.id}`);
-    const evidenceDocument = { claim: { checkId: check.id, queryPlanHash: check.query_plan_hash }, chunks };
+    const evidenceChunks = chunks.map((chunk) => compactEvidenceChunkForCheck(check, chunk))
+      .filter((chunk) => chunk.phase !== "discovery" || (chunk.terms?.length ?? 0) > 0);
+    if (evidenceChunks.length === 0) throw new Error(`no claimed-query evidence supplied for ${check.id}`);
+    const evidenceDocument = { claim: { checkId: check.id, queryPlanHash: check.query_plan_hash }, chunks: evidenceChunks };
     const pointer = await client.request("/internal/ingredient-pricing/evidence", { json: {
       checkId: check.id, kind: "producer", sourceUrl: store.canary.evidenceUrl, observedAt: store.canary.observedAt, document: evidenceDocument,
     } }) as unknown as { evidence: any };
@@ -1810,9 +1813,11 @@ if (command === "status") {
       ? verifications.find((chunk) => chunk.phase === "verification" && (chunk.verifications ?? []).some((item: Record<string, unknown>) => item.productKey === captured.sourceUrl))
       : discovery;
     if (!verification) throw new Error(`no independent verification supplied for ${check.id}`);
+    const evidenceVerification = compactEvidenceChunkForCheck(check, verification);
     const pointer = await client.request("/internal/ingredient-pricing/evidence", { json: {
-      checkId: check.id, kind: "verifier", sourceUrl: verification.canary.evidenceUrl,
-      observedAt: verification.canary.observedAt, document: { claim: { checkId: check.id, queryPlanHash: check.query_plan_hash }, verification },
+      checkId: check.id, kind: "verifier", sourceUrl: evidenceVerification.canary.evidenceUrl,
+      observedAt: evidenceVerification.canary.observedAt,
+      document: { claim: { checkId: check.id, queryPlanHash: check.query_plan_hash }, verification: evidenceVerification },
     } }) as unknown as { evidence: any };
     const payload = buildIngredientQaPayload(check, verification, pointer.evidence);
     try {
