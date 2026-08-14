@@ -163,6 +163,35 @@ describe("headless targeted store capture", () => {
     }
   });
 
+  it("reconciles an inconsistent broad Kroger total only through complete disjoint brand facets", async () => {
+    const directory = await mkdtemp(path.join(os.tmpdir(), "tc-kroger-facet-reconcile-"));
+    const credentials = path.join(directory, "kroger.json"); const output = path.join(directory, "capture.json");
+    await writeFile(credentials, JSON.stringify({ client_id: "id", client_secret: "secret" }), "utf8");
+    const products = Array.from({ length: 333 }, (_, index) => ({ productId: `p${index}`,
+      brand: `Brand ${index % 7}`, description: `Sea Salt ${index}` }));
+    const fetchImpl = async (input: string | URL | Request) => {
+      const url = new URL(String(input));
+      if (url.pathname.endsWith("/token")) return new Response(JSON.stringify({ access_token: "token" }), { status: 200 });
+      const start = Number(url.searchParams.get("filter.start")); const brandFilter = url.searchParams.get("filter.brand");
+      if (!brandFilter && start > 250) return new Response(JSON.stringify({ error: "offset limit" }), { status: 400 });
+      const brands = new Set((brandFilter ?? "").split("|").filter(Boolean));
+      const selected = brandFilter ? products.filter((product) => brands.has(product.brand)) : products;
+      return new Response(JSON.stringify({ data: selected.slice(start, start + 50),
+        meta: { pagination: { start, limit: 50, total: brandFilter ? selected.length : 337 } } }), { status: 200 });
+    };
+    try {
+      const chunk = await captureHeadlessDiscovery("bakers", ["sea salt"], output,
+        { krogerCredentialsFile: credentials, fetchImpl, pageConcurrency: 8 });
+      expect(chunk.terms?.[0]?.retrieval).toMatchObject({ targetResultCount: 333, loadedResultCount: 333,
+        availableResultCount: 333, hasMoreResults: false, termination: "end-of-results" });
+      expect((chunk.terms?.[0]?.retrieval as { partitionProof?: Array<Record<string, unknown>> }).partitionProof)
+        .toContainEqual(expect.objectContaining({ strategy: "disjoint_brand_facets", broadReportedTotal: 337,
+          authoritativeUniqueTotal: 333, observedOutsidePartitions: 0 }));
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+
   it("accepts Kroger's pagination-less empty first page as a complete zero-result envelope", async () => {
     const directory = await mkdtemp(path.join(os.tmpdir(), "tc-kroger-empty-test-"));
     const credentials = path.join(directory, "kroger.json"); const output = path.join(directory, "capture.json");

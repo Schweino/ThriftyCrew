@@ -291,6 +291,7 @@ async function captureBakers(query: string, token: string, observedAt: string, f
   const baseFilters: Partition["filters"] = { fulfillment: "ais" };
   const first = await fetchPage(0, baseFilters);
   let products: ProductHit[];
+  let authoritativeTotal = first.total;
   const partitionProof: JsonRecord[] = [];
   if (first.total <= KROGER_MAX_START + KROGER_PAGE_SIZE) {
     const direct = await captureBounded("direct", baseFilters, first);
@@ -362,7 +363,7 @@ async function captureBakers(query: string, token: string, observedAt: string, f
       const probeAttempts = await mapWithConcurrency(probeTerms, pageConcurrency, async (probeTerm) => {
         try { return await fetchPage(0, baseFilters, probeTerm); }
         catch (error) {
-          if (/omitted a valid pagination total/i.test(String(error instanceof Error ? error.message : error))) return null;
+          if (/omitted a valid pagination total|source returned HTTP 404/i.test(String(error instanceof Error ? error.message : error))) return null;
           throw error;
         }
       });
@@ -382,6 +383,8 @@ async function captureBakers(query: string, token: string, observedAt: string, f
         probeCount: probes.length, plannedProbeCount: probeTerms.length, discoveredBrands: probeBrands.size,
         lexicallyExactUnbranded: lexicalUnbranded.length, recoveredUnique: products.length });
       const queriedBrands = new Set<string>();
+      let partitionReportedTotal = 0;
+      let partitionRecoveredTotal = 0;
       for (let round = 0; products.length !== first.total;) {
         const newBrands = [...new Set([...products.map((hit) => String(hit.product.brand ?? "").trim()).filter(Boolean), ...probeBrands])]
           .filter((brand) => !queriedBrands.has(brand)).sort();
@@ -391,13 +394,33 @@ async function captureBakers(query: string, token: string, observedAt: string, f
           newBrands.slice(index * KROGER_BRANDS_PER_PARTITION, (index + 1) * KROGER_BRANDS_PER_PARTITION));
         const partitions = await mapWithConcurrency(groups, pageConcurrency, (group, index) =>
           captureBounded(`brands-${round + 1}-${index + 1}`, { ...baseFilters, brands: group }));
+        partitionReportedTotal += partitions.reduce((sum, partition) => sum + partition.total, 0);
+        partitionRecoveredTotal += partitions.reduce((sum, partition) => sum + partition.products.length, 0);
         products = unionProductHits([...products, ...partitions.flatMap((partition) => partition.products)], "partition union");
         partitionProof.push(...partitions.map((partition) => partition.proof));
         round += 1;
       }
+      if (products.length !== first.total) {
+        const observedOutsidePartitions = unionProductHits([...direct.products,
+          ...probeProducts.map((product: JsonRecord, resultIndex: number) => ({ product,
+            pageIndex: direct.pages + probes.length + resultIndex, resultIndex }))], "broad and probe observations")
+          .filter((hit) => !queriedBrands.has(String(hit.product.brand ?? "").trim()));
+        if (queriedBrands.size > 0 && observedOutsidePartitions.length === 0
+          && partitionReportedTotal === products.length && partitionRecoveredTotal === products.length) {
+          authoritativeTotal = products.length;
+          partitionProof.push({ label: "facet-cardinality-reconciliation", strategy: "disjoint_brand_facets",
+            broadReportedTotal: first.total, authoritativeUniqueTotal: authoritativeTotal,
+            partitionReportedTotal, partitionRecoveredTotal, queriedBrands: queriedBrands.size,
+            observedOutsidePartitions: 0 });
+        }
+      }
     }
-    if (products.length !== first.total) throw new HeadlessSourceLimitError(
-      `Baker's deterministic in-store brand union recovered ${products.length} of ${first.total} reported products for ${JSON.stringify(query)}`);
+    if (products.length !== authoritativeTotal) throw new HeadlessSourceLimitError(
+      `Baker's deterministic in-store brand union recovered ${products.length} of ${first.total} reported products for ${JSON.stringify(query)}; proof=${JSON.stringify(partitionProof.map((proof) => ({
+        label: proof.label, strategy: proof.strategy, reportedTotal: proof.reportedTotal,
+        recoveredUnique: proof.recoveredUnique, discoveredBrands: proof.discoveredBrands,
+        lexicallyExactUnbranded: proof.lexicallyExactUnbranded, error: proof.error,
+      })))}`);
   }
 
   for (const { product, pageIndex, resultIndex } of products) {
@@ -414,7 +437,7 @@ async function captureBakers(query: string, token: string, observedAt: string, f
         effective: item?.price?.effectiveDate?.value ?? null, expires: item?.price?.expirationDate?.value ?? null }, pageIndex, index, observedAt);
       if (normalized) rows.push(normalized); else excludedResults.push({ productKey: String(product.productId ?? ""), name: String(product.description ?? ""), reason: "incomplete or ambiguous price/size facts" });
   }
-  return { rows, total: first.total, examined: products.length, pages: requestPages, excludedResults, partitionProof };
+  return { rows, total: authoritativeTotal, examined: products.length, pages: requestPages, excludedResults, partitionProof };
 }
 
 async function captureFamilyFareCatalog(file: string, fetchImpl: FetchLike) {
