@@ -523,6 +523,22 @@ async function commodityAdd(inputFile: string | undefined): Promise<unknown> {
   return commodityAddSpecification(JSON.parse(await readFile(cliPath(inputFile), "utf8")) as CommodityAddition);
 }
 
+async function configurationCommodityDriftIds(activeSourceCommit: string | null | undefined, targetIncomeRoot: string): Promise<string[]> {
+  const targetFile = path.join(targetIncomeRoot, "platform", "config", "commodities.json");
+  const target = parseCatalogJson<Array<Record<string, unknown>>>(await readFile(targetFile, "utf8"));
+  if (!activeSourceCommit || !/^[0-9a-f]{7,40}$/i.test(activeSourceCommit)) return target.map((commodity) => String(commodity.id));
+  try {
+    const priorText = (await execFileAsync("git", ["-C", incomeRoot, "show", `${activeSourceCommit}:platform/config/commodities.json`], {
+      maxBuffer: 16 * 1024 * 1024,
+    })).stdout;
+    const prior = parseCatalogJson<Array<Record<string, unknown>>>(priorText);
+    const priorById = new Map(prior.map((commodity) => [String(commodity.id), stableJson(commodity)]));
+    return target.filter((commodity) => priorById.get(String(commodity.id)) !== stableJson(commodity)).map((commodity) => String(commodity.id));
+  } catch {
+    return target.map((commodity) => String(commodity.id));
+  }
+}
+
 async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
   if (gapIds.length < 1 || gapIds.length > 50) throw new Error("ingredient publish-v2 requires 1 through 50 gap ids");
   const client = await mutationClient();
@@ -563,10 +579,12 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
     }
     const sourceCommit = (await execFileAsync("git", ["-C", worktreeRoot, "rev-parse", "HEAD"])).stdout.trim();
     const bridge = await buildCurrentBridge(worktreeRoot);
+    const activeConfiguration = await client.request("/internal/configurations/active-metadata") as { sourceCommit?: string | null };
+    const driftCommodityIds = await configurationCommodityDriftIds(activeConfiguration.sourceCommit, worktreeRoot);
     const modifiedCommodityIds = [...new Set(applied.flatMap((entry) => {
       const value = entry as { modifiedCommodityIds?: string[] };
       return value.modifiedCommodityIds ?? [];
-    }))];
+    }).concat(driftCommodityIds))];
     const deployment = await deployConfigurationDelta(client, bridge.configuration, modifiedCommodityIds);
     configurationDeployed = true;
     const matching = await rematchPromotedBatches(client);
