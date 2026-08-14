@@ -650,11 +650,11 @@ export async function ingredientPipelineStatus(db: D1Database): Promise<Record<s
       LEFT JOIN event_counts event ON event.aggregate_id = check_row.id
       GROUP BY check_row.store_location_id ORDER BY check_row.store_location_id`).all(),
     db.prepare(`SELECT store_location_id, role, COUNT(*) AS count FROM (
-      SELECT store_location_id,
-        CASE WHEN state = 'qa_pending' OR (state = 'transient_failed' AND resume_state = 'qa_queued') THEN 'qa'
-             WHEN state IN ('targeted_refresh','evidence_expired')
-               OR (state = 'transient_failed' AND COALESCE(resume_state,'capture_queued') = 'capture_queued') THEN 'capture'
-             WHEN state IN ('queued','catalog_lookup') THEN 'catalog' END AS role
+      SELECT check_row.store_location_id,
+        CASE WHEN check_row.state = 'qa_pending' OR (check_row.state = 'transient_failed' AND check_row.resume_state = 'qa_queued') THEN 'qa'
+             WHEN check_row.state IN ('targeted_refresh','evidence_expired')
+               OR (check_row.state = 'transient_failed' AND COALESCE(check_row.resume_state,'capture_queued') = 'capture_queued') THEN 'capture'
+             WHEN check_row.state IN ('queued','catalog_lookup') THEN 'catalog' END AS role
       FROM ingredient_store_checks check_row
       JOIN ingredient_pricing_jobs job ON job.id = check_row.pricing_job_id
       JOIN ingredient_gaps gap ON gap.id = check_row.gap_id
