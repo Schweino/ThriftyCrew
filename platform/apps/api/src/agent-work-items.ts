@@ -1137,6 +1137,13 @@ export async function completeAgentWorkItem(env: Pick<WorkerEnv, "DB" | "EVIDENC
   if (current.state === "completed" && current.lease_id === body.leaseId && Number(current.lease_generation) === body.leaseGeneration) return { idempotent: true, workItemId, state: "completed" };
   const output = validateAgentOutput(String(current.output_contract), body.output, String(current.source_ref), String(current.agent_id));
   if (String(current.agent_id).startsWith("recipe-")) assertRecipeChainContinuity(String(current.agent_id), JSON.parse(String(current.input_json)), output);
+  // Fact verification is an acceptance gate, not a post-completion side effect.
+  // Persisting it first is safe to replay because artifacts and fact versions are
+  // content-addressed. A rejection therefore leaves the lease open so the normal
+  // failure path can retry or source a replacement instead of stranding a
+  // completed work item with no verified facts.
+  const recipeFactsPersisted = current.agent_id === "recipe-fact-extractor";
+  if (recipeFactsPersisted) await persistRecipeSourceFacts(env, output);
   const outputJson = stableJson(output);
   const outputHash = await digestHex(outputJson);
   const finishedAt = new Date().toISOString();
@@ -1208,7 +1215,7 @@ export async function completeAgentWorkItem(env: Pick<WorkerEnv, "DB" | "EVIDENC
         ).bind(current.source_ref, stableJson({ workItemId, outputHash, verificationId, dependencyRoot, verifierVersion: "locked-facts-v2" })),
       ]);
     }
-    if (current.agent_id === "recipe-fact-extractor") await persistRecipeSourceFacts(env, output);
+    if (current.agent_id === "recipe-fact-extractor" && !recipeFactsPersisted) await persistRecipeSourceFacts(env, output);
     if (current.agent_id === "recipe-mapper") await persistRecipeMappings(db, output);
     const gapResult = current.agent_id === "recipe-mapper"
       ? await persistRecipeIngredientGaps(db, current, output)
@@ -1267,6 +1274,18 @@ export async function failAgentWorkItem(db: D1Database, identity: MutationIdenti
       "SELECT DISTINCT request_id FROM ingredient_gap_occurrences WHERE gap_id = ?1",
     ).bind(current.source_ref).all<{ request_id: string }>();
     for (const campaign of campaigns.results) await reconcileIngredientCampaign(db, campaign.request_id);
+  }
+  if (!retry && ["recipe-sourcer", "recipe-deduper", "recipe-fact-extractor"].includes(String(current.agent_id))) {
+    const discovery = await db.prepare(
+      `SELECT request_id FROM ingredient_discovery_batches
+        WHERE request_id = ?1 AND state = 'collecting' AND paused_at IS NULL AND discovery_frozen_at IS NULL`,
+    ).bind(current.source_ref).first<{ request_id: string }>();
+    if (discovery) {
+      await db.prepare(
+        "UPDATE ingredient_discovery_batches SET source_round = source_round + 1, updated_at = CURRENT_TIMESTAMP WHERE request_id = ?1",
+      ).bind(current.source_ref).run();
+      await reconcileIngredientCampaign(db, String(current.source_ref));
+    }
   }
   return { workItemId, state, retryAt: retry ? availableAt : null };
 }

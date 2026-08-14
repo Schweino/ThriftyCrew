@@ -324,12 +324,14 @@ function Invoke-IngredientDownstreamDrain {
   }
   if (-not $downstreamLock) { throw 'ingredient recipe downstream lock remained occupied for 30 minutes' }
   try {
+    $contentAdvanced = $false
     foreach ($agentId in @('recipe-mapper','recipe-writer','recipe-auditor')) {
       for ($item = 0; $item -lt $MaxItems; $item++) {
         if (-not (Invoke-AgentItem $agentId)) { break }
+        if ($agentId -in @('recipe-writer','recipe-auditor')) { $contentAdvanced = $true }
       }
     }
-    Publish-ReadyRecipeContent
+    if ($contentAdvanced) { Publish-ReadyRecipeContent }
   } finally {
     Exit-PcRuntimeLock $downstreamLock
   }
@@ -388,12 +390,14 @@ try {
       }
       if (-not $roundProgress) { break }
     }
+    $contentAdvanced = $false
     foreach ($agentId in @('recipe-mapper','recipe-writer','recipe-auditor')) {
       for ($item = 0; $item -lt $MaxItems; $item++) {
         if (-not (Invoke-AgentItem $agentId)) { break }
+        if ($agentId -in @('recipe-writer','recipe-auditor')) { $contentAdvanced = $true }
       }
     }
-    Publish-ReadyRecipeContent
+    if ($contentAdvanced) { Publish-ReadyRecipeContent }
   } elseif ($Cycle -eq 'IngredientPricing' -and -not $OnlyAgent) {
     if ($PricingWorkerSlot -gt 1) { throw 'V3 ingredient pricing uses one coordinator with seven store lanes, not model worker slots' }
     Set-PcRuntimeCredential $config 'local-operator'
