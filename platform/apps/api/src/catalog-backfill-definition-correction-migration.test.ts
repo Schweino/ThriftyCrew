@@ -21,7 +21,10 @@ function fixture() {
     CREATE TABLE catalog_backfill_cells_v4(run_id TEXT,commodity_id TEXT,ingredient_id TEXT,definition_version_id TEXT,store_location_id TEXT,
       semantic_state TEXT,evidence_state TEXT,producer_work_item_id TEXT,verifier_work_item_id TEXT,terminal_result_json TEXT,
       terminal_result_hash TEXT,updated_at TEXT,PRIMARY KEY(run_id,commodity_id,store_location_id));`);
-  db.exec(readFileSync(new URL("../../../migrations/0078_catalog_backfill_definition_corrections.sql", import.meta.url), "utf8"));
+  for (const migration of ["0078_catalog_backfill_definition_corrections.sql",
+    "0079_catalog_backfill_definition_correction_fence.sql", "0080_catalog_backfill_definition_correction_apply.sql"]) {
+    db.exec(readFileSync(new URL(`../../../migrations/${migration}`, import.meta.url), "utf8"));
+  }
   db.exec(`INSERT INTO ingredient_entities VALUES('ingredient');
     INSERT INTO catalog_ingredient_versions VALUES('old','ingredient','${"a".repeat(64)}'),('new','ingredient','${"b".repeat(64)}');
     INSERT INTO catalog_ingredient_current VALUES('ingredient','old',3,CURRENT_TIMESTAMP);
