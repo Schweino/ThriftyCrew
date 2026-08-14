@@ -21,6 +21,7 @@ import {
 } from "@thriftycrew/contracts";
 import { normalizeTextForHash } from "@thriftycrew/domain";
 import { codexStrictOutputSchema, normalizeCodexStructuredOutput, runSubscriptionAgent, stripCodexOptionalNulls } from "./codex-subscription";
+import { normalizeRecipeMapperReadiness } from "./recipe-mapper-normalization";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const outputRoot = path.resolve(process.env.TC_OUTPUT_ROOT ?? process.env.RUNNER_TEMP ?? path.join(platformRoot, ".agent-output"));
@@ -110,7 +111,10 @@ if (definition.provider === "codex-chatgpt") {
     outputRoot,
     webSearch: definition.capabilities.includes("search:web"),
   });
-  finalOutput = outputType.parse(normalizeCodexStructuredOutput(stripCodexOptionalNulls(result.output, jsonSchema), definition.outputContract));
+  const normalizedOutput = normalizeCodexStructuredOutput(stripCodexOptionalNulls(result.output, jsonSchema), definition.outputContract);
+  finalOutput = outputType.parse(definition.outputContract === "recipe-map-v2"
+    ? normalizeRecipeMapperReadiness(normalizedOutput)
+    : normalizedOutput);
   usageOutput = {
     inputTokens: result.usage.input_tokens,
     outputTokens: result.usage.output_tokens,
