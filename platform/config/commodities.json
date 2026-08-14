@@ -7547,7 +7547,10 @@
       "\\bpops\\b",
       "mushrooms?\\b.{0,25}(?:pieces|stems|sliced\\b.{0,10}can)",
       "canned\\s+mushrooms?",
-      "mushroom\\s+pieces"
+      "mushroom\\s+pieces",
+      "\\bPortobello\\s+Mushrooms\\b",
+      "\\bportobello\\s+mushrooms\\b",
+      "\\bportabella\\s+mushrooms\\b"
     ]
   },
   {
@@ -8149,7 +8152,10 @@
       "rice\\s+(cakes?|crisps?|crackers?)",
       "epsom",
       "tampons?",
-      "lip\\s+balm"
+      "lip\\s+balm",
+      "\\bCooked\\s+Jasmine\\s+Rice\\b",
+      "\\bcooked\\s+jasmine\\s+rice\\b",
+      "\\bready\\s+to\\s+eat\\s+jasmine\\s+rice\\b"
     ]
   },
   {
@@ -10530,7 +10536,9 @@
       "\\bheart\\s+health\\b",
       "tampons?",
       "lip\\s+balm",
-      "\\bberbere\\b"
+      "\\bberbere\\b",
+      "\\bSalt\\s+Pork\\b",
+      "\\bsalt\\s+pork\\b"
     ]
   },
   {
@@ -10639,7 +10647,10 @@
       "\\bheart\\s+health\\b",
       "epsom",
       "tampons?",
-      "lip\\s+balm"
+      "lip\\s+balm",
+      "\\bBlack\\s+peppercorns\\b",
+      "\\bblack\\s+peppercorns\\b",
+      "\\bwhole\\s+black\\s+pepper\\b"
     ]
   },
   {
@@ -34864,7 +34875,8 @@
       "\\bheart\\s+health\\b",
       "epsom",
       "tampons?",
-      "lip\\s+balm"
+      "lip\\s+balm",
+      "\\bgreen\\s+chili\\s+pepper\\b"
     ]
   },
   {
@@ -40684,7 +40696,10 @@
       "\\bheart\\s+health\\b",
       "epsom",
       "tampons?",
-      "lip\\s+balm"
+      "lip\\s+balm",
+      "\\bWhole\\s+cloves\\b",
+      "\\bwhole\\s+cloves\\s+spice\\b",
+      "\\bwhole\\s+clove\\b"
     ]
   },
   {
@@ -44225,7 +44240,8 @@
       "\\bheart\\s+health\\b",
       "epsom",
       "tampons?",
-      "lip\\s+balm"
+      "lip\\s+balm",
+      "\\bwild\\s+rice\\s+mix\\b"
     ]
   },
   {
@@ -55733,6 +55749,230 @@
       "\\bpowder\\b",
       "\\bseasoning mix\\b",
       "\\bseed oil\\b"
+    ]
+  },
+  {
+    "id": "ingredient-definition-mace-spice",
+    "label": "Mace",
+    "unit": "oz",
+    "include": [
+      "\\bmace(?: blades?)?\\b"
+    ],
+    "exclude": [
+      "\\bpepper spray\\b",
+      "\\bsecurity\\b",
+      "\\bself defense\\b",
+      "\\bground beef\\b",
+      "\\bweapon\\b"
+    ]
+  },
+  {
+    "id": "ingredient-definition-fresh-whole-nutmeg",
+    "label": "Fresh whole nutmeg",
+    "unit": "oz",
+    "include": [
+      "\\b(?:fresh )?whole nutmeg\\b",
+      "\\bwhole nutmegs\\b"
+    ],
+    "exclude": [
+      "\\bground\\b",
+      "\\bpowder\\b",
+      "\\bgrater\\b",
+      "\\bseasoning blend\\b"
+    ]
+  },
+  {
+    "id": "ingredient-definition-lamb-shoulder",
+    "label": "Lamb shoulder",
+    "unit": "lb",
+    "include": [
+      "\\blamb shoulder\\b"
+    ],
+    "exclude": [
+      "\\bseasoning\\b",
+      "\\bdog food\\b",
+      "\\bpet (?:food|treat)\\b",
+      "\\bprepared meal\\b"
+    ]
+  },
+  {
+    "id": "ingredient-definition-green-chilli",
+    "label": "Green chilli",
+    "unit": "lb",
+    "include": [
+      "\\bgreen (?:chilli|chili)(?: peppers?)?\\b",
+      "\\bgreen chiles?\\b"
+    ],
+    "exclude": [
+      "\\bcanned\\b",
+      "\\bpickled\\b",
+      "\\bsauce\\b",
+      "\\bsalsa\\b",
+      "\\bpaste\\b",
+      "\\bpowder\\b",
+      "\\bseasoning\\b",
+      "\\bfrozen\\b"
+    ]
+  },
+  {
+    "id": "ingredient-definition-peanut-oil",
+    "label": "Peanut oil",
+    "unit": "fl_oz",
+    "include": [
+      "\\bpeanut oil\\b"
+    ],
+    "exclude": [
+      "\\bblend\\b",
+      "\\bpeanut butter\\b",
+      "\\broasted peanuts?\\b",
+      "\\bflavored\\b"
+    ]
+  },
+  {
+    "id": "chipotle-powder",
+    "label": "Chipotle Powder",
+    "unit": "oz",
+    "include": [
+      "\\bchipotle\\s+(?:chile\\s+|chili\\s+)?powder\\b",
+      "\\bground\\s+chipotle(?:\\s+chile|\\s+chili)?\\b"
+    ],
+    "exclude": [
+      "\\bchili\\s+powder\\b(?!.*\\bchipotle\\b)",
+      "\\bseasoning\\s+(?:blend|mix)\\b",
+      "\\bchipotle\\s+(?:sauce|paste|peppers?)\\b"
+    ]
+  },
+  {
+    "id": "salt-pork",
+    "label": "Salt Pork",
+    "unit": "lb",
+    "include": [
+      "\\bsalt[\\s-]+pork\\b"
+    ],
+    "exclude": [
+      "\\bpork[\\s-]+rinds?\\b",
+      "\\bpork[\\s-]+belly\\b",
+      "\\bbacon\\b",
+      "\\bseasoning\\b",
+      "\\bflavor(?:ed|ing)?\\b"
+    ]
+  },
+  {
+    "id": "wild-rice-blend",
+    "label": "Wild Rice Blend",
+    "unit": "lb",
+    "include": [
+      "\\bwild\\s+rice\\s+(?:blend|mix)\\b"
+    ],
+    "exclude": [
+      "\\b(?:soup|broth|cracker|chip|seasoning|stuffing|meal|bowl|frozen|ready(?:\\s+to)?\\s+(?:eat|heat)|microwaveable)\\b"
+    ]
+  },
+  {
+    "id": "ingredient-definition-saffron",
+    "label": "Saffron",
+    "unit": "gram",
+    "include": [
+      "\\bsaffron(?: threads?)?\\b"
+    ],
+    "exclude": [
+      "\\bsaffron rice\\b",
+      "\\bsaffron tea\\b",
+      "\\bsaffron seasoning\\b",
+      "\\bextract\\b",
+      "\\bsupplement\\b",
+      "\\bcolor(?:ing)?\\b"
+    ]
+  },
+  {
+    "id": "ingredient-definition-whole-cloves",
+    "label": "Whole cloves",
+    "unit": "oz",
+    "include": [
+      "\\bwhole cloves?\\b",
+      "\\bcloves? whole\\b"
+    ],
+    "exclude": [
+      "\\bground\\b",
+      "\\bpowder\\b",
+      "\\bgarlic\\b",
+      "\\bclove oil\\b",
+      "\\bcigarettes?\\b"
+    ]
+  },
+  {
+    "id": "chili-garlic-sauce",
+    "label": "Chili Garlic Sauce",
+    "unit": "oz",
+    "include": [
+      "\\b(?:chili|chilli|chile)\\s+garlic\\s+sauce\\b",
+      "\\bgarlic\\s+(?:chili|chilli|chile)\\s+sauce\\b"
+    ],
+    "exclude": [
+      "\\bsweet\\s+(?:chili|chilli|chile)\\s+sauce\\b",
+      "\\b(?:chili|chilli|chile)\\s+garlic\\s+paste\\b",
+      "\\bmarinade\\b"
+    ]
+  },
+  {
+    "id": "creamy-cilantro-lime-dressing",
+    "label": "Creamy Cilantro Lime Dressing",
+    "unit": "fl_oz",
+    "include": [
+      "\\bcreamy\\s+cilantro[\\s-]+lime\\s+(?:salad\\s+)?dressing\\b",
+      "\\bcilantro[\\s-]+lime\\s+creamy\\s+(?:salad\\s+)?dressing\\b"
+    ],
+    "exclude": [
+      "\\b(?:sauce|marinade|dip|salsa|seasoning)\\b",
+      "\\b(?:vinaigrette|avocado|jalape[nñ]o|ranch)\\b"
+    ]
+  },
+  {
+    "id": "cooked-jasmine-rice",
+    "label": "Cooked Jasmine Rice",
+    "unit": "oz",
+    "include": [
+      "\\b(?:fully\\s+)?cooked\\s+jasmine\\s+rice\\b",
+      "\\bready(?:[-\\s]+to[-\\s]+eat)?\\s+jasmine\\s+rice\\b"
+    ],
+    "exclude": [
+      "\\buncooked\\b",
+      "\\bdry\\b",
+      "\\bbrown\\s+jasmine\\s+rice\\b",
+      "\\bjasmine\\s+rice\\s+mix\\b"
+    ]
+  },
+  {
+    "id": "ingredient-definition-black-peppercorns",
+    "label": "Black peppercorns",
+    "unit": "oz",
+    "include": [
+      "\\bblack peppercorns?\\b",
+      "\\bwhole black pepper\\b"
+    ],
+    "exclude": [
+      "\\bground\\b",
+      "\\bcracked\\b",
+      "\\bpeppercorn blend\\b",
+      "\\bmixed peppercorns?\\b",
+      "\\bgrinder\\b"
+    ]
+  },
+  {
+    "id": "portobello-mushrooms",
+    "label": "Portobello Mushrooms",
+    "unit": "lb",
+    "include": [
+      "\\bport(?:o|a)bello\\s+mushrooms?\\b",
+      "\\bport(?:o|a)bella\\s+mushrooms?\\b"
+    ],
+    "exclude": [
+      "\\bstuffed\\b",
+      "\\bdried\\b",
+      "\\bpowder\\b",
+      "\\bsoup\\b",
+      "\\bsauce\\b",
+      "\\bcanned\\b"
     ]
   }
 ]

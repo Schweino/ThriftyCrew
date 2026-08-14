@@ -8,8 +8,8 @@
     "grocery/recipe-commodities.json"
   ],
   "hashes": {
-    "commodities.json": "2e385fc4c4718ec6427539726f1592f44dc94ecd29c1837caddc3413a63c47c8",
-    "categories.json": "cb6bff8b6640f1ef085d5d594f7d0bd57fb9d519c9851611dc1b87c3979ad1f1",
+    "commodities.json": "2d08b8d1c8f8c65413e803618dbc311a97638e9238ddc5414b135402f78d43c1",
+    "categories.json": "36a926434783b36ace533e333ee4df018c1fef07ce91e1ab629ede6f98c7dbe7",
     "known-wrong.json": "55489ceee179b14120dcfcd45481a4c0b929b6ba9137ed13cb8bddc638037ade",
     "recipe-commodities.json": "b44604ffac3eca6d80916dd530bf1b8e2025e123b5d3737fedd6559db3bb33a7",
     "recipe-commodity-aliases.json": "36aa3984f9ba69b6cdddc4c4c82c3ebf4e15e387ac4013d3cd88bdf6798e7666",
@@ -17,8 +17,8 @@
     "omaha-store-policies.json": "64771b20000a4133e78d7534143734c328c47f0c28135e1f17c145747167050f"
   },
   "counts": {
-    "commodities": 556,
-    "uniqueMatchRules": 49347,
+    "commodities": 571,
+    "uniqueMatchRules": 49452,
     "knownWrongRulings": 121,
     "expandedKnownWrongNames": 126
   }
