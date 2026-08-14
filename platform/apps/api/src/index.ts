@@ -920,6 +920,34 @@ app.post("/internal/match-decisions/reconcile", zValidator("json", matchDecision
   return context.json({ ok: true, batchId: body.batchId, retained: body.retainedProductIds.length, superseded: updated.meta.changes });
 });
 
+app.post("/internal/configurations/:id/clone-active", async (context) => {
+  const configurationId = context.req.param("id");
+  const target = await context.env.DB.prepare("SELECT active FROM configuration_versions WHERE id = ?1").bind(configurationId).first<{ active: number }>();
+  if (!target) return jsonError("configuration not found", 404);
+  if (target.active === 1) return context.json({ ok: true, configurationId, idempotent: true });
+  const source = await context.env.DB.prepare("SELECT id FROM configuration_versions WHERE active = 1 AND id <> ?1").bind(configurationId).first<{ id: string }>();
+  if (!source) return jsonError("active configuration clone source not found", 409);
+  await context.env.DB.batch([
+    context.env.DB.prepare(`INSERT OR IGNORE INTO configuration_categories (configuration_id, category_id)
+      SELECT ?1, category_id FROM configuration_categories WHERE configuration_id = ?2`).bind(configurationId, source.id),
+    context.env.DB.prepare(`INSERT OR IGNORE INTO commodities
+      (id, configuration_id, label, basis_unit, category_id, band_min_micros, band_max_micros, match_priority)
+      SELECT id, ?1, label, basis_unit, category_id, band_min_micros, band_max_micros, match_priority
+        FROM commodities WHERE configuration_id = ?2`).bind(configurationId, source.id),
+    context.env.DB.prepare(`INSERT OR IGNORE INTO configuration_match_rules (configuration_id, definition_id)
+      SELECT ?1, definition_id FROM configuration_match_rules WHERE configuration_id = ?2`).bind(configurationId, source.id),
+  ]);
+  const knownWrong = await context.env.DB.prepare(`SELECT commodity_id,store_location_id,external_product_key,normalized_name,ruling,evidence
+    FROM known_wrong_rules WHERE configuration_id = ?1 ORDER BY id`).bind(source.id).all<Record<string, unknown>>();
+  const statements = await Promise.all(knownWrong.results.map(async (rule) => context.env.DB.prepare(`INSERT OR IGNORE INTO known_wrong_rules
+    (id,configuration_id,commodity_id,store_location_id,external_product_key,normalized_name,ruling,evidence)
+    VALUES (?1,?2,?3,?4,?5,?6,?7,?8)`).bind(await deterministicId("known-wrong-clone", configurationId, stableJson(rule)), configurationId,
+    rule.commodity_id, rule.store_location_id, rule.external_product_key, rule.normalized_name, rule.ruling, rule.evidence)));
+  for (let offset = 0; offset < statements.length; offset += 90) await context.env.DB.batch(statements.slice(offset, offset + 90));
+  const cloned = await context.env.DB.prepare("SELECT id FROM commodities WHERE configuration_id = ?1 ORDER BY id").bind(configurationId).all<{ id: string }>();
+  return context.json({ ok: true, configurationId, sourceConfigurationId: source.id, commodityIds: cloned.results.map((row) => row.id), idempotent: false });
+});
+
 app.post("/internal/match-decisions/reconcile-inactive", async (context) => {
   const reconciliation = await reconcileInactiveConfigurationDecisions(context.env.DB);
   await recordAudit(context.env, context.get("identity"), "matching.reconcile-inactive", "configuration",

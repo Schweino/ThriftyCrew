@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { DirectCaptureArtifact } from "@thriftycrew/contracts";
 import type { CurrentBridgeArtifact } from "./legacy";
-import { deduplicateDirectObservations, deployConfiguration, MutationClient, publishNativeRelease } from "./client";
+import { deduplicateDirectObservations, deployConfiguration, deployConfigurationDelta, MutationClient, publishNativeRelease } from "./client";
 import type { NativeReleaseArtifact } from "./native";
 
 describe("configuration deployment", () => {
@@ -26,6 +26,27 @@ describe("configuration deployment", () => {
     });
     expect(request).toHaveBeenCalledTimes(1);
     expect(request).not.toHaveBeenCalledWith("/internal/doctor", expect.anything());
+  });
+
+  it("clones the active configuration and uploads only changed commodities", async () => {
+    const paths: string[] = [];
+    const request = vi.fn(async (pathname: string, _options?: unknown) => {
+      paths.push(pathname);
+      if (pathname === "/internal/configurations") return { active: false };
+      if (pathname.endsWith("/clone-active")) return { ok: true, commodityIds: ["unchanged"] };
+      if (pathname.endsWith("/commodities")) return { ok: true };
+      if (pathname.endsWith("/activate")) return { ok: true };
+      throw new Error(`unexpected path ${pathname}`);
+    });
+    const configuration = { id: "cfg_delta", sourceCommit: "test", contentHash: "a".repeat(64), categories: [], knownWrong: [], commodities: [
+      { id: "unchanged", label: "Unchanged", unit: "oz", categoryId: "pantry", include: ["unchanged"], exclude: [] },
+      { id: "new-item", label: "New Item", unit: "oz", categoryId: "pantry", include: ["new item"], exclude: [] },
+    ] } as unknown as CurrentBridgeArtifact["configuration"];
+    await deployConfigurationDelta({ request } as unknown as MutationClient, configuration, ["new-item"]);
+    expect(paths).toEqual(["/internal/configurations", "/internal/configurations/cfg_delta/clone-active",
+      "/internal/configurations/cfg_delta/commodities", "/internal/configurations/cfg_delta/activate"]);
+    const commodityPayload = request.mock.calls.find(([pathname]) => String(pathname).endsWith("/commodities"))?.[1] as { json: { commodities: Array<{ id: string }> } };
+    expect(commodityPayload.json.commodities.map((commodity) => commodity.id)).toEqual(["new-item"]);
   });
 });
 

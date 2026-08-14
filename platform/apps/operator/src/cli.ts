@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
 import { directCaptureArtifactSchema, ingredientPriceResearchSchema, observationChunkSchema } from "@thriftycrew/contracts";
-import { deployConfiguration, ingestDirectCapture, MutationClient, publishNativeRelease, publishValidatedRelease, replayCurrentArtifact, type CaptureEvidenceInput } from "@thriftycrew/daily/client";
+import { deployConfiguration, deployConfigurationDelta, ingestDirectCapture, MutationClient, publishNativeRelease, publishValidatedRelease, replayCurrentArtifact, type CaptureEvidenceInput } from "@thriftycrew/daily/client";
 import { buildCurrentBridge } from "@thriftycrew/daily/legacy";
 import { buildRegularCapture, type CaptureAttestation } from "@thriftycrew/daily/direct";
 import { evaluateSourceContract, type SourceContract } from "@thriftycrew/daily/source-contracts";
@@ -463,6 +463,7 @@ async function commodityAddSpecification(incoming: CommodityAddition, generate =
   if (commodities.some((item) => item.id === incoming.id)) throw new Error(`commodity ${incoming.id} already exists`);
   if (commodities.some((item) => normalizeName(String(item.label ?? "")) === normalizeName(incoming.label!))) throw new Error(`commodity label ${incoming.label} already exists`);
   const proposedNames = [incoming.label!, ...searchTerms];
+  const matcherSurgeryIds: string[] = [];
   const newIncludes = include.map(compileCommodityRegexPattern);
   const newExcludes = exclude.map(compileCommodityRegexPattern);
   if (!proposedNames.some((name) => newIncludes.some((pattern) => pattern.test(name)) && !newExcludes.some((pattern) => pattern.test(name)))) {
@@ -480,6 +481,7 @@ async function commodityAddSpecification(incoming: CommodityAddition, generate =
       && !existingExcludes.some((pattern) => pattern.test(name)));
     if (collisions.length > 0) {
       existing.exclude = [...new Set([...existingExcludeValues, ...collisions.map(commodityPhraseExclusionPattern)])];
+      matcherSurgeryIds.push(String(existing.id));
     }
   }
   if (incoming.bandMin !== undefined && (!Number.isFinite(incoming.bandMin) || incoming.bandMin <= 0)) throw new Error(`commodity ${incoming.id} has an invalid minimum price band`);
@@ -499,7 +501,8 @@ async function commodityAddSpecification(incoming: CommodityAddition, generate =
   await writeJson(commodityFile, commodities);
   await writeJson(categoryFile, categoryDocument);
   await writeJson(searchFile, searchDocument);
-  return { ...(generate ? await generateLegacyConfiguration(targetIncomeRoot, false) : { generated: false }), commodityId: incoming.id, searchTerm: searchTerms[0] };
+  return { ...(generate ? await generateLegacyConfiguration(targetIncomeRoot, false) : { generated: false }), commodityId: incoming.id,
+    searchTerm: searchTerms[0], modifiedCommodityIds: [incoming.id, ...matcherSurgeryIds] };
 }
 
 async function commodityAdd(inputFile: string | undefined): Promise<unknown> {
@@ -536,7 +539,11 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
     await execFileAsync("git", ["-C", worktreeRoot, "commit", "-m", `Publish ${applied.length} verified Omaha ingredients (${sealed.batchId})`]);
     const sourceCommit = (await execFileAsync("git", ["-C", worktreeRoot, "rev-parse", "HEAD"])).stdout.trim();
     const bridge = await buildCurrentBridge(worktreeRoot);
-    const deployment = await deployConfiguration(client, bridge.configuration);
+    const modifiedCommodityIds = [...new Set(applied.flatMap((entry) => {
+      const value = entry as { modifiedCommodityIds?: string[] };
+      return value.modifiedCommodityIds ?? [];
+    }))];
+    const deployment = await deployConfigurationDelta(client, bridge.configuration, modifiedCommodityIds);
     configurationDeployed = true;
     const matching = await rematchPromotedBatches(client);
     const materialization = await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(sealed.batchId)}/materialize`, { method: "POST" }) as {

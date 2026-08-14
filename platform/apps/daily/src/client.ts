@@ -515,6 +515,43 @@ export async function deployConfiguration(client: MutationClient, config: Curren
   };
 }
 
+export async function deployConfigurationDelta(client: MutationClient, config: CurrentBridgeArtifact["configuration"], changedCommodityIds: string[]): Promise<Record<string, unknown>> {
+  const configuration = await client.request("/internal/configurations", { json: {
+    id: config.id,
+    sourceCommit: config.sourceCommit,
+    contentHash: config.contentHash,
+    expectedCategories: config.categories.length,
+    expectedCommodities: config.commodities.length,
+    expectedRules: configurationRuleCount(config),
+    expectedKnownWrong: config.knownWrong.length,
+  } });
+  let activation: Record<string, unknown> | null = null;
+  if (configuration.active !== true) {
+    const clone = await client.request(`/internal/configurations/${config.id}/clone-active`, { method: "POST" }) as { commodityIds?: string[] };
+    const clonedCommodityIds = new Set(clone.commodityIds ?? []);
+    const changed = new Set([...changedCommodityIds,
+      ...config.commodities.filter((commodity) => !clonedCommodityIds.has(commodity.id)).map((commodity) => commodity.id)]);
+    const commodities = config.commodities.filter((commodity) => changed.has(commodity.id));
+    for (const commodityChunk of chunks(commodities, 20)) {
+      await client.request(`/internal/configurations/${config.id}/commodities`, { method: "PUT", json: {
+        commodities: commodityChunk.map((commodity) => ({
+          id: commodity.id,
+          label: commodity.label,
+          basisUnit: apiBasisUnit(commodity.unit),
+          categoryId: commodity.categoryId,
+          include: commodity.include,
+          exclude: commodity.exclude,
+          matchPriority: config.commodities.length - config.commodities.indexOf(commodity),
+          ...(commodity.band_min !== undefined ? { bandMinMicros: Math.round(commodity.band_min * 1_000_000) } : {}),
+          ...(commodity.band_max !== undefined ? { bandMaxMicros: Math.round(commodity.band_max * 1_000_000) } : {}),
+        })),
+      } });
+    }
+    activation = await client.request(`/internal/configurations/${config.id}/activate`, { method: "POST" });
+  }
+  return { ok: true, configurationId: config.id, active: true, idempotent: configuration.active === true, activation };
+}
+
 export async function replayCurrentArtifact(client: MutationClient, artifact: CurrentBridgeArtifact): Promise<Record<string, unknown>> {
   const config = artifact.configuration;
   await deployConfiguration(client, config);
