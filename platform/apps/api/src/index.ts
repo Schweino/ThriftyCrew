@@ -1,6 +1,7 @@
 import { Hono, type MiddlewareHandler } from "hono";
 import { cache } from "cloudflare:workers";
 import { captureBatchProductsQuery } from "./capture-batch-products";
+import { sameMatchRunFacts } from "./match-run-persistence";
 import { zValidator } from "@hono/zod-validator";
 import {
   accuracyDrawCreateSchema,
@@ -1223,13 +1224,28 @@ app.post("/internal/match-runs", zValidator("json", matchRunSchema), async (cont
   const status = body.collisionCount === 0 ? "passed" : "failed";
   const existing = await context.env.DB.prepare("SELECT status FROM match_runs WHERE id = ?1").bind(body.id).first<{ status: string }>();
   if (existing) return context.json({ ok: existing.status === "passed", runId: body.id, status: existing.status, idempotent: true });
-  await context.env.DB.prepare(
+  const inserted = await context.env.DB.prepare(
     `INSERT INTO match_runs
        (id, batch_id, configuration_id, input_hash, status, product_count, matched_count,
         unmatched_count, collision_count, aisle_rejected_count, detail_json)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)`,
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)
+     ON CONFLICT(batch_id, configuration_id, input_hash) DO NOTHING`,
   ).bind(body.id, body.batchId, body.configurationId, body.inputHash, status, body.productCount, body.matchedCount,
     body.unmatchedCount, body.collisionCount, body.aisleRejectedCount, stableJson(body.detail)).run();
+  if (Number(inserted.meta.changes ?? 0) === 0) {
+    const semantic = await context.env.DB.prepare(
+      `SELECT id, status, product_count, matched_count, unmatched_count, collision_count, aisle_rejected_count
+         FROM match_runs WHERE batch_id = ?1 AND configuration_id = ?2 AND input_hash = ?3`,
+    ).bind(body.batchId, body.configurationId, body.inputHash).first<{
+      id: string; status: string; product_count: number; matched_count: number; unmatched_count: number;
+      collision_count: number; aisle_rejected_count: number;
+    }>();
+    if (!semantic || !sameMatchRunFacts(semantic, body, status)) {
+      return jsonError("existing semantic match run disagrees with the submitted result facts", 409);
+    }
+    return context.json({ ok: semantic.status === "passed", runId: semantic.id, status: semantic.status,
+      idempotent: true, semanticReuse: true });
+  }
   if (body.collisionCount > 0) {
     const triageId = await deterministicId("triage", "match-run", body.id);
     await context.env.DB.prepare(
