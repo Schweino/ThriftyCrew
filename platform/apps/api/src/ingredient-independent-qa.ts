@@ -240,7 +240,7 @@ export async function rejectIngredientStoreQa(env: Pick<WorkerEnv, "DB">, checkI
   const results = await env.DB.batch([
     env.DB.prepare("DELETE FROM ingredient_query_coverage WHERE store_check_id = ?1").bind(checkId),
     env.DB.prepare("DELETE FROM ingredient_store_candidates WHERE store_check_id = ?1").bind(checkId),
-    env.DB.prepare(`UPDATE ingredient_store_checks SET state = 'capture_pending', operational_state = 'capture_queued',
+    env.DB.prepare(`UPDATE ingredient_store_checks SET state = 'targeted_refresh', operational_state = 'capture_queued',
       terminal_outcome = NULL, capture_result_json = NULL, candidate_set_hash = NULL, producer_evidence_id = NULL,
       verifier_evidence_id = NULL, verifier_version = NULL, qa_attestation_id = NULL,
       lease_owner = NULL, lease_expires_at = NULL, heartbeat_at = NULL, lease_lane = NULL,
