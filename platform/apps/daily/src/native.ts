@@ -908,6 +908,8 @@ export async function buildNativeRelease(
       productUrl: cell.winner!.product_url ?? undefined,
       taxonomyPath: cell.winner!.taxonomy_path ?? undefined,
       capturedAt: cell.winner!.captured_at,
+      validFrom: cell.winner!.valid_from ?? null,
+      validTo: cell.winner!.valid_to ?? null,
     }));
     return {
       id: commodity.id,

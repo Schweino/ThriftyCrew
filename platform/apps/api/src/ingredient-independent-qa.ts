@@ -8,6 +8,22 @@ import type { IngredientAggregate } from "./ingredient-state-machine";
 type CaptureResult = z.infer<typeof ingredientStoreCaptureResultSchema>;
 type QaComplete = z.infer<typeof ingredientStoreQaCompleteSchema>;
 
+export async function uploadIngredientEvidence(env: Pick<WorkerEnv, "DB" | "EVIDENCE">, input: { checkId: string; kind: string; sourceUrl: string; observedAt: string; document: unknown }) {
+  const check = await env.DB.prepare("SELECT id FROM ingredient_store_checks WHERE id = ?1").bind(input.checkId).first<{ id: string }>();
+  if (!check) throw new Error("ingredient evidence check does not exist");
+  const body = stableJson({ schema: "tc-ingredient-evidence-v3", checkId: input.checkId, kind: input.kind,
+    sourceUrl: input.sourceUrl, observedAt: input.observedAt, document: input.document });
+  const bytes = new TextEncoder().encode(body);
+  if (bytes.byteLength < 2 || bytes.byteLength > 1_000_000) throw new Error("ingredient evidence must be between 2 bytes and 1 MB");
+  const sha256 = await digestHex(bytes);
+  const objectKey = `ingredient-store-evidence/${input.checkId}/${input.kind}/${sha256}.json`;
+  await env.EVIDENCE.put(objectKey, bytes, { httpMetadata: { contentType: "application/json; charset=utf-8" },
+    customMetadata: { sha256, kind: input.kind, checkId: input.checkId } });
+  await verifyPointer(env.EVIDENCE, { objectKey, sha256, byteLength: bytes.byteLength });
+  return { objectKey, sha256, byteLength: bytes.byteLength, contentType: "application/json; charset=utf-8",
+    sourceUrl: input.sourceUrl, observedAt: input.observedAt };
+}
+
 async function verifyPointer(bucket: R2Bucket, pointer: { objectKey: string; sha256: string; byteLength: number }): Promise<void> {
   const object = await bucket.get(pointer.objectKey);
   if (!object) throw new Error("ingredient evidence object is absent");
@@ -49,6 +65,22 @@ export async function completeIngredientStoreCapture(env: Pick<WorkerEnv, "DB" |
         coverage.completedAt, coverage.expiresAt, coverage.evidenceHash, coverage.retailerResultTotal,
         coverage.paginationHash, input.queryPlanHash, input.producerVersion));
   }
+  for (const candidate of input.candidates) {
+    const candidateId = await deterministicId("ingredient-targeted-candidate", checkId, candidate.productId, candidate.evidenceHash);
+    statements.push(env.DB.prepare(`INSERT INTO ingredient_store_candidates
+      (id, store_check_id, product_id, retailer_product_key, product_name, product_url, seller_name, fulfillment_state,
+       availability_state, package_text, package_price_minor, normalized_basis_unit, normalized_basis_qty_micros,
+       per_unit_micros, offer_kind, valid_from, valid_to, loyalty_required, membership_required, eligible,
+       rejection_codes_json, evidence_hash, producer_evidence_hash, originating_query)
+      VALUES (?1, ?2, ?3, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?21, ?22)
+      ON CONFLICT(store_check_id, retailer_product_key, evidence_hash) DO NOTHING`)
+      .bind(candidateId, checkId, candidate.productId, candidate.productName, candidate.sourceUrl, candidate.sellerName,
+        candidate.fulfillmentMode, candidate.availabilityText, candidate.packageText, candidate.packagePriceMinor,
+        candidate.normalizedBasisUnit, candidate.normalizedBasisQtyMicros, candidate.perUnitMicros, candidate.offerKind,
+        candidate.validFrom, candidate.validTo, candidate.loyaltyRequired ? 1 : 0, candidate.membershipRequired ? 1 : 0,
+        candidate.eligible ? 1 : 0, stableJson(candidate.rejectionCodes), candidate.evidenceHash,
+        input.result.queryTerms.join(" | ")));
+  }
   statements.push(env.DB.prepare(`UPDATE ingredient_store_checks SET state = 'qa_pending', operational_state = 'qa_queued',
     capture_result_json = ?4, candidate_set_hash = ?5, producer_evidence_id = ?6, producer_version = ?7,
     capture_completed_at = CURRENT_TIMESTAMP, evidence_generation = evidence_generation + 1,
@@ -56,8 +88,13 @@ export async function completeIngredientStoreCapture(env: Pick<WorkerEnv, "DB" |
     last_error = NULL, last_progress_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
     WHERE id = ?1 AND state = 'leased' AND lease_owner = ?2 AND lease_generation = ?3`)
     .bind(checkId, input.owner, input.leaseGeneration, stableJson(input.result), input.candidateSetHash, evidenceId, input.producerVersion));
+  statements.push(env.DB.prepare(`INSERT INTO pipeline_stage_events
+    (lane, aggregate_kind, aggregate_id, stage, event_kind, detail_json)
+    VALUES ('pricing', 'store_check', ?1, 'capture', 'completed', ?2)`)
+    .bind(checkId, stableJson({ storeLocationId: row.store_location_id, producerVersion: input.producerVersion,
+      candidates: input.candidates.length, qualifying: input.result.qualifyingProductsExamined })));
   const results = await env.DB.batch(statements);
-  if ((results.at(-1)?.meta.changes ?? 0) !== 1) throw new Error("capture completion lost its lease fence");
+  if ((results.at(-2)?.meta.changes ?? 0) !== 1) throw new Error("capture completion lost its lease fence");
   return { checkId, state: "qa_queued" as const };
 }
 
@@ -75,6 +112,23 @@ export async function completeIngredientStoreQa(env: Pick<WorkerEnv, "DB" | "EVI
   if (input.verdict !== "ambiguous" && (!result.searchComplete || !result.locationVerified || !result.priceModeVerified)) throw new Error("QA cannot verify incomplete capture");
   if (input.verdict === "priced" && result.qualifyingProductsExamined < 1) throw new Error("priced QA requires a qualifying candidate");
   if (input.verdict === "not_found" && result.qualifyingProductsExamined !== 0) throw new Error("not-found QA requires zero qualifying candidates");
+  const coverage = await env.DB.prepare(`SELECT COUNT(*) AS count FROM ingredient_query_coverage
+    WHERE store_check_id = ?1 AND complete = 1 AND end_of_results_proven = 1
+      AND location_verified = 1 AND price_mode_verified = 1 AND expires_at > CURRENT_TIMESTAMP`).bind(checkId).first<{ count: number }>();
+  if (Number(coverage?.count ?? 0) < 1) throw new Error("QA requires current complete query coverage");
+  const candidates = await env.DB.prepare(`SELECT product_id, product_name, product_url, package_price_minor,
+      normalized_basis_unit, normalized_basis_qty_micros, per_unit_micros, eligible
+    FROM ingredient_store_candidates WHERE store_check_id = ?1 ORDER BY eligible DESC, per_unit_micros, product_id`).bind(checkId).all<Record<string, unknown>>();
+  const eligible = candidates.results.filter((candidate) => Number(candidate.eligible) === 1);
+  if (input.verdict === "not_found" && eligible.length !== 0) throw new Error("not-found QA cannot ignore an eligible candidate");
+  if (input.verdict === "priced") {
+    const winner = eligible[0];
+    const captured = JSON.parse(String(row.capture_result_json)) as Record<string, unknown>;
+    if (!winner || winner.product_name !== captured.productName || winner.product_url !== captured.sourceUrl
+      || Number(winner.package_price_minor) !== Number(captured.packagePriceMinor)
+      || Number(winner.per_unit_micros) !== Number(captured.perUnitMicros)
+      || winner.normalized_basis_unit !== captured.normalizedBasisUnit) throw new Error("QA winner is not the cheapest frozen eligible candidate");
+  }
   await verifyPointer(env.EVIDENCE, input.verifierEvidence);
   const producer = await env.DB.prepare("SELECT sha256 FROM ingredient_evidence_refs WHERE id = ?1").bind(row.producer_evidence_id).first<{ sha256: string }>();
   if (!producer || producer.sha256 === input.verifierEvidence.sha256) throw new Error("producer and verifier evidence must be distinct");
@@ -92,14 +146,20 @@ export async function completeIngredientStoreQa(env: Pick<WorkerEnv, "DB" | "EVI
       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7) ON CONFLICT(store_check_id, input_hash, output_hash) DO NOTHING`)
       .bind(qaId, checkId, qaInputHash, stableJson(input.validatorVersions), input.verdict, stableJson(input.findings), qaOutputHash),
     env.DB.prepare(`UPDATE ingredient_store_checks SET state = ?4, operational_state = ?4, terminal_outcome = ?5,
+      result_json = capture_result_json, evidence_id = producer_evidence_id,
       qa_attestation_id = ?6, verifier_evidence_id = ?7, verifier_version = ?8, qa_generation = qa_generation + 1,
       qa_completed_at = CURRENT_TIMESTAMP, lease_owner = NULL, lease_expires_at = NULL, heartbeat_at = NULL,
       lease_lane = NULL, last_error = ?9, last_progress_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?1 AND state = 'leased' AND lease_owner = ?2 AND lease_generation = ?3`)
       .bind(checkId, input.owner, input.leaseGeneration, terminal, input.verdict === "ambiguous" ? null : input.verdict,
         qaId, verifierEvidenceId, input.verifierVersion, input.verdict === "ambiguous" ? input.findings.join("; ") : null),
+    env.DB.prepare(`INSERT INTO pipeline_stage_events
+      (lane, aggregate_kind, aggregate_id, stage, event_kind, detail_json)
+      VALUES ('pricing', 'store_check', ?1, 'qa', ?2, ?3)`)
+      .bind(checkId, input.verdict === "ambiguous" ? "attention_required" : "completed",
+        stableJson({ verdict: input.verdict, verifierVersion: input.verifierVersion, findings: input.findings })),
   ];
   const results = await env.DB.batch(statements);
-  if ((results.at(-1)?.meta.changes ?? 0) !== 1) throw new Error("QA completion lost its lease fence");
+  if ((results.at(-2)?.meta.changes ?? 0) !== 1) throw new Error("QA completion lost its lease fence");
   return sealAggregateIfTerminal(env, String(row.pricing_job_id));
 }

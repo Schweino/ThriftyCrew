@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { ingredientPriceResearchSchema, OMAHA_GROCERY_STORE_LOCATION_IDS, recipeMapSchema, recipeSourceCandidatesSchema } from "@thriftycrew/contracts";
+import { ingredientPriceResearchSchema, ingredientStoreCaptureResultSchema, OMAHA_GROCERY_STORE_LOCATION_IDS, recipeMapSchema, recipeSourceCandidatesSchema } from "@thriftycrew/contracts";
 import { activeIngredientCategoryContextSql, assertRecipeChainContinuity, ingredientCampaignPhase, type IngredientCampaignSnapshot, isAtomicDiscoveryGapName, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
 
 const candidate = {
@@ -122,6 +122,35 @@ describe("agent output boundary", () => {
     expect(recipeMapSchema.parse(mapped)).toEqual(mapped);
   });
 
+  it("binds compound requirements and process water to exact source occurrences", () => {
+    const compoundCandidate = {
+      ...candidate,
+      ingredients: [
+        { raw: "kosher salt and black pepper", quantityText: "to taste" },
+        { raw: "2 cups water", quantityText: "2 cups" },
+        { raw: "2 pounds potatoes", quantityText: "2 pounds" },
+      ],
+      mealComponents: [
+        { role: "main" as const, label: "seasoned potatoes", ingredientIndexes: [0] },
+        { role: "substantial-accompaniment" as const, label: "potatoes", ingredientIndexes: [2] },
+      ],
+    };
+    const ingredients = [
+      { sourceIngredientIndex: 0, splitComponentIndex: 0, sourceLine: "kosher salt and black pepper", sourceName: "kosher salt", quantityText: "to taste", commodityId: "kosher-salt", grams: 10, decision: "exact" as const, scalingStatus: "scaled" as const, evidence: "First indexed atomic requirement." },
+      { sourceIngredientIndex: 0, splitComponentIndex: 1, sourceLine: "kosher salt and black pepper", sourceName: "black pepper", quantityText: "to taste", commodityId: null, grams: null, decision: "unmapped" as const, scalingStatus: "unresolved" as const, evidence: "Second indexed atomic requirement." },
+      { sourceIngredientIndex: 1, splitComponentIndex: 0, sourceLine: "2 cups water", sourceName: "water", quantityText: "2 cups", commodityId: null, grams: 1_656, decision: "process" as const, scalingStatus: "scaled" as const, evidence: "Process water is not purchased." },
+      { sourceIngredientIndex: 2, splitComponentIndex: 0, sourceLine: "2 pounds potatoes", sourceName: "potatoes", quantityText: "2 pounds", commodityId: "potatoes", grams: 3_175, decision: "exact" as const, scalingStatus: "scaled" as const, evidence: "Exact indexed commodity." },
+    ];
+    expect(recipeMapSchema.parse({ requestId: "request_compound", recipes: [{
+      candidate: compoundCandidate, ingredients,
+      mealComponents: [
+        { role: "main", label: "seasoned potatoes", commodityIds: ["kosher-salt"] },
+        { role: "substantial-accompaniment", label: "potatoes", commodityIds: ["potatoes"] },
+      ],
+      readyForWriting: false, issues: ["Black pepper is not mapped."],
+    }] }).recipes[0]?.ingredients).toHaveLength(4);
+  });
+
   it("recomputes unit prices and requires sale validity dates", () => {
     const priced = {
       ...unpricedStores[0], outcome: "priced" as const, productName: "Test spice", packageText: "8 oz",
@@ -155,6 +184,39 @@ describe("agent output boundary", () => {
       offerSnapshot: { purchasePriceMinor: 399, availability: { status: "in_stock", fulfillmentMode: "pickup" } },
       captureVerification: { marketVerified: true, locationVerified: true, priceModeVerified: true, priceMode: "pickup", captureBatchId: "batch_one" },
     });
+  });
+
+  it("rejects a capture that does not select the cheapest complete candidate set", () => {
+    const evidenceHash = "a".repeat(64);
+    const candidateBase = {
+      sourceUrl: "https://example.test/product", productName: "Test spice", sellerName: "Store",
+      fulfillmentMode: "pickup" as const, availabilityText: "In stock", packageText: "8 oz",
+      packagePriceMinor: 400, normalizedBasisUnit: "oz" as const, normalizedBasisQtyMicros: 8_000_000,
+      perUnitMicros: 500_000, offerKind: "everyday" as const, validFrom: null, validTo: null,
+      loyaltyRequired: false, membershipRequired: false, eligible: true, rejectionCodes: [], evidenceHash,
+    };
+    const result = {
+      ...unpricedStores[0], outcome: "priced" as const, productName: "Expensive spice", sellerName: "Store",
+      sourceUrl: "https://example.test/product",
+      fulfillmentMode: "pickup" as const, availabilityText: "In stock", packageText: "8 oz", packagePriceMinor: 480,
+      normalizedBasisUnit: "oz" as const, normalizedBasisQtyMicros: 8_000_000, perUnitMicros: 600_000,
+      offerKind: "everyday" as const, qualifyingProductsExamined: 2,
+    };
+    const capture = {
+      owner: "capture-owner", leaseGeneration: 1, producerVersion: "test-producer-v1", queryPlanHash: "b".repeat(64), result,
+      candidates: [
+        { ...candidateBase, productId: "cheap" },
+        { ...candidateBase, productId: "expensive", productName: "Expensive spice", packagePriceMinor: 480, perUnitMicros: 600_000 },
+      ],
+      evidence: { objectKey: "evidence/object.json", sha256: evidenceHash, byteLength: 100, contentType: "application/json", sourceUrl: "https://example.test/search", observedAt: result.checkedAt },
+      candidateSetHash: "c".repeat(64), coverage: [{ normalizedQuery: "test spice", pageCount: 1, resultCount: 2,
+        retailerResultTotal: 2, terminationReason: "end_of_results" as const, paginationHash: "d".repeat(64),
+        evidenceHash, completedAt: result.checkedAt, expiresAt: "2026-08-14T12:00:00.000Z" }],
+    };
+    expect(() => ingredientStoreCaptureResultSchema.parse(capture)).toThrow(/cheapest/);
+    expect(ingredientStoreCaptureResultSchema.parse({ ...capture, result: {
+      ...result, productName: "Test spice", packagePriceMinor: 400, perUnitMicros: 500_000,
+    } }).candidates).toHaveLength(2);
   });
 
   it("fences triage plans to their source item", () => {

@@ -1,7 +1,10 @@
-import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import { access, mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import os from "node:os";
 import path from "node:path";
+import { promisify } from "node:util";
 import { directCaptureArtifactSchema, ingredientPriceResearchSchema, observationChunkSchema } from "@thriftycrew/contracts";
-import { deployConfiguration, ingestDirectCapture, MutationClient, publishNativeRelease, replayCurrentArtifact, type CaptureEvidenceInput } from "@thriftycrew/daily/client";
+import { deployConfiguration, ingestDirectCapture, MutationClient, publishNativeRelease, publishValidatedRelease, replayCurrentArtifact, type CaptureEvidenceInput } from "@thriftycrew/daily/client";
 import { buildCurrentBridge } from "@thriftycrew/daily/legacy";
 import { buildRegularCapture, type CaptureAttestation } from "@thriftycrew/daily/direct";
 import { evaluateSourceContract, type SourceContract } from "@thriftycrew/daily/source-contracts";
@@ -28,6 +31,7 @@ const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
 const invocationRoot = path.resolve(process.env.INIT_CWD ?? process.cwd());
 const [command = "help", subcommand, ...arguments_] = process.argv.slice(2);
+const execFileAsync = promisify(execFile);
 
 function cliPath(file: string): string {
   return path.normalize(path.isAbsolute(file) ? file : path.resolve(invocationRoot, file));
@@ -394,7 +398,7 @@ interface CommodityAddition {
   bandMin?: number; bandMax?: number;
 }
 
-async function commodityAddSpecification(incoming: CommodityAddition, generate = true): Promise<unknown> {
+async function commodityAddSpecification(incoming: CommodityAddition, generate = true, targetIncomeRoot = incomeRoot): Promise<unknown> {
   if (!incoming.id || !/^[a-z0-9][a-z0-9-]{1,79}$/.test(incoming.id) || !incoming.label?.trim() || !incoming.categoryId) throw new Error("commodity file needs a safe id, label, unit, and categoryId");
   const allowedUnits = new Set(["lb", "oz", "fl_oz", "each", "dozen", "gal", "qt", "pt", "liter", "ml", "gram", "kg"]);
   if (!incoming.unit || !allowedUnits.has(incoming.unit)) throw new Error(`commodity ${incoming.id} has an unsupported basis unit`);
@@ -408,9 +412,10 @@ async function commodityAddSpecification(incoming: CommodityAddition, generate =
       try { compileCommodityRegexPattern(pattern); } catch (error) { throw new Error(`${kind} regex is invalid for ${incoming.id}: ${error instanceof Error ? error.message : String(error)}`); }
     }
   }
-  const commodityFile = path.join(platformRoot, "config", "commodities.json");
-  const categoryFile = path.join(platformRoot, "config", "categories.json");
-  const searchFile = path.join(incomeRoot, "grocery", "commodity-search.json");
+  const targetPlatformRoot = path.join(targetIncomeRoot, "platform");
+  const commodityFile = path.join(targetPlatformRoot, "config", "commodities.json");
+  const categoryFile = path.join(targetPlatformRoot, "config", "categories.json");
+  const searchFile = path.join(targetIncomeRoot, "grocery", "commodity-search.json");
   const commodities = parseCatalogJson<Array<Record<string, unknown>>>(await readFile(commodityFile, "utf8"));
   if (commodities.some((item) => item.id === incoming.id)) throw new Error(`commodity ${incoming.id} already exists`);
   if (commodities.some((item) => normalizeName(String(item.label ?? "")) === normalizeName(incoming.label!))) throw new Error(`commodity label ${incoming.label} already exists`);
@@ -448,7 +453,7 @@ async function commodityAddSpecification(incoming: CommodityAddition, generate =
   await writeJson(commodityFile, commodities);
   await writeJson(categoryFile, categoryDocument);
   await writeJson(searchFile, searchDocument);
-  return { ...(generate ? await generateLegacyConfiguration(incomeRoot, false) : { generated: false }), commodityId: incoming.id, searchTerm: searchTerms[0] };
+  return { ...(generate ? await generateLegacyConfiguration(targetIncomeRoot, false) : { generated: false }), commodityId: incoming.id, searchTerm: searchTerms[0] };
 }
 
 async function commodityAdd(inputFile: string | undefined): Promise<unknown> {
@@ -463,24 +468,55 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
     json: { gapIds, sourceCommit: process.env.GITHUB_SHA ?? null },
   }) as { batchId?: string; members?: Array<{ gapId: string; proposal: CommodityAddition }> };
   if (!sealed.batchId || sealed.members?.length !== gapIds.length) throw new Error("sealed ingredient publication batch is incomplete");
-  const applied = [];
-  for (const member of sealed.members) applied.push(await commodityAddSpecification(member.proposal, false));
-  await generateLegacyConfiguration(incomeRoot, true);
-  const bridge = await buildCurrentBridge(incomeRoot);
-  const deployment = await deployConfiguration(client, bridge.configuration);
-  const matching = await rematchPromotedBatches(client);
-  const snapshot = await loadEngineSnapshot(client, "direct");
-  const catalog = await loadNativeReleaseCatalog(incomeRoot);
-  const releaseArtifact = await buildNativeRelease(incomeRoot, snapshot, catalog, await loadCurrentReleaseGraph(client));
-  if (Number(releaseArtifact.audit.top5Entries) !== 20 || Number(releaseArtifact.audit.rotationEntries) !== 20) {
-    throw new Error("ingredient microbatch release failed the 20-recipe ranking guard");
+  const scopedStatus = await execFileAsync("git", ["-C", incomeRoot, "status", "--porcelain", "--",
+    "platform/config/commodities.json", "platform/config/categories.json", "platform/config/manifest.json",
+    "grocery/commodities.json", "grocery/categories.json", "grocery/commodity-search.json"]);
+  if (scopedStatus.stdout.trim()) throw new Error("ingredient publication requires clean authoritative commodity files");
+  const worktreeRoot = await mkdtemp(path.join(os.tmpdir(), `tc-ingredient-publish-${sealed.batchId}-`));
+  const branch = `ingredient-publish/${sealed.batchId}`;
+  let completed = false;
+  try {
+    await execFileAsync("git", ["-C", incomeRoot, "worktree", "add", "-b", branch, worktreeRoot, "HEAD"]);
+    const applied = [];
+    for (const member of sealed.members) applied.push(await commodityAddSpecification(member.proposal, false, worktreeRoot));
+    await generateLegacyConfiguration(worktreeRoot, false);
+    await generateLegacyConfiguration(worktreeRoot, true);
+    await execFileAsync("git", ["-C", worktreeRoot, "add", "--", "platform/config/commodities.json", "platform/config/categories.json",
+      "platform/config/manifest.json", "grocery/commodities.json", "grocery/categories.json", "grocery/commodity-search.json"]);
+    await execFileAsync("git", ["-C", worktreeRoot, "commit", "-m", `Publish ${applied.length} verified Omaha ingredients (${sealed.batchId})`]);
+    const sourceCommit = (await execFileAsync("git", ["-C", worktreeRoot, "rev-parse", "HEAD"])).stdout.trim();
+    const bridge = await buildCurrentBridge(worktreeRoot);
+    const deployment = await deployConfiguration(client, bridge.configuration);
+    const matching = await rematchPromotedBatches(client);
+    const snapshot = await loadEngineSnapshot(client, "direct");
+    const catalog = await loadNativeReleaseCatalog(worktreeRoot);
+    const releaseArtifact = await buildNativeRelease(worktreeRoot, snapshot, catalog, await loadCurrentReleaseGraph(client));
+    if (Number(releaseArtifact.audit.top5Entries) !== 20 || Number(releaseArtifact.audit.rotationEntries) !== 20) {
+      throw new Error("ingredient microbatch release failed the 20-recipe ranking guard");
+    }
+    const stagedRelease = await publishNativeRelease(client, releaseArtifact, { publish: false });
+    if (stagedRelease.ok !== true || stagedRelease.state !== "validated") throw new Error("ingredient release did not reach validated prepublication state");
+    const prepublication = await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(sealed.batchId)}/prepublish-verify`, {
+      json: { releaseId: releaseArtifact.releaseId },
+    });
+    if (prepublication.verified !== true) throw new Error("ingredient release failed exact prepublication projection verification");
+    const publication = await publishValidatedRelease(client, releaseArtifact.releaseId);
+    const verification = await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(sealed.batchId)}/verify`, {
+      json: { releaseId: releaseArtifact.releaseId },
+    });
+    if (verification.complete !== true) throw new Error("ingredient microbatch exact projection failed on one or both required public origins");
+    await execFileAsync("git", ["-C", incomeRoot, "merge", "--ff-only", branch]);
+    completed = true;
+    return { ok: true, batchId: sealed.batchId, releaseId: releaseArtifact.releaseId, sourceCommit,
+      applied: applied.length, deployment, matching, stagedRelease, prepublication, publication, verification };
+  } catch (error) {
+    throw new Error(`${error instanceof Error ? error.message : String(error)}; failed publication worktree preserved at ${worktreeRoot}`);
+  } finally {
+    if (completed) {
+      await execFileAsync("git", ["-C", incomeRoot, "worktree", "remove", worktreeRoot]);
+      await execFileAsync("git", ["-C", incomeRoot, "branch", "-d", branch]);
+    }
   }
-  const publication = await publishNativeRelease(client, releaseArtifact);
-  const verification = await client.request(`/internal/ingredient-publication/batches/${encodeURIComponent(sealed.batchId)}/verify`, {
-    json: { releaseId: releaseArtifact.releaseId },
-  });
-  if (verification.complete !== true) throw new Error("ingredient microbatch is live on fewer than both required public origins");
-  return { ok: true, batchId: sealed.batchId, releaseId: releaseArtifact.releaseId, applied: applied.length, deployment, matching, publication, verification };
 }
 
 async function recipeAdd(inputFile: string | undefined): Promise<unknown> {
@@ -1600,6 +1636,52 @@ if (command === "status") {
   else if (action === "tick") result = await runIngredientPipeline(await mutationClient(), { once: true });
   else if (action === "run") result = await runIngredientPipeline(await mutationClient());
   else throw new Error("tc ingredient pipeline requires run, tick, or status");
+} else if (command === "ingredient" && subcommand === "capture-claim") {
+  const [storeLocationId, limitText = "50"] = arguments_;
+  if (!storeLocationId) throw new Error("tc ingredient capture-claim requires a store location id");
+  result = await (await mutationClient()).request("/internal/ingredient-pricing/store-checks/claim", {
+    json: { storeLocationId, owner: `codex-capture-${process.pid}`, lane: "targeted_refresh", limit: Number(limitText), leaseSeconds: 900 },
+  });
+} else if (command === "ingredient" && subcommand === "qa-claim") {
+  const [storeLocationId, limitText = "50"] = arguments_;
+  if (!storeLocationId) throw new Error("tc ingredient qa-claim requires a store location id");
+  result = await (await mutationClient()).request("/internal/ingredient-pricing/store-checks/claim", {
+    json: { storeLocationId, owner: `codex-qa-${process.pid}`, lane: "qa", limit: Number(limitText), leaseSeconds: 900 },
+  });
+} else if (command === "ingredient" && subcommand === "capture-complete") {
+  const [checkId, inputFile] = arguments_;
+  if (!checkId || !inputFile) throw new Error("tc ingredient capture-complete requires a check id and input JSON");
+  result = await (await mutationClient()).request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(checkId)}/capture-result`, {
+    json: JSON.parse(await readFile(cliPath(inputFile), "utf8")),
+  });
+} else if (command === "ingredient" && subcommand === "evidence-upload") {
+  const [inputFile] = arguments_;
+  if (!inputFile) throw new Error("tc ingredient evidence-upload requires an input JSON file");
+  result = await (await mutationClient()).request("/internal/ingredient-pricing/evidence", {
+    json: JSON.parse(await readFile(cliPath(inputFile), "utf8")),
+  });
+} else if (command === "ingredient" && subcommand === "qa-complete") {
+  const [checkId, inputFile] = arguments_;
+  if (!checkId || !inputFile) throw new Error("tc ingredient qa-complete requires a check id and input JSON");
+  result = await (await mutationClient()).request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(checkId)}/qa-complete`, {
+    json: JSON.parse(await readFile(cliPath(inputFile), "utf8")),
+  });
+} else if (command === "ingredient" && subcommand === "challenge-open") {
+  const [checkId, inputFile] = arguments_;
+  if (!checkId || !inputFile) throw new Error("tc ingredient challenge-open requires a check id and input JSON");
+  result = await (await mutationClient()).request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(checkId)}/challenge-open`, {
+    json: JSON.parse(await readFile(cliPath(inputFile), "utf8")),
+  });
+} else if (command === "ingredient" && subcommand === "challenge-acknowledge") {
+  const [challengeId] = arguments_;
+  if (!challengeId) throw new Error("tc ingredient challenge-acknowledge requires a challenge id");
+  result = await (await mutationClient()).request(`/internal/ingredient-pricing/challenges/${encodeURIComponent(challengeId)}/acknowledge`, { method: "POST" });
+} else if (command === "ingredient" && subcommand === "challenge-resolve") {
+  const [challengeId, inputFile] = arguments_;
+  if (!challengeId || !inputFile) throw new Error("tc ingredient challenge-resolve requires a challenge id and canary input JSON");
+  result = await (await mutationClient()).request(`/internal/ingredient-pricing/challenges/${encodeURIComponent(challengeId)}/resolve`, {
+    json: JSON.parse(await readFile(cliPath(inputFile), "utf8")),
+  });
 } else if (command === "ingredient" && subcommand === "publication-ready") {
   result = await (await mutationClient()).request("/internal/ingredient-pricing/publication-ready");
 } else if (command === "ingredient" && subcommand === "backfill-v2") {

@@ -465,23 +465,27 @@ export async function reconcileIngredientHolds(db: D1Database): Promise<void> {
         WHERE occurrence.hold_id = ?1 AND occurrence.role = 'purchased'
         ORDER BY occurrence.source_ingredient_index, occurrence.split_component_index`,
     ).bind(hold.id).all<{ source_line: string; source_ingredient_index: number; split_component_index: number; gap_id: string; commodity_id: string | null }>();
-    const commodityBySourceLine = new Map(occurrenceRows.results.map((row) => [row.source_line, row.commodity_id]));
+    const commodityByOccurrence = new Map(occurrenceRows.results.map((row) => [`${row.source_ingredient_index}:${row.split_component_index}`, row.commodity_id]));
     const lockedRecipe = JSON.parse(locked.mapping_json) as z.infer<typeof recipeMapSchema>["recipes"][number];
-    const ingredients = lockedRecipe.ingredients.map((ingredient) => {
+    const ingredients = lockedRecipe.ingredients.map((ingredient, mappedIndex) => {
       if (ingredient.decision !== "unmapped") return ingredient;
-      const commodityId = commodityBySourceLine.get(ingredient.sourceLine);
+      const sourceIngredientIndex = ingredient.sourceIngredientIndex ?? mappedIndex;
+      const splitComponentIndex = ingredient.splitComponentIndex ?? 0;
+      const commodityId = commodityByOccurrence.get(`${sourceIngredientIndex}:${splitComponentIndex}`);
       return commodityId ? { ...ingredient, commodityId, decision: "alias" as const, evidence: "Public-verified missing ingredient resolution bound to the immutable source occurrence." } : ingredient;
     });
     const mealComponents = lockedRecipe.candidate.mealComponents.map((component) => ({
       role: component.role,
       label: component.label,
-      commodityIds: [...new Set(component.ingredientIndexes.flatMap((index) => ingredients[index]?.commodityId ?? []))],
+      commodityIds: [...new Set(component.ingredientIndexes.flatMap((index) => ingredients
+        .filter((ingredient, mappedIndex) => (ingredient.sourceIngredientIndex ?? mappedIndex) === index)
+        .flatMap((ingredient) => ingredient.commodityId ?? [])))],
     }));
     const gramsByCommodity = new Map(ingredients.flatMap((ingredient) => ingredient.commodityId && ingredient.grams !== null ? [[ingredient.commodityId, ingredient.grams] as const] : []));
     const accompanimentIds = new Set(mealComponents.filter((component) => component.role === "substantial-accompaniment").flatMap((component) => component.commodityIds));
     const accompanimentGrams = [...accompanimentIds].reduce((sum, commodityId) => sum + (gramsByCommodity.get(commodityId) ?? 0), 0);
     const readyForWriting = lockedRecipe.candidate.sourceServings !== null
-      && ingredients.every((ingredient) => ingredient.decision !== "unmapped" && ingredient.scalingStatus === "scaled")
+      && ingredients.every((ingredient) => ingredient.decision === "process" || (ingredient.decision !== "unmapped" && ingredient.scalingStatus === "scaled"))
       && accompanimentGrams >= 14 * RECIPE_MIN_ACCOMPANIMENT_GRAMS_PER_SERVING;
     if (!readyForWriting) {
       await db.prepare("UPDATE recipe_ingredient_holds SET resume_error = 'resolved commodity still requires a bounded quantity conversion review', updated_at = CURRENT_TIMESTAMP WHERE id = ?1").bind(hold.id).run();
@@ -717,7 +721,8 @@ export function assertRecipeChainContinuity(agentId: string, inputValue: unknown
       if (!mapped || stableJson(mapped.mealComponents) !== stableJson(item.mealComponents)) {
         throw new Error(`recipe writer must preserve meal components for ${item.sourceCandidateId}`);
       }
-      const expectedIngredients = mapped.ingredients.map((ingredient) => ({ sourceLine: ingredient.sourceLine, commodityId: ingredient.commodityId, grams: ingredient.grams }));
+      const expectedIngredients = mapped.ingredients.filter((ingredient) => ingredient.decision !== "process")
+        .map((ingredient) => ({ sourceLine: ingredient.sourceLine, commodityId: ingredient.commodityId, grams: ingredient.grams }));
       const actualIngredients = item.ingredients.map((ingredient) => ({ sourceLine: ingredient.sourceLine, commodityId: ingredient.commodityId, grams: ingredient.grams }));
       if (stableJson(expectedIngredients) !== stableJson(actualIngredients)) throw new Error(`deterministic recipe verification rejected ingredient drift for ${item.sourceCandidateId}`);
       if (!item.provenance.some((entry) => entry.url === mapped.candidate.sourceUrl && entry.accessedAt === mapped.candidate.accessedAt)) {
@@ -773,10 +778,15 @@ async function persistRecipeIngredientGaps(db: D1Database, completed: Record<str
     }
     const recipeGapIds: string[] = [];
     const occurrenceRequirements: Array<{ gapId: string; entityId: string; sourceIngredientIndex: number; splitComponentIndex: number; sourceLine: string; normalizedName: string }> = [];
-    for (const ingredient of recipe.ingredients.filter((item) => item.decision === "unmapped")) {
-      const sourceIngredientIndex = recipe.candidate.ingredients.findIndex((item) => item.raw === ingredient.sourceLine);
+    for (const [mappedIndex, ingredient] of recipe.ingredients.entries()) {
+      if (ingredient.decision !== "unmapped") continue;
+      const sourceIngredientIndex = ingredient.sourceIngredientIndex ?? mappedIndex;
       if (sourceIngredientIndex < 0) throw new Error(`unmapped ingredient is not pinned to a source occurrence: ${ingredient.sourceLine}`);
-      for (const requirement of extractShoppingRequirements(ingredient.sourceLine || ingredient.sourceName).filter((item) => item.role === "purchased")) {
+      const requirements = extractShoppingRequirements(ingredient.sourceLine || ingredient.sourceName);
+      const selectedRequirements = ingredient.splitComponentIndex === undefined
+        ? requirements
+        : requirements.filter((item) => item.splitComponentIndex === ingredient.splitComponentIndex);
+      for (const requirement of selectedRequirements.filter((item) => item.role === "purchased")) {
         const gapId = gapIdsByName.get(requirement.normalizedName);
         if (!gapId) continue;
         const entityId = `entity_${gapId}`;

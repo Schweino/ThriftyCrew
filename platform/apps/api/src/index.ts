@@ -54,6 +54,9 @@ import {
   ingredientStoreCheckHeartbeatSchema,
   ingredientStoreCaptureResultSchema,
   ingredientStoreQaCompleteSchema,
+  ingredientCaptureChallengeOpenSchema,
+  ingredientCaptureChallengeResolveSchema,
+  ingredientEvidenceUploadSchema,
   pipelineOutboxAcknowledgeSchema,
   pipelineOutboxClaimSchema,
   pipelineOutboxNackSchema,
@@ -115,9 +118,10 @@ import { recipeCommodityIds } from "./recipe-commodity-catalog";
 import { claimAgentWorkItem, completeAgentWorkItem, enqueueIngredientDefinitionPlan, failAgentWorkItem, ingredientCampaignSnapshot, reconcileIngredientCampaign, reconcileIngredientHolds } from "./agent-work-items";
 import { claimStoreChecks, completeStoreCheck, createPricingWave, failStoreCheck, heartbeatStoreCheck, ingredientPipelineStatus, pipelineEvents, pricingWaveStatus, qaClaimedCatalogStoreCheck, resolveClaimedStoreCheckFromCatalog } from "./ingredient-pricing-v2";
 import { acknowledgePipelineOutbox, claimPipelineOutbox, nackPipelineOutbox } from "./pipeline-outbox";
-import { completeIngredientStoreCapture, completeIngredientStoreQa } from "./ingredient-independent-qa";
+import { completeIngredientStoreCapture, completeIngredientStoreQa, uploadIngredientEvidence } from "./ingredient-independent-qa";
+import { acknowledgeIngredientChallenge, openIngredientChallenge, resolveIngredientChallenge } from "./ingredient-challenges";
 import { materializeHotCatalog } from "./hot-catalog";
-import { attachIngredientProposal, createIngredientPublicationBatch, verifyIngredientPublication } from "./ingredient-publication-v2";
+import { attachIngredientProposal, createIngredientPublicationBatch, verifyIngredientPublication, verifyIngredientPublicationCandidate } from "./ingredient-publication-v2";
 import { assertLoginCanaryEvidenceHasNoEmail } from "./login-canary";
 import { isMissingMultipartUploadError } from "./restore-cleanup";
 import { validateBrowserCaptureEvidence, validateScreenshotEvidence } from "./evidence-validation";
@@ -1442,6 +1446,12 @@ app.post("/internal/ingredient-publication/batches/:id/verify", zValidator("json
   catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient publication verification failed", 409); }
 });
 
+app.post("/internal/ingredient-publication/batches/:id/prepublish-verify", zValidator("json", ingredientPublicationVerifySchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only an operator may verify an ingredient publication candidate", 403);
+  try { return context.json({ ok: true, ...await verifyIngredientPublicationCandidate(context.env, context.req.param("id"), context.req.valid("json").releaseId) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient prepublication verification failed", 409); }
+});
+
 app.post("/internal/ingredient-pricing/catalog/materialize", async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only an operator may materialize the pricing catalog", 403);
   try {
@@ -1559,10 +1569,34 @@ app.post("/internal/ingredient-pricing/store-checks/:id/capture-result", zValida
   catch (error) { return jsonError(error instanceof Error ? error.message : "store capture completion failed", 409); }
 });
 
+app.post("/internal/ingredient-pricing/evidence", zValidator("json", ingredientEvidenceUploadSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only the local capture coordinator may upload ingredient evidence", 403);
+  try { return context.json({ ok: true, evidence: await uploadIngredientEvidence(context.env, context.req.valid("json")) }, 201); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient evidence upload failed", 409); }
+});
+
 app.post("/internal/ingredient-pricing/store-checks/:id/qa-complete", zValidator("json", ingredientStoreQaCompleteSchema), async (context) => {
   if (context.get("identity").role !== "operator") return jsonError("only the independent QA coordinator may complete store QA", 403);
   try { return context.json({ ok: true, aggregate: await completeIngredientStoreQa(context.env, context.req.param("id"), context.req.valid("json")) }); }
   catch (error) { return jsonError(error instanceof Error ? error.message : "store QA completion failed", 409); }
+});
+
+app.post("/internal/ingredient-pricing/store-checks/:id/challenge-open", zValidator("json", ingredientCaptureChallengeOpenSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only the capture coordinator may open an ingredient challenge", 403);
+  try { return context.json({ ok: true, ...await openIngredientChallenge(context.env.DB, context.req.param("id"), context.req.valid("json")) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient challenge open failed", 409); }
+});
+
+app.post("/internal/ingredient-pricing/challenges/:id/acknowledge", async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only the capture callback may acknowledge an ingredient challenge", 403);
+  try { return context.json({ ok: true, ...await acknowledgeIngredientChallenge(context.env.DB, context.req.param("id")) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient challenge acknowledgement failed", 409); }
+});
+
+app.post("/internal/ingredient-pricing/challenges/:id/resolve", zValidator("json", ingredientCaptureChallengeResolveSchema), async (context) => {
+  if (context.get("identity").role !== "operator") return jsonError("only the capture coordinator may resolve an ingredient challenge", 403);
+  try { return context.json({ ok: true, ...await resolveIngredientChallenge(context.env.DB, context.req.param("id"), context.req.valid("json")) }); }
+  catch (error) { return jsonError(error instanceof Error ? error.message : "ingredient challenge resolution failed", 409); }
 });
 
 app.post("/internal/ingredient-pricing/store-checks/:id/catalog-qa", zValidator("json", ingredientStoreCheckHeartbeatSchema), async (context) => {

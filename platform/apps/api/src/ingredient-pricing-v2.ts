@@ -504,7 +504,7 @@ export async function pricingWaveStatus(db: D1Database, waveId: string): Promise
 }
 
 export async function ingredientPipelineStatus(db: D1Database): Promise<Record<string, unknown>> {
-  const [jobs, stores, waves, attention, lastProgress] = await Promise.all([
+  const [jobs, stores, waves, inbox, attention, lastProgress, challenges, outbox, stageLatency, orphans] = await Promise.all([
     db.prepare(`SELECT CASE WHEN job.state = 'failed' AND gap.qa_resolution IS NOT NULL
           THEN 'cancelled_existing_alias' ELSE job.state END AS state, COUNT(*) AS count
       FROM ingredient_pricing_jobs job JOIN ingredient_gaps gap ON gap.id = job.gap_id
@@ -515,6 +515,8 @@ export async function ingredientPipelineStatus(db: D1Database): Promise<Record<s
       WHERE job.state = 'store_checks_running' GROUP BY check_row.store_location_id, check_row.state
       ORDER BY check_row.store_location_id, check_row.state`).all(),
     db.prepare("SELECT state, COUNT(*) AS count FROM pricing_waves GROUP BY state ORDER BY state").all(),
+    db.prepare(`SELECT state, COUNT(*) AS count, MIN(created_at) AS oldest_created_at
+      FROM ingredient_pricing_inbox GROUP BY state ORDER BY state`).all(),
     db.prepare(`SELECT check_row.id, check_row.gap_id, gap.display_name, check_row.store_location_id,
         check_row.state, check_row.challenge_id, check_row.last_error, check_row.updated_at
       FROM ingredient_store_checks check_row JOIN ingredient_gaps gap ON gap.id = check_row.gap_id
@@ -527,9 +529,24 @@ export async function ingredientPipelineStatus(db: D1Database): Promise<Record<s
       UNION ALL SELECT MAX(updated_at) FROM ingredient_pricing_jobs
       UNION ALL SELECT MAX(last_progress_at) FROM pricing_waves
     )`).first<{ changed_at: string | null }>(),
+    db.prepare(`SELECT store_location_id, COUNT(*) AS count, MIN(opened_at) AS oldest_opened_at
+      FROM ingredient_capture_challenges WHERE resolved_at IS NULL AND abandoned_at IS NULL
+      GROUP BY store_location_id ORDER BY store_location_id`).all(),
+    db.prepare(`SELECT CASE WHEN acknowledged_at IS NULL THEN 'pending' ELSE 'acknowledged' END AS state,
+      COUNT(*) AS count, MIN(created_at) AS oldest_created_at FROM pipeline_outbox
+      GROUP BY CASE WHEN acknowledged_at IS NULL THEN 'pending' ELSE 'acknowledged' END ORDER BY state`).all(),
+    db.prepare(`SELECT lane, stage, event_kind, COUNT(*) AS count, MAX(created_at) AS last_at
+      FROM pipeline_stage_events WHERE created_at >= datetime('now','-1 day')
+      GROUP BY lane, stage, event_kind ORDER BY lane, stage, event_kind`).all(),
+    db.prepare(`SELECT COUNT(*) AS count FROM ingredient_store_checks check_row
+      JOIN ingredient_pricing_jobs job ON job.id = check_row.pricing_job_id
+      WHERE job.operational_state IN ('cancelled','public_verified','permanently_unavailable','failed_manual')
+        AND check_row.operational_state NOT IN ('cancelled','qa_verified_priced','qa_verified_not_found')`).first<{ count: number }>(),
   ]);
-  return { marketId: "omaha", waves: waves.results, jobs: jobs.results, stores: stores.results,
-    needsOperator: attention.results, lastProgressAt: lastProgress?.changed_at ?? null };
+  return { marketId: "omaha", waves: waves.results, jobs: jobs.results, stores: stores.results, inbox: inbox.results,
+    needsOperator: attention.results, challenges: challenges.results, outbox: outbox.results,
+    stagesLast24Hours: stageLatency.results, orphanActiveChecks: Number(orphans?.count ?? 0),
+    lastProgressAt: lastProgress?.changed_at ?? null };
 }
 
 export async function pipelineEvents(db: D1Database, after: number, limit: number): Promise<{ events: Record<string, unknown>[]; next: number }> {

@@ -657,7 +657,8 @@ export async function replayCurrentArtifact(client: MutationClient, artifact: Cu
   return { releaseId, inputHash, actualObservationCount: actualObservationByCell.size, validation, publication };
 }
 
-export async function publishNativeRelease(client: MutationClient, artifact: NativeReleaseArtifact): Promise<Record<string, unknown>> {
+export async function publishNativeRelease(client: MutationClient, artifact: NativeReleaseArtifact, options: { publish?: boolean } = {}): Promise<Record<string, unknown>> {
+  const shouldPublish = options.publish !== false;
   const releaseRequest = {
     id: artifact.releaseId,
     marketId: artifact.marketId,
@@ -678,6 +679,7 @@ export async function publishNativeRelease(client: MutationClient, artifact: Nat
   if (state === "published") return { ok: true, releaseId: artifact.releaseId, state, idempotent: true, audit: artifact.audit };
   if (state === "rejected") return { ok: false, releaseId: artifact.releaseId, state, idempotent: true, audit: artifact.audit };
   if (state === "validated") {
+    if (!shouldPublish) return { ok: true, releaseId: artifact.releaseId, state: "validated", validation: { ok: true, idempotent: true }, audit: artifact.audit };
     const publication = await client.request(`/internal/releases/${artifact.releaseId}/publish`, { method: "POST" });
     return { ok: true, releaseId: artifact.releaseId, state: "published", validation: { ok: true, idempotent: true }, publication, audit: artifact.audit };
   }
@@ -709,8 +711,9 @@ export async function publishNativeRelease(client: MutationClient, artifact: Nat
     }
     const recipeBundles = await buildRecipeBundles(client, artifact.releaseId);
     const validation = await client.request(`/internal/releases/${artifact.releaseId}/validate`, { method: "POST", retrySafe: true, acceptStatuses: [422] });
-    const publication = validation.ok ? await client.request(`/internal/releases/${artifact.releaseId}/publish`, { method: "POST", retrySafe: true }) : null;
-    return { ok: Boolean(validation.ok && publication?.ok), releaseId: artifact.releaseId, inputHash: artifact.inputHash, validation, publication, recipeBundles, audit: artifact.audit };
+    const publication = validation.ok && shouldPublish ? await client.request(`/internal/releases/${artifact.releaseId}/publish`, { method: "POST", retrySafe: true }) : null;
+    return { ok: Boolean(validation.ok && (!shouldPublish || publication?.ok)), releaseId: artifact.releaseId, inputHash: artifact.inputHash,
+      state: validation.ok ? (shouldPublish ? "published" : "validated") : "rejected", validation, publication, recipeBundles, audit: artifact.audit };
   } catch (error) {
     // A second executor can observe `draft` just before the first executor
     // publishes. Re-read the deterministic release identity so that completed
@@ -723,4 +726,8 @@ export async function publishNativeRelease(client: MutationClient, artifact: Nat
     }
     throw error;
   }
+}
+
+export async function publishValidatedRelease(client: MutationClient, releaseId: string): Promise<Record<string, unknown>> {
+  return client.request(`/internal/releases/${releaseId}/publish`, { method: "POST", retrySafe: true });
 }

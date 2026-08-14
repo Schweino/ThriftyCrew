@@ -6,37 +6,39 @@ type ClaimResponse = { checks?: ClaimedCheck[] };
 
 const pause = (milliseconds: number) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
-async function drainLane(client: MutationClient, storeLocationId: string, lane: "catalog" | "qa", owner: string, limit: number): Promise<number> {
+async function drainCatalogLane(client: MutationClient, storeLocationId: string, owner: string, limit: number): Promise<number> {
   const claimed = await client.request("/internal/ingredient-pricing/store-checks/claim", {
-    json: { storeLocationId, owner, lane, limit, leaseSeconds: 300 },
+    json: { storeLocationId, owner, lane: "catalog", limit, leaseSeconds: 300 },
   }) as ClaimResponse;
-  let completed = 0;
-  for (const check of claimed.checks ?? []) {
+  await Promise.all((claimed.checks ?? []).map(async (check) => {
     const id = String(check.id ?? "");
     const leaseGeneration = Number(check.lease_generation);
     if (!id || !Number.isInteger(leaseGeneration) || leaseGeneration < 1) throw new Error("claimed store check omitted its lease fence");
-    const path = lane === "catalog" ? "catalog-resolve" : "catalog-qa";
-    await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(id)}/${path}`, {
+    await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(id)}/catalog-resolve`, {
       json: { owner, leaseGeneration, leaseSeconds: 300 },
     });
-    completed += 1;
-  }
-  return completed;
+  }));
+  return (claimed.checks ?? []).length;
 }
 
 export async function runIngredientPipelineTick(client: MutationClient, options: { owner?: string; limitPerStore?: number } = {}) {
   const owner = options.owner ?? `ingredient-coordinator-${process.pid}`;
   const limit = options.limitPerStore ?? 50;
+  const claimedEvents = await client.request("/internal/pipeline/outbox/claim", {
+    json: { owner, limit: 200, leaseSeconds: 120 },
+  }) as { events?: Array<{ id?: unknown; lease_generation?: unknown }> };
   const catalog = await client.request("/internal/ingredient-pricing/catalog/materialize", { method: "POST", retrySafe: true });
   const storeResults = await Promise.all(OMAHA_GROCERY_STORE_LOCATION_IDS.map(async (storeLocationId) => {
-    const catalogResolved = await drainLane(client, storeLocationId, "catalog", owner, limit);
-    const qaCompleted = await drainLane(client, storeLocationId, "qa", owner, limit);
-    return { storeLocationId, catalogResolved, qaCompleted };
+    const catalogResolved = await drainCatalogLane(client, storeLocationId, owner, limit);
+    return { storeLocationId, catalogResolved };
   }));
   const definitionPlanning = await client.request("/internal/ingredient-pricing/proposals/plan", { method: "POST" });
+  await Promise.all((claimedEvents.events ?? []).map((event) => client.request(`/internal/pipeline/outbox/${encodeURIComponent(String(event.id))}/ack`, {
+    json: { owner, leaseGeneration: Number(event.lease_generation) },
+  })));
   const status = await client.request("/internal/ingredient-pricing/status");
-  return { ok: true, catalog, stores: storeResults, definitionPlanning, status,
-    progressed: storeResults.some((row) => row.catalogResolved + row.qaCompleted > 0) || definitionPlanning.queued === true };
+  return { ok: true, catalog, outboxEvents: (claimedEvents.events ?? []).length, stores: storeResults, definitionPlanning, status,
+    progressed: (claimedEvents.events ?? []).length > 0 || storeResults.some((row) => row.catalogResolved > 0) || definitionPlanning.queued === true };
 }
 
 export async function runIngredientPipeline(client: MutationClient, options: { owner?: string; limitPerStore?: number; once?: boolean } = {}) {

@@ -281,7 +281,7 @@
       "enabled": true,
       "plane": "pc",
       "promptFile": "agents/recipe-mapper/prompt.md",
-      "promptSha256": "da4a359c50ae1cb889d81d5ad61da0ba53fe043e634fe6b3f308a19a309147d7",
+      "promptSha256": "d85d267d15f3f35078af19ef7d6bf9bea584602fdbd76d9659494885e243c50f",
       "provider": "codex-chatgpt",
       "model": "gpt-5.6-sol",
       "reasoningEffort": "high",
@@ -290,7 +290,7 @@
       "criticality": "optional",
       "workflowFile": ".github/workflows/agent-recipe-mapper.yml",
       "reusableWorkflowFile": ".github/workflows/platform-agent-runner.yml",
-      "executionConfigHash": "3f96a39a539a3ee775be7a09a5a66a6a75f8eb005dd4ea3c1f408d32c864571b",
+      "executionConfigHash": "68fd9e7cece61598828a99aa30d0f89c15d3998353c473c0fe250b8a74804bba",
       "capabilities": [
         "read:content",
         "write:ledger",

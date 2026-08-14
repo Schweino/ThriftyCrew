@@ -1163,20 +1163,28 @@ export const recipeDedupSchema = z.object({
 });
 
 const recipeMappedIngredientSchema = z.object({
+  sourceIngredientIndex: z.number().int().min(0).max(99).optional(),
+  splitComponentIndex: z.number().int().min(0).max(19).optional(),
   sourceLine: z.string().trim().min(1).max(1000),
   sourceName: z.string().trim().min(1).max(300),
   quantityText: z.string().trim().min(1).max(300),
   commodityId: nonEmptyId.nullable(),
   grams: z.number().positive().nullable(),
-  decision: z.enum(["exact", "alias", "unmapped"]),
+  decision: z.enum(["exact", "alias", "unmapped", "process"]),
   scalingStatus: z.enum(["scaled", "unresolved"]),
   evidence: z.string().trim().min(5).max(1000),
 }).superRefine((value, context) => {
+  if ((value.sourceIngredientIndex === undefined) !== (value.splitComponentIndex === undefined)) {
+    context.addIssue({ code: "custom", message: "source and split-component indexes must be supplied together" });
+  }
   if (value.decision === "unmapped" && value.commodityId !== null) {
     context.addIssue({ code: "custom", message: "unmapped ingredients cannot carry a commodity id" });
   }
-  if (value.decision !== "unmapped" && value.commodityId === null) {
+  if (value.decision !== "unmapped" && value.decision !== "process" && value.commodityId === null) {
     context.addIssue({ code: "custom", message: "mapped ingredients require a commodity id" });
+  }
+  if (value.decision === "process" && value.commodityId !== null) {
+    context.addIssue({ code: "custom", message: "process inputs cannot carry a commodity id" });
   }
   if ((value.scalingStatus === "scaled") !== (value.grams !== null)) {
     context.addIssue({ code: "custom", message: "scaled ingredients require positive grams and unresolved ingredients require null grams" });
@@ -1195,13 +1203,25 @@ export const recipeMapSchema = z.object({
 }).superRefine((value, context) => {
   for (const [index, recipe] of value.recipes.entries()) {
     requireCompleteMealRoles(recipe.mealComponents, context, ["recipes", index, "mealComponents"]);
-    if (recipe.ingredients.length !== recipe.candidate.ingredients.length) {
-      context.addIssue({ code: "custom", path: ["recipes", index, "ingredients"], message: "mapped ingredients must preserve every source ingredient in order" });
+    const indexed = recipe.ingredients.every((ingredient) => ingredient.sourceIngredientIndex !== undefined);
+    if (!indexed && recipe.ingredients.length !== recipe.candidate.ingredients.length) {
+      context.addIssue({ code: "custom", path: ["recipes", index, "ingredients"], message: "legacy mapped ingredients must preserve every source ingredient in order" });
     }
-    recipe.candidate.ingredients.forEach((sourceIngredient, ingredientIndex) => {
-      const mappedIngredient = recipe.ingredients[ingredientIndex];
-      if (!mappedIngredient || mappedIngredient.sourceLine !== sourceIngredient.raw || mappedIngredient.quantityText !== sourceIngredient.quantityText) {
-        context.addIssue({ code: "custom", path: ["recipes", index, "ingredients", ingredientIndex], message: "mapped ingredient must preserve its source line and quantity position" });
+    const occurrenceKeys = new Set<string>();
+    recipe.ingredients.forEach((mappedIngredient, mappedIndex) => {
+      const sourceIndex = indexed ? mappedIngredient.sourceIngredientIndex! : mappedIndex;
+      const splitIndex = indexed ? mappedIngredient.splitComponentIndex! : 0;
+      const sourceIngredient = recipe.candidate.ingredients[sourceIndex];
+      if (!sourceIngredient || mappedIngredient.sourceLine !== sourceIngredient.raw || mappedIngredient.quantityText !== sourceIngredient.quantityText) {
+        context.addIssue({ code: "custom", path: ["recipes", index, "ingredients", mappedIndex], message: "mapped ingredient must preserve its indexed source line and quantity" });
+      }
+      const occurrenceKey = `${sourceIndex}:${splitIndex}`;
+      if (occurrenceKeys.has(occurrenceKey)) context.addIssue({ code: "custom", path: ["recipes", index, "ingredients", mappedIndex], message: "mapped ingredient occurrence indexes must be unique" });
+      occurrenceKeys.add(occurrenceKey);
+    });
+    recipe.candidate.ingredients.forEach((_sourceIngredient, sourceIndex) => {
+      if (![...occurrenceKeys].some((key) => key.startsWith(`${sourceIndex}:`))) {
+        context.addIssue({ code: "custom", path: ["recipes", index, "ingredients"], message: `source ingredient ${sourceIndex} has no mapped occurrence` });
       }
     });
     const gramsByCommodity = new Map(recipe.ingredients.flatMap((ingredient) => ingredient.commodityId && ingredient.grams !== null ? [[ingredient.commodityId, ingredient.grams] as const] : []));
@@ -1211,7 +1231,9 @@ export const recipeMapSchema = z.object({
         context.addIssue({ code: "custom", path: ["recipes", index, "mealComponents", componentIndex], message: "mapped meal components must preserve source component identity" });
         return;
       }
-      const expectedIds = [...new Set(sourceComponent.ingredientIndexes.flatMap((ingredientIndex) => recipe.ingredients[ingredientIndex]?.commodityId ?? []))].sort();
+      const expectedIds = [...new Set(sourceComponent.ingredientIndexes.flatMap((ingredientIndex) => recipe.ingredients
+        .filter((ingredient, mappedIndex) => (indexed ? ingredient.sourceIngredientIndex : mappedIndex) === ingredientIndex)
+        .flatMap((ingredient) => ingredient.commodityId ?? [])))].sort();
       const actualIds = [...mappedComponent.commodityIds].sort();
       if (JSON.stringify(expectedIds) !== JSON.stringify(actualIds)) {
         context.addIssue({ code: "custom", path: ["recipes", index, "mealComponents", componentIndex, "commodityIds"], message: "mapped meal component must preserve its source ingredients" });
@@ -1223,7 +1245,7 @@ export const recipeMapSchema = z.object({
     const accompanimentIds = new Set(recipe.mealComponents.filter((component) => component.role === "substantial-accompaniment").flatMap((component) => component.commodityIds));
     const accompanimentGrams = [...accompanimentIds].reduce((sum, commodityId) => sum + (gramsByCommodity.get(commodityId) ?? 0), 0);
     const hasBlockingFact = recipe.candidate.sourceServings === null
-      || recipe.ingredients.some((ingredient) => ingredient.decision === "unmapped" || ingredient.scalingStatus === "unresolved")
+      || recipe.ingredients.some((ingredient) => ingredient.decision !== "process" && (ingredient.decision === "unmapped" || ingredient.scalingStatus === "unresolved"))
       || accompanimentGrams < 14 * RECIPE_MIN_ACCOMPANIMENT_GRAMS_PER_SERVING;
     if (recipe.readyForWriting === hasBlockingFact) {
       context.addIssue({ code: "custom", path: ["recipes", index, "readyForWriting"], message: "readiness must be false when source yield is missing or any ingredient is unmapped or unscaled" });
@@ -1414,12 +1436,43 @@ const ingredientEvidencePointerSchema = z.object({
   observedAt: isoDateTime,
 }).strict();
 
+const ingredientCapturedCandidateSchema = z.object({
+  productId: nonEmptyId,
+  sourceUrl: recipeHttpUrl,
+  productName: z.string().trim().min(1).max(500),
+  sellerName: z.string().trim().min(1).max(300),
+  fulfillmentMode: z.enum(["pickup", "in_store", "club"]),
+  availabilityText: z.string().trim().min(1).max(500),
+  packageText: z.string().trim().min(1).max(500),
+  packagePriceMinor: z.number().int().positive(),
+  normalizedBasisUnit: basisUnit,
+  normalizedBasisQtyMicros: z.number().int().positive(),
+  perUnitMicros: z.number().int().positive(),
+  offerKind: observationKind,
+  validFrom: isoDateTime.nullable(),
+  validTo: isoDateTime.nullable(),
+  loyaltyRequired: z.boolean(),
+  membershipRequired: z.boolean(),
+  eligible: z.boolean(),
+  rejectionCodes: z.array(nonEmptyId).max(30),
+  evidenceHash: sha256Hex,
+}).strict().superRefine((value, context) => {
+  const expected = Math.round((value.packagePriceMinor * 10_000 * 1_000_000) / value.normalizedBasisQtyMicros);
+  if (Math.abs(expected - value.perUnitMicros) > 2) context.addIssue({ code: "custom", path: ["perUnitMicros"], message: `candidate unit price must equal ${expected}` });
+  if (value.eligible && value.rejectionCodes.length > 0) context.addIssue({ code: "custom", path: ["rejectionCodes"], message: "eligible candidates cannot carry rejection codes" });
+  if (!value.eligible && value.rejectionCodes.length === 0) context.addIssue({ code: "custom", path: ["rejectionCodes"], message: "ineligible candidates require a rejection code" });
+  if ((value.offerKind === "sale" || value.offerKind === "markdown") && (!value.validFrom || !value.validTo || value.validTo <= value.validFrom)) {
+    context.addIssue({ code: "custom", path: ["validFrom"], message: "promotional candidates require a valid effective window" });
+  }
+});
+
 export const ingredientStoreCaptureResultSchema = z.object({
   owner: nonEmptyId,
   leaseGeneration: z.number().int().positive(),
   producerVersion: z.string().trim().min(3).max(160),
   queryPlanHash: sha256Hex,
   result: ingredientStorePriceSchema,
+  candidates: z.array(ingredientCapturedCandidateSchema).max(10_000),
   evidence: ingredientEvidencePointerSchema,
   candidateSetHash: sha256Hex,
   coverage: z.array(z.object({
@@ -1433,7 +1486,22 @@ export const ingredientStoreCaptureResultSchema = z.object({
     completedAt: isoDateTime,
     expiresAt: isoDateTime,
   }).strict()).min(1).max(20),
-}).strict();
+}).strict().superRefine((value, context) => {
+  const ids = value.candidates.map((candidate) => candidate.productId);
+  if (new Set(ids).size !== ids.length) context.addIssue({ code: "custom", path: ["candidates"], message: "captured product ids must be unique" });
+  const eligible = value.candidates.filter((candidate) => candidate.eligible)
+    .sort((left, right) => left.perUnitMicros - right.perUnitMicros || left.productId.localeCompare(right.productId));
+  if (value.result.qualifyingProductsExamined !== eligible.length) context.addIssue({ code: "custom", path: ["result", "qualifyingProductsExamined"], message: "qualifying count must equal the complete eligible candidate set" });
+  if (value.result.outcome === "not_found" && eligible.length !== 0) context.addIssue({ code: "custom", path: ["result", "outcome"], message: "not_found cannot omit eligible captured candidates" });
+  if (value.result.outcome === "priced") {
+    const winner = eligible[0];
+    if (!winner || winner.productName !== value.result.productName || winner.sourceUrl !== value.result.sourceUrl
+      || winner.packagePriceMinor !== value.result.packagePriceMinor || winner.perUnitMicros !== value.result.perUnitMicros
+      || winner.normalizedBasisUnit !== value.result.normalizedBasisUnit) {
+      context.addIssue({ code: "custom", path: ["result"], message: "priced result must be the deterministic cheapest eligible candidate" });
+    }
+  }
+});
 
 export const ingredientStoreQaCompleteSchema = z.object({
   owner: nonEmptyId,
@@ -1453,6 +1521,32 @@ export const ingredientStoreCheckFailSchema = z.object({
   reason: z.string().trim().min(5).max(5000),
   challengeId: nonEmptyId.nullable().default(null),
   retryAt: isoDateTime.nullable().default(null),
+}).strict();
+
+export const ingredientCaptureChallengeOpenSchema = z.object({
+  owner: nonEmptyId,
+  leaseGeneration: z.number().int().positive(),
+  challengeId: nonEmptyId,
+  normalizedQuery: z.string().trim().min(1).max(300),
+  reason: z.string().trim().min(5).max(2000),
+  sessionId: nonEmptyId.nullable().default(null),
+  tabOwnershipId: nonEmptyId.nullable().default(null),
+  preCanaryEvidenceHash: sha256Hex.nullable().default(null),
+}).strict();
+
+export const ingredientCaptureChallengeResolveSchema = z.object({
+  canaryPassed: z.boolean(),
+  postCanaryEvidenceHash: sha256Hex.nullable().default(null),
+}).strict().superRefine((value, context) => {
+  if (value.canaryPassed && !value.postCanaryEvidenceHash) context.addIssue({ code: "custom", path: ["postCanaryEvidenceHash"], message: "a passed canary requires evidence" });
+});
+
+export const ingredientEvidenceUploadSchema = z.object({
+  checkId: nonEmptyId,
+  kind: z.enum(["producer", "verifier", "canary"]),
+  sourceUrl: recipeHttpUrl,
+  observedAt: isoDateTime,
+  document: z.unknown(),
 }).strict();
 
 export const pipelineOutboxClaimSchema = z.object({
