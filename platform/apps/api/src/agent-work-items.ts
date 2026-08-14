@@ -23,7 +23,7 @@ import type { MutationIdentity, WorkerEnv } from "./env";
 import { evaluateContentPromotion } from "./content-batches";
 import { mergeRecipeCommodityCatalog } from "./recipe-commodity-catalog";
 import { createPricingWave } from "./ingredient-pricing-v2";
-import { assertPublicRecipeSourceUrl, recipeFactVerificationHash, verifyRecipeFactsAgainstArtifact, verifyRecipeMappingContinuity } from "./recipe-source-verification";
+import { assertPublicRecipeSourceUrl, decideRecipeFactsAgainstArtifact, recipeFactVerificationHash, verifyRecipeMappingContinuity } from "./recipe-source-verification";
 import { expectedUnitDimension, extractShoppingRequirements } from "./ingredient-requirements";
 
 interface RegistryRow {
@@ -1000,6 +1000,7 @@ async function persistRecipeSourceFacts(env: Pick<WorkerEnv, "DB" | "EVIDENCE">,
     return { candidate, sourceUrl, bytes, sha256, artifactId, objectKey, contentType, status: response.status };
   }))).filter((artifact): artifact is NonNullable<typeof artifact> => artifact !== null);
   const statements: D1PreparedStatement[] = [];
+  const verifiedCandidateIds = new Set<string>();
   for (const artifact of artifacts) {
     const { candidate } = artifact;
     const lock = lockByCandidate.get(candidate.id);
@@ -1007,8 +1008,19 @@ async function persistRecipeSourceFacts(env: Pick<WorkerEnv, "DB" | "EVIDENCE">,
     const factsJson = stableJson(candidate);
     const factsHash = await digestHex(factsJson);
     const id = await deterministicId("recipe-facts", facts.requestId, candidate.id, factsHash);
-    const findings = verifyRecipeFactsAgainstArtifact(candidate, new TextDecoder().decode(artifact.bytes));
-    if (findings.length > 0) throw new Error(`source fact verification rejected ${candidate.id}: ${findings.join(", ")}`);
+    const decision = decideRecipeFactsAgainstArtifact(candidate, new TextDecoder().decode(artifact.bytes));
+    const { findings } = decision;
+    if (!decision.accepted) {
+      const { reason } = decision;
+      rejectedSources.push({ candidateId: candidate.id, sourceUrl: artifact.sourceUrl, reason });
+      await env.DB.prepare(
+        `INSERT INTO pipeline_stage_events
+           (campaign_id, lane, aggregate_kind, aggregate_id, stage, event_kind, detail_json)
+         VALUES (?1, 'discovery', 'recipe_candidate', ?2, 'atomic-requirements', 'source_rejected', ?3)`,
+      ).bind(facts.requestId, candidate.id, stableJson({ sourceUrl: artifact.sourceUrl, reason, findings })).run();
+      continue;
+    }
+    verifiedCandidateIds.add(candidate.id);
     const verificationInputHash = await recipeFactVerificationHash({ artifactHash: artifact.sha256, factsHash });
     const verificationOutputHash = await recipeFactVerificationHash({ verdict: "verified", findings, verifierVersion: "artifact-containment-v1" });
     const verificationId = await deterministicId("recipe-fact-verification", id, verificationInputHash, verificationOutputHash);
@@ -1039,11 +1051,10 @@ async function persistRecipeSourceFacts(env: Pick<WorkerEnv, "DB" | "EVIDENCE">,
     ).bind(id, verificationId, artifact.artifactId, factsHash));
   }
   for (let offset = 0; offset < statements.length; offset += 90) await env.DB.batch(statements.slice(offset, offset + 90));
-  const acceptedIds = new Set(artifacts.map((artifact) => artifact.candidate.id));
   return recipeSourceFactsSchema.parse({
     ...facts,
-    candidates: facts.candidates.filter((candidate) => acceptedIds.has(candidate.id)),
-    factLocks: facts.factLocks.filter((lock) => acceptedIds.has(lock.candidateId)),
+    candidates: facts.candidates.filter((candidate) => verifiedCandidateIds.has(candidate.id)),
+    factLocks: facts.factLocks.filter((lock) => verifiedCandidateIds.has(lock.candidateId)),
     rejectedSources,
     extractionSummary: facts.extractionSummary,
   });

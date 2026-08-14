@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { assertPublicRecipeSourceUrl, verifyRecipeFactsAgainstArtifact, verifyRecipeMappingContinuity } from "./recipe-source-verification";
+import { assertPublicRecipeSourceUrl, decideRecipeFactsAgainstArtifact, verifyRecipeFactsAgainstArtifact, verifyRecipeMappingContinuity } from "./recipe-source-verification";
 
 describe("recipe source verification", () => {
   it("rejects private and insecure source URLs", () => {
@@ -21,6 +21,16 @@ describe("recipe source verification", () => {
     const artifact = `<h1>Chipotle Chicken</h1><li>1/2&#032;teaspoon&#032;kosher salt</li>
       <script type="application/ld+json">{"recipeIngredient":["1 tablespoon chipotle paste"]}</script>`;
     expect(verifyRecipeFactsAgainstArtifact(candidate, artifact)).toEqual([]);
+  });
+
+  it("returns a candidate-local decision so one rejected source does not abort verified siblings", () => {
+    const candidate = { title: "Rice Bowl", ingredients: [{ raw: "2 cups rice", quantityText: "2 cups" }] };
+    expect(decideRecipeFactsAgainstArtifact(candidate, "<h1>Rice Bowl</h1><li>2 cups rice</li>"))
+      .toEqual({ accepted: true, findings: [], reason: null });
+    const rejected = decideRecipeFactsAgainstArtifact(candidate, "<h1>Rice Bowl</h1><li>1 cup pasta</li>");
+    expect(rejected.accepted).toBe(false);
+    expect(rejected.findings).toContain("ingredient_0_missing_from_artifact");
+    expect(rejected.reason).toContain("source fact verification rejected");
   });
 
   it("rejects mapping lines that are absent from locked source facts", () => {

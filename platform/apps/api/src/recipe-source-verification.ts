@@ -47,6 +47,16 @@ export function verifyRecipeFactsAgainstArtifact(candidate: {
   return findings;
 }
 
+export function decideRecipeFactsAgainstArtifact(
+  candidate: Parameters<typeof verifyRecipeFactsAgainstArtifact>[0],
+  artifact: string,
+) {
+  const findings = verifyRecipeFactsAgainstArtifact(candidate, artifact);
+  return findings.length === 0
+    ? { accepted: true as const, findings, reason: null }
+    : { accepted: false as const, findings, reason: `source fact verification rejected: ${findings.join(", ")}` };
+}
+
 export async function recipeFactVerificationHash(input: unknown): Promise<string> {
   return digestHex(stableJson(input));
 }
