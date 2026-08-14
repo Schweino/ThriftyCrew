@@ -90,6 +90,17 @@ function regexes(patterns: string[]): RegExp[] {
   return patterns.map((pattern) => new RegExp(pattern.replace(/^\(\?i\)/, ""), "i"));
 }
 
+export function matchesCommodityExclusion(patterns: string[], productName: string, packageText = ""): boolean {
+  if (regexes(patterns).some((rule) => rule.test(productName))) return true;
+  const joined = `${productName} ${packageText}`;
+  return patterns.some((pattern) => {
+    const normalized = pattern.toLowerCase().replace(/\\b|\\s\+|\(\?:|[()^$?+*|[\]{}]/g, " ").replace(/[^a-z]+/g, " ").trim();
+    if (/\bcanned\b/.test(normalized) && /\b(?:can|cans|canned)\b/i.test(joined)) return true;
+    if (/\bdried\b/.test(normalized) && /\b(?:dry|dried)\b/i.test(joined)) return true;
+    return false;
+  });
+}
+
 function rowIdentity(row: Record<string, unknown>) {
   const truth = row._capture as Record<string, any> | undefined;
   const offer = truth?.offer as Record<string, any> | undefined;
@@ -113,7 +124,7 @@ function canonicalCandidate(row: Record<string, unknown>, check: ClaimedCheck, e
   if (isClearlyNonFoodProduct(identity.productName, String(row.taxonomy_path ?? row.taxonomy ?? ""))) rejections.push("non_food_product");
   if (isClearlyDerivativeProduct(proposal.id, identity.productName)) rejections.push("ingredient_derivative_product");
   if (!regexes(proposal.include).some((rule) => rule.test(identity.productName))) rejections.push("identity_not_included");
-  if (regexes(proposal.exclude).some((rule) => rule.test(identity.productName))) rejections.push("identity_excluded");
+  if (matchesCommodityExclusion(proposal.exclude, identity.productName, identity.packageText)) rejections.push("identity_excluded");
   const availability = identity.offer?.availability ?? {};
   if (availability.eligible !== true || availability.status !== "in_stock") rejections.push("not_source_verified_in_stock");
   const parsed = parsedPackage(identity.packageText);
