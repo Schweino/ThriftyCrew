@@ -763,7 +763,11 @@ async function persistRecipeIngredientGaps(db: D1Database, completed: Record<str
   const rejectedAlternativeCandidates = new Set<string>();
   for (const recipe of map.recipes) {
     for (const ingredient of recipe.ingredients.filter((item) => item.decision === "unmapped")) {
-      const requirements = extractShoppingRequirements(ingredient.sourceLine || ingredient.sourceName);
+      // The mapper has already removed quantities, preparation text, and optional
+      // substitutions from sourceName. Re-parsing the raw source line can turn a
+      // valid identity such as "coconut aminos" into "1 4 cup coconut aminos
+      // may sub tamari" when the source uses Unicode fractions.
+      const requirements = extractShoppingRequirements(ingredient.sourceName || ingredient.sourceLine);
       if (requirements.some((requirement) => requirement.role === "alternative")) {
         rejectedAlternativeCandidates.add(recipe.candidate.id);
         break;
@@ -809,7 +813,7 @@ async function persistRecipeIngredientGaps(db: D1Database, completed: Record<str
       if (ingredient.decision !== "unmapped") continue;
       const sourceIngredientIndex = ingredient.sourceIngredientIndex ?? mappedIndex;
       if (sourceIngredientIndex < 0) throw new Error(`unmapped ingredient is not pinned to a source occurrence: ${ingredient.sourceLine}`);
-      const requirements = extractShoppingRequirements(ingredient.sourceLine || ingredient.sourceName);
+      const requirements = extractShoppingRequirements(ingredient.sourceName || ingredient.sourceLine);
       const selectedRequirements = ingredient.splitComponentIndex === undefined
         ? requirements
         : requirements.filter((item) => item.splitComponentIndex === ingredient.splitComponentIndex);
