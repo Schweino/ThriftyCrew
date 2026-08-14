@@ -145,12 +145,19 @@ export async function createIngredientPublicationBatch(db: D1Database, inputValu
   const batchId = await deterministicId("ingredient-publication-batch", "omaha", memberRootHash);
   const statements: D1PreparedStatement[] = [db.prepare(
     `INSERT INTO ingredient_publication_batches (id, market_id, member_root_hash, source_commit, state)
-     VALUES (?1, 'omaha', ?2, ?3, 'sealed') ON CONFLICT(id) DO NOTHING`,
+     VALUES (?1, 'omaha', ?2, ?3, 'sealed')
+     ON CONFLICT(id) DO UPDATE SET state = 'sealed', source_commit = excluded.source_commit,
+       failure_class = NULL, failure_detail = NULL, updated_at = CURRENT_TIMESTAMP
+     WHERE ingredient_publication_batches.state = 'failed'`,
   ).bind(batchId, memberRootHash, input.sourceCommit)];
   for (const member of members) statements.push(db.prepare(
     `INSERT INTO ingredient_publication_members (batch_id, gap_id, resolution_version_id, commodity_id, content_hash,
        expected_public_projection_json, expected_public_projection_hash)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7) ON CONFLICT(batch_id, gap_id) DO NOTHING`,
+     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+     ON CONFLICT(batch_id, gap_id) DO UPDATE SET state = 'pending', failure_detail = NULL,
+       content_hash = excluded.content_hash, expected_public_projection_json = excluded.expected_public_projection_json,
+       expected_public_projection_hash = excluded.expected_public_projection_hash, updated_at = CURRENT_TIMESTAMP
+     WHERE ingredient_publication_members.state = 'failed'`,
   ).bind(batchId, member.gapId, member.resolutionVersionId, member.commodityId, member.proposalHash,
     stableJson(member.expectedPublicProjection), member.expectedPublicProjectionHash));
   statements.push(db.prepare(`INSERT INTO ingredient_publication_transition_receipts
@@ -168,7 +175,11 @@ export async function failIngredientPublicationBatch(db: D1Database, batchId: st
             lease_owner = NULL, lease_expires_at = NULL, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?1 AND state IN ('open','sealed','git_committed')`,
   ).bind(batchId, failureDetail).run();
-  if ((batch.meta.changes ?? 0) !== 1) throw new Error("only a predeployment ingredient publication batch may be failed and retried");
+  if ((batch.meta.changes ?? 0) !== 1) {
+    const existing = await db.prepare("SELECT state FROM ingredient_publication_batches WHERE id = ?1").bind(batchId).first<{ state: string }>();
+    if (existing?.state === "failed") return { batchId, state: "failed", retryableMembers: true, idempotent: true };
+    throw new Error("only a predeployment ingredient publication batch may be failed and retried");
+  }
   await db.prepare(
     `UPDATE ingredient_publication_members
         SET state = 'failed', failure_detail = ?2, updated_at = CURRENT_TIMESTAMP
