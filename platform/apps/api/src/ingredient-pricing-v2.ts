@@ -487,11 +487,27 @@ export async function reopenTerminalStoreCheckForCorrection(
   input: { reason: string; expectedEvidenceId: string; expectedQaAttestationId: string },
 ) {
   const check = await db.prepare(`SELECT check_row.pricing_job_id, check_row.gap_id, check_row.state,
-      check_row.evidence_id, check_row.qa_attestation_id, job.resolution_version_id, gap.status AS gap_status
+      check_row.evidence_id, check_row.qa_attestation_id, check_row.last_error,
+      job.resolution_version_id, gap.status AS gap_status
     FROM ingredient_store_checks check_row
     JOIN ingredient_pricing_jobs job ON job.id = check_row.pricing_job_id
     JOIN ingredient_gaps gap ON gap.id = check_row.gap_id
     WHERE check_row.id = ?1`).bind(checkId).first<Record<string, unknown>>();
+  if (check?.state === "targeted_refresh" && !check.evidence_id && !check.qa_attestation_id
+      && String(check.last_error ?? "").startsWith("correction requested:")) {
+    const prior = await db.prepare(`SELECT detail_json FROM pipeline_stage_events
+      WHERE aggregate_kind = 'store_check' AND aggregate_id = ?1 AND stage = 'correction' AND event_kind = 'reopened'
+      ORDER BY created_at DESC, id DESC LIMIT 1`).bind(checkId).first<{ detail_json: string }>();
+    const detail = prior ? JSON.parse(prior.detail_json) as Record<string, unknown> : null;
+    if (detail?.supersededEvidenceId !== input.expectedEvidenceId || detail?.supersededQaAttestationId !== input.expectedQaAttestationId) {
+      throw new Error("idempotent store-check correction lost its immutable evidence/QA fence");
+    }
+    await db.prepare(`UPDATE ingredient_store_checks SET state = 'catalog_lookup', operational_state = 'catalog_lookup',
+      next_attempt_at = CURRENT_TIMESTAMP, last_progress_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?1 AND state = 'targeted_refresh' AND evidence_id IS NULL AND qa_attestation_id IS NULL`).bind(checkId).run();
+    return { checkId, pricingJobId: check.pricing_job_id, gapId: check.gap_id, state: "catalog_lookup",
+      supersededResolutionVersionId: detail?.supersededResolutionVersionId ?? null, idempotent: true };
+  }
   if (!check || !["qa_verified_priced", "qa_verified_not_found"].includes(String(check.state))) {
     throw new Error("only a QA-terminal store check may be reopened for correction");
   }
@@ -548,7 +564,7 @@ export async function reopenTerminalStoreCheckForCorrection(
       WHERE EXISTS (SELECT 1 FROM ingredient_store_checks WHERE id = ?1 AND state = ?3
         AND evidence_id = ?4 AND qa_attestation_id = ?5)`)
       .bind(checkId, eventDetail, check.state, check.evidence_id, check.qa_attestation_id),
-    db.prepare(`UPDATE ingredient_store_checks SET state = 'targeted_refresh', operational_state = 'capture_queued',
+    db.prepare(`UPDATE ingredient_store_checks SET state = 'catalog_lookup', operational_state = 'catalog_lookup',
       terminal_outcome = NULL, evidence_id = NULL, qa_attestation_id = NULL, result_json = NULL,
       capture_result_json = NULL, candidate_set_hash = NULL, producer_evidence_id = NULL,
       verifier_evidence_id = NULL, producer_version = NULL, verifier_version = NULL,
@@ -563,7 +579,7 @@ export async function reopenTerminalStoreCheckForCorrection(
   if ((results[7]?.meta.changes ?? 0) !== 1 || (results[3]?.meta.changes ?? 0) !== 1) {
     throw new Error("store-check correction lost its durable state fence");
   }
-  return { checkId, pricingJobId: check.pricing_job_id, gapId: check.gap_id, state: "targeted_refresh",
+  return { checkId, pricingJobId: check.pricing_job_id, gapId: check.gap_id, state: "catalog_lookup",
     supersededResolutionVersionId: check.resolution_version_id };
 }
 

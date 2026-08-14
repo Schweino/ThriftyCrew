@@ -7,7 +7,7 @@ const terminal = {
   resolution_version_id: "resolution_1", gap_status: "ready_to_publish",
 };
 
-function correctionDb(overrides: { blocking?: { id: string; state: string } | null; changes?: number } = {}) {
+function correctionDb(overrides: { blocking?: { id: string; state: string } | null; changes?: number; check?: Record<string, unknown>; prior?: Record<string, unknown> } = {}) {
   const sql: string[] = [];
   return {
     sql,
@@ -15,7 +15,7 @@ function correctionDb(overrides: { blocking?: { id: string; state: string } | nu
       prepare(statement: string) {
         sql.push(statement);
         return { bind() { return {
-          first: async () => statement.includes("FROM ingredient_store_checks check_row") ? terminal
+          first: async () => statement.includes("FROM ingredient_store_checks check_row") ? (overrides.check ?? terminal)
             : statement.includes("FROM ingredient_publication_batches batch") ? (overrides.blocking ?? null) : null,
         }; } };
       },
@@ -32,12 +32,12 @@ describe("terminal ingredient store-check correction", () => {
     await expect(reopenTerminalStoreCheckForCorrection(fixture.db, "check_1", {
       reason: "package multipack count was omitted from the normalized size",
       expectedEvidenceId: "evidence_1", expectedQaAttestationId: "qa_1",
-    })).resolves.toMatchObject({ checkId: "check_1", state: "targeted_refresh", supersededResolutionVersionId: "resolution_1" });
+    })).resolves.toMatchObject({ checkId: "check_1", state: "catalog_lookup", supersededResolutionVersionId: "resolution_1" });
     const mutationSql = fixture.sql.join("\n");
     expect(mutationSql).not.toMatch(/DELETE FROM ingredient_(?:evidence_refs|qa_attestations|resolution_versions)/);
     expect(mutationSql).toContain("DELETE FROM ingredient_current_resolutions");
     expect(mutationSql).toContain("evidence_id = ?5 AND qa_attestation_id = ?6");
-    expect(mutationSql).toContain("state = 'targeted_refresh'");
+    expect(mutationSql).toContain("state = 'catalog_lookup'");
     expect(mutationSql).toContain("failure_class = 'evidence_correction'");
   });
 
@@ -47,6 +47,23 @@ describe("terminal ingredient store-check correction", () => {
       reason: "package multipack count was omitted from the normalized size",
       expectedEvidenceId: "evidence_1", expectedQaAttestationId: "qa_1",
     })).rejects.toThrow(/corrective release/);
+  });
+
+  it("idempotently moves an already reopened correction through catalog lookup using its audit event fence", async () => {
+    const detail = { supersededEvidenceId: "evidence_1", supersededQaAttestationId: "qa_1",
+      supersededResolutionVersionId: "resolution_1" };
+    const sql: string[] = [];
+    const db = { prepare(statement: string) { sql.push(statement); return { bind() { return {
+      first: async () => statement.includes("FROM ingredient_store_checks check_row")
+        ? { ...terminal, state: "targeted_refresh", evidence_id: null, qa_attestation_id: null, last_error: "correction requested: package count" }
+        : statement.includes("FROM pipeline_stage_events") ? { detail_json: JSON.stringify(detail) } : null,
+      run: async () => ({ meta: { changes: 1 } }),
+    }; } }; } } as unknown as D1Database;
+    await expect(reopenTerminalStoreCheckForCorrection(db, "check_1", {
+      reason: "package multipack count was omitted from the normalized size",
+      expectedEvidenceId: "evidence_1", expectedQaAttestationId: "qa_1",
+    })).resolves.toMatchObject({ state: "catalog_lookup", idempotent: true });
+    expect(sql.join("\n")).toContain("stage = 'correction'");
   });
 
   it("fails closed when the durable aggregate or store-check fence is lost", async () => {
