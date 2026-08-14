@@ -9,6 +9,7 @@ describe("domain invariants", () => {
   it("rejects prepared derivatives and non-food lookalikes from ingredient pricing", () => {
     expect(isClearlyIngredientDerivative("green-chilli", "Pueblo Lindo Chopped Green Chiles")).toBe(true);
     expect(isClearlyIngredientDerivative("ingredient-definition-green-chilli", "Old El Paso Green Chiles Refried Beans")).toBe(true);
+    expect(isClearlyIngredientDerivative("ingredient-definition-green-chilli", "505 Southwestern Medium Green Chile Queso Blanco")).toBe(true);
     expect(isClearlyIngredientDerivative("portobello-mushrooms", "Smithfield Marinated Portobello Mushroom Fresh Pork Loin Filet")).toBe(true);
     expect(isClearlyIngredientDerivative("portobello-mushrooms", "Fresh Whole Portabella Mushroom Caps")).toBe(false);
     expect(isClearlyIngredientDerivative("saffron", "Mahatma Saffron Rice")).toBe(true);

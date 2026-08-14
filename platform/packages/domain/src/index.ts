@@ -81,7 +81,7 @@ export function isClearlyIngredientDerivative(commodityId: string, name: string)
     return /\b(?:frosting|muffins?|cakes?|cookies?|pudding|ice\s+cream|gelato|butter|cream|paste|spread|cereal|granola|chocolate|flavor(?:ed|ing)?)\b/i.test(name);
   }
   if (/green-chilli/.test(commodityId)) {
-    return /\b(?:tomatoes?|salsa|sauces?|soups?|stews?|meals?|rice|beans?|seasoning|diced|chopped|roasted)\b/i.test(name);
+    return /\b(?:tomatoes?|salsa|sauces?|soups?|stews?|meals?|rice|beans?|queso|cheese|dips?|seasoning|diced|chopped|roasted)\b/i.test(name);
   }
   if (/(?:portobello|portabella)-mushrooms?/.test(commodityId)) {
     return /\b(?:pork|loin|filet|chicken|beef|steak)\b/i.test(name);
