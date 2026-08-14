@@ -123,6 +123,8 @@ describe("capture eviction guard", () => {
     expect(releaseCaptureEvictionSql).toContain("candidate_input.release_id = ?1");
     expect(releaseCaptureEvictionSql).not.toContain("candidate_batch.status IN");
     expect(releaseThinSelectedSql).toContain("release_input_batches selected_input");
+    expect(releaseThinSelectedSql).toContain("selected_batch.coverage_mode = 'partial'");
+    expect(releaseThinSelectedSql).not.toContain("'partial','targeted'");
     expect(releaseThinSelectedSql).toContain("NOT EXISTS");
     expect(releaseThinSelectedSql).toContain("complete_member.observation_id = selected.observation_id");
     expect(releaseThinSelectedSql).toContain("complete_batch.coverage_mode IN ('full','ad_only')");

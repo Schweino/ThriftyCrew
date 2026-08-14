@@ -72,7 +72,7 @@ export const releaseThinSelectedSql = `SELECT DISTINCT selected.commodity_id, se
         ON selected_member.batch_id = selected_input.batch_id AND selected_member.observation_id = selected.observation_id
       JOIN capture_batches selected_batch ON selected_batch.id = selected_member.batch_id
       WHERE selected.release_id = ?1 AND selected.status = 'priced'
-       AND selected_batch.coverage_mode IN ('partial','targeted')
+       AND selected_batch.coverage_mode = 'partial'
        AND NOT EXISTS (
          SELECT 1
            FROM release_input_batches complete_input
