@@ -51,6 +51,16 @@ export function isClearlyDerivativeProduct(commodityId: string, name: string): b
   if (/pistachios?/.test(commodityId)) {
     return /\b(?:frosting|muffins?|cakes?|cookies?|pudding|ice\s+cream|gelato|butter|cream|paste|spread|cereal|granola|chocolate|flavor(?:ed|ing)?)\b/i.test(name);
   }
+  // Ingredient identity must describe the requested commodity itself, not a
+  // prepared food that happens to mention it. Locked exclusions remain the
+  // primary definition, while these high-risk whole-commodity guards fail
+  // closed across retailers when catalog titles omit words such as "canned".
+  if (/green-chilli/.test(commodityId)) {
+    return /\b(?:tomatoes?|salsa|sauces?|soups?|stews?|meals?|rice|seasoning|diced|chopped|roasted)\b/i.test(name);
+  }
+  if (/saffron/.test(commodityId)) {
+    return /\b(?:rice|tea|seasonings?|extract|supplements?|color(?:ing)?)\b/i.test(name);
+  }
   return false;
 }
 

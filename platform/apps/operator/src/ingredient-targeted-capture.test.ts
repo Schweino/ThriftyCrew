@@ -44,6 +44,10 @@ describe("targeted ingredient capture bridge", () => {
     expect(isClearlyDerivativeProduct("ingredient-definition-pistachios", "Pillsbury Pistachio Frosting")).toBe(true);
     expect(isClearlyDerivativeProduct("ingredient-definition-pistachios", "Pistachio Muffins 4 Ct")).toBe(true);
     expect(isClearlyDerivativeProduct("ingredient-definition-pistachios", "Wonderful Roasted Pistachios")).toBe(false);
+    expect(isClearlyDerivativeProduct("ingredient-definition-green-chilli", "HATCH Diced Tomatoes & Green Chiles")).toBe(true);
+    expect(isClearlyDerivativeProduct("ingredient-definition-green-chilli", "Fresh Green Chili Pepper")).toBe(false);
+    expect(isClearlyDerivativeProduct("ingredient-definition-saffron", "Mahatma Authentic Saffron Yellow Rice")).toBe(true);
+    expect(isClearlyDerivativeProduct("ingredient-definition-saffron", "Premium Saffron Threads")).toBe(false);
   });
 
   it("applies package-form synonyms in locked exclusions", () => {
