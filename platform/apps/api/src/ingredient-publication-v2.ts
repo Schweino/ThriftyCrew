@@ -259,7 +259,9 @@ export async function materializeIngredientPublicationCaptures(db: D1Database, b
 }
 
 async function fetchProof(origin: string, commodityId: string, releaseId: string, expectedHash: string) {
-  const url = new URL(`/api/v2/board/${encodeURIComponent(commodityId)}`, origin).toString();
+  const proofUrl = new URL(`/api/v2/board/${encodeURIComponent(commodityId)}`, origin);
+  proofUrl.searchParams.set("release", releaseId);
+  const url = proofUrl.toString();
   const response = await fetch(url, { headers: { accept: "application/json", "cache-control": "no-cache" } });
   const body = await response.text();
   let responseReleaseId: string | null = null;
