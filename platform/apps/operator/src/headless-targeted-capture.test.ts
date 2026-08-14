@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { claimSearchTerms, headlessPriceMinor, headlessPriceSemantics } from "./headless-targeted-capture";
+import { claimSearchTerms, headlessPriceMinor, headlessPriceSemantics, stableProductName } from "./headless-targeted-capture";
 
 describe("headless targeted store capture", () => {
   it("accepts only unambiguous single-package prices", () => {
@@ -7,6 +7,11 @@ describe("headless targeted store capture", () => {
     expect(headlessPriceMinor(3.49)).toBe(349);
     expect(headlessPriceMinor("4 for $5.00")).toBeNull();
     expect(headlessPriceMinor("$3.499")).toBeNull();
+  });
+
+  it("stabilizes retailer trademark mojibake before freezing identity", () => {
+    expect(stableProductName("KrogerÂ® Pearl Couscous")).toBe("Kroger Pearl Couscous");
+    expect(stableProductName("KrogerÃ‚Â® Pearl Couscous")).toBe("Kroger Pearl Couscous");
   });
 
   it("refuses a discounted price without a complete effective window", () => {

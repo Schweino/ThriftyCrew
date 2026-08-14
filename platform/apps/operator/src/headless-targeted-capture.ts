@@ -28,6 +28,10 @@ function slug(value: string): string {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 90);
 }
 
+export function stableProductName(value: unknown): string {
+  return String(value ?? "").replace(/Ã‚Â®|Ã‚Â™|Â®|Â™|[®™©]/g, "").replace(/\s+/g, " ").trim();
+}
+
 async function jsonFetch(url: string, init: RequestInit = {}, attempts = 2): Promise<JsonRecord> {
   let last: unknown;
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
@@ -104,7 +108,7 @@ async function captureBakers(query: string, token: string, observedAt: string) {
       const regular = headlessPriceMinor(item?.price?.regular);
       const source = String(product.productPageURI ?? "").split("?", 1)[0];
       const normalized = current === null ? null : capturedRow("bakers", query, { id: String(product.productId ?? item?.itemId ?? ""),
-        name: String(product.description ?? ""), size: String(item?.size ?? ""),
+        name: stableProductName(product.description), size: String(item?.size ?? ""),
         url: new URL(source || `/p/${product.productId}`, "https://www.bakersplus.com").href, price: current, regular,
         available: item?.fulfillment?.inStore === true && String(item?.inventory?.stockLevel ?? "").toUpperCase() !== "TEMPORARILY_OUT_OF_STOCK",
         rawAvailability: `${item?.inventory?.stockLevel ?? "unknown"}; inStore=${item?.fulfillment?.inStore === true}`,
@@ -136,7 +140,7 @@ async function captureFamilyFare(query: string, observedAt: string) {
       const rawUrl = String(item.canonical_url ?? "");
       const urlValue = rawUrl ? new URL(rawUrl, "https://www.shopfamilyfare.com").href : "";
       const available = item.available === true || item.is_available === true || String(item.availability ?? "").toLowerCase() === "in_stock";
-      const normalized = current === null ? null : capturedRow("family-fare", query, { id: String(item.id ?? ""), name: String(item.name ?? ""),
+      const normalized = current === null ? null : capturedRow("family-fare", query, { id: String(item.id ?? ""), name: stableProductName(item.name),
         size: String(item.size ?? ""), url: urlValue, price: current, regular, available,
         rawAvailability: available ? "Freshop store 6401 available" : "Freshop did not prove current availability" }, pages - 1, index, observedAt);
       if (normalized) rows.push(normalized); else excludedResults.push({ productKey: String(item.id ?? ""), name: String(item.name ?? ""), reason: "incomplete, ambiguous, or unavailable Freshop result" });
@@ -162,7 +166,7 @@ async function captureHyVee(query: string, observedAt: string) {
     if (!Number.isInteger(pagesTotal) || pagesTotal < 1 || !Number.isInteger(total) || total < 0) throw new Error("Hy-Vee omitted pagination totals");
     for (const [index, item] of items.entries()) {
       const current = headlessPriceMinor(item.pricing?.tagPriceValue); const regular = headlessPriceMinor(item.pricing?.basePriceValue ?? item.pricing?.regularPriceValue);
-      const name = String(item.description ?? "");
+      const name = stableProductName(item.description);
       const normalized = current === null ? null : capturedRow("hy-vee", query, { id: String(item.id ?? ""), name,
         size: String(item.unitOfMeasure ?? ""), url: `https://www.hy-vee.com/aisles-online/p/${item.id}/${slug(name)}`,
         price: current, regular, available: item.isEcommerceActive === true,

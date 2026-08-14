@@ -101,13 +101,21 @@ export async function claimStoreChecks(db: D1Database, inputValue: unknown): Pro
   const expiresAt = new Date(now.getTime() + input.leaseSeconds * 1000).toISOString();
   await db.prepare(
     `UPDATE ingredient_store_checks
-        SET state = 'transient_failed', operational_state = 'capture_queued', lease_owner = NULL, lease_expires_at = NULL,
-            last_error = 'lease expired', next_attempt_at = ?2, updated_at = CURRENT_TIMESTAMP
+        SET state = 'transient_failed', operational_state = 'transient_backoff',
+            resume_state = CASE WHEN lease_lane = 'qa' THEN 'qa_queued' ELSE 'capture_queued' END,
+            lease_owner = NULL, lease_expires_at = NULL, heartbeat_at = NULL, lease_lane = NULL,
+            error_class = 'transient', last_error = 'lease expired', next_attempt_at = ?2,
+            last_progress_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
       WHERE store_location_id = ?1 AND state = 'leased' AND lease_expires_at <= ?2`,
   ).bind(input.storeLocationId, now.toISOString()).run();
-  const claimStates = input.lane === "qa" ? ["qa_pending"]
+  const claimStates = input.lane === "qa" ? ["qa_pending", "transient_failed"]
     : input.lane === "targeted_refresh" ? ["targeted_refresh", "transient_failed", "evidence_expired"]
       : ["queued", "catalog_lookup"];
+  const resumePredicate = input.lane === "qa"
+    ? "AND (check_row.state <> 'transient_failed' OR check_row.resume_state = 'qa_queued')"
+    : input.lane === "targeted_refresh"
+      ? "AND (check_row.state <> 'transient_failed' OR check_row.resume_state IS NULL OR check_row.resume_state = 'capture_queued')"
+      : "";
   const candidates = await db.prepare(
     `SELECT check_row.id
        FROM ingredient_store_checks check_row
@@ -116,6 +124,7 @@ export async function claimStoreChecks(db: D1Database, inputValue: unknown): Pro
       WHERE check_row.store_location_id = ?
         AND check_row.state IN (${claimStates.map(() => "?").join(",")})
         AND check_row.next_attempt_at <= ?
+        ${resumePredicate}
         AND job.state = 'store_checks_running'
         AND job.commodity_proposal_json IS NOT NULL
         AND gap.qa_resolution IS NULL
@@ -127,7 +136,7 @@ export async function claimStoreChecks(db: D1Database, inputValue: unknown): Pro
       `UPDATE ingredient_store_checks
           SET state = 'leased', operational_state = ?, lease_lane = ?, lease_owner = ?,
               lease_generation = lease_generation + 1, lease_expires_at = ?, heartbeat_at = ?,
-              attempt_count = attempt_count + 1, last_error = NULL,
+              attempt_count = attempt_count + 1, last_error = NULL, resume_state = NULL,
               last_progress_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
         WHERE id = ?
           AND state IN (${claimStates.map(() => "?").join(",")})`,
@@ -477,12 +486,20 @@ export async function failStoreCheck(db: D1Database, checkId: string, inputValue
     : input.failureClass === "ambiguous" ? "ambiguous"
       : input.failureClass === "adapter_quarantined" ? "adapter_quarantined" : "transient_failed";
   const retryAt = input.retryAt ?? (input.failureClass === "transient" ? new Date(Date.now() + 30_000).toISOString() : "9999-12-31T23:59:59.999Z");
+  const operationalState = input.failureClass === "challenge" ? "challenge_blocked"
+    : input.failureClass === "ambiguous" ? "ambiguous"
+      : input.failureClass === "adapter_quarantined" ? "adapter_quarantined" : "transient_backoff";
   const update = await db.prepare(
     `UPDATE ingredient_store_checks
-        SET state = ?4, challenge_id = ?5, last_error = ?6, next_attempt_at = ?7,
-            lease_owner = NULL, lease_expires_at = NULL, heartbeat_at = NULL, updated_at = CURRENT_TIMESTAMP
+        SET state = ?4, operational_state = ?8,
+            resume_state = CASE WHEN ?4 = 'transient_failed' AND lease_lane = 'qa' THEN 'qa_queued'
+                                WHEN ?4 = 'transient_failed' THEN 'capture_queued' ELSE resume_state END,
+            challenge_id = ?5, error_class = ?9, last_error = ?6, next_attempt_at = ?7,
+            lease_owner = NULL, lease_expires_at = NULL, heartbeat_at = NULL, lease_lane = NULL,
+            last_progress_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?1 AND state = 'leased' AND lease_owner = ?2 AND lease_generation = ?3`,
-  ).bind(checkId, input.owner, input.leaseGeneration, state, input.challengeId, input.reason, retryAt).run();
+  ).bind(checkId, input.owner, input.leaseGeneration, state, input.challengeId, input.reason, retryAt,
+    operationalState, input.failureClass).run();
   if ((update.meta.changes ?? 0) !== 1) throw new Error("store-check failure rejected by lease fence");
   // A blocked or ambiguous store is isolated to its own check. The remaining
   // six store lanes continue; operator attention is derived from check state.
