@@ -329,8 +329,9 @@ async function matchBatch(client: MutationClient, batchId: string, reusableConte
     products: snapshot.products.map((product) => [product.product_id, product.normalized_name, product.taxonomy_path]),
     decisions: decisions.map((decision) => [decision.productId, decision.commodityId, decision.decidedBy]),
   };
-  const inputHash = await digestHex(stableJson(inputMaterial));
-  const report = {
+  let repair: { generation: number; priorRunId: string; priorActual: unknown } | null = null;
+  let inputHash = await digestHex(stableJson(inputMaterial));
+  let report = {
     id: `match_${inputHash.slice(0, 32)}`,
     batchId,
     configurationId: snapshot.configurationId,
@@ -348,12 +349,20 @@ async function matchBatch(client: MutationClient, batchId: string, reusableConte
       aisleRejectedExamples: aisleRejected.slice(0, 100),
     } as Record<string, unknown>,
   };
-  const existing = await client.request(`/internal/match-runs/${encodeURIComponent(report.id)}`, { acceptStatuses: [404] }) as {
-    found?: boolean; run?: { input_hash?: string; status?: string; integrity?: boolean };
-  };
-  if (existing.found && existing.run?.integrity === true) {
+  for (let generation = 0; generation < 5; generation++) {
+    const existing = await client.request(`/internal/match-runs/${encodeURIComponent(report.id)}`, { acceptStatuses: [404] }) as {
+      found?: boolean; run?: { input_hash?: string; status?: string; integrity?: boolean; actual?: unknown };
+    };
+    if (!existing.found) break;
     if (existing.run?.input_hash !== inputHash) throw new Error(`match run ${report.id} has a conflicting input hash`);
-    return { ok: existing.run.status === "passed", runId: report.id, status: existing.run.status, idempotent: true, reused: true, ...report };
+    if (existing.run.integrity === true) {
+      return { ok: existing.run.status === "passed", runId: report.id, status: existing.run.status, idempotent: true, reused: true, ...report };
+    }
+    repair = { generation: generation + 1, priorRunId: report.id, priorActual: existing.run.actual ?? null };
+    inputHash = await digestHex(stableJson({ ...inputMaterial, integrityRepair: repair }));
+    report = { ...report, id: `match_${inputHash.slice(0, 32)}`, inputHash,
+      detail: { ...report.detail, integrityRepair: repair } };
+    if (generation === 4) throw new Error(`match run integrity repair chain exceeded its bounded limit for ${batchId}`);
   }
   let decisionWrites = 0;
   let superseded = 0;
@@ -456,7 +465,7 @@ async function matchBatchIncremental(
     affectedProductIds: affected.map((product) => product.product_id),
     retainedProductIds: decisions.map((decision) => decision.productId),
   } }) as { superseded?: number };
-  const inputHash = await digestHex(stableJson({
+  const deltaInputMaterial = {
     version: 2,
     batchId,
     sourceId: snapshot.sourceId,
@@ -467,8 +476,9 @@ async function matchBatchIncremental(
     changedCommodityIds: [...incremental.changedCommodityIds].sort(),
     affected: classifications.map((item) => [item.product.product_id, item.product.normalized_name,
       item.product.taxonomy_path, item.current.status, item.current.decision?.commodityId ?? null]),
-  }));
-  const report = {
+  };
+  let inputHash = await digestHex(stableJson(deltaInputMaterial));
+  let report = {
     id: `match_${inputHash.slice(0, 32)}`,
     batchId,
     configurationId: snapshot.configurationId,
@@ -495,6 +505,22 @@ async function matchBatchIncremental(
         writeAvoidanceRatio: snapshot.products.length === 0 ? 1 : (snapshot.products.length - decisionWrites) / snapshot.products.length },
     } as Record<string, unknown>,
   };
+  for (let generation = 0; generation < 5; generation++) {
+    const existing = await client.request(`/internal/match-runs/${encodeURIComponent(report.id)}`, { acceptStatuses: [404] }) as {
+      found?: boolean; run?: { input_hash?: string; status?: string; integrity?: boolean; actual?: unknown };
+    };
+    if (!existing.found) break;
+    if (existing.run?.input_hash !== inputHash) throw new Error(`match run ${report.id} has a conflicting input hash`);
+    if (existing.run.integrity === true) {
+      return { ok: existing.run.status === "passed", runId: report.id, status: existing.run.status,
+        idempotent: true, reused: true, ...report };
+    }
+    const repair = { generation: generation + 1, priorRunId: report.id, priorActual: existing.run.actual ?? null };
+    inputHash = await digestHex(stableJson({ ...deltaInputMaterial, integrityRepair: repair }));
+    report = { ...report, id: `match_${inputHash.slice(0, 32)}`, inputHash,
+      detail: { ...report.detail, integrityRepair: repair } };
+    if (generation === 4) throw new Error(`incremental match integrity repair chain exceeded its bounded limit for ${batchId}`);
+  }
   const persisted = await client.request("/internal/match-runs", { method: "POST", json: report, acceptStatuses: [422] });
   return { ...persisted, ...report };
 }
