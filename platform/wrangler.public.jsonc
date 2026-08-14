@@ -5,6 +5,7 @@
   "workers_dev": true,
   "routes": [
     { "pattern": "www.thriftycrew.com/api/v2/*", "zone_name": "thriftycrew.com" },
+    { "pattern": "www.thriftycrew.com/api/v3/*", "zone_name": "thriftycrew.com" },
     { "pattern": "www.thriftycrew.com/v2/*", "zone_name": "thriftycrew.com" },
     { "pattern": "www.thriftycrew.com/member-status*", "zone_name": "thriftycrew.com" },
     { "pattern": "www.thriftycrew.com/member-status/*", "zone_name": "thriftycrew.com" },
