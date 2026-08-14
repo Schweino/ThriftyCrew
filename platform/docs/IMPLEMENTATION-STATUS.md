@@ -111,9 +111,9 @@ pnpm tc ingredient backfill-v4 claim <producer-agent-id> <owner> 50
 pnpm tc ingredient backfill-v4 heartbeat <owner> 900
 pnpm tc ingredient backfill-v4 producer-submit <lease-fenced-adapter-artifact.json>
 pnpm tc ingredient backfill-v4 verifier-submit <independent-adapter-artifact.json>
-pnpm tc ingredient backfill-v4 requeue <run-id> <commodity-id> <store-id> <adjudication-id> <resolution-reason>
+pnpm tc ingredient backfill-v4 requeue <run-id> <commodity-id> <store-id> <adjudication-id> <adapter_repaired|challenge_resolved> <resolution-reason>
 ```
 
-A `needs_operator` or `challenged` cell is recoverable: after resolving the source ambiguity or challenge, an operator records a durable adjudication and requeues a new producer work item. The new item retains the prior work identity in its input, has a new dedupe/lease/generation fence, and must capture fresh checked evidence; old evidence is retained and can never be reused as the verifier pass.
+A `needs_operator` or `challenged` cell is recoverable only after an actual typed resolution. `adapter_repaired` means the deployed adapter now preserves the previously missing immutable raw/source facts; `challenge_resolved` records an acknowledged retailer challenge resolution. Free-form reason text never excludes a candidate. Requeue is idempotent by adjudication ID, retains the prior work identity, and creates a new dedupe/lease/generation fence that must capture fresh checked evidence; old evidence is retained and can never be reused as the verifier pass.
 
 The progress response deliberately reports `semanticParity` and `terminalEvidenceReadiness` separately. `promotionAllowed` is true only when the exact expected cell count is present and every cell is independently terminal-verified; extra, partial, mixed, challenged, stale, or `legacy_unknown` evidence fails closed. Import and capture may run with all public V4 flags off, but no V4 public pointer or UI route may be enabled from backfill staging data.

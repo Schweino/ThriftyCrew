@@ -192,20 +192,34 @@ export async function heartbeatCatalogBackfillOwner(db: D1Database, input: { own
 }
 
 export async function requeueCatalogBackfillCell(db: D1Database, input: {
-  runId: string; commodityId: string; storeLocationId: string; adjudicationId: string; reason: string;
+  runId: string; commodityId: string; storeLocationId: string; adjudicationId: string;
+  resolutionType: "adapter_repaired" | "challenge_resolved"; reason: string;
 }) {
   if (!input.adjudicationId.trim() || input.reason.trim().length < 10) throw new Error("backfill requeue requires durable adjudication identity and reason");
-  const prior = await db.prepare(`SELECT cell.producer_work_item_id,work.agent_id,work.input_json,work.dedupe_key
+  if (!["adapter_repaired", "challenge_resolved"].includes(input.resolutionType)) throw new Error("backfill requeue requires a typed resolution");
+  const existing = await db.prepare(`SELECT id FROM pipeline_agent_work_items_v4 WHERE correlation_id=?1 AND entity_type='catalog_backfill_cell'
+    AND json_extract(input_json,'$.commodityId')=?2 AND json_extract(input_json,'$.storeLocationId')=?3
+    AND json_extract(input_json,'$.operatorAdjudication.id')=?4 ORDER BY created_at DESC LIMIT 1`)
+    .bind(input.runId, input.commodityId, input.storeLocationId, input.adjudicationId).first<{ id: string }>();
+  if (existing) return { workItemId: existing.id, adjudicationId: input.adjudicationId, state: "queued", idempotent: true };
+  const prior = await db.prepare(`SELECT cell.producer_work_item_id,cell.evidence_state,work.agent_id,work.input_json,work.dedupe_key
     FROM catalog_backfill_cells_v4 cell JOIN pipeline_agent_work_items_v4 work ON work.id=cell.producer_work_item_id
     WHERE cell.run_id=?1 AND cell.commodity_id=?2 AND cell.store_location_id=?3
       AND cell.evidence_state IN ('needs_operator','challenged')`)
     .bind(input.runId, input.commodityId, input.storeLocationId)
-    .first<{ producer_work_item_id: string; agent_id: string; input_json: string; dedupe_key: string }>();
+    .first<{ producer_work_item_id: string; evidence_state: string; agent_id: string; input_json: string; dedupe_key: string }>();
   if (!prior) throw new Error("backfill cell is not awaiting operator resolution");
+  if (prior.evidence_state === "needs_operator" && input.resolutionType !== "adapter_repaired") {
+    throw new Error("needs-operator evidence requires a deployed adapter/source-fact repair before fresh capture");
+  }
+  if (prior.evidence_state === "challenged" && input.resolutionType !== "challenge_resolved") {
+    throw new Error("challenged evidence requires an acknowledged challenge resolution before fresh capture");
+  }
   const dedupeKey = `${prior.dedupe_key}:adjudication:${input.adjudicationId}`;
   const workItemId = await deterministicId("pipeline-v4-work", dedupeKey);
   const workInput = stableJson({ ...(JSON.parse(prior.input_json) as Record<string, unknown>), retryOf: prior.producer_work_item_id,
-    operatorAdjudication: { id: input.adjudicationId, reason: input.reason.trim(), resolvedAt: new Date().toISOString() } });
+    operatorAdjudication: { id: input.adjudicationId, resolutionType: input.resolutionType,
+      reason: input.reason.trim(), resolvedAt: new Date().toISOString() } });
   const inputHash = await digestHex(workInput);
   await db.batch([
     db.prepare(`INSERT INTO pipeline_agent_work_items_v4
@@ -225,7 +239,7 @@ export async function requeueCatalogBackfillCell(db: D1Database, input: {
     WHERE run_id=?1 AND commodity_id=?2 AND store_location_id=?3`).bind(input.runId, input.commodityId, input.storeLocationId)
     .first<{ producer_work_item_id: string; evidence_state: string }>();
   if (moved?.producer_work_item_id !== workItemId || moved.evidence_state !== "queued") throw new Error("backfill requeue lost its cell fence");
-  return { workItemId, adjudicationId: input.adjudicationId, state: "queued", idempotent: prior.producer_work_item_id === workItemId };
+  return { workItemId, adjudicationId: input.adjudicationId, state: "queued", idempotent: false };
 }
 
 export type BackfillEvidenceSubmission = {

@@ -2283,12 +2283,12 @@ if (command === "status") {
     if (!first) throw new Error(`tc ingredient backfill-v4 ${action} requires an evidence JSON file`);
     result = await client.request(`/internal/v4/backfill/${action}`, { json: JSON.parse(await readFile(cliPath(first), "utf8")) });
   } else if (action === "requeue") {
-    const [runId, commodityId, storeLocationId, adjudicationId, ...reason] = arguments_.slice(1);
-    if (!runId || !commodityId || !storeLocationId || !adjudicationId || reason.join(" ").length < 10) {
-      throw new Error("tc ingredient backfill-v4 requeue requires run commodity store adjudication-id reason");
+    const [runId, commodityId, storeLocationId, adjudicationId, resolutionType, ...reason] = arguments_.slice(1);
+    if (!runId || !commodityId || !storeLocationId || !adjudicationId || !["adapter_repaired", "challenge_resolved"].includes(resolutionType ?? "") || reason.join(" ").length < 10) {
+      throw new Error("tc ingredient backfill-v4 requeue requires run commodity store adjudication-id adapter_repaired|challenge_resolved reason");
     }
-    result = await client.request("/internal/v4/backfill/requeue", { json: { runId, commodityId, storeLocationId, adjudicationId, reason: reason.join(" ") } });
-  } else throw new Error("tc ingredient backfill-v4 requires initialize|import <run> [offset] [limit]|progress [run]|claim <agent> [owner] [limit]|heartbeat <owner> [lease-seconds]|producer-submit <adapter-artifact>|verifier-submit <independent-adapter-artifact>|requeue <run> <commodity> <store> <adjudication-id> <reason>");
+    result = await client.request("/internal/v4/backfill/requeue", { json: { runId, commodityId, storeLocationId, adjudicationId, resolutionType, reason: reason.join(" ") } });
+  } else throw new Error("tc ingredient backfill-v4 requires initialize|import <run> [offset] [limit]|progress [run]|claim <agent> [owner] [limit]|heartbeat <owner> [lease-seconds]|producer-submit <adapter-artifact>|verifier-submit <independent-adapter-artifact>|requeue <run> <commodity> <store> <adjudication-id> <resolution-type> <reason>");
 } else if (command === "recipe" && subcommand === "wave") {
   const [action, waveId, value] = arguments_;
   if (!action || !waveId) throw new Error("tc recipe wave requires snapshot|published|corrective and a wave id");

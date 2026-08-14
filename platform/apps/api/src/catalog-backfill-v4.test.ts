@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { assertFreshBackfillEvidence, assertFrozenBackfillReproduction, assertIndependentBackfillEvidence, assertLegacyBoard,
   catalogBackfillPromotionAllowed, deriveCatalogBackfillCapture } from "./catalog-backfill-v4";
+import { requeueCatalogBackfillCell } from "./catalog-backfill-v4";
 
 const identity = { canonicalName: "Bananas", displayName: "Bananas", acceptedForms: ["Bananas"], excludedForms: ["chips"], basisUnit: "lb" };
 
@@ -150,5 +151,12 @@ describe("truthful V4 catalog backfill", () => {
       .toThrow("stale or future-dated");
     expect(() => assertFrozenBackfillReproduction("priced", { productId: "different" }, derived))
       .toThrow("did not independently reproduce");
+  });
+
+  it("makes a typed operator-resolution requeue idempotent by adjudication identity", async () => {
+    const db = { prepare() { return { bind() { return this; }, async first() { return { id: "work_repaired" }; } }; } } as unknown as D1Database;
+    await expect(requeueCatalogBackfillCell(db, { runId: "run", commodityId: "bananas", storeLocationId: "walmart-omaha",
+      adjudicationId: "adapter-fix-1", resolutionType: "adapter_repaired", reason: "adapter now preserves complete raw pickup facts" }))
+      .resolves.toEqual({ workItemId: "work_repaired", adjudicationId: "adapter-fix-1", state: "queued", idempotent: true });
   });
 });
