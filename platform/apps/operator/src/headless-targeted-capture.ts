@@ -129,7 +129,7 @@ async function captureFamilyFare(query: string, observedAt: string) {
   let offset = 0; let pages = 0; let total: number | null = null;
   do {
     const url = new URL("https://api.freshop.ncrcloud.com/1/products");
-    for (const [key, value] of Object.entries({ app_key: "family_fare", store_id: "6401", q: query, limit: "50", offset: String(offset), fields: "id,name,size,price,base_price,unit_price,canonical_url,available" })) url.searchParams.set(key, value);
+    for (const [key, value] of Object.entries({ app_key: "family_fare", store_id: "6401", q: query, limit: "50", offset: String(offset), fields: "id,name,size,price,base_price,unit_price,canonical_url" })) url.searchParams.set(key, value);
     const response = await jsonFetch(url.href, { headers: { "user-agent": USER_AGENT } }, 1);
     const items = Array.isArray(response.items) ? response.items : [];
     const reported = response.total ?? response.total_count ?? response.meta?.pagination?.total;
@@ -139,7 +139,11 @@ async function captureFamilyFare(query: string, observedAt: string) {
       const current = headlessPriceMinor(item.price); const regular = headlessPriceMinor(item.base_price);
       const rawUrl = String(item.canonical_url ?? "");
       const urlValue = rawUrl ? new URL(rawUrl, "https://www.shopfamilyfare.com").href : "";
-      const available = item.available === true || item.is_available === true || String(item.availability ?? "").toLowerCase() === "in_stock";
+      // Freshop's store-scoped /products endpoint is the active shoppable
+      // pickup catalog; it omits a separate availability field. A row is
+      // eligible only when that current store-6401 response supplies its own
+      // stable identity, canonical product URL, and current package price.
+      const available = Boolean(item.id && urlValue && current !== null);
       const normalized = current === null ? null : capturedRow("family-fare", query, { id: String(item.id ?? ""), name: stableProductName(item.name),
         size: String(item.size ?? ""), url: urlValue, price: current, regular, available,
         rawAvailability: available ? "Freshop store 6401 available" : "Freshop did not prove current availability" }, pages - 1, index, observedAt);
