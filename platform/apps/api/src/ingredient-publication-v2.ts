@@ -36,6 +36,8 @@ interface PricedStoreResult {
 export async function ingredientPublicationObservation(storeLocationId: string, commodityId: string, result: PricedStoreResult): Promise<ObservationInput> {
   const externalProductKey = await deterministicId("ingredient-targeted-product", storeLocationId, result.sourceUrl, result.productName);
   const kind = result.offerKind === "sale" || result.offerKind === "markdown" || result.offerKind === "member" ? result.offerKind : "everyday";
+  const fulfillmentMode = result.fulfillmentMode === "pickup" || result.fulfillmentMode === "delivery"
+    || result.fulfillmentMode === "shipping" || result.fulfillmentMode === "in_store" ? result.fulfillmentMode : "unknown";
   const rawPriceText = `$${(result.packagePriceMinor / 100).toFixed(2)}`;
   return observationInputSchema.parse({
     externalProductKey,
@@ -74,7 +76,7 @@ export async function ingredientPublicationObservation(storeLocationId: string, 
       availability: {
         status: "in_stock",
         rawText: result.availabilityText ?? undefined,
-        fulfillmentMode: result.fulfillmentMode ?? "unknown",
+        fulfillmentMode,
         locationId: storeLocationId,
         eligible: true,
       },
