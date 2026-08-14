@@ -47,6 +47,13 @@ export function isClearlyNonFoodProduct(name: string, taxonomy = ""): boolean {
   return NON_FOOD_PRODUCT.test(`${name} ${taxonomy}`);
 }
 
+export function isClearlyDerivativeProduct(commodityId: string, name: string): boolean {
+  if (/pistachios?/.test(commodityId)) {
+    return /\b(?:frosting|muffins?|cakes?|cookies?|pudding|ice\s+cream|gelato|butter|cream|paste|spread|cereal|granola|chocolate|flavor(?:ed|ing)?)\b/i.test(name);
+  }
+  return false;
+}
+
 function sha(value: unknown): string {
   return createHash("sha256").update(stableJson(value)).digest("hex");
 }
@@ -96,7 +103,7 @@ function rowIdentity(row: Record<string, unknown>) {
 
 function canonicalCandidate(row: Record<string, unknown>, check: ClaimedCheck, evidenceHash: string): CapturePayload["candidates"][number] {
   const store = STORE[check.store_location_id];
-  const proposal = JSON.parse(check.commodity_proposal_json) as { unit: string; include: string[]; exclude: string[] };
+  const proposal = JSON.parse(check.commodity_proposal_json) as { id: string; unit: string; include: string[]; exclude: string[] };
   const identity = rowIdentity(row);
   const rejections: string[] = [];
   let url: URL | null = null;
@@ -104,6 +111,7 @@ function canonicalCandidate(row: Record<string, unknown>, check: ClaimedCheck, e
   if (url?.hostname !== store.host) rejections.push("wrong_first_party_host");
   if (!identity.productId || !identity.productName) rejections.push("missing_product_identity");
   if (isClearlyNonFoodProduct(identity.productName, String(row.taxonomy_path ?? row.taxonomy ?? ""))) rejections.push("non_food_product");
+  if (isClearlyDerivativeProduct(proposal.id, identity.productName)) rejections.push("ingredient_derivative_product");
   if (!regexes(proposal.include).some((rule) => rule.test(identity.productName))) rejections.push("identity_not_included");
   if (regexes(proposal.exclude).some((rule) => rule.test(identity.productName))) rejections.push("identity_excluded");
   const availability = identity.offer?.availability ?? {};

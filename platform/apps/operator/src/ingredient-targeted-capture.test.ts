@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildIngredientCapturePayload, buildIngredientQaPayload, isClearlyNonFoodProduct, mergeIngredientQaDiscoveryChunks, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
+import { buildIngredientCapturePayload, buildIngredientQaPayload, isClearlyDerivativeProduct, isClearlyNonFoodProduct, mergeIngredientQaDiscoveryChunks, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
 
 const hash = (character: string) => character.repeat(64);
 const observedAt = "2026-08-13T20:00:00.000Z";
@@ -27,6 +27,12 @@ describe("targeted ingredient capture bridge", () => {
   it("fails closed on non-food products whose names happen to match an ingredient", () => {
     expect(isClearlyNonFoodProduct("Spicy Cinnamon Stick Scented Wax Melts", "Home Decor")).toBe(true);
     expect(isClearlyNonFoodProduct("Organic Cinnamon Sticks", "Pantry / Spices")).toBe(false);
+  });
+
+  it("fails closed on prepared derivatives when the ingredient is the whole commodity", () => {
+    expect(isClearlyDerivativeProduct("ingredient-definition-pistachios", "Pillsbury Pistachio Frosting")).toBe(true);
+    expect(isClearlyDerivativeProduct("ingredient-definition-pistachios", "Pistachio Muffins 4 Ct")).toBe(true);
+    expect(isClearlyDerivativeProduct("ingredient-definition-pistachios", "Wonderful Roasted Pistachios")).toBe(false);
   });
 
   it("keeps non-food matches in the evidence set but makes them ineligible", async () => {

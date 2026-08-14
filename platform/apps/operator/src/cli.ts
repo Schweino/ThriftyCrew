@@ -27,6 +27,7 @@ import { loadR2ShardedEngineSnapshot } from "./engine-snapshot";
 import { compileCommodityRegexPattern, normalizeCommodityRegexPattern, parseCatalogJson } from "./commodity-regex";
 import { runIngredientPipeline } from "./ingredient-pipeline";
 import { buildIngredientCapturePayload, buildIngredientQaPayload, mergeIngredientQaDiscoveryChunks, type AdapterChunk, type ClaimedCheck } from "./ingredient-targeted-capture";
+import { captureHeadlessDiscovery, captureHeadlessVerification, claimSearchTerms, type HeadlessStore } from "./headless-targeted-capture";
 
 const platformRoot = path.resolve(import.meta.dirname, "../../..");
 const incomeRoot = path.resolve(platformRoot, "..");
@@ -1657,6 +1658,22 @@ if (command === "status") {
   result = await (await mutationClient()).request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(checkId)}/capture-result`, {
     json: JSON.parse(await readFile(cliPath(inputFile), "utf8")),
   });
+} else if (command === "ingredient" && subcommand === "headless-capture") {
+  const [store, claimFile, outputFile] = arguments_;
+  if (!store || !claimFile || !outputFile) throw new Error("tc ingredient headless-capture requires store, claim JSON, and output JSON");
+  const claimDocument = JSON.parse(await readFile(cliPath(claimFile), "utf8")) as { checks?: ClaimedCheck[] };
+  const checks = claimDocument.checks ?? [];
+  const chunk = await captureHeadlessDiscovery(store as HeadlessStore, claimSearchTerms(checks), cliPath(outputFile),
+    { krogerCredentialsFile: path.join(incomeRoot, "grocery", ".krogerkey") });
+  result = { ok: true, store, terms: chunk.terms?.length ?? 0, rows: chunk.rows?.length ?? 0, outputFile: cliPath(outputFile) };
+} else if (command === "ingredient" && subcommand === "headless-verify") {
+  const [store, claimFile, outputFile] = arguments_;
+  if (!store || !claimFile || !outputFile) throw new Error("tc ingredient headless-verify requires store, QA claim JSON, and output JSON");
+  const claimDocument = JSON.parse(await readFile(cliPath(claimFile), "utf8")) as { checks?: ClaimedCheck[] };
+  const checks = claimDocument.checks ?? [];
+  const chunk = await captureHeadlessVerification(store as HeadlessStore, checks, cliPath(outputFile),
+    { krogerCredentialsFile: path.join(incomeRoot, "grocery", ".krogerkey") });
+  result = { ok: true, store, verifications: chunk.verifications?.length ?? 0, outputFile: cliPath(outputFile) };
 } else if (command === "ingredient" && subcommand === "capture-submit") {
   const [claimFile, ...chunkFiles] = arguments_;
   if (!claimFile || chunkFiles.length === 0) throw new Error("tc ingredient capture-submit requires a claim JSON and one or more discovery chunk JSON files");
@@ -1717,6 +1734,21 @@ if (command === "status") {
   result = await (await mutationClient()).request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(checkId)}/qa-reject`, {
     json: { owner, leaseGeneration: Number(generationText), validatorVersion, reason: reasonParts.join(" ") },
   });
+} else if (command === "ingredient" && subcommand === "check-fail") {
+  const [claimFile, failureClass, retryAt, ...reasonParts] = arguments_;
+  if (!claimFile || !failureClass || !retryAt || reasonParts.length === 0) {
+    throw new Error("tc ingredient check-fail requires claim JSON, failure class, retry-at ISO timestamp (or null), and reason");
+  }
+  const claimDocument = JSON.parse(await readFile(cliPath(claimFile), "utf8")) as { checks?: ClaimedCheck[] };
+  const client = await mutationClient();
+  const failed = [];
+  for (const check of claimDocument.checks ?? []) {
+    failed.push(await client.request(`/internal/ingredient-pricing/store-checks/${encodeURIComponent(check.id)}/fail`, { json: {
+      owner: check.lease_owner, leaseGeneration: Number(check.lease_generation), failureClass,
+      reason: reasonParts.join(" "), challengeId: null, retryAt: retryAt === "null" ? null : retryAt,
+    } }));
+  }
+  result = { ok: true, failed };
 } else if (command === "ingredient" && subcommand === "challenge-open") {
   const [checkId, inputFile] = arguments_;
   if (!checkId || !inputFile) throw new Error("tc ingredient challenge-open requires a check id and input JSON");
