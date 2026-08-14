@@ -4697,7 +4697,17 @@ app.post("/internal/releases/:id/validate", async (context) => {
   const releaseId = context.req.param("id");
   const release = await context.env.DB.prepare("SELECT state, summary_json FROM releases WHERE id = ?1").bind(releaseId).first<{ state: string; summary_json: string }>();
   if (!release) return jsonError("release not found", 404);
-  if (release.state !== "draft" && release.state !== "validating") return jsonError(`release cannot be validated from ${release.state}`, 409);
+  // A rejected artifact is immutable, but the validator implementation is
+  // versioned with the worker. Permit an explicit operator retry after a guard
+  // defect is corrected so the same bytes can be re-evaluated without an
+  // expensive and semantically pointless release rebuild.
+  if (!["draft", "validating", "rejected"].includes(release.state)) return jsonError(`release cannot be validated from ${release.state}`, 409);
+  if (release.state === "rejected") {
+    const reopened = await context.env.DB.prepare(
+      "UPDATE releases SET state = 'validating', validated_at = NULL WHERE id = ?1 AND state = 'rejected'",
+    ).bind(releaseId).run();
+    if ((reopened.meta.changes ?? 0) !== 1) return jsonError("release validation retry lost its state fence", 409);
+  }
   const summary = JSON.parse(release.summary_json) as { expectedCommodities: number; expectedStores: number; expectedRecipes: number; expectedFreeRotation?: number };
   const expectedFreeRotation = summary.expectedFreeRotation ?? 0;
   const releaseIdentity = await context.env.DB.prepare(
