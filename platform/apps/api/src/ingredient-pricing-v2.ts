@@ -90,7 +90,7 @@ export async function createPricingWave(db: D1Database, inputValue: unknown): Pr
       `INSERT INTO ingredient_query_plans
          (id, pricing_job_id, version, canonical_term, aliases_json, exclusions_json, plan_hash, planner_version)
        VALUES (?1, ?2, 1, ?3, '[]', '[]', ?4, 'deterministic-v1')
-       ON CONFLICT(pricing_job_id, plan_hash) DO NOTHING`,
+       ON CONFLICT(id) DO NOTHING`,
     ).bind(planId, jobId, row.normalized_name, planHash));
     for (const storeLocationId of OMAHA_GROCERY_STORE_LOCATION_IDS) {
       const checkId = await deterministicId("ingredient-store-check", jobId, storeLocationId);

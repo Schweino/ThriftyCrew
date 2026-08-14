@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { ingredientPriceResearchSchema, ingredientStoreCaptureResultSchema, OMAHA_GROCERY_STORE_LOCATION_IDS, recipeMapSchema, recipeSourceCandidatesSchema } from "@thriftycrew/contracts";
-import { activeIngredientCategoryContextSql, assertRecipeChainContinuity, assertRetailerTolerantIngredientDefinition, ingredientCampaignPhase, ingredientDiscoveryBufferTarget, type IngredientCampaignSnapshot, isAtomicDiscoveryGapName, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
+import { activeIngredientCategoryContextSql, assertRecipeChainContinuity, assertRetailerTolerantIngredientDefinition, ingredientCampaignPhase, ingredientDiscoveryBufferTarget, ingredientDiscoveryRequestedLeadCount, type IngredientCampaignSnapshot, isAtomicDiscoveryGapName, normalizeAccuracyEvidenceRow, recipeTerminalReason, validateAgentOutput } from "./agent-work-items";
 
 const candidate = {
   id: "candidate-bean-chili",
@@ -33,6 +33,12 @@ describe("discovery gap identity", () => {
     expect(isAtomicDiscoveryGapName("water")).toBe(false);
     expect(isAtomicDiscoveryGapName("dried apricots or prunes")).toBe(false);
     expect(isAtomicDiscoveryGapName("roasted peanuts and cilantro")).toBe(false);
+  });
+
+  it("keeps source rounds within the mapper throughput envelope", () => {
+    expect(ingredientDiscoveryRequestedLeadCount(25, 0)).toBe(8);
+    expect(ingredientDiscoveryRequestedLeadCount(10, 7)).toBe(6);
+    expect(ingredientDiscoveryRequestedLeadCount(50, 49)).toBe(6);
   });
 });
 

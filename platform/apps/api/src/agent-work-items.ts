@@ -299,8 +299,10 @@ async function seedsFor(db: D1Database, agentId: string): Promise<WorkSeed[]> {
           discovery: row.target_missing_ingredients ? {
             targetMissingIngredients: row.target_published_ingredients ?? row.target_missing_ingredients,
             uniqueMissingIngredients: row.unique_missing_ingredients,
-            requestedLeadCount: Math.min(50, Math.max(20,
-              (Number(row.target_published_ingredients ?? row.target_missing_ingredients) - Number(row.unique_missing_ingredients ?? 0)) * 3)),
+            requestedLeadCount: ingredientDiscoveryRequestedLeadCount(
+              Number(row.target_published_ingredients ?? row.target_missing_ingredients),
+              Number(row.unique_missing_ingredients ?? 0),
+            ),
             sourceRound: row.source_round,
             priorSourceUrls: [...new Set([
               ...prior.results.map((item) => item.source_url),
@@ -363,6 +365,15 @@ export interface IngredientCampaignSnapshot {
 
 export function ingredientDiscoveryBufferTarget(targetPublishedIngredients: number): number {
   return targetPublishedIngredients + Math.max(10, Math.min(20, Math.ceil(targetPublishedIngredients * 0.4)));
+}
+
+export function ingredientDiscoveryRequestedLeadCount(targetPublishedIngredients: number, uniqueMissingIngredients: number): number {
+  const remaining = Math.max(1, targetPublishedIngredients - uniqueMissingIngredients);
+  // Fact extraction and mapping are typed, high-context stages. Keeping each
+  // source round to 6-8 ingredient-dense leads prevents five-minute mapper
+  // timeouts while the campaign supervisor starts the next round as soon as
+  // the current chain becomes terminal.
+  return Math.min(8, Math.max(6, remaining * 2));
 }
 
 export function ingredientCampaignPhase(snapshot: IngredientCampaignSnapshot): "collecting" | "pricing" | "completed" {
