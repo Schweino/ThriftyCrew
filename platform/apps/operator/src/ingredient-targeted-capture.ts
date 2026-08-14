@@ -23,7 +23,8 @@ interface AdapterChunk {
   version: 2;
   phase: "discovery" | "verification";
   store: string;
-  canary: { evidenceUrl: string; observedAt: string; locationVerified: boolean; priceModeVerified: boolean };
+  canary: { evidenceUrl: string; observedAt: string; location?: string; exactAddress?: string; priceMode?: string;
+    locationId?: string; retailerLocationKey?: string; locationVerified: boolean; priceModeVerified: boolean };
   terms?: Array<Record<string, unknown>>;
   rows?: Array<Record<string, unknown>>;
   verifications?: Array<Record<string, unknown>>;

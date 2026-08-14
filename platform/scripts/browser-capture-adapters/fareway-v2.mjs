@@ -222,7 +222,9 @@ async function captureCanary(tab, screenshotSha256) {
   }));
   const visibleHeaders = await tab.playwright.getByRole("button", { name: /In-Store.*Omaha/ }).filter({ visible: true }).count();
   if (state.challenge || !state.plainOmaha || visibleHeaders < 1) throw new Error("Fareway Omaha/In-Store canary failed");
-  return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: LOCATION, priceMode: PRICE_MODE, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
+  return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: LOCATION, locationId: "043",
+    retailerLocationKey: "043", priceMode: PRICE_MODE, evidenceUrl: state.url, marketVerified: true,
+    locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
 }
 
 async function readProductDetail(tab) {

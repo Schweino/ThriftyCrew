@@ -328,7 +328,19 @@ export async function captureNextDataCanary(tab, store, screenshotSha256) {
     const pass = store === "sams"
       ? /Pickup[\s\S]*Omaha Sam's Club/i.test(state.body)
       : /Omaha L St Supercenter/i.test(state.body) && /fulfillment_method%3APickup/i.test(state.url);
-    if (pass) return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: config.location, priceMode: config.priceMode, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
+    if (pass) return {
+      observedAt: new Date().toISOString(),
+      market: "Omaha, NE",
+      location: config.location,
+      locationId: config.locationId,
+      retailerLocationKey: config.locationId,
+      priceMode: config.priceMode,
+      evidenceUrl: state.url,
+      marketVerified: true,
+      locationVerified: true,
+      priceModeVerified: true,
+      ...(screenshotSha256 ? { screenshotSha256 } : {}),
+    };
     if (attempt < 4) await tab.playwright.waitForTimeout(750);
   }
   throw new Error(`${store} Omaha/Pickup canary failed after waiting for the page to settle`);

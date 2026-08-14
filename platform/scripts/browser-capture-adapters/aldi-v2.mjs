@@ -178,7 +178,9 @@ async function captureCanary(tab, screenshotSha256) {
   });
   if (state.challenge) throw new Error("ALDI retailer block page detected; stop the lane without retrying or attempting a bypass");
   if (!state.exact) throw new Error(`ALDI OLA 48 Omaha/In-Store canary failed; selected control was ${state.selectedFulfillment || "absent"}`);
-  return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: LOCATION, priceMode: PRICE_MODE, evidenceUrl: state.url, marketVerified: true, locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
+  return { observedAt: new Date().toISOString(), market: "Omaha, NE", location: LOCATION, locationId: "OLA 48",
+    retailerLocationKey: "OLA 48", priceMode: PRICE_MODE, evidenceUrl: state.url, marketVerified: true,
+    locationVerified: true, priceModeVerified: true, ...(screenshotSha256 ? { screenshotSha256 } : {}) };
 }
 
 async function captureAldiChunkInternal({ tab, terms, file, sessionDirectory, screenshotSha256, interTermDelayMs = DEFAULT_INTER_TERM_DELAY_MS }) {

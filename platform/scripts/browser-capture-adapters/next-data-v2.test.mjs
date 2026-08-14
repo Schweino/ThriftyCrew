@@ -101,6 +101,8 @@ describe("next-data location canary", () => {
 
     await expect(captureNextDataCanary(tab, "walmart")).resolves.toMatchObject({
       location: "Omaha L St Supercenter, 12850 L St, Omaha, NE 68137",
+      locationId: "5361",
+      retailerLocationKey: "5361",
       locationVerified: true,
       priceModeVerified: true,
     });
@@ -122,6 +124,8 @@ describe("next-data location canary", () => {
     const canary = await captureNextDataCanary(tab, "sams");
 
     expect(canary.locationVerified).toBe(true);
+    expect(canary.locationId).toBe("8146");
+    expect(canary.retailerLocationKey).toBe("8146");
     expect(waits).toEqual([750]);
   });
 

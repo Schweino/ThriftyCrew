@@ -557,7 +557,8 @@ export async function captureHeadlessDiscovery(store: HeadlessStore, terms: stri
     });
   const config = STORE[store];
   const chunk: AdapterChunk = { version: 2, phase: "discovery", store,
-    canary: { evidenceUrl: config.evidenceUrl, observedAt, locationVerified: true, priceModeVerified: true },
+    canary: { evidenceUrl: config.evidenceUrl, observedAt, location: config.location, priceMode: config.priceMode,
+      locationId: config.locationId, retailerLocationKey: config.locationId, locationVerified: true, priceModeVerified: true },
     terms: records.map((record) => ({ query: record.query, outcome: record.failure ? "rejected" : record.rows.length ? "success" : "empty",
       rowCount: record.rows.length, attempts: 1, startedAt: observedAt, finishedAt: new Date().toISOString(),
       retrieval: { targetResultCount: record.total, loadedResultCount: record.examined,

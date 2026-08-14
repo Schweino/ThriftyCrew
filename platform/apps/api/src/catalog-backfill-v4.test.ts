@@ -20,7 +20,9 @@ function walmartChunk(overrides: Record<string, any> = {}) {
         purchasePriceMinor: 150, availability: { locationId: "5361", fulfillmentMode: "pickup", eligible: true, status: "in_stock" },
         priceSemantics: { offerType: "everyday", condition: "none", ambiguity: false, unitPriceMinor: 150, qualifyingQuantity: 1, totalPriceMinor: 150 } } } }];
   return { version: 2, phase: "discovery", store: "walmart",
-    canary: { evidenceUrl: "https://www.walmart.com/store/5361-omaha-ne", observedAt, locationVerified: true, priceModeVerified: true },
+    canary: { evidenceUrl: "https://www.walmart.com/store/5361-omaha-ne", observedAt,
+      location: "Omaha L St Supercenter, 12850 L St, Omaha, NE 68137", locationId: "5361", retailerLocationKey: "5361",
+      priceMode: "Pickup", locationVerified: true, priceModeVerified: true },
     terms: [{ query: "Bananas", outcome: "success", rowCount: 2, retrieval: { loadedResultCount: 2, availableResultCount: 2,
       pageCount: 1, hasMoreResults: false, termination: "end-of-results" } }], rows, ...overrides };
 }
@@ -85,6 +87,9 @@ describe("truthful V4 catalog backfill", () => {
     const chunk = walmartChunk() as Record<string, any>;
     chunk.store = "sams";
     chunk.canary.evidenceUrl = "https://www.samsclub.com/club/8146-omaha-ne";
+    chunk.canary.location = "Omaha Sam's Club";
+    chunk.canary.locationId = "8146";
+    chunk.canary.retailerLocationKey = "8146";
     for (const row of chunk.rows) {
       row.url = row.url.replace("walmart.com", "samsclub.com");
       row._capture.location = "Omaha club 8146";
@@ -108,6 +113,10 @@ describe("truthful V4 catalog backfill", () => {
     const chunk = walmartChunk() as Record<string, any>;
     chunk.store = "fareway";
     chunk.canary.evidenceUrl = "https://shop.fareway.com/store/fareway/products";
+    chunk.canary.location = "17070 Audrey Street, Omaha, NE 68136";
+    chunk.canary.locationId = "043";
+    chunk.canary.retailerLocationKey = "043";
+    chunk.canary.priceMode = "In-Store";
     for (const row of chunk.rows) {
       row.url = row.url.replace("walmart.com", "shop.fareway.com");
       row._capture.location = "17070 Audrey Street, Omaha, NE 68136";
@@ -125,7 +134,32 @@ describe("truthful V4 catalog backfill", () => {
       .resolves.toMatchObject({ outcome: "not_found" });
   });
 
+  it("accepts the source-native Omaha Hy-Vee #01 canary while binding offers to store 1465", async () => {
+    const chunk = walmartChunk() as Record<string, any>;
+    chunk.store = "hy-vee";
+    chunk.canary.evidenceUrl = "https://www.hy-vee.com/aisles-online/search?search=Bananas";
+    chunk.canary.location = "Omaha Hy-Vee #01";
+    chunk.canary.locationId = "1465";
+    chunk.canary.retailerLocationKey = "1465";
+    chunk.canary.priceMode = "in_store";
+    for (const row of chunk.rows) {
+      row.url = row.url.replace("walmart.com", "hy-vee.com");
+      row._capture.location = "Omaha Hy-Vee #01";
+      row._capture.priceMode = "in_store";
+      row._capture.pageState.locationText = "Omaha Hy-Vee #01";
+      row._capture.pageState.fulfillmentText = "in_store";
+      row._capture.offer.sourceUrl = row._capture.offer.sourceUrl.replace("walmart.com", "hy-vee.com");
+      row._capture.offer.availability.locationId = "1465";
+      row._capture.offer.availability.fulfillmentMode = "in_store";
+    }
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "hy-vee-omaha-1465", queryTerms: ["Bananas"], identity, document: chunk }))
+      .resolves.toMatchObject({ outcome: "priced" });
+  });
+
   it("fails closed on forged empty, missing raw exclusions, policy mismatch, and incomplete pagination", async () => {
+    const missingCanonicalCanary = walmartChunk(); delete (missingCanonicalCanary.canary as any).retailerLocationKey;
+    await expect(deriveCatalogBackfillCapture({ storeLocationId: "walmart-omaha", queryTerms: ["Bananas"], identity, document: missingCanonicalCanary }))
+      .rejects.toThrow("canonical retailer location");
     const empty = walmartChunk({ rows: [], terms: [{ query: "Bananas", outcome: "empty", rowCount: 0,
       retrieval: { loadedResultCount: 0, pageCount: 1, hasMoreResults: false, termination: "no-results" } }] });
     await expect(deriveCatalogBackfillCapture({ storeLocationId: "walmart-omaha", queryTerms: ["Bananas"], identity, document: empty }))

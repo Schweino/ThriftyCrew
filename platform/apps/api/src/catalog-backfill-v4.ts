@@ -290,6 +290,15 @@ export async function deriveCatalogBackfillCapture(input: { storeLocationId: str
   if (chunk?.version !== 2 || chunk?.phase !== "discovery" || chunk?.store !== adapterNameForPolicy(policy)) throw new Error("backfill capture adapter chunk identity mismatch");
   const canary = chunk.canary as Record<string, unknown> | undefined;
   if (!canary || canary.locationVerified !== true || canary.priceModeVerified !== true) throw new Error("backfill capture lacks an exact location/mode canary");
+  const canaryLocation = stableJson([canary.location, canary.exactAddress]);
+  const canaryMode = String(canary.priceMode ?? "");
+  const canaryLocationId = String(canary.locationId ?? "");
+  if (String(canary.retailerLocationKey ?? "") !== policy.retailerLocationKey
+    || canaryLocationId && canaryLocationId !== policy.retailerLocationKey && canaryLocationId !== policy.priceLocationKey
+    || !new RegExp(policy.locationCanary.expectedLocationPattern, "i").test(canaryLocation)
+    || !new RegExp(policy.locationCanary.expectedModePattern, "i").test(canaryMode)) {
+    throw new Error("backfill capture canary is not bound to the canonical retailer location and price mode");
+  }
   const sourceUrl = String(canary.evidenceUrl ?? "");
   const observedAt = String(canary.observedAt ?? "");
   const host = new URL(sourceUrl).hostname;
