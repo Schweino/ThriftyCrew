@@ -1093,19 +1093,28 @@ app.get("/internal/capture-batches/:id/products", async (context) => {
   ).first<{ id: string; content_hash: string }>();
   if (!configuration) return jsonError("active configuration not found", 422);
   const products = await context.env.DB.prepare(
-    `WITH ranked AS (
+    `WITH batch_products AS (
+       SELECT DISTINCT product.id
+         FROM capture_batch_observations member
+         JOIN observations observation ON observation.id = member.observation_id
+         JOIN product_versions version ON version.id = observation.product_version_id
+         JOIN products product ON product.id = version.product_id
+        WHERE member.batch_id = ?1
+     ), ranked AS (
        SELECT p.id AS product_id, p.external_key, p.store_location_id,
               pv.name, pv.normalized_name, pv.taxonomy_path,
               o.normalized_basis_unit, o.normalized_basis_qty_micros,
               decision.commodity_id AS active_commodity_id,
               decision.configuration_id AS active_configuration_id,
-              ROW_NUMBER() OVER (PARTITION BY p.id ORDER BY member.observed_at DESC, o.id DESC) AS ordinal
-         FROM capture_batch_observations member
-         JOIN observations o ON o.id = member.observation_id
-         JOIN product_versions pv ON pv.id = o.product_version_id
-         JOIN products p ON p.id = pv.product_id
+              ROW_NUMBER() OVER (PARTITION BY p.id ORDER BY o.captured_at DESC, member.observed_at DESC, o.id DESC) AS ordinal
+         FROM batch_products selected
+         JOIN products p ON p.id = selected.id
+         JOIN product_versions pv ON pv.product_id = p.id
+         JOIN observations o ON o.product_version_id = pv.id
+         JOIN capture_batch_observations member ON member.observation_id = o.id
+         JOIN capture_batches source_batch ON source_batch.id = member.batch_id
+          AND source_batch.status IN ('promoted','superseded')
          LEFT JOIN match_decisions decision ON decision.product_id = p.id AND decision.superseded_at IS NULL
-        WHERE member.batch_id = ?1
      )
      SELECT product_id, external_key, store_location_id, name, normalized_name,
             taxonomy_path, normalized_basis_unit, normalized_basis_qty_micros,
