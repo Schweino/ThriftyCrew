@@ -1052,7 +1052,7 @@ async function persistIngredientDefinitionPlan(db: D1Database, outputValue: unkn
       basisUnit: item.proposal.unit, commodityId: item.proposal.id, version: 2 }));
     statements.push(db.prepare(
       `UPDATE ingredient_pricing_jobs SET commodity_proposal_json = ?2, commodity_proposal_hash = ?3,
-         operational_state = CASE WHEN state = 'store_checks_running' THEN 'definition_ready' ELSE operational_state END,
+         operational_state = CASE WHEN state = 'store_checks_running' THEN 'store_checks_running' ELSE operational_state END,
          semantic_plan_hash = ?5, last_progress_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
         WHERE id = ?1 AND gap_id = ?4 AND state IN ('store_checks_running','ready_to_publish')`,
     ).bind(item.pricingJobId, proposalJson, proposalHash, item.gapId, queryPlanHash));

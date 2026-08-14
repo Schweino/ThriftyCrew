@@ -101,7 +101,7 @@ export async function claimStoreChecks(db: D1Database, inputValue: unknown): Pro
   const expiresAt = new Date(now.getTime() + input.leaseSeconds * 1000).toISOString();
   await db.prepare(
     `UPDATE ingredient_store_checks
-        SET state = 'transient_failed', lease_owner = NULL, lease_expires_at = NULL,
+        SET state = 'transient_failed', operational_state = 'capture_queued', lease_owner = NULL, lease_expires_at = NULL,
             last_error = 'lease expired', next_attempt_at = ?2, updated_at = CURRENT_TIMESTAMP
       WHERE store_location_id = ?1 AND state = 'leased' AND lease_expires_at <= ?2`,
   ).bind(input.storeLocationId, now.toISOString()).run();

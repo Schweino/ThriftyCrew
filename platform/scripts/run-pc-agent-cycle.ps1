@@ -405,6 +405,7 @@ try {
       if (-not (Invoke-AgentItem 'ingredient-definition-planner')) { break }
     }
     Set-PcRuntimeCredential $config 'local-operator'
+    $publishedGaps = 0
     Push-Location $platformRoot
     try {
       $readyResult = Invoke-LoggedCommand 'ingredient-v2-publication-ready' { & $pnpmPath --silent --filter '@thriftycrew/operator' tc ingredient publication-ready }
@@ -413,10 +414,13 @@ try {
       if ($readyStart -ge 0 -and $readyEnd -gt $readyStart) {
         $readyDocument = $readyText.Substring($readyStart, $readyEnd - $readyStart + 1) | ConvertFrom-Json
         $gapIds = @($readyDocument.gaps | Select-Object -First $MaxItems | ForEach-Object { [string]$_.gap_id })
-        if ($gapIds.Count -gt 0) { Invoke-LoggedCommand 'ingredient-v2-publish' { & $pnpmPath tc ingredient publish-v2 @gapIds } | Out-Null }
+        if ($gapIds.Count -gt 0) {
+          Invoke-LoggedCommand 'ingredient-v2-publish' { & $pnpmPath tc ingredient publish-v2 @gapIds } | Out-Null
+          $publishedGaps = $gapIds.Count
+        }
       }
     } finally { Pop-Location }
-    Invoke-IngredientDownstreamDrain
+    if ($publishedGaps -gt 0) { Invoke-IngredientDownstreamDrain }
   } else {
     foreach ($agentId in $agentsForCycle) {
       for ($item = 0; $item -lt $MaxItems; $item++) {
@@ -448,6 +452,6 @@ try {
     }
   }
   Exit-PcRuntimeLock $lock
-  if (Test-Path -LiteralPath $env:TC_JOB_LEASE_FILE) { Remove-Item -LiteralPath $env:TC_JOB_LEASE_FILE -Force }
+  if ($env:TC_JOB_LEASE_FILE -and (Test-Path -LiteralPath $env:TC_JOB_LEASE_FILE)) { Remove-Item -LiteralPath $env:TC_JOB_LEASE_FILE -Force }
 }
 if ($failed) { exit 1 }
