@@ -242,9 +242,9 @@ interface MatchContext {
   nonFoodFamilies: Set<string>;
 }
 
-async function loadMatchContext(): Promise<MatchContext> {
-  const commodities = JSON.parse(await readFile(path.join(platformRoot, "config", "commodities.json"), "utf8")) as Array<{ id: string; include?: string[]; exclude?: string[] }>;
-  const categoryDocument = JSON.parse((await readFile(path.join(platformRoot, "config", "categories.json"), "utf8")).replace(/^\uFEFF/, "")) as { categories: Array<{ key: string; commodities: string[] }> };
+async function loadMatchContext(targetPlatformRoot = platformRoot): Promise<MatchContext> {
+  const commodities = JSON.parse(await readFile(path.join(targetPlatformRoot, "config", "commodities.json"), "utf8")) as Array<{ id: string; include?: string[]; exclude?: string[] }>;
+  const categoryDocument = JSON.parse((await readFile(path.join(targetPlatformRoot, "config", "categories.json"), "utf8")).replace(/^\uFEFF/, "")) as { categories: Array<{ key: string; commodities: string[] }> };
   return {
     categoryByCommodity: new Map(categoryDocument.categories.flatMap((category) => category.commodities.map((commodityId) => [commodityId, category.key] as const))),
     nonFoodFamilies: new Set(["household", "personal", "baby", "pet"]),
@@ -468,8 +468,8 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
   const client = await mutationClient();
   const sealed = await client.request("/internal/ingredient-publication/batches", {
     json: { gapIds, sourceCommit: process.env.GITHUB_SHA ?? null },
-  }) as { batchId?: string; members?: Array<{ gapId: string; proposal: CommodityAddition }> };
-  if (!sealed.batchId || sealed.members?.length !== gapIds.length) throw new Error("sealed ingredient publication batch is incomplete");
+  }) as { batchId?: string; memberRootHash?: string; members?: Array<{ gapId: string; proposal: CommodityAddition }> };
+  if (!sealed.batchId || !sealed.memberRootHash || sealed.members?.length !== gapIds.length) throw new Error("sealed ingredient publication batch is incomplete");
   const scopedStatus = await execFileAsync("git", ["-C", incomeRoot, "status", "--porcelain", "--",
     "platform/config/commodities.json", "platform/config/categories.json", "platform/config/manifest.json",
     "grocery/commodities.json", "grocery/categories.json", "grocery/commodity-search.json"]);
@@ -484,6 +484,7 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
     for (const member of sealed.members) applied.push(await commodityAddSpecification(member.proposal, false, worktreeRoot));
     await generateLegacyConfiguration(worktreeRoot, false);
     await generateLegacyConfiguration(worktreeRoot, true);
+    const publicationMatchContext = await loadMatchContext(path.join(worktreeRoot, "platform"));
     await execFileAsync("git", ["-C", worktreeRoot, "add", "--", "platform/config/commodities.json", "platform/config/categories.json",
       "platform/config/manifest.json", "grocery/commodities.json", "grocery/categories.json", "grocery/commodity-search.json"]);
     await execFileAsync("git", ["-C", worktreeRoot, "commit", "-m", `Publish ${applied.length} verified Omaha ingredients (${sealed.batchId})`]);
@@ -496,14 +497,27 @@ async function publishIngredientMicrobatch(gapIds: string[]): Promise<unknown> {
     };
     const materializedCaptures = [];
     for (const batch of materialization.batches ?? []) {
-      const matched = await matchBatch(client, batch.batchId);
+      const matched = await matchBatch(client, batch.batchId, publicationMatchContext);
       if (matched.status !== "passed") throw new Error(`ingredient publication capture ${batch.batchId} failed deterministic matching`);
       const promoted = await client.request(`/internal/capture-batches/${encodeURIComponent(batch.batchId)}/promote`, { method: "POST" });
       materializedCaptures.push({ batchId: batch.batchId, matched, promoted });
     }
     const snapshot = await loadEngineSnapshot(client, "direct");
+    const materializedBatchIds = new Set(materializedCaptures.map((capture) => capture.batchId));
+    const publicationCommodityIds = new Set((sealed.members ?? []).map((member) => member.proposal.id).filter((id): id is string => Boolean(id)));
+    const publicationSnapshot: NativeEngineSnapshot = {
+      ...snapshot,
+      inputHash: await digestHex(stableJson({
+        baseEngineSnapshotHash: snapshot.inputHash,
+        ingredientPublicationBatchId: sealed.batchId,
+        memberRootHash: sealed.memberRootHash,
+        materializedBatchIds: [...materializedBatchIds].sort(),
+      })),
+      candidates: snapshot.candidates.filter((candidate) => !publicationCommodityIds.has(candidate.commodity_id)
+        || (candidate.batch_id !== undefined && materializedBatchIds.has(candidate.batch_id))),
+    };
     const catalog = await loadNativeReleaseCatalog(worktreeRoot);
-    const releaseArtifact = await buildNativeRelease(worktreeRoot, snapshot, catalog, await loadCurrentReleaseGraph(client));
+    const releaseArtifact = await buildNativeRelease(worktreeRoot, publicationSnapshot, catalog, await loadCurrentReleaseGraph(client));
     if (Number(releaseArtifact.audit.top5Entries) !== 20 || Number(releaseArtifact.audit.rotationEntries) !== 20) {
       throw new Error("ingredient microbatch release failed the 20-recipe ranking guard");
     }
